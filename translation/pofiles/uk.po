@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 16:04+0300\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-10-06 01:31+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
@@ -18,9 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural="
-"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
-"1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -334,7 +333,7 @@ msgstr "Недостатньо прав для збереження файлу '
 #: common/dialogs/panel_embedded_files.cpp:508
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
-#: eeschema/dialogs/dialog_erc.cpp:879
+#: eeschema/dialogs/dialog_erc.cpp:901
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:901
@@ -354,7 +353,7 @@ msgstr "Недостатньо прав для збереження файлу '
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:984
+#: pcbnew/dialogs/dialog_drc.cpp:1006
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:418
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
@@ -1406,7 +1405,7 @@ msgstr "Масштаб"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2475
+#: pcbnew/tools/pcb_point_editor.cpp:2485
 msgid "X:"
 msgstr "Х:"
 
@@ -1430,7 +1429,7 @@ msgstr "Х:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2475
+#: pcbnew/tools/pcb_point_editor.cpp:2485
 msgid "Y:"
 msgstr "Y:"
 
@@ -2032,7 +2031,7 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
-#: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:880
+#: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:902
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
@@ -2045,7 +2044,7 @@ msgstr "&OK"
 #: eeschema/symbol_editor/symbol_editor.cpp:503
 #: eeschema/symbol_editor/symbol_editor.cpp:1299
 #: eeschema/symbol_editor/symbol_editor.cpp:1697
-#: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
+#: pcbnew/dialogs/dialog_drc.cpp:1007 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
@@ -3485,7 +3484,7 @@ msgstr "Попередній перегляд друку"
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
-#: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:464
+#: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:486
 #: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
@@ -3498,7 +3497,7 @@ msgstr "Попередній перегляд друку"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#: pcbnew/dialogs/dialog_drc.cpp:141 pcbnew/dialogs/dialog_drc.cpp:368
+#: pcbnew/dialogs/dialog_drc.cpp:141 pcbnew/dialogs/dialog_drc.cpp:390
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 #: pcbnew/dialogs/dialog_export_2581.cpp:60
 #: pcbnew/dialogs/dialog_export_step.cpp:111
@@ -3808,13 +3807,13 @@ msgstr "OK"
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:465 common/tool/actions.cpp:159
-#: eeschema/dialogs/dialog_erc.cpp:424
+#: eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 #: eeschema/symbol_editor/symbol_editor.cpp:1030
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:348
+#: pcbnew/dialogs/dialog_drc.cpp:370
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr "Скасувати"
@@ -5615,15 +5614,15 @@ msgid "Netclasses"
 msgstr "Класи звʼязків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:642
-#: pcbnew/tools/board_inspection_tool.cpp:1193 pcbnew/zone.cpp:2120
+#: pcbnew/tools/board_inspection_tool.cpp:643
+#: pcbnew/tools/board_inspection_tool.cpp:1194 pcbnew/zone.cpp:2120
 msgid "Clearance"
 msgstr "Зазор"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
-#: pcbnew/tools/board_inspection_tool.cpp:434
-#: pcbnew/tools/board_inspection_tool.cpp:1356
+#: pcbnew/tools/board_inspection_tool.cpp:435
+#: pcbnew/tools/board_inspection_tool.cpp:1357
 msgid "Track Width"
 msgstr "Ширина доріжки"
 
@@ -5717,8 +5716,8 @@ msgstr "Клас зв'язків"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:881 eeschema/sch_marker.cpp:373
-#: pcbnew/dialogs/dialog_drc.cpp:986 pcbnew/pcb_marker.cpp:229
+#: eeschema/dialogs/dialog_erc.cpp:903 eeschema/sch_marker.cpp:373
+#: pcbnew/dialogs/dialog_drc.cpp:1008 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "Ігнорувати"
 
@@ -6353,7 +6352,7 @@ msgstr "Виносна лінія"
 msgid "Target"
 msgstr "Орієнтир"
 
-#: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:824
+#: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:825
 msgid "Zone"
 msgstr "Зона"
 
@@ -7976,9 +7975,9 @@ msgstr "Не вдалося перемкнути мову на %s"
 
 #: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1021
 #: pcbnew/drc/drc_engine.cpp:1022 pcbnew/drc/drc_engine.cpp:1023
-#: pcbnew/tools/board_inspection_tool.cpp:251
-#: pcbnew/tools/board_inspection_tool.cpp:260
-#: pcbnew/tools/board_inspection_tool.cpp:269
+#: pcbnew/tools/board_inspection_tool.cpp:252
+#: pcbnew/tools/board_inspection_tool.cpp:261
+#: pcbnew/tools/board_inspection_tool.cpp:270
 msgid "undefined"
 msgstr "не визначено"
 
@@ -8567,7 +8566,7 @@ msgstr "Розпакування файлу '%s'."
 msgid "Error extracting file!"
 msgstr "Помилка розпакування файлу!"
 
-#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1070
+#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1092
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -8578,7 +8577,7 @@ msgstr "Помилка розпакування файлу!"
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
-#: pcbnew/dialogs/dialog_drc.cpp:1075 pcbnew/dialogs/dialog_export_2581.cpp:318
+#: pcbnew/dialogs/dialog_drc.cpp:1097 pcbnew/dialogs/dialog_export_2581.cpp:318
 #: pcbnew/dialogs/dialog_export_idf.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml.cpp:226
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:356
@@ -10099,7 +10098,7 @@ msgstr "Об'єкти не вибрано"
 msgid "%d objects selected"
 msgstr "%d об'єкти вибрано"
 
-#: common/widgets/properties_panel.cpp:342
+#: common/widgets/properties_panel.cpp:346
 msgid "Basic Properties"
 msgstr "Базові властивості"
 
@@ -10229,9 +10228,9 @@ msgid "Info:"
 msgstr "Інформація:"
 
 #: common/widgets/wx_html_report_panel.cpp:372
-#: eeschema/dialogs/dialog_erc.cpp:1037
+#: eeschema/dialogs/dialog_erc.cpp:1059
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
-#: pcbnew/dialogs/dialog_drc.cpp:1041
+#: pcbnew/dialogs/dialog_drc.cpp:1063
 msgid "Save Report File"
 msgstr "Зберегти файл звіту"
 
@@ -10997,7 +10996,7 @@ msgstr ""
 "%s\n"
 "не знайдено. Скрипт не доступний."
 
-#: eeschema/connection_graph.cpp:3312
+#: eeschema/connection_graph.cpp:3320
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11005,21 +11004,21 @@ msgstr ""
 "Обидва %s та %s прикріплені до тих самих елементів; %s буде "
 "використовуватися в списку зв'язків"
 
-#: eeschema/connection_graph.cpp:3550
+#: eeschema/connection_graph.cpp:3558
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Зв'язок %s графічно підключена до шини %s , але не є членом цієї шини"
 
-#: eeschema/connection_graph.cpp:3855 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3863 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Непідключена кінцева точка дроту"
 
-#: eeschema/connection_graph.cpp:3880
+#: eeschema/connection_graph.cpp:3888
 msgid "Unconnected wire to bus entry"
 msgstr "Непідключений провід до входу шини"
 
-#: eeschema/connection_graph.cpp:4213
+#: eeschema/connection_graph.cpp:4221
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11028,12 +11027,12 @@ msgstr ""
 "Ієрархічну мітку \"%s\" у кореневому аркуші неможливо підключити до "
 "неіснуючого батьківського аркуша"
 
-#: eeschema/connection_graph.cpp:4278
+#: eeschema/connection_graph.cpp:4286
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Виводу листа %s не має відповідної ієрархічної мітки всередині листа"
 
-#: eeschema/connection_graph.cpp:4295
+#: eeschema/connection_graph.cpp:4303
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Ієрархічна мітка %s не має відповідного виводу листа"
@@ -11966,137 +11965,137 @@ msgstr "Показати діалог анотації"
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr "Схема не повністю анотована. Результати ERC будуть неповними."
 
-#: eeschema/dialogs/dialog_erc.cpp:314 pcbnew/dialogs/dialog_drc.cpp:1266
+#: eeschema/dialogs/dialog_erc.cpp:336 pcbnew/dialogs/dialog_drc.cpp:1291
 msgid "Delete exclusions too?"
 msgstr "Видалити також винятки?"
 
-#: eeschema/dialogs/dialog_erc.cpp:314 eeschema/dialogs/dialog_erc_base.cpp:173
-#: pcbnew/dialogs/dialog_drc.cpp:1266 pcbnew/dialogs/dialog_drc_base.cpp:219
+#: eeschema/dialogs/dialog_erc.cpp:336 eeschema/dialogs/dialog_erc_base.cpp:173
+#: pcbnew/dialogs/dialog_drc.cpp:1291 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Видалити всі маркери"
 
-#: eeschema/dialogs/dialog_erc.cpp:316 pcbnew/dialogs/dialog_drc.cpp:1268
+#: eeschema/dialogs/dialog_erc.cpp:338 pcbnew/dialogs/dialog_drc.cpp:1293
 msgid "Errors and Warnings Only"
 msgstr "Лише помилки та попередження"
 
-#: eeschema/dialogs/dialog_erc.cpp:317 pcbnew/dialogs/dialog_drc.cpp:1269
+#: eeschema/dialogs/dialog_erc.cpp:339 pcbnew/dialogs/dialog_drc.cpp:1294
 msgid "Errors, Warnings and Exclusions"
 msgstr "Помилки, попередження і винятки"
 
-#: eeschema/dialogs/dialog_erc.cpp:449
+#: eeschema/dialogs/dialog_erc.cpp:471
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d символ(и) потрібно анотувати.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:456
+#: eeschema/dialogs/dialog_erc.cpp:478
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC скасовано користувачем.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:362
+#: eeschema/dialogs/dialog_erc.cpp:480 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Done.<br><br>"
 msgstr "Виконано.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:623 pcbnew/dialogs/dialog_drc.cpp:671
+#: eeschema/dialogs/dialog_erc.cpp:645 pcbnew/dialogs/dialog_drc.cpp:693
 msgid "errors"
 msgstr "помилок"
 
-#: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:672
+#: eeschema/dialogs/dialog_erc.cpp:646 pcbnew/dialogs/dialog_drc.cpp:694
 msgid "warnings"
 msgstr "попереджень"
 
-#: eeschema/dialogs/dialog_erc.cpp:625 pcbnew/dialogs/dialog_drc.cpp:673
+#: eeschema/dialogs/dialog_erc.cpp:647 pcbnew/dialogs/dialog_drc.cpp:695
 msgid "appropriate"
 msgstr "нормальних"
 
-#: eeschema/dialogs/dialog_erc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:694
+#: eeschema/dialogs/dialog_erc.cpp:670 pcbnew/dialogs/dialog_drc.cpp:716
 msgid "Remove exclusion for this violation"
 msgstr "Видалити виключення для цього порушення"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:695
+#: eeschema/dialogs/dialog_erc.cpp:671 pcbnew/dialogs/dialog_drc.cpp:717
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Його буде розміщено назад у %s список"
 
-#: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:698
+#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:720
 msgid "Edit exclusion comment..."
 msgstr "Редагувати коментар до виключення..."
 
-#: eeschema/dialogs/dialog_erc.cpp:657 pcbnew/dialogs/dialog_drc.cpp:711
+#: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:733
 msgid "Exclude this violation"
 msgstr "Виключити це порушення"
 
-#: eeschema/dialogs/dialog_erc.cpp:658 eeschema/dialogs/dialog_erc.cpp:662
-#: pcbnew/dialogs/dialog_drc.cpp:712 pcbnew/dialogs/dialog_drc.cpp:716
+#: eeschema/dialogs/dialog_erc.cpp:680 eeschema/dialogs/dialog_erc.cpp:684
+#: pcbnew/dialogs/dialog_drc.cpp:734 pcbnew/dialogs/dialog_drc.cpp:738
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "буде виключено зі списку %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:661 pcbnew/dialogs/dialog_drc.cpp:715
+#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:737
 msgid "Exclude with comment..."
 msgstr "Виключити з коментарем..."
 
-#: eeschema/dialogs/dialog_erc.cpp:680 pcbnew/dialogs/dialog_drc.cpp:737
+#: eeschema/dialogs/dialog_erc.cpp:702 pcbnew/dialogs/dialog_drc.cpp:759
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Змінити рівень Помилка для порушення '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:682 eeschema/dialogs/dialog_erc.cpp:689
+#: eeschema/dialogs/dialog_erc.cpp:704 eeschema/dialogs/dialog_erc.cpp:711
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "Ступінь серйозності порушень також можна редагувати в діалоговому вікні "
 "Налаштування схеми"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
+#: eeschema/dialogs/dialog_erc.cpp:709 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Встановити рівень Попередження для всіх порушень '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:694 pcbnew/dialogs/dialog_drc.cpp:750
+#: eeschema/dialogs/dialog_erc.cpp:716 pcbnew/dialogs/dialog_drc.cpp:772
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ігнорувати всі '%s' порушення"
 
-#: eeschema/dialogs/dialog_erc.cpp:695 pcbnew/dialogs/dialog_drc.cpp:751
+#: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:773
 msgid "Violations will not be checked or reported"
 msgstr "Порушення не будуть перевірятися або повідомлятись"
 
-#: eeschema/dialogs/dialog_erc.cpp:703
+#: eeschema/dialogs/dialog_erc.cpp:725
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Редагувати карту конфліктів виводів..."
 
-#: eeschema/dialogs/dialog_erc.cpp:704 eeschema/dialogs/dialog_erc.cpp:710
-#: eeschema/dialogs/dialog_erc.cpp:717
+#: eeschema/dialogs/dialog_erc.cpp:726 eeschema/dialogs/dialog_erc.cpp:732
+#: eeschema/dialogs/dialog_erc.cpp:739
 msgid "Open the Schematic Setup... dialog"
 msgstr "Відкрити налаштування схеми... діалог"
 
-#: eeschema/dialogs/dialog_erc.cpp:709 pcbnew/dialogs/dialog_drc.cpp:756
+#: eeschema/dialogs/dialog_erc.cpp:731 pcbnew/dialogs/dialog_drc.cpp:778
 msgid "Edit violation severities..."
 msgstr "Редагувати рівні порушень..."
 
-#: eeschema/dialogs/dialog_erc.cpp:716
+#: eeschema/dialogs/dialog_erc.cpp:738
 msgid "Edit connection grid spacing..."
 msgstr "Змінити крок сітки…"
 
-#: eeschema/dialogs/dialog_erc.cpp:728 eeschema/dialogs/dialog_erc.cpp:764
-#: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:820
+#: eeschema/dialogs/dialog_erc.cpp:750 eeschema/dialogs/dialog_erc.cpp:786
+#: pcbnew/dialogs/dialog_drc.cpp:789 pcbnew/dialogs/dialog_drc.cpp:842
 msgid "Exclusion Comment"
 msgstr "Коментар щодо виключення"
 
-#: eeschema/dialogs/dialog_erc.cpp:852
+#: eeschema/dialogs/dialog_erc.cpp:874
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
 msgstr "Карта конфліктів виводів"
 
-#: eeschema/dialogs/dialog_erc.cpp:856 eeschema/dialogs/dialog_erc.cpp:986
+#: eeschema/dialogs/dialog_erc.cpp:878 eeschema/dialogs/dialog_erc.cpp:1008
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
-#: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:966
-#: pcbnew/dialogs/dialog_drc.cpp:1008
+#: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:988
+#: pcbnew/dialogs/dialog_drc.cpp:1030
 msgid "Violation Severity"
 msgstr "Рівні порушення"
 
-#: eeschema/dialogs/dialog_erc.cpp:860
+#: eeschema/dialogs/dialog_erc.cpp:882
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
@@ -12104,7 +12103,7 @@ msgstr "Рівні порушення"
 msgid "Formatting"
 msgstr "Форматування"
 
-#: eeschema/dialogs/dialog_erc.cpp:1065 pcbnew/dialogs/dialog_gendrill.cpp:518
+#: eeschema/dialogs/dialog_erc.cpp:1087 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Файл звіту '%s' створений."
@@ -12853,7 +12852,7 @@ msgstr "Мітка не може бути незаповненою."
 #: eeschema/dialogs/dialog_label_properties.cpp:584
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:501
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
-#: eeschema/dialogs/dialog_symbol_properties.cpp:739 include/project.h:43
+#: eeschema/dialogs/dialog_symbol_properties.cpp:741 include/project.h:43
 msgid "untitled"
 msgstr "без назви"
 
@@ -12954,7 +12953,7 @@ msgstr "V вирівнювання"
 #: eeschema/sch_field.cpp:1901 eeschema/sch_label.cpp:1251
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:650
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:545
-#: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1433
+#: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
 msgid "Text Size"
 msgstr "Розмір тексту"
 
@@ -13290,7 +13289,7 @@ msgstr "Поле повинно мати імʼя."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:686
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
-#: eeschema/dialogs/dialog_symbol_properties.cpp:809
+#: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "Імʼя поля '%s' вже використовується."
@@ -13425,7 +13424,7 @@ msgstr "Новий символ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:391
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
-#: eeschema/dialogs/dialog_symbol_properties.cpp:648
+#: eeschema/dialogs/dialog_symbol_properties.cpp:650
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:458
 msgid "Fields must have a name."
@@ -13457,7 +13456,7 @@ msgstr "Імʼя символу '%s' вже використовується в 
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:466
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:471
-#: eeschema/dialogs/dialog_symbol_properties.cpp:780
+#: eeschema/dialogs/dialog_symbol_properties.cpp:782
 msgid "Edit Symbol Properties"
 msgstr "Редагувати властивості символу"
 
@@ -13473,7 +13472,7 @@ msgstr "Ім'я '%s' вже використовується."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:717
 #: eeschema/dialogs/dialog_sheet_properties.cpp:788
-#: eeschema/dialogs/dialog_symbol_properties.cpp:881
+#: eeschema/dialogs/dialog_symbol_properties.cpp:883
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:720
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:748
 #, c-format
@@ -13744,7 +13743,7 @@ msgid "Alternate Pin Name"
 msgstr "Альтернативне ім'я виводу"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
-#: eeschema/dialogs/dialog_symbol_properties.cpp:358
+#: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr ""
 "Призначення альтернативного імені виводам недоступне для символів De Morgan."
@@ -18579,8 +18578,8 @@ msgstr ""
 #: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
-#: pcbnew/widgets/pcb_properties_panel.cpp:247
-#: pcbnew/widgets/pcb_properties_panel.cpp:258 pcbnew/zone.cpp:1917
+#: pcbnew/widgets/pcb_properties_panel.cpp:246
+#: pcbnew/widgets/pcb_properties_panel.cpp:257 pcbnew/zone.cpp:1917
 #: pcbnew/zone.cpp:1929
 msgid "Position X"
 msgstr "Позиція X"
@@ -18589,7 +18588,7 @@ msgstr "Позиція X"
 #: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
-#: pcbnew/widgets/pcb_properties_panel.cpp:248 pcbnew/zone.cpp:1923
+#: pcbnew/widgets/pcb_properties_panel.cpp:247 pcbnew/zone.cpp:1923
 #: pcbnew/zone.cpp:1930
 msgid "Position Y"
 msgstr "Позиція Y"
@@ -18788,102 +18787,102 @@ msgstr ""
 "Ім'я файлу для аркуша %s не визначено, це, ймовірно, группа сигналів Altium, "
 "який було конвертовано на аркуш."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:966
+#: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Файл сховища не повністю оброблений (залишилося %d байт)."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1048
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1150
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1053
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1155
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Очікувана версія файлу схеми Altium 5.0"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1265
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1270
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Запис 'IEEE_SYMBOL' не обробляється."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1384
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1389
 msgid "Parameter Set not currently supported."
 msgstr "Набір параметрів наразі не підтримується."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1409
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1414
 msgid "Compile mask not currently supported."
 msgstr "Маска під час компіляції не підтримується."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1434
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
 msgid "Blanket not currently supported."
 msgstr "Покриття наразі не підтримується."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4734
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1444
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4739
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "Невідомий або неочікуваний ідентифікатор запису %d знайдено в %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1497
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1502
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "Символ \"%s\" на аркуші \"%s\" з індексом %d замінено на символ \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1669
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1674
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
 msgid "Pin has unexpected orientation."
 msgstr "Вивід має неочікувану орієнтацію."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1717
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
 msgid "Pin has unexpected electrical type."
 msgstr "Вивід має неочікуваний електричний тип."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
 msgid "Pin has unexpected outer edge type."
 msgstr "Вивід має неочікуваний тип зовнішньої межі."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1725
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1730
 msgid "Pin has unexpected inner edge type."
 msgstr "Вивід має неочікуваний внутрішній тип краю."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2131
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2136
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Крива Безьє має контрольні точки %d . Очікуються щонайменше 2."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3616
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3621
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 "Порт живлення має невідомий стиль, з невідомим стилем, імпортованим як тип "
 "'Bar'."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3665
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3670
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:701
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Символ живлення створює глобальну мітку з назвою '%s'"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3833
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3838
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Порт %s немає підключення."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4025
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4030
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Вбудований файл %s не знайдено в сховищі."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4042
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4061
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4047
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4066
 #, c-format
 msgid "Error reading image %s."
 msgstr "Помилка при читанні зображення %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4054
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4059
 #, c-format
 msgid "File not found %s."
 msgstr "Файл не знайдено %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4866
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4871
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Очікувався файл бібліотеки Altium Schematic версії 5.0"
 
@@ -24307,13 +24306,13 @@ msgid "Find again to wrap around to the start."
 msgstr "Почати пошук знову з початку."
 
 #: eeschema/tools/sch_inspection_tool.cpp:224
-#: pcbnew/tools/board_inspection_tool.cpp:292
+#: pcbnew/tools/board_inspection_tool.cpp:293
 #, c-format
 msgid "Run %s > %s"
 msgstr "Запуск %s > %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:231
-#: pcbnew/tools/board_inspection_tool.cpp:299
+#: pcbnew/tools/board_inspection_tool.cpp:300
 #, c-format
 msgid "Run %s"
 msgstr "Запускати %s"
@@ -24336,7 +24335,7 @@ msgid "Symbol %s"
 msgstr "Символ %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:385
-#: pcbnew/tools/board_inspection_tool.cpp:1584
+#: pcbnew/tools/board_inspection_tool.cpp:1585
 msgid "Summary"
 msgstr "Короткий зміст"
 
@@ -24346,17 +24345,17 @@ msgstr "Різниця між схемою і бібліотекою для:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#: pcbnew/tools/board_inspection_tool.cpp:1588
+#: pcbnew/tools/board_inspection_tool.cpp:1589
 msgid "Library: "
 msgstr "Бібліотека: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
-#: pcbnew/tools/board_inspection_tool.cpp:1589
+#: pcbnew/tools/board_inspection_tool.cpp:1590
 msgid "Library item: "
 msgstr "Елемент бібліотеки: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:400
-#: pcbnew/tools/board_inspection_tool.cpp:1607
+#: pcbnew/tools/board_inspection_tool.cpp:1608
 msgid "The library is not included in the current configuration."
 msgstr "Бібліотека не включена до поточної конфігурації."
 
@@ -24366,23 +24365,23 @@ msgid "Manage Symbol Libraries"
 msgstr "Керування Бібліотеками символів"
 
 #: eeschema/tools/sch_inspection_tool.cpp:406
-#: pcbnew/tools/board_inspection_tool.cpp:1615
+#: pcbnew/tools/board_inspection_tool.cpp:1616
 msgid "The library is not enabled in the current configuration."
 msgstr "Бібліотека не ввімкнена в поточній конфігурації."
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
-#: pcbnew/tools/board_inspection_tool.cpp:1635
+#: pcbnew/tools/board_inspection_tool.cpp:1636
 #, c-format
 msgid "The library no longer contains the item %s."
 msgstr "Бібліотека більше не містить елемент %s."
 
 #: eeschema/tools/sch_inspection_tool.cpp:447
-#: pcbnew/tools/board_inspection_tool.cpp:1641
+#: pcbnew/tools/board_inspection_tool.cpp:1642
 msgid "No relevant differences detected."
 msgstr "Жодних суттєвих відмінностей не виявлено."
 
 #: eeschema/tools/sch_inspection_tool.cpp:450
-#: pcbnew/tools/board_inspection_tool.cpp:1643
+#: pcbnew/tools/board_inspection_tool.cpp:1644
 msgid "Visual"
 msgstr "Візуальний"
 
@@ -24423,7 +24422,7 @@ msgid "Page '%s' not found."
 msgstr "Сторінку '%s' не знайдено."
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2385
+#: pcbnew/tools/pcb_point_editor.cpp:2395
 msgid "Move Point"
 msgstr "Точка переміщення"
 
@@ -24699,7 +24698,7 @@ msgid "Invalid footprint specified"
 msgstr "Вказано недопустиме посадкове місце"
 
 #: eeschema/widgets/sch_properties_panel.cpp:219
-#: pcbnew/widgets/pcb_properties_panel.cpp:278
+#: pcbnew/widgets/pcb_properties_panel.cpp:277
 msgid "Edit Properties"
 msgstr "Редагувати властивості"
 
@@ -24992,12 +24991,12 @@ msgstr "Вибрати шар: %s"
 #: pcbnew/pcb_tablecell.cpp:141 pcbnew/pcb_tablecell.cpp:217
 #: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:476
 #: pcbnew/pcb_track.cpp:1628 pcbnew/pcb_track.cpp:1695
-#: pcbnew/pcb_track.cpp:2171 pcbnew/tools/board_inspection_tool.cpp:237
+#: pcbnew/pcb_track.cpp:2171 pcbnew/tools/board_inspection_tool.cpp:238
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:215
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:226
+#: pcbnew/widgets/pcb_properties_panel.cpp:302
 #: pcbnew/widgets/pcb_properties_panel.cpp:303
-#: pcbnew/widgets/pcb_properties_panel.cpp:304
-#: pcbnew/widgets/pcb_properties_panel.cpp:307
+#: pcbnew/widgets/pcb_properties_panel.cpp:306
 #: pcbnew/widgets/search_handlers.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:189
 #: pcbnew/widgets/search_handlers.cpp:255 pcbnew/zone.cpp:854
@@ -33888,53 +33887,53 @@ msgstr "Властивості розмірів"
 msgid "Run DRC"
 msgstr "Запуск DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:305
+#: pcbnew/dialogs/dialog_drc.cpp:327
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
 "Конфігурація DRC неповна: не вдалося скомпілювати правила проектування."
 
-#: pcbnew/dialogs/dialog_drc.cpp:307 pcbnew/tools/board_inspection_tool.cpp:214
+#: pcbnew/dialogs/dialog_drc.cpp:329 pcbnew/tools/board_inspection_tool.cpp:215
 msgid "Show design rules."
 msgstr "Показати правила проектування."
 
-#: pcbnew/dialogs/dialog_drc.cpp:360
+#: pcbnew/dialogs/dialog_drc.cpp:382
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC скасовано користувачем.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:703
+#: pcbnew/dialogs/dialog_drc.cpp:725
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Видалити всі виключення з правил '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:705
+#: pcbnew/dialogs/dialog_drc.cpp:727
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr "Вони будуть повернуті назад до списку %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:721
+#: pcbnew/dialogs/dialog_drc.cpp:743
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "Виключити всі порушення правила '%s'..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:723
+#: pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr "Їх буде виключено зі списку %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:746
+#: pcbnew/dialogs/dialog_drc.cpp:761 pcbnew/dialogs/dialog_drc.cpp:768
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "Рівень порушень можна також редагувати у діалозі Параметри плати"
 
-#: pcbnew/dialogs/dialog_drc.cpp:757
+#: pcbnew/dialogs/dialog_drc.cpp:779
 msgid "Open the Board Setup... dialog"
 msgstr "Відкрити вікно налаштувань друкованої плати"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1070
+#: pcbnew/dialogs/dialog_drc.cpp:1092
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Файл звіту '%s' створено<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1413
+#: pcbnew/dialogs/dialog_drc.cpp:1438
 msgid "not run"
 msgstr "не запущено"
 
@@ -36013,7 +36012,7 @@ msgstr "Ширина тексту"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
 #: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:152
-#: pcbnew/pcb_textbox.cpp:483 pcbnew/tools/board_inspection_tool.cpp:404
+#: pcbnew/pcb_textbox.cpp:483 pcbnew/tools/board_inspection_tool.cpp:405
 msgid "Text Height"
 msgstr "Висота тексту"
 
@@ -36021,7 +36020,7 @@ msgstr "Висота тексту"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
 #: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:150
-#: pcbnew/pcb_textbox.cpp:481 pcbnew/tools/board_inspection_tool.cpp:419
+#: pcbnew/pcb_textbox.cpp:481 pcbnew/tools/board_inspection_tool.cpp:420
 msgid "Text Thickness"
 msgstr "Товщина тексту"
 
@@ -38026,7 +38025,7 @@ msgid "Render PCB Job Options"
 msgstr "Параметри завдання візуалізації PCB"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:127
-#: pcbnew/tools/board_inspection_tool.cpp:1466
+#: pcbnew/tools/board_inspection_tool.cpp:1467
 msgid "Keepouts"
 msgstr "Області заборони"
 
@@ -41060,8 +41059,8 @@ msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1419
 #: pcbnew/pcb_track.cpp:1699 pcbnew/pcb_track.cpp:2175
-#: pcbnew/tools/board_inspection_tool.cpp:1123
-#: pcbnew/tools/board_inspection_tool.cpp:1145
+#: pcbnew/tools/board_inspection_tool.cpp:1124
+#: pcbnew/tools/board_inspection_tool.cpp:1146
 msgid "Hole"
 msgstr "Отвір"
 
@@ -46960,11 +46959,11 @@ msgstr "Доріжка %s на %s, довжина %s"
 msgid "Via Properties"
 msgstr "Властивості перехідного отвору"
 
-#: pcbnew/pcb_track.cpp:2177 pcbnew/widgets/pcb_properties_panel.cpp:308
+#: pcbnew/pcb_track.cpp:2177 pcbnew/widgets/pcb_properties_panel.cpp:307
 msgid "Layer Top"
 msgstr "Верхній шар"
 
-#: pcbnew/pcb_track.cpp:2179 pcbnew/widgets/pcb_properties_panel.cpp:309
+#: pcbnew/pcb_track.cpp:2179 pcbnew/widgets/pcb_properties_panel.cpp:308
 msgid "Layer Bottom"
 msgstr "Нижній шар"
 
@@ -46980,7 +46979,7 @@ msgstr "Передній намет"
 msgid "Back tenting"
 msgstr "Наметування на спині"
 
-#: pcbnew/pcbexpr_evaluator.cpp:683
+#: pcbnew/pcbexpr_evaluator.cpp:688
 msgid "must be mm, in, or mil"
 msgstr "має бути mm, in, або mil"
 
@@ -47908,355 +47907,355 @@ msgstr "Дублікат зони"
 msgid "Selection contains no items with labeled nets."
 msgstr "Вибір не містить елементів із позначеними зв'язками."
 
-#: pcbnew/tools/board_inspection_tool.cpp:65
+#: pcbnew/tools/board_inspection_tool.cpp:66
 msgid "Net Inspection Tools"
 msgstr "Утиліта перевірки звʼязків"
 
-#: pcbnew/tools/board_inspection_tool.cpp:201
+#: pcbnew/tools/board_inspection_tool.cpp:202
 #, c-format
 msgid "[netclass %s]"
 msgstr "[клас звʼязків %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:212
+#: pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Report incomplete: could not compile custom design rules."
 msgstr ""
 "Звіт не завершено: не вдалося скомпілювати спеціальні правила проектування."
 
-#: pcbnew/tools/board_inspection_tool.cpp:389
+#: pcbnew/tools/board_inspection_tool.cpp:390
 msgid "Uncoupled Length"
 msgstr "Незчеплена довжина"
 
-#: pcbnew/tools/board_inspection_tool.cpp:390
+#: pcbnew/tools/board_inspection_tool.cpp:391
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "Аналіз довжини незв'язаної диференційної пари для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:398
-#: pcbnew/tools/board_inspection_tool.cpp:1022
+#: pcbnew/tools/board_inspection_tool.cpp:399
+#: pcbnew/tools/board_inspection_tool.cpp:1023
 #, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "Проаналізовано максимальну довжину незв’язаної диференційної пари: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:405
-#: pcbnew/tools/board_inspection_tool.cpp:1434
+#: pcbnew/tools/board_inspection_tool.cpp:406
+#: pcbnew/tools/board_inspection_tool.cpp:1435
 msgid "Text height resolution for:"
 msgstr "Аналіз висоти тексту для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:413
+#: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "Визначені обмеження висоти: мін %s, макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:420
-#: pcbnew/tools/board_inspection_tool.cpp:1450
+#: pcbnew/tools/board_inspection_tool.cpp:421
+#: pcbnew/tools/board_inspection_tool.cpp:1451
 msgid "Text thickness resolution for:"
 msgstr "Товщина тексту для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:428
+#: pcbnew/tools/board_inspection_tool.cpp:429
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "Вирішені обмеження товщини: мін %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:435
-#: pcbnew/tools/board_inspection_tool.cpp:1357
+#: pcbnew/tools/board_inspection_tool.cpp:436
+#: pcbnew/tools/board_inspection_tool.cpp:1358
 msgid "Track width resolution for:"
 msgstr "Дозволена ширина доріжки для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:443
+#: pcbnew/tools/board_inspection_tool.cpp:444
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "Обмежені ширини: мін %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:449
+#: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Track Angle"
 msgstr "Кут Колії"
 
-#: pcbnew/tools/board_inspection_tool.cpp:450
+#: pcbnew/tools/board_inspection_tool.cpp:451
 msgid "Track Angle resolution for:"
 msgstr "Роздільна здатність кута відстеження для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:458
+#: pcbnew/tools/board_inspection_tool.cpp:459
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
 msgstr "Вирішені кутові обмеження: мін. %s; максимальн. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:464
+#: pcbnew/tools/board_inspection_tool.cpp:465
 msgid "Track Segment Length"
 msgstr "Довжина Сегмента треку"
 
-#: pcbnew/tools/board_inspection_tool.cpp:465
+#: pcbnew/tools/board_inspection_tool.cpp:466
 msgid "Track segment length resolution for:"
 msgstr "Роздільна здатність довжини сегмента відстеження для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:473
+#: pcbnew/tools/board_inspection_tool.cpp:474
 #, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
 msgstr "Вирішено обмеження довжини сегмента: мін. %s; максимальн. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:479
+#: pcbnew/tools/board_inspection_tool.cpp:480
 msgid "Connection Width"
 msgstr "Ширина з'єднання"
 
-#: pcbnew/tools/board_inspection_tool.cpp:480
+#: pcbnew/tools/board_inspection_tool.cpp:481
 msgid "Connection width resolution for:"
 msgstr "Роздільна здатність ширини підключення для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:488
+#: pcbnew/tools/board_inspection_tool.cpp:489
 #, c-format
 msgid "Resolved min connection width: %s."
 msgstr "Вирішено мінімальну ширину з'єднання: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:493
-#: pcbnew/tools/board_inspection_tool.cpp:1375
+#: pcbnew/tools/board_inspection_tool.cpp:494
+#: pcbnew/tools/board_inspection_tool.cpp:1376
 msgid "Via Diameter"
 msgstr "Діаметр перехідного отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:494
-#: pcbnew/tools/board_inspection_tool.cpp:1376
+#: pcbnew/tools/board_inspection_tool.cpp:495
+#: pcbnew/tools/board_inspection_tool.cpp:1377
 msgid "Via diameter resolution for:"
 msgstr "Проаналізовано діаметр перехідного отвору для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:502
+#: pcbnew/tools/board_inspection_tool.cpp:503
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "Проаналізовано обмеження діаметру: мін %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:508
+#: pcbnew/tools/board_inspection_tool.cpp:509
 msgid "Via Annulus"
 msgstr "Кільця перехідного отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:509
-#: pcbnew/tools/board_inspection_tool.cpp:1393
+#: pcbnew/tools/board_inspection_tool.cpp:510
+#: pcbnew/tools/board_inspection_tool.cpp:1394
 msgid "Via annular width resolution for:"
 msgstr "Проаналізовано ширину кільця для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:517
+#: pcbnew/tools/board_inspection_tool.cpp:518
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "Проаналізовано обмеження ширини кільця: мін %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:524
-#: pcbnew/tools/board_inspection_tool.cpp:1413
+#: pcbnew/tools/board_inspection_tool.cpp:525
+#: pcbnew/tools/board_inspection_tool.cpp:1414
 msgid "Hole Size"
 msgstr "Розмір отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:525
-#: pcbnew/tools/board_inspection_tool.cpp:1414
+#: pcbnew/tools/board_inspection_tool.cpp:526
+#: pcbnew/tools/board_inspection_tool.cpp:1415
 msgid "Hole size resolution for:"
 msgstr "Роздільна здатність розміру отвору для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:533
+#: pcbnew/tools/board_inspection_tool.cpp:534
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
 msgstr "Вирішено обмеження розміру отвору: мін. %s; максимальн. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:539
+#: pcbnew/tools/board_inspection_tool.cpp:540
 msgid "Hole Clearance"
 msgstr "Зазор для отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:540
-#: pcbnew/tools/board_inspection_tool.cpp:1126
+#: pcbnew/tools/board_inspection_tool.cpp:541
+#: pcbnew/tools/board_inspection_tool.cpp:1127
 msgid "Hole clearance resolution for:"
 msgstr "Дозволений зазор для отвору:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:548
-#: pcbnew/tools/board_inspection_tool.cpp:651
+#: pcbnew/tools/board_inspection_tool.cpp:549
+#: pcbnew/tools/board_inspection_tool.cpp:652
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "Елементи належать до того ж звʼязку. Зазор дорівнює 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:557
-#: pcbnew/tools/board_inspection_tool.cpp:577
-#: pcbnew/tools/board_inspection_tool.cpp:594
-#: pcbnew/tools/board_inspection_tool.cpp:609
-#: pcbnew/tools/board_inspection_tool.cpp:660
-#: pcbnew/tools/board_inspection_tool.cpp:680
-#: pcbnew/tools/board_inspection_tool.cpp:920
-#: pcbnew/tools/board_inspection_tool.cpp:934
-#: pcbnew/tools/board_inspection_tool.cpp:978
-#: pcbnew/tools/board_inspection_tool.cpp:1076
-#: pcbnew/tools/board_inspection_tool.cpp:1100
-#: pcbnew/tools/board_inspection_tool.cpp:1135
-#: pcbnew/tools/board_inspection_tool.cpp:1164
-#: pcbnew/tools/board_inspection_tool.cpp:1203
-#: pcbnew/tools/board_inspection_tool.cpp:1257
-#: pcbnew/tools/board_inspection_tool.cpp:1305
+#: pcbnew/tools/board_inspection_tool.cpp:558
+#: pcbnew/tools/board_inspection_tool.cpp:578
+#: pcbnew/tools/board_inspection_tool.cpp:595
+#: pcbnew/tools/board_inspection_tool.cpp:610
+#: pcbnew/tools/board_inspection_tool.cpp:661
+#: pcbnew/tools/board_inspection_tool.cpp:681
+#: pcbnew/tools/board_inspection_tool.cpp:921
+#: pcbnew/tools/board_inspection_tool.cpp:935
+#: pcbnew/tools/board_inspection_tool.cpp:979
+#: pcbnew/tools/board_inspection_tool.cpp:1077
+#: pcbnew/tools/board_inspection_tool.cpp:1101
+#: pcbnew/tools/board_inspection_tool.cpp:1136
+#: pcbnew/tools/board_inspection_tool.cpp:1165
+#: pcbnew/tools/board_inspection_tool.cpp:1204
+#: pcbnew/tools/board_inspection_tool.cpp:1258
+#: pcbnew/tools/board_inspection_tool.cpp:1306
 #, c-format
 msgid "Resolved min clearance: %s."
 msgstr "Вирішено мінімальний зазор: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:563
-#: pcbnew/tools/board_inspection_tool.cpp:1288
+#: pcbnew/tools/board_inspection_tool.cpp:564
+#: pcbnew/tools/board_inspection_tool.cpp:1289
 msgid "Physical hole clearance resolution for:"
 msgstr "Дозволений фізичний зазор для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:572
-#: pcbnew/tools/board_inspection_tool.cpp:1300
+#: pcbnew/tools/board_inspection_tool.cpp:573
+#: pcbnew/tools/board_inspection_tool.cpp:1301
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "Не визначено обмеження 'physical_hole_clearance'."
 
-#: pcbnew/tools/board_inspection_tool.cpp:583
+#: pcbnew/tools/board_inspection_tool.cpp:584
 msgid "Hole to Hole"
 msgstr "Від отвору до отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:584
-#: pcbnew/tools/board_inspection_tool.cpp:1155
+#: pcbnew/tools/board_inspection_tool.cpp:585
+#: pcbnew/tools/board_inspection_tool.cpp:1156
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "Роздільна здатність між отворами для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:598
+#: pcbnew/tools/board_inspection_tool.cpp:599
 msgid "Edge Clearance"
 msgstr "Зазор до краю"
 
-#: pcbnew/tools/board_inspection_tool.cpp:599
-#: pcbnew/tools/board_inspection_tool.cpp:1194
+#: pcbnew/tools/board_inspection_tool.cpp:600
+#: pcbnew/tools/board_inspection_tool.cpp:1195
 msgid "Edge clearance resolution for:"
 msgstr "Дозволений зазор до краю плати:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:643
-#: pcbnew/tools/board_inspection_tool.cpp:948
+#: pcbnew/tools/board_inspection_tool.cpp:644
+#: pcbnew/tools/board_inspection_tool.cpp:949
 msgid "Clearance resolution for:"
 msgstr "Дозволений зазор для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:666
-#: pcbnew/tools/board_inspection_tool.cpp:1243
-#: pcbnew/tools/board_inspection_tool.cpp:1268
+#: pcbnew/tools/board_inspection_tool.cpp:667
+#: pcbnew/tools/board_inspection_tool.cpp:1244
+#: pcbnew/tools/board_inspection_tool.cpp:1269
 msgid "Physical clearance resolution for:"
 msgstr "Дозволений фізичний зазор для плати:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:675
-#: pcbnew/tools/board_inspection_tool.cpp:1219
+#: pcbnew/tools/board_inspection_tool.cpp:676
+#: pcbnew/tools/board_inspection_tool.cpp:1220
 msgid "No 'physical_clearance' constraints defined."
 msgstr "Не задано обмеження 'physical_clearance'."
 
-#: pcbnew/tools/board_inspection_tool.cpp:686
-#: pcbnew/tools/board_inspection_tool.cpp:1492
+#: pcbnew/tools/board_inspection_tool.cpp:687
+#: pcbnew/tools/board_inspection_tool.cpp:1493
 msgid "Assertions"
 msgstr "Дозволи"
 
-#: pcbnew/tools/board_inspection_tool.cpp:687
-#: pcbnew/tools/board_inspection_tool.cpp:1493
+#: pcbnew/tools/board_inspection_tool.cpp:688
+#: pcbnew/tools/board_inspection_tool.cpp:1494
 msgid "Assertions for:"
 msgstr "Дозволи для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:718
+#: pcbnew/tools/board_inspection_tool.cpp:719
 msgid "Select two items for a clearance resolution report."
 msgstr "Виберіть два елементи для звіту про зазори."
 
-#: pcbnew/tools/board_inspection_tool.cpp:734
-#: pcbnew/tools/board_inspection_tool.cpp:747
+#: pcbnew/tools/board_inspection_tool.cpp:735
+#: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Cannot generate clearance report on empty group."
 msgstr "Не вдалося створити звіт про зазори для незаповнених груп."
 
-#: pcbnew/tools/board_inspection_tool.cpp:825
+#: pcbnew/tools/board_inspection_tool.cpp:826
 msgid "Zone connection resolution for:"
 msgstr "Роздільна здатність з'єднання зон для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:833
+#: pcbnew/tools/board_inspection_tool.cpp:834
 msgid "Thermal-relief gap resolution for:"
 msgstr "Роздільна здатність зазору для термозняття:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:842
+#: pcbnew/tools/board_inspection_tool.cpp:843
 #, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "Дозвіл відступу теплового зазору: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:847
+#: pcbnew/tools/board_inspection_tool.cpp:848
 msgid "Thermal-relief spoke width resolution for:"
 msgstr "Роздільна здатність ширини спиць для терморозвантаження:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:856
+#: pcbnew/tools/board_inspection_tool.cpp:857
 #, c-format
 msgid "Resolved spoke width: %s."
 msgstr "Визначена ширина спиць: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:861
+#: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Thermal-relief min spoke count resolution for:"
 msgstr "Мінімальна роздільна здатність спиць для термозняття:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:870
+#: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
 msgid "Resolved min spoke count: %d."
 msgstr "Мінімальна кількість вирішених питань: %d."
 
-#: pcbnew/tools/board_inspection_tool.cpp:879
-#: pcbnew/tools/board_inspection_tool.cpp:927
+#: pcbnew/tools/board_inspection_tool.cpp:880
+#: pcbnew/tools/board_inspection_tool.cpp:928
 msgid "Zone clearance resolution for:"
 msgstr "Дозвіл про очищення зони для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:883
+#: pcbnew/tools/board_inspection_tool.cpp:884
 #, c-format
 msgid "Zone clearance: %s."
 msgstr "Зазор зони: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:893
+#: pcbnew/tools/board_inspection_tool.cpp:894
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "Замінено більшим фізичним зазором на %s; зазор: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:909
+#: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr "Перевизначено більшим фізичним зазором отвору від %s; зазор: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:953
+#: pcbnew/tools/board_inspection_tool.cpp:954
 msgid "Items belong to the same net. Min clearance is 0."
 msgstr "Елементи належать до однієї мережі. Мінімальний зазор — 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:968
+#: pcbnew/tools/board_inspection_tool.cpp:969
 msgid "Min clearance is 0."
 msgstr "Мінімальний зазор дорівнює 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:972
+#: pcbnew/tools/board_inspection_tool.cpp:973
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
 msgstr "Врегулювання зазору: %s; зазор не був протестований."
 
-#: pcbnew/tools/board_inspection_tool.cpp:995
+#: pcbnew/tools/board_inspection_tool.cpp:996
 msgid "Diff Pair"
 msgstr "Диференційна пара"
 
-#: pcbnew/tools/board_inspection_tool.cpp:996
+#: pcbnew/tools/board_inspection_tool.cpp:997
 msgid "Diff-pair gap resolution for:"
 msgstr "Роздільна здатність розриву диференціальної пари для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1001
+#: pcbnew/tools/board_inspection_tool.cpp:1002
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Дозволене обмеження зазору: мін %s; опт %s;макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1009
+#: pcbnew/tools/board_inspection_tool.cpp:1010
 msgid "Diff-pair max uncoupled length resolution for:"
 msgstr ""
 "Роздільна здатність максимальної незв'язаної довжини диференціальної пари "
 "для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1015
+#: pcbnew/tools/board_inspection_tool.cpp:1016
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "обмежень 'diff_pair_uncoupled' не визначено."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1046
+#: pcbnew/tools/board_inspection_tool.cpp:1047
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr ""
 "Примітка: %s закриті маскою; зазор застосовуватиметься лише до отворів."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1063
+#: pcbnew/tools/board_inspection_tool.cpp:1064
 msgid "Silkscreen clearance resolution for:"
 msgstr "Дозволений зазор шовкографії для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1091
+#: pcbnew/tools/board_inspection_tool.cpp:1092
 msgid "Courtyard clearance resolution for:"
 msgstr "Дозволений зазор встановлення для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1210
+#: pcbnew/tools/board_inspection_tool.cpp:1211
 msgid "Physical Clearances"
 msgstr "Фізичні відступи"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1251
+#: pcbnew/tools/board_inspection_tool.cpp:1252
 #, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "На %s не діють обмеження «physical_clearance»."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1270
+#: pcbnew/tools/board_inspection_tool.cpp:1271
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
@@ -48264,83 +48263,83 @@ msgstr ""
 "Елементи не мають спільних відповідних шарів. Обмеження «physical_clearance» "
 "не застосовуватимуться."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1332
+#: pcbnew/tools/board_inspection_tool.cpp:1333
 msgid "Select an item for a constraints resolution report."
 msgstr "Виберіть елементи для звіту про обмеження."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1365
+#: pcbnew/tools/board_inspection_tool.cpp:1366
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження ширини: хв. %s; опц. %s; макс. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1385
+#: pcbnew/tools/board_inspection_tool.cpp:1386
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження діаметра: хв. %s; опц. %s; макс. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1392
+#: pcbnew/tools/board_inspection_tool.cpp:1393
 msgid "Via Annular Width"
 msgstr "Ширина пояска перехідного отвору"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1402
+#: pcbnew/tools/board_inspection_tool.cpp:1403
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження ширини кільця: хв %s; опція %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1423
+#: pcbnew/tools/board_inspection_tool.cpp:1424
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження розміру отвору: хв %s; опція %s; макс %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1442
+#: pcbnew/tools/board_inspection_tool.cpp:1443
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження висоти: мін. %s; опц. %s; макс. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1458
+#: pcbnew/tools/board_inspection_tool.cpp:1459
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
 msgstr "Вирішено обмеження товщини: хв. %s; опц. %s; макс. %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1467
+#: pcbnew/tools/board_inspection_tool.cpp:1468
 msgid "Keepout resolution for:"
 msgstr "Розширення зони заборони для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1477
-#: pcbnew/tools/board_inspection_tool.cpp:1501
+#: pcbnew/tools/board_inspection_tool.cpp:1478
+#: pcbnew/tools/board_inspection_tool.cpp:1502
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
 "Звіт може бути неповним: деякі посадкові місця мають некоректну область "
 "встановлення."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1479
-#: pcbnew/tools/board_inspection_tool.cpp:1503
+#: pcbnew/tools/board_inspection_tool.cpp:1480
+#: pcbnew/tools/board_inspection_tool.cpp:1504
 msgid "Run DRC for a full analysis."
 msgstr "Виконайте DRC для повного аналізу."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1486
+#: pcbnew/tools/board_inspection_tool.cpp:1487
 msgid "Item <b>disallowed</b> at current location."
 msgstr "Елемент <b>заборонений</b> в поточній локації."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1488
+#: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Item allowed at current location."
 msgstr "Елементи дозволені в поточній локації."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1541
+#: pcbnew/tools/board_inspection_tool.cpp:1542
 msgid "Select a footprint to diff with its library equivalent."
 msgstr "Виберіть слід для порівняння з його бібліотечним еквівалентом."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1559
+#: pcbnew/tools/board_inspection_tool.cpp:1560
 msgid "Select a footprint for a footprint associations report."
 msgstr ""
 "Виберіть посадковий елемент для звіту про асоціації посадкових елементів."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1586
+#: pcbnew/tools/board_inspection_tool.cpp:1587
 msgid "Board vs library diff for:"
 msgstr "Різниця між дошкою та бібліотекою для:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1609
-#: pcbnew/tools/board_inspection_tool.cpp:1617
+#: pcbnew/tools/board_inspection_tool.cpp:1610
+#: pcbnew/tools/board_inspection_tool.cpp:1618
 msgid "Manage Footprint Libraries"
 msgstr "Керування бібліотеками слідів"
 
@@ -50873,51 +50872,51 @@ msgstr "Вибрані елементи"
 msgid "Selected 2D Length"
 msgstr "Вибрана 2D-довжина"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2381
+#: pcbnew/tools/pcb_point_editor.cpp:2391
 msgid "Resize Table Cells"
 msgstr "Зміна розміру комірок таблиці"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2466
+#: pcbnew/tools/pcb_point_editor.cpp:2476
 msgid "Move Midpoint to Location"
 msgstr "Перемістити середню точку в потрібне місце"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2467
+#: pcbnew/tools/pcb_point_editor.cpp:2477
 msgid "Move Midpoint"
 msgstr "Перемістити середню точку"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2471
+#: pcbnew/tools/pcb_point_editor.cpp:2481
 msgid "Move Corner to Location"
 msgstr "Перемістити кут до місця розташування"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2472
+#: pcbnew/tools/pcb_point_editor.cpp:2482
 msgid "Move Corner"
 msgstr "Перемістити кут"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2818
+#: pcbnew/tools/pcb_point_editor.cpp:2829
 msgid "Add Zone Corner"
 msgstr "Додати кут зони"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2842
+#: pcbnew/tools/pcb_point_editor.cpp:2853
 msgid "Split Segment"
 msgstr "Розділити сегмент"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2864
+#: pcbnew/tools/pcb_point_editor.cpp:2875
 msgid "Split Arc"
 msgstr "Розділена дуга"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2941
+#: pcbnew/tools/pcb_point_editor.cpp:2952
 msgid "Remove Zone Corner"
 msgstr "Вилучити кут зони"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2943
+#: pcbnew/tools/pcb_point_editor.cpp:2954
 msgid "Remove Polygon Corner"
 msgstr "Вилучити кут багатокутника"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3041
+#: pcbnew/tools/pcb_point_editor.cpp:3052
 msgid "Break Zone Corner"
 msgstr "Куточок зони перерви"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3043
+#: pcbnew/tools/pcb_point_editor.cpp:3054
 msgid "Break Polygon Corner"
 msgstr "Розрив кута полігона"
 

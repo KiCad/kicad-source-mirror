@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 16:04+0300\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-10-01 15:02+0000\n"
 "Last-Translator: William Lin <unrealin01@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -350,7 +350,7 @@ msgstr "儲存檔案 '%s' 的權限不足。"
 #: common/dialogs/panel_embedded_files.cpp:508
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
-#: eeschema/dialogs/dialog_erc.cpp:879
+#: eeschema/dialogs/dialog_erc.cpp:901
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:901
@@ -370,7 +370,7 @@ msgstr "儲存檔案 '%s' 的權限不足。"
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:984
+#: pcbnew/dialogs/dialog_drc.cpp:1006
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:418
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
@@ -1442,7 +1442,7 @@ msgstr "比例"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2475
+#: pcbnew/tools/pcb_point_editor.cpp:2485
 msgid "X:"
 msgstr "X:"
 
@@ -1466,7 +1466,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2475
+#: pcbnew/tools/pcb_point_editor.cpp:2485
 msgid "Y:"
 msgstr "Y:"
 
@@ -2065,7 +2065,7 @@ msgid "&OK"
 msgstr "確定 (&O)"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
-#: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:880
+#: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:902
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
@@ -2078,7 +2078,7 @@ msgstr "確定 (&O)"
 #: eeschema/symbol_editor/symbol_editor.cpp:503
 #: eeschema/symbol_editor/symbol_editor.cpp:1299
 #: eeschema/symbol_editor/symbol_editor.cpp:1697
-#: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
+#: pcbnew/dialogs/dialog_drc.cpp:1007 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
@@ -3492,7 +3492,7 @@ msgstr "列印預覽"
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
-#: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:464
+#: eeschema/dialogs/dialog_erc.cpp:116 eeschema/dialogs/dialog_erc.cpp:486
 #: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
@@ -3505,7 +3505,7 @@ msgstr "列印預覽"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#: pcbnew/dialogs/dialog_drc.cpp:141 pcbnew/dialogs/dialog_drc.cpp:368
+#: pcbnew/dialogs/dialog_drc.cpp:141 pcbnew/dialogs/dialog_drc.cpp:390
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 #: pcbnew/dialogs/dialog_export_2581.cpp:60
 #: pcbnew/dialogs/dialog_export_step.cpp:111
@@ -3815,13 +3815,13 @@ msgstr "確定"
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:465 common/tool/actions.cpp:159
-#: eeschema/dialogs/dialog_erc.cpp:424
+#: eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 #: eeschema/symbol_editor/symbol_editor.cpp:1030
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:348
+#: pcbnew/dialogs/dialog_drc.cpp:370
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr "取消"
@@ -5565,15 +5565,15 @@ msgid "Netclasses"
 msgstr "網路類"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:642
-#: pcbnew/tools/board_inspection_tool.cpp:1193 pcbnew/zone.cpp:2120
+#: pcbnew/tools/board_inspection_tool.cpp:643
+#: pcbnew/tools/board_inspection_tool.cpp:1194 pcbnew/zone.cpp:2120
 msgid "Clearance"
 msgstr "銅皮間隙"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
-#: pcbnew/tools/board_inspection_tool.cpp:434
-#: pcbnew/tools/board_inspection_tool.cpp:1356
+#: pcbnew/tools/board_inspection_tool.cpp:435
+#: pcbnew/tools/board_inspection_tool.cpp:1357
 msgid "Track Width"
 msgstr "走線寬度"
 
@@ -5667,8 +5667,8 @@ msgstr "網路類"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:881 eeschema/sch_marker.cpp:373
-#: pcbnew/dialogs/dialog_drc.cpp:986 pcbnew/pcb_marker.cpp:229
+#: eeschema/dialogs/dialog_erc.cpp:903 eeschema/sch_marker.cpp:373
+#: pcbnew/dialogs/dialog_drc.cpp:1008 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "忽略"
 
@@ -6302,7 +6302,7 @@ msgstr "引線"
 msgid "Target"
 msgstr "目標"
 
-#: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:824
+#: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:825
 msgid "Zone"
 msgstr "區域"
 
@@ -7908,9 +7908,9 @@ msgstr "無法將語言切換到 %s"
 
 #: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1021
 #: pcbnew/drc/drc_engine.cpp:1022 pcbnew/drc/drc_engine.cpp:1023
-#: pcbnew/tools/board_inspection_tool.cpp:251
-#: pcbnew/tools/board_inspection_tool.cpp:260
-#: pcbnew/tools/board_inspection_tool.cpp:269
+#: pcbnew/tools/board_inspection_tool.cpp:252
+#: pcbnew/tools/board_inspection_tool.cpp:261
+#: pcbnew/tools/board_inspection_tool.cpp:270
 msgid "undefined"
 msgstr "未定義"
 
@@ -8501,7 +8501,7 @@ msgstr "正在提取檔案 '%s'。"
 msgid "Error extracting file!"
 msgstr "提取檔案時出錯!"
 
-#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1070
+#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1092
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -8512,7 +8512,7 @@ msgstr "提取檔案時出錯!"
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
-#: pcbnew/dialogs/dialog_drc.cpp:1075 pcbnew/dialogs/dialog_export_2581.cpp:318
+#: pcbnew/dialogs/dialog_drc.cpp:1097 pcbnew/dialogs/dialog_export_2581.cpp:318
 #: pcbnew/dialogs/dialog_export_idf.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml.cpp:226
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:356
@@ -10023,7 +10023,7 @@ msgstr "未選擇物件"
 msgid "%d objects selected"
 msgstr "選擇了 %d 個物件"
 
-#: common/widgets/properties_panel.cpp:342
+#: common/widgets/properties_panel.cpp:346
 msgid "Basic Properties"
 msgstr "基礎屬性"
 
@@ -10152,9 +10152,9 @@ msgid "Info:"
 msgstr "資訊:"
 
 #: common/widgets/wx_html_report_panel.cpp:372
-#: eeschema/dialogs/dialog_erc.cpp:1037
+#: eeschema/dialogs/dialog_erc.cpp:1059
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
-#: pcbnew/dialogs/dialog_drc.cpp:1041
+#: pcbnew/dialogs/dialog_drc.cpp:1063
 msgid "Save Report File"
 msgstr "儲存報告檔案"
 
@@ -10899,39 +10899,39 @@ msgstr ""
 "%s\n"
 "找不到。腳本不可用。"
 
-#: eeschema/connection_graph.cpp:3312
+#: eeschema/connection_graph.cpp:3320
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都連接到同一項上; 將使用 %s 作為網表中的網路名稱"
 
-#: eeschema/connection_graph.cpp:3550
+#: eeschema/connection_graph.cpp:3558
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "網路 %s 以圖形方式連接到匯流排 %s, 但不是匯流排的成員"
 
-#: eeschema/connection_graph.cpp:3855 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3863 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未連接的線路端點"
 
-#: eeschema/connection_graph.cpp:3880
+#: eeschema/connection_graph.cpp:3888
 msgid "Unconnected wire to bus entry"
 msgstr "未連接匯流排入口的電線"
 
-#: eeschema/connection_graph.cpp:4213
+#: eeschema/connection_graph.cpp:4221
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙接腳"
 
-#: eeschema/connection_graph.cpp:4278
+#: eeschema/connection_graph.cpp:4286
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "圖紙接腳 %s 在子圖紙內沒有匹配的層次標籤"
 
-#: eeschema/connection_graph.cpp:4295
+#: eeschema/connection_graph.cpp:4303
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙接腳"
@@ -11849,135 +11849,135 @@ msgstr "顯示批註對話框"
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr "原理圖批註不完整。ERC 結果將不完整。"
 
-#: eeschema/dialogs/dialog_erc.cpp:314 pcbnew/dialogs/dialog_drc.cpp:1266
+#: eeschema/dialogs/dialog_erc.cpp:336 pcbnew/dialogs/dialog_drc.cpp:1291
 msgid "Delete exclusions too?"
 msgstr "是否刪除排除項?"
 
-#: eeschema/dialogs/dialog_erc.cpp:314 eeschema/dialogs/dialog_erc_base.cpp:173
-#: pcbnew/dialogs/dialog_drc.cpp:1266 pcbnew/dialogs/dialog_drc_base.cpp:219
+#: eeschema/dialogs/dialog_erc.cpp:336 eeschema/dialogs/dialog_erc_base.cpp:173
+#: pcbnew/dialogs/dialog_drc.cpp:1291 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "刪除所有標記"
 
-#: eeschema/dialogs/dialog_erc.cpp:316 pcbnew/dialogs/dialog_drc.cpp:1268
+#: eeschema/dialogs/dialog_erc.cpp:338 pcbnew/dialogs/dialog_drc.cpp:1293
 msgid "Errors and Warnings Only"
 msgstr "僅錯誤和警告"
 
-#: eeschema/dialogs/dialog_erc.cpp:317 pcbnew/dialogs/dialog_drc.cpp:1269
+#: eeschema/dialogs/dialog_erc.cpp:339 pcbnew/dialogs/dialog_drc.cpp:1294
 msgid "Errors, Warnings and Exclusions"
 msgstr "錯誤, 警告和排除"
 
-#: eeschema/dialogs/dialog_erc.cpp:449
+#: eeschema/dialogs/dialog_erc.cpp:471
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d 個符號需要批註。<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:456
+#: eeschema/dialogs/dialog_erc.cpp:478
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- 使用者取消 ERC。<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:458 pcbnew/dialogs/dialog_drc.cpp:362
+#: eeschema/dialogs/dialog_erc.cpp:480 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Done.<br><br>"
 msgstr "完成。<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:623 pcbnew/dialogs/dialog_drc.cpp:671
+#: eeschema/dialogs/dialog_erc.cpp:645 pcbnew/dialogs/dialog_drc.cpp:693
 msgid "errors"
 msgstr "錯誤"
 
-#: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:672
+#: eeschema/dialogs/dialog_erc.cpp:646 pcbnew/dialogs/dialog_drc.cpp:694
 msgid "warnings"
 msgstr "警告"
 
-#: eeschema/dialogs/dialog_erc.cpp:625 pcbnew/dialogs/dialog_drc.cpp:673
+#: eeschema/dialogs/dialog_erc.cpp:647 pcbnew/dialogs/dialog_drc.cpp:695
 msgid "appropriate"
 msgstr "適當"
 
-#: eeschema/dialogs/dialog_erc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:694
+#: eeschema/dialogs/dialog_erc.cpp:670 pcbnew/dialogs/dialog_drc.cpp:716
 msgid "Remove exclusion for this violation"
 msgstr "不再排除此違規"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:695
+#: eeschema/dialogs/dialog_erc.cpp:671 pcbnew/dialogs/dialog_drc.cpp:717
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "它將放回 %s 列表中"
 
-#: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:698
+#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:720
 msgid "Edit exclusion comment..."
 msgstr "編輯排除註釋..."
 
-#: eeschema/dialogs/dialog_erc.cpp:657 pcbnew/dialogs/dialog_drc.cpp:711
+#: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:733
 msgid "Exclude this violation"
 msgstr "排除此違規行為"
 
-#: eeschema/dialogs/dialog_erc.cpp:658 eeschema/dialogs/dialog_erc.cpp:662
-#: pcbnew/dialogs/dialog_drc.cpp:712 pcbnew/dialogs/dialog_drc.cpp:716
+#: eeschema/dialogs/dialog_erc.cpp:680 eeschema/dialogs/dialog_erc.cpp:684
+#: pcbnew/dialogs/dialog_drc.cpp:734 pcbnew/dialogs/dialog_drc.cpp:738
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "它將從 %s 列表中排除"
 
-#: eeschema/dialogs/dialog_erc.cpp:661 pcbnew/dialogs/dialog_drc.cpp:715
+#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:737
 msgid "Exclude with comment..."
 msgstr "編輯排除註釋..."
 
-#: eeschema/dialogs/dialog_erc.cpp:680 pcbnew/dialogs/dialog_drc.cpp:737
+#: eeschema/dialogs/dialog_erc.cpp:702 pcbnew/dialogs/dialog_drc.cpp:759
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "將所有 '%s' 違規的違規嚴重級別修改為 '錯誤'"
 
-#: eeschema/dialogs/dialog_erc.cpp:682 eeschema/dialogs/dialog_erc.cpp:689
+#: eeschema/dialogs/dialog_erc.cpp:704 eeschema/dialogs/dialog_erc.cpp:711
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr "違規嚴重級別也可以在 '電路板設定' 選項中進行編輯"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
+#: eeschema/dialogs/dialog_erc.cpp:709 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "將所有 '%s' 違規的違規嚴重級別修改為 '警告'"
 
-#: eeschema/dialogs/dialog_erc.cpp:694 pcbnew/dialogs/dialog_drc.cpp:750
+#: eeschema/dialogs/dialog_erc.cpp:716 pcbnew/dialogs/dialog_drc.cpp:772
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "忽略所有 '%s' 違規"
 
-#: eeschema/dialogs/dialog_erc.cpp:695 pcbnew/dialogs/dialog_drc.cpp:751
+#: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:773
 msgid "Violations will not be checked or reported"
 msgstr "違規將不會被檢查或報告"
 
-#: eeschema/dialogs/dialog_erc.cpp:703
+#: eeschema/dialogs/dialog_erc.cpp:725
 msgid "Edit pin-to-pin conflict map..."
 msgstr "編輯接腳到接腳衝突圖..."
 
-#: eeschema/dialogs/dialog_erc.cpp:704 eeschema/dialogs/dialog_erc.cpp:710
-#: eeschema/dialogs/dialog_erc.cpp:717
+#: eeschema/dialogs/dialog_erc.cpp:726 eeschema/dialogs/dialog_erc.cpp:732
+#: eeschema/dialogs/dialog_erc.cpp:739
 msgid "Open the Schematic Setup... dialog"
 msgstr "打開 '原理圖設定' 對話框"
 
-#: eeschema/dialogs/dialog_erc.cpp:709 pcbnew/dialogs/dialog_drc.cpp:756
+#: eeschema/dialogs/dialog_erc.cpp:731 pcbnew/dialogs/dialog_drc.cpp:778
 msgid "Edit violation severities..."
 msgstr "編輯違規嚴重級別......"
 
-#: eeschema/dialogs/dialog_erc.cpp:716
+#: eeschema/dialogs/dialog_erc.cpp:738
 msgid "Edit connection grid spacing..."
 msgstr "編輯最小網格間距..."
 
-#: eeschema/dialogs/dialog_erc.cpp:728 eeschema/dialogs/dialog_erc.cpp:764
-#: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:820
+#: eeschema/dialogs/dialog_erc.cpp:750 eeschema/dialogs/dialog_erc.cpp:786
+#: pcbnew/dialogs/dialog_drc.cpp:789 pcbnew/dialogs/dialog_drc.cpp:842
 msgid "Exclusion Comment"
 msgstr "排除註釋"
 
-#: eeschema/dialogs/dialog_erc.cpp:852
+#: eeschema/dialogs/dialog_erc.cpp:874
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
 msgstr "接腳衝突圖"
 
-#: eeschema/dialogs/dialog_erc.cpp:856 eeschema/dialogs/dialog_erc.cpp:986
+#: eeschema/dialogs/dialog_erc.cpp:878 eeschema/dialogs/dialog_erc.cpp:1008
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
-#: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:966
-#: pcbnew/dialogs/dialog_drc.cpp:1008
+#: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:988
+#: pcbnew/dialogs/dialog_drc.cpp:1030
 msgid "Violation Severity"
 msgstr "違規嚴重級別"
 
-#: eeschema/dialogs/dialog_erc.cpp:860
+#: eeschema/dialogs/dialog_erc.cpp:882
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
@@ -11985,7 +11985,7 @@ msgstr "違規嚴重級別"
 msgid "Formatting"
 msgstr "格式"
 
-#: eeschema/dialogs/dialog_erc.cpp:1065 pcbnew/dialogs/dialog_gendrill.cpp:518
+#: eeschema/dialogs/dialog_erc.cpp:1087 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, c-format
 msgid "Report file '%s' created."
 msgstr "已建立報告檔案 '%s'。"
@@ -12724,7 +12724,7 @@ msgstr "標籤不能為空。"
 #: eeschema/dialogs/dialog_label_properties.cpp:584
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:501
 #: eeschema/dialogs/dialog_sheet_properties.cpp:397
-#: eeschema/dialogs/dialog_symbol_properties.cpp:739 include/project.h:43
+#: eeschema/dialogs/dialog_symbol_properties.cpp:741 include/project.h:43
 msgid "untitled"
 msgstr "無標題"
 
@@ -12826,7 +12826,7 @@ msgstr "垂直對齊"
 #: eeschema/sch_field.cpp:1901 eeschema/sch_label.cpp:1251
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:650
 #: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:545
-#: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1433
+#: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
 msgid "Text Size"
 msgstr "文字大小"
 
@@ -13169,7 +13169,7 @@ msgstr "欄位必須要有一個名稱。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:686
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
-#: eeschema/dialogs/dialog_symbol_properties.cpp:809
+#: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "欄位名稱 '%s' 已經被佔用。"
@@ -13307,7 +13307,7 @@ msgstr "新建符號"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:391
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
-#: eeschema/dialogs/dialog_symbol_properties.cpp:648
+#: eeschema/dialogs/dialog_symbol_properties.cpp:650
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:458
 msgid "Fields must have a name."
@@ -13339,7 +13339,7 @@ msgstr "符號名稱 '%s' 在庫 '%s' 中已被使用。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:466
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:471
-#: eeschema/dialogs/dialog_symbol_properties.cpp:780
+#: eeschema/dialogs/dialog_symbol_properties.cpp:782
 msgid "Edit Symbol Properties"
 msgstr "編輯符號屬性"
 
@@ -13355,7 +13355,7 @@ msgstr "名稱 '%s' 已被使用。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:717
 #: eeschema/dialogs/dialog_sheet_properties.cpp:788
-#: eeschema/dialogs/dialog_symbol_properties.cpp:881
+#: eeschema/dialogs/dialog_symbol_properties.cpp:883
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:720
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:748
 #, c-format
@@ -13621,7 +13621,7 @@ msgid "Alternate Pin Name"
 msgstr "替代接腳名稱"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
-#: eeschema/dialogs/dialog_symbol_properties.cpp:358
+#: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "替代接腳分配功能對迪摩根等效樣式符號不可用。"
 
@@ -18382,8 +18382,8 @@ msgstr ""
 #: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
-#: pcbnew/widgets/pcb_properties_panel.cpp:247
-#: pcbnew/widgets/pcb_properties_panel.cpp:258 pcbnew/zone.cpp:1917
+#: pcbnew/widgets/pcb_properties_panel.cpp:246
+#: pcbnew/widgets/pcb_properties_panel.cpp:257 pcbnew/zone.cpp:1917
 #: pcbnew/zone.cpp:1929
 msgid "Position X"
 msgstr "位置 X"
@@ -18392,7 +18392,7 @@ msgstr "位置 X"
 #: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
-#: pcbnew/widgets/pcb_properties_panel.cpp:248 pcbnew/zone.cpp:1923
+#: pcbnew/widgets/pcb_properties_panel.cpp:247 pcbnew/zone.cpp:1923
 #: pcbnew/zone.cpp:1930
 msgid "Position Y"
 msgstr "位置 Y"
@@ -18587,99 +18587,99 @@ msgid ""
 "harness that got converted to a sheet."
 msgstr "圖紙 %s 的檔案名未定義, 這可能是轉換為圖紙的 Altium 信號線束。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:966
+#: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "存儲檔案沒有被完全解析 (%d 字節剩餘)。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1048
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1150
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1053
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1155
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "應為 5.0 版本的 Altium 原理圖檔案"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1265
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1270
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "未處理記錄 'IEEE_SYMBOL'。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1384
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1389
 msgid "Parameter Set not currently supported."
 msgstr "尚未支援參數設定。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1409
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1414
 msgid "Compile mask not currently supported."
 msgstr "尚未支援 Compile mask。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1434
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
 msgid "Blanket not currently supported."
 msgstr "尚未支援空白。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4734
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1444
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4739
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1497
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1502
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "符號 \"%s\"(位於圖紙 \"%s\", 該圖紙位於索引 %d) 被符號\"%s\"取代。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1669
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1674
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
 msgid "Pin has unexpected orientation."
 msgstr "接腳方向不符預期。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1717
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
 msgid "Pin has unexpected electrical type."
 msgstr "接腳電氣類型不符預期。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
 msgid "Pin has unexpected outer edge type."
 msgstr "接腳的外邊緣類型出乎意料。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1725
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1730
 msgid "Pin has unexpected inner edge type."
 msgstr "接腳的內邊緣類型出乎意料。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2131
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2136
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "貝塞爾曲線有 %d 個控制點。至少應為 2 個。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3616
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3621
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "未知樣式的電源端口匯入為 'Bar' 類型。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3665
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3670
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:701
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "電源符號建立名為 '%s' 的全域標籤"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3833
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3838
 #, c-format
 msgid "Port %s has no connections."
 msgstr "端口 %s 未連接。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4025
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4030
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "在存儲中找不到嵌入檔案 %s。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4042
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4061
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4047
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4066
 #, c-format
 msgid "Error reading image %s."
 msgstr "讀取圖片 %s 時出錯。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4054
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4059
 #, c-format
 msgid "File not found %s."
 msgstr "找不到檔案 %s。"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4866
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4871
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Altium 原理圖庫檔案應為 5.0 版本"
 
@@ -23971,13 +23971,13 @@ msgid "Find again to wrap around to the start."
 msgstr "再次尋找到開始。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:224
-#: pcbnew/tools/board_inspection_tool.cpp:292
+#: pcbnew/tools/board_inspection_tool.cpp:293
 #, c-format
 msgid "Run %s > %s"
 msgstr "運行 %s > %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:231
-#: pcbnew/tools/board_inspection_tool.cpp:299
+#: pcbnew/tools/board_inspection_tool.cpp:300
 #, c-format
 msgid "Run %s"
 msgstr "運行 %s"
@@ -24000,7 +24000,7 @@ msgid "Symbol %s"
 msgstr "符號 %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:385
-#: pcbnew/tools/board_inspection_tool.cpp:1584
+#: pcbnew/tools/board_inspection_tool.cpp:1585
 msgid "Summary"
 msgstr "總結"
 
@@ -24010,17 +24010,17 @@ msgstr "原理圖與庫的差異:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#: pcbnew/tools/board_inspection_tool.cpp:1588
+#: pcbnew/tools/board_inspection_tool.cpp:1589
 msgid "Library: "
 msgstr "庫: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
-#: pcbnew/tools/board_inspection_tool.cpp:1589
+#: pcbnew/tools/board_inspection_tool.cpp:1590
 msgid "Library item: "
 msgstr "庫項目: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:400
-#: pcbnew/tools/board_inspection_tool.cpp:1607
+#: pcbnew/tools/board_inspection_tool.cpp:1608
 msgid "The library is not included in the current configuration."
 msgstr "目前配置中不包括該庫。"
 
@@ -24030,23 +24030,23 @@ msgid "Manage Symbol Libraries"
 msgstr "管理符號庫"
 
 #: eeschema/tools/sch_inspection_tool.cpp:406
-#: pcbnew/tools/board_inspection_tool.cpp:1615
+#: pcbnew/tools/board_inspection_tool.cpp:1616
 msgid "The library is not enabled in the current configuration."
 msgstr "目前配置中未啟用該庫。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
-#: pcbnew/tools/board_inspection_tool.cpp:1635
+#: pcbnew/tools/board_inspection_tool.cpp:1636
 #, c-format
 msgid "The library no longer contains the item %s."
 msgstr "庫中不再包含項目 %s。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:447
-#: pcbnew/tools/board_inspection_tool.cpp:1641
+#: pcbnew/tools/board_inspection_tool.cpp:1642
 msgid "No relevant differences detected."
 msgstr "沒有差異。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:450
-#: pcbnew/tools/board_inspection_tool.cpp:1643
+#: pcbnew/tools/board_inspection_tool.cpp:1644
 msgid "Visual"
 msgstr "可視"
 
@@ -24087,7 +24087,7 @@ msgid "Page '%s' not found."
 msgstr "找不到 '%s' 頁面。"
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2385
+#: pcbnew/tools/pcb_point_editor.cpp:2395
 msgid "Move Point"
 msgstr "移動端點"
 
@@ -24357,7 +24357,7 @@ msgid "Invalid footprint specified"
 msgstr "指定的封裝無效"
 
 #: eeschema/widgets/sch_properties_panel.cpp:219
-#: pcbnew/widgets/pcb_properties_panel.cpp:278
+#: pcbnew/widgets/pcb_properties_panel.cpp:277
 msgid "Edit Properties"
 msgstr "編輯屬性"
 
@@ -24647,12 +24647,12 @@ msgstr "選擇層: %s"
 #: pcbnew/pcb_tablecell.cpp:141 pcbnew/pcb_tablecell.cpp:217
 #: pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:288 pcbnew/pcb_textbox.cpp:476
 #: pcbnew/pcb_track.cpp:1628 pcbnew/pcb_track.cpp:1695
-#: pcbnew/pcb_track.cpp:2171 pcbnew/tools/board_inspection_tool.cpp:237
+#: pcbnew/pcb_track.cpp:2171 pcbnew/tools/board_inspection_tool.cpp:238
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:215
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:226
+#: pcbnew/widgets/pcb_properties_panel.cpp:302
 #: pcbnew/widgets/pcb_properties_panel.cpp:303
-#: pcbnew/widgets/pcb_properties_panel.cpp:304
-#: pcbnew/widgets/pcb_properties_panel.cpp:307
+#: pcbnew/widgets/pcb_properties_panel.cpp:306
 #: pcbnew/widgets/search_handlers.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:189
 #: pcbnew/widgets/search_handlers.cpp:255 pcbnew/zone.cpp:854
@@ -33381,52 +33381,52 @@ msgstr "測量標註屬性"
 msgid "Run DRC"
 msgstr "運行 DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:305
+#: pcbnew/dialogs/dialog_drc.cpp:327
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr "DRC 不完整: 無法編譯自定義設計規則。"
 
-#: pcbnew/dialogs/dialog_drc.cpp:307 pcbnew/tools/board_inspection_tool.cpp:214
+#: pcbnew/dialogs/dialog_drc.cpp:329 pcbnew/tools/board_inspection_tool.cpp:215
 msgid "Show design rules."
 msgstr "顯示設計規則。"
 
-#: pcbnew/dialogs/dialog_drc.cpp:360
+#: pcbnew/dialogs/dialog_drc.cpp:382
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC 已被使用者取消。<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:703
+#: pcbnew/dialogs/dialog_drc.cpp:725
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "移除所有規則 '%s' 違規的排除項"
 
-#: pcbnew/dialogs/dialog_drc.cpp:705
+#: pcbnew/dialogs/dialog_drc.cpp:727
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr "它們將被放回 %s 列表中"
 
-#: pcbnew/dialogs/dialog_drc.cpp:721
+#: pcbnew/dialogs/dialog_drc.cpp:743
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "排除所有違反 '%s' 規則的違規項..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:723
+#: pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr "它們將被從 %s 列表中排除"
 
-#: pcbnew/dialogs/dialog_drc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:746
+#: pcbnew/dialogs/dialog_drc.cpp:761 pcbnew/dialogs/dialog_drc.cpp:768
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "也可在 <電路板設定...> 選項中編輯違規嚴重級別"
 
-#: pcbnew/dialogs/dialog_drc.cpp:757
+#: pcbnew/dialogs/dialog_drc.cpp:779
 msgid "Open the Board Setup... dialog"
 msgstr "打開\"電路板設定...\"對話框"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1070
+#: pcbnew/dialogs/dialog_drc.cpp:1092
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "建立報告檔案 '%s' <br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1413
+#: pcbnew/dialogs/dialog_drc.cpp:1438
 msgid "not run"
 msgstr "不運行"
 
@@ -35449,7 +35449,7 @@ msgstr "文字寬度"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
 #: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:152
-#: pcbnew/pcb_textbox.cpp:483 pcbnew/tools/board_inspection_tool.cpp:404
+#: pcbnew/pcb_textbox.cpp:483 pcbnew/tools/board_inspection_tool.cpp:405
 msgid "Text Height"
 msgstr "文字高度"
 
@@ -35457,7 +35457,7 @@ msgstr "文字高度"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
 #: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:150
-#: pcbnew/pcb_textbox.cpp:481 pcbnew/tools/board_inspection_tool.cpp:419
+#: pcbnew/pcb_textbox.cpp:481 pcbnew/tools/board_inspection_tool.cpp:420
 msgid "Text Thickness"
 msgstr "文字線寬"
 
@@ -37402,7 +37402,7 @@ msgid "Render PCB Job Options"
 msgstr "算繪 PCB 作業選項"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:127
-#: pcbnew/tools/board_inspection_tool.cpp:1466
+#: pcbnew/tools/board_inspection_tool.cpp:1467
 msgid "Keepouts"
 msgstr "禁區"
 
@@ -40310,8 +40310,8 @@ msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1419
 #: pcbnew/pcb_track.cpp:1699 pcbnew/pcb_track.cpp:2175
-#: pcbnew/tools/board_inspection_tool.cpp:1123
-#: pcbnew/tools/board_inspection_tool.cpp:1145
+#: pcbnew/tools/board_inspection_tool.cpp:1124
+#: pcbnew/tools/board_inspection_tool.cpp:1146
 msgid "Hole"
 msgstr "孔徑"
 
@@ -46049,11 +46049,11 @@ msgstr "走線 %s (%s), 長度: %s"
 msgid "Via Properties"
 msgstr "貫孔屬性"
 
-#: pcbnew/pcb_track.cpp:2177 pcbnew/widgets/pcb_properties_panel.cpp:308
+#: pcbnew/pcb_track.cpp:2177 pcbnew/widgets/pcb_properties_panel.cpp:307
 msgid "Layer Top"
 msgstr "層頂部"
 
-#: pcbnew/pcb_track.cpp:2179 pcbnew/widgets/pcb_properties_panel.cpp:309
+#: pcbnew/pcb_track.cpp:2179 pcbnew/widgets/pcb_properties_panel.cpp:308
 msgid "Layer Bottom"
 msgstr "層底部"
 
@@ -46069,7 +46069,7 @@ msgstr "格式化"
 msgid "Back tenting"
 msgstr "佈線編輯"
 
-#: pcbnew/pcbexpr_evaluator.cpp:683
+#: pcbnew/pcbexpr_evaluator.cpp:688
 msgid "must be mm, in, or mil"
 msgstr "單位必須為 mm, in 或 mil"
 
@@ -46975,431 +46975,431 @@ msgstr "複製區域"
 msgid "Selection contains no items with labeled nets."
 msgstr "所選部分不包含帶標籤網路的項目。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:65
+#: pcbnew/tools/board_inspection_tool.cpp:66
 msgid "Net Inspection Tools"
 msgstr "網路檢查工具"
 
-#: pcbnew/tools/board_inspection_tool.cpp:201
+#: pcbnew/tools/board_inspection_tool.cpp:202
 #, c-format
 msgid "[netclass %s]"
 msgstr "[網路類 %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:212
+#: pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Report incomplete: could not compile custom design rules."
 msgstr "報告不完整: 無法編譯自定義設計規則。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:389
+#: pcbnew/tools/board_inspection_tool.cpp:390
 msgid "Uncoupled Length"
 msgstr "未耦合長度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:390
+#: pcbnew/tools/board_inspection_tool.cpp:391
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "差分對未耦合長度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:398
-#: pcbnew/tools/board_inspection_tool.cpp:1022
+#: pcbnew/tools/board_inspection_tool.cpp:399
+#: pcbnew/tools/board_inspection_tool.cpp:1023
 #, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "解析完成的最大未耦合長度: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:405
-#: pcbnew/tools/board_inspection_tool.cpp:1434
+#: pcbnew/tools/board_inspection_tool.cpp:406
+#: pcbnew/tools/board_inspection_tool.cpp:1435
 msgid "Text height resolution for:"
 msgstr "文字高度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:413
+#: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "解析完成的高度約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:420
-#: pcbnew/tools/board_inspection_tool.cpp:1450
+#: pcbnew/tools/board_inspection_tool.cpp:421
+#: pcbnew/tools/board_inspection_tool.cpp:1451
 msgid "Text thickness resolution for:"
 msgstr "文字線寬解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:428
+#: pcbnew/tools/board_inspection_tool.cpp:429
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "解析完成的線寬約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:435
-#: pcbnew/tools/board_inspection_tool.cpp:1357
+#: pcbnew/tools/board_inspection_tool.cpp:436
+#: pcbnew/tools/board_inspection_tool.cpp:1358
 msgid "Track width resolution for:"
 msgstr "走線寬度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:443
+#: pcbnew/tools/board_inspection_tool.cpp:444
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "解析完成的寬度約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:449
+#: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Track Angle"
 msgstr "走線長度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:450
+#: pcbnew/tools/board_inspection_tool.cpp:451
 msgid "Track Angle resolution for:"
 msgstr "走線寬度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:458
+#: pcbnew/tools/board_inspection_tool.cpp:459
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
 msgstr "解析完成的直徑約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:464
+#: pcbnew/tools/board_inspection_tool.cpp:465
 msgid "Track Segment Length"
 msgstr "線段長度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:465
+#: pcbnew/tools/board_inspection_tool.cpp:466
 msgid "Track segment length resolution for:"
 msgstr "走線寬度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:473
+#: pcbnew/tools/board_inspection_tool.cpp:474
 #, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
 msgstr "解析完成的直徑約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:479
+#: pcbnew/tools/board_inspection_tool.cpp:480
 msgid "Connection Width"
 msgstr "連接寬度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:480
+#: pcbnew/tools/board_inspection_tool.cpp:481
 msgid "Connection width resolution for:"
 msgstr "連接寬度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:488
+#: pcbnew/tools/board_inspection_tool.cpp:489
 #, c-format
 msgid "Resolved min connection width: %s."
 msgstr "解析完成的最小連接寬度約束: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:493
-#: pcbnew/tools/board_inspection_tool.cpp:1375
+#: pcbnew/tools/board_inspection_tool.cpp:494
+#: pcbnew/tools/board_inspection_tool.cpp:1376
 msgid "Via Diameter"
 msgstr "貫孔直徑"
 
-#: pcbnew/tools/board_inspection_tool.cpp:494
-#: pcbnew/tools/board_inspection_tool.cpp:1376
+#: pcbnew/tools/board_inspection_tool.cpp:495
+#: pcbnew/tools/board_inspection_tool.cpp:1377
 msgid "Via diameter resolution for:"
 msgstr "貫孔直徑解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:502
+#: pcbnew/tools/board_inspection_tool.cpp:503
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "解析完成的直徑約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:508
+#: pcbnew/tools/board_inspection_tool.cpp:509
 msgid "Via Annulus"
 msgstr "貫孔環"
 
-#: pcbnew/tools/board_inspection_tool.cpp:509
-#: pcbnew/tools/board_inspection_tool.cpp:1393
+#: pcbnew/tools/board_inspection_tool.cpp:510
+#: pcbnew/tools/board_inspection_tool.cpp:1394
 msgid "Via annular width resolution for:"
 msgstr "貫孔環形寬度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:517
+#: pcbnew/tools/board_inspection_tool.cpp:518
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "解析完成的環形寬度約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:524
-#: pcbnew/tools/board_inspection_tool.cpp:1413
+#: pcbnew/tools/board_inspection_tool.cpp:525
+#: pcbnew/tools/board_inspection_tool.cpp:1414
 msgid "Hole Size"
 msgstr "孔尺寸"
 
-#: pcbnew/tools/board_inspection_tool.cpp:525
-#: pcbnew/tools/board_inspection_tool.cpp:1414
+#: pcbnew/tools/board_inspection_tool.cpp:526
+#: pcbnew/tools/board_inspection_tool.cpp:1415
 msgid "Hole size resolution for:"
 msgstr "孔直徑解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:533
+#: pcbnew/tools/board_inspection_tool.cpp:534
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
 msgstr "解析完成的高度約束: 最小 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:539
+#: pcbnew/tools/board_inspection_tool.cpp:540
 msgid "Hole Clearance"
 msgstr "孔間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:540
-#: pcbnew/tools/board_inspection_tool.cpp:1126
+#: pcbnew/tools/board_inspection_tool.cpp:541
+#: pcbnew/tools/board_inspection_tool.cpp:1127
 msgid "Hole clearance resolution for:"
 msgstr "孔間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:548
-#: pcbnew/tools/board_inspection_tool.cpp:651
+#: pcbnew/tools/board_inspection_tool.cpp:549
+#: pcbnew/tools/board_inspection_tool.cpp:652
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "項目屬於同一網路。間隙為 0。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:557
-#: pcbnew/tools/board_inspection_tool.cpp:577
-#: pcbnew/tools/board_inspection_tool.cpp:594
-#: pcbnew/tools/board_inspection_tool.cpp:609
-#: pcbnew/tools/board_inspection_tool.cpp:660
-#: pcbnew/tools/board_inspection_tool.cpp:680
-#: pcbnew/tools/board_inspection_tool.cpp:920
-#: pcbnew/tools/board_inspection_tool.cpp:934
-#: pcbnew/tools/board_inspection_tool.cpp:978
-#: pcbnew/tools/board_inspection_tool.cpp:1076
-#: pcbnew/tools/board_inspection_tool.cpp:1100
-#: pcbnew/tools/board_inspection_tool.cpp:1135
-#: pcbnew/tools/board_inspection_tool.cpp:1164
-#: pcbnew/tools/board_inspection_tool.cpp:1203
-#: pcbnew/tools/board_inspection_tool.cpp:1257
-#: pcbnew/tools/board_inspection_tool.cpp:1305
+#: pcbnew/tools/board_inspection_tool.cpp:558
+#: pcbnew/tools/board_inspection_tool.cpp:578
+#: pcbnew/tools/board_inspection_tool.cpp:595
+#: pcbnew/tools/board_inspection_tool.cpp:610
+#: pcbnew/tools/board_inspection_tool.cpp:661
+#: pcbnew/tools/board_inspection_tool.cpp:681
+#: pcbnew/tools/board_inspection_tool.cpp:921
+#: pcbnew/tools/board_inspection_tool.cpp:935
+#: pcbnew/tools/board_inspection_tool.cpp:979
+#: pcbnew/tools/board_inspection_tool.cpp:1077
+#: pcbnew/tools/board_inspection_tool.cpp:1101
+#: pcbnew/tools/board_inspection_tool.cpp:1136
+#: pcbnew/tools/board_inspection_tool.cpp:1165
+#: pcbnew/tools/board_inspection_tool.cpp:1204
+#: pcbnew/tools/board_inspection_tool.cpp:1258
+#: pcbnew/tools/board_inspection_tool.cpp:1306
 #, c-format
 msgid "Resolved min clearance: %s."
 msgstr "解析完成的間隙: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:563
-#: pcbnew/tools/board_inspection_tool.cpp:1288
+#: pcbnew/tools/board_inspection_tool.cpp:564
+#: pcbnew/tools/board_inspection_tool.cpp:1289
 msgid "Physical hole clearance resolution for:"
 msgstr "物理孔間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:572
-#: pcbnew/tools/board_inspection_tool.cpp:1300
+#: pcbnew/tools/board_inspection_tool.cpp:573
+#: pcbnew/tools/board_inspection_tool.cpp:1301
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "未定義 'physical_hole_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:583
+#: pcbnew/tools/board_inspection_tool.cpp:584
 msgid "Hole to Hole"
 msgstr "孔到孔"
 
-#: pcbnew/tools/board_inspection_tool.cpp:584
-#: pcbnew/tools/board_inspection_tool.cpp:1155
+#: pcbnew/tools/board_inspection_tool.cpp:585
+#: pcbnew/tools/board_inspection_tool.cpp:1156
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "孔到孔間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:598
+#: pcbnew/tools/board_inspection_tool.cpp:599
 msgid "Edge Clearance"
 msgstr "板邊間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:599
-#: pcbnew/tools/board_inspection_tool.cpp:1194
+#: pcbnew/tools/board_inspection_tool.cpp:600
+#: pcbnew/tools/board_inspection_tool.cpp:1195
 msgid "Edge clearance resolution for:"
 msgstr "板邊間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:643
-#: pcbnew/tools/board_inspection_tool.cpp:948
+#: pcbnew/tools/board_inspection_tool.cpp:644
+#: pcbnew/tools/board_inspection_tool.cpp:949
 msgid "Clearance resolution for:"
 msgstr "間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:666
-#: pcbnew/tools/board_inspection_tool.cpp:1243
-#: pcbnew/tools/board_inspection_tool.cpp:1268
+#: pcbnew/tools/board_inspection_tool.cpp:667
+#: pcbnew/tools/board_inspection_tool.cpp:1244
+#: pcbnew/tools/board_inspection_tool.cpp:1269
 msgid "Physical clearance resolution for:"
 msgstr "物理間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:675
-#: pcbnew/tools/board_inspection_tool.cpp:1219
+#: pcbnew/tools/board_inspection_tool.cpp:676
+#: pcbnew/tools/board_inspection_tool.cpp:1220
 msgid "No 'physical_clearance' constraints defined."
 msgstr "未定義 'physical_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:686
-#: pcbnew/tools/board_inspection_tool.cpp:1492
+#: pcbnew/tools/board_inspection_tool.cpp:687
+#: pcbnew/tools/board_inspection_tool.cpp:1493
 msgid "Assertions"
 msgstr "斷言"
 
-#: pcbnew/tools/board_inspection_tool.cpp:687
-#: pcbnew/tools/board_inspection_tool.cpp:1493
+#: pcbnew/tools/board_inspection_tool.cpp:688
+#: pcbnew/tools/board_inspection_tool.cpp:1494
 msgid "Assertions for:"
 msgstr "斷言:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:718
+#: pcbnew/tools/board_inspection_tool.cpp:719
 msgid "Select two items for a clearance resolution report."
 msgstr "選擇兩個項目以生成間隙解析報告。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:734
-#: pcbnew/tools/board_inspection_tool.cpp:747
+#: pcbnew/tools/board_inspection_tool.cpp:735
+#: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Cannot generate clearance report on empty group."
 msgstr "無法為空群組生成間隙報告。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:825
+#: pcbnew/tools/board_inspection_tool.cpp:826
 msgid "Zone connection resolution for:"
 msgstr "覆銅連接接線:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:833
+#: pcbnew/tools/board_inspection_tool.cpp:834
 msgid "Thermal-relief gap resolution for:"
 msgstr "緩釋熱焊盤 (花焊盤) 間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:842
+#: pcbnew/tools/board_inspection_tool.cpp:843
 #, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "解析完成的緩釋熱焊盤 (花焊盤) 間隙: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:847
+#: pcbnew/tools/board_inspection_tool.cpp:848
 msgid "Thermal-relief spoke width resolution for:"
 msgstr "緩釋熱焊盤 (花焊盤) 間隙寬度:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:856
+#: pcbnew/tools/board_inspection_tool.cpp:857
 #, c-format
 msgid "Resolved spoke width: %s."
 msgstr "解析完成的緩釋熱焊盤 (花焊盤) 引線寬度: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:861
+#: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Thermal-relief min spoke count resolution for:"
 msgstr "緩釋熱焊盤 (花焊盤) 最小引線寬度間隙:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:870
+#: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
 msgid "Resolved min spoke count: %d."
 msgstr "解析完成的最小緩釋熱焊盤 (花焊盤) 引線數量: %d。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:879
-#: pcbnew/tools/board_inspection_tool.cpp:927
+#: pcbnew/tools/board_inspection_tool.cpp:880
+#: pcbnew/tools/board_inspection_tool.cpp:928
 msgid "Zone clearance resolution for:"
 msgstr "覆銅間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:883
+#: pcbnew/tools/board_inspection_tool.cpp:884
 #, c-format
 msgid "Zone clearance: %s."
 msgstr "覆銅間隙: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:893
+#: pcbnew/tools/board_inspection_tool.cpp:894
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "被來自 %s 的較大物理間隙覆蓋; 間隙: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:909
+#: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr "被來自 %s 的較大物理孔間隙覆蓋; 間隙: %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:953
+#: pcbnew/tools/board_inspection_tool.cpp:954
 msgid "Items belong to the same net. Min clearance is 0."
 msgstr "項目屬於同一網路。最小間隙為 0。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:968
+#: pcbnew/tools/board_inspection_tool.cpp:969
 msgid "Min clearance is 0."
 msgstr "最小間隙為 0。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:972
+#: pcbnew/tools/board_inspection_tool.cpp:973
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
 msgstr "已解決的間隙問題: %s; 間隙將不被測試。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:995
+#: pcbnew/tools/board_inspection_tool.cpp:996
 msgid "Diff Pair"
 msgstr "差分對"
 
-#: pcbnew/tools/board_inspection_tool.cpp:996
+#: pcbnew/tools/board_inspection_tool.cpp:997
 msgid "Diff-pair gap resolution for:"
 msgstr "差分對間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1001
+#: pcbnew/tools/board_inspection_tool.cpp:1002
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1009
+#: pcbnew/tools/board_inspection_tool.cpp:1010
 msgid "Diff-pair max uncoupled length resolution for:"
 msgstr "差分對最大未耦合長度解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1015
+#: pcbnew/tools/board_inspection_tool.cpp:1016
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "未定義 'diff_pair_uncoupled' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1046
+#: pcbnew/tools/board_inspection_tool.cpp:1047
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr "注意: %s 被綠油覆蓋; 間隙僅適用於貫孔。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1063
+#: pcbnew/tools/board_inspection_tool.cpp:1064
 msgid "Silkscreen clearance resolution for:"
 msgstr "絲印層間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1091
+#: pcbnew/tools/board_inspection_tool.cpp:1092
 msgid "Courtyard clearance resolution for:"
 msgstr "元件外框間隙解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1210
+#: pcbnew/tools/board_inspection_tool.cpp:1211
 msgid "Physical Clearances"
 msgstr "物理間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1251
+#: pcbnew/tools/board_inspection_tool.cpp:1252
 #, fuzzy, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "未定義 'physical_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1270
+#: pcbnew/tools/board_inspection_tool.cpp:1271
 #, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
 msgstr "未定義 'physical_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1332
+#: pcbnew/tools/board_inspection_tool.cpp:1333
 msgid "Select an item for a constraints resolution report."
 msgstr "為約束解析報告選一個項目。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1365
+#: pcbnew/tools/board_inspection_tool.cpp:1366
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1385
+#: pcbnew/tools/board_inspection_tool.cpp:1386
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
 msgstr "解析完成的直徑約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1392
+#: pcbnew/tools/board_inspection_tool.cpp:1393
 msgid "Via Annular Width"
 msgstr "貫孔環形寬度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1402
+#: pcbnew/tools/board_inspection_tool.cpp:1403
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "解析完成的環形寬度約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1423
+#: pcbnew/tools/board_inspection_tool.cpp:1424
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1442
+#: pcbnew/tools/board_inspection_tool.cpp:1443
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "解析完成的間隙約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1458
+#: pcbnew/tools/board_inspection_tool.cpp:1459
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
 msgstr "解析完成的線寬約束: 最小 %s; 最優 %s; 最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1467
+#: pcbnew/tools/board_inspection_tool.cpp:1468
 msgid "Keepout resolution for:"
 msgstr "Keepout 解析:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1477
-#: pcbnew/tools/board_inspection_tool.cpp:1501
+#: pcbnew/tools/board_inspection_tool.cpp:1478
+#: pcbnew/tools/board_inspection_tool.cpp:1502
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr "報告可能不完整: 某些封裝的外框不正確。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1479
-#: pcbnew/tools/board_inspection_tool.cpp:1503
+#: pcbnew/tools/board_inspection_tool.cpp:1480
+#: pcbnew/tools/board_inspection_tool.cpp:1504
 msgid "Run DRC for a full analysis."
 msgstr "運行 DRC 進行全面分析。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1486
+#: pcbnew/tools/board_inspection_tool.cpp:1487
 msgid "Item <b>disallowed</b> at current location."
 msgstr "目前位置 <b>不允許</b> 項目。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1488
+#: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Item allowed at current location."
 msgstr "目前位置允許的項目。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1541
+#: pcbnew/tools/board_inspection_tool.cpp:1542
 msgid "Select a footprint to diff with its library equivalent."
 msgstr "選擇一個封裝並與其對應的庫封裝進行比較。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1559
+#: pcbnew/tools/board_inspection_tool.cpp:1560
 msgid "Select a footprint for a footprint associations report."
 msgstr "選擇一個封裝, 生成封裝關聯報告。。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1586
+#: pcbnew/tools/board_inspection_tool.cpp:1587
 msgid "Board vs library diff for:"
 msgstr "比較電路板與庫的差異:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1609
-#: pcbnew/tools/board_inspection_tool.cpp:1617
+#: pcbnew/tools/board_inspection_tool.cpp:1610
+#: pcbnew/tools/board_inspection_tool.cpp:1618
 msgid "Manage Footprint Libraries"
 msgstr "管理封裝庫"
 
@@ -49857,51 +49857,51 @@ msgstr "被選項目"
 msgid "Selected 2D Length"
 msgstr "選擇的網路:"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2381
+#: pcbnew/tools/pcb_point_editor.cpp:2391
 msgid "Resize Table Cells"
 msgstr "重新調整單元格"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2466
+#: pcbnew/tools/pcb_point_editor.cpp:2476
 msgid "Move Midpoint to Location"
 msgstr "移動中點至指定位置"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2467
+#: pcbnew/tools/pcb_point_editor.cpp:2477
 msgid "Move Midpoint"
 msgstr "移動中點"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2471
+#: pcbnew/tools/pcb_point_editor.cpp:2481
 msgid "Move Corner to Location"
 msgstr "移動拐角到指定位置"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2472
+#: pcbnew/tools/pcb_point_editor.cpp:2482
 msgid "Move Corner"
 msgstr "移動拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2818
+#: pcbnew/tools/pcb_point_editor.cpp:2829
 msgid "Add Zone Corner"
 msgstr "添加區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2842
+#: pcbnew/tools/pcb_point_editor.cpp:2853
 msgid "Split Segment"
 msgstr "分割線段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2864
+#: pcbnew/tools/pcb_point_editor.cpp:2875
 msgid "Split Arc"
 msgstr "分割弧"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2941
+#: pcbnew/tools/pcb_point_editor.cpp:2952
 msgid "Remove Zone Corner"
 msgstr "移除區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2943
+#: pcbnew/tools/pcb_point_editor.cpp:2954
 msgid "Remove Polygon Corner"
 msgstr "移除覆銅或多邊形的轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3041
+#: pcbnew/tools/pcb_point_editor.cpp:3052
 msgid "Break Zone Corner"
 msgstr "添加區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3043
+#: pcbnew/tools/pcb_point_editor.cpp:3054
 msgid "Break Polygon Corner"
 msgstr "移除覆銅或多邊形的轉角"
 
