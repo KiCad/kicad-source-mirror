@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 10:07+0000\n"
+"PO-Revision-Date: 2025-10-09 07:44+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10566,9 +10566,8 @@ msgid "Select &All\tA"
 msgstr "すべて選択 (&A)\tA"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "ソース表示..."
+msgstr "表示とさらなる選択肢(無効なビットマップ)...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -23426,16 +23425,16 @@ msgid ""
 "Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
 msgstr ""
+"基底シンボルを削除すると、そこから派生したすべてのシンボルが削除されます。\n"
+"\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
-#, fuzzy
 msgid " (base)\n"
-msgstr " (位相)"
+msgstr " (基底シンボル)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid "Delete All Listed Symbols"
-msgstr "シンボルを削除"
+msgstr "リストされている全てのシンボルを削除"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1399 pcbnew/files.cpp:332
 #: pcbnew/footprint_libraries_utils.cpp:1150
