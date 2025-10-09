@@ -161,7 +161,7 @@ class PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE : public wxPanel
 
 	public:
 
-		PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 303,65 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_SUNKEN|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE();
 

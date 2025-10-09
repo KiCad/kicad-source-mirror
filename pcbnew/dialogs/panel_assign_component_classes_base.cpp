@@ -281,6 +281,7 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 
 	this->SetSizer( m_conditionSizer );
 	this->Layout();
+	m_conditionSizer->Fit( this );
 
 	// Connect Events
 	m_buttonDeleteMatch->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::OnDeleteConditionClick ), NULL, this );
