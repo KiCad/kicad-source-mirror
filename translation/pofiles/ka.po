@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 10:07+0000\n"
+"PO-Revision-Date: 2025-10-09 07:44+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ka/>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3385,7 +3385,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
-msgstr ""
+msgstr "გამოცემის თარიღი:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "<<<"
@@ -3656,12 +3656,12 @@ msgstr "ხელით მითითებული:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:105
 msgid "Info text"
-msgstr ""
+msgstr "ინფორმაციის ტექსტი"
 
 #: common/dialogs/dialog_print_generic_base.cpp:117
 #: eeschema/printing/dialog_print_base.cpp:84
 msgid "Page Setup..."
-msgstr ""
+msgstr "გვერდის მორგება..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
@@ -4107,15 +4107,15 @@ msgstr ""
 #: common/dialogs/panel_color_settings.cpp:219
 #: common/dialogs/panel_color_settings.cpp:238
 msgid "New Theme..."
-msgstr ""
+msgstr "ახალი თემა..."
 
 #: common/dialogs/panel_color_settings.cpp:303
 msgid "Copy color"
-msgstr ""
+msgstr "ფერის კოპირება"
 
 #: common/dialogs/panel_color_settings.cpp:306
 msgid "Paste color"
-msgstr ""
+msgstr "ფერის ჩასმა"
 
 #: common/dialogs/panel_color_settings.cpp:309
 msgid "Revert to saved color"
@@ -4221,11 +4221,11 @@ msgstr "მოგლუვება:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
-msgstr ""
+msgstr "მოგლუვების გარეშე"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "Fast Antialiasing"
-msgstr ""
+msgstr "სწრაფი მოგლუვება"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "High Quality Antialiasing"
@@ -4297,7 +4297,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:200
 msgid "Icon theme:"
-msgstr ""
+msgstr "ხატულას თემა:"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Light"
@@ -4382,7 +4382,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid "Canvas scale:"
-msgstr ""
+msgstr "ტილოს მასშტაბი:"
 
 #: common/dialogs/panel_common_settings_base.cpp:276
 msgid "High-contrast mode dimming factor:"
@@ -4427,7 +4427,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:359
 msgid "&Auto save:"
-msgstr ""
+msgstr "&ავტოშენახვა:"
 
 #: common/dialogs/panel_common_settings_base.cpp:364
 msgid ""
@@ -4441,7 +4441,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:391
 msgid "Project Backup"
-msgstr ""
+msgstr "პროექტის მარქაფი"
 
 #: common/dialogs/panel_common_settings_base.cpp:406
 msgid "Automatically backup projects"
@@ -5140,7 +5140,7 @@ msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid "Import Hotkeys..."
-msgstr ""
+msgstr "კლავიატურის მალსახმობების შემოტანა..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:137
 msgid ""
@@ -5267,7 +5267,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:55
 msgid "Zoom speed:"
-msgstr ""
+msgstr "გადიდების სიჩქარე:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:61
 #: common/dialogs/panel_spacemouse_base.cpp:40
@@ -5289,7 +5289,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
-msgstr ""
+msgstr "გადათრევის ჟესტები"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
@@ -5385,7 +5385,7 @@ msgstr "Shift"
 #: common/dialogs/panel_mouse_settings_base.cpp:183
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:20
 msgid "Scroll Gestures"
-msgstr ""
+msgstr "გადახვევის ჟესტები"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:199
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -5411,11 +5411,11 @@ msgstr "აღდგენა"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:260
 msgid "Pan up/down:"
-msgstr ""
+msgstr "პანინგი მაღლა/დაბლა:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:280
 msgid "Pan left/right:"
-msgstr ""
+msgstr "პანინგი მარცხნივ/მარჯვნივ:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:317
 msgid "Pan left/right with horizontal movement"
@@ -5730,32 +5730,32 @@ msgstr "ღრეჩო"
 #: pcbnew/tools/board_inspection_tool.cpp:401
 #: pcbnew/tools/board_inspection_tool.cpp:1323
 msgid "Track Width"
-msgstr ""
+msgstr "ბილიკის სიგანე"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: pcb_calculator/pcb_calculator_frame.cpp:176
 msgid "Via Size"
-msgstr ""
+msgstr "გამტარი ნახვრეტის ზომა"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "Via Hole"
-msgstr ""
+msgstr "გამტარი ნახვრეტი"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr ""
+msgstr "გამტარი მიკრონახვრეტის ზომა"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
-msgstr ""
+msgstr "გამტარი მიკრონახვრეტი"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
-msgstr ""
+msgstr "DP-ის სიგანე"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
 msgid "DP Gap"
-msgstr ""
+msgstr "DP-ის ღრიჭო"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Delay Profile"
@@ -5767,11 +5767,11 @@ msgstr "PCB-ის ფერი"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:62
 msgid "Wire Thickness"
-msgstr ""
+msgstr "მავთულის სისქე"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63
 msgid "Bus Thickness"
-msgstr ""
+msgstr "სალტეს სისქე"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2779
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:646
@@ -5823,7 +5823,7 @@ msgstr "ნიმუში"
 #: eeschema/sch_field.cpp:1125 eeschema/sch_label.cpp:225
 #: pcbnew/board_connected_item.cpp:227 pcbnew/pad.cpp:2826 pcbnew/zone.cpp:1911
 msgid "Net Class"
-msgstr ""
+msgstr "ქსელის კლასი"
 
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:123
 #: eeschema/dialogs/dialog_erc.cpp:961
@@ -5908,7 +5908,7 @@ msgstr "ცვლადის სახელი"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr ""
+msgstr "ტექსტის ჩანაცვლება"
 
 #: common/dialogs/panel_toolbar_customization.cpp:46 common/eda_text.cpp:1340
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
@@ -6058,7 +6058,7 @@ msgstr "მართკუთხედი"
 #: common/drawing_sheet/ds_data_item.cpp:368
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Imported Shape"
-msgstr ""
+msgstr "შემოტანილი მოხაზულობა"
 
 #: common/drawing_sheet/ds_data_item.cpp:369
 #: common/drawing_sheet/ds_draw_item.cpp:141
@@ -6078,7 +6078,7 @@ msgstr ""
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Subsequent Pages"
-msgstr ""
+msgstr "მომდევნო გვერდები"
 
 #: common/drawing_sheet/ds_draw_item.cpp:149
 msgid "All Pages"
@@ -6108,7 +6108,7 @@ msgstr "კომენტარი"
 #: common/drawing_sheet/ds_draw_item.cpp:242
 #, c-format
 msgid "Text '%s'"
-msgstr ""
+msgstr "ტექსტი '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
 msgid "Imported shape"
@@ -6127,7 +6127,7 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:528 common/layer_id.cpp:117
 #: common/layer_id.cpp:147
 msgid "Page limits"
-msgstr ""
+msgstr "გვერდის შეზღუდვები"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -6136,7 +6136,7 @@ msgstr "ბუფერი"
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr ""
+msgstr "მოველი '%s'-ს"
 
 #: common/dsnlexer.cpp:352
 #, c-format
@@ -6146,7 +6146,7 @@ msgstr "მოველოდი მნიშვნელობას %s. მი
 #: common/dsnlexer.cpp:359
 #, c-format
 msgid "Unexpected '%s'"
-msgstr ""
+msgstr "მოულოდნელი '%s'"
 
 #: common/dsnlexer.cpp:366
 #, c-format
@@ -6156,7 +6156,7 @@ msgstr ""
 #: common/dsnlexer.cpp:373
 #, c-format
 msgid "Unexpected %s"
-msgstr ""
+msgstr "მოულოდნელი %s"
 
 #: common/dsnlexer.cpp:433
 #, c-format
@@ -6231,13 +6231,13 @@ msgstr "ვერსიის კონტროლი"
 
 #: common/eda_base_frame.cpp:1319
 msgid "Data Collection"
-msgstr ""
+msgstr "მონაცემების შეგროვება"
 
 #: common/eda_base_frame.cpp:1339 common/tool/actions.cpp:1291
 #: common/tool/common_tools.cpp:617 eeschema/symbol_editor/symbol_editor.cpp:83
 #: kicad/tools/kicad_manager_actions.cpp:116
 msgid "Symbol Editor"
-msgstr ""
+msgstr "სიმბოლოების რედაქტორი"
 
 #: common/eda_base_frame.cpp:1340 common/eda_base_frame.cpp:1352
 #: common/eda_base_frame.cpp:1378 common/eda_base_frame.cpp:1394
@@ -6269,7 +6269,7 @@ msgstr "ხელსაწყოს პანელები"
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:132
 #: eeschema/sch_edit_frame.cpp:1727 kicad/tools/kicad_manager_actions.cpp:105
 msgid "Schematic Editor"
-msgstr ""
+msgstr "სქემის რედაქტორი"
 
 #: common/eda_base_frame.cpp:1360
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
@@ -6316,7 +6316,7 @@ msgstr "დამატებები"
 
 #: common/eda_base_frame.cpp:1414
 msgid "Realtime Renderer"
-msgstr ""
+msgstr "რეალური დროის რენდერერი"
 
 #: common/eda_base_frame.cpp:1415
 msgid "Raytracing Renderer"
@@ -6327,11 +6327,11 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:679 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:149
 msgid "Gerber Viewer"
-msgstr ""
+msgstr "Gerber-ის ფაილების დათვალიერება"
 
 #: common/eda_base_frame.cpp:1439
 msgid "Excellon Options"
-msgstr ""
+msgstr "Excellon-ის პარამეტრები"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:620 kicad/tools/kicad_manager_actions.cpp:178
@@ -6375,7 +6375,7 @@ msgstr "ენის დაყენება"
 
 #: common/eda_doc.cpp:153
 msgid "Documentation File"
-msgstr ""
+msgstr "დოკუმენტაციის ფაილი"
 
 #: common/eda_doc.cpp:163
 #, c-format
@@ -6398,12 +6398,12 @@ msgstr "ბადეების ჩასწორება..."
 
 #: common/eda_draw_frame.cpp:590
 msgid "Zoom Auto"
-msgstr ""
+msgstr "ავტოგადიდება"
 
 #: common/eda_draw_frame.cpp:599
 #, c-format
 msgid "Zoom %.2f"
-msgstr ""
+msgstr "მასშტაბი %.2f"
 
 #: common/eda_draw_frame.cpp:690
 #, c-format
@@ -6593,15 +6593,15 @@ msgstr "ჯანქშენი"
 
 #: common/eda_item.cpp:446
 msgid "No-Connect Flag"
-msgstr ""
+msgstr "ალამი 'დაკავშირებული არაა'"
 
 #: common/eda_item.cpp:447
 msgid "Wire Entry"
-msgstr ""
+msgstr "მავთულის შეყვანა"
 
 #: common/eda_item.cpp:448
 msgid "Bus Entry"
-msgstr ""
+msgstr "სალტეს შეყვანა"
 
 #: common/eda_item.cpp:450 eeschema/sch_bitmap.cpp:191
 msgid "Bitmap"
@@ -6614,22 +6614,22 @@ msgstr ""
 
 #: common/eda_item.cpp:457 eeschema/tools/sch_edit_tool.cpp:276
 msgid "Net Label"
-msgstr ""
+msgstr "ქსელის ჭდე"
 
 #: common/eda_item.cpp:458 eeschema/sch_label.cpp:1404
 #: eeschema/sch_label.cpp:1937
 msgid "Directive Label"
-msgstr ""
+msgstr "დირექტივის ჭდე"
 
 #: common/eda_item.cpp:459 eeschema/sch_label.cpp:1405
 #: eeschema/tools/sch_edit_tool.cpp:278
 msgid "Global Label"
-msgstr ""
+msgstr "გლობალური ჭდე"
 
 #: common/eda_item.cpp:460 eeschema/sch_label.cpp:1406
 #: eeschema/tools/sch_edit_tool.cpp:277
 msgid "Hierarchical Label"
-msgstr ""
+msgstr "იერარქიული ჭდე"
 
 #: common/eda_item.cpp:461 eeschema/dialogs/dialog_lib_fields_table_base.cpp:48
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:47
@@ -6649,7 +6649,7 @@ msgstr "მიმაგრება"
 
 #: common/eda_item.cpp:464
 msgid "Sheet Pin"
-msgstr ""
+msgstr "ფურცლის საკონტაქტო ღერო"
 
 #: common/eda_item.cpp:465 eeschema/dialogs/dialog_migrate_buses.cpp:110
 #: pcbnew/tools/pcb_actions.cpp:2407
@@ -6658,15 +6658,15 @@ msgstr "ფურცელი"
 
 #: common/eda_item.cpp:473
 msgid "SCH Screen"
-msgstr ""
+msgstr "SCH ეკრანი"
 
 #: common/eda_item.cpp:477
 msgid "Gerber Layout"
-msgstr ""
+msgstr "Gerber-ის განლაგება"
 
 #: common/eda_item.cpp:478
 msgid "Draw Item"
-msgstr ""
+msgstr "ელემენტის დახაზვა"
 
 #: common/eda_shape.cpp:327
 msgid "Thermal Spoke"
@@ -6674,7 +6674,7 @@ msgstr ""
 
 #: common/eda_shape.cpp:328 pcbnew/pcb_shape.cpp:1083
 msgid "Number Box"
-msgstr ""
+msgstr "რიცხვის ველი"
 
 #: common/eda_shape.cpp:337 pcbnew/pad.cpp:1626
 msgid "Rect"
@@ -6833,7 +6833,7 @@ msgstr "მოხაზულობის თვისებები"
 #: pcbnew/pcb_tablecell.cpp:236 pcbnew/pcb_textbox.cpp:843
 #: pcbnew/pcb_track.cpp:2559
 msgid "Start X"
-msgstr ""
+msgstr "დაწყების X"
 
 #: common/eda_shape.cpp:2696 eeschema/sch_line.cpp:1280
 #: eeschema/sch_table.cpp:520 eeschema/sch_tablecell.cpp:215
@@ -6841,7 +6841,7 @@ msgstr ""
 #: pcbnew/pcb_tablecell.cpp:237 pcbnew/pcb_textbox.cpp:844
 #: pcbnew/pcb_track.cpp:2563
 msgid "Start Y"
-msgstr ""
+msgstr "დაწყების Y"
 
 #: common/eda_shape.cpp:2702 pcbnew/pcb_shape.cpp:1021
 msgid "Center X"
@@ -6856,14 +6856,14 @@ msgstr "Y ცენტრი"
 #: pcbnew/pcb_shape.cpp:1017 pcbnew/pcb_tablecell.cpp:238
 #: pcbnew/pcb_textbox.cpp:845 pcbnew/pcb_track.cpp:2566
 msgid "End X"
-msgstr ""
+msgstr "დასასრულის X"
 
 #: common/eda_shape.cpp:2726 eeschema/sch_line.cpp:1288
 #: eeschema/sch_tablecell.cpp:217 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_shape.cpp:1019 pcbnew/pcb_tablecell.cpp:239
 #: pcbnew/pcb_textbox.cpp:846 pcbnew/pcb_track.cpp:2569
 msgid "End Y"
-msgstr ""
+msgstr "დასასრულის Y"
 
 #: common/eda_shape.cpp:2744 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
@@ -7061,7 +7061,7 @@ msgstr "სარკისებური"
 #: common/eda_text.cpp:1434 eeschema/sch_field.cpp:1656
 #: eeschema/sch_field.cpp:1659 eeschema/sch_label.cpp:2489
 msgid "Horizontal Justification"
-msgstr ""
+msgstr "ჰორიზონტალური გასწორება"
 
 #: common/eda_text.cpp:1437 eeschema/sch_field.cpp:1663
 #: eeschema/sch_field.cpp:1666 eeschema/sch_label.cpp:2490
@@ -7069,7 +7069,7 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:2055 pcbnew/pcb_dimension.cpp:2097
 #: pcbnew/pcb_dimension.cpp:2131
 msgid "Vertical Justification"
-msgstr ""
+msgstr "ვერტიკალური გასწორება"
 
 #: common/eda_text.cpp:1445 eeschema/sch_field.cpp:1675
 #: eeschema/sch_label.cpp:2451 eeschema/sch_tablecell.cpp:235
@@ -7179,7 +7179,7 @@ msgstr ""
 
 #: common/file_history.cpp:155
 msgid "No Files"
-msgstr ""
+msgstr "ფაილების გარეშე"
 
 #: common/filename_resolver.cpp:494
 msgid "The given path does not exist"
@@ -7191,11 +7191,11 @@ msgstr "ფსევდონიმი: "
 
 #: common/filename_resolver.cpp:525
 msgid "This path:"
-msgstr ""
+msgstr "ეს ბილიკი:"
 
 #: common/filename_resolver.cpp:528
 msgid "Existing path:"
-msgstr ""
+msgstr "არსებული ბილიკი:"
 
 #: common/filename_resolver.cpp:530
 msgid "Bad alias (duplicate name)"
@@ -7699,15 +7699,15 @@ msgstr "თოლიის გადართვა"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
-msgstr ""
+msgstr "მარცხენა/მარჯვენა პანინგი"
 
 #: common/hotkey_store.cpp:48
 msgid "Pan Up/Down"
-msgstr ""
+msgstr "პანინგი ზემოთ/ქვემოთ"
 
 #: common/hotkey_store.cpp:49
 msgid "Finish Drawing"
-msgstr ""
+msgstr "ხაზვის დასრულება"
 
 #: common/hotkey_store.cpp:50
 msgid "Add to Selection"
@@ -7717,7 +7717,7 @@ msgstr ""
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1525
 #: pcbnew/tools/pcb_actions.cpp:1555
 msgid "Highlight Net"
-msgstr ""
+msgstr "ქსელის გამოკვეთა"
 
 #: common/hotkey_store.cpp:52
 msgid "Remove from Selection"
@@ -8303,7 +8303,7 @@ msgstr "ავტობუსები"
 
 #: common/layer_id.cpp:73
 msgid "Bus junctions"
-msgstr ""
+msgstr "სალტის შეერთებები"
 
 #: common/layer_id.cpp:74
 msgid "Junctions"
@@ -8318,36 +8318,36 @@ msgstr "ჭდეები"
 #: common/layer_id.cpp:76
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
 msgid "Global labels"
-msgstr ""
+msgstr "გლობალური ჭდეები"
 
 #: common/layer_id.cpp:77
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:48
 msgid "Hierarchical labels"
-msgstr ""
+msgstr "იერარქიული ჭდეები"
 
 #: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3187
 msgid "Pin numbers"
-msgstr ""
+msgstr "საკონტაქტო ღეროს ნომრები"
 
 #: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3191
 msgid "Pin names"
-msgstr ""
+msgstr "საკონტაქტო ღეროს სახელები"
 
 #: common/layer_id.cpp:80
 msgid "Symbol references"
-msgstr ""
+msgstr "სიმბოლოს მიმართვები"
 
 #: common/layer_id.cpp:81
 msgid "Symbol values"
-msgstr ""
+msgstr "სიმბოლოს მნიშვნელობები"
 
 #: common/layer_id.cpp:82
 msgid "Symbol fields"
-msgstr ""
+msgstr "სიმბოლოს ველები"
 
 #: common/layer_id.cpp:83
 msgid "Sheet references"
-msgstr ""
+msgstr "ფურცლის მიმართვები"
 
 #: common/layer_id.cpp:84
 msgid "Net class references"
@@ -8389,19 +8389,19 @@ msgstr "საკონტაქტო ღეროeები"
 
 #: common/layer_id.cpp:93
 msgid "Sheet borders"
-msgstr ""
+msgstr "ფურცლის საზღვრები"
 
 #: common/layer_id.cpp:94
 msgid "Sheet backgrounds"
-msgstr ""
+msgstr "ფურცლის ფონები"
 
 #: common/layer_id.cpp:95
 msgid "Sheet names"
-msgstr ""
+msgstr "ფურცლის სახელები"
 
 #: common/layer_id.cpp:96
 msgid "Sheet fields"
-msgstr ""
+msgstr "ფურცლის ველები"
 
 #: common/layer_id.cpp:97
 msgid "Sheet file names"
@@ -8410,11 +8410,11 @@ msgstr ""
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet pins"
-msgstr ""
+msgstr "ფურცლის საკონტაქტო ღეროები"
 
 #: common/layer_id.cpp:99
 msgid "No-connect symbols"
-msgstr ""
+msgstr "კავშირის არმქონე სიმბოლოები"
 
 #: common/layer_id.cpp:100
 msgid "DNP markers"
@@ -8426,15 +8426,15 @@ msgstr "სიმულაციიდან ამოღებულობი�
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
-msgstr ""
+msgstr "ERC გაფრთხილებები"
 
 #: common/layer_id.cpp:103
 msgid "ERC errors"
-msgstr ""
+msgstr "ERC შეცდომები"
 
 #: common/layer_id.cpp:104
 msgid "ERC exclusions"
-msgstr ""
+msgstr "ERC გამონაკლისები"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -8443,7 +8443,7 @@ msgstr "ანკერები"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:149
 msgid "Helper items"
-msgstr ""
+msgstr "დამხმარე ელემენტები"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:150 common/tool/grid_menu.cpp:56
 #: eeschema/tools/sch_editor_control.cpp:2933
@@ -8466,11 +8466,11 @@ msgstr "ფონი"
 
 #: common/layer_id.cpp:111
 msgid "Hovered items"
-msgstr ""
+msgstr "თაგუნაგადატარებული ელემენტები"
 
 #: common/layer_id.cpp:112
 msgid "Highlighted items"
-msgstr ""
+msgstr "გამოკვეთილი ელემენტები"
 
 #: common/layer_id.cpp:113
 msgid "Hidden items"
@@ -8478,7 +8478,7 @@ msgstr "დამალული ჩანაწერები"
 
 #: common/layer_id.cpp:114 common/layer_id.cpp:153
 msgid "Selection highlight"
-msgstr ""
+msgstr "მონიშნულის გამოკვეთა"
 
 #: common/layer_id.cpp:115
 msgid "Net color highlight"
@@ -8486,7 +8486,7 @@ msgstr "ქსელის ფერის გამოკვეთა"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:146
 msgid "Drawing sheet"
-msgstr ""
+msgstr "სახაზავი ფურცელი"
 
 #: common/layer_id.cpp:118
 msgid "Operating point voltages"
@@ -8528,7 +8528,7 @@ msgstr "ტრეკი"
 #: common/layer_id.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:38
 msgid "Through vias"
-msgstr ""
+msgstr "გამტარი ნახვრეტების გავლით"
 
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
@@ -8546,7 +8546,7 @@ msgstr "გამტარი მიკრონახვრეტები"
 
 #: common/layer_id.cpp:133
 msgid "Via holes"
-msgstr ""
+msgstr "გამტარი ნახვრეტები"
 
 #: common/layer_id.cpp:134
 msgid "Via hole walls"
@@ -19105,7 +19105,7 @@ msgstr "ველი %s '%s'"
 
 #: eeschema/sch_field.cpp:986
 msgid "Symbol Field"
-msgstr ""
+msgstr "სიმბოლოს ველი"
 
 #: eeschema/sch_field.cpp:991 eeschema/sch_pin.cpp:1340
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
@@ -22375,14 +22375,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
-#, fuzzy
 msgid " (base)\n"
-msgstr " (ფაზა)"
+msgstr " (ბაზა)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid "Delete All Listed Symbols"
-msgstr "სიმბოლოს წაშლა"
+msgstr "ყველა ჩამოთვლილი სიმბოლოს წაშლა"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1399 pcbnew/files.cpp:332
 #: pcbnew/footprint_libraries_utils.cpp:1150
@@ -25289,7 +25287,7 @@ msgstr ""
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:139
 msgid "Page Limits"
-msgstr ""
+msgstr "გვერდის ლიმიტები"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:101
 #, c-format
