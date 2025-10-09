@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-05 13:03+0000\n"
+"PO-Revision-Date: 2025-10-09 15:07+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2597,7 +2597,6 @@ msgid "The name %s is reserved, and cannot be used."
 msgstr "A(z) '%s' egy fenntartott név, nem használható."
 
 #: common/dialogs/dialog_configure_paths.cpp:392
-#, fuzzy
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -2605,21 +2604,21 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Adja meg az egyes környezeti változók nevét és értékét. A szürke "
-"bejegyzések \n"
-"olyan nevek, amelyeket külsőleg a rendszer vagy a felhasználói szinten \n"
-"definiáltunk. A rendszer vagy a felhasználói szinten meghatározott \n"
-"környezeti változók elsőbbséget élveznek a táblázatban meghatározott \n"
-"értékekkel szemben. Ez azt jelenti, hogy a táblázatban szereplő értékeket \n"
-"figyelmen kívül hagyja."
+"Adja meg a környezeti változók neveit és értékeit.  A szürkével jelölt "
+"változók külsőleg, rendszer vagy felhasználói szinten lettek definiálva.  A "
+"rendszer vagy a felhasználói szinten definiált környezeti változók "
+"elsőbbséget élveznek a táblázatban meghatározott értékekkel szemben.  Ez azt "
+"jelenti, hogy a táblázatban szereplő értékek figyelmen kívül lesznek hagyva."
 
 #: common/dialogs/dialog_configure_paths.cpp:398
-#, fuzzy
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr "A név mező csak nagybetűket, számokat és aláhúzást tartalmazhat."
+msgstr ""
+"Annak érdekében, hogy a környezeti változók nevei minden operációs "
+"rendszerben érvényesek legyenek, a név mező csak nagybetűket, számokat és "
+"aláhúzást tartalmazhat."
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -4510,26 +4509,23 @@ msgid "days"
 msgstr "napok"
 
 #: common/dialogs/panel_common_settings_base.cpp:382
-#, fuzzy
 msgid "Project Backup"
-msgstr "Projekt Visszaállítás"
+msgstr "Projekt biztonsági mentés"
 
 #: common/dialogs/panel_common_settings_base.cpp:397
 msgid "Automatically backup projects"
 msgstr "Projektek automatikus biztonsági mentése"
 
 #: common/dialogs/panel_common_settings_base.cpp:398
-#, fuzzy
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
-"Fájlok mentésekor automatikusan létrehozza az aktuális projekt biztonsági "
-"mentési archívumát"
+"Automatikus biztonsági mentés készítése az aktuális projektről a fájlok "
+"mentésekor"
 
 #: common/dialogs/panel_common_settings_base.cpp:402
-#, fuzzy
 msgid "Create backups when auto save occurs"
-msgstr "Automatikus biztonsági másolatotok készítése"
+msgstr "Biztonsági mentések készítése automatikus mentés esetén"
 
 #: common/dialogs/panel_common_settings_base.cpp:403
 #, fuzzy
@@ -4580,20 +4576,18 @@ msgid "Maximum total backup size:"
 msgstr "Biztonsági mentések maximális összmérete:"
 
 #: common/dialogs/panel_common_settings_base.cpp:440
-#, fuzzy
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
 "Ha a biztonsági mentési fájlok teljes mérete meghaladja ezt a korlátot, a "
-"régi biztonsági másolatok törlődnek (0-ra állítva a korlátozás nélküli)."
+"régi biztonsági mentések törlődnek (0-ra állítva nincs méretkorlát)"
 
 #: common/dialogs/panel_common_settings_base.cpp:447
 msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4609,21 +4603,22 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"A KiCad-nak névtelenül jelentheti az összeomlásokat és a különleges "
-"eseményeket, hogy segítse a kritikus hibák hatékonyabb azonosítását és "
-"segítse a profilfunkciók a fejlesztési munkálatait.\n"
+"A KiCad névtelenül jelentheti az összeomlásokat és különleges eseményeket a "
+"fejlesztőknek, hogy segítse a kritikus hibák hatékonyabb azonosítását és a "
+"szoftver funkcióinak megfigyelését, a továbbfejlesztési irányok kijelölése "
+"érdekében.\n"
 "\n"
-"Az ugyanabból a KiCad telepítésből származó automatikus jelentések "
+"Egy adott KiCad telepítésből származó automatikus jelentések "
 "összekapcsolásához egy egyedi azonosító generálódik, amely teljesen "
 "véletlenszerű, és csak összeomlási jelentés céljából használatos. Ehhez az "
-"azonosítóhoz nem tárolnak vagy kapcsolódnak személyazonosításra alkalmas "
+"azonosítóhoz nem tárolódnak vagy kapcsolódnak személyazonosításra alkalmas "
 "adatok (PII), beleértve az IP-címet. Ezt az azonosítót bármikor "
 "visszaállíthatja a megadott gombbal.\n"
 "\n"
 "Ha úgy dönt, hogy önkéntesen részt vesz ebben, a KiCad automatikusan kezeli "
-"az említett jelentéseket, ha összeomlás vagy egyéb események fordulnak elő. "
-"A tervfájlok, például a kapcsolási rajz vagy a PCB nem kerülnek megosztásra "
-"ebben a folyamatban."
+"az említett jelentéseket összeomlás vagy egyéb események előfordulásakor. A "
+"tervfájlok, például a kapcsolási rajz vagy a NYÁK terv soha nem kerülnek "
+"megosztásra ebben a folyamatban."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -6246,9 +6241,9 @@ msgid "Packages and Updates"
 msgstr "Csomagok és frissítések"
 
 #: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "Elégtelen jogosultságok a(z) \"%s\" mappához."
 
 #: common/eda_base_frame.cpp:1373
 #, c-format
@@ -7698,9 +7693,8 @@ msgid "DXF construction lines not currently supported."
 msgstr "Nincs kapcsolási rajz megnyitva."
 
 #: common/import_gfx/dxf_import_plugin.h:470
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Nincs kapcsolási rajz megnyitva."
+msgstr "DXF ívhez igazított szöveg jelenleg nem támogatott."
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
@@ -7710,9 +7704,8 @@ msgstr "Nincs kapcsolási rajz megnyitva."
 #: common/import_gfx/dxf_import_plugin.h:500
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Nincs kapcsolási rajz megnyitva."
+msgstr "DXF dimenziók jelenleg nem támogatottak."
 
 #: common/import_gfx/dxf_import_plugin.h:516
 #, fuzzy
@@ -7730,19 +7723,17 @@ msgid "DXF 3dfaces not currently supported."
 msgstr "Nincs kapcsolási rajz megnyitva."
 
 #: common/import_gfx/dxf_import_plugin.h:534
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Nincs kapcsolási rajz megnyitva."
+msgstr "DXF testek jelenleg nem támogatottak."
 
 #: common/import_gfx/dxf_import_plugin.h:539
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Nincs kapcsolási rajz megnyitva."
+msgstr "DXF képek jelenleg nem támogatottak."
 
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Az importált grafika túl nagy. A maximális méretarány: %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
@@ -7783,7 +7774,7 @@ msgstr "A kijelölt fájl nem érvényes vagy sérült!"
 #: common/io/cadstar/cadstar_archive_parser.cpp:2681
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "A pontok száma nem megfelelő: %s. Talált: %d, elvárt: %d."
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, fuzzy, c-format
@@ -7813,9 +7804,9 @@ msgstr ""
 "\"%s\""
 
 #: common/io/eagle/eagle_parser.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid size %lld: too large"
-msgstr "Érvénytelen méret, túl nagy: %lld"
+msgstr "Érvénytelen méret %lld: túl nagy"
 
 #: common/io/eagle/eagle_parser.cpp:507
 #, fuzzy, c-format
@@ -8090,7 +8081,6 @@ msgid "Schematic: Export PDF"
 msgstr "Kapcsolási rajz: PDF exportálása"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
 msgstr "Kapcsolási rajz: PythonBOM exportálása"
 
@@ -8603,9 +8593,8 @@ msgid "Edit options..."
 msgstr "Beállítások szerkesztése..."
 
 #: common/lib_table_grid_tricks.cpp:34
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "\"%s\" alkatrészkönyvtár beállítások"
+msgstr "Beállítások szerkesztése ehhez a tételhez"
 
 #: common/lib_table_grid_tricks.cpp:64
 msgid "Activate selected"
@@ -8852,7 +8841,7 @@ msgstr "\"%s\" fájl kibontása."
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
 msgid "Error extracting file!"
-msgstr "Hiba történt a fájl kibontása során."
+msgstr "Hiba történt a fájl kibontása során!"
 
 #: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1092
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
@@ -8895,9 +8884,9 @@ msgid "Archived file '%s'."
 msgstr "Archívum fájl \"%s\""
 
 #: common/project/project_archiver.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "A(z) \"%s\" fájl biztonsági mentése sikertelen.\n"
+msgstr "A(z) \"%s\" fájl archiválása sikertelen."
 
 #: common/project/project_archiver.cpp:350
 #, c-format
@@ -8905,9 +8894,8 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "\"%s\" ZIP archívum létrehozva (%s tömörítetlen, %s tömörített)."
 
 #: common/rc_item.cpp:428 eeschema/erc/erc_item.cpp:405
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Méretarány:"
+msgstr "Kihagyott figyelmeztetés: "
 
 #: common/rc_item.cpp:430 eeschema/erc/erc_item.cpp:407
 #, fuzzy
@@ -8970,9 +8958,8 @@ msgid "Grouped By Value"
 msgstr "Csoportosítás érték szerint"
 
 #: common/settings/bom_settings.cpp:166
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Alkatrészrajzolat mozgatása ide"
+msgstr "Csoportosítás Érték és Alkatrészrajzolat szerint"
 
 #: common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -9107,9 +9094,8 @@ msgid "Save all changes"
 msgstr "Összes változás mentése"
 
 #: common/tool/actions.cpp:121
-#, fuzzy
 msgid "Revert"
-msgstr "Visszavonás"
+msgstr "Visszaállítás"
 
 #: common/tool/actions.cpp:122
 msgid "Throw away changes"
@@ -9219,7 +9205,6 @@ msgid "Interactive Delete Tool"
 msgstr "Interaktív törlő eszköz"
 
 #: common/tool/actions.cpp:300
-#, fuzzy
 msgid "Delete clicked items"
 msgstr "Elem törlése rákattintással"
 
@@ -10138,7 +10123,6 @@ msgid "Incorrect value: %s"
 msgstr "Helytelen érték: %s"
 
 #: common/validators.cpp:282
-#, fuzzy
 msgid "Invalid signal name"
 msgstr "Érvénytelen jel név"
 
@@ -11008,9 +10992,8 @@ msgstr "Szűrt alkatrészrajzolatok"
 
 #: cvpcb/cvpcb_mainframe.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:335
-#, fuzzy
 msgid "Apply, Save Schematic && Continue"
-msgstr "Alkalmazás, kapcsolási rajz mentése és folytatás"
+msgstr "Alkalmaz, Kapcsolási rajz mentése és Folytatás"
 
 #: cvpcb/cvpcb_mainframe.cpp:211
 #, fuzzy
@@ -11651,14 +11634,12 @@ msgid "Scope"
 msgstr "Hatáskör"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:42
-#, fuzzy
 msgid "Entire schematic"
 msgstr "Teljes kapcsolási rajz"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:170
-#, fuzzy
 msgid "Current sheet only"
 msgstr "Csak az aktuális lap"
 
