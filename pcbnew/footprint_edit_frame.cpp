@@ -317,6 +317,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 // Ensure the controls on the toolbars all are correctly sized
                 UpdateToolbarControlSizes();
                 m_treePane->FocusSearchFieldIfExists();
+
+                // Update the angle snap mode toolbar button to reflect the current preference
+                GetToolManager()->RunAction( PCB_ACTIONS::angleSnapModeChanged );
             } );
 }
 
@@ -1368,12 +1371,6 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
     // clang-format on
 
-    auto constrainedDrawingModeCond =
-            [this]( const SELECTION& )
-            {
-                return GetSettings()->m_AngleSnapMode != LEADER_MODE::DIRECT;
-            };
-
     auto highContrastCond =
             [this]( const SELECTION& )
             {
@@ -1404,7 +1401,6 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
             };
 
-    mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,        CHECK( constrainedDrawingModeCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,       CHECK( cond.BoundingBoxes() ) );

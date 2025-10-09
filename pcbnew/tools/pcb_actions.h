@@ -552,9 +552,6 @@ public:
 
     static TOOL_ACTION microwaveCreateLine;
 
-    // Constrained drawing
-    static TOOL_ACTION toggleHV45Mode;
-
     // Locking
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;

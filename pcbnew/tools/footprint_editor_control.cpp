@@ -960,7 +960,6 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineModeFree.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineMode90.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ChangeLineMode,       PCB_ACTIONS::lineMode45.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::NextLineMode,         PCB_ACTIONS::lineModeNext.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::OnAngleSnapModeChanged,
                                                    PCB_ACTIONS::angleSnapModeChanged.MakeEvent() );
 }
@@ -971,13 +970,6 @@ int FOOTPRINT_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
     GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode = mode;
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
     m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
-    return 0;
-}
-
-int FOOTPRINT_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
-{
-    OPT_TOOL_EVENT evt = PCB_ACTIONS::toggleHV45Mode.MakeEvent();
-    m_toolMgr->ProcessEvent( *evt );
     return 0;
 }
 

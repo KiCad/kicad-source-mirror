@@ -58,7 +58,6 @@ bool PCB_VIEWER_TOOLS::Init()
         ctxMenu.AddSeparator( 1 );
     }
 
-    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode,   activeToolCondition, 2 );
     ctxMenu.AddSeparator(                                activeToolCondition, 2 );
 
     ctxMenu.AddItem( ACTIONS::copy,                      activeToolCondition, 3 );
@@ -107,7 +106,7 @@ template<class T> void Flip( T& aValue )
 }
 
 
-int PCB_VIEWER_TOOLS::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
+int PCB_VIEWER_TOOLS::NextLineMode( const TOOL_EVENT& toolEvent )
 {
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
     {
@@ -474,7 +473,7 @@ void PCB_VIEWER_TOOLS::setTransitions()
     // clang-format off
     Go( &PCB_VIEWER_TOOLS::Show3DViewer,      ACTIONS::show3DViewer.MakeEvent() );
 
-    Go( &PCB_VIEWER_TOOLS::ToggleHV45Mode,    PCB_ACTIONS::toggleHV45Mode.MakeEvent() );
+    Go( &PCB_VIEWER_TOOLS::NextLineMode,      PCB_ACTIONS::lineModeNext.MakeEvent() );
 
     // Display modes
     Go( &PCB_VIEWER_TOOLS::ShowPadNumbers,    PCB_ACTIONS::showPadNumbers.MakeEvent() );

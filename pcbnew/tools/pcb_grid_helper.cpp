@@ -307,10 +307,20 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
         // At this point, constructionDrawables can be empty, which is fine
         // (it means there's no additional construction geometry to draw, but
         // the item is still going to be proposed for activation)
+
+        // Convert the drawables to DRAWABLE_ENTRY format
+        std::vector<CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY> drawableEntries;
+        drawableEntries.reserve( constructionDrawables.size() );
+        for( auto& drawable : constructionDrawables )
+        {
+            drawableEntries.emplace_back(
+                    CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY{ std::move( drawable ), 1 } );
+        }
+
         constructionItemsBatch->emplace_back( CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM{
                 CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS,
                 item,
-                std::move( constructionDrawables ),
+                std::move( drawableEntries ),
         } );
     }
 
@@ -548,6 +558,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
+    const VECTOR2D gridSize = GetGridSize( aGrid );
 
     const int hysteresisWorld =
             KiROUND( m_toolMgr->GetView()->ToWorld( ADVANCED_CFG::GetCfg().m_SnapHysteresis ) );
@@ -630,6 +641,15 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         {
             OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint(
                     aOrigin, nearestGrid, snapDist, snapRange );
+
+            if( !snapLineSnap )
+            {
+                std::optional<VECTOR2I> constructionSnap =
+                        SnapToConstructionLines( aOrigin, nearestGrid, gridSize, snapRange );
+
+                if( constructionSnap )
+                    snapLineSnap = *constructionSnap;
+            }
 
             // We found a better snap point that the nearest one
             if( snapLineSnap && m_skipPoint != *snapLineSnap )
@@ -752,14 +772,9 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     m_snapItem = std::nullopt;
 
     if( !snapValid )
-    {
-        snapLineManager.ClearSnapLine();
         snapManager.GetConstructionManager().CancelProposal();
-    }
-    else
-    {
-        snapLineManager.SetSnapLineEnd( std::nullopt );
-    }
+
+    snapLineManager.SetSnapLineEnd( std::nullopt );
 
     m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
 
@@ -1015,7 +1030,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
         {
             BOARD_ITEM* involvedItem = static_cast<BOARD_ITEM*>( constructionItem.Item );
 
-            for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable : constructionItem.Constructions )
+            for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY& drawable : constructionItem.Constructions )
             {
                 std::visit(
                         [&]( const auto& visited )
@@ -1035,7 +1050,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
                                 addAnchor( visited, SNAPPABLE | CONSTRUCTED, involvedItem, POINT_TYPE::PT_NONE );
                             }
                         },
-                        drawable );
+                        drawable.Drawable );
             }
         }
     }

@@ -1454,15 +1454,6 @@ TOOL_ACTION PCB_ACTIONS::toggleLock( TOOL_ACTION_ARGS()
         .Tooltip( _( "Lock or unlock selected items" ) )
         .Icon( BITMAPS::lock_unlock ) );
 
-TOOL_ACTION PCB_ACTIONS::toggleHV45Mode( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.toggle45" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_SHIFT + ' ' )
-        .FriendlyName( _( "Cycle H/V/45 constraint" ) )
-        .Tooltip( _( "Cycle between no angle constraint, 45 degrees, or horizontal/vertical only" ) )
-        .ToolbarState( TOOLBAR_STATE::TOGGLE )
-        .Icon( BITMAPS::hv45mode ) );
-
 // Line mode grouping and events (for PCB and Footprint editors)
 TOOL_ACTION PCB_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.lineModeFree" )
@@ -1493,9 +1484,10 @@ TOOL_ACTION PCB_ACTIONS::lineMode45( TOOL_ACTION_ARGS()
 
 TOOL_ACTION PCB_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.lineModeNext" )
+        .DefaultHotkey( MD_SHIFT + ' ' )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Line Modes" ) )
-        .Tooltip( _( "Switch to next line mode" ) ) );
+        .Tooltip( _( "Switch to next angle snapping mode" ) ) );
 
 TOOL_ACTION PCB_ACTIONS::angleSnapModeChanged( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.angleSnapModeChanged" )

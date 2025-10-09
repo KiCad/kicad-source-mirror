@@ -24,13 +24,13 @@
 #include "tool/grid_helper.h"
 
 #include <functional>
+#include <cmath>
+#include <limits>
 
 #include <advanced_config.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/painter.h>
 #include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
-#include <render_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
 #include <view/view.h>
@@ -61,12 +61,8 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
     if( !m_toolMgr )
         return;
 
-    KIGFX::VIEW*            view = m_toolMgr->GetView();
-    KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
-
-    const KIGFX::COLOR4D constructionColour = settings->GetLayerColor( aConstructionLayer );
-    m_constructionGeomPreview.SetPersistentColor( constructionColour );
-    m_constructionGeomPreview.SetColor( constructionColour.WithAlpha( 0.7 ) );
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+    wxUnusedVar( aConstructionLayer );
 
     view->Add( &m_constructionGeomPreview );
     view->SetVisible( &m_constructionGeomPreview, false );
@@ -132,6 +128,119 @@ void GRID_HELPER::showConstructionGeometry( bool aShow )
 {
     if( m_toolMgr )
         m_toolMgr->GetView()->SetVisible( &m_constructionGeomPreview, aShow );
+}
+
+
+void GRID_HELPER::SetSnapLineDirections( const std::vector<VECTOR2I>& aDirections )
+{
+    m_snapManager.GetSnapLineManager().SetDirections( aDirections );
+}
+
+
+void GRID_HELPER::SetSnapLineOrigin( const VECTOR2I& aOrigin )
+{
+    m_snapManager.GetSnapLineManager().SetSnapLineOrigin( aOrigin );
+}
+
+
+void GRID_HELPER::ClearSnapLine()
+{
+    m_snapManager.GetSnapLineManager().ClearSnapLine();
+}
+
+
+std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aPoint,
+                                                              const VECTOR2I& aNearestGrid,
+                                                              const VECTOR2D& aGrid,
+                                                              double aSnapRange ) const
+{
+    const SNAP_LINE_MANAGER& snapLineManager = m_snapManager.GetSnapLineManager();
+    const OPT_VECTOR2I&      snapOrigin = snapLineManager.GetSnapLineOrigin();
+
+    if( !snapOrigin || snapLineManager.GetDirections().empty() )
+        return std::nullopt;
+
+    const VECTOR2I& origin = *snapOrigin;
+
+    const std::vector<VECTOR2I>& directions = snapLineManager.GetDirections();
+    const std::optional<int>     activeDirection = snapLineManager.GetActiveDirection();
+
+    const VECTOR2D originVec( origin );
+    const VECTOR2D cursorVec( aPoint );
+    const VECTOR2D delta = cursorVec - originVec;
+
+    std::optional<VECTOR2I> bestPoint;
+    double                  bestPerp = std::numeric_limits<double>::max();
+    double                  bestDistance = std::numeric_limits<double>::max();
+
+    for( size_t ii = 0; ii < directions.size(); ++ii )
+    {
+        const VECTOR2I& dir = directions[ii];
+        VECTOR2D        dirVector( dir );
+        double          dirLength = dirVector.EuclideanNorm();
+
+        if( dirLength == 0.0 )
+            continue;
+
+        VECTOR2D dirUnit = dirVector / dirLength;
+
+        double    distanceAlong = delta.Dot( dirUnit );
+        VECTOR2D  projection = originVec + dirUnit * distanceAlong;
+        VECTOR2D  offset = delta - dirUnit * distanceAlong;
+        double    perpDistance = offset.EuclideanNorm();
+
+        double snapThreshold = aSnapRange;
+
+        if( activeDirection && *activeDirection == static_cast<int>( ii ) )
+            snapThreshold *= 1.5;
+
+        if( perpDistance > snapThreshold )
+            continue;
+
+        VECTOR2D candidate = projection;
+
+        if( canUseGrid() )
+        {
+            if( dir.x == 0 && dir.y != 0 )
+            {
+                candidate.x = origin.x;
+                candidate.y = aNearestGrid.y;
+            }
+            else if( dir.y == 0 && dir.x != 0 )
+            {
+                candidate.x = aNearestGrid.x;
+                candidate.y = origin.y;
+            }
+            else
+            {
+                double stepDistance = std::sqrt( aGrid.x * aGrid.x + aGrid.y * aGrid.y );
+
+                if( stepDistance == 0.0 )
+                    continue;
+
+                double steps = std::round( distanceAlong / stepDistance );
+                candidate = originVec + dirUnit * ( steps * stepDistance );
+            }
+        }
+
+        VECTOR2I candidateInt( KiROUND( candidate.x ), KiROUND( candidate.y ) );
+
+        if( candidateInt == m_skipPoint )
+            continue;
+
+        VECTOR2D candidateDelta( candidateInt.x - aPoint.x, candidateInt.y - aPoint.y );
+        double    candidateDistance = candidateDelta.EuclideanNorm();
+
+        if( perpDistance < bestPerp
+                || ( std::abs( perpDistance - bestPerp ) < 1e-9 && candidateDistance < bestDistance ) )
+        {
+            bestPerp = perpDistance;
+            bestDistance = candidateDistance;
+            bestPoint = candidateInt;
+        }
+    }
+
+    return bestPoint;
 }
 
 

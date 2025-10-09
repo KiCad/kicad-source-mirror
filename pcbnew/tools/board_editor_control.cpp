@@ -205,14 +205,6 @@ int BOARD_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-int BOARD_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
-{
-    // Reuse existing toggle behavior
-    OPT_TOOL_EVENT evt = PCB_ACTIONS::toggleHV45Mode.MakeEvent();
-    m_toolMgr->ProcessEvent( *evt );
-    return 0;
-}
-
 
 bool BOARD_EDITOR_CONTROL::Init()
 {
@@ -1911,6 +1903,5 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineModeFree.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineMode90.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ChangeLineMode,        PCB_ACTIONS::lineMode45.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::NextLineMode,          PCB_ACTIONS::lineModeNext.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::OnAngleSnapModeChanged,PCB_ACTIONS::angleSnapModeChanged.MakeEvent() );
 }

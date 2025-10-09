@@ -96,7 +96,6 @@ private:
 
     // Line-mode handlers
     int ChangeLineMode( const TOOL_EVENT& aEvent );
-    int NextLineMode( const TOOL_EVENT& aEvent );
     int OnAngleSnapModeChanged( const TOOL_EVENT& aEvent );
 
     FOOTPRINT_EDIT_FRAME*      m_frame;

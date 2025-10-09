@@ -551,6 +551,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                {
                    // Ensure the controls on the toolbars all are correctly sized
                     UpdateToolbarControlSizes();
+
+                    // Update the angle snap mode toolbar button to reflect the current preference
+                    GetToolManager()->RunAction( PCB_ACTIONS::angleSnapModeChanged );
                } );
 
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
@@ -990,12 +993,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ( !GetBoard()->IsEmpty() || !SELECTION_CONDITIONS::Idle( aSel ) );
             };
 
-    auto constrainedDrawingModeCond =
-            [this]( const SELECTION& )
-            {
-                return GetPcbNewSettings()->m_AngleSnapMode != LEADER_MODE::DIRECT;
-            };
-
     auto boardFlippedCond =
             [this]( const SELECTION& )
             {
@@ -1064,7 +1061,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return tool && tool->IsNetHighlightSet();
             };
 
-    mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,       CHECK( constrainedDrawingModeCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,    CHECK( layerManagerCond ) );
@@ -1178,8 +1174,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawSimilarZone, ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::zoneMerge,       ENABLE( zoneMergeCond ) );
-
-    mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,  CHECK( cond.Get45degMode() ) );
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
@@ -2029,6 +2023,8 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
         // User name
         layerEnum.Map( layer, GetBoard()->GetLayerName( layer ) );
     }
+
+    GetToolManager()->RunAction( PCB_ACTIONS::angleSnapModeChanged );
 
     // Sync visibility with canvas
     for( PCB_LAYER_ID layer : LSET::AllLayersMask() )

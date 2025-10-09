@@ -46,6 +46,13 @@ public:
     // Supported items
     using DRAWABLE = std::variant<SEG, LINE, HALF_LINE, CIRCLE, SHAPE_ARC, VECTOR2I>;
 
+    struct SNAP_GUIDE
+    {
+        SEG      Segment;
+        COLOR4D  Color;
+        int      LineWidth;
+    };
+
     CONSTRUCTION_GEOM();
 
     wxString GetClass() const override { return wxT( "CONSTRUCTION_GEOM" ); }
@@ -59,7 +66,8 @@ public:
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
     void SetPersistentColor( const COLOR4D& aColor ) { m_persistentColor = aColor; }
 
-    void AddDrawable( const DRAWABLE& aItem, bool aIsPersistent );
+    void AddDrawable( const DRAWABLE& aItem, bool aIsPersistent, int aLineWidth = 1 );
+    void SetSnapGuides( std::vector<SNAP_GUIDE> aGuides );
     void ClearDrawables();
 
     void SetSnapLine( const SEG& aLine ) { m_snapLine = aLine; }
@@ -72,10 +80,12 @@ private:
     {
         DRAWABLE Item;
         bool     IsPersistent;
+        int      LineWidth;
     };
 
     // The items to draw
     std::vector<DRAWABLE_INFO> m_drawables;
+    std::vector<SNAP_GUIDE>    m_snapGuides;
 
     // The snap line to draw
     std::optional<SEG> m_snapLine;

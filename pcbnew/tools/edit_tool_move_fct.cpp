@@ -837,10 +837,26 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     controls->ForceCursorPosition( false );
 
     auto displayConstraintsMessage =
-            [editFrame]( bool constrained )
+            [editFrame]( LEADER_MODE aMode )
             {
-                editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
-                                                              : wxString( wxT( "" ) ) );
+                wxString msg;
+
+                switch( aMode )
+                {
+                case LEADER_MODE::DEG45:
+                    msg = _( "Angle snap lines: 45°" );
+                    break;
+
+                case LEADER_MODE::DEG90:
+                    msg = _( "Angle snap lines: 90°" );
+                    break;
+
+                default:
+                    msg.clear();
+                    break;
+                }
+
+                editFrame->DisplayConstraintsMsg( msg );
             };
 
     auto updateStatusPopup =
@@ -946,7 +962,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2I        prevPos;
     bool            enableLocalRatsnest = true;
 
-    bool hv45Mode        = GetAngleSnapMode() != LEADER_MODE::DIRECT;
+    LEADER_MODE angleSnapMode = GetAngleSnapMode();
     bool eatFirstMouseUp = true;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
@@ -961,7 +977,39 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         drc_on_move->Init( board );
     }
 
-    displayConstraintsMessage( hv45Mode );
+    auto configureAngleSnap =
+            [&]( LEADER_MODE aMode )
+            {
+                std::vector<VECTOR2I> directions;
+
+                switch( aMode )
+                {
+                case LEADER_MODE::DEG45:
+                    directions = { VECTOR2I( 1, 0 ), VECTOR2I( 0, 1 ), VECTOR2I( 1, 1 ), VECTOR2I( 1, -1 ) };
+                    break;
+
+                case LEADER_MODE::DEG90:
+                    directions = { VECTOR2I( 1, 0 ), VECTOR2I( 0, 1 ) };
+                    break;
+
+                default:
+                    break;
+                }
+
+                grid.SetSnapLineDirections( directions );
+
+                if( directions.empty() )
+                {
+                    grid.ClearSnapLine();
+                }
+                else
+                {
+                    grid.SetSnapLineOrigin( originalPos );
+                }
+            };
+
+    configureAngleSnap( angleSnapMode );
+    displayConstraintsMessage( angleSnapMode );
 
     // Prime the pump
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -1010,12 +1058,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
-
-                if( hv45Mode )
-                {
-                    VECTOR2I moveVector = m_cursor - originalPos;
-                    m_cursor = originalPos + GetVectorSnapped45( moveVector );
-                }
 
                 if( updateBBox )
                 {
@@ -1118,12 +1160,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
 
-                    if( hv45Mode )
-                    {
-                        VECTOR2I moveVector = m_cursor - originalPos;
-                        m_cursor = originalPos + GetVectorSnapped45( moveVector );
-                    }
-
                     movement = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
@@ -1172,6 +1208,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( moveWithReference )
                     {
                         selection.SetReferencePoint( pickedReferencePoint );
+
+                        if( angleSnapMode != LEADER_MODE::DIRECT )
+                            grid.SetSnapLineOrigin( selection.GetReferencePoint() );
+
                         controls->ForceCursorPosition( true, pickedReferencePoint );
                         m_cursor = pickedReferencePoint;
                     }
@@ -1192,6 +1232,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         }
 
                         selection.SetReferencePoint( snapped );
+
+                        if( angleSnapMode != LEADER_MODE::DIRECT )
+                            grid.SetSnapLineOrigin( selection.GetReferencePoint() );
+
                         grid.SetAuxAxes( true, snapped );
 
                         if( !editFrame->GetMoveWarpsCursor() )
@@ -1282,6 +1326,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     originalPos = nextItem->GetPosition();
                     m_selectionTool->AddItemToSel( nextItem );
                     selection.SetReferencePoint( originalPos );
+                    if( angleSnapMode != LEADER_MODE::DIRECT )
+                        grid.SetSnapLineOrigin( selection.GetReferencePoint() );
 
                     sel_items.clear();
                     sel_items.push_back( nextItem );
@@ -1305,11 +1351,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
             break; // finish
         }
-        else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
+        else if( evt->IsAction( &PCB_ACTIONS::angleSnapModeChanged ) )
         {
-            hv45Mode = GetAngleSnapMode() != LEADER_MODE::DIRECT;
-            displayConstraintsMessage( hv45Mode );
-            evt->SetPassEvent( false );
+            angleSnapMode = GetAngleSnapMode();
+            configureAngleSnap( angleSnapMode );
+            displayConstraintsMessage( angleSnapMode );
+            evt->SetPassEvent( true );
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {

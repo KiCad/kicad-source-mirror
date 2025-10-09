@@ -124,6 +124,13 @@ public:
     bool GetUseGrid() const { return m_enableGrid; }
 
     void SetSnapLine( bool aSnap ) { m_enableSnapLine = aSnap; }
+    void SetSnapLineDirections( const std::vector<VECTOR2I>& aDirections );
+    void SetSnapLineOrigin( const VECTOR2I& aOrigin );
+    void ClearSnapLine();
+    std::optional<VECTOR2I> SnapToConstructionLines( const VECTOR2I& aPoint,
+                                                     const VECTOR2I& aNearestGrid,
+                                                     const VECTOR2D& aGrid,
+                                                     double aSnapRange ) const;
 
     void SetMask( int aMask ) { m_maskTypes = aMask; }
     void SetMaskFlag( int aFlag ) { m_maskTypes |= aFlag; }

@@ -24,6 +24,7 @@
 #include "preview_items/construction_geom.h"
 
 #include <layer_ids.h>
+#include <utility>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_utils.h>
 #include <preview_items/item_drawing_utils.h>
@@ -39,9 +40,15 @@ CONSTRUCTION_GEOM::CONSTRUCTION_GEOM() :
 }
 
 
-void CONSTRUCTION_GEOM::AddDrawable( const DRAWABLE& aItem, bool aPersistent )
+void CONSTRUCTION_GEOM::AddDrawable( const DRAWABLE& aItem, bool aPersistent, int aLineWidth )
 {
-    m_drawables.push_back( { aItem, aPersistent } );
+    m_drawables.push_back( { aItem, aPersistent, aLineWidth } );
+}
+
+
+void CONSTRUCTION_GEOM::SetSnapGuides( std::vector<SNAP_GUIDE> aGuides )
+{
+    m_snapGuides = std::move( aGuides );
 }
 
 
@@ -90,6 +97,7 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
     for( const DRAWABLE_INFO& drawable : m_drawables )
     {
         gal.SetStrokeColor( drawable.IsPersistent ? m_persistentColor : m_color );
+        gal.SetLineWidth( drawable.LineWidth );
 
         std::visit(
                 [&]( const auto& visited )
@@ -139,9 +147,17 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
                 drawable.Item );
     }
 
+    for( const SNAP_GUIDE& guide : m_snapGuides )
+    {
+        gal.SetStrokeColor( guide.Color );
+        gal.SetLineWidth( guide.LineWidth );
+        gal.DrawLine( guide.Segment.A, guide.Segment.B );
+    }
+
     if( haveSnapLine )
     {
         gal.SetStrokeColor( m_persistentColor );
+        gal.SetLineWidth( 2 );
 
         const int dashSizeBasis = aView->ToWorld( 12 );
         const int snapOriginMarkerSize = aView->ToWorld( 16 );

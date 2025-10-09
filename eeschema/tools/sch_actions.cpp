@@ -1318,7 +1318,7 @@ TOOL_ACTION SCH_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_SHIFT + static_cast<int>( WXK_SPACE ) )
         .FriendlyName( _( "Line Mode for Wires and Buses" ) )
-        .Tooltip( _( "Switch to next line mode" ) ) );
+        .Tooltip( _( "Switch to next angle snapping mode" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::angleSnapModeChanged( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.angleSnapModeChanged" )

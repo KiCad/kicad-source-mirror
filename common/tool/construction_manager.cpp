@@ -23,11 +23,18 @@
 
 #include "tool/construction_manager.h"
 
+#include <algorithm>
 #include <chrono>
+#include <cmath>
+#include <limits>
+#include <numeric>
+#include <utility>
 
 #include <wx/timer.h>
+#include <wx/debug.h>
 
 #include <advanced_config.h>
+#include <math/util.h>
 #include <hash.h>
 
 
@@ -333,9 +340,9 @@ void CONSTRUCTION_MANAGER::acceptConstructionItems( std::unique_ptr<PENDING_BATC
         {
             for( const CONSTRUCTION_ITEM& item : batch )
             {
-                for( const KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable : item.Constructions )
+                for( const CONSTRUCTION_ITEM::DRAWABLE_ENTRY& drawable : item.Constructions )
                 {
-                    geom.AddDrawable( drawable, aIsPersistent );
+                    geom.AddDrawable( drawable.Drawable, aIsPersistent, drawable.LineWidth );
                 }
             }
         }
@@ -387,16 +394,111 @@ bool CONSTRUCTION_MANAGER::HasActiveConstruction() const
 
 
 SNAP_LINE_MANAGER::SNAP_LINE_MANAGER( CONSTRUCTION_VIEW_HANDLER& aViewHandler ) :
-        m_viewHandler( aViewHandler )
+        m_viewHandler( aViewHandler ), m_snapManager( static_cast<SNAP_MANAGER*>( &aViewHandler ) )
 {
+    wxASSERT( m_snapManager );
+    SetDirections( { VECTOR2I( 1, 0 ), VECTOR2I( 0, 1 ) } );
+}
+
+
+static VECTOR2I normalizeDirection( const VECTOR2I& aDir )
+{
+    if( aDir.x == 0 && aDir.y == 0 )
+        return VECTOR2I( 0, 0 );
+
+    int dx = aDir.x;
+    int dy = aDir.y;
+
+    int gcd = std::gcd( std::abs( dx ), std::abs( dy ) );
+
+    if( gcd > 0 )
+    {
+        dx /= gcd;
+        dy /= gcd;
+    }
+
+    if( dx < 0 || ( dx == 0 && dy < 0 ) )
+    {
+        dx = -dx;
+        dy = -dy;
+    }
+
+    return VECTOR2I( dx, dy );
+}
+
+
+static std::optional<int> findDirectionIndex( const std::vector<VECTOR2I>& aDirections,
+                                              const VECTOR2I&               aDelta )
+{
+    VECTOR2I normalized = normalizeDirection( aDelta );
+
+    if( normalized.x == 0 && normalized.y == 0 )
+        return std::nullopt;
+
+    for( size_t i = 0; i < aDirections.size(); ++i )
+    {
+        if( aDirections[i] == normalized )
+            return static_cast<int>( i );
+    }
+
+    return std::nullopt;
+}
+
+
+void SNAP_LINE_MANAGER::SetDirections( const std::vector<VECTOR2I>& aDirections )
+{
+    std::vector<VECTOR2I> uniqueDirections;
+    uniqueDirections.reserve( aDirections.size() );
+
+    for( const VECTOR2I& direction : aDirections )
+    {
+        VECTOR2I normalized = normalizeDirection( direction );
+
+        if( normalized.x == 0 && normalized.y == 0 )
+            continue;
+
+        if( std::find( uniqueDirections.begin(), uniqueDirections.end(), normalized )
+                == uniqueDirections.end() )
+        {
+            uniqueDirections.push_back( normalized );
+        }
+    }
+
+    if( uniqueDirections != m_directions )
+    {
+        m_directions = std::move( uniqueDirections );
+        m_activeDirection.reset();
+
+        if( m_snapLineOrigin && m_snapLineEnd )
+        {
+            if( !findDirectionIndex( m_directions, *m_snapLineEnd - *m_snapLineOrigin ) )
+                m_snapLineEnd.reset();
+        }
+
+        if( m_directions.empty() )
+        {
+            ClearSnapLine();
+            return;
+        }
+
+        notifyGuideChange();
+    }
 }
 
 
 void SNAP_LINE_MANAGER::SetSnapLineOrigin( const VECTOR2I& aOrigin )
 {
-    // Setting the origin clears the snap line as the end point is no longer valid
-    ClearSnapLine();
+    if( m_snapLineOrigin && *m_snapLineOrigin == aOrigin && !m_snapLineEnd )
+    {
+        notifyGuideChange();
+        return;
+    }
+
     m_snapLineOrigin = aOrigin;
+    m_snapLineEnd.reset();
+    m_activeDirection.reset();
+    m_viewHandler.GetViewItem().ClearSnapLine();
+    notifyGuideChange();
 }
 
 
@@ -407,11 +509,16 @@ void SNAP_LINE_MANAGER::SetSnapLineEnd( const OPT_VECTOR2I& aSnapEnd )
         m_snapLineEnd = aSnapEnd;
 
         if( m_snapLineEnd )
+            m_activeDirection = findDirectionIndex( m_directions, *m_snapLineEnd - *m_snapLineOrigin );
+        else
+            m_activeDirection.reset();
+
+        if( m_snapLineEnd )
             m_viewHandler.GetViewItem().SetSnapLine( SEG{ *m_snapLineOrigin, *m_snapLineEnd } );
         else
             m_viewHandler.GetViewItem().ClearSnapLine();
 
-        m_viewHandler.updateView();
+        notifyGuideChange();
     }
 }
 
@@ -420,8 +527,9 @@ void SNAP_LINE_MANAGER::ClearSnapLine()
 {
     m_snapLineOrigin.reset();
     m_snapLineEnd.reset();
+    m_activeDirection.reset();
     m_viewHandler.GetViewItem().ClearSnapLine();
-    m_viewHandler.updateView();
+    notifyGuideChange();
 }
 
 
@@ -429,7 +537,7 @@ void SNAP_LINE_MANAGER::SetSnappedAnchor( const VECTOR2I& aAnchorPos )
 {
     if( m_snapLineOrigin.has_value() )
     {
-        if( aAnchorPos.x == m_snapLineOrigin->x || aAnchorPos.y == m_snapLineOrigin->y )
+        if( findDirectionIndex( m_directions, aAnchorPos - *m_snapLineOrigin ) )
         {
             SetSnapLineEnd( aAnchorPos );
         }
@@ -448,85 +556,70 @@ void SNAP_LINE_MANAGER::SetSnappedAnchor( const VECTOR2I& aAnchorPos )
 }
 
 
-/**
- * Check if the cursor has moved far enough away from the snap line origin to escape snapping
- * in the X direction.
- *
- * This is defined as within aEscapeRange of the snap line origin, and within aLongRangeEscapeAngle
- * of the vertical line passing through the snap line origin.
- */
-static bool pointHasEscapedSnapLineX( const VECTOR2I& aCursor, const VECTOR2I& aSnapLineOrigin,
-                                      int aEscapeRange, EDA_ANGLE aLongRangeEscapeAngle )
-{
-    if( std::abs( aCursor.x - aSnapLineOrigin.x ) < aEscapeRange )
-    {
-        return false;
-    }
-    EDA_ANGLE angle = EDA_ANGLE( aCursor - aSnapLineOrigin ) + EDA_ANGLE( 90, DEGREES_T );
-    return std::abs( angle.Normalize90() ) > aLongRangeEscapeAngle;
-}
-
-
-/**
- * As above, but for the Y direction.
- */
-static bool pointHasEscapedSnapLineY( const VECTOR2I& aCursor, const VECTOR2I& aSnapLineOrigin,
-                                      int aEscapeRange, EDA_ANGLE aLongRangeEscapeAngle )
-{
-    if( std::abs( aCursor.y - aSnapLineOrigin.y ) < aEscapeRange )
-    {
-        return false;
-    }
-    EDA_ANGLE angle = EDA_ANGLE( aCursor - aSnapLineOrigin );
-    return std::abs( angle.Normalize90() ) > aLongRangeEscapeAngle;
-}
-
-
 OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCursor,
-                                                         const VECTOR2I&    aNearestGrid,
-                                                         std::optional<int> aDistToNearest,
-                                                         int                aSnapRange ) const
+                                                        const VECTOR2I&    aNearestGrid,
+                                                        std::optional<int> aDistToNearest,
+                                                        int                aSnapRange ) const
 {
-    // return std::nullopt;
-    if( m_snapLineOrigin )
+    wxUnusedVar( aNearestGrid );
+
+    if( !m_snapLineOrigin || m_directions.empty() )
+        return std::nullopt;
+
+    const bool gridBetterThanNearest = !aDistToNearest || *aDistToNearest > aSnapRange;
+
+    if( !gridBetterThanNearest )
+        return std::nullopt;
+
+    const int       escapeRange = 2 * aSnapRange;
+    const EDA_ANGLE longRangeEscapeAngle( 4, DEGREES_T );
+
+    const VECTOR2D origin( *m_snapLineOrigin );
+    const VECTOR2D cursor( aCursor );
+    const VECTOR2D delta = cursor - origin;
+
+    double                        bestPerpDistance = std::numeric_limits<double>::max();
+    std::optional<VECTOR2I>       bestSnapPoint;
+
+    for( const VECTOR2I& direction : m_directions )
     {
-        bool     snapLine = false;
-        VECTOR2I bestSnapPoint = aNearestGrid;
+        VECTOR2D dirVector( direction );
+        double   dirLength = dirVector.EuclideanNorm();
 
-        // If there's no snap anchor, or it's too far away, prefer the grid
-        const bool gridBetterThanNearest = !aDistToNearest || *aDistToNearest > aSnapRange;
+        if( dirLength == 0.0 )
+            continue;
 
-        // The escape range is how far you go before the snap line is de-activated.
-        // Make this a bit more forgiving than the snap range, as you can easily cancel
-        // deliberately with a mouse move.
-        // These are both a bit arbitrary, and can be adjusted as preferred
-        const int       escapeRange = 2 * aSnapRange;
-        const EDA_ANGLE longRangeEscapeAngle( 4, DEGREES_T );
+        VECTOR2D dirUnit = dirVector / dirLength;
 
-        const bool escapedX = pointHasEscapedSnapLineX( aCursor, *m_snapLineOrigin, escapeRange,
-                                                        longRangeEscapeAngle );
-        const bool escapedY = pointHasEscapedSnapLineY( aCursor, *m_snapLineOrigin, escapeRange,
-                                                        longRangeEscapeAngle );
+        double    distanceAlong = delta.Dot( dirUnit );
+        VECTOR2D  projection = origin + dirUnit * distanceAlong;
+        VECTOR2D  offset = delta - dirUnit * distanceAlong;
+        double    perpDistance = offset.EuclideanNorm();
 
-        /// Allows de-snapping from the line if you are closer to another snap point
-        /// Or if you have moved far enough away from the line
-        if( !escapedX && gridBetterThanNearest )
+        if( perpDistance > aSnapRange )
+            continue;
+
+        bool escaped = false;
+
+        if( perpDistance >= escapeRange )
         {
-            bestSnapPoint.x = m_snapLineOrigin->x;
-            snapLine = true;
+            EDA_ANGLE deltaAngle( delta );
+            EDA_ANGLE directionAngle( dirVector );
+            double    angleDiff = ( deltaAngle - directionAngle ).Normalize180().AsDegrees();
+
+            if( std::abs( angleDiff ) > longRangeEscapeAngle.AsDegrees() )
+                escaped = true;
         }
 
-        if( !escapedY && gridBetterThanNearest )
+        if( !escaped && perpDistance < bestPerpDistance )
         {
-            bestSnapPoint.y = m_snapLineOrigin->y;
-            snapLine = true;
-        }
-
-        if( snapLine )
-        {
-            return bestSnapPoint;
+            bestPerpDistance = perpDistance;
+            bestSnapPoint = VECTOR2I( KiROUND( projection.x ), KiROUND( projection.y ) );
         }
     }
+
+    if( bestSnapPoint )
+        return *bestSnapPoint;
 
     return std::nullopt;
 }
@@ -534,7 +627,8 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
 
 SNAP_MANAGER::SNAP_MANAGER( KIGFX::CONSTRUCTION_GEOM& aHelper ) :
         CONSTRUCTION_VIEW_HANDLER( aHelper ), m_snapLineManager( *this ),
-        m_constructionManager( *this )
+        m_constructionManager( *this ), m_snapGuideColor( KIGFX::COLOR4D::WHITE ),
+        m_snapGuideHighlightColor( KIGFX::COLOR4D::WHITE )
 {
 }
 
@@ -544,10 +638,71 @@ void SNAP_MANAGER::updateView()
     if( m_updateCallback )
     {
         bool showAnything = m_constructionManager.HasActiveConstruction()
-                            || m_snapLineManager.HasCompleteSnapLine();
+                            || m_snapLineManager.HasCompleteSnapLine()
+                            || ( m_snapLineManager.GetSnapLineOrigin()
+                                 && !m_snapLineManager.GetDirections().empty() );
 
         m_updateCallback( showAnything );
     }
+}
+
+
+void SNAP_MANAGER::SetSnapGuideColors( const KIGFX::COLOR4D& aBase, const KIGFX::COLOR4D& aHighlight )
+{
+    m_snapGuideColor = aBase;
+    m_snapGuideHighlightColor = aHighlight;
+    UpdateSnapGuides();
+}
+
+
+void SNAP_MANAGER::UpdateSnapGuides()
+{
+    std::vector<KIGFX::CONSTRUCTION_GEOM::SNAP_GUIDE> guides;
+
+    const OPT_VECTOR2I& origin = m_snapLineManager.GetSnapLineOrigin();
+    const std::vector<VECTOR2I>& directions = m_snapLineManager.GetDirections();
+
+    if( origin && !directions.empty() )
+    {
+        const std::optional<int> activeDirection = m_snapLineManager.GetActiveDirection();
+        const int                 guideLength = 500000;
+
+        for( size_t ii = 0; ii < directions.size(); ++ii )
+        {
+            const VECTOR2I& direction = directions[ii];
+
+            if( direction.x == 0 && direction.y == 0 )
+                continue;
+
+            VECTOR2I scaled = direction * guideLength;
+
+            KIGFX::CONSTRUCTION_GEOM::SNAP_GUIDE guide;
+            guide.Segment = SEG( *origin - scaled, *origin + scaled );
+
+            if( activeDirection && *activeDirection == static_cast<int>( ii ) )
+            {
+                guide.LineWidth = 2;
+                guide.Color = m_snapGuideHighlightColor;
+            }
+            else
+            {
+                guide.LineWidth = 1;
+                guide.Color = m_snapGuideColor;
+            }
+
+            guides.push_back( guide );
+        }
+    }
+
+    GetViewItem().SetSnapGuides( std::move( guides ) );
+    updateView();
+}
+
+
+void SNAP_LINE_MANAGER::notifyGuideChange()
+{
+    if( m_snapManager )
+        m_snapManager->UpdateSnapGuides();
 }
 
 
@@ -570,13 +725,24 @@ SNAP_MANAGER::GetConstructionItems() const
                         {},
                 } );
 
-        // One horizontal and one vertical infinite line from the snap point
-        snapPointItem.Constructions.push_back(
-                LINE{ *snapLineOrigin, *snapLineOrigin + VECTOR2I( 100000, 0 ) } );
-        snapPointItem.Constructions.push_back(
-                LINE{ *snapLineOrigin, *snapLineOrigin + VECTOR2I( 0, 100000 ) } );
+        const std::vector<VECTOR2I>& directions = m_snapLineManager.GetDirections();
+        const std::optional<int>     activeDirection = m_snapLineManager.GetActiveDirection();
 
-        batches.push_back( std::move( batch ) );
+        for( size_t ii = 0; ii < directions.size(); ++ii )
+        {
+            const VECTOR2I& direction = directions[ii];
+
+            VECTOR2I scaledDirection = direction * 100000;
+
+            CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY entry;
+            entry.Drawable = LINE{ *snapLineOrigin, *snapLineOrigin + scaledDirection };
+            entry.LineWidth = ( activeDirection && *activeDirection == static_cast<int>( ii ) ) ? 2 : 1;
+
+            snapPointItem.Constructions.push_back( entry );
+        }
+
+        if( !snapPointItem.Constructions.empty() )
+            batches.push_back( std::move( batch ) );
     }
 
     return batches;

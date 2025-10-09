@@ -103,13 +103,6 @@ public:
     SELECTION_CONDITION ZoneDisplayMode( ZONE_DISPLAY_MODE aMode );
 
     /**
-     * Create a functor that tests whether angle constraints are enabled
-     *
-     * @return Functor returning true if angle constraints are enabled
-     */
-    SELECTION_CONDITION Get45degMode();
-
-    /**
      * Create a functor that tests if the footprint viewer should auto zoom on new footprints.
      *
      * @return Functor returning true if auto zoom is enabled.
@@ -141,9 +134,6 @@ protected:
     ///< Helper function used by ZoneDisplayMode()
     static bool zoneDisplayModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame,
                                      ZONE_DISPLAY_MODE aMode );
-
-    ///< Helper function used by Get45degMode()
-    static bool get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 
     /// Helper function used by FootprintViewerAutoZoom()
     static bool footprintViewerAutoZoom( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );

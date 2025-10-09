@@ -55,7 +55,7 @@ public:
 
     ///< Launch a tool to measure between points.
     int MeasureTool( const TOOL_EVENT& aEvent );
-    int ToggleHV45Mode( const TOOL_EVENT& aEvent );
+    int NextLineMode( const TOOL_EVENT& aEvent );
 
     // Display modes
     int ShowPadNumbers( const TOOL_EVENT& aEvent );
