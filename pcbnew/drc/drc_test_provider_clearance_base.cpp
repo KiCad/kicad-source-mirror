@@ -46,8 +46,8 @@ std::vector<PCB_SHAPE> DRC_TEST_PROVIDER_CLEARANCE_BASE::GetShapes( const std::v
     {
         VECTOR2I V1 = shortestPathShapes[0].GetStart() - shortestPathShapes[0].GetEnd();
         VECTOR2I V2 = shortestPathShapes.back().GetStart() - shortestPathShapes.back().GetEnd();
-        V1 = V1.Perpendicular().Resize( aLength / 30 );
-        V2 = V2.Perpendicular().Resize( aLength / 30 );
+        V1 = V1.Perpendicular().Resize( std::max( aLength / 24, pcbIUScale.mmToIU( 0.05 ) ) );
+        V2 = V2.Perpendicular().Resize( std::max( aLength / 24, pcbIUScale.mmToIU( 0.05 ) ) );
 
         PCB_SHAPE s( nullptr, SHAPE_T::SEGMENT );
         s.SetStroke( hairline );
@@ -61,10 +61,10 @@ std::vector<PCB_SHAPE> DRC_TEST_PROVIDER_CLEARANCE_BASE::GetShapes( const std::v
         shortestPathShapes.push_back( s );
     }
 
-    // Add outlined areas
+    // Add shaded areas
     for( PCB_SHAPE shape : aShapes )
     {
-        shape.SetWidth( aLength / 10 );
+        shape.SetWidth( std::max( aLength / 10, pcbIUScale.mmToIU( 0.2 ) ) );
         shortestPathShapes.push_back( std::move( shape ) );
     }
 

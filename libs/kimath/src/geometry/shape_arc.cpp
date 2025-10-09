@@ -491,6 +491,9 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECT
         }
     }
 
+    // Adjust point A by half the arc width towards point B
+    VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
+    aPtA += dir;
     return true;
 }
 

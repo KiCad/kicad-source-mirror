@@ -152,6 +152,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
         testGraphicClearances();
     }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking copper graphic hole clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        testGraphicClearances();
+    }
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
     {
@@ -799,6 +806,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     VECTOR2I               pos;
     bool                   has_error = false;
 
+    auto sub_e = [this]( int clearance )
+                 {
+                     return std::max( 0, clearance - m_drcEpsilon );
+                 };
+
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )
     {
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
@@ -839,8 +851,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
         {
-            if( padShape->Collide( otherShape.get(), std::max( 0, clearance - m_drcEpsilon ),
-                                   &actual, &pos ) )
+            if( padShape->Collide( otherShape.get(), sub_e( clearance ), &actual, &pos ) )
             {
                 if( m_drcEngine->IsNetTieExclusion( pad->GetNetCode(), aLayer, pos, other ) )
                 {
@@ -880,76 +891,65 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         }
     }
 
+    auto doTestHole =
+            [&]( BOARD_ITEM* item, SHAPE* shape, BOARD_ITEM* otherItem, SHAPE* otherShape, int clearance )
+            {
+                if( shape->Collide( otherShape, sub_e( clearance ), &actual, &pos ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              clearance,
+                                              actual );
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                    drce->SetItems( item, otherItem );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+                    ReportAndShowPathCuToCu( drce, pos, aLayer, item, otherItem, aLayer, actual );
+                    has_error = true;
+                    testHoles = false;  // No need for multiple violations
+                }
+            };
+
     if( testHoles )
     {
         constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, pad, other, aLayer );
-        clearance = constraint.GetValue().Min();
 
         if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
             testHoles = false;
     }
 
-    if( testHoles && otherPad && pad->FlashLayer( aLayer ) && otherPad->HasHole() )
+    if( testHoles && pad->HasHole() )
     {
-        if( clearance > 0 && padShape->Collide( otherPad->GetEffectiveHoleShape().get(),
-                                                std::max( 0, clearance - m_drcEpsilon ),
-                                                &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
+        clearance = constraint.GetValue().Min();
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
-            has_error = true;
-            testHoles = false;  // No need for multiple violations
-        }
+        if( otherPad && !otherPad->FlashLayer( aLayer ) )
+            clearance = 0;
+
+        if( clearance > 0 )
+            doTestHole( other, otherShape.get(), pad, pad->GetEffectiveHoleShape().get(), clearance );
     }
 
-    if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->HasHole() )
+    if( testHoles && otherPad && otherPad->HasHole() )
     {
-        if( clearance > 0 && otherShape->Collide( pad->GetEffectiveHoleShape().get(),
-                                                  std::max( 0, clearance - m_drcEpsilon ),
-                                                  &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
+        clearance = constraint.GetValue().Min();
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+        if( !pad->FlashLayer( aLayer ) )
+            clearance = 0;
 
-            reportViolation( drce, pos, aLayer );
-            has_error = true;
-            testHoles = false;  // No need for multiple violations
-        }
+        if( clearance > 0 )
+            doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape().get(), clearance );
     }
 
-    if( testHoles && otherVia && otherVia->IsOnLayer( aLayer ) )
+    if( testHoles && otherVia && otherVia->HasHole() )
     {
-        if( clearance > 0 && padShape->Collide( otherVia->GetEffectiveHoleShape().get(),
-                                                std::max( 0, clearance - m_drcEpsilon ),
-                                                &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
+        clearance = constraint.GetValue().Min();
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, otherVia );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, otherVia, aLayer, actual );
-            has_error = true;
-        }
+        if( !otherVia->IsOnLayer( aLayer ) )
+            clearance = 0;
+
+        if( clearance > 0 )
+            doTestHole( pad, padShape, otherVia, otherVia->GetEffectiveHoleShape().get(), clearance );
     }
 
     return !has_error;

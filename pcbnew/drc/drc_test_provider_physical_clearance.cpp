@@ -315,53 +315,14 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 break;
                             }
 
+                            // Simple shapes can't create self-intersections, and I'm not sure a user
+                            // would want a report that one side of their rectangle was too close to
+                            // the other side.
                             case SHAPE_T::ARC:
-                            {
-                                SHAPE_LINE_CHAIN asPoly;
-
-                                VECTOR2I  center = shape->GetCenter();
-                                EDA_ANGLE angle  = -shape->GetArcAngle();
-                                double    r      = shape->GetRadius();
-                                int       steps  = GetArcToSegmentCount( r, errorMax, angle );
-
-                                asPoly.Append( shape->GetStart() );
-
-                                for( int step = 1; step <= steps; ++step )
-                                {
-                                    EDA_ANGLE rotation = ( angle * step ) / steps;
-                                    VECTOR2I  pt = shape->GetStart();
-
-                                    RotatePoint( pt, center, rotation );
-                                    asPoly.Append( pt );
-                                }
-
-                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
-                                break;
-                            }
-
                             case SHAPE_T::RECTANGLE:
-                            {
-                                SHAPE_LINE_CHAIN asPoly;
-                                std::vector<VECTOR2I> pts = shape->GetRectCorners();
-                                asPoly.Append( pts[0] );
-                                asPoly.Append( pts[1] );
-                                asPoly.Append( pts[2] );
-                                asPoly.Append( pts[3] );
-                                asPoly.SetClosed( true );
-
-                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
-                                break;
-                            }
-
                             case SHAPE_T::SEGMENT:
-                            {
-                                SHAPE_LINE_CHAIN asPoly;
-                                asPoly.Append( shape->GetStart() );
-                                asPoly.Append( shape->GetEnd() );
-
-                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
+                            case SHAPE_T::CIRCLE:
                                 break;
-                            }
 
                             default:
                                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );

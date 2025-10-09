@@ -3131,7 +3131,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
                 m_gal->SetIsFill( false );
                 m_gal->SetIsStroke( true );
                 m_gal->SetStrokeColor( WHITE );
-                m_gal->SetLineWidth( (float) shape.GetWidth() );
+                m_gal->SetLineWidth( pcbIUScale.mmToIU( 0.01 ) );
 
                 if( shape.GetShape() == SHAPE_T::SEGMENT )
                 {

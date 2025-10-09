@@ -435,36 +435,31 @@ static bool NearestPoints( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHA
  * Find the nearest points between an arc and other shapes.
  * Uses the arc's built-in NearestPoints methods.
  */
-static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_CIRCLE& aCircle,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
     return aArc.NearestPoints( aCircle, aPtA, aPtB, distSq );
 }
 
-static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_RECT& aRect,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
     return aArc.NearestPoints( aRect, aPtA, aPtB, distSq );
 }
 
-static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_SEGMENT& aSeg,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_SEGMENT& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
     return aArc.NearestPoints( aSeg.GetSeg(), aPtA, aPtB, distSq );
 }
 
-static bool NearestPoints( const SHAPE_ARC& aArcA, const SHAPE_ARC& aArcB,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_ARC& aArcA, const SHAPE_ARC& aArcB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
     return aArcA.NearestPoints( aArcB, aPtA, aPtB, distSq );
 }
 
-static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_LINE_CHAIN_BASE& aChain,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_LINE_CHAIN_BASE& aChain, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
@@ -490,37 +485,39 @@ static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_LINE_CHAIN_BASE& a
 /**
  * Find nearest points between SHAPE_SEGMENT and other shapes
  */
-static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_CIRCLE& aCircle,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
-    // If we get nearest points, then we need to move the aPtA half of the width of the segment
-    // toward aPtB
     if( NearestPoints( aCircle, aSeg.GetSeg(), aPtB, aPtA ) )
     {
+        // Adjust point A by half the segment width towards point B
         VECTOR2I dir = ( aPtB - aPtA ).Resize( aSeg.GetWidth() / 2 );
         aPtA += dir;
+        // Adjust point B by half the circle stroke-width towards point A
+        dir = ( aPtA - aPtB ).Resize( aCircle.GetWidth() / 2 );
+        aPtB += dir;
         return true;
     }
 
     return false;
 }
 
-static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_RECT& aRect,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     if( NearestPoints( aRect, aSeg.GetSeg(), aPtB, aPtA ) )
     {
         // Adjust point A by half the segment width towards point B
         VECTOR2I dir = ( aPtB - aPtA ).Resize( aSeg.GetWidth() / 2 );
         aPtA += dir;
+        // Adjust point B by half the rect stroke-width towards point A
+        dir = ( aPtA - aPtB ).Resize( aRect.GetWidth() / 2 );
+        aPtB += dir;
         return true;
     }
 
     return false;
 }
 
-static bool NearestPoints( const SHAPE_SEGMENT& aSegA, const SHAPE_SEGMENT& aSegB,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_SEGMENT& aSegA, const SHAPE_SEGMENT& aSegB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     // Find nearest points between two segments
     if( NearestPoints( aSegA.GetSeg(), aSegB.GetSeg(), aPtA, aPtB ) )
@@ -537,8 +534,8 @@ static bool NearestPoints( const SHAPE_SEGMENT& aSegA, const SHAPE_SEGMENT& aSeg
     return false;
 }
 
-static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain, VECTOR2I& aPtA,
+                           VECTOR2I& aPtB )
 {
     if( NearestPoints( aSeg.GetSeg(), aChain, aPtB, aPtA ) )
     {
@@ -556,29 +553,24 @@ static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_LINE_CHAIN_BAS
  * Template functions to handle shape conversions and reversals
  */
 template<class T_a, class T_b>
-inline bool NearestPointsCase( const SHAPE* aA, const SHAPE* aB,
-                              VECTOR2I& aPtA, VECTOR2I& aPtB )
+inline bool NearestPointsCase( const SHAPE* aA, const SHAPE* aB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
-    return NearestPoints( *static_cast<const T_a*>( aA ),
-                         *static_cast<const T_b*>( aB ),
-                         aPtA, aPtB );
+    return NearestPoints( *static_cast<const T_a*>( aA ), *static_cast<const T_b*>( aB ),
+                          aPtA, aPtB );
 }
 
 template<class T_a, class T_b>
-inline bool NearestPointsCaseReversed( const SHAPE* aA, const SHAPE* aB,
-                                      VECTOR2I& aPtA, VECTOR2I& aPtB )
+inline bool NearestPointsCaseReversed( const SHAPE* aA, const SHAPE* aB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
-    return NearestPoints( *static_cast<const T_b*>( aB ),
-                         *static_cast<const T_a*>( aA ),
-                         aPtB, aPtA );
+    return NearestPoints( *static_cast<const T_b*>( aB ), *static_cast<const T_a*>( aA ),
+                          aPtB, aPtA );
 }
 
 
 /**
  * Main dispatcher for finding nearest points between arbitrary shapes
  */
-static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB,
-                                      VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     switch( aA->Type() )
     {
@@ -834,30 +826,33 @@ static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB,
 /**
  * Handle compound shapes by finding nearest points between all sub-shape pairs
  */
-static bool nearestPoints( const SHAPE* aA, const SHAPE* aB,
-                          VECTOR2I& aPtA, VECTOR2I& aPtB )
+static bool nearestPoints( const SHAPE* aA, const SHAPE* aB, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
     bool found = false;
 
-    auto checkNearestPoints = [&]( const SHAPE* shapeA, const SHAPE* shapeB ) -> bool
-    {
-        VECTOR2I ptA, ptB;
-
-        if( nearestPointsSingleShapes( shapeA, shapeB, ptA, ptB ) )
-        {
-            int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
-            if( distSq < minDistSq )
+    auto checkNearestPoints =
+            [&]( const SHAPE* shapeA, const SHAPE* shapeB ) -> bool
             {
-                minDistSq = distSq;
-                aPtA = ptA;
-                aPtB = ptB;
-                found = true;
-            }
-            return true;
-        }
-        return false;
-    };
+                VECTOR2I ptA, ptB;
+
+                if( nearestPointsSingleShapes( shapeA, shapeB, ptA, ptB ) )
+                {
+                    int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
+
+                    if( distSq < minDistSq )
+                    {
+                        minDistSq = distSq;
+                        aPtA = ptA;
+                        aPtB = ptB;
+                        found = true;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            };
 
     if( aA->Type() == SH_COMPOUND && aB->Type() == SH_COMPOUND )
     {
