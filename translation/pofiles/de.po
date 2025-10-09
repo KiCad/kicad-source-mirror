@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-09 07:44+0000\n"
+"PO-Revision-Date: 2025-10-09 16:56+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -15588,8 +15588,8 @@ msgid ""
 msgstr ""
 "Neuer Dateipfad für Schaltplanblatt:\n"
 "\"%s\"\n"
-"kann nicht normalisiert werden anhand des Dateipfads des übergeordneten "
-"Schaltplanblatts:\n"
+"kann nicht anhand des Dateipfads des übergeordneten Schaltplanblatts "
+"normalisiert werden:\n"
 "\"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:498
@@ -50872,7 +50872,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:210
 msgid "Track Corner Mode 45"
-msgstr "Leiterbahn-Ecken-Modus 45"
+msgstr "Leiterbahnecken-Modus 45"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Switch to 45° corner when routing tracks."
@@ -50880,7 +50880,7 @@ msgstr "Wechselt beim Verlegen von Leiterbahnen zu 45° Ecken."
 
 #: pcbnew/router/router_tool.cpp:217
 msgid "Track Corner Mode 90"
-msgstr "Leiterbahn-Ecken-Modus 90"
+msgstr "Leiterbahnecken-Modus 90"
 
 #: pcbnew/router/router_tool.cpp:218
 msgid "Switch to 90° corner when routing tracks."
