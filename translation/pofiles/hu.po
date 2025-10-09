@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-09 07:44+0000\n"
+"PO-Revision-Date: 2025-10-10 08:24+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
@@ -12780,14 +12780,14 @@ msgid "*** new symbol has too few units ***"
 msgstr "*** alkatrészrajzolat nem található ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:883
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "%s frissítve (\"%s\" -> \"%s\")"
+msgstr "%s rajzjel frissítése (\"%s\" --> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "%s frissítve (\"%s\" -> \"%s\")"
+msgstr "%s rajzjelek frissítése (\"%s\" --> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:900
 #, c-format
@@ -12970,14 +12970,12 @@ msgid "Reload the database library configuration file"
 msgstr "Gyorsbillentyű konfigurációs fájl betöltése:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Keresés"
+msgstr "Gyorsítótárazás"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Lapméret:"
+msgstr "Gyorsítótár mérete:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
@@ -13434,9 +13432,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:361
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Maximális magasság:"
+msgstr "Összes teljesítmény disszipáció mentése"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:362
 msgid ""
@@ -42619,28 +42616,24 @@ msgid "Line width must be greater than zero."
 msgstr "A vonalvastagságnak nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1250
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "A sugárnak nullánál nagyobbnak kell lennie."
+msgstr "A körvonal vastagságának nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1257
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "A sugárnak nullánál nagyobbnak kell lennie."
+msgstr "A téglalap vonalvastagságának nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1263
 msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "A sugárnak nullánál nagyobbnak kell lennie."
+msgstr "A sokszög vonalvastagságának nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1284
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "A sugárnak nullánál nagyobbnak kell lennie."
+msgstr "A görbe vonalvastagságának nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1295
 msgid "Error List"
