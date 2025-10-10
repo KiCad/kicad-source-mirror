@@ -25,6 +25,7 @@
 #define GRID_HELPER_H
 
 #include <vector>
+#include <optional>
 
 #include <geometry/point_types.h>
 #include <math/vector2d.h>
@@ -126,6 +127,7 @@ public:
     void SetSnapLine( bool aSnap ) { m_enableSnapLine = aSnap; }
     void SetSnapLineDirections( const std::vector<VECTOR2I>& aDirections );
     void SetSnapLineOrigin( const VECTOR2I& aOrigin );
+    void SetSnapLineEnd( const std::optional<VECTOR2I>& aEnd );
     void ClearSnapLine();
     std::optional<VECTOR2I> SnapToConstructionLines( const VECTOR2I& aPoint,
                                                      const VECTOR2I& aNearestGrid,

@@ -194,6 +194,9 @@ public:
     /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
+    const EDIT_POINT& GetConstrainer() const { return m_constrainer; }
+    VECTOR2I GetLineVector() const { return m_line; }
+
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
     VECTOR2I m_line;                    ///< Vector representing the constraining line.

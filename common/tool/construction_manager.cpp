@@ -681,7 +681,7 @@ void SNAP_MANAGER::UpdateSnapGuides()
 
             if( activeDirection && *activeDirection == static_cast<int>( ii ) )
             {
-                guide.LineWidth = 2;
+                guide.LineWidth = 5;
                 guide.Color = m_snapGuideHighlightColor;
             }
             else

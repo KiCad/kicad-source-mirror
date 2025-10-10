@@ -26,6 +26,7 @@
 #include <layer_ids.h>
 #include <utility>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/line.h>
 #include <geometry/shape_utils.h>
 #include <preview_items/item_drawing_utils.h>
 #include <view/view.h>
@@ -97,7 +98,7 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
     for( const DRAWABLE_INFO& drawable : m_drawables )
     {
         gal.SetStrokeColor( drawable.IsPersistent ? m_persistentColor : m_color );
-        gal.SetLineWidth( drawable.LineWidth );
+        gal.SetLineWidth( drawable.LineWidth / gal.GetWorldScale() );
 
         std::visit(
                 [&]( const auto& visited )
@@ -149,9 +150,19 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
 
     for( const SNAP_GUIDE& guide : m_snapGuides )
     {
+        const SEG& segment = guide.Segment;
+
+        if( segment.A == segment.B )
+            continue;
+
+        std::optional<SEG> clipped = KIGEOM::ClipLineToBox( LINE( segment ), viewport );
+
+        if( !clipped )
+            continue;
+
         gal.SetStrokeColor( guide.Color );
         gal.SetLineWidth( guide.LineWidth );
-        gal.DrawLine( guide.Segment.A, guide.Segment.B );
+        gal.DrawLine( clipped->A, clipped->B );
     }
 
     if( haveSnapLine )

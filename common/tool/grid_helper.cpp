@@ -142,6 +142,10 @@ void GRID_HELPER::SetSnapLineOrigin( const VECTOR2I& aOrigin )
     m_snapManager.GetSnapLineManager().SetSnapLineOrigin( aOrigin );
 }
 
+void GRID_HELPER::SetSnapLineEnd( const std::optional<VECTOR2I>& aEnd )
+{
+    m_snapManager.GetSnapLineManager().SetSnapLineEnd( aEnd );
+}
 
 void GRID_HELPER::ClearSnapLine()
 {

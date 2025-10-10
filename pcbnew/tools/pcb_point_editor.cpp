@@ -70,6 +70,47 @@ using namespace std::placeholders;
 
 const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
+static void appendDirection( std::vector<VECTOR2I>& aDirections, const VECTOR2I& aDirection )
+{
+    if( aDirection.x != 0 || aDirection.y != 0 )
+        aDirections.push_back( aDirection );
+}
+
+static std::vector<VECTOR2I> getConstraintDirections( EDIT_CONSTRAINT<EDIT_POINT>* aConstraint )
+{
+    std::vector<VECTOR2I> directions;
+
+    if( !aConstraint )
+        return directions;
+
+    if( dynamic_cast<EC_90DEGREE*>( aConstraint ) )
+    {
+        appendDirection( directions, VECTOR2I( 1, 0 ) );
+        appendDirection( directions, VECTOR2I( 0, 1 ) );
+    }
+    else if( dynamic_cast<EC_45DEGREE*>( aConstraint ) )
+    {
+        appendDirection( directions, VECTOR2I( 1, 0 ) );
+        appendDirection( directions, VECTOR2I( 0, 1 ) );
+        appendDirection( directions, VECTOR2I( 1, 1 ) );
+        appendDirection( directions, VECTOR2I( 1, -1 ) );
+    }
+    else if( dynamic_cast<EC_VERTICAL*>( aConstraint ) )
+    {
+        appendDirection( directions, VECTOR2I( 0, 1 ) );
+    }
+    else if( dynamic_cast<EC_HORIZONTAL*>( aConstraint ) )
+    {
+        appendDirection( directions, VECTOR2I( 1, 0 ) );
+    }
+    else if( EC_LINE* lineConstraint = dynamic_cast<EC_LINE*>( aConstraint ) )
+    {
+        appendDirection( directions, lineConstraint->GetLineVector() );
+    }
+
+    return directions;
+}
+
 // Few constants to avoid using bare numbers for point indices
 enum RECT_POINTS
 {
@@ -2158,6 +2199,39 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     updateEditedPoint( aEvent );
     bool inDrag = false;
     bool isConstrained = false;
+    bool haveSnapLineDirections = false;
+
+    auto updateSnapLineDirections =
+            [&]()
+            {
+                std::vector<VECTOR2I> directions;
+
+                if( inDrag && m_editedPoint )
+                {
+                    EDIT_CONSTRAINT<EDIT_POINT>* constraint = nullptr;
+
+                    if( m_altConstraint )
+                        constraint = m_altConstraint.get();
+                    else if( m_editedPoint->IsConstrained() )
+                        constraint = m_editedPoint->GetConstraint();
+
+                    directions = getConstraintDirections( constraint );
+                }
+
+                if( directions.empty() )
+                {
+                    grid.SetSnapLineDirections( {} );
+                    grid.SetSnapLineEnd( std::nullopt );
+                    haveSnapLineDirections = false;
+                }
+                else
+                {
+                    grid.SetSnapLineDirections( directions );
+                    grid.SetSnapLineOrigin( m_original.GetPosition() );
+                    grid.SetSnapLineEnd( std::nullopt );
+                    haveSnapLineDirections = true;
+                }
+            };
 
     BOARD_COMMIT commit( editFrame );
 
@@ -2235,6 +2309,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 clones.emplace_back( clone );
                 grid.AddConstructionItems( { clone }, false, true );
+
+                updateSnapLineDirections();
             }
 
             bool need_constraint = Is45Limited() || Is90Limited();
@@ -2243,6 +2319,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 setAltConstraint( need_constraint );
                 isConstrained = need_constraint;
+                updateSnapLineDirections();
             }
 
             // Keep point inside of limits with some padding
@@ -2319,16 +2396,20 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
+            bool constraintSnapped = false;
+
             // Apply 45 degree or other constraints
             if( !m_angleSnapActive && m_altConstraint )
             {
                 m_editedPoint->SetPosition( pos );
                 m_altConstraint->Apply( grid );
+                constraintSnapped = true;
             }
             else if( !m_angleSnapActive && m_editedPoint->IsConstrained() )
             {
                 m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
+                constraintSnapped = true;
             }
             else if( !m_angleSnapActive && m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
@@ -2338,6 +2419,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
             {
                 m_editedPoint->SetPosition( pos );
+            }
+
+            if( haveSnapLineDirections )
+            {
+                if( constraintSnapped )
+                    grid.SetSnapLineEnd( m_editedPoint->GetPosition() );
+                else
+                    grid.SetSnapLineEnd( std::nullopt );
             }
 
             updateItem( commit );
@@ -2398,6 +2487,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
+            updateSnapLineDirections();
 
             if( m_editorBehavior )
                 m_editorBehavior->FinalizeItem( *m_editPoints, commit );
@@ -2428,6 +2518,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             inDrag = false;
             frame()->UndoRedoBlock( false );
+            updateSnapLineDirections();
 
             m_toolMgr->PostAction<EDA_ITEM*>( ACTIONS::reselectItem, item ); // FIXME: Needed for generators
         }
@@ -2451,6 +2542,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 inDrag = false;
                 frame()->UndoRedoBlock( false );
+                updateSnapLineDirections();
             }
 
             // Only cancel point editor when activating a new tool
@@ -2511,6 +2603,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     }
 
     m_editedPoint = nullptr;
+    grid.SetSnapLineDirections( {} );
 
     return 0;
 }
@@ -2640,15 +2733,31 @@ void PCB_POINT_EDITOR::updatePoints()
         return;
 
     int editedIndex = -1;
+    bool editingLine = false;
 
     if( m_editedPoint )
     {
+        // Check if we're editing a point (vertex)
         for( unsigned ii = 0; ii < m_editPoints->PointsSize(); ++ii )
         {
             if( &m_editPoints->Point( ii ) == m_editedPoint )
             {
                 editedIndex = ii;
                 break;
+            }
+        }
+
+        // If not found in points, check if we're editing a line (midpoint)
+        if( editedIndex == -1 )
+        {
+            for( unsigned ii = 0; ii < m_editPoints->LinesSize(); ++ii )
+            {
+                if( &m_editPoints->Line( ii ) == m_editedPoint )
+                {
+                    editedIndex = ii;
+                    editingLine = true;
+                    break;
+                }
             }
         }
     }
@@ -2660,10 +2769,19 @@ void PCB_POINT_EDITOR::updatePoints()
         getView()->Add( m_editPoints.get() );
     }
 
-    if( editedIndex >= 0 && editedIndex < (int) m_editPoints->PointsSize())
-        m_editedPoint = &m_editPoints->Point( editedIndex );
+    if( editedIndex >= 0 )
+    {
+        if( editingLine && editedIndex < (int) m_editPoints->LinesSize() )
+            m_editedPoint = &m_editPoints->Line( editedIndex );
+        else if( !editingLine && editedIndex < (int) m_editPoints->PointsSize() )
+            m_editedPoint = &m_editPoints->Point( editedIndex );
+        else
+            m_editedPoint = nullptr;
+    }
     else
+    {
         m_editedPoint = nullptr;
+    }
 
     getView()->Update( m_editPoints.get() );
 
