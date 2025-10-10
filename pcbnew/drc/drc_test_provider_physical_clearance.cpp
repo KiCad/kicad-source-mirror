@@ -315,10 +315,33 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 break;
                             }
 
+                            case SHAPE_T::ARC:
+                            {
+                                SHAPE_LINE_CHAIN asPoly;
+
+                                VECTOR2I  center = shape->GetCenter();
+                                EDA_ANGLE angle  = -shape->GetArcAngle();
+                                double    r      = shape->GetRadius();
+                                int       steps  = GetArcToSegmentCount( r, errorMax, angle );
+
+                                asPoly.Append( shape->GetStart() );
+
+                                for( int step = 1; step <= steps; ++step )
+                                {
+                                    EDA_ANGLE rotation = ( angle * step ) / steps;
+                                    VECTOR2I  pt = shape->GetStart();
+
+                                    RotatePoint( pt, center, rotation );
+                                    asPoly.Append( pt );
+                                }
+
+                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
+                                break;
+                            }
+
                             // Simple shapes can't create self-intersections, and I'm not sure a user
                             // would want a report that one side of their rectangle was too close to
                             // the other side.
-                            case SHAPE_T::ARC:
                             case SHAPE_T::RECTANGLE:
                             case SHAPE_T::SEGMENT:
                             case SHAPE_T::CIRCLE:

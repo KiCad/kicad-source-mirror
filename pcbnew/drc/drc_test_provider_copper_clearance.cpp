@@ -914,17 +914,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testHoles = false;
     }
 
-    if( testHoles && pad->HasHole() )
-    {
-        clearance = constraint.GetValue().Min();
-
-        if( otherPad && !otherPad->FlashLayer( aLayer ) )
-            clearance = 0;
-
-        if( clearance > 0 )
-            doTestHole( other, otherShape.get(), pad, pad->GetEffectiveHoleShape().get(), clearance );
-    }
-
     if( testHoles && otherPad && otherPad->HasHole() )
     {
         clearance = constraint.GetValue().Min();
