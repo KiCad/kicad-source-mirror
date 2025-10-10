@@ -1796,7 +1796,7 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 
 
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                                  int aMarkerLayer, const std::vector<PCB_SHAPE>& aShapes )
+                                  int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator )
 {
     static std::mutex globalLock;
 
@@ -1805,7 +1805,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
     if( m_violationHandler )
     {
         std::lock_guard<std::mutex> guard( globalLock );
-        m_violationHandler( aItem, aPos, aMarkerLayer, aShapes );
+        m_violationHandler( aItem, aPos, aMarkerLayer, aPathGenerator );
     }
 
     if( m_logReporter )

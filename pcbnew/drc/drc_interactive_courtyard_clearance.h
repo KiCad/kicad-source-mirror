@@ -25,14 +25,14 @@
 
 #pragma once
 
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 
 
-class DRC_INTERACTIVE_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_INTERACTIVE_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_INTERACTIVE_COURTYARD_CLEARANCE( const std::shared_ptr<DRC_ENGINE>& aDRCEngine ) :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            DRC_TEST_PROVIDER(),
             m_largestCourtyardClearance( 0 )
     {
         m_isRuleDriven = false;

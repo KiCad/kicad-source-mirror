@@ -45,7 +45,8 @@ DRC_TEST_PROVIDER_REGISTRY::~DRC_TEST_PROVIDER_REGISTRY()
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
         UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MM ),
-        m_drcEngine( nullptr )
+        m_drcEngine( nullptr ),
+        m_board( nullptr )
 {
 }
 
@@ -73,10 +74,57 @@ const wxString DRC_TEST_PROVIDER::GetName() const { return wxT( "<no name test>"
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
                                          const VECTOR2I& aMarkerPos, int aMarkerLayer,
-                                         const std::vector<PCB_SHAPE>& aShapes )
+                                         const std::function<void( PCB_MARKER* )>& aPathGenerator )
 {
     item->SetViolatingTest( this );
-    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aShapes );
+    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer, aPathGenerator );
+}
+
+
+void DRC_TEST_PROVIDER::reportTwoPointGeometry( std::shared_ptr<DRC_ITEM>& aDrcItem, const VECTOR2I& aMarkerPos,
+                                                const VECTOR2I& ptA, const VECTOR2I& ptB, PCB_LAYER_ID aLayer )
+{
+    PCB_SHAPE ptAShape( nullptr, SHAPE_T::SEGMENT );
+    ptAShape.SetStart( ptA );
+    ptAShape.SetEnd( ptB );
+
+    reportViolation( aDrcItem, aMarkerPos, aLayer,
+                     [&]( PCB_MARKER* aMarker )
+                     {
+                         aMarker->SetPath( { ptAShape }, ptA, ptB );
+                     } );
+}
+
+
+void DRC_TEST_PROVIDER::reportTwoShapeGeometry( std::shared_ptr<DRC_ITEM>& aDrcItem, const VECTOR2I& aMarkerPos,
+                                                const SHAPE* aShape1, const SHAPE* aShape2, PCB_LAYER_ID aLayer,
+                                                int aDistance )
+{
+    VECTOR2I ptA, ptB;
+
+    if( aDistance == 0 )
+    {
+        reportTwoPointGeometry( aDrcItem, aMarkerPos, aMarkerPos, aMarkerPos, aLayer );
+    }
+    else if( aShape1->NearestPoints( aShape2, ptA, ptB ) )
+    {
+        reportTwoPointGeometry( aDrcItem, aMarkerPos, ptA, ptB, aLayer );
+    }
+    else
+    {
+        reportViolation( aDrcItem, aMarkerPos, aLayer );
+    }
+}
+
+
+void DRC_TEST_PROVIDER::reportTwoItemGeometry( std::shared_ptr<DRC_ITEM>& aDrcItem, const VECTOR2I& aMarkerPos,
+                                               const BOARD_ITEM* aItem1, const BOARD_ITEM* aItem2,
+                                               PCB_LAYER_ID aLayer, int aDistance )
+{
+    std::shared_ptr<SHAPE> aShape1 = aItem1->GetEffectiveShape( aLayer );
+    std::shared_ptr<SHAPE> aShape2 = aItem2->GetEffectiveShape( aLayer );
+
+    reportTwoShapeGeometry( aDrcItem, aMarkerPos, aShape1.get(), aShape2.get(), aLayer, aDistance );
 }
 
 

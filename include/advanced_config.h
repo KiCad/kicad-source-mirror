@@ -787,15 +787,6 @@ public:
     int m_MaximumThreads;
 
     /**
-     * When finding overlapped marker a minium distance (in mm) between two DRC markers required
-     * to mark it as overlapped
-     *
-     * Setting name: "MinimumMarkerSeparationDistance"
-     * Default value: 0.15
-     */
-    double m_MinimumMarkerSeparationDistance;
-
-    /**
      * When updating the net inspector, it either recalculates all nets or iterates through items
      * one-by-one. This value controls the threshold at which all nets are recalculated rather than
      * iterating over the items.

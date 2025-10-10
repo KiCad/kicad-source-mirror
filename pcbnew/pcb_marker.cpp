@@ -367,11 +367,73 @@ void PCB_MARKER::SetZoom( double aZoomFactor ) const
 }
 
 
+std::vector<PCB_SHAPE> PCB_MARKER::GetShapes() const
+{
+    STROKE_PARAMS          hairline( 1.0 );     // Segments of width 1.0 will get drawn as lines by PCB_PAINTER
+    std::vector<PCB_SHAPE> pathShapes;
+
+    if( m_pathStart == m_pathEnd )
+    {
+        // Add a collision 'X'
+        const int len = KiROUND( 2.5 * MarkerScale() );
+
+        PCB_SHAPE s( nullptr, SHAPE_T::SEGMENT );
+        s.SetStroke( hairline );
+
+        s.SetStart( m_pathStart + VECTOR2I( -len, -len ) );
+        s.SetEnd( m_pathStart + VECTOR2I( len, len ) );
+        pathShapes.push_back( s );
+
+        s.SetStart( m_pathStart + VECTOR2I( -len, len ) );
+        s.SetEnd( m_pathStart + VECTOR2I( len, -len ) );
+        pathShapes.push_back( s );
+    }
+    else
+    {
+        // Add the path
+        for( PCB_SHAPE shape : m_pathShapes )
+        {
+            shape.SetStroke( hairline );
+            pathShapes.push_back( std::move( shape ) );
+        }
+
+        // Draw perpendicular begin/end stops
+        if( pathShapes.size() > 0 )
+        {
+            VECTOR2I V1 = pathShapes[0].GetStart() - pathShapes[0].GetEnd();
+            VECTOR2I V2 = pathShapes.back().GetStart() - pathShapes.back().GetEnd();
+            V1 = V1.Perpendicular().Resize( 2.5 * MarkerScale() );
+            V2 = V2.Perpendicular().Resize( 2.5 * MarkerScale() );
+
+            PCB_SHAPE s( nullptr, SHAPE_T::SEGMENT );
+            s.SetStroke( hairline );
+
+            s.SetStart( m_pathStart + V1 );
+            s.SetEnd( m_pathStart - V1 );
+            pathShapes.push_back( s );
+
+            s.SetStart( m_pathEnd + V2 );
+            s.SetEnd( m_pathEnd - V2 );
+            pathShapes.push_back( s );
+        }
+    }
+
+    // Add shaded areas
+    for( PCB_SHAPE shape : m_pathShapes )
+    {
+        shape.SetWidth( 10 * MarkerScale() );
+        pathShapes.push_back( std::move( shape ) );
+    }
+
+    return pathShapes;
+}
+
+
 const BOX2I PCB_MARKER::GetBoundingBox() const
 {
     BOX2I box = GetBoundingBoxMarker();
 
-    for( const PCB_SHAPE& s : m_shapes )
+    for( const PCB_SHAPE& s : m_pathShapes )
         box.Merge( s.GetBoundingBox() );
 
     return box;

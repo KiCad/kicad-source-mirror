@@ -593,7 +593,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     engine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2D& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( aItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
                     || aItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT

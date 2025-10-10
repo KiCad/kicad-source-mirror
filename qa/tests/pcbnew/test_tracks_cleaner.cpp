@@ -208,7 +208,7 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
                     violations.push_back( *aItem );

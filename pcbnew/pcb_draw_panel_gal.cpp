@@ -922,19 +922,16 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_RATSNEST );
 
     m_view->SetLayerTarget( LAYER_DRC_ERROR, KIGFX::TARGET_OVERLAY );
-    //m_view->SetLayerDisplayOnly( LAYER_DRC_ERROR );
     m_view->SetLayerTarget( LAYER_DRC_WARNING, KIGFX::TARGET_OVERLAY );
-    //m_view->SetLayerDisplayOnly( LAYER_DRC_WARNING );
     m_view->SetLayerTarget( LAYER_DRC_EXCLUSION, KIGFX::TARGET_OVERLAY );
-    //m_view->SetLayerDisplayOnly( LAYER_DRC_EXCLUSION );
     m_view->SetLayerTarget( LAYER_MARKER_SHADOWS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_MARKER_SHADOWS );
     m_view->SetLayerTarget( LAYER_DRC_SHAPES, KIGFX::TARGET_OVERLAY );
-    m_view->SetLayerDisplayOnly( LAYER_DRC_SHAPES );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_SHAPES );    // markers can't be selected through shapes
 
     m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
-    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;
-    m_view->SetLayerDisplayOnly( LAYER_GRID );
+    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ; // drawing sheet can't be selected
+    m_view->SetLayerDisplayOnly( LAYER_GRID );          // grid can't be selected
 
     for( int i = LAYER_UI_START; i < LAYER_UI_END; ++i )
     {

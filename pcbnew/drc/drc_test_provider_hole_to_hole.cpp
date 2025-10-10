@@ -31,7 +31,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 #include "drc_rtree.h"
 
 /*
@@ -41,11 +41,11 @@
     - DRCE_DRILLED_HOLES_COLOCATED
 */
 
-class DRC_TEST_PROVIDER_HOLE_TO_HOLE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_HOLE_TO_HOLE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_HOLE_TO_HOLE () :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            DRC_TEST_PROVIDER(),
             m_board( nullptr ),
             m_largestHoleToHoleClearance( 0 )
     {}
@@ -282,9 +282,10 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
             if( aItem->m_Uuid > aOther->m_Uuid )
                 std::swap( aItem, aOther );
 
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_COLOCATED );
-            drce->SetItems( aItem, aOther );
-            reportViolation( drce, aHole->GetCenter(), UNDEFINED_LAYER );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_COLOCATED );
+            drcItem->SetItems( aItem, aOther );
+            reportTwoPointGeometry( drcItem, aHole->GetCenter(), aHole->GetCenter(), aHole->GetCenter(),
+                                    UNDEFINED_LAYER );
         }
     }
     else if( reportHole2Hole )
@@ -305,17 +306,17 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
             if( aItem->m_Uuid > aOther->m_Uuid )
                 std::swap( aItem, aOther );
 
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
             wxString msg = formatMsg( _( "(%s min %s; actual %s)" ),
                                       constraint.GetName(),
                                       minClearance,
                                       actual );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( aItem, aOther );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, aHole->GetCenter(), UNDEFINED_LAYER );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetItems( aItem, aOther );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
+            reportTwoShapeGeometry( drcItem, aHole->GetCenter(), aHole, otherHole.get(), UNDEFINED_LAYER,
+                                    actual );
         }
     }
 

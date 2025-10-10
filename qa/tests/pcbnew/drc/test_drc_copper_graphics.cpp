@@ -64,7 +64,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 PCB_MARKER temp( aItem, aPos );
 

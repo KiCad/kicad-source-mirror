@@ -34,7 +34,7 @@
 #include <geometry/shape_segment.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 #include <drc/drc_creepage_utils.h>
 
 #include <geometry/shape_circle.h>
@@ -47,11 +47,11 @@
         - DRCE_CREEPAGE
     */
 
-class DRC_TEST_PROVIDER_CREEPAGE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_CREEPAGE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_CREEPAGE() :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+            DRC_TEST_PROVIDER()
     {}
 
     virtual ~DRC_TEST_PROVIDER_CREEPAGE() = default;
@@ -172,12 +172,12 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
 
     if( !shortestPath.empty() && ( shortestPath.size() >= 4 ) && ( distance - creepageValue < 0 ) )
     {
-        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CREEPAGE );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CREEPAGE );
         wxString msg = formatMsg( _( "(%s creepage %s; actual %s)" ),
                                   constraint.GetName(),
                                   creepageValue, distance );
-        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-        drce->SetViolatingRule( constraint.GetParentRule() );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+        drcItem->SetViolatingRule( constraint.GetParentRule() );
 
         std::shared_ptr<GRAPH_CONNECTION> gc1 = shortestPath[1];
         std::shared_ptr<GRAPH_CONNECTION> gc2 = shortestPath[shortestPath.size() - 2];
@@ -188,7 +188,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
             const BOARD_ITEM* item2 = gc2->n2->m_parent->GetParent();
 
             if( m_reportedPairs.insert( std::make_pair( item1, item2 ) ).second )
-                drce->SetItems( item1, item2 );
+                drcItem->SetItems( item1, item2 );
             else
                 return 1;
         }
@@ -200,7 +200,11 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
         for( const std::shared_ptr<GRAPH_CONNECTION>& gc : shortestPath )
             gc->GetShapes( path );
 
-        reportViolation( drce, gc1->m_path.a2, aLayer, GetShapes( path, startPoint, endPoint, distance ) );
+        reportViolation( drcItem, gc1->m_path.a2, aLayer,
+                         [&]( PCB_MARKER* aMarker )
+                         {
+                             aMarker->SetPath( path, startPoint, endPoint );
+                         } );
     }
 
     return 1;

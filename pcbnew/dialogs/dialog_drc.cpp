@@ -56,7 +56,6 @@
 #include <tools/zone_filler_tool.h>
 #include <tools/board_inspection_tool.h>
 #include <kiplatform/ui.h>
-#include <advanced_config.h>
 
 // wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
@@ -491,17 +490,6 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 }
             };
 
-    auto isOverlapping =
-            []( BOARD_ITEM* aSelectedMarkerItem, BOARD_ITEM* aUnSelectedMarkerItem ) -> bool
-            {
-                VECTOR2D selectedItemPos = aSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
-                VECTOR2D unSelectedItemPos = aUnSelectedMarkerItem->GetPosition() / PCB_IU_PER_MM;
-                double   dist = selectedItemPos.Distance( unSelectedItemPos );
-                double   minimumMarkerSeparationDistance = ADVANCED_CFG::GetCfg().m_MinimumMarkerSeparationDistance;
-
-                return dist <= minimumMarkerSeparationDistance;
-            };
-
     if( !node )
     {
         // list is being freed; don't do anything with null ptrs
@@ -668,23 +656,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     }
     else
     {
-        if( item->Type() == PCB_MARKER_T )
-        {
-            std::vector<BOARD_ITEM*> items;
-
-            for( BOARD_ITEM* boardMarkerItem : board->Markers() )
-            {
-                if( item->m_Uuid != boardMarkerItem->m_Uuid && isOverlapping( item, boardMarkerItem ) )
-                    items.push_back( boardMarkerItem );
-            }
-
-            items.push_back( item );
-            m_frame->FocusOnItems( items, principalLayer, m_scroll_on_crossprobe );
-        }
-        else
-        {
-            m_frame->FocusOnItem( item, principalLayer, m_scroll_on_crossprobe );
-        }
+        m_frame->FocusOnItem( item, principalLayer, m_scroll_on_crossprobe );
     }
 
     aEvent.Skip();

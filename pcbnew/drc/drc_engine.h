@@ -36,7 +36,6 @@
 class BOARD_COMMIT;
 class BOARD_DESIGN_SETTINGS;
 class DRC_TEST_PROVIDER;
-class DRC_TEST_PROVIDER_CLEARANCE_BASE;
 class DRC_TEST_PROVIDER_CREEPAGE;
 class PCB_EDIT_FRAME;
 class DS_PROXY_VIEW_ITEM;
@@ -68,7 +67,7 @@ class DRC_CONSTRAINT;
 
 typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
                             const VECTOR2I& aPos, int aLayer,
-                            const std::vector<PCB_SHAPE>& aShapes )> DRC_VIOLATION_HANDLER;
+                            const std::function<void( PCB_MARKER* )>& aPathGenerator )> DRC_VIOLATION_HANDLER;
 
 /**
  * Design Rule Checker object that performs all the DRC tests.
@@ -83,7 +82,6 @@ typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
 class DRC_ENGINE : public UNITS_PROVIDER
 {
     // They need to change / restore the violation handler
-    friend class DRC_TEST_PROVIDER_CLEARANCE_BASE;
     friend class DRC_TEST_PROVIDER_CREEPAGE;
 
 public:
@@ -176,7 +174,7 @@ public:
     bool RulesValid() { return m_rulesValid; }
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                          int aMarkerLayer, const std::vector<PCB_SHAPE>& aShapes = {} );
+                          int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator = {} );
 
     bool KeepRefreshing( bool aWait = false );
     void AdvanceProgress();

@@ -564,6 +564,10 @@ bool SHAPE_ARC::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB,
         }
     }
 
+    // Adjust point A by half the arc width towards point B
+    VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
+    aPtA += dir;
+
     return true;
 }
 
@@ -624,6 +628,10 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I
             aPtB = circleNearestPt;
         }
     }
+
+    // Adjust point A by half the arc-width towards point B
+    VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
+    aPtA += dir;
 
     return true;
 }
@@ -761,6 +769,13 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
             }
         }
     }
+
+    // Adjust point A by half the arc-width towards point B
+    VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
+    aPtA += dir;
+    // Adjust point B by half the other arc-width towards point A
+    dir = ( aPtA - aPtB ).Resize( aArc.GetWidth() / 2 );
+    aPtB += dir;
 
     return true;
 }

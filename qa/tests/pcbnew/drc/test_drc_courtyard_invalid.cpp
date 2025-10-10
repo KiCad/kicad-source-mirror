@@ -305,7 +305,7 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
 
     drcEngine.SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if(    aItem->GetErrorCode() == DRCE_OVERLAPPING_FOOTPRINTS
                     || aItem->GetErrorCode() == DRCE_MALFORMED_COURTYARD

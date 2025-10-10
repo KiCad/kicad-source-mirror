@@ -129,44 +129,42 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 }
             };
 
-    auto checkPadAnnularWidth =
+    auto getPadAnnulusPts =
             []( PAD* pad, PCB_LAYER_ID aLayer, DRC_CONSTRAINT& constraint,
-                const std::vector<const PAD*>& sameNumPads,
-                int* aMinAnnularWidth, int* aMaxAnnularWidth )
+                const std::vector<const PAD*>& sameNumPads, VECTOR2I* ptA, VECTOR2I* ptB )
             {
-                int  annularWidth = 0;
                 bool handled = false;
 
                 if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
                 {
-                    VECTOR2I padSize = pad->GetSize( aLayer );
+                    int xDist = KiROUND( ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2.0 );
+                    int yDist = KiROUND( ( pad->GetSizeY() - pad->GetDrillSizeY() ) / 2.0 );
+
+                    if( yDist < xDist )
+                    {
+                        *ptA = pad->GetPosition() - VECTOR2I( 0, pad->GetDrillSizeY() / 2 );
+                        *ptB = pad->GetPosition() - VECTOR2I( 0, pad->GetSizeY() / 2 );
+                    }
+                    else
+                    {
+                        *ptA = pad->GetPosition() - VECTOR2I( pad->GetDrillSizeX() / 2, 0 );
+                        *ptB = pad->GetPosition() - VECTOR2I( pad->GetSizeX() / 2, 0 );
+                    }
+
+                    RotatePoint( *ptA, pad->GetPosition(), pad->GetOrientation() );
+                    RotatePoint( *ptB, pad->GetPosition(), pad->GetOrientation() );
 
                     switch( pad->GetShape( aLayer ) )
                     {
-                    case PAD_SHAPE::CIRCLE:
-                        annularWidth = ( padSize.x - pad->GetDrillSizeX() ) / 2;
-
-                        // If there are more pads with the same number then we'll still need to
-                        // run the more generalised checks below.
-                        handled = sameNumPads.empty();
-
+                    case PAD_SHAPE::CHAMFERED_RECT:
+                        handled = pad->GetChamferRectRatio( aLayer ) <= 0.30;
                         break;
 
-                    case PAD_SHAPE::CHAMFERED_RECT:
-                        if( pad->GetChamferRectRatio( aLayer ) > 0.30 )
-                            break;
-
-                        KI_FALLTHROUGH;
-
+                    case PAD_SHAPE::CIRCLE:
                     case PAD_SHAPE::OVAL:
                     case PAD_SHAPE::RECTANGLE:
                     case PAD_SHAPE::ROUNDRECT:
-                        annularWidth = std::min( padSize.x - pad->GetDrillSizeX(),
-                                                 padSize.y - pad->GetDrillSizeY() ) / 2;
-
-                        // If there are more pads with the same number then we'll still need to
-                        // run the more generalised checks below.
-                        handled = sameNumPads.empty();
+                        handled = true;
 
                         break;
 
@@ -175,10 +173,9 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     }
                 }
 
-                if( !handled )
+                if( !handled || !sameNumPads.empty() )
                 {
                     // Slow (but general purpose) method.
-                    SEG::ecoord    dist_sq;
                     SHAPE_POLY_SET padOutline;
                     std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
 
@@ -189,19 +186,15 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         if( !padOutline.Collide( pad->GetPosition() ) )
                         {
                             // Hole outside pad
-                            annularWidth = 0;
+                            *ptA = pad->GetPosition();
+                            *ptB = pad->GetPosition();
                         }
                         else
                         {
-                            // Disable is-inside test in SquaredDistance
-                            padOutline.Outline( 0 ).SetClosed( false );
-
-                            dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
-                            annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
+                            padOutline.NearestPoints( slot.get(), *ptA, *ptB );
                         }
                     }
-                    else if( constraint.Value().HasMin()
-                           && ( annularWidth < constraint.Value().Min() ) )
+                    else if( constraint.Value().HasMin() )
                     {
                         SHAPE_POLY_SET aggregatePadOutline = padOutline;
                         SHAPE_POLY_SET otherPadHoles;
@@ -212,8 +205,8 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         for( const PAD* sameNumPad : sameNumPads )
                         {
                             // Construct the full pad with outline and hole.
-                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline, PADSTACK::ALL_LAYERS,
-                                                                 0, pad->GetMaxError(), ERROR_OUTSIDE );
+                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline, aLayer, 0,
+                                                                 pad->GetMaxError(), ERROR_OUTSIDE );
 
                             sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, pad->GetMaxError(),
                                                                 ERROR_INSIDE );
@@ -224,22 +217,68 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         if( !aggregatePadOutline.Collide( pad->GetPosition() ) )
                         {
                             // Hole outside pad
-                            annularWidth = 0;
+                            *ptA = pad->GetPosition();
+                            *ptB = pad->GetPosition();
                         }
                         else
                         {
-                            // Disable is-inside test in SquaredDistance
-                            for( int ii = 0; ii < aggregatePadOutline.OutlineCount(); ++ii )
-                                aggregatePadOutline.Outline( ii ).SetClosed( false );
-
-                            dist_sq = aggregatePadOutline.SquaredDistanceToSeg( slot->GetSeg() );
-                            annularWidth = sqrt( dist_sq ) - slot->GetWidth() / 2;
+                            aggregatePadOutline.NearestPoints( slot.get(), *ptA, *ptB );
                         }
                     }
                 }
+            };
 
-                *aMaxAnnularWidth = std::max( *aMaxAnnularWidth, annularWidth );
-                *aMinAnnularWidth = std::min( *aMinAnnularWidth, annularWidth );
+    auto checkConstraint =
+            [&]( DRC_CONSTRAINT& constraint, BOARD_ITEM* item, const VECTOR2I& ptA, const VECTOR2I& ptB,
+                 PCB_LAYER_ID aLayer )
+            {
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                    return;
+
+                int  v_min = 0;
+                int  v_max = 0;
+                bool fail_min = false;
+                bool fail_max = false;
+                int  width = ( ptA - ptB ).EuclideanNorm();
+
+                if( constraint.Value().HasMin() )
+                {
+                    v_min = constraint.Value().Min();
+                    fail_min = width < v_min;
+                }
+
+                if( constraint.Value().HasMax() )
+                {
+                    v_max = constraint.Value().Max();
+                    fail_max = width > v_max;
+                }
+
+                if( fail_min || fail_max )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULAR_WIDTH );
+                    wxString msg;
+
+                    if( fail_min )
+                    {
+                        msg = formatMsg( _( "(%s min annular width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         v_min,
+                                         width );
+                    }
+
+                    if( fail_max )
+                    {
+                        msg = formatMsg( _( "(%s max annular width %s; actual %s)" ),
+                                         constraint.GetName(),
+                                         v_max,
+                                         width );
+                    }
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( item );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    reportTwoPointGeometry( drcItem, item->GetPosition(), ptA, ptB, aLayer );
+                }
             };
 
     auto checkAnnularWidth =
@@ -248,34 +287,22 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
                     return false;
 
-                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
-                                                          UNDEFINED_LAYER );
-
-                int  minAnnularWidth = INT_MAX;
-                int  maxAnnularWidth = 0;
-                int  v_min = 0;
-                int  v_max = 0;
-                bool fail_min = false;
-                bool fail_max = false;
-
-                switch( item->Type() )
-                {
-                case PCB_VIA_T:
+                if( item->Type() == PCB_VIA_T )
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                    int      drill = via->GetDrillValue();
 
                     via->Padstack().ForEachUniqueLayer(
                             [&]( PCB_LAYER_ID aLayer )
                             {
-                                int layerWidth = ( via->GetWidth( aLayer ) - drill ) / 2;
-                                minAnnularWidth = std::min( minAnnularWidth, layerWidth );
-                                maxAnnularWidth = std::max( maxAnnularWidth, layerWidth );
-                            } );
-                    break;
-                }
+                                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item,
+                                                                          nullptr, aLayer );
 
-                case PCB_PAD_T:
+                                VECTOR2I ptA = via->GetPosition() - VECTOR2I( via->GetDrillValue() / 2, 0 );
+                                VECTOR2I ptB = via->GetPosition() - VECTOR2I( via->GetWidth( aLayer ) / 2, 0 );
+                                checkConstraint( constraint, via, ptA, ptB, aLayer );
+                            } );
+                }
+                else if( item->Type() == PCB_PAD_T )
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
@@ -290,58 +317,14 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     pad->Padstack().ForEachUniqueLayer(
                             [&]( PCB_LAYER_ID aLayer )
                             {
-                                checkPadAnnularWidth( pad, aLayer, constraint, sameNumPads,
-                                                      &minAnnularWidth, &maxAnnularWidth );
+                                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item,
+                                                                          nullptr, aLayer );
+
+                                VECTOR2I ptA;
+                                VECTOR2I ptB;
+                                getPadAnnulusPts( pad, aLayer, constraint, sameNumPads, &ptA, &ptB );
+                                checkConstraint( constraint, pad, ptA, ptB, aLayer );
                             } );
-
-                    break;
-                }
-
-                default:
-                    return true;
-                }
-
-                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
-                    return true;
-
-                if( constraint.Value().HasMin() )
-                {
-                    v_min = constraint.Value().Min();
-                    fail_min = minAnnularWidth < v_min;
-                }
-
-                if( constraint.Value().HasMax() )
-                {
-                    v_max = constraint.Value().Max();
-                    fail_max = maxAnnularWidth > v_max;
-                }
-
-                if( fail_min || fail_max )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULAR_WIDTH );
-                    wxString msg;
-
-                    if( fail_min )
-                    {
-                        msg = formatMsg( _( "(%s min annular width %s; actual %s)" ),
-                                         constraint.GetName(),
-                                         v_min,
-                                         minAnnularWidth );
-                    }
-
-                    if( fail_max )
-                    {
-                        msg = formatMsg( _( "(%s max annular width %s; actual %s)" ),
-                                         constraint.GetName(),
-                                         v_max,
-                                         maxAnnularWidth );
-                    }
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
-                    drcItem->SetItems( item );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                 }
 
                 return true;

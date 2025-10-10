@@ -444,7 +444,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                             if( c.Value().Min() == aMinWidth )
                             {
-                                auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
+                                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
                                 wxString msg;
 
                                 msg = formatMsg( _( "(%s minimum connection width %s; actual %s)" ),
@@ -454,13 +454,13 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                                 msg += wxS( " " ) + layerDesc( aLayer );
 
-                                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                                drce->SetViolatingRule( c.GetParentRule() );
+                                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                                drcItem->SetViolatingRule( c.GetParentRule() );
 
                                 for( BOARD_ITEM* item : contributingItems )
-                                    drce->AddItem( item );
+                                    drcItem->AddItem( item );
 
-                                reportViolation( drce, location, aLayer );
+                                reportTwoPointGeometry( drcItem, location, span.A, span.B, aLayer );
                             }
                         }
                     }

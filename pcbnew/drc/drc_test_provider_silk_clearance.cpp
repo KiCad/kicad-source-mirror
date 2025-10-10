@@ -29,8 +29,9 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 #include <drc/drc_rtree.h>
+#include <board_design_settings.h>
 
 /*
     Silk to silk clearance test. Check all silkscreen features against each other.
@@ -250,9 +251,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                     drcItem->SetItems( refItem, testItem );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, pos, aLayers.second );
-
+                    reportTwoShapeGeometry( drcItem, pos, refShape, testShape, aLayers.second, actual );
                     *aCollisionDetected = true;
                 }
 

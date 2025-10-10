@@ -150,12 +150,21 @@ public:
         return wxT( "PCB_MARKER" );
     }
 
-    std::vector<PCB_SHAPE> GetShapes() const { return m_shapes; };
-    void SetShapes( const std::vector<PCB_SHAPE>& aShapes ) { m_shapes = aShapes; };
+    std::vector<PCB_SHAPE> GetShapes() const;
+
+    void SetPath( const std::vector<PCB_SHAPE>& aShapes, const VECTOR2I& aStart, const VECTOR2I& aEnd )
+    {
+        m_pathShapes = aShapes;
+        m_pathStart = aStart;
+        m_pathEnd = aEnd;
+    }
 
 protected:
     KIGFX::COLOR4D getColor() const override;
 
 protected:
-    std::vector<PCB_SHAPE> m_shapes; // Shown on LAYER_DRC_SHAPES
+    std::vector<PCB_SHAPE> m_pathShapes; // Shown on LAYER_DRC_SHAPES
+    VECTOR2I               m_pathStart;
+    VECTOR2I               m_pathEnd;
+    int                    m_pathLength;
 };

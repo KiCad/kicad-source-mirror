@@ -105,7 +105,7 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( bds.GetSeverity( aItem->GetErrorCode() ) == SEVERITY::RPT_SEVERITY_ERROR )
                     violations.push_back( *aItem );

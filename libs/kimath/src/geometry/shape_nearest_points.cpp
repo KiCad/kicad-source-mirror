@@ -63,9 +63,8 @@ static bool NearestPoints( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB,
     else
     {
         // Points lie on line between centers
-        VECTOR2I dir = delta.Resize( 1 );
-        aPtA = aA.GetCenter() + dir.Resize( aA.GetRadius() );
-        aPtB = aB.GetCenter() - dir.Resize( aB.GetRadius() );
+        aPtA = aA.GetCenter() + delta.Resize( aA.GetRadius() );
+        aPtB = aB.GetCenter() - delta.Resize( aB.GetRadius() );
     }
 
     return true;
@@ -450,7 +449,13 @@ static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_RECT& aRect, VECTO
 static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_SEGMENT& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     int64_t distSq;
-    return aArc.NearestPoints( aSeg.GetSeg(), aPtA, aPtB, distSq );
+    bool    retVal = aArc.NearestPoints( aSeg.GetSeg(), aPtA, aPtB, distSq );
+
+    // Adjust point B by half the seg width towards point A
+    VECTOR2I dir = ( aPtA - aPtB ).Resize( aSeg.GetWidth() / 2 );
+    aPtB += dir;
+
+    return retVal;
 }
 
 static bool NearestPoints( const SHAPE_ARC& aArcA, const SHAPE_ARC& aArcB, VECTOR2I& aPtA, VECTOR2I& aPtB )

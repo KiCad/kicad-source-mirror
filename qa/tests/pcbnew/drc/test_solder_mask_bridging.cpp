@@ -59,7 +59,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 PCB_MARKER temp( aItem, aPos );
 

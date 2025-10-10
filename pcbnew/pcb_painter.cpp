@@ -490,6 +490,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         case LAYER_DRC_ERROR:
         case LAYER_DRC_WARNING:
         case LAYER_DRC_EXCLUSION:
+        case LAYER_DRC_SHAPES:
             isActive = true;
             break;
 
@@ -3131,7 +3132,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
                 m_gal->SetIsFill( false );
                 m_gal->SetIsStroke( true );
                 m_gal->SetStrokeColor( WHITE );
-                m_gal->SetLineWidth( pcbIUScale.mmToIU( 0.01 ) );
+                m_gal->SetLineWidth( KiROUND( aMarker->MarkerScale() / 2.0 ) );
 
                 if( shape.GetShape() == SHAPE_T::SEGMENT )
                 {

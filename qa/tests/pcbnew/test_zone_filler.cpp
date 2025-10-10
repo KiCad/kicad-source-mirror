@@ -104,7 +104,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                 {
@@ -199,7 +199,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 std::vector<PCB_SHAPE> aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                     violations.push_back( *aItem );
@@ -246,7 +246,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 std::vector<PCB_SHAPE> aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( aItem->GetErrorCode() == DRCE_COPPER_SLIVER )
                     violations.push_back( *aItem );

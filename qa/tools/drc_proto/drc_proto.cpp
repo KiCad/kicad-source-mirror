@@ -115,7 +115,7 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
 
     drcEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
-                 const std::vector<PCB_SHAPE>& aShapes )
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 // fixme
             } );

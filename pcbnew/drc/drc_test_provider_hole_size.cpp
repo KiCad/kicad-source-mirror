@@ -29,7 +29,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 
 /*
     Drilled hole size test. scans vias/through-hole pads and checks for min drill sizes
@@ -117,23 +117,42 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 
     auto constraint = m_drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, aPad, nullptr,
                                               UNDEFINED_LAYER /* holes are not layer-specific */ );
-    bool fail_min = false;
-    bool fail_max = false;
-    int  constraintValue = 0;
+    bool     fail_min = false;
+    bool     fail_max = false;
+    int      constraintValue = 0;
+    VECTOR2I ptA, ptB;
 
     if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
         return;
-
-    if( constraint.Value().HasMin() && holeMinor < constraint.Value().Min() )
-    {
-        fail_min        = true;
-        constraintValue = constraint.Value().Min();
-    }
 
     if( constraint.Value().HasMax() && holeMajor > constraint.Value().Max() )
     {
         fail_max        = true;
         constraintValue = constraint.Value().Max();
+
+        ptA = aPad->GetPosition();
+
+        if( aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSizeX() / 2 );
+        else if( aPad->GetDrillSizeX() > aPad->GetDrillSizeY() )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSizeX() / 2, 0 );
+        else
+            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSizeY() / 2 );
+    }
+
+    if( constraint.Value().HasMin() && holeMinor < constraint.Value().Min() )
+    {
+        fail_min        = true;
+        constraintValue = constraint.Value().Min();
+
+        ptA = aPad->GetPosition();
+
+        if( aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSizeX() / 2 );
+        else if( aPad->GetDrillSizeX() < aPad->GetDrillSizeY() )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSizeX() / 2, 0 );
+        else
+            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSizeY() / 2 );
     }
 
     if( fail_min || fail_max )
@@ -163,8 +182,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-        reportViolation( drcItem, aPad->GetPosition(), UNDEFINED_LAYER );
+        reportTwoPointGeometry( drcItem, ptA, ptA, ptB, UNDEFINED_LAYER );
     }
 }
 
@@ -193,17 +211,18 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
     bool fail_min = false;
     bool fail_max = false;
     int  constraintValue = 0;
+    int  drill = via->GetDrillValue();
 
     if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
         return;
 
-    if( constraint.Value().HasMin() && via->GetDrillValue() < constraint.Value().Min() )
+    if( constraint.Value().HasMin() && drill < constraint.Value().Min() )
     {
         fail_min        = true;
         constraintValue = constraint.Value().Min();
     }
 
-    if( constraint.Value().HasMax() && via->GetDrillValue() > constraint.Value().Max() )
+    if( constraint.Value().HasMax() && drill > constraint.Value().Max() )
     {
         fail_max        = true;
         constraintValue = constraint.Value().Max();
@@ -223,21 +242,24 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
             msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
                              constraintName,
                              constraintValue,
-                             via->GetDrillValue() );
+                             drill );
         }
         else
         {
             msg = formatMsg( _( "(%s max hole %s; actual %s)" ),
                              constraintName,
                              constraintValue,
-                             via->GetDrillValue() );
+                             drill );
         }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        reportViolation( drcItem, via->GetPosition(), UNDEFINED_LAYER );
+        VECTOR2I ptA = via->GetPosition();
+
+        VECTOR2I ptB = ptA - VECTOR2I( drill, drill ).Resize( drill / 2 );
+        reportTwoPointGeometry( drcItem, ptA, ptA, ptB, UNDEFINED_LAYER );
     }
 }
 

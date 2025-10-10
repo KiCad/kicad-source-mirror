@@ -24,12 +24,13 @@
 #include <common.h>
 #include <pcb_shape.h>
 #include <footprint.h>
+#include <pcb_track.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider.h>
 #include "drc_rtree.h"
 
 /*
@@ -40,11 +41,11 @@
     - DRCE_SILK_EDGE_CLEARANCE
 */
 
-class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            DRC_TEST_PROVIDER(),
             m_largestEdgeClearance( 0 )
     {}
 
@@ -99,7 +100,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                 }
             }
 
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
             // Only report clearance info if there is any; otherwise it's just a straight collision
             if( minClearance > 0 )
@@ -109,13 +110,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                                           minClearance,
                                           actual );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
             }
 
-            drce->SetItems( edge->m_Uuid, item->m_Uuid );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-
-            reportViolation( drce, pos, Edge_Cuts );
+            drcItem->SetItems( edge->m_Uuid, item->m_Uuid );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
+            reportTwoItemGeometry( drcItem, pos, edge, item, Edge_Cuts, actual );
 
             if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
                 return m_drcEngine->GetReportAllTrackErrors();
