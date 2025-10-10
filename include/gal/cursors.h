@@ -47,6 +47,8 @@ enum class KICURSOR
     ARROW64,
     MOVING,
     MOVING64,
+    WARNING,
+    WARNING64,
     PENCIL,
     PENCIL64,
     REMOVE,

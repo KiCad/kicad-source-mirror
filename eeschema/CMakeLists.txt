@@ -460,6 +460,7 @@ set( EESCHEMA_SRCS
     tools/sch_group_tool.cpp
     tools/sch_inspection_tool.cpp
     tools/sch_line_wire_bus_tool.cpp
+    tools/sch_drag_net_collision.cpp
     tools/sch_move_tool.cpp
     tools/sch_navigate_tool.cpp
     tools/sch_point_editor.cpp

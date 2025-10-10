@@ -27,6 +27,8 @@
 
 #include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
+#include <unordered_map>
+#include <unordered_set>
 
 
 class SCH_EDIT_FRAME;
@@ -38,6 +40,7 @@ class SCH_JUNCTION;
 class SCH_SELECTION;
 class SCH_SHEET;
 class SCH_COMMIT;
+class SCH_ITEM;
 
 
 struct SPECIAL_CASE_LABEL_INFO

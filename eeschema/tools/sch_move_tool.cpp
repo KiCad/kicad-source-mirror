@@ -23,6 +23,8 @@
  */
 
 #include <cmath>
+#include <memory>
+#include <optional>
 #include <wx/log.h>
 #include <trigo.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -39,6 +41,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_line.h>
+#include <sch_connection.h>
 #include <sch_junction.h>
 #include <junction_helpers.h>
 #include <sch_edit_frame.h>
@@ -50,6 +53,7 @@
 #include <base_units.h>
 #include <sch_screen.h>
 #include "sch_move_tool.h"
+#include "sch_drag_net_collision.h"
 
 
 // For adding to or removing from selections
@@ -70,6 +74,31 @@ static bool isGraphicItemForDrop( const SCH_ITEM* aItem )
     default:
         return false;
     }
+}
+
+
+static void cloneWireConnection( SCH_LINE* aNewLine, SCH_ITEM* aSource, SCH_EDIT_FRAME* aFrame )
+{
+    if( !aNewLine || !aSource || !aFrame )
+        return;
+
+    SCH_LINE* sourceLine = dynamic_cast<SCH_LINE*>( aSource );
+
+    if( !sourceLine )
+        return;
+
+    SCH_SHEET_PATH sheetPath = aFrame->GetCurrentSheet();
+    SCH_CONNECTION* sourceConnection = sourceLine->Connection( &sheetPath );
+
+    if( !sourceConnection )
+        return;
+
+    SCH_CONNECTION* newConnection = aNewLine->InitializeConnection( sheetPath, nullptr );
+
+    if( !newConnection )
+        return;
+
+    newConnection->Clone( *sourceConnection );
 }
 
 
@@ -207,6 +236,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
             foundLine = new SCH_LINE( unselectedEnd, line->GetLayer() );
             foundLine->SetFlags( IS_NEW );
             foundLine->SetLastResolvedState( line );
+            cloneWireConnection( foundLine, line, m_frame );
             m_frame->AddToScreen( foundLine, m_frame->GetScreen() );
             m_newDragLines.insert( foundLine );
 
@@ -336,6 +366,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
             a->SetFlags( IS_NEW );
             a->SetConnectivityDirty( true );
             a->SetLastResolvedState( line );
+            cloneWireConnection( a, line, m_frame );
             m_frame->AddToScreen( a, m_frame->GetScreen() );
             m_newDragLines.insert( a );
 
@@ -344,6 +375,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
             b->SetFlags( IS_NEW | STARTPOINT );
             b->SetConnectivityDirty( true );
             b->SetLastResolvedState( line );
+            cloneWireConnection( b, line, m_frame );
             m_frame->AddToScreen( b, m_frame->GetScreen() );
             m_newDragLines.insert( b );
 
@@ -505,6 +537,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     bool selectionHasNonGraphicItems = false;
     bool selectionIsGraphicsOnly = false;
 
+    std::unique_ptr<SCH_DRAG_NET_COLLISION_MONITOR> netCollisionMonitor;
+
     auto refreshSelectionTraits = [&]()
     {
         selectionHasSheetPins = false;
@@ -529,6 +563,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     refreshSelectionTraits();
 
+    if( !selection.Empty() )
+    {
+        netCollisionMonitor = std::make_unique<SCH_DRAG_NET_COLLISION_MONITOR>( m_frame, m_view );
+        netCollisionMonitor->Initialize( selection );
+    }
+
     bool lastCtrlDown = false;
 
     Activate();
@@ -552,13 +592,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     VECTOR2I    prevPos;
     GRID_HELPER_GRIDS snapLayer = GRID_CURRENT;
     SCH_SHEET*  hoverSheet = nullptr;
-
+    KICURSOR    currentCursor = KICURSOR::MOVING;
     m_cursor = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     do
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+        m_frame->GetCanvas()->SetCurrentCursor( currentCursor );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
@@ -887,8 +927,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 }
             }
 
-            m_frame->GetCanvas()->SetCurrentCursor( hoverSheet ? KICURSOR::PLACE
-                                                               : KICURSOR::MOVING );
+            currentCursor = hoverSheet ? KICURSOR::PLACE : KICURSOR::MOVING;
+
+            if( netCollisionMonitor )
+                currentCursor = netCollisionMonitor->AdjustCursor( currentCursor );
+
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
@@ -983,8 +1026,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             for( SCH_LINE* line : m_changedDragLines )
                 previewItems.push_back( line );
 
-            for( SCH_JUNCTION* jct : JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(),
-                                                                          previewItems ) )
+            std::vector<SCH_JUNCTION*> previewJunctions =
+                    JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(), previewItems );
+
+            if( netCollisionMonitor )
+                netCollisionMonitor->Update( previewJunctions, selection );
+
+            for( SCH_JUNCTION* jct : previewJunctions )
             {
                 m_view->AddToPreview( jct, true );
             }
@@ -1522,10 +1570,19 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                 newWire->SetFlags( IS_NEW );
                 newWire->SetConnectivityDirty( true );
 
-                if( dynamic_cast<const SCH_LINE*>( selected ) )
+                SCH_LINE* selectedLine = dynamic_cast<SCH_LINE*>( selected );
+                SCH_LINE* fixedLine = dynamic_cast<SCH_LINE*>( fixed );
+
+                if( selectedLine )
+                {
                     newWire->SetLastResolvedState( selected );
-                else if( dynamic_cast<const SCH_LINE*>( fixed ) )
+                    cloneWireConnection( newWire, selectedLine, m_frame );
+                }
+                else if( fixedLine )
+                {
                     newWire->SetLastResolvedState( fixed );
+                    cloneWireConnection( newWire, fixedLine, m_frame );
+                }
 
                 newWire->SetEndPoint( end );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
