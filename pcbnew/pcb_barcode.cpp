@@ -570,6 +570,28 @@ void PCB_BARCODE::SetBarcodeErrorCorrection( BARCODE_ECC_T aErrorCorrection )
 }
 
 
+void PCB_BARCODE::SetBarcodeWidth( int aWidth )
+{
+    m_width = aWidth;
+
+    if( KeepSquare() )
+        m_height = aWidth;
+
+    AssembleBarcode();
+}
+
+
+void PCB_BARCODE::SetBarcodeHeight( int aHeight )
+{
+    m_height = aHeight;
+
+    if( KeepSquare() )
+        m_width = aHeight;
+
+    AssembleBarcode();
+}
+
+
 void PCB_BARCODE::SetBarcodeKind( BARCODE_T aKind )
 {
     SetKind( aKind );

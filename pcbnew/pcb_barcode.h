@@ -367,8 +367,8 @@ public:
     void SetShowText( bool aShow ) { m_text.SetVisible( aShow ); AssembleBarcode(); }
     bool GetShowText() const { return m_text.IsVisible(); }
 
-    void SetBarcodeWidth( int aWidth ) { m_width = aWidth; AssembleBarcode(); }
-    void SetBarcodeHeight( int aHeight ) { m_height = aHeight; AssembleBarcode(); }
+    void SetBarcodeWidth( int aWidth );
+    void SetBarcodeHeight( int aHeight );
 
     EDA_ANGLE GetAngle() const { return m_angle; }
     double GetOrientation() const { return m_angle.AsDegrees(); }
