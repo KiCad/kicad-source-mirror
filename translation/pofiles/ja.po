@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 06:49+0000\n"
+"PO-Revision-Date: 2025-10-10 17:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -600,11 +600,11 @@ msgstr "導体/表面の仕上がり色を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "接着剤"
+msgstr "部品実装用接着剤(Adhesive)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
-msgstr "接着剤 (Adhesive) を表示"
+msgstr "部品実装用接着剤 (Adhesive) を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
@@ -36784,11 +36784,11 @@ msgstr "テクニカルレイヤー:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid "Front adhesive"
-msgstr "表面の接着剤層"
+msgstr "表面の部品実装用接着剤(Adhesive)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545
 msgid "Back adhesive"
-msgstr "裏面の接着剤層"
+msgstr "裏面の部品実装用接着剤(Adhesive)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:548
 msgid "Front solder paste"
@@ -39368,7 +39368,7 @@ msgstr "基板外、製造用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:115
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "基板表面に実装用接着剤のテンプレートを使用したい場合"
+msgstr "基板表面に部品実装用接着剤(Adhesive)のテンプレートを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:125
 #: pcbnew/dialogs/panel_setup_layers.cpp:143
@@ -39407,7 +39407,7 @@ msgstr "基板裏面にハンダペースト レイヤーを使用したい場�
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:247
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "基板裏面に実装用ボンド レイヤーを使用したい場合"
+msgstr "基板裏面に部品実装用接着剤(Adhesive)を使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:265
 msgid "If you want a fabrication layer for the back side of the board"
@@ -51132,11 +51132,11 @@ msgstr "このレイヤーの表示/非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Adhesive on board's front"
-msgstr "基板表面の部品実装用接着剤位置"
+msgstr "基板表面の部品実装用接着剤(Adhesive)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Adhesive on board's back"
-msgstr "基板裏面の部品実装用接着剤位置"
+msgstr "基板裏面の部品実装用接着剤(Adhesive)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1675
 msgid "Solder paste on board's front"
