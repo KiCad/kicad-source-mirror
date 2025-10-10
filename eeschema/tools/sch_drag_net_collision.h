@@ -34,12 +34,12 @@
 
 #include <gal/cursors.h>
 #include <math/vector2d.h>
+#include <sch_sheet_path.h>
 
 class SCH_EDIT_FRAME;
 class SCH_ITEM;
 class SCH_JUNCTION;
 class SCH_SELECTION;
-class SCH_SHEET_PATH;
 
 namespace KIGFX
 {
