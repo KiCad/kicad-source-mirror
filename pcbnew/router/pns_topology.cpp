@@ -19,6 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/log.h>
+
 #include "pns_line.h"
 #include "pns_segment.h"
 #include "pns_arc.h"
@@ -205,6 +207,12 @@ TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* 
                                               std::set<ITEM*>& aVisited,
                                               bool aFollowLockedSegments )
 {
+    static int depth = 0;
+    depth++;
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: joint at (%d,%d), prev=%p" ),
+                depth, aJoint->Pos().x, aJoint->Pos().y, aPrev );
+
     PATH_RESULT best;
 
     ITEM* via = nullptr;
@@ -216,16 +224,26 @@ TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* 
             via = link;
     }
 
+    int branchCount = 0;
     for( ITEM* link : links )
     {
         if( link->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
             && link != aPrev && !aVisited.contains( link ) )
         {
+            branchCount++;
+
             LINE l = m_world->AssembleLine( static_cast<LINKED_ITEM*>( link ), nullptr,
                                             false, aFollowLockedSegments );
 
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - assembled line with %d segments" ),
+                        depth, branchCount, l.SegmentCount() );
+
             if( l.CPoint( 0 ) != aJoint->Pos() )
+            {
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - reversing line" ),
+                            depth, branchCount );
                 l.Reverse();
+            }
 
             const JOINT* next = m_world->FindJoint( l.CLastPoint(), &l );
 
@@ -235,7 +253,14 @@ TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* 
             if( via )
                 aVisited.insert( via );
 
+            int lineLength = l.CLine().Length();
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - line length=%d, recursing..." ),
+                        depth, branchCount, lineLength );
+
             PATH_RESULT sub = followBranch( next, l.Links().back(), aVisited, aFollowLockedSegments );
+
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - sub-path returned with length=%d, %d items" ),
+                        depth, branchCount, sub.m_length, sub.m_items.Size() );
 
             ITEM_SET tmp;
             if( via )
@@ -246,8 +271,13 @@ TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* 
 
             int len = l.CLine().Length() + sub.m_length;
 
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - total length=%d (line=%d + sub=%d), best so far=%d" ),
+                        depth, branchCount, len, lineLength, sub.m_length, best.m_length );
+
             if( len > best.m_length )
             {
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: branch %d - NEW BEST! Replacing best path" ),
+                            depth, branchCount );
                 best.m_length = len;
                 best.m_end = sub.m_end;
                 best.m_items = tmp;
@@ -262,17 +292,29 @@ TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* 
     }
 
     if( !best.m_end )
+    {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: no branches found, terminal joint" ), depth );
         best.m_end = aJoint;
+    }
 
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followBranch[depth=%d]: returning best path with length=%d, %d items" ),
+                depth, best.m_length, best.m_items.Size() );
+
+    depth--;
     return best;
 }
-
-
 ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJointA,
                                       const JOINT** aTerminalJointB,
                                       bool aFollowLockedSegments )
 {
     assert( aLine2->IsLinked() );
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath START ===" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: initial line has %d segments, %zu links" ),
+                aLine2->SegmentCount(), aLine2->Links().size() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: line endpoints: (%d,%d) to (%d,%d)" ),
+                aLine2->CPoint( 0 ).x, aLine2->CPoint( 0 ).y,
+                aLine2->CLastPoint().x, aLine2->CLastPoint().y );
 
     ITEM_SET path;
     path.Add( *aLine2 );
@@ -285,8 +327,17 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
     const JOINT* jtA = m_world->FindJoint( aLine2->CPoint( 0 ), aLine2 );
     const JOINT* jtB = m_world->FindJoint( aLine2->CLastPoint(), aLine2 );
 
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: LEFT branch starting from joint at (%d,%d)" ),
+                jtA->Pos().x, jtA->Pos().y );
     PATH_RESULT left = followBranch( jtA, aLine2->Links().front(), visited, aFollowLockedSegments );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: LEFT branch result: length=%d, %d items" ),
+                left.m_length, left.m_items.Size() );
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: RIGHT branch starting from joint at (%d,%d)" ),
+                jtB->Pos().x, jtB->Pos().y );
     PATH_RESULT right = followBranch( jtB, aLine2->Links().back(), visited, aFollowLockedSegments );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: RIGHT branch result: length=%d, %d items" ),
+                right.m_length, right.m_items.Size() );
 
     if( aTerminalJointA )
         *aTerminalJointA = left.m_end;
@@ -294,11 +345,57 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
     if( aTerminalJointB )
         *aTerminalJointB = right.m_end;
 
-    for( int i = left.m_items.Size() - 1; i >= 0; i-- )
-        path.Prepend( left.m_items[i] );
+    // Count segments as we build the final path
+    int leftSegCount = 0;
+    int rightSegCount = 0;
+    int initialSegCount = 0;
 
+    // Count initial segments
+    for( int i = 0; i < aLine2->SegmentCount(); i++ )
+        initialSegCount++;
+
+    // Add left items
+    for( ITEM* item : left.m_items )
+    {
+        path.Prepend( item );
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+        {
+            LINE* l = dynamic_cast<LINE*>( item );
+            if( l )
+                leftSegCount += l->SegmentCount();
+            else
+                leftSegCount++;
+        }
+    }
+
+    // Add right items
     for( ITEM* item : right.m_items )
+    {
         path.Add( item );
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+        {
+            LINE* l = dynamic_cast<LINE*>( item );
+            if( l )
+                rightSegCount += l->SegmentCount();
+            else
+                rightSegCount++;
+        }
+    }
+
+    // Calculate total path length
+    int totalLength = left.m_length + aLine2->CLine().Length() + right.m_length;
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath SUMMARY ===" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Starting segment count: %d" ), initialSegCount );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Left branch: %d segments, length=%d" ), leftSegCount, left.m_length );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Initial line: %d segments, length=%lld" ), initialSegCount, aLine2->CLine().Length() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Right branch: %d segments, length=%d" ), rightSegCount, right.m_length );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total segments in path: %d" ), leftSegCount + initialSegCount + rightSegCount );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total path length: %d" ), totalLength );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total items in result: %d" ), path.Size() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath END ===" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
 
     return path;
 }
@@ -308,16 +405,24 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
                                               std::pair<const JOINT*, const JOINT*>* aTerminalJoints,
                                               bool aFollowLockedSegments )
 {
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "*** AssembleTrivialPath: START ***" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: aStart=%p, kind=%s" ),
+                aStart, aStart->KindStr().c_str() );
+
     ITEM_SET        path;
     LINKED_ITEM*    seg = nullptr;
 
     if( aStart->Kind() == ITEM::VIA_T )
     {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: starting from VIA" ) );
         VIA*         via = static_cast<VIA*>( aStart );
         const JOINT* jt  = m_world->FindJoint( via->Pos(), via );
 
         if( !jt->IsNonFanoutVia() )
+        {
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: VIA is fanout, returning empty" ) );
             return ITEM_SET();
+        }
 
         ITEM_SET links( jt->CLinks() );
 
@@ -326,6 +431,7 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
             if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
             {
                 seg = static_cast<LINKED_ITEM*>( item );
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: found segment/arc from VIA" ) );
                 break;
             }
         }
@@ -333,14 +439,21 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     else if( aStart->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
     {
         seg = static_cast<LINKED_ITEM*>( aStart );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: starting from SEGMENT/ARC" ) );
     }
 
     if( !seg )
+    {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: no segment found, returning empty" ) );
         return ITEM_SET();
+    }
 
     // Assemble a line following through locked segments
     // TODO: consider if we want to allow tuning lines with different widths in the future
     LINE l = m_world->AssembleLine( seg, nullptr, false, aFollowLockedSegments );
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: assembled line with %d segments, length=%lld" ),
+                l.SegmentCount(), l.CLine().Length() );
 
     const JOINT* jointA = nullptr;
     const JOINT* jointB = nullptr;
@@ -351,7 +464,13 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     {
         wxASSERT( jointA && jointB );
         *aTerminalJoints = std::make_pair( jointA, jointB );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: terminal joints at (%d,%d) and (%d,%d)" ),
+                    jointA->Pos().x, jointA->Pos().y, jointB->Pos().x, jointB->Pos().y );
     }
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: returning path with %d items" ), path.Size() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "*** AssembleTrivialPath: END ***" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
 
     return path;
 }
@@ -360,8 +479,15 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* aStart, SOLID** aStartPad,
                                              SOLID** aEndPad )
 {
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "########## AssembleTuningPath: START ##########" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: aStart=%p, kind=%s" ),
+                aStart, aStart->KindStr().c_str() );
+
     std::pair<const JOINT*, const JOINT*> joints;
     ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints, true );
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: initial path has %d items" ), initialPath.Size() );
 
     PAD* padA = nullptr;
     PAD* padB = nullptr;
@@ -389,16 +515,32 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
             };
 
     if( joints.first )
+    {
         getPadFromJoint( joints.first, &padA, aStartPad );
+        if( padA )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: found start pad at joint (%d,%d)" ),
+                        joints.first->Pos().x, joints.first->Pos().y );
+    }
 
     if( joints.second )
+    {
         getPadFromJoint( joints.second, &padB, aEndPad );
+        if( padB )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: found end pad at joint (%d,%d)" ),
+                        joints.second->Pos().x, joints.second->Pos().y );
+    }
 
     if( !padA && !padB )
+    {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: no pads found, returning initial path" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "########## AssembleTuningPath: END ##########" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
         return initialPath;
+    }
 
     auto processPad = [&]( PAD* aPad, int aLayer )
     {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: processing pad, optimizing trace in pad" ) );
         for( int idx = 0; idx < initialPath.Size(); idx++ )
         {
             if( initialPath[idx]->Kind() != ITEM::LINE_T )
@@ -408,7 +550,13 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
             SHAPE_LINE_CHAIN&  slc = line->Line();
             const PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
 
+            int lengthBefore = slc.Length();
             LENGTH_DELAY_CALCULATION::OptimiseTraceInPad( slc, aPad, pcbLayer );
+            int lengthAfter = slc.Length();
+
+            if( lengthBefore != lengthAfter )
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: optimized line %d, length changed from %d to %d" ),
+                            idx, lengthBefore, lengthAfter );
         }
     };
 
@@ -417,6 +565,24 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
 
     if( padB )
         processPad( padB, joints.second->Layer() );
+
+    // Calculate total path length
+    int totalLength = 0;
+    int lineCount = 0;
+    for( int idx = 0; idx < initialPath.Size(); idx++ )
+    {
+        if( initialPath[idx]->Kind() == ITEM::LINE_T )
+        {
+            LINE* line = static_cast<LINE*>( initialPath[idx] );
+            totalLength += line->CLine().Length();
+            lineCount++;
+        }
+    }
+
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTuningPath: final path has %d items, %d lines, total length=%d" ),
+                initialPath.Size(), lineCount, totalLength );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "########## AssembleTuningPath: END ##########" ) );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
 
     return initialPath;
 }
