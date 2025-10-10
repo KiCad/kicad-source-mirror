@@ -63,7 +63,7 @@ void TRANSLINE_CALCULATION_BASE::SetSynthesisResult( const TRANSLINE_PARAMETERS 
 
 
 bool TRANSLINE_CALCULATION_BASE::MinimiseZ0Error1D( const TRANSLINE_PARAMETERS aOptimise,
-                                                    const TRANSLINE_PARAMETERS aMeasure )
+                                                    const TRANSLINE_PARAMETERS aMeasure, bool aRecalculateLength )
 {
     double& var = GetParameterRef( aOptimise );
     double& Z0_param = GetParameterRef( aMeasure );
@@ -125,17 +125,20 @@ bool TRANSLINE_CALCULATION_BASE::MinimiseZ0Error1D( const TRANSLINE_PARAMETERS a
     }
 
     /* Compute one last time, but with correct length */
-    Z0_param = Z0_dest;
-    ANG_L_param = angl_l_dest;
-    SetParameter( TCP::PHYS_LEN, TC::C0 / GetParameter( TCP::FREQUENCY ) / sqrt( GetParameter( TCP::EPSILON_EFF ) )
-                                         * ANG_L_param / 2.0 / M_PI ); /* in m */
-    Analyse();
+    if( aRecalculateLength )
+    {
+        Z0_param = Z0_dest;
+        ANG_L_param = angl_l_dest;
+        SetParameter( TCP::PHYS_LEN, TC::C0 / GetParameter( TCP::FREQUENCY ) / sqrt( GetParameter( TCP::EPSILON_EFF ) )
+                                             * ANG_L_param / 2.0 / M_PI ); /* in m */
+        Analyse();
 
-    /* Restore parameters */
-    Z0_param = Z0_dest;
-    ANG_L_param = angl_l_dest;
-    SetParameter( TCP::PHYS_LEN, TC::C0 / GetParameter( TCP::FREQUENCY ) / sqrt( GetParameter( TCP::EPSILON_EFF ) )
-                                         * ANG_L_param / 2.0 / M_PI ); /* in m */
+        /* Restore parameters */
+        Z0_param = Z0_dest;
+        ANG_L_param = angl_l_dest;
+        SetParameter( TCP::PHYS_LEN, TC::C0 / GetParameter( TCP::FREQUENCY ) / sqrt( GetParameter( TCP::EPSILON_EFF ) )
+                                             * ANG_L_param / 2.0 / M_PI ); /* in m */
+    }
 
     return error <= m_maxError;
 }

@@ -386,7 +386,8 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 
         if( cellEditor )
         {
-            if( GRID_CELL_MARK_AS_NULLABLE* nullable = dynamic_cast<GRID_CELL_MARK_AS_NULLABLE*>( cellEditor ) )
+            if( const GRID_CELL_NULLABLE_INTERFACE* nullable =
+                        dynamic_cast<GRID_CELL_NULLABLE_INTERFACE*>( cellEditor ) )
                 isNullable = nullable->IsNullable();
 
             cellEditor->DecRef();
@@ -897,7 +898,14 @@ void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
 
 void WX_GRID::SetOptionalUnitValue( int aRow, int aCol, std::optional<int> aValue )
 {
-    SetCellValue( aRow, aCol, getUnitsProvider( aCol )->StringFromOptionalValue( aValue, true ) );
+    EDA_DATA_TYPE cellDataType;
+
+    if( m_autoEvalColsUnits.contains( aCol ) )
+        cellDataType = m_autoEvalColsUnits[aCol].second;
+    else
+        cellDataType = EDA_DATA_TYPE::DISTANCE;
+
+    SetCellValue( aRow, aCol, getUnitsProvider( aCol )->StringFromOptionalValue( aValue, true, cellDataType ) );
 }
 
 

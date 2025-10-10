@@ -165,9 +165,11 @@ protected:
      *
      * @param aOptimise Parameter to optimise
      * @param aMeasure The parameter to measure / optimise against
+     * @param aRecalculateLength True if the angular length should be recalculated (not for differential pair usage)
      * @returns true if error < MAX_ERROR, otherwise false
      */
-    bool MinimiseZ0Error1D( TRANSLINE_PARAMETERS aOptimise, TRANSLINE_PARAMETERS aMeasure );
+    bool MinimiseZ0Error1D( TRANSLINE_PARAMETERS aOptimise, TRANSLINE_PARAMETERS aMeasure,
+                            bool aRecalculateLength = false );
 
     /**
      * minimizeZ0Error2D

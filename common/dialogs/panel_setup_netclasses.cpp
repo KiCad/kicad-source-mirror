@@ -287,7 +287,7 @@ void PANEL_SETUP_NETCLASSES::loadNetclasses()
             [&]( int aRow, const NETCLASS* nc )
             {
                 m_netclassGrid->SetCellValue( aRow, GRID_NAME, nc->GetName() );
-                m_netclassGrid->SetCellValue( aRow, GRID_DELAY_PROFILE, nc->GetDelayProfile() );
+                m_netclassGrid->SetCellValue( aRow, GRID_DELAY_PROFILE, nc->GetTuningProfile() );
 
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_WIREWIDTH, nc->GetWireWidthOpt() );
                 m_netclassGrid->SetOptionalUnitValue( aRow, GRID_BUSWIDTH, nc->GetBusWidthOpt() );
@@ -486,7 +486,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
                     nc->SetPriority( aRow );
 
                 nc->SetName( m_netclassGrid->GetCellValue( aRow, GRID_NAME ) );
-                nc->SetDelayProfile( m_netclassGrid->GetCellValue( aRow, GRID_DELAY_PROFILE ) );
+                nc->SetTuningProfile( m_netclassGrid->GetCellValue( aRow, GRID_DELAY_PROFILE ) );
 
                 nc->SetWireWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_WIREWIDTH ) );
                 nc->SetBusWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_BUSWIDTH ) );

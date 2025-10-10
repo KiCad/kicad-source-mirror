@@ -44,6 +44,8 @@
 #include <core/profile.h>
 #include <thread_pool.h>
 #include <zone.h>
+#include <project/project_file.h>
+#include <project/tuning_profiles.h>
 
 
 // wxListBox's performance degrades horrifically with very large datasets.  It's not clear
@@ -436,8 +438,121 @@ void DRC_ENGINE::loadImplicitRules()
     for( std::shared_ptr<DRC_RULE>& ncRule : netclassItemSpecificRules )
         addRule( ncRule );
 
-    // 3) keepout area rules
+    // 4) tuning profile rules
+    auto addTuningSingleRule = [this, &bds]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry,
+                                             const wxString& aProfileName, const wxString& aNetclassName )
+    {
+        if( aLayerEntry.GetWidth() <= 0 )
+            return;
 
+        std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+        tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+        tuningRule->m_Implicit = true;
+
+        wxString expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s'" ), aNetclassName,
+                                          LSET::Name( aLayerEntry.GetSignalLayer() ) );
+        tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+
+        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
+        constraint.Value().SetMin( bds.m_TrackMinWidth );
+        constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+        tuningRule->AddConstraint( constraint );
+
+        addRule( tuningRule );
+    };
+
+    auto addTuningDifferentialRules = [this, &bds]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry,
+                                                    const wxString& aProfileName, const NETCLASS* aNetclass )
+    {
+        if( aLayerEntry.GetWidth() <= 0 || aLayerEntry.GetDiffPairGap() <= 0 )
+            return;
+
+        std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+        tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+        tuningRule->m_Implicit = true;
+
+        wxString expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                          aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
+        tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+
+        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
+        constraint.Value().SetMin( bds.m_TrackMinWidth );
+        constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+        tuningRule->AddConstraint( constraint );
+
+        addRule( tuningRule );
+
+        std::shared_ptr<DRC_RULE> tuningRule2 = std::make_shared<DRC_RULE>();
+        tuningRule2->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+        tuningRule2->m_Implicit = true;
+
+        const wxString expr2 =
+                wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                  aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
+        tuningRule2->m_Condition = new DRC_RULE_CONDITION( expr2 );
+
+        DRC_CONSTRAINT constraint2( DIFF_PAIR_GAP_CONSTRAINT );
+        constraint2.Value().SetMin( bds.m_TrackMinWidth );
+        constraint2.Value().SetOpt( aLayerEntry.GetDiffPairGap() );
+        tuningRule2->AddConstraint( constraint2 );
+
+        addRule( tuningRule2 );
+
+        // A narrower diffpair gap overrides the netclass min clearance
+        if( aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
+        {
+            std::shared_ptr<DRC_RULE> diffPairClearanceRule = std::make_shared<DRC_RULE>();
+            diffPairClearanceRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+            diffPairClearanceRule->m_Implicit = true;
+
+            expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                     aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
+            diffPairClearanceRule->m_Condition = new DRC_RULE_CONDITION( expr );
+
+            DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
+            min_clearanceConstraint.Value().SetMin( aLayerEntry.GetDiffPairGap() );
+            diffPairClearanceRule->AddConstraint( min_clearanceConstraint );
+
+            addRule( diffPairClearanceRule );
+        }
+    };
+
+    if( PROJECT* project = m_board->GetProject() )
+    {
+        std::shared_ptr<TUNING_PROFILES> tuningParams = project->GetProjectFile().TuningProfileParameters();
+
+        auto addNetclassTuningProfileRules =
+                [&tuningParams, &addTuningSingleRule, &addTuningDifferentialRules]( NETCLASS* aNetclass )
+        {
+            if( aNetclass->HasTuningProfile() )
+            {
+                const wxString        delayProfileName = aNetclass->GetTuningProfile();
+                const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( delayProfileName );
+
+                if( !profile.m_GenerateNetClassDRCRules )
+                    return;
+
+                for( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& layerEntry : profile.m_TrackPropagationEntries )
+                {
+                    if( layerEntry.GetWidth() <= 0 )
+                        continue;
+
+                    if( profile.m_Type == TUNING_PROFILE::PROFILE_TYPE::SINGLE )
+                        addTuningSingleRule( layerEntry, delayProfileName, aNetclass->GetName() );
+                    else
+                        addTuningDifferentialRules( layerEntry, delayProfileName, aNetclass );
+                }
+            }
+        };
+
+        for( const auto& [netclassName, netclass] : bds.m_NetSettings->GetNetclasses() )
+            addNetclassTuningProfileRules( netclass.get() );
+
+        for( const auto& [netclassName, netclass] : bds.m_NetSettings->GetCompositeNetclasses() )
+            addNetclassTuningProfileRules( netclass.get() );
+    }
+
+    // 5) keepout area rules
     std::vector<ZONE*> keepoutZones;
 
     for( ZONE* zone : m_board->Zones() )

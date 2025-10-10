@@ -1084,7 +1084,7 @@ public:
     /**
      * Ensure that all time domain properties providers are in sync with current settings
      */
-    void SynchronizeTimeDomainProperties();
+    void SynchronizeTuningProfileProperties();
 
     /**
      * Return the Similarity.  Because we compare board to board, we just return 1.0 here

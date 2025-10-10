@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCBNEW_TIME_DOMAIN_PARAMETERS_INTERFACE_H
-#define PCBNEW_TIME_DOMAIN_PARAMETERS_INTERFACE_H
+#ifndef PCBNEW_TUNING_PROFILE_PARAMETERS_IFACE_H
+#define PCBNEW_TUNING_PROFILE_PARAMETERS_IFACE_H
 
 #include <length_delay_calculation/length_delay_calculation_item.h>
 #include <netclass.h>
@@ -32,7 +32,7 @@ class LENGTH_DELAY_CALCULATION;
 /**
 * A data structure to contain basic geometry data which can affect signal propagation calculations.
 */
-struct TIME_DOMAIN_GEOMETRY_CONTEXT
+struct TUNING_PROFILE_GEOMETRY_CONTEXT
 {
     /// The net class this track belongs to
     const NETCLASS* NetClass;
@@ -52,19 +52,20 @@ struct TIME_DOMAIN_GEOMETRY_CONTEXT
 
 
 /**
- * Interface for providers of time domain parameter information. This interface is consumed by the
- * LENGTH_TIME_CALCULATOR object to convert space-domain physical layout informaton (e.g. track lengths) in to
+ * Interface for providers of tuning profile parameter information. This interface is consumed by the
+ * LENGTH_TIME_CALCULATOR object to convert space-domain physical layout information (e.g. track lengths) in to
  * time-domain propagation information.
  */
-class TIME_DOMAIN_PARAMETERS_IFACE
+class TUNING_PROFILE_PARAMETERS_IFACE
 {
 public:
-    explicit TIME_DOMAIN_PARAMETERS_IFACE( BOARD* aBoard, LENGTH_DELAY_CALCULATION* aCalculation ) :
-            m_board{ aBoard }, m_lengthCalculation{ aCalculation }
+    explicit TUNING_PROFILE_PARAMETERS_IFACE( BOARD* aBoard, LENGTH_DELAY_CALCULATION* aCalculation ) :
+            m_board{ aBoard },
+            m_lengthCalculation{ aCalculation }
     {
     }
 
-    virtual ~TIME_DOMAIN_PARAMETERS_IFACE() = default;
+    virtual ~TUNING_PROFILE_PARAMETERS_IFACE() = default;
 
     /**
      * Event called by the length and time calculation architecture if the board stackup has changed. This can be used
@@ -85,7 +86,7 @@ public:
      * @param aContext the geometry context in which to query to propagation delay
      */
     virtual std::vector<int64_t> GetPropagationDelays( const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
-                                                       const TIME_DOMAIN_GEOMETRY_CONTEXT&               aContext ) = 0;
+                                                       const TUNING_PROFILE_GEOMETRY_CONTEXT&            aContext ) = 0;
 
     /**
      * Gets the propagation delay (in internal units) for the given item in the given geometry context
@@ -93,8 +94,8 @@ public:
      * @param aItem the board item to query propagation delay for
      * @param aContext is the geometry context in which to query to propagation delay
      */
-    virtual int64_t GetPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                                         const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext ) = 0;
+    virtual int64_t GetPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM&   aItem,
+                                         const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) = 0;
 
     /**
      * Gets the track length (in internal distance units) required for the given propagation delay (in internal time
@@ -103,8 +104,8 @@ public:
      * @param aContext the geometry context in which to query to propagation delay
      * @param aDelay the propagation delay for which a length should be calculated
      */
-    virtual int64_t GetTrackLengthForPropagationDelay( int64_t                             aDelay,
-                                                       const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext ) = 0;
+    virtual int64_t GetTrackLengthForPropagationDelay( int64_t                                aDelay,
+                                                       const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) = 0;
 
     /**
      * Gets the propagation delay for the given shape line chain
@@ -112,8 +113,8 @@ public:
      * @param aShape is the shape to calculate delay for
      * @param aContext is the geometry context for which to query to propagation delay
      */
-    virtual int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&             aShape,
-                                                                const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext ) = 0;
+    virtual int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&                aShape,
+                                                                const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) = 0;
 
 protected:
     /// The board all calculations are for
@@ -123,4 +124,4 @@ protected:
     LENGTH_DELAY_CALCULATION* m_lengthCalculation;
 };
 
-#endif //PCBNEW_TIME_DOMAIN_PARAMETERS_INTERFACE_H
+#endif //PCBNEW_TUNING_PROFILE_PARAMETERS_IFACE_H

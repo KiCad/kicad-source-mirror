@@ -194,7 +194,7 @@ public:
                                      const int aDiffPairCouplingGap, const int aPNSLayer,
                                      const NETCLASS* aNetClass ) override
     {
-        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
         ctx.NetClass = aNetClass;
         ctx.Width = aWidth;
         ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
@@ -208,7 +208,7 @@ public:
                                              int aDiffPairCouplingGap, int aPNSLayer,
                                              const NETCLASS* aNetClass ) override
     {
-        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
         ctx.NetClass = aNetClass;
         ctx.Width = aWidth;
         ctx.IsDiffPairCoupled = aIsDiffPairCoupled;

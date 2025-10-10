@@ -147,10 +147,10 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
         return;
     }
 
-    BOOST_TEST_CHECKPOINT( "Synchronize Time Domain Properties" );
+    BOOST_TEST_CHECKPOINT( "Synchronize Tuning Profile Properties" );
     try
     {
-        aBoard->GetLengthCalculation()->SynchronizeTimeDomainProperties();
+        aBoard->GetLengthCalculation()->SynchronizeTuningProfileProperties();
     }
     catch( const std::exception& e )
     {

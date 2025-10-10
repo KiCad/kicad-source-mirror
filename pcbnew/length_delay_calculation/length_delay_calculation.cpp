@@ -249,10 +249,10 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
         wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: calculating time domain statistics" ) );
 
         // TODO(JJ): Populate this
-        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
         ctx.NetClass = aItems.front().GetEffectiveNetClass(); // We don't care if this is merged for net class lookup
 
-        const std::vector<int64_t> itemDelays = m_timeDomainParameters->GetPropagationDelays( aItems, ctx );
+        const std::vector<int64_t> itemDelays = m_tuningProfileParameters->GetPropagationDelays( aItems, ctx );
 
         wxASSERT( itemDelays.size() == aItems.size() );
 
@@ -660,29 +660,28 @@ LENGTH_DELAY_CALCULATION::GetLengthCalculationItem( const BOARD_CONNECTED_ITEM* 
 }
 
 
-void LENGTH_DELAY_CALCULATION::SetTimeDomainParametersProvider(
-        std::unique_ptr<TIME_DOMAIN_PARAMETERS_IFACE>&& aProvider )
+void LENGTH_DELAY_CALCULATION::SetTuningProfileParametersProvider(
+        std::unique_ptr<TUNING_PROFILE_PARAMETERS_IFACE>&& aProvider )
 {
-    m_timeDomainParameters = std::move( aProvider );
+    m_tuningProfileParameters = std::move( aProvider );
 }
 
 
-void LENGTH_DELAY_CALCULATION::SynchronizeTimeDomainProperties() const
+void LENGTH_DELAY_CALCULATION::SynchronizeTuningProfileProperties() const
 {
-    m_timeDomainParameters->OnSettingsChanged();
+    m_tuningProfileParameters->OnSettingsChanged();
 }
 
 
-int64_t LENGTH_DELAY_CALCULATION::CalculateLengthForDelay( const int64_t                       aDesiredDelay,
-                                                           const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const
+int64_t LENGTH_DELAY_CALCULATION::CalculateLengthForDelay( const int64_t                          aDesiredDelay,
+                                                           const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const
 {
-    return m_timeDomainParameters->GetTrackLengthForPropagationDelay( aDesiredDelay, aCtx );
+    return m_tuningProfileParameters->GetTrackLengthForPropagationDelay( aDesiredDelay, aCtx );
 }
 
 
-int64_t
-LENGTH_DELAY_CALCULATION::CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&             aShape,
-                                                                      const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const
+int64_t LENGTH_DELAY_CALCULATION::CalculatePropagationDelayForShapeLineChain(
+        const SHAPE_LINE_CHAIN& aShape, const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const
 {
-    return m_timeDomainParameters->CalculatePropagationDelayForShapeLineChain( aShape, aCtx );
+    return m_tuningProfileParameters->CalculatePropagationDelayForShapeLineChain( aShape, aCtx );
 }

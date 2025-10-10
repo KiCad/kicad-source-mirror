@@ -140,26 +140,45 @@ protected:
 };
 
 
+class GRID_CELL_NULLABLE_INTERFACE
+{
+public:
+    GRID_CELL_NULLABLE_INTERFACE() :
+            m_isNullable( true )
+    {
+    }
+    GRID_CELL_NULLABLE_INTERFACE( bool aIsNullable ) :
+            m_isNullable( aIsNullable )
+    {
+    }
+    virtual ~GRID_CELL_NULLABLE_INTERFACE() = default;
+
+    virtual bool IsNullable() const { return m_isNullable; }
+
+protected:
+    bool m_isNullable{ false };
+};
+
+
 //---- Grid helpers: custom wxGridCellTextEditor ------------------------------------------
 //
 // Note: This is used to mark WX_GRID cell as nullable
-class GRID_CELL_MARK_AS_NULLABLE : public wxGridCellTextEditor
+class GRID_CELL_MARK_AS_NULLABLE : public wxGridCellTextEditor, public GRID_CELL_NULLABLE_INTERFACE
 {
 public:
-    GRID_CELL_MARK_AS_NULLABLE() : m_isNullable( true ) {}
-    GRID_CELL_MARK_AS_NULLABLE( bool aIsNullable ) : m_isNullable( aIsNullable ) {}
-
-    wxGridCellEditor* Clone() const override
+    GRID_CELL_MARK_AS_NULLABLE() :
+            GRID_CELL_NULLABLE_INTERFACE( true )
     {
-        return new GRID_CELL_MARK_AS_NULLABLE( m_isNullable );
     }
+    GRID_CELL_MARK_AS_NULLABLE( const bool aIsNullable ) :
+            GRID_CELL_NULLABLE_INTERFACE( aIsNullable )
+    {
+    }
+
+    wxGridCellEditor* Clone() const override { return new GRID_CELL_MARK_AS_NULLABLE( IsNullable() ); }
 
     void Reset() override {}
 
-    bool IsNullable() { return m_isNullable; }
-
-protected:
-    bool m_isNullable;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_MARK_AS_NULLABLE );
 };

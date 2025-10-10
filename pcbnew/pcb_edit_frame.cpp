@@ -1497,7 +1497,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindo
     {
         // Note: We must synchronise time domain properties before nets and classes, otherwise the updates
         // called by the board listener events are using stale data
-        GetBoard()->SynchronizeTimeDomainProperties();
+        GetBoard()->SynchronizeTuningProfileProperties();
         GetBoard()->SynchronizeNetsAndNetClasses( true );
 
         if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )

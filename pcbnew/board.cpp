@@ -2408,9 +2408,9 @@ void BOARD::SynchronizeProperties()
 }
 
 
-void BOARD::SynchronizeTimeDomainProperties()
+void BOARD::SynchronizeTuningProfileProperties()
 {
-    m_lengthDelayCalc->SynchronizeTimeDomainProperties();
+    m_lengthDelayCalc->SynchronizeTuningProfileProperties();
 }
 
 

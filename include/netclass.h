@@ -241,11 +241,11 @@ public:
     void    SetPriority( int aPriority )    { m_Priority = aPriority; }
     int     GetPriority() const             { return m_Priority; }
 
-    bool      HasDelayProfile() const { return !m_DelayProfile.empty(); }
-    void      SetDelayProfile( const wxString& aDelayProfile ) { m_DelayProfile = aDelayProfile; }
-    wxString  GetDelayProfile() const { return m_DelayProfile; }
-    void      SetDelayProfileParent( NETCLASS* aParent ) { m_delayProfileParent = aParent; }
-    NETCLASS* GetDelayProfileParent() const { return m_delayProfileParent; }
+    bool      HasTuningProfile() const { return !m_tuningProfile.empty(); }
+    void      SetTuningProfile( const wxString& aTuningProfile ) { m_tuningProfile = aTuningProfile; }
+    wxString  GetTuningProfile() const { return m_tuningProfile; }
+    void      SetTuningProfileParent( NETCLASS* aParent ) { m_tuningProfileParent = aParent; }
+    NETCLASS* GetTuningProfileParent() const { return m_tuningProfileParent; }
 
 protected:
     bool m_isDefault; ///< Mark if this instance is the default netclass
@@ -276,7 +276,7 @@ protected:
 
     COLOR4D            m_pcbColor;          ///< Optional PCB color override for this netclass
 
-    wxString m_DelayProfile; ///< The tuning profile name being used by this netclass
+    wxString m_tuningProfile; ///< The tuning profile name being used by this netclass
 
     // The NETCLASS providing each parameter
     NETCLASS* m_clearanceParent;
@@ -293,7 +293,7 @@ protected:
     NETCLASS* m_busWidthParent;
     NETCLASS* m_schematicColorParent;
     NETCLASS* m_lineStyleParent;
-    NETCLASS* m_delayProfileParent;
+    NETCLASS* m_tuningProfileParent;
 };
 
 #endif  // CLASS_NETCLASS_H

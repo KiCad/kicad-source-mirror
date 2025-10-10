@@ -60,10 +60,10 @@ void COUPLED_MICROSTRIP::Analyse()
 bool COUPLED_MICROSTRIP::Synthesize( const SYNTHESIZE_OPTS aOpts )
 {
     if( aOpts == SYNTHESIZE_OPTS::FIX_WIDTH )
-        return MinimiseZ0Error1D( TCP::PHYS_S, TCP::Z0_O );
+        return MinimiseZ0Error1D( TCP::PHYS_S, TCP::Z0_O, false );
 
     if( aOpts == SYNTHESIZE_OPTS::FIX_SPACING )
-        return MinimiseZ0Error1D( TCP::PHYS_WIDTH, TCP::Z0_O );
+        return MinimiseZ0Error1D( TCP::PHYS_WIDTH, TCP::Z0_O, false );
 
     double Z0_e, Z0_o, ang_l_dest;
     double f1, f2, ft1, ft2, j11, j12, j21, j22, d_s_h, d_w_h, err;
@@ -173,16 +173,16 @@ void COUPLED_MICROSTRIP::SetAnalysisResults()
 
 void COUPLED_MICROSTRIP::SetSynthesisResults()
 {
-    SetAnalysisResult( TCP::EPSILON_EFF_EVEN, er_eff_e );
-    SetAnalysisResult( TCP::EPSILON_EFF_ODD, er_eff_o );
-    SetAnalysisResult( TCP::UNIT_PROP_DELAY_EVEN, prop_delay_e );
-    SetAnalysisResult( TCP::UNIT_PROP_DELAY_ODD, prop_delay_o );
-    SetAnalysisResult( TCP::ATTEN_COND_EVEN, atten_cond_e );
-    SetAnalysisResult( TCP::ATTEN_COND_ODD, atten_cond_o );
-    SetAnalysisResult( TCP::ATTEN_DILECTRIC_EVEN, atten_dielectric_e );
-    SetAnalysisResult( TCP::ATTEN_DILECTRIC_ODD, atten_dielectric_o );
-    SetAnalysisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
-    SetAnalysisResult( TCP::Z_DIFF, Zdiff );
+    SetSynthesisResult( TCP::EPSILON_EFF_EVEN, er_eff_e );
+    SetSynthesisResult( TCP::EPSILON_EFF_ODD, er_eff_o );
+    SetSynthesisResult( TCP::UNIT_PROP_DELAY_EVEN, prop_delay_e );
+    SetSynthesisResult( TCP::UNIT_PROP_DELAY_ODD, prop_delay_o );
+    SetSynthesisResult( TCP::ATTEN_COND_EVEN, atten_cond_e );
+    SetSynthesisResult( TCP::ATTEN_COND_ODD, atten_cond_o );
+    SetSynthesisResult( TCP::ATTEN_DILECTRIC_EVEN, atten_dielectric_e );
+    SetSynthesisResult( TCP::ATTEN_DILECTRIC_ODD, atten_dielectric_o );
+    SetSynthesisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
+    SetSynthesisResult( TCP::Z_DIFF, Zdiff );
 
     const double Z0_E = GetParameter( TCP::Z0_E );
     const double Z0_O = GetParameter( TCP::Z0_O );
@@ -198,12 +198,12 @@ void COUPLED_MICROSTRIP::SetSynthesisResults()
     const bool L_invalid = !std::isfinite( L ) || L < 0;
     const bool S_invalid = !std::isfinite( S ) || S <= 0;
 
-    SetAnalysisResult( TCP::Z0_E, Z0_E, Z0_E_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::Z0_O, Z0_O, Z0_O_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_S, S, S_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::Z0_E, Z0_E, Z0_E_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::Z0_O, Z0_O, Z0_O_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetSynthesisResult( TCP::PHYS_S, S, S_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
 }
 
 

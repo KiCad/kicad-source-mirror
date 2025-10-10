@@ -71,10 +71,10 @@ void COUPLED_STRIPLINE::Analyse()
 bool COUPLED_STRIPLINE::Synthesize( const SYNTHESIZE_OPTS aOpts )
 {
     if( aOpts == SYNTHESIZE_OPTS::FIX_WIDTH )
-        return MinimiseZ0Error1D( TCP::PHYS_S, TCP::Z0_O );
+        return MinimiseZ0Error1D( TCP::PHYS_S, TCP::Z0_O, false );
 
     if( aOpts == SYNTHESIZE_OPTS::FIX_SPACING )
-        return MinimiseZ0Error1D( TCP::PHYS_WIDTH, TCP::Z0_O );
+        return MinimiseZ0Error1D( TCP::PHYS_WIDTH, TCP::Z0_O, false );
 
     // This synthesis approach is modified from wcalc, which is released under GPL version 2
     // Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006 Dan McMahill

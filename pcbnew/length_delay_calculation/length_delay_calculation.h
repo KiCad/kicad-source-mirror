@@ -24,8 +24,8 @@
 #ifndef PCBNEW_LENGTH_DELAY_CALCULATION_H
 #define PCBNEW_LENGTH_DELAY_CALCULATION_H
 
-#include "time_domain_parameters_iface.h"
-#include "time_domain_parameters_user_defined.h"
+#include "tuning_profile_parameters_iface.h"
+#include "tuning_profile_parameters_user_defined.h"
 
 #include <board_design_settings.h>
 #include <connectivity/connectivity_data.h>
@@ -128,7 +128,7 @@ public:
      */
     explicit LENGTH_DELAY_CALCULATION( BOARD* aBoard ) :
             m_board( aBoard ),
-            m_timeDomainParameters( std::make_unique<TIME_DOMAIN_PARAMETERS_USER_DEFINED>( aBoard, this ) )
+            m_tuningProfileParameters( std::make_unique<TUNING_PROFILE_PARAMETERS_USER_DEFINED>( aBoard, this ) )
     {
     }
 
@@ -176,8 +176,8 @@ public:
   * @param aShape is the shape to calculate delay for
   * @param aCtx is the geometry context for which to query to propagation delay
   */
-    int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&             aShape,
-                                                        const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const;
+    int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&                aShape,
+                                                        const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const;
 
     /**
      * @brief Calculates the length of track required for the given delay in a specific geometry context
@@ -185,7 +185,7 @@ public:
      * @param aDesiredDelay is the desired track delay (in IU)
      * @param aCtx is the track geometry context to calculate propagation velocitiy against
      */
-    int64_t CalculateLengthForDelay( int64_t aDesiredDelay, const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const;
+    int64_t CalculateLengthForDelay( int64_t aDesiredDelay, const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const;
 
     /// Optimises the given trace / line to minimise the electrical path length within the given pad
     static void OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aPcbLayer );
@@ -193,11 +193,11 @@ public:
     /// Return a LENGTH_CALCULATION_ITEM constructed from the given BOARD_CONNECTED_ITEM
     LENGTH_DELAY_CALCULATION_ITEM GetLengthCalculationItem( const BOARD_CONNECTED_ITEM* aBoardItem ) const;
 
-    /// Sets the provider for time domain parameter resolution
-    void SetTimeDomainParametersProvider( std::unique_ptr<TIME_DOMAIN_PARAMETERS_IFACE>&& aProvider );
+    /// Sets the provider for tuning profile parameter resolution
+    void SetTuningProfileParametersProvider( std::unique_ptr<TUNING_PROFILE_PARAMETERS_IFACE>&& aProvider );
 
     /// Ensure time domain properties provider is synced with board / project settings if required
-    void SynchronizeTimeDomainProperties() const;
+    void SynchronizeTuningProfileProperties() const;
 
     /**
      * Returns the stackup distance between the two given layers.
@@ -210,8 +210,8 @@ protected:
     /// The parent board for all items
     BOARD* m_board;
 
-    /// The active provider of time domain parameters
-    std::unique_ptr<TIME_DOMAIN_PARAMETERS_IFACE> m_timeDomainParameters;
+    /// The active provider of tuning profile parameters
+    std::unique_ptr<TUNING_PROFILE_PARAMETERS_IFACE> m_tuningProfileParameters;
 
     /// Enum to describe whether track merging is attempted from the start or end of a track segment
     enum class MERGE_POINT

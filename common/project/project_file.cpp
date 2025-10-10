@@ -22,7 +22,7 @@
 #include <project.h>
 #include <project/component_class_settings.h>
 #include <project/net_settings.h>
-#include <project/time_domain_parameters.h>
+#include <project/tuning_profiles.h>
 #include <settings/json_settings_internals.h>
 #include <project/project_file.h>
 #include <settings/common_settings.h>
@@ -160,8 +160,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_ComponentClassSettings =
             std::make_shared<COMPONENT_CLASS_SETTINGS>( this, "component_class_settings" );
 
-    m_timeDomainParameters =
-            std::make_shared<TIME_DOMAIN_PARAMETERS>( this, "time_domain_parameters" );
+    m_tuningProfileParameters = std::make_shared<TUNING_PROFILES>( this, "tuning_profiles" );
 
     m_params.emplace_back( new PARAM_LAYER_PRESET( "board.layer_presets", &m_LayerPresets ) );
 

@@ -57,7 +57,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 6, _("uVia Hole") );
 	m_netclassGrid->SetColLabelValue( 7, _("DP Width") );
 	m_netclassGrid->SetColLabelValue( 8, _("DP Gap") );
-	m_netclassGrid->SetColLabelValue( 9, _("Delay Profile") );
+	m_netclassGrid->SetColLabelValue( 9, _("Tuning Profile") );
 	m_netclassGrid->SetColLabelValue( 10, _("PCB Color") );
 	m_netclassGrid->SetColLabelValue( 11, _("Wire Thickness") );
 	m_netclassGrid->SetColLabelValue( 12, _("Bus Thickness") );

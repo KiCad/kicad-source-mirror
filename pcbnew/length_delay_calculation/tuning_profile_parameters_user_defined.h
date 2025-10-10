@@ -21,18 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_NEW_TIME_DOMAIN_PARAMETERS_USER_DEFINED_H
-#define PCB_NEW_TIME_DOMAIN_PARAMETERS_USER_DEFINED_H
+#ifndef PCB_NEW_TUNING_PROFILE_PARAMETERS_USER_DEFINED_H
+#define PCB_NEW_TUNING_PROFILE_PARAMETERS_USER_DEFINED_H
 
 
-#include <length_delay_calculation/time_domain_parameters_iface.h>
-#include <project/time_domain_parameters.h>
+#include <length_delay_calculation/tuning_profile_parameters_iface.h>
+#include <project/tuning_profiles.h>
 
-class TIME_DOMAIN_PARAMETERS_USER_DEFINED final : public TIME_DOMAIN_PARAMETERS_IFACE
+class TUNING_PROFILE_PARAMETERS_USER_DEFINED final : public TUNING_PROFILE_PARAMETERS_IFACE
 {
 public:
-    explicit TIME_DOMAIN_PARAMETERS_USER_DEFINED( BOARD* aBoard, LENGTH_DELAY_CALCULATION* aCalculation ) :
-            TIME_DOMAIN_PARAMETERS_IFACE( aBoard, aCalculation )
+    explicit TUNING_PROFILE_PARAMETERS_USER_DEFINED( BOARD* aBoard, LENGTH_DELAY_CALCULATION* aCalculation ) :
+            TUNING_PROFILE_PARAMETERS_IFACE( aBoard, aCalculation )
     {
     }
 
@@ -50,7 +50,7 @@ public:
      * @param aContext the geometry context in which to query to propagation delay
      */
     std::vector<int64_t> GetPropagationDelays( const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
-                                               const TIME_DOMAIN_GEOMETRY_CONTEXT&               aContext ) override;
+                                               const TUNING_PROFILE_GEOMETRY_CONTEXT&            aContext ) override;
 
     /**
      * Gets the propagation delay (in internal units) for the given item in the given geometry context
@@ -58,8 +58,8 @@ public:
      * @param aItem the board item to query propagation delay for
      * @param aContext the geometry context in which to query to propagation delay
      */
-    int64_t GetPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                                 const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext ) override;
+    int64_t GetPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM&   aItem,
+                                 const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) override;
 
     /**
      * Gets the track length (in internal distance units) required for the given propagation delay (in internal time
@@ -68,7 +68,8 @@ public:
      * @param aContext the geometry context in which to query to propagation delay
      * @param aDelay the propagation delay for which a length should be calculated
      */
-    int64_t GetTrackLengthForPropagationDelay( int64_t aDelay, const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext ) override;
+    int64_t GetTrackLengthForPropagationDelay( int64_t                                aDelay,
+                                               const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) override;
 
     /**
      * Gets the propagation delay for the given shape line chain
@@ -76,8 +77,8 @@ public:
      * @param aShape is the shape to calculate delay for
      * @param aContext is the geometry context for which to query to propagation delay
      */
-    int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&             aShape,
-                                                        const TIME_DOMAIN_GEOMETRY_CONTEXT& aContext ) override;
+    int64_t CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&                aShape,
+                                                        const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) override;
 
 private:
     void rebuildCaches();
@@ -120,9 +121,9 @@ private:
      * @param aContext the geometry context in which to query to propagation delay
      * @param aDelayProfile the time domain tuning profile for the given item
      */
-    int64_t getPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                                 const TIME_DOMAIN_GEOMETRY_CONTEXT&  aContext,
-                                 const DELAY_PROFILE*                 aDelayProfile ) const;
+    int64_t getPropagationDelay( const LENGTH_DELAY_CALCULATION_ITEM&   aItem,
+                                 const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext,
+                                 const TUNING_PROFILE*                  aDelayProfile ) const;
 
     /**
      * Gets the tuning profile pointer for the given tuning profile name
@@ -130,13 +131,13 @@ private:
      * @param aDelayProfileName the tuning profile name to return
      * @returns Valid pointer to a tuning profile, or nullptr if no profile found
      */
-    const DELAY_PROFILE* GetDelayProfile( const wxString& aDelayProfileName );
+    const TUNING_PROFILE* GetTuningProfile( const wxString& aDelayProfileName );
 
     /// Cached map of tuning profile names to per-layer time domain parameters
-    std::map<wxString, const DELAY_PROFILE*> m_delayProfilesCache;
+    std::map<wxString, const TUNING_PROFILE*> m_delayProfilesCache;
 
     /// Cached per-tuning profile via overrides
     std::map<wxString, std::map<VIA_OVERRIDE_CACHE_KEY, int64_t>> m_viaOverridesCache;
 };
 
-#endif //PCB_NEW_TIME_DOMAIN_PARAMETERS_USER_DEFINED_H
+#endif //PCB_NEW_TUNING_PROFILE_PARAMETERS_USER_DEFINED_H

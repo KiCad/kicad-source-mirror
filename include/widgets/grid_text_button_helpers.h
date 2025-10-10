@@ -25,6 +25,8 @@
 #ifndef GRID_TEXT_BUTTON_HELPERS_H
 #define GRID_TEXT_BUTTON_HELPERS_H
 
+#include <widgets/grid_icon_text_helpers.h>
+
 #include <memory>
 
 #include <wx/combo.h>
@@ -221,5 +223,40 @@ protected:
     std::function<wxString( const wxString& )>          m_embedCallback;
 };
 
+
+/**
+* A cell editor which runs a provided function when the grid cell button is clicked.
+*
+* The function has the signature (int, int) -> void. The passed parameters are the (row, col) of the
+* clicked grid cell
+*/
+class GRID_CELL_RUN_FUNCTION_EDITOR : public GRID_CELL_TEXT_BUTTON, public GRID_CELL_NULLABLE_INTERFACE
+{
+public:
+    GRID_CELL_RUN_FUNCTION_EDITOR( DIALOG_SHIM* aParent, const std::function<void( int, int )> aFunction,
+                                   const bool aIsNullable = false ) :
+            GRID_CELL_NULLABLE_INTERFACE( aIsNullable ),
+            m_dlg( aParent ),
+            m_row( -1 ),
+            m_col( -1 ),
+            m_function( aFunction )
+    {
+    }
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GRID_CELL_RUN_FUNCTION_EDITOR( m_dlg, m_function, IsNullable() );
+    }
+
+    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
+    void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
+
+
+protected:
+    DIALOG_SHIM* m_dlg;
+    int          m_row;
+    int          m_col;
+    std::function<void( int, int )> m_function;
+};
 
 #endif  // GRID_TEXT_BUTTON_HELPERS_H

@@ -36,6 +36,8 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 
 #include <limits>
+#include <project/project_file.h>
+#include <project/tuning_profiles.h>
 
 /*
     Miscellaneous tests:
@@ -46,6 +48,7 @@
     - DRCE_ASSERTION_FAILURE,                 ///< user-defined assertions
     - DRCE_GENERIC_WARNING                    ///< user-defined warnings
     - DRCE_GENERIC_ERROR                      ///< user-defined errors
+    - DRCE_MISSING_TUNING_PROFILES            ///< tuning profile for netc lass not defined
 */
 
 static void findClosestOutlineGap( BOARD* aBoard, PCB_SHAPE*& aItemA, PCB_SHAPE*& aItemB,
@@ -126,6 +129,7 @@ private:
     void testDisabledLayers();
     void testTextVars();
     void testAssertions();
+    void testMissingTuningProfiles();
 
     BOARD* m_board;
 };
@@ -518,6 +522,43 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 }
 
 
+void DRC_TEST_PROVIDER_MISC::testMissingTuningProfiles()
+{
+    if( !m_board->GetProject() )
+        return;
+
+    std::shared_ptr<NET_SETTINGS>          netSettings = m_board->GetProject()->GetProjectFile().NetSettings();
+    const std::shared_ptr<TUNING_PROFILES> tuningProfiles =
+            m_board->GetProject()->GetProjectFile().TuningProfileParameters();
+
+    std::set<wxString> profileNames;
+    std::ranges::for_each( tuningProfiles->GetTuningProfiles(),
+                           [&profileNames]( const TUNING_PROFILE& tuningProfile )
+                           {
+                               if( const wxString name = tuningProfile.m_ProfileName; name != wxEmptyString )
+                                   profileNames.insert( name );
+                           } );
+
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+    {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_TUNING_PROFILE ) )
+            return;
+
+        const wxString profileName = netclass->GetTuningProfile();
+
+        if( netclass->HasTuningProfile() && !profileNames.contains( profileName ) )
+        {
+            auto     drcItem = DRC_ITEM::Create( DRCE_MISSING_TUNING_PROFILE );
+            wxString errMsg = wxString::Format( "%s (Net Class: %s, Tuning Profile: %s)", drcItem->GetErrorText(), name,
+                                                profileName );
+            drcItem->SetErrorMessage( errMsg );
+
+            reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
+        }
+    }
+}
+
+
 bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
@@ -554,6 +595,14 @@ bool DRC_TEST_PROVIDER_MISC::Run()
             return false;   // DRC cancelled
 
         testAssertions();
+    }
+
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_TUNING_PROFILE ) )
+    {
+        if( !reportPhase( _( "Checking for missing tuning profiles..." ) ) )
+            return false; // DRC cancelled
+
+        testMissingTuningProfiles();
     }
 
     return !m_drcEngine->IsCancelled();

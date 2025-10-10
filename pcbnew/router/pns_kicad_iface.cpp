@@ -2508,7 +2508,7 @@ int64_t PNS_KICAD_IFACE_BASE::CalculateLengthForDelay( int64_t aDesiredDelay, co
                                                        const bool aIsDiffPairCoupled, const int aDiffPairCouplingGap,
                                                        const int aPNSLayer, const NETCLASS* aNetClass )
 {
-    TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+    TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
     ctx.NetClass = aNetClass;
     ctx.Width = aWidth;
     ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
@@ -2524,7 +2524,7 @@ int64_t PNS_KICAD_IFACE_BASE::CalculateDelayForShapeLineChain( const SHAPE_LINE_
                                                                bool aIsDiffPairCoupled, int aDiffPairCouplingGap,
                                                                int aPNSLayer, const NETCLASS* aNetClass )
 {
-    TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+    TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
     ctx.NetClass = aNetClass;
     ctx.Width = aWidth;
     ctx.IsDiffPairCoupled = aIsDiffPairCoupled;

@@ -3,6 +3,8 @@
     "3dviewports": [],
     "design_settings": {
       "defaults": {
+        "apply_defaults_to_fp_barcodes": false,
+        "apply_defaults_to_fp_dimensions": false,
         "apply_defaults_to_fp_fields": false,
         "apply_defaults_to_fp_shapes": false,
         "apply_defaults_to_fp_text": false,
@@ -664,6 +666,7 @@
       "sort_asc": true,
       "sort_field": "Reference"
     },
+    "bus_aliases": {},
     "connection_grid_size": 50.0,
     "drawing": {
       "dashed_lines_dash_length_ratio": 12.0,
@@ -925,6 +928,337 @@
         "signal_layer_to": "In1.Cu",
         "via_layer_from": "F.Cu",
         "via_layer_to": "In2.Cu"
+      }
+    ]
+  },
+  "tuning_profiles": {
+    "meta": {
+      "version": 0
+    },
+    "tuning_profiles_impedance_geometric": [
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS1",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [],
+        "via_prop_delay": 0
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS2",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [],
+        "via_prop_delay": 0
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 2000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS3",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [],
+        "via_prop_delay": 0
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS4",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [],
+        "via_prop_delay": 1000000
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS5",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [
+          {
+            "delay": 20000000,
+            "signal_layer_from": "F.Cu",
+            "signal_layer_to": "B.Cu",
+            "via_layer_from": "F.Cu",
+            "via_layer_to": "B.Cu"
+          }
+        ],
+        "via_prop_delay": 0
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 2000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS6",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [
+          {
+            "delay": 10000000,
+            "signal_layer_from": "F.Cu",
+            "signal_layer_to": "In1.Cu",
+            "via_layer_from": "F.Cu",
+            "via_layer_to": "In1.Cu"
+          },
+          {
+            "delay": 20000000,
+            "signal_layer_from": "F.Cu",
+            "signal_layer_to": "In1.Cu",
+            "via_layer_from": "F.Cu",
+            "via_layer_to": "In2.Cu"
+          }
+        ],
+        "via_prop_delay": 0
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "generate_drc_rules": false,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 1000000,
+            "diff_pair_gap": 0,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 0,
+            "diff_pair_gap": 0,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 0
+          }
+        ],
+        "profile_name": "CLASS7",
+        "target_impedance": 0.0,
+        "type": 0,
+        "via_overrides": [],
+        "via_prop_delay": 0
       }
     ]
   }

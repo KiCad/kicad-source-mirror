@@ -621,3 +621,58 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
+
+class TEXT_BUTTON_RUN_FUNCTION final : public wxComboCtrl
+{
+public:
+    TEXT_BUTTON_RUN_FUNCTION( wxWindow* aParent, DIALOG_SHIM* aParentDlg, std::function<void( int, int )>& aFunction,
+                              int& aRow, int& aCol ) :
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
+                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
+            m_dlg( aParentDlg ),
+            m_function( aFunction ),
+            m_row( aRow ),
+            m_col( aCol )
+    {
+        SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_refresh ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
+    }
+
+protected:
+    void DoSetPopupControl( wxComboPopup* popup ) override { m_popup = nullptr; }
+
+    void OnButtonClick() override { m_function( m_row, m_col ); }
+
+    DIALOG_SHIM* m_dlg;
+    std::function<void( int, int )>& m_function;
+    int&                             m_row;
+    int&                             m_col;
+};
+
+
+void GRID_CELL_RUN_FUNCTION_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler )
+{
+    m_control = new TEXT_BUTTON_RUN_FUNCTION( aParent, m_dlg, m_function, m_row, m_col );
+    WX_GRID::CellEditorSetMargins( Combo() );
+
+#if wxUSE_VALIDATORS
+    // validate text in textctrl, if validator is set
+    if( m_validator )
+    {
+        Combo()->SetValidator( *m_validator );
+    }
+#endif
+
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
+}
+
+
+void GRID_CELL_RUN_FUNCTION_EDITOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
+{
+    m_row = aRow;
+    m_col = aCol;
+
+    GRID_CELL_TEXT_BUTTON::BeginEdit( aRow, aCol, aGrid );
+}
