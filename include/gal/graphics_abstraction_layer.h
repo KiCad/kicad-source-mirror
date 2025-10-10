@@ -854,6 +854,9 @@ public:
     {
         VECTOR2D gridScreenSize( m_gridSize );
 
+        gridScreenSize = VECTOR2D( std::max( 1.0, gridScreenSize.x ),
+                                   std::max( 1.0, gridScreenSize.y ) );
+
         double gridThreshold = computeMinGridSpacing() / m_worldScale;
 
         if( m_gridStyle == GRID_STYLE::SMALL_CROSS )

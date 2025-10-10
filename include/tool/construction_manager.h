@@ -65,6 +65,9 @@ private:
  * This is a line that has a start point (the "snap origin") and an end point (the "snap end").
  * The end can only be set if the origin is set. If the origin is set, the end will be unset.
  */
+class SNAP_MANAGER;
+
+
 class SNAP_LINE_MANAGER
 {
 public:
@@ -120,14 +123,26 @@ public:
     OPT_VECTOR2I GetNearestSnapLinePoint( const VECTOR2I& aCursor, const VECTOR2I& aNearestGrid,
                                           std::optional<int> aDistToNearest, int snapRange ) const;
 
+    void SetDirections( const std::vector<VECTOR2I>& aDirections );
+
+    const std::vector<VECTOR2I>& GetDirections() const { return m_directions; }
+
+    std::optional<int> GetActiveDirection() const { return m_activeDirection; }
+
 private:
     // If a snap point is "active", extra construction geometry is added to the helper
     // extending from the snap point to the cursor.
     OPT_VECTOR2I m_snapLineOrigin;
     OPT_VECTOR2I m_snapLineEnd;
 
+    std::vector<VECTOR2I> m_directions;
+    std::optional<int>    m_activeDirection;
+
     // The view handler to update when the snap line changes
     CONSTRUCTION_VIEW_HANDLER& m_viewHandler;
+    SNAP_MANAGER*              m_snapManager;
+
+    void notifyGuideChange();
 };
 
 
@@ -157,9 +172,16 @@ public:
      */
     struct CONSTRUCTION_ITEM
     {
-        SOURCE                                          Source;
-        EDA_ITEM*                                       Item;
-        std::vector<KIGFX::CONSTRUCTION_GEOM::DRAWABLE> Constructions;
+        SOURCE    Source;
+        EDA_ITEM* Item;
+
+        struct DRAWABLE_ENTRY
+        {
+            KIGFX::CONSTRUCTION_GEOM::DRAWABLE Drawable;
+            int                                LineWidth = 1;
+        };
+
+        std::vector<DRAWABLE_ENTRY> Constructions;
     };
 
     // A single batch of construction items. Once batch contains all the items (and associated
@@ -253,6 +275,7 @@ public:
     void SetUpdateCallback( GFX_UPDATE_CALLBACK aCallback ) { m_updateCallback = aCallback; }
 
     SNAP_LINE_MANAGER& GetSnapLineManager() { return m_snapLineManager; }
+    const SNAP_LINE_MANAGER& GetSnapLineManager() const { return m_snapLineManager; }
 
     CONSTRUCTION_MANAGER& GetConstructionManager() { return m_constructionManager; }
 
@@ -275,6 +298,9 @@ public:
      */
     std::vector<CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH> GetConstructionItems() const;
 
+    void SetSnapGuideColors( const KIGFX::COLOR4D& aBase, const KIGFX::COLOR4D& aHighlight );
+    void UpdateSnapGuides();
+
 public:
     void updateView() override;
 
@@ -284,4 +310,6 @@ public:
     CONSTRUCTION_MANAGER m_constructionManager;
 
     std::vector<VECTOR2I> m_referenceOnlyPoints;
+    KIGFX::COLOR4D        m_snapGuideColor;
+    KIGFX::COLOR4D        m_snapGuideHighlightColor;
 };

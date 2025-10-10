@@ -76,6 +76,8 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetCoarseGrid( 10 );
     m_gridLineWidth = 0.5f;
     m_gridStyle = GRID_STYLE::LINES;
+    m_gridSize = VECTOR2D( 1.0, 1.0 );
+    m_gridOffset = VECTOR2D( 0.0, 0.0 );
     m_gridMinSpacing = 10;
 
     // Initialize the cursor shape

@@ -332,10 +332,16 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     controls->ForceCursorPosition( false );
 
     auto displayConstraintsMessage =
-            [editFrame]( bool constrained )
+            [editFrame]( bool aHV45Enabled )
             {
-                editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
-                                                              : wxString( wxT( "" ) ) );
+                wxString msg;
+
+                if( aHV45Enabled )
+                    msg = _( "Angle snap guides: H, V, 45°" );
+                else
+                    msg.clear();
+
+                editFrame->DisplayConstraintsMsg( msg );
             };
 
     auto updateStatusPopup =
@@ -441,7 +447,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2I        prevPos;
     bool            enableLocalRatsnest = true;
 
-    bool hv45Mode        = Is45Limited() && !evt->Modifier( MD_SHIFT );
+    bool hv45Enabled = Is45Limited();
     bool eatFirstMouseUp = true;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
@@ -456,7 +462,29 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         drc_on_move->Init( board );
     }
 
-    displayConstraintsMessage( hv45Mode );
+    auto configureAngleSnap =
+            [&]( bool aHV45Enabled )
+            {
+                std::vector<VECTOR2I> directions;
+
+                if( aHV45Enabled )
+                {
+                    // H, V, and both 45° diagonals
+                    directions = { VECTOR2I( 1, 0 ), VECTOR2I( 0, 1 ),
+                                   VECTOR2I( 1, 1 ), VECTOR2I( 1, -1 ) };
+                }
+                // Not enabled = no directions = no guides
+
+                grid.SetSnapLineDirections( directions );
+
+                if( !directions.empty() )
+                    grid.SetSnapLineOrigin( originalPos );
+                else
+                    grid.ClearSnapLine();
+            };
+
+    configureAngleSnap( hv45Enabled );
+    displayConstraintsMessage( hv45Enabled );
 
     // Prime the pump
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -505,12 +533,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
-
-                if( hv45Mode )
-                {
-                    VECTOR2I moveVector = m_cursor - originalPos;
-                    m_cursor = originalPos + GetVectorSnapped45( moveVector );
-                }
 
                 if( updateBBox )
                 {
@@ -611,12 +633,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
 
-                    if( hv45Mode )
-                    {
-                        VECTOR2I moveVector = m_cursor - originalPos;
-                        m_cursor = originalPos + GetVectorSnapped45( moveVector );
-                    }
-
                     movement = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
@@ -665,6 +681,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( moveWithReference )
                     {
                         selection.SetReferencePoint( pickedReferencePoint );
+
+                        if( hv45Enabled )
+                            grid.SetSnapLineOrigin( selection.GetReferencePoint() );
+
                         controls->ForceCursorPosition( true, pickedReferencePoint );
                         m_cursor = pickedReferencePoint;
                     }
@@ -685,6 +705,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         }
 
                         selection.SetReferencePoint( snapped );
+
+                        if( hv45Enabled )
+                            grid.SetSnapLineOrigin( selection.GetReferencePoint() );
+
                         grid.SetAuxAxes( true, snapped );
 
                         if( !editFrame->GetMoveWarpsCursor() )
@@ -769,6 +793,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     originalPos = nextItem->GetPosition();
                     m_selectionTool->AddItemToSel( nextItem );
                     selection.SetReferencePoint( originalPos );
+                    if( hv45Enabled )
+                        grid.SetSnapLineOrigin( selection.GetReferencePoint() );
 
                     sel_items.clear();
                     sel_items.push_back( nextItem );
@@ -794,8 +820,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
-            hv45Mode = Is45Limited();
-            displayConstraintsMessage( hv45Mode );
+            hv45Enabled = Is45Limited();
+            configureAngleSnap( hv45Enabled );
+            displayConstraintsMessage( hv45Enabled );
             evt->SetPassEvent( false );
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
