@@ -29,6 +29,11 @@
 #include <board_item.h>
 #include <board_item_container.h>
 
+namespace KIGFX
+{
+class RENDER_SETTINGS;
+};
+
 
 class PCB_TABLE : public BOARD_ITEM_CONTAINER
 {
@@ -218,6 +223,12 @@ public:
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aMaxError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;
+
+    /**
+     * Convert graphic items (segments and texts) to a set of polygonal shapes
+     */
+    void TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMaxError, ERROR_LOC aErrorLoc,
+                                    KIGFX::RENDER_SETTINGS* aRenderSettings ) const;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
