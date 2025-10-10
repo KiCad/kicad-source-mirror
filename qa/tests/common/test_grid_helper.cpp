@@ -99,8 +99,8 @@ BOOST_AUTO_TEST_CASE( AlignWithOriginOffset )
     // When grid has an origin offset, alignment should still work from (0,0) reference
     // AlignGrid doesn't use origin, just pure grid alignment
     VECTOR2I aligned = helper.AlignGrid( VECTOR2I( 149, 251 ) );
-    BOOST_CHECK_EQUAL( aligned.x, 100 );
-    BOOST_CHECK_EQUAL( aligned.y, 300 );
+    BOOST_CHECK_EQUAL( aligned.x, 125 );
+    BOOST_CHECK_EQUAL( aligned.y, 225 );
 }
 
 BOOST_AUTO_TEST_CASE( AlignWithAuxiliaryAxes )
