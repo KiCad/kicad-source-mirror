@@ -29,6 +29,8 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
 #include <geometry/geometry_utils.h>
+#include <convert_basic_shapes_to_polygon.h>
+#include <pcb_painter.h>    // for PCB_RENDER_SETTINGS
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -436,6 +438,47 @@ void PCB_TABLE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
 
     for( PCB_TABLECELL* cell : m_cells )
         cell->TransformShapeToPolygon( aBuffer, aLayer, gap, aMaxError, aErrorLoc, false );
+}
+
+
+void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMaxError, ERROR_LOC aErrorLoc,
+                                                KIGFX::RENDER_SETTINGS* aRenderSettings ) const
+{
+    // Convert graphic items (segments and texts) to a set of polygonal shapes
+    DrawBorders(
+            [&aBuffer, aMaxError, aErrorLoc, aRenderSettings]
+                        ( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
+            {
+                int        lineWidth = stroke.GetWidth();
+                LINE_STYLE lineStyle = stroke.GetLineStyle();
+
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                    TransformOvalToPolygon( aBuffer, ptA, ptB, lineWidth, aMaxError, aErrorLoc );
+                else
+                {
+                    SHAPE_SEGMENT seg( ptA, ptB );
+                    KIGFX::PCB_RENDER_SETTINGS defaultRenderSettings;
+
+                    KIGFX::RENDER_SETTINGS* currSettings = aRenderSettings;
+
+                    if( currSettings == nullptr )
+                        currSettings = &defaultRenderSettings;
+
+                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, currSettings,
+                            [&]( VECTOR2I a, VECTOR2I b )
+                            {
+                                if( a == b )
+                                    TransformCircleToPolygon( aBuffer, a, lineWidth/2, aMaxError, aErrorLoc );
+                                else
+                                    TransformOvalToPolygon( aBuffer, a+1, b, lineWidth, aMaxError, aErrorLoc );
+                            } );
+                }
+            } );
+
+    for( PCB_TABLECELL* cell : m_cells )
+    {
+        cell->TransformTextToPolySet( aBuffer, 0, aMaxError, ERROR_INSIDE );
+    }
 }
 
 

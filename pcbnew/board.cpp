@@ -3196,7 +3196,8 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 
 
 void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
-                                                SHAPE_POLY_SET& aOutlines ) const
+                                                SHAPE_POLY_SET& aOutlines,
+                                                KIGFX::RENDER_SETTINGS* aRenderSettings ) const
 {
     int maxError = GetDesignSettings().m_MaxError;
 
@@ -3276,7 +3277,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_TABLE_T:
         {
             const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
-            table->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
+            table->TransformGraphicItemsToPolySet( aOutlines, maxError, ERROR_INSIDE, aRenderSettings );
             break;
         }
 

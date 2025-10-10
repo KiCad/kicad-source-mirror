@@ -851,7 +851,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
     for( PCB_LAYER_ID layer : aLayerMask.Seq( aLayerMask.SeqStackupForPlotting() ) )
     {
         outlines.RemoveAllContours();
-        aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
+        aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines, aPlotter->RenderSettings() );
 
         outlines.Simplify();
 

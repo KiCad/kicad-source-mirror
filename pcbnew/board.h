@@ -69,6 +69,11 @@ class PROJECT;
 class PROGRESS_REPORTER;
 class PCB_BOARD_OUTLINE;
 
+namespace KIGFX
+{
+class RENDER_SETTINGS;
+};
+
 
 namespace KIFONT
 {
@@ -812,8 +817,11 @@ public:
      *
      * @param aLayer is a copper layer, like B_Cu, etc.
      * @param aOutlines is the SHAPE_POLY_SET to fill in with items outline.
+     * @param aRenderSettings is used to convert a SHAPE_SEGMENT when not a simple segment.
+     * if not specified, a default setting will be used
      */
-    void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines ) const;
+    void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines,
+                                             KIGFX::RENDER_SETTINGS* aRenderSettings = nullptr ) const;
 
     /**
      * Return the ID of a layer.
