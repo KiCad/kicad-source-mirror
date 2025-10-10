@@ -1889,7 +1889,7 @@ bool SHAPE_POLY_SET::isExteriorWaist( const SEG& aSegA, const SEG& aSegB ) const
     // Create perpendicular offset vector to check both sides
     VECTOR2I segDir = e - s;
 
-    if( segDir.EuclideanNorm() > 0 )
+    if( segDir.EuclideanNorm() > 25 )
     {
         VECTOR2I perp = segDir.Perpendicular().Resize( 10 );
 
@@ -1900,7 +1900,12 @@ bool SHAPE_POLY_SET::isExteriorWaist( const SEG& aSegA, const SEG& aSegB ) const
         // Only return true if both sides are outside the polygon
         // This is the case for non-fractured segments
         if( !side1 && !side2 )
+        {
+            wxLogTrace( wxT( "collinear" ), wxT( "Found exterior waist between (%d,%d)-(%d,%d) and (%d,%d)-(%d,%d)" ),
+                        aSegA.A.x, aSegA.A.y, aSegA.B.x, aSegA.B.y,
+                        aSegB.A.x, aSegB.A.y, aSegB.B.x, aSegB.B.y );
             return true;
+        }
     }
 
     return false;
