@@ -229,16 +229,32 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
         otherNet = connectedItem->GetNet();
 
-    std::shared_ptr<SHAPE> otherShapeStorage = other->GetEffectiveShape( layer );
-    SHAPE* otherShape = otherShapeStorage.get();
+    std::shared_ptr<SHAPE> otherShape_shared_ptr;
 
     if( other->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( other );
 
-        if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
-            testClearance = testShorting = false;
+        if( !pad->FlashLayer( layer ) )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                testClearance = testShorting = false;
+
+            otherShape_shared_ptr = pad->GetEffectiveHoleShape();
+        }
     }
+    else if( other->Type() == PCB_VIA_T )
+    {
+        PCB_VIA* via = static_cast<PCB_VIA*>( other );
+
+        if( !via->FlashLayer( layer ) )
+            otherShape_shared_ptr = via->GetEffectiveHoleShape();
+    }
+
+    if( !otherShape_shared_ptr )
+        otherShape_shared_ptr = other->GetEffectiveShape( layer );
+
+    SHAPE* otherShape = otherShape_shared_ptr.get();
 
     if( testClearance || testShorting )
     {
