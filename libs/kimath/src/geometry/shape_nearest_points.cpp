@@ -497,9 +497,6 @@ static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_CIRCLE& aCircl
         // Adjust point A by half the segment width towards point B
         VECTOR2I dir = ( aPtB - aPtA ).Resize( aSeg.GetWidth() / 2 );
         aPtA += dir;
-        // Adjust point B by half the circle stroke-width towards point A
-        dir = ( aPtA - aPtB ).Resize( aCircle.GetWidth() / 2 );
-        aPtB += dir;
         return true;
     }
 
@@ -513,9 +510,6 @@ static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_RECT& aRect, V
         // Adjust point A by half the segment width towards point B
         VECTOR2I dir = ( aPtB - aPtA ).Resize( aSeg.GetWidth() / 2 );
         aPtA += dir;
-        // Adjust point B by half the rect stroke-width towards point A
-        dir = ( aPtA - aPtB ).Resize( aRect.GetWidth() / 2 );
-        aPtB += dir;
         return true;
     }
 
