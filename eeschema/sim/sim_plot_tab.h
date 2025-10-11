@@ -409,6 +409,8 @@ private:
     ///< Create/Ensure axes are available for plotting
     void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
+    void UpdateAxisVisibility();
+
 private:
     SIM_PLOT_COLORS              m_colors;
     std::map<wxString, wxColour> m_sessionTraceColors;

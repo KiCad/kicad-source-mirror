@@ -878,6 +878,8 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
 
     if( m_axis_y3 )
         m_axis_y3->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+
+    UpdateAxisVisibility();
 }
 
 
@@ -1141,6 +1143,59 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
         if( cursor )
             cursor->SetCoordX( cursor->GetCoords().x );
     }
+
+    UpdateAxisVisibility();
+}
+
+
+void SIM_PLOT_TAB::UpdateAxisVisibility()
+{
+    bool hasY1Traces = false;
+    bool hasY2Traces = false;
+    bool hasY3Traces = false;
+
+    for( const auto& [ name, trace ] : m_traces )
+    {
+        if( !trace )
+            continue;
+
+        if( trace->GetType() & SPT_POWER )
+        {
+            hasY3Traces = true;
+        }
+        else if( ( trace->GetType() & SPT_AC_PHASE )
+                 || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+        {
+            hasY2Traces = true;
+        }
+        else
+        {
+            hasY1Traces = true;
+        }
+    }
+
+    bool visibilityChanged = false;
+
+    if( m_axis_y1 && m_axis_y1->IsVisible() != hasY1Traces )
+    {
+        m_axis_y1->SetVisible( hasY1Traces );
+        visibilityChanged = true;
+    }
+
+    if( m_axis_y2 && m_axis_y2->IsVisible() != hasY2Traces )
+    {
+        m_axis_y2->SetVisible( hasY2Traces );
+        visibilityChanged = true;
+    }
+
+    if( m_axis_y3 && m_axis_y3->IsVisible() != hasY3Traces )
+    {
+        m_axis_y3->SetVisible( hasY3Traces );
+        visibilityChanged = true;
+    }
+
+    if( visibilityChanged )
+        m_plotWin->UpdateAll();
 }
 
 
@@ -1163,6 +1218,7 @@ void SIM_PLOT_TAB::DeleteTrace( TRACE* aTrace )
 
     m_plotWin->DelLayer( aTrace, true, true );
     ResetScales( false );
+    UpdateAxisVisibility();
 }
 
 
