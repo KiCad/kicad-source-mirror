@@ -38,6 +38,9 @@
 #include <view/view.h>
 #include <view/view_overlay.h>
 #include <gal/color4d.h>
+#include <layer_ids.h>
+#include <settings/color_settings.h>
+#include <eeschema_settings.h>
 
 SCH_DRAG_NET_COLLISION_MONITOR::SCH_DRAG_NET_COLLISION_MONITOR( SCH_EDIT_FRAME* aFrame,
                                                                 KIGFX::VIEW* aView ) :
@@ -142,17 +145,43 @@ bool SCH_DRAG_NET_COLLISION_MONITOR::Update( const std::vector<SCH_JUNCTION*>& a
 
     wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Drawing %zu collision markers", markers.size() );
 
+    COLOR4D baseColor( 1.0, 0.0, 0.0, 0.8 );
+
+    if( COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings() )
+    {
+        COLOR4D themeColor = colorSettings->GetColor( LAYER_DRAG_NET_COLLISION );
+
+        if( themeColor != COLOR4D::UNSPECIFIED )
+            baseColor = themeColor;
+    }
+
+    double baseAlpha = baseColor.a;
+
+    if( baseAlpha <= 0.0 )
+        baseAlpha = 1.0;
+
+    double fillAlpha = std::clamp( baseAlpha * 0.35, 0.05, 1.0 );
+    double strokeAlpha = std::clamp( baseAlpha, 0.05, 1.0 );
+
     m_overlay->SetIsFill( true );
-    m_overlay->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 0.25 ) );
+    m_overlay->SetFillColor( baseColor.WithAlpha( fillAlpha ) );
     m_overlay->SetIsStroke( true );
-    m_overlay->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 0.7 ) );
+    m_overlay->SetStrokeColor( baseColor.WithAlpha( strokeAlpha ) );
+
+    int lineWidthPixels = 4;
+
+    if( EESCHEMA_SETTINGS* cfg = m_frame->eeconfig() )
+        lineWidthPixels = std::max( cfg->m_Selection.drag_net_collision_width, 1 );
+
+    double lineWidth = m_view->ToWorld( lineWidthPixels );
+
+    if( lineWidth <= 0.0 )
+        lineWidth = 1.0;
+
+    m_overlay->SetLineWidth( lineWidth );
 
     for( const COLLISION_MARKER& marker : markers )
-    {
-        double lineWidth = std::max( marker.radius * 0.3, 1.0 );
-        m_overlay->SetLineWidth( lineWidth );
         m_overlay->Circle( marker.position, marker.radius );
-    }
 
     m_view->Update( m_overlay.get() );
     m_hasCollision = true;
@@ -217,6 +246,9 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
 
     std::unordered_set<int> allNetCodes;
     std::unordered_set<int> movedNetCodes;
+    std::unordered_set<int> originalNetCodes;
+    std::unordered_set<int> movedOriginalNetCodes;
+    std::unordered_set<int> stationaryOriginalNetCodes;
 
     auto accumulateNet = [&]( SCH_ITEM* item )
     {
@@ -241,7 +273,12 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
         }
 
         auto previewIt = aPreviewNetCodes.find( item );
+        auto originalIt = m_itemNetCodes.find( item );
         std::optional<int> netCodeOpt;
+        std::optional<int> originalNetOpt;
+
+        if( originalIt != m_itemNetCodes.end() )
+            originalNetOpt = originalIt->second;
 
         if( previewIt != aPreviewNetCodes.end() )
         {
@@ -250,26 +287,34 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
                         item, item->GetClass().c_str(),
                         netCodeOpt.has_value() ? std::to_string( *netCodeOpt ).c_str() : "none" );
         }
+        else if( originalIt != m_itemNetCodes.end() )
+        {
+            netCodeOpt = originalIt->second;
+            wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) using cached net %s",
+                        item, item->GetClass().c_str(),
+                        netCodeOpt.has_value() ? std::to_string( *netCodeOpt ).c_str() : "none" );
+        }
         else
         {
-            auto it = m_itemNetCodes.find( item );
-
-            if( it != m_itemNetCodes.end() )
-            {
-                netCodeOpt = it->second;
-                wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) using cached net %s",
-                            item, item->GetClass().c_str(),
-                            netCodeOpt.has_value() ? std::to_string( *netCodeOpt ).c_str() : "none" );
-            }
-            else
-            {
-                wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) has no net code",
-                            item, item->GetClass().c_str() );
-            }
+            wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) has no net code",
+                        item, item->GetClass().c_str() );
         }
+
+        bool isSelectionItem = item->IsSelected() || aSelection.Contains( item );
+        bool isMoved = ( previewIt != aPreviewNetCodes.end() ) || isSelectionItem;
 
         if( !netCodeOpt )
         {
+            if( originalNetOpt )
+            {
+                originalNetCodes.insert( *originalNetOpt );
+
+                if( isSelectionItem )
+                    movedOriginalNetCodes.insert( *originalNetOpt );
+                else
+                    stationaryOriginalNetCodes.insert( *originalNetOpt );
+            }
+
             wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) netCode is nullopt",
                         item, item->GetClass().c_str() );
             return;
@@ -278,15 +323,21 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
         int netCode = *netCodeOpt;
         allNetCodes.insert( netCode );
 
-        bool isMoved = ( previewIt != aPreviewNetCodes.end()
-                         || item->IsSelected()
-                         || aSelection.Contains( item ) );
-
         wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  accumulateNet: item %p (%s) net %d, moved=%s",
                     item, item->GetClass().c_str(), netCode, isMoved ? "yes" : "no" );
 
         if( isMoved )
             movedNetCodes.insert( netCode );
+
+        if( originalNetOpt )
+        {
+            originalNetCodes.insert( *originalNetOpt );
+
+            if( isSelectionItem )
+                movedOriginalNetCodes.insert( *originalNetOpt );
+            else
+                stationaryOriginalNetCodes.insert( *originalNetOpt );
+        }
     };
 
     wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "analyzeJunction: Checking items overlapping position" );
@@ -316,6 +367,26 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
             wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  - Net %d", netCode );
     }
 
+    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION",
+                "analyzeJunction: Original nets=%zu, moved originals=%zu, stationary originals=%zu",
+                originalNetCodes.size(), movedOriginalNetCodes.size(), stationaryOriginalNetCodes.size() );
+
+    if( !movedOriginalNetCodes.empty() )
+    {
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "analyzeJunction: Moved original nets:" );
+
+        for( int netCode : movedOriginalNetCodes )
+            wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  - Net %d", netCode );
+    }
+
+    if( !stationaryOriginalNetCodes.empty() )
+    {
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "analyzeJunction: Stationary original nets:" );
+
+        for( int netCode : stationaryOriginalNetCodes )
+            wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  - Net %d", netCode );
+    }
+
     if( allNetCodes.size() >= 2 )
     {
         wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "analyzeJunction: All nets at junction:" );
@@ -324,11 +395,39 @@ std::optional<SCH_DRAG_NET_COLLISION_MONITOR::COLLISION_MARKER> SCH_DRAG_NET_COL
             wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "  - Net %d", netCode );
     }
 
-    if( movedNetCodes.empty() || allNetCodes.size() < 2 )
+    bool previewCollision = !movedNetCodes.empty() && allNetCodes.size() >= 2;
+
+    bool originalCollision = false;
+
+    if( !movedOriginalNetCodes.empty() && !stationaryOriginalNetCodes.empty() )
+    {
+        for( int movedNet : movedOriginalNetCodes )
+        {
+            for( int stationaryNet : stationaryOriginalNetCodes )
+            {
+                if( movedNet != stationaryNet )
+                {
+                    originalCollision = true;
+                    break;
+                }
+            }
+
+            if( originalCollision )
+                break;
+        }
+    }
+
+    if( !previewCollision && !originalCollision )
     {
         wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "analyzeJunction: No collision (movedNets=%zu, allNets=%zu)",
                     movedNetCodes.size(), allNetCodes.size() );
         return std::nullopt;
+    }
+
+    if( originalCollision && !previewCollision )
+    {
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION",
+                    "analyzeJunction: Original net mismatch detected under moved endpoints" );
     }
 
     COLLISION_MARKER marker;

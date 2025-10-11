@@ -195,6 +195,7 @@ public:
         bool highlight_netclass_colors;
         int    highlight_netclass_colors_thickness;
         double highlight_netclass_colors_alpha;
+        int  drag_net_collision_width;
     };
 
     struct PAGE_SETTINGS

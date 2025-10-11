@@ -185,12 +185,20 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_selWidthCtrl->SetDigits( 0 );
 	gbSizer1->Add( m_selWidthCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	m_highlightColorNote = new wxStaticText( this, wxID_ANY, _("(selection color can be edited in the \"Colors\" page)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_highlightColorNote->Wrap( -1 );
-	gbSizer1->Add( m_highlightColorNote, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
+        m_highlightColorNote = new wxStaticText( this, wxID_ANY, _("(selection color can be edited in the \"Colors\" page)"), wxDefaultPosition, wxDefaultSize, 0 );
+        m_highlightColorNote->Wrap( -1 );
+        gbSizer1->Add( m_highlightColorNote, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
 
-	m_highlightWidthLabel = new wxStaticText( this, wxID_ANY, _("Highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_highlightWidthLabel->Wrap( -1 );
+        m_collisionMarkerWidthLabel = new wxStaticText( this, wxID_ANY, _("Net collision marker width:"), wxDefaultPosition, wxDefaultSize, 0 );
+        m_collisionMarkerWidthLabel->Wrap( -1 );
+        gbSizer1->Add( m_collisionMarkerWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+        m_collisionMarkerWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 1, 50, 4.000000, 1 );
+        m_collisionMarkerWidthCtrl->SetDigits( 0 );
+        gbSizer1->Add( m_collisionMarkerWidthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+        m_highlightWidthLabel = new wxStaticText( this, wxID_ANY, _("Highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+        m_highlightWidthLabel->Wrap( -1 );
 	gbSizer1->Add( m_highlightWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_highlightWidthCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 2.000000, 1 );

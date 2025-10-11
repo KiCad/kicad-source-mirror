@@ -419,6 +419,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<double>( "selection.highlight_netclass_colors_alpha",
             &m_Selection.highlight_netclass_colors_alpha, 0.6, 0, 1 ) );
 
+    m_params.emplace_back( new PARAM<int>( "selection.drag_net_collision_width",
+            &m_Selection.drag_net_collision_width, 4, 1, 50 ) );
+
     m_params.emplace_back( new PARAM<bool>( "annotation.automatic",
             &m_AnnotatePanel.automatic, true ) );
 

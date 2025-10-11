@@ -66,6 +66,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkSelDrawChildItems->SetValue( cfg->m_Selection.draw_selected_children );
     m_checkSelFillShapes->SetValue( cfg->m_Selection.fill_shapes );
     m_selWidthCtrl->SetValue( cfg->m_Selection.selection_thickness );
+    m_collisionMarkerWidthCtrl->SetValue( cfg->m_Selection.drag_net_collision_width );
     m_highlightWidthCtrl->SetValue( cfg->m_Selection.highlight_thickness );
     m_highlightNetclassColors->SetValue( cfg->m_Selection.highlight_netclass_colors );
     m_colHighlightThickness->SetValue( cfg->m_Selection.highlight_netclass_colors_thickness );
@@ -109,6 +110,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
         cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
         cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );
+        cfg->m_Selection.drag_net_collision_width = KiROUND( m_collisionMarkerWidthCtrl->GetValue() );
         cfg->m_Selection.highlight_thickness = KiROUND( m_highlightWidthCtrl->GetValue() );
         cfg->m_Selection.highlight_netclass_colors = m_highlightNetclassColors->GetValue();
         cfg->m_Selection.highlight_netclass_colors_thickness = m_colHighlightThickness->GetValue();

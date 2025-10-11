@@ -63,11 +63,13 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_selectionLabel;
 		wxStaticLine* m_staticline2;
 		wxCheckBox* m_checkSelDrawChildItems;
-		wxCheckBox* m_checkSelFillShapes;
-		wxStaticText* m_selWidthLabel;
-		wxSpinCtrlDouble* m_selWidthCtrl;
-		wxStaticText* m_highlightColorNote;
-		wxStaticText* m_highlightWidthLabel;
+                wxCheckBox* m_checkSelFillShapes;
+                wxStaticText* m_selWidthLabel;
+                wxSpinCtrlDouble* m_selWidthCtrl;
+                wxStaticText* m_collisionMarkerWidthLabel;
+                wxSpinCtrlDouble* m_collisionMarkerWidthCtrl;
+                wxStaticText* m_highlightColorNote;
+                wxStaticText* m_highlightWidthLabel;
 		wxSpinCtrlDouble* m_highlightWidthCtrl;
 		wxCheckBox* m_highlightNetclassColors;
 		wxStaticText* m_colorHighlightLabel;
