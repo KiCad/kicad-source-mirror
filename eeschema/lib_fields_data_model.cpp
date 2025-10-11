@@ -965,8 +965,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             // Remove any fields that are not in the fieldStore
             if( !fieldStore.contains( field->GetName() ) )
             {
+                // RemoveField() will automatically delete the field since it's stored in a
+                // boost::ptr_vector which manages object lifetime
                 symbol->RemoveField( field );
-                delete field;
             }
         }
     }
