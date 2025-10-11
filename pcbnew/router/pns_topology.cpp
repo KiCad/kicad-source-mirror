@@ -293,8 +293,8 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
     if( aTerminalJointB )
         *aTerminalJointB = right.m_end;
 
-    for( int i = left.m_items.Size() - 1; i >= 0; i-- )
-        path.Prepend( left.m_items[i] );
+    for( ITEM* item : left.m_items )
+        path.Prepend( item );
 
     for( ITEM* item : right.m_items )
         path.Add( item );
