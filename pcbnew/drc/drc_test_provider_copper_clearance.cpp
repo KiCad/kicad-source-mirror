@@ -176,6 +176,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
         testGraphicClearances();
     }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking copper graphic hole clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        testGraphicClearances();
+    }
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
     {
@@ -217,7 +224,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
         net = connectedItem->GetNet();
 
-    NETINFO_ITEM*  trackNet = net;
+    NETINFO_ITEM*  itemNet = net;
 
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
         otherNet = connectedItem->GetNet();
@@ -273,24 +280,24 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
         if( itemShape->Collide( otherShape, clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            if( trackNet && m_drcEngine->IsNetTieExclusion( trackNet->GetNetCode(), layer, pos, other ) )
+            if( itemNet && m_drcEngine->IsNetTieExclusion( itemNet->GetNetCode(), layer, pos, other ) )
             {
                 // Collision occurred as track was entering a pad marked as a net-tie.  We
                 // allow these.
             }
             else if( actual == 0 && otherNet && testShorting )
             {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 wxString msg;
 
                 msg.Printf( _( "(nets %s and %s)" ),
                             net ? net->GetNetname() : _( "<no net>" ),
                             otherNet ? otherNet->GetNetname() : _( "<no net>" ) );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( item, other );
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetItems( item, other );
 
-                reportViolation( drce, pos, layer );
+                reportViolation( drcItem, pos, layer );
                 has_error = true;
 
                 if( !m_drcEngine->GetReportAllTrackErrors() )
@@ -298,17 +305,17 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             }
             else if( testClearance )
             {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                 wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                           constraint.GetName(),
                                           clearance,
                                           actual );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( item, other );
-                drce->SetViolatingRule( constraint.GetParentRule() );
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetItems( item, other );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportAndShowPathCuToCu( drce, pos, layer, item, other, layer, actual );
+                ReportAndShowPathCuToCu( drcItem, pos, layer, item, other, layer, actual );
                 has_error = true;
 
                 if( !m_drcEngine->GetReportAllTrackErrors() )
@@ -319,30 +326,34 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
     if( testHoles && ( item->HasHole() || other->HasHole() ) )
     {
-        std::array<BOARD_ITEM*, 2> a{ item, other };
-        std::array<BOARD_ITEM*, 2> b{ other, item };
-        std::array<SHAPE*, 2>      a_shape{ itemShape, otherShape };
+        std::array<BOARD_ITEM*, 2>   a{ item, other };
+        std::array<BOARD_ITEM*, 2>   b{ other, item };
+        std::array<NETINFO_ITEM*, 2> b_net{ otherNet, itemNet };
+        std::array<SHAPE*, 2>        a_shape{ itemShape, otherShape };
 
         for( size_t ii = 0; ii < 2; ++ii )
         {
             std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
-            // We only test a track item here against an item with a hole.
-            // If either case is not valid, simply move on
-            if( !( dynamic_cast<PCB_TRACK*>( a[ii] ) ) || !b[ii]->HasHole() )
-            {
-                continue;
-            }
-
             if( b[ii]->Type() == PCB_VIA_T )
             {
                 if( b[ii]->GetLayerSet().Contains( layer ) )
                     holeShape = b[ii]->GetEffectiveHoleShape();
+                else
+                    continue;
             }
             else
             {
-                holeShape = b[ii]->GetEffectiveHoleShape();
+                if( b[ii]->HasHole() )
+                    holeShape = b[ii]->GetEffectiveHoleShape();
+                else
+                    continue;
             }
+
+            int netcode = b_net[ii] ? b_net[ii]->GetNetCode() : 0;
+
+            if( netcode && m_drcEngine->IsNetTieExclusion( netcode, layer, holeShape->Centre(), a[ii] ) )
+                continue;
 
             constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
             clearance = constraint.GetValue().Min();
@@ -354,18 +365,18 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
                 if( a_shape[ii]->Collide( holeShape.get(), std::max( 0, clearance - m_drcEpsilon ),
                                           &actual, &pos ) )
                 {
-                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                     wxString msg = formatMsg( clearance ? _( "(%s clearance %s; actual %s)" )
                                                         : _( "(%s clearance %s; actual < 0)" ),
                                               constraint.GetName(),
                                               clearance,
                                               actual );
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    drce->SetItems( a[ii], b[ii] );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( a[ii], b[ii] );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportAndShowPathCuToCu( drce, pos, layer, a[ii], b[ii], layer, actual );
+                    ReportAndShowPathCuToCu( drcItem, pos, layer, a[ii], b[ii], layer, actual );
                     return false;
                 }
             }
@@ -472,16 +483,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
         if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
                                       std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
             wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       clearance,
                                       actual );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( aItem, aZone );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, aLayer, aItem, aZone, aLayer, actual );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetItems( aItem, aZone );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
+            ReportAndShowPathCuToCu( drcItem, pos, aLayer, aItem, aZone, aLayer, actual );
         }
     }
 
@@ -510,16 +521,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                                               std::max( 0, clearance - m_drcEpsilon ),
                                               &actual, &pos ) )
                 {
-                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                     wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                               constraint.GetName(),
                                               clearance,
                                               actual );
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    drce->SetItems( aItem, aZone );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
-                    ReportAndShowPathCuToCu( drce, pos, aLayer, aItem, aZone, aLayer, actual );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( aItem, aZone );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    ReportAndShowPathCuToCu( drcItem, pos, aLayer, aItem, aZone, aLayer, actual );
                 }
             }
         }
@@ -581,29 +592,29 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
         if( zoneTree->QueryColliding( itemBBox, itemShape.get(), layer,
                                       std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
-            std::shared_ptr<DRC_ITEM> drce;
+            std::shared_ptr<DRC_ITEM> drcItem;
             wxString                  msg;
 
             if( testShorts && actual == 0 && *aInheritedNet )
             {
-                drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 msg.Printf( _( "(nets %s and %s)" ),
                               ( *aInheritedNet )->GetNetname(),
                               aZone->GetNetname() );
             }
             else
             {
-                drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                 msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                  constraint.GetName(),
                                  clearance,
                                  actual );
             }
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( aText, aZone );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, layer, aText, aZone, layer, actual );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetItems( aText, aZone );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
+            ReportAndShowPathCuToCu( drcItem, pos, layer, aText, aZone, layer, actual );
         }
     }
 }
@@ -777,8 +788,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testClearance = testShorting = false;
     }
 
-    PAD*     otherPad = nullptr;
-    PCB_VIA* otherVia = nullptr;
+    BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+    PAD*                  otherPad = nullptr;
+    PCB_VIA*              otherVia = nullptr;
 
     if( other->Type() == PCB_PAD_T )
         otherPad = static_cast<PAD*>( other );
@@ -800,11 +812,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( dynamic_cast<PCB_TRACK*>( other) )
         testClearance = testShorting = false;
 
-    int padNet = pad->GetNetCode();
-    int otherNet = 0;
+    // Graphic clearances are tested in testGraphicClearances()
+    if( dynamic_cast<PCB_SHAPE*>( other ) )
+        testClearance = testShorting = false;
 
-    if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
-        otherNet = connectedItem->GetNetCode();
+    int padNet = pad->GetNetCode();
+    int otherNet = otherCItem ? otherCItem->GetNetCode() : 0;
 
     // Other objects of the same (defined) net get a waiver on clearance and hole tests
     if( otherNet && otherNet == padNet )
@@ -830,6 +843,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     VECTOR2I               pos;
     bool                   has_error = false;
 
+    auto sub_e = [this]( int clearance )
+                 {
+                     return std::max( 0, clearance - m_drcEpsilon );
+                 };
+
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )
     {
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
@@ -846,17 +864,17 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 return true;
             }
 
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
             wxString msg;
 
             msg.Printf( _( "(nets %s and %s)" ),
                         pad->GetNetname(),
                         otherPad->GetNetname() );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, otherPad );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetItems( pad, otherPad );
 
-            reportViolation( drce, otherPad->GetPosition(), aLayer );
+            reportViolation( drcItem, otherPad->GetPosition(), aLayer );
             has_error = true;
         }
 
@@ -870,8 +888,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
         {
-            if( padShape->Collide( otherShape.get(), std::max( 0, clearance - m_drcEpsilon ),
-                                   &actual, &pos ) )
+            if( padShape->Collide( otherShape.get(), sub_e( clearance ), &actual, &pos ) )
             {
                 if( m_drcEngine->IsNetTieExclusion( pad->GetNetCode(), aLayer, pos, other ) )
                 {
@@ -880,32 +897,30 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 }
                 else if( actual == 0 && padNet && otherNet && testShorting )
                 {
-                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-                    wxString msg;
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                    wxString msg = wxString::Format( _( "(nets %s and %s)" ),
+                                                     pad->GetNetname(),
+                                                     otherCItem->GetNetname() );
 
-                    msg.Printf( _( "(nets %s and %s)" ),
-                                pad->GetNetname(),
-                                static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetname() );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( pad, other );
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    drce->SetItems( pad, other );
-
-                    reportViolation( drce, pos, aLayer );
+                    reportViolation( drcItem, pos, aLayer );
                     has_error = true;
                     testHoles = false;  // No need for multiple violations
                 }
                 else if( testClearance )
                 {
-                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                     wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                               constraint.GetName(),
                                               clearance,
                                               actual );
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                    drce->SetItems( pad, other );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
-                    ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( pad, other );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    ReportAndShowPathCuToCu( drcItem, pos, aLayer, pad, other, aLayer, actual );
                     has_error = true;
                     testHoles = false;  // No need for multiple violations
                 }
@@ -913,76 +928,54 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         }
     }
 
+    auto doTestHole =
+            [&]( BOARD_ITEM* item, SHAPE* shape, BOARD_ITEM* otherItem, SHAPE* otherShape, int clearance )
+            {
+                if( shape->Collide( otherShape, sub_e( clearance ), &actual, &pos ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              clearance,
+                                              actual );
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( item, otherItem );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    ReportAndShowPathCuToCu( drcItem, pos, aLayer, item, otherItem, aLayer, actual );
+                    has_error = true;
+                    testHoles = false;  // No need for multiple violations
+                }
+            };
+
     if( testHoles )
     {
         constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, pad, other, aLayer );
-        clearance = constraint.GetValue().Min();
 
         if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
             testHoles = false;
     }
 
-    if( testHoles && otherPad && pad->FlashLayer( aLayer ) && otherPad->HasHole() )
+    if( testHoles && otherPad && otherPad->HasHole() )
     {
-        if( clearance > 0 && padShape->Collide( otherPad->GetEffectiveHoleShape().get(),
-                                                std::max( 0, clearance - m_drcEpsilon ),
-                                                &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
+        clearance = constraint.GetValue().Min();
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, other, aLayer, actual );
-            has_error = true;
-            testHoles = false;  // No need for multiple violations
-        }
+        if( !pad->FlashLayer( aLayer ) )
+            clearance = 0;
+
+        if( clearance > 0 )
+            doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape().get(), clearance );
     }
 
-    if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->HasHole() )
+    if( testHoles && otherVia && otherVia->HasHole() )
     {
-        if( clearance > 0 && otherShape->Collide( pad->GetEffectiveHoleShape().get(),
-                                                  std::max( 0, clearance - m_drcEpsilon ),
-                                                  &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
+        clearance = constraint.GetValue().Min();
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+        if( !otherVia->IsOnLayer( aLayer ) )
+            clearance = 0;
 
-            reportViolation( drce, pos, aLayer );
-            has_error = true;
-            testHoles = false;  // No need for multiple violations
-        }
-    }
-
-    if( testHoles && otherVia && otherVia->IsOnLayer( aLayer ) )
-    {
-        if( clearance > 0 && padShape->Collide( otherVia->GetEffectiveHoleShape().get(),
-                                                std::max( 0, clearance - m_drcEpsilon ),
-                                                &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
-
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( pad, otherVia );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pos, aLayer, pad, otherVia, aLayer, actual );
-            has_error = true;
-        }
+        if( clearance > 0 )
+            doTestHole( pad, padShape, otherVia, otherVia->GetEffectiveHoleShape().get(), clearance );
     }
 
     return !has_error;
@@ -1106,7 +1099,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
             };
 
     auto testGraphicAgainstZone =
-            [&]( BOARD_ITEM* item )
+            [this, isKnockoutText]( BOARD_ITEM* item )
             {
                 if( item->Type() == PCB_REFERENCE_IMAGE_T )
                     return;
@@ -1135,56 +1128,53 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     std::mutex                                            checkedPairsMutex;
 
     auto testCopperGraphic =
-            [&]( PCB_SHAPE* aShape )
+            [this, &checkedPairs, &checkedPairsMutex]( PCB_SHAPE* aShape )
             {
                 PCB_LAYER_ID layer = aShape->GetLayer();
 
                 m_board->m_CopperItemRTreeCache->QueryColliding( aShape, layer, layer,
-                            // Filter:
-                            [&]( BOARD_ITEM* other ) -> bool
+                        // Filter:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+
+                            if( otherCItem && otherCItem->GetNetCode() == aShape->GetNetCode() )
+                                return false;
+
+                            // Track clearances are tested in testTrackClearances()
+                            if( dynamic_cast<PCB_TRACK*>( other) )
+                                return false;
+
+                            BOARD_ITEM* a = aShape;
+                            BOARD_ITEM* b = other;
+
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
+
+                            std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                            auto it = checkedPairs.find( { a, b } );
+
+                            if( it != checkedPairs.end() && it->second.layers.test( layer ) )
                             {
-                                auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
-
-                                if( otherCItem && otherCItem->GetNetCode() == aShape->GetNetCode() )
-                                    return false;
-
-                                // Pads and tracks handled separately
-                                if( other->Type() == PCB_PAD_T || other->Type() == PCB_ARC_T ||
-                                    other->Type() == PCB_TRACE_T || other->Type() == PCB_VIA_T )
-                                {
-                                    return false;
-                                }
-
-                                BOARD_ITEM* a = aShape;
-                                BOARD_ITEM* b = other;
-
-                                // store canonical order so we don't collide in both directions
-                                // (a:b and b:a)
-                                if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                                    std::swap( a, b );
-
-                                std::lock_guard<std::mutex> lock( checkedPairsMutex );
-                                auto it = checkedPairs.find( { a, b } );
-
-                                if( it != checkedPairs.end() && it->second.layers.test( layer ) )
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    checkedPairs[ { a, b } ].layers.set( layer );
-                                    return true;
-                                }
-                            },
-                            // Visitor:
-                            [&]( BOARD_ITEM* other ) -> bool
+                                return false;
+                            }
+                            else
                             {
-                                testSingleLayerItemAgainstItem( aShape, aShape->GetEffectiveShape().get(),
-                                                                layer, other );
+                                checkedPairs[ { a, b } ].layers.set( layer );
+                                return true;
+                            }
+                        },
+                        // Visitor:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            testSingleLayerItemAgainstItem( aShape, aShape->GetEffectiveShape().get(),
+                                                            layer, other );
 
-                                return !m_drcEngine->IsCancelled();
-                            },
-                            m_board->m_DRCMaxClearance );
+                            return !m_drcEngine->IsCancelled();
+                        },
+                        m_board->m_DRCMaxClearance );
             };
 
     std::future<void> retn = tp.submit(
@@ -1239,90 +1229,94 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     std::atomic<size_t> done( 0 );
     size_t              count = 0;
 
-    auto reportZoneZoneViolation = [this]( ZONE* zoneA, ZONE* zoneB, VECTOR2I& pt, int actual,
-                                           const DRC_CONSTRAINT& constraint, PCB_LAYER_ID layer ) -> void
-    {
-        std::shared_ptr<DRC_ITEM> drce;
-
-        if( constraint.IsNull() )
-        {
-            drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-            wxString msg = _( "(intersecting zones must have distinct priorities)" );
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( zoneA, zoneB );
-            reportViolation( drce, pt, layer );
-        }
-        else
-        {
-            drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ), constraint.GetName(),
-                                      constraint.GetValue().Min(), std::max( actual, 0 ) );
-
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( zoneA, zoneB );
-            drce->SetViolatingRule( constraint.GetParentRule() );
-            ReportAndShowPathCuToCu( drce, pt, layer, zoneA, zoneB, layer, actual );
-        }
-    };
-
-    auto checkZones = [this, testClearance, testIntersects, reportZoneZoneViolation, &poly_segments,
-                       &done]( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> void
-    {
-        ZONE*    zoneA = m_board->m_DRCCopperZones[zoneA_idx];
-        ZONE*    zoneB = m_board->m_DRCCopperZones[zoneB_idx];
-        int      actual = 0;
-        VECTOR2I pt;
-
-        if( sameNet && testIntersects )
-        {
-            if( zoneA->Outline()->Collide( zoneB->Outline(), 0, &actual, &pt ) )
+    auto reportZoneZoneViolation =
+            [this]( ZONE* zoneA, ZONE* zoneB, VECTOR2I& pt, int actual, const DRC_CONSTRAINT& constraint,
+                    PCB_LAYER_ID layer ) -> void
             {
-                done.fetch_add( 1 );
-                reportZoneZoneViolation( zoneA, zoneB, pt, actual, DRC_CONSTRAINT(), layer );
-                return;
-            }
-        }
-        else if( !sameNet && testClearance )
-        {
-            DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
-            int            clearance = constraint.GetValue().Min();
+                std::shared_ptr<DRC_ITEM> drcItem;
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
-            {
-                std::map<VECTOR2I, int> conflictPoints;
-
-                std::vector<SEG>& refSegments = poly_segments[zoneA_idx][layer];
-                std::vector<SEG>& testSegments = poly_segments[zoneB_idx][layer];
-
-                // Iterate through all the segments in zoneA
-                for( SEG& refSegment : refSegments )
+                if( constraint.IsNull() )
                 {
-                    // Iterate through all the segments in zoneB
-                    for( SEG& testSegment : testSegments )
+                    drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                    wxString msg = _( "(intersecting zones must have distinct priorities)" );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( zoneA, zoneB );
+                    reportViolation( drcItem, pt, layer );
+                }
+                else
+                {
+                    drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                              constraint.GetName(),
+                                              constraint.GetValue().Min(),
+                                              std::max( actual, 0 ) );
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetItems( zoneA, zoneB );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    ReportAndShowPathCuToCu( drcItem, pt, layer, zoneA, zoneB, layer, actual );
+                }
+            };
+
+    auto checkZones =
+            [this, testClearance, testIntersects, reportZoneZoneViolation, &poly_segments, &done]
+            ( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> void
+            {
+                ZONE*    zoneA = m_board->m_DRCCopperZones[zoneA_idx];
+                ZONE*    zoneB = m_board->m_DRCCopperZones[zoneB_idx];
+                int      actual = 0;
+                VECTOR2I pt;
+
+                if( sameNet && testIntersects )
+                {
+                    if( zoneA->Outline()->Collide( zoneB->Outline(), 0, &actual, &pt ) )
                     {
-                        // We have ensured that the 'A' segment starts before the 'B' segment, so if the
-                        // 'A' segment ends before the 'B' segment starts, we can skip to the next 'A'
-                        if( refSegment.B.x < testSegment.A.x )
-                            break;
+                        done.fetch_add( 1 );
+                        reportZoneZoneViolation( zoneA, zoneB, pt, actual, DRC_CONSTRAINT(), layer );
+                        return;
+                    }
+                }
+                else if( !sameNet && testClearance )
+                {
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
+                    int            clearance = constraint.GetValue().Min();
 
-                        int64_t  dist_sq = 0;
-                        VECTOR2I other_pt;
-                        refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
-                        actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
+                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
+                    {
+                        std::map<VECTOR2I, int> conflictPoints;
 
-                        if( actual < clearance )
+                        std::vector<SEG>& refSegments = poly_segments[zoneA_idx][layer];
+                        std::vector<SEG>& testSegments = poly_segments[zoneB_idx][layer];
+
+                        // Iterate through all the segments in zoneA
+                        for( SEG& refSegment : refSegments )
                         {
-                            done.fetch_add( 1 );
-                            reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint, layer );
-                            return;
+                            // Iterate through all the segments in zoneB
+                            for( SEG& testSegment : testSegments )
+                            {
+                                // We have ensured that the 'A' segment starts before the 'B' segment, so if the
+                                // 'A' segment ends before the 'B' segment starts, we can skip to the next 'A'
+                                if( refSegment.B.x < testSegment.A.x )
+                                    break;
+
+                                int64_t  dist_sq = 0;
+                                VECTOR2I other_pt;
+                                refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
+                                actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
+
+                                if( actual < clearance )
+                                {
+                                    done.fetch_add( 1 );
+                                    reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint, layer );
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
 
-        done.fetch_add( 1 );
-    };
+                done.fetch_add( 1 );
+            };
 
 
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_board->GetCopperLayerCount() ) )
