@@ -773,7 +773,7 @@ static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB, VECTOR2
             const SHAPE_POLY_SET* polySet = static_cast<const SHAPE_POLY_SET*>( aA );
             int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
-            for( auto it = polySet->CIterateSegments(); it; ++it )
+            for( auto it = polySet->CIterateSegmentsWithHoles(); it; ++it )
             {
                 SHAPE_SEGMENT seg( *it );
                 VECTOR2I ptA, ptB;
