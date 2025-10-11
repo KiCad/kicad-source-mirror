@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
-"PO-Revision-Date: 2025-10-09 15:07+0000\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"PO-Revision-Date: 2025-10-12 06:14+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -7995,7 +7995,7 @@ msgstr ""
 
 #: common/layer_id.cpp:134
 msgid "Plated holes"
-msgstr ""
+msgstr "მეტალიზებული ნახვრეტები"
 
 #: common/layer_id.cpp:135
 msgid "Plated hole walls"
@@ -8003,7 +8003,7 @@ msgstr ""
 
 #: common/layer_id.cpp:136
 msgid "Non-plated holes"
-msgstr ""
+msgstr "არამეტალიზებული ნახვრეტები"
 
 #: common/layer_id.cpp:137 pcbnew/dialogs/panel_edit_options_base.cpp:371
 #: pcbnew/widgets/appearance_controls.cpp:344
@@ -8015,11 +8015,11 @@ msgstr "კავშირები"
 
 #: common/layer_id.cpp:138
 msgid "DRC warnings"
-msgstr ""
+msgstr "DRC-ის გაფრთხილებები"
 
 #: common/layer_id.cpp:139
 msgid "DRC errors"
-msgstr ""
+msgstr "DRC-ის შეცდომები"
 
 #: common/layer_id.cpp:140
 msgid "DRC shape 1"
@@ -8031,7 +8031,7 @@ msgstr ""
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
-msgstr ""
+msgstr "DRC-ის გამონაკლისები"
 
 #: common/layer_id.cpp:143
 msgid "DRC marker shadows"
@@ -8039,7 +8039,7 @@ msgstr ""
 
 #: common/layer_id.cpp:150
 msgid "Grid axes"
-msgstr ""
+msgstr "ბადის ღერძები"
 
 #: common/layer_id.cpp:153
 msgid "Locked item shadow"
@@ -8080,11 +8080,11 @@ msgstr ""
 
 #: common/lib_table_grid_tricks.cpp:64
 msgid "Activate selected"
-msgstr ""
+msgstr "მონიშნულის გააქტიურება"
 
 #: common/lib_table_grid_tricks.cpp:67
 msgid "Deactivate selected"
-msgstr ""
+msgstr "მონიშნულის დეაქტივაცია"
 
 #: common/lib_table_grid_tricks.cpp:72
 msgid "Set visible flag"
@@ -8209,7 +8209,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:236 common/pgm_base.cpp:238
 msgid "Executable file"
-msgstr ""
+msgstr "შესრულებადი ფაილი"
 
 #: common/pgm_base.cpp:248
 msgid "Select Preferred Editor"
@@ -8354,11 +8354,11 @@ msgstr ""
 
 #: common/rc_item.cpp:428 eeschema/erc/erc_item.cpp:405
 msgid "Excluded warning: "
-msgstr ""
+msgstr "ამოღებული გაფრთხილება: "
 
 #: common/rc_item.cpp:430 eeschema/erc/erc_item.cpp:407
 msgid "Excluded error: "
-msgstr ""
+msgstr "ამოღებული შეცდომა: "
 
 #: common/rc_item.cpp:434 eeschema/erc/erc_item.cpp:411
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1424
@@ -8451,11 +8451,11 @@ msgstr ""
 #: common/settings/color_settings.cpp:443
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:82
 msgid "KiCad Default"
-msgstr ""
+msgstr "KiCad-ის ნაგულისხმევი"
 
 #: common/settings/color_settings.cpp:448
 msgid "KiCad Classic"
-msgstr ""
+msgstr "კლასიკური KiCad"
 
 #: common/tool/action_menu.cpp:215 common/tool/action_menu.cpp:220
 #, c-format
@@ -8478,7 +8478,7 @@ msgstr ""
 #: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:867
 #: pcbnew/footprint_libraries_utils.cpp:1066
 msgid "New Library..."
-msgstr ""
+msgstr "ახალი ბიბლიოთეკა..."
 
 #: common/tool/actions.cpp:53
 msgid "Create a new library folder"
@@ -8486,7 +8486,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:59
 msgid "Add Library..."
-msgstr ""
+msgstr "ბიბლიოთეკის დამატება..."
 
 #: common/tool/actions.cpp:60
 msgid "Add an existing library folder"
@@ -8528,7 +8528,7 @@ msgstr "ცვლილებების შენახვა"
 
 #: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:228
 msgid "Save As..."
-msgstr ""
+msgstr "შენახვა, როგორც..."
 
 #: common/tool/actions.cpp:101
 msgid "Save current document to another location"
@@ -8560,7 +8560,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:129
 msgid "Page Settings..."
-msgstr ""
+msgstr "გვერდის პარამეტრები..."
 
 #: common/tool/actions.cpp:130
 msgid "Settings for paper size and title block info"
@@ -8632,7 +8632,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:269
 msgid "Paste Special..."
-msgstr ""
+msgstr "სპეციალური ჩასმა..."
 
 #: common/tool/actions.cpp:270
 msgid "Paste item(s) from clipboard with options"
@@ -8877,15 +8877,15 @@ msgstr "ყველას ჩანაცვლება"
 
 #: common/tool/actions.cpp:538
 msgid "Previous Marker"
-msgstr ""
+msgstr "წინა მარკერი"
 
 #: common/tool/actions.cpp:544
 msgid "Next Marker"
-msgstr ""
+msgstr "შემდეგი მარკერი"
 
 #: common/tool/actions.cpp:550
 msgid "Exclude Marker"
-msgstr ""
+msgstr "მარკერის ამოღება"
 
 #: common/tool/actions.cpp:551
 msgid "Mark current violation in Checker window as an exclusion"
@@ -8918,7 +8918,7 @@ msgstr ""
 #: common/tool/actions.cpp:618 common/widgets/mathplot.cpp:1402
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
 msgid "Zoom In"
-msgstr ""
+msgstr "გადიდება"
 
 #: common/tool/actions.cpp:624 common/widgets/mathplot.cpp:1403
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
@@ -9036,7 +9036,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:793
 msgid "Pin Library"
-msgstr ""
+msgstr "ბიბლიოთეკის ამაგრება"
 
 #: common/tool/actions.cpp:794
 msgid "Keep the library at the top of the list"
@@ -9044,7 +9044,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:799
 msgid "Unpin Library"
-msgstr ""
+msgstr "ბიბლიოთეკის ჩამოხსნა"
 
 #: common/tool/actions.cpp:800
 msgid "No longer keep the library at the top of the list"
@@ -9167,7 +9167,7 @@ msgstr "სვეტების მონიშვნა..."
 
 #: common/tool/actions.cpp:985
 msgid "Switch units"
-msgstr ""
+msgstr "ერთეულების გადართვა"
 
 #: common/tool/actions.cpp:986
 msgid "Switch between imperial and metric units"
@@ -9195,7 +9195,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:1015
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "სრულეკრანიანი გადაჯვარედინება"
 
 #: common/tool/actions.cpp:1016
 msgid "Switch display of full-window crosshairs"
@@ -9224,7 +9224,7 @@ msgstr ""
 #: common/tool/actions.cpp:1044 pcbnew/dialogs/panel_edit_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
 msgid "Select item(s)"
-msgstr ""
+msgstr "აირჩიეთ ელემენტ(ებ)-ი"
 
 #: common/tool/actions.cpp:1054
 msgid "Measure Tool"
@@ -9361,7 +9361,7 @@ msgstr "KiCad-ის შესახებ"
 
 #: common/tool/actions.cpp:1213
 msgid "List Hotkeys..."
-msgstr ""
+msgstr "კლავიატურის მალსახმობების სია..."
 
 #: common/tool/actions.cpp:1214
 msgid "Displays current hotkeys table and corresponding commands"
@@ -9476,7 +9476,7 @@ msgstr ""
 #: common/tool/zoom_menu.cpp:67
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "მასშტაბი: %.2f"
 
 #: common/validators.cpp:224
 #, c-format
@@ -9591,7 +9591,7 @@ msgstr "ფილტრი:"
 
 #: common/widgets/font_choice.cpp:64
 msgid "<not found>"
-msgstr ""
+msgstr "<აღმოჩენილი არაა>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
 #: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
@@ -9626,7 +9626,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel_base.cpp:19
 msgid "Rendering Engine"
-msgstr ""
+msgstr "რენდერის ძრავა"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
@@ -9674,11 +9674,11 @@ msgstr "ხაზები"
 
 #: common/widgets/gal_options_panel_base.cpp:67
 msgid "Small crosses"
-msgstr ""
+msgstr "პატარა ჯვრები"
 
 #: common/widgets/gal_options_panel_base.cpp:78
 msgid "Grid thickness:"
-msgstr ""
+msgstr "ბადის სისქე:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
 msgid "Minimum grid spacing:"
@@ -9744,11 +9744,11 @@ msgstr "ანბანის მიხედვით დალაგება"
 
 #: common/widgets/lib_tree.cpp:445
 msgid "recent searches"
-msgstr ""
+msgstr "უახლესი ძებნები"
 
 #: common/widgets/lib_tree.cpp:1008
 msgid "Select Columns"
-msgstr ""
+msgstr "აირჩიეთ სვეტები"
 
 #: common/widgets/mathplot.cpp:1402
 msgid "Zoom in plot view."
@@ -9776,11 +9776,11 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:287
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:288
 msgid "<no net>"
-msgstr ""
+msgstr "<დაყენებული არაა>"
 
 #: common/widgets/net_selector.cpp:33
 msgid "<create net>"
-msgstr ""
+msgstr "<ქსელის შექმნა>"
 
 #: common/widgets/paged_dialog.cpp:85 common/widgets/paged_dialog.cpp:351
 #: eeschema/dialogs/dialog_bom_base.cpp:114
@@ -9855,7 +9855,7 @@ msgstr "ბრძანება:"
 
 #: common/widgets/widget_hotkey_list.cpp:126
 msgid "Current key:"
-msgstr ""
+msgstr "მიმდინარე ღილაკი:"
 
 #: common/widgets/widget_hotkey_list.cpp:136
 msgid "Clear assigned hotkey"
@@ -9863,7 +9863,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:161
 msgid "Set Hotkey"
-msgstr ""
+msgstr "კლავიატურის მალსახმობის დაყენება"
 
 #: common/widgets/widget_hotkey_list.cpp:387
 #, c-format
@@ -9903,7 +9903,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:502
 msgid "Confirm change"
-msgstr ""
+msgstr "ცვლილების დადასტურება"
 
 #: common/widgets/widget_hotkey_list.cpp:522
 msgid "Command"
@@ -9959,7 +9959,7 @@ msgstr ""
 
 #: common/widgets/wx_html_report_panel_base.cpp:16
 msgid "Output Messages"
-msgstr ""
+msgstr "გამოტანილი შეტყობინებები"
 
 #: common/widgets/wx_html_report_panel_base.cpp:30
 #: eeschema/dialogs/dialog_erc_base.cpp:125
@@ -9998,7 +9998,7 @@ msgstr "შენახვა..."
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "All files"
-msgstr ""
+msgstr "ყველა ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:241
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:82
@@ -10102,11 +10102,11 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
-msgstr ""
+msgstr "ბურღის ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "SVG files"
-msgstr ""
+msgstr "SVG ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:408
 msgid "HTML files"
@@ -10122,7 +10122,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:426
 msgid "PostScript files"
-msgstr ""
+msgstr "PostScript ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:432
 msgid "Json files"
@@ -10130,7 +10130,7 @@ msgstr "JSON ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Report files"
-msgstr ""
+msgstr "ანგარიშის ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:444
 msgid "Component placement files"
@@ -10182,7 +10182,7 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "DXF Files"
-msgstr ""
+msgstr "DXF ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:522
 #: resources/linux/mime/kicad-gerbers.xml.in:22
@@ -10203,19 +10203,19 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "Workbook file"
-msgstr ""
+msgstr "სამუშაო წიგნის ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:556
 msgid "PNG file"
-msgstr ""
+msgstr "PNG ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:562
 msgid "Jpeg file"
-msgstr ""
+msgstr "JPEG ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:568
 msgid "Hotkey file"
-msgstr ""
+msgstr "კლავიატურის მალსახმობის ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:574
 msgid "KiCad jobset files"
@@ -10249,7 +10249,7 @@ msgstr ""
 
 #: cvpcb/auto_associate.cpp:309
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "CvPcb გაფრთხილება"
 
 #: cvpcb/cvpcb.cpp:190
 msgid ""
@@ -10316,15 +10316,15 @@ msgstr "საკვანძო სიტყვები"
 
 #: cvpcb/cvpcb_mainframe.cpp:801
 msgid "Pin Count"
-msgstr ""
+msgstr "საკონტაქტო ღეროების რაოდენობა"
 
 #: cvpcb/cvpcb_mainframe.cpp:827
 msgid "Search Text"
-msgstr ""
+msgstr "ტექსტის ძებნა"
 
 #: cvpcb/cvpcb_mainframe.cpp:831
 msgid "No Filtering"
-msgstr ""
+msgstr "ფილტრის გარეშე"
 
 #: cvpcb/cvpcb_mainframe.cpp:833
 #, c-format
@@ -10409,7 +10409,7 @@ msgstr "ბმა"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:39
 msgid "Schematic assignment"
-msgstr ""
+msgstr "სქემატური მინიჭება"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:42
 msgid "Cmp file assignment"
@@ -10465,7 +10465,7 @@ msgstr ""
 #: cvpcb/display_footprints_frame.cpp:542
 #, c-format
 msgid "Lib: %s"
-msgstr ""
+msgstr "ბიბლ: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:121
 msgid ""
@@ -10509,7 +10509,7 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:309
 msgid "Schematic saved"
-msgstr ""
+msgstr "სქემა შენახულია"
 
 #: cvpcb/toolbars_cvpcb.cpp:70
 msgid "Footprint Filters:"
@@ -10652,7 +10652,7 @@ msgstr ""
 
 #: eeschema/annotate.cpp:439
 msgid "Annotation complete."
-msgstr ""
+msgstr "ანოტაცია დასრულდა."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
@@ -10720,7 +10720,7 @@ msgstr ""
 #: eeschema/cross-probing.cpp:166
 #, c-format
 msgid "%s found"
-msgstr ""
+msgstr "%s ნაპოვნია"
 
 #: eeschema/cross-probing.cpp:171 eeschema/sim/simulator_frame_ui.cpp:1506
 #: eeschema/sim/simulator_frame_ui.cpp:2036
@@ -10855,7 +10855,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
-msgstr ""
+msgstr "ანოტაციის შეტყობინებები:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
@@ -10873,7 +10873,7 @@ msgstr "ფარგლები"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:42
 msgid "Entire schematic"
-msgstr ""
+msgstr "მთელი სქემა"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:50
@@ -10935,11 +10935,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Clear Annotation"
-msgstr ""
+msgstr "ანოტაციის გასუფთავება"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
-msgstr ""
+msgstr "სქემის ანოტაცია"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
@@ -10950,7 +10950,7 @@ msgstr "გენერაცია"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
 msgid "(file missing)"
-msgstr ""
+msgstr "(ნაკლული ფაილი)"
 
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
@@ -10977,11 +10977,11 @@ msgstr "ფაილის შექმნა ჩავარდა."
 
 #: eeschema/dialogs/dialog_bom.cpp:337 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr ""
+msgstr "გენერატორის მეტსახელი:"
 
 #: eeschema/dialogs/dialog_bom.cpp:337
 msgid "Add Generator"
-msgstr ""
+msgstr "გენერატორის დამატება"
 
 #: eeschema/dialogs/dialog_bom.cpp:346
 #, c-format
@@ -10991,7 +10991,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:375
 #: eeschema/dialogs/dialog_export_netlist.cpp:984
 msgid "Generator File"
-msgstr ""
+msgstr "გენერატორის ფაილი"
 
 #: eeschema/dialogs/dialog_bom.cpp:394
 msgid "Generator file name not found."
@@ -11130,7 +11130,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_change_symbols.cpp:71
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
 msgid "Change Symbols"
-msgstr ""
+msgstr "სიმბოლოების შეცვლა"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:80
 msgid "Change selected symbol(s)"
@@ -11151,7 +11151,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:62
 msgid "Update Fields"
-msgstr ""
+msgstr "ველების განახლება"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Remove fields if not in new symbol"
@@ -11500,7 +11500,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr ""
+msgstr "სიმბოლოები რუკის გარეშე"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -11525,7 +11525,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:115
 msgid "Run ERC"
-msgstr ""
+msgstr "ERC-ის გაშვება"
 
 #: eeschema/dialogs/dialog_erc.cpp:170
 msgid "Show Annotation dialog"
@@ -11661,7 +11661,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:988
 #: pcbnew/dialogs/dialog_drc.cpp:1030
 msgid "Violation Severity"
-msgstr ""
+msgstr "დარღვევის სიმძიმე"
 
 #: eeschema/dialogs/dialog_erc.cpp:882
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
@@ -11679,7 +11679,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr ""
+msgstr "შემოწმებები გაშვებულია..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: eeschema/dialogs/dialog_erc_base.cpp:115
@@ -11731,7 +11731,7 @@ msgstr "გვერდი"
 #: pcbnew/dialogs/dialog_drc_base.cpp:108
 #, c-format
 msgid "Violations (%s)"
-msgstr ""
+msgstr "დარღვევა (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:97
 #: pcbnew/dialogs/dialog_drc_base.cpp:146
@@ -11754,7 +11754,7 @@ msgstr "გამონაკლისები"
 #: pcbnew/dialogs/dialog_drc_base.cpp:216
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:76
 msgid "Delete Marker"
-msgstr ""
+msgstr "მარკერის წაშლა"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
@@ -11787,7 +11787,7 @@ msgstr "ქსელების სიის გატანა PADS ფორ�
 #: eeschema/dialogs/dialog_export_netlist.cpp:309
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
 msgid "Export Netlist"
-msgstr ""
+msgstr "ქსელების სიის გატანა"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:360
 msgid "Export netlist in SPICE format"
@@ -11859,7 +11859,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:468
 msgid "Netlist command:"
-msgstr ""
+msgstr "ქსელების სიის ბრძანება:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:549
 msgid "Save Netlist File"
@@ -11868,7 +11868,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_export_netlist.cpp:619
 #, c-format
 msgid "%s Export"
-msgstr ""
+msgstr "%s გატანა"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:658
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
@@ -11999,7 +11999,7 @@ msgstr "ფონტი:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:87
 msgid "KiCad Font"
-msgstr ""
+msgstr "KiCad-ის ფონტი"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:53
@@ -12030,7 +12030,7 @@ msgstr "მარჯვნივ სწორება"
 #: eeschema/sch_label.cpp:1258
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:76
 msgid "Align top"
-msgstr ""
+msgstr "სწორება ზემოთ"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:197
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:85
@@ -12045,17 +12045,17 @@ msgstr ""
 #: eeschema/sch_label.cpp:1256
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:86
 msgid "Align bottom"
-msgstr ""
+msgstr "სწორება ქვემოთ"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:212
 #: eeschema/dialogs/dialog_text_properties_base.cpp:163
 msgid "Horizontal text"
-msgstr ""
+msgstr "ჰორიზონტალური ტექსტი"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:217
 #: eeschema/dialogs/dialog_text_properties_base.cpp:168
 msgid "Vertical text"
-msgstr ""
+msgstr "ვერტიკალური ტექსტი"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:198
@@ -12063,7 +12063,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:180
 msgid "Text size:"
-msgstr ""
+msgstr "ტექსტის ზომა:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:243
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
@@ -12130,11 +12130,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
 msgid "Label fields"
-msgstr ""
+msgstr "ჭდის ველები"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
-msgstr ""
+msgstr "ფურცლის სათაურები"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Other sheet fields"
@@ -12166,11 +12166,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
-msgstr ""
+msgstr "არა-კვების სიმბოლოები"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr ""
+msgstr "კვების სიმბოლო"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -12189,12 +12189,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
-msgstr ""
+msgstr "დაყენება მნიშვნელობაზე"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:162
 msgid "Text color:"
-msgstr ""
+msgstr "ტექსტის ფერი:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:2108
@@ -12219,18 +12219,18 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
-msgstr ""
+msgstr "ჰ სწორება:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:289
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:299
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:313
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
 msgid "(fields only)"
-msgstr ""
+msgstr "(მხოლოდ ველები)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 msgid "V Align:"
-msgstr ""
+msgstr "ვ სწორება:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:354
@@ -12258,11 +12258,11 @@ msgstr "შემვსები ფერი:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:393
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:71
 msgid "Junction size:"
-msgstr ""
+msgstr "შეერთების წერტილის ზომა:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:407
 msgid "Junction color:"
-msgstr ""
+msgstr "შეერთების წერტილის ფერი:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:127
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:104
@@ -12302,7 +12302,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "დამმუშავებელი Ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:78
 #: eeschema/dialogs/dialog_image_properties_base.h:56
@@ -12367,11 +12367,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
-msgstr ""
+msgstr "შეერთების წერტილის თვისებები"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:130
 msgid "Pin length:"
-msgstr ""
+msgstr "საკონტაქტო ღეროს სიგრძე:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
@@ -12434,7 +12434,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_user_defined_signals_base.cpp:78
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:30
 msgid "Syntax help"
-msgstr ""
+msgstr "სინტაქსის დახმარება"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
@@ -12476,7 +12476,7 @@ msgstr "ჩვენება"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:493
 msgid "Show Name"
-msgstr ""
+msgstr "სახელის ჩვენება"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:113
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -12484,7 +12484,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:494
 msgid "H Align"
-msgstr ""
+msgstr "ჰ სწორება"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
@@ -12492,7 +12492,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:495
 msgid "V Align"
-msgstr ""
+msgstr "ვ სწორება"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
@@ -12514,7 +12514,7 @@ msgstr "ტექსტის ზომა"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:66
 #: eeschema/fields_grid_table.cpp:500
 msgid "X Position"
-msgstr ""
+msgstr "X მდებარეობა"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:129
@@ -12524,7 +12524,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:67
 #: eeschema/fields_grid_table.cpp:501
 msgid "Y Position"
-msgstr ""
+msgstr "Y მდებარეობა"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:143
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
@@ -12628,7 +12628,7 @@ msgstr "ნომერი"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
 #: eeschema/sch_pin.cpp:2135
 msgid "Electrical Type"
-msgstr ""
+msgstr "ელექტრული ტიპი"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:91
@@ -12638,7 +12638,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
 #: eeschema/sch_pin.cpp:2140
 msgid "Graphic Style"
-msgstr ""
+msgstr "გრაფიკის სტილი"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
@@ -12669,7 +12669,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:108
 #: eeschema/dialogs/dialog_shape_properties.cpp:85
 msgid "Read Only"
-msgstr ""
+msgstr "მხოლოდ წაკითხვადი"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
 #: eeschema/dialogs/dialog_lib_fields.cpp:450
@@ -12680,7 +12680,7 @@ msgstr "შევინახო ცვლილებები?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:26
 msgid "Pin numbers:"
-msgstr ""
+msgstr "საკონტაქტო ღეროს ნიმრები:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:30
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:41
@@ -12715,11 +12715,11 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
 msgid "Pin count:"
-msgstr ""
+msgstr "საკონტაქტო ღეროების რაოდენობა:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
 msgid "Duplicate pins:"
-msgstr ""
+msgstr "გამეორებული საკონტაქტო ღეროები:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
 msgid "Group by name"
@@ -12727,7 +12727,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
-msgstr ""
+msgstr "მონიშნულის დაჯგუფება"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
@@ -12735,7 +12735,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
-msgstr ""
+msgstr "საკონტაქტო ღეროების ცხრილი"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
 msgid "Revert symbol"
@@ -12894,7 +12894,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:41
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:130
 msgid "Symbol name:"
-msgstr ""
+msgstr "სიმბოლოს სახელი:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:50
 msgid "Derive from existing symbol:"
@@ -12967,7 +12967,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:76
 msgid "New Symbol"
-msgstr ""
+msgstr "ახალი სიმბოლო"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:391
 #: eeschema/dialogs/dialog_sheet_properties.cpp:217
@@ -13955,7 +13955,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:158 pcbnew/zone.cpp:2042
 msgid "Fill Style"
-msgstr ""
+msgstr "შევსების სტილი"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:165
 msgid "Do not fill"
@@ -15378,7 +15378,7 @@ msgstr "ტექსტის თვისებების ჩასწორ�
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
 msgid "Background fill"
-msgstr ""
+msgstr "ფონის შევსება"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -15458,7 +15458,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
-msgstr ""
+msgstr "ველების განახლება/ჩამოყრა"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
@@ -16704,11 +16704,11 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1837
 msgid "Checking conflicts..."
-msgstr ""
+msgstr "შემოწმება კონფლიქტებზე..."
 
 #: eeschema/erc/erc.cpp:1851
 msgid "Checking units..."
-msgstr ""
+msgstr "ერთეულების შემოწმება..."
 
 #: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
@@ -16717,7 +16717,7 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
-msgstr ""
+msgstr "საკონტაქტო ღეროების შემოწმება..."
 
 #: eeschema/erc/erc.cpp:1891
 msgid "Checking similar labels..."
