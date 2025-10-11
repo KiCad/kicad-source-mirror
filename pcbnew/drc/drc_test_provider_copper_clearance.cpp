@@ -198,21 +198,37 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
         net = connectedItem->GetNet();
 
-    NETINFO_ITEM*  trackNet = net;
+    NETINFO_ITEM*  itemNet = net;
 
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
         otherNet = connectedItem->GetNet();
 
-    std::shared_ptr<SHAPE> otherShapeStorage = other->GetEffectiveShape( layer );
-    SHAPE* otherShape = otherShapeStorage.get();
+    std::shared_ptr<SHAPE> otherShape_shared_ptr;
 
     if( other->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( other );
 
-        if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
-            testClearance = testShorting = false;
+        if( !pad->FlashLayer( layer ) )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                testClearance = testShorting = false;
+
+            otherShape_shared_ptr = pad->GetEffectiveHoleShape();
+        }
     }
+    else if( other->Type() == PCB_VIA_T )
+    {
+        PCB_VIA* via = static_cast<PCB_VIA*>( other );
+
+        if( !via->FlashLayer( layer ) )
+            otherShape_shared_ptr = via->GetEffectiveHoleShape();
+    }
+
+    if( !otherShape_shared_ptr )
+        otherShape_shared_ptr = other->GetEffectiveShape( layer );
+
+    SHAPE* otherShape = otherShape_shared_ptr.get();
 
     if( testClearance || testShorting )
     {
@@ -252,7 +268,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
         if( itemShape->Collide( otherShape, clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            if( trackNet && m_drcEngine->IsNetTieExclusion( trackNet->GetNetCode(), layer, pos, other ) )
+            if( itemNet && m_drcEngine->IsNetTieExclusion( itemNet->GetNetCode(), layer, pos, other ) )
             {
                 // Collision occurred as track was entering a pad marked as a net-tie.  We
                 // allow these.
@@ -296,28 +312,34 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
     if( testHoles && ( item->HasHole() || other->HasHole() ) )
     {
-        std::array<BOARD_ITEM*, 2> a{ item, other };
-        std::array<BOARD_ITEM*, 2> b{ other, item };
-        std::array<SHAPE*, 2>      a_shape{ itemShape, otherShape };
+        std::array<BOARD_ITEM*, 2>   a{ item, other };
+        std::array<BOARD_ITEM*, 2>   b{ other, item };
+        std::array<NETINFO_ITEM*, 2> b_net{ otherNet, itemNet };
+        std::array<SHAPE*, 2>        a_shape{ itemShape, otherShape };
 
         for( size_t ii = 0; ii < 2; ++ii )
         {
             std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
-            // We only test a track item here against an item with a hole.
-            // If either case is not valid, simply move on
-            if( !( dynamic_cast<PCB_TRACK*>( a[ii] ) ) || !b[ii]->HasHole() )
-                continue;
-
             if( b[ii]->Type() == PCB_VIA_T )
             {
                 if( b[ii]->GetLayerSet().Contains( layer ) )
                     holeShape = b[ii]->GetEffectiveHoleShape();
+                else
+                    continue;
             }
             else
             {
-                holeShape = b[ii]->GetEffectiveHoleShape();
+                if( b[ii]->HasHole() )
+                    holeShape = b[ii]->GetEffectiveHoleShape();
+                else
+                    continue;
             }
+
+            int netcode = b_net[ii] ? b_net[ii]->GetNetCode() : 0;
+
+            if( netcode && m_drcEngine->IsNetTieExclusion( netcode, layer, holeShape->Centre(), a[ii] ) )
+                continue;
 
             constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
             clearance = constraint.GetValue().Min();
@@ -776,6 +798,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( dynamic_cast<PCB_TRACK*>( other) )
         testClearance = testShorting = false;
 
+    // Graphic clearances are tested in testGraphicClearances()
+    if( dynamic_cast<PCB_SHAPE*>( other ) )
+        testClearance = testShorting = false;
+
     int padNet = pad->GetNetCode();
     int otherNet = otherCItem ? otherCItem->GetNetCode() : 0;
 
@@ -1095,12 +1121,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             if( cItem && otherCItem && cItem->GetNetCode() == otherCItem->GetNetCode() )
                                 return false;
 
-                            // Pads and tracks handled separately
-                            if( other->Type() == PCB_PAD_T || other->Type() == PCB_ARC_T ||
-                                other->Type() == PCB_TRACE_T || other->Type() == PCB_VIA_T )
-                            {
+                            // Track clearances are tested in testTrackClearances()
+                            if( dynamic_cast<PCB_TRACK*>( other) )
                                 return false;
-                            }
 
                             BOARD_ITEM* a = graphic;
                             BOARD_ITEM* b = other;
