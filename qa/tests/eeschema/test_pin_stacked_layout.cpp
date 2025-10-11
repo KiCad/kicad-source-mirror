@@ -272,7 +272,7 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
 
 /**
  * Test that multiline and non-multiline pin numbers/names are positioned consistently
- * on the same side of the pin for each rotation
+ * with the name above (or left) and the number below (or right) for all rotations.
  */
 BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
 {
@@ -370,8 +370,8 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
         {
             for( const PinTextInfo& inf : pinInfos )
             {
-                BOOST_CHECK_MESSAGE( inf.numberPos.x < inf.pinPos.x,
-                    "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not left of vertical pin." );
+                BOOST_CHECK_MESSAGE( inf.numberPos.x > inf.pinPos.x,
+                    "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not right of vertical pin." );
                 BOOST_CHECK_MESSAGE( inf.namePos.x < inf.pinPos.x,
                     "At rotation " << rotName << ", name for pin " << inf.pinNumber << " not left of vertical pin." );
             }
@@ -380,8 +380,8 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
         {
             for( const PinTextInfo& inf : pinInfos )
             {
-                BOOST_CHECK_MESSAGE( inf.numberPos.y < inf.pinPos.y,
-                    "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not above horizontal pin." );
+                BOOST_CHECK_MESSAGE( inf.numberPos.y > inf.pinPos.y,
+                    "At rotation " << rotName << ", number for pin " << inf.pinNumber << " not below horizontal pin." );
                 BOOST_CHECK_MESSAGE( inf.namePos.y < inf.pinPos.y,
                     "At rotation " << rotName << ", name for pin " << inf.pinNumber << " not above horizontal pin." );
             }
@@ -488,8 +488,8 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 
             if( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN )
             {
-                // Vertical pins: measure clearance from pin (at pin.x) to RIGHT edge of text box.
-                // We approximate half width from text length heuristic.
+                // Vertical pins: numbers are to the right and should be LEFT-aligned.
+                // Calculate the left edge of the number text box.
                 int textWidth = data.isMultiline ? 0 : (int)( data.pinNumber.Length() * numberInfo.m_TextSize * 0.6 );
 
                 // (Multiline case: numberInfo.m_Text already contains \n; heuristic in earlier section)
@@ -500,17 +500,37 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
                     textWidth = lines.size() * lineSpacing; // when vertical orientation text is rotated
                 }
 
-                int rightEdge = data.numberPos.x + textWidth / 2;
-                data.numberBottomDistance = data.pinPos.x - rightEdge; // positive gap
+                // Left edge = center - halfWidth
+                int leftEdge = data.numberPos.x - textWidth / 2;
+                data.numberBottomDistance = leftEdge - data.pinPos.x; // distance from pin to left edge
+
+                // For names (to the left of the pin), measure right edge
                 int nameWidth = (int)( nameInfo.m_Text.Length() * nameInfo.m_TextSize * 0.6 );
                 int nameRightEdge = data.namePos.x + nameWidth / 2;
-                data.nameBottomDistance = data.pinPos.x - nameRightEdge; // expect similar across pins
+                data.nameBottomDistance = data.pinPos.x - nameRightEdge; // distance from name right edge to pin
             }
             else
             {
-                // Horizontal pins: we align centers at a fixed offset above the pin. Measure center gap.
-                data.numberBottomDistance = data.pinPos.y - data.numberPos.y; // center gap constant
-                data.nameBottomDistance = data.pinPos.y - data.namePos.y;     // center gap for names
+                // Horizontal pins: numbers are below the pin and should be TOP-aligned.
+                // Calculate the top edge of the number text box.
+                int textHeight = data.isMultiline ? 0 : numberInfo.m_TextSize;
+
+                if( data.isMultiline )
+                {
+                    wxArrayString lines;
+                    wxStringSplit( numberInfo.m_Text, lines, '\n' );
+                    int lineSpacing = numberInfo.m_TextSize * 1.3;
+                    textHeight = lines.size() * lineSpacing;
+                }
+
+                // Top edge = center - halfHeight
+                int topEdge = data.numberPos.y - textHeight / 2;
+                data.numberBottomDistance = topEdge - data.pinPos.y; // distance from pin to top edge
+
+                // For names (above the pin), measure bottom edge
+                int nameHeight = nameInfo.m_TextSize;
+                int nameBottomEdge = data.namePos.y + nameHeight / 2;
+                data.nameBottomDistance = data.pinPos.y - nameBottomEdge; // distance from name bottom to pin
             }
 
             pinData.push_back( data );

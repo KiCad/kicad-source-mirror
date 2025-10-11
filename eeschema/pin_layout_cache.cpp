@@ -40,6 +40,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     recomputeCaches();
 
     wxString number = m_pin.GetShownNumber();
+
     if( number.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
         return std::nullopt;
 
@@ -47,14 +48,16 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     EESCHEMA_SETTINGS*     cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
     const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
-    wxString formatted = FormatStackedPinForDisplay( number, m_pin.GetLength(), m_pin.GetNumberTextSize(), font, metrics );
+    int                    length = m_pin.GetLength();
+    int                    size = m_pin.GetNumberTextSize();
+    wxString               formatted = FormatStackedPinForDisplay( number, length, size, font, metrics );
 
     std::optional<TEXT_INFO> info = TEXT_INFO();
-    info->m_Text      = formatted;
-    info->m_TextSize  = m_pin.GetNumberTextSize();
+    info->m_Text = formatted;
+    info->m_TextSize = size;
     info->m_Thickness = m_numberThickness;
-    info->m_HAlign    = GR_TEXT_H_ALIGN_CENTER;
-    info->m_VAlign    = GR_TEXT_V_ALIGN_CENTER;
+    info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
+    info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;
 
     PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
 
@@ -62,65 +65,104 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     {
         int h = size;
         int w = (int) ( txt.Length() * size * 0.6 );
+
         if( txt.Contains( '\n' ) )
         {
-            wxArrayString lines; wxStringSplit( txt, lines, '\n' );
+            wxArrayString lines;
+            wxStringSplit( txt, lines, '\n' );
+
             if( isVertical )
             {
                 int lineSpacing = KiROUND( size * 1.3 );
                 w = (int) lines.size() * lineSpacing;
-                size_t maxLen = 0; for( const wxString& l : lines ) maxLen = std::max( maxLen, l.Length() );
+                size_t maxLen = 0;
+                for( const wxString& l : lines )
+                    maxLen = std::max( maxLen, l.Length() );
                 h = (int) ( maxLen * size * 0.6 );
             }
             else
             {
                 int lineSpacing = KiROUND( size * 1.3 );
                 h = (int) lines.size() * lineSpacing;
-                size_t maxLen = 0; for( const wxString& l : lines ) maxLen = std::max( maxLen, l.Length() );
+                size_t maxLen = 0;
+                for( const wxString& l : lines )
+                    maxLen = std::max( maxLen, l.Length() );
                 w = (int) ( maxLen * size * 0.6 );
             }
         }
+
         return VECTOR2I( w, h );
     };
 
     // Pass 1: determine maximum perpendicular half span among all pin numbers to ensure
     // a single distance from the pin center that avoids overlap for every pin.
     const SYMBOL* parentSym = m_pin.GetParentSymbol();
-    int maxHalfHeight = 0; // vertical half span across all numbers
-    int maxHalfWidth  = 0; // horizontal half span across all numbers (for vertical pins overlap avoidance)
-    int maxFullHeight = 0; // full height (for dynamic clearance)
+    int           maxHalfHeight = 0; // vertical half span across all numbers (for horizontal pins)
+    int           maxHalfWidth = 0;  // horizontal half span across all numbers (for vertical pins when rotated)
+    int           maxFullHeight = 0; // full height (for dynamic clearance)
+
     if( parentSym )
     {
         for( const SCH_PIN* p : parentSym->GetPins() )
         {
             wxString raw = p->GetShownNumber();
+
             if( raw.IsEmpty() )
                 continue;
-            wxString fmt = FormatStackedPinForDisplay( raw, p->GetLength(), p->GetNumberTextSize(), font, p->GetFontMetrics() );
-            // Determine true max height regardless of rotation: use isVertical=false path for multiline height
-            VECTOR2I box = estimateQABox( fmt, p->GetNumberTextSize(), false );
-        maxHalfHeight = std::max( maxHalfHeight, box.y / 2 );
-        maxFullHeight = std::max( maxFullHeight, box.y );
-            maxHalfWidth  = std::max( maxHalfWidth,  box.x / 2 );
+
+            wxString fmt = FormatStackedPinForDisplay( raw, p->GetLength(), p->GetNumberTextSize(), font,
+                                                       p->GetFontMetrics() );
+            // For horizontal pins: compute vertical extent (height when text is horizontal)
+            VECTOR2I boxHoriz = estimateQABox( fmt, p->GetNumberTextSize(), false );
+            maxHalfHeight = std::max( maxHalfHeight, boxHoriz.y / 2 );
+            maxFullHeight = std::max( maxFullHeight, boxHoriz.y );
+
+            // For vertical pins: compute horizontal extent when text is rotated vertical
+            // When text is vertical, the perpendicular span is the original height
+            VECTOR2I boxVert = estimateQABox( fmt, p->GetNumberTextSize(), true );
+            maxHalfWidth = std::max( maxHalfWidth, boxVert.x / 2 );
         }
     }
-    int clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
-    VECTOR2I pinPos = m_pin.GetPosition();
-    const int halfLength = m_pin.GetLength() / 2;
-    bool verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
-    // We need the per-pin bounding width for vertical placement (rotated text).  For vertical
-    // pins we anchor by the RIGHT edge of the text box so the gap from the pin to text is
-    // constant (clearance) independent of text width (multi-line vs single-line).
-    auto currentBox = estimateQABox( formatted, info->m_TextSize, verticalOrient );
+    int       clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
+    VECTOR2I  pinPos = m_pin.GetPosition();
+    const int halfLength = m_pin.GetLength() / 2;
+    bool      verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
+
+    // Calculate the current pin's text dimensions for positioning
+    VECTOR2I currentBox = estimateQABox( formatted, info->m_TextSize, verticalOrient );
+    int currentHalfHeight = currentBox.y / 2;
+    int currentHalfWidth = currentBox.x / 2;
 
     if( verticalOrient )
     {
-        // Vertical pins: text is placed to the LEFT (negative X) and rotated vertical so that it
-        // reads bottom->top when the schematic is in its canonical orientation.  We right-edge
-        // align the text box at (pin.x - clearance) to keep a constant gap regardless of text width.
-        int boxWidth = currentBox.x;
-        int centerX = pinPos.x - clearance - boxWidth / 2;
+        // Vertical pins: text is rotated vertical so that it reads bottom->top.
+        // When rotated, the perpendicular distance from pin is determined by the text width
+        // when in vertical orientation.
+
+        // Check if both name and number are displayed
+        bool showBothNameAndNumber = !m_pin.GetShownName().IsEmpty()
+                                     && parentSym
+                                     && parentSym->GetShowPinNames()
+                                     && parentSym->GetPinNameOffset() == 0; // name is outside
+
+        int centerX;
+
+        if( showBothNameAndNumber )
+        {
+            // When both are shown: name goes to the left, number goes to the right
+            // Position the number to the right of the pin, left-aligned (so all numbers start at same x)
+            // Left edge at: pinPos.x + clearance
+            // Center at: pinPos.x + clearance + currentHalfWidth
+            centerX = pinPos.x + clearance + currentHalfWidth + m_numberThickness;
+        }
+        else
+        {
+            // When only number is shown: place it to the left of the pin
+            // Use maxHalfWidth for consistent alignment when there's no name
+            centerX = pinPos.x - clearance - currentHalfWidth - m_numberThickness;
+        }
+
         info->m_TextPosition.x = centerX;
 
         if( orient == PIN_ORIENTATION::PIN_DOWN )
@@ -132,10 +174,27 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     }
     else
     {
-        // Horizontal pins: "above" means negative Y direction.  All numbers are centered on the
-        // pin X and share a Y offset derived from the maximum half height across all numbers so
-        // that multi-line and single-line numbers align cleanly.
-        int centerY = pinPos.y - ( maxHalfHeight + clearance );
+        // Horizontal pins: "above" means negative Y direction.
+
+        // Check if both name and number are displayed
+        bool showBothNameAndNumber = !m_pin.GetShownName().IsEmpty()
+                                     && parentSym
+                                     && parentSym->GetShowPinNames()
+                                     && parentSym->GetPinNameOffset() == 0; // name is outside
+
+        int centerY;
+        if( showBothNameAndNumber )
+        {
+            // When both are shown: name goes above, number goes below (top-aligned)
+            // Position the number below the pin with top edge at: pinPos.y + clearance
+            // Center at: pinPos.y + clearance + currentHalfHeight
+            centerY = pinPos.y + clearance + currentHalfHeight + m_numberThickness;
+        }
+        else
+        {
+            // When only number is shown: place it above the pin
+            centerY = pinPos.y - ( currentHalfHeight + clearance + m_numberThickness );
+        }
 
         if( orient == PIN_ORIENTATION::PIN_LEFT )
             info->m_TextPosition.x = pinPos.x - halfLength; // centered horizontally along pin
@@ -148,18 +207,15 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
 
     return info;
 }
-// (Removed duplicate license & namespace with second PIN_TEXT_MARGIN to avoid ambiguity)
 
-// NOTE: The real implementation of FormatStackedPinForDisplay lives in sch_pin.cpp.
-// The accidental, partial duplicate that was here has been removed.
 
-// Reintroduce small helper functions (previously inside an anonymous namespace) needed later.
 static int externalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
     if( aSettings && aSettings->m_PinSymbolSize )
         return aSettings->m_PinSymbolSize;
     return aPin.GetNumberTextSize() / 2;
 }
+
 
 static int internalPinDecoSize( const SCHEMATIC_SETTINGS* aSettings, const SCH_PIN& aPin )
 {
@@ -176,9 +232,7 @@ PIN_LAYOUT_CACHE::PIN_LAYOUT_CACHE( const SCH_PIN& aPin ) :
     const SCHEMATIC* schematic = aPin.Schematic();
 
     if( schematic )
-    {
         m_schSettings = &schematic->Settings();
-    }
 }
 
 
@@ -569,15 +623,26 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
 
     const int pinLength = m_pin.GetLength();
 
-    // The pin name is always over the pin
+    // The pin number is always over the pin (centered along its length)
     OPT_BOX2I box = BOX2I::ByCenter( { pinLength / 2, 0 }, m_numExtentsCache.m_Extents );
 
-    int textPos = -m_numExtentsCache.m_Extents.y / 2 - getPinTextOffset();
+    // Check if both name and number are displayed (name outside the pin)
+    bool showBothNameAndNumber = ( pinNameOffset == 0
+                                   && !m_pin.GetShownName().empty()
+                                   && m_pin.GetParentSymbol()->GetShowPinNames() );
 
-    // The number goes below, if there is a name outside
-    if( pinNameOffset == 0 && !m_pin.GetShownName().empty()
-        && m_pin.GetParentSymbol()->GetShowPinNames() )
-        textPos *= -1;
+    int textPos;
+    if( showBothNameAndNumber )
+    {
+        // When both are shown: name goes above, number goes below (top-aligned to bottom)
+        // Position the number below the pin, with its top edge at the clearance distance
+        textPos = m_numExtentsCache.m_Extents.y / 2 + getPinTextOffset();
+    }
+    else
+    {
+        // When only number is shown: place it above the pin
+        textPos = -m_numExtentsCache.m_Extents.y / 2 - getPinTextOffset();
+    }
 
     // Bump it up (or down)
     box->Move( { 0, textPos } );
@@ -810,7 +875,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
             {
                 // Vertical pins: name mirrors number placement (left + rotated) for visual consistency.
                 int boxWidth = info->m_TextSize * (int) info->m_Text.Length() * 0.6; // heuristic width
-                int centerX = pinPos.x - clearance - boxWidth / 2;
+                int centerX = pinPos.x - clearance - boxWidth / 2 - info->m_Thickness;
                 info->m_TextPosition = { centerX, pinPos.y };
 
                 if( orient == PIN_ORIENTATION::PIN_DOWN )
@@ -825,7 +890,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
             else
             {
                 // Horizontal pins: name above (negative Y) aligned to same Y offset logic as numbers.
-                info->m_TextPosition = { pinPos.x, pinPos.y - ( maxHalfHeight + clearance ) };
+                info->m_TextPosition = { pinPos.x, pinPos.y - ( maxHalfHeight + clearance + info->m_Thickness ) };
 
                 if( orient == PIN_ORIENTATION::PIN_LEFT )
                     info->m_TextPosition.x -= halfLength;
