@@ -2428,6 +2428,16 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
                             : KIGEOM::BoxHitTest( aArea.GetPoly(), pin->GetBoundingBox(), true ) )
                     uniqueCandidates.insert( pin );
             }
+
+            for( SCH_FIELD& field : symbol->GetFields() )
+            {
+                if( field.IsVisible()
+                        && ( boxMode ? selectionRect.Intersects( field.GetBoundingBox() )
+                                     : KIGEOM::BoxHitTest( aArea.GetPoly(), field.GetBoundingBox(), true ) ) )
+                {
+                    uniqueCandidates.insert( &field );
+                }
+            }
         }
     }
 
