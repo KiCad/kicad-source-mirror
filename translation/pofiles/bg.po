@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-11 04:08+0300\n"
 "PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -365,8 +365,8 @@ msgstr "Няма права за запазване на файла „%s“."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:1006
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:418
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:125
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:466
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
 #: pcbnew/widgets/appearance_controls.cpp:2783
 msgid "Error"
@@ -6040,7 +6040,7 @@ msgstr "Стил на заливка"
 #: eeschema/sch_textbox.cpp:539 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2619 pcbnew/pcb_dimension.cpp:642
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2620 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480
 msgid "Default"
@@ -6631,8 +6631,7 @@ msgid "Inches"
 msgstr "Инчове"
 
 #: common/eda_draw_frame.cpp:715 pagelayout_editor/pl_editor_frame.cpp:170
-#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:336
-#: pcbnew/tools/pcb_actions.cpp:1174
+#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:1174
 #, fuzzy
 msgid "Constrain to H, V, 45"
 msgstr "Комп.отпечатък:"
@@ -6974,7 +6973,7 @@ msgstr "Комп. отпечатъци"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2152 pcbnew/pad.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2153 pcbnew/pad.cpp:1392
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -7036,14 +7035,14 @@ msgid "Center Y"
 msgstr "Център"
 
 #: common/eda_shape.cpp:2417 eeschema/sch_tablecell.cpp:224
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2631 pcbnew/pcb_tablecell.cpp:229
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2632 pcbnew/pcb_tablecell.cpp:229
 #: pcbnew/pcb_textbox.cpp:806 pcbnew/pcb_track.cpp:2134
 #, fuzzy
 msgid "End X"
 msgstr "Край на инструмент"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_tablecell.cpp:225
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2637 pcbnew/pcb_tablecell.cpp:230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2638 pcbnew/pcb_tablecell.cpp:230
 #: pcbnew/pcb_textbox.cpp:807 pcbnew/pcb_track.cpp:2137
 #, fuzzy
 msgid "End Y"
@@ -7131,7 +7130,7 @@ msgstr "Bold+Italic"
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1242 eeschema/sch_field.cpp:1851
 #: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2617
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Left"
 msgstr "Ляво"
 
@@ -7159,7 +7158,7 @@ msgstr "Център"
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1244 eeschema/sch_field.cpp:1853
 #: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2619
 msgid "Right"
 msgstr "Дясно"
 
@@ -7270,7 +7269,7 @@ msgstr ""
 
 #: common/eda_units.cpp:429
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
-#: pcbnew/generators/pcb_tuning_pattern.cpp:211
+#: pcbnew/generators/pcb_tuning_pattern.cpp:212
 #, fuzzy
 msgid "min"
 msgstr "в"
@@ -7282,7 +7281,7 @@ msgstr "Връх"
 
 #: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
-#: pcbnew/generators/pcb_tuning_pattern.cpp:214
+#: pcbnew/generators/pcb_tuning_pattern.cpp:215
 msgid "max"
 msgstr ""
 
@@ -16468,7 +16467,7 @@ msgstr "Параметри"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2107 pcbnew/pcb_marker.cpp:223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2108 pcbnew/pcb_marker.cpp:223
 #: pcbnew/pcb_shape.cpp:615 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1624
 #: pcbnew/pcb_track.cpp:1691 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:775
@@ -19829,7 +19828,7 @@ msgid "Unhandled item type %d"
 msgstr "Обратно обозначаване на полета на комп.отп."
 
 #: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2064
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
 #: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1036
 #: pcbnew/widgets/appearance_controls.cpp:2472
@@ -20181,7 +20180,7 @@ msgstr "Установи вход на шина /"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:954
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2146 pcbnew/pad.cpp:1339
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1339
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:811
 #, fuzzy
@@ -21230,8 +21229,8 @@ msgstr "Подравняване:"
 #: eeschema/sch_label.cpp:1385 eeschema/sch_line.cpp:893
 #: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/generators/pcb_tuning_pattern.cpp:490
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2142 pcbnew/pad.cpp:1337
+#: pcbnew/generators/pcb_tuning_pattern.cpp:491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2143 pcbnew/pad.cpp:1337
 #: pcbnew/pad.cpp:2771 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1719 pcbnew/tools/pcb_control.cpp:1907
 #: pcbnew/widgets/pcb_properties_panel.cpp:327
@@ -22759,7 +22758,7 @@ msgstr "Печат на схема"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1480
 #, fuzzy
 msgid "unknown"
 msgstr "Неизвестна форма на подложка"
@@ -24747,7 +24746,7 @@ msgstr "Огледално по ос y"
 msgid "Flips selected item(s) from left to right"
 msgstr "Копирай избрания елемент"
 
-#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
+#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:153
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
 msgstr ""
@@ -25542,7 +25541,7 @@ msgstr "на текущия лист?"
 #: eeschema/tools/symbol_editor_move_tool.cpp:109
 #: pagelayout_editor/tools/pl_actions.cpp:82
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
-#: pcbnew/tools/edit_tool_move_fct.cpp:244 pcbnew/tools/pcb_actions.cpp:457
+#: pcbnew/tools/edit_tool_move_fct.cpp:245 pcbnew/tools/pcb_actions.cpp:457
 msgid "Move"
 msgstr "Премести"
 
@@ -26840,7 +26839,7 @@ msgstr "Избор на слой:"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4184 pcbnew/footprint.cpp:4187
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2149 pcbnew/pad.cpp:1347
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1347
 #: pcbnew/pad.cpp:2733 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:498 pcbnew/pcb_marker.cpp:400
@@ -41401,8 +41400,8 @@ msgid "Target skew: "
 msgstr "Форма на целта:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2231 pcbnew/pad.cpp:1439
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2210
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2232 pcbnew/pad.cpp:1439
 #: pcbnew/pcb_track.cpp:1666 pcbnew/pcb_track.cpp:1674
 #: pcbnew/pcb_track.cpp:1706 pcbnew/pcb_track.cpp:1712
 #: pcbnew/router/router_tool.cpp:2792 pcbnew/router/router_tool.cpp:2797
@@ -41481,7 +41480,7 @@ msgstr "Радиус"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:391
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2720
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2721
 #, fuzzy
 msgid "Single-sided"
 msgstr "Една страница"
@@ -41834,33 +41833,33 @@ msgstr "Компонент \"%s\" вече съществува. Да го пр�
 msgid "Failed to save footprint library file '%s'."
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:123
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:417
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:465
 #, fuzzy
 msgid "Error adding 3D model"
 msgstr "Зареди D-кодове"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:501
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:549
 #, fuzzy
 msgid "No filename entered"
 msgstr "Не е избран слой"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:506
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:554
 #, fuzzy
 msgid "Illegal filename"
 msgstr "Име на файл на платката:"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:511
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:559
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "Файлът не е намерен"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:516
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:564
 #, fuzzy
 msgid "Unable to open file"
 msgstr "Неуспешно отваряне на файл "
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:521
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:569
 #, fuzzy
 msgid "Unknown error"
 msgstr "Неизвестна форма на подложка"
@@ -46026,184 +46025,184 @@ msgstr "Документация за комп.отп."
 msgid "Error loading footprint %s from library '%s'."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:261
-#: pcbnew/generators/pcb_tuning_pattern.cpp:266
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2238
+#: pcbnew/generators/pcb_tuning_pattern.cpp:262
+#: pcbnew/generators/pcb_tuning_pattern.cpp:267
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2239
 #, fuzzy
 msgid "Tuning Pattern"
 msgstr "Щриховка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:271
+#: pcbnew/generators/pcb_tuning_pattern.cpp:272
 #, fuzzy
 msgid "Tuning Patterns"
 msgstr "Щриховка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:492
 #, fuzzy
 msgid "Tuning"
 msgstr "Предупреждение"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1476
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
 msgid "too long"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
 #, fuzzy
 msgid "too short"
 msgstr "Не показвай"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
 msgid "tuned"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1558
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1559
 #, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Редактирай в текстов редактор"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2083
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2084
 #, fuzzy
 msgid "current skew"
 msgstr "Текуща верига:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2085
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
 #, fuzzy
 msgid "current length"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2173
 #, fuzzy
 msgid "Routed Lengths"
 msgstr "Страна:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2178 pcbnew/pcb_track.cpp:1649
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2179 pcbnew/pcb_track.cpp:1649
 #, fuzzy
 msgid "Routed Length"
 msgstr "Страна:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2184 pcbnew/pad.cpp:2886
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2185 pcbnew/pad.cpp:2886
 #: pcbnew/pcb_track.cpp:1654
 #, fuzzy
 msgid "Pad To Die Length"
 msgstr "Дължина на линия"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2187 pcbnew/pcb_track.cpp:1657
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2188 pcbnew/pcb_track.cpp:1657
 #, fuzzy
 msgid "Full Length"
 msgstr "Пълна Дължина"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2199
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
 #, fuzzy, c-format
 msgid "Target Skew: %s"
 msgstr "Форма на целта:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2201
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2223
 #, fuzzy
 msgid "(from tuning pattern properties)"
 msgstr "Текстови настройки на комп.отп."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2208
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
 #, fuzzy, c-format
 msgid "Skew Constraints: %s"
 msgstr "Комп.отпечатък:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
 #, fuzzy, c-format
 msgid "Target Length: %s"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2231
 #, fuzzy, c-format
 msgid "Length Constraints: %s"
 msgstr "Комп.отпечатък:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2251
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2252
 #, fuzzy
 msgid "Tune Skew"
 msgstr "Ъгъл"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2464
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2465
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2500
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
 #, fuzzy
 msgid "Tune"
 msgstr "Ъгъл"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2526
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2544
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
 #, fuzzy
 msgid "Select a track to tune first."
 msgstr "Изчисти текущото табло и започни ново"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2612
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
 #, fuzzy
 msgid "Single track"
 msgstr "Една страница"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
 #, fuzzy
 msgid "Differential pair"
 msgstr "Изтр. на размер"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2615
 #, fuzzy
 msgid "Diff pair skew"
 msgstr "Изтр. на размер"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2628
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 #, fuzzy
 msgid "Pattern Properties"
 msgstr "Настройки на извод"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2643
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2644
 #, fuzzy
 msgid "Tuning Mode"
 msgstr "Определени отвори"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2649
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2650
 #, fuzzy
 msgid "Min Amplitude"
 msgstr "Времева отметка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2656
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2657
 #, fuzzy
 msgid "Max Amplitude"
 msgstr "Времева отметка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2663
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2664
 #, fuzzy
 msgid "Initial Side"
 msgstr "Номер на извод:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2669
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2670
 #, fuzzy
 msgid "Min Spacing"
 msgstr "хоризонтал"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2676
 #, fuzzy
 msgid "Corner Radius %"
 msgstr "Ъгли"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2697
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2698
 #, fuzzy
 msgid "Target Length"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2706
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2707
 #, fuzzy
 msgid "Target Skew"
 msgstr "Форма на целта:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2714
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2715
 #, fuzzy
 msgid "Override Custom Rules"
 msgstr "Скрит текст"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2726
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2727
 #, fuzzy
 msgid "Rounded"
 msgstr " намерен(а)"
@@ -47674,7 +47673,7 @@ msgstr "Неизвестна форма на подложка"
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Неизвестен MIME-тип за документация <%s>"
 
-#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:864
+#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -47951,14 +47950,14 @@ msgstr ""
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3629
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3631
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3657
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3659
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -47966,82 +47965,82 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3672
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3674
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3700
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3711
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3713
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3721
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3723
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3868
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3870
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3881
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3883
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Зареждане"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3925
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3927
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3988
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3990
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Зареждане"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4205
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4207
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Зареждане"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4219
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4221
 #, fuzzy
 msgid "Loading text..."
 msgstr "Зареждане"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4251
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4273
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4275
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4286
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4288
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4486
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4488
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4642
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4644
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Зареди Gerber файл"
@@ -51297,24 +51296,28 @@ msgstr "Избор на верига"
 msgid "Copy canceled"
 msgstr "Копирай етикет"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:207
+#: pcbnew/tools/edit_tool_move_fct.cpp:208
 #, fuzzy
 msgid "Pack Footprints"
 msgstr "Търсене на комп.отп."
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:343
+#: pcbnew/tools/edit_tool_move_fct.cpp:340
+msgid "Angle snap guides: H, V, 45°"
+msgstr ""
+
+#: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:356
+#: pcbnew/tools/edit_tool_move_fct.cpp:363
 #, fuzzy, c-format
 msgid "%s pad %s"
 msgstr "и"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:399
+#: pcbnew/tools/edit_tool_move_fct.cpp:406
 #, fuzzy
 msgid "Select reference point for move..."
 msgstr "Установи нач.коорд. за решетката"

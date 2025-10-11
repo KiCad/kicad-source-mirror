@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-11 04:08+0300\n"
 "PO-Revision-Date: 2025-10-03 15:54+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
@@ -367,8 +367,8 @@ msgstr "Dosya '%s' kaydetmek için yeterli izin yok."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:1006
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:418
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:125
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:466
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
 #: pcbnew/widgets/appearance_controls.cpp:2783
 msgid "Error"
@@ -5693,7 +5693,7 @@ msgstr "Çizgi Stili"
 #: eeschema/sch_textbox.cpp:539 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2619 pcbnew/pcb_dimension.cpp:642
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2620 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480
 msgid "Default"
@@ -6248,8 +6248,7 @@ msgid "Inches"
 msgstr "İnç"
 
 #: common/eda_draw_frame.cpp:715 pagelayout_editor/pl_editor_frame.cpp:170
-#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/edit_tool_move_fct.cpp:336
-#: pcbnew/tools/pcb_actions.cpp:1174
+#: pcbnew/tools/drawing_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:1174
 msgid "Constrain to H, V, 45"
 msgstr "Yatay, Dikey, 45 Derece ile kısıtla"
 
@@ -6558,7 +6557,7 @@ msgstr "Noktalar"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2152 pcbnew/pad.cpp:1392
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2153 pcbnew/pad.cpp:1392
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -6614,13 +6613,13 @@ msgid "Center Y"
 msgstr "Y-Eksen Merkezi"
 
 #: common/eda_shape.cpp:2417 eeschema/sch_tablecell.cpp:224
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2631 pcbnew/pcb_tablecell.cpp:229
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2632 pcbnew/pcb_tablecell.cpp:229
 #: pcbnew/pcb_textbox.cpp:806 pcbnew/pcb_track.cpp:2134
 msgid "End X"
 msgstr "X'i sonlandır"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_tablecell.cpp:225
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2637 pcbnew/pcb_tablecell.cpp:230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2638 pcbnew/pcb_tablecell.cpp:230
 #: pcbnew/pcb_textbox.cpp:807 pcbnew/pcb_track.cpp:2137
 msgid "End Y"
 msgstr "Y'debitir"
@@ -6705,7 +6704,7 @@ msgstr "Kalın+Yatık"
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1242 eeschema/sch_field.cpp:1851
 #: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2617
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
 msgid "Left"
 msgstr "Sol"
 
@@ -6733,7 +6732,7 @@ msgstr "Merkez"
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1244 eeschema/sch_field.cpp:1853
 #: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2619
 msgid "Right"
 msgstr "Sağ"
 
@@ -6841,7 +6840,7 @@ msgstr "Köprü"
 
 #: common/eda_units.cpp:429
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
-#: pcbnew/generators/pcb_tuning_pattern.cpp:211
+#: pcbnew/generators/pcb_tuning_pattern.cpp:212
 msgid "min"
 msgstr "min"
 
@@ -6851,7 +6850,7 @@ msgstr "opsiyon"
 
 #: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
-#: pcbnew/generators/pcb_tuning_pattern.cpp:214
+#: pcbnew/generators/pcb_tuning_pattern.cpp:215
 msgid "max"
 msgstr "maks"
 
@@ -15227,7 +15226,7 @@ msgstr "Parametre"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2107 pcbnew/pcb_marker.cpp:223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2108 pcbnew/pcb_marker.cpp:223
 #: pcbnew/pcb_shape.cpp:615 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1624
 #: pcbnew/pcb_track.cpp:1691 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:775
@@ -18294,7 +18293,7 @@ msgid "Unhandled item type %d"
 msgstr "İşlenmemiş öge türü %d"
 
 #: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2064
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2136
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
 #: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1036
 #: pcbnew/widgets/appearance_controls.cpp:2472
@@ -18636,7 +18635,7 @@ msgstr "Veriyolu Giriş Tipi"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:954
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2146 pcbnew/pad.cpp:1339
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1339
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:811
 msgid "Resolved Netclass"
@@ -19701,8 +19700,8 @@ msgstr "Gerekçe"
 #: eeschema/sch_label.cpp:1385 eeschema/sch_line.cpp:893
 #: pcbnew/board_connected_item.cpp:214
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/generators/pcb_tuning_pattern.cpp:490
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2142 pcbnew/pad.cpp:1337
+#: pcbnew/generators/pcb_tuning_pattern.cpp:491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2143 pcbnew/pad.cpp:1337
 #: pcbnew/pad.cpp:2771 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1719 pcbnew/tools/pcb_control.cpp:1907
 #: pcbnew/widgets/pcb_properties_panel.cpp:327
@@ -21259,7 +21258,7 @@ msgstr "Simülasyon modeli yüklenirken hata oluştu: '%s' alanı yok"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1480
 msgid "unknown"
 msgstr "bilinmeyen"
 
@@ -23150,7 +23149,7 @@ msgstr "Yatay Olarak Aynala"
 msgid "Flips selected item(s) from left to right"
 msgstr "Seçili ögeleri soldan sağa çevirir"
 
-#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
+#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:153
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
 msgstr "Takas"
@@ -23830,7 +23829,7 @@ msgstr "Segment Duruşunu Değiştir."
 #: eeschema/tools/symbol_editor_move_tool.cpp:109
 #: pagelayout_editor/tools/pl_actions.cpp:82
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
-#: pcbnew/tools/edit_tool_move_fct.cpp:244 pcbnew/tools/pcb_actions.cpp:457
+#: pcbnew/tools/edit_tool_move_fct.cpp:245 pcbnew/tools/pcb_actions.cpp:457
 msgid "Move"
 msgstr "Taşı"
 
@@ -24977,7 +24976,7 @@ msgstr "Katman Seç: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4184 pcbnew/footprint.cpp:4187
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2149 pcbnew/pad.cpp:1347
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1347
 #: pcbnew/pad.cpp:2733 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:498 pcbnew/pcb_marker.cpp:400
@@ -38516,8 +38515,8 @@ msgid "Target skew: "
 msgstr "Hedef sapması: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2231 pcbnew/pad.cpp:1439
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2210
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2232 pcbnew/pad.cpp:1439
 #: pcbnew/pcb_track.cpp:1666 pcbnew/pcb_track.cpp:1674
 #: pcbnew/pcb_track.cpp:1706 pcbnew/pcb_track.cpp:1712
 #: pcbnew/router/router_tool.cpp:2792 pcbnew/router/router_tool.cpp:2797
@@ -38591,7 +38590,7 @@ msgstr "Yarıçap (r):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:391
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2720
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2721
 msgid "Single-sided"
 msgstr "Tek taraflı"
 
@@ -38906,29 +38905,29 @@ msgstr ""
 msgid "Failed to save footprint library file '%s'."
 msgstr "Ayak izi kütüphane dosyası '%s' kaydedilemedi."
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:123
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:417
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:465
 msgid "Error adding 3D model"
 msgstr "3B model ekleme hatası"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:501
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:549
 msgid "No filename entered"
 msgstr "Dosya adı girilmemiş"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:506
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:554
 msgid "Illegal filename"
 msgstr "Geçersiz dosya adı"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:511
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:559
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "Dosya bulunamadı"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:516
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:564
 msgid "Unable to open file"
 msgstr "Dosya açılamıyor"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:521
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:569
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
@@ -43459,156 +43458,156 @@ msgstr "Belgeler"
 msgid "Error loading footprint %s from library '%s'."
 msgstr "'%s' kütüphanesinden %s ayak izi yüklenirken hata oluştu."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:261
-#: pcbnew/generators/pcb_tuning_pattern.cpp:266
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2238
+#: pcbnew/generators/pcb_tuning_pattern.cpp:262
+#: pcbnew/generators/pcb_tuning_pattern.cpp:267
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2239
 msgid "Tuning Pattern"
 msgstr "Ayarlama Deseni"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:271
+#: pcbnew/generators/pcb_tuning_pattern.cpp:272
 msgid "Tuning Patterns"
 msgstr "Ayarlama Desenleri"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:491
+#: pcbnew/generators/pcb_tuning_pattern.cpp:492
 msgid "Tuning"
 msgstr "Ayarlama"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1476
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
 msgid "too long"
 msgstr "çok uzun"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
 msgid "too short"
 msgstr "çok kısa"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
 msgid "tuned"
 msgstr "ayarlanmış"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1558
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1559
 msgid "Edit Tuning Pattern"
 msgstr "Ayarlama Desenini Düzenle"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2083
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2084
 msgid "current skew"
 msgstr "mevcut sapma"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2085
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
 msgid "current length"
 msgstr "mevcut uzunluk"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2173
 msgid "Routed Lengths"
 msgstr "Yönlendirilmiş Uzunluklar"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2178 pcbnew/pcb_track.cpp:1649
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2179 pcbnew/pcb_track.cpp:1649
 msgid "Routed Length"
 msgstr "Yönlendirilmiş Uzunluk"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2184 pcbnew/pad.cpp:2886
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2185 pcbnew/pad.cpp:2886
 #: pcbnew/pcb_track.cpp:1654
 msgid "Pad To Die Length"
 msgstr "Ped - Kalıp Uzunluğu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2187 pcbnew/pcb_track.cpp:1657
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2188 pcbnew/pcb_track.cpp:1657
 msgid "Full Length"
 msgstr "Tam Uzunluk"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2199
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
 #, c-format
 msgid "Target Skew: %s"
 msgstr "Hedef Sapma: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2201
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2223
 msgid "(from tuning pattern properties)"
 msgstr "(ayarlama modeli özelliklerinden)"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2208
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
 #, c-format
 msgid "Skew Constraints: %s"
 msgstr "Sapma Kısıtlamaları: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
 #, c-format
 msgid "Target Length: %s"
 msgstr "Hedef Uzunluk: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2231
 #, c-format
 msgid "Length Constraints: %s"
 msgstr "Uzunluk Kısıtlamaları: %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2251
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2252
 msgid "Tune Skew"
 msgstr "Ayar Eğimi"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2464
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2465
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr "Diğer ayarlama modellerinin içindeki segmentler ayarlanamıyor."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2500
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
 msgid "Tune"
 msgstr "Ayarla"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2526
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2544
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
 msgid "Select a track to tune first."
 msgstr "Öncelikle akort edilecek parçayı seçin."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2612
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
 msgid "Single track"
 msgstr "Tekli yol"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
 msgid "Differential pair"
 msgstr "Diferansiyel çift"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2615
 msgid "Diff pair skew"
 msgstr "Diferansiyel çift sapması"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2628
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Pattern Properties"
 msgstr "Desen Özellikleri"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2643
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2644
 msgid "Tuning Mode"
 msgstr "Ayar Modu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2649
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2650
 msgid "Min Amplitude"
 msgstr "Minimum Yükseltme"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2656
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2657
 msgid "Max Amplitude"
 msgstr "Maks Yükseltme"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2663
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2664
 msgid "Initial Side"
 msgstr "Başlangıç tarafı"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2669
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2670
 msgid "Min Spacing"
 msgstr "Minimum Aralık"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2676
 msgid "Corner Radius %"
 msgstr "Köşe Yarıçapı %"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2697
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2698
 msgid "Target Length"
 msgstr "Hedef Uzunluk"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2706
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2707
 msgid "Target Skew"
 msgstr "Hedef Sapma"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2714
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2715
 msgid "Override Custom Rules"
 msgstr "Özel Kuralları Geçersiz Kıl"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2726
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2727
 msgid "Rounded"
 msgstr "Yuvarlatılmış"
 
@@ -44972,7 +44971,7 @@ msgstr "Bilinmeyen Kayıt adı dizesi: '%s'."
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Bilinmeyen Genişletilmiş İlkel Bilgi türü: '%s'."
 
-#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:864
+#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Ped 6 akışında alt kayıt 6 için beklenmeyen uzunluk var: %d."
@@ -45263,7 +45262,7 @@ msgstr ""
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3629
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3631
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -45272,7 +45271,7 @@ msgstr ""
 "KiCad karşılığı olmayan %s numaralı bakırsız ped, bir Altium katmanında (%d) "
 "bulundu. KiCad'in Eco1_User katmanına taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3657
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3659
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45283,7 +45282,7 @@ msgstr ""
 "Ayak izi %s bakır olmayan ped %s, KiCad eşdeğeri olmayan bir Altium "
 "katmanında (%d) bulundu. KiCad katmanı Eco1_User'a taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3672
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3674
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -45292,32 +45291,32 @@ msgstr ""
 "Ayak izi %s, bakırsız ped %s, KiCad karşılığı olmayan bir Altium katmanında "
 "(%d) bulundu. KiCad'in Eco1_User katmanına taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3700
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Bakır olmayan ped %s desteklenmeyen bir ağa bağlı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3711
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3713
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Bakır olmayan ped %s'de desteklenmeyen bir delik var."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3721
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3723
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Bakır olmayan ped %s'nin karmaşık bir ped yığını var (henüz desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3868
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3870
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Bakır olmayan ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3881
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3883
 msgid "Loading vias..."
 msgstr "Geçitler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3925
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3927
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -45325,24 +45324,24 @@ msgstr ""
 "%d katmanından %d katmanına geçiş, desteklenmeyen bakır olmayan bir katman "
 "kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3988
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3990
 msgid "Loading tracks..."
 msgstr "İzler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4205
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4207
 msgid "Loading unicode strings..."
 msgstr "Unicode dizeler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4219
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4221
 msgid "Loading text..."
 msgstr "Metin yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4251
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Altium %d katmanında barkod yok sayıldı (henüz desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4273
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4275
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45352,19 +45351,19 @@ msgstr ""
 "Ayak izi %s, Altium katmanı %d üzerinde barkod içeriyor (henüz "
 "desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4286
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4288
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ayak izi %s, Altium katmanı %d üzerinde barkod içeriyor (henüz "
 "desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4486
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4488
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Bilinmeyen metin kutusu hizalaması %d, aText %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4642
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4644
 msgid "Loading rectangles..."
 msgstr "Dikdörtgenler yükleniyor..."
 
@@ -48561,11 +48560,15 @@ msgstr "Seçim kopyalandı"
 msgid "Copy canceled"
 msgstr "Kopyalamadan vazgeçildi"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:207
+#: pcbnew/tools/edit_tool_move_fct.cpp:208
 msgid "Pack Footprints"
 msgstr "Ayak İzlerini Paketle"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:343
+#: pcbnew/tools/edit_tool_move_fct.cpp:340
+msgid "Angle snap guides: H, V, 45°"
+msgstr ""
+
+#: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
@@ -48574,12 +48577,12 @@ msgstr ""
 "%s yerleştirmek için tıklayın (%zu / %zu öge)\n"
 "Tümünü iptal etmek için <esc> tuşuna basın; bitirmek için çift tıklayın"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:356
+#: pcbnew/tools/edit_tool_move_fct.cpp:363
 #, c-format
 msgid "%s pad %s"
 msgstr "%s ped %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:399
+#: pcbnew/tools/edit_tool_move_fct.cpp:406
 msgid "Select reference point for move..."
 msgstr "Taşıma için referans noktasını seçin..."
 

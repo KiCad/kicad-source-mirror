@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-11 04:08+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -34488,6 +34488,9 @@ msgstr "Copy canceled"
 
 msgid "Pack Footprints"
 msgstr "Pack Footprints"
+
+msgid "Angle snap guides: H, V, 45°"
+msgstr "Angle snap guides: H, V, 45°"
 
 #, c-format
 msgid ""
