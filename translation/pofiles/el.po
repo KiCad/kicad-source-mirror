@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-11 04:08+0300\n"
 "PO-Revision-Date: 2025-06-01 11:56+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
@@ -291,9 +291,9 @@ msgstr "3Δ Προβολή KiCad"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:627
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
-#: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:1015
-#: pcbnew/pcb_edit_frame.cpp:319 pcbnew/pcb_edit_frame.cpp:1899
-#: pcbnew/tools/pcb_actions.cpp:1620
+#: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:1018
+#: pcbnew/pcb_edit_frame.cpp:319 pcbnew/pcb_edit_frame.cpp:1893
+#: pcbnew/tools/pcb_actions.cpp:1612
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
@@ -355,7 +355,7 @@ msgstr "Ανεπαρκή δικαιώματα για αποθήκευση του
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:1051
+#: pcbnew/dialogs/dialog_drc.cpp:1023
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:116
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:453
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:236
@@ -607,7 +607,7 @@ msgid "Show Appearance Manager"
 msgstr "Προβολή Διαχειριστή Εμφάνισης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#: pcbnew/tools/pcb_actions.cpp:1621
+#: pcbnew/tools/pcb_actions.cpp:1613
 msgid "Show/hide the appearance manager"
 msgstr "Προβολή/απόκρυψη του διαχειριστή εμφάνισης"
 
@@ -1765,7 +1765,7 @@ msgstr "Κλίμακα"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:778
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2543
+#: pcbnew/tools/pcb_point_editor.cpp:2637
 msgid "X:"
 msgstr "Χ:"
 
@@ -1789,7 +1789,7 @@ msgstr "Χ:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:253
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2543
+#: pcbnew/tools/pcb_point_editor.cpp:2637
 msgid "Y:"
 msgstr "Ψ:"
 
@@ -1864,13 +1864,13 @@ msgstr "Διαγραφή Πρόσφατων Αρχείων"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1156
-#: pagelayout_editor/pl_editor_frame.cpp:847 pcbnew/tools/drawing_tool.cpp:752
+#: pagelayout_editor/pl_editor_frame.cpp:847 pcbnew/tools/drawing_tool.cpp:751
 msgid "Choose Image"
 msgstr "Επιλογή Εικόνας"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
 #: eeschema/tools/sch_drawing_tools.cpp:1157
-#: pagelayout_editor/pl_editor_frame.cpp:848 pcbnew/tools/drawing_tool.cpp:753
+#: pagelayout_editor/pl_editor_frame.cpp:848 pcbnew/tools/drawing_tool.cpp:752
 msgid "Image Files"
 msgstr "Αρχεία Εικόνας"
 
@@ -3335,7 +3335,7 @@ msgstr "Σύνδεσμος βιβλιοθήκης:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1830 pcbnew/pad.cpp:1369 pcbnew/pad.cpp:2791
 #: pcbnew/pcb_barcode.cpp:380 pcbnew/pcb_dimension.cpp:693
-#: pcbnew/pcb_group.cpp:396 pcbnew/pcb_marker.cpp:400 pcbnew/pcb_shape.cpp:696
+#: pcbnew/pcb_group.cpp:396 pcbnew/pcb_marker.cpp:462 pcbnew/pcb_shape.cpp:696
 #: pcbnew/pcb_tablecell.cpp:142 pcbnew/pcb_text.cpp:288
 #: pcbnew/pcb_textbox.cpp:486 pcbnew/pcb_track.cpp:2038
 #: pcbnew/tools/generator_tool.cpp:47
@@ -3457,7 +3457,7 @@ msgstr "Προεπισκόπηση Δεδομένων Πλαισίου Τίτλ�
 #: common/dialogs/dialog_page_settings.cpp:89
 #: common/dialogs/dialog_page_settings_base.h:146
 #: eeschema/tools/sch_editor_control.cpp:190
-#: pcbnew/tools/board_editor_control.cpp:342
+#: pcbnew/tools/board_editor_control.cpp:334
 msgid "Page Settings"
 msgstr "Ρυθμίσεις Σελίδας"
 
@@ -3751,7 +3751,7 @@ msgstr "Προεπισκόπηση εκτύπωσης"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:114
 #: pcbnew/dialogs/dialog_board_statistics.cpp:169
-#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:423
+#: pcbnew/dialogs/dialog_drc.cpp:146 pcbnew/dialogs/dialog_drc.cpp:422
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:130
 #: pcbnew/dialogs/dialog_export_2581.cpp:56
 #: pcbnew/dialogs/dialog_export_step.cpp:101
@@ -3861,7 +3861,7 @@ msgid "Fit to page"
 msgstr "Προσαρμογή στη σελίδα"
 
 #: common/dialogs/dialog_print_generic_base.cpp:84
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:419
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:420
 msgid "Custom:"
 msgstr "Προσαρμοσμένο:"
 
@@ -4076,7 +4076,7 @@ msgstr "Εντάξει"
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:403
+#: pcbnew/dialogs/dialog_drc.cpp:402
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr "Άκυρο"
@@ -5672,7 +5672,7 @@ msgstr "Μεγέθυνση"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
-#: common/dialogs/panel_mouse_settings_base.cpp:165 common/eda_shape.cpp:2645
+#: common/dialogs/panel_mouse_settings_base.cpp:165 common/eda_shape.cpp:2643
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:140
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
@@ -5951,8 +5951,8 @@ msgstr "Πληροφορίες:"
 msgid "<Not defined>"
 msgstr "Μη Συνδεδεμένο"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2634
-#: common/eda_shape.cpp:2646 common/stroke_params.cpp:40
+#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2632
+#: common/eda_shape.cpp:2644 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: eeschema/sch_bus_entry.cpp:639 eeschema/sch_line.cpp:1235
@@ -5962,44 +5962,44 @@ msgstr "Μη Συνδεδεμένο"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#: pcbnew/footprint.cpp:4411 pcbnew/pad.cpp:2774 pcbnew/pcb_table.cpp:657
+#: pcbnew/footprint.cpp:4411 pcbnew/pad.cpp:2774 pcbnew/pcb_table.cpp:700
 #: pcbnew/pcb_textbox.cpp:828 pcbnew/zone.cpp:945 pcbnew/zone.cpp:1811
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
 msgstr "Συμπαγής"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2635
+#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2633
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:640 eeschema/sch_line.cpp:1236
-#: eeschema/sch_line.cpp:1248 pcbnew/pcb_table.cpp:658
+#: eeschema/sch_line.cpp:1248 pcbnew/pcb_table.cpp:701
 #: pcbnew/pcb_textbox.cpp:829
 msgid "Dashed"
 msgstr "Με παύλες"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2636
+#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2634
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:641 eeschema/sch_line.cpp:1237
-#: eeschema/sch_line.cpp:1249 pcbnew/pcb_table.cpp:659
+#: eeschema/sch_line.cpp:1249 pcbnew/pcb_table.cpp:702
 #: pcbnew/pcb_textbox.cpp:830
 msgid "Dotted"
 msgstr "Με τελείες"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2637
+#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2635
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:642 eeschema/sch_line.cpp:1238
-#: eeschema/sch_line.cpp:1250 pcbnew/pcb_table.cpp:660
+#: eeschema/sch_line.cpp:1250 pcbnew/pcb_table.cpp:703
 #: pcbnew/pcb_textbox.cpp:831
 msgid "Dash-Dot"
 msgstr "Παύλα-Τελεία"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2638
+#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2636
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:643 eeschema/sch_line.cpp:1239
-#: eeschema/sch_line.cpp:1251 pcbnew/pcb_table.cpp:661
+#: eeschema/sch_line.cpp:1251 pcbnew/pcb_table.cpp:704
 #: pcbnew/pcb_textbox.cpp:832
 msgid "Dash-Dot-Dot"
 msgstr "Παύλα-Τελεία-Τελεία"
@@ -6150,7 +6150,7 @@ msgstr "Πάχος Καλωδίου"
 msgid "Bus Thickness"
 msgstr "Πάχος Δίαυλου"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2779
+#: common/dialogs/panel_setup_netclasses_base.cpp:65 common/eda_shape.cpp:2777
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:646
 #: eeschema/sch_line.cpp:961 eeschema/sch_line.cpp:1295
 #: eeschema/sch_line.cpp:1299 eeschema/sch_tablecell.cpp:225
@@ -6216,7 +6216,7 @@ msgstr "Κλάση Δικτύου"
 #: eeschema/symbol_editor/symbol_editor.cpp:434
 #: eeschema/symbol_editor/symbol_editor.cpp:1264
 #: eeschema/symbol_editor/symbol_editor.cpp:1661
-#: pcbnew/dialogs/dialog_drc.cpp:1052 pcbnew/dialogs/dialog_export_vrml.cpp:61
+#: pcbnew/dialogs/dialog_drc.cpp:1024 pcbnew/dialogs/dialog_export_vrml.cpp:61
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:241
 #: pcbnew/pcb_marker.cpp:233
 msgid "Warning"
@@ -6225,7 +6225,7 @@ msgstr "Προειδοποίηση"
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:962 eeschema/sch_marker.cpp:366
-#: pcbnew/dialogs/dialog_drc.cpp:1053 pcbnew/pcb_marker.cpp:230
+#: pcbnew/dialogs/dialog_drc.cpp:1025 pcbnew/pcb_marker.cpp:230
 msgid "Ignore"
 msgstr "Παράληψη"
 
@@ -6415,7 +6415,7 @@ msgstr "Εξαντλήθηκε η μνήμη."
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:142
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/pcb_barcode.cpp:377
-#: pcbnew/pcb_barcode.cpp:717 pcbnew/pcb_dimension.cpp:1899
+#: pcbnew/pcb_barcode.cpp:739 pcbnew/pcb_dimension.cpp:1899
 #: pcbnew/pcb_dimension.cpp:1981 pcbnew/pcb_dimension.cpp:2014
 #: pcbnew/pcb_dimension.cpp:2052 pcbnew/pcb_dimension.cpp:2094
 #: pcbnew/pcb_dimension.cpp:2128 pcbnew/pcb_tablecell.cpp:139
@@ -6440,8 +6440,8 @@ msgid "Line"
 msgstr "Γραμμή"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1136
-#: common/eda_shape.cpp:2624 common/tool/actions.cpp:353
+#: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:1134
+#: common/eda_shape.cpp:2622 common/tool/actions.cpp:353
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
 #: eeschema/sch_label.cpp:2467
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
@@ -6688,7 +6688,7 @@ msgstr "Προσομοιωτής"
 #: common/eda_base_frame.cpp:1377 common/tool/actions.cpp:1308
 #: common/tool/common_tools.cpp:619 kicad/tools/kicad_manager_actions.cpp:138
 #: pcbnew/dialogs/panel_display_options_base.cpp:154
-#: pcbnew/footprint_edit_frame.cpp:1099 pcbnew/menubar_footprint_editor.cpp:92
+#: pcbnew/footprint_edit_frame.cpp:1102 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Επεξεργαστής Αποτυπώματος"
 
@@ -6710,7 +6710,7 @@ msgstr "Εκκαθάριση Γραφικών"
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
 #: pcbnew/dialogs/panel_display_options_base.cpp:269
 #: pcbnew/menubar_pcb_editor.cpp:165 pcbnew/pcb_edit_frame.cpp:187
-#: pcbnew/pcb_edit_frame.cpp:1995 pcbnew/tools/zone_filler_tool.cpp:291
+#: pcbnew/pcb_edit_frame.cpp:1989 pcbnew/tools/zone_filler_tool.cpp:291
 msgid "PCB Editor"
 msgstr "Επεξεργαστής Σχεδίασης PCB"
 
@@ -6754,7 +6754,7 @@ msgid "Maintenance"
 msgstr "Συντηρητής"
 
 #: common/eda_base_frame.cpp:1562 pcbnew/dialogs/dialog_export_odbpp.cpp:286
-#: pcbnew/tools/board_editor_control.cpp:494
+#: pcbnew/tools/board_editor_control.cpp:486
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου %s."
@@ -6876,7 +6876,7 @@ msgid "Inches"
 msgstr "Ίντσες"
 
 #: common/eda_draw_frame.cpp:756 pagelayout_editor/pl_editor_frame.cpp:176
-#: pcbnew/tools/drawing_tool.cpp:342 pcbnew/tools/edit_tool_move_fct.cpp:842
+#: pcbnew/tools/drawing_tool.cpp:341
 msgid "Constrain to H, V, 45"
 msgstr "Περιορισμός σε Οριζ, Κάθ, 45 μοίρες"
 
@@ -6890,12 +6890,12 @@ msgstr "Αναζήτηση"
 #: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:1945
 #: pagelayout_editor/pl_editor_frame.cpp:200
 #: pcbnew/footprint_edit_frame.cpp:233 pcbnew/pcb_edit_frame.cpp:354
-#: pcbnew/pcb_edit_frame.cpp:1901
+#: pcbnew/pcb_edit_frame.cpp:1895
 msgid "Properties"
 msgstr "Ιδιότητες"
 
 #: common/eda_draw_frame.cpp:1247 pcbnew/pcb_edit_frame.cpp:366
-#: pcbnew/pcb_edit_frame.cpp:1902 pcbnew/tools/pcb_actions.cpp:1628
+#: pcbnew/pcb_edit_frame.cpp:1896 pcbnew/tools/pcb_actions.cpp:1620
 msgid "Net Inspector"
 msgstr "Επιθεωρητής Net"
 
@@ -6939,7 +6939,7 @@ msgid "Text Box"
 msgstr "Πλαίσιο Κειμένου"
 
 #: common/eda_item.cpp:425 common/eda_item.cpp:455 eeschema/sch_table.cpp:456
-#: eeschema/sch_tablecell.cpp:237 pcbnew/pcb_table.cpp:511
+#: eeschema/sch_tablecell.cpp:237 pcbnew/pcb_table.cpp:554
 #: pcbnew/pcb_tablecell.cpp:251
 msgid "Table"
 msgstr "Πίνακας"
@@ -7067,7 +7067,7 @@ msgid "Sheet Pin"
 msgstr "Ακροδέκτης Φύλλου"
 
 #: common/eda_item.cpp:465 eeschema/dialogs/dialog_migrate_buses.cpp:110
-#: pcbnew/tools/pcb_actions.cpp:2407
+#: pcbnew/tools/pcb_actions.cpp:2399
 msgid "Sheet"
 msgstr "Φύλλο"
 
@@ -7095,12 +7095,12 @@ msgstr "Πλαίσιο Αριθμού"
 msgid "Rect"
 msgstr "Ορθογώνιο"
 
-#: common/eda_shape.cpp:338 common/eda_shape.cpp:1133 common/eda_shape.cpp:2625
+#: common/eda_shape.cpp:338 common/eda_shape.cpp:1131 common/eda_shape.cpp:2623
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Τόξο"
 
-#: common/eda_shape.cpp:339 common/eda_shape.cpp:1132 common/eda_shape.cpp:2626
+#: common/eda_shape.cpp:339 common/eda_shape.cpp:1130 common/eda_shape.cpp:2624
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2465 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
@@ -7114,31 +7114,31 @@ msgstr "Κύκλος"
 msgid "Bezier Curve"
 msgstr "Καμπύλη Μπεζιέ"
 
-#: common/eda_shape.cpp:341 common/eda_shape.cpp:1135 common/eda_shape.cpp:2627
+#: common/eda_shape.cpp:341 common/eda_shape.cpp:1133 common/eda_shape.cpp:2625
 msgid "Polygon"
 msgstr "Πολύγωνο"
 
-#: common/eda_shape.cpp:1123
+#: common/eda_shape.cpp:1121
 msgid "Pad Number Box"
 msgstr "Πλαίσιο Αριθμού Pad"
 
-#: common/eda_shape.cpp:1124 pcbnew/pcb_shape.cpp:1090
+#: common/eda_shape.cpp:1122 pcbnew/pcb_shape.cpp:1090
 msgid "Thermal Spoke Template"
 msgstr "Πρότυπο Θερμικής Ακτίνας"
 
-#: common/eda_shape.cpp:1125 common/eda_shape.cpp:1138
+#: common/eda_shape.cpp:1123 common/eda_shape.cpp:1136
 msgid "Unrecognized"
 msgstr "Μη αναγνωρισμένο"
 
-#: common/eda_shape.cpp:1134
+#: common/eda_shape.cpp:1132
 msgid "Curve"
 msgstr "Καμπύλη"
 
-#: common/eda_shape.cpp:1137 common/eda_shape.cpp:2623
+#: common/eda_shape.cpp:1135 common/eda_shape.cpp:2621
 msgid "Segment"
 msgstr "Τμήμα"
 
-#: common/eda_shape.cpp:1148 common/eda_shape.cpp:2687
+#: common/eda_shape.cpp:1146 common/eda_shape.cpp:2685
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2447 eeschema/sch_label.cpp:2478
@@ -7155,35 +7155,35 @@ msgstr "Τμήμα"
 msgid "Shape"
 msgstr "Σχήμα"
 
-#: common/eda_shape.cpp:1154 common/eda_shape.cpp:1163
-#: common/eda_shape.cpp:2714 pcbnew/dialogs/dialog_shape_properties.cpp:941
+#: common/eda_shape.cpp:1152 common/eda_shape.cpp:1161
+#: common/eda_shape.cpp:2712 pcbnew/dialogs/dialog_shape_properties.cpp:941
 #: pcbnew/pcb_shape.cpp:1025 pcbnew/pcb_track.cpp:1902
 msgid "Radius"
 msgstr "Ακτίνα"
 
-#: common/eda_shape.cpp:1158 common/eda_shape.cpp:1167
-#: common/eda_shape.cpp:1182 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
+#: common/eda_shape.cpp:1156 common/eda_shape.cpp:1165
+#: common/eda_shape.cpp:1180 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:102
 #: eeschema/sch_line.cpp:1292 eeschema/sch_pin.cpp:1343
 #: eeschema/sch_pin.cpp:1934 pcbnew/dialogs/dialog_shape_properties.cpp:905
 msgid "Length"
 msgstr "Μήκος"
 
-#: common/eda_shape.cpp:1161 common/eda_shape.cpp:1187
-#: common/eda_shape.cpp:2788 pcbnew/dialogs/dialog_shape_properties.cpp:906
+#: common/eda_shape.cpp:1159 common/eda_shape.cpp:1185
+#: common/eda_shape.cpp:2786 pcbnew/dialogs/dialog_shape_properties.cpp:906
 #: pcbnew/pcb_barcode.cpp:384 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:490
 msgid "Angle"
 msgstr "Γωνία"
 
-#: common/eda_shape.cpp:1172 common/layer_id.cpp:145
+#: common/eda_shape.cpp:1170 common/layer_id.cpp:145
 #: eeschema/sch_rule_area.cpp:372 pcbnew/widgets/appearance_controls.cpp:351
 #: pcbnew/widgets/panel_selection_filter.cpp:230
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Points"
 msgstr "Σημεία"
 
-#: common/eda_shape.cpp:1176 common/eda_shape.cpp:2732 common/eda_text.cpp:1424
+#: common/eda_shape.cpp:1174 common/eda_shape.cpp:2730 common/eda_text.cpp:1424
 #: eeschema/sch_bitmap.cpp:198 eeschema/sch_bitmap.cpp:333
 #: eeschema/sch_field.cpp:1678 eeschema/sch_tablecell.cpp:220
 #: eeschema/sch_tablecell.cpp:229 eeschema/sch_text.cpp:702
@@ -7194,7 +7194,7 @@ msgstr "Σημεία"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1993
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2532 pcbnew/pad.cpp:1419
-#: pcbnew/pcb_barcode.cpp:727 pcbnew/pcb_fields_grid_table.cpp:150
+#: pcbnew/pcb_barcode.cpp:749 pcbnew/pcb_fields_grid_table.cpp:150
 #: pcbnew/pcb_reference_image.cpp:228 pcbnew/pcb_reference_image.cpp:378
 #: pcbnew/pcb_tablecell.cpp:241 pcbnew/pcb_target.cpp:157
 #: pcbnew/pcb_target.cpp:250 pcbnew/pcb_text.cpp:303 pcbnew/pcb_textbox.cpp:847
@@ -7202,108 +7202,108 @@ msgstr "Σημεία"
 msgid "Width"
 msgstr "Πλάτος"
 
-#: common/eda_shape.cpp:1177 common/eda_shape.cpp:2738 common/eda_text.cpp:1429
+#: common/eda_shape.cpp:1175 common/eda_shape.cpp:2736 common/eda_text.cpp:1429
 #: eeschema/sch_bitmap.cpp:200 eeschema/sch_bitmap.cpp:338
 #: eeschema/sch_field.cpp:1679 eeschema/sch_tablecell.cpp:221
 #: eeschema/sch_tablecell.cpp:230 eeschema/sch_text.cpp:703
 #: eeschema/sch_textbox.cpp:619 pcbnew/dialogs/dialog_board_statistics.cpp:796
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/pad.cpp:1420 pcbnew/pcb_barcode.cpp:731 pcbnew/pcb_dimension.cpp:1069
+#: pcbnew/pad.cpp:1420 pcbnew/pcb_barcode.cpp:753 pcbnew/pcb_dimension.cpp:1069
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:230
 #: pcbnew/pcb_reference_image.cpp:383 pcbnew/pcb_tablecell.cpp:242
 #: pcbnew/pcb_text.cpp:304 pcbnew/pcb_textbox.cpp:848
 msgid "Height"
 msgstr "Ύψος"
 
-#: common/eda_shape.cpp:2628
+#: common/eda_shape.cpp:2626
 msgid "Bezier"
 msgstr "Μπεζιέ"
 
-#: common/eda_shape.cpp:2647
+#: common/eda_shape.cpp:2645
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Hatch"
 msgstr "Σκιαγραφημένο"
 
-#: common/eda_shape.cpp:2648
+#: common/eda_shape.cpp:2646
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Reverse Hatch"
 msgstr "Αντιστροφή"
 
-#: common/eda_shape.cpp:2649
+#: common/eda_shape.cpp:2647
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 #, fuzzy
 msgid "Cross-hatch"
 msgstr "Cross-probing"
 
-#: common/eda_shape.cpp:2685 eeschema/sch_shape.cpp:593
+#: common/eda_shape.cpp:2683 eeschema/sch_shape.cpp:593
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Ιδιότητες Σχήματος"
 
-#: common/eda_shape.cpp:2691 eeschema/sch_line.cpp:1276
+#: common/eda_shape.cpp:2689 eeschema/sch_line.cpp:1276
 #: eeschema/sch_table.cpp:517 eeschema/sch_tablecell.cpp:214
-#: pcbnew/pcb_shape.cpp:1013 pcbnew/pcb_table.cpp:672
+#: pcbnew/pcb_shape.cpp:1013 pcbnew/pcb_table.cpp:715
 #: pcbnew/pcb_tablecell.cpp:236 pcbnew/pcb_textbox.cpp:843
 #: pcbnew/pcb_track.cpp:2559
 msgid "Start X"
 msgstr "Έναρξη Χ"
 
-#: common/eda_shape.cpp:2696 eeschema/sch_line.cpp:1280
+#: common/eda_shape.cpp:2694 eeschema/sch_line.cpp:1280
 #: eeschema/sch_table.cpp:520 eeschema/sch_tablecell.cpp:215
-#: pcbnew/pcb_shape.cpp:1015 pcbnew/pcb_table.cpp:675
+#: pcbnew/pcb_shape.cpp:1015 pcbnew/pcb_table.cpp:718
 #: pcbnew/pcb_tablecell.cpp:237 pcbnew/pcb_textbox.cpp:844
 #: pcbnew/pcb_track.cpp:2563
 msgid "Start Y"
 msgstr "Έναρξη Ψ"
 
-#: common/eda_shape.cpp:2702 pcbnew/pcb_shape.cpp:1021
+#: common/eda_shape.cpp:2700 pcbnew/pcb_shape.cpp:1021
 msgid "Center X"
 msgstr "Κεντράρισμα Χ"
 
-#: common/eda_shape.cpp:2708 pcbnew/pcb_shape.cpp:1023
+#: common/eda_shape.cpp:2706 pcbnew/pcb_shape.cpp:1023
 msgid "Center Y"
 msgstr "Κεντράρισμα Ψ"
 
-#: common/eda_shape.cpp:2720 eeschema/sch_line.cpp:1284
+#: common/eda_shape.cpp:2718 eeschema/sch_line.cpp:1284
 #: eeschema/sch_tablecell.cpp:216 pcbnew/generators/pcb_tuning_pattern.cpp:2553
 #: pcbnew/pcb_shape.cpp:1017 pcbnew/pcb_tablecell.cpp:238
 #: pcbnew/pcb_textbox.cpp:845 pcbnew/pcb_track.cpp:2566
 msgid "End X"
 msgstr "Τέλος Χ"
 
-#: common/eda_shape.cpp:2726 eeschema/sch_line.cpp:1288
+#: common/eda_shape.cpp:2724 eeschema/sch_line.cpp:1288
 #: eeschema/sch_tablecell.cpp:217 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_shape.cpp:1019 pcbnew/pcb_tablecell.cpp:239
 #: pcbnew/pcb_textbox.cpp:846 pcbnew/pcb_track.cpp:2569
 msgid "End Y"
 msgstr "Τέλος Ψ"
 
-#: common/eda_shape.cpp:2744 eeschema/sch_tablecell.cpp:227
+#: common/eda_shape.cpp:2742 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
 #: pcbnew/pcb_textbox.cpp:852
 #, fuzzy
 msgid "Corner Radius"
 msgstr "Ακτίνα Γωνίας %"
 
-#: common/eda_shape.cpp:2775 common/stroke_params.cpp:276
+#: common/eda_shape.cpp:2773 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1303
 #: eeschema/sch_tablecell.cpp:224 pcbnew/pcb_tablecell.cpp:243
 #: pcbnew/pcb_textbox.cpp:849
 msgid "Line Width"
 msgstr "Πλάτος Γραμμής"
 
-#: common/eda_shape.cpp:2783 eeschema/sch_tablecell.cpp:226
+#: common/eda_shape.cpp:2781 eeschema/sch_tablecell.cpp:226
 #: pcbnew/pcb_shape.cpp:976 pcbnew/pcb_tablecell.cpp:245
 msgid "Line Color"
 msgstr "Χρώμα Γραμμής"
 
-#: common/eda_shape.cpp:2830
+#: common/eda_shape.cpp:2828
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
 #: eeschema/sch_tablecell.cpp:222
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
@@ -7313,7 +7313,7 @@ msgstr "Χρώμα Γραμμής"
 msgid "Fill"
 msgstr "Γέμισμα"
 
-#: common/eda_shape.cpp:2835 eeschema/sch_shape.cpp:586
+#: common/eda_shape.cpp:2833 eeschema/sch_shape.cpp:586
 #: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_shape.cpp:977
 msgid "Fill Color"
 msgstr "Χρώμα Γεμίσματος"
@@ -7428,7 +7428,7 @@ msgstr "Κάτω"
 #: eeschema/sch_text.cpp:711 eeschema/sch_textbox.cpp:646
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4453 pcbnew/pad.cpp:2793 pcbnew/pcb_barcode.cpp:735
+#: pcbnew/footprint.cpp:4453 pcbnew/pad.cpp:2793 pcbnew/pcb_barcode.cpp:757
 #: pcbnew/pcb_dimension.cpp:1864 pcbnew/pcb_dimension.cpp:1939
 #: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_tablecell.cpp:247
 msgid "Orientation"
@@ -8179,8 +8179,8 @@ msgid "Add to Selection"
 msgstr "Προσθήκη στην Επιλογή"
 
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:998
-#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1525
-#: pcbnew/tools/pcb_actions.cpp:1555
+#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1517
+#: pcbnew/tools/pcb_actions.cpp:1547
 msgid "Highlight Net"
 msgstr "Επισήμανση Δικτύου"
 
@@ -9514,7 +9514,7 @@ msgstr "Σφάλμα εξαγωγής αρχείου!"
 #: eeschema/sch_plotter.cpp:736 gerbview/export_to_pcbnew.cpp:64
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:779
-#: pcbnew/dialogs/dialog_drc.cpp:1126 pcbnew/dialogs/dialog_export_2581.cpp:294
+#: pcbnew/dialogs/dialog_drc.cpp:1098 pcbnew/dialogs/dialog_export_2581.cpp:294
 #: pcbnew/dialogs/dialog_export_idf.cpp:130
 #: pcbnew/dialogs/dialog_export_vrml.cpp:136
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:294
@@ -11188,7 +11188,7 @@ msgid "Footprint not found."
 msgstr "Το αποτύπωμα δεν βρέθηκε."
 
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:908
-#: pcbnew/footprint_edit_frame.cpp:1125
+#: pcbnew/footprint_edit_frame.cpp:1128
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
 #, fuzzy
 msgid "Load Footprint Libraries"
@@ -11245,8 +11245,8 @@ msgstr "Ορισμός απεικόνισης γραφήματος για εμφ
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:402
 #: pcbnew/dialogs/dialog_copper_zones.cpp:777
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:261
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:262
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:266
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:267
 msgid "<no net>"
 msgstr "<κανένα δίκτυο>"
 
@@ -11442,7 +11442,7 @@ msgstr "Προειδοποίηση:"
 #: common/widgets/wx_html_report_panel.cpp:312
 #: eeschema/dialogs/dialog_erc.cpp:1104
 #: pcbnew/dialogs/dialog_board_statistics.cpp:765
-#: pcbnew/dialogs/dialog_drc.cpp:1096
+#: pcbnew/dialogs/dialog_drc.cpp:1068
 msgid "Save Report File"
 msgstr "Αποθήκευση Αρχείου Αναφοράς"
 
@@ -12957,7 +12957,7 @@ msgstr "Αλφαριθμητικό Σύνδεσης:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:214
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1464
-#: pcbnew/footprint_edit_frame.cpp:229 pcbnew/footprint_edit_frame.cpp:1011
+#: pcbnew/footprint_edit_frame.cpp:229 pcbnew/footprint_edit_frame.cpp:1014
 msgid "Libraries"
 msgstr "Βιβλιοθήκες"
 
@@ -13091,7 +13091,7 @@ msgstr ""
 "Το Σχηματικό δεν είναι πλήρως ονοματισμένο. Τα αποτελέσματα ERC θα είναι "
 "ελλιπή."
 
-#: eeschema/dialogs/dialog_erc.cpp:222 pcbnew/dialogs/dialog_drc.cpp:276
+#: eeschema/dialogs/dialog_erc.cpp:222 pcbnew/dialogs/dialog_drc.cpp:275
 #, fuzzy
 msgid "Cross-probe Selected Items"
 msgstr "Επιλεγμένα Αντικείμενα"
@@ -13101,30 +13101,30 @@ msgstr "Επιλεγμένα Αντικείμενα"
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
 msgstr "Επισήμανση συμβόλων που αντιστοιχούν στα επιλεγμένα αποτυπώματα"
 
-#: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:281
+#: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:280
 #, fuzzy
 msgid "Center on Cross-probe"
 msgstr "Κέντρο στον δείκτη του Κέρσορα"
 
-#: eeschema/dialogs/dialog_erc.cpp:228 pcbnew/dialogs/dialog_drc.cpp:282
+#: eeschema/dialogs/dialog_erc.cpp:228 pcbnew/dialogs/dialog_drc.cpp:281
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:398 pcbnew/dialogs/dialog_drc.cpp:1314
+#: eeschema/dialogs/dialog_erc.cpp:398 pcbnew/dialogs/dialog_drc.cpp:1286
 msgid "Delete exclusions too?"
 msgstr "Διαγραφή και των εξαιρέσεων;"
 
 #: eeschema/dialogs/dialog_erc.cpp:398 eeschema/dialogs/dialog_erc_base.cpp:192
-#: pcbnew/dialogs/dialog_drc.cpp:1314 pcbnew/dialogs/dialog_drc_base.cpp:236
+#: pcbnew/dialogs/dialog_drc.cpp:1286 pcbnew/dialogs/dialog_drc_base.cpp:236
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:80
 msgid "Delete All Markers"
 msgstr "Διαγραφή Όλων των Σημαδιών"
 
-#: eeschema/dialogs/dialog_erc.cpp:400 pcbnew/dialogs/dialog_drc.cpp:1316
+#: eeschema/dialogs/dialog_erc.cpp:400 pcbnew/dialogs/dialog_drc.cpp:1288
 msgid "Errors and Warnings Only"
 msgstr "Σφάλματα και Προειδοποιήσεις Μόνο"
 
-#: eeschema/dialogs/dialog_erc.cpp:401 pcbnew/dialogs/dialog_drc.cpp:1317
+#: eeschema/dialogs/dialog_erc.cpp:401 pcbnew/dialogs/dialog_drc.cpp:1289
 msgid "Errors, Warnings and Exclusions"
 msgstr "Σφάλματα, Προειδοποιήσεις και Εξαιρέσεις"
 
@@ -13138,52 +13138,52 @@ msgstr "%d το/τα σύμβολο/-α απαιτούν σχολιασμό.<br>
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- Το ERC ακυρώθηκε από τον χρήστη.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:525 pcbnew/dialogs/dialog_drc.cpp:417
+#: eeschema/dialogs/dialog_erc.cpp:525 pcbnew/dialogs/dialog_drc.cpp:416
 msgid "Done.<br><br>"
 msgstr "Έγινε.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:690 pcbnew/dialogs/dialog_drc.cpp:726
+#: eeschema/dialogs/dialog_erc.cpp:690 pcbnew/dialogs/dialog_drc.cpp:698
 msgid "errors"
 msgstr "σφάλματα"
 
-#: eeschema/dialogs/dialog_erc.cpp:691 pcbnew/dialogs/dialog_drc.cpp:727
+#: eeschema/dialogs/dialog_erc.cpp:691 pcbnew/dialogs/dialog_drc.cpp:699
 msgid "warnings"
 msgstr "προειδοποιήσεις"
 
-#: eeschema/dialogs/dialog_erc.cpp:692 pcbnew/dialogs/dialog_drc.cpp:728
+#: eeschema/dialogs/dialog_erc.cpp:692 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "appropriate"
 msgstr "κατάλληλο"
 
-#: eeschema/dialogs/dialog_erc.cpp:716 pcbnew/dialogs/dialog_drc.cpp:750
+#: eeschema/dialogs/dialog_erc.cpp:716 pcbnew/dialogs/dialog_drc.cpp:722
 msgid "Remove exclusion for this violation"
 msgstr "Κατάργηση εξαίρεσης για αυτήν την παράβαση"
 
-#: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:751
+#: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:723
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Θα τοποθετηθεί ξανά στη λίστα %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:754
+#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:726
 msgid "Edit exclusion comment..."
 msgstr "Επεξεργασία σχολίου αποκλεισμού..."
 
-#: eeschema/dialogs/dialog_erc.cpp:725 pcbnew/dialogs/dialog_drc.cpp:767
+#: eeschema/dialogs/dialog_erc.cpp:725 pcbnew/dialogs/dialog_drc.cpp:739
 #, fuzzy
 msgid "Exclude this violation"
 msgstr "Εξαίρεση αυτής της παραβίασης..."
 
 #: eeschema/dialogs/dialog_erc.cpp:726 eeschema/dialogs/dialog_erc.cpp:730
-#: pcbnew/dialogs/dialog_drc.cpp:768 pcbnew/dialogs/dialog_drc.cpp:772
+#: pcbnew/dialogs/dialog_drc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:744
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Θα αποκλειστεί από τη λίστα %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:729 pcbnew/dialogs/dialog_drc.cpp:771
+#: eeschema/dialogs/dialog_erc.cpp:729 pcbnew/dialogs/dialog_drc.cpp:743
 #, fuzzy
 msgid "Exclude with comment..."
 msgstr "Επεξεργασία σχολίου αποκλεισμού..."
 
-#: eeschema/dialogs/dialog_erc.cpp:757 pcbnew/dialogs/dialog_drc.cpp:802
+#: eeschema/dialogs/dialog_erc.cpp:757 pcbnew/dialogs/dialog_drc.cpp:774
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Αλλαγή σοβαρότητας σε Σφάλμα για όλες τις παραβιάσεις '%s'"
@@ -13195,17 +13195,17 @@ msgstr ""
 "Μπορείτε επίσης να επεξεργαστείτε τις σοβαρές παραβιάσεις στο διάλογο "
 "Ρύθμιση Σχηματικού ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:764 pcbnew/dialogs/dialog_drc.cpp:809
+#: eeschema/dialogs/dialog_erc.cpp:764 pcbnew/dialogs/dialog_drc.cpp:781
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Αλλαγή σοβαρότητας σε Προειδοποίηση για όλες τις παραβιάσεις '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:771 pcbnew/dialogs/dialog_drc.cpp:815
+#: eeschema/dialogs/dialog_erc.cpp:771 pcbnew/dialogs/dialog_drc.cpp:787
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Αγνόηση όλων των παραβιάσεων '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:772 pcbnew/dialogs/dialog_drc.cpp:816
+#: eeschema/dialogs/dialog_erc.cpp:772 pcbnew/dialogs/dialog_drc.cpp:788
 msgid "Violations will not be checked or reported"
 msgstr "Οι παραβιάσεις δεν θα ελεγχθούν ούτε θα αναφερθούν"
 
@@ -13218,7 +13218,7 @@ msgstr "Επεξεργασία χάρτη διενέξεων pin-to-pin ..."
 msgid "Open the Schematic Setup... dialog"
 msgstr "Άνοιγμα του διαλόγου για τις ρυθμίσεις σχηματικού..."
 
-#: eeschema/dialogs/dialog_erc.cpp:786 pcbnew/dialogs/dialog_drc.cpp:821
+#: eeschema/dialogs/dialog_erc.cpp:786 pcbnew/dialogs/dialog_drc.cpp:793
 msgid "Edit violation severities..."
 msgstr "Επεξεργασία βαρύτητας παραβίασης..."
 
@@ -13227,7 +13227,7 @@ msgid "Edit connection grid spacing..."
 msgstr "Επεξεργασία ελάχιστης απόσταση πλέγματος.."
 
 #: eeschema/dialogs/dialog_erc.cpp:805 eeschema/dialogs/dialog_erc.cpp:841
-#: pcbnew/dialogs/dialog_drc.cpp:832 pcbnew/dialogs/dialog_drc.cpp:884
+#: pcbnew/dialogs/dialog_drc.cpp:804 pcbnew/dialogs/dialog_drc.cpp:856
 msgid "Exclusion Comment"
 msgstr "Σχόλιο Αποκλεισμού"
 
@@ -13238,8 +13238,8 @@ msgstr "Καρφίτσωμα Χάρτη Διενέξεων"
 
 #: eeschema/dialogs/dialog_erc.cpp:937 eeschema/dialogs/dialog_erc.cpp:1067
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
-#: pcbnew/dialogs/dialog_board_setup.cpp:232 pcbnew/dialogs/dialog_drc.cpp:1033
-#: pcbnew/dialogs/dialog_drc.cpp:1075
+#: pcbnew/dialogs/dialog_board_setup.cpp:232 pcbnew/dialogs/dialog_drc.cpp:1005
+#: pcbnew/dialogs/dialog_drc.cpp:1047
 msgid "Violation Severity"
 msgstr "Σοβαρότητα Παραβίασης"
 
@@ -14119,7 +14119,7 @@ msgstr "Κ Στοίχιση"
 #: eeschema/sch_field.cpp:1682 eeschema/sch_label.cpp:1424
 #: eeschema/sch_tablecell.cpp:155 eeschema/sch_text.cpp:569
 #: eeschema/sch_text.cpp:706 eeschema/sch_textbox.cpp:479
-#: eeschema/sch_textbox.cpp:641 pcbnew/pcb_barcode.cpp:723
+#: eeschema/sch_textbox.cpp:641 pcbnew/pcb_barcode.cpp:745
 #: pcbnew/tools/board_inspection_tool.cpp:1446
 msgid "Text Size"
 msgstr "Μέγεθος Κειμένου"
@@ -17236,7 +17236,7 @@ msgstr "Γραμμές στηλών"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:524 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:679
+#: pcbnew/pcb_table.cpp:722
 msgid "Table Properties"
 msgstr "Ιδιότητες Πίνακα"
 
@@ -18682,8 +18682,8 @@ msgid "Net Navigator"
 msgstr "Πλοηγός Δικτύων"
 
 #: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:1944
-#: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:1017
-#: pcbnew/pcb_edit_frame.cpp:332 pcbnew/pcb_edit_frame.cpp:1900
+#: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:1020
+#: pcbnew/pcb_edit_frame.cpp:332 pcbnew/pcb_edit_frame.cpp:1894
 msgid "Selection Filter"
 msgstr "Φίλτρο Επιλογής"
 
@@ -19552,7 +19552,7 @@ msgstr "Feet"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:220
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:163
-#: pcbnew/tools/drawing_tool.cpp:2121 pcbnew/tools/drawing_tool.cpp:2206
+#: pcbnew/tools/drawing_tool.cpp:2120 pcbnew/tools/drawing_tool.cpp:2205
 msgid "Import Graphics"
 msgstr "Εισαγωγή Γραφικών"
 
@@ -20411,8 +20411,8 @@ msgstr "Το νέο αρχείο του σχηματικού δεν έχει α�
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:632
 #: eeschema/symbol_editor/symbol_editor.cpp:1639
 #: kicad/dialogs/panel_jobset.cpp:816 pagelayout_editor/pl_editor_frame.cpp:423
-#: pcbnew/footprint_edit_frame.cpp:898 pcbnew/footprint_edit_frame.cpp:938
-#: pcbnew/pcb_edit_frame.cpp:1338
+#: pcbnew/footprint_edit_frame.cpp:901 pcbnew/footprint_edit_frame.cpp:941
+#: pcbnew/pcb_edit_frame.cpp:1332
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Αποθήκευση αλλαγών στο \"%s\" πριν το κλείσιμο;"
@@ -20449,13 +20449,13 @@ msgid "Could not open CvPcb"
 msgstr "Αδυναμία ανοίγματος CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1717 eeschema/sim/simulator_frame.cpp:334
-#: kicad/kicad_manager_frame.cpp:1091 pcbnew/footprint_edit_frame.cpp:1083
-#: pcbnew/pcb_edit_frame.cpp:1990
+#: kicad/kicad_manager_frame.cpp:1091 pcbnew/footprint_edit_frame.cpp:1086
+#: pcbnew/pcb_edit_frame.cpp:1984
 msgid "[Read Only]"
 msgstr "[Μόνο Ανάγνωση]"
 
 #: eeschema/sch_edit_frame.cpp:1720 eeschema/sim/simulator_frame.cpp:337
-#: pcbnew/footprint_edit_frame.cpp:1092 pcbnew/pcb_edit_frame.cpp:1993
+#: pcbnew/footprint_edit_frame.cpp:1095 pcbnew/pcb_edit_frame.cpp:1987
 msgid "[Unsaved]"
 msgstr "[Μη σωσμένο]"
 
@@ -21835,13 +21835,13 @@ msgid "Hierarchical Sheet '%s'"
 msgstr "Ιεραρχικό Φύλλο %s"
 
 #: eeschema/sch_sheet.cpp:1714 eeschema/sch_table.cpp:534
-#: pcbnew/pcb_table.cpp:689 pcbnew/pcb_tablecell.cpp:234
+#: pcbnew/pcb_table.cpp:732 pcbnew/pcb_tablecell.cpp:234
 #: pcbnew/pcb_textbox.cpp:876
 msgid "Border Width"
 msgstr "Όριο Πλάτους"
 
 #: eeschema/sch_sheet.cpp:1718 eeschema/sch_table.cpp:543
-#: pcbnew/pcb_table.cpp:698
+#: pcbnew/pcb_table.cpp:741
 msgid "Border Color"
 msgstr "Χρώμα Ορίου"
 
@@ -21921,41 +21921,41 @@ msgstr "Σύνδεσμος Βιβλιοθήκης"
 msgid "%d Column Table"
 msgstr "%d Στήλη Πίνακα"
 
-#: eeschema/sch_table.cpp:456 pcbnew/pcb_table.cpp:511
+#: eeschema/sch_table.cpp:456 pcbnew/pcb_table.cpp:554
 #, c-format
 msgid "%d Columns"
 msgstr "%d Στήλες"
 
-#: eeschema/sch_table.cpp:526 pcbnew/pcb_table.cpp:681
+#: eeschema/sch_table.cpp:526 pcbnew/pcb_table.cpp:724
 msgid "External Border"
 msgstr "Εξωτερικό Περίγραμμα"
 
-#: eeschema/sch_table.cpp:530 pcbnew/pcb_table.cpp:685
+#: eeschema/sch_table.cpp:530 pcbnew/pcb_table.cpp:728
 msgid "Header Border"
 msgstr "Περίγραμμα Κεφαλίδας"
 
-#: eeschema/sch_table.cpp:539 pcbnew/pcb_table.cpp:694
+#: eeschema/sch_table.cpp:539 pcbnew/pcb_table.cpp:737
 #: pcbnew/pcb_tablecell.cpp:233 pcbnew/pcb_textbox.cpp:872
 msgid "Border Style"
 msgstr "Τύπος Περιγράμματος"
 
-#: eeschema/sch_table.cpp:547 pcbnew/pcb_table.cpp:702
+#: eeschema/sch_table.cpp:547 pcbnew/pcb_table.cpp:745
 msgid "Row Separators"
 msgstr "Διαχωριστές Γραμμής"
 
-#: eeschema/sch_table.cpp:551 pcbnew/pcb_table.cpp:706
+#: eeschema/sch_table.cpp:551 pcbnew/pcb_table.cpp:749
 msgid "Cell Separators"
 msgstr "Διαχωριστές Κελιού"
 
-#: eeschema/sch_table.cpp:555 pcbnew/pcb_table.cpp:710
+#: eeschema/sch_table.cpp:555 pcbnew/pcb_table.cpp:753
 msgid "Separators Width"
 msgstr "Πλάτος Διαχωριστών"
 
-#: eeschema/sch_table.cpp:560 pcbnew/pcb_table.cpp:715
+#: eeschema/sch_table.cpp:560 pcbnew/pcb_table.cpp:758
 msgid "Separators Style"
 msgstr "Στύλ Διαχωριστών"
 
-#: eeschema/sch_table.cpp:564 pcbnew/pcb_table.cpp:719
+#: eeschema/sch_table.cpp:564 pcbnew/pcb_table.cpp:762
 msgid "Separators Color"
 msgstr "Χρώμα Διαχωριστών"
 
@@ -24674,12 +24674,12 @@ msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
 "Εμφάνιση παραθύρου προσομοίωσης για την εκτέλεση προσομοιώσεων SPICE ή IBIS."
 
-#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2295
+#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2287
 msgid "Create Corner"
 msgstr "Δημιουργία Γωνίας"
 
-#: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1400
-#: pcbnew/tools/pcb_actions.cpp:2302
+#: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1404
+#: pcbnew/tools/pcb_actions.cpp:2294
 msgid "Remove Corner"
 msgstr "Αφαίρεση γωνίας"
 
@@ -24940,7 +24940,7 @@ msgstr "Σχέδια"
 
 #: eeschema/tools/sch_actions.cpp:357 eeschema/tools/sch_actions.cpp:627
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:307
-#: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/drawing_tool.cpp:1112
+#: pagelayout_editor/tools/pl_actions.cpp:63 pcbnew/tools/drawing_tool.cpp:1111
 #: pcbnew/tools/pcb_actions.cpp:216
 #, fuzzy
 msgid "Draw Text"
@@ -25455,11 +25455,11 @@ msgstr "Τεμαχισμός"
 msgid "Divide into unconnected segments"
 msgstr "Υποδιαίρεση σε ασύνδετα τμήματα"
 
-#: eeschema/tools/sch_actions.cpp:999 pcbnew/tools/pcb_actions.cpp:1526
+#: eeschema/tools/sch_actions.cpp:999 pcbnew/tools/pcb_actions.cpp:1518
 msgid "Highlight net under cursor"
 msgstr "Επισήμανση δικτύου κάτω από τον κέρσορα"
 
-#: eeschema/tools/sch_actions.cpp:1006 pcbnew/tools/pcb_actions.cpp:1541
+#: eeschema/tools/sch_actions.cpp:1006 pcbnew/tools/pcb_actions.cpp:1533
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1036
 msgid "Clear Net Highlighting"
 msgstr "Καθαρισμός Φωτισμών Δικτύου"
@@ -25776,15 +25776,15 @@ msgstr "Εμφάνιση ένδειξης ακροδεκτών με εναλλα
 msgid "Line Mode for Wires and Buses"
 msgstr "Μοντέλο Γραμμής για Καλώδια και Δίαυλους"
 
-#: eeschema/tools/sch_actions.cpp:1293 pcbnew/tools/pcb_actions.cpp:1471
+#: eeschema/tools/sch_actions.cpp:1293 pcbnew/tools/pcb_actions.cpp:1462
 msgid "Draw and drag at any angle"
 msgstr "Σχεδιάση και σύρσιμο ως προς κάθε γωνιά"
 
-#: eeschema/tools/sch_actions.cpp:1302 pcbnew/tools/pcb_actions.cpp:1480
+#: eeschema/tools/sch_actions.cpp:1302 pcbnew/tools/pcb_actions.cpp:1471
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr "Περιορισμός σχεδίασης και συρσίματος σε οριζόντιες ή κάθετες κινήσεις"
 
-#: eeschema/tools/sch_actions.cpp:1311 pcbnew/tools/pcb_actions.cpp:1489
+#: eeschema/tools/sch_actions.cpp:1311 pcbnew/tools/pcb_actions.cpp:1480
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
@@ -25792,8 +25792,9 @@ msgstr ""
 "Περιορισμός σχεδίασης και συρσίματος σε οριζόντια, κάθετη, ή υπό γονεία 45 "
 "μοιρών κίνηση"
 
-#: eeschema/tools/sch_actions.cpp:1321 pcbnew/tools/pcb_actions.cpp:1498
-msgid "Switch to next line mode"
+#: eeschema/tools/sch_actions.cpp:1321 pcbnew/tools/pcb_actions.cpp:1490
+#, fuzzy
+msgid "Switch to next angle snapping mode"
 msgstr "Εναλλαγή στην επόμενη λειτουργία γραμμής"
 
 #: eeschema/tools/sch_actions.cpp:1331
@@ -25929,7 +25930,7 @@ msgstr "Ξεδίπλωμα από τον Δίαυλο"
 msgid "Break a wire out of a bus"
 msgstr "Αποκοπή σύρματος από τον δίαυλο"
 
-#: eeschema/tools/sch_actions.cpp:1485 pcbnew/tools/pcb_actions.cpp:2629
+#: eeschema/tools/sch_actions.cpp:1485 pcbnew/tools/pcb_actions.cpp:2621
 msgid "Undo Last Segment"
 msgstr "Αναίρεση τελευταίας επεξεργασίας"
 
@@ -25945,7 +25946,7 @@ msgstr "Εναλλαγή Στάσης Τμήματος"
 msgid "Switches posture of the current segment."
 msgstr "Εναλλαγή στάσης τρέχον τμήματος."
 
-#: eeschema/tools/sch_actions.cpp:1505 eeschema/tools/sch_move_tool.cpp:418
+#: eeschema/tools/sch_actions.cpp:1505 eeschema/tools/sch_move_tool.cpp:450
 #: eeschema/tools/symbol_editor_move_tool.cpp:110
 #: pagelayout_editor/tools/pl_actions.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
@@ -25953,7 +25954,7 @@ msgstr "Εναλλαγή στάσης τρέχον τμήματος."
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: eeschema/tools/sch_actions.cpp:1514 eeschema/tools/sch_move_tool.cpp:418
+#: eeschema/tools/sch_actions.cpp:1514 eeschema/tools/sch_move_tool.cpp:450
 msgid "Drag"
 msgstr "Σύρσιμο"
 
@@ -25961,7 +25962,7 @@ msgstr "Σύρσιμο"
 msgid "Move items while keeping their connections"
 msgstr "Μετακίνηση αντικειμένων διατηρώντας τις συνδέσεις"
 
-#: eeschema/tools/sch_actions.cpp:1522 eeschema/tools/sch_move_tool.cpp:2118
+#: eeschema/tools/sch_actions.cpp:1522 eeschema/tools/sch_move_tool.cpp:2175
 #: eeschema/tools/symbol_editor_move_tool.cpp:435
 msgid "Align Items to Grid"
 msgstr "Στοίχιση Αντικειμένων στο Πλέγμα"
@@ -26168,25 +26169,25 @@ msgstr "Εισαγωγή Περιεχομένου Φύλλου Σχηματικ�
 msgid "Choose Schematic"
 msgstr "Νέο Σχηματικό"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1132 pcbnew/tools/drawing_tool.cpp:730
+#: eeschema/tools/sch_drawing_tools.cpp:1132 pcbnew/tools/drawing_tool.cpp:729
 msgid "Press <ESC> to cancel image creation."
 msgstr "Πατήστε <ESC> για ακύρωση δημιουργίας εικόνας."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1192
 #: eeschema/tools/sch_edit_tool.cpp:3397
 #: pagelayout_editor/pl_editor_frame.cpp:859
-#: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:789
+#: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:788
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "Αδυναμία φόρτωσης εικόνας από '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1215 pcbnew/tools/drawing_tool.cpp:810
+#: eeschema/tools/sch_drawing_tools.cpp:1215 pcbnew/tools/drawing_tool.cpp:809
 msgid "Place Image"
 msgstr "Τοποθέτηση Εικόνας"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1312
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:707
-#: pcbnew/tools/drawing_tool.cpp:2054
+#: pcbnew/tools/drawing_tool.cpp:2053
 msgid "No graphic items found in file."
 msgstr "Δεν βρέθηκαν αντικείμενα γραφικών στο αρχείο."
 
@@ -26264,7 +26265,7 @@ msgstr "Προσθήκη %s"
 msgid "Draw %s"
 msgstr "Σχεδίαση %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2997 pcbnew/tools/drawing_tool.cpp:1328
+#: eeschema/tools/sch_drawing_tools.cpp:2997 pcbnew/tools/drawing_tool.cpp:1327
 msgid "Draw Table"
 msgstr "Σχεδίαση Πίνακα"
 
@@ -26510,14 +26511,14 @@ msgid "Increment Annotations"
 msgstr "Διαγραφή Ονοματοδοσίας"
 
 #: eeschema/tools/sch_editor_control.cpp:2890
-#: pcbnew/tools/board_editor_control.cpp:640
+#: pcbnew/tools/board_editor_control.cpp:632
 #: pcbnew/tools/footprint_editor_control.cpp:903
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d διπλά IDs αντικαταστάθηκαν.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2900
-#: pcbnew/tools/board_editor_control.cpp:655
+#: pcbnew/tools/board_editor_control.cpp:647
 #: pcbnew/tools/footprint_editor_control.cpp:910
 #, c-format
 msgid "%d potential problems repaired."
@@ -26652,11 +26653,11 @@ msgstr "Ο δίαυλος δεν έχει μέλη"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Πατήστε <ESC> για ακύρωση σχεδίασης."
 
-#: eeschema/tools/sch_move_tool.cpp:1013
+#: eeschema/tools/sch_move_tool.cpp:1061
 msgid "Press <ESC> to cancel drag."
 msgstr "Πατήστε <ESC> για ακύρωση συρσίματος."
 
-#: eeschema/tools/sch_move_tool.cpp:1015
+#: eeschema/tools/sch_move_tool.cpp:1063
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
 msgstr "Πατήστε <ESC> για ακύρωση μετακίνησης."
@@ -26666,12 +26667,12 @@ msgstr "Πατήστε <ESC> για ακύρωση μετακίνησης."
 msgid "Page '%s' not found."
 msgstr "Η σελίδα '%s' δεν βρέθηκε."
 
-#: eeschema/tools/sch_point_editor.cpp:1131
-#: pcbnew/tools/pcb_point_editor.cpp:2419
+#: eeschema/tools/sch_point_editor.cpp:1135
+#: pcbnew/tools/pcb_point_editor.cpp:2510
 msgid "Move Point"
 msgstr "Μετακίνηση Σημείου"
 
-#: eeschema/tools/sch_point_editor.cpp:1356
+#: eeschema/tools/sch_point_editor.cpp:1360
 msgid "Add Corner"
 msgstr "Προσθήκη Γωνίας"
 
@@ -26744,7 +26745,7 @@ msgid "No symbol to export"
 msgstr "Δεν υπάρχει σύμβολο για εξαγωγή"
 
 #: eeschema/tools/symbol_editor_control.cpp:749
-#: pcbnew/footprint_edit_frame.cpp:1549
+#: pcbnew/footprint_edit_frame.cpp:1545
 msgid "Export View as PNG"
 msgstr "Εξαγωγή Προβολής ως PNG"
 
@@ -27321,7 +27322,7 @@ msgstr "Επιλογή Επιπέδου: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2530 pcbnew/pad.cpp:1373
 #: pcbnew/pad.cpp:2790 pcbnew/pcb_barcode.cpp:382 pcbnew/pcb_dimension.cpp:695
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_fields_grid_table.cpp:154
-#: pcbnew/pcb_group.cpp:494 pcbnew/pcb_marker.cpp:399 pcbnew/pcb_point.cpp:171
+#: pcbnew/pcb_group.cpp:494 pcbnew/pcb_marker.cpp:461 pcbnew/pcb_point.cpp:171
 #: pcbnew/pcb_reference_image.cpp:232 pcbnew/pcb_reference_image.cpp:355
 #: pcbnew/pcb_shape.cpp:700 pcbnew/pcb_shape.cpp:956 pcbnew/pcb_shape.cpp:958
 #: pcbnew/pcb_tablecell.cpp:144 pcbnew/pcb_tablecell.cpp:225
@@ -35079,7 +35080,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(Το τόξο έχει μηδενικό ή πολύ μικρό μέγεθος: %d nm)"
 
 #: pcbnew/cross-probing.cpp:102 pcbnew/dialogs/dialog_board_setup.cpp:222
-#: pcbnew/dialogs/dialog_drc.cpp:306 pcbnew/pcb_edit_frame.cpp:2929
+#: pcbnew/dialogs/dialog_drc.cpp:305 pcbnew/pcb_edit_frame.cpp:2925
 msgid "Custom Rules"
 msgstr "Προσαρμοσμένοι Κανόνες"
 
@@ -35089,7 +35090,7 @@ msgid "Modify barcode"
 msgstr "Τροποποίηση έδρας"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:52
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:770
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:792
 #: pcbnew/pcb_dimension.cpp:1990 pcbnew/pcb_dimension.cpp:2023
 #: pcbnew/pcb_dimension.cpp:2061 pcbnew/pcb_dimension.cpp:2103
 #: pcbnew/pcb_dimension.cpp:2137 pcbnew/pcb_fields_grid_table.cpp:159
@@ -35170,13 +35171,13 @@ msgid "~65% (Level H)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
-#: pcbnew/pcb_barcode.cpp:750
+#: pcbnew/pcb_barcode.cpp:772
 #, fuzzy
 msgid "Error Correction"
 msgstr "Κατεύθυνση:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
-#: pcbnew/pcb_barcode.cpp:686
+#: pcbnew/pcb_barcode.cpp:708
 #, fuzzy
 msgid "Barcode Properties"
 msgstr "Ιδιότητες Ορίων"
@@ -35936,7 +35937,7 @@ msgid "Build Changes"
 msgstr "Δημιουργία Αλλαγών"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:210
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
 msgid "Checking zones..."
 msgstr "Έλεγχος γεμίσματος ζωνών..."
 
@@ -37119,76 +37120,76 @@ msgstr ""
 msgid "Dimension Properties"
 msgstr "Ιδιότητες Διαστάσεων"
 
-#: pcbnew/dialogs/dialog_drc.cpp:146
+#: pcbnew/dialogs/dialog_drc.cpp:145
 msgid "Run DRC"
 msgstr "Εκτέλεση ΕΚΣ"
 
-#: pcbnew/dialogs/dialog_drc.cpp:269
+#: pcbnew/dialogs/dialog_drc.cpp:268
 #, fuzzy
 msgid "Report All Errors for Each Track"
 msgstr "Αναφορά όλων των σφαλμάτων των διαδρόμων"
 
-#: pcbnew/dialogs/dialog_drc.cpp:270
+#: pcbnew/dialogs/dialog_drc.cpp:269
 #, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
 msgstr "Εάν επιλεγεί, οι ζώνες θα ξαναγεμίζουν μετά από κάθε επεξεργασία"
 
-#: pcbnew/dialogs/dialog_drc.cpp:277
+#: pcbnew/dialogs/dialog_drc.cpp:276
 #, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
 msgstr "Επισήμανση συμβόλων που αντιστοιχούν στα επιλεγμένα αποτυπώματα"
 
-#: pcbnew/dialogs/dialog_drc.cpp:360
+#: pcbnew/dialogs/dialog_drc.cpp:359
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
 "Ημιτελής ΕΚΣ: δεν ήταν δυνατή η μεταγλώττιση προσαρμοσμένων κανόνων "
 "σχεδίασης."
 
-#: pcbnew/dialogs/dialog_drc.cpp:362 pcbnew/tools/board_inspection_tool.cpp:217
+#: pcbnew/dialogs/dialog_drc.cpp:361 pcbnew/tools/board_inspection_tool.cpp:217
 msgid "Show design rules."
 msgstr "Εμφάνιση κανόνων σχεδίασης."
 
-#: pcbnew/dialogs/dialog_drc.cpp:415
+#: pcbnew/dialogs/dialog_drc.cpp:414
 #, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- Ο ΕΚΣ ακυρώθηκε από τον χρήστη.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:759
+#: pcbnew/dialogs/dialog_drc.cpp:731
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Κατάργηση εξαιρέσεων για παραβιάσεις του κανόνα '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:761
+#: pcbnew/dialogs/dialog_drc.cpp:733
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr "Θα τοποθετηθούν ξανά πίσω στη λίστα %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:777
+#: pcbnew/dialogs/dialog_drc.cpp:749
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "Εξαίρεση όλων των παραβιάσεων του κανόνα '%s'..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:779
+#: pcbnew/dialogs/dialog_drc.cpp:751
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr "Θα αποκλειστούν από τη λίστα %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:804 pcbnew/dialogs/dialog_drc.cpp:811
+#: pcbnew/dialogs/dialog_drc.cpp:776 pcbnew/dialogs/dialog_drc.cpp:783
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Μπορείτε επίσης να επεξεργαστείτε τις σοβαρές παραβιάσεις στο διάλογο "
 "Ρύθμιση Πλακέτας ..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:822
+#: pcbnew/dialogs/dialog_drc.cpp:794
 msgid "Open the Board Setup... dialog"
 msgstr "Άνοιγμα διαλόγου Ρύθμιση Πλακέτας"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1124
+#: pcbnew/dialogs/dialog_drc.cpp:1096
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Δημιουργήθηκε αρχείο αναφοράς '%s' <br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1459
+#: pcbnew/dialogs/dialog_drc.cpp:1431
 msgid "not run"
 msgstr "δεν εκτελέστηκε"
 
@@ -38372,7 +38373,7 @@ msgid "Exclude from position files"
 msgstr "Εξαίρεση από αρχεία τοποθέτησης"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
-#: pcbnew/pcb_edit_frame.cpp:3066
+#: pcbnew/pcb_edit_frame.cpp:3062
 msgid "Update Footprint from Library..."
 msgstr "Ανανέωση Αποτυπώματος από Βιβλιοθήκη..."
 
@@ -42365,7 +42366,7 @@ msgstr "Όνομα Φύλλου"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:730
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:755
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:772
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:360
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:361
 #, fuzzy
 msgid "Footprint Field:"
 msgstr "πεδίο αποτυπώματος"
@@ -42404,10 +42405,10 @@ msgstr ": %i ταιριαστά αποτυπώματα"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:183
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:230
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:277
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:327
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:432
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:475
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:328
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:390
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:433
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:476
 #, fuzzy
 msgid "Delete row"
 msgstr "Διαγραφή Σειράς"
@@ -42427,22 +42428,22 @@ msgstr "Άλλα Επίπεδα"
 msgid "Import references"
 msgstr "Αναφορά εξαρτήματος"
 
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:306
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:307
 #, fuzzy
 msgid "Footprint:"
 msgstr "Αποτύπωμα: "
 
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:319
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:320
 #, fuzzy
 msgid "Show library"
 msgstr "Πλοήγηση Βιβλιοθήκης"
 
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:374
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:375
 #, fuzzy
 msgid "Field Value:"
 msgstr "Τελική τιμή:"
 
-#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:462
+#: pcbnew/dialogs/panel_assign_component_classes_base.cpp:463
 #, fuzzy
 msgid "Sheet Name:"
 msgstr "Όνομα Φύλλου"
@@ -42693,7 +42694,7 @@ msgid "Always show selected ratsnest"
 msgstr "Πάντοτε εμφάνιση επιλεγμένης φωλιάς συνδέσεων"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
-#: pcbnew/tools/pcb_actions.cpp:1664
+#: pcbnew/tools/pcb_actions.cpp:1656
 msgid "Show ratsnest with curved lines"
 msgstr "Εμφάνιση φωλιάς συνδέσεων με καμπύλες γραμμές"
 
@@ -42953,10 +42954,10 @@ msgid "Minimum clearance:"
 msgstr "Ελάχιστο διάκενο:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
+#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
-"net.  If set, this is an absolute minimum which cannot be reduced by "
-"netclasses, custom rules, or other settings."
+"net. If set, this can only be reduced by custom rules."
 msgstr ""
 "Το ελάχιστο διάκενο μεταξύ χάλκινων αντικειμένων που δεν ανήκουν στο ίδιο "
 "δίκτυο. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
@@ -42967,9 +42968,9 @@ msgid "Minimum track width:"
 msgstr "Ελάχιστο πλάτος διαδρόμου:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
+#, fuzzy
 msgid ""
-"The minimum track width.  If set, this is an absolute minimum and cannot be "
-"reduced by netclasses, custom rules, or other settings."
+"The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
 "Το ελάχιστο πλάτος του διαδρόμου. Εάν οριστεί, αυτό είναι ένα απόλυτο "
 "ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
@@ -42988,9 +42989,10 @@ msgid "Minimum annular width:"
 msgstr "Ελάχιστο πλάτος δακτυλίου:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
+#, fuzzy
 msgid ""
-"The minimum annular ring width.  If set, this is an absolute minimum and "
-"cannot be reduced by netclasses, custom rules, or other settings."
+"The minimum annular ring width. If set, this can only be reduced by custom "
+"rules."
 msgstr ""
 "Το ελάχιστο πλάτος κυκλικού δακτυλίου. Εάν οριστεί, αυτό είναι το απόλυτο "
 "ελάχιστο και δεν μπορεί να μειωθεί από κλάσεις δικτύου, προσαρμοσμένους "
@@ -43001,9 +43003,9 @@ msgid "Minimum via diameter:"
 msgstr "Ελάχιστη διάμετρος διέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
+#, fuzzy
 msgid ""
-"The minimum via diameter.  If set, this is an absolute minimum and cannot be "
-"reduced by netclasses, custom rules, or other settings."
+"The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
 "Η ελάχιστη διάμετρος διέλευσης. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο "
 "που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες "
@@ -43014,10 +43016,10 @@ msgid "Copper to hole clearance:"
 msgstr "Διάκενο χαλκού με τρύπα:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
+#, fuzzy
 msgid ""
-"The minimum clearance between a hole and an unassociated copper item.  If "
-"set, this is an absolute minimum and cannot be reduced by custom rules or "
-"other settings."
+"The minimum clearance between a hole and an unassociated copper item. If "
+"set, this can only be reduced by custom rules."
 msgstr ""
 "Το ελάχιστο διάκενο μεταξύ μιας τρύπας και ενός μη συσχετισμένου χάλκινου "
 "αντικειμένου. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
@@ -43028,10 +43030,10 @@ msgid "Copper to edge clearance:"
 msgstr "Διάκενο χαλκού με άκρη:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
+#, fuzzy
 msgid ""
-"The minimum clearance between the board edge and any copper item.  If set, "
-"this is an absolute minimum and cannot be reduced by custom rules or other "
-"settings."
+"The minimum clearance between the board edge and any copper item. If set, "
+"this can only be reduced by custom rules."
 msgstr ""
 "Το ελάχιστο διάκενο μεταξύ της άκρης της πλακέτας και οποιουδήποτε χάλκινου "
 "αντικειμένου. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
@@ -43056,9 +43058,10 @@ msgid "Minimum through hole:"
 msgstr "Ελάχιστο τρύπα σε τρύπα:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
+#, fuzzy
 msgid ""
-"The minimum through-hole size.  If set, this is an absolute minimum and "
-"cannot be reduced by netclasses, custom rules or other settings."
+"The minimum through-hole size. If set, this can only be reduced by custom "
+"rules."
 msgstr ""
 "Το ελάχιστο μέγεθος διαμπερούς τρύπας. Εάν οριστεί, αυτό είναι ένα απόλυτο "
 "ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
@@ -43069,10 +43072,10 @@ msgid "Hole to hole clearance:"
 msgstr "Διάκενο οπής με οπή:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
+#, fuzzy
 msgid ""
-"The minimum clearance between two drilled holes.   If set, this is an "
-"absolute minimum and cannot be reduced by custom rules or other settings. "
-"(Note: does not apply to milled holes.)"
+"The minimum clearance between two drilled holes. If set, this can only be "
+"reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
 "Το ελάχιστο διάκενο μεταξύ δύο ανοιγμένων τρυπών. Εάν οριστεί, αυτό είναι το "
 "απόλυτο ελάχιστο και δεν μπορεί να μειωθεί από προσαρμοσμένους κανόνες ή "
@@ -43087,9 +43090,10 @@ msgid "Minimum uVia diameter:"
 msgstr "Ελάχιστη διάμετρος μΔιέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
+#, fuzzy
 msgid ""
-"The minimum diameter for micro-vias.  If set, this is an absolute minimum "
-"and cannot be reduced by netclasses, custom rules, or other settings."
+"The minimum diameter for micro-vias. If set, this can only be reduced by "
+"custom rules."
 msgstr ""
 "Η ελάχιστη διάμετρος για μίκρο-διελεύσεις. Εάν οριστεί, αυτό είναι ένα "
 "απόλυτο ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς "
@@ -43100,9 +43104,10 @@ msgid "Minimum uVia hole:"
 msgstr "Ελάχιστο μέγεθος οπής μΔιέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
+#, fuzzy
 msgid ""
-"The minimum micro-via hole size.  If set, this is an absolute minimum and "
-"cannot be reduced by netclasses, custom rules, or other settings."
+"The minimum micro-via hole size. If set, this can only be reduced by custom "
+"rules."
 msgstr ""
 "Το ελάχιστο μέγεθος τρύπας μίκρο-διέλευσης. Εάν οριστεί, αυτό είναι ένα "
 "απόλυτο ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς "
@@ -43117,8 +43122,9 @@ msgid "Minimum item clearance:"
 msgstr "Ελάχιστο διάκενο αντικειμένου:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
+#, fuzzy
 msgid ""
-"Minimum clearance between two items on the same silkscreen layer.  If set "
+"Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
@@ -44932,8 +44938,8 @@ msgstr "Προκαθορισμένες ιδιότητες για ρύθμιση 
 msgid "Gathering copper items..."
 msgstr "Συλλογή αντικειμένων χαλκού..."
 
-#: pcbnew/drc/drc_engine.cpp:160 pcbnew/drc/drc_test_provider_hole_size.cpp:148
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:221
+#: pcbnew/drc/drc_engine.cpp:160 pcbnew/drc/drc_test_provider_hole_size.cpp:167
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:240
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:128
 #: pcbnew/drc/drc_test_provider_track_width.cpp:126
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:112
@@ -45780,12 +45786,12 @@ msgstr "Λείπει όνομα σοβαρότητας."
 msgid "Checking pad & via annular rings..."
 msgstr "Έλεγχος κυκλικών δακτυλίων διέλευσης και έδρας..."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:326
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:263
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s ελάχιστο πλάτος δακτυλίου %s· πραγματικό %s)"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:334
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:271
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s μέγιστο πλάτος δακτυλίου %s· πραγματικό %s)"
@@ -45827,49 +45833,52 @@ msgstr "Έλεγχος pins..."
 msgid "Checking copper graphic clearances..."
 msgstr "Έλεχγος διακένων κειμένων και γραφικών..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:158
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
+#, fuzzy
+msgid "Checking copper graphic hole clearances..."
+msgstr "Έλεχγος διακένων κειμένων και γραφικών..."
+
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
 msgstr "Έλεγχος διακένων χάλκινου zone..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:260
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:562
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:821
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:853
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:566
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:830
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:860
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(nets %s και %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:276
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:330
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:448
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:486
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:569
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:867
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:899
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:920
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:942
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1232
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:280
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:333
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:450
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:488
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:573
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:873
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:895
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1216
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:234
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:266
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:107
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:573
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:639
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:717
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:733
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:820
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:867
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:243
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:108
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:557
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:622
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:698
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:713
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:799
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:845
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:244
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:259
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s διάκενο %s; πραγματικό %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:331
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:334
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s διάκενο %s; πραγματικό <0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1224
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1208
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -45934,14 +45943,14 @@ msgstr "Έλεγχος οπών διελεύσεων..."
 msgid "Checking micro-via holes..."
 msgstr "Έλεγχος οπών μίκρο-διελεύσεων..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:150
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:223
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:169
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, fuzzy, c-format
 msgid "(%s min hole %s; actual %s)"
 msgstr "(%s %s; πραγματικό %s)"
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:157
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:230
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:176
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:249
 #, fuzzy, c-format
 msgid "(%s max hole %s; actual %s)"
 msgstr "(%s μέγιστο ύψος %s; πραγματικό %s)"
@@ -45950,7 +45959,7 @@ msgstr "(%s μέγιστο ύψος %s; πραγματικό %s)"
 msgid "Checking hole to hole clearances..."
 msgstr "Έλεγχος διακένων οπής σε οπή..."
 
-#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:309
+#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:310
 #, c-format
 msgid "(%s min %s; actual %s)"
 msgstr "(%s %s; πραγματικό %s)"
@@ -46454,7 +46463,7 @@ msgstr "Συλλογή φυσικών αντικειμένων..."
 msgid "Checking physical clearances..."
 msgstr "Έλεγχος φυσικών διάκενων..."
 
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:524
+#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:508
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Παραβίαση εσωτερικού διακένου (%s διάκενο %s; πραγματικό %s)"
@@ -46512,7 +46521,7 @@ msgstr "Δεν βρέθηκε pad για το pin %s στο σχηματικό."
 msgid "Checking PCB to schematic parity..."
 msgstr "Έλεγχος ισοτιμίας PCB ως προς το σχηματικό..."
 
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:87
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:88
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Έλεγχος μεταξοτυπίας για επικάλυψη αντικειμένων ..."
 
@@ -47110,7 +47119,7 @@ msgstr "Σφάλμα κατά τη φόρτωση του PCB '%s'."
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Η μνήμη εξαντλήθηκε κατά τη φόρτωση του PCB '%s'"
 
-#: pcbnew/files.cpp:797 pcbnew/pcb_edit_frame.cpp:1513
+#: pcbnew/files.cpp:797 pcbnew/pcb_edit_frame.cpp:1507
 #, fuzzy
 msgid "Could not load component class assignment rules"
 msgstr "Αδυναμία επεξεργασίας ειδικών κανόνων σχεδίασης."
@@ -47327,46 +47336,46 @@ msgstr "Επεξεργαστής Αποτυπώματος"
 msgid "Footprint changes are unsaved"
 msgstr "Αλλαγές στο αποτύπωμα δεν είναι αποθηκευμένες"
 
-#: pcbnew/footprint_edit_frame.cpp:550
+#: pcbnew/footprint_edit_frame.cpp:553
 msgid "Inner layers"
 msgstr "Εσωτερικά επίπεδα"
 
-#: pcbnew/footprint_edit_frame.cpp:628
+#: pcbnew/footprint_edit_frame.cpp:631
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 "Επεξεργασία %s από την πλακέτα. Η αποθήκευση θα ενημερώσει μόνο την πλακέτα."
 
-#: pcbnew/footprint_edit_frame.cpp:630
+#: pcbnew/footprint_edit_frame.cpp:633
 #, fuzzy, c-format
 msgid "Open in library %s"
 msgstr "Ενημέρωση Συμβόλων από Βιβλιοθήκη"
 
-#: pcbnew/footprint_edit_frame.cpp:656
+#: pcbnew/footprint_edit_frame.cpp:659
 #, fuzzy, c-format
 msgid "Editing footprint from read-only library %s."
 msgstr "Σφάλμα κατά τη φόρτωση αποτυπώματος %s από τη βιβλιοθήκη '%s'."
 
-#: pcbnew/footprint_edit_frame.cpp:661
+#: pcbnew/footprint_edit_frame.cpp:664
 #, fuzzy
 msgid "Save as editable copy"
 msgstr "Αποθήκευση τοπικού αντίγραφου σε:"
 
-#: pcbnew/footprint_edit_frame.cpp:1061
+#: pcbnew/footprint_edit_frame.cpp:1064
 #, c-format
 msgid "[from %s]"
 msgstr "[από %s]"
 
-#: pcbnew/footprint_edit_frame.cpp:1096
+#: pcbnew/footprint_edit_frame.cpp:1099
 msgid "[no footprint loaded]"
 msgstr "[δεν φορτώθηκε αποτύπωμα]"
 
-#: pcbnew/footprint_edit_frame.cpp:1153
+#: pcbnew/footprint_edit_frame.cpp:1156
 #, fuzzy
 msgid "Update Footprint Libraries"
 msgstr "Ανανεώνονται οι Βιβλιοθήκες Αποτυπωμάτων"
 
-#: pcbnew/footprint_edit_frame.cpp:1540
+#: pcbnew/footprint_edit_frame.cpp:1536
 msgid "No footprint selected."
 msgstr "Δεν επιλέχθηκε αποτύπωμα."
 
@@ -49002,59 +49011,59 @@ msgstr "Θερμικές Εκτονώσεις"
 msgid "Barcode '%s' on %s"
 msgstr "Διέλευση %s σε %s"
 
-#: pcbnew/pcb_barcode.cpp:692
+#: pcbnew/pcb_barcode.cpp:714
 msgid "CODE_39"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:693
+#: pcbnew/pcb_barcode.cpp:715
 msgid "CODE_128"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:694
+#: pcbnew/pcb_barcode.cpp:716
 msgid "DATA_MATRIX"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:695
+#: pcbnew/pcb_barcode.cpp:717
 msgid "QR_CODE"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:696
+#: pcbnew/pcb_barcode.cpp:718
 msgid "MICRO_QR_CODE"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:703 pcbnew/pcb_barcode.cpp:759
+#: pcbnew/pcb_barcode.cpp:725 pcbnew/pcb_barcode.cpp:781
 msgid "L (Low)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:704 pcbnew/pcb_barcode.cpp:760
+#: pcbnew/pcb_barcode.cpp:726 pcbnew/pcb_barcode.cpp:782
 msgid "M (Medium)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:705 pcbnew/pcb_barcode.cpp:761
+#: pcbnew/pcb_barcode.cpp:727 pcbnew/pcb_barcode.cpp:783
 msgid "Q (Quartile)"
 msgstr ""
 
-#: pcbnew/pcb_barcode.cpp:706 pcbnew/pcb_barcode.cpp:765
+#: pcbnew/pcb_barcode.cpp:728 pcbnew/pcb_barcode.cpp:787
 #, fuzzy
 msgid "H (High)"
 msgstr "Επισήμανση"
 
-#: pcbnew/pcb_barcode.cpp:720
+#: pcbnew/pcb_barcode.cpp:742
 #, fuzzy
 msgid "Show Text"
 msgstr "Προβολή Ίχνους"
 
-#: pcbnew/pcb_barcode.cpp:738
+#: pcbnew/pcb_barcode.cpp:760
 #, fuzzy
 msgid "Barcode Type"
 msgstr "Τύπος Pad"
 
-#: pcbnew/pcb_barcode.cpp:773
+#: pcbnew/pcb_barcode.cpp:795
 #, fuzzy
 msgid "Margin X"
 msgstr "Περιθώριο"
 
-#: pcbnew/pcb_barcode.cpp:777
+#: pcbnew/pcb_barcode.cpp:799
 #, fuzzy
 msgid "Margin Y"
 msgstr "Περιθώριο"
@@ -49171,19 +49180,19 @@ msgstr ""
 msgid "New PCB file is unsaved"
 msgstr "Νεο PCB αρχείο δεν αποθηκεύτηκε"
 
-#: pcbnew/pcb_edit_frame.cpp:1820
+#: pcbnew/pcb_edit_frame.cpp:1814
 msgid "Board file is read only."
 msgstr "Το αρχείο πλακέτας είναι μόνο για ανάγνωση."
 
-#: pcbnew/pcb_edit_frame.cpp:1866
+#: pcbnew/pcb_edit_frame.cpp:1860
 msgid "PCB file changes are unsaved"
 msgstr "Οι αλλαγές αρχείων PCB δεν είναι αποθηκευμένες"
 
-#: pcbnew/pcb_edit_frame.cpp:2130
+#: pcbnew/pcb_edit_frame.cpp:2126
 msgid "The schematic for this board cannot be found."
 msgstr "Το σχηματικό για αυτήν την πλακέτα δεν μπορεί να βρεθεί."
 
-#: pcbnew/pcb_edit_frame.cpp:2156
+#: pcbnew/pcb_edit_frame.cpp:2152
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -49194,11 +49203,11 @@ msgstr ""
 "σχηματικά διαγράμματα, πρέπει να εκτελέσετε τον διαχειριστή έργων Kicad και "
 "να δημιουργήσετε ένα έργο PCB."
 
-#: pcbnew/pcb_edit_frame.cpp:2181 pcbnew/pcbnew_jobs_handler.cpp:2226
+#: pcbnew/pcb_edit_frame.cpp:2177 pcbnew/pcbnew_jobs_handler.cpp:2226
 msgid "Eeschema netlist"
 msgstr "Λίστα δικτύων EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:2192
+#: pcbnew/pcb_edit_frame.cpp:2188
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -49207,27 +49216,27 @@ msgstr ""
 "ζήτημα στην ομάδα του KiCad χρησιμοποιώντας το μενού Βοήθεια->Αναφορά "
 "σφάλματος."
 
-#: pcbnew/pcb_edit_frame.cpp:2923
+#: pcbnew/pcb_edit_frame.cpp:2919
 msgid "Edit design rules"
 msgstr "Επεξεργασία κανόνων σχεδίασης"
 
-#: pcbnew/pcb_edit_frame.cpp:2935
+#: pcbnew/pcb_edit_frame.cpp:2931
 msgid "Could not compile custom design rules."
 msgstr "Αδυναμία επεξεργασίας ειδικών κανόνων σχεδίασης."
 
-#: pcbnew/pcb_edit_frame.cpp:3028
+#: pcbnew/pcb_edit_frame.cpp:3024
 msgid "Violation Report"
 msgstr "Αναφορά Παραβίασης"
 
-#: pcbnew/pcb_edit_frame.cpp:3040
+#: pcbnew/pcb_edit_frame.cpp:3036
 msgid "Clearance Report"
 msgstr "Διάκενο"
 
-#: pcbnew/pcb_edit_frame.cpp:3052
+#: pcbnew/pcb_edit_frame.cpp:3048
 msgid "Constraints Report"
 msgstr "Αναφορά Αποτυπωμάτων"
 
-#: pcbnew/pcb_edit_frame.cpp:3064 pcbnew/tools/pcb_actions.cpp:2174
+#: pcbnew/pcb_edit_frame.cpp:3060 pcbnew/tools/pcb_actions.cpp:2166
 msgid "Compare Footprint with Library"
 msgstr "Σύγκριση Αποτυπώματος με Βιβλιοθήκη"
 
@@ -49293,7 +49302,7 @@ msgstr "Άγνωστο αλφαριθμητικό ονόματος Εγγραφ�
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Άγνωστος τύπος Εκτεταμένων Πληροφοριών Πρωτεύοντων: '%s'."
 
-#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:864
+#: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Η ροή Pads6 έχει απροσδόκητο μήκος για την υποεγγραφή 6: %d."
@@ -49589,7 +49598,7 @@ msgstr ""
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3634
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3637
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -49598,7 +49607,7 @@ msgstr ""
 "Μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. "
 "Τοποθέτηση στο επίπεδο Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3662
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3665
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -49609,7 +49618,7 @@ msgstr ""
 "Στο αποτύπωμα %s η χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει "
 "ισοδύναμο στο KiCad. Έχει μετακινηθεί στο επίπεδο Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3677
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3680
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -49618,35 +49627,35 @@ msgstr ""
 "Στο αποτύπωμα %s μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει "
 "ισοδύναμο στο KiCad. Έχει μετακινηθεί στο επίπεδο Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3705
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3708
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Η μη χάλκινη έδρα %s είναι συνδεδεμένη σε ένα δίκτυο, κάτι το οποίο δεν "
 "υποστηρίζεται."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3716
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3719
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Η μη χάλκινη έδρα '%s' έχει τρύπα, αυτό δεν υποστηρίζεται."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3726
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3729
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Η μη χάλκινη έδρα '%s' χρησιμοποιεί μια σύνθετη στοίβαξη έδρας (δεν "
 "υποστηρίζεται ακόμη)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3873
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3876
 #, fuzzy, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "Η μη χάλκινη έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3886
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3889
 msgid "Loading vias..."
 msgstr "Φόρτωση διελεύσεων..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3934
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3937
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -49654,24 +49663,24 @@ msgstr ""
 "Η διέλευση από το επίπεδο %d στο %d χρησιμοποιεί ένα μη χάλκινο επίπεδο, το "
 "οποίο δεν υποστηρίζεται."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3997
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4000
 msgid "Loading tracks..."
 msgstr "Φόρτωση διαδρόμων..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4214
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4217
 msgid "Loading unicode strings..."
 msgstr "Φόρτωση unicode αλφαριθμητικών..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4228
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4231
 msgid "Loading text..."
 msgstr "Φόρτωση κειμένου..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4517
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4520
 #, fuzzy, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Άγνωστη στοίχιση πλαισίου κειμένου %d, κείμενο %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4673
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4676
 msgid "Loading rectangles..."
 msgstr "Φόρτωση ορθογώνιων..."
 
@@ -51110,7 +51119,7 @@ msgstr "%s σε %s"
 msgid "Pad Primitives"
 msgstr "Πρωτεύοντα Σχήματα Έδρας"
 
-#: pcbnew/pcb_table.cpp:469
+#: pcbnew/pcb_table.cpp:512
 #, fuzzy, c-format
 msgid "%d column table"
 msgstr "%d Στήλη Πίνακα"
@@ -52065,7 +52074,7 @@ msgstr "(%s για υποβολή έτσι κι αλλιώς.)"
 msgid "Track violates DRC."
 msgstr "Ο διάδρομος παραβιάζει τον ΕΚΣ."
 
-#: pcbnew/router/router_tool.cpp:2740 pcbnew/tools/pcb_actions.cpp:2677
+#: pcbnew/router/router_tool.cpp:2740 pcbnew/tools/pcb_actions.cpp:2669
 msgid "Break Track"
 msgstr "Διάσπαση Διαδρόμου"
 
@@ -52289,19 +52298,19 @@ msgstr "Διέλευση: %s (%s)"
 msgid "Align/Distribute"
 msgstr "Στοίχιση/Διανομή"
 
-#: pcbnew/tools/align_distribute_tool.cpp:256 pcbnew/tools/pcb_actions.cpp:2214
+#: pcbnew/tools/align_distribute_tool.cpp:256 pcbnew/tools/pcb_actions.cpp:2206
 msgid "Align to Top"
 msgstr "Στοίχιση Επάνω"
 
-#: pcbnew/tools/align_distribute_tool.cpp:295 pcbnew/tools/pcb_actions.cpp:2221
+#: pcbnew/tools/align_distribute_tool.cpp:295 pcbnew/tools/pcb_actions.cpp:2213
 msgid "Align to Bottom"
 msgstr "Στοίχιση Κάτω"
 
-#: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:2228
+#: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:2220
 msgid "Align to Left"
 msgstr "Στοίχιση Αριστερά"
 
-#: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:2235
+#: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:2227
 msgid "Align to Right"
 msgstr "Στοίχιση Δεξιά"
 
@@ -52317,36 +52326,36 @@ msgstr "Στοίχιση στο Κέντρο"
 msgid "Locking"
 msgstr "Κλείδωμα"
 
-#: pcbnew/tools/board_editor_control.cpp:430
+#: pcbnew/tools/board_editor_control.cpp:422
 msgid "Specctra Session File"
 msgstr "Αρχείο Συνεδρίας Specctra"
 
-#: pcbnew/tools/board_editor_control.cpp:457
+#: pcbnew/tools/board_editor_control.cpp:449
 msgid "Specctra DSN File"
 msgstr "Αρχείο Specctra DSN"
 
-#: pcbnew/tools/board_editor_control.cpp:481
+#: pcbnew/tools/board_editor_control.cpp:473
 msgid "Export Board Netlist"
 msgstr "Εξαγωγή Λίστας Δικτύων"
 
-#: pcbnew/tools/board_editor_control.cpp:482
+#: pcbnew/tools/board_editor_control.cpp:474
 msgid "KiCad board netlist files"
 msgstr "Αρχεία KiCad λίστας δικτύων"
 
-#: pcbnew/tools/board_editor_control.cpp:583
+#: pcbnew/tools/board_editor_control.cpp:575
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
 msgstr "Το ορφανό δίκτυο %s αποδόθηκε εκ νέου.\n"
 
-#: pcbnew/tools/board_editor_control.cpp:662
+#: pcbnew/tools/board_editor_control.cpp:654
 msgid "No board problems found."
 msgstr "Δεν βρέθηκαν άλλα σημάδια."
 
-#: pcbnew/tools/board_editor_control.cpp:673
+#: pcbnew/tools/board_editor_control.cpp:665
 msgid "Updating PCB requires a fully annotated schematic."
 msgstr "Η εξαγωγή λίστας δικτύων απαιτεί ένα πλήρες ονοματισμένο σχηματικό."
 
-#: pcbnew/tools/board_editor_control.cpp:687
+#: pcbnew/tools/board_editor_control.cpp:679
 msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -52357,76 +52366,76 @@ msgstr ""
 "σχηματικά διαγράμματα, πρέπει να εκτελέσετε τον διαχειριστή έργων Kicad και "
 "να δημιουργήσετε ένα έργο PCB."
 
-#: pcbnew/tools/board_editor_control.cpp:731
+#: pcbnew/tools/board_editor_control.cpp:723
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
 
-#: pcbnew/tools/board_editor_control.cpp:762
+#: pcbnew/tools/board_editor_control.cpp:754
 msgid "Eeschema failed to load."
 msgstr "Αποτυχία φόρτωσης του Eeschema."
 
-#: pcbnew/tools/board_editor_control.cpp:875
+#: pcbnew/tools/board_editor_control.cpp:867
 #, fuzzy
 msgid "Increase Track Width"
 msgstr "Αύξηση Πάχους Γραμμής"
 
-#: pcbnew/tools/board_editor_control.cpp:957
+#: pcbnew/tools/board_editor_control.cpp:949
 #, fuzzy
 msgid "Decrease Track Width"
 msgstr "Μείωση Πάχους Γραμμής"
 
-#: pcbnew/tools/board_editor_control.cpp:1042 pcbnew/tools/pcb_actions.cpp:1375
+#: pcbnew/tools/board_editor_control.cpp:1034 pcbnew/tools/pcb_actions.cpp:1375
 msgid "Increase Via Size"
 msgstr "Αύξηση Μεγέθους Διέλευσης"
 
-#: pcbnew/tools/board_editor_control.cpp:1312
+#: pcbnew/tools/board_editor_control.cpp:1304
 #, fuzzy
 msgid "Place Footprint"
 msgstr "Τοποθέτηση Αποτυπώματος"
 
-#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1508
+#: pcbnew/tools/board_editor_control.cpp:1432 pcbnew/tools/pcb_actions.cpp:1500
 msgid "Lock"
 msgstr "Κλείδωμα"
 
-#: pcbnew/tools/board_editor_control.cpp:1440 pcbnew/tools/pcb_actions.cpp:1515
+#: pcbnew/tools/board_editor_control.cpp:1432 pcbnew/tools/pcb_actions.cpp:1507
 msgid "Unlock"
 msgstr "Ξεκλείδωμα"
 
-#: pcbnew/tools/board_editor_control.cpp:1471
+#: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Zones have insufficient overlap for merging."
 msgstr "Ανεπαρκής επικάλυψη ζωνών για συγχώνευση."
 
-#: pcbnew/tools/board_editor_control.cpp:1517
+#: pcbnew/tools/board_editor_control.cpp:1509
 msgid "Some zone netcodes did not match and were not merged."
 msgstr ""
 "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας κωδικών δικτύων κάποιων ζωνών."
 
-#: pcbnew/tools/board_editor_control.cpp:1523
+#: pcbnew/tools/board_editor_control.cpp:1515
 msgid "Some zone priorities did not match and were not merged."
 msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας προτεραιοτήτων κάποιων ζωνών."
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1521
 msgid "Some zones were rule areas and were not merged."
 msgstr "Κάποιες ζώνες ήταν περιοχές κανόνων και δεν έγινε συγχώνευση."
 
-#: pcbnew/tools/board_editor_control.cpp:1535
+#: pcbnew/tools/board_editor_control.cpp:1527
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας επιπέδων κάποιων ζωνών."
 
-#: pcbnew/tools/board_editor_control.cpp:1552
+#: pcbnew/tools/board_editor_control.cpp:1544
 msgid "Some zones did not intersect and were not merged."
 msgstr "Κάποιες ζώνες δεν τέμνονται και δεν έγινε συγχώνευση."
 
-#: pcbnew/tools/board_editor_control.cpp:1565 pcbnew/tools/pcb_actions.cpp:1410
+#: pcbnew/tools/board_editor_control.cpp:1557 pcbnew/tools/pcb_actions.cpp:1410
 msgid "Merge Zones"
 msgstr "Συγχώνευση Ζωνών"
 
-#: pcbnew/tools/board_editor_control.cpp:1619
+#: pcbnew/tools/board_editor_control.cpp:1611
 msgid "Duplicate Zone"
 msgstr "Διπλασιασμός Ζώνης"
 
-#: pcbnew/tools/board_editor_control.cpp:1692
+#: pcbnew/tools/board_editor_control.cpp:1684
 msgid "Selection contains no items with labeled nets."
 msgstr "Η επιλογή δεν περιέχει στοιχεία με κατονομαζόμενα δίκτυα."
 
@@ -52951,63 +52960,63 @@ msgstr "Δημιουργία Τόξου"
 msgid "Select Via Size"
 msgstr "Επιλογή Μεγέθους Διέλευσης"
 
-#: pcbnew/tools/drawing_tool.cpp:345
+#: pcbnew/tools/drawing_tool.cpp:344
 #, fuzzy
 msgid "Constrain to H, V"
 msgstr "Περιορισμός σε Οριζ, Κάθ, 45 μοίρες"
 
-#: pcbnew/tools/drawing_tool.cpp:386 pcbnew/tools/drawing_tool.cpp:2575
+#: pcbnew/tools/drawing_tool.cpp:385 pcbnew/tools/drawing_tool.cpp:2574
 msgid "Draw Line"
 msgstr "Σχεδίαση Γραμμής"
 
-#: pcbnew/tools/drawing_tool.cpp:450
+#: pcbnew/tools/drawing_tool.cpp:449
 msgid "Draw Text Box"
 msgstr "Σχεδίαση Πλαισίου Πεδίου Κειμένου"
 
-#: pcbnew/tools/drawing_tool.cpp:450
+#: pcbnew/tools/drawing_tool.cpp:449
 msgid "Draw Rectangle"
 msgstr "Σχεδίαση Ορθογωνίου"
 
-#: pcbnew/tools/drawing_tool.cpp:498
+#: pcbnew/tools/drawing_tool.cpp:497
 msgid "Draw Circle"
 msgstr "Σχεδίαση Κύκλου"
 
-#: pcbnew/tools/drawing_tool.cpp:545
+#: pcbnew/tools/drawing_tool.cpp:544
 msgid "Draw Arc"
 msgstr "Σχεδίαση Τόξου"
 
-#: pcbnew/tools/drawing_tool.cpp:596
+#: pcbnew/tools/drawing_tool.cpp:595
 #, fuzzy
 msgid "Draw Bezier"
 msgstr "Μπεζιέ"
 
-#: pcbnew/tools/drawing_tool.cpp:918
+#: pcbnew/tools/drawing_tool.cpp:917
 #, fuzzy
 msgid "Place point"
 msgstr "Τοποθέτηση διέλευσης"
 
-#: pcbnew/tools/drawing_tool.cpp:1540
+#: pcbnew/tools/drawing_tool.cpp:1539
 #, fuzzy
 msgid "Draw Barcode"
 msgstr "Σχεδίαση ενός κύκλου"
 
-#: pcbnew/tools/drawing_tool.cpp:1821
+#: pcbnew/tools/drawing_tool.cpp:1820
 msgid "Draw Dimension"
 msgstr "Σχεδίαση Διάστασης"
 
-#: pcbnew/tools/drawing_tool.cpp:2287
+#: pcbnew/tools/drawing_tool.cpp:2286
 msgid "Move Footprint Anchor"
 msgstr "Μετακίνηση Αγκίστρωσης Αποτυπώματος"
 
-#: pcbnew/tools/drawing_tool.cpp:3992
+#: pcbnew/tools/drawing_tool.cpp:3991
 msgid "Select Net:"
 msgstr "Επιλογή Δικτύου:"
 
-#: pcbnew/tools/drawing_tool.cpp:4258
+#: pcbnew/tools/drawing_tool.cpp:4257
 msgid "Via location violates DRC."
 msgstr "Η θέση της διέλευσης παραβιάζει τον ΕΚΣ."
 
-#: pcbnew/tools/drawing_tool.cpp:4348
+#: pcbnew/tools/drawing_tool.cpp:4347
 msgid "Place via"
 msgstr "Τοποθέτηση διέλευσης"
 
@@ -53248,7 +53257,15 @@ msgstr "Ενημέρωση Δικτύων"
 msgid "Pack Footprints"
 msgstr "Συγκέντρωση Αποτυπωμάτων"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:849
+#: pcbnew/tools/edit_tool_move_fct.cpp:847
+msgid "Angle snap lines: 45°"
+msgstr ""
+
+#: pcbnew/tools/edit_tool_move_fct.cpp:851
+msgid "Angle snap lines: 90°"
+msgstr ""
+
+#: pcbnew/tools/edit_tool_move_fct.cpp:865
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
@@ -53257,12 +53274,12 @@ msgstr ""
 "Κάντε κλικ για τοποθέτιση %s (εξάρτημα %zu του %zu)\n"
 "Πατήστε <esc> για ακύρωση ή διπλό κλικ για εγγραφή"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:862
+#: pcbnew/tools/edit_tool_move_fct.cpp:878
 #, c-format
 msgid "%s pad %s"
 msgstr "%s έδρα %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:905
+#: pcbnew/tools/edit_tool_move_fct.cpp:921
 msgid "Select reference point for move..."
 msgstr "Επιλογή σημείου αναφοράς για μετακίνηση..."
 
@@ -54610,141 +54627,131 @@ msgstr "Εναλλαγή κλειδώματος"
 msgid "Lock or unlock selected items"
 msgstr "Κλείδωμα ή ξεκλείδωμα επιλεγμένων αντικειμένων"
 
-#: pcbnew/tools/pcb_actions.cpp:1461
-#, fuzzy
-msgid "Cycle H/V/45 constraint"
-msgstr "Περιορισμοί"
-
-#: pcbnew/tools/pcb_actions.cpp:1462
-msgid ""
-"Cycle between no angle constraint, 45 degrees, or horizontal/vertical only"
-msgstr ""
-
-#: pcbnew/tools/pcb_actions.cpp:1470 pcbnew/tools/pcb_actions.cpp:1479
-#: pcbnew/tools/pcb_actions.cpp:1488 pcbnew/tools/pcb_actions.cpp:1497
+#: pcbnew/tools/pcb_actions.cpp:1461 pcbnew/tools/pcb_actions.cpp:1470
+#: pcbnew/tools/pcb_actions.cpp:1479 pcbnew/tools/pcb_actions.cpp:1489
 #, fuzzy
 msgid "Line Modes"
 msgstr "Λειτουργία εκτύπωσης"
 
-#: pcbnew/tools/pcb_actions.cpp:1509
+#: pcbnew/tools/pcb_actions.cpp:1501
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr "Αποτροπή μετακίνησης και/ή αλλαγής μεγέθους αντικειμένων στον καμβά"
 
-#: pcbnew/tools/pcb_actions.cpp:1516
+#: pcbnew/tools/pcb_actions.cpp:1508
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
 "Να επιτρέπεται η μετακίνηση και/ή αλλαγή μεγέθους αντικειμένων στον καμβά"
 
-#: pcbnew/tools/pcb_actions.cpp:1533
+#: pcbnew/tools/pcb_actions.cpp:1525
 msgid "Toggle Last Net Highlight"
 msgstr "Εναλλαγή Φωτισμού Τελευταίου Δικτύου"
 
-#: pcbnew/tools/pcb_actions.cpp:1534
+#: pcbnew/tools/pcb_actions.cpp:1526
 msgid "Toggle between last two highlighted nets"
 msgstr "Εναλλαγή μεταξύ των δύο τελευταίων επισημασμένων δικτύων"
 
-#: pcbnew/tools/pcb_actions.cpp:1547
+#: pcbnew/tools/pcb_actions.cpp:1539
 msgid "Toggle Net Highlight"
 msgstr "Εναλλαγή Φωτισμού Τελευταίου Δικτύου"
 
-#: pcbnew/tools/pcb_actions.cpp:1556
+#: pcbnew/tools/pcb_actions.cpp:1548
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Φωτισμός όλων των αντικειμένων χαλκού ενός δικτύου"
 
-#: pcbnew/tools/pcb_actions.cpp:1567
+#: pcbnew/tools/pcb_actions.cpp:1559
 msgid "Hide Net in Ratsnest"
 msgstr "Απόκρυψη Δικτύου στη Φωλιά Συνδέσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1568
+#: pcbnew/tools/pcb_actions.cpp:1560
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
 "Απόκρυψη των επιλεγμένων δικτύων από φωλιά συνδέσεων μη συνδεδεμένων γραμμών/"
 "τόξων δικτύων"
 
-#: pcbnew/tools/pcb_actions.cpp:1575
+#: pcbnew/tools/pcb_actions.cpp:1567
 msgid "Show Net in Ratsnest"
 msgstr "Εμφάνιση Δικτύου σε Φωλιά Συνδέσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1576
+#: pcbnew/tools/pcb_actions.cpp:1568
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
 "Εμφάνιση των επιλεγμένων δικτύων από φωλιά συνδέσεων μη συνδεδεμένων γραμμών/"
 "τόξων δικτύων"
 
-#: pcbnew/tools/pcb_actions.cpp:1583
+#: pcbnew/tools/pcb_actions.cpp:1575
 msgid "Switch to Schematic Editor"
 msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:1584
+#: pcbnew/tools/pcb_actions.cpp:1576
 msgid "Open schematic in schematic editor"
 msgstr "Άνοιγμα σχηματικού στον επεξεργαστή σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:1594
+#: pcbnew/tools/pcb_actions.cpp:1586
 msgid "Local Ratsnest"
 msgstr "Τοπική Φωλιά Συνδέσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1595
+#: pcbnew/tools/pcb_actions.cpp:1587
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Εμφάνιση φωλιάς συνδέσεων του επιλεγμένου στοιχείου"
 
-#: pcbnew/tools/pcb_actions.cpp:1612
+#: pcbnew/tools/pcb_actions.cpp:1604
 msgid "Scripting Console"
 msgstr "Κονσόλα Γλώσσας Σεναρίων"
 
-#: pcbnew/tools/pcb_actions.cpp:1613
+#: pcbnew/tools/pcb_actions.cpp:1605
 msgid "Show the Python scripting console"
 msgstr "Εμφάνιση της κονσόλας σεναρίων Python"
 
-#: pcbnew/tools/pcb_actions.cpp:1629
+#: pcbnew/tools/pcb_actions.cpp:1621
 #, fuzzy
 msgid "Show/hide the net inspector"
 msgstr "Προβολή ελεγκτή net"
 
-#: pcbnew/tools/pcb_actions.cpp:1635
+#: pcbnew/tools/pcb_actions.cpp:1627
 #, fuzzy
 msgid "Zone Manager..."
 msgstr "Διαχειριστής Ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1636
+#: pcbnew/tools/pcb_actions.cpp:1628
 msgid "Show the zone manager dialog"
 msgstr "Προβολή διαλόγου διαχειριστή ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1642
+#: pcbnew/tools/pcb_actions.cpp:1634
 msgid "Flip Board View"
 msgstr "Αναστροφή Προβολής Πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:1643
+#: pcbnew/tools/pcb_actions.cpp:1635
 msgid "View board from the opposite side"
 msgstr "Προβολή πλακέτας από την αντίθετη πλευρά"
 
-#: pcbnew/tools/pcb_actions.cpp:1655
+#: pcbnew/tools/pcb_actions.cpp:1647
 msgid "Show Ratsnest"
 msgstr "Εμφάνιση Φωλιάς Συνδέσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1656
+#: pcbnew/tools/pcb_actions.cpp:1648
 msgid "Show lines/arcs representing missing connections on the board"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1663
+#: pcbnew/tools/pcb_actions.cpp:1655
 msgid "Curved Ratsnest Lines"
 msgstr "Καμπύλες Γραμμές Φωλιάς Συνδέσμων"
 
-#: pcbnew/tools/pcb_actions.cpp:1671
+#: pcbnew/tools/pcb_actions.cpp:1663
 msgid "Ratsnest Mode (3-state)"
 msgstr "Κατάσταση Φωλιάς Συνδέσεων (3-καταστάσεις)"
 
-#: pcbnew/tools/pcb_actions.cpp:1672
+#: pcbnew/tools/pcb_actions.cpp:1664
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
 "Μετάβαση ανάμεσα σε προβολή φωλιών συνδέσεων για όλα τα επίπεδα, μόνο για τα "
 "ορατά επίπεδα, και για κανένα"
 
-#: pcbnew/tools/pcb_actions.cpp:1677
+#: pcbnew/tools/pcb_actions.cpp:1669
 msgid "Net Color Mode (3-state)"
 msgstr "Συμπεριφορά Χρωματισμού Δικτύου (3-καταστάσεις)"
 
-#: pcbnew/tools/pcb_actions.cpp:1678
+#: pcbnew/tools/pcb_actions.cpp:1670
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
@@ -54752,377 +54759,377 @@ msgstr ""
 "Εναλλαγή ανάμεσα στη χρήση χρωμάτων δικτύου και κλάσης δικτύου για όλα τα "
 "δίκτυα, μόνο για τη φωλιά συνδέσεων, και για κανένα"
 
-#: pcbnew/tools/pcb_actions.cpp:1685
+#: pcbnew/tools/pcb_actions.cpp:1677
 msgid "Sketch Tracks"
 msgstr "Περίγραμμα Διαδρόμων"
 
-#: pcbnew/tools/pcb_actions.cpp:1686
+#: pcbnew/tools/pcb_actions.cpp:1678
 msgid "Show tracks in outline mode"
 msgstr "Εμφάνιση περιγραμμάτων διαδρόμων"
 
-#: pcbnew/tools/pcb_actions.cpp:1693
+#: pcbnew/tools/pcb_actions.cpp:1685
 msgid "Sketch Pads"
 msgstr "Περίγραμμα Εδρών"
 
-#: pcbnew/tools/pcb_actions.cpp:1694
+#: pcbnew/tools/pcb_actions.cpp:1686
 msgid "Show pads in outline mode"
 msgstr "Εμφάνιση εδρών σε λειτουργία περιγράμματος"
 
-#: pcbnew/tools/pcb_actions.cpp:1701
+#: pcbnew/tools/pcb_actions.cpp:1693
 msgid "Sketch Vias"
 msgstr "Περίγραμμα Διελεύσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1702
+#: pcbnew/tools/pcb_actions.cpp:1694
 msgid "Show vias in outline mode"
 msgstr "Εμφάνιση περιγραμμάτων διελεύσεων"
 
-#: pcbnew/tools/pcb_actions.cpp:1709
+#: pcbnew/tools/pcb_actions.cpp:1701
 msgid "Sketch Graphic Items"
 msgstr "Περίγραμμα Γραφικών"
 
-#: pcbnew/tools/pcb_actions.cpp:1710
+#: pcbnew/tools/pcb_actions.cpp:1702
 msgid "Show graphic items in outline mode"
 msgstr "Εμφάνιση αντικειμένων γραφικών σε λειτουργία περιγράμματος"
 
-#: pcbnew/tools/pcb_actions.cpp:1717
+#: pcbnew/tools/pcb_actions.cpp:1709
 msgid "Sketch Text Items"
 msgstr "Περίγραμμα Φωτισμένων Αντικειμένων"
 
-#: pcbnew/tools/pcb_actions.cpp:1718
+#: pcbnew/tools/pcb_actions.cpp:1710
 msgid "Show footprint texts in line mode"
 msgstr "Εμφάνιση κειμένων αποτυπώματος σε λειτουργία γραμμής"
 
-#: pcbnew/tools/pcb_actions.cpp:1725
+#: pcbnew/tools/pcb_actions.cpp:1717
 msgid "Show Pad Numbers"
 msgstr "Προβολή Αριθμών Έδρας"
 
-#: pcbnew/tools/pcb_actions.cpp:1732
+#: pcbnew/tools/pcb_actions.cpp:1724
 msgid "Draw Zone Fills"
 msgstr "Σχεδίαση Γεμίσματος Ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1733
+#: pcbnew/tools/pcb_actions.cpp:1725
 msgid "Show filled areas of zones"
 msgstr "Εμφάνιση γεμισμένων περιοχών σε ζώνες"
 
-#: pcbnew/tools/pcb_actions.cpp:1740
+#: pcbnew/tools/pcb_actions.cpp:1732
 msgid "Draw Zone Outlines"
 msgstr "Σχεδίαση Περιγράμματος Ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1741
+#: pcbnew/tools/pcb_actions.cpp:1733
 msgid "Show only zone boundaries"
 msgstr "Προβολή μόνο των ορίων ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:1748
+#: pcbnew/tools/pcb_actions.cpp:1740
 msgid "Draw Zone Fill Fracture Borders"
 msgstr "Σχεδίαση Κατακερματισμένων Περιγραμμάτων Γεμίσματος Ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1755
+#: pcbnew/tools/pcb_actions.cpp:1747
 msgid "Draw Zone Fill Triangulation"
 msgstr "Σχεδίαση Τριγωνοποιημένου Γεμίσματος Ζώνης"
 
-#: pcbnew/tools/pcb_actions.cpp:1762
+#: pcbnew/tools/pcb_actions.cpp:1754
 msgid "Toggle Zone Display"
 msgstr "Αλλαγή Προβολής Ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:1763
+#: pcbnew/tools/pcb_actions.cpp:1755
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr ""
 "Εναλλαγή ανάμεσα σε προβολή γεμίσματος ζωνών ή μόνο των περιγραμμάτων τους"
 
-#: pcbnew/tools/pcb_actions.cpp:1770
+#: pcbnew/tools/pcb_actions.cpp:1762
 #, fuzzy
 msgid "Automatic zoom"
 msgstr "Αυτόματο"
 
-#: pcbnew/tools/pcb_actions.cpp:1771
+#: pcbnew/tools/pcb_actions.cpp:1763
 msgid "Automatic Zoom on footprint change"
 msgstr "Αυτόματη Μεγέθυνση αποτυπώματος κατα την αλλαγή"
 
-#: pcbnew/tools/pcb_actions.cpp:1832
+#: pcbnew/tools/pcb_actions.cpp:1824
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Μετάβαση στο επίπεδο Εξαρτημάτων (F.Cu)"
 
-#: pcbnew/tools/pcb_actions.cpp:1841
+#: pcbnew/tools/pcb_actions.cpp:1833
 msgid "Switch to Inner Layer 1"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 1"
 
-#: pcbnew/tools/pcb_actions.cpp:1850
+#: pcbnew/tools/pcb_actions.cpp:1842
 msgid "Switch to Inner Layer 2"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 2"
 
-#: pcbnew/tools/pcb_actions.cpp:1859
+#: pcbnew/tools/pcb_actions.cpp:1851
 msgid "Switch to Inner Layer 3"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 3"
 
-#: pcbnew/tools/pcb_actions.cpp:1868
+#: pcbnew/tools/pcb_actions.cpp:1860
 msgid "Switch to Inner Layer 4"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 4"
 
-#: pcbnew/tools/pcb_actions.cpp:1877
+#: pcbnew/tools/pcb_actions.cpp:1869
 msgid "Switch to Inner Layer 5"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 5"
 
-#: pcbnew/tools/pcb_actions.cpp:1886
+#: pcbnew/tools/pcb_actions.cpp:1878
 msgid "Switch to Inner Layer 6"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 6"
 
-#: pcbnew/tools/pcb_actions.cpp:1894
+#: pcbnew/tools/pcb_actions.cpp:1886
 msgid "Switch to Inner Layer 7"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 7"
 
-#: pcbnew/tools/pcb_actions.cpp:1902
+#: pcbnew/tools/pcb_actions.cpp:1894
 msgid "Switch to Inner Layer 8"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 8"
 
-#: pcbnew/tools/pcb_actions.cpp:1910
+#: pcbnew/tools/pcb_actions.cpp:1902
 msgid "Switch to Inner Layer 9"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 9"
 
-#: pcbnew/tools/pcb_actions.cpp:1918
+#: pcbnew/tools/pcb_actions.cpp:1910
 msgid "Switch to Inner Layer 10"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 10"
 
-#: pcbnew/tools/pcb_actions.cpp:1926
+#: pcbnew/tools/pcb_actions.cpp:1918
 msgid "Switch to Inner Layer 11"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 11"
 
-#: pcbnew/tools/pcb_actions.cpp:1934
+#: pcbnew/tools/pcb_actions.cpp:1926
 msgid "Switch to Inner Layer 12"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 12"
 
-#: pcbnew/tools/pcb_actions.cpp:1942
+#: pcbnew/tools/pcb_actions.cpp:1934
 msgid "Switch to Inner Layer 13"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 13"
 
-#: pcbnew/tools/pcb_actions.cpp:1950
+#: pcbnew/tools/pcb_actions.cpp:1942
 msgid "Switch to Inner Layer 14"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 14"
 
-#: pcbnew/tools/pcb_actions.cpp:1958
+#: pcbnew/tools/pcb_actions.cpp:1950
 msgid "Switch to Inner Layer 15"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 15"
 
-#: pcbnew/tools/pcb_actions.cpp:1966
+#: pcbnew/tools/pcb_actions.cpp:1958
 msgid "Switch to Inner Layer 16"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 16"
 
-#: pcbnew/tools/pcb_actions.cpp:1974
+#: pcbnew/tools/pcb_actions.cpp:1966
 msgid "Switch to Inner Layer 17"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 17"
 
-#: pcbnew/tools/pcb_actions.cpp:1982
+#: pcbnew/tools/pcb_actions.cpp:1974
 msgid "Switch to Inner Layer 18"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 18"
 
-#: pcbnew/tools/pcb_actions.cpp:1990
+#: pcbnew/tools/pcb_actions.cpp:1982
 msgid "Switch to Inner Layer 19"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 19"
 
-#: pcbnew/tools/pcb_actions.cpp:1998
+#: pcbnew/tools/pcb_actions.cpp:1990
 msgid "Switch to Inner Layer 20"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 20"
 
-#: pcbnew/tools/pcb_actions.cpp:2006
+#: pcbnew/tools/pcb_actions.cpp:1998
 msgid "Switch to Inner Layer 21"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 21"
 
-#: pcbnew/tools/pcb_actions.cpp:2014
+#: pcbnew/tools/pcb_actions.cpp:2006
 msgid "Switch to Inner Layer 22"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 22"
 
-#: pcbnew/tools/pcb_actions.cpp:2022
+#: pcbnew/tools/pcb_actions.cpp:2014
 msgid "Switch to Inner Layer 23"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 23"
 
-#: pcbnew/tools/pcb_actions.cpp:2030
+#: pcbnew/tools/pcb_actions.cpp:2022
 msgid "Switch to Inner Layer 24"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 24"
 
-#: pcbnew/tools/pcb_actions.cpp:2038
+#: pcbnew/tools/pcb_actions.cpp:2030
 msgid "Switch to Inner Layer 25"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 25"
 
-#: pcbnew/tools/pcb_actions.cpp:2046
+#: pcbnew/tools/pcb_actions.cpp:2038
 msgid "Switch to Inner Layer 26"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 26"
 
-#: pcbnew/tools/pcb_actions.cpp:2054
+#: pcbnew/tools/pcb_actions.cpp:2046
 msgid "Switch to Inner Layer 27"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 27"
 
-#: pcbnew/tools/pcb_actions.cpp:2062
+#: pcbnew/tools/pcb_actions.cpp:2054
 msgid "Switch to Inner Layer 28"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 28"
 
-#: pcbnew/tools/pcb_actions.cpp:2070
+#: pcbnew/tools/pcb_actions.cpp:2062
 msgid "Switch to Inner Layer 29"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 29"
 
-#: pcbnew/tools/pcb_actions.cpp:2078
+#: pcbnew/tools/pcb_actions.cpp:2070
 msgid "Switch to Inner Layer 30"
 msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 30"
 
-#: pcbnew/tools/pcb_actions.cpp:2088
+#: pcbnew/tools/pcb_actions.cpp:2080
 msgid "Switch to Copper (B.Cu) Layer"
 msgstr "Μετάβαση στο Επίπεδο Χαλκού (B.Cu)"
 
-#: pcbnew/tools/pcb_actions.cpp:2097
+#: pcbnew/tools/pcb_actions.cpp:2089
 msgid "Switch to Next Layer"
 msgstr "Μετάβαση στο Επόμενο Επίπεδο"
 
-#: pcbnew/tools/pcb_actions.cpp:2105
+#: pcbnew/tools/pcb_actions.cpp:2097
 msgid "Switch to Previous Layer"
 msgstr "Μετάβαση στο Προηγούμενο Επίπεδο"
 
-#: pcbnew/tools/pcb_actions.cpp:2113
+#: pcbnew/tools/pcb_actions.cpp:2105
 msgid "Toggle Layer"
 msgstr "Εναλλαγή Επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2114
+#: pcbnew/tools/pcb_actions.cpp:2106
 msgid "Switch between layers in active layer pair"
 msgstr "Εναλλαγή μεταξύ επιπέδων στο ενεργό ζευγάρι επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2123
+#: pcbnew/tools/pcb_actions.cpp:2115
 msgid "Increase Layer Opacity"
 msgstr "Αύξηση Αδιαφάνειας Επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2124
+#: pcbnew/tools/pcb_actions.cpp:2116
 msgid "Make the current layer less transparent"
 msgstr "Το τρέχον επίπεδο γίνεται λιγότερο διάφανο"
 
-#: pcbnew/tools/pcb_actions.cpp:2133
+#: pcbnew/tools/pcb_actions.cpp:2125
 msgid "Decrease Layer Opacity"
 msgstr "Μείωση Αδιαφάνειας Επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2134
+#: pcbnew/tools/pcb_actions.cpp:2126
 msgid "Make the current layer more transparent"
 msgstr "Το τρέχον επίπεδο γίνεται πιο διάφανο"
 
-#: pcbnew/tools/pcb_actions.cpp:2141
+#: pcbnew/tools/pcb_actions.cpp:2133
 #, fuzzy
 msgid "Cycle Layer Pair Presets"
 msgstr "Αποθήκευση Προεπιλογής Επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2142
+#: pcbnew/tools/pcb_actions.cpp:2134
 #, fuzzy
 msgid "Cycle between preset layer pairs"
 msgstr "Εναλλαγή μεταξύ επιπέδων στο ενεργό ζευγάρι επιπέδου"
 
-#: pcbnew/tools/pcb_actions.cpp:2153
+#: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Show Board Statistics"
 msgstr "Εμφάνιση Στατιστικών Πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2154
+#: pcbnew/tools/pcb_actions.cpp:2146
 msgid "Shows board statistics"
 msgstr "Εμφανίζει στατιστικά πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2160
+#: pcbnew/tools/pcb_actions.cpp:2152
 msgid "Clearance Resolution"
 msgstr "Ανάλυση Διάκενου"
 
-#: pcbnew/tools/pcb_actions.cpp:2161
+#: pcbnew/tools/pcb_actions.cpp:2153
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
 "Εμφάνιση ανάλυσης διακένου για το ενεργό επίπεδο μεταξύ δύο επιλεγμένων "
 "αντικειμένων"
 
-#: pcbnew/tools/pcb_actions.cpp:2167
+#: pcbnew/tools/pcb_actions.cpp:2159
 msgid "Constraints Resolution"
 msgstr "Ανάλυση Περιορισμών"
 
-#: pcbnew/tools/pcb_actions.cpp:2168
+#: pcbnew/tools/pcb_actions.cpp:2160
 msgid "Show constraints resolution for the selected object"
 msgstr "Εμφάνιση ανάλυσης περιορισμών για το επιλεγμένο αντικείμενο"
 
-#: pcbnew/tools/pcb_actions.cpp:2175
+#: pcbnew/tools/pcb_actions.cpp:2167
 msgid "Show differences between board footprint and its library equivalent"
 msgstr "Εμφάνιση διαφορών αποτυπώματος πλακέτας και ισοδύναμου από βιβλιοθήκη"
 
-#: pcbnew/tools/pcb_actions.cpp:2181
+#: pcbnew/tools/pcb_actions.cpp:2173
 msgid "Show Footprint Associations"
 msgstr "Εμφάνιση Συσχετισμών Αποτυπώματος"
 
-#: pcbnew/tools/pcb_actions.cpp:2182
+#: pcbnew/tools/pcb_actions.cpp:2174
 msgid "Show footprint library and schematic symbol associations"
 msgstr "Εμφάνιση συσχετίσεων βιβλιοθήκης αποτυπώματος και συμβόλων σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:2189
+#: pcbnew/tools/pcb_actions.cpp:2181
 msgid "Geographical Reannotate..."
 msgstr "Γεωγραφικός Επανα-σχολιασμός…"
 
-#: pcbnew/tools/pcb_actions.cpp:2190
+#: pcbnew/tools/pcb_actions.cpp:2182
 msgid "Reannotate PCB in geographical order"
 msgstr "Επανα-σχολιασμός του PCB με γεωγραφική σειρά"
 
-#: pcbnew/tools/pcb_actions.cpp:2196
+#: pcbnew/tools/pcb_actions.cpp:2188
 msgid "Repair Board"
 msgstr "Διόρθωση Πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2197
+#: pcbnew/tools/pcb_actions.cpp:2189
 msgid "Run various diagnostics and attempt to repair board"
 msgstr "Εκκίνηση διαφόρων διαγνωστικών και προσπάθεια επιδιόρθωσης πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2204
+#: pcbnew/tools/pcb_actions.cpp:2196
 msgid "Repair Footprint"
 msgstr "Νέο Αποτύπωμα"
 
-#: pcbnew/tools/pcb_actions.cpp:2205
+#: pcbnew/tools/pcb_actions.cpp:2197
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr "Εκκίνηση διαφόρων διαγνωστικών και προσπάθεια επιδιόρθωσης πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2215
+#: pcbnew/tools/pcb_actions.cpp:2207
 msgid "Aligns selected items to the top edge of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο επάνω άκρο του αντικειμένου κάτω από τον "
 "κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2222
+#: pcbnew/tools/pcb_actions.cpp:2214
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο κάτω άκρο του αντικειμένου κάτω από τον "
 "κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2229
+#: pcbnew/tools/pcb_actions.cpp:2221
 msgid "Aligns selected items to the left edge of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο του αντικειμένου κάτω από "
 "τον κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2236
+#: pcbnew/tools/pcb_actions.cpp:2228
 msgid "Aligns selected items to the right edge of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο δεξί άκρο του αντικειμένου κάτω από τον "
 "κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2242
+#: pcbnew/tools/pcb_actions.cpp:2234
 msgid "Align to Vertical Center"
 msgstr "Στοίχιση στο Κέντρο Κάθετα"
 
-#: pcbnew/tools/pcb_actions.cpp:2243
+#: pcbnew/tools/pcb_actions.cpp:2235
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο κατακόρυφο κέντρο του αντικειμένου κάτω "
 "από τον κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2249
+#: pcbnew/tools/pcb_actions.cpp:2241
 msgid "Align to Horizontal Center"
 msgstr "Στοίχιση στο Κέντρο Οριζόντια"
 
-#: pcbnew/tools/pcb_actions.cpp:2250
+#: pcbnew/tools/pcb_actions.cpp:2242
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
 msgstr ""
 "Στοίχιση επιλεγμένων στοιχείων στο οριζόντιο κέντρο του αντικειμένου κάτω "
 "από τον κέρσορα"
 
-#: pcbnew/tools/pcb_actions.cpp:2256
+#: pcbnew/tools/pcb_actions.cpp:2248
 #, fuzzy
 msgid "Distribute Horizontally by Centers"
 msgstr "Διανομή Οριζόντια"
 
-#: pcbnew/tools/pcb_actions.cpp:2257
+#: pcbnew/tools/pcb_actions.cpp:2249
 #, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
@@ -55131,12 +55138,12 @@ msgstr ""
 "Κατανομή επιλεγμένων αντικειμένων μεταξύ του αριστερότερου και του "
 "δεξιότερου αντικειμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2264
+#: pcbnew/tools/pcb_actions.cpp:2256
 #, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
 msgstr "Διανομή Οριζόντια"
 
-#: pcbnew/tools/pcb_actions.cpp:2265
+#: pcbnew/tools/pcb_actions.cpp:2257
 #, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
@@ -55145,12 +55152,12 @@ msgstr ""
 "Κατανομή επιλεγμένων αντικειμένων μεταξύ του αριστερότερου και του "
 "δεξιότερου αντικειμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2272
+#: pcbnew/tools/pcb_actions.cpp:2264
 #, fuzzy
 msgid "Distribute Vertically with Even Gaps"
 msgstr "Διανομή Κάθετα"
 
-#: pcbnew/tools/pcb_actions.cpp:2273
+#: pcbnew/tools/pcb_actions.cpp:2265
 #, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
@@ -55159,12 +55166,12 @@ msgstr ""
 "Κατανομή επιλεγμένων αντικειμένων μεταξύ του υψηλότερου και του χαμηλότερου "
 "αντικειμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2280
+#: pcbnew/tools/pcb_actions.cpp:2272
 #, fuzzy
 msgid "Distribute Vertically by Centers"
 msgstr "Διανομή Κάθετα"
 
-#: pcbnew/tools/pcb_actions.cpp:2281
+#: pcbnew/tools/pcb_actions.cpp:2273
 #, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
@@ -55173,40 +55180,40 @@ msgstr ""
 "Κατανομή επιλεγμένων αντικειμένων μεταξύ του υψηλότερου και του χαμηλότερου "
 "αντικειμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2296
+#: pcbnew/tools/pcb_actions.cpp:2288
 msgid "Create a corner"
 msgstr "Δημιουργία γωνίας"
 
-#: pcbnew/tools/pcb_actions.cpp:2303
+#: pcbnew/tools/pcb_actions.cpp:2295
 msgid "Remove corner"
 msgstr "Αφαίρεση γωνίας"
 
-#: pcbnew/tools/pcb_actions.cpp:2309
+#: pcbnew/tools/pcb_actions.cpp:2301
 #, fuzzy
 msgid "Chamfer Corner"
 msgstr "Γωνίες λοξότμησης:"
 
-#: pcbnew/tools/pcb_actions.cpp:2310
+#: pcbnew/tools/pcb_actions.cpp:2302
 #, fuzzy
 msgid "Chamfer corner"
 msgstr "Γωνίες λοξότμησης:"
 
-#: pcbnew/tools/pcb_actions.cpp:2320
+#: pcbnew/tools/pcb_actions.cpp:2312
 msgid "Position Relative To..."
 msgstr "Θέση Σχετική με..."
 
-#: pcbnew/tools/pcb_actions.cpp:2321
+#: pcbnew/tools/pcb_actions.cpp:2313
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
 "Τοποθέτηση των επιλεγμένων αντικειμένων σε μία ακριβή απόσταση σε σχέση με "
 "άλλο αντικείμενο"
 
-#: pcbnew/tools/pcb_actions.cpp:2327
+#: pcbnew/tools/pcb_actions.cpp:2319
 #, fuzzy
 msgid "Position Interactively..."
 msgstr "Θέση Σχετική με..."
 
-#: pcbnew/tools/pcb_actions.cpp:2328
+#: pcbnew/tools/pcb_actions.cpp:2320
 #, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
@@ -55215,11 +55222,11 @@ msgstr ""
 "Τοποθέτηση των επιλεγμένων αντικειμένων σε μία ακριβή απόσταση σε σχέση με "
 "άλλο αντικείμενο"
 
-#: pcbnew/tools/pcb_actions.cpp:2349
+#: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Select/Expand Connection"
 msgstr "Επιλογή/Επέκταση Σύνδεσης"
 
-#: pcbnew/tools/pcb_actions.cpp:2350
+#: pcbnew/tools/pcb_actions.cpp:2342
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
@@ -55227,56 +55234,56 @@ msgstr ""
 "Επιλέγει μια σύνδεση ή επεκτείνει μια υπάρχουσα επιλογή σε κόμβους, pads ή "
 "ολόκληρες συνδέσεις"
 
-#: pcbnew/tools/pcb_actions.cpp:2356
+#: pcbnew/tools/pcb_actions.cpp:2348
 msgid "Unroute Selected"
 msgstr "Αποδρομολόγηση Επιλεγμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2357
+#: pcbnew/tools/pcb_actions.cpp:2349
 msgid "Unroutes selected items to the nearest pad."
 msgstr "Αποδρομολόγηση επιλεγμένων στην κοντινότερη έδρα."
 
-#: pcbnew/tools/pcb_actions.cpp:2364
+#: pcbnew/tools/pcb_actions.cpp:2356
 #, fuzzy
 msgid "Unroute Segment"
 msgstr "Αποδρομολόγηση Επιλεγμένου"
 
-#: pcbnew/tools/pcb_actions.cpp:2365
+#: pcbnew/tools/pcb_actions.cpp:2357
 #, fuzzy
 msgid "Unroutes segment to the nearest segment."
 msgstr "Αποδρομολόγηση επιλεγμένων στην κοντινότερη έδρα."
 
-#: pcbnew/tools/pcb_actions.cpp:2379
+#: pcbnew/tools/pcb_actions.cpp:2371
 msgid "Select All Tracks in Net"
 msgstr "Επιλογή Όλων Των Διαδρόμων στο Δίκτυο"
 
-#: pcbnew/tools/pcb_actions.cpp:2380
+#: pcbnew/tools/pcb_actions.cpp:2372
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Επιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
 
-#: pcbnew/tools/pcb_actions.cpp:2386
+#: pcbnew/tools/pcb_actions.cpp:2378
 msgid "Deselect All Tracks in Net"
 msgstr "Αποεπιλογή Όλων Των Διαδρόμων στο Δίκτυο"
 
-#: pcbnew/tools/pcb_actions.cpp:2387
+#: pcbnew/tools/pcb_actions.cpp:2379
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr ""
 "Αποεπιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
 
-#: pcbnew/tools/pcb_actions.cpp:2394
+#: pcbnew/tools/pcb_actions.cpp:2386
 msgid "Select All Unconnected Footprints"
 msgstr "Επιλογή Όλων των Ασύνδετων Αποτυπωμάτων"
 
-#: pcbnew/tools/pcb_actions.cpp:2395
+#: pcbnew/tools/pcb_actions.cpp:2387
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr ""
 "Επιλογή όλων των ασύνδετων αποτυπωμάτων που ανήκουν στο εκάστοτε επιλεγμένο "
 "δίκτυο."
 
-#: pcbnew/tools/pcb_actions.cpp:2401
+#: pcbnew/tools/pcb_actions.cpp:2393
 msgid "Grab Nearest Unconnected Footprints"
 msgstr "Επιλογή Κοντινότερων Ασύνδετων Αποτυπωμάτων"
 
-#: pcbnew/tools/pcb_actions.cpp:2402
+#: pcbnew/tools/pcb_actions.cpp:2394
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
@@ -55284,40 +55291,40 @@ msgstr ""
 "Επιλέγει και ξεκινά τη μετακίνηση του πλησιέστερου μη συνδεδεμένου "
 "αποτυπώματος σε κάθε επιλεγμένο δίκτυο."
 
-#: pcbnew/tools/pcb_actions.cpp:2408
+#: pcbnew/tools/pcb_actions.cpp:2400
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "Επιλογή όλων των αποτυπωμάτων και διαδρόμων στο φύλλο του σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:2414
+#: pcbnew/tools/pcb_actions.cpp:2406
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Αντικειμενα στο ίδιο Ιεραρχικό Φύλλο"
 
-#: pcbnew/tools/pcb_actions.cpp:2415
+#: pcbnew/tools/pcb_actions.cpp:2407
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
 "Επιλογή όλων των αποτυπωμάτων και διαδρόμων στο ίδιο φύλλο του σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:2421
+#: pcbnew/tools/pcb_actions.cpp:2413
 msgid "Select on Schematic"
 msgstr "Επιλογή στο Σχηματικό"
 
-#: pcbnew/tools/pcb_actions.cpp:2422
+#: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Selects corresponding items in Schematic editor"
 msgstr "Επιλογή αντίστοιχων αντικειμένων στον Επεξεργαστή Σχηματικού"
 
-#: pcbnew/tools/pcb_actions.cpp:2428
+#: pcbnew/tools/pcb_actions.cpp:2420
 msgid "Filter Selected Items..."
 msgstr "Φιλτράρισμα Επιλεγμένων Αντικειμένων..."
 
-#: pcbnew/tools/pcb_actions.cpp:2429
+#: pcbnew/tools/pcb_actions.cpp:2421
 msgid "Remove items from the selection by type"
 msgstr "Αφαίρεση αντικειμένων από την επιλογή ανα τύπο"
 
-#: pcbnew/tools/pcb_actions.cpp:2438
+#: pcbnew/tools/pcb_actions.cpp:2430
 msgid "Draft Fill Selected Zone(s)"
 msgstr "Πρόχειρο Γέμισμα Επιλεγμένων Ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:2439
+#: pcbnew/tools/pcb_actions.cpp:2431
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
@@ -55325,312 +55332,312 @@ msgstr ""
 "Ενημέρωση γεμίσματος χαλκού των επιλεγμένων ζωνών χωρίς να ληφθούν υπόψη "
 "άλλες ζώνες που αλληλεπιδρούν"
 
-#: pcbnew/tools/pcb_actions.cpp:2448 pcbnew/tools/zone_filler_tool.cpp:168
+#: pcbnew/tools/pcb_actions.cpp:2440 pcbnew/tools/zone_filler_tool.cpp:168
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:383
 msgid "Fill All Zones"
 msgstr "Γέμισμα Όλων των Ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:2449
+#: pcbnew/tools/pcb_actions.cpp:2441
 msgid "Update copper fill of all zones"
 msgstr "Άδειασμα όλων των ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:2459
+#: pcbnew/tools/pcb_actions.cpp:2451
 msgid "Unfill Selected Zone(s)"
 msgstr "Άδειασμα Επιλεγμένων Ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:2460
+#: pcbnew/tools/pcb_actions.cpp:2452
 msgid "Remove copper fill from selected zone(s)"
 msgstr "Αφαίρεση γεμίσματος χαλκού από επιλεγμένες ζώνες"
 
-#: pcbnew/tools/pcb_actions.cpp:2468 pcbnew/tools/zone_filler_tool.cpp:436
+#: pcbnew/tools/pcb_actions.cpp:2460 pcbnew/tools/zone_filler_tool.cpp:436
 msgid "Unfill All Zones"
 msgstr "Άδειασμα Όλων Των Ζωνών"
 
-#: pcbnew/tools/pcb_actions.cpp:2469
+#: pcbnew/tools/pcb_actions.cpp:2461
 msgid "Remove copper fill from all zones"
 msgstr "Αφαίρεση γέμισης από όλες τις ζώνες της πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2478
+#: pcbnew/tools/pcb_actions.cpp:2470
 msgid "Place Selected Footprints"
 msgstr "Τοποθέτηση Επιλεγμένων Αποτυπωμάτων"
 
-#: pcbnew/tools/pcb_actions.cpp:2479
+#: pcbnew/tools/pcb_actions.cpp:2471
 msgid "Performs automatic placement of selected components"
 msgstr "Εκτελεί αυτόματη τοποθέτηση των επιλεγμένων αποτυπωμάτων"
 
-#: pcbnew/tools/pcb_actions.cpp:2484
+#: pcbnew/tools/pcb_actions.cpp:2476
 msgid "Place Off-Board Footprints"
 msgstr "Τοποθέτηση Αποτυπωμάτων Εκτός-Πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2485
+#: pcbnew/tools/pcb_actions.cpp:2477
 msgid "Performs automatic placement of components outside board area"
 msgstr "Εκτελεί αυτόματη τοποθέτηση εξαρτημάτων εκτός της πλακέτας"
 
-#: pcbnew/tools/pcb_actions.cpp:2490
+#: pcbnew/tools/pcb_actions.cpp:2482
 #, fuzzy
 msgid "Generate Placement Rule Areas..."
 msgstr "Δημιουργία Αρχείου Τοποθέτησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2491
+#: pcbnew/tools/pcb_actions.cpp:2483
 #, fuzzy
 msgid "Creates best-fit placement rule areas"
 msgstr "Δημιουργία Αρχείου Τοποθέτησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2498
+#: pcbnew/tools/pcb_actions.cpp:2490
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "Επανάληψη Μέτρησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2499
+#: pcbnew/tools/pcb_actions.cpp:2491
 msgid "Clones placement & routing across multiple identical channels"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2510
+#: pcbnew/tools/pcb_actions.cpp:2502
 msgid "Route Single Track"
 msgstr "Δρομολόγηση Ενός Διαδρόμου"
 
-#: pcbnew/tools/pcb_actions.cpp:2511
+#: pcbnew/tools/pcb_actions.cpp:2503
 msgid "Route tracks"
 msgstr "Δρομολόγηση διαδρόμων"
 
-#: pcbnew/tools/pcb_actions.cpp:2523
+#: pcbnew/tools/pcb_actions.cpp:2515
 msgid "Route Differential Pair"
 msgstr "Δρομολόγηση Διαφορικού Ζεύγους"
 
-#: pcbnew/tools/pcb_actions.cpp:2524
+#: pcbnew/tools/pcb_actions.cpp:2516
 msgid "Route differential pairs"
 msgstr "Δρομολόγηση διαφορικού ζεύγους"
 
-#: pcbnew/tools/pcb_actions.cpp:2535
+#: pcbnew/tools/pcb_actions.cpp:2527
 msgid "Interactive Router Settings..."
 msgstr "Ρυθμίσεις Διαδραστικού Δρομολογητή..."
 
-#: pcbnew/tools/pcb_actions.cpp:2536
+#: pcbnew/tools/pcb_actions.cpp:2528
 msgid "Open Interactive Router settings"
 msgstr "Άνοιγμα ρυθμίσεων Διαδραστικού Δρομολογητή"
 
-#: pcbnew/tools/pcb_actions.cpp:2542
+#: pcbnew/tools/pcb_actions.cpp:2534
 msgid "Differential Pair Dimensions..."
 msgstr "Διαστάσεις Διαφορικού Ζεύγους..."
 
-#: pcbnew/tools/pcb_actions.cpp:2543
+#: pcbnew/tools/pcb_actions.cpp:2535
 msgid "Open Differential Pair Dimension settings"
 msgstr "Άνοιγμα ρυθμίσεων Διάστασης Διαφορικού Ζεύγους"
 
-#: pcbnew/tools/pcb_actions.cpp:2549
+#: pcbnew/tools/pcb_actions.cpp:2541
 msgid "Router Highlight Mode"
 msgstr "Δρομολογητής σε Λειτουργία Επισήμανσης"
 
-#: pcbnew/tools/pcb_actions.cpp:2550
+#: pcbnew/tools/pcb_actions.cpp:2542
 msgid "Switch router to highlight mode"
 msgstr "Αλλαγή δρομολογητή σε λειτουργία επισήμανσης"
 
-#: pcbnew/tools/pcb_actions.cpp:2557
+#: pcbnew/tools/pcb_actions.cpp:2549
 msgid "Router Shove Mode"
 msgstr "Λειτουργία μετακίνησης δρομολογητή"
 
-#: pcbnew/tools/pcb_actions.cpp:2558
+#: pcbnew/tools/pcb_actions.cpp:2550
 msgid "Switch router to shove mode"
 msgstr "Εναλλαγή δρομολογητή σε λειτουργία μετακίνησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2565
+#: pcbnew/tools/pcb_actions.cpp:2557
 msgid "Router Walkaround Mode"
 msgstr "Δρομολογητής σε λειτουργία περιήγησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2566
+#: pcbnew/tools/pcb_actions.cpp:2558
 msgid "Switch router to walkaround mode"
 msgstr "Εναλλαγή δρομολογητή σε λειτουργία περιήγησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2573
+#: pcbnew/tools/pcb_actions.cpp:2565
 msgid "Cycle Router Mode"
 msgstr "Εναλλαγή συμπεριφοράς δρομολογητή"
 
-#: pcbnew/tools/pcb_actions.cpp:2574
+#: pcbnew/tools/pcb_actions.cpp:2566
 msgid "Cycle router to the next mode"
 msgstr "Εναλλαγή συμπεριφοράς δρομολογητή στην επόμενη"
 
-#: pcbnew/tools/pcb_actions.cpp:2579
+#: pcbnew/tools/pcb_actions.cpp:2571
 msgid "Set Layer Pair..."
 msgstr "Ορισμός Ζεύγους Επιπέδων..."
 
-#: pcbnew/tools/pcb_actions.cpp:2580
+#: pcbnew/tools/pcb_actions.cpp:2572
 msgid "Change active layer pair for routing"
 msgstr "Αλλαγή του ενεργού ζεύγους επιπέδων για δρομολόγηση"
 
-#: pcbnew/tools/pcb_actions.cpp:2590
+#: pcbnew/tools/pcb_actions.cpp:2582
 msgid "Tune Length of a Single Track"
 msgstr "Ρύθμιση Ακριβείας Μήκους Μονού Διαδρόμου"
 
-#: pcbnew/tools/pcb_actions.cpp:2602
+#: pcbnew/tools/pcb_actions.cpp:2594
 msgid "Tune Length of a Differential Pair"
 msgstr "Ρύθμιση Ακριβείας Μήκους Διαφορικού Ζεύγους"
 
-#: pcbnew/tools/pcb_actions.cpp:2614
+#: pcbnew/tools/pcb_actions.cpp:2606
 msgid "Tune Skew of a Differential Pair"
 msgstr "Ρύθμιση Απόκλισης Διαφορικού Ζεύγους"
 
-#: pcbnew/tools/pcb_actions.cpp:2630
+#: pcbnew/tools/pcb_actions.cpp:2622
 msgid "Walks the current track back one segment."
 msgstr "Πάει τον τρέχοντα διάδρομο πίσω, κατά ένα τμήμα."
 
-#: pcbnew/tools/pcb_actions.cpp:2636
+#: pcbnew/tools/pcb_actions.cpp:2628
 msgid "Route From Other End"
 msgstr "Δρομολόγηση Από Την Άλλη Άκρη"
 
-#: pcbnew/tools/pcb_actions.cpp:2637
+#: pcbnew/tools/pcb_actions.cpp:2629
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
 "Δεσμεύει τα τρέχοντα τμήματα και ξεκινά το επόμενο τμήμα από το πλησιέστερο "
 "άκρο της φωλιάς συνδέσεων."
 
-#: pcbnew/tools/pcb_actions.cpp:2643
+#: pcbnew/tools/pcb_actions.cpp:2635
 msgid "Attempt Finish"
 msgstr "Προσπάθεια Ολοκλήρωσης"
 
-#: pcbnew/tools/pcb_actions.cpp:2644
+#: pcbnew/tools/pcb_actions.cpp:2636
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
 "Προσπάθεια ολοκλήρωσης της τρέχουσας δρομολόγησης προς το πλησιέστερο τέλος "
 "της φωλιάς συνδέσεων."
 
-#: pcbnew/tools/pcb_actions.cpp:2651
+#: pcbnew/tools/pcb_actions.cpp:2643
 msgid "Route Selected"
 msgstr "Επιλογή Δρομολόγησης"
 
-#: pcbnew/tools/pcb_actions.cpp:2652
+#: pcbnew/tools/pcb_actions.cpp:2644
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr ""
 "Διαδοχική δρομολόγηση επιλεγμένων στοιχείων από αγκίστρωση φωλιάς συνδέσεων."
 
-#: pcbnew/tools/pcb_actions.cpp:2660
+#: pcbnew/tools/pcb_actions.cpp:2652
 msgid "Route Selected From Other End"
 msgstr "Δρομολόγηση Επιλεγένων Από Την Άλλη Άκρη"
 
-#: pcbnew/tools/pcb_actions.cpp:2661
+#: pcbnew/tools/pcb_actions.cpp:2653
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
 "Διαδοχική δρομολόγηση επιλεγμένων στοιχείων από την άλλη άκρη της "
 "αγκίστρωσης φωλιάς συνδέσεων."
 
-#: pcbnew/tools/pcb_actions.cpp:2669
+#: pcbnew/tools/pcb_actions.cpp:2661
 msgid "Attempt Finish Selected (Autoroute)"
 msgstr "Προσπάθεια Ολοκλήρωσης Επιλεγμένων (Αυτόματη Δρομολόγηση)"
 
-#: pcbnew/tools/pcb_actions.cpp:2670
+#: pcbnew/tools/pcb_actions.cpp:2662
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
 "Να γίνει προσπάθεια διαδοχικά να δρομολογηθούν αυτόματα όλες οι επιλεγμένες "
 "έδρες."
 
-#: pcbnew/tools/pcb_actions.cpp:2678
+#: pcbnew/tools/pcb_actions.cpp:2670
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
 "Χωρίζει το τμήμα του διαδρόμου σε δύο τμήματα που ενώνονται στο σημείο που "
 "είναι ο κέρσορας."
 
-#: pcbnew/tools/pcb_actions.cpp:2686
+#: pcbnew/tools/pcb_actions.cpp:2678
 msgid "Drag 45 Degree Mode"
 msgstr "Σύρσιμο υπό Γωνία 45 μοιρών"
 
-#: pcbnew/tools/pcb_actions.cpp:2687
+#: pcbnew/tools/pcb_actions.cpp:2679
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 "Σέρνει το κομμάτι του διαδρόμου διατηρώντας ταυτόχρονα τους συνδεδεμένους "
 "διαδρόμους στις 45 μοίρες."
 
-#: pcbnew/tools/pcb_actions.cpp:2695
+#: pcbnew/tools/pcb_actions.cpp:2687
 msgid "Drag Free Angle"
 msgstr "Σύρσιμο Ελεύθερης Γωνίας"
 
-#: pcbnew/tools/pcb_actions.cpp:2696
+#: pcbnew/tools/pcb_actions.cpp:2688
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
 "Σέρνει την πλησιέστερη σύνδεση στον διάδρομο χωρίς να περιορίζει τη γωνία "
 "του διαδρόμου."
 
-#: pcbnew/tools/pcb_actions.cpp:2706
+#: pcbnew/tools/pcb_actions.cpp:2698
 msgid "Update All Tuning Patterns"
 msgstr "Ενημέρωση όλων των μοτίβων συντονισμού"
 
-#: pcbnew/tools/pcb_actions.cpp:2707
+#: pcbnew/tools/pcb_actions.cpp:2699
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 "Προσπαθήστε να επανασυντονίσετε τα υπάρχοντα μοτίβα συντονισμού εντός των "
 "ορίων τους"
 
-#: pcbnew/tools/pcb_actions.cpp:2714
+#: pcbnew/tools/pcb_actions.cpp:2706
 msgid "Rebuild All Generators"
 msgstr "Ανακατασκευή όλων των Δημιουργών"
 
-#: pcbnew/tools/pcb_actions.cpp:2715
+#: pcbnew/tools/pcb_actions.cpp:2707
 msgid "Rebuilds geometry of all generators"
 msgstr "Ανακατασκευή γεωμετρίας όλων των δημιουργών"
 
-#: pcbnew/tools/pcb_actions.cpp:2722
+#: pcbnew/tools/pcb_actions.cpp:2714
 msgid "Rebuild Selected Generators"
 msgstr "Ανακατασκευή από Επιλεγμένους Δημιουργούς"
 
-#: pcbnew/tools/pcb_actions.cpp:2723
+#: pcbnew/tools/pcb_actions.cpp:2715
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr "Ανακατασκευή γεωμετρίας επιλεγμένων δημιουργών"
 
-#: pcbnew/tools/pcb_actions.cpp:2751
+#: pcbnew/tools/pcb_actions.cpp:2743
 msgid "Generators Manager"
 msgstr "Διαχειριστής Δημιουργών"
 
-#: pcbnew/tools/pcb_actions.cpp:2752
+#: pcbnew/tools/pcb_actions.cpp:2744
 msgid "Show a manager dialog for Generator objects"
 msgstr "Εμφάνιση παραθύρου διαχείρισης των αντικειμένων του Δημιουργού"
 
-#: pcbnew/tools/pcb_actions.cpp:2764
+#: pcbnew/tools/pcb_actions.cpp:2756
 msgid "Length Tuning Settings..."
 msgstr "Επιλογές Μικρο-ρύθμισης Μήκους..."
 
-#: pcbnew/tools/pcb_actions.cpp:2765
+#: pcbnew/tools/pcb_actions.cpp:2757
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
 msgstr "Εμφάνιση του παραθύρου ιδιοτήτων μικρορύθμισης μοτίβου"
 
-#: pcbnew/tools/pcb_actions.cpp:2785
+#: pcbnew/tools/pcb_actions.cpp:2777
 #, fuzzy
 msgid "Show wizards selector"
 msgstr "δεν επιλέχθηκε οδηγού"
 
-#: pcbnew/tools/pcb_actions.cpp:2786
+#: pcbnew/tools/pcb_actions.cpp:2778
 msgid "Select wizard script to run"
 msgstr "Επιλογή οδηγού προς εκτέλεση"
 
-#: pcbnew/tools/pcb_actions.cpp:2792
+#: pcbnew/tools/pcb_actions.cpp:2784
 #, fuzzy
 msgid "Reset wizard parameters"
 msgstr "Επαναφορά των παραμέτρων του οδηγού στις προκαθορισμένες τιμές"
 
-#: pcbnew/tools/pcb_actions.cpp:2793
+#: pcbnew/tools/pcb_actions.cpp:2785
 msgid "Reset wizard parameters to default"
 msgstr "Επαναφορά των παραμέτρων του οδηγού στις προκαθορισμένες τιμές"
 
-#: pcbnew/tools/pcb_actions.cpp:2799
+#: pcbnew/tools/pcb_actions.cpp:2791
 #, fuzzy
 msgid "Select previous wizard page"
 msgstr "Επιλογή προηγούμενης σελίδας παραμέτρων"
 
-#: pcbnew/tools/pcb_actions.cpp:2800
+#: pcbnew/tools/pcb_actions.cpp:2792
 msgid "Select previous parameters page"
 msgstr "Επιλογή προηγούμενης σελίδας παραμέτρων"
 
-#: pcbnew/tools/pcb_actions.cpp:2806
+#: pcbnew/tools/pcb_actions.cpp:2798
 #, fuzzy
 msgid "Select next wizard page"
 msgstr "Επιλογή επόμενης σελίδας παραμέτρων"
 
-#: pcbnew/tools/pcb_actions.cpp:2807
+#: pcbnew/tools/pcb_actions.cpp:2799
 msgid "Select next parameters page"
 msgstr "Επιλογή επόμενης σελίδας παραμέτρων"
 
-#: pcbnew/tools/pcb_actions.cpp:2813 pcbnew/tools/pcb_actions.cpp:2814
+#: pcbnew/tools/pcb_actions.cpp:2805 pcbnew/tools/pcb_actions.cpp:2806
 msgid "Export footprint to editor"
 msgstr "Εξαγωγή αποτυπώματος στον επεξεργαστή"
 
@@ -55860,53 +55867,53 @@ msgstr "Μοντέλο"
 msgid "%d 3D model(s) successfully embedded."
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2415
+#: pcbnew/tools/pcb_point_editor.cpp:2506
 msgid "Resize Table Cells"
 msgstr "Αλλαγή Μεγέθους Κελιών Πίνακα"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2534
+#: pcbnew/tools/pcb_point_editor.cpp:2628
 msgid "Move Midpoint to Location"
 msgstr "Μετακίνηση Μεσαίου Σημείου σε Τοποθεσία"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2535
+#: pcbnew/tools/pcb_point_editor.cpp:2629
 msgid "Move Midpoint"
 msgstr "Μετακίνηση Μεσαίου Σημείου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2539
+#: pcbnew/tools/pcb_point_editor.cpp:2633
 msgid "Move Corner to Location"
 msgstr "Μετακίνηση Γωνίας σε Τοποθεσία"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2540
+#: pcbnew/tools/pcb_point_editor.cpp:2634
 msgid "Move Corner"
 msgstr "Μετακίνηση Γωνίας"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2906
+#: pcbnew/tools/pcb_point_editor.cpp:3030
 msgid "Add Zone Corner"
 msgstr "Προσθήκη Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2929
+#: pcbnew/tools/pcb_point_editor.cpp:3053
 msgid "Split Segment"
 msgstr "Διαχωρισμός Τμήματος"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2950
+#: pcbnew/tools/pcb_point_editor.cpp:3074
 #, fuzzy
 msgid "Split Arc"
 msgstr "Διαγραφή Τόξου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3027
+#: pcbnew/tools/pcb_point_editor.cpp:3151
 msgid "Remove Zone Corner"
 msgstr "Αφαίρεση Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3029
+#: pcbnew/tools/pcb_point_editor.cpp:3153
 msgid "Remove Polygon Corner"
 msgstr "Αφαίρεση Γωνίας Πολυγώνου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3125
+#: pcbnew/tools/pcb_point_editor.cpp:3249
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "Προσθήκη Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3127
+#: pcbnew/tools/pcb_point_editor.cpp:3251
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "Αφαίρεση Γωνίας Πολυγώνου"
@@ -57555,6 +57562,10 @@ msgstr "Σύμβολο Σχηματικού KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Φύλλα Σχεδίασης KiCad"
+
+#, fuzzy
+#~ msgid "Cycle H/V/45 constraint"
+#~ msgstr "Περιορισμοί"
 
 #~ msgid "&Expand Selection\tE"
 #~ msgstr "&Επέκταση Επιλεγμένης Σύνδεσης\tE"
