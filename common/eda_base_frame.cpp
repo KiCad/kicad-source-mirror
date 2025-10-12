@@ -1105,6 +1105,9 @@ void EDA_BASE_FRAME::FinishAUIInitialization()
 
 void EDA_BASE_FRAME::RestoreAuiLayout()
 {
+    if( !ADVANCED_CFG::GetCfg().m_EnableUseAuiPerspective )
+        return;
+
 #if wxCHECK_VERSION( 3, 3, 0 )
     bool restored = false;
 

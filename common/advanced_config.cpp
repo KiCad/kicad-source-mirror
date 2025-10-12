@@ -140,6 +140,7 @@ static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout"
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
+static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
 
 } // namespace KEYS
 
@@ -337,6 +338,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ScreenDPI = 91;
 
     m_EnableVariantsUI = false;
+
+    m_EnableUseAuiPerspective = false;
 
     loadFromConfigFile();
 }
@@ -682,6 +685,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableVariantsUI, &m_EnableVariantsUI,
                                                            m_EnableVariantsUI ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableUseAuiPerspective,
+                                                           &m_EnableUseAuiPerspective,
+                                                           m_EnableUseAuiPerspective ) );
+
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
