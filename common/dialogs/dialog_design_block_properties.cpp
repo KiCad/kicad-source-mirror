@@ -70,9 +70,9 @@ DIALOG_DESIGN_BLOCK_PROPERTIES::~DIALOG_DESIGN_BLOCK_PROPERTIES()
 
 bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToWindow()
 {
-    m_textName->AppendText( m_designBlock->GetLibId().GetLibItemName() );
-    m_textKeywords->AppendText( m_designBlock->GetKeywords() );
-    m_textDescription->AppendText( m_designBlock->GetLibDescription() );
+    m_textName->ChangeValue( m_designBlock->GetLibId().GetLibItemName() );
+    m_textKeywords->ChangeValue( m_designBlock->GetKeywords() );
+    m_textDescription->ChangeValue( m_designBlock->GetLibDescription() );
 
     // Typical assignment operator does not work here because of the ordered_map
     auto source = m_designBlock->GetFields();
