@@ -3481,7 +3481,10 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
     {
         // Convert hidden footprint text (which is no longer supported) into a hidden field
         if( !text->IsVisible() && text->Type() == PCB_TEXT_T )
-            return new PCB_FIELD( *text.get(), FIELD_T::USER );
+        {
+            wxString fieldName = GetUserFieldName( parentFP->GetFields().size(), !DO_TRANSLATE );
+            return new PCB_FIELD( *text.get(), FIELD_T::USER, fieldName );
+        }
     }
     else
     {
