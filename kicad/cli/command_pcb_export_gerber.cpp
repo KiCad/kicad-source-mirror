@@ -81,8 +81,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
 
     m_argParser.add_argument( ARG_DISABLE_APERTURE_MACROS )
             .help( UTF8STDSTR( _( "Disable aperture macros" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_USE_DRILL_FILE_ORIGIN )
             .help( UTF8STDSTR( _( "Use drill/place file origin" ) ) )

@@ -70,7 +70,6 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 
     m_argParser.add_argument( ARG_SORT_ASC )
             .help( UTF8STDSTR( _( ARG_SORT_ASC_DESC ) ) )
-            .implicit_value( true )
             .default_value( true );
 
     m_argParser.add_argument( ARG_FILTER )

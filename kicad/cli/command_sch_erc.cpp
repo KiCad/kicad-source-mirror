@@ -67,8 +67,7 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
             .help( UTF8STDSTR( _( "Report all ERC warning level violations, this can be combined "
                                   "with the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
             .help( UTF8STDSTR( _( "Report all excluded ERC violations, this can be combined "

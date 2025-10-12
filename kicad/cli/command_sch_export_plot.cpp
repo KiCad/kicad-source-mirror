@@ -75,8 +75,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( "-e", ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_FONT_NAME )
             .help( UTF8STDSTR( _( "Default font name" ) ) )
