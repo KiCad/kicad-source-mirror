@@ -83,7 +83,14 @@ public:
             wxPGChoices choices = aProperty->GetChoices( this );
 
             if( choices.GetCount()  )
-                aProperty->set<wxString>( object, choices.GetLabel( aValue.GetInteger() ) );
+            {
+                // If the property type is int, use the choice value directly
+                // Otherwise, convert to the choice label string
+                if( aProperty->TypeHash() == TYPE_HASH( int ) )
+                    aProperty->set<int>( object, aValue.GetInteger() );
+                else
+                    aProperty->set<wxString>( object, choices.GetLabel( aValue.GetInteger() ) );
+            }
             else
                 aProperty->set<wxVariant>( object, aValue );
 
