@@ -49,12 +49,12 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
     const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
     int                    length = m_pin.GetLength();
-    int                    size = m_pin.GetNumberTextSize();
-    wxString               formatted = FormatStackedPinForDisplay( number, length, size, font, metrics );
+    int                    num_size = m_pin.GetNumberTextSize();
+    wxString               formatted = FormatStackedPinForDisplay( number, length, num_size, font, metrics );
 
     std::optional<TEXT_INFO> info = TEXT_INFO();
     info->m_Text = formatted;
-    info->m_TextSize = size;
+    info->m_TextSize = num_size;
     info->m_Thickness = m_numberThickness;
     info->m_HAlign = GR_TEXT_H_ALIGN_CENTER;
     info->m_VAlign = GR_TEXT_V_ALIGN_CENTER;

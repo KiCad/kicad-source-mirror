@@ -829,9 +829,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     VECTOR2I               pos;
     bool                   has_error = false;
 
-    auto sub_e = [this]( int clearance )
+    auto sub_e = [this]( int aclearance )
                  {
-                     return std::max( 0, clearance - m_drcEpsilon );
+                     return std::max( 0, aclearance - m_drcEpsilon );
                  };
 
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )
