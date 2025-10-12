@@ -39,9 +39,8 @@ CLI::COMMAND::COMMAND( const std::string& aName ) :
 
 {
     m_argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
-                .default_value( false )
                 .help( UTF8STDSTR( ARG_HELP_DESC ) )
-                .implicit_value( true )
+                .flag()
                 .nargs( 0 );
 }
 

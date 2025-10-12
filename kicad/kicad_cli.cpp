@@ -353,15 +353,13 @@ int PGM_KICAD::OnPgmRun()
                                         argparse::default_arguments::none );
 
     argParser.add_argument( "-v", ARG_VERSION )
-            .default_value( false )
             .help( UTF8STDSTR( _( "prints version information and exits" ) ) )
-            .implicit_value( true )
+            .flag()
             .nargs( 0 );
 
     argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
-            .default_value( false )
             .help( UTF8STDSTR( ARG_HELP_DESC ) )
-            .implicit_value( true )
+            .flag()
             .nargs( 0 );
 
     for( COMMAND_ENTRY& entry : commandStack )

@@ -86,8 +86,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     m_argParser.add_argument( ARG_NO_UNSPECIFIED )
             .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Unspecified' footprint "
                                   "type" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_NO_DNP )
             .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Do not populate' "
