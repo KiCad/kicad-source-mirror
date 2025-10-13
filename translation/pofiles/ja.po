@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-10 08:24+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-10-13 12:07+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -10567,7 +10567,7 @@ msgstr "すべて選択 (&A)\tA"
 
 #: common/tool/selection_tool.cpp:316
 msgid "Show &More Choices...\tM"
-msgstr "表示とさらなる選択肢(無効なビットマップ)...\tM"
+msgstr "表示とさらなる選択肢...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
