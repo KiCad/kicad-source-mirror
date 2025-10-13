@@ -30,6 +30,9 @@
 #include <widgets/wx_progress_reporters.h>
 #include <ctime>
 #include <memory>
+#include <optional>
+
+class PROJECT;
 
 
 class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER
@@ -137,6 +140,7 @@ public:
     std::optional<bool>                                                   m_lastRunSuccess;
     std::unordered_map<wxString, std::optional<bool>>                     m_lastRunSuccessMap;
     std::unordered_map<wxString, std::shared_ptr<JOBSET_OUTPUT_REPORTER>> m_lastRunReporters;
+    std::optional<wxString>                                               m_lastResolvedOutputPath;
 };
 
 

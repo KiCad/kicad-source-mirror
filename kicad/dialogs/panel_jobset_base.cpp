@@ -206,6 +206,12 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	m_buttonGenerate = new wxButton( this, wxID_ANY, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonGenerate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_buttonOpenOutput = new wxButton( this, wxID_ANY, _("Open Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonOpenOutput->Enable( false );
+	m_buttonOpenOutput->SetToolTip( _("Open the generated output") );
+
+	bSizerButtons->Add( m_buttonOpenOutput, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
 
 	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxTOP, 10 );
 
@@ -220,6 +226,7 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	m_buttonProperties->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnProperties ), NULL, this );
 	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnDelete ), NULL, this );
 	m_buttonGenerate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnGenerate ), NULL, this );
+	m_buttonOpenOutput->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnOpenOutput ), NULL, this );
 }
 
 PANEL_DESTINATION_BASE::~PANEL_DESTINATION_BASE()
@@ -230,6 +237,7 @@ PANEL_DESTINATION_BASE::~PANEL_DESTINATION_BASE()
 	m_buttonProperties->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnProperties ), NULL, this );
 	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnDelete ), NULL, this );
 	m_buttonGenerate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnGenerate ), NULL, this );
+	m_buttonOpenOutput->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESTINATION_BASE::OnOpenOutput ), NULL, this );
 
 }
 

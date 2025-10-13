@@ -22,6 +22,7 @@
 
 #include <kicommon.h>
 #include <vector>
+#include <optional>
 #include <jobs/job.h>
 
 class PROJECT;
@@ -44,7 +45,8 @@ public:
     virtual bool OutputPrecheck() { return true; }
     virtual bool HandleOutputs( const wxString&                aBaseTempPath,
                                 PROJECT*                       aProject,
-                                const std::vector<JOB_OUTPUT>& aOutputsToHandle ) = 0;
+                                const std::vector<JOB_OUTPUT>& aOutputsToHandle,
+                                std::optional<wxString>&       aResolvedOutputPath ) = 0;
 
     virtual void FromJson( const nlohmann::json& j ) = 0;
     virtual void ToJson( nlohmann::json& j ) const = 0;

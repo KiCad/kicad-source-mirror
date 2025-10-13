@@ -28,6 +28,7 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <reporter.h>
+#include <optional>
 #include <wx/process.h>
 #include <wx/txtstrm.h>
 #include <wx/sstream.h>
@@ -161,6 +162,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     aDestination->m_lastRunSuccessMap.clear();
     aDestination->m_lastRunReporters.clear();
+    aDestination->m_lastResolvedOutputPath.reset();
 
     wxString tempDirPath = tmp.GetFullPath();
 
@@ -312,7 +314,9 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     wxUnsetEnv( OUTPUT_TMP_PATH_VAR_NAME );
 
     if( genOutputs )
-        success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
+        success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs,
+                                                                 aDestination->m_lastResolvedOutputPath );
+
 
     aDestination->m_lastRunSuccess = success;
 

@@ -41,6 +41,8 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
+#include <launch_ext.h>
+#include <wx/filename.h>
 
 #include <jobs/job_special_execute.h>
 #include <jobs/job_special_copyfiles.h>
@@ -196,6 +198,7 @@ public:
 
         m_pathInfo->SetFont( KIUI::GetSmallInfoFont( this ) );
         UpdatePathInfo( aDestination->GetPathInfo() );
+        m_buttonOpenOutput->Enable( false );
         UpdateStatus();
     }
 
@@ -210,7 +213,9 @@ public:
         wxCHECK( destination, /*void*/ );
 
         destination->m_lastRunSuccess = std::nullopt;
+        destination->m_lastResolvedOutputPath = std::nullopt;
         m_statusBitmap->SetBitmap( wxNullBitmap );
+        m_buttonOpenOutput->Enable( false );
     }
 
     void UpdateStatus()
@@ -239,6 +244,10 @@ public:
         }
 
         m_buttonGenerate->Enable( !m_jobsFile->GetJobsForDestination( destination ).empty() );
+        bool enableOpenOutput =
+                destination->m_lastRunSuccess.value_or( false ) && destination->m_lastResolvedOutputPath.has_value();
+
+        m_buttonOpenOutput->Enable( enableOpenOutput );
     }
 
     void UpdatePathInfo( const wxString& aMsg )
@@ -279,7 +288,24 @@ public:
                 } );
     }
 
-    virtual void OnLastStatusClick( wxMouseEvent& aEvent ) override
+    void OnOpenOutput( wxCommandEvent& aEvent ) override
+    {
+        JOBSET_DESTINATION* destination = GetDestination();
+        wxCHECK( destination, /*void*/ );
+
+        if( !destination->m_lastResolvedOutputPath.has_value() )
+            return;
+
+        const wxString& resolvedPath = destination->m_lastResolvedOutputPath.value();
+
+        if( resolvedPath.IsEmpty() )
+            return;
+
+        if( !LaunchExternal( resolvedPath ) )
+            DisplayError( this, wxString::Format( _( "Failed to open '%s'." ), resolvedPath ) );
+    }
+
+    void OnLastStatusClick( wxMouseEvent& aEvent ) override
     {
         JOBSET_DESTINATION* destination = GetDestination();
         wxCHECK( destination, /*void*/ );
@@ -299,8 +325,10 @@ public:
 
         menu.AppendSeparator();
         menu.Append( wxID_VIEW_DETAILS, _( "View Last Run Log..." ) );
+        menu.Append( wxID_OPEN, _( "Open Output" ) );
 
         menu.Enable( wxID_VIEW_DETAILS, destination->m_lastRunSuccess.has_value() );
+        menu.Enable( wxID_OPEN, m_buttonOpenOutput->IsEnabled() );
 
         PopupMenu( &menu );
     }
@@ -318,6 +346,7 @@ public:
             UpdatePathInfo( destination->GetPathInfo() );
             m_jobsFile->SetDirty();
             m_panelParent->UpdateTitle();
+            ClearStatus();
         }
     }
 
@@ -363,9 +392,15 @@ private:
             }
                 break;
 
-            default:
-                wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
-        }
+                case wxID_OPEN:
+                {
+                    wxCommandEvent dummy;
+                    OnOpenOutput( dummy );
+                }
+                break;
+
+                default: wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
+                }
     }
 
 private:

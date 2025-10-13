@@ -30,6 +30,7 @@
 #include <jobs/jobs_output_archive.h>
 #include <kiid.h>
 #include <reporter.h>
+#include <wx/filename.h>
 
 #include <algorithm>
 #include <memory>
@@ -158,7 +159,6 @@ wxString JOBSET_DESTINATION::GetPathInfo() const
 {
     return m_outputHandler->GetOutputPath();
 }
-
 
 void JOBSET_DESTINATION::SetDescription( const wxString& aDescription )
 {

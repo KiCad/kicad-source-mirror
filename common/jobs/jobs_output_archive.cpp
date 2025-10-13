@@ -42,10 +42,13 @@ bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
 }
 
 
-bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* aProject,
-                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle )
+bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTempPath,
+                                         PROJECT*                       aProject,
+                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle,
+                                         std::optional<wxString>&       aResolvedOutputPath )
 {
     bool success = true;
+    aResolvedOutputPath.reset();
 
     wxString outputPath = ExpandTextVars( m_outputPath, aProject );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
@@ -61,6 +64,7 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* 
     {
         //msg.Printf( _( "Failed to create file '%s'." ), aDestFile );
         //aReporter.Report( msg, RPT_SEVERITY_ERROR );
+        aResolvedOutputPath.reset();
         return false;
     }
 
@@ -72,6 +76,11 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* 
 
     if( !zipstream.Close() )
         success = false;
+
+    if( success )
+        aResolvedOutputPath = outputPath;
+    else
+        aResolvedOutputPath.reset();
 
     return success;
 }

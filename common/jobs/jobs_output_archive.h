@@ -32,9 +32,10 @@ public:
         ZIP
     };
 
-    bool HandleOutputs( const wxString& aBaseTempPath,
-                        PROJECT* aProject,
-                        const std::vector<JOB_OUTPUT>& aOutputsToHandle ) override;
+    bool HandleOutputs( const wxString&                aBaseTempPath,
+                        PROJECT*                       aProject,
+                        const std::vector<JOB_OUTPUT>& aOutputsToHandle,
+                        std::optional<wxString>&       aResolvedOutputPath ) override;
     bool OutputPrecheck() override;
 
     void FromJson( const nlohmann::json& j ) override;
