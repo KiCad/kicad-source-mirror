@@ -1233,6 +1233,24 @@ void SCH_POINT_EDITOR::updatePoints()
     if( !m_editPoints || !m_editBehavior )
         return;
 
+    // Careful; the unit and/or body style may have changed out from under us, meaning the item is no
+    // longer present on the canvas.
+    if( m_isSymbolEditor )
+    {
+        SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        SCH_ITEM*          item = dynamic_cast<SCH_ITEM*>( m_editPoints->GetParent() );
+
+        if( ( item && item->GetUnit() != 0 && item->GetUnit() != editor->GetUnit() )
+                || ( item && item->GetBodyStyle() != 0 && item->GetBodyStyle() != editor->GetBodyStyle() ) )
+        {
+            getView()->Remove( m_editPoints.get() );
+            getView()->Remove( m_angleItem.get() );
+            m_editPoints.reset();
+            m_angleItem.reset();
+            return;
+        }
+    }
+
     m_editBehavior->UpdatePoints( *m_editPoints );
     getView()->Update( m_editPoints.get() );
     getView()->Update( m_angleItem.get() );
@@ -1263,16 +1281,8 @@ void SCH_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
 bool SCH_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
-    bool isRuleArea = false;
-
-    if( m_editPoints )
-        isRuleArea = m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T;
-
-    if( !m_editPoints || !m_editedPoint
-        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T || isRuleArea ) )
-    {
+    if( !m_editPoints || !m_editedPoint || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return false;
-    }
 
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
 
@@ -1298,12 +1308,8 @@ bool SCH_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
 bool SCH_POINT_EDITOR::addCornerCondition( const SELECTION& )
 {
-    if( !m_editPoints
-        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
-              || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
-    {
+    if( !m_editPoints || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return false;
-    }
 
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
 
@@ -1319,12 +1325,8 @@ bool SCH_POINT_EDITOR::addCornerCondition( const SELECTION& )
 
 int SCH_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints
-        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
-              || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
-    {
+    if( !m_editPoints || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return 0;
-    }
 
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
@@ -1364,11 +1366,8 @@ int SCH_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
 int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints || !m_editedPoint
-        || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
-    {
+    if( !m_editPoints || !m_editedPoint || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return 0;
-    }
 
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
