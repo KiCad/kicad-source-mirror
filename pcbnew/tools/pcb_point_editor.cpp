@@ -389,7 +389,7 @@ public:
     bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
         // Careful; rectangle shape is mutable between cardinal and non-cardinal rotations...
-        if( m_rectangle.GetShape() != SHAPE_T::RECTANGLE )
+        if( m_rectangle.GetShape() != SHAPE_T::RECTANGLE || aPoints.PointsSize() == 0 )
             return false;
 
         UpdatePoints( m_rectangle, aPoints );
