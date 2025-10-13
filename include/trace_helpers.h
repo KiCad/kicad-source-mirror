@@ -200,6 +200,34 @@ extern KICOMMON_API const wxChar* const traceSymbolResolver;
 extern KICOMMON_API const wxChar* const traceSchSheetPaths;
 
 /**
+ * Flag to enable debug output of current sheet tracking in the schematic editor.
+ *
+ * Use "KICAD_SCH_CURRENT_SHEET" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchCurrentSheet;
+
+/**
+ * Flag to enable debug output of schematic field rendering and positioning.
+ *
+ * Use "KICAD_SCH_FIELD_RENDERING" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchFieldRendering;
+
+/**
+ * Flag to enable debug output of schematic painter operations.
+ *
+ * Use "KICAD_SCH_PAINTER" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchPainter;
+
+/**
+ * Flag to enable debug output of schematic symbol reference resolution.
+ *
+ * Use "KICAD_SCH_SYMBOL_REF" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchSymbolRef;
+
+/**
  * Flag to enable debug output of environment variable operations.
  *
  * Use "KICAD_ENV_VARS" to enable.

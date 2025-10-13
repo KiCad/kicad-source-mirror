@@ -130,8 +130,7 @@ BOOST_AUTO_TEST_CASE( Default )
 {
     CreateTestSchematic();
 
-    //BOOST_CHECK_NOT_EQUAL( m_sheet.GetParent(), nullptr );
-    BOOST_CHECK_EQUAL( m_sheet->IsRootSheet(), true );
+    BOOST_CHECK_EQUAL( m_sheet->IsTopLevelSheet(), true );
     BOOST_CHECK_EQUAL( m_sheet->GetPosition(), VECTOR2I( 0, 0 ) );
     BOOST_CHECK_EQUAL( m_sheet->CountSheets(), 1 );
     BOOST_CHECK_EQUAL( m_sheet->SymbolCount(), 1 );

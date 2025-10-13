@@ -24,6 +24,7 @@
 
 #include "sch_sheet_path.h"
 #include <memory>
+#include <set>
 
 #include <kiplatform/ui.h>
 #include <optional>
@@ -3294,9 +3295,25 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             instance.push_back( sheet );
             wxString pageNumber;
 
-            // Don't try to be too clever when assigning the next availabe page number.  Just use
-            // the number of sheets plus one.
-            pageNumber.Printf( wxT( "%d" ), static_cast<int>( hierarchy.size() ) + 1 );
+            // Find the next available page number by checking all existing page numbers
+            std::set<int> usedPageNumbers;
+
+            for( const SCH_SHEET_PATH& path : hierarchy )
+            {
+                wxString existingPageNum = path.GetPageNumber();
+                long pageNum = 0;
+
+                if( existingPageNum.ToLong( &pageNum ) && pageNum > 0 )
+                    usedPageNumbers.insert( static_cast<int>( pageNum ) );
+            }
+
+            // Find the first available number starting from 1
+            int nextAvailable = 1;
+
+            while( usedPageNumbers.count( nextAvailable ) > 0 )
+                nextAvailable++;
+
+            pageNumber.Printf( wxT( "%d" ), nextAvailable );
             instance.SetPageNumber( pageNumber );
 
             m_view->ClearPreview();
@@ -3656,9 +3673,19 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
 
     std::list<SCH_SHEET_PATH> sheetPaths;
     std::set<SCH_SCREEN*> visited;
-    SCH_SHEET_PATH current;
-    current.push_back( &m_frame->Schematic().Root() );
-    getSheetChildren( sheetPaths, m_frame->Schematic().Root().GetScreen(), visited, current );
+
+    // Build sheet paths for each top-level sheet (don't include virtual root in paths)
+    std::vector<SCH_SHEET*> topLevelSheets = m_frame->Schematic().GetTopLevelSheets();
+
+    for( SCH_SHEET* topSheet : topLevelSheets )
+    {
+        if( topSheet && topSheet->GetScreen() )
+        {
+            SCH_SHEET_PATH current;
+            current.push_back( topSheet );
+            getSheetChildren( sheetPaths, topSheet->GetScreen(), visited, current );
+        }
+    }
 
     if( sheetPaths.size() == 0 )
     {

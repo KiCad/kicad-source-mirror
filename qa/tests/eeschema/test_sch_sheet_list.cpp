@@ -116,7 +116,9 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         newPrjFn.SetExt( FILEEXT::ProjectFileExtension );
         BOOST_CHECK( wxCopyFile( prjFn.GetFullPath(), newPrjFn.GetFullPath() ) );
 
-        m_pi->SaveSchematicFile( rootFn.GetFullPath(), &m_schematic->Root(), m_schematic.get() );
+        // Save the first top-level sheet (not the virtual root which has no screen)
+        SCH_SHEET* topLevelSheet = sheets.at( 0 ).Last();
+        m_pi->SaveSchematicFile( rootFn.GetFullPath(), topLevelSheet, m_schematic.get() );
 
         wxFileName subSheetFn = rootFn;
         BOOST_CHECK( subSheetFn.AppendDir( "ampli_ht" ) );

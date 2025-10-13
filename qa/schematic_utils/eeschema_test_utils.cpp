@@ -72,7 +72,6 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
 
-    m_schematic->CurrentSheet().push_back( &m_schematic->Root() );
 
     SCH_SCREENS screens( m_schematic->Root() );
 

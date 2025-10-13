@@ -95,7 +95,22 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     schematic->Reset();
     schematic->SetProject( &manager.Prj() );
     schematic->SetRoot( pi->LoadSchematicFile( aFilename, schematic.get() ) );
-    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    // Set current sheet to the first top-level sheet, not the virtual root
+    std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
+
+    if( !topLevelSheets.empty() )
+    {
+        schematic->CurrentSheet().push_back( topLevelSheets[0] );
+        wxLogTrace( traceSchCurrentSheet,
+                   "Set current sheet to first top-level sheet: %s, path: %s",
+                   topLevelSheets[0]->GetName(),
+                   schematic->CurrentSheet().Path().AsString() );
+    }
+    else
+    {
+        wxLogWarning( "No top-level sheets found after loading schematic!" );
+    }
 
     SCH_SCREENS screens( schematic->Root() );
 

@@ -2673,7 +2673,15 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     std::optional<SCH_SHEET_PATH> optSheetPath;
 
     if( m_schematic )
+    {
         optSheetPath = m_schematic->CurrentSheet();
+        wxLogTrace( traceSchPainter,
+                   "SCH_PAINTER::draw symbol %s: Current sheet path='%s', size=%zu, empty=%d",
+                   aSymbol->m_Uuid.AsString(),
+                   optSheetPath->Path().AsString(),
+                   optSheetPath->size(),
+                   optSheetPath->empty() ? 1 : 0 );
+    }
 
     bool DNP = aSymbol->GetDNP( nullptr );
     bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSymbol->GetExcludedFromSim( nullptr );

@@ -896,7 +896,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     for( SCH_ITEM* it : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
                     {
                         SCH_SHEET* candidate = static_cast<SCH_SHEET*>( it );
-                        if( candidate->IsSelected() || candidate->IsRootSheet() )
+
+                        if( candidate->IsSelected() || candidate->IsTopLevelSheet() )
                             continue;
 
                         BOX2I body = candidate->GetBodyBoundingBox();

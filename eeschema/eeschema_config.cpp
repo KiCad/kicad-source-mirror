@@ -223,6 +223,41 @@ void SCH_EDIT_FRAME::saveProjectSettings()
         }
     }
 
+    // Update top-level sheets information in the project file
+    const std::vector<SCH_SHEET*>& topLevelSheets = Schematic().GetTopLevelSheets();
+
+    if( !topLevelSheets.empty() )
+    {
+        std::vector<TOP_LEVEL_SHEET_INFO>& projectSheets = Prj().GetProjectFile().GetTopLevelSheets();
+        projectSheets.clear();
+
+        wxString projectPath = Prj().GetProjectPath();
+
+        for( SCH_SHEET* sheet : topLevelSheets )
+        {
+            TOP_LEVEL_SHEET_INFO info;
+            info.uuid = sheet->m_Uuid;
+            info.name = sheet->GetName();
+
+            // For top-level sheets, get the filename from the screen, not from the sheet's
+            // SHEET_FILENAME field (which is only used for sheet instances on parent sheets)
+            wxString filename;
+
+            if( sheet->GetScreen() )
+                filename = sheet->GetScreen()->GetFileName();
+
+            // Make the filename relative to the project path
+            wxFileName sheetFn( filename );
+
+            if( sheetFn.IsAbsolute() )
+                sheetFn.MakeRelativeTo( projectPath );
+
+            info.filename = sheetFn.GetFullPath();
+
+            projectSheets.push_back( info );
+        }
+    }
+
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
 }
 

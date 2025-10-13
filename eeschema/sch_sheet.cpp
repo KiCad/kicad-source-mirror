@@ -169,11 +169,19 @@ int SCH_SHEET::GetScreenCount() const
 }
 
 
-bool SCH_SHEET::IsRootSheet() const
+bool SCH_SHEET::IsVirtualRootSheet() const
 {
-    wxCHECK_MSG( Schematic(), false, "Can't call IsRootSheet without setting a schematic" );
+    wxCHECK_MSG( Schematic(), false, "Can't call IsVirtualRootSheet without setting a schematic" );
 
-    return &Schematic()->Root() == this;
+    return m_Uuid == niluuid;
+}
+
+
+bool SCH_SHEET::IsTopLevelSheet() const
+{
+    wxCHECK_MSG( Schematic(), false, "Can't call IsTopLevelSheet without setting a schematic" );
+
+    return Schematic()->IsTopLevelSheet( this );
 }
 
 

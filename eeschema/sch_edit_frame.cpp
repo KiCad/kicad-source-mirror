@@ -194,10 +194,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( eeconfig() );
 
-    SCH_SHEET_PATH root;
-    root.push_back( &Schematic().Root() );
-    SetCurrentSheet( root );
-
     setupTools();
     setupUIConditions();
     ReCreateMenuBar();
@@ -1035,6 +1031,13 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
     {
         ClearFocus();
 
+        wxLogTrace( traceSchCurrentSheet,
+                   "SCH_EDIT_FRAME::SetCurrentSheet: Changing from path='%s' (size=%zu) to path='%s' (size=%zu)",
+                   GetCurrentSheet().Path().AsString(),
+                   GetCurrentSheet().size(),
+                   aSheet.Path().AsString(),
+                   aSheet.size() );
+
         Schematic().SetCurrentSheet( aSheet );
         GetCanvas()->DisplaySheet( aSheet.LastScreen() );
     }
@@ -1751,7 +1754,9 @@ void SCH_EDIT_FRAME::updateTitle()
 void SCH_EDIT_FRAME::initScreenZoom()
 {
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
-    GetScreen()->m_zoomInitialized = true;
+
+    if( GetScreen() )
+        GetScreen()->m_zoomInitialized = true;
 }
 
 
@@ -2010,6 +2015,9 @@ void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     BOX2I bBoxDoc;
+
+    if( !GetScreen() )
+        return bBoxDoc;
 
     if( aIncludeAllVisible )
     {

@@ -105,24 +105,9 @@ public:
 
     const std::map<wxString, wxString>* GetProperties() { return &m_properties; }
 
-    SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const
-    {
-        SCH_SHEET_LIST hierarchy( m_rootSheet );
+    SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const;
 
-        hierarchy.SortByPageNumbers();
-
-        return hierarchy;
-    }
-
-    SCH_SHEET_LIST BuildUnorderedSheetList() const
-    {
-        SCH_SHEET_LIST sheets;
-
-        if( m_rootSheet )
-            sheets.BuildSheetList( m_rootSheet, false );
-
-        return sheets;
-    }
+    SCH_SHEET_LIST BuildUnorderedSheetList() const;
 
     /**
      * Return the full schematic flattened hierarchical sheet list.
@@ -151,6 +136,36 @@ public:
      * @param aRootSheet is the new root sheet for this schematic.
      */
     void SetRoot( SCH_SHEET* aRootSheet );
+
+    /**
+     * Get the list of top-level sheets.
+     *
+     * @return vector of pointers to top-level sheets (children of virtual root).
+     */
+    std::vector<SCH_SHEET*> GetTopLevelSheets() const;
+
+    /**
+     * Add a new top-level sheet to the schematic.
+     *
+     * @param aSheet is the sheet to add as a top-level sheet.
+     */
+    void AddTopLevelSheet( SCH_SHEET* aSheet );
+
+    /**
+     * Remove a top-level sheet from the schematic.
+     *
+     * @param aSheet is the sheet to remove.
+     * @return true if the sheet was successfully removed.
+     */
+    bool RemoveTopLevelSheet( SCH_SHEET* aSheet );
+
+    /**
+     * Check if a sheet is a top-level sheet (direct child of virtual root).
+     *
+     * @param aSheet is the sheet to check.
+     * @return true if the sheet is a top-level sheet.
+     */
+    bool IsTopLevelSheet( const SCH_SHEET* aSheet ) const;
 
     /// A simple test if the schematic is loaded, not a complete one
     bool IsValid() const
@@ -470,8 +485,11 @@ private:
 
     PROJECT* m_project;
 
-    /// The top-level sheet in this schematic hierarchy (or potentially the only one)
+    /// The virtual root sheet (has no screen, contains all top-level sheets)
     SCH_SHEET* m_rootSheet;
+
+    /// List of top-level sheets (direct children of virtual root)
+    std::vector<SCH_SHEET*> m_topLevelSheets;
 
     /**
      * The sheet path of the sheet currently being edited or displayed.

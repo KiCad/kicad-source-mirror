@@ -4238,8 +4238,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
     for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
-        // Hierarchical labels in the root sheet cannot be connected to anything.
-        if( sheet.Last()->IsRootSheet() )
+        // Hierarchical labels in the top-level sheets cannot be connected to anything.
+        if( sheet.Last()->IsTopLevelSheet() )
         {
             for( const SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
             {

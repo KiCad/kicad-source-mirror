@@ -43,6 +43,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         m_SchematicSettings( nullptr ),
         m_BoardSettings(),
         m_sheets(),
+        m_topLevelSheets(),
         m_boards(),
         m_project( nullptr ),
         m_wasMigrated( false )
@@ -51,6 +52,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_deleteLegacyAfterMigration = false;
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
+
+    m_params.emplace_back( new PARAM_LIST<TOP_LEVEL_SHEET_INFO>( "schematic.top_level_sheets",
+            &m_topLevelSheets, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "boards", &m_boards, {} ) );
 
@@ -666,6 +670,37 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 }
 
 
+bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
+{
+    bool success = JSON_SETTINGS::LoadFromFile( aDirectory );
+
+    if( success )
+    {
+        // Migrate from old single-root format to top_level_sheets format
+        if( m_topLevelSheets.empty() && m_project )
+        {
+            // Create a default top-level sheet entry based on the project name
+            wxString projectName = m_project->GetProjectName();
+
+            TOP_LEVEL_SHEET_INFO defaultSheet;
+            defaultSheet.uuid = niluuid;  // Use niluuid for the first/default sheet
+            defaultSheet.name = projectName;
+            defaultSheet.filename = projectName + ".kicad_sch";
+
+            m_topLevelSheets.push_back( defaultSheet );
+
+            // Mark as migrated so it will be saved with the new format
+            m_wasMigrated = true;
+
+            wxLogTrace( traceSettings,
+                       wxT( "PROJECT_FILE: Migrated old single-root format to top_level_sheets" ) );
+        }
+    }
+
+    return success;
+}
+
+
 bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     wxASSERT( m_project );
@@ -755,4 +790,28 @@ void from_json( const nlohmann::json& aJson, FILE_INFO_PAIR& aPair )
     wxCHECK( aJson.is_array() && aJson.size() == 2, /* void */ );
     aPair.first  = KIID( wxString( aJson[0].get<std::string>().c_str(), wxConvUTF8 ) );
     aPair.second = wxString( aJson[1].get<std::string>().c_str(), wxConvUTF8 );
+}
+
+
+void to_json( nlohmann::json& aJson, const TOP_LEVEL_SHEET_INFO& aInfo )
+{
+    aJson = nlohmann::json::object();
+    aJson["uuid"] = aInfo.uuid.AsString().ToUTF8();
+    aJson["name"] = aInfo.name.ToUTF8();
+    aJson["filename"] = aInfo.filename.ToUTF8();
+}
+
+
+void from_json( const nlohmann::json& aJson, TOP_LEVEL_SHEET_INFO& aInfo )
+{
+    wxCHECK( aJson.is_object(), /* void */ );
+
+    if( aJson.contains( "uuid" ) )
+        aInfo.uuid = KIID( wxString( aJson["uuid"].get<std::string>().c_str(), wxConvUTF8 ) );
+
+    if( aJson.contains( "name" ) )
+        aInfo.name = wxString( aJson["name"].get<std::string>().c_str(), wxConvUTF8 );
+
+    if( aJson.contains( "filename" ) )
+        aInfo.filename = wxString( aJson["filename"].get<std::string>().c_str(), wxConvUTF8 );
 }

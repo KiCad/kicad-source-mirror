@@ -306,8 +306,6 @@ public:
         return retv;
     }
 
-    bool IsFullPath() const;
-
     /**
      * Compare if this is the same sheet path as \a aSheetPathToTest.
      *

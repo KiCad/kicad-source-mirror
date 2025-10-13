@@ -109,8 +109,8 @@ std::unique_ptr<SCHEMATIC> LoadHierarchyFromRoot( const std::string& rootFilenam
 
     schematic->SetProject( project );
     SCH_SHEET* rootSheet = new SCH_SHEET( schematic.get() );
-    schematic->SetRoot( rootSheet );
     LoadHierarchy( schematic.get(), rootSheet, rootFilename, parsedScreens );
+    schematic->SetRoot( rootSheet );  // Call SetRoot AFTER loading so sheet has a screen
 
     return schematic;
 }

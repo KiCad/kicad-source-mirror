@@ -277,13 +277,87 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 wxBusyCursor    busy;
                 WINDOW_DISABLER raii( this );
 
-                newSchematic->SetRoot( pi->LoadSchematicFile( fullFileName, newSchematic.get() ) );
+                // Check if project file has top-level sheets defined
+                PROJECT_FILE& projectFile = Prj().GetProjectFile();
+                const std::vector<TOP_LEVEL_SHEET_INFO>& topLevelSheets = projectFile.GetTopLevelSheets();
 
-                // Make ${SHEETNAME} work on the root sheet until we properly support
-                // naming the root sheet
-                newSchematic->Root().SetName( _( "Root" ) );
-                wxLogTrace( tracePathsAndFiles, wxS( "Loaded schematic with root sheet UUID %s" ),
-                            newSchematic->Root().m_Uuid.AsString() );
+                if( !topLevelSheets.empty() )
+                {
+                    // New multi-root format: Load all top-level sheets
+                    // Note: AddTopLevelSheet will create the virtual root as needed
+
+                    // Load each top-level sheet
+                    for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
+                    {
+                        wxFileName sheetFileName( Prj().GetProjectPath(), sheetInfo.filename );
+                        wxString sheetPath = sheetFileName.GetFullPath();
+
+                        if( !wxFileName::FileExists( sheetPath ) )
+                        {
+                            wxLogWarning( wxT( "Top-level sheet file not found: %s" ), sheetPath );
+                            continue;
+                        }
+
+                        SCH_SHEET* sheet = pi->LoadSchematicFile( sheetPath, newSchematic.get() );
+
+                        if( sheet )
+                        {
+                            // Preserve the UUID from the project file, unless it's niluuid which is
+                            // just a placeholder meaning "use the UUID from the file"
+                            if( sheetInfo.uuid != niluuid )
+                            {
+                                const_cast<KIID&>( sheet->m_Uuid ) = sheetInfo.uuid;
+                            }
+
+                            sheet->SetName( sheetInfo.name );
+
+                            // Regular top-level sheet, add it normally
+                            newSchematic->AddTopLevelSheet( sheet );
+
+                            wxLogTrace( tracePathsAndFiles,
+                                       wxS( "Loaded top-level sheet '%s' (UUID %s) from %s" ),
+                                       sheet->GetName(),
+                                       sheet->m_Uuid.AsString(),
+                                       sheetPath );
+                        }
+                    }
+
+                    // Virtual root was already created by AddTopLevelSheet, no need to call SetRoot
+                    // Set current sheet to the first top-level sheet
+                    if( !newSchematic->GetTopLevelSheets().empty() )
+                    {
+                        newSchematic->CurrentSheet().clear();
+                        newSchematic->CurrentSheet().push_back( newSchematic->GetTopLevelSheets()[0] );
+
+                        wxLogTrace( tracePathsAndFiles,
+                                   wxS( "Loaded multi-root schematic with %zu top-level sheets, current sheet set to '%s'" ),
+                                   newSchematic->GetTopLevelSheets().size(),
+                                   newSchematic->GetTopLevelSheets()[0]->GetName() );
+                    }
+                    else
+                    {
+                        wxLogTrace( tracePathsAndFiles,
+                                   wxS( "Loaded multi-root schematic with no top-level sheets!" ) );
+                    }
+                }
+                else
+                {
+                    // Legacy single-root format: Load the single root sheet
+                    newSchematic->SetRoot( pi->LoadSchematicFile( fullFileName, newSchematic.get() ) );
+
+                    // Make ${SHEETNAME} work on the root sheet until we properly support
+                    // naming the root sheet
+                    newSchematic->Root().SetName( _( "Root" ) );
+
+                    wxLogTrace( tracePathsAndFiles,
+                               wxS( "Loaded schematic with root sheet UUID %s" ),
+                               newSchematic->Root().m_Uuid.AsString() );
+                    wxLogTrace( traceSchCurrentSheet,
+                               "After loading: Current sheet path='%s', size=%zu, empty=%d",
+                               newSchematic->CurrentSheet().Path().AsString(),
+                               newSchematic->CurrentSheet().size(),
+                               newSchematic->CurrentSheet().empty() ? 1 : 0 );
+                }
             }
 
             if( !pi->GetError().IsEmpty() )
@@ -533,11 +607,21 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
         schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
+
+        wxLogTrace( traceSchCurrentSheet,
+                   "Before CheckForMissingSymbolInstances: Current sheet path='%s', size=%zu",
+                   GetCurrentSheet().Path().AsString(),
+                   GetCurrentSheet().size() );
         sheetList.CheckForMissingSymbolInstances( Prj().GetProjectName() );
 
         Schematic().ConnectionGraph()->Reset();
 
         SetScreen( GetCurrentSheet().LastScreen() );
+
+        wxLogTrace( traceSchCurrentSheet,
+                   "After SetScreen: Current sheet path='%s', size=%zu",
+                   GetCurrentSheet().Path().AsString(),
+                   GetCurrentSheet().size() );
 
         // Migrate conflicting bus definitions
         // TODO(JE) This should only run once based on schematic file version
@@ -911,7 +995,7 @@ bool PrepareSaveAsFiles( SCHEMATIC& aSchematic, SCH_SCREENS& aScreens,
 
     for( SCH_SHEET_PATH& sheet : aSchematic.Hierarchy() )
     {
-        if( !sheet.Last()->IsRootSheet() )
+        if( !sheet.Last()->IsTopLevelSheet() )
             sheet.MakeFilePathRelativeToParentSheet();
     }
 
@@ -1186,18 +1270,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
         wxCHECK2( sheet, continue );
 
-        // Use the schematic UUID for the root sheet.
-        if( sheet->IsRootSheet() )
-        {
-            screen = sheet->GetScreen();
-
-            wxCHECK2( screen, continue );
-
-            // For the root sheet we use the canonical name ( "Root" ) because its name
-            // cannot be modified by the user
-            sheets.emplace_back( std::make_pair( screen->GetUuid(), wxT( "Root" ) ) );
-        }
-        else
+        // Do not save the virtual root sheet
+        if( !sheet->IsVirtualRootSheet() )
         {
             sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
         }

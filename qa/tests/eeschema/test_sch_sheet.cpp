@@ -95,11 +95,15 @@ BOOST_AUTO_TEST_CASE( SchematicParent )
 {
     m_sheet.SetParent( &m_schematic );
 
-    BOOST_CHECK_EQUAL( m_sheet.IsRootSheet(), false );
+    BOOST_CHECK_EQUAL( m_sheet.IsVirtualRootSheet(), false );
+    BOOST_CHECK_EQUAL( m_sheet.IsTopLevelSheet(), false );  // Not yet a top-level sheet
 
     m_schematic.SetRoot( &m_sheet );
 
-    BOOST_CHECK_EQUAL( m_sheet.IsRootSheet(), true );
+    // After SetRoot, the sheet becomes a top-level sheet under the virtual root
+    BOOST_CHECK_EQUAL( m_sheet.IsVirtualRootSheet(), false );  // Sheet is not the virtual root
+    BOOST_CHECK_EQUAL( m_sheet.IsTopLevelSheet(), true );      // Sheet is now a top-level sheet
+    BOOST_CHECK_EQUAL( m_schematic.Root().IsVirtualRootSheet(), true );  // The root is virtual
 }
 
 /**

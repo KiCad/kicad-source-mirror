@@ -152,7 +152,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( schematic );
     const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
-    schematic->Root().SetScreen( rootScreen );
+    rootSheet->SetScreen( rootScreen );  // Set screen on the top-level sheet, not virtual root
 
     schematic->RootScreen()->SetFileName( wxEmptyString );
 

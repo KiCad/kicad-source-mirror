@@ -249,8 +249,30 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, nullptr );
 
-        bool stripTrailingSeparator = !sheetPath.Last()->IsRootSheet();
-        wxString txt =  sheetPath.PathHumanReadable( true, stripTrailingSeparator );
+        // Build path string for net navigator - include top-level sheet name to distinguish
+        // multiple top-level sheets
+        wxString txt;
+        if( !sheetPath.empty() && sheetPath.at( 0 )->GetScreen() )
+        {
+            // Get the top-level sheet name
+            wxString topLevelName = sheetPath.at( 0 )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+
+            if( topLevelName.IsEmpty() )
+            {
+                wxFileName fn( sheetPath.at( 0 )->GetScreen()->GetFileName() );
+                topLevelName = fn.GetName();
+            }
+
+            txt = topLevelName;
+
+            // Add sub-sheet names
+            for( unsigned i = 1; i < sheetPath.size(); i++ )
+                txt << wxS( "/" ) << sheetPath.at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+        }
+        else
+        {
+            txt = sheetPath.PathHumanReadable( true, true );
+        }
 
         wxTreeItemId sheetId;
 
@@ -743,7 +765,9 @@ void SCH_EDIT_FRAME::onResizeNetNavigator( wxSizeEvent& aEvent )
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-    wxCHECK( cfg, /* void */ );
+    // During deletion/cleanup operations, settings may be temporarily unavailable
+    if( !cfg )
+        return;
 
     wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
 

@@ -285,7 +285,16 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
 wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     if( SCHEMATIC* schematic = Schematic() )
-        return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+    {
+        const SCH_SHEET_PATH& currentSheet = schematic->CurrentSheet();
+        wxLogTrace( traceSchFieldRendering,
+                   "GetShownText (no path arg): field=%s, current sheet path='%s', size=%zu, empty=%d",
+                   GetName(),
+                   currentSheet.Path().AsString(),
+                   currentSheet.size(),
+                   currentSheet.empty() ? 1 : 0 );
+        return GetShownText( &currentSheet, aAllowExtraText, aDepth );
+    }
     else
         return GetShownText( nullptr, aAllowExtraText, aDepth );
 }
@@ -1591,9 +1600,21 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
 {
     wxString retv = EDA_TEXT::GetShownText( false );
 
+    wxLogTrace( traceSchFieldRendering,
+               "getUnescapedText: field=%s, parent=%p, aPath=%p, path_empty=%d, initial_text='%s'",
+               GetName(),
+               m_parent,
+               aPath,
+               aPath ? (aPath->empty() ? 1 : 0) : -1,
+               retv );
+
     // Special handling for parent object field instance and variant information.
-    if( m_parent && aPath )
+    // Only use the path if it's non-empty; an empty path can't match any instances
+    if( m_parent && aPath && !aPath->empty() )
     {
+        wxLogTrace( traceSchFieldRendering,
+                   "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
+
         switch( m_parent->Type() )
         {
         case SCH_SYMBOL_T:
@@ -1601,7 +1622,15 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
             const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_parent );
 
             if( m_id == FIELD_T::REFERENCE )
+            {
+                wxLogTrace( traceSchFieldRendering,
+                           "  Calling GetRef for symbol %s on path %s",
+                           symbol->m_Uuid.AsString(),
+                           aPath->Path().AsString() );
                 retv = symbol->GetRef( aPath, true );
+                wxLogTrace( traceSchFieldRendering,
+                           "  GetRef returned: '%s'", retv );
+            }
 
             break;
         }

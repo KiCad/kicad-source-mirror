@@ -614,12 +614,23 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     wxString  ref;
     wxString  subRef;
 
+    wxLogTrace( traceSchSymbolRef,
+               "GetRef for symbol %s on path %s (sheet path has %zu sheets)",
+               m_Uuid.AsString(), path.AsString(), sheet->size() );
+
+    wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references",
+               m_instanceReferences.size() );
+
     for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
     {
+        wxLogTrace( traceSchSymbolRef, "    Instance: path=%s, ref=%s",
+                   instance.m_Path.AsString(), instance.m_Reference );
+
         if( instance.m_Path == path )
         {
             ref = instance.m_Reference;
             subRef = SubReference( instance.m_Unit );
+            wxLogTrace( traceSchSymbolRef, "  MATCH FOUND: ref=%s", ref );
             break;
         }
     }
@@ -629,13 +640,21 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     // file.  It will also mean that multiple instances of the same sheet by default all have
     // the same symbol references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( FIELD_T::REFERENCE )->GetText().IsEmpty() )
+    {
         ref = GetField( FIELD_T::REFERENCE )->GetText();
+        wxLogTrace( traceSchSymbolRef, "  Using fallback from REFERENCE field: %s", ref );
+    }
 
     if( ref.IsEmpty() )
+    {
         ref = UTIL::GetRefDesUnannotated( m_prefix );
+        wxLogTrace( traceSchSymbolRef, "  Using unannotated reference: %s", ref );
+    }
 
     if( aIncludeUnit && GetUnitCount() > 1 )
         ref += subRef;
+
+    wxLogTrace( traceSchSymbolRef, "  Final reference: %s", ref );
 
     return ref;
 }

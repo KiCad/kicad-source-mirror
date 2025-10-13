@@ -54,7 +54,7 @@ class HIERARCHY_TREE : public wxTreeCtrl
 public:
     HIERARCHY_TREE( HIERARCHY_PANE* parent ) :
             wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                        wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS, wxDefaultValidator,
+                        wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxTR_HIDE_ROOT, wxDefaultValidator,
                         wxT( "HierachyTreeCtrl" ) )
     {
     }
@@ -76,7 +76,9 @@ public:
         EDIT_PAGE_NUMBER,
         EXPAND_ALL,
         COLLAPSE_ALL,
-        RENAME
+        RENAME,
+        NEW_TOP_LEVEL_SHEET,
+        DELETE_TOP_LEVEL_SHEET
     };
 
     HIERARCHY_PANE( SCH_EDIT_FRAME* aParent );
@@ -124,6 +126,7 @@ private:
 
     void onTreeItemRightClick( wxTreeEvent& aEvent );
     void onRightClick( wxTreeItemId aItem );
+    void onContextMenu( wxContextMenuEvent& aEvent );
     void onCharHook( wxKeyEvent& aKeyStroke );
     void onTreeRightClick( wxTreeEvent& event );
     void onTreeEditFinished( wxTreeEvent& event );

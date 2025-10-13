@@ -821,17 +821,44 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
             // current project from accumulating in the schematic files.
-            bool isOrphaned = ( inst.m_Path[0] == rootSheetUuid )
-                              && !aSheetList.GetSheetPathByKIIDPath( inst.m_Path );
+            //
+            // The root sheet UUID can be niluuid for the virtual root. In that case, instance
+            // paths may include the virtual root, but SCH_SHEET_PATH::Path() skips it. We need
+            // to normalize the path by removing the virtual root before comparison.
+            KIID_PATH pathToCheck = inst.m_Path;
+            bool hasVirtualRoot = false;
+
+            // If root is virtual (niluuid) and path starts with virtual root, strip it
+            if( rootSheetUuid == niluuid && !pathToCheck.empty() && pathToCheck[0] == niluuid )
+            {
+                if( pathToCheck.size() > 1 )
+                {
+                    pathToCheck.erase( pathToCheck.begin() );
+                    hasVirtualRoot = true;
+                }
+                else
+                {
+                    // Path only contains virtual root, skip it
+                    continue;
+                }
+            }
+
+            // Check if this instance is orphaned (no matching sheet path)
+            // For virtual root, we check if the first real sheet matches one of the top-level sheets
+            // For non-virtual root, we check if it matches the root sheet UUID
+            bool belongsToThisProject = hasVirtualRoot || pathToCheck[0] == rootSheetUuid;
+            bool isOrphaned = belongsToThisProject && !aSheetList.GetSheetPathByKIIDPath( pathToCheck );
 
             // Keep all instance data when copying to the clipboard.  They may be needed on paste.
             if( !aForClipboard && isOrphaned )
                 continue;
 
-            auto it = projectInstances.find( inst.m_Path[0] );
+            // Group by project - use the first real sheet KIID (after stripping virtual root)
+            KIID projectKey = pathToCheck[0];
+            auto it = projectInstances.find( projectKey );
 
             if( it == projectInstances.end() )
-                projectInstances[ inst.m_Path[0] ] = { inst };
+                projectInstances[ projectKey ] = { inst };
             else
                 it->second.emplace_back( inst );
         }

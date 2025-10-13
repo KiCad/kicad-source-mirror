@@ -130,4 +130,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250827  // Custom body styles
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250829  // Rounded Rectangles
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250901  // Stacked Pin notation
-#define SEXPR_SCHEMATIC_FILE_VERSION 20250922    // Schematic variants.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250922  // Schematic variants.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20251012    // Flat schematic hierarchy support

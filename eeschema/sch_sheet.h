@@ -128,9 +128,20 @@ public:
     void SetBackgroundColor( KIGFX::COLOR4D aColor ) { m_backgroundColor = aColor; }
 
     /**
-     * @return true if this sheet is the root sheet.
+     * @return true if this sheet is the virtual root sheet.  This is a sheet with no
+     * data except for instances of the top-level sheets in the schematic.  It is
+     * used to represent the root of a hierarchical sheet structure.
      */
-    bool IsRootSheet() const;
+    bool IsVirtualRootSheet() const;
+
+    /**
+     * Check if this sheet is a top-level sheet. A top-level sheet is a sheet
+     * which is directly under the virtual root sheet.  The top-level sheets are stored
+     * in the project file and are the entry points to the schematic hierarchy.
+     *
+     * @return true if this sheet is a top-level sheet.
+     */
+    bool IsTopLevelSheet() const;
 
     /**
      * Set the #SCH_SCREEN associated with this sheet to \a aScreen.
