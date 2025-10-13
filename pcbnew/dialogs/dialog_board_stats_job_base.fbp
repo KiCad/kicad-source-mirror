@@ -3,7 +3,7 @@
   <FileVersion major="1" minor="18"/>
   <object class="Project" expanded="true">
     <property name="code_generation">C++</property>
-    <property name="cpp_class_decoration">KICOMMON_API; kicommon.h</property>
+    <property name="cpp_class_decoration"></property>
     <property name="cpp_disconnect_events">1</property>
     <property name="cpp_event_generation">connect</property>
     <property name="cpp_help_provider">none</property>
