@@ -1109,17 +1109,20 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     auto testCopperGraphic =
             [this, &checkedPairs, &checkedPairsMutex]( BOARD_ITEM* graphic )
             {
-                BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( graphic );
-                PCB_LAYER_ID          layer = graphic->GetLayer();
+                PCB_LAYER_ID layer = graphic->GetLayer();
 
                 m_board->m_CopperItemRTreeCache->QueryColliding( graphic, layer, layer,
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
-                            BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
-
-                            if( cItem && otherCItem && cItem->GetNetCode() == otherCItem->GetNetCode() )
-                                return false;
+                             // Graphics are often compound shapes so ignore collisions between shapes
+                             // in a single footprint.
+                             if( graphic->Type() == PCB_SHAPE_T && other->Type() == PCB_SHAPE_T
+                                      && graphic->GetParentFootprint()
+                                      && graphic->GetParentFootprint() == other->GetParentFootprint() )
+                             {
+                                 return false;
+                             }
 
                             // Track clearances are tested in testTrackClearances()
                             if( dynamic_cast<PCB_TRACK*>( other) )
@@ -1180,13 +1183,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         (void)tp.submit_task(
-                [this, footprint, &done, testGraphicAgainstZone]()
+                [this, footprint, &done, testGraphicAgainstZone, testCopperGraphic]()
                 {
                     for( BOARD_ITEM* item : footprint->GraphicalItems() )
                     {
                         if( !m_drcEngine->IsCancelled() )
                         {
                             testGraphicAgainstZone( item );
+
+                            if( ( item->Type() == PCB_SHAPE_T || item->Type() == PCB_BARCODE_T )
+                                    && item->IsOnCopperLayer() )
+                            {
+                                testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
+                            }
 
                             done.fetch_add( 1 );
                         }
