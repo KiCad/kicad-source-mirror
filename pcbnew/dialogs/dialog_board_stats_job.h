@@ -24,7 +24,7 @@
 #include <jobs/job_export_pcb_stats.h>
 #include <dialogs/dialog_board_stats_job_base.h>
 
-class KICOMMON_API DIALOG_BOARD_STATS_JOB : public DIALOG_BOARD_STATS_JOB_BASE
+class DIALOG_BOARD_STATS_JOB : public DIALOG_BOARD_STATS_JOB_BASE
 {
 public:
     DIALOG_BOARD_STATS_JOB( wxWindow* aParent, JOB_EXPORT_PCB_STATS* aJob );
