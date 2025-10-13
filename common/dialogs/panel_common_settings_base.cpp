@@ -194,6 +194,11 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bUserInterfaceSizer->Add( bSizer14, 0, wxEXPAND, 5 );
 
+	m_disableCustomCursors = new wxCheckBox( this, wxID_ANY, _("Disable custom cursors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_disableCustomCursors->SetToolTip( _("When enabled, KiCad will use default system cursors instead of custom ones") );
+
+	bUserInterfaceSizer->Add( m_disableCustomCursors, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 	wxBoxSizer* bSizerIconsTheme;
 	bSizerIconsTheme = new wxBoxSizer( wxHORIZONTAL );
 

@@ -26,6 +26,8 @@
 
 #include <gal/cursors.h>
 #include <kiplatform/ui.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 
 // Cursor files
 #include <cursors/cursor-add.xpm>
@@ -389,6 +391,21 @@ const WX_CURSOR_TYPE CURSOR_STORE::GetCursor( KICURSOR aCursorType, bool aHiDPI 
 {
     // Use a single cursor store instance
     static CURSOR_STORE store;
+
+    bool useCustomCursors = true;
+
+    if( COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings() )
+        useCustomCursors = commonSettings->m_Appearance.use_custom_cursors;
+
+    if( !useCustomCursors )
+    {
+        wxStockCursor stock = GetStockCursor( aCursorType );
+
+        if( stock == wxCURSOR_MAX )
+            stock = wxCURSOR_ARROW;
+
+        return WX_CURSOR_TYPE( stock );
+    }
 
     wxStockCursor stock = GetStockCursor( aCursorType );
 

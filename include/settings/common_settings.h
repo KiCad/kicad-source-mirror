@@ -57,6 +57,7 @@ public:
         int        text_editor_zoom;
         int        toolbar_icon_size;
         bool       grid_striping;
+        bool       use_custom_cursors;
         double     zoom_correction_factor;
     };
 

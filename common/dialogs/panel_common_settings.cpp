@@ -204,6 +204,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Appearance.grid_striping = m_gridStriping->GetValue();
 
+    commonSettings->m_Appearance.use_custom_cursors = !m_disableCustomCursors->GetValue();
+
     commonSettings->m_Appearance.zoom_correction_factor = m_zoomCorrectionCtrl->GetValue();
 
     double dimmingPercent = 80;
@@ -295,6 +297,8 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     m_scaleFonts->SetValue( aSettings.m_Appearance.apply_icon_scale_to_fonts );
 
     m_gridStriping->SetValue( aSettings.m_Appearance.grid_striping );
+
+    m_disableCustomCursors->SetValue( !aSettings.m_Appearance.use_custom_cursors );
 
     m_zoomCorrectionCtrl->SetDisplayedValue( aSettings.m_Appearance.zoom_correction_factor );
 
