@@ -45,7 +45,7 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 
     if( !wxFileName::DirExists( outputPath ) )
     {
-        if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT ) )
+        if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
             aResolvedOutputPath.reset();
             return false;
