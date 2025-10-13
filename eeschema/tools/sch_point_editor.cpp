@@ -1232,9 +1232,7 @@ void SCH_POINT_EDITOR::updatePoints()
                 || ( item && item->GetBodyStyle() != 0 && item->GetBodyStyle() != editor->GetBodyStyle() ) )
         {
             getView()->Remove( m_editPoints.get() );
-            getView()->Remove( m_angleItem.get() );
             m_editPoints.reset();
-            m_angleItem.reset();
             return;
         }
     }
