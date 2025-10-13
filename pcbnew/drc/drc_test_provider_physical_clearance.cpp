@@ -159,7 +159,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 }
 
                 for( PCB_LAYER_ID layer : layers )
-                    m_itemTree.Insert( item, layer, m_board->m_DRCMaxPhysicalClearance );
+                    m_itemTree.Insert( item, layer, m_board->m_DRCMaxPhysicalClearance, ATOMIC_TABLES );
 
                 return true;
             } );
@@ -200,6 +200,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 // Filter:
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
+                                    if( item->Type() == PCB_TABLECELL_T && item->GetParent() == other )
+                                        return false;
+
                                     BOARD_ITEM* a = item;
                                     BOARD_ITEM* b = other;
 
