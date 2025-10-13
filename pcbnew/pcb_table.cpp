@@ -396,12 +396,11 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
 
 std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    EDA_ANGLE             drawAngle = GetCell( 0, 0 )->GetDrawRotation();
-    std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( drawAngle );
-    std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence( drawAngle );
-    std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
-    std::vector<VECTOR2I> bottomRight =
-            GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
+    EDA_ANGLE             angle = GetCell( 0, 0 )->GetDrawRotation();
+    std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount()-1, 0 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount()-1 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount()-1, GetColCount()-1 )->GetCornersInSequence( angle );
 
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
