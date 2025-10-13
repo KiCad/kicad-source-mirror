@@ -25,6 +25,7 @@
 #ifndef KICAD_SCH_DRAG_NET_COLLISION_H
 #define KICAD_SCH_DRAG_NET_COLLISION_H
 
+#include <cstddef>
 #include <optional>
 #include <unordered_map>
 #include <unordered_set>
@@ -81,12 +82,29 @@ private:
         double   radius;
     };
 
+    struct DISCONNECTION_MARKER
+    {
+        VECTOR2I pointA;
+        VECTOR2I pointB;
+        double   radius;
+    };
+
+    struct ORIGINAL_CONNECTION
+    {
+        SCH_ITEM* itemA;
+        size_t    indexA;
+        SCH_ITEM* itemB;
+        size_t    indexB;
+    };
+
     std::optional<COLLISION_MARKER> analyzeJunction( SCH_JUNCTION* aJunction,
                                                      const SCH_SELECTION& aSelection,
                                                      const std::unordered_map<const SCH_ITEM*, std::optional<int>>&
                                                              aPreviewNetCodes ) const;
 
     void recordItemNet( SCH_ITEM* aItem );
+    void recordOriginalConnections( const SCH_SELECTION& aSelection );
+    std::vector<DISCONNECTION_MARKER> collectDisconnectedMarkers( const SCH_SELECTION& aSelection ) const;
 
     void ensureOverlay();
     void clearOverlay() const;
@@ -97,6 +115,7 @@ private:
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_overlay;
     std::unordered_map<const SCH_ITEM*, std::optional<int>> m_itemNetCodes;
     SCH_SHEET_PATH m_sheetPath;
+    std::vector<ORIGINAL_CONNECTION> m_originalConnections;
     bool            m_hasCollision;
 };
 

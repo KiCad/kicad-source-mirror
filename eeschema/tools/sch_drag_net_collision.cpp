@@ -25,6 +25,7 @@
 #include "sch_drag_net_collision.h"
 
 #include <algorithm>
+#include <limits>
 #include <unordered_set>
 
 #include <eda_item.h>
@@ -49,6 +50,7 @@ SCH_DRAG_NET_COLLISION_MONITOR::SCH_DRAG_NET_COLLISION_MONITOR( SCH_EDIT_FRAME* 
         m_overlay(),
         m_itemNetCodes(),
         m_sheetPath(),
+        m_originalConnections(),
         m_hasCollision( false )
 {
 }
@@ -65,6 +67,7 @@ void SCH_DRAG_NET_COLLISION_MONITOR::Initialize( const SCH_SELECTION& aSelection
     wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Initialize: Starting initialization" );
 
     m_itemNetCodes.clear();
+    m_originalConnections.clear();
     m_sheetPath = m_frame->GetCurrentSheet();
     m_hasCollision = false;
 
@@ -82,6 +85,8 @@ void SCH_DRAG_NET_COLLISION_MONITOR::Initialize( const SCH_SELECTION& aSelection
     for( EDA_ITEM* edaItem : aSelection )
         recordItemNet( static_cast<SCH_ITEM*>( edaItem ) );
 
+    recordOriginalConnections( aSelection );
+
     wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Initialize: Complete. Tracked %zu items with net codes",
                 m_itemNetCodes.size() );
 }
@@ -93,17 +98,6 @@ bool SCH_DRAG_NET_COLLISION_MONITOR::Update( const std::vector<SCH_JUNCTION*>& a
 {
     wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Called with %zu junctions, %d selected items, %zu preview assignments",
                 aJunctions.size(), aSelection.GetSize(), aPreviewAssignments.size() );
-
-    if( aJunctions.empty() )
-    {
-        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: No junctions to check, clearing overlay" );
-        clearOverlay();
-        m_hasCollision = false;
-        return false;
-    }
-
-    ensureOverlay();
-    m_overlay->Clear();
 
     std::unordered_map<const SCH_ITEM*, std::optional<int>> previewNetCodes;
 
@@ -123,27 +117,40 @@ bool SCH_DRAG_NET_COLLISION_MONITOR::Update( const std::vector<SCH_JUNCTION*>& a
 
     std::vector<COLLISION_MARKER> markers;
 
-    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Analyzing %zu junctions", aJunctions.size() );
-
-    for( SCH_JUNCTION* junction : aJunctions )
+    if( aJunctions.empty() )
     {
-        if( auto marker = analyzeJunction( junction, aSelection, previewNetCodes ) )
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: No junctions to analyze" );
+    }
+    else
+    {
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Analyzing %zu junctions", aJunctions.size() );
+
+        for( SCH_JUNCTION* junction : aJunctions )
         {
-            wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Junction at (%d, %d) has collision",
-                        marker->position.x, marker->position.y );
-            markers.push_back( *marker );
+            if( auto marker = analyzeJunction( junction, aSelection, previewNetCodes ) )
+            {
+                wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Junction at (%d, %d) has collision",
+                            marker->position.x, marker->position.y );
+                markers.push_back( *marker );
+            }
         }
     }
 
-    if( markers.empty() )
+    std::vector<DISCONNECTION_MARKER> disconnections = collectDisconnectedMarkers( aSelection );
+
+    if( markers.empty() && disconnections.empty() )
     {
-        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: No collision markers found" );
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: No collisions or disconnections detected" );
+        clearOverlay();
         m_hasCollision = false;
-        m_view->Update( m_overlay.get() );
         return false;
     }
 
-    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Drawing %zu collision markers", markers.size() );
+    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "Update: Drawing %zu collision markers and %zu disconnection markers",
+                markers.size(), disconnections.size() );
+
+    ensureOverlay();
+    m_overlay->Clear();
 
     COLOR4D baseColor( 1.0, 0.0, 0.0, 0.8 );
 
@@ -183,6 +190,13 @@ bool SCH_DRAG_NET_COLLISION_MONITOR::Update( const std::vector<SCH_JUNCTION*>& a
     for( const COLLISION_MARKER& marker : markers )
         m_overlay->Circle( marker.position, marker.radius );
 
+    for( const DISCONNECTION_MARKER& marker : disconnections )
+    {
+        m_overlay->Circle( marker.pointA, marker.radius );
+        m_overlay->Circle( marker.pointB, marker.radius );
+        m_overlay->Line( VECTOR2D( marker.pointA ), VECTOR2D( marker.pointB ) );
+    }
+
     m_view->Update( m_overlay.get() );
     m_hasCollision = true;
     return true;
@@ -193,6 +207,7 @@ void SCH_DRAG_NET_COLLISION_MONITOR::Reset()
 {
     clearOverlay();
     m_itemNetCodes.clear();
+    m_originalConnections.clear();
     m_hasCollision = false;
 }
 
@@ -487,6 +502,150 @@ void SCH_DRAG_NET_COLLISION_MONITOR::recordItemNet( SCH_ITEM* aItem )
                     aItem, aItem->GetClass().c_str() );
         m_itemNetCodes.emplace( aItem, std::nullopt );
     }
+}
+
+
+void SCH_DRAG_NET_COLLISION_MONITOR::recordOriginalConnections( const SCH_SELECTION& aSelection )
+{
+    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "recordOriginalConnections: Recording connections for %d items",
+                aSelection.GetSize() );
+
+    EE_RTREE& items = m_frame->GetScreen()->Items();
+
+    for( EDA_ITEM* edaItem : aSelection )
+    {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        if( !item || !item->IsConnectable() )
+            continue;
+
+        std::vector<VECTOR2I> points = item->GetConnectionPoints();
+
+        for( size_t index = 0; index < points.size(); ++index )
+        {
+            const VECTOR2I& point = points[index];
+
+            for( SCH_ITEM* candidate : items.Overlapping( point ) )
+            {
+                if( candidate == item || !candidate->IsConnectable() )
+                    continue;
+
+                if( !candidate->CanConnect( item ) )
+                    continue;
+
+                if( !candidate->IsConnected( point )
+                        && !( candidate->IsType( { SCH_LINE_T } ) && candidate->HitTest( point ) ) )
+                {
+                    continue;
+                }
+
+                std::vector<VECTOR2I> candidatePoints = candidate->GetConnectionPoints();
+                size_t               candidateIndex = std::numeric_limits<size_t>::max();
+
+                for( size_t candidatePos = 0; candidatePos < candidatePoints.size(); ++candidatePos )
+                {
+                    if( candidatePoints[candidatePos] == point )
+                    {
+                        candidateIndex = candidatePos;
+                        break;
+                    }
+                }
+
+                if( candidateIndex == std::numeric_limits<size_t>::max() )
+                    continue;
+
+                SCH_ITEM* firstItem = item;
+                size_t    firstIndex = index;
+                SCH_ITEM* secondItem = candidate;
+                size_t    secondIndex = candidateIndex;
+
+                if( secondItem < firstItem || ( secondItem == firstItem && secondIndex < firstIndex ) )
+                {
+                    std::swap( firstItem, secondItem );
+                    std::swap( firstIndex, secondIndex );
+                }
+
+                if( firstItem == secondItem )
+                    continue;
+
+                bool firstSelected = firstItem->IsSelected() || aSelection.Contains( firstItem );
+                bool secondSelected = secondItem->IsSelected() || aSelection.Contains( secondItem );
+
+                if( !firstSelected && !secondSelected )
+                    continue;
+
+                auto existing = std::find_if( m_originalConnections.begin(), m_originalConnections.end(),
+                        [&]( const ORIGINAL_CONNECTION& connection )
+                        {
+                            return connection.itemA == firstItem && connection.indexA == firstIndex
+                                   && connection.itemB == secondItem && connection.indexB == secondIndex;
+                        } );
+
+                if( existing != m_originalConnections.end() )
+                    continue;
+
+                m_originalConnections.push_back( { firstItem, firstIndex, secondItem, secondIndex } );
+            }
+        }
+    }
+
+    wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION", "recordOriginalConnections: Tracked %zu connections",
+                m_originalConnections.size() );
+}
+
+
+std::vector<SCH_DRAG_NET_COLLISION_MONITOR::DISCONNECTION_MARKER>
+SCH_DRAG_NET_COLLISION_MONITOR::collectDisconnectedMarkers( const SCH_SELECTION& aSelection ) const
+{
+    std::vector<DISCONNECTION_MARKER> markers;
+
+    for( const ORIGINAL_CONNECTION& connection : m_originalConnections )
+    {
+        SCH_ITEM* itemA = connection.itemA;
+        SCH_ITEM* itemB = connection.itemB;
+
+        if( !itemA || !itemB )
+            continue;
+
+        if( !itemA->IsConnectable() || !itemB->IsConnectable() )
+            continue;
+
+        std::vector<VECTOR2I> pointsA = itemA->GetConnectionPoints();
+        std::vector<VECTOR2I> pointsB = itemB->GetConnectionPoints();
+
+        if( connection.indexA >= pointsA.size() || connection.indexB >= pointsB.size() )
+            continue;
+
+        VECTOR2I pointA = pointsA[ connection.indexA ];
+        VECTOR2I pointB = pointsB[ connection.indexB ];
+
+        if( pointA == pointB )
+            continue;
+
+        bool relevant = itemA->IsSelected() || aSelection.Contains( itemA )
+                        || itemB->IsSelected() || aSelection.Contains( itemB );
+
+        if( !relevant )
+            continue;
+
+        double radius = std::max( { 800.0,
+                                    static_cast<double>( itemA->GetPenWidth() ),
+                                    static_cast<double>( itemB->GetPenWidth() ) } );
+
+        DISCONNECTION_MARKER marker;
+        marker.pointA = pointA;
+        marker.pointB = pointB;
+        marker.radius = radius;
+        markers.push_back( marker );
+    }
+
+    if( !markers.empty() )
+    {
+        wxLogTrace( "KICAD_SCH_DRAG_NET_COLLISION",
+                    "collectDisconnectedMarkers: Identified %zu disconnections", markers.size() );
+    }
+
+    return markers;
 }
 
 
