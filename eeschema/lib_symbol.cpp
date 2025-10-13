@@ -916,18 +916,13 @@ int LIB_SYMBOL::GetPinCount()
 
     for( SCH_PIN* pin : GetGraphicalPins( 0 /* all units */, 1 /* single body style */ ) )
     {
-        bool                        valid;
-        std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
-    wxLogTrace( "CVPCB_PINCOUNT",
-            wxString::Format( "LIB_SYMBOL::GetPinCount lib='%s' pin base='%s' shown='%s' valid=%d +%zu",
-                      GetLibId().Format().wx_str(), pin->GetName(),
-                      pin->GetShownNumber(), valid, numbers.size() ) );
-        count += numbers.size();
+        int  pinCount = pin->GetStackedPinCount();
+        count += pinCount;
     }
 
-    wxLogTrace( "CVPCB_PINCOUNT",
-        wxString::Format( "LIB_SYMBOL::GetPinCount total for lib='%s' => %d",
-                  GetLibId().Format().wx_str(), count ) );
+    wxLogTrace( "CVPCB_PINCOUNT", "LIB_SYMBOL::GetPinCount total for lib='%s' => %d", GetLibId().Format().wx_str(),
+                count );
+
     return count;
 }
 

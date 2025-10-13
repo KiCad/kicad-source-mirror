@@ -1629,6 +1629,91 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 }
 
 
+int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
+{
+    if( aValid )
+        *aValid = true;
+
+    // Fast path: if no brackets, it's a single pin
+    const bool hasOpenBracket  = aPinName.Contains( wxT( "[" ) );
+    const bool hasCloseBracket = aPinName.Contains( wxT( "]" ) );
+
+    if( hasOpenBracket || hasCloseBracket )
+    {
+        if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
+        {
+            if( aValid )
+                *aValid = false;
+            return 1;
+        }
+    }
+
+    if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
+        return 1;
+
+    const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
+
+    int count = 0;
+    size_t start = 0;
+
+    while( start < inner.length() )
+    {
+        size_t comma = inner.find( ',', start );
+        wxString part = ( comma == wxString::npos ) ? inner.Mid( start ) : inner.Mid( start, comma - start );
+        part.Trim( true ).Trim( false );
+
+        if( part.empty() )
+        {
+            start = ( comma == wxString::npos ) ? inner.length() : comma + 1;
+            continue;
+        }
+
+        int dashPos = part.Find( '-' );
+        if( dashPos != wxNOT_FOUND )
+        {
+            wxString startTxt = part.Left( dashPos );
+            wxString endTxt   = part.Mid( dashPos + 1 );
+            startTxt.Trim( true ).Trim( false );
+            endTxt.Trim( true ).Trim( false );
+
+            auto [startPrefix, startVal] = ParseAlphaNumericPin( startTxt );
+            auto [endPrefix, endVal]     = ParseAlphaNumericPin( endTxt );
+
+            if( startPrefix != endPrefix || startVal == -1 || endVal == -1 || startVal > endVal )
+            {
+                if( aValid )
+                    *aValid = false;
+
+                return 1;
+            }
+
+            // Count pins in the range
+            count += static_cast<int>( endVal - startVal + 1 );
+        }
+        else
+        {
+            // Single pin
+            ++count;
+        }
+
+        if( comma == wxString::npos )
+            break;
+
+        start = comma + 1;
+    }
+
+    if( count == 0 )
+    {
+        if( aValid )
+            *aValid = false;
+
+        return 1;
+    }
+
+    return count;
+}
+
+
 wxString GetDefaultVariantName()
 {
     return wxString( defaultVariantName );

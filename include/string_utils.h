@@ -494,6 +494,18 @@ KICOMMON_API wxString NormalizeFileUri( const wxString& aFileUri );
 KICOMMON_API std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName,
                                                             bool* aValid = nullptr );
 
+/**
+ * Count the number of pins represented by stacked pin notation without allocating strings.
+ *
+ * This is a fast alternative to ExpandStackedPinNotation().size() for cases where only
+ * the count is needed.
+ *
+ * @param aPinName is the pin name to count (may or may not use stacked notation)
+ * @param aValid is optionally set to indicate whether the notation was valid
+ * @return count of individual pins represented (always >= 1)
+ */
+KICOMMON_API int CountStackedPinNotation( const wxString& aPinName, bool* aValid = nullptr );
+
 
 KICOMMON_API wxString GetDefaultVariantName();
 

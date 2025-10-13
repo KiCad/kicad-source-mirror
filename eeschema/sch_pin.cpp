@@ -609,6 +609,14 @@ std::vector<wxString> SCH_PIN::GetStackedPinNumbers( bool* aValid ) const
     return numbers;
 }
 
+
+int SCH_PIN::GetStackedPinCount( bool* aValid ) const
+{
+    wxString shown = GetShownNumber();
+    return CountStackedPinNotation( shown, aValid );
+}
+
+
 std::optional<wxString> SCH_PIN::GetSmallestLogicalNumber() const
 {
     bool valid = false;

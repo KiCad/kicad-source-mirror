@@ -772,4 +772,56 @@ BOOST_AUTO_TEST_CASE( TestDuplicatePinDetectionWithStackedNotation )
     BOOST_CHECK( messages.empty() );
 }
 
+
+/**
+ * Test that GetStackedPinCount returns the same count as GetStackedPinNumbers().size()
+ * but more efficiently
+ */
+BOOST_AUTO_TEST_CASE( TestStackedPinCountEfficiency )
+{
+    // Test cases with different pin notations
+    struct TestCase
+    {
+        wxString notation;
+        int      expectedCount;
+        bool     expectedValid;
+    };
+
+    std::vector<TestCase> testCases = {
+        { wxT( "1" ), 1, true },                    // Simple pin
+        { wxT( "[1,2,3]" ), 3, true },              // List notation
+        { wxT( "[5-7]" ), 3, true },                // Range notation
+        { wxT( "[1,3,5-7]" ), 5, true },            // Mixed notation
+        { wxT( "[A1-A5]" ), 5, true },              // Alphanumeric range
+        { wxT( "[1-10]" ), 10, true },              // Larger range
+        { wxT( "[PA1,PA2,PB5-PB8]" ), 6, true },    // Complex mixed
+        { wxT( "[1-3,10,20-22]" ), 7, true },       // Multiple ranges
+        { wxT( "[10" ), 1, false },                 // Invalid (missing bracket)
+        { wxT( "10]" ), 1, false },                 // Invalid (missing bracket)
+        { wxT( "[5-3]" ), 1, false },               // Invalid (reverse range)
+    };
+
+    for( const auto& testCase : testCases )
+    {
+        SCH_PIN* pin = new SCH_PIN( m_symbol.get() );
+        pin->SetNumber( testCase.notation );
+
+        bool validExpand = false;
+        bool validCount = false;
+
+        std::vector<wxString> expanded = pin->GetStackedPinNumbers( &validExpand );
+        int count = pin->GetStackedPinCount( &validCount );
+
+        // Both methods should agree on validity
+        BOOST_CHECK_EQUAL( validExpand, validCount );
+        BOOST_CHECK_EQUAL( validExpand, testCase.expectedValid );
+
+        // Both methods should return the same count
+        BOOST_CHECK_EQUAL( static_cast<int>( expanded.size() ), count );
+        BOOST_CHECK_EQUAL( count, testCase.expectedCount );
+
+        delete pin;
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
