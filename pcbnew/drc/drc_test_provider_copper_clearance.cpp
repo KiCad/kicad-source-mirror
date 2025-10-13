@@ -1152,10 +1152,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
-                            BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
-
-                            if( otherCItem && otherCItem->GetNetCode() == aShape->GetNetCode() )
-                                return false;
+                             // Graphics are often compound shapes so ignore collisions between shapes
+                             // in a single footprint.
+                             if( aShape->Type() == PCB_SHAPE_T && other->Type() == PCB_SHAPE_T
+                                      && aShape->GetParentFootprint()
+                                      && aShape->GetParentFootprint() == other->GetParentFootprint() )
+                             {
+                                 return false;
+                             }
 
                             // Track clearances are tested in testTrackClearances()
                             if( dynamic_cast<PCB_TRACK*>( other) )
@@ -1214,6 +1218,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                     for( BOARD_ITEM* item : footprint->GraphicalItems() )
                     {
                         testGraphicAgainstZone( item );
+
+                        if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
+                            testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
 
                         done.fetch_add( 1 );
 
