@@ -45,21 +45,18 @@ public:
     DRC_TEST_PROVIDER_SILK_CLEARANCE ():
         m_board( nullptr ),
         m_largestClearance( 0 )
-    {
-    }
+    {}
 
-    virtual ~DRC_TEST_PROVIDER_SILK_CLEARANCE()
-    {
-    }
+    ~DRC_TEST_PROVIDER_SILK_CLEARANCE() = default;
 
-    virtual bool Run() override;
+    bool Run() override;
 
-    virtual const wxString GetName() const override
+    const wxString GetName() const override
     {
         return wxT( "silk_clearance" );
     };
 
-    virtual const wxString GetDescription() const override
+    const wxString GetDescription() const override
     {
         return wxT( "Tests for overlapping silkscreen features." );
     }
@@ -67,7 +64,7 @@ public:
 private:
 
     BOARD* m_board;
-    int m_largestClearance;
+    int    m_largestClearance;
 };
 
 
