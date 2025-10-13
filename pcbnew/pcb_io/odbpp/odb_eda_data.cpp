@@ -183,6 +183,9 @@ void OUTLINE_RECT::Write( std::ostream& ost ) const
 
 void OUTLINE_CONTOUR::Write( std::ostream& ost ) const
 {
+    if( !m_surfaces )
+        return;
+
     ost << "CT" << std::endl;
     m_surfaces->WriteData( ost );
     ost << "CE" << std::endl;
