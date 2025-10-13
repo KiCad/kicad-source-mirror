@@ -1767,6 +1767,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             break;
 
         case PCB_REFERENCE_IMAGE_T:     // ignore
+        case PCB_TARGET_T:
             break;
 
         default:
