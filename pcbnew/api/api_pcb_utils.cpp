@@ -92,7 +92,9 @@ LSET UnpackLayerSet( const google::protobuf::RepeatedField<int>& aProtoLayerSet 
         wxCHECK2( layer >= F_Cu && layer < PCB_LAYER_ID_COUNT, continue );
         PCB_LAYER_ID boardLayer =
                 FromProtoEnum<PCB_LAYER_ID>( static_cast<types::BoardLayer>( layer ) );
-        set.set( boardLayer );
+
+        if( boardLayer >= 0 && IsValidLayer( boardLayer ) )
+            set.set( boardLayer );
     }
 
     return set;
