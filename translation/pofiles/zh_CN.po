@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 10:07+0000\n"
+"PO-Revision-Date: 2025-10-14 09:45+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -6319,14 +6319,14 @@ msgid "Redo"
 msgstr "重做"
 
 #: common/eda_base_frame.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "运行 %s > %s"
+msgstr "运行: %s > %s"
 
 #: common/eda_base_frame.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "规则: %s"
+msgstr "运行: %s"
 
 #: common/eda_base_frame.cpp:1219
 #, c-format
@@ -6721,7 +6721,7 @@ msgstr "网络信息"
 
 #: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
-msgstr ""
+msgstr "条码"
 
 #: common/eda_item.cpp:445 eeschema/sch_junction.cpp:297
 #: eeschema/sch_junction.h:102
@@ -7919,7 +7919,7 @@ msgstr "API 响应: %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "API 响应: %s"
 
@@ -12536,7 +12536,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d 个符号需要批注。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:523
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- 用户已取消 ERC。<br><br>"
 
@@ -13807,14 +13806,12 @@ msgid "Pin Table"
 msgstr "引脚属性表"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert symbol"
-msgstr "转换符号"
+msgstr "还原符号"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "是否放弃变更, 并将 '%s' 重置为上一保存版本?"
+msgstr "将符号还原回上次保存状态"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 msgid "Clear cell"
@@ -13830,7 +13827,7 @@ msgstr "创建派生符号"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 msgid "Create a new symbol derived from the selected one"
-msgstr "创建一个从所选符号派生出的新符号"
+msgstr "从选中符号创建一个新的派生符号"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
@@ -13923,7 +13920,7 @@ msgstr "重命名字段"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:780
 #, c-format
 msgid "Field name '%s' already exists."
-msgstr "名称为 '%s' 的字段已存在。"
+msgstr "字段名 '%s' 已存在。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:825
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
@@ -13937,7 +13934,6 @@ msgid "Symbol Name"
 msgstr "符号名称"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
-#, fuzzy
 msgid "Exclude From BOM"
 msgstr "从 BOM 中移除"
 
@@ -14143,7 +14139,7 @@ msgstr "编辑符号属性"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:731
 #, c-format
 msgid "This field is inherited from '%s'."
-msgstr "此字段继承于'%s'。"
+msgstr "该字段继承自 '%s'。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:761
 #, c-format
@@ -16139,15 +16135,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2624
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2683
-#, fuzzy
 msgid "Add new variant name:"
-msgstr "输入封装名称:"
+msgstr "添加新的变体名称:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2624
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2683
-#, fuzzy
 msgid "New Variant"
-msgstr "新建封装"
+msgstr "新建变体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:71
 msgid "Add a new field"
@@ -16162,9 +16156,8 @@ msgid "Remove selected field"
 msgstr "移除选中字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:96
-#, fuzzy
 msgid "Variants:"
-msgstr "制库"
+msgstr "变体:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "View presets:"
@@ -18783,39 +18776,39 @@ msgid "Graphic item count differs."
 msgstr "'图形项目数量' 差异。"
 
 #: eeschema/lib_symbol.cpp:1693
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "'图形项目数量' 差异。"
+msgstr "'图形项目' 差异: %s; %s。"
 
 #: eeschema/lib_symbol.cpp:1710
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "编辑原理图符号"
+msgstr "原理图符号中多余的引脚: %s。"
 
 #: eeschema/lib_symbol.cpp:1718
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "'引脚 %s' 差异。"
+msgstr "'引脚 '%s'' 差异: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "编辑原理图符号"
+msgstr "原理图符号中缺失的引脚: %s。"
 
 #: eeschema/lib_symbol.cpp:1754
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "编辑原理图符号"
+msgstr "原理图符号多余的字段: %s。"
 
 #: eeschema/lib_symbol.cpp:1780
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "'字段数量' 差异。"
+msgstr "'字段 '%s'' 差异: %s; %s。"
 
 #: eeschema/lib_symbol.cpp:1803
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "编辑原理图符号"
+msgstr "原理图符号缺失的字段: %s。"
 
 #: eeschema/lib_symbol.cpp:1813
 #, fuzzy
@@ -18859,44 +18852,36 @@ msgid "Datasheet"
 msgstr "数据手册"
 
 #: eeschema/lib_symbol.cpp:2106
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "符号单元"
+msgstr "符号定义"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Define as Power Symbol"
 msgstr "定义为电源符号"
 
 #: eeschema/lib_symbol.cpp:2111
-#, fuzzy
 msgid "Define as Local Power Symbol"
 msgstr "定义为局部电源符号"
 
 #: eeschema/lib_symbol.cpp:2115
-#, fuzzy
 msgid "Pin Display"
-msgstr "栅格显示"
+msgstr "引脚显示"
 
 #: eeschema/lib_symbol.cpp:2117
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "显示引脚编号"
 
 #: eeschema/lib_symbol.cpp:2120
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "显示引脚名称"
 
 #: eeschema/lib_symbol.cpp:2123
-#, fuzzy
 msgid "Place Pin Names Inside"
 msgstr "将引脚名称放在符号内部"
 
 #: eeschema/lib_symbol.cpp:2126
-#, fuzzy
 msgid "Pin Name Position Offset"
-msgstr "引脚名称位置偏移:"
+msgstr "引脚名称位置偏移"
 
 #: eeschema/lib_symbol.cpp:2133 eeschema/tools/sch_actions.cpp:1046
 msgid "Exclude from Simulation"
@@ -18911,9 +18896,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "设置 '从物料清单中移除' 特性"
 
 #: eeschema/lib_symbol.cpp:2143
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "单元 && 图形样式"
+msgstr "单元和主体样式"
 
 #: eeschema/lib_symbol.cpp:2145
 #, fuzzy
@@ -18982,9 +18966,8 @@ msgid "Panels"
 msgstr "面板"
 
 #: eeschema/menubar.cpp:325
-#, fuzzy
 msgid "Variants"
-msgstr "制库"
+msgstr "变体"
 
 #: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -19566,9 +19549,9 @@ msgid "Compare Symbol with Library"
 msgstr "将符号与库符号进行比较"
 
 #: eeschema/sch_field.cpp:970
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "%s 的字段 (%s)"
+msgstr "字段 %s (空)"
 
 #: eeschema/sch_field.cpp:975
 #, c-format
@@ -20481,7 +20464,7 @@ msgstr "所有单元"
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:218
 #: eeschema/sch_item.cpp:766
 msgid "All body styles"
-msgstr "所有图形样式"
+msgstr "所有主体样式"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -20548,9 +20531,9 @@ msgid "Label '%s'"
 msgstr "标签 '%s'"
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "指令标签 [%s %s]"
+msgstr "指令标签 [%s (空)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -22194,9 +22177,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "运行 %s"
+msgstr "运行 %d"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -23334,14 +23317,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "断开图纸引脚与层次标签的关联"
 
 #: eeschema/toolbars_sch_editor.cpp:51
-#, fuzzy
 msgid "Current Variant"
-msgstr "当前网格"
+msgstr "当前变体"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic variant"
-msgstr "控制以选择层"
+msgstr "控制以选择当前原理图变体"
 
 #: eeschema/toolbars_sch_editor.cpp:81 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
@@ -23356,9 +23337,8 @@ msgid "Selection modes"
 msgstr "选区已复制"
 
 #: eeschema/toolbars_sch_editor.cpp:238
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "选择页面以模拟项目显示"
+msgstr "选中当前变体以显示并编辑"
 
 #: eeschema/toolbars_symbol_viewer.cpp:135
 msgid "Symbol Viewer"
@@ -24892,24 +24872,20 @@ msgid "Show SPICE Netlist"
 msgstr "显示 SPICE 网表"
 
 #: eeschema/tools/sch_actions.cpp:1688
-#, fuzzy
 msgid "Add Variant..."
-msgstr "添加线..."
+msgstr "添加变体..."
 
 #: eeschema/tools/sch_actions.cpp:1689
-#, fuzzy
 msgid "Add new variant to the schematic."
-msgstr "将当前符号添加到原理图中"
+msgstr "添加新的变体到原理图中。"
 
 #: eeschema/tools/sch_actions.cpp:1694
-#, fuzzy
 msgid "Remove Variant..."
-msgstr "移除插件..."
+msgstr "移除变体..."
 
 #: eeschema/tools/sch_actions.cpp:1695
-#, fuzzy
 msgid "Remove an existing variant from the schematic."
-msgstr "要清除整个原理图的现有的标注吗？"
+msgstr "从原理图中移除现有变体。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:322
 msgid "Press <ESC> to cancel symbol creation."
@@ -25072,9 +25048,9 @@ msgid " (already placed)"
 msgstr " (已放置)"
 
 #: eeschema/tools/sch_edit_tool.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "放置所有单元"
+msgstr "放置单元 %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:200
 msgid "Pin Function"
@@ -25210,9 +25186,8 @@ msgid "Edit Symbol Properties..."
 msgstr "编辑符号属性..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3513
-#, fuzzy
 msgid "Edit Netclasses..."
-msgstr "网类...\n"
+msgstr "编辑网络类..."
 
 #: eeschema/tools/sch_editor_control.cpp:159
 #, c-format
@@ -25240,9 +25215,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "错误: 在当前图纸中找到重复的子图纸名称。"
 
 #: eeschema/tools/sch_editor_control.cpp:896
-#, fuzzy
 msgid "No nets selected."
-msgstr "没有选择网络。"
+msgstr "未选择任何网络。"
 
 #: eeschema/tools/sch_editor_control.cpp:935
 #, fuzzy
@@ -27166,6 +27140,9 @@ msgid ""
 "When no --variants arguement is provided the default variant is output.\n"
 "To output all variants use '--variants=all'"
 msgstr ""
+"要输出的变体名称列表。\n"
+"未提供 --variants 参数将输出默认变体。\n"
+"使用 '--variants=all' 参数可输出所有变体。"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -28779,9 +28756,8 @@ msgid "Export STEPZ"
 msgstr "导出 STEPZ"
 
 #: kicad/kicad_cli.cpp:133
-#, fuzzy
 msgid "Export U3D"
-msgstr "导出 DXF"
+msgstr "导出 U3D"
 
 #: kicad/kicad_cli.cpp:158
 msgid "Export PS"
@@ -33458,9 +33434,8 @@ msgid "Custom Rules"
 msgstr "自定义规则"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:244
-#, fuzzy
 msgid "Modify barcode"
-msgstr "修改焊盘"
+msgstr "修改条码"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:770
@@ -33520,39 +33495,37 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "QR Code (ISO 18004)"
-msgstr ""
+msgstr "标准 QR 码 (ISO 18004)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Micro QR Code"
-msgstr ""
+msgstr "微型 QR 码"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~20% (Level L)"
-msgstr ""
+msgstr "~20% (L 级)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~37% (Level M)"
-msgstr ""
+msgstr "~37% (M 级)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~55% (Level Q)"
-msgstr ""
+msgstr "~55% (Q 级)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~65% (Level H)"
-msgstr ""
+msgstr "~65% (H 级)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:750
-#, fuzzy
 msgid "Error Correction"
-msgstr "箭头方向"
+msgstr "容错等级"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
 #: pcbnew/pcb_barcode.cpp:686
-#, fuzzy
 msgid "Barcode Properties"
-msgstr "边框属性"
+msgstr "条码属性"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Empty"
@@ -37000,15 +36973,13 @@ msgstr "钻孔"
 
 # Die 裸芯片
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
-#, fuzzy
 msgid "Pad->Die Length"
-msgstr "焊盘到 Die 长度"
+msgstr "Pad->Die 长度"
 
 # Die 裸芯片
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad->Die Delay"
-msgstr "焊盘到 Die 延迟"
+msgstr "Pad->Die 延迟"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:81
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:199
@@ -37029,9 +37000,8 @@ msgstr "连接器:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:85
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:209
-#, fuzzy
 msgid "Aperture"
-msgstr "SMD Aperture"
+msgstr "Aperture"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:199
 msgid "Use a relative path?"
@@ -37757,7 +37727,6 @@ msgid "Unknown choice"
 msgstr "未知选择"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
 msgstr "微孔"
 
@@ -37778,9 +37747,8 @@ msgid "Via size:"
 msgstr "过孔大小:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
-#, fuzzy
 msgid "Via annular rings:"
-msgstr "孔环:"
+msgstr "过孔孔环:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1146
@@ -37805,9 +37773,8 @@ msgid "Start and end layers only"
 msgstr "仅起始层和结束层"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:206
-#, fuzzy
 msgid "Via protection features:"
-msgstr "保护功能:"
+msgstr "过孔保护特性:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
@@ -38169,13 +38136,12 @@ msgid "Target areas:"
 msgstr "目标域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:59
-#, fuzzy
 msgid "Reference rule area:"
 msgstr "参考规则域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:75
 msgid "Anchor footprint:"
-msgstr ""
+msgstr "封装锚点:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:82
 msgid ""
@@ -39729,9 +39695,8 @@ msgid "Mid Point"
 msgstr "中点"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:924
-#, fuzzy
 msgid "Included Angle"
-msgstr "包含填充区 (&Z)"
+msgstr "夹角"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:944
 msgid "Point on Circle"
@@ -40028,7 +39993,7 @@ msgstr "微孔"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2405
 msgid "Blind"
-msgstr ""
+msgstr "盲孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2406
@@ -40103,7 +40068,6 @@ msgid "Target Length:"
 msgstr "目标长度:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:58
-#, fuzzy
 msgid "Target Delay:"
 msgstr "目标延迟:"
 
@@ -40308,7 +40272,6 @@ msgstr "高亮匹配的封装"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:432
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:475
-#, fuzzy
 msgid "Delete row"
 msgstr "删除行"
 
@@ -43836,7 +43799,7 @@ msgstr "%s 存在 '填充区挖空设置' 重写。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:277
 #, c-format
 msgid "%s pad to die length differs."
-msgstr "%s 个 '焊盘到 Die 的长度' 差异。"
+msgstr "%s 个 'Pad->Die 的长度' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:279
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
@@ -43921,34 +43884,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "层 %2$s 上的 %1$s 个形状原型差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s 个差异。"
+msgstr "%s 个 '文本' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "%s 个 '栅格宽度' 差异。"
+msgstr "%s 个 '宽度' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
-msgstr "%s 个 '名称' 差异。"
+msgstr "%s 个 '高度' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "%s 个 '钻孔大小' 差异。"
+msgstr "%s 个 '文本大小' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s 个 '拐角' 差异。"
+msgstr "%s 个 '条码' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "%s 个 '网格平滑等级' 差异。"
+msgstr "%s 个 '容错等级' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #, c-format
@@ -44150,9 +44113,8 @@ msgid "%s differs."
 msgstr "%s 个差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "'焊盘数量' 差异。"
+msgstr "'条码数量' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
@@ -44180,9 +44142,9 @@ msgid "The footprint library '%s' was not found at '%s'"
 msgstr "在 '%2$s' 中找不到封装库 '%1$s'。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
-msgstr "封装 '%s' 与来源库 '%s' 中的封装存在差异。"
+msgstr "封装 '%s' 与库 '%s' 中的副本不匹配"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:121
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:129
@@ -46695,9 +46657,9 @@ msgid "Thermal Relief Gap"
 msgstr "缓释热焊盘 (花焊盘) 间隙"
 
 #: pcbnew/pcb_barcode.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "%2$s 上的焊盘 %1$s"
+msgstr "%2$s 上的条码 %1$s"
 
 #: pcbnew/pcb_barcode.cpp:692
 msgid "CODE_39"
@@ -46743,9 +46705,8 @@ msgid "Show Text"
 msgstr "显示走线"
 
 #: pcbnew/pcb_barcode.cpp:738
-#, fuzzy
 msgid "Barcode Type"
-msgstr "焊盘类型"
+msgstr "条码类型"
 
 #: pcbnew/pcb_barcode.cpp:773
 #, fuzzy
@@ -49193,9 +49154,9 @@ msgid "Plugin Directory"
 msgstr "打开插件目录"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "目录 '%s' 不存在。"
+msgstr "插件目录 '%s' 不存在。创建该目录?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
 #, fuzzy, c-format
@@ -50469,9 +50430,8 @@ msgid "Place point"
 msgstr "放置引脚"
 
 #: pcbnew/tools/drawing_tool.cpp:1540
-#, fuzzy
 msgid "Draw Barcode"
-msgstr "绘制圆形"
+msgstr "绘制条形码"
 
 #: pcbnew/tools/drawing_tool.cpp:1821
 msgid "Draw Dimension"
@@ -50494,29 +50454,24 @@ msgid "Place via"
 msgstr "放置过孔"
 
 #: pcbnew/tools/drc_tool.cpp:312
-#, fuzzy
 msgid "Edit Footprint Properties..."
-msgstr "编辑封装属性"
+msgstr "编辑封装属性..."
 
 #: pcbnew/tools/drc_tool.cpp:317
-#, fuzzy
 msgid "Edit Pad Properties..."
-msgstr "编辑焊盘属性"
+msgstr "编辑焊盘属性..."
 
 #: pcbnew/tools/drc_tool.cpp:327
-#, fuzzy
 msgid "Edit Dimension Properties..."
-msgstr "编辑测量标注属性"
+msgstr "编辑测量标注属性..."
 
 #: pcbnew/tools/drc_tool.cpp:329
-#, fuzzy
 msgid "Edit Field Properties..."
-msgstr "编辑标签属性"
+msgstr "编辑字段属性..."
 
 #: pcbnew/tools/drc_tool.cpp:331
-#, fuzzy
 msgid "Edit Text Properties..."
-msgstr "编辑文本属性"
+msgstr "编辑文本属性..."
 
 #: pcbnew/tools/edit_tool.cpp:164
 msgid "Positioning Tools"
@@ -51044,14 +50999,12 @@ msgid "Create outset lines from the selected item"
 msgstr "从选区生成外扩形状线条"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add Barcode"
-msgstr "添加一个圆形"
+msgstr "添加条码"
 
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Add a barcode"
-msgstr "添加一个圆弧"
+msgstr "添加一个条码"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Add Board Characteristics"
