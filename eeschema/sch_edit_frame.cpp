@@ -73,6 +73,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_align_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_inspection_tool.h>
 #include <tools/sch_point_editor.h>
@@ -639,6 +640,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
+    m_toolManager->RegisterTool( new SCH_ALIGN_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
     m_toolManager->RegisterTool( new SCH_GROUP_TOOL );
@@ -750,6 +752,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::alignLeft,       ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::alignCenterX,    ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::alignRight,      ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::alignTop,        ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::alignCenterY,    ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::alignBottom,     ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( hasElements ) );
 

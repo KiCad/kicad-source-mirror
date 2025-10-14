@@ -447,6 +447,7 @@ set( EESCHEMA_SRCS
 
     tools/assign_footprints.cpp
     tools/backannotate.cpp
+    tools/sch_align_tool.cpp
     tools/ee_grid_helper.cpp
     tools/rule_area_create_helper.cpp
     tools/sch_actions.cpp

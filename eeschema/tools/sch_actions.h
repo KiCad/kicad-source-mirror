@@ -114,6 +114,12 @@ public:
 
     // Interactive Editing
     static TOOL_ACTION alignToGrid;
+    static TOOL_ACTION alignTop;
+    static TOOL_ACTION alignBottom;
+    static TOOL_ACTION alignLeft;
+    static TOOL_ACTION alignRight;
+    static TOOL_ACTION alignCenterX;
+    static TOOL_ACTION alignCenterY;
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
     static TOOL_ACTION repeatDrawItem;

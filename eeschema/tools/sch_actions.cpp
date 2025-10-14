@@ -1523,6 +1523,54 @@ TOOL_ACTION SCH_ACTIONS::alignToGrid( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::align_elements_to_grid )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION SCH_ACTIONS::alignTop( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignTop" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Top" ) )
+        .Tooltip( _( "Aligns selected items to the top edge of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_top )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::alignBottom( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignBottom" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Bottom" ) )
+        .Tooltip( _( "Aligns selected items to the bottom edge of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_bottom )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::alignLeft( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignLeft" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Left" ) )
+        .Tooltip( _( "Aligns selected items to the left edge of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_left )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::alignRight( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignRight" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Right" ) )
+        .Tooltip( _( "Aligns selected items to the right edge of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_right )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::alignCenterX( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignCenterX" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Horizontal Center" ) )
+        .Tooltip( _( "Aligns selected items to the horizontal center of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_middle )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION SCH_ACTIONS::alignCenterY( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Align.alignCenterY" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Align to Vertical Center" ) )
+        .Tooltip( _( "Aligns selected items to the vertical center of the item under the cursor" ) )
+        .Icon( BITMAPS::align_items_center )
+        .Flags( AF_ACTIVATE ) );
+
 // Schematic editor save copy curr sheet command
 TOOL_ACTION SCH_ACTIONS::saveCurrSheetCopyAs( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.saveCurrSheetCopyAs" )
