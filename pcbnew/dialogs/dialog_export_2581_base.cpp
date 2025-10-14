@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,7 +124,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 
 	fgSizer4->Add( m_lblOEM, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	wxString m_oemRefChoices[] = { _("Generate Unique") };
+	wxString m_oemRefChoices[] = { _("Generate unique") };
 	int m_oemRefNChoices = sizeof( m_oemRefChoices ) / sizeof( wxString );
 	m_oemRef = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_oemRefNChoices, m_oemRefChoices, 0 );
 	m_oemRef->SetSelection( 0 );
