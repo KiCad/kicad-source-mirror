@@ -108,6 +108,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 {
     std::string buffer;
     char line[1024];        // A line to print intermediate data
+    wxString wxLine;        // wxString used for UTF-8 line
 
     // Minimal text lengths:
     m_fpCount = 0;
@@ -264,17 +265,11 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             ref.Replace( wxT( " " ), wxT( "_" ) );
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
-            snprintf( line, sizeof(line), "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
-                      lenRefText, TO_UTF8( ref ),
-                      lenValText, TO_UTF8( val ),
-                      lenPkgText, TO_UTF8( pkg ),
-                      footprint_pos.x * conv_unit,
-                      // Keep the coordinates in the first quadrant,
-                      // (i.e. change y sign
-                      -footprint_pos.y * conv_unit,
-                      list[ii].m_Footprint->GetOrientation().AsDegrees(),
-                      (layer == F_Cu ) ? GetFrontSideName().c_str() : GetBackSideName().c_str() );
-            buffer += line;
+            wxLine.Printf( "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n", lenRefText, ref, lenValText, val, lenPkgText,
+                         pkg, footprint_pos.x * conv_unit, -footprint_pos.y * conv_unit,
+                         list[ii].m_Footprint->GetOrientation().AsDegrees(),
+                         ( layer == F_Cu ) ? GetFrontSideName() : GetBackSideName() );
+            buffer += TO_UTF8( wxLine );
         }
 
         // Write EOF
