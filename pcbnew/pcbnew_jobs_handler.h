@@ -69,6 +69,7 @@ private:
                                            JOB_EXPORT_PCB_GERBERS* aJob );
     int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
     void loadOverrideDrawingSheet( BOARD* brd, const wxString& aSheetPath );
+    wxString resolveJobOutputPath( JOB* aJob, BOARD* aBoard, const wxString* aDrawingSheet = nullptr );
 
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( BOARD* aBrd );
 

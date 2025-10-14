@@ -521,10 +521,6 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( aStepJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -549,7 +545,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         aStepJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aStepJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -657,10 +653,6 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( aRenderJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -682,7 +674,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         aRenderJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aRenderJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -912,8 +904,6 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
     if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
         if( aSvgJob->GetConfiguredOutputPath().IsEmpty() )
@@ -926,17 +916,13 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         }
     }
 
-    wxString outPath = aSvgJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd, &aSvgJob->m_drawingSheet );
 
     if( !PATHS::EnsurePathExists( outPath, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
-
-    loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
 
     if( aSvgJob->m_checkZonesBeforePlot )
     {
@@ -1004,11 +990,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( aDxfJob->m_checkZonesBeforePlot )
     {
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
@@ -1041,7 +1022,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         }
     }
 
-    wxString outPath = aDxfJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd, &aDxfJob->m_drawingSheet );
 
     if( !PATHS::EnsurePathExists( outPath, aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE ) )
     {
@@ -1096,11 +1077,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    pdfJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, pdfJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( pdfJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( pdfJob->m_checkZonesBeforePlot )
     {
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
@@ -1133,6 +1109,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         pdfJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = resolveJobOutputPath( pdfJob, brd, &pdfJob->m_drawingSheet );
+
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pdfJob, *m_reporter );
 
@@ -1141,8 +1119,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         plotOpts.m_PDFSingle = true;
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
-
-    wxString outPath = pdfJob->GetFullOutputPath( brd->GetProject() );
 
     if( !PATHS::EnsurePathExists( outPath, plotAllLayersOneFile ) )
     {
@@ -1191,11 +1167,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    psJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, psJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( psJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( psJob->m_checkZonesBeforePlot )
     {
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
@@ -1230,7 +1201,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
         }
     }
 
-    wxString outPath = psJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( psJob, brd, &psJob->m_drawingSheet );
 
     if( !PATHS::EnsurePathExists( outPath, isSingle ) )
     {
@@ -1282,9 +1253,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    TOOL_MANAGER* toolManager = getToolManager( brd );
-
-    wxString outPath = aGerberJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd, &aGerberJob->m_drawingSheet );
 
     if( !PATHS::EnsurePathExists( outPath, false ) )
     {
@@ -1292,10 +1261,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
+    TOOL_MANAGER* toolManager = getToolManager( brd );
 
     if( aGerberJob->m_checkZonesBeforePlot )
     {
@@ -1474,7 +1440,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
         aGencadJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aGencadJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -1541,7 +1507,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStats( JOB* aJob )
     if( statsJob->GetConfiguredOutputPath().IsEmpty() && statsJob->GetWorkingOutputPath().IsEmpty() )
         statsJob->SetDefaultOutputPath( boardFile.GetFullPath() );
 
-    wxString outPath = statsJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -1589,18 +1555,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
-    if( aGerberJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
-    }
-
     if( aGerberJob->m_argLayers )
         aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), brd );
 
@@ -1622,6 +1576,16 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         aGerberJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
+    wxString outPath = resolveJobOutputPath( aJob, brd );
+
+    if( aGerberJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+    }
+
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aGerberJob, *m_reporter );
     plotOpts.SetLayerSelection( aGerberJob->m_plotLayerSequence );
@@ -1631,7 +1595,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     wxString     layerName;
     wxString     sheetName;
     wxString     sheetPath;
-    wxString     outPath = aGerberJob->GetFullOutputPath( brd->GetProject() );
 
     // The first layer will be treated as the layer name for the gerber header,
     // the other layers will be treated equivalent to the "Plot on All Layers" option
@@ -1688,9 +1651,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
-    wxString outPath = aDrillJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath ) )
     {
@@ -1807,8 +1768,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
     if( aPosJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -1824,7 +1783,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         aPosJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = aPosJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -2235,10 +2194,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
     if( drcJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -2252,7 +2207,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         drcJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = drcJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -2459,8 +2414,6 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -2470,7 +2423,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         job->SetWorkingOutputPath( fn.GetName() );
     }
 
-    wxString outPath = job->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -2553,8 +2506,6 @@ int PCBNEW_JOBS_HANDLER::JobExportIpcD356( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -2564,7 +2515,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpcD356( JOB* aJob )
         job->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = job->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = resolveJobOutputPath( aJob, brd );
 
     if( !PATHS::EnsurePathExists( outPath, true ) )
     {
@@ -2601,10 +2552,6 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-
-    wxString   path = job->GetConfiguredOutputPath();
-
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         if( job->m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
@@ -2633,6 +2580,10 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
         }
     }
 
+    resolveJobOutputPath( job, brd );
+
+    // The helper handles output path creation, so hand it a job that already has fully-resolved
+    // token context (title block and project overrides applied above).
     DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
 
     return CLI::EXIT_CODES::SUCCESS;
@@ -2673,6 +2624,25 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
     }
 
     return CLI::EXIT_CODES::SUCCESS;
+}
+
+// Most job handlers need to align the running job with the board before resolving any
+// output paths with variables in them like ${REVISION}.
+wxString PCBNEW_JOBS_HANDLER::resolveJobOutputPath( JOB* aJob, BOARD* aBoard, const wxString* aDrawingSheet )
+{
+    aJob->SetTitleBlock( aBoard->GetTitleBlock() );
+
+    if( aDrawingSheet && !aDrawingSheet->IsEmpty() )
+        loadOverrideDrawingSheet( aBoard, *aDrawingSheet );
+
+    PROJECT* project = aBoard->GetProject();
+
+    if( project )
+        project->ApplyTextVars( aJob->GetVarOverrides() );
+
+    aBoard->SynchronizeProperties();
+
+    return aJob->GetFullOutputPath( project );
 }
 
 DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
