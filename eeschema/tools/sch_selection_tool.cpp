@@ -2319,7 +2319,16 @@ bool SCH_SELECTION_TOOL::selectLasso()
         if( getView()->IsMirroredX() && shapeArea != 0 )
             isClockwise = !isClockwise;
 
-        selectionMode = isClockwise ? SELECTION_MODE::INSIDE_LASSO : SELECTION_MODE::TOUCHING_LASSO;
+        if( isClockwise )
+        {
+            selectionMode = SELECTION_MODE::INSIDE_LASSO;
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_WINDOW );
+        }
+        else
+        {
+            selectionMode = SELECTION_MODE::TOUCHING_LASSO;
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
+        }
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
