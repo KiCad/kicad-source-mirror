@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-13 12:07+0000\n"
+"PO-Revision-Date: 2025-10-15 03:07+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -6544,7 +6544,7 @@ msgstr "Zeichnungselement"
 
 #: common/eda_shape.cpp:319
 msgid "Thermal Spoke"
-msgstr "Thermische Speiche"
+msgstr "Wärmefallensteg"
 
 #: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:952
 msgid "Number Box"
@@ -6581,7 +6581,7 @@ msgstr "Pad-Nummernfeld"
 
 #: common/eda_shape.cpp:975 pcbnew/pcb_shape.cpp:959
 msgid "Thermal Spoke Template"
-msgstr "Thermische Speiche-Vorlage"
+msgstr "Wärmefallensteg-Vorlage"
 
 #: common/eda_shape.cpp:976 common/eda_shape.cpp:989
 msgid "Unrecognized"
@@ -33290,8 +33290,7 @@ msgstr "Abrundungsradius:"
 #: pcbnew/zone_manager/panel_zone_properties.cpp:303
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
-"Breite einer thermischen Speiche kann nicht kleiner als die Mindestbreite "
-"sein."
+"Breite eines Wärmefallenstegs kann nicht kleiner als die Mindestbreite sein."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:609
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:361
@@ -33441,17 +33440,17 @@ msgstr ""
 #: pcbnew/pad.cpp:2718 pcbnew/zone.cpp:1878
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
-msgstr "Thermische Entlastungen"
+msgstr "Wärmefallen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
 msgid "Thermal relief gap:"
-msgstr "Thermischer Entlastungsspalt:"
+msgstr "Wärmefallenspalt:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:165
@@ -33460,7 +33459,7 @@ msgid ""
 "a pad connected by thermal relief spokes."
 msgstr ""
 "Der Abstand, der zwischen dem gefüllten Bereich der Zone und einem durch "
-"thermische Entlastungspeichen verbundenen Pad freigehalten wird."
+"Wärmefallenstege verbundenen Pad freigehalten wird."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:170
@@ -33470,12 +33469,12 @@ msgstr "Freiraum zwischen Pads im selben Netz und gefüllten Flächen."
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:178
 msgid "Thermal spoke width:"
-msgstr "Thermische Speichenbreite:"
+msgstr "Wärmefallen-Stegbreite:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:183
 msgid "Width of copper in thermal reliefs."
-msgstr "Kupferbreite in thermischen Entlastungen."
+msgstr "Stegbreite in Wärmefallen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
@@ -37438,7 +37437,7 @@ msgstr "Konvexe Pad-Hülle"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
 msgid "Thermal Relief Overrides"
-msgstr "Überschreibungen für thermische Entlastung"
+msgstr "Überschreibungen für Wärmefallen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:889
 msgid "Relief gap:"
@@ -39820,7 +39819,7 @@ msgstr "Verrundungen/Fasen außerhalb des Zonenumrisses zulassen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
-msgstr "Mindestanzahl für thermische Entlastungsspeichen:"
+msgstr "Mindeststeganzahl für Wärmefallen:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
 msgid "Length Tuning"
@@ -41605,12 +41604,12 @@ msgstr "Lokale Überschreibung auf %s; Zonenverbindung: %s."
 #: pcbnew/drc/drc_engine.cpp:892
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Lokale Überschreibung auf %s; thermischer Entlastungsspalt: %s."
+msgstr "Lokale Überschreibung auf %s; Wärmefallenspalt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:909
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Lokale Überschreibung auf %s; thermische Speichenbreite: %s."
+msgstr "Lokale Überschreibung auf %s; Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, c-format
@@ -41658,7 +41657,7 @@ msgstr "Prüfe %s Abstand: %s."
 #: pcbnew/drc/drc_engine.cpp:990
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Prüfe %s thermische Speichenbreite: %s."
+msgstr "Prüfe %s Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:996
 #, c-format
@@ -41842,12 +41841,12 @@ msgstr "Zone"
 #: pcbnew/drc/drc_engine.cpp:1519
 #, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Thermischer Entlastungsspalt %s: %s."
+msgstr "Wärmefallenspalt %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1536
 #, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "%s thermale Speichenbreite: %s."
+msgstr "%s Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1569
 #, c-format
@@ -41916,7 +41915,7 @@ msgstr "Isolierte Kupferfüllung"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Thermal relief connection to zone incomplete"
-msgstr "Verbindung der thermischen Entlastung zur Zone unvollständig"
+msgstr "Verbindung der Wärmefalle zur Zone unvollständig"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Via is not connected or connected on only one layer"
@@ -42464,17 +42463,17 @@ msgstr "%s überschreibt Zonenverbindung."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:252
 #, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s überschreibt thermischen Entlastungsspalt."
+msgstr "%s überschreibt Wärmefallenspalt."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:259
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s überschreibt thermische Speichenbreite."
+msgstr "%s überschreibt Wärmefallen-Stegbreite."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:265
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s überschreibt thermischen Speichenwinkel."
+msgstr "%s überschreibt Wärmefallen-Stegwinkel."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
 #, c-format
@@ -42630,12 +42629,12 @@ msgstr "%s Lokaler Freiraum weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:542
 #, c-format
 msgid "%s thermal relief gap differs."
-msgstr "Thermischer Entlastungsspalt ist unterschiedlich für %s."
+msgstr "Wärmefallenspalt unterschiedlich für %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:544
 #, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "%s Speichenbreite der thermischen Entlastungen weicht ab."
+msgstr "%s Stegbreite der Wärmefallen weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:547
 #, c-format
@@ -43038,7 +43037,7 @@ msgstr "(Lage %s; %s min. Speichenanzahl %d; tatsächlich %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:254
 msgid "Checking thermal reliefs..."
-msgstr "Prüfe thermische Entlastungen ..."
+msgstr "Prüfe Wärmefallen ..."
 
 #: pcbnew/edit_zone_helpers.cpp:83
 msgid "Edit Zone Properties"
@@ -43594,7 +43593,7 @@ msgstr "Vererbt"
 
 #: pcbnew/footprint.cpp:4160 pcbnew/pad.cpp:2720 pcbnew/zone.cpp:1880
 msgid "Thermal reliefs for PTH"
-msgstr "Thermische Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: pcbnew/footprint.cpp:4220
 msgid "Not in Schematic"
@@ -45195,15 +45194,15 @@ msgstr "Überschreibung des Lötstopprands"
 
 #: pcbnew/pad.cpp:2922 pcbnew/zone.cpp:2144
 msgid "Thermal Relief Spoke Width"
-msgstr "Thermische Entlastung Speichenbreite"
+msgstr "Wärmefallen-Stegbreite"
 
 #: pcbnew/pad.cpp:2928
 msgid "Thermal Relief Spoke Angle"
-msgstr "Thermische Entlastung Speichenwinkel"
+msgstr "Wärmefallen-Stegwinkel"
 
 #: pcbnew/pad.cpp:2933 pcbnew/zone.cpp:2138
 msgid "Thermal Relief Gap"
-msgstr "Thermische Entlastung Spalt"
+msgstr "Wärmefallenspalt"
 
 #: pcbnew/pcb_base_frame.cpp:1225
 msgid ""
@@ -46168,8 +46167,8 @@ msgid ""
 "pads has been applied."
 msgstr ""
 "Die CADSTAR-Vorlage \"%s\" verfügt über unterschiedliche Einstellungen für "
-"thermische Entlastungen von Pads und Vias. KiCad unterstützt nur eine "
-"einzige Einstellung für beide. Die Einstellung für Pads wurde angewandt."
+"Wärmefallen von Pads und Vias. KiCad unterstützt nur eine einzige "
+"Einstellung für beide. Die Einstellung für Pads wurde angewandt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2058
 #, c-format
@@ -46180,11 +46179,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"Die CADSTAR-Vorlage \"%s\" hat im ursprünglichen Design thermische "
-"Entlastungen, aber die Speichenbreite (%.2f mm) ist dünner als die "
-"Mindestdicke der Zone (%.2f mm). KiCad verlangt, dass die Mindestdicke der "
-"Zone beibehalten wird. Daher wurde die Mindestdicke als neue Speichenbreite "
-"gesetzt, was beim nächsten Füllen der Zonen angewendet wird."
+"Die CADSTAR-Vorlage \"%s\" verwendet im ursprünglichen Design Wärmefallen, "
+"aber die Stegbreite (%.2f mm) ist schmaler als die Mindeststärke der Zone "
+"(%.2f mm). KiCad verlangt, dass die Mindeststärke der Zone beibehalten wird. "
+"Daher wurde diese als neue Stegbreite gesetzt, was beim nächsten Füllen der "
+"Zonen angewendet wird."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2105
 #, c-format
@@ -48614,16 +48613,16 @@ msgstr "Ermittlung der Zonenverbindungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:834
 msgid "Thermal-relief gap resolution for:"
-msgstr "Ermittlung des thermischen Entlastungsspalts für:"
+msgstr "Ermittlung des Wärmefallenspalts für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:843
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Ermittelter thermischer Entlastungsspalt: %s."
+msgstr "Ermittelter Wärmefallenspalt: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:848
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Ermittlung der thermischen Speichenbreite für:"
+msgstr "Ermittlung der Wärmefallen-Stegbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
 #, c-format
@@ -48632,7 +48631,7 @@ msgstr "Ermittelte Speichenbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Ermittlung der min. thermischen Speichenanzahl für:"
+msgstr "Ermittlung der min. Wärmefallen-Steganzahl für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
@@ -50111,8 +50110,7 @@ msgstr "Standard-Pad-Eigenschaften..."
 #: pcbnew/tools/pcb_actions.cpp:971
 msgid "Edit the pad properties used when creating new pads"
 msgstr ""
-"Bearbeiten der Pad-Eigenschaften, die beim Erstellen neuer Pads verwendet "
-"werden"
+"Bearbeiten der Eigenschaften, die beim Erstellen neuer Pads verwendet werden"
 
 #: pcbnew/tools/pcb_actions.cpp:982
 msgid "Reveal Plugin Folder in Finder"
@@ -52705,7 +52703,7 @@ msgstr "geerbt"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr "thermische Entlastungen"
+msgstr "Wärmefallen"
 
 #: pcbnew/zones.h:64
 msgid "solid"
@@ -52713,7 +52711,7 @@ msgstr "voll"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
-msgstr "thermische Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
