@@ -97,35 +97,46 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         l.cornerDistance = std::min( distFirst, distLast );
 
-        if( aPrimitives.FindVertex( origLast ) )
-        {
-            l.cornerIsLast = true;
-            l.leaderSegIndex = l.originalLine.SegmentCount() - 1;
-            l.cornerDistance = distLast;
-            l.isCorner = true;
+        bool takeFirst = false;
+        auto ilast = aPrimitives.FindVertex( origLast );
+        auto ifirst = aPrimitives.FindVertex( origFirst );
 
-            if( distLast <= thr )
+        if( ilast && ifirst )
+            takeFirst = distFirst < distLast;
+        else if( ilast )
+            takeFirst = false;
+        else if( ifirst )
+            takeFirst = true;
+
+        if( ifirst || ilast )
+        {
+            if( takeFirst )
             {
-                l.isStrict = true;
-                l.cornerDistance = 0;
+                l.cornerIsLast = false;
+                l.leaderSegIndex = 0;
+                l.cornerDistance = distFirst;
+                l.isCorner = true;
+
+                if( distFirst <= thr )
+                {
+                    l.isStrict = true;
+                    l.cornerDistance = 0;
+                }
+            }
+            else
+            {
+                l.cornerIsLast = true;
+                l.leaderSegIndex = l.originalLine.SegmentCount() - 1;
+                l.cornerDistance = distLast;
+                l.isCorner = true;
+
+                if( distLast <= thr )
+                {
+                    l.isStrict = true;
+                    l.cornerDistance = 0;
+                }
             }
         }
-
-        if( aPrimitives.FindVertex( origFirst ) )
-        {
-            l.cornerIsLast = false;
-            l.leaderSegIndex = 0;
-            l.cornerDistance = distFirst;
-            l.isCorner = true;
-
-            if( distFirst <= thr )
-            {
-                l.isStrict = true;
-                l.cornerDistance = 0;
-            }
-
-        }
-
 
         const auto& links = l.originalLine.Links();
 
@@ -707,7 +718,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
         if( m_dragMode == DM_CORNER )
         {
             // first, drag only the primary line
-        //    PNS_DBG( Dbg(), AddPoint, primaryDragged->CPoint( -1 ), YELLOW, 600000, wxT("mdrag-sec"));
+            PNS_DBG( Dbg(), AddPoint, primaryDragged->CPoint( -1 ), YELLOW, 600000, wxT("mdrag-sec"));
 
 	        lastPreDrag =  primaryPreDrag->CSegment( -1 );
             primaryDir = DIRECTION_45( lastPreDrag );
@@ -715,13 +726,14 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
             primaryDragged->SetSnapThreshhold( snapThreshold );
             primaryDragged->DragCorner( aP, primaryDragged->PointCount() - 1, false );
 
-            SEG lastPrimDrag = primaryDragged->CSegment( -1 );
-
-            if ( aVariant == 2 )
-                lastPrimDrag = lastPreDrag;
-
+         
             if( primaryDragged->SegmentCount() > 0 )
             {
+                SEG lastPrimDrag = primaryDragged->CSegment( -1 );
+
+                if ( aVariant == 2 )
+                    lastPrimDrag = lastPreDrag;
+
                 auto lastSeg = primaryDragged->CSegment( -1 );
                 if( DIRECTION_45( lastSeg ) != primaryDir )
                 {
@@ -730,14 +742,21 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         lastPrimDrag = lastPreDrag;
                     }
                 }
+            
+                perp = (lastPrimDrag.B - lastPrimDrag.A).Perpendicular();
+                primaryLastSegDir = DIRECTION_45( lastPrimDrag );
+
+                
+                PNS_DBG( Dbg(), AddItem, &(*primaryDragged), LIGHTGRAY, 100000, "prim" );
+                PNS_DBG( Dbg(), AddShape, SEG(lastPrimDrag.B, lastPrimDrag.B + perp), LIGHTGRAY, 100000, wxString::Format("prim-perp-seg") );
+            } else {
+                return false;
             }
 
-            perp = (lastPrimDrag.B - lastPrimDrag.A).Perpendicular();
 
-            primaryLastSegDir = DIRECTION_45( lastPrimDrag );
 
 //            PNS_DBG( Dbg(), AddShape, &ll, LIGHTBLUE, 200000, "par" );
-            PNS_DBG( Dbg(), AddItem, &(*primaryDragged), LIGHTGRAY, 100000, "prim" );
+
         }
         else
         {
@@ -795,6 +814,8 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 
                             LINE parallelDragged( l.preDragLine );
 
+                            PNS_DBG( Dbg(), AddPoint, projected, LIGHTGRAY, 100000, "dragged-c" );
+                            PNS_DBG( Dbg(), AddPoint, parallelDragged.CPoint( -1 ), LIGHTGRAY, 100000, wxString::Format("orig-c cil %d", l.cornerIsLast?1:0) );
 
                             parallelDragged.ClearLinks();
                             //m_lastNode->Remove( parallelDragged );
@@ -802,8 +823,8 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                             parallelDragged.DragCorner( projected, parallelDragged.PointCount() - 1,
                                                         false, primaryLastSegDir );
 
-                            //PNS_DBG( Dbg(), AddPoint, projected, LIGHTYELLOW, 600000,
-                            //       wxT( "l-end" ) );
+                            PNS_DBG( Dbg(), AddPoint, projected, LIGHTYELLOW, 600000,
+                                   wxT( "l-end" ) );
 
                             l.dragOK = true;
 
