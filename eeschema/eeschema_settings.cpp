@@ -518,17 +518,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths",
             &m_FieldEditorPanel.field_widths, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "field_editor.page",
-            &m_FieldEditorPanel.page, 0 ) );
-
     m_params.emplace_back( new PARAM<wxString>( "field_editor.export_filename",
             &m_FieldEditorPanel.export_filename, wxT( "" ) ) );
 
     m_params.emplace_back( new PARAM<int>( "field_editor.selection_mode",
             &m_FieldEditorPanel.selection_mode, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "field_editor.scope",
-            &m_FieldEditorPanel.scope, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "field_editor.view_controls_visible_columns",
             &m_FieldEditorPanel.view_controls_visible_columns, "0 1 2 3" ) );

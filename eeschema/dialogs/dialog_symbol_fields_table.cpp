@@ -342,8 +342,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
-    m_nbPages->SetSelection( cfg.page );
-
     m_viewControlsGrid->ShowHideColumns( cfg.view_controls_visible_columns );
     // Ensure at least one column is visible otherwise we cannot add columns
     // because there is no area to right click to get the menu managing the show/hide columns
@@ -401,7 +399,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 
     EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
-    cfg.page = m_nbPages->GetSelection();
     cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
 
     if( !cfg.sidebar_collapsed )
@@ -572,16 +569,10 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     SCH_SELECTION&      selection = selectionTool->GetSelection();
     SCH_SYMBOL*         symbol = nullptr;
 
-    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
+    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
 
-    switch( cfg.scope )
-    {
-    case SCOPE::SCOPE_ALL:             m_scope->SetSelection( 0 ); break;
-    case SCOPE::SCOPE_SHEET:           m_scope->SetSelection( 1 ); break;
-    case SCOPE::SCOPE_SHEET_RECURSIVE: m_scope->SetSelection( 2 ); break;
-    }
-
-    setScope( static_cast<SCOPE>( cfg.scope ) );
+    wxCommandEvent dummy;
+    OnScope( dummy );
 
     if( selection.GetSize() == 1 )
     {
@@ -909,10 +900,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::setScope( SCOPE aScope )
 {
-    EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
-
-    cfg.scope = aScope;
-
     m_dataModel->SetPath( m_parent->GetCurrentSheet() );
     m_dataModel->SetScope( aScope );
     m_dataModel->RebuildRows();

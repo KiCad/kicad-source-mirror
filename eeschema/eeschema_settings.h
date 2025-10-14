@@ -235,10 +235,8 @@ public:
     struct PANEL_SYMBOL_FIELDS_TABLE
     {
         std::map<std::string, int> field_widths;
-        int                        page;
         wxString                   export_filename;
         int                        selection_mode;
-        int                        scope;
         wxString                   view_controls_visible_columns;
         int                        sash_pos;
         bool                       sidebar_collapsed;
