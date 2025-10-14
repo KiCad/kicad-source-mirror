@@ -1670,6 +1670,19 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
+    // Adjust text drawn in an outline font to more closely mimic the positioning of
+    // SCH_FIELD text.
+    if( font->IsOutline() && aText->Type() == SCH_TEXT_T )
+    {
+        BOX2I    firstLineBBox = aText->GetTextBox( nullptr, 0 );
+        int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
+        int      adjust = KiROUND( sizeDiff * 0.35 );
+        VECTOR2I adjust_offset( 0, adjust );
+
+        RotatePoint( adjust_offset, aText->GetDrawRotation() );
+        text_offset += adjust_offset;
+    }
+
     if( drawingShadows && font->IsOutline() )
     {
         BOX2I bBox = aText->GetBoundingBox();
@@ -1775,22 +1788,8 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             attrs.m_Underlined = true;
         }
 
-        // Adjust text drawn in an outline font to more closely mimic the positioning of
-        // SCH_FIELD text.
-        if( font->IsOutline() && aText->Type() == SCH_TEXT_T )
-        {
-            BOX2I    firstLineBBox = aText->GetTextBox( nullptr, 0 );
-            int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
-            int      adjust = KiROUND( sizeDiff * 0.4 );
-            VECTOR2I adjust_offset( 0, - adjust );
-
-            RotatePoint( adjust_offset, aText->GetDrawRotation() );
-            text_offset += adjust_offset;
-        }
-
-        if( nonCached( aText )
-                && aText->RenderAsBitmap( m_gal->GetWorldScale() )
-                && !shownText.Contains( wxT( "\n" ) ) )
+        if( nonCached( aText ) && aText->RenderAsBitmap( m_gal->GetWorldScale() )
+                               && !shownText.Contains( wxT( "\n" ) ) )
         {
             bitmapText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs );
             const_cast<SCH_TEXT*>( aText )->SetFlags( IS_SHOWN_AS_BITMAP );
