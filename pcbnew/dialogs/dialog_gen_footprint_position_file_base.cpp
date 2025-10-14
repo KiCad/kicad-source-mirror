@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-75-g9786507b-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,7 +56,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_formatLabel->Wrap( -1 );
 	fgSizer1->Add( m_formatLabel, 0, wxRIGHT, 5 );
 
-	wxString m_formatCtrlChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
+	wxString m_formatCtrlChoices[] = { _("Plain text"), _("CSV"), _("Gerber X3") };
 	int m_formatCtrlNChoices = sizeof( m_formatCtrlChoices ) / sizeof( wxString );
 	m_formatCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_formatCtrlNChoices, m_formatCtrlChoices, 0 );
 	m_formatCtrl->SetSelection( 0 );
