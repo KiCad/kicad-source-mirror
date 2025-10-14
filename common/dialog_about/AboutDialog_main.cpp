@@ -910,6 +910,9 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
                                          MODELS_3D_CONTRIBUTION,
                                          wxS( "https://github.com/easyw" ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitHub contributors" ),
+                                         MODELS_3D_CONTRIBUTION,
+                                         wxS( "https://github.com/easyw/kicad-3d-models-in-freecad/graphs/contributors" ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
                                          MODELS_3D_CONTRIBUTION,
                                          wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master" ) ) );
