@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-10-15 03:07+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -37441,15 +37441,15 @@ msgstr "Überschreibungen für Wärmefallen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:889
 msgid "Relief gap:"
-msgstr "Entlastungsspalt:"
+msgstr "Spaltbreite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:900
 msgid "Spoke width:"
-msgstr "Speichenbreite:"
+msgstr "Stegbreite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:911
 msgid "Spoke angle:"
-msgstr "Speichenwinkel:"
+msgstr "Stegwinkel:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
@@ -41662,7 +41662,7 @@ msgstr "Prüfe %s Wärmefallen-Stegbreite: %s."
 #: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Prüfe %s Mindestanzahl Speichen: %s."
+msgstr "Prüfe %s min. Steganzahl: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
@@ -43028,12 +43028,12 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:222
 #, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(Lage %s; %d Speichen zu isolierter Insel verbunden)"
+msgstr "(Lage %s; %d Stege zu isolierter Insel verbunden)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:229
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(Lage %s; %s min. Speichenanzahl %d; tatsächlich %d)"
+msgstr "(Lage %s; %s min. Steganzahl %d; tatsächlich %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:254
 msgid "Checking thermal reliefs..."
@@ -48627,7 +48627,7 @@ msgstr "Ermittlung der Wärmefallen-Stegbreite für:"
 #: pcbnew/tools/board_inspection_tool.cpp:857
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "Ermittelte Speichenbreite: %s."
+msgstr "Ermittelte Stegbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Thermal-relief min spoke count resolution for:"
@@ -48636,7 +48636,7 @@ msgstr "Ermittlung der min. Wärmefallen-Steganzahl für:"
 #: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Ermittelte Mindestanzahl von Speichen: %d."
+msgstr "Ermittelte min. Steganzahl: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:880
 #: pcbnew/tools/board_inspection_tool.cpp:928
