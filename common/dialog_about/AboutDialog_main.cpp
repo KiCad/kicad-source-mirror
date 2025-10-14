@@ -910,6 +910,9 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
                                          MODELS_3D_CONTRIBUTION,
                                          wxS( "https://github.com/easyw" ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Hasan Yavuz Özderya" ),
+                                         MODELS_3D_CONTRIBUTION,
+                                         wxS( "https://bitbucket.org/hyOzd/freecad-macros/src/master/" ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitHub contributors" ),
                                          MODELS_3D_CONTRIBUTION,
                                          wxS( "https://github.com/easyw/kicad-3d-models-in-freecad/graphs/contributors" ) ) );
