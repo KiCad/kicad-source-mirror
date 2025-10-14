@@ -174,7 +174,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         // Set first line:;
         snprintf( line, sizeof(line), "Ref%cVal%cPackage%cPosX%cPosY%cRot%cSide\n",
-                 csv_sep, csv_sep, csv_sep, csv_sep, csv_sep, csv_sep );
+                  csv_sep, csv_sep, csv_sep, csv_sep, csv_sep, csv_sep );
 
         buffer += line;
 
@@ -190,28 +190,28 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             if( layer == B_Cu && m_negateBottomX )
                 footprint_pos.x = - footprint_pos.x;
 
-            wxString tmp = wxT( "\"" ) + list[ii].m_Reference;
-            tmp << wxT( "\"" ) << csv_sep;
-            tmp << wxT( "\"" ) << list[ii].m_Value;
-            tmp << wxT( "\"" ) << csv_sep;
-            tmp << wxT( "\"" ) << list[ii].m_Footprint->GetFPID().GetLibItemName().wx_str();
-            tmp << wxT( "\"" ) << csv_sep;
+            wxLine = wxT( "\"" ) + list[ii].m_Reference;
+            wxLine << wxT( "\"" ) << csv_sep;
+            wxLine << wxT( "\"" ) << list[ii].m_Value;
+            wxLine << wxT( "\"" ) << csv_sep;
+            wxLine << wxT( "\"" ) << list[ii].m_Footprint->GetFPID().GetLibItemName().wx_str();
+            wxLine << wxT( "\"" ) << csv_sep;
 
-            tmp << wxString::Format( wxT( "%f%c%f%c%f" ),
-                                     footprint_pos.x * conv_unit,
-                                     csv_sep,
-                                     // Keep the Y axis oriented from bottom to top,
-                                     // ( change y coordinate sign )
-                                     -footprint_pos.y * conv_unit,
-                                     csv_sep,
-                                     list[ii].m_Footprint->GetOrientation().AsDegrees() );
-            tmp << csv_sep;
+            wxLine << wxString::Format( wxT( "%f%c%f%c%f" ),
+                                        footprint_pos.x * conv_unit,
+                                        csv_sep,
+                                        // Keep the Y axis oriented from bottom to top,
+                                        // ( change y coordinate sign )
+                                        -footprint_pos.y * conv_unit,
+                                        csv_sep,
+                                        list[ii].m_Footprint->GetOrientation().AsDegrees() );
+            wxLine << csv_sep;
 
-            tmp << ( (layer == F_Cu ) ? PLACE_FILE_EXPORTER::GetFrontSideName()
-                                      : PLACE_FILE_EXPORTER::GetBackSideName() );
-            tmp << '\n';
+            wxLine << ( (layer == F_Cu ) ? PLACE_FILE_EXPORTER::GetFrontSideName()
+                                         : PLACE_FILE_EXPORTER::GetBackSideName() );
+            wxLine << '\n';
 
-            buffer += TO_UTF8( tmp );
+            buffer += TO_UTF8( wxLine );
         }
     }
     else
@@ -230,9 +230,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         buffer += "## Side : ";
 
         if( m_side == PCB_BACK_SIDE )
-            buffer += GetBackSideName().c_str();
+            buffer += GetBackSideName();
         else if( m_side == PCB_FRONT_SIDE )
-            buffer += GetFrontSideName().c_str();
+            buffer += GetFrontSideName();
         else if( m_side == PCB_BOTH_SIDES )
             buffer += "All";
         else
@@ -241,9 +241,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         buffer += "\n";
 
         snprintf( line, sizeof(line), "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
-                  int(lenRefText), "# Ref",
-                  int(lenValText), "Val",
-                  int(lenPkgText), "Package",
+                  lenRefText, "# Ref",
+                  lenValText, "Val",
+                  lenPkgText, "Package",
                   "PosX", "PosY", "Rot", "Side" );
         buffer += line;
 
@@ -265,10 +265,15 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             ref.Replace( wxT( " " ), wxT( "_" ) );
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
-            wxLine.Printf( "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n", lenRefText, ref, lenValText, val, lenPkgText,
-                         pkg, footprint_pos.x * conv_unit, -footprint_pos.y * conv_unit,
-                         list[ii].m_Footprint->GetOrientation().AsDegrees(),
-                         ( layer == F_Cu ) ? GetFrontSideName() : GetBackSideName() );
+            wxLine.Printf( wxT( "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n" ),
+                           lenRefText, ref,
+                           lenValText, val,
+                           lenPkgText, pkg,
+                           footprint_pos.x * conv_unit,
+                           // Keep the coordinates in the first quadrant, (i.e. change y sign)
+                           -footprint_pos.y * conv_unit,
+                           list[ii].m_Footprint->GetOrientation().AsDegrees(),
+                           ( layer == F_Cu ) ? GetFrontSideName() : GetBackSideName() );
             buffer += TO_UTF8( wxLine );
         }
 
