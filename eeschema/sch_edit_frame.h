@@ -65,6 +65,8 @@ class HIERARCHY_PANE;
 class API_HANDLER_SCH;
 class DIALOG_SCHEMATIC_SETUP;
 class PROGRESS_REPORTER;
+class wxSearchCtrl;
+class BITMAP_BUTTON;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -874,6 +876,7 @@ public:
     const SCH_ITEM* SelectNextPrevNetNavigatorItem( bool aNext );
 
     void ToggleNetNavigator();
+    void FindNetInInspector( const wxString& aNetName );
 
     PLUGIN_ACTION_SCOPE PluginActionScope() const override
     {
@@ -990,7 +993,14 @@ private:
 
     const wxString& getAutoSaveFileName() const;
 
-    wxTreeCtrl* createHighlightedNetNavigator();
+    wxWindow* createHighlightedNetNavigator();
+
+    void onNetNavigatorFilterChanged( wxCommandEvent& aEvent );
+    void onNetNavigatorKey( wxKeyEvent& aEvent );
+    void onNetNavigatorItemMenu( wxTreeEvent& aEvent );
+    void onNetNavigatorContextMenu( wxContextMenuEvent& aEvent );
+    void onNetNavigatorMenuCommand( wxCommandEvent& aEvent );
+    void showNetNavigatorMenu( const wxTreeItemId& aItem );
 
     void onNetNavigatorSelection( wxTreeEvent& aEvent );
 
@@ -1005,6 +1015,15 @@ private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
     friend class SCH_EDITOR_CONTROL;
+
+    enum
+    {
+        ID_NET_NAVIGATOR_EXPAND_ALL = wxID_HIGHEST + 400,
+        ID_NET_NAVIGATOR_COLLAPSE_ALL,
+        ID_NET_NAVIGATOR_FIND_IN_INSPECTOR,
+        ID_NET_NAVIGATOR_SEARCH_WILDCARD,
+        ID_NET_NAVIGATOR_SEARCH_REGEX
+    };
 
     SCHEMATIC*                  m_schematic;          ///< The currently loaded schematic
     wxString                    m_highlightedConn;    ///< The highlighted net or bus or empty string.
@@ -1025,6 +1044,10 @@ private:
 
 
     wxTreeCtrl*                 m_netNavigator;
+    wxSearchCtrl*               m_netNavigatorFilter;
+    BITMAP_BUTTON*              m_netNavigatorMenuButton;
+    wxString                    m_netNavigatorFilterValue;
+    wxString                    m_netNavigatorMenuNetName;
 
 	bool                        m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
     // Cross-probe flashing support

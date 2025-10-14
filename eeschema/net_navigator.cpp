@@ -21,10 +21,12 @@
  */
 
 #include <wx/log.h>
+#include <wx/srchctrl.h>
 #include <wx/wupdlock.h>
 #include <core/profile.h>
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
+#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <sch_bus_entry.h>
 #include <sch_line.h>
@@ -36,6 +38,12 @@
 #include <connection_graph.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/sch_actions.h>
+#include <mail_type.h>
+#include <wx/filename.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/clntdata.h>
+#include <regex>
+#include <eeschema_settings.h>
 
 
 static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
@@ -302,11 +310,50 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     if( !m_netNavigator->IsShown() )
         return;
 
+    if( m_netNavigatorFilter )
+        m_netNavigatorFilter->Enable( m_highlightedConn.IsEmpty() );
+
     bool   singleSheetSchematic = m_schematic->Hierarchy().size() == 1;
     size_t nodeCnt = 0;
 
     wxWindowUpdateLocker updateLock( m_netNavigator );
     PROF_TIMER           timer;
+
+    wxString filter = m_highlightedConn.IsEmpty() ? m_netNavigatorFilterValue : wxString();
+
+    // Determine search mode from settings
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+    bool useWildcard = cfg ? cfg->m_AuiPanels.net_nav_search_mode_wildcard : true;
+
+    // For wildcard mode, wrap filter with wildcards for substring matching by default
+    // unless user has already specified wildcards
+    wxString globFilter;
+    std::unique_ptr<std::regex> regexFilter;
+
+    if( !filter.IsEmpty() )
+    {
+        if( useWildcard )
+        {
+            globFilter = filter;
+            if( !globFilter.Contains( wxT( "*" ) ) && !globFilter.Contains( wxT( "?" ) ) )
+                globFilter = wxT( "*" ) + globFilter + wxT( "*" );
+        }
+        else
+        {
+            // Regex mode - compile the regex pattern
+            try
+            {
+                regexFilter = std::make_unique<std::regex>(
+                        filter.ToStdString(),
+                        std::regex_constants::icase | std::regex_constants::ECMAScript );
+            }
+            catch( const std::regex_error& )
+            {
+                // Invalid regex - no filtering
+                regexFilter.reset();
+            }
+        }
+    }
 
     if( m_highlightedConn.IsEmpty() )
     {
@@ -323,12 +370,39 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             if( net.first.Name.IsEmpty() )
                 continue;
 
-            nodeCnt++;
-            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, UnescapeString( net.first.Name ) );
-            MakeNetNavigatorNode( net.first.Name, netId, aSelection, singleSheetSchematic );
-        }
+            wxString displayName = UnescapeString( net.first.Name );
 
-        m_netNavigator->Expand( rootId );
+            // Apply filter based on mode
+            if( !filter.IsEmpty() )
+            {
+                bool matches = false;
+
+                if( useWildcard && !globFilter.IsEmpty() )
+                {
+                    // Use glob-based matching (supports * and ? wildcards), case-insensitive
+                    matches = WildCompareString( globFilter, displayName, false );
+                }
+                else if( !useWildcard && regexFilter )
+                {
+                    // Use regex matching
+                    try
+                    {
+                        matches = std::regex_search( displayName.ToStdString(), *regexFilter );
+                    }
+                    catch( const std::regex_error& )
+                    {
+                        matches = false;
+                    }
+                }
+
+                if( !matches )
+                    continue;
+            }
+
+            nodeCnt++;
+            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, displayName, -1, -1 );
+            MakeNetNavigatorNode( net.first.Name, netId, aSelection, singleSheetSchematic );
+        }        m_netNavigator->Expand( rootId );
     }
     else if( !m_netNavigator->IsEmpty() )
     {
@@ -340,7 +414,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             nodeCnt++;
 
-            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
+            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
         }
@@ -356,7 +430,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             m_netNavigator->DeleteAllItems();
             nodeCnt++;
 
-            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
+            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId, itemData, singleSheetSchematic );
         }
@@ -365,7 +439,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     {
         nodeCnt++;
 
-        wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
+        wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
         MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
     }
@@ -628,6 +702,32 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
 
         RefreshNetNavigator( itemData );
     }
+}
+
+
+void SCH_EDIT_FRAME::FindNetInInspector( const wxString& aNetName )
+{
+    if( !m_netNavigator || aNetName.IsEmpty() )
+        return;
+
+    // Ensure the net navigator is shown
+    wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
+
+    if( !netNavigatorPane.IsShown() )
+        ToggleNetNavigator();
+
+    // Clear any net highlights
+    m_highlightedConn = wxEmptyString;
+    GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
+
+    // Set the search text to the aNetName
+    if( m_netNavigatorFilter )
+        m_netNavigatorFilter->SetValue( aNetName );
+
+    m_netNavigatorFilterValue = aNetName;
+
+    // Refresh the tree
+    RefreshNetNavigator();
 }
 
 

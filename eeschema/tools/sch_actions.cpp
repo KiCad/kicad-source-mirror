@@ -868,6 +868,12 @@ TOOL_ACTION SCH_ACTIONS::assignNetclass( TOOL_ACTION_ARGS()
         .Tooltip( _( "Assign a netclass to nets matching a pattern" ) )
         .Icon( BITMAPS::netlist ) );
 
+TOOL_ACTION SCH_ACTIONS::findNetInInspector( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.findNetInInspector" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Find in Net Navigator" ) )
+        .Tooltip( _( "Locate the selected net in the net navigator" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::cycleBodyStyle( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.toggleDeMorgan" )
         .Scope( AS_GLOBAL )

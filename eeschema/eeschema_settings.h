@@ -104,6 +104,7 @@ public:
         wxSize net_nav_panel_float_size;
         bool float_net_nav_panel;
         bool show_net_nav_panel;
+        bool net_nav_search_mode_wildcard;  // true = wildcard search, false = regex search
         int  properties_panel_width;
         float properties_splitter;
         bool show_properties;

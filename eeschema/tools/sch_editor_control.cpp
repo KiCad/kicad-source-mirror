@@ -1054,6 +1054,45 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::FindNetInInspector( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+
+    if( !selectionTool )
+        return 0;
+
+    wxString netName;
+
+    for( EDA_ITEM* item : selectionTool->GetSelection() )
+    {
+        if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+        {
+            if( SCH_CONNECTION* conn = schItem->Connection() )
+            {
+                if( !conn->GetNetName().IsEmpty() )
+                {
+                    netName = conn->GetNetName();
+                    break;
+                }
+            }
+        }
+    }
+
+    if( netName.IsEmpty() )
+        netName = m_frame->GetHighlightedConnection();
+
+    if( netName.IsEmpty() )
+    {
+        m_frame->ShowInfoBarError( _( "No connected net selected." ) );
+        return 0;
+    }
+
+    m_frame->FindNetInInspector( netName );
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
     wxCHECK( m_frame, 0 );
@@ -3054,6 +3093,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting,   SCH_ACTIONS::updateNetHighlighting.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::AssignNetclass,          SCH_ACTIONS::assignNetclass.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindNetInInspector,      SCH_ACTIONS::findNetInInspector.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::Undo,                    ACTIONS::undo.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Redo,                    ACTIONS::redo.MakeEvent() );

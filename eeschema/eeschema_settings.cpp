@@ -298,6 +298,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxSize>( "aui.net_nav_panel_float_size",
             &m_AuiPanels.net_nav_panel_float_size, wxSize( 200, 200 ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.net_nav_search_mode_wildcard",
+            &m_AuiPanels.net_nav_search_mode_wildcard, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, true ) );
 

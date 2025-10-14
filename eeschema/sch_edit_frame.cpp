@@ -34,6 +34,12 @@
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <widgets/sch_design_block_pane.h>
+#include <wx/srchctrl.h>
+#include <mail_type.h>
+#include <wx/clntdata.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/menu.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -92,6 +98,7 @@
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/hierarchy_pane.h>
+#include <widgets/bitmap_button.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
 #include <wildcards_and_files_ext.h>
@@ -148,6 +155,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_diffSymbolDialog( nullptr ),
         m_symbolFieldsTableDialog( nullptr ),
         m_netNavigator( nullptr ),
+        m_netNavigatorFilter( nullptr ),
+        m_netNavigatorFilterValue(),
+        m_netNavigatorMenuNetName(),
         m_highlightedConnChanged( false ),
         m_designBlocksPane( nullptr )
 {
@@ -2372,12 +2382,66 @@ void SCH_EDIT_FRAME::RemoveSchematicChangeListener( wxEvtHandler* aListener )
 }
 
 
-wxTreeCtrl* SCH_EDIT_FRAME::createHighlightedNetNavigator()
+wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 {
-    m_netNavigator = new wxTreeCtrl( this, wxID_ANY, wxPoint( 0, 0 ), FromDIP( wxSize( 160, 250 ) ),
-                                     wxTR_DEFAULT_STYLE | wxNO_BORDER );
+    wxPanel* panel = new wxPanel( this );
 
-    return m_netNavigator;
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    // Create horizontal sizer for search control and gear button
+    wxBoxSizer* searchSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_netNavigatorFilter = new wxSearchCtrl( panel, wxID_ANY );
+    m_netNavigatorFilter->SetDescriptiveText( _( "Filter nets" ) );
+    m_netNavigatorFilter->ShowCancelButton( false );
+    searchSizer->Add( m_netNavigatorFilter, 1, wxEXPAND | wxRIGHT, FromDIP( 2 ) );
+
+    m_netNavigatorMenuButton = new BITMAP_BUTTON( panel, wxID_ANY );
+    m_netNavigatorMenuButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+    m_netNavigatorMenuButton->SetPadding( FromDIP( 2 ) );
+    searchSizer->Add( m_netNavigatorMenuButton, 0, wxALIGN_CENTER_VERTICAL );
+
+    sizer->Add( searchSizer, 0, wxEXPAND | wxALL, FromDIP( 2 ) );
+
+    m_netNavigator = new wxTreeCtrl( panel, wxID_ANY, wxPoint( 0, 0 ), FromDIP( wxSize( 160, 250 ) ),
+                                     wxTR_DEFAULT_STYLE | wxNO_BORDER );
+    sizer->Add( m_netNavigator, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP( 2 ) );
+
+    panel->SetSizer( sizer );
+
+    m_netNavigatorFilter->Bind( wxEVT_COMMAND_TEXT_UPDATED,
+                                &SCH_EDIT_FRAME::onNetNavigatorFilterChanged, this );
+    m_netNavigatorFilter->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
+    m_netNavigator->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
+    m_netNavigator->Bind( wxEVT_TREE_ITEM_MENU, &SCH_EDIT_FRAME::onNetNavigatorItemMenu, this );
+    m_netNavigator->Bind( wxEVT_CONTEXT_MENU, &SCH_EDIT_FRAME::onNetNavigatorContextMenu, this );
+
+    m_netNavigatorMenuButton->Bind( wxEVT_LEFT_DOWN,
+            [this]( wxMouseEvent& event )
+            {
+                wxMenu menu;
+                wxMenuItem* wildcardItem = menu.AppendRadioItem( ID_NET_NAVIGATOR_SEARCH_WILDCARD,
+                                                                  _( "Wildcard Search" ) );
+                wxMenuItem* regexItem = menu.AppendRadioItem( ID_NET_NAVIGATOR_SEARCH_REGEX,
+                                                              _( "Regex Search" ) );
+
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+
+                if( cfg && cfg->m_AuiPanels.net_nav_search_mode_wildcard )
+                    wildcardItem->Check();
+                else
+                    regexItem->Check();
+
+                PopupMenu( &menu );
+            } );
+
+    Bind( wxEVT_MENU, &SCH_EDIT_FRAME::onNetNavigatorMenuCommand, this, ID_NET_NAVIGATOR_EXPAND_ALL );
+    Bind( wxEVT_MENU, &SCH_EDIT_FRAME::onNetNavigatorMenuCommand, this, ID_NET_NAVIGATOR_COLLAPSE_ALL );
+    Bind( wxEVT_MENU, &SCH_EDIT_FRAME::onNetNavigatorMenuCommand, this, ID_NET_NAVIGATOR_FIND_IN_INSPECTOR );
+    Bind( wxEVT_MENU, &SCH_EDIT_FRAME::onNetNavigatorMenuCommand, this, ID_NET_NAVIGATOR_SEARCH_WILDCARD );
+    Bind( wxEVT_MENU, &SCH_EDIT_FRAME::onNetNavigatorMenuCommand, this, ID_NET_NAVIGATOR_SEARCH_REGEX );
+
+    return panel;
 }
 
 
@@ -2415,6 +2479,204 @@ void SCH_EDIT_FRAME::unitsChangeRefresh()
     }
 
     UpdateProperties();
+}
+
+
+void SCH_EDIT_FRAME::onNetNavigatorFilterChanged( wxCommandEvent& aEvent )
+{
+    if( !m_netNavigator )
+        return;
+
+    wxString newFilter = m_netNavigatorFilter ? m_netNavigatorFilter->GetValue() : wxString();
+
+    if( newFilter == m_netNavigatorFilterValue )
+        return;
+
+    m_netNavigatorFilterValue = newFilter;
+
+    NET_NAVIGATOR_ITEM_DATA selectionData;
+    NET_NAVIGATOR_ITEM_DATA* selectionPtr = nullptr;
+
+    wxTreeItemId selection = m_netNavigator->GetSelection();
+
+    if( selection.IsOk() )
+    {
+        if( NET_NAVIGATOR_ITEM_DATA* tmp =
+                    dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) ) )
+        {
+            selectionData = *tmp;
+            selectionPtr = &selectionData;
+        }
+    }
+
+    RefreshNetNavigator( selectionPtr );
+
+    aEvent.Skip();
+}
+
+
+void SCH_EDIT_FRAME::onNetNavigatorKey( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        // Clear the search string and refresh
+        if( m_netNavigatorFilter )
+            m_netNavigatorFilter->SetValue( wxEmptyString );
+
+        m_netNavigatorFilterValue = wxEmptyString;
+
+        RefreshNetNavigator();
+
+        // Don't skip the event - we handled it
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+
+void SCH_EDIT_FRAME::onNetNavigatorItemMenu( wxTreeEvent& aEvent )
+{
+    showNetNavigatorMenu( aEvent.GetItem() );
+}
+
+
+void SCH_EDIT_FRAME::onNetNavigatorContextMenu( wxContextMenuEvent& aEvent )
+{
+    if( !m_netNavigator )
+        return;
+
+    wxPoint screenPos = aEvent.GetPosition();
+
+    if( screenPos == wxDefaultPosition )
+        screenPos = wxGetMousePosition();
+
+    wxPoint clientPos = m_netNavigator->ScreenToClient( screenPos );
+    int     flags = 0;
+    wxTreeItemId item = m_netNavigator->HitTest( clientPos, flags );
+
+    showNetNavigatorMenu( item );
+}
+
+
+void SCH_EDIT_FRAME::showNetNavigatorMenu( const wxTreeItemId& aItem )
+{
+    if( !m_netNavigator )
+        return;
+
+    wxMenu menu;
+
+    menu.Append( ID_NET_NAVIGATOR_EXPAND_ALL, _( "Expand All" ) );
+    menu.Append( ID_NET_NAVIGATOR_COLLAPSE_ALL, _( "Collapse All" ) );
+
+    wxMenuItem* findInInspector = new wxMenuItem( &menu, ID_NET_NAVIGATOR_FIND_IN_INSPECTOR,
+                                                  _( "Find in Net Inspector" ) );
+    menu.Append( findInInspector );
+
+    wxString netName;
+
+    if( aItem.IsOk() )
+    {
+        wxTreeItemId netItem = aItem;
+
+        if( m_netNavigator->GetItemParent( netItem ) != m_netNavigator->GetRootItem() )
+        {
+            wxTreeItemId parent = m_netNavigator->GetItemParent( netItem );
+
+            while( parent.IsOk() && parent != m_netNavigator->GetRootItem() )
+            {
+                netItem = parent;
+                parent = m_netNavigator->GetItemParent( netItem );
+            }
+
+            if( parent == m_netNavigator->GetRootItem() )
+            {
+                if( wxStringClientData* data =
+                            dynamic_cast<wxStringClientData*>( m_netNavigator->GetItemData( netItem ) ) )
+                {
+                    netName = data->GetData();
+                }
+            }
+        }
+        else if( m_netNavigator->GetItemParent( netItem ) == m_netNavigator->GetRootItem() )
+        {
+            if( wxStringClientData* data =
+                        dynamic_cast<wxStringClientData*>( m_netNavigator->GetItemData( netItem ) ) )
+            {
+                netName = data->GetData();
+            }
+        }
+        else if( !m_highlightedConn.IsEmpty() && netItem == m_netNavigator->GetRootItem() )
+        {
+            netName = m_highlightedConn;
+        }
+    }
+    else if( !m_highlightedConn.IsEmpty() && m_netNavigator->GetRootItem().IsOk() )
+    {
+        netName = m_highlightedConn;
+    }
+
+    if( netName.IsEmpty() )
+    {
+        findInInspector->Enable( false );
+        m_netNavigatorMenuNetName.clear();
+    }
+    else
+    {
+        m_netNavigatorMenuNetName = netName;
+    }
+
+    PopupMenu( &menu );
+}
+
+
+void SCH_EDIT_FRAME::onNetNavigatorMenuCommand( wxCommandEvent& aEvent )
+{
+    if( !m_netNavigator )
+        return;
+
+    switch( aEvent.GetId() )
+    {
+    case ID_NET_NAVIGATOR_EXPAND_ALL:
+        m_netNavigator->ExpandAll();
+        break;
+
+    case ID_NET_NAVIGATOR_COLLAPSE_ALL:
+        m_netNavigator->CollapseAll();
+
+        if( m_netNavigator->GetRootItem().IsOk() )
+            m_netNavigator->Expand( m_netNavigator->GetRootItem() );
+        break;
+
+    case ID_NET_NAVIGATOR_FIND_IN_INSPECTOR:
+        if( !m_netNavigatorMenuNetName.IsEmpty() )
+            FindNetInInspector( m_netNavigatorMenuNetName );
+        break;
+
+    case ID_NET_NAVIGATOR_SEARCH_WILDCARD:
+    case ID_NET_NAVIGATOR_SEARCH_REGEX:
+    {
+        EESCHEMA_SETTINGS* cfg = eeconfig();
+        if( cfg )
+        {
+            cfg->m_AuiPanels.net_nav_search_mode_wildcard =
+                    ( aEvent.GetId() == ID_NET_NAVIGATOR_SEARCH_WILDCARD );
+
+            // Refresh the navigator with current filter
+            RefreshNetNavigator();
+        }
+        break;
+    }
+
+    default:
+        aEvent.Skip();
+        return;
+    }
+
+    m_netNavigatorMenuNetName.clear();
+
+    aEvent.Skip( false );
 }
 
 
