@@ -40,8 +40,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
-"PO-Revision-Date: 2025-09-17 02:02+0000\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"PO-Revision-Date: 2025-10-15 03:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -7385,7 +7385,7 @@ msgstr "API 响应: %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "API 响应: %s"
 
@@ -9218,9 +9218,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "不再将库保持在列表顶部"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "库表错误"
+msgstr "库表"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -11838,7 +11837,7 @@ msgstr "%d 个符号需要批注。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:478
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- 用户取消 ERC。<br><br>"
+msgstr "-------- 用户已取消 ERC。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:480 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Done.<br><br>"
@@ -13026,34 +13025,28 @@ msgid "Pin Table"
 msgstr "引脚属性表"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "转换符号"
+msgstr "还原符号"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "是否放弃变更, 并将 '%s' 重置为上一保存版本?"
+msgstr "将符号还原回上次保存状态"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "铜皮间距"
+msgstr "清除单元格"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "清除最近的钻孔文件"
+msgstr "清除单元格值"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "创建新符号"
+msgstr "创建派生符号"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "从现有符号派生, 创建一个新符号"
+msgstr "从选中符号创建一个新的派生符号"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13074,9 +13067,9 @@ msgid "Show datasheet in browser"
 msgstr "在浏览器中显示数据书册"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "符号库"
+msgstr "符号库字段: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13089,30 +13082,29 @@ msgid "Group By"
 msgstr "分组"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "符号 '%s' 在库中 '%s' 找不到。"
+msgstr "在库中 %s 找不到符号。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s: %s"
-msgstr "库加载出错:"
+msgstr "加载符号 %s 出错: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error accessing library %s.\n"
 "\n"
 "%s"
 msgstr ""
-"加载符号库 %s 时出现错误。\n"
+"访问符号库 %s 时出错。\n"
 "\n"
-"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "更新符号以使原理图符号与库中的符号同步"
+msgstr "无法从库中加载任何符号。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13144,9 +13136,9 @@ msgid "Rename Field"
 msgstr "重命名字段"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "名称为 %s 的字段已存在。"
+msgstr "字段名 '%s' 已存在。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13155,7 +13147,6 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "确定移除字段 '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
 msgstr "从 BOM 中移除"
 
@@ -13175,14 +13166,12 @@ msgid "Power Symbol"
 msgstr "电源符号"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "电源符号"
+msgstr "局部电源符号"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "库编辑器"
+msgstr "库字段编辑器"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -13306,9 +13295,9 @@ msgid "Edit Symbol Properties"
 msgstr "编辑符号属性"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "文件已经被打开。"
+msgstr "该字段继承自 '%s'。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -19329,15 +19318,13 @@ msgstr "未知 SCH_FILE_T 值: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:634
-#, fuzzy
 msgid "All units"
-msgstr "所有项目"
+msgstr "所有单元"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
 #: eeschema/sch_item.cpp:656
-#, fuzzy
 msgid "All body styles"
-msgstr "作用于符号的所有图形样式"
+msgstr "所有主体样式"
 
 #: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
@@ -24106,9 +24093,8 @@ msgid "SVG File Name"
 msgstr "SVG 文件名称"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "库"
+msgstr "库字段"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -41261,7 +41247,7 @@ msgstr "%s 存在 '填充区挖空设置' 重写。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:283
 #, c-format
 msgid "%s pad to die length differs."
-msgstr "%s 个 '焊盘到 Die 的长度' 差异。"
+msgstr "%s 个 'Pad->Die 的长度' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -45393,9 +45379,8 @@ msgid "Saving file"
 msgstr "保存文件"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3278
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "无法将文件保存到缓存"
+msgstr "无法将 IPC-2581 数据保存到缓存。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
