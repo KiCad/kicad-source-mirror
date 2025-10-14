@@ -58,6 +58,7 @@
 #include <sch_table.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
+#include <trace_helpers.h>
 #include <view/view.h>
 #include <kiface_base.h>
 #include <default_values.h>

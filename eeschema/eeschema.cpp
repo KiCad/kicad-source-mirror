@@ -49,6 +49,7 @@
 #include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
+#include <trace_helpers.h>
 #include <kiface_ids.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <wx/ffile.h>

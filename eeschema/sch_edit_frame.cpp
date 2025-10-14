@@ -94,6 +94,7 @@
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
 #include <tools/sch_find_replace_tool.h>
+#include <trace_helpers.h>
 #include <unordered_set>
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
