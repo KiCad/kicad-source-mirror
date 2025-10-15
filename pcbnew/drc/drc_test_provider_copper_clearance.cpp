@@ -913,20 +913,20 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     }
 
     auto doTestHole =
-            [&]( BOARD_ITEM* item, SHAPE* shape, BOARD_ITEM* otherItem, SHAPE* otherShape, int clearance )
+            [&]( BOARD_ITEM* item, SHAPE* shape, BOARD_ITEM* otherItem, SHAPE* aOtherShape, int aClearance )
             {
-                if( shape->Collide( otherShape, sub_e( clearance ), &actual, &pos ) )
+                if( shape->Collide( aOtherShape, sub_e( aClearance ), &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
                     wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                               constraint.GetName(),
-                                              clearance,
+                                              aClearance,
                                               actual );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item, otherItem );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
-                    reportTwoShapeGeometry( drcItem, pos, shape, otherShape, aLayer, actual );
+                    reportTwoShapeGeometry( drcItem, pos, shape, aOtherShape, aLayer, actual );
                     has_error = true;
                     testHoles = false;  // No need for multiple violations
                 }
