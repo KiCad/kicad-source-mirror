@@ -30,6 +30,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_screen.h>
+#include <schematic.h>
 
 #include <algorithm>
 #include <map>
@@ -37,10 +38,14 @@
 
 void boost_test_update_symbol_connectivity()
 {
+    // Create schematic
+    SCHEMATIC schematic( nullptr );
+    
     // Create root sheet and screen
     SCH_SCREEN* screen = new SCH_SCREEN( nullptr );
     SCH_SHEET*  sheet = new SCH_SHEET( nullptr, VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) );
     sheet->SetScreen( screen );
+    sheet->SetParent( &schematic );
 
     SCH_SHEET_PATH sheetPath;
     sheetPath.push_back( sheet );
@@ -140,10 +145,14 @@ void boost_test_update_generic_connectivity()
 {
     std::map<VECTOR2I, std::vector<SCH_ITEM*>> cmap;
 
+    // Create schematic
+    SCHEMATIC schematic( nullptr );
+    
     // Create root sheet and screen
     SCH_SCREEN* screen = new SCH_SCREEN( nullptr );
     SCH_SHEET*  sheet = new SCH_SHEET( nullptr, VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) );
     sheet->SetScreen( screen );
+    sheet->SetParent( &schematic );
 
     SCH_SHEET_PATH sheetPath;
     sheetPath.push_back( sheet );

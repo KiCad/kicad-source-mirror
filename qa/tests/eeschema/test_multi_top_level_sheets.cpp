@@ -53,13 +53,16 @@ BOOST_AUTO_TEST_CASE( TestAddTopLevelSheet )
     SCH_SHEET* virtualRoot = new SCH_SHEET();
     const_cast<KIID&>( virtualRoot->m_Uuid ) = niluuid;
     virtualRoot->SetScreen( nullptr );
+    virtualRoot->SetParent( &schematic );
     schematic.SetRoot( virtualRoot );
 
     // Create and add a top-level sheet
     SCH_SHEET* sheet1 = new SCH_SHEET();
     sheet1->SetName( "Sheet1" );
     SCH_SCREEN* screen1 = new SCH_SCREEN();
+    screen1->SetParent( &schematic );
     sheet1->SetScreen( screen1 );
+    sheet1->SetParent( &schematic );
 
     schematic.AddTopLevelSheet( sheet1 );
 
@@ -78,6 +81,7 @@ BOOST_AUTO_TEST_CASE( TestAddMultipleTopLevelSheets )
     SCH_SHEET* virtualRoot = new SCH_SHEET();
     const_cast<KIID&>( virtualRoot->m_Uuid ) = niluuid;
     virtualRoot->SetScreen( nullptr );
+    virtualRoot->SetParent( &schematic );
     schematic.SetRoot( virtualRoot );
 
     // Create and add multiple top-level sheets
@@ -86,7 +90,9 @@ BOOST_AUTO_TEST_CASE( TestAddMultipleTopLevelSheets )
         SCH_SHEET* sheet = new SCH_SHEET();
         sheet->SetName( wxString::Format( "Sheet%d", i ) );
         SCH_SCREEN* screen = new SCH_SCREEN();
+        screen->SetParent( &schematic );
         sheet->SetScreen( screen );
+        sheet->SetParent( &schematic );
         schematic.AddTopLevelSheet( sheet );
     }
 
@@ -106,19 +112,24 @@ BOOST_AUTO_TEST_CASE( TestRemoveTopLevelSheet )
     SCH_SHEET* virtualRoot = new SCH_SHEET();
     const_cast<KIID&>( virtualRoot->m_Uuid ) = niluuid;
     virtualRoot->SetScreen( nullptr );
+    virtualRoot->SetParent( &schematic );
     schematic.SetRoot( virtualRoot );
 
     // Create and add sheets
     SCH_SHEET* sheet1 = new SCH_SHEET();
     sheet1->SetName( "Sheet1" );
     SCH_SCREEN* screen1 = new SCH_SCREEN();
+    screen1->SetParent( &schematic );
     sheet1->SetScreen( screen1 );
+    sheet1->SetParent( &schematic );
     schematic.AddTopLevelSheet( sheet1 );
 
     SCH_SHEET* sheet2 = new SCH_SHEET();
     sheet2->SetName( "Sheet2" );
     SCH_SCREEN* screen2 = new SCH_SCREEN();
+    screen2->SetParent( &schematic );
     sheet2->SetScreen( screen2 );
+    sheet2->SetParent( &schematic );
     schematic.AddTopLevelSheet( sheet2 );
 
     // Remove first sheet
@@ -139,6 +150,7 @@ BOOST_AUTO_TEST_CASE( TestBuildSheetListWithMultipleRoots )
     SCH_SHEET* virtualRoot = new SCH_SHEET();
     const_cast<KIID&>( virtualRoot->m_Uuid ) = niluuid;
     virtualRoot->SetScreen( nullptr );
+    virtualRoot->SetParent( &schematic );
     schematic.SetRoot( virtualRoot );
 
     // Create two top-level sheets, each with one child
@@ -148,14 +160,18 @@ BOOST_AUTO_TEST_CASE( TestBuildSheetListWithMultipleRoots )
         topSheet->SetName( wxString::Format( "TopSheet%d", i ) );
         topSheet->SetFileName( wxString::Format( "top_sheet_%d.kicad_sch", i ) );
         SCH_SCREEN* topScreen = new SCH_SCREEN();
+        topScreen->SetParent( &schematic );
         topSheet->SetScreen( topScreen );
+        topSheet->SetParent( &schematic );
 
         // Add a child sheet
         SCH_SHEET* childSheet = new SCH_SHEET();
         childSheet->SetName( wxString::Format( "ChildSheet%d", i ) );
         childSheet->SetFileName( wxString::Format( "child_sheet_%d.kicad_sch", i ) );
         SCH_SCREEN* childScreen = new SCH_SCREEN();
+        childScreen->SetParent( &schematic );
         childSheet->SetScreen( childScreen );
+        childSheet->SetParent( &schematic );
         topScreen->Append( childSheet );
 
         schematic.AddTopLevelSheet( topSheet );

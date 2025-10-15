@@ -37,13 +37,14 @@
 #include <eeschema_helpers.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 
 #include <sstream>
 
 class TEST_SCH_SHEET_PATH_FIXTURE
 {
 public:
-    TEST_SCH_SHEET_PATH_FIXTURE()
+    TEST_SCH_SHEET_PATH_FIXTURE() : m_schematic( nullptr )
     {
         for( unsigned i = 0; i < 4; ++i )
         {
@@ -52,6 +53,7 @@ public:
             std::ostringstream ss;
             ss << "Sheet" << i;
             m_sheets[i].GetField( FIELD_T::SHEET_NAME )->SetText( ss.str() );
+            m_sheets[i].SetParent( &m_schematic );
         }
 
         // 0->1->2
@@ -60,6 +62,7 @@ public:
         m_linear.push_back( &m_sheets[2] );
     }
 
+    SCHEMATIC      m_schematic;
     SCH_SHEET_PATH m_empty_path;
 
     /**
