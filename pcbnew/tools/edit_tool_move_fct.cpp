@@ -951,7 +951,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     }
 
     bool            restore_state = false;
-    VECTOR2I        originalPos;
+    VECTOR2I        originalPos = originalCursorPos;  // Initialize to current cursor position
     VECTOR2D        bboxMovement;
     BOX2I           originalBBox;
     bool            updateBBox = true;
@@ -1217,31 +1217,31 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     }
                     else
                     {
-                        VECTOR2I snapped = grid.Align( m_cursor, grid.GetSelectionGrid( selection ) );
-                        VECTOR2I delta = snapped - m_cursor;
+                        // Don't snap the items on the initial drag start - this would warp
+                        // the object position before the mouse moves. Instead, set up construction
+                        // lines at the current object position and let the user move from there.
+                        
+                        // Get the best drag origin (where an item anchor is)
+                        VECTOR2I dragOrigin = m_cursor;
+                        
+                        // Set the reference point to the drag origin (actual item position)
+                        selection.SetReferencePoint( dragOrigin );
 
-                        if( delta.x || delta.y )
-                        {
-                            for( BOARD_ITEM* item : sel_items )
-                            {
-                                if( item->GetParent() && item->GetParent()->IsSelected() )
-                                    continue;
-
-                                item->Move( delta );
-                            }
-                        }
-
-                        selection.SetReferencePoint( snapped );
-
+                        // Set up construction/snap lines at the CURRENT position, not a snapped position
                         if( angleSnapMode != LEADER_MODE::DIRECT )
-                            grid.SetSnapLineOrigin( selection.GetReferencePoint() );
+                            grid.SetSnapLineOrigin( dragOrigin );
 
-                        grid.SetAuxAxes( true, snapped );
+                        grid.SetAuxAxes( true, dragOrigin );
 
+                        // Use the original cursor position if not warping
                         if( !editFrame->GetMoveWarpsCursor() )
                             m_cursor = originalCursorPos;
                         else
-                            m_cursor = snapped;
+                        {
+                            // Even when warping is enabled, stay at the drag origin initially
+                            // to prevent immediate object movement
+                            m_cursor = dragOrigin;
+                        }
                     }
 
                     originalPos = selection.GetReferencePoint();
