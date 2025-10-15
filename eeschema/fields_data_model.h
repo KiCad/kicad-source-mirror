@@ -302,11 +302,32 @@ private:
      * Example: BOM template provides ${DNP} as a field, but they symbol doesn't have the field. */
     wxString getFieldShownText( const SCH_REFERENCE& aRef, const wxString& aFieldName );
 
+    /**
+     * Create a composite key for the data store using sheet path and symbol UUID.
+     * This is necessary for hierarchical designs where the same symbol (same UUID)
+     * is instantiated in multiple sheets with different field values.
+     *
+     * The key is a string representation of the full KIID_PATH including the symbol's UUID.
+     */
+    wxString makeDataStoreKey( const SCH_SHEET_PATH& aSheetPath, const SCH_SYMBOL& aSymbol ) const
+    {
+        KIID_PATH path = aSheetPath.Path();
+        path.push_back( aSymbol.m_Uuid );
+        return path.AsString();
+    }
+
+    wxString makeDataStoreKey( const SCH_REFERENCE& aRef ) const
+    {
+        return makeDataStoreKey( aRef.GetSheetPath(), *aRef.GetSymbol() );
+    }
+
     void Sort();
 
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
     void               storeReferenceFields( SCH_REFERENCE& aRef );
     void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
+    void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName,
+                                     const SCH_SHEET_PATH* aSheetPath );
 
 protected:
     SCH_REFERENCE_LIST m_symbolsList;
@@ -329,6 +350,8 @@ protected:
 
     // Data store
     // The data model is fundamentally m_componentRefs X m_fieldNames.
-    // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
-    std::map<KIID, std::map<wxString, wxString>> m_dataStore;
+    // For hierarchical designs, symbols can be instantiated in multiple sheets with the same UUID,
+    // so we use a composite key containing the full KIID_PATH (sheet path + symbol UUID).
+    // This ensures each hierarchical instance maintains its own distinct field values.
+    std::map<wxString, std::map<wxString, wxString>> m_dataStore;
 };

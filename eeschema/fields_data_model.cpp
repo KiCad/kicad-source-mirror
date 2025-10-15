@@ -45,8 +45,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
-            updateDataStoreSymbolField( *symbol, aFieldName );
+        const SCH_REFERENCE& ref = m_symbolsList[i];
+
+        if( SCH_SYMBOL* symbol = ref.GetSymbol() )
+            updateDataStoreSymbolField( *symbol, aFieldName, &ref.GetSheetPath() );
     }
 }
 
@@ -54,30 +56,53 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
 void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol,
                                                                 const wxString&   aFieldName )
 {
+    // Call the overloaded version with nullptr for sheet path (will use current sheet)
+    updateDataStoreSymbolField( aSymbol, aFieldName, nullptr );
+}
+
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol,
+                                                                const wxString&   aFieldName,
+                                                                const SCH_SHEET_PATH* aSheetPath )
+{
+    // Get the sheet path - use the one provided or fall back to m_path
+    const SCH_SHEET_PATH& sheetPath = aSheetPath ? *aSheetPath : m_path;
+    wxString key = makeDataStoreKey( sheetPath, aSymbol );
+
     if( isAttribute( aFieldName ) )
     {
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
+        m_dataStore[key][aFieldName] = getAttributeValue( aSymbol, aFieldName );
     }
     else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
     {
         if( field->IsPrivate() )
         {
-            m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+            m_dataStore[key][aFieldName] = wxEmptyString;
             return;
         }
 
-        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( field->GetText() );
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = value;
+        // Use GetShownText() instead of GetText() to get the properly resolved value
+        // that includes text variable resolution and inherited library symbol values.
+        // This ensures BOM exports show the correct value that users see in the schematic.
+        wxString getText = field->GetText();
+        wxString getShownText = field->GetShownText( aSheetPath, false );
+        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( getShownText );
+
+        wxLogTrace( "KICAD_FIELDS",
+                   "Fields Table updateDataStore: Symbol %s, Field %s: GetText()='%s', GetShownText()='%s', final='%s'",
+                   aSymbol.GetRef( aSheetPath ), aFieldName, getText, getShownText, value );
+
+        m_dataStore[key][aFieldName] = value;
     }
     else if( IsGeneratedField( aFieldName ) )
     {
         // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in
         // the symbol by giving them the correct value
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = aFieldName;
+        m_dataStore[key][aFieldName] = aFieldName;
     }
     else
     {
-        m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
+        m_dataStore[key][aFieldName] = wxEmptyString;
     }
 }
 
@@ -86,25 +111,29 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
-            m_dataStore[symbol->m_Uuid].erase( m_cols[aCol].m_fieldName );
+        const SCH_REFERENCE& ref = m_symbolsList[i];
+
+        if( SCH_SYMBOL* symbol = ref.GetSymbol() )
+        {
+            wxString key = makeDataStoreKey( ref );
+            m_dataStore[key].erase( m_cols[aCol].m_fieldName );
+        }
     }
 
     m_cols.erase( m_cols.begin() + aCol );
 }
-
-
 void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newName )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
+        const SCH_REFERENCE& ref = m_symbolsList[i];
+        wxString key = makeDataStoreKey( ref );
 
         // Careful; field may have already been renamed from another sheet instance
-        if( auto node = m_dataStore[symbol->m_Uuid].extract( m_cols[aCol].m_fieldName ) )
+        if( auto node = m_dataStore[key].extract( m_cols[aCol].m_fieldName ) )
         {
             node.key() = newName;
-            m_dataStore[symbol->m_Uuid].insert( std::move( node ) );
+            m_dataStore[key].insert( std::move( node ) );
         }
     }
 
@@ -220,15 +249,20 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
         }
         else // Other columns are either a single value or ROW_MULTI_ITEMS
         {
-            const KIID& symbolID = ref.GetSymbol()->m_Uuid;
+            wxString key = makeDataStoreKey( ref );
 
-            if( !m_dataStore.count( symbolID )
-                || !m_dataStore[symbolID].count( m_cols[aCol].m_fieldName ) )
+            if( !m_dataStore.count( key )
+                || !m_dataStore[key].count( m_cols[aCol].m_fieldName ) )
             {
                 return INDETERMINATE_STATE;
             }
 
-            wxString refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
+            wxString refFieldValue = m_dataStore[key][m_cols[aCol].m_fieldName];
+
+            wxLogTrace( "KICAD_FIELDS",
+                       "GetValue: Symbol %s (UUID %s, Path %s), Field %s = '%s' (from m_dataStore)",
+                       ref.GetRef(), ref.GetSymbol()->m_Uuid.AsString(),
+                       ref.GetSheetPath().PathAsString(), m_cols[aCol].m_fieldName, refFieldValue );
 
             if( resolveVars )
             {
@@ -310,6 +344,10 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
     else if( ColIsItemNumber( aCol ) && group.m_Flag != CHILD_ITEM )
         fieldValue = wxString::Format( wxT( "%d" ), group.m_ItemNumber );
 
+    wxLogTrace( "KICAD_FIELDS",
+               "GetValue returning: Col %d (%s), Group refs=%zu, Final Value = '%s'",
+               aCol, m_cols[aCol].m_fieldName, group.m_Refs.size(), fieldValue );
+
     return fieldValue;
 }
 
@@ -328,7 +366,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
     DATA_MODEL_ROW& rowGroup = m_rows[aRow];
 
     for( const SCH_REFERENCE& ref : rowGroup.m_Refs )
-        m_dataStore[ref.GetSymbol()->m_Uuid][m_cols[aCol].m_fieldName] = aValue;
+    {
+        wxString key = makeDataStoreKey( ref );
+        m_dataStore[key][m_cols[aCol].m_fieldName] = aValue;
+    }
 
     m_edited = true;
 }
@@ -477,8 +518,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         matchFound = true;
     }
 
-    const KIID& lhRefID = lhRef.GetSymbol()->m_Uuid;
-    const KIID& rhRefID = rhRef.GetSymbol()->m_Uuid;
+    wxString lhKey = makeDataStoreKey( lhRef );
+    wxString rhKey = makeDataStoreKey( rhRef );
 
     // Now check all the other columns.
     for( size_t i = 0; i < m_cols.size(); ++i )
@@ -496,23 +537,23 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         wxString lh, rh;
 
         if( IsGeneratedField( m_cols[i].m_fieldName )
-            || IsGeneratedField( m_dataStore[lhRefID][m_cols[i].m_fieldName] ) )
+            || IsGeneratedField( m_dataStore[lhKey][m_cols[i].m_fieldName] ) )
         {
             lh = getFieldShownText( lhRef, m_cols[i].m_fieldName );
         }
         else
         {
-            lh = m_dataStore[lhRefID][m_cols[i].m_fieldName];
+            lh = m_dataStore[lhKey][m_cols[i].m_fieldName];
         }
 
         if( IsGeneratedField( m_cols[i].m_fieldName )
-            || IsGeneratedField( m_dataStore[rhRefID][m_cols[i].m_fieldName] ) )
+            || IsGeneratedField( m_dataStore[rhKey][m_cols[i].m_fieldName] ) )
         {
             rh = getFieldShownText( rhRef, m_cols[i].m_fieldName );
         }
         else
         {
-            rh = m_dataStore[rhRefID][m_cols[i].m_fieldName];
+            rh = m_dataStore[rhKey][m_cols[i].m_fieldName];
         }
 
         wxString fieldName = m_cols[i].m_fieldName;
@@ -805,11 +846,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_SYMBOL& symbol = *m_symbolsList[i].GetSymbol();
+        const SCH_REFERENCE& ref = m_symbolsList[i];
+        SCH_SYMBOL& symbol = *ref.GetSymbol();
 
-        aCommit.Modify( &symbol, m_symbolsList[i].GetSheetPath().LastScreen() );
+        aCommit.Modify( &symbol, ref.GetSheetPath().LastScreen() );
 
-        const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
+        wxString key = makeDataStoreKey( ref );
+        const std::map<wxString, wxString>& fieldStore = m_dataStore[key];
 
         for( const auto& [srcName, srcValue] : fieldStore )
         {
@@ -894,8 +937,8 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 
         for( unsigned symbolRef = 0; symbolRef < m_symbolsList.GetCount(); ++symbolRef )
         {
-            const KIID& symbolID = m_symbolsList[symbolRef].GetSymbol()->m_Uuid;
-            wxString    text = m_dataStore[symbolID][fieldName];
+            wxString key = makeDataStoreKey( m_symbolsList[symbolRef] );
+            wxString text = m_dataStore[key][fieldName];
 
             width = std::max( width, KIUI::GetTextSize( text, GetView() ).x );
         }
@@ -1077,9 +1120,14 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
                 if( !field.IsPrivate() )
                 {
                     wxString name = field.GetCanonicalName();
-                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() );
+                    // Use GetShownText() instead of GetText() to get the properly resolved value
+                    // that includes text variable resolution and inherited library symbol values.
+                    // This ensures BOM exports show the correct value that users see in the schematic.
+                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs(
+                            field.GetShownText( &ref.GetSheetPath(), false ) );
 
-                    m_dataStore[symbol->m_Uuid][name] = value;
+                    wxString key = makeDataStoreKey( ref );
+                    m_dataStore[key][name] = value;
                 }
             }
         }
@@ -1092,7 +1140,19 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
     // The schematic event listener passes us the symbol after it has been removed,
     // so we can't just work with a SCH_REFERENCE_LIST like the other handlers as the
     // references are already gone. Instead we need to prune our list.
-    m_dataStore[aSymbol.m_Uuid].clear();
+    // We need to remove all instances of this symbol from all sheet paths.
+
+    auto it = m_dataStore.begin();
+    while( it != m_dataStore.end() )
+    {
+        // The key is a KIID_PATH string; check if it ends with this symbol's UUID
+        // by checking if the key ends with "/" + UUID
+        wxString symbolUuidStr = "/" + aSymbol.m_Uuid.AsString();
+        if( it->first.EndsWith( symbolUuidStr ) )
+            it = m_dataStore.erase( it );
+        else
+            ++it;
+    }
 
     // Remove all refs that match this symbol using remove_if
     m_symbolsList.erase( std::remove_if( m_symbolsList.begin(), m_symbolsList.end(),
@@ -1114,9 +1174,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& 
         {
             m_symbolsList.RemoveItem( index );
 
-            // If we're out of instances then remove the symbol, too
-            if( ref.GetSymbol()->GetInstances().empty() )
-                m_dataStore.erase( ref.GetSymbol()->m_Uuid );
+            // Remove this specific instance from the data store
+            wxString key = makeDataStoreKey( ref );
+            m_dataStore.erase( key );
         }
     }
 }
@@ -1130,7 +1190,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
         // columns; we must have all fields in the symbol added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the symbol
         for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName );
+            updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName, &ref.GetSheetPath() );
 
         if( !m_symbolsList.Contains( ref ) )
             m_symbolsList.AddItem( ref );
