@@ -841,9 +841,9 @@ DrcSeverity ToProtoEnum( SEVERITY aValue )
     case RPT_SEVERITY_INFO:      return DrcSeverity::DRS_INFO;
     case RPT_SEVERITY_ACTION:    return DrcSeverity::DRS_ACTION;
     case RPT_SEVERITY_DEBUG:     return DrcSeverity::DRS_DEBUG;
-    case RPT_SEVERITY_UNDEFINED:
+    case RPT_SEVERITY_UNDEFINED: return DrcSeverity::DRS_UNDEFINED;
     default:
-        wxCHECK_MSG( false, DrcSeverity::DRS_UNKNOWN,
+        wxCHECK_MSG( false, DrcSeverity::DRS_UNDEFINED,
                      "Unhandled case in ToProtoEnum<SEVERITY>");
     }
 }

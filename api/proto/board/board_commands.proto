@@ -270,6 +270,7 @@ enum DrcSeverity // Since 10.0
   DRS_INFO = 5;
   DRS_ACTION = 6;
   DRS_DEBUG = 7;
+  DRS_UNDEFINED = 8;
 }
 
 // Returns InjectDrcErrorResponse
