@@ -391,5 +391,6 @@ protected:
     // Data store
     // The data model is fundamentally m_componentRefs X m_fieldNames.
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
-    std::map<KIID, std::map<wxString, wxString>> m_dataStore;
+    // The compID is now the full KIID_PATH (sheet path + symbol UUID) as a string
+    std::map<wxString, std::map<wxString, wxString>> m_dataStore;
 };
