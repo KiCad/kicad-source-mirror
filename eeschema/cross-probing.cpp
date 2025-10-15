@@ -43,6 +43,7 @@
 #include <advanced_config.h>
 #include <widgets/sch_design_block_pane.h>
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wxString* aReference,
                                                  bool aSearchHierarchy, SCH_SEARCH_T aSearchType,
@@ -934,10 +935,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( eeconfig()->m_CrossProbing.flash_selection )
             {
-                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): flash enabled, items=%zu", items.size() );
+                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash enabled, items=%zu", items.size() );
                 if( items.empty() )
                 {
-                    wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): nothing to flash" );
+                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): nothing to flash" );
                 }
                 else
                 {
@@ -949,7 +950,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             }
             else
             {
-                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE): flash disabled" );
+                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash disabled" );
             }
         }
 

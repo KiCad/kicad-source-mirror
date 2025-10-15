@@ -235,6 +235,13 @@ extern KICOMMON_API const wxChar* const traceSchSymbolRef;
 extern KICOMMON_API const wxChar* const traceSchDragNetCollision;
 
 /**
+ * Flag to enable debug output for cross-probe flash operations.
+ *
+ * Use "CROSS_PROBE_FLASH" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceCrossProbeFlash;
+
+/**
  * Flag to enable debug output of environment variable operations.
  *
  * Use "KICAD_ENV_VARS" to enable.
@@ -296,6 +303,20 @@ extern KICOMMON_API const wxChar* const traceLibFieldTable;
  * Use "KICAD_PDF_PLOTTER" to enable.
  */
 extern KICOMMON_API const wxChar* const tracePdfPlotter;
+
+/**
+ * Flag to enable debug output for stacked pins handling in symbol/pin code.
+ *
+ * Use "KICAD_STACKED_PINS" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceStackedPins;
+
+/**
+ * Flag to enable debug output for library file watch refreshes.
+ *
+ * Use "KICAD_LIB_WATCH" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceLibWatch;
 
 ///@}
 

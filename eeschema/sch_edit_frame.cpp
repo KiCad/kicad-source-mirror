@@ -459,22 +459,22 @@ void SCH_EDIT_FRAME::StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems 
 {
     if( !eeconfig()->m_CrossProbing.flash_selection )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: aborted (setting disabled) items=%zu", aItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: aborted (setting disabled) items=%zu", aItems.size() );
         return;
     }
     if( aItems.empty() )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: aborted (no items)" );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: aborted (no items)" );
         return;
     }
 
     if( m_crossProbeFlashing )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: restarting existing flash (phase=%d)", m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: restarting existing flash (phase=%d)", m_crossProbeFlashPhase );
         m_crossProbeFlashTimer.Stop();
     }
 
-    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: starting with %zu items", aItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: starting with %zu items", aItems.size() );
     m_crossProbeFlashItems.clear();
     for( SCH_ITEM* it : aItems )
         m_crossProbeFlashItems.push_back( it->m_Uuid );
@@ -485,17 +485,17 @@ void SCH_EDIT_FRAME::StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems 
         m_crossProbeFlashTimer.SetOwner( this );
 
     bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS );
-    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash: timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
 }
 
 
 void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 {
-    wxLogTrace( "CROSS_PROBE_FLASH", "Timer(SCH) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Timer(SCH) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
 
     if( !m_crossProbeFlashing )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "Timer fired but not flashing (ignored)" );
+    wxLogTrace( traceCrossProbeFlash, "Timer fired but not flashing (ignored)" );
         return;
     }
 
@@ -509,7 +509,7 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     if( m_crossProbeFlashPhase % 2 == 0 )
     {
         selTool->ClearSelection( true );
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: cleared selection", m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d: cleared selection", m_crossProbeFlashPhase );
     }
     else
     {
@@ -518,13 +518,13 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
             if( SCH_ITEM* item = Schematic().ResolveItem( id, nullptr, true ) )
                 selTool->AddItemToSel( item, true );
         }
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d: restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
     }
 
     if( GetCanvas() )
     {
         GetCanvas()->ForceRefresh();
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d: forced canvas refresh", m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d: forced canvas refresh", m_crossProbeFlashPhase );
     }
 
     m_syncingPcbToSchSelection = prevGuard;
@@ -540,7 +540,7 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
         m_crossProbeFlashing = false;
         m_crossProbeFlashTimer.Stop();
-        wxLogTrace( "CROSS_PROBE_FLASH", "Flashing complete. Final selection size=%zu", m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Flashing complete. Final selection size=%zu", m_crossProbeFlashItems.size() );
     }
 }
 

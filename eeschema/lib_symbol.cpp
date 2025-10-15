@@ -34,6 +34,7 @@
 #include <settings/color_settings.h>
 #include <sch_pin.h>
 #include <sch_shape.h>
+#include <trace_helpers.h>
 
 #include <algorithm>
 #include <memory>
@@ -810,10 +811,10 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
 
         // TODO: get rid of const_cast.  (It used to be a C-style cast so was less noticeable.)
         SCH_PIN* pin = const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) );
-        wxLogTrace( "KICAD_STACKED_PINS",
-                    wxString::Format( "GetGraphicalPins: lib='%s' unit=%d body=%d -> include pin name='%s' number='%s' shownNum='%s'",
-                                      GetLibId().Format().wx_str(), aUnit, aBodyStyle,
-                                      pin->GetName(), pin->GetNumber(), pin->GetShownNumber() ) );
+    wxLogTrace( traceStackedPins,
+            wxString::Format( "GetGraphicalPins: lib='%s' unit=%d body=%d -> include pin name='%s' number='%s' shownNum='%s'",
+                      GetLibId().Format().wx_str(), aUnit, aBodyStyle,
+                      pin->GetName(), pin->GetNumber(), pin->GetShownNumber() ) );
         pins.push_back( pin );
     }
 
@@ -892,7 +893,7 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
             for( const wxString& num : expanded )
             {
                 out.push_back( LOGICAL_PIN{ pin, num } );
-                wxLogTrace( "KICAD_STACKED_PINS",
+                wxLogTrace( traceStackedPins,
                             wxString::Format( "GetLogicalPins: base='%s' -> '%s'",
                                               pin->GetShownNumber(), num ) );
             }
@@ -900,7 +901,7 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
         else
         {
             out.push_back( LOGICAL_PIN{ pin, pin->GetShownNumber() } );
-            wxLogTrace( "KICAD_STACKED_PINS",
+            wxLogTrace( traceStackedPins,
                         wxString::Format( "GetLogicalPins: base='%s' (no expansion)",
                                           pin->GetShownNumber() ) );
         }

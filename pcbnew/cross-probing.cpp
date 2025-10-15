@@ -53,6 +53,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <trace_helpers.h>
 #include <netlist_reader/netlist_reader.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <wx/log.h>
@@ -648,10 +649,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( GetPcbNewSettings()->m_CrossProbing.flash_selection )
             {
-                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: flash enabled, items=%zu", items.size() );
+                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash enabled, items=%zu", items.size() );
                 if( items.empty() )
                 {
-                    wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: nothing to flash" );
+                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: nothing to flash" );
                 }
                 else
                 {
@@ -662,7 +663,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             }
             else
             {
-                wxLogTrace( "CROSS_PROBE_FLASH", "MAIL_SELECTION(_FORCE) PCB: flash disabled" );
+                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash disabled" );
             }
         }
 

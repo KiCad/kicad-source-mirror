@@ -28,6 +28,7 @@
 #include <string_utils.h>
 
 #include <symbol_library.h>
+#include <trace_helpers.h>
 #include <connection_graph.h>
 #include <sch_reference_list.h>
 #include <sch_screen.h>
@@ -154,8 +155,8 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     {
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
-        // This is only done once, it would be too expensive otherwise.
         findAllUnitsOfSymbol( aSymbol, aSheetPath, pins, aKeepUnconnectedPins );
+        wxLogTrace( traceStackedPins, "CreatePinList(multi): ref='%s' pins=%zu", aSymbol->GetRef( &aSheetPath ), pins.size() );
     }
 
     else // GetUnitCount() <= 1 means one part per package
@@ -179,7 +180,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                 bool                  valid;
                 std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
                 wxString              baseName = pin->GetShownName();
-                wxLogTrace( "KICAD_STACKED_PINS",
+                wxLogTrace( traceStackedPins,
                             wxString::Format( "CreatePinList(single): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' "
                                               "valid=%d expand=%zu",
                                               ref, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
@@ -187,7 +188,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                 for( const wxString& num : numbers )
                 {
                     wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
-                    wxLogTrace( "KICAD_STACKED_PINS",
+                    wxLogTrace( traceStackedPins,
                                 wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
                     pins.emplace_back( num, netName, pinName );
                 }
@@ -283,14 +284,14 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                     bool                        valid;
                     std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
                     wxString                     baseName = pin->GetShownName();
-                    wxLogTrace( "KICAD_STACKED_PINS",
+                    wxLogTrace( traceStackedPins,
                                wxString::Format( "CreatePinList(multi): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' valid=%d expand=%zu",
                                                  ref2, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
 
                     for( const wxString& num : numbers )
                     {
                         wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
-                        wxLogTrace( "KICAD_STACKED_PINS",
+                        wxLogTrace( traceStackedPins,
                                     wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
                         aPins.emplace_back( num, netName, pinName );
                     }

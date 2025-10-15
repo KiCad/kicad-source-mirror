@@ -60,6 +60,7 @@
 #include <wx/fswatcher.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
+#include <trace_helpers.h>
 
 #ifndef __linux__
 #include <navlib/nl_schematic_plugin.h>
@@ -814,7 +815,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 
     if( m_watcher )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
+        wxLogTrace( traceLibWatch, "Remove watch" );
         m_watcher->RemoveAll();
         m_watcher->SetOwner( nullptr );
         m_watcher.reset();
@@ -842,11 +843,11 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     }
     catch( const IO_ERROR& error )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Error: %s", error.What() );
+        wxLogTrace( traceLibWatch, "Error: %s", error.What() );
         return;
     }
 
-    wxLogTrace( "KICAD_LIB_WATCH", "Setting up watcher for %s", libfullname );
+    wxLogTrace( traceLibWatch, "Setting up watcher for %s", libfullname );
     m_watcherFileName.Assign( libfullname );
 
     if( !m_watcherFileName.FileExists() )
@@ -876,7 +877,7 @@ void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
 {
     SYMBOL_LIBS* libs = PROJECT_SCH::SchLibs( &Prj() );
 
-    wxLogTrace( "KICAD_LIB_WATCH", "OnSymChange: %s, watcher file: %s",
+    wxLogTrace( traceLibWatch, "OnSymChange: %s, watcher file: %s",
                 aEvent.GetPath().GetFullPath(), m_watcherFileName.GetFullPath() );
 
     if( !libs || !m_watcher || !m_watcher.get() || m_watcherFileName.GetPath().IsEmpty() )
@@ -888,7 +889,7 @@ void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
     // Start the debounce timer (set to 1 second)
     if( !m_watcherDebounceTimer.StartOnce( 1000 ) )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Failed to start the debounce timer" );
+    wxLogTrace( traceLibWatch, "Failed to start the debounce timer" );
         return;
     }
 }
@@ -904,11 +905,11 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     if( m_inSymChangeTimerEvent )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Restarting debounce timer" );
+    wxLogTrace( traceLibWatch, "Restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 3000 );
     }
 
-    wxLogTrace( "KICAD_LIB_WATCH", "OnSymChangeDebounceTimer" );
+    wxLogTrace( traceLibWatch, "OnSymChangeDebounceTimer" );
 
     // Disable logging to avoid spurious messages and check if the file has changed
     wxLog::EnableLogging( false );
@@ -926,7 +927,7 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
       || IsOK( this, _( "The library containing the current symbol has changed.\n"
                         "Do you want to reload the library?" ) ) )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Sending refresh symbol mail" );
+    wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
         std::string libName = m_watcherFileName.GetFullPath().ToStdString();
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );

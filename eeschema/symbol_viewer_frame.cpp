@@ -64,6 +64,7 @@
 #include <wx/log.h>
 #include <wx/choice.h>
 #include <toolbars_symbol_viewer.h>
+#include <trace_helpers.h>
 
 #include <default_values.h>
 #include <string_utils.h>
@@ -1167,12 +1168,12 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         wxString libfullname = row->GetFullURI( true );
 
         wxString lib( mail.GetPayload() );
-        wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s, current symbols "
-                    "is %s", lib, libfullname );
+    wxLogTrace( traceLibWatch, "Received refresh symbol request for %s, current symbols "
+            "is %s", lib, libfullname );
 
         if( lib == libfullname )
         {
-            wxLogTrace( "KICAD_LIB_WATCH", "Refreshing symbol %s", symbol->GetName() );
+            wxLogTrace( traceLibWatch, "Refreshing symbol %s", symbol->GetName() );
             updatePreviewSymbol();
             GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         }

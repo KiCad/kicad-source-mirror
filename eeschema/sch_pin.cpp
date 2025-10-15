@@ -36,6 +36,7 @@
 #include <symbol_edit_frame.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
+#include <trace_helpers.h>
 #include <trigo.h>
 #include <string_utils.h>
 
@@ -486,7 +487,7 @@ bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
                              || isPassiveOrNic( GetType() )
                              || isPassiveOrNic( aPin->GetType() );
 
-    wxLogTrace( "KICAD_STACKED_PINS",
+    wxLogTrace( traceStackedPins,
                 wxString::Format( "IsStacked: this='%s/%s' other='%s/%s' sameParent=%d samePos=%d sameName=%d typeCompat=%d",
                                   GetName(), GetNumber(), aPin->GetName(), aPin->GetNumber(), sameParent,
                                   samePos, sameName, typeCompat ) );
@@ -593,17 +594,17 @@ wxString SCH_PIN::GetShownNumber() const
 std::vector<wxString> SCH_PIN::GetStackedPinNumbers( bool* aValid ) const
 {
     wxString shown = GetShownNumber();
-    wxLogTrace( "KICAD_STACKED_PINS",
+    wxLogTrace( traceStackedPins,
                 wxString::Format( "GetStackedPinNumbers: shown='%s'", shown ) );
 
     std::vector<wxString> numbers = ExpandStackedPinNotation( shown, aValid );
 
     // Log the expansion for debugging
-    wxLogTrace( "KICAD_STACKED_PINS",
+    wxLogTrace( traceStackedPins,
                 wxString::Format( "Expanded '%s' to %zu pins", shown, numbers.size() ) );
     for( const wxString& num : numbers )
     {
-        wxLogTrace( "KICAD_STACKED_PINS", wxString::Format( " -> '%s'", num ) );
+        wxLogTrace( traceStackedPins, wxString::Format( " -> '%s'", num ) );
     }
 
     return numbers;
@@ -1453,7 +1454,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     if( effectivePadNumber != libPinShownNumber )
     {
-        wxLogTrace( "KICAD_STACKED_PINS",
+        wxLogTrace( traceStackedPins,
                     wxString::Format( "GetDefaultNetName: stacked pin shown='%s' -> using smallest logical='%s'",
                                       libPinShownNumber, effectivePadNumber ) );
     }

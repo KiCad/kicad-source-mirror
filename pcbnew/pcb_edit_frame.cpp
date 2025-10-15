@@ -590,23 +590,23 @@ void PCB_EDIT_FRAME::StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItem
 {
     if( !GetPcbNewSettings()->m_CrossProbing.flash_selection )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash(PCB): aborted (setting disabled) items=%zu", aItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (setting disabled) items=%zu", aItems.size() );
         return;
     }
 
     if( aItems.empty() )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash(PCB): aborted (no items)" );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (no items)" );
         return;
     }
 
     if( m_crossProbeFlashing )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash(PCB): restarting existing flash (phase=%d)" , m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): restarting existing flash (phase=%d)" , m_crossProbeFlashPhase );
         m_crossProbeFlashTimer.Stop();
     }
 
-    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash(PCB): starting with %zu items", aItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): starting with %zu items", aItems.size() );
     // Store uuids
     m_crossProbeFlashItems.clear();
     for( BOARD_ITEM* it : aItems )
@@ -618,16 +618,16 @@ void PCB_EDIT_FRAME::StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItem
         m_crossProbeFlashTimer.SetOwner( this );
 
     bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS ); // 0.5s intervals -> 3s total for 6 phases
-    wxLogTrace( "CROSS_PROBE_FLASH", "StartCrossProbeFlash(PCB): timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
 }
 
 void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 {
-    wxLogTrace( "CROSS_PROBE_FLASH", "Timer(PCB) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
 
     if( !m_crossProbeFlashing )
     {
-        wxLogTrace( "CROSS_PROBE_FLASH", "Timer(PCB) fired but not flashing (ignored)" );
+    wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired but not flashing (ignored)" );
         return;
     }
 
@@ -643,7 +643,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     {
         // Hide selection
         selTool->ClearSelection( true );
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d (PCB): cleared selection", m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): cleared selection", m_crossProbeFlashPhase );
     }
     else
     {
@@ -653,14 +653,14 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
             if( EDA_ITEM* item = GetBoard()->ResolveItem( id, true ) )
                 selTool->AddItemToSel( item, true );
         }
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d (PCB): restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
     }
 
     // Force a redraw even if the canvas / frame does not currently have focus (mouse elsewhere)
     if( GetCanvas() )
     {
         GetCanvas()->ForceRefresh();
-        wxLogTrace( "CROSS_PROBE_FLASH", "Phase %d (PCB): forced canvas refresh", m_crossProbeFlashPhase );
+    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): forced canvas refresh", m_crossProbeFlashPhase );
     }
 
     m_probingSchToPcb = prevGuard;
@@ -676,7 +676,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
         }
         m_crossProbeFlashing = false;
         m_crossProbeFlashTimer.Stop();
-        wxLogTrace( "CROSS_PROBE_FLASH", "Flashing complete (PCB). Final selection size=%zu", m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Flashing complete (PCB). Final selection size=%zu", m_crossProbeFlashItems.size() );
     }
 }
 

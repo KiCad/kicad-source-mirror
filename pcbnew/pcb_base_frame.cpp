@@ -52,6 +52,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
+#include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 
 #include <math/vector2d.h>
@@ -1075,13 +1076,13 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
 
 void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 {
-    wxLogTrace( "KICAD_LIB_WATCH", "setFPWatcher" );
+    wxLogTrace( traceLibWatch, "setFPWatcher" );
 
     Unbind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
 
     if( m_watcher )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
+    wxLogTrace( traceLibWatch, "Remove watch" );
         m_watcher->RemoveAll();
         m_watcher->SetOwner( nullptr );
         m_watcher.reset();
@@ -1109,7 +1110,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     }
     catch( const IO_ERROR& error )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Error: %s", error.What() );
+    wxLogTrace( traceLibWatch, "Error: %s", error.What() );
         return;
     }
 
@@ -1129,7 +1130,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
 
-    wxLogTrace( "KICAD_LIB_WATCH", "Add watch: %s", fn.GetPath() );
+    wxLogTrace( traceLibWatch, "Add watch: %s", fn.GetPath() );
 
     {
         // Silence OS errors that come from the watcher
@@ -1147,7 +1148,7 @@ void PCB_BASE_FRAME::OnFPChange( wxFileSystemWatcherEvent& aEvent )
     // Start the debounce timer (set to 1 second)
     if( !m_watcherDebounceTimer.StartOnce( 1000 ) )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Failed to start the debounce timer" );
+    wxLogTrace( traceLibWatch, "Failed to start the debounce timer" );
         return;
     }
 }
@@ -1163,11 +1164,11 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
     if( m_inFpChangeTimerEvent )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Restarting debounce timer" );
+    wxLogTrace( traceLibWatch, "Restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 3000 );
     }
 
-    wxLogTrace( "KICAD_LIB_WATCH", "OnFpChangeDebounceTimer" );
+    wxLogTrace( traceLibWatch, "OnFpChangeDebounceTimer" );
 
     // Disable logging to avoid spurious messages and check if the file has changed
     wxLog::EnableLogging( false );

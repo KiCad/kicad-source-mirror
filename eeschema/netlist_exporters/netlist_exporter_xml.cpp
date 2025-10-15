@@ -37,6 +37,7 @@
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <json_common.h>
 #include <project_sch.h>
+#include <trace_helpers.h>
 
 #include <symbol_lib_table.h>
 
@@ -1039,7 +1040,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             wxString              baseName = netNode.m_Pin->GetShownName();
             wxString              pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
 
-            wxLogTrace( "KICAD_STACKED_PINS",
+            wxLogTrace( traceStackedPins,
                         wxString::Format( "XML: net='%s' ref='%s' base='%s' shownNum='%s' expand=%zu",
                                           net_record->m_Name, refText, baseName,
                                           netNode.m_Pin->GetShownNumber(), nums.size() ) );
@@ -1061,7 +1062,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     && ( net_record->m_Nodes.size() == 1 || allNetPinsStacked ) )
                 {
                     typeAttr += wxT( "+no_connect" );
-                    wxLogTrace( "KICAD_STACKED_PINS",
+                    wxLogTrace( traceStackedPins,
                                 wxString::Format( "XML: marking node ref='%s' pin='%s' as no_connect",
                                                   refText, num ) );
                 }

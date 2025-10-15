@@ -87,6 +87,7 @@
 #include <wx/msgdlg.h>
 #include <wx/combobox.h>
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
@@ -1676,7 +1677,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_SYMBOL* symbol = GetCurSymbol();
 
-        wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s", payload );
+    wxLogTrace( traceLibWatch, "Received refresh symbol request for %s", payload );
 
         if( !tbl || !symbol )
             break;
@@ -1690,12 +1691,12 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         wxFileName libfullname( row->GetFullURI( true ) );
 
         wxFileName changedLib( mail.GetPayload() );
-        wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s, current symbols is %s",
-                    changedLib.GetFullPath(), libfullname.GetFullPath() );
+    wxLogTrace( traceLibWatch, "Received refresh symbol request for %s, current symbols is %s",
+            changedLib.GetFullPath(), libfullname.GetFullPath() );
 
         if( changedLib == libfullname )
         {
-            wxLogTrace( "KICAD_LIB_WATCH", "Refreshing symbol %s", symbol->GetName() );
+            wxLogTrace( traceLibWatch, "Refreshing symbol %s", symbol->GetName() );
 
             SetScreen( m_dummyScreen );  // UpdateLibraryBuffer will destroy the old screen
             m_libMgr->UpdateLibraryBuffer( libName );

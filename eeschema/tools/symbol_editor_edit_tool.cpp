@@ -50,6 +50,7 @@
 #include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
+#include <trace_helpers.h>
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
         SCH_TOOL_BASE( "eeschema.SymbolEditTool" )
@@ -989,7 +990,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
     masterPin->SetNumber( stackedNotation );
 
     // Log information about pins being removed before we remove them
-    wxLogTrace( "KICAD_STACKED_PINS",
+    wxLogTrace( traceStackedPins,
                wxString::Format( "Converting %zu pins to stacked notation '%s'",
                                pinsToConvert.size(), stackedNotation ) );
 
@@ -1001,11 +1002,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
         SCH_PIN* pinToRemove = pinsToConvert[i];
 
         // Log the pin before removing it
-        wxLogTrace( "KICAD_STACKED_PINS",
-                   wxString::Format( "Will remove pin '%s' at position (%d, %d)",
-                                   pinToRemove->GetNumber(),
-                                   pinToRemove->GetPosition().x,
-                                   pinToRemove->GetPosition().y ) );
+    wxLogTrace( traceStackedPins,
+           wxString::Format( "Will remove pin '%s' at position (%d, %d)",
+                   pinToRemove->GetNumber(),
+                   pinToRemove->GetPosition().x,
+                   pinToRemove->GetPosition().y ) );
 
         pinsToRemove.push_back( pinToRemove );
     }
