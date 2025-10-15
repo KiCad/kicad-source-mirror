@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-13 12:07+0000\n"
+"PO-Revision-Date: 2025-10-16 19:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -51854,7 +51854,7 @@ msgstr "調整パターンの1ステップ振幅を小さくします。"
 
 #: pcbnew/tools/pcb_actions.cpp:278
 msgid "Draw Aligned Dimensions"
-msgstr "アラインした寸法線を描く"
+msgstr "平行寸法線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Draw Center Dimensions"
