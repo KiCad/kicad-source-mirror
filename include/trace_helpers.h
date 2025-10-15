@@ -305,6 +305,13 @@ extern KICOMMON_API const wxChar* const traceLibFieldTable;
 extern KICOMMON_API const wxChar* const tracePdfPlotter;
 
 /**
+ * Flag to enable snap/grid helper debug tracing.
+ *
+ * Use "KICAD_SNAP" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSnap;
+
+/**
  * Flag to enable debug output for stacked pins handling in symbol/pin code.
  *
  * Use "KICAD_STACKED_PINS" to enable.

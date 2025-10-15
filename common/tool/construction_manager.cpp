@@ -32,10 +32,12 @@
 
 #include <wx/timer.h>
 #include <wx/debug.h>
+#include <wx/log.h>
 
 #include <advanced_config.h>
 #include <math/util.h>
 #include <hash.h>
+#include <trace_helpers.h>
 
 
 /**
@@ -563,16 +565,32 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
 {
     wxUnusedVar( aNearestGrid );
 
+    wxLogTrace( traceSnap, "GetNearestSnapLinePoint: cursor=(%d, %d), nearestGrid=(%d, %d), distToNearest=%s, snapRange=%d",
+                aCursor.x, aCursor.y, aNearestGrid.x, aNearestGrid.y,
+                aDistToNearest ? wxString::Format( "%d", *aDistToNearest ) : "none", aSnapRange );
+
     if( !m_snapLineOrigin || m_directions.empty() )
+    {
+        wxLogTrace( traceSnap, "  No snap line origin or no directions, returning nullopt" );
         return std::nullopt;
+    }
 
     const bool gridBetterThanNearest = !aDistToNearest || *aDistToNearest > aSnapRange;
 
+    wxLogTrace( traceSnap, "  snapLineOrigin=(%d, %d), directions count=%zu, gridBetterThanNearest=%d",
+                m_snapLineOrigin->x, m_snapLineOrigin->y, m_directions.size(), gridBetterThanNearest );
+
     if( !gridBetterThanNearest )
+    {
+        wxLogTrace( traceSnap, "  Grid not better than nearest, returning nullopt" );
         return std::nullopt;
+    }
 
     const int       escapeRange = 2 * aSnapRange;
     const EDA_ANGLE longRangeEscapeAngle( 4, DEGREES_T );
+
+    wxLogTrace( traceSnap, "  escapeRange=%d, longRangeEscapeAngle=%.1f deg",
+                escapeRange, longRangeEscapeAngle.AsDegrees() );
 
     const VECTOR2D origin( *m_snapLineOrigin );
     const VECTOR2D cursor( aCursor );
@@ -581,13 +599,17 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
     double                        bestPerpDistance = std::numeric_limits<double>::max();
     std::optional<VECTOR2I>       bestSnapPoint;
 
-    for( const VECTOR2I& direction : m_directions )
+    for( size_t ii = 0; ii < m_directions.size(); ++ii )
     {
+        const VECTOR2I& direction = m_directions[ii];
         VECTOR2D dirVector( direction );
         double   dirLength = dirVector.EuclideanNorm();
 
         if( dirLength == 0.0 )
+        {
+            wxLogTrace( traceSnap, "    Direction %zu: zero length, skipping", ii );
             continue;
+        }
 
         VECTOR2D dirUnit = dirVector / dirLength;
 
@@ -596,8 +618,14 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
         VECTOR2D  offset = delta - dirUnit * distanceAlong;
         double    perpDistance = offset.EuclideanNorm();
 
+        wxLogTrace( traceSnap, "    Direction %zu: dir=(%d, %d), perpDist=%.1f, distAlong=%.1f",
+                    ii, direction.x, direction.y, perpDistance, distanceAlong );
+
         if( perpDistance > aSnapRange )
+        {
+            wxLogTrace( traceSnap, "      perpDistance > snapRange, skipping" );
             continue;
+        }
 
         bool escaped = false;
 
@@ -607,20 +635,41 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
             EDA_ANGLE directionAngle( dirVector );
             double    angleDiff = ( deltaAngle - directionAngle ).Normalize180().AsDegrees();
 
+            wxLogTrace( traceSnap, "      In escape range: deltaAngle=%.1f, dirAngle=%.1f, angleDiff=%.1f",
+                        deltaAngle.AsDegrees(), directionAngle.AsDegrees(), angleDiff );
+
             if( std::abs( angleDiff ) > longRangeEscapeAngle.AsDegrees() )
+            {
                 escaped = true;
+                wxLogTrace( traceSnap, "      ESCAPED (angle diff too large)" );
+            }
         }
 
         if( !escaped && perpDistance < bestPerpDistance )
         {
             bestPerpDistance = perpDistance;
             bestSnapPoint = VECTOR2I( KiROUND( projection.x ), KiROUND( projection.y ) );
+            wxLogTrace( traceSnap, "      NEW BEST: perpDist=%.1f, snapPoint=(%d, %d)",
+                        bestPerpDistance, bestSnapPoint->x, bestSnapPoint->y );
+        }
+        else if( escaped )
+        {
+            wxLogTrace( traceSnap, "      Not updating (escaped)" );
+        }
+        else
+        {
+            wxLogTrace( traceSnap, "      Not updating (perpDist=%.1f >= bestPerp=%.1f)",
+                        perpDistance, bestPerpDistance );
         }
     }
 
     if( bestSnapPoint )
+    {
+        wxLogTrace( traceSnap, "  RETURNING bestSnapPoint=(%d, %d)", bestSnapPoint->x, bestSnapPoint->y );
         return *bestSnapPoint;
+    }
 
+    wxLogTrace( traceSnap, "  RETURNING nullopt (no valid snap found)" );
     return std::nullopt;
 }
 

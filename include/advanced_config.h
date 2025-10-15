@@ -759,6 +759,17 @@ public:
     int m_SnapHysteresis;
 
     /**
+     * Margin multiplier for preferring anchors over construction line snaps.
+     * When an anchor is within (distance * margin) of a construction line snap,
+     * the anchor will be preferred.
+     *
+     * Setting name: "SnapToAnchorMargin"
+     * Default value: 1.1
+     * Valid values: 1.0 to 2.0
+     */
+    double m_SnapToAnchorMargin;
+
+    /**
      * Minimum overlapping angle for which an arc is considered to be parallel
      * to its paired arc.
      *
