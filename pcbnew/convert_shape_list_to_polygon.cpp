@@ -923,20 +923,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         aOutlines.Append( corner );
     }
 
-    for( int ii = 0; ii < fpHoles.OutlineCount(); ++ii )
-    {
-        const VECTOR2I holePt = fpHoles.Outline( ii ).CPoint( 0 );
-
-        for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
-        {
-            if( aOutlines.Outline( jj ).PointInside( holePt ) )
-            {
-                aOutlines.AddHole( fpHoles.Outline( ii ), jj );
-                break;
-            }
-        }
-    }
-
+    aOutlines.BooleanSubtract( fpHoles );
     return success;
 }
 
