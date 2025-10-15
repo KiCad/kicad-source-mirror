@@ -121,6 +121,8 @@ static const wxChar EnableExtensionSnaps[] = wxT( "EnableExtensionSnaps" );
 static const wxChar ExtensionSnapTimeoutMs[] = wxT( "ExtensionSnapTimeoutMs" );
 static const wxChar ExtensionSnapActivateOnHover[] = wxT( "ExtensionSnapActivateOnHover" );
 static const wxChar EnableSnapAnchorsDebug[] = wxT( "EnableSnapAnchorsDebug" );
+static const wxChar SnapHysteresis[] = wxT( "SnapHysteresis" );
+static const wxChar SnapToAnchorMargin[] = wxT( "SnapToAnchorMargin" );
 static const wxChar MinParallelAngle[] = wxT( "MinParallelAngle" );
 static const wxChar HoleWallPaintingMultiplier[] = wxT( "HoleWallPaintingMultiplier" );
 static const wxChar MsgPanelShowUuids[] = wxT( "MsgPanelShowUuids" );
@@ -301,6 +303,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ExtensionSnapTimeoutMs = 500;
     m_ExtensionSnapActivateOnHover = true;
     m_EnableSnapAnchorsDebug = false;
+    m_SnapHysteresis = 5;
+    m_SnapToAnchorMargin = 1.1;
 
     m_MinParallelAngle = 0.001;
     m_HoleWallPaintingMultiplier = 1.5;
@@ -581,6 +585,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableSnapAnchorsDebug,
                                                 &m_EnableSnapAnchorsDebug,
                                                 m_EnableSnapAnchorsDebug ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::SnapHysteresis,
+                                               &m_SnapHysteresis, m_SnapHysteresis,
+                                               0, 100 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SnapToAnchorMargin,
+                                                  &m_SnapToAnchorMargin, m_SnapToAnchorMargin,
+                                                  1.0, 2.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinParallelAngle,
                                                   &m_MinParallelAngle, m_MinParallelAngle,

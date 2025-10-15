@@ -60,6 +60,7 @@ const wxChar* const traceGit = wxT( "KICAD_GIT" );
 const wxChar* const traceEagleIo = wxT( "KICAD_EAGLE_IO" );
 const wxChar* const traceDesignBlocks = wxT( "KICAD_DESIGN_BLOCK" );
 const wxChar* const traceLibFieldTable = wxT( "KICAD_LIB_FIELD_TABLE" );
+const wxChar* const traceSnap = wxT( "KICAD_SNAP" );
 
 
 wxString dump( const wxArrayString& aArray )

@@ -255,6 +255,14 @@ extern KICOMMON_API const wxChar* const traceDesignBlocks;
  */
 extern KICOMMON_API const wxChar* const traceLibFieldTable;
 
+/**
+ * Flag to enable snap/grid helper debug tracing.
+ *
+ * Use "KICAD_SNAP" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSnap;
+
+
 ///@}
 
 /**

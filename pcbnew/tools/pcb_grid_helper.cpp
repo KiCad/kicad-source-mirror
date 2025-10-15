@@ -54,6 +54,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>
 #include <view/view.h>
+#include <trace_helpers.h>
 
 namespace
 {
@@ -531,6 +532,9 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                                           GRID_HELPER_GRIDS               aGrid,
                                           const std::vector<BOARD_ITEM*>& aSkip )
 {
+    wxLogTrace( traceSnap, "BestSnapAnchor: origin (%d, %d), enableSnap=%d, enableGrid=%d, enableSnapLine=%d",
+                aOrigin.x, aOrigin.y, m_enableSnap, m_enableGrid, m_enableSnapLine );
+
     // Tuning constant: snap radius in screen space
     const int snapSize = 25;
 
@@ -557,6 +561,15 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE );
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
 
+    wxLogTrace( traceSnap, "  visibleItems count=%zu, anchors count=%zu",
+                visibleItems.size(), m_anchors.size() );
+    wxLogTrace( traceSnap, "  nearest anchor: %s at (%d, %d), distance=%f",
+                nearest ? "found" : "none",
+                nearest ? nearest->pos.x : 0,
+                nearest ? nearest->pos.y : 0,
+                nearest ? nearest->Distance( aOrigin ) : -1.0 );
+    wxLogTrace( traceSnap, "  nearestGrid: (%d, %d)", nearestGrid.x, nearestGrid.y );
+
     if( KIGFX::ANCHOR_DEBUG* ad = enableAndGetAnchorDebug(); ad )
     {
         ad->ClearAnchors();
@@ -573,6 +586,18 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     if( nearest )
         snapDist = nearest->Distance( aOrigin );
+
+    if( m_snapItem )
+    {
+        int existingDist = m_snapItem->Distance( aOrigin );
+
+        if( !snapDist || existingDist < *snapDist )
+            snapDist = existingDist;
+    }
+
+    wxLogTrace( traceSnap, "  snapDist: %s (value=%d)",
+                snapDist ? "set" : "none", snapDist ? *snapDist : -1 );
+    wxLogTrace( traceSnap, "  m_snapItem: %s", m_snapItem ? "exists" : "none" );
 
     showConstructionGeometry( m_enableSnap );
 
@@ -621,9 +646,13 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
     if( m_enableSnap )
     {
+        wxLogTrace( traceSnap, "  Snap enabled, checking snap options..." );
+
         // Existing snap lines need priority over new snaps
         if( m_enableSnapLine )
         {
+            wxLogTrace( traceSnap, "    Checking snap lines..." );
+
             OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint(
                     aOrigin, nearestGrid, snapDist, snapRange );
 
@@ -639,36 +668,104 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             // We found a better snap point that the nearest one
             if( snapLineSnap && m_skipPoint != *snapLineSnap )
             {
-                snapLineManager.SetSnapLineEnd( *snapLineSnap );
-                snapValid = true;
+                wxLogTrace( traceSnap, "    Snap line found at (%d, %d)",
+                            snapLineSnap->x, snapLineSnap->y );
 
-                // Don't show a snap point if we're snapping to a grid rather than an anchor
-                m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
-                m_viewSnapPoint.SetSnapTypes( POINT_TYPE::PT_NONE );
+                // Check if we have a nearby anchor that should take precedence
+                // Prefer actual anchors over construction line grid intersections
+                bool preferAnchor = false;
 
-                // Only return the snap line end as a snap if it's not a reference point
-                // (we don't snap to reference points, but we can use them to update the snap line,
-                // without actually snapping)
-                if( !ptIsReferenceOnly( *snapLineSnap ) )
-                    return *snapLineSnap;
+                if( nearest && nearest->Distance( aOrigin ) <= snapRange )
+                {
+                    int snapLineDistance = ( *snapLineSnap - aOrigin ).EuclideanNorm();
+                    int anchorDistance = nearest->Distance( aOrigin );
+
+                    // Prefer the anchor if it's closer or within a small margin
+                    if( anchorDistance <= snapLineDistance * ADVANCED_CFG::GetCfg().m_SnapToAnchorMargin )
+                    {
+                        preferAnchor = true;
+                        wxLogTrace( traceSnap, "    Preferring anchor over snap line (anchorDist=%d, snapLineDist=%d)",
+                                    anchorDistance, snapLineDistance );
+                    }
+                }
+
+                if( !preferAnchor )
+                {
+                    snapLineManager.SetSnapLineEnd( *snapLineSnap );
+                    snapValid = true;
+
+                    // Don't show a snap point if we're snapping to a grid rather than an anchor
+                    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
+                    m_viewSnapPoint.SetSnapTypes( POINT_TYPE::PT_NONE );
+
+                    // Only return the snap line end as a snap if it's not a reference point
+                    // (we don't snap to reference points, but we can use them to update the snap line,
+                    // without actually snapping)
+                    if( !ptIsReferenceOnly( *snapLineSnap ) )
+                    {
+                        wxLogTrace( traceSnap, "  RETURNING snap line point (non-reference): (%d, %d)",
+                                    snapLineSnap->x, snapLineSnap->y );
+                        return *snapLineSnap;
+                    }
+                    else
+                    {
+                        wxLogTrace( traceSnap, "    Snap line point is reference-only, continuing..." );
+                    }
+                }
+                else
+                {
+                    wxLogTrace( traceSnap, "    Skipping snap line, will use anchor instead" );
+                }
             }
+        }
+
+        if( m_snapItem )
+        {
+            int dist = m_snapItem->Distance( aOrigin );
+
+            wxLogTrace( traceSnap, "    Checking existing m_snapItem, dist=%d (snapRange=%d)",
+                        dist, snapRange );
+
+            if( dist <= snapRange )
+            {
+                if( nearest && ptIsReferenceOnly( nearest->pos ) &&
+                        nearest->Distance( aOrigin ) <= snapRange )
+                {
+                    snapLineManager.SetSnapLineOrigin( nearest->pos );
+                }
+
+                snapLineManager.SetSnappedAnchor( m_snapItem->pos );
+                updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
+
+                wxLogTrace( traceSnap, "  RETURNING existing m_snapItem: (%d, %d)",
+                            m_snapItem->pos.x, m_snapItem->pos.y );
+                return m_snapItem->pos;
+            }
+
+            wxLogTrace( traceSnap, "    m_snapItem too far, clearing..." );
+            m_snapItem = std::nullopt;
         }
 
         // If there's a snap anchor within range, use it if we can
         if( nearest && nearest->Distance( aOrigin ) <= snapRange )
         {
+            wxLogTrace( traceSnap, "    Nearest anchor within snapRange" );
+
             const bool anchorIsConstructed = nearest->flags & ANCHOR_FLAGS::CONSTRUCTED;
 
             // If the nearest anchor is a reference point, we don't snap to it,
             // but we can update the snap line origin
             if( ptIsReferenceOnly( nearest->pos ) )
             {
+                wxLogTrace( traceSnap, "    Nearest anchor is reference-only, setting snap line origin" );
                 // We can set the snap line origin, but don't mess with the
                 // accepted snap point
                 snapLineManager.SetSnapLineOrigin( nearest->pos );
             }
             else
             {
+                wxLogTrace( traceSnap, "    Nearest anchor accepted, constructed=%d", anchorIsConstructed );
+
                 // 'Intrinsic' points of items can trigger adding construction geometry
                 // for _that_ item by proximity. E.g. just mousing over the intersection
                 // of an item doesn't  add a construction item for the second item).
@@ -684,6 +781,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                 // Show the correct snap point marker
                 updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
 
+                wxLogTrace( traceSnap, "  RETURNING nearest anchor: (%d, %d)",
+                            m_snapItem->pos.x, m_snapItem->pos.y );
                 return m_snapItem->pos;
             }
 
@@ -691,10 +790,14 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         }
         else
         {
+            wxLogTrace( traceSnap, "    No nearest anchor within snapRange" );
+
             static const bool canActivateByHitTest = ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
 
             if( canActivateByHitTest )
             {
+                wxLogTrace( traceSnap, "    Checking hit test for construction activation..." );
+
                 // An exact hit on an item, even if not near a snap point
                 // If it's tool hard to hit by hover, this can be increased
                 // to make it non-exact.
@@ -704,6 +807,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                 {
                     if( item->HitTest( aOrigin, hoverAccuracy ) )
                     {
+                        wxLogTrace( traceSnap, "    Hit item, proposing construction geometry" );
                         proposeConstructionForItems( { item } );
                         snapValid = true;
                         break;
@@ -718,11 +822,16 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         // but they're useful when there isn't a grid to snap to
         if( !m_enableGrid )
         {
+            wxLogTrace( traceSnap, "    Grid disabled, checking point-on-element snap..." );
+
             OPT_VECTOR2I nearestPointOnAnElement = GetNearestPoint( m_pointOnLineCandidates, aOrigin );
 
             // Got any nearest point - snap if in range
             if( nearestPointOnAnElement && nearestPointOnAnElement->Distance( aOrigin ) <= snapRange )
             {
+                wxLogTrace( traceSnap, "  RETURNING point-on-element: (%d, %d)",
+                            nearestPointOnAnElement->x, nearestPointOnAnElement->y );
+
                 updateSnapPoint( { *nearestPointOnAnElement, POINT_TYPE::PT_ON_ELEMENT } );
 
                 // Clear the snap end, but keep the origin so touching another line
@@ -734,6 +843,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     }
 
     // Completely failed to find any snap point, so snap to the grid
+
+    wxLogTrace( traceSnap, "  RETURNING grid snap: (%d, %d)", nearestGrid.x, nearestGrid.y );
 
     m_snapItem = std::nullopt;
 
