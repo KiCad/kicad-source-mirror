@@ -512,7 +512,9 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
     if( GetDesignSettings().GetTrackWidthIndex() >= (int) GetDesignSettings().m_TrackWidthList.size() )
         GetDesignSettings().SetTrackWidthIndex( 0 );
 
-    aTrackWidthSelectBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+    // GetDesignSettings().GetTrackWidthIndex() can be < 0 if no board loaded
+    // So in this case select the first select box item available (use netclass)
+    aTrackWidthSelectBox->SetSelection( std::max( 0, GetDesignSettings().GetTrackWidthIndex() ) );
 }
 
 
@@ -571,7 +573,9 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
     if( GetDesignSettings().GetViaSizeIndex() >= (int) GetDesignSettings().m_ViasDimensionsList.size() )
         GetDesignSettings().SetViaSizeIndex( 0 );
 
-    aViaSizeSelectBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+    // GetDesignSettings().GetViaSizeIndex() can be < 0 if no board loaded
+    // So in this case select the first select box item available (use netclass)
+    aViaSizeSelectBox->SetSelection( std::max( 0, GetDesignSettings().GetViaSizeIndex() ) );
 }
 
 
@@ -691,7 +695,8 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
         if( bds.UseCustomTrackViaSize() )
             sel = wxNOT_FOUND;
         else
-            sel = bds.GetTrackWidthIndex();
+            // if GetTrackWidthIndex() < 0, display the "use netclass" option
+            sel = std::max( 0, bds.GetTrackWidthIndex() );
 
         if( m_SelTrackWidthBox->GetSelection() != sel )
             m_SelTrackWidthBox->SetSelection( sel );
@@ -709,7 +714,8 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
         if( bds.UseCustomTrackViaSize() )
             sel = wxNOT_FOUND;
         else
-            sel = bds.GetViaSizeIndex();
+            // if GetViaSizeIndex() < 0, display the "use netclass" option
+            sel = std::max( 0, bds.GetViaSizeIndex() );
 
         if( m_SelViaSizeBox->GetSelection() != sel )
             m_SelViaSizeBox->SetSelection( sel );
