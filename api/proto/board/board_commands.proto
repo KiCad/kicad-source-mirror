@@ -265,6 +265,11 @@ enum DrcSeverity // Since 10.0
   DRS_UNKNOWN = 0;
   DRS_WARNING = 1;
   DRS_ERROR = 2;
+  DRS_EXCLUSION = 3;
+  DRS_IGNORE = 4;
+  DRS_INFO = 5;
+  DRS_ACTION = 6;
+  DRS_DEBUG = 7;
 }
 
 // Returns InjectDrcErrorResponse

@@ -834,11 +834,17 @@ DrcSeverity ToProtoEnum( SEVERITY aValue )
 {
     switch( aValue )
     {
-    case RPT_SEVERITY_WARNING: return DrcSeverity::DRS_WARNING;
-    case RPT_SEVERITY_ERROR:   return DrcSeverity::DRS_ERROR;
-
+    case RPT_SEVERITY_WARNING:   return DrcSeverity::DRS_WARNING;
+    case RPT_SEVERITY_ERROR:     return DrcSeverity::DRS_ERROR;
+    case RPT_SEVERITY_EXCLUSION: return DrcSeverity::DRS_EXCLUSION;
+    case RPT_SEVERITY_IGNORE:    return DrcSeverity::DRS_IGNORE;
+    case RPT_SEVERITY_INFO:      return DrcSeverity::DRS_INFO;
+    case RPT_SEVERITY_ACTION:    return DrcSeverity::DRS_ACTION;
+    case RPT_SEVERITY_DEBUG:     return DrcSeverity::DRS_DEBUG;
+    case RPT_SEVERITY_UNDEFINED:
     default:
-        return DrcSeverity::DRS_UNKNOWN;
+        wxCHECK_MSG( false, DrcSeverity::DRS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<SEVERITY>");
     }
 }
 
@@ -848,10 +854,16 @@ SEVERITY FromProtoEnum( DrcSeverity aValue )
 {
     switch( aValue )
     {
-    case DrcSeverity::DRS_WARNING: return RPT_SEVERITY_WARNING;
-    case DrcSeverity::DRS_ERROR:   return RPT_SEVERITY_ERROR;
+    case DrcSeverity::DRS_WARNING:   return RPT_SEVERITY_WARNING;
+    case DrcSeverity::DRS_ERROR:     return RPT_SEVERITY_ERROR;
+    case DrcSeverity::DRS_EXCLUSION: return RPT_SEVERITY_EXCLUSION;
+    case DrcSeverity::DRS_IGNORE:    return RPT_SEVERITY_IGNORE;
+    case DrcSeverity::DRS_INFO:      return RPT_SEVERITY_INFO;
+    case DrcSeverity::DRS_ACTION:    return RPT_SEVERITY_ACTION;
+    case DrcSeverity::DRS_DEBUG:     return RPT_SEVERITY_DEBUG;
     case DrcSeverity::DRS_UNKNOWN:
-    default:                       return RPT_SEVERITY_ERROR;
+    default:
+        return RPT_SEVERITY_UNDEFINED;
     }
 }
 

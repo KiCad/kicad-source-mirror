@@ -270,7 +270,7 @@ BOOST_AUTO_TEST_CASE( BoardStackupLayerType )
 
 BOOST_AUTO_TEST_CASE( DrcSeverity )
 {
-    testEnums<SEVERITY, kiapi::board::commands::DrcSeverity>( true );
+    testEnums<SEVERITY, kiapi::board::commands::DrcSeverity>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
