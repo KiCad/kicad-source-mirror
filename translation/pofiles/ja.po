@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
 "PO-Revision-Date: 2025-10-16 22:07+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -28996,7 +28996,7 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
 msgid "Place Bitmaps"
-msgstr "ビットマップを配置する"
+msgstr "ビットマップを配置"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
@@ -48269,7 +48269,7 @@ msgstr "ビアのサイズを選択"
 
 #: pcbnew/tools/drawing_tool.cpp:381 pcbnew/tools/drawing_tool.cpp:2374
 msgid "Draw Line"
-msgstr "線を描く"
+msgstr "線を描画"
 
 #: pcbnew/tools/drawing_tool.cpp:445
 msgid "Draw Text Box"
@@ -48277,15 +48277,15 @@ msgstr "テキスト ボックスを描画"
 
 #: pcbnew/tools/drawing_tool.cpp:445
 msgid "Draw Rectangle"
-msgstr "矩形を描く"
+msgstr "矩形を描画"
 
 #: pcbnew/tools/drawing_tool.cpp:493
 msgid "Draw Circle"
-msgstr "円を描く"
+msgstr "円を描画"
 
 #: pcbnew/tools/drawing_tool.cpp:540
 msgid "Draw Arc"
-msgstr "円弧を描く"
+msgstr "円弧を描画"
 
 #: pcbnew/tools/drawing_tool.cpp:591
 msgid "Draw Bezier"
@@ -48820,7 +48820,7 @@ msgstr "図形レイヤーに基板スタックアップの表を追加します
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Place Reference Images"
-msgstr "参照画像を配置する"
+msgstr "参照画像を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:175
 msgid ""
@@ -48863,27 +48863,27 @@ msgstr "調整パターンの1ステップ振幅を小さくします。"
 
 #: pcbnew/tools/pcb_actions.cpp:244
 msgid "Draw Aligned Dimensions"
-msgstr "平行寸法線を描く"
+msgstr "平行寸法線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:251
 msgid "Draw Center Dimensions"
-msgstr "中心の寸法線を描く"
+msgstr "中心の寸法線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 msgid "Draw Radial Dimensions"
-msgstr "半径の寸法線を描く"
+msgstr "半径の寸法線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:266
 msgid "Draw Orthogonal Dimensions"
-msgstr "直交寸法線を描く"
+msgstr "直交寸法線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:273
 msgid "Draw Leaders"
-msgstr "引出線を描く"
+msgstr "引出線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Draw Filled Zones"
-msgstr "塗りつぶしゾーンを描く"
+msgstr "塗りつぶしゾーンを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Place Vias"
@@ -49302,7 +49302,7 @@ msgstr "冗長なアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Draw Microwave Gaps"
-msgstr "マイクロ波用ギャップを描く"
+msgstr "マイクロ波用ギャップを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
@@ -49310,7 +49310,7 @@ msgstr "高周波基板用に指定長のギャップを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:879
 msgid "Draw Microwave Stubs"
-msgstr "マイクロ波用のスタブを描く"
+msgstr "マイクロ波用のスタブを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:880
 msgid "Create stub of specified length for microwave applications"
@@ -49318,7 +49318,7 @@ msgstr "高周波基板用に指定長のスタブを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Draw Microwave Arc Stubs"
-msgstr "マイクロ波用の円弧スタブを描く"
+msgstr "マイクロ波用の円弧スタブを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -49326,7 +49326,7 @@ msgstr "高周波基板用に指定長のスタブ (円弧) を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "マイクロ波用のポリゴン形状を描く"
+msgstr "マイクロ波用のポリゴン形状を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:898
 msgid "Create a microwave polygonal shape from a list of vertices"
@@ -49334,7 +49334,7 @@ msgstr "頂点のリストからマイクロ波用のポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:906
 msgid "Draw Microwave Lines"
-msgstr "マイクロ波用の線を描く"
+msgstr "マイクロ波用の線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:907
 msgid "Create line of specified length for microwave applications"
@@ -50690,11 +50690,11 @@ msgstr "ゾーンの切り抜きを追加"
 
 #: pcbnew/tools/zone_create_helper.cpp:229
 msgid "Draw Zone"
-msgstr "ゾーンを描く"
+msgstr "ゾーンを描画"
 
 #: pcbnew/tools/zone_create_helper.cpp:251
 msgid "Draw Polygon"
-msgstr "ポリゴンを描く"
+msgstr "ポリゴンを描画"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
