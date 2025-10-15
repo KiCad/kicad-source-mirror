@@ -545,6 +545,8 @@ void DRC_ENGINE::loadImplicitRules()
             }
         };
 
+        addNetclassTuningProfileRules( bds.m_NetSettings->GetDefaultNetclass().get() );
+
         for( const auto& [netclassName, netclass] : bds.m_NetSettings->GetNetclasses() )
             addNetclassTuningProfileRules( netclass.get() );
 
