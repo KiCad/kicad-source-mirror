@@ -276,7 +276,14 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
         return nullptr;
 
     if( !aSheet )
-        aSheet = &Schematic()->CurrentSheet();
+    {
+        SCHEMATIC* sch = Schematic();
+
+        if( !sch )
+            return nullptr; // Item has been removed from schematic (e.g. SCH_PIN during symbol deletion)
+
+        aSheet = &sch->CurrentSheet();
+    }
 
     auto it = m_connection_map.find( *aSheet );
 
