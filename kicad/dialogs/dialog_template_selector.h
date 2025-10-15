@@ -51,9 +51,19 @@ public:
     void Select();
     void Unselect();
 
+    /**
+     * Set whether this template widget represents a user template
+     * @param aIsUser true if this is a user template (can be edited/duplicated)
+     */
+    void SetIsUserTemplate( bool aIsUser ) { m_isUserTemplate = aIsUser; }
+    bool IsUserTemplate() const { return m_isUserTemplate; }
+
 protected:
     void OnKillFocus( wxFocusEvent& event );
     void OnMouse( wxMouseEvent& event );
+    void onRightClick( wxMouseEvent& event );
+    void onEditTemplate( wxCommandEvent& event );
+    void onDuplicateTemplate( wxCommandEvent& event );
 
 private:
     bool IsSelected() { return m_selected; }
@@ -63,6 +73,7 @@ protected:
     wxWindow*                 m_parent;
     wxPanel*                  m_panel;
     bool                      m_selected;
+    bool                      m_isUserTemplate;
 
     PROJECT_TEMPLATE*         m_currTemplate;
 };
@@ -77,16 +88,23 @@ public:
      */
     TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent, const wxString& aPath );
 
-    const wxString& GetPath() { return m_templatesPath; }
+    const wxString& GetPath() const { return m_templatesPath; }
 
     void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
 
     void SortAlphabetically();
 
+    /**
+     * Set whether templates in this panel are user templates (can be edited/duplicated)
+     */
+    void SetIsUserTemplates( bool aIsUser ) { m_isUserTemplates = aIsUser; }
+    bool IsUserTemplates() const { return m_isUserTemplates; }
+
 protected:
     wxNotebookPage* m_parent;
     wxString        m_templatesPath;   ///< the path to access to the folder
                                        ///<   containing the templates (which are also folders)
+    bool            m_isUserTemplates; ///< true if this panel contains user templates
 };
 
 
@@ -105,6 +123,26 @@ public:
 
     void SetWidget( TEMPLATE_WIDGET* aWidget );
 
+    /**
+     * @return the project path to edit (if Edit Template was selected), or empty string
+     */
+    wxString GetProjectToEdit() const { return m_projectToEdit; }
+
+    /**
+     * Set the project path to edit (used by template widgets)
+     */
+    void SetProjectToEdit( const wxString& aPath ) { m_projectToEdit = aPath; }
+
+    /**
+     * Refresh the current page to show updated template list
+     */
+    void replaceCurrentPage();
+
+    /**
+     * Get the path to the user templates directory (first panel marked as user templates)
+     */
+    wxString GetUserTemplatesPath() const;
+
 protected:
     void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
 
@@ -116,7 +154,6 @@ private:
 
 private:
     void buildPageContent( const wxString& aPath, int aPage );
-    void replaceCurrentPage();
 
     void OnPageChange( wxNotebookEvent& event ) override;
     void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -129,6 +166,7 @@ protected:
     TEMPLATE_WIDGET*                       m_defaultWidget;
     // Keep track of all template widgets so we can pick a sensible default
     std::vector<TEMPLATE_WIDGET*>          m_allWidgets;
+    wxString                               m_projectToEdit;  ///< Project path to edit instead of creating new
 };
 
 #endif
