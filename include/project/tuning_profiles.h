@@ -98,7 +98,7 @@ public:
 
     int GetWidth() const { return m_width; }
     int GetDiffPairGap() const { return m_diffPairGap; }
-    int GetDelay() const { return m_enableTimeDomainTuning ? m_delay : 0; }
+    int GetDelay( const bool aForce = false ) const { return ( m_enableTimeDomainTuning || aForce ) ? m_delay : 0; }
 
     bool operator==( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& other ) const
     {

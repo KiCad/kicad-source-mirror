@@ -176,7 +176,7 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
 
         m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_TRACK_WIDTH, entry.GetWidth() );
         m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_TRACK_GAP, entry.GetDiffPairGap() );
-        m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_DELAY, entry.GetDelay() );
+        m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_DELAY, entry.GetDelay( true ) );
     }
 
     for( const auto& entry : aProfile.m_ViaOverrides )
