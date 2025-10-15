@@ -35,6 +35,7 @@
 #include <wx/generic/textdlgg.h>
 #include <wx/menu.h>
 #include <wx/wupdlock.h>
+#include <wx/msgdlg.h>
 
 /**
  * Store an SCH_SHEET_PATH of each sheet in hierarchy.
