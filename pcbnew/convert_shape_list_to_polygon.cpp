@@ -197,6 +197,7 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
 
             prevPt = pt;
         }
+
         aContour.SetClosed( true );
         break;
     }
@@ -212,13 +213,11 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         aContour.SetClosed( true );
 
         for( int ii = 1; ii < aContour.PointCount(); ++ii )
-        {
-            aShapeOwners[ std::make_pair( aContour.CPoint( ii-1 ),
-                                         aContour.CPoint( ii ) ) ] = aShape;
-        }
+            aShapeOwners[ std::make_pair( aContour.CPoint( ii-1 ), aContour.CPoint( ii ) ) ] = aShape;
 
         if( !aAllowUseArcsInPolygons )
             aContour.ClearArcs();
+
         break;
     }
     case SHAPE_T::RECTANGLE:
@@ -232,10 +231,7 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
             aContour.Append( poly.Outline( 0 ) );
 
             for( int ii = 1; ii < aContour.PointCount(); ++ii )
-            {
-                aShapeOwners[ std::make_pair( aContour.CPoint( ii - 1 ),
-                                             aContour.CPoint( ii ) ) ] = aShape;
-            }
+                aShapeOwners[ std::make_pair( aContour.CPoint( ii - 1 ), aContour.CPoint( ii ) ) ] = aShape;
 
             if( !aAllowUseArcsInPolygons )
                 aContour.ClearArcs();

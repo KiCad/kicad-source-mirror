@@ -111,23 +111,23 @@ public:
     bool IsLayersSizeValid();
 
 
-    void AddToMiddleContourns( const SHAPE_LINE_CHAIN& outlinePath, float zBot, float zTop,
-                               double aBiuTo3Du, bool aInvertFaceDirection,
-                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
+    void AddToMiddleContours( const SHAPE_LINE_CHAIN& outlinePath, float zBot, float zTop,
+                              double aBiuTo3Du, bool aInvertFaceDirection,
+                              const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    void AddToMiddleContourns( const SHAPE_POLY_SET& aPolySet, float zBot, float zTop,
-                               double aBiuTo3Du, bool aInvertFaceDirection,
-                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
+    void AddToMiddleContours( const SHAPE_POLY_SET& aPolySet, float zBot, float zTop,
+                              double aBiuTo3Du, bool aInvertFaceDirection,
+                              const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    void AddToMiddleContourns( const std::vector< SFVEC2F >& aContournPoints, float zBot,
-                               float zTop, bool aInvertFaceDirection,
-                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
+    void AddToMiddleContours( const std::vector< SFVEC2F >& aContourPoints, float zBot,
+                              float zTop, bool aInvertFaceDirection,
+                              const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
     std::mutex m_middle_layer_lock;
 
     TRIANGLE_LIST* m_layer_top_segment_ends;
     TRIANGLE_LIST* m_layer_top_triangles;
-    TRIANGLE_LIST* m_layer_middle_contourns_quads;
+    TRIANGLE_LIST* m_layer_middle_contours_quads;
     TRIANGLE_LIST* m_layer_bot_triangles;
     TRIANGLE_LIST* m_layer_bot_segment_ends;
 };
@@ -229,7 +229,7 @@ private:
     float   m_zTop;
     GLuint  m_layer_top_segment_ends;
     GLuint  m_layer_top_triangles;
-    GLuint  m_layer_middle_contourns_quads;
+    GLuint  m_layer_middle_contours_quads;
     GLuint  m_layer_bot_triangles;
     GLuint  m_layer_bot_segment_ends;
 

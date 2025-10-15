@@ -150,8 +150,7 @@ void RENDER_3D_OPENGL::addObjectTriangles( const RING_2D* aRing, TRIANGLE_DISPLA
 }
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri,
-                                           TRIANGLE_DISPLAY_LIST* aDstLayer,
+void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri, TRIANGLE_DISPLAY_LIST* aDstLayer,
                                            float aZtop, float aZbot )
 {
     const SFVEC2F& v1 = aTri->GetP1();
@@ -248,64 +247,52 @@ void RENDER_3D_OPENGL::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
 
 
 OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
-                                                     const SHAPE_POLY_SET& aPoly, float aZtop,
-                                                     float aZbot, bool aInvertFaces,
-                                                     const BVH_CONTAINER_2D* aThroughHoles )
+                                                     const SHAPE_POLY_SET& aPoly, float aZtop, float aZbot,
+                                                     bool aInvertFaces, const BVH_CONTAINER_2D* aThroughHoles )
 {
-    OPENGL_RENDER_LIST* ret = nullptr;
+    if( aListHolesObject2d.size() == 0 )
+        return nullptr;
 
-    if( aListHolesObject2d.size() > 0 )
+    OPENGL_RENDER_LIST*    ret = nullptr;
+    TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( aListHolesObject2d.size() * 2 );
+
+    // Convert the list of objects(filled circles) to triangle layer structure
+    for( const OBJECT_2D* object2d : aListHolesObject2d )
     {
-        TRIANGLE_DISPLAY_LIST* layerTriangles =
-                new TRIANGLE_DISPLAY_LIST( aListHolesObject2d.size() * 2 );
-
-        // Convert the list of objects(filled circles) to triangle layer structure
-        for( const OBJECT_2D* itemOnLayer : aListHolesObject2d )
+        switch( object2d->GetObjectType() )
         {
-            const OBJECT_2D* object2d_A = itemOnLayer;
+        case OBJECT_2D_TYPE::FILLED_CIRCLE:
+            addObjectTriangles( static_cast<const FILLED_CIRCLE_2D*>( object2d ), layerTriangles, aZtop, aZbot );
+            break;
 
-            wxASSERT( ( object2d_A->GetObjectType() == OBJECT_2D_TYPE::FILLED_CIRCLE )
-                      || ( object2d_A->GetObjectType() == OBJECT_2D_TYPE::ROUNDSEG ) );
+        case OBJECT_2D_TYPE::ROUNDSEG:
+            addObjectTriangles( static_cast<const ROUND_SEGMENT_2D*>( object2d ), layerTriangles, aZtop, aZbot );
+            break;
 
-            switch( object2d_A->GetObjectType() )
-            {
-            case OBJECT_2D_TYPE::FILLED_CIRCLE:
-                addObjectTriangles( static_cast<const FILLED_CIRCLE_2D*>( object2d_A ),
-                                    layerTriangles, aZtop, aZbot );
-                break;
-
-            case OBJECT_2D_TYPE::ROUNDSEG:
-                addObjectTriangles( static_cast<const ROUND_SEGMENT_2D*>( object2d_A ),
-                                    layerTriangles, aZtop, aZbot );
-                break;
-
-            default:
-                wxFAIL_MSG( wxT( "RENDER_3D_OPENGL::generateHoles: Object type not implemented" ) );
-                break;
-            }
+        default:
+            wxFAIL_MSG( wxT( "RENDER_3D_OPENGL::generateHoles: Object type not implemented" ) );
+            break;
         }
-
-        // Note: he can have a aListHolesObject2d with holes but without contours
-        // eg: when there are only NPTH on the list and the contours were not added
-        if( aPoly.OutlineCount() > 0 )
-        {
-            layerTriangles->AddToMiddleContourns( aPoly, aZbot, aZtop,
-                                                  m_boardAdapter.BiuTo3dUnits(),
-                                                  aInvertFaces,  aThroughHoles );
-        }
-
-        ret = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, aZbot, aZtop );
-
-        delete layerTriangles;
     }
+
+    // Note: he can have a aListHolesObject2d with holes but without contours
+    // eg: when there are only NPTH on the list and the contours were not added
+    if( aPoly.OutlineCount() > 0 )
+    {
+        layerTriangles->AddToMiddleContours( aPoly, aZbot, aZtop, m_boardAdapter.BiuTo3dUnits(), aInvertFaces,
+                                             aThroughHoles );
+    }
+
+    ret = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, aZbot, aZtop );
+
+    delete layerTriangles;
 
     return ret;
 }
 
 
 OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D* aContainer,
-                                                         const SHAPE_POLY_SET* aPolyList,
-                                                         PCB_LAYER_ID aLayer,
+                                                         const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayer,
                                                          const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aContainer == nullptr )
@@ -316,10 +303,10 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
     if( listObject2d.size() == 0 )
         return nullptr;
 
-    float layer_z_bot = 0.0f;
-    float layer_z_top = 0.0f;
+    float zBot = 0.0f;
+    float zTop = 0.0f;
 
-    getLayerZPos( aLayer, layer_z_top, layer_z_bot );
+    getLayerZPos( aLayer, zTop, zBot );
 
     // Calculate an estimation for the nr of triangles based on the nr of objects
     unsigned int nrTrianglesEstimation = listObject2d.size() * 8;
@@ -330,35 +317,28 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
     m_triangles.push_back( layerTriangles );
 
     // Load the 2D (X,Y axis) component of shapes
-    for( const OBJECT_2D* itemOnLayer : listObject2d )
+    for( const OBJECT_2D* object2d : listObject2d )
     {
-        const OBJECT_2D* object2d_A = itemOnLayer;
-
-        switch( object2d_A->GetObjectType() )
+        switch( object2d->GetObjectType() )
         {
         case OBJECT_2D_TYPE::FILLED_CIRCLE:
-            addObjectTriangles( static_cast<const FILLED_CIRCLE_2D*>( object2d_A ),
-                                layerTriangles, layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const FILLED_CIRCLE_2D*>( object2d ), layerTriangles, zTop, zBot );
             break;
 
         case OBJECT_2D_TYPE::POLYGON4PT:
-            addObjectTriangles( static_cast<const POLYGON_4PT_2D*>( object2d_A ),
-                                layerTriangles, layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const POLYGON_4PT_2D*>( object2d ), layerTriangles, zTop, zBot );
             break;
 
         case OBJECT_2D_TYPE::RING:
-            addObjectTriangles( static_cast<const RING_2D*>( object2d_A ),
-                                layerTriangles, layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const RING_2D*>( object2d ), layerTriangles, zTop, zBot );
             break;
 
         case OBJECT_2D_TYPE::TRIANGLE:
-            addObjectTriangles( static_cast<const TRIANGLE_2D*>( object2d_A ),
-                                layerTriangles, layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const TRIANGLE_2D*>( object2d ), layerTriangles, zTop, zBot );
             break;
 
         case OBJECT_2D_TYPE::ROUNDSEG:
-            addObjectTriangles( static_cast<const ROUND_SEGMENT_2D*>( object2d_A ),
-                                layerTriangles, layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const ROUND_SEGMENT_2D*>( object2d ), layerTriangles, zTop, zBot );
             break;
 
         default:
@@ -369,12 +349,12 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
 
     if( aPolyList && aPolyList->OutlineCount() > 0 )
     {
-        layerTriangles->AddToMiddleContourns( *aPolyList, layer_z_bot, layer_z_top,
-                                              m_boardAdapter.BiuTo3dUnits(), false, aThroughHoles );
+        layerTriangles->AddToMiddleContours( *aPolyList, zBot, zTop, m_boardAdapter.BiuTo3dUnits(), false,
+                                             aThroughHoles );
     }
 
     // Create display list
-    return new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, layer_z_bot, layer_z_top );
+    return new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, zBot, zTop );
 }
 
 
@@ -433,9 +413,9 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardP
 
         if( aBoardPoly.OutlineCount() > 0 )
         {
-            layerTriangles->AddToMiddleContourns( aBoardPoly, layer_z_bot, layer_z_top,
-                                                  m_boardAdapter.BiuTo3dUnits(), false,
-                                                  aThroughHoles );
+            layerTriangles->AddToMiddleContours( aBoardPoly, layer_z_bot, layer_z_top,
+                                                 m_boardAdapter.BiuTo3dUnits(), false,
+                                                 aThroughHoles );
 
             dispLists = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
                                                 layer_z_top, layer_z_top );
@@ -722,8 +702,8 @@ void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
                                                    SFVEC3F( vi0.x, vi0.y, aZbot ) );
     }
 
-    aDstLayer->AddToMiddleContourns( outerContour, aZbot, aZtop, true );
-    aDstLayer->AddToMiddleContourns( innerContour, aZbot, aZtop, false );
+    aDstLayer->AddToMiddleContours( outerContour, aZbot, aZtop, true );
+    aDstLayer->AddToMiddleContours( innerContour, aZbot, aZtop, false );
 }
 
 
@@ -920,9 +900,9 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
             if( tht_outer_holes_poly.OutlineCount() > 0 )
             {
-                layerTriangles->AddToMiddleContourns( tht_outer_holes_poly,
-                                                      layer_z_bot, layer_z_top,
-                                                      m_boardAdapter.BiuTo3dUnits(), false );
+                layerTriangles->AddToMiddleContours( tht_outer_holes_poly,
+                                                     layer_z_bot, layer_z_top,
+                                                     m_boardAdapter.BiuTo3dUnits(), false );
 
                 m_padHoles = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
                                                      layer_z_top, layer_z_top );
