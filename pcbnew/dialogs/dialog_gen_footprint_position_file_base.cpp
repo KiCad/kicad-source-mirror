@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	m_formatLabel = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_formatLabel->Wrap( -1 );
-	fgSizer1->Add( m_formatLabel, 0, wxRIGHT, 5 );
+	fgSizer1->Add( m_formatLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	wxString m_formatCtrlChoices[] = { _("Plain text"), _("CSV"), _("Gerber X3") };
 	int m_formatCtrlNChoices = sizeof( m_formatCtrlChoices ) / sizeof( wxString );
@@ -64,7 +64,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	m_unitsLabel = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsLabel->Wrap( -1 );
-	fgSizer1->Add( m_unitsLabel, 0, wxRIGHT, 5 );
+	fgSizer1->Add( m_unitsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	wxString m_unitsCtrlChoices[] = { _("Inches"), _("Millimeters") };
 	int m_unitsCtrlNChoices = sizeof( m_unitsCtrlChoices ) / sizeof( wxString );
