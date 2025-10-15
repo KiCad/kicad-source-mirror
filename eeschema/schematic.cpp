@@ -328,9 +328,10 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
         m_topLevelSheets.push_back( aRootSheet );
         aRootSheet->SetParent( m_rootSheet );
 
-        // Add the sheet to the virtual root's screen if screen exists
+        // Clear the virtual root's screen and add only the new sheet
         if( m_rootSheet->GetScreen() )
         {
+            m_rootSheet->GetScreen()->Clear();
             m_rootSheet->GetScreen()->Append( aRootSheet );
         }
 
@@ -915,10 +916,19 @@ wxString SCHEMATIC::GetUniqueFilenameForCurrentSheet()
     // Note that we need to fetch the rootSheetName out of its filename, as the root SCH_SHEET's
     // name is just a timestamp.
 
-    wxFileName rootFn( CurrentSheet().at( 0 )->GetFileName() );
+    // Skip virtual root if present
+    size_t startIdx = 0;
+    if( CurrentSheet().size() > 0 && CurrentSheet().at( 0 )->IsVirtualRootSheet() )
+        startIdx = 1;
+
+    // Handle the case where we only have a virtual root (shouldn't happen in practice)
+    if( startIdx >= CurrentSheet().size() )
+        return wxEmptyString;
+
+    wxFileName rootFn( CurrentSheet().at( startIdx )->GetFileName() );
     wxString   filename = rootFn.GetName();
 
-    for( unsigned i = 1; i < CurrentSheet().size(); i++ )
+    for( unsigned i = startIdx + 1; i < CurrentSheet().size(); i++ )
         filename += wxT( "-" ) + CurrentSheet().at( i )->GetName();
 
     return filename;
@@ -934,10 +944,11 @@ void SCHEMATIC::SetSheetNumberAndCount()
     int sheet_count;
 
     // Handle virtual root case
-    if( Root().m_Uuid == niluuid && !Root().GetScreen() )
+    if( Root().m_Uuid == niluuid )
     {
         // Virtual root: count all top-level sheets
         sheet_count = 0;
+
         for( const SCH_SHEET* topSheet : m_topLevelSheets )
         {
             if( topSheet )

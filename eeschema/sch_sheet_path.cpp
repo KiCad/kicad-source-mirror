@@ -374,6 +374,12 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
 {
     wxString s;
 
+    // Determine the starting index - skip virtual root if present
+    size_t startIdx = 0;
+
+    if( !empty() && at( 0 )->IsVirtualRootSheet() )
+        startIdx = 1;
+
     if( aUseShortRootName )
     {
         s = wxS( "/" ); // Use only the short name in netlists
@@ -382,16 +388,16 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
     {
         wxString fileName;
 
-        if( !empty() && at( 0 )->GetScreen() )
-            fileName = at( 0 )->GetScreen()->GetFileName();
+        if( size() > startIdx && at( startIdx )->GetScreen() )
+            fileName = at( startIdx )->GetScreen()->GetFileName();
 
         wxFileName fn = fileName;
 
         s = fn.GetName() + wxS( "/" );
     }
 
-    // Start at 1 since we've already processed the root sheet.
-    for( unsigned i = 1; i < size(); i++ )
+    // Start at startIdx + 1 since we've already processed the root sheet.
+    for( unsigned i = startIdx + 1; i < size(); i++ )
         s << at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false ) << wxS( "/" );
 
     if( aStripTrailingSeparator && s.EndsWith( "/" ) )
@@ -848,6 +854,26 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
                aSheet->GetName(),
                aSheet->m_Uuid.AsString(),
                aSheet->m_Uuid == niluuid ? 1 : 0 );
+
+    // Special handling for virtual root: process its children without adding the root itself
+    if( aSheet->IsVirtualRootSheet() )
+    {
+        wxLogTrace( traceSchSheetPaths, "  Skipping virtual root, processing children only" );
+
+        if( aSheet->GetScreen() )
+        {
+            std::vector<SCH_ITEM*> childSheets;
+            aSheet->GetScreen()->GetSheets( &childSheets );
+
+            for( SCH_ITEM* item : childSheets )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+                BuildSheetList( sheet, aCheckIntegrity );
+            }
+        }
+
+        return;
+    }
 
     std::vector<SCH_SHEET*> badSheets;
 
