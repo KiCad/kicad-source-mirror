@@ -228,6 +228,13 @@ extern KICOMMON_API const wxChar* const traceSchPainter;
 extern KICOMMON_API const wxChar* const traceSchSymbolRef;
 
 /**
+ * Flag to enable debug output of schematic drag net collision detection.
+ *
+ * Use "KICAD_SCH_DRAG_NET_COLLISION" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchDragNetCollision;
+
+/**
  * Flag to enable debug output of environment variable operations.
  *
  * Use "KICAD_ENV_VARS" to enable.

@@ -57,6 +57,7 @@ const wxChar* const traceSchFieldRendering = wxT( "KICAD_SCH_FIELD_RENDERING" );
 const wxChar* const traceSchPainter = wxT( "KICAD_SCH_PAINTER" );
 const wxChar* const traceSchSymbolRef = wxT( "KICAD_SCH_SYMBOL_REF" );
 const wxChar* const traceEnvVars = wxT( "KICAD_ENV_VARS" );
+const wxChar* const traceSchDragNetCollision = wxT( "KICAD_SCH_DRAG_NET_COLLISION" );
 const wxChar* const traceGalProfile = wxT( "KICAD_GAL_PROFILE" );
 const wxChar* const traceKiCad2Step = wxT( "KICAD2STEP" );
 const wxChar* const traceUiProfile = wxT( "KICAD_UI_PROFILE" );
