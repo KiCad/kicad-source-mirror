@@ -229,6 +229,7 @@ std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aP
         {
             if( dir.x == 0 && dir.y != 0 )
             {
+                // Vertical construction line: snap to grid intersection
                 candidate.x = origin.x;
                 candidate.y = aNearestGrid.y;
                 wxLogTrace( traceSnap, "      Vertical snap: candidate=(%d, %d)",
@@ -236,6 +237,7 @@ std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aP
             }
             else if( dir.y == 0 && dir.x != 0 )
             {
+                // Horizontal construction line: snap to grid intersection
                 candidate.x = aNearestGrid.x;
                 candidate.y = origin.y;
                 wxLogTrace( traceSnap, "      Horizontal snap: candidate=(%d, %d)",
@@ -243,18 +245,56 @@ std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aP
             }
             else
             {
-                double stepDistance = std::sqrt( aGrid.x * aGrid.x + aGrid.y * aGrid.y );
+                // Diagonal construction line: find nearest grid intersection along the line
+                // We need to find grid points near the projection point and pick the closest
+                // one that lies on the construction line
 
-                if( stepDistance == 0.0 )
+                // Get the grid origin for proper alignment
+                VECTOR2D gridOrigin( GetOrigin() );
+
+                // Calculate the projection point relative to grid
+                VECTOR2D relProjection = projection - gridOrigin;
+
+                // Find nearby grid points (check 9 points in a 3x3 grid around the projection)
+                std::vector<VECTOR2D> gridPoints;
+                for( int dx = -1; dx <= 1; ++dx )
                 {
-                    wxLogTrace( traceSnap, "      stepDistance=0, skipping" );
-                    continue;
+                    for( int dy = -1; dy <= 1; ++dy )
+                    {
+                        double gridX = std::round( relProjection.x / aGrid.x ) * aGrid.x + dx * aGrid.x;
+                        double gridY = std::round( relProjection.y / aGrid.y ) * aGrid.y + dy * aGrid.y;
+                        gridPoints.push_back( VECTOR2D( gridX + gridOrigin.x, gridY + gridOrigin.y ) );
+                    }
                 }
 
-                double steps = std::round( distanceAlong / stepDistance );
-                candidate = originVec + dirUnit * ( steps * stepDistance );
-                wxLogTrace( traceSnap, "      Diagonal snap: steps=%.1f, candidate=(%.1f, %.1f)",
-                            steps, candidate.x, candidate.y );
+                // Find the grid point closest to the construction line
+                double   bestGridDist = std::numeric_limits<double>::max();
+                VECTOR2D bestGridPt = projection;
+
+                for( const VECTOR2D& gridPt : gridPoints )
+                {
+                    // Calculate perpendicular distance from grid point to construction line
+                    VECTOR2D gridDelta = gridPt - originVec;
+                    double   gridDistAlong = gridDelta.Dot( dirUnit );
+                    VECTOR2D gridProjection = originVec + dirUnit * gridDistAlong;
+                    double   gridPerpDist = ( gridPt - gridProjection ).EuclideanNorm();
+
+                    // Also consider distance from cursor
+                    double distFromCursor = ( gridPt - cursorVec ).EuclideanNorm();
+
+                    // Prefer grid points that are close to the line and close to cursor
+                    double score = gridPerpDist + distFromCursor * 0.1;
+
+                    if( score < bestGridDist )
+                    {
+                        bestGridDist = score;
+                        bestGridPt = gridPt;
+                    }
+                }
+
+                candidate = bestGridPt;
+                wxLogTrace( traceSnap, "      Diagonal snap: candidate=(%.1f, %.1f), perpDist=%.1f",
+                            candidate.x, candidate.y, bestGridDist );
             }
         }
         else

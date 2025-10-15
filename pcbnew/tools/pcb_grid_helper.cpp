@@ -654,7 +654,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             wxLogTrace( traceSnap, "    Checking snap lines..." );
 
             OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint(
-                    aOrigin, nearestGrid, snapDist, snapRange );
+                    aOrigin, nearestGrid, snapDist, snapRange, GetGridSize( aGrid ), GetOrigin() );
 
             if( !snapLineSnap )
             {
