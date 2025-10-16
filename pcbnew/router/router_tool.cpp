@@ -1201,8 +1201,21 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             }
             else
             {
-                // use the layer of the other end
-                targetLayer = m_iface->GetBoardLayerFromPNSLayer( otherEndLayers.Start() );
+                // use the layer of the other end, unless it is the same layer as the currently active layer, in which
+                // case use the layer pair (if applicable)
+                PCB_LAYER_ID otherEndLayerPcbId = m_iface->GetBoardLayerFromPNSLayer( otherEndLayers.Start() );
+                const std::optional<int> pairedLayerPns = m_router->Sizes().PairedLayer( m_router->GetCurrentLayer() );
+
+                if( currentLayer == otherEndLayerPcbId && pairedLayerPns.has_value() )
+                {
+                    // Closest ratsnest layer is the same as the active layer - assume the via is being placed for
+                    // other routing reasons and switch the layer
+                    targetLayer = m_iface->GetBoardLayerFromPNSLayer( *pairedLayerPns );
+                }
+                else
+                {
+                    targetLayer = m_iface->GetBoardLayerFromPNSLayer( otherEndLayers.Start() );
+                }
             }
         }
         else
