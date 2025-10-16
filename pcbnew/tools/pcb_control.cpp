@@ -2318,6 +2318,9 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 {
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                     {
+                        if( !bci->GetNet() || bci->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
+                            continue;
+
                         netNames.insert( UnescapeString( bci->GetNetname() ) );
                         netClasses.insert( UnescapeString( bci->GetEffectiveNetClass()->GetHumanReadableName() ) );
 
