@@ -369,19 +369,80 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                                                          aEvent.GetPropertyName() );
         wxCHECK( property, /* void */ );
 
-        if( item->Type() == SCH_TABLECELL_T )
+        if( item->Type() == SCH_FIELD_T )
+        {
+            // Handle field edits specially - modify the parent symbol for mandatory fields
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( field->GetParent() );
+
+            if( symbol )
+            {
+                changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+
+                // For mandatory fields on symbols, use the symbol's setters for proper validation
+                wxString textValue = newValue.GetString();
+
+                if( field->GetId() == FIELD_T::REFERENCE )
+                {
+                    symbol->SetRefProp( textValue );
+                }
+                else if( field->GetId() == FIELD_T::VALUE )
+                {
+                    symbol->SetValueFieldText( textValue );
+                }
+                else if( field->GetId() == FIELD_T::FOOTPRINT )
+                {
+                    symbol->SetFootprintFieldText( textValue );
+                }
+                else
+                {
+                    field->SetText( textValue );
+                }
+
+                symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+            }
+            else
+            {
+                // Non-symbol fields, just modify normally
+                changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+                item->Set( property, newValue );
+            }
+        }
+        else if( item->Type() == SCH_TABLECELL_T )
+        {
             changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );
+            item->Set( property, newValue );
+        }
         else
+        {
             changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+            item->Set( property, newValue );
 
-        item->Set( property, newValue );
-
-        if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
-            symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+                symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+        }
     }
 
     changes.Push( _( "Edit Properties" ) );
-    m_frame->Refresh();
+
+    // Force a repaint of the symbols whose properties were changed
+    // This is necessary to update field displays in the schematic view
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( edaItem->Type() == SCH_FIELD_T )
+        {
+            // For fields, update the parent symbol
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( edaItem );
+            EDA_ITEM* parent = field->GetParent();
+
+            if( parent )
+                m_frame->GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+        }
+        else
+        {
+            m_frame->GetCanvas()->GetView()->Update( edaItem, KIGFX::REPAINT );
+        }
+    }
 
     // Perform grid updates as necessary based on value change
     AfterCommit();
