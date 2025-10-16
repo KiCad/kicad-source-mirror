@@ -133,6 +133,14 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::onRightClick ),
              nullptr, this );
 
+    // Add double-click handler to activate the template (like OK button)
+    m_bitmapIcon->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( TEMPLATE_WIDGET::OnDoubleClick ),
+                           nullptr, this );
+    m_staticTitle->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( TEMPLATE_WIDGET::OnDoubleClick ),
+                            nullptr, this );
+    Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( TEMPLATE_WIDGET::OnDoubleClick ),
+             nullptr, this );
+
     // We're not selected until we're clicked
     Unselect();
 
@@ -144,7 +152,8 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
 void TEMPLATE_WIDGET::Select()
 {
     m_dialog->SetWidget( this );
-    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNHIGHLIGHT ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+    m_staticTitle->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
     m_selected = true;
     Refresh();
 }
@@ -153,6 +162,7 @@ void TEMPLATE_WIDGET::Select()
 void TEMPLATE_WIDGET::Unselect()
 {
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+    m_staticTitle->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
     m_selected = false;
     Refresh();
 }
@@ -194,6 +204,15 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 {
     // Toggle selection here
     Select();
+    event.Skip();
+}
+
+
+void TEMPLATE_WIDGET::OnDoubleClick( wxMouseEvent& event )
+{
+    // Double-click acts like pressing OK button
+    Select();
+    m_dialog->EndModal( wxID_OK );
     event.Skip();
 }
 
@@ -294,7 +313,7 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
 
     // Get the user templates directory from the dialog
     wxString userTemplatesPath = m_dialog->GetUserTemplatesPath();
-    
+
     if( userTemplatesPath.IsEmpty() )
     {
         DisplayErrorMessage( m_dialog, _( "Could not find user templates directory." ) );
@@ -573,7 +592,7 @@ wxString DIALOG_TEMPLATE_SELECTOR::GetUserTemplatesPath() const
         if( panel->IsUserTemplates() )
             return panel->GetPath();
     }
-    
+
     // If no user templates panel found, return empty string
     return wxEmptyString;
 }
@@ -581,6 +600,9 @@ wxString DIALOG_TEMPLATE_SELECTOR::GetUserTemplatesPath() const
 
 void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPage )
 {
+    // Track initial template count to detect if any templates were added
+    size_t initialTemplateCount = m_panels[aPage]->m_SizerChoice->GetItemCount();
+
     // Get a list of files under the template path to include as choices...
     wxDir dir;
 
@@ -618,8 +640,27 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
     }
 
     m_panels[aPage]->SortAlphabetically();
+
+    // Check if any templates were added; if not, display "No templates found" message
+    size_t finalTemplateCount = m_panels[aPage]->m_SizerChoice->GetItemCount();
+
+    if( finalTemplateCount == initialTemplateCount )
+    {
+        // No templates found in this directory - show message in webview
+        if( (unsigned)aPage < m_panels.size() )
+        {
+            // Get the panel's webview if it exists (it may not be directly accessible)
+            // Instead, we'll set the message on the main webview if it's associated with this panel
+            if( m_selectedWidget == nullptr && aPage == m_notebook->GetSelection() )
+            {
+                m_webviewPanel->SetPage( GetNoTemplatesHtml() );
+            }
+        }
+    }
+
     Layout();
 }
+
 
 
 void DIALOG_TEMPLATE_SELECTOR::onDirectoryBrowseClicked( wxCommandEvent& event )

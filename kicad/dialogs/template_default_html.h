@@ -146,4 +146,56 @@ inline wxString GetTemplateInfoHtml( const wxString& aTemplateName )
     );
 }
 
+// Page shown when a template directory has no templates.
+inline wxString GetNoTemplatesHtml()
+{
+    return wxString(
+        "<!DOCTYPE html>"
+        "<html lang=\"en\">"
+        "<head>"
+        "<meta charset=\"UTF-8\">"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+        "<title>No Templates - KiCad</title>"
+        "<style>"
+        "body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; min-height: 100vh; box-sizing: border-box; }"
+        ".container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.98); border-radius: 12px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); }"
+        ".content { text-align: center; }"
+        ".icon { font-size: 3.5rem; margin-bottom: 20px; }"
+        ".title { font-size: 1.8rem; font-weight: 600; color: #2d3748; margin-bottom: 12px; }"
+        ".message { font-size: 1rem; color: #4a5568; line-height: 1.6; margin-bottom: 30px; }"
+        ".suggestions { text-align: left; background: #edf2f7; border-left: 4px solid #4299e1; border-radius: 8px; padding: 20px; margin-bottom: 30px; }"
+        ".suggestions h3 { color: #2d3748; margin-top: 0; margin-bottom: 12px; }"
+        ".suggestions ul { color: #4a5568; margin: 0; padding-left: 20px; line-height: 1.8; }"
+        ".suggestions li { margin-bottom: 8px; }"
+        ".action-hint { background: #fef5e7; border: 1px solid #f9e79f; border-radius: 8px; padding: 16px; color: #7d6608; }"
+        ".action-hint strong { color: #c17817; }"
+        "</style>"
+        "</head>"
+        "<body>"
+        "<div class=\"container\">"
+        "<div class=\"content\">"
+        "<div class=\"icon\">📂</div>"
+        "<div class=\"title\">" + _( "No Templates Found" ) + "</div>"
+        "<div class=\"message\">"
+        + _( "The selected templates directory does not contain any project templates." )
+        + "</div>"
+        "<div class=\"suggestions\">"
+        "<h3>" + _( "What to do:" ) + "</h3>"
+        "<ul>"
+        "<li>" + _( "Browse to a different templates directory using the folder icon" ) + "</li>"
+        "<li>" + _( "Click the refresh icon to reload the current directory" ) + "</li>"
+        "<li>" + _( "Check that the directory path contains valid templates" ) + "</li>"
+        "<li>" + _( "Use the default system templates by navigating to a system templates tab" ) + "</li>"
+        "</ul>"
+        "</div>"
+        "<div class=\"action-hint\">"
+        "<strong>" + _( "Tip:" ) + "</strong> " + _( "Templates are organized in subdirectories. Each template needs a 'meta' folder with configuration files." )
+        + "</div>"
+        "</div>"
+        "</div>"
+        "</body>"
+        "</html>"
+    );
+}
+
 #endif // KICAD_TEMPLATE_DEFAULT_HTML_H

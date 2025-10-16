@@ -61,6 +61,7 @@ public:
 protected:
     void OnKillFocus( wxFocusEvent& event );
     void OnMouse( wxMouseEvent& event );
+    void OnDoubleClick( wxMouseEvent& event );
     void onRightClick( wxMouseEvent& event );
     void onEditTemplate( wxCommandEvent& event );
     void onDuplicateTemplate( wxCommandEvent& event );
