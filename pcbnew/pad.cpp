@@ -2298,27 +2298,29 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
     if( ( GetProperty() == PAD_PROP::FIDUCIAL_GLBL || GetProperty() == PAD_PROP::FIDUCIAL_LOCAL )
             && GetAttribute() == PAD_ATTRIB::NPTH )
     {
-        aErrorHandler( DRCE_PADSTACK, _( "('fiducial' property makes no sense on NPTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('fiducial' pads are normally plated)" ) );
     }
 
     if( GetProperty() == PAD_PROP::TESTPOINT && GetAttribute() == PAD_ATTRIB::NPTH )
-        aErrorHandler( DRCE_PADSTACK, _( "('testpoint' property makes no sense on NPTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('testpoint' pads are normally plated)" ) );
 
     if( GetProperty() == PAD_PROP::HEATSINK && GetAttribute() == PAD_ATTRIB::NPTH )
-        aErrorHandler( DRCE_PADSTACK, _( "('heatsink' property makes no sense on NPTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('heatsink' pads are normally plated)" ) );
 
     if( GetProperty() == PAD_PROP::CASTELLATED && GetAttribute() != PAD_ATTRIB::PTH )
-        aErrorHandler( DRCE_PADSTACK, _( "('castellated' property is for PTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('castellated' pads are normally PTH)" ) );
 
     if( GetProperty() == PAD_PROP::BGA && GetAttribute() != PAD_ATTRIB::SMD )
         aErrorHandler( DRCE_PADSTACK, _( "('BGA' property is for SMD pads)" ) );
 
     if( GetProperty() == PAD_PROP::MECHANICAL && GetAttribute() != PAD_ATTRIB::PTH )
-        aErrorHandler( DRCE_PADSTACK, _( "('mechanical' property is for PTH pads)" ) );
+        aErrorHandler( DRCE_PADSTACK, _( "('mechanical' pads are normally PTH)" ) );
 
     if( GetProperty() == PAD_PROP::PRESSFIT
             && ( GetAttribute() != PAD_ATTRIB::PTH || !HasDrilledHole() ) )
-        aErrorHandler( DRCE_PADSTACK, _( "('press-fit' property is for PTH pads with round holes)" ) );
+    {
+        aErrorHandler( DRCE_PADSTACK, _( "('press-fit' pads are normally PTH with round holes)" ) );
+    }
 
     switch( GetAttribute() )
     {
