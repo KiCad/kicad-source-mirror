@@ -105,6 +105,8 @@ public:
     void AddAuxilliaryMatrixLayer();
     void AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide );
 
+    void EnsureUniqueLayerNames();
+
 private:
     std::map<wxString, unsigned int> m_matrixSteps;
     std::vector<MATRIX_LAYER>        m_matrixLayers;

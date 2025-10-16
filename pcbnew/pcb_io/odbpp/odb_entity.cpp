@@ -184,6 +184,8 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
     AddAuxilliaryMatrixLayer();
 
     AddCOMPMatrixLayer( B_Cu );
+
+    EnsureUniqueLayerNames();
 }
 
 
@@ -496,6 +498,50 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
     for( const auto& [layer_pair, vec] : auxilliary_layers )
     {
         InitAuxMatrix( layer_pair );
+    }
+}
+
+
+void ODB_MATRIX_ENTITY::EnsureUniqueLayerNames()
+{
+    // Track occurrences of each layer name to detect and handle duplicates
+    std::map<wxString, std::vector<size_t>> name_to_indices;
+
+    // First pass: collect all layer names and their indices
+    for( size_t i = 0; i < m_matrixLayers.size(); ++i )
+    {
+        const wxString& layerName = m_matrixLayers[i].m_layerName;
+        name_to_indices[layerName].push_back( i );
+    }
+
+    // Second pass: for any layer names that appear more than once, add suffixes
+    for( auto& [layerName, indices] : name_to_indices )
+    {
+        if( indices.size() > 1 )
+        {
+            // Multiple layers have the same name, add suffixes to make them unique
+            for( size_t count = 0; count < indices.size(); ++count )
+            {
+                size_t idx = indices[count];
+                wxString newLayerName =
+                        wxString::Format( "%s_%zu", m_matrixLayers[idx].m_layerName, count + 1 );
+
+                // Ensure the new name doesn't exceed the 64-character limit
+                if( newLayerName.length() > 64 )
+                {
+                    // Truncate the base name if necessary to fit the suffix
+                    wxString baseName = m_matrixLayers[idx].m_layerName;
+                    size_t suffixLen = wxString::Format( "_%zu", count + 1 ).length();
+                    if( suffixLen < baseName.length() )
+                    {
+                        baseName.Truncate( 64 - suffixLen );
+                        newLayerName = wxString::Format( "%s_%zu", baseName, count + 1 );
+                    }
+                }
+
+                m_matrixLayers[idx].m_layerName = newLayerName;
+            }
+        }
     }
 }
 
