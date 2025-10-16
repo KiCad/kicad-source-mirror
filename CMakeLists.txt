@@ -999,8 +999,8 @@ find_package( PythonLibs 3.6 REQUIRED )
 # USE_CROSSCOMPILING is needed to avoid pybind11 trying to run a non-native intrepreter
 # It also makes no sense it needs a second flag in addition to CMAKE_CROSSCOMPILING
 set( PYBIND11_USE_CROSSCOMPILING TRUE )
-# Because pybind11 tries to now use "Python" prefixes instead of "PYTHON" without this
-set( PYBIND11_FINDPYTHON "COMPAT" )
+# Disable the findpython integration that pybind has buried in it
+set( PYBIND11_NOPYTHON TRUE )
 add_subdirectory(thirdparty/pybind11)
 
 # Make sure that we get our pybind11 and not the system pybind11 (ours is patched to work with wx)
