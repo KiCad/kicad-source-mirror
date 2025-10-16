@@ -563,7 +563,7 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
 {
     wxLogTrace( traceSnap, "GetNearestSnapLinePoint: cursor=(%d, %d), nearestGrid=(%d, %d), distToNearest=%s, snapRange=%d",
                 aCursor.x, aCursor.y, aNearestGrid.x, aNearestGrid.y,
-                aDistToNearest ? wxString::Format( "%d", *aDistToNearest ) : "none", aSnapRange );
+                aDistToNearest ? wxString::Format( "%d", *aDistToNearest ) : wxString( "none" ), aSnapRange );
 
     if( !m_snapLineOrigin || m_directions.empty() )
     {
