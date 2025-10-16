@@ -47,7 +47,7 @@ class KICOMMON_API KISTATUSBAR : public wxStatusBar
 public:
     enum STYLE_FLAGS : int
     {
-        NONE              = 0x00,
+        NONE_STYLE        = 0x00,
         NOTIFICATION_ICON = 0x01,
         CANCEL_BUTTON     = 0x02,
     };
