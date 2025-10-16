@@ -34,7 +34,7 @@ public:
     bool Deserialize( const nlohmann::json& aState ) const;
 
 private:
-    wxAuiManager& m_manager;
+    [[maybe_unused]] wxAuiManager& m_manager;
 };
 
 #endif
