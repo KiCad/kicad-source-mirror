@@ -821,7 +821,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         updateItem( item, false );
 
                         isPasted |= ( item->GetFlags() & IS_PASTED ) != 0;
-                        item->ClearFlags( IS_PASTED );
                     }
 
                     // The first time pasted items are moved we need to store the position of the

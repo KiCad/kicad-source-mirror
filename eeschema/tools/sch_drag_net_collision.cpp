@@ -512,6 +512,26 @@ void SCH_DRAG_NET_COLLISION_MONITOR::recordOriginalConnections( const SCH_SELECT
     wxLogTrace( traceSchDragNetCollision, "recordOriginalConnections: Recording connections for %d items",
                 aSelection.GetSize() );
 
+    // Don't record original connections for new or pasted items (duplicates, pastes)
+    // as they weren't previously connected to anything
+    bool hasNewOrPastedItems = false;
+
+    for( EDA_ITEM* edaItem : aSelection )
+    {
+        if( edaItem->IsNew() || ( edaItem->GetFlags() & IS_PASTED ) )
+        {
+            hasNewOrPastedItems = true;
+            break;
+        }
+    }
+
+    if( hasNewOrPastedItems )
+    {
+        wxLogTrace( traceSchDragNetCollision,
+                    "recordOriginalConnections: Skipping - selection contains new or pasted items" );
+        return;
+    }
+
     EE_RTREE& items = m_frame->GetScreen()->Items();
 
     for( EDA_ITEM* edaItem : aSelection )
