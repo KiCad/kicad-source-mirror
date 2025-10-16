@@ -811,13 +811,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case PAD_PROP::PRESSFIT:         m_choiceFabProperty->SetSelection( 8 ); break;
     }
 
-    // Ensure the pad property is compatible with the pad type
-    if( m_previewPad->GetAttribute() == PAD_ATTRIB::NPTH )
-    {
-        m_choiceFabProperty->SetSelection( 0 );
-        m_choiceFabProperty->Enable( false );
-    }
-
     if( m_previewPad->GetDrillShape() != PAD_DRILL_SHAPE::OBLONG )
         m_holeShapeCtrl->SetSelection( 0 );
     else
@@ -1177,15 +1170,14 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
     bool hasHole = true;
     bool hasConnection = true;
-    bool hasProperty = true;
 
     switch( m_padType->GetSelection() )
     {
-    case PTH_DLG_TYPE:      hasHole = true;  hasConnection = true;  hasProperty = true;  break;
-    case SMD_DLG_TYPE:      hasHole = false; hasConnection = true;  hasProperty = true;  break;
-    case CONN_DLG_TYPE:     hasHole = false; hasConnection = true;  hasProperty = true;  break;
-    case NPTH_DLG_TYPE:     hasHole = true;  hasConnection = false; hasProperty = false; break;
-    case APERTURE_DLG_TYPE: hasHole = false; hasConnection = false; hasProperty = true;  break;
+    case PTH_DLG_TYPE:      hasHole = true;  hasConnection = true;  break;
+    case SMD_DLG_TYPE:      hasHole = false; hasConnection = true;  break;
+    case CONN_DLG_TYPE:     hasHole = false; hasConnection = true;  break;
+    case NPTH_DLG_TYPE:     hasHole = true;  hasConnection = false; break;
+    case APERTURE_DLG_TYPE: hasHole = false; hasConnection = false; break;
     }
 
     // Update Layers dropdown list and selects the "best" layer set for the new pad type:
@@ -1225,11 +1217,6 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
         m_padNumCtrl->ChangeValue( m_currentPad->GetNumber() );
         m_padNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
-
-    if( !hasProperty )
-        m_choiceFabProperty->SetSelection( 0 );
-
-    m_choiceFabProperty->Enable( hasProperty );
 
     transferDataToPad( m_previewPad );
 
