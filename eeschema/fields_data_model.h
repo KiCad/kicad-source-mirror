@@ -309,14 +309,14 @@ private:
      *
      * The key is a string representation of the full KIID_PATH including the symbol's UUID.
      */
-    wxString makeDataStoreKey( const SCH_SHEET_PATH& aSheetPath, const SCH_SYMBOL& aSymbol ) const
+    KIID_PATH makeDataStoreKey( const SCH_SHEET_PATH& aSheetPath, const SCH_SYMBOL& aSymbol ) const
     {
         KIID_PATH path = aSheetPath.Path();
         path.push_back( aSymbol.m_Uuid );
-        return path.AsString();
+        return path;
     }
 
-    wxString makeDataStoreKey( const SCH_REFERENCE& aRef ) const
+    KIID_PATH makeDataStoreKey( const SCH_REFERENCE& aRef ) const
     {
         return makeDataStoreKey( aRef.GetSheetPath(), *aRef.GetSymbol() );
     }
@@ -353,5 +353,5 @@ protected:
     // For hierarchical designs, symbols can be instantiated in multiple sheets with the same UUID,
     // so we use a composite key containing the full KIID_PATH (sheet path + symbol UUID).
     // This ensures each hierarchical instance maintains its own distinct field values.
-    std::map<wxString, std::map<wxString, wxString>> m_dataStore;
+    std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
 };
