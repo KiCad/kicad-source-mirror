@@ -371,7 +371,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     {
         if( track->Type() == PCB_VIA_T )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            PCB_VIA*  via = static_cast<PCB_VIA*>( track );
+            PADSTACK& padstack = via->Padstack();
 
             via->ClearZoneLayerOverrides();
 
@@ -405,13 +406,16 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                     ZONE* zone = findHighestPriorityZone( bbox, layer, netcode, viaTestFn );
 
                     if( zone && zone->GetNetCode() == via->GetNetCode()
-                            && ( via->Padstack().UnconnectedLayerMode()
-                                     != PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY
-                                 || layer == via->Padstack().Drill().start
-                                 || layer == via->Padstack().Drill().end ) )
+                             && ( padstack.UnconnectedLayerMode() != PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY
+                                  || layer == padstack.Drill().start
+                                  || layer == padstack.Drill().end ) )
+                    {
                         via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
+                    }
                     else
+                    {
                         via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+                    }
                 }
             }
         }
