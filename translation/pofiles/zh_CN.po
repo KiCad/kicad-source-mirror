@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-14 09:45+0000\n"
+"PO-Revision-Date: 2025-10-20 04:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -10486,9 +10486,8 @@ msgid "Select &All\tA"
 msgstr "全选 (&A)\tA"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "显示源码..."
+msgstr "显示更多选择 (&M)...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -12982,7 +12981,7 @@ msgstr "KiCad 字体"
 #: eeschema/sch_label.cpp:1430 eeschema/sch_text.cpp:573
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:122
 msgid "Align left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:117
@@ -12997,7 +12996,7 @@ msgstr "水平居中对齐"
 #: eeschema/sch_label.cpp:1428 eeschema/sch_text.cpp:575
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:132
 msgid "Align right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:192
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:139
@@ -17143,9 +17142,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "成员的网络/别名不能为空。"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "总线定义..."
+msgstr "总线定义"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -20075,9 +20073,9 @@ msgid "HTTP library settings file %s missing or invalid."
 msgstr "HTTP 库设置文件 %s 丢失或无效"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "HTTP 库设置文件 %s 缺少 API 版本号!"
+msgstr "HTTP 库设置文件 %s 中缺少 API 版本号。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:223
 #, fuzzy, c-format
@@ -20087,9 +20085,9 @@ msgid ""
 msgstr "HTTP 库设置文件 %s 使用 API 版本 %s, 但 KiCad 需要版本 %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "HTTP 库设置文件 %s 缺少 root URL!"
+msgstr "HTTP 库设置文件 %s 中缺少 根URL。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:240
 #, fuzzy, c-format
@@ -23338,7 +23336,7 @@ msgstr "选区已复制"
 
 #: eeschema/toolbars_sch_editor.cpp:238
 msgid "Select the current variant to display and edit."
-msgstr "选中当前变体以显示并编辑"
+msgstr "选中当前变体以显示并编辑。"
 
 #: eeschema/toolbars_symbol_viewer.cpp:135
 msgid "Symbol Viewer"
@@ -24799,9 +24797,8 @@ msgid "Export Current Plot to Schematic"
 msgstr "将当前绘制结果导出到原理图"
 
 #: eeschema/tools/sch_actions.cpp:1611
-#, fuzzy
 msgid "Show Simulation Side Panel"
-msgstr "显示侧边栏面板"
+msgstr "显示仿真侧边栏面板"
 
 #: eeschema/tools/sch_actions.cpp:1616
 msgid "Show Simulation Console Panel"
@@ -27839,11 +27836,10 @@ msgid "Colors defined in board stackup override those in preset"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
-msgstr "强制启用地面, 阴影和后处理 (不管是否已在质量预设中禁用)"
+msgstr "强制启用地面, 阴影和后处理效果 (无论在质量预设中是否已禁用)"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -28570,9 +28566,8 @@ msgid ""
 msgstr "设置完成后, 可保存当前配置为自定义模板, 便于复用。"
 
 #: kicad/dialogs/template_default_html.h:130
-#, fuzzy
 msgid "Template"
-msgstr "自定义模板"
+msgstr "模板"
 
 #: kicad/dialogs/template_default_html.h:131
 msgid ""
@@ -33452,9 +33447,8 @@ msgid "If checked, the barcode will be inverted with a margin around it"
 msgstr "如果勾选此选项, 在符号所有的单元中均会显示此引脚。"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:57
-#, fuzzy
 msgid "Show text"
-msgstr "显示飞线"
+msgstr "显示文本"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:105
 msgid "Size X:"
@@ -33483,15 +33477,15 @@ msgstr "裕量:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 39 (ISO 16388)"
-msgstr ""
+msgstr "Code 39 (ISO 16388)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 128 (ISO 15417)"
-msgstr ""
+msgstr "Code 128 (ISO 15417)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Data Matrix (ECC 200)"
-msgstr ""
+msgstr "Data Matrix (ECC 200)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "QR Code (ISO 18004)"
@@ -35925,9 +35919,8 @@ msgid "Universal 3D files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:296
-#, fuzzy
 msgid "PDF files"
-msgstr "PLY 文件"
+msgstr "PDF 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:304
 msgid "3D Model Output File"
@@ -35980,7 +35973,7 @@ msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -36221,9 +36214,8 @@ msgid "Footprint 3D model path:"
 msgstr "封装 3D 模型路径:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:35
-#, fuzzy
 msgid "shapes3D"
-msgstr "形状"
+msgstr "shapes3D"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
 msgid "meter"
@@ -44139,7 +44131,7 @@ msgstr "正在对照库内容检查电路板封装..."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1053
 #, c-format
 msgid "The footprint library '%s' was not found at '%s'"
-msgstr "在 '%2$s' 中找不到封装库 '%1$s'。"
+msgstr "在 '%2$s' 中找不到封装库 '%1$s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1103
 #, c-format
@@ -49762,11 +49754,11 @@ msgstr "底端对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:2228
 msgid "Align to Left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:2235
 msgid "Align to Right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:434
 msgid "Align to Middle"
