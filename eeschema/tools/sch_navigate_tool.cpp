@@ -206,7 +206,15 @@ bool SCH_NAVIGATE_TOOL::CanGoForward()
 
 bool SCH_NAVIGATE_TOOL::CanGoUp()
 {
-    return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
+    std::vector<SCH_SHEET*> topLevelSheets = m_frame->Schematic().GetTopLevelSheets();
+
+    for( SCH_SHEET* top_sheet : topLevelSheets )
+    {
+        if( m_frame->GetCurrentSheet().Last() == top_sheet )
+            return false;
+    }
+
+    return true;
 }
 
 
