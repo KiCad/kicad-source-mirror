@@ -568,7 +568,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         else  // S-expression schematic.
         {
-            if( schematic.GetFirst()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
+            SCH_SCREEN* first_screen = schematic.GetFirst();
+
+            // Skip the first screen as it is a virtual root with no version info.
+            if( first_screen->GetFileFormatVersionAtLoad() == 0 )
+                first_screen = schematic.GetNext();
+
+            if( first_screen && first_screen->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
             {
                 m_infoBar->RemoveAllButtons();
                 m_infoBar->AddCloseButton();
