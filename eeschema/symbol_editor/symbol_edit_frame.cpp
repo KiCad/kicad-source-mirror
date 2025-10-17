@@ -224,8 +224,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Protect against broken saved Perspective() due to bugs in previous version
     // This is currently a workaround.
-    m_auimgr.GetPane( "TopMainToolbar" ).Top().Layer( 6 ).Position(0);
-    m_auimgr.GetPane( "LeftToolbar" ).Position(0);
+    m_auimgr.GetPane( "TopMainToolbar" ).Top().Layer( 6 ).Position(0).Show( true );
+    m_auimgr.GetPane( "LeftToolbar" ).Position(0).Show( true );
+    m_auimgr.GetPane( "RightToolbar" ).Show( true );
 
     // Show or hide m_propertiesPanel depending on current settings:
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );

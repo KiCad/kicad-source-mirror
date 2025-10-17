@@ -1122,8 +1122,7 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
     if( !restored && !m_perspective.IsEmpty() )
         m_auimgr.LoadPerspective( m_perspective );
 #else
-    if( !m_perspective.IsEmpty() )
-        m_auimgr.LoadPerspective( m_perspective );
+    // Do nothing: Save/LoadPerspective() is broken on wx before 3.3
 #endif
 }
 
