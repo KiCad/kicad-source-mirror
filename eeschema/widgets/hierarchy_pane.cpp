@@ -404,7 +404,11 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
     std::function<void( const wxTreeItemId& )> updateLabel =
             [&]( const wxTreeItemId& id )
             {
-                auto*      itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+                TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+                if( !itemData )     // happens if not shown in wxTreeCtrl m_tree (virtual sheet)
+                    return;
+
                 SCH_SHEET* sheet = itemData->m_SheetPath.Last();
                 wxString   sheetNameBase = sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
                 wxString   sheetName = formatPageString( sheetNameBase,
