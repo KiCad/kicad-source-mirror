@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-15 03:07+0000\n"
+"PO-Revision-Date: 2025-10-20 05:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -12288,7 +12288,7 @@ msgstr "KiCad 字体"
 #: eeschema/sch_label.cpp:1257 eeschema/sch_text.cpp:654
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:49
 msgid "Align left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:58
@@ -12303,7 +12303,7 @@ msgstr "水平居中对齐"
 #: eeschema/sch_label.cpp:1255 eeschema/sch_text.cpp:656
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:59
 msgid "Align right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:192
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:80
@@ -26280,11 +26280,10 @@ msgid "Colors defined in board stackup override those in preset"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
-msgstr "强制启用地面, 阴影和后处理 (不管是否已在质量预设中禁用)"
+msgstr "强制启用地面, 阴影和后处理效果 (无论在质量预设中是否已禁用)"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -46768,11 +46767,11 @@ msgstr "底端对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:345 pcbnew/tools/pcb_actions.cpp:1911
 msgid "Align to Left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:395 pcbnew/tools/pcb_actions.cpp:1918
 msgid "Align to Right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: pcbnew/tools/align_distribute_tool.cpp:434
 msgid "Align to Middle"
