@@ -350,13 +350,13 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
                 case FILL_T::NO_FILL:
                     break;
 
-                case FILL_T::HATCH:
-                case FILL_T::REVERSE_HATCH:
-                case FILL_T::CROSS_HATCH:
                 case FILL_T::FILLED_SHAPE:
                     color = shape->GetStroke().GetColor();
                     break;
 
+                case FILL_T::HATCH:
+                case FILL_T::REVERSE_HATCH:
+                case FILL_T::CROSS_HATCH:
                 case FILL_T::FILLED_WITH_COLOR:
                     color = shape->GetFillColor();
                     break;
@@ -2131,11 +2131,6 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
         case FILL_T::HATCH:
         case FILL_T::REVERSE_HATCH:
         case FILL_T::CROSS_HATCH:
-            if( aShape->IsSelected() )
-                color.a = color.a * 0.8;  // selected items already have reduced-alpha backgrounds
-            else
-                color.a = color.a * 0.4;
-
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );

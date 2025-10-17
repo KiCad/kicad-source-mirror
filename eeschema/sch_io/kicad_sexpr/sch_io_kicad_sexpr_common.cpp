@@ -46,7 +46,10 @@ void formatFill( OUTPUTFORMATTER* aFormatter, FILL_T aFillMode, const COLOR4D& a
     case FILL_T::CROSS_HATCH:              fillType = "cross_hatch";   break;
     }
 
-    if( aFillMode == FILL_T::FILLED_WITH_COLOR )
+    if( aFillMode == FILL_T::FILLED_WITH_COLOR
+            || aFillMode == FILL_T::HATCH
+            || aFillMode == FILL_T::REVERSE_HATCH
+            || aFillMode == FILL_T::CROSS_HATCH )
     {
         aFormatter->Print( "(fill (type %s) (color %d %d %d %s))",
                            fillType,

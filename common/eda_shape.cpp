@@ -627,6 +627,12 @@ void EDA_SHAPE::UpdateHatching() const
         return;
     }
 
+    BOX2I extents = shapeBuffer.BBox();
+    int   majorAxis = std::max( extents.GetWidth(), extents.GetHeight() );
+
+    if( majorAxis / spacing > 100 )
+        spacing = majorAxis / 100;
+
     if( GetFillMode() == FILL_T::HATCH || GetFillMode() == FILL_T::REVERSE_HATCH )
     {
         for( const SEG& seg : shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) )
@@ -644,7 +650,7 @@ void EDA_SHAPE::UpdateHatching() const
         // Generate a grid of holes for a cross-hatch.  This is about 3X the speed of the above
         // algorithm, even when modified for the 45-degree fracture problem.
 
-        int gridsize = GetHatchLineSpacing();
+        int gridsize = spacing;
         int hole_size = gridsize - GetHatchLineWidth();
 
         m_hatching = shapeBuffer.CloneDropTriangulation();
