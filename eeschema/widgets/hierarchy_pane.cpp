@@ -198,8 +198,14 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
                 {
                     wxTreeItemId parent = m_tree->GetItemParent( id );
 
-                    if( parent.IsOk() && !m_tree->IsExpanded( parent ) )
-                        m_tree->Expand( parent );
+                    if( parent.IsOk() )
+                    {
+                        // AT least on MSW, wxTreeCtrl::IsExpanded(item) and wxTreeCtrl::Expand(item)
+                        // can be called only if item is visible.
+                        // Otherwise wxWidgets alerts are thrown and Expand() say the item is invisible
+                        if( m_tree->IsVisible( parent ) && !m_tree->IsExpanded( parent ) )
+                            m_tree->Expand( parent );
+                    }
 
                     if( !m_tree->IsVisible( id ) )
                         m_tree->EnsureVisible( id );
