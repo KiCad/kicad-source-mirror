@@ -189,10 +189,9 @@ std::vector<wxString> PANEL_SETUP_TUNING_PROFILES::GetDelayProfileNames() const
 
     for( size_t i = 0; i < profileCount; ++i )
     {
-        const PANEL_SETUP_TUNING_PROFILE_INFO* profilePage =
-                dynamic_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
+        const auto* profilePage = static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
 
-        if( wxString name = profilePage->GetProfileName(); name != wxEmptyString )
+        if( const wxString& name = profilePage->GetProfileName(); name != wxEmptyString )
             names.push_back( name );
     }
 

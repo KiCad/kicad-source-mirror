@@ -148,6 +148,8 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::initPanel()
 
 void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfile )
 {
+    BOARD* board = m_parentPanel->m_board;
+
     m_name->SetValue( aProfile.m_ProfileName );
     m_type->SetSelection( static_cast<int>( aProfile.m_Type ) );
     onChangeProfileType( aProfile.m_Type );
@@ -162,17 +164,19 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
         m_trackPropagationGrid->AppendRows();
 
         m_trackPropagationGrid->SetCellValue( row, TRACK_GRID_SIGNAL_LAYER,
-                                              m_parentPanel->m_board->GetLayerName( entry.GetSignalLayer() ) );
+                                              board->GetLayerName( entry.GetSignalLayer() ) );
 
         if( entry.GetTopReferenceLayer() != UNDEFINED_LAYER )
-            m_trackPropagationGrid->SetCellValue(
-                    row, TRACK_GRID_TOP_REFERENCE,
-                    m_parentPanel->m_board->GetLayerName( entry.GetTopReferenceLayer() ) );
+        {
+            m_trackPropagationGrid->SetCellValue( row, TRACK_GRID_TOP_REFERENCE,
+                                                  board->GetLayerName( entry.GetTopReferenceLayer() ) );
+        }
 
         if( entry.GetBottomReferenceLayer() != UNDEFINED_LAYER )
-            m_trackPropagationGrid->SetCellValue(
-                    row, TRACK_GRID_BOTTOM_REFERENCE,
-                    m_parentPanel->m_board->GetLayerName( entry.GetBottomReferenceLayer() ) );
+        {
+            m_trackPropagationGrid->SetCellValue( row, TRACK_GRID_BOTTOM_REFERENCE,
+                                                  board->GetLayerName( entry.GetBottomReferenceLayer() ) );
+        }
 
         m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_TRACK_WIDTH, entry.GetWidth() );
         m_trackPropagationGrid->SetUnitValue( row, TRACK_GRID_TRACK_GAP, entry.GetDiffPairGap() );
@@ -184,14 +188,10 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
         const int row = m_viaOverrides->GetNumberRows();
         m_viaOverrides->AppendRows();
 
-        m_viaOverrides->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_FROM,
-                                      m_parentPanel->m_board->GetLayerName( entry.m_SignalLayerFrom ) );
-        m_viaOverrides->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_TO,
-                                      m_parentPanel->m_board->GetLayerName( entry.m_SignalLayerTo ) );
-        m_viaOverrides->SetCellValue( row, VIA_GRID_VIA_LAYER_FROM,
-                                      m_parentPanel->m_board->GetLayerName( entry.m_ViaLayerFrom ) );
-        m_viaOverrides->SetCellValue( row, VIA_GRID_VIA_LAYER_TO,
-                                      m_parentPanel->m_board->GetLayerName( entry.m_ViaLayerTo ) );
+        m_viaOverrides->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_FROM, board->GetLayerName( entry.m_SignalLayerFrom ) );
+        m_viaOverrides->SetCellValue( row, VIA_GRID_SIGNAL_LAYER_TO, board->GetLayerName( entry.m_SignalLayerTo ) );
+        m_viaOverrides->SetCellValue( row, VIA_GRID_VIA_LAYER_FROM, board->GetLayerName( entry.m_ViaLayerFrom ) );
+        m_viaOverrides->SetCellValue( row, VIA_GRID_VIA_LAYER_TO, board->GetLayerName( entry.m_ViaLayerTo ) );
         m_viaOverrides->SetUnitValue( row, VIA_GRID_DELAY, entry.m_Delay );
     }
 
@@ -819,15 +819,15 @@ bool PANEL_SETUP_TUNING_PROFILE_INFO::ValidateProfile( const size_t aPageIndex )
 
     for( int i = 0; i < m_trackPropagationGrid->GetNumberRows(); ++i )
     {
-        wxString layerName = m_trackPropagationGrid->GetCellValue( i, TRACK_GRID_SIGNAL_LAYER );
+        const wxString& layerName = m_trackPropagationGrid->GetCellValue( i, TRACK_GRID_SIGNAL_LAYER );
 
         if( layerNames.contains( layerName ) )
         {
             m_parentPanel->m_tuningProfiles->SetSelection( aPageIndex );
 
             const wxString msg = _( "Duplicated signal layer configuration in tuning profile" );
-            PAGED_DIALOG::GetDialog( m_parentPanel )
-                    ->SetError( msg, m_parentPanel, m_trackPropagationGrid, i, TRACK_GRID_SIGNAL_LAYER );
+            PAGED_DIALOG::GetDialog( m_parentPanel )->SetError( msg, m_parentPanel, m_trackPropagationGrid, i,
+                                                                TRACK_GRID_SIGNAL_LAYER );
             return false;
         }
 

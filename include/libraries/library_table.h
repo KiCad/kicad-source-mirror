@@ -31,6 +31,7 @@
 
 enum class LIBRARY_TABLE_TYPE
 {
+    UNINITIALIZED,
     SYMBOL,
     FOOTPRINT,
     DESIGN_BLOCK
@@ -100,8 +101,8 @@ private:
     wxString m_type;
     wxString m_options;
     wxString m_description;
-    bool m_disabled;
-    bool m_hidden;
+    bool m_disabled = false;
+    bool m_hidden = false;
 
     bool m_ok = false;
     wxString m_errorDescription;
@@ -180,15 +181,15 @@ private:
     /// The full path to the file this table was parsed from, if any
     wxString m_path;
 
-    LIBRARY_TABLE_SCOPE m_scope;
+    LIBRARY_TABLE_SCOPE m_scope = LIBRARY_TABLE_SCOPE::UNINITIALIZED;
 
     /// What type of content this table contains (footprint, symbol, design block, etc)
-    LIBRARY_TABLE_TYPE m_type;
+    LIBRARY_TABLE_TYPE m_type = LIBRARY_TABLE_TYPE::UNINITIALIZED;
 
     /// The format version, if present in the parsed file
     std::optional<int> m_version;
 
-    bool m_ok;
+    bool m_ok = false;
     wxString m_errorDescription;
 
     std::vector<LIBRARY_TABLE_ROW> m_rows;

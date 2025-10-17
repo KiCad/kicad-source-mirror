@@ -253,7 +253,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
             info.filename = sheetFn.GetFullPath();
 
-            projectSheets.push_back( info );
+            projectSheets.push_back( std::move( info ) );
         }
     }
 

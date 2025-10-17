@@ -252,18 +252,17 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
         // Build path string for net navigator - include top-level sheet name to distinguish
         // multiple top-level sheets
         wxString txt;
+
         if( !sheetPath.empty() && sheetPath.at( 0 )->GetScreen() )
         {
             // Get the top-level sheet name
-            wxString topLevelName = sheetPath.at( 0 )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+            txt = sheetPath.at( 0 )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
 
-            if( topLevelName.IsEmpty() )
+            if( txt.IsEmpty() )
             {
                 wxFileName fn( sheetPath.at( 0 )->GetScreen()->GetFileName() );
-                topLevelName = fn.GetName();
+                txt = fn.GetName();
             }
-
-            txt = topLevelName;
 
             // Add sub-sheet names
             for( unsigned i = 1; i < sheetPath.size(); i++ )

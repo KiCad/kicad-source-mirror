@@ -49,30 +49,25 @@ LIBRARY_MANAGER::LIBRARY_MANAGER()
 
 LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
 
-const std::map<LIBRARY_TABLE_TYPE, const std::string&> LIBRARY_MANAGER::m_typeToFilenameMap =
-        { { LIBRARY_TABLE_TYPE::SYMBOL,       FILEEXT::SymbolLibraryTableFileName },
-          { LIBRARY_TABLE_TYPE::FOOTPRINT,    FILEEXT::FootprintLibraryTableFileName },
-          { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, FILEEXT::DesignBlockLibraryTableFileName } };
-
 
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                                   std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
     auto getTarget =
-        [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
-        {
-            switch( aScope )
+            [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
             {
-            case LIBRARY_TABLE_SCOPE::GLOBAL:
-                return m_tables;
+                switch( aScope )
+                {
+                case LIBRARY_TABLE_SCOPE::GLOBAL:
+                    return m_tables;
 
-            case LIBRARY_TABLE_SCOPE::PROJECT:
-                return m_projectTables;
+                case LIBRARY_TABLE_SCOPE::PROJECT:
+                    return m_projectTables;
 
-            default:
-                wxCHECK_MSG( false, m_tables, "Invalid scope passed to loadTables" );
-            }
-        };
+                default:
+                    wxCHECK_MSG( false, m_tables, "Invalid scope passed to loadTables" );
+                }
+            };
 
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>& aTarget = getTarget();
 
@@ -83,10 +78,7 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
     {
         aTarget.erase( type );
 
-        wxCHECK2( m_typeToFilenameMap.contains( type ), continue );
-        const std::string& fileName = m_typeToFilenameMap.at( type );
-
-        wxFileName fn( aTablePath, fileName );
+        wxFileName fn( aTablePath, tableFileName( type ) );
 
         if( fn.IsFileReadable() )
         {
@@ -108,49 +100,49 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
     std::unordered_set<wxString> seenTables;
 
     std::function<void(LIBRARY_TABLE&)> processOneTable =
-        [&]( LIBRARY_TABLE& aTable )
-        {
-            seenTables.insert( aTable.Path() );
-
-            if( !aTable.IsOk() )
-                return;
-
-            for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
+            [&]( LIBRARY_TABLE& aTable )
             {
-                if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+                seenTables.insert( aTable.Path() );
+
+                if( !aTable.IsOk() )
+                    return;
+
+                for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
                 {
-                    wxFileName file( row.URI() );
-
-                    // URI may be relative to parent
-                    file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
-
-                    WX_FILENAME::ResolvePossibleSymlinks( file );
-                    wxString src = file.GetFullPath();
-
-                    if( seenTables.contains( src ) )
+                    if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                     {
-                        wxLogTrace( traceLibraries, "Library table %s has already been loaded!",
-                                    src );
-                        row.SetOk( false );
-                        row.SetErrorDescription(
-                            _( "A reference to this library table already exists" ) );
-                        continue;
+                        wxFileName file( row.URI() );
+
+                        // URI may be relative to parent
+                        file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
+
+                        WX_FILENAME::ResolvePossibleSymlinks( file );
+                        wxString src = file.GetFullPath();
+
+                        if( seenTables.contains( src ) )
+                        {
+                            wxLogTrace( traceLibraries, "Library table %s has already been loaded!",
+                                        src );
+                            row.SetOk( false );
+                            row.SetErrorDescription(
+                                _( "A reference to this library table already exists" ) );
+                            continue;
+                        }
+
+                        auto child = std::make_unique<LIBRARY_TABLE>( file, aRootTable.Scope() );
+
+                        processOneTable( *child );
+
+                        if( !child->IsOk() )
+                        {
+                            row.SetOk( false );
+                            row.SetErrorDescription( child->ErrorDescription() );
+                        }
+
+                        m_childTables.insert( { row.URI(), std::move( child ) } );
                     }
-
-                    auto child = std::make_unique<LIBRARY_TABLE>( file, aRootTable.Scope() );
-
-                    processOneTable( *child );
-
-                    if( !child->IsOk() )
-                    {
-                        row.SetOk( false );
-                        row.SetErrorDescription( child->ErrorDescription() );
-                    }
-
-                    m_childTables.insert( { row.URI(), std::move( child ) } );
                 }
-            }
-        };
+            };
 
     processOneTable( aRootTable );
 }
@@ -163,16 +155,13 @@ wxString LIBRARY_MANAGER::tableFileName( LIBRARY_TABLE_TYPE aType )
     case LIBRARY_TABLE_TYPE::SYMBOL:        return FILEEXT::SymbolLibraryTableFileName;
     case LIBRARY_TABLE_TYPE::FOOTPRINT:     return FILEEXT::FootprintLibraryTableFileName;
     case LIBRARY_TABLE_TYPE::DESIGN_BLOCK:  return FILEEXT::DesignBlockLibraryTableFileName;
+    default:                                wxCHECK( false, wxEmptyString );
     }
-
-    wxCHECK( false, wxEmptyString );
 }
 
 
 void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope )
 {
-
-
     if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
     {
         wxCHECK( !m_tables.contains( aType ), /* void */ );
@@ -184,8 +173,7 @@ void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_
     else if( aScope == LIBRARY_TABLE_SCOPE::PROJECT )
     {
         wxCHECK( !m_projectTables.contains( aType ), /* void */ );
-        wxFileName fn( Pgm().GetSettingsManager().Prj().GetProjectDirectory(),
-                       tableFileName( aType ) );
+        wxFileName fn( Pgm().GetSettingsManager().Prj().GetProjectDirectory(), tableFileName( aType ) );
 
         m_projectTables[aType] = std::make_unique<LIBRARY_TABLE>( fn.GetFullPath(),
                                                                   LIBRARY_TABLE_SCOPE::PROJECT );
@@ -207,12 +195,11 @@ public:
         m_prefix_dir_count = f.GetDirCount();
 
         m_symbolTable = m_manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL )
-                                .value_or( nullptr );
+                                 .value_or( nullptr );
         m_fpTable = m_manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL )
-                            .value_or( nullptr );
-        m_designBlockTable =
-            m_manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL )
-                    .value_or( nullptr );
+                             .value_or( nullptr );
+        m_designBlockTable = m_manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL )
+                                      .value_or( nullptr );
     }
 
     /// Handles symbol library files, minimum nest level 2
@@ -331,10 +318,9 @@ private:
 
 wxString LIBRARY_MANAGER::DefaultGlobalTablePath( LIBRARY_TABLE_TYPE aType )
 {
-    wxCHECK( m_typeToFilenameMap.contains( aType ), wxEmptyString );
     wxString basePath = PATHS::GetUserSettingsPath();
 
-    wxFileName fn( basePath, m_typeToFilenameMap.at( aType ) );
+    wxFileName fn( basePath, tableFileName( aType ) );
     fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     return fn.GetFullPath();
@@ -364,10 +350,12 @@ std::vector<LIBRARY_TABLE_TYPE> LIBRARY_MANAGER::InvalidGlobalTables()
     std::vector<LIBRARY_TABLE_TYPE> invalidTables;
     wxString basePath = PATHS::GetUserSettingsPath();
 
-    for( auto [type, name] : m_typeToFilenameMap )
+    for( LIBRARY_TABLE_TYPE tableType : { LIBRARY_TABLE_TYPE::SYMBOL,
+                                          LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                          LIBRARY_TABLE_TYPE::DESIGN_BLOCK } )
     {
-        if( wxFileName fn( basePath, name ); !IsTableValid( fn.GetFullPath() ) )
-            invalidTables.emplace_back( type );
+        if( wxFileName fn( basePath, tableFileName( tableType ) ); !IsTableValid( fn.GetFullPath() ) )
+            invalidTables.emplace_back( tableType );
     }
 
     return invalidTables;
@@ -376,14 +364,13 @@ std::vector<LIBRARY_TABLE_TYPE> LIBRARY_MANAGER::InvalidGlobalTables()
 
 bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulateDefaultLibraries )
 {
-    wxCHECK( m_typeToFilenameMap.contains( aType ), false );
     wxFileName fn( DefaultGlobalTablePath( aType ) );
 
     LIBRARY_TABLE table( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
     table.SetType( aType );
     table.Rows().clear();
 
-    wxFileName defaultLib( PATHS::GetStockTemplatesPath(), m_typeToFilenameMap.at( aType ) );
+    wxFileName defaultLib( PATHS::GetStockTemplatesPath(), tableFileName( aType ) );
 
     if( !defaultLib.IsFileReadable() )
     {

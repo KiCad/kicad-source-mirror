@@ -523,8 +523,7 @@ void ODB_MATRIX_ENTITY::EnsureUniqueLayerNames()
             for( size_t count = 0; count < indices.size(); ++count )
             {
                 size_t idx = indices[count];
-                wxString newLayerName =
-                        wxString::Format( "%s_%zu", m_matrixLayers[idx].m_layerName, count + 1 );
+                wxString newLayerName = wxString::Format( "%s_%zu", m_matrixLayers[idx].m_layerName, count + 1 );
 
                 // Ensure the new name doesn't exceed the 64-character limit
                 if( newLayerName.length() > 64 )
@@ -532,6 +531,7 @@ void ODB_MATRIX_ENTITY::EnsureUniqueLayerNames()
                     // Truncate the base name if necessary to fit the suffix
                     wxString baseName = m_matrixLayers[idx].m_layerName;
                     size_t suffixLen = wxString::Format( "_%zu", count + 1 ).length();
+
                     if( suffixLen < baseName.length() )
                     {
                         baseName.Truncate( 64 - suffixLen );
@@ -539,7 +539,7 @@ void ODB_MATRIX_ENTITY::EnsureUniqueLayerNames()
                     }
                 }
 
-                m_matrixLayers[idx].m_layerName = newLayerName;
+                m_matrixLayers[idx].m_layerName = std::move( newLayerName );
             }
         }
     }

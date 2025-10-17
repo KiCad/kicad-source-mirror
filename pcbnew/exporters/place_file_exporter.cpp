@@ -161,7 +161,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         item.m_Reference = footprint->Reference().GetShownText( false );
         item.m_Value     = footprint->Value().GetShownText( false );
         item.m_Layer     = footprint->GetLayer();
-        list.push_back( item );
+        list.push_back( std::move( item ) );
 
         lenRefText = std::max( lenRefText, (int) item.m_Reference.length() );
         lenValText = std::max( lenValText, (int) item.m_Value.length() );
@@ -272,9 +272,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
             wxLine.Printf( wxT( "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n" ),
-                           lenRefText, ref,
-                           lenValText, val,
-                           lenPkgText, pkg,
+                           lenRefText, std::move( ref ),
+                           lenValText, std::move( val ),
+                           lenPkgText, std::move( pkg ),
                            footprint_pos.x * conv_unit,
                            // Keep the coordinates in the first quadrant, (i.e. change y sign)
                            -footprint_pos.y * conv_unit,

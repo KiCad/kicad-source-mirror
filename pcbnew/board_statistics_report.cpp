@@ -222,10 +222,12 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
         }
     }
 
-    std::vector<DRILL_LINE_ITEM> drills;
-    CollectDrillLineItems( aBoard, drills );
+    {
+        std::vector<DRILL_LINE_ITEM> drills;
+        CollectDrillLineItems( aBoard, drills );
 
-    aData.drillEntries = drills;
+        aData.drillEntries = std::move( drills );
+    }
 
     std::sort( aData.drillEntries.begin(), aData.drillEntries.end(),
                DRILL_LINE_ITEM::COMPARE( DRILL_LINE_ITEM::COL_COUNT, false ) );
@@ -390,47 +392,48 @@ static void appendTable( const std::vector<std::vector<wxString>>& aRows, bool a
         }
     }
 
-    auto appendDataRow = [&]( const std::vector<wxString>& row, bool treatFirstAsLabel )
-    {
-        if( treatFirstAsLabel && aUseFirstColAsLabel )
-        {
-            wxString formatted;
-            wxString firstColumn;
-
-            if( !row.empty() )
-                firstColumn = row[0];
-
-            formatted.Printf( wxS( "|%-*s  |" ), widths[0], firstColumn );
-            aOut << formatted;
-
-            for( size_t col = 1; col < columnCount; ++col )
+    auto appendDataRow =
+            [&]( const std::vector<wxString>& row, bool treatFirstAsLabel )
             {
-                wxString value;
-                if( col < row.size() )
-                    value = row[col];
+                if( treatFirstAsLabel && aUseFirstColAsLabel )
+                {
+                    wxString formatted;
+                    wxString firstColumn;
 
-                formatted.Printf( wxS( " %*s |" ), widths[col], value );
-                aOut << formatted;
-            }
-        }
-        else
-        {
-            aOut << wxS( "|" );
+                    if( !row.empty() )
+                        firstColumn = row[0];
 
-            for( size_t col = 0; col < columnCount; ++col )
-            {
-                wxString value;
-                if( col < row.size() )
-                    value = row[col];
+                    formatted.Printf( wxS( "|%-*s  |" ), widths[0], firstColumn );
+                    aOut << formatted;
 
-                wxString formatted;
-                formatted.Printf( wxS( " %*s |" ), widths[col], value );
-                aOut << formatted;
-            }
-        }
+                    for( size_t col = 1; col < columnCount; ++col )
+                    {
+                        wxString value;
+                        if( col < row.size() )
+                            value = row[col];
 
-        aOut << wxS( "\n" );
-    };
+                        formatted.Printf( wxS( " %*s |" ), widths[col], value );
+                        aOut << formatted;
+                    }
+                }
+                else
+                {
+                    aOut << wxS( "|" );
+
+                    for( size_t col = 0; col < columnCount; ++col )
+                    {
+                        wxString value;
+                        if( col < row.size() )
+                            value = row[col];
+
+                        wxString formatted;
+                        formatted.Printf( wxS( " %*s |" ), widths[col], value );
+                        aOut << formatted;
+                    }
+                }
+
+                aOut << wxS( "\n" );
+            };
 
     appendDataRow( aRows.front(), false );
 
@@ -530,7 +533,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
     header.push_back( _( "Front Side" ) );
     header.push_back( _( "Back Side" ) );
     header.push_back( _( "Total" ) );
-    componentRows.push_back( header );
+    componentRows.push_back( std::move( header ) );
 
     int frontTotal = 0;
     int backTotal = 0;
@@ -542,7 +545,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
         row.push_back( formatCount( fpEntry.frontCount ) );
         row.push_back( formatCount( fpEntry.backCount ) );
         row.push_back( formatCount( fpEntry.frontCount + fpEntry.backCount ) );
-        componentRows.push_back( row );
+        componentRows.push_back( std::move( row ) );
 
         frontTotal += fpEntry.frontCount;
         backTotal += fpEntry.backCount;
@@ -553,7 +556,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
     totalRow.push_back( formatCount( frontTotal ) );
     totalRow.push_back( formatCount( backTotal ) );
     totalRow.push_back( formatCount( frontTotal + backTotal ) );
-    componentRows.push_back( totalRow );
+    componentRows.push_back( std::move( totalRow ) );
 
     appendTable( componentRows, true, report );
 
@@ -570,7 +573,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
     drillHeader.push_back( _( "Via/Pad" ) );
     drillHeader.push_back( _( "Start Layer" ) );
     drillHeader.push_back( _( "Stop Layer" ) );
-    drillRows.push_back( drillHeader );
+    drillRows.push_back( std::move( drillHeader ) );
 
     for( const DRILL_LINE_ITEM& drill : aData.drillEntries )
     {
@@ -612,7 +615,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
         row.push_back( itemStr );
         row.push_back( startLayerStr );
         row.push_back( stopLayerStr );
-        drillRows.push_back( row );
+        drillRows.push_back( std::move( row ) );
     }
 
     appendTable( drillRows, false, report );
@@ -751,7 +754,7 @@ wxString FormatBoardStatisticsJson( const BOARD_STATISTICS_DATA& aData, BOARD* a
         drillJson["source"] = sourceStr;
         drillJson["start_layer"] = startLayerStr;
         drillJson["stop_layer"] = stopLayerStr;
-        drillHoles.push_back( drillJson );
+        drillHoles.push_back( std::move( drillJson ) );
     }
 
     root["drill_holes"] = drillHoles;

@@ -686,13 +686,12 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
             defaultSheet.name = projectName;
             defaultSheet.filename = projectName + ".kicad_sch";
 
-            m_topLevelSheets.push_back( defaultSheet );
+            m_topLevelSheets.push_back( std::move( defaultSheet ) );
 
             // Mark as migrated so it will be saved with the new format
             m_wasMigrated = true;
 
-            wxLogTrace( traceSettings,
-                       wxT( "PROJECT_FILE: Migrated old single-root format to top_level_sheets" ) );
+            wxLogTrace( traceSettings, wxT( "PROJECT_FILE: Migrated old single-root format to top_level_sheets" ) );
         }
     }
 
