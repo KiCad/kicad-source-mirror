@@ -310,6 +310,8 @@ private:
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_projectTables;
 
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
+
+    mutable std::mutex m_adaptersMutex;
 };
 
 #endif //LIBRARY_MANAGER_H

@@ -405,8 +405,11 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
 void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
     // Cancel any in-progress load
-    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
-        adapter->GlobalTablesChanged( aTablesToLoad );
+    {
+        std::scoped_lock lock( m_adaptersMutex );
+        for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+            adapter->GlobalTablesChanged( aTablesToLoad );
+    }
 
     loadTables( PATHS::GetUserSettingsPath(), LIBRARY_TABLE_SCOPE::GLOBAL, aTablesToLoad );
 
@@ -482,6 +485,8 @@ void LIBRARY_MANAGER::ProjectChanged()
 {
     LoadProjectTables( Pgm().GetSettingsManager().Prj().GetProjectDirectory() );
 
+    std::scoped_lock lock( m_adaptersMutex );
+
     for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
         adapter->ProjectChanged();
 }
@@ -490,6 +495,8 @@ void LIBRARY_MANAGER::ProjectChanged()
 void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                                        std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter )
 {
+    std::scoped_lock lock( m_adaptersMutex );
+
     wxCHECK_MSG( !m_adapters.contains( aType ), /**/, "You should only register an adapter once!" );
 
     m_adapters[aType] = std::move( aAdapter );
@@ -498,6 +505,8 @@ void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
 
 std::optional<LIBRARY_MANAGER_ADAPTER*> LIBRARY_MANAGER::Adapter( LIBRARY_TABLE_TYPE aType ) const
 {
+    std::scoped_lock lock( m_adaptersMutex );
+
     if( m_adapters.contains( aType ) )
         return m_adapters.at( aType ).get();
 
