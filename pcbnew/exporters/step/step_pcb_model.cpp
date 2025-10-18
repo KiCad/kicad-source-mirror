@@ -2769,8 +2769,12 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECT
     Handle( TDocStd_Document )  doc;
     m_app->NewDocument( "MDTV-XCAF", doc );
 
-    wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
+    wxString            fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
     MODEL3D_FORMAT_TYPE modelFmt = fileType( aFileNameUTF8.c_str() );
+
+    wxFileName                 modelFile( fileName );
+    std::string                pname( modelFile.GetName().ToUTF8() );
+    TCollection_ExtendedString partname( pname.c_str() );
 
     switch( modelFmt )
     {
@@ -2934,34 +2938,31 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECT
                     }
                 }
             }
+        }
 
-            // VRML models only work when exporting to mesh formats
-            // Also OCCT < 7.9.0 fails to load most VRML 2.0 models because of Switch nodes
-            if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF || m_outFmt == OUTPUT_FORMAT::FMT_OUT_STL
-                || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PLY || m_outFmt == OUTPUT_FORMAT::FMT_OUT_U3D
-                || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PDF )
+        // VRML models only work when exporting to mesh formats
+        // Also OCCT < 7.9.0 fails to load most VRML 2.0 models because of Switch nodes
+        if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF || m_outFmt == OUTPUT_FORMAT::FMT_OUT_STL
+            || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PLY || m_outFmt == OUTPUT_FORMAT::FMT_OUT_U3D
+            || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PDF )
+        {
+            if( readVRML( doc, aFileNameUTF8.c_str() ) )
             {
-                if( readVRML( doc, aFileNameUTF8.c_str() ) )
-                {
-                    Handle( XCAFDoc_ShapeTool ) shapeTool =
-                            XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
+                Handle( XCAFDoc_ShapeTool ) shapeTool = XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
 
-                    prefixNames( shapeTool->Label(),
-                                 TCollection_ExtendedString( baseName.c_str().AsChar() ) );
-                }
-                else
-                {
-                    m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'." ),
-                                                          fileName ),
-                                        RPT_SEVERITY_ERROR );
-                    return false;
-                }
+                prefixNames( shapeTool->Label(), partname );
+            }
+            else
+            {
+                m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'." ), fileName ),
+                                    RPT_SEVERITY_ERROR );
+                return false;
             }
         }
-        else // Substitution is not allowed
+        else
         {
             if( aErrorMessage )
-                aErrorMessage->Printf( wxT( "Cannot load any VRML model for this export." ) );
+                aErrorMessage->Printf( _( "Cannot use VRML models when exporting to non-mesh formats." ) );
 
             return false;
         }
@@ -2989,9 +2990,6 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECT
 
     // attach the PART NAME ( base filename: note that in principle
     // different models may have the same base filename )
-    wxFileName afile( fileName );
-    std::string pname( afile.GetName().ToUTF8() );
-    TCollection_ExtendedString partname( pname.c_str() );
     TDataStd_Name::Set( aLabel, partname );
 
     m_models.insert( MODEL_DATUM( model_key, aLabel ) );
