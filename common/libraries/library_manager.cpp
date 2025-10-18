@@ -407,6 +407,7 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
     // Cancel any in-progress load
     {
         std::scoped_lock lock( m_adaptersMutex );
+
         for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
             adapter->GlobalTablesChanged( aTablesToLoad );
     }
