@@ -611,6 +611,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
                                           m_filename.GetFullPath() ) );
     }
 
+#if wxCHECK_VERSION( 3, 3, 0 )
     wxXmlParseError err;
 
     if( !xmlDocument.Load( stream, wxXMLDOC_NONE, &err ) )
@@ -645,6 +646,31 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
                                               err.offset ) );
         }
     }
+#else
+    if( !xmlDocument.Load( stream ) )
+    {
+        // Some files don't have the correct header, throwing off the xml parser
+        // So prepend the correct header
+        wxMemoryOutputStream memOutput;
+
+        wxString header;
+        header << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        header << "<!DOCTYPE eagle SYSTEM \"eagle.dtd\">\n";
+
+        wxScopedCharBuffer headerBuf = header.utf8_str();
+        memOutput.Write( headerBuf.data(), headerBuf.length() );
+
+        wxFFileInputStream stream2( m_filename.GetFullPath() );
+        memOutput.Write( stream2 );
+
+        wxMemoryInputStream memInput( memOutput );
+
+        if( !xmlDocument.Load( memInput ) )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+        }
+    }
+#endif
 
     return xmlDocument;
 }
