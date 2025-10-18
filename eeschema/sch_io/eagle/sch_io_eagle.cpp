@@ -33,6 +33,7 @@
 #include <wx/tokenzr.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
+#include <wx/mstream.h>
 #include <wx/xml/xml.h>
 
 #include <font/fontconfig.h>
@@ -602,17 +603,47 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
     wxTextInputStream text( stream );
     wxString          line = text.ReadLine();
 
-    if( !line.StartsWith( wxT( "<?xml" ) ) && !line.StartsWith( wxT( "<!--" ) ) )
+    if( !line.StartsWith( wxT( "<?xml" ) ) && !line.StartsWith( wxT( "<!--" ) )
+        && !line.StartsWith( wxT( "<eagle " ) ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format file; "
                                              "only Eagle XML-format files can be imported." ),
                                           m_filename.GetFullPath() ) );
     }
 
-    if( !xmlDocument.Load( stream ) )
+    wxXmlParseError err;
+
+    if( !xmlDocument.Load( stream, wxXMLDOC_NONE, &err ) )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+        if( err.message == wxS( "no element found" ) )
+        {
+            // Some files don't have the correct header, throwing off the xml parser
+            // So prepend the correct header
+            wxMemoryOutputStream memOutput;
+
+            wxString header;
+            header << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+            header << "<!DOCTYPE eagle SYSTEM \"eagle.dtd\">\n";
+
+            wxScopedCharBuffer headerBuf = header.utf8_str();
+            memOutput.Write( headerBuf.data(), headerBuf.length() );
+
+            wxFFileInputStream stream2( m_filename.GetFullPath() );
+            memOutput.Write( stream2 );
+
+            wxMemoryInputStream memInput( memOutput );
+
+            if( !xmlDocument.Load( memInput, wxXMLDOC_NONE, &err ) )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+            }
+        }
+        else
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'.\n'%s' at line %d, column %d, offset %d" ),
+                                              m_filename.GetFullPath(), err.message, err.line, err.column,
+                                              err.offset ) );
+        }
     }
 
     return xmlDocument;
