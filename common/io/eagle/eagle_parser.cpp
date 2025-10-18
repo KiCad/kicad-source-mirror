@@ -417,14 +417,13 @@ EROT Convert<EROT>( const wxString& aRot )
     }
 
     // Calculate the offset after 'R', 'S', and 'M'
-    size_t offset = rPos + 1;
+    size_t offset;
 
-    if( value.spin )
-        ++offset;
-
-    if( value.mirror )
-        ++offset;
-
+    for( offset = 0; offset < aRot.size(); offset++ )
+    {
+        if( wxIsdigit( aRot[offset] ) )
+            break;
+    }
 
     wxString degreesStr = aRot.Mid( offset );
 
