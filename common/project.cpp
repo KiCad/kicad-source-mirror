@@ -446,6 +446,8 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
 
 DESIGN_BLOCK_LIBRARY_ADAPTER* PROJECT::DesignBlockLibs()
 {
+    std::scoped_lock lock( m_designBlockLibsMutex );
+
     LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
     std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = mgr.Adapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 

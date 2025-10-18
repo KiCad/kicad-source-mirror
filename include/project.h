@@ -29,6 +29,7 @@
  */
 #include <array>
 #include <map>
+#include <mutex>
 #include <vector>
 #include <kiid.h>
 #include <wx_filename.h>
@@ -374,6 +375,9 @@ private:
 
     /// Lock
     std::unique_ptr<LOCKFILE> m_project_lock;
+
+    /// Synchronise access to DesignBlockLibs()
+    std::mutex m_designBlockLibsMutex;
 };
 
 
