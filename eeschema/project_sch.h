@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <mutex>
+
 class PROJECT;
 class SEARCH_STACK;
 class LEGACY_SYMBOL_LIBS;
@@ -45,4 +47,7 @@ public:
 
 private:
     PROJECT_SCH() {}
+
+    /// Used to synchronise access to SymbolLibAdapter
+    static std::mutex s_libAdapterMutex;
 };

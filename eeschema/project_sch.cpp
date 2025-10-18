@@ -28,6 +28,7 @@
 #include <libraries/symbol_library_adapter.h>
 
 static std::mutex s_symbolTableMutex;
+std::mutex        PROJECT_SCH::s_libAdapterMutex;
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -132,6 +133,8 @@ LEGACY_SYMBOL_LIBS* PROJECT_SCH::LegacySchLibs( PROJECT* aProject )
 
 SYMBOL_LIBRARY_ADAPTER* PROJECT_SCH::SymbolLibAdapter( PROJECT* aProject )
 {
+    std::scoped_lock lock( s_libAdapterMutex );
+
     LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
     std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = mgr.Adapter( LIBRARY_TABLE_TYPE::SYMBOL );
 
