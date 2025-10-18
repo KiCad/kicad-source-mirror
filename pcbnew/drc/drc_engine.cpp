@@ -614,7 +614,7 @@ void DRC_ENGINE::loadImplicitRules()
 
 void DRC_ENGINE::loadRules( const wxFileName& aPath )
 {
-    if( aPath.FileExists() )
+    if( m_board && aPath.FileExists() )
     {
         std::vector<std::shared_ptr<DRC_RULE>> rules;
 
@@ -626,14 +626,17 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
             std::function<bool( wxString* )> resolver =
                     [&]( wxString* token ) -> bool
                     {
-                        if( m_board && m_board->GetProject() )
-                            return m_board->GetProject()->TextVarResolver( token );
-
-                        return false;
+                        return m_board->ResolveTextVar( token, 0 );
                     };
 
             while( char* line = lineReader.ReadLine() )
-                rulesText << ExpandTextVars( line, &resolver ) << '\n';
+            {
+                wxString str( line );
+                str = m_board->ConvertCrossReferencesToKIIDs( str );
+                str = ExpandTextVars( str, &resolver );
+
+                rulesText << str << '\n';
+            }
 
             DRC_RULES_PARSER parser( rulesText, aPath.GetFullPath() );
             parser.Parse( rules, m_logReporter );

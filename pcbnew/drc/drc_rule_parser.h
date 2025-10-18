@@ -61,8 +61,10 @@ private:
     void parseUnknown();
     wxString parseExpression();
 
-    void reportError( const wxString& aMessage );
+    void reportError( const wxString& aMessage, int aOffset = 0 );
     void reportDeprecation( const wxString& oldToken, const wxString& newToken );
+    bool checkUnresolvedTextVariable();
+    void expected( const wxString& expectedTokens );
 
 private:
     int       m_requiredVersion;

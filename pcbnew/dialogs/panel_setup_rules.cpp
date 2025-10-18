@@ -717,13 +717,15 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
         std::function<bool( wxString* )> resolver =
                 [&]( wxString* token ) -> bool
                 {
-                    if( m_frame->Prj().TextVarResolver( token ) )
+                    if( m_frame->GetBoard()->ResolveTextVar( token, 0 ) )
                         return true;
 
                     return false;
                 };
 
-        wxString rulesText = ExpandTextVars( m_textEditor->GetText(), &resolver );
+        wxString rulesText = m_textEditor->GetText();
+        rulesText = m_frame->GetBoard()->ConvertCrossReferencesToKIIDs( rulesText );
+        rulesText = ExpandTextVars( rulesText, &resolver );
 
         DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
 
@@ -732,14 +734,13 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     }
     catch( PARSE_ERROR& pe )
     {
-        wxString msg = wxString::Format( wxT( "%s <a href='%d:%d'>%s</a>%s" ),
-                                         _( "ERROR:" ),
-                                         pe.lineNumber,
-                                         pe.byteIndex,
-                                         pe.ParseProblem(),
-                                         wxEmptyString );
-
-        m_errorsReport->Report( msg, RPT_SEVERITY_ERROR );
+        m_errorsReport->Report( wxString::Format( wxT( "%s <a href='%d:%d'>%s</a>%s" ),
+                                                  _( "ERROR:" ),
+                                                  pe.lineNumber,
+                                                  pe.byteIndex,
+                                                  pe.ParseProblem(),
+                                                  wxEmptyString ),
+                                RPT_SEVERITY_ERROR );
     }
 
     m_errorsReport->Flush();
@@ -766,9 +767,10 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
 
         if( seenConditions.count( condition ) )
         {
-            wxString msg = wxString::Format( _( "Rules '%s' and '%s' share the same condition." ), rule->m_Name,
-                                             seenConditions[condition] );
-            m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+            m_errorsReport->Report( wxString::Format( _( "Rules '%s' and '%s' share the same condition." ),
+                                                      rule->m_Name,
+                                                      seenConditions[condition] ),
+                                    RPT_SEVERITY_WARNING );
         }
         else
         {
@@ -785,9 +787,10 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
 
             if( !bds.m_NetSettings->HasNetclass( ncName ) )
             {
-                wxString msg =
-                        wxString::Format( _( "Rule '%s' references undefined netclass '%s'." ), rule->m_Name, ncName );
-                m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+                m_errorsReport->Report( wxString::Format( _( "Rule '%s' references undefined netclass '%s'." ),
+                                                          rule->m_Name,
+                                                          ncName ),
+                                        RPT_SEVERITY_WARNING );
             }
         }
 
@@ -807,9 +810,10 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
                     badLayers += board->GetLayerName( layer );
                 }
 
-                wxString msg = wxString::Format( _( "Rule '%s' references undefined layer(s): %s." ), rule->m_Name,
-                                                 badLayers );
-                m_errorsReport->Report( msg, RPT_SEVERITY_WARNING );
+                m_errorsReport->Report( wxString::Format( _( "Rule '%s' references undefined layer(s): %s." ),
+                                                          rule->m_Name,
+                                                          badLayers ),
+                                        RPT_SEVERITY_WARNING );
             }
         }
     }
