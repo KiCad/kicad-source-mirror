@@ -55,6 +55,12 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::initPanel()
     else
         m_viaPropagationUnits.SetUnits( EDA_UNITS::PS_PER_CM );
 
+    int x = 0, y = 0;
+    m_name->GetTextExtent( "XXXXXXXXXXXXXXXXXXXXX", &x, &y );
+    m_name->SetMinSize( wxSize( x, -1 ) );
+    m_targetImpedance->GetTextExtent( "XXXXXXXXX", &x, &y );
+    m_targetImpedance->SetMinSize( wxSize( x, -1 ) );
+
     m_viaPropagationUnits.SetValue( 0 );
 
     m_addTrackPropogationLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -143,6 +149,7 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::initPanel()
     m_trackPropagationGrid->HideCol( TRACK_GRID_TRACK_GAP );
 
     UpdateLayerNames();
+    Layout();
 }
 
 

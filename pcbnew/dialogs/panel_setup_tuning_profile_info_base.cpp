@@ -33,8 +33,6 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	fgSizer2->Add( m_nameLabel, 0, wxALL, 5 );
 
 	m_name = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_name->SetMinSize( wxSize( 150,-1 ) );
-
 	fgSizer2->Add( m_name, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -66,8 +64,6 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	#else
 	m_targetImpedance->SetMaxLength( 15 );
 	#endif
-	m_targetImpedance->SetMinSize( wxSize( 100,-1 ) );
-
 	fgSizer2->Add( m_targetImpedance, 0, wxALL|wxEXPAND, 5 );
 
 	m_ohmsLabel = new wxStaticText( this, wxID_ANY, _("ohms"), wxDefaultPosition, wxDefaultSize, 0 );
