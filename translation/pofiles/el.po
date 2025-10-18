@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-06-01 11:56+0000\n"
+"PO-Revision-Date: 2025-10-20 04:51+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -123,7 +123,7 @@ msgstr "Προηγούμενος χρόνος απόδοσης %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "Σφάλμα OpenGL κατά την απόδοση εκτός οθόνης: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:962
 #, c-format
@@ -231,15 +231,13 @@ msgstr "3Δ Πλέγμα"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Περιστροφή μπλοκ"
+msgstr "Περιστροφή Πλακέτας"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Μετακίνηση Πλακέτας Επάνω"
+msgstr "Μετακίνηση Πλακέτας"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -396,14 +394,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Αντιγραφή τρέχουσας 3Δ εικόνας στο πρόχειρο"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Επεξεργασία Εικόνας..."
+msgstr "Εξαγωγή Εικόνας..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Εξαγωγή Τρέχουσας Προβολής ως PNG εικόνα"
+msgstr "Εξαγωγή Τρέχουσας Προβολής ως αρχείο εικόνας"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -598,9 +594,8 @@ msgstr ""
 "Εμφάνιση πλαισίων οριοθέτησης 3Δ μοντέλων σε απόδοση πραγματικού χρόνου"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Εμφάνιση Πλοηγού Δικτύων"
+msgstr "Εμφάνιση 3Δ Πλοηγού"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:374
 msgid "Show Appearance Manager"
@@ -620,14 +615,12 @@ msgid "Show board body"
 msgstr "Εμφάνιση σώματος πλακέτας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Επιμεταλλωμένες οπές"
+msgstr "Επιμεταλλωμένες Οπές"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Εμφάνιση through-hole pads"
+msgstr "Εμφάνιση επιμεταλλωμένων οπών και διελεύσεων"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -687,228 +680,184 @@ msgid "Show user ECO2 layer"
 msgstr "Εμφάνιση επιπέδου ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 1"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 2"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 3"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 4"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Show user defined layer 5"
 msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 6"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 7"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 8"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 9"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 10"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Εμφάνιση καθορισμένου από τον χρήστη επιπέδο 11"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
+msgstr "Εμφάνιση καθορισμένου από τον χρήστη επίπεδο 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 msgid "Through-hole Models"
@@ -977,9 +926,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Όχι ψαλίδισμα μεταξοτυπίας εκτός περιγράμματος πλακέτας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Πλοηγός Δικτύων"
+msgstr "Πλοηγός 3Δ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
 msgid "Background Start"
@@ -1006,7 +954,7 @@ msgstr "Χρήση χρωμάτων διάταξης πλακέτας"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
 #, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Χρήση χρωμάτων διάταξης πλακέτας"
+msgstr "Χρήση χρωμάτων χαλκού από Επεξεργαστή Πλακέτας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
 #, fuzzy
@@ -1174,14 +1122,12 @@ msgid "(unsaved)"
 msgstr "[Μη αποθηκευμένο]"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Επιλογή 3Δ Μοντέλου"
+msgstr "Εξαγωγή 3Δ Προβολής"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Μέγεθος εικόνας:"
+msgstr "Μέγεθος Εικόνας"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1400,7 +1346,7 @@ msgstr "mm"
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
 #, fuzzy
 msgid "in"
-msgstr "Ακροδέκτης"
+msgstr "ίντσες"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1411,34 +1357,29 @@ msgid "Height:"
 msgstr "Ύψος:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Επίλυση 3R:"
+msgstr "Ανάλυση"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Επίλυση 3R:"
+msgstr "Ανάλυση Χ:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "εικονοστοιχεία"
+msgstr "εικονοστοιχεία/ίντσα"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "εικονοστοιχεία"
+msgstr "εικονοστοιχεία/χλστ"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Επίλυση 3R:"
+msgstr "Ανάλυση Ψ:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d εικονοστοιχεία"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -8229,9 +8170,9 @@ msgstr "Απόκριση API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:286
 #: common/http_lib/http_lib_connection.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Απόκριση API:  %s"
+msgstr "Απόκριση API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:375
 #, c-format
@@ -35225,14 +35166,12 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:325
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    Αλλαγή διάταξης\n"
-"***********************\n"
+"<br/>Αλλαγή διάταξης\n"
+"***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:333
 #, fuzzy
@@ -35285,9 +35224,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:392
 #, fuzzy, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"RefDes: %s Αποτύπωμα: %s:%s στο %s στο PCB."
+msgstr "<br/>RefDes: %s Αποτύπωμα: %s:%s στο %s στην πλακέτα."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:400
 msgid "Reannotate anyway?"
@@ -48461,12 +48398,12 @@ msgstr "Αλλαγή τιμής %s από '%s' σε '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1476
 #, fuzzy, c-format
 msgid "Change group library link to '%s'."
-msgstr "Αλλαγή  αποτυπώματος του '%s'"
+msgstr "Αλλαγή συνδέσμου βιβλιοθήκης ομάδας σε '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
 #, fuzzy, c-format
 msgid "Changed group library link to '%s'."
-msgstr "Αλλαγή  αποτυπώματος του '%s'"
+msgstr "Σύνδεσμος βιβλιοθήκης ομάδας άλλαξε σε '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1520
 #, c-format
