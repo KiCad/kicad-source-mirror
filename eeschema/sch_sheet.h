@@ -317,6 +317,15 @@ public:
     int CountSheets() const;
 
     /**
+     * Count the number of sheets found in "this" sheet including all of the subsheets.
+     *
+     * @return the full count of active sheets+subsheets contained by "this"
+     * An active sheet is a "physical" sheet actually used in schematic, and not a virtual sheet only
+     * used to handle a set of sheets in a hierarchy and having no UUID
+     */
+    int CountActiveSheets() const;
+
+    /**
      * Count the number of sheets that refer to a specific file
      * including all of the subsheets.
      * @param aFileName The filename to search for.

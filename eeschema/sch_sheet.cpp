@@ -850,6 +850,17 @@ int SCH_SHEET::CountSheets() const
 }
 
 
+int SCH_SHEET::CountActiveSheets() const
+{
+    int count = CountSheets();
+
+    if( IsVirtualRootSheet() )
+        count--;
+
+    return count;
+}
+
+
 void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // Don't use GetShownText(); we want to see the variable references here

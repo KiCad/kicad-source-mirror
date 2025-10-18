@@ -53,13 +53,13 @@ SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
 void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
 {
     *minPage = *selPageFrom = 1;
-    *maxPage = *selPageTo   = m_parent->Schematic().Root().CountSheets();
+    *maxPage = *selPageTo   = m_parent->Schematic().Root().CountActiveSheets();
 }
 
 
 bool SCH_PRINTOUT::HasPage( int pageNum )
 {
-    return m_parent->Schematic().Root().CountSheets() >= pageNum;
+    return m_parent->Schematic().Root().CountActiveSheets() >= pageNum;
 }
 
 
