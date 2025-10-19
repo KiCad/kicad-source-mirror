@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-08 10:07+0000\n"
+"PO-Revision-Date: 2025-10-20 04:51+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -18223,9 +18223,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "Zapisano plik raportu ERC do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1226
-#, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "Plik ze schematem '%s' nie został znaleziony."
+msgstr "Plik ze schematem nie został uaktualniony\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1244 eeschema/files-io.cpp:775
 #: eeschema/files-io.cpp:819
@@ -23713,9 +23712,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
-#, fuzzy
 msgid " (base)\n"
-msgstr " (faza)"
+msgstr " (baza)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
 #, fuzzy
