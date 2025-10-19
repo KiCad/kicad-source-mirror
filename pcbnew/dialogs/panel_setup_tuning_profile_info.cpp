@@ -730,16 +730,22 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::calculateTrackParametersForCell( const int
         int calculatedGap = 0;
         int calculatedDelay = 0;
 
-        std::tuple<int, int, int> result;
+        CALCULATION_RESULT result;
 
         if( isMicrostrip )
             result = calculateDifferentialMicrostrip( aRow, calculationType );
         else
             result = calculateDifferentialStripline( aRow, calculationType );
 
-        calculatedWidth = std::get<0>( result );
-        calculatedGap = std::get<1>( result );
-        calculatedDelay = std::get<2>( result );
+        if( !result.OK )
+        {
+            DisplayErrorMessage( m_parentPanel->m_dlg, wxString::Format( _( "Error: %s" ), result.ErrorMsg ) );
+            return;
+        }
+
+        calculatedWidth = result.Width;
+        calculatedGap = result.DiffPairGap;
+        calculatedDelay = result.Delay;
 
         const bool widthOk = calculatedWidth > 0;
         const bool gapOk = calculatedGap > 0;
@@ -777,15 +783,21 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::calculateTrackParametersForCell( const int
         int calculatedWidth = 0;
         int calculatedDelay = 0;
 
-        std::pair<int, int> result;
+        CALCULATION_RESULT result;
 
         if( isMicrostrip )
             result = calculateSingleMicrostrip( aRow, calculationType );
         else
             result = calculateSingleStripline( aRow, calculationType );
 
-        calculatedWidth = result.first;
-        calculatedDelay = result.second;
+        if( !result.OK )
+        {
+            DisplayErrorMessage( m_parentPanel->m_dlg, wxString::Format( _( "Error: %s" ), result.ErrorMsg ) );
+            return;
+        }
+
+        calculatedWidth = result.Width;
+        calculatedDelay = result.Delay;
 
         const bool widthOk = calculatedWidth > 0;
         const bool delayOk = calculatedDelay > 0;
@@ -849,8 +861,8 @@ bool PANEL_SETUP_TUNING_PROFILE_INFO::ValidateProfile( const size_t aPageIndex )
  *                                        SIMULATION / ANALYSIS PLUMBING
  ****************************************************************************************************************/
 
-std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int       aRow,
-                                                                                CalculationType aCalculationType )
+PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
+PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType )
 {
     const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
 
@@ -858,7 +870,7 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( 
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
 
     // Get the signal layer information from the stackup
     BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
@@ -867,21 +879,24 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( 
     const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
 
     // Microstrip can only be on an outer copper layer
     if( signalLayer != F_Cu && signalLayer != B_Cu )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Internal error: Microstrip can only be on an outer copper layer" ) };
 
     const int signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
 
     if( signalLayerStackupId == -1 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const double signalLayerThickness =
             iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+
+    if( signalLayerThickness <= 0 )
+        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
 
     // Get reference layer
     wxString referenceLayerName;
@@ -892,13 +907,13 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( 
         referenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( referenceLayerName ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID referenceLayer = m_parentPanel->m_layerNamesToIDs[referenceLayerName];
     const int          referenceLayerStackupId = getStackupLayerId( stackupLayerList, referenceLayer );
 
     if( signalLayerStackupId == referenceLayerStackupId )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Reference layer must be different to signal layer" ) };
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> dielectricLayerStackupIds;
@@ -907,7 +922,7 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( 
                           dielectricLayerHeight );
 
     if( dielectricLayerHeight <= 0.0 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Dielectric height must be > 0" ) };
 
     // Calculate geometric average of the dielectric materials
     const auto [e_r, tan_d] =
@@ -957,22 +972,22 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( 
     }();
 
     if( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second != TRANSLINE_STATUS::OK )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Width calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].second != TRANSLINE_STATUS::OK )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Delay calculation failed" ) };
 
     int width = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::MM, results[TRANSLINE_PARAMETERS::PHYS_WIDTH].first * 1000.0 ) );
     int propDelay = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::PS_PER_CM, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].first ) );
 
-    return { width, propDelay };
+    return CALCULATION_RESULT{ width, propDelay };
 }
 
 
-std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( const int       aRow,
-                                                                               CalculationType aCalculationType )
+PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
+PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( const int aRow, CalculationType aCalculationType )
 {
     const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
 
@@ -980,7 +995,7 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( c
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
 
     // Get the signal layer information from the stackup
     BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
@@ -989,40 +1004,43 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( c
     const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
     const int          signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
 
     if( signalLayerStackupId == -1 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const double signalLayerThickness =
             iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+
+    if( signalLayerThickness <= 0 )
+        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
 
     // Get top reference layer
     const wxString topReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( topReferenceLayerName ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Top reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID topReferenceLayer = m_parentPanel->m_layerNamesToIDs[topReferenceLayerName];
     const int          topReferenceLayerStackupId = getStackupLayerId( stackupLayerList, topReferenceLayer );
 
     if( !IsCopperLayerLowerThan( signalLayer, topReferenceLayer ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Top reference layer must be above signal layer in board stackup" ) };
 
     // Get bottom reference layer
     wxString bottomReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( bottomReferenceLayerName ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Bottom reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID bottomReferenceLayer = m_parentPanel->m_layerNamesToIDs[bottomReferenceLayerName];
     const int          bottomReferenceLayerStackupId = getStackupLayerId( stackupLayerList, bottomReferenceLayer );
 
     if( !IsCopperLayerLowerThan( bottomReferenceLayer, signalLayer ) )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Bottom reference layer must be below signal layer in board stackup" ) };
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
@@ -1035,7 +1053,7 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( c
                           bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
 
     if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Dielectric heights must be > 0" ) };
 
     // Calculate geometric average of the dielectric materials
     std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
@@ -1086,21 +1104,21 @@ std::pair<int, int> PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( c
     }();
 
     if( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second != TRANSLINE_STATUS::OK )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Width calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].second != TRANSLINE_STATUS::OK )
-        return { 0, 0 };
+        return CALCULATION_RESULT{ _( "Delay calculation failed" ) };
 
     int width = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::MM, results[TRANSLINE_PARAMETERS::PHYS_WIDTH].first * 1000.0 ) );
     int propDelay = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::PS_PER_CM, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY].first ) );
 
-    return { width, propDelay };
+    return CALCULATION_RESULT{ width, propDelay };
 }
 
 
-std::tuple<int, int, int>
+PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
 PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow, CalculationType aCalculationType )
 {
     const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
@@ -1109,7 +1127,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
 
     // Get the signal layer information from the stackup
     BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
@@ -1118,21 +1136,24 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
 
     // Microstrip can only be on an outer copper layer
     if( signalLayer != F_Cu && signalLayer != B_Cu )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Internal error: Microstrip can only be on an outer copper layer" ) };
 
     const int signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
 
     if( signalLayerStackupId == -1 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const double signalLayerThickness =
             iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+
+    if( signalLayerThickness <= 0 )
+        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
 
     // Get reference layer
     wxString referenceLayerName;
@@ -1143,13 +1164,13 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
         referenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( referenceLayerName ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID referenceLayer = m_parentPanel->m_layerNamesToIDs[referenceLayerName];
     const int          referenceLayerStackupId = getStackupLayerId( stackupLayerList, referenceLayer );
 
     if( signalLayerStackupId == referenceLayerStackupId )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Reference layer must be different to signal layer" ) };
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> dielectricLayerStackupIds;
@@ -1158,7 +1179,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
                           dielectricLayerHeight );
 
     if( dielectricLayerHeight <= 0.0 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Dielectric height must be > 0" ) };
 
     // Calculate geometric average of the dielectric materials
     const auto [e_r, tan_d] =
@@ -1173,22 +1194,22 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
 
     if( aCalculationType == CalculationType::WIDTH )
     {
-        if( !gapOpt )
-            return { 0, 0, 0 };
+        if( !gapOpt || *gapOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Diff pair gap must be > 0 to calculate width" ) };
 
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::GAP )
     {
-        if( !widthOpt )
-            return { 0, 0, 0 };
+        if( !widthOpt || *widthOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Width must be > 0 to calculate diff pair gap" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::DELAY )
     {
-        if( !widthOpt || !gapOpt )
-            return { 0, 0, 0 };
+        if( !widthOpt || !gapOpt || *widthOpt <= 0 || *gapOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Width and diff pair gap must be > 0 to calculate delay" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
@@ -1230,13 +1251,13 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     }();
 
     if( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Width calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::PHYS_S].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Diff pair gap calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Delay calculation failed" ) };
 
     int calcWidth = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::MM, results[TRANSLINE_PARAMETERS::PHYS_WIDTH].first * 1000.0 ) );
@@ -1245,11 +1266,11 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     int propDelay = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::PS_PER_CM, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first ) );
 
-    return { calcWidth, calcGap, propDelay };
+    return CALCULATION_RESULT{ calcWidth, calcGap, propDelay };
 }
 
 
-std::tuple<int, int, int>
+PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
 PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow, CalculationType aCalculationType )
 {
     const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
@@ -1258,7 +1279,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
 
     // Get the signal layer information from the stackup
     BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
@@ -1267,40 +1288,43 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
     const int          signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
 
     if( signalLayerStackupId == -1 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
 
     const double signalLayerThickness =
             iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+
+    if( signalLayerThickness <= 0 )
+        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
 
     // Get top reference layer
     const wxString topReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( topReferenceLayerName ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Top reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID topReferenceLayer = m_parentPanel->m_layerNamesToIDs[topReferenceLayerName];
     const int          topReferenceLayerStackupId = getStackupLayerId( stackupLayerList, topReferenceLayer );
 
     if( !IsCopperLayerLowerThan( signalLayer, topReferenceLayer ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Top reference layer must be above signal layer in board stackup" ) };
 
     // Get bottom reference layer
     wxString bottomReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( bottomReferenceLayerName ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Bottom reference layer not found in stackup" ) };
 
     const PCB_LAYER_ID bottomReferenceLayer = m_parentPanel->m_layerNamesToIDs[bottomReferenceLayerName];
     const int          bottomReferenceLayerStackupId = getStackupLayerId( stackupLayerList, bottomReferenceLayer );
 
     if( !IsCopperLayerLowerThan( bottomReferenceLayer, signalLayer ) )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Bottom reference layer must be below signal layer in board stackup" ) };
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
@@ -1313,7 +1337,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
                           bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
 
     if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Dielectric heights must be > 0" ) };
 
     // Calculate geometric average of the dielectric materials
     std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
@@ -1331,22 +1355,22 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
 
     if( aCalculationType == CalculationType::WIDTH )
     {
-        if( !gapOpt )
-            return { 0, 0, 0 };
+        if( !gapOpt || *gapOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Diff pair gap must be > 0 to calculate width" ) };
 
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::GAP )
     {
-        if( !widthOpt )
-            return { 0, 0, 0 };
+        if( !widthOpt || *widthOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Width must be > 0 to calculate diff pair gap" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::DELAY )
     {
-        if( !widthOpt || !gapOpt )
-            return { 0, 0, 0 };
+        if( !widthOpt || !gapOpt || *widthOpt <= 0 || *gapOpt <= 0 )
+            return CALCULATION_RESULT{ _( "Width and diff pair gap must be > 0 to calculate delay" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
@@ -1386,13 +1410,13 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     }();
 
     if( results[TRANSLINE_PARAMETERS::PHYS_WIDTH].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Width calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::PHYS_S].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Diff pair gap calculation failed" ) };
 
     if( results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].second != TRANSLINE_STATUS::OK )
-        return { 0, 0, 0 };
+        return CALCULATION_RESULT{ _( "Delay calculation failed" ) };
 
     int calcWidth = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::MM, results[TRANSLINE_PARAMETERS::PHYS_WIDTH].first * 1000.0 ) );
@@ -1401,5 +1425,5 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     int propDelay = static_cast<int>( EDA_UNIT_UTILS::UI::FromUserUnit(
             iuScale, EDA_UNITS::PS_PER_CM, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first ) );
 
-    return { calcWidth, calcGap, propDelay };
+    return CALCULATION_RESULT{ calcWidth, calcGap, propDelay };
 }

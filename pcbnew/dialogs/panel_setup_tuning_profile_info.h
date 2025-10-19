@@ -103,6 +103,34 @@ private:
         DELAY
     };
 
+    struct CALCULATION_RESULT
+    {
+        CALCULATION_RESULT() = default;
+        explicit CALCULATION_RESULT( const wxString& errorMsg ) :
+                ErrorMsg{ errorMsg }
+        {
+        }
+        explicit CALCULATION_RESULT( const int aWidth, const int aDelay ) :
+                OK{ true },
+                Width{ aWidth },
+                Delay{ aDelay }
+        {
+        }
+        explicit CALCULATION_RESULT( const int aWidth, const int aDiffPairGap, const int aDelay ) :
+                OK{ true },
+                Width{ aWidth },
+                DiffPairGap{ aDiffPairGap },
+                Delay{ aDelay }
+        {
+        }
+
+        bool     OK{ false };
+        int      Width{ 0 };
+        int      DiffPairGap{ 0 };
+        int      Delay{ 0 };
+        wxString ErrorMsg;
+    };
+
     /// Initialises all controls on the panel
     void initPanel();
 
@@ -111,19 +139,19 @@ private:
 
     /// Calculates the track width or delay for the given propagation grid row
     /// @returns pair of (width, unit propagation delay) in IU
-    std::pair<int, int> calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType );
+    CALCULATION_RESULT calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType );
 
     /// Calculates the track width or delay for the given propagation grid row
     /// @returns pair of (width, unit propagation delay) in IU
-    std::pair<int, int> calculateSingleStripline( const int aRow, CalculationType aCalculationType );
+    CALCULATION_RESULT calculateSingleStripline( const int aRow, CalculationType aCalculationType );
 
     /// Calculates the track width, pair gap, or delay for the given propagation grid row
     /// @returns tuple of (width, diff pair gap, unit propagation delay) in IU
-    std::tuple<int, int, int> calculateDifferentialMicrostrip( int aRow, CalculationType aCalculationType );
+    CALCULATION_RESULT calculateDifferentialMicrostrip( int aRow, CalculationType aCalculationType );
 
     /// Calculates the track width, pair gap, or delay for the given propagation grid row
     /// @returns tuple of (width, diff pair gap, unit propagation delay) in IU
-    std::tuple<int, int, int> calculateDifferentialStripline( int aRow, CalculationType aCalculationType );
+    CALCULATION_RESULT calculateDifferentialStripline( int aRow, CalculationType aCalculationType );
 
     /// Calculate the effective skin depth for the given parameters
     static double calculateSkinDepth( double aFreq, double aMurc, double aSigma );
