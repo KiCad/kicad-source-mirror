@@ -365,84 +365,41 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
-        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ),
-                                                         aEvent.GetPropertyName() );
-        wxCHECK( property, /* void */ );
+        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ), aEvent.GetPropertyName() );
+        wxCHECK2( property, continue );
 
-        if( item->Type() == SCH_FIELD_T )
+        // Editing reference text in the schematic must go through the parent symbol in order to handle
+        // symbol instance data properly.
+        if( item->Type() == SCH_FIELD_T && static_cast<SCH_FIELD*>( item )->GetId() == FIELD_T::REFERENCE
+                && m_frame->IsType( FRAME_SCH )
+                && property->Name() == wxT( "Text" ) )
         {
-            // Handle field edits specially - modify the parent symbol for mandatory fields
-            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
-            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( field->GetParent() );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParentSymbol() );
+            wxCHECK2( symbol, continue );
 
-            if( symbol )
-            {
-                changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
-
-                // For mandatory fields on symbols, use the symbol's setters for proper validation
-                wxString textValue = newValue.GetString();
-
-                if( field->GetId() == FIELD_T::REFERENCE )
-                {
-                    symbol->SetRefProp( textValue );
-                }
-                else if( field->GetId() == FIELD_T::VALUE )
-                {
-                    symbol->SetValueFieldText( textValue );
-                }
-                else if( field->GetId() == FIELD_T::FOOTPRINT )
-                {
-                    symbol->SetFootprintFieldText( textValue );
-                }
-                else
-                {
-                    field->SetText( textValue );
-                }
-
-                symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
-            }
-            else
-            {
-                // Non-symbol fields, just modify normally
-                changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
-                item->Set( property, newValue );
-            }
+            changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+            symbol->SetRefProp( newValue.GetString() );
+            symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+            continue;
         }
-        else if( item->Type() == SCH_TABLECELL_T )
-        {
+
+        if( item->Type() == SCH_TABLECELL_T )
             changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );
-            item->Set( property, newValue );
-        }
         else
-        {
             changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
-            item->Set( property, newValue );
 
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
-                symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
-        }
+        item->Set( property, newValue );
+
+        if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+            symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
     }
 
     changes.Push( _( "Edit Properties" ) );
 
-    // Force a repaint of the symbols whose properties were changed
+    // Force a repaint of the items whose properties were changed
     // This is necessary to update field displays in the schematic view
     for( EDA_ITEM* edaItem : selection )
-    {
-        if( edaItem->Type() == SCH_FIELD_T )
-        {
-            // For fields, update the parent symbol
-            SCH_FIELD* field = static_cast<SCH_FIELD*>( edaItem );
-            EDA_ITEM* parent = field->GetParent();
-
-            if( parent )
-                m_frame->GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
-        }
-        else
-        {
-            m_frame->GetCanvas()->GetView()->Update( edaItem, KIGFX::REPAINT );
-        }
-    }
+        m_frame->UpdateItem( edaItem );
 
     // Perform grid updates as necessary based on value change
     AfterCommit();
