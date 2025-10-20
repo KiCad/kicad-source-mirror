@@ -182,6 +182,9 @@ public:
     int PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent );
 
+    int AddVariant( const TOOL_EVENT& aEvent );
+    int RemoveVariant( const TOOL_EVENT& aEvent );
+
 private:
     ///< copy selection to clipboard or to m_duplicateClipboard
     bool doCopy( bool aUseDuplicateClipboard = false );

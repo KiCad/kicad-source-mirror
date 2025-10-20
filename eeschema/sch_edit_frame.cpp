@@ -113,6 +113,9 @@
 #include <project/project_local_settings.h>
 #include <toolbars_sch_editor.h>
 #include <wx/log.h>
+#include <wx/choicdlg.h>
+#include <wx/textdlg.h>
+
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -2874,6 +2877,7 @@ void SCH_EDIT_FRAME::ToggleLibraryTree()
     }
 }
 
+
 void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
 {
     wxCHECK( aSchematic, /* void */ );
@@ -2891,4 +2895,83 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
     static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
     m_toolManager->SetEnvironment( m_schematic, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(),
                                    this );
+}
+
+
+void SCH_EDIT_FRAME::AddVariant()
+{
+    if( !m_currentVariantCtrl )
+        return;
+
+    wxTextEntryDialog dlg( this, _( "Enter new variant name" ), _( "Variant Name" ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString variantName = dlg.GetValue();
+
+    if( variantName.IsEmpty() || ( m_currentVariantCtrl->FindString( variantName ) != wxNOT_FOUND ) )
+        return;
+
+    Schematic().AddVariant( variantName );
+
+    int selected = m_currentVariantCtrl->GetSelection();
+    wxString tmp;
+
+    if( selected != wxNOT_FOUND )
+        tmp = m_currentVariantCtrl->GetString( selected );
+
+    m_currentVariantCtrl->Set( Schematic().GetVariantNamesForUI() );
+
+    if( selected != wxNOT_FOUND )
+    {
+        selected = m_currentVariantCtrl->FindString( tmp );
+        m_currentVariantCtrl->SetSelection( selected );
+    }
+}
+
+
+void SCH_EDIT_FRAME::RemoveVariant()
+{
+    if( !m_currentVariantCtrl )
+        return;
+
+    wxArrayString choices = Schematic().GetVariantNamesForUI();
+
+    // Default variant cannot be removed.
+    choices.RemoveAt( 0 );
+
+    wxSingleChoiceDialog dlg( this, _( "Select variant name to remove" ), _( "Variant Name" ), choices );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString variantName = dlg.GetStringSelection();
+
+    if( variantName.IsEmpty() || ( m_currentVariantCtrl->FindString( variantName ) != wxNOT_FOUND ) )
+        return;
+
+    Schematic().DeleteVariant( variantName );
+
+    int selected = m_currentVariantCtrl->GetSelection();
+    wxString tmp;
+
+    if( selected != wxNOT_FOUND )
+        tmp = m_currentVariantCtrl->GetString( selected );
+
+    m_currentVariantCtrl->Set( Schematic().GetVariantNamesForUI() );
+
+    if( selected != wxNOT_FOUND )
+    {
+        if( tmp != variantName )
+        {
+            selected = m_currentVariantCtrl->FindString( tmp );
+            m_currentVariantCtrl->SetSelection( selected );
+        }
+        else
+        {
+            m_currentVariantCtrl->SetSelection( 0 );
+            SetCurrentVariant( wxEmptyString );
+        }
+    }
 }

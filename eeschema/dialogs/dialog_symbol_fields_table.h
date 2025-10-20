@@ -142,6 +142,7 @@ private:
     void onAddVariant( wxCommandEvent& aEvent ) override;
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
     void onRenameVariant( wxCommandEvent& aEvent ) override;
+    void onVariantSelectionChange( wxCommandEvent& aEvent ) override;
 
     std::set<wxString> getSelectedVariants() const;
 

@@ -2687,6 +2687,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEvent )
+{
+    std::set<wxString> selectedVariants = getSelectedVariants();
+
+    m_dataModel->UpdateReferences( m_symbolsList, selectedVariants );
+
+    if( m_parent )
+    {
+        wxString selectedVariant = GetDefaultVariantName();
+
+        // Selecting more than one variant in the schematic editor doesn't make any sense.  Select the first
+        // variant in the table editor dialog as the variant to show in the schematic editor.
+        if( selectedVariants.size() >= 1 )
+            selectedVariant = *selectedVariants.cbegin();
+
+        m_parent->SetCurrentVariant( selectedVariant );
+    }
+}
+
+
 std::set<wxString> DIALOG_SYMBOL_FIELDS_TABLE::getSelectedVariants() const
 {
     std::set<wxString> retv;

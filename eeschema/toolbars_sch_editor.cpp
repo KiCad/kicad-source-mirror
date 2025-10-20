@@ -294,3 +294,43 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
     m_currentVariantCtrl->SetSelection( selectionIndex );
 }
 
+
+void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
+{
+    if( aEvent.GetId() != ID_TOOLBAR_SCH_SELECT_VARAIANT )
+        return;
+
+    int selection = m_currentVariantCtrl->GetSelection();
+
+    wxString selectedVariant;
+
+    if( ( selection != wxNOT_FOUND ) && ( m_currentVariantCtrl->GetString( selection ) != GetDefaultVariantName() ) )
+        selectedVariant = m_currentVariantCtrl->GetString( selection );
+
+    Schematic().SetCurrentVariant( selectedVariant );
+}
+
+
+void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
+{
+    if( !m_currentVariantCtrl )
+        return;
+
+    int newSelection = m_currentVariantCtrl->FindString( aVariantName );
+
+    if( newSelection == wxNOT_FOUND )
+        return;
+
+    int currentSelection = m_currentVariantCtrl->GetSelection();
+
+    wxString selectedString;
+
+    if( currentSelection != wxNOT_FOUND )
+        selectedString = m_currentVariantCtrl->GetString( currentSelection );
+
+    if( selectedString != aVariantName )
+    {
+        m_currentVariantCtrl->SetSelection( newSelection );
+        Schematic().SetCurrentVariant( aVariantName );
+    }
+}

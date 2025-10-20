@@ -250,6 +250,10 @@ public:
      */
     void UpdateDesignBlockOptions();
 
+    void AddVariant();
+
+    void RemoveVariant();
+
     /**
      * Update the variant name control on the main toolbar.
      *
@@ -258,6 +262,10 @@ public:
      *
      */
     void UpdateVariantSelectionCtrl( const wxArrayString& aVariantNames );
+
+    void SetCurrentVariant( const wxString& aVariantName );
+
+    void onVariantSelected( wxCommandEvent& aEvent );
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.

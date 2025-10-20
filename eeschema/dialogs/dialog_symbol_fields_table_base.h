@@ -112,6 +112,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onVariantSelectionChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAddVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRenameVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteVariant( wxCommandEvent& event ) { event.Skip(); }

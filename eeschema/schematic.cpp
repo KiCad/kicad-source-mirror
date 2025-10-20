@@ -1975,6 +1975,16 @@ wxString SCHEMATIC::GetCurrentVariant() const
 }
 
 
+void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
+{
+    // Internally an empty string is the default variant.  Set to default if the variant name doesn't exist.
+    if( ( aVariantName == GetDefaultVariantName() ) || !m_variantNames.contains( aVariantName ) )
+        m_currentVariant = wxEmptyString;
+    else
+        m_currentVariant = aVariantName;
+}
+
+
 void SCHEMATIC::DeleteVariant( const wxString& aVariantName )
 {
     wxCHECK( m_rootSheet, /* void */ );

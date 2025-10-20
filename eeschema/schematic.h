@@ -455,12 +455,16 @@ public:
      */
     wxString GetCurrentVariant() const;
 
+    void SetCurrentVariant( const wxString& aVariantName );
+
     /**
      * Delete all information for @a aVariantName.
      *
      * @param aVariantName is the name of the variant to remove.
      */
     void DeleteVariant( const wxString& aVariantName );
+
+    void AddVariant( const wxString& aVariantName ) { m_variantNames.emplace( aVariantName ); }
 
     /**
      * True if a SCHEMATIC exists, false if not

@@ -246,7 +246,12 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 return label->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
-    wxString text = getUnescapedText( aPath );
+    wxString variantName;
+
+    if( SCHEMATIC* schematic = Schematic() )
+        variantName = schematic->GetCurrentVariant();
+
+    wxString text = getUnescapedText( aPath, variantName );
 
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
@@ -1597,38 +1602,52 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
 wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxString& aVariantName ) const
 {
+    // This is the default variant field text for all fields except the reference field.
     wxString retv = EDA_TEXT::GetShownText( false );
 
     wxLogTrace( traceSchFieldRendering,
-               "getUnescapedText: field=%s, parent=%p, aPath=%p, path_empty=%d, initial_text='%s'",
-               GetName(),
-               m_parent,
-               aPath,
-               aPath ? (aPath->empty() ? 1 : 0) : -1,
-               retv );
+                "getUnescapedText: field=%s, parent=%p, aPath=%p, path_empty=%d, initial_text='%s'",
+                GetName(),
+                m_parent,
+                aPath,
+                aPath ? (aPath->empty() ? 1 : 0) : -1,
+                retv );
 
     // Special handling for parent object field instance and variant information.
     // Only use the path if it's non-empty; an empty path can't match any instances
     if( m_parent && aPath && !aPath->empty() )
     {
         wxLogTrace( traceSchFieldRendering,
-                   "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
+                    "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
 
         switch( m_parent->Type() )
         {
         case SCH_SYMBOL_T:
         {
-            const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_parent );
-
-            if( m_id == FIELD_T::REFERENCE )
+            if( const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_parent ) )
             {
-                wxLogTrace( traceSchFieldRendering,
-                           "  Calling GetRef for symbol %s on path %s",
-                           symbol->m_Uuid.AsString(),
-                           aPath->Path().AsString() );
-                retv = symbol->GetRef( aPath, true );
-                wxLogTrace( traceSchFieldRendering,
-                           "  GetRef returned: '%s'", retv );
+                if( m_id == FIELD_T::REFERENCE )
+                {
+                    wxLogTrace( traceSchFieldRendering,
+                                "  Calling GetRef for symbol %s on path %s",
+                                symbol->m_Uuid.AsString(),
+                                aPath->Path().AsString() );
+
+                    retv = symbol->GetRef( aPath, true );
+
+                    wxLogTrace( traceSchFieldRendering,
+                                "  GetRef returned: '%s'", retv );
+                }
+                else if( !aVariantName.IsEmpty() )
+                {
+                    // If the variant is not found, fall back to default variant above.
+                    if( std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( *aPath, aVariantName ) )
+                    {
+                        // If the field name does not exist in the variant, fall back to the default variant above.
+                        if( variant->m_Fields.contains( GetName() ) )
+                            retv = variant->m_Fields[GetName()];
+                    }
+                }
             }
 
             break;
