@@ -22,9 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef BACKANNOTATE_H
-#define BACKANNOTATE_H
+#pragma once
 
 #include <deque>
 #include <map>
@@ -92,7 +90,8 @@ public:
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
                    bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
                    bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun );
-    ~BACK_ANNOTATE();
+
+    ~BACK_ANNOTATE() = default;
 
     /**
      * Get netlist from the Pcbnew.
@@ -143,10 +142,9 @@ private:
                                       SCH_COMMIT* aCommit );
 
     void processNetNameChange( SCH_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
-                               const SCH_CONNECTION* aConnection, const wxString& aOldName,
-                               const wxString& aNewName );
+                               const SCH_CONNECTION* aConnection, const wxString& aOldName, const wxString& aNewName );
 
-
+private:
     REPORTER&                    m_reporter;
 
     bool                         m_matchByReference;
@@ -168,5 +166,3 @@ private:
 
     int                          m_changesCount;    // Number of user-level changes
 };
-
-#endif

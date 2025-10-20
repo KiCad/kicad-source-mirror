@@ -23,7 +23,6 @@
 
 #include <reporter.h>
 #include <vector>
-
 #include "wx_html_report_panel_base.h"
 
 class WX_HTML_REPORT_PANEL;

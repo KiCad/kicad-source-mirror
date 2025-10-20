@@ -52,9 +52,8 @@
 
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
-                              bool aProcessFootprints, bool aProcessValues,
-                              bool aProcessReferences, bool aProcessNetNames,
-                              bool aProcessAttributes, bool aProcessOtherFields,
+                              bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
+                              bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
                               bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
@@ -69,13 +68,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
         m_changesCount( 0 )
-{
-}
-
-
-BACK_ANNOTATE::~BACK_ANNOTATE()
-{
-}
+{ }
 
 
 bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
@@ -85,8 +78,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
         && !m_processNetNames && !m_processAttributes && !m_processOtherFields )
     {
-        m_reporter.ReportTail( _( "Select at least one property to back annotate." ),
-                               RPT_SEVERITY_ERROR );
+        m_reporter.ReportTail( _( "Select at least one property to back annotate." ), RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -100,7 +92,6 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     checkForUnusedSymbols();
 
     applyChangelist();
-
     return true;
 }
 
@@ -109,10 +100,9 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
 {
     if( Kiface().IsSingle() )
     {
-        DisplayErrorMessage( m_frame, _( "Cannot fetch PCB netlist because Schematic Editor is opened "
-                                         "in stand-alone mode.\n"
-                                         "You must launch the KiCad project manager and create "
-                                         "a project." ) );
+        DisplayErrorMessage( m_frame, _( "Cannot fetch PCB netlist because Schematic Editor is opened in "
+                                         "stand-alone mode.\n"
+                                         "You must launch the KiCad project manager and create a project." ) );
         return false;
     }
 
@@ -137,6 +127,15 @@ void BACK_ANNOTATE::PushNewLinksToPCB()
     std::string nullPayload;
 
     m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_UPDATE_LINKS, nullPayload );
+}
+
+
+wxString describeRef( const wxString& aRef )
+{
+    if( aRef.IsEmpty() )
+        return wxT( "<i>" ) + _( "unannotated footprint" ) + wxT( " </i>" );
+    else
+        return aRef;
 }
 
 
@@ -177,7 +176,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint '%s' has no assigned symbol." ), ref );
+                msg.Printf( _( "Footprint '%s' has no assigned symbol." ), describeRef( ref ) );
                 m_reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
@@ -221,13 +220,9 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
                     continue;
 
                 if( name.get().front().first == "dnp" )
-                {
                     dnp = true;
-                }
                 else if( name.get().front().first == "exclude_from_bom" )
-                {
                     exBOM = true;
-                }
             }
 
             boost::optional<const PTREE&> nets = item.second.get_child_optional( "nets" );
@@ -255,15 +250,15 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         {
             // Module with this path already exists - generate error
             msg.Printf( _( "Footprints '%s' and '%s' linked to same symbol." ),
-                        nearestItem->second->m_ref,
-                        ref );
+                        describeRef( nearestItem->second->m_ref ),
+                        describeRef( ref ) );
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
         }
         else
         {
             // Add footprint to the map
-            auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM,
-                                                       pinNetMap, fieldsMap );
+            std::shared_ptr<PCB_FP_DATA> data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp,
+                                                                               exBOM, pinNetMap, fieldsMap );
             m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -272,17 +267,13 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
 void BACK_ANNOTATE::getChangeList()
 {
-    for( std::pair<const wxString, std::shared_ptr<PCB_FP_DATA>>& fpData : m_pcbFootprints )
+    for( const auto& [pcbPath, pcbData] : m_pcbFootprints )
     {
-        const wxString& pcbPath = fpData.first;
-        auto&           pcbData = fpData.second;
-        int             refIndex;
-        bool            foundInMultiunit = false;
+        int  refIndex;
+        bool foundInMultiunit = false;
 
-        for( std::pair<const wxString, SCH_REFERENCE_LIST>& item : m_multiUnitsRefs )
+        for( const auto& [_, refList] : m_multiUnitsRefs )
         {
-            SCH_REFERENCE_LIST& refList = item.second;
-
             if( m_matchByReference )
                 refIndex = refList.FindRef( pcbPath );
             else
@@ -320,9 +311,9 @@ void BACK_ANNOTATE::getChangeList()
         else
         {
             // Haven't found linked symbol in multiunits or common refs. Generate error
-            wxString msg = wxString::Format( _( "Cannot find symbol for footprint '%s'." ),
-                                             pcbData->m_ref );
-            m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
+            m_reporter.ReportTail( wxString::Format( _( "Cannot find symbol for footprint '%s'." ),
+                                                     describeRef( pcbData->m_ref ) ),
+                                   RPT_SEVERITY_ERROR );
         }
     }
 }
@@ -349,11 +340,11 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
             if( ref.GetSymbol()->GetExcludedFromBoard() )
             {
-                wxString msg = wxString::Format( _( "Footprint '%s' is not present on PCB. "
-                                                    "Corresponding symbols in schematic must be "
-                                                    "manually deleted (if desired)." ),
-                                                 m_refs[i].GetRef() );
-                m_reporter.ReportTail( msg, RPT_SEVERITY_WARNING );
+                m_reporter.ReportTail( wxString::Format( _( "Footprint '%s' is not present on PCB. "
+                                                            "Corresponding symbols in schematic must be "
+                                                            "manually deleted (if desired)." ),
+                                                         describeRef( m_refs[i].GetRef() ) ),
+                                       RPT_SEVERITY_WARNING );
             }
 
             ++i;
@@ -449,8 +440,7 @@ void BACK_ANNOTATE::applyChangelist()
                     auto found = unitPinsByLibSymbol.find( libSymbol );
 
                     if( found == unitPinsByLibSymbol.end() )
-                        found = unitPinsByLibSymbol.emplace( libSymbol,
-                                                             libSymbol->GetUnitPinInfo() ).first;
+                        found = unitPinsByLibSymbol.emplace( libSymbol, libSymbol->GetUnitPinInfo() ).first;
 
                     const std::vector<LIB_SYMBOL::UNIT_PIN_INFO>& unitInfos = found->second;
 
@@ -462,31 +452,31 @@ void BACK_ANNOTATE::applyChangelist()
 
             // Compare nets in the deterministic library order so diode arrays and similar map cleanly
             auto netsInUnitOrder =
-               []( const std::vector<wxString>& pins,
-                   const std::map<wxString, wxString>& netByPin )
-               {
-                   std::vector<wxString> nets;
-
-                   if( !pins.empty() )
+                   []( const std::vector<wxString>& pins,
+                       const std::map<wxString, wxString>& netByPin )
                    {
-                       nets.reserve( pins.size() );
+                       std::vector<wxString> nets;
 
-                       for( const wxString& pinNum : pins )
+                       if( !pins.empty() )
                        {
-                           auto it = netByPin.find( pinNum );
-                           nets.push_back( it != netByPin.end() ? it->second : wxString() );
+                           nets.reserve( pins.size() );
+
+                           for( const wxString& pinNum : pins )
+                           {
+                               auto it = netByPin.find( pinNum );
+                               nets.push_back( it != netByPin.end() ? it->second : wxString() );
+                           }
                        }
-                   }
-                   else
-                   {
-                       nets.reserve( netByPin.size() );
+                       else
+                       {
+                           nets.reserve( netByPin.size() );
 
-                       for( const std::pair<const wxString, wxString>& kv : netByPin )
-                           nets.push_back( kv.second );
-                   }
+                           for( const std::pair<const wxString, wxString>& kv : netByPin )
+                               nets.push_back( kv.second );
+                       }
 
-                   return nets;
-               };
+                       return nets;
+                   };
 
             for( CHANGELIST_ITEM* changedItem : changedFpItems )
             {
@@ -545,20 +535,22 @@ void BACK_ANNOTATE::applyChangelist()
                 symbolUnits.push_back( symbolUnit );
             }
 
-            auto vectorToString = []( const std::vector<wxString>& values ) -> wxString
-            {
-                return fmt::format( L"{}", fmt::join( values, L", " ) );
-            };
+            auto vectorToString =
+                    []( const std::vector<wxString>& values ) -> wxString
+                    {
+                        return fmt::format( L"{}", fmt::join( values, L", " ) );
+                    };
 
-            auto mapToString = [vectorToString]( const std::map<wxString, wxString>& pinMap ) -> wxString
-            {
-                std::vector<wxString> entries;
+            auto mapToString =
+                    [vectorToString]( const std::map<wxString, wxString>& pinMap ) -> wxString
+                    {
+                        std::vector<wxString> entries;
 
-                for( const std::pair<const wxString, wxString>& pin : pinMap )
-                    entries.push_back( pin.first + '=' + pin.second );
+                        for( const std::pair<const wxString, wxString>& pin : pinMap )
+                            entries.push_back( pin.first + '=' + pin.second );
 
-                return vectorToString( entries );
-            };
+                        return vectorToString( entries );
+                    };
 
             msg.Printf( wxT( "DEBUG(unit-swap): footprint %s processed (%zu units, dryRun=%d)." ), fp->m_ref,
                         symbolUnits.size(), m_dryRun ? 1 : 0 );
@@ -767,7 +759,10 @@ void BACK_ANNOTATE::applyChangelist()
                     if( unitBString.IsEmpty() )
                         unitBString.Printf( wxT( "%d" ), bUnit );
 
-                    msg.Printf( _( "Swap %s unit %s with unit %s." ), baseRef, unitAString, unitBString );
+                    msg.Printf( _( "Swap %s unit %s with unit %s." ),
+                                describeRef( baseRef ),
+                                unitAString,
+                                unitBString );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                     ++m_changesCount;
                 }
@@ -818,16 +813,14 @@ void BACK_ANNOTATE::applyChangelist()
                 };
 
         if( !m_dryRun )
-        {
             commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
-        }
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip
                 && !symbol->GetField( FIELD_T::REFERENCE )->HasTextVars() )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s reference designator to '%s'." ),
-                        ref.GetRef(),
+                        describeRef( ref.GetRef() ),
                         fpData.m_ref );
 
             if( !m_dryRun )
@@ -841,7 +834,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint assignment from '%s' to '%s'." ),
-                        ref.GetRef(),
+                        describeRef( ref.GetRef() ),
                         EscapeHTML( oldFootprint ),
                         EscapeHTML( fpData.m_footprint ) );
 
@@ -856,7 +849,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s value from '%s' to '%s'." ),
-                        ref.GetRef(),
+                        describeRef( ref.GetRef() ),
                         EscapeHTML( oldValue ),
                         EscapeHTML( fpData.m_value ) );
 
@@ -870,7 +863,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s 'Do not populate' from '%s' to '%s'." ),
-                        ref.GetRef(),
+                        describeRef( ref.GetRef() ),
                         boolString( oldDNP ),
                         boolString( fpData.m_DNP ) );
 
@@ -884,7 +877,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s 'Exclude from bill of materials' from '%s' to '%s'." ),
-                        ref.GetRef(),
+                        describeRef( ref.GetRef() ),
                         boolString( oldExBOM ),
                         boolString( fpData.m_excludeFromBOM ) );
 
@@ -915,7 +908,7 @@ void BACK_ANNOTATE::applyChangelist()
                 if( !pin )
                 {
                     msg.Printf( _( "Cannot find %s pin '%s'." ),
-                                ref.GetRef(),
+                                describeRef( ref.GetRef() ),
                                 EscapeHTML( pinNumber ) );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
 
@@ -958,7 +951,7 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     m_changesCount++;
                     msg.Printf( _( "Change %s field '%s' value to '%s'." ),
-                                ref.GetRef(),
+                                describeRef( ref.GetRef() ),
                                 EscapeHTML( symField->GetCanonicalName() ),
                                 EscapeHTML( fpFieldValue ) );
 
@@ -973,7 +966,7 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     m_changesCount++;
                     msg.Printf( _( "Add %s field '%s' with value '%s'." ),
-                                ref.GetRef(),
+                                describeRef( ref.GetRef() ),
                                 EscapeHTML( fpFieldName ),
                                 EscapeHTML( fpFieldValue ) );
 
@@ -1003,7 +996,7 @@ void BACK_ANNOTATE::applyChangelist()
                     // Field not found in footprint field map, delete it
                     m_changesCount++;
                     msg.Printf( _( "Delete %s field '%s.'" ),
-                                ref.GetRef(),
+                                describeRef( ref.GetRef() ),
                                 EscapeHTML( field.GetName() ) );
 
                     if( !m_dryRun )
@@ -1101,8 +1094,7 @@ static SPIN_STYLE orientLabel( SCH_PIN* aPin )
 }
 
 
-void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
-                     std::set<SCH_ITEM*>& connectedItems )
+void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath, std::set<SCH_ITEM*>& connectedItems )
 {
     if( connectedItems.insert( aItem ).second )
     {
@@ -1191,8 +1183,8 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
 
     std::set<wxString> sharedSheetPaths;
     std::set<wxString> sharedProjectNames;
-    bool               sharedSheetSymbol =
-            SymbolHasSheetInstances( *aSymbol, currentProjectName, &sharedSheetPaths, &sharedProjectNames );
+    bool               sharedSheetSymbol = SymbolHasSheetInstances( *aSymbol, currentProjectName,
+                                                                    &sharedSheetPaths, &sharedProjectNames );
 
     std::set<wxString> friendlySheetNames;
 
@@ -1267,7 +1259,8 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
                 if( projects.IsEmpty() )
                 {
                     msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared across other projects." ),
-                                aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                                describeRef( aReference.GetRef() ),
+                                EscapeHTML( change.pin->GetShownNumber() ),
                                 EscapeHTML( partner.pin->GetShownNumber() ) );
                 }
                 else
@@ -1284,20 +1277,23 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
 
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is used by multiple sheet "
                                "instances (%s)." ),
-                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            describeRef( aReference.GetRef() ),
+                            EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ), sheets );
             }
             else if( sharedSheetSymbol )
             {
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared." ),
-                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            describeRef( aReference.GetRef() ),
+                            EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ) );
             }
             else
             {
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are disabled in "
                                "the schematic preferences." ),
-                            aReference.GetRef(), EscapeHTML( change.pin->GetShownNumber() ),
+                            describeRef( aReference.GetRef() ),
+                            EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ) );
             }
             m_reporter.ReportHead( msg, RPT_SEVERITY_INFO );
@@ -1330,8 +1326,10 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
 
         ++m_changesCount;
 
-        msg.Printf( _( "Swap %s pins %s and %s to match PCB." ), aReference.GetRef(),
-                    EscapeHTML( change.pin->GetShownNumber() ), EscapeHTML( partner.pin->GetShownNumber() ) );
+        msg.Printf( _( "Swap %s pins %s and %s to match PCB." ),
+                    describeRef( aReference.GetRef() ),
+                    EscapeHTML( change.pin->GetShownNumber() ),
+                    EscapeHTML( partner.pin->GetShownNumber() ) );
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
     }
 
@@ -1404,7 +1402,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         ++m_changesCount;
 
         msg.Printf( _( "Change %s pin %s net label from '%s' to '%s'." ),
-                    aRef,
+                    describeRef( aRef ),
                     EscapeHTML( aPin->GetShownNumber() ),
                     EscapeHTML( aOldName ),
                     EscapeHTML( aNewName ) );
@@ -1436,7 +1434,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         ++m_changesCount;
         msg.Printf( _( "Add label '%s' to %s pin %s net." ),
                     EscapeHTML( aNewName ),
-                    aRef,
+                    describeRef( aRef ),
                     EscapeHTML( aPin->GetShownNumber() ) );
 
         if( !m_dryRun )

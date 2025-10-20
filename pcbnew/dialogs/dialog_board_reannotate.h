@@ -133,7 +133,7 @@ private:
     void ShowReport( const wxString& aMessage, SEVERITY aSeverity );
 
 	/// Create a list of the footprints and their coordinates.
-    void LogFootprints( const wxString& aMessage, const std::vector<REFDES_INFO>& aFootprints );
+    void LogFootprints( const std::vector<REFDES_INFO>& aFootprints );
 
     /// Create an audit trail of the changes.
     void LogChangePlan( void );
