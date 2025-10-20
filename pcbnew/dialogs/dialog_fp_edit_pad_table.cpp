@@ -36,6 +36,7 @@
 #include <footprint.h>
 #include <footprint_edit_frame.h>
 
+
 // Helper to map shape string to PAD_SHAPE
 static PAD_SHAPE ShapeFromString( const wxString& shape )
 {
@@ -48,9 +49,10 @@ static PAD_SHAPE ShapeFromString( const wxString& shape )
     return PAD_SHAPE::CIRCLE;
 }
 
+
 DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOOTPRINT* aFootprint ) :
-    DIALOG_SHIM( (wxWindow*)aParent, wxID_ANY, _( "Pad Table" ), wxDefaultPosition, wxDefaultSize,
-             wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+        DIALOG_SHIM( (wxWindow*)aParent, wxID_ANY, _( "Pad Table" ), wxDefaultPosition, wxDefaultSize,
+                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_grid( nullptr ),
         m_footprint( aFootprint ),
         m_unitsProvider( std::make_unique<UNITS_PROVIDER>( pcbIUScale, GetUserUnits() ) )
@@ -161,23 +163,24 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->Bind( wxEVT_GRID_SELECT_CELL, &DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell, this );
 
     // Listen for cancel
-    Bind(
-            wxEVT_BUTTON,
-            [this]( wxCommandEvent& aEvt )
-            {
-                m_cancelled = true;
-                aEvt.Skip();
-            },
-            wxID_CANCEL );
+    Bind( wxEVT_BUTTON,
+          [this]( wxCommandEvent& aEvt )
+          {
+              m_cancelled = true;
+              aEvt.Skip();
+          },
+          wxID_CANCEL );
 
     finishDialogSettings();
 }
+
 
 DIALOG_FP_EDIT_PAD_TABLE::~DIALOG_FP_EDIT_PAD_TABLE()
 {
     if( m_cancelled )
         RestoreOriginalPadState();
 }
+
 
 void DIALOG_FP_EDIT_PAD_TABLE::Populate()
 {
@@ -222,6 +225,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
 
             if( drill.x > 0 )
                 m_grid->SetCellValue( row, COL_DRILL_X, m_unitsProvider->StringFromValue( drill.x, true ) );
+
             if( drill.y > 0 )
                 m_grid->SetCellValue( row, COL_DRILL_Y, m_unitsProvider->StringFromValue( drill.y, true ) );
         }
@@ -235,8 +239,10 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
         // Pad to die metrics
         if( pad->GetPadToDieLength() )
             m_grid->SetCellValue( row, COL_P2D_LENGTH, m_unitsProvider->StringFromValue( pad->GetPadToDieLength(), true ) );
+
         if( pad->GetPadToDieDelay() )
             m_grid->SetCellValue( row, COL_P2D_DELAY, wxString::Format( "%d", pad->GetPadToDieDelay() ) );
+
         row++;
     }
 
@@ -263,6 +269,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
         shapeNames.push_back( _( "Custom shape" ) );
 
         int maxWidth = 0;
+
         for( const wxString& str : shapeNames )
         {
             int w, h;
@@ -272,7 +279,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
 
         // Add padding for internal cell margins + dropdown control.
         int padding = FromDIP( 30 ); // heuristic: 2*margin + arrow button
-    m_grid->SetColSize( COL_SHAPE, maxWidth + padding );
+        m_grid->SetColSize( COL_SHAPE, maxWidth + padding );
     }
 
     // Record initial proportions for proportional resizing later.
@@ -299,6 +306,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
     }
 }
 
+
 void DIALOG_FP_EDIT_PAD_TABLE::CaptureOriginalPadState()
 {
     m_originalPads.clear();
@@ -308,17 +316,18 @@ void DIALOG_FP_EDIT_PAD_TABLE::CaptureOriginalPadState()
     for( PAD* pad : m_footprint->Pads() )
     {
         PAD_SNAPSHOT snap;
-    snap.number        = pad->GetNumber();
-    snap.shape         = pad->GetShape( PADSTACK::ALL_LAYERS );
-    snap.position      = pad->GetPosition();
-    snap.size          = pad->GetSize( PADSTACK::ALL_LAYERS );
-    snap.attribute     = pad->GetAttribute();
-    snap.drillSize     = pad->GetDrillSize();
-    snap.padToDieLength= pad->GetPadToDieLength();
-    snap.padToDieDelay = pad->GetPadToDieDelay();
+        snap.number        = pad->GetNumber();
+        snap.shape         = pad->GetShape( PADSTACK::ALL_LAYERS );
+        snap.position      = pad->GetPosition();
+        snap.size          = pad->GetSize( PADSTACK::ALL_LAYERS );
+        snap.attribute     = pad->GetAttribute();
+        snap.drillSize     = pad->GetDrillSize();
+        snap.padToDieLength= pad->GetPadToDieLength();
+        snap.padToDieDelay = pad->GetPadToDieDelay();
         m_originalPads.push_back( snap );
     }
 }
+
 
 void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
 {
@@ -335,14 +344,14 @@ void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
             break;
 
         const PAD_SNAPSHOT& snap = m_originalPads[idx++];
-    pad->SetNumber( snap.number );
-    pad->SetShape( PADSTACK::ALL_LAYERS, snap.shape );
-    pad->SetAttribute( snap.attribute );
-    pad->SetPosition( snap.position );
-    pad->SetSize( PADSTACK::ALL_LAYERS, snap.size );
-    pad->SetDrillSize( snap.drillSize );
-    pad->SetPadToDieLength( snap.padToDieLength );
-    pad->SetPadToDieDelay( snap.padToDieDelay );
+        pad->SetNumber( snap.number );
+        pad->SetShape( PADSTACK::ALL_LAYERS, snap.shape );
+        pad->SetAttribute( snap.attribute );
+        pad->SetPosition( snap.position );
+        pad->SetSize( PADSTACK::ALL_LAYERS, snap.size );
+        pad->SetDrillSize( snap.drillSize );
+        pad->SetPadToDieLength( snap.padToDieLength );
+        pad->SetPadToDieDelay( snap.padToDieDelay );
         pad->ClearBrightened();
 
         if( canvas )
@@ -372,6 +381,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
     pad->SetNumber( m_grid->GetCellValue( row, COL_NUMBER ) );
 
         wxString typeStr = m_grid->GetCellValue( row, COL_TYPE );
+
         if( typeStr == _( "Through-hole" ) )
             pad->SetAttribute( PAD_ATTRIB::PTH );
         else if( typeStr == _( "SMD" ) )
@@ -437,6 +447,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
     return true;
 }
 
+
 void DIALOG_FP_EDIT_PAD_TABLE::InitColumnProportions()
 {
     m_colProportions.clear();
@@ -468,6 +479,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::InitColumnProportions()
     }
 }
 
+
 void DIALOG_FP_EDIT_PAD_TABLE::OnSize( wxSizeEvent& aEvent )
 {
     if( m_colProportions.empty() )
@@ -490,6 +502,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSize( wxSizeEvent& aEvent )
         available = clientW; // prefer actual client width
 
     int used = 0;
+
     for( int c = 0; c < cols; ++c )
     {
         int target = (int) std::round( m_colProportions[c] * available );
@@ -505,6 +518,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSize( wxSizeEvent& aEvent )
 
     aEvent.Skip();
 }
+
 
 void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
 {
@@ -642,6 +656,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
             base->GetCanvas()->ForceRefresh();
     }
 }
+
 
 void DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell( wxGridEvent& aEvent )
 {
