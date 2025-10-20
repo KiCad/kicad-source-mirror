@@ -409,7 +409,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
         {
             badrefdes += wxString::Format( _( "<br/>    RefDes: %s; footprint: %s at %s on PCB." ),
                                            mod.RefDesString.IsEmpty() ? empty_str() : mod.RefDesString,
-                                           mod.FPID.IsValid() ? wxString( mod.FPID.Format() ) : unknown_str(),
+                                           mod.FPID.IsValid() ? wxString( mod.FPID.Format().c_str() ) : unknown_str(),
                                            CoordTowxString( mod.x, mod.y ) );
         }
 
