@@ -161,11 +161,12 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         item.m_Reference = footprint->Reference().GetShownText( false );
         item.m_Value     = footprint->Value().GetShownText( false );
         item.m_Layer     = footprint->GetLayer();
-        list.push_back( std::move( item ) );
 
         lenRefText = std::max( lenRefText, (int) item.m_Reference.length() );
         lenValText = std::max( lenValText, (int) item.m_Value.length() );
         lenPkgText = std::max( lenPkgText, (int) item.m_Footprint->GetFPID().GetLibItemName().length() );
+
+        list.push_back( std::move( item ) );
     }
 
     if( list.size() > 1 )

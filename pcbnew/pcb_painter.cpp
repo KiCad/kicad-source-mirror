@@ -3039,7 +3039,7 @@ void PCB_PAINTER::draw( const PCB_POINT* aPoint, int aLayer )
     // The color for the point comes from the associated copper layer ( aLayer - LAYER_POINT_START )
     // and the visibility comes from the combination of that copper layer and LAYER_POINT
 
-    double size = aPoint->GetSize() / 2;
+    double size = (double)aPoint->GetSize() / 2;
 
     // Keep the width constant, not related to the scale because the anchor
     // is just a marker on screen, just draw in pixels

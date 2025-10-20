@@ -47,7 +47,8 @@
 
 PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition, int aLayer ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T, F_Cu ),  // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, aItem )
+        MARKER_BASE( SCALING_FACTOR, aItem ),
+        m_pathLength( 0 )
 {
     if( m_rcItem )
     {
