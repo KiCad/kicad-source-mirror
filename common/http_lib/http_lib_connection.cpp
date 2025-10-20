@@ -151,6 +151,74 @@ bool HTTP_LIB_CONNECTION::syncCategories()
 }
 
 
+bool boolFromString( const std::any& aVal, bool aDefaultValue )
+{
+    try
+    {
+        wxString strval( std::any_cast<std::string>( aVal ).c_str(), wxConvUTF8 );
+
+        if( strval.IsEmpty() )
+            return aDefaultValue;
+
+        strval.MakeLower();
+
+        for( const auto& trueVal : { wxS( "true" ), wxS( "yes" ), wxS( "y" ), wxS( "1" ) } )
+        {
+            if( strval.Matches( trueVal ) )
+                return true;
+        }
+
+        for( const auto& falseVal : { wxS( "false" ), wxS( "no" ), wxS( "n" ), wxS( "0" ) } )
+        {
+            if( strval.Matches( falseVal ) )
+                return false;
+        }
+    }
+    catch( const std::bad_any_cast& )
+    {
+    }
+
+    return aDefaultValue;
+}
+
+
+void setPartIdNameAndMetadata( const nlohmann::json& aPart_json, HTTP_LIB_PART& aPart )
+{
+    // the id used to identify the part, the name is needed to show a human-readable
+    // part description to the user inside the symbol chooser dialog
+    aPart.id = aPart_json.at( "id" );
+
+    // API might not want to return an optional name.
+    if( aPart_json.contains( "name" ) )
+        aPart.name = aPart_json.at( "name" );
+    else
+        aPart.name = aPart.id;
+
+    aPart.name = LIB_ID::FixIllegalChars( aPart.name, false ).c_str();
+
+    if( aPart_json.contains( "description" ) )
+        aPart.desc = aPart_json.at( "description" );
+
+    if( aPart_json.contains( "keywords" ) )
+        aPart.keywords = aPart_json.at( "keywords" );
+
+    if( aPart_json.contains( "footprint_filters" ) )
+    {
+        nlohmann::json filters_json = aPart_json.at( "footprint_filters" );
+
+        if( filters_json.is_array() )
+        {
+            for( const auto& val : filters_json )
+                aPart.fp_filters.push_back( val );
+        }
+        else
+        {
+            aPart.fp_filters.push_back( filters_json );
+        }
+    }
+}
+
+
 bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart )
 {
     if( !IsValidEndpoint() )
@@ -189,21 +257,10 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         std::string    key = "";
         std::string    value = "";
 
-        // the id used to identify the part, the name is needed to show a human-readable
-        // part description to the user inside the symbol chooser dialog
-        aFetchedPart.id = response.at( "id" );
-
         // get a timestamp for caching
         aFetchedPart.lastCached = std::time( nullptr );
 
-        // API might not want to return an optional name.
-        if( response.contains( "name" ) )
-            aFetchedPart.name = response.at( "name" );
-        else
-            aFetchedPart.name = aFetchedPart.id;
-
-        UTF8 sanitizedFetchedName = LIB_ID::FixIllegalChars( aFetchedPart.name, false );
-        aFetchedPart.name = sanitizedFetchedName.c_str();
+        setPartIdNameAndMetadata( response, aFetchedPart );
 
         aFetchedPart.symbolIdStr = response.at( "symbolIdStr" );
 
@@ -259,27 +316,6 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             // Add field to fields list
             aFetchedPart.fields.push_back( std::make_pair( key, std::make_tuple( value, visible ) ) );
         }
-
-        if( response.contains( "description" ) )
-            aFetchedPart.desc = response.at( "description" );
-
-        if( response.contains( "keywords" ) )
-            aFetchedPart.keywords = response.at( "keywords" );
-
-        if( response.contains( "footprint_filters" ) )
-        {
-            nlohmann::json filters_json = response.at( "footprint_filters" );
-
-            if( filters_json.is_array() )
-            {
-                for( const auto& val : filters_json )
-                    aFetchedPart.fp_filters.push_back( val );
-            }
-            else
-            {
-                aFetchedPart.fp_filters.push_back( filters_json );
-            }
-        }
     }
     catch( const std::exception& e )
     {
@@ -324,27 +360,7 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
             //PART result;
             HTTP_LIB_PART part;
 
-            part.id = item.at( "id" );
-
-            if( item.contains( "description" ) )
-            {
-                // At this point we don't display anything so just set it to false
-                part.fields.push_back( std::make_pair( "description",
-                                                       std::make_tuple( item.at( "description" ), false ) ) );
-            }
-
-            // API might not want to return an optional name.
-            if( item.contains( "name" ) )
-                part.name = item.at( "name" );
-            else
-                part.name = part.id;
-
-            std::string originalName = part.name;
-            UTF8        sanitizedPartName = LIB_ID::FixIllegalChars( part.name, false );
-            part.name = sanitizedPartName.c_str();
-
-            if( part.name != originalName )
-                m_cache.erase( originalName );
+            setPartIdNameAndMetadata( item, part );
 
             // add to cache
             m_cache[part.name] = std::make_tuple( part.id, aCategory.id );
@@ -378,37 +394,6 @@ bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>&
     }
 
     return true;
-}
-
-
-bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal, bool aDefaultValue )
-{
-    try
-    {
-        wxString strval( std::any_cast<std::string>( aVal ).c_str(), wxConvUTF8 );
-
-        if( strval.IsEmpty() )
-            return aDefaultValue;
-
-        strval.MakeLower();
-
-        for( const auto& trueVal : { wxS( "true" ), wxS( "yes" ), wxS( "y" ), wxS( "1" ) } )
-        {
-            if( strval.Matches( trueVal ) )
-                return true;
-        }
-
-        for( const auto& falseVal : { wxS( "false" ), wxS( "no" ), wxS( "n" ), wxS( "0" ) } )
-        {
-            if( strval.Matches( falseVal ) )
-                return false;
-        }
-    }
-    catch( const std::bad_any_cast& )
-    {
-    }
-
-    return aDefaultValue;
 }
 
 

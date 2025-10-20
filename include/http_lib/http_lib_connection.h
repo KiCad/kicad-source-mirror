@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_HTTP_LIB_CONNECTION_H
-#define KICAD_HTTP_LIB_CONNECTION_H
+#pragma once
 
 #include <any>
 #include <boost/algorithm/string.hpp>
@@ -94,8 +93,6 @@ private:
 
     bool checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl );
 
-    bool boolFromString( const std::any& aVal, bool aDefaultValue = false );
-
     /**
      * HTTP response status codes indicate whether a specific HTTP request has been
      * successfully completed.
@@ -126,5 +123,3 @@ private:
     //        part.name               part.id     category.id
     std::map<std::string, std::tuple<std::string, std::string>> m_cache;
 };
-
-#endif //KICAD_HTTP_LIB_CONNECTION_H
