@@ -664,21 +664,22 @@ wxString FormatBoardStatisticsJson( const BOARD_STATISTICS_DATA& aData, BOARD* a
 
     // The UI strings end in colons, often have a suffix like "via", and need
     // to be snake_cased
-    auto jsonize = []( const wxString& title, bool removeSuffix )
-    {
-        wxString json = title;
+    auto jsonize =
+            []( const wxString& title, bool removeSuffix ) -> wxString
+            {
+                wxString json = title;
 
-        if( removeSuffix )
-            json = json.BeforeLast( ' ' );
+                if( removeSuffix )
+                    json = json.BeforeLast( ' ' );
 
-        if( json.EndsWith( wxS( ":" ) ) )
-            json.RemoveLast();
+                if( json.EndsWith( wxS( ":" ) ) )
+                    json.RemoveLast();
 
-        json.Replace( wxS( " " ), wxS( "_" ) );
-        json.Replace( wxS( "-" ), wxS( "_" ) );
+                json.Replace( wxS( " " ), wxS( "_" ) );
+                json.Replace( wxS( "-" ), wxS( "_" ) );
 
-        return json.MakeLower();
-    };
+                return json.MakeLower();
+            };
 
     nlohmann::ordered_json pads = nlohmann::ordered_json::object();
 
