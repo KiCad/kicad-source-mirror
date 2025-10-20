@@ -23,7 +23,6 @@
 
 #include <dialogs/panel_setup_tuning_profiles.h>
 #include <dialogs/panel_setup_tuning_profile_info.h>
-#include <widgets/wx_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
@@ -31,11 +30,10 @@
 #include <layer_ids.h>
 #include <magic_enum.hpp>
 #include <pgm_base.h>
-#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>
 
 PANEL_SETUP_TUNING_PROFILES::PANEL_SETUP_TUNING_PROFILES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
-                                                          BOARD*                           aBoard,
+                                                          BOARD* aBoard,
                                                           std::shared_ptr<TUNING_PROFILES> aTimeDomainParameters ) :
         PANEL_SETUP_TUNING_PROFILES_BASE( aParentWindow ),
         m_tuningProfileParameters( std::move( aTimeDomainParameters ) ),
@@ -85,8 +83,7 @@ bool PANEL_SETUP_TUNING_PROFILES::TransferDataFromWindow()
 
     for( size_t i = 0; i < m_tuningProfiles->GetPageCount(); ++i )
     {
-        PANEL_SETUP_TUNING_PROFILE_INFO* panel =
-                dynamic_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
+        auto* panel = static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
         TUNING_PROFILE profile = panel->GetProfile();
         m_tuningProfileParameters->AddTuningProfile( std::move( profile ) );
     }
@@ -120,8 +117,7 @@ void PANEL_SETUP_TUNING_PROFILES::SyncCopperLayers( const int aNumCopperLayers )
 
     for( size_t i = 0; i < m_tuningProfiles->GetPageCount(); ++i )
     {
-        PANEL_SETUP_TUNING_PROFILE_INFO* panel =
-                static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
+        auto* panel = static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
         panel->UpdateLayerNames();
     }
 }
