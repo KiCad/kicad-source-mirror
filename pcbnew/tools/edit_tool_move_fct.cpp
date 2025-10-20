@@ -1370,7 +1370,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                  || evt->IsAction( &PCB_ACTIONS::moveWithReference )
                  || evt->IsAction( &PCB_ACTIONS::copyWithReference )
                  || evt->IsAction( &PCB_ACTIONS::positionRelative )
-                 || evt->IsAction( &PCB_ACTIONS::positionRelativeInteractively )
+                 || evt->IsAction( &PCB_ACTIONS::interactiveOffsetTool )
                  || evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();

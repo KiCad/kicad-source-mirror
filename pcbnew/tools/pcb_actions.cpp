@@ -600,7 +600,7 @@ TOOL_ACTION PCB_ACTIONS::moveIndividually( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::moveWithReference( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveMove.moveWithReference" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Move with Reference" ) )
+        .FriendlyName( _( "Move with Reference..." ) )
         .Tooltip( _( "Moves the selected item(s) with a specified starting point" ) )
         .Icon( BITMAPS::move )
         .Flags( AF_ACTIVATE )
@@ -609,7 +609,7 @@ TOOL_ACTION PCB_ACTIONS::moveWithReference( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::copyWithReference( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveMove.copyWithReference" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Copy with Reference" ) )
+        .FriendlyName( _( "Copy with Reference..." ) )
         .Tooltip( _( "Copy selected item(s) to clipboard with a specified starting point" ) )
         .Icon( BITMAPS::copy )
         .Flags( AF_ACTIVATE ) );
@@ -2313,11 +2313,11 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( TOOL_ACTION_ARGS()
         .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another" ) )
         .Icon( BITMAPS::move_relative ) );
 
-TOOL_ACTION PCB_ACTIONS::positionRelativeInteractively( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PositionRelative.positionRelativeInteractively" )
+TOOL_ACTION PCB_ACTIONS::interactiveOffsetTool( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PositionRelative.interactiveOffsetTool" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Position Interactively..." ) )
-        .Tooltip( _( "Positions the selected item(s) by an exact amount relative to another, interactively" ) )
+        .FriendlyName( _( "Interactive Offset Tool" ) )
+        .Tooltip( _( "Interactive tool for offsetting items by exact amounts" ) )
         .Icon( BITMAPS::move_relative ) );
 
 // PCIKER_TOOL

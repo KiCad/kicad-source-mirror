@@ -26,7 +26,8 @@
 
 DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset, bool aClearToZero ) :
         DIALOG_SET_OFFSET_BASE( &aParent ), m_clearToZero( aClearToZero ),
-        m_originalOffset( aOffset ), m_updatedOffset( aOffset ),
+        m_originalOffset( aOffset ),
+        m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
         m_yOffset( &aParent, m_yLabel, m_yEntry, m_yUnit ),
         m_stateX( 0.0 ),
@@ -38,8 +39,6 @@ DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset
     m_yOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );
 
     SetInitialFocus( m_xEntry );
-
-    updateDialogControls( m_polarCoords->IsChecked() );
 
     if( m_clearToZero )
     {
@@ -79,7 +78,7 @@ void DIALOG_SET_OFFSET::OnTextFocusLost( wxFocusEvent& event )
 }
 
 
-static void ToPolarDeg( double x, double y, double& r, EDA_ANGLE& q )
+static void ToPolar( double x, double y, double& r, EDA_ANGLE& q )
 {
     // convert to polar coordinates
     r = hypot( x, y );
@@ -106,7 +105,7 @@ void DIALOG_SET_OFFSET::OnClear( wxCommandEvent& event )
     VECTOR2I              offset = m_originalOffset;
     double                r;
     EDA_ANGLE             q;
-    ToPolarDeg( offset.x, offset.y, r, q );
+    ToPolar( offset.x, offset.y, r, q );
 
     if( obj == m_clearX )
     {
@@ -145,7 +144,7 @@ void DIALOG_SET_OFFSET::OnPolarChanged( wxCommandEvent& event )
         {
             m_stateX = xOffset;
             m_stateY = yOffset;
-            ToPolarDeg( m_stateX, m_stateY, m_stateRadius, m_stateTheta );
+            ToPolar( m_stateX, m_stateY, m_stateRadius, m_stateTheta );
 
             m_xOffset.SetDoubleValue( m_stateRadius );
             m_stateRadius = m_xOffset.GetDoubleValue();
@@ -202,16 +201,33 @@ void DIALOG_SET_OFFSET::updateDialogControls( bool aPolar )
 
 bool DIALOG_SET_OFFSET::TransferDataToWindow()
 {
-    m_xOffset.SetValue( m_originalOffset.x );
-    m_yOffset.SetValue( m_originalOffset.y );
+    m_xOffset.ChangeValue( m_originalOffset.x );
+    m_yOffset.ChangeValue( m_originalOffset.y );
+
+    if( m_polarCoords->GetValue() )
+    {
+        wxCommandEvent dummy;
+        OnPolarChanged( dummy );
+    }
 
     return true;
 }
 
 bool DIALOG_SET_OFFSET::TransferDataFromWindow()
 {
-    m_updatedOffset.x = m_xOffset.GetValue();
-    m_updatedOffset.y = m_yOffset.GetValue();
+    if( m_polarCoords->GetValue() )
+    {
+        m_stateRadius = m_xOffset.GetDoubleValue();
+        m_stateTheta = EDA_ANGLE( m_yOffset.GetDoubleValue(), DEGREES_T );
+
+        m_updatedOffset.x = KiROUND( m_stateRadius * m_stateTheta.Cos() );
+        m_updatedOffset.y = KiROUND( m_stateRadius * m_stateTheta.Sin() );
+    }
+    else
+    {
+        m_updatedOffset.x = m_xOffset.GetIntValue();
+        m_updatedOffset.y = m_yOffset.GetIntValue();
+    }
 
     return true;
 }

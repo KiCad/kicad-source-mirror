@@ -161,20 +161,16 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetIcon( BITMAPS::special_tools );
-    menu->SetUntranslatedTitle( _HKI( "Positioning Tools" ) );
+    menu->SetUntranslatedTitle( _HKI( "Position" ) );
 
     auto notMovingCondition = []( const SELECTION& aSelection )
     {
         return aSelection.Empty() || !aSelection.Front()->IsMoving();
     };
 
-    // clang-format off
-    menu->AddItem( PCB_ACTIONS::moveExact,                      SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::moveWithReference,              SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::copyWithReference,              SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::positionRelative,               SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu->AddItem( PCB_ACTIONS::positionRelativeInteractively,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    // clang-format on
+    menu->AddItem( PCB_ACTIONS::moveExact,             SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::positionRelative,      SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::interactiveOffsetTool, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     return menu;
 };
 
@@ -549,7 +545,6 @@ bool EDIT_TOOL::Init()
                 return GATE_SWAP_MENU::EqualPinCounts( fp, unitsHit );
             };
 
-
     auto propertiesCondition =
             [this]( const SELECTION& aSel )
             {
@@ -646,41 +641,38 @@ bool EDIT_TOOL::Init()
                 return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
 
-    SELECTION_CONDITION isRoutable =
-           SELECTION_CONDITIONS::NotEmpty
-           && SELECTION_CONDITIONS::HasTypes( routableTypes )
-           && notMovingCondition
-           && !inFootprintEditor;
-
+    SELECTION_CONDITION isRoutable = SELECTION_CONDITIONS::NotEmpty
+                                         && SELECTION_CONDITIONS::HasTypes( routableTypes )
+                                         && notMovingCondition
+                                         && !inFootprintEditor;
 
     const auto canCopyAsText = SELECTION_CONDITIONS::NotEmpty
-                               && SELECTION_CONDITIONS::OnlyTypes( {
-                                       PCB_FIELD_T,
-                                       PCB_TEXT_T,
-                                       PCB_TEXTBOX_T,
-                                       PCB_DIM_ALIGNED_T,
-                                       PCB_DIM_LEADER_T,
-                                       PCB_DIM_CENTER_T,
-                                       PCB_DIM_RADIAL_T,
-                                       PCB_DIM_ORTHOGONAL_T,
-                                       PCB_TABLE_T,
-                                       PCB_TABLECELL_T,
-                               } );
+                                   && SELECTION_CONDITIONS::OnlyTypes( { PCB_FIELD_T,
+                                                                         PCB_TEXT_T,
+                                                                         PCB_TEXTBOX_T,
+                                                                         PCB_DIM_ALIGNED_T,
+                                                                         PCB_DIM_LEADER_T,
+                                                                         PCB_DIM_CENTER_T,
+                                                                         PCB_DIM_RADIAL_T,
+                                                                         PCB_DIM_ORTHOGONAL_T,
+                                                                         PCB_TABLE_T,
+                                                                         PCB_TABLECELL_T,
+                                                                       } );
 
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
     // clang-format off
-    menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
-                                                      && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::move,                    SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::moveWithReference,       SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::moveIndividually,        SELECTION_CONDITIONS::MoreThan( 1 ) && notMovingCondition );
 
-    menu.AddItem( PCB_ACTIONS::routerRouteSelected,     isRoutable );
+    menu.AddItem( PCB_ACTIONS::routerRouteSelected,        isRoutable );
     menu.AddItem( PCB_ACTIONS::routerRouteSelectedFromEnd, isRoutable );
-    menu.AddItem( PCB_ACTIONS::unrouteSelected,         isRoutable );
-    menu.AddItem( PCB_ACTIONS::unrouteSegment,          isRoutable );
-    menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
-    menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
-                                                      && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::unrouteSelected,            isRoutable );
+    menu.AddItem( PCB_ACTIONS::unrouteSegment,             isRoutable );
+    menu.AddItem( PCB_ACTIONS::routerAutorouteSelected,    isRoutable );
+
     menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
@@ -690,6 +682,7 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) );
     menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
+
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -726,6 +719,7 @@ bool EDIT_TOOL::Init()
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::cut,                   SELECTION_CONDITIONS::NotEmpty, 150 );
     menu.AddItem( ACTIONS::copy,                  SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition, 150 );
     menu.AddItem( ACTIONS::copyAsText,            canCopyAsText, 150 );
 
     // Selection tool handles the context menu for some other tools, such as the Picker.

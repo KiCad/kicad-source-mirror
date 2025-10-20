@@ -149,7 +149,8 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEvent )
+
+int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
 {
     if( m_inInteractivePosition )
         return false;
@@ -312,23 +313,13 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             // Hide the popup text so it doesn't get in the way
             statusPopup.Hide();
 
-            // This is the forward vector from the ruler item
-            const VECTOR2I    origVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
-            VECTOR2I          offsetVector = origVector;
-            // Start with the value of that vector in the dialog (will match the rule HUD)
+            // Start with the forward vector from the ruler item
+            VECTOR2I          offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
             DIALOG_SET_OFFSET dlg( *frame(), offsetVector, false );
 
-            int ret = dlg.ShowModal();
-
-            if( ret == wxID_OK )
+            if( dlg.ShowModal() == wxID_OK )
             {
-                const VECTOR2I move = origVector - offsetVector;
-
-                applyVector( move );
-
-                // Leave the arrow in place but update it
-                twoPtMgr.SetOrigin( twoPtMgr.GetOrigin() + move );
-                view.Update( &ruler, KIGFX::GEOMETRY );
+                applyVector( offsetVector );
                 canvas()->Refresh();
             }
 
@@ -347,13 +338,9 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             auto snap = LEADER_MODE::DIRECT;
 
             if( frame()->IsType( FRAME_PCB_EDITOR ) )
-            {
                 snap = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
-            }
             else
-            {
                 snap = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
-            }
 
             twoPtMgr.SetAngleSnap( snap );
             twoPtMgr.SetEnd( cursorPos );
@@ -438,8 +425,6 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
 
 void POSITION_RELATIVE_TOOL::setTransitions()
 {
-    // clang-format off
-    Go( &POSITION_RELATIVE_TOOL::PositionRelative,              PCB_ACTIONS::positionRelative.MakeEvent() );
-    Go( &POSITION_RELATIVE_TOOL::PositionRelativeInteractively, PCB_ACTIONS::positionRelativeInteractively.MakeEvent() );
-    // clang-format on
+    Go( &POSITION_RELATIVE_TOOL::PositionRelative,  PCB_ACTIONS::positionRelative.MakeEvent() );
+    Go( &POSITION_RELATIVE_TOOL::InteractiveOffset, PCB_ACTIONS::interactiveOffsetTool.MakeEvent() );
 }

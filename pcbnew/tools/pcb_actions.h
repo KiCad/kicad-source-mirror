@@ -319,7 +319,7 @@ public:
 
     // Position Relative Tool
     static TOOL_ACTION positionRelative;
-    static TOOL_ACTION positionRelativeInteractively;
+    static TOOL_ACTION interactiveOffsetTool;
 
     /// Selection of reference points/items
     static TOOL_ACTION selectItemInteractively;

@@ -36,7 +36,6 @@ class DIALOG_SET_OFFSET_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_description;
 		wxStaticText* m_xLabel;
 		wxTextCtrl* m_xEntry;
 		wxStaticText* m_xUnit;
@@ -60,7 +59,7 @@ class DIALOG_SET_OFFSET_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Set Offset"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Offset Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_SET_OFFSET_BASE();
 

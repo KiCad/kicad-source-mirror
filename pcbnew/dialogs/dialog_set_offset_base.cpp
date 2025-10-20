@@ -16,10 +16,6 @@ DIALOG_SET_OFFSET_BASE::DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_description = new wxStaticText( this, wxID_ANY, _("Set a new value for this offset:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_description->Wrap( -1 );
-	bMainSizer->Add( m_description, 0, wxALL, 5 );
-
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 5, 5, 0 );
 	fgSizer2->AddGrowableCol( 1 );
@@ -28,20 +24,20 @@ DIALOG_SET_OFFSET_BASE::DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id,
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("Offset X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
-	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_xEntry, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_xEntry, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_xUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xUnit->Wrap( -1 );
-	fgSizer2->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP|wxRIGHT, 5 );
 
 
 	fgSizer2->Add( 10, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	fgSizer2->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );

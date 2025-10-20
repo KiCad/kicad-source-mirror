@@ -52,10 +52,10 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer6->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 10 );
+	bSizer6->Add( m_staticline2, 0, wxEXPAND, 10 );
 
 
-	bUpperSizer->Add( bSizer6, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bSizer6, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxALL, 5 );

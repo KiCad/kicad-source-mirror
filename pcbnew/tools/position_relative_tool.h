@@ -60,7 +60,7 @@ public:
      * Draw a line connecting two points and allow the user to enter what it should be.
      * The move the items to match that.
      */
-    int PositionRelativeInteractively( const TOOL_EVENT& aEvent );
+    int InteractiveOffset( const TOOL_EVENT& aEvent );
 
     /**
      * Return the position of the selected item(s)
