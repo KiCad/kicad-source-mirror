@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
-"PO-Revision-Date: 2025-10-10 17:07+0000\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"PO-Revision-Date: 2025-10-21 20:15+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -8434,14 +8434,12 @@ msgid "Page limits"
 msgstr "Oldalkorlátok megjelenítése:"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Munkapont"
+msgstr "Munkapont feszültségek"
 
 #: common/layer_id.cpp:119
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Munkapont"
+msgstr "Munkapont áramok"
 
 #: common/layer_id.cpp:123
 #, fuzzy
