@@ -218,16 +218,33 @@ void DIALOG_SET_OFFSET::updateDialogControls( bool aPolar )
 
 bool DIALOG_SET_OFFSET::TransferDataToWindow()
 {
-    m_xOffset.SetValue( m_originalOffset.x );
-    m_yOffset.SetValue( m_originalOffset.y );
+    m_xOffset.ChangeValue( m_originalOffset.x );
+    m_yOffset.ChangeValue( m_originalOffset.y );
+
+    if( m_polarCoords->GetValue() )
+    {
+        wxCommandEvent dummy;
+        OnPolarChanged( dummy );
+    }
 
     return true;
 }
 
 bool DIALOG_SET_OFFSET::TransferDataFromWindow()
 {
-    m_updatedOffset.x = m_xOffset.GetValue();
-    m_updatedOffset.y = m_yOffset.GetValue();
+    if( m_polarCoords->GetValue() )
+    {
+        m_stateRadius = m_xOffset.GetDoubleValue();
+        m_stateTheta = EDA_ANGLE( m_yOffset.GetDoubleValue(), DEGREES_T );
+
+        m_updatedOffset.x = KiROUND( m_stateRadius * m_stateTheta.Cos() );
+        m_updatedOffset.y = KiROUND( m_stateRadius * m_stateTheta.Sin() );
+    }
+    else
+    {
+        m_updatedOffset.x = m_xOffset.GetIntValue();
+        m_updatedOffset.y = m_yOffset.GetIntValue();
+    }
 
     return true;
 }

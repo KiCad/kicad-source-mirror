@@ -316,25 +316,19 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             // Hide the popup text so it doesn't get in the way
             statusPopup.Hide();
 
-            // This is the forward vector from the ruler item
-            const VECTOR2I    origVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
-            VECTOR2I          offsetVector = origVector;
-            // Start with the value of that vector in the dialog (will match the rule HUD)
+            // Start with the forward vector from the ruler item
+            VECTOR2I          offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
             DIALOG_SET_OFFSET dlg( *frame(), offsetVector, false );
 
-            int ret = dlg.ShowModal();
-
-            if( ret == wxID_OK )
+            if( dlg.ShowModal() == wxID_OK )
             {
-                const VECTOR2I move = origVector - offsetVector;
-
-                applyVector( move );
-
-                // Leave the arrow in place but update it
-                twoPtMgr.SetOrigin( twoPtMgr.GetOrigin() + move );
-                view.Update( &ruler, KIGFX::GEOMETRY );
+                applyVector( offsetVector );
                 canvas()->Refresh();
             }
+
+            twoPtMgr.Reset();
+            view.SetVisible( &ruler, false );
+            view.Update( &ruler, KIGFX::GEOMETRY );
 
             originSet = false;
 
