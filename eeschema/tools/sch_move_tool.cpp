@@ -461,10 +461,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
-    bool                  isLineModeConstrained = false;
-
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        isLineModeConstrained = cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE;
 
     m_anchorPos.reset();
 
@@ -985,6 +981,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         continue;
 
                     SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
+                    bool isLineModeConstrained = false;
+
+                    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+                        isLineModeConstrained = cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE;
 
                     // Only partially selected drag lines in orthogonal line mode need special
                     // handling
