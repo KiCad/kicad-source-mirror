@@ -201,6 +201,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
         m_fillColorSwatch->SetSwatchColor( m_shape->GetFillColor(), false );
     }
 
+    m_fillColorLabel->Enable( m_fillCtrl->GetSelection() != UI_FILL_MODE::NONE );
+    m_fillColorSwatch->Enable( m_fillCtrl->GetSelection() != UI_FILL_MODE::NONE );
+
     return true;
 }
 
@@ -231,8 +234,8 @@ void DIALOG_SHAPE_PROPERTIES::onBorderChecked( wxCommandEvent& event )
 
 void DIALOG_SHAPE_PROPERTIES::onFillChoice( wxCommandEvent& event )
 {
-    m_fillColorLabel->Enable( m_fillCtrl->GetSelection() == UI_FILL_MODE::SOLID );
-    m_fillColorSwatch->Enable( m_fillCtrl->GetSelection() == UI_FILL_MODE::SOLID );
+    m_fillColorLabel->Enable( m_fillCtrl->GetSelection() != UI_FILL_MODE::NONE );
+    m_fillColorSwatch->Enable( m_fillCtrl->GetSelection() != UI_FILL_MODE::NONE );
 }
 
 
