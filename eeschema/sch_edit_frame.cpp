@@ -571,7 +571,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
         {
             GetSettingsManager()->UnloadProject( &Prj(), false );
         }
-        catch( const nlohmann::detail::type_error& e )
+        catch( const std::runtime_error& e )
         {
             wxFAIL_MSG( wxString::Format( wxT( "Settings exception occurred: %s" ), e.what() ) );
         }
