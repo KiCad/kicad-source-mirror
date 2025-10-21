@@ -2,7 +2,7 @@
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 #  Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
-#  Copyright (C) 2016-2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2016-2023, 2024, 2025 KiCad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 # KiCad.
 #
 # Note: This version string should follow the semantic versioning system
-set( KICAD_SEMANTIC_VERSION "9.0.6-rc1" )
+set( KICAD_SEMANTIC_VERSION "9.0.6-rc2" )
 
 # Default the version to the semantic version.
 # This is overridden by the git repository tag though (if using git)
