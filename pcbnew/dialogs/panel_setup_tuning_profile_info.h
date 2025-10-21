@@ -131,11 +131,30 @@ private:
         wxString ErrorMsg;
     };
 
+    struct CALCULATION_BOARD_PARAMETERS
+    {
+        double DielectricConstant{ 0 };
+        double TopDielectricLayerThickness{ 0 };
+        double BottomDielectricLayerThickness{ 0 };
+        double SignalLayerThickness{ 0 };
+        double LossTangent{ 0 };
+    };
+
     /// Initialises all controls on the panel
     void initPanel();
 
     /// Set up the widths of all grid columns
     void setColumnWidths();
+
+    /// Gets the board parameters for microstrip calculations
+    /// @parameter aRow The grid row to calculate board parameters for
+    std::pair<CALCULATION_BOARD_PARAMETERS, CALCULATION_RESULT>
+    getMicrostripBoardParameters( int aRow, const EDA_IU_SCALE& aScale );
+
+    /// Gets the board parameters for stripline calculations
+    /// @parameter aRow The grid row to calculate board parameters for
+    std::pair<CALCULATION_BOARD_PARAMETERS, CALCULATION_RESULT>
+    getStriplineBoardParameters( int aRow, const EDA_IU_SCALE& aScale );
 
     /// Calculates the track width or delay for the given propagation grid row
     /// @returns pair of (width, unit propagation delay) in IU

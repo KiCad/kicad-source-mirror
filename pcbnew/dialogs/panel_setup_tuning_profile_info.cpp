@@ -861,17 +861,10 @@ bool PANEL_SETUP_TUNING_PROFILE_INFO::ValidateProfile( const size_t aPageIndex )
  *                                        SIMULATION / ANALYSIS PLUMBING
  ****************************************************************************************************************/
 
-PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
-PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType )
+std::pair<PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_BOARD_PARAMETERS,
+          PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT>
+PANEL_SETUP_TUNING_PROFILE_INFO::getMicrostripBoardParameters( const int aRow, const EDA_IU_SCALE& aScale )
 {
-    const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
-
-    // Get the target impedance
-    const double targetZ = getTargetImpedance();
-
-    if( targetZ <= 0 )
-        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
-
     // Get the signal layer information from the stackup
     BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
     const std::vector<BOARD_STACKUP_ITEM*>& stackupLayerList = stackup.GetList();
@@ -879,24 +872,24 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, Calc
     const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
+        return { {}, CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) } };
 
     const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
 
     // Microstrip can only be on an outer copper layer
     if( signalLayer != F_Cu && signalLayer != B_Cu )
-        return CALCULATION_RESULT{ _( "Internal error: Microstrip can only be on an outer copper layer" ) };
+        return { {}, CALCULATION_RESULT{ _( "Internal error: Microstrip can only be on an outer copper layer" ) } };
 
     const int signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
 
     if( signalLayerStackupId == -1 )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
+        return { {}, CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) } };
 
     const double signalLayerThickness =
-            iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+            aScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
 
     if( signalLayerThickness <= 0 )
-        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
+        return { {}, CALCULATION_RESULT{ _( "Signal layer thickness must be greater than 0" ) } };
 
     // Get reference layer
     wxString referenceLayerName;
@@ -907,13 +900,13 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, Calc
         referenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
 
     if( !m_parentPanel->m_layerNamesToIDs.contains( referenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Reference layer not found in stackup" ) };
+        return { {}, CALCULATION_RESULT{ _( "Reference layer not found in stackup" ) } };
 
     const PCB_LAYER_ID referenceLayer = m_parentPanel->m_layerNamesToIDs[referenceLayerName];
     const int          referenceLayerStackupId = getStackupLayerId( stackupLayerList, referenceLayer );
 
     if( signalLayerStackupId == referenceLayerStackupId )
-        return CALCULATION_RESULT{ _( "Reference layer must be different to signal layer" ) };
+        return { {}, CALCULATION_RESULT{ _( "Reference layer must be different to signal layer" ) } };
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> dielectricLayerStackupIds;
@@ -922,12 +915,116 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, Calc
                           dielectricLayerHeight );
 
     if( dielectricLayerHeight <= 0.0 )
-        return CALCULATION_RESULT{ _( "Dielectric height must be > 0" ) };
+        return { {}, CALCULATION_RESULT{ _( "Dielectric height must be greater than 0" ) } };
 
     // Calculate geometric average of the dielectric materials
     const auto [e_r, tan_d] =
-            calculateAverageDielectricConstants( stackupLayerList, dielectricLayerStackupIds, iuScale );
+            calculateAverageDielectricConstants( stackupLayerList, dielectricLayerStackupIds, aScale );
 
+    CALCULATION_BOARD_PARAMETERS boardParameters{ e_r, dielectricLayerHeight, 0.0, signalLayerThickness, tan_d };
+    CALCULATION_RESULT           result;
+    result.OK = true;
+
+    return { boardParameters, result };
+}
+
+
+std::pair<PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_BOARD_PARAMETERS,
+          PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT>
+PANEL_SETUP_TUNING_PROFILE_INFO::getStriplineBoardParameters( const int aRow, const EDA_IU_SCALE& aScale )
+{
+    // Get the signal layer information from the stackup
+    BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
+    const std::vector<BOARD_STACKUP_ITEM*>& stackupLayerList = stackup.GetList();
+
+    const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
+
+    if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
+        return { {}, CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) } };
+
+    const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
+    const int          signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
+
+    if( signalLayerStackupId == -1 )
+        return { {}, CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) } };
+
+    const double signalLayerThickness =
+            aScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
+
+    if( signalLayerThickness <= 0 )
+        return { {}, CALCULATION_RESULT{ _( "Signal layer thickness must be greater than 0" ) } };
+
+    // Get top reference layer
+    const wxString topReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
+
+    if( !m_parentPanel->m_layerNamesToIDs.contains( topReferenceLayerName ) )
+        return { {}, CALCULATION_RESULT{ _( "Top reference layer not found in stackup" ) } };
+
+    const PCB_LAYER_ID topReferenceLayer = m_parentPanel->m_layerNamesToIDs[topReferenceLayerName];
+    const int          topReferenceLayerStackupId = getStackupLayerId( stackupLayerList, topReferenceLayer );
+
+    if( !IsCopperLayerLowerThan( signalLayer, topReferenceLayer ) )
+        return { {}, CALCULATION_RESULT{ _( "Top reference layer must be above signal layer in board stackup" ) } };
+
+    // Get bottom reference layer
+    wxString bottomReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
+
+    if( !m_parentPanel->m_layerNamesToIDs.contains( bottomReferenceLayerName ) )
+        return { {}, CALCULATION_RESULT{ _( "Bottom reference layer not found in stackup" ) } };
+
+    const PCB_LAYER_ID bottomReferenceLayer = m_parentPanel->m_layerNamesToIDs[bottomReferenceLayerName];
+    const int          bottomReferenceLayerStackupId = getStackupLayerId( stackupLayerList, bottomReferenceLayer );
+
+    if( !IsCopperLayerLowerThan( bottomReferenceLayer, signalLayer ) )
+        return { {}, CALCULATION_RESULT{ _( "Bottom reference layer must be below signal layer in board stackup" ) } };
+
+    // Get the dielectric layers between signal and reference layers
+    std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
+    double           topDielectricLayerHeight = 0.0;
+    double           bottomDielectricLayerHeight = 0.0;
+
+    getDielectricDetails( stackupLayerList, signalLayerStackupId, topReferenceLayerStackupId,
+                          topDielectricLayerStackupIds, topDielectricLayerHeight );
+    getDielectricDetails( stackupLayerList, signalLayerStackupId, bottomReferenceLayerStackupId,
+                          bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
+
+    if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
+        return { {}, CALCULATION_RESULT{ _( "Dielectric heights must be greater than 0" ) } };
+
+    // Calculate geometric average of the dielectric materials
+    std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
+    allDielectricLayerStackupIds.insert( allDielectricLayerStackupIds.end(), bottomDielectricLayerStackupIds.begin(),
+                                         bottomDielectricLayerStackupIds.end() );
+    const auto [e_r, tan_d] =
+            calculateAverageDielectricConstants( stackupLayerList, allDielectricLayerStackupIds, aScale );
+
+    CALCULATION_BOARD_PARAMETERS boardParameters{ e_r, topDielectricLayerHeight, bottomDielectricLayerHeight,
+                                                  signalLayerThickness, tan_d };
+    CALCULATION_RESULT           result;
+    result.OK = true;
+
+    return { boardParameters, result };
+}
+
+
+PANEL_SETUP_TUNING_PROFILE_INFO::CALCULATION_RESULT
+PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType )
+{
+    const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
+
+    // Get the target impedance
+    const double targetZ = getTargetImpedance();
+
+    if( targetZ <= 0 )
+        return CALCULATION_RESULT{ _( "Target impedance must be greater than 0" ) };
+
+    // Get board parameters
+    auto [boardParameters, result] = getMicrostripBoardParameters( aRow, iuScale );
+
+    if( !result.OK )
+        return result;
+
+    // Set calculation parameters
     if( aCalculationType == CalculationType::WIDTH )
     {
         m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, 0.001 );
@@ -944,14 +1041,14 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, Calc
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILON_EFF, 1.0 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, e_r );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::H_T, 1e+20 );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::H, dielectricLayerHeight );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::T, signalLayerThickness );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::Z0, targetZ );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, 0 );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, tan_d );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 10 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::MUR, 1 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
@@ -995,73 +1092,15 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( const int aRow, Calcu
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
+        return CALCULATION_RESULT{ _( "Target impedance must be greater than 0" ) };
 
-    // Get the signal layer information from the stackup
-    BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
-    const std::vector<BOARD_STACKUP_ITEM*>& stackupLayerList = stackup.GetList();
+    // Get board parameters
+    auto [boardParameters, result] = getStriplineBoardParameters( aRow, iuScale );
 
-    const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
+    if( !result.OK )
+        return result;
 
-    if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
-    const int          signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
-
-    if( signalLayerStackupId == -1 )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const double signalLayerThickness =
-            iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
-
-    if( signalLayerThickness <= 0 )
-        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
-
-    // Get top reference layer
-    const wxString topReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
-
-    if( !m_parentPanel->m_layerNamesToIDs.contains( topReferenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Top reference layer not found in stackup" ) };
-
-    const PCB_LAYER_ID topReferenceLayer = m_parentPanel->m_layerNamesToIDs[topReferenceLayerName];
-    const int          topReferenceLayerStackupId = getStackupLayerId( stackupLayerList, topReferenceLayer );
-
-    if( !IsCopperLayerLowerThan( signalLayer, topReferenceLayer ) )
-        return CALCULATION_RESULT{ _( "Top reference layer must be above signal layer in board stackup" ) };
-
-    // Get bottom reference layer
-    wxString bottomReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
-
-    if( !m_parentPanel->m_layerNamesToIDs.contains( bottomReferenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Bottom reference layer not found in stackup" ) };
-
-    const PCB_LAYER_ID bottomReferenceLayer = m_parentPanel->m_layerNamesToIDs[bottomReferenceLayerName];
-    const int          bottomReferenceLayerStackupId = getStackupLayerId( stackupLayerList, bottomReferenceLayer );
-
-    if( !IsCopperLayerLowerThan( bottomReferenceLayer, signalLayer ) )
-        return CALCULATION_RESULT{ _( "Bottom reference layer must be below signal layer in board stackup" ) };
-
-    // Get the dielectric layers between signal and reference layers
-    std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
-    double           topDielectricLayerHeight = 0.0;
-    double           bottomDielectricLayerHeight = 0.0;
-
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, topReferenceLayerStackupId,
-                          topDielectricLayerStackupIds, topDielectricLayerHeight );
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, bottomReferenceLayerStackupId,
-                          bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
-
-    if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
-        return CALCULATION_RESULT{ _( "Dielectric heights must be > 0" ) };
-
-    // Calculate geometric average of the dielectric materials
-    std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
-    allDielectricLayerStackupIds.insert( allDielectricLayerStackupIds.end(), bottomDielectricLayerStackupIds.begin(),
-                                         bottomDielectricLayerStackupIds.end() );
-    const auto [e_r, tan_d] =
-            calculateAverageDielectricConstants( stackupLayerList, allDielectricLayerStackupIds, iuScale );
-
+    // Set calculation parameters
     if( aCalculationType == CalculationType::WIDTH )
     {
         m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, 0.001 );
@@ -1076,15 +1115,16 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( const int aRow, Calcu
 
     // Run the synthesis
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, e_r );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::T, signalLayerThickness );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, topDielectricLayerHeight );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::H,
-                                  topDielectricLayerHeight + signalLayerThickness + bottomDielectricLayerHeight );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, boardParameters.TopDielectricLayerThickness );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness
+                                                                   + boardParameters.SignalLayerThickness
+                                                                   + boardParameters.BottomDielectricLayerThickness );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::Z0, targetZ );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 1.0 );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, tan_d );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1.0 );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
@@ -1127,65 +1167,15 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
+        return CALCULATION_RESULT{ _( "Target impedance must be greater than 0" ) };
 
-    // Get the signal layer information from the stackup
-    BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
-    const std::vector<BOARD_STACKUP_ITEM*>& stackupLayerList = stackup.GetList();
+    // Get board parameters
+    auto [boardParameters, result] = getMicrostripBoardParameters( aRow, iuScale );
 
-    const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
+    if( !result.OK )
+        return result;
 
-    if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
-
-    // Microstrip can only be on an outer copper layer
-    if( signalLayer != F_Cu && signalLayer != B_Cu )
-        return CALCULATION_RESULT{ _( "Internal error: Microstrip can only be on an outer copper layer" ) };
-
-    const int signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
-
-    if( signalLayerStackupId == -1 )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const double signalLayerThickness =
-            iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
-
-    if( signalLayerThickness <= 0 )
-        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
-
-    // Get reference layer
-    wxString referenceLayerName;
-
-    if( signalLayer == F_Cu )
-        referenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
-    else
-        referenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
-
-    if( !m_parentPanel->m_layerNamesToIDs.contains( referenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Reference layer not found in stackup" ) };
-
-    const PCB_LAYER_ID referenceLayer = m_parentPanel->m_layerNamesToIDs[referenceLayerName];
-    const int          referenceLayerStackupId = getStackupLayerId( stackupLayerList, referenceLayer );
-
-    if( signalLayerStackupId == referenceLayerStackupId )
-        return CALCULATION_RESULT{ _( "Reference layer must be different to signal layer" ) };
-
-    // Get the dielectric layers between signal and reference layers
-    std::vector<int> dielectricLayerStackupIds;
-    double           dielectricLayerHeight = 0;
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, referenceLayerStackupId, dielectricLayerStackupIds,
-                          dielectricLayerHeight );
-
-    if( dielectricLayerHeight <= 0.0 )
-        return CALCULATION_RESULT{ _( "Dielectric height must be > 0" ) };
-
-    // Calculate geometric average of the dielectric materials
-    const auto [e_r, tan_d] =
-            calculateAverageDielectricConstants( stackupLayerList, dielectricLayerStackupIds, iuScale );
-
-    // Get tuning parameters
+    // Set calculation parameters
     double width = 0.0;
     double gap = 0.0;
 
@@ -1195,21 +1185,21 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     if( aCalculationType == CalculationType::WIDTH )
     {
         if( !gapOpt || *gapOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Diff pair gap must be > 0 to calculate width" ) };
+            return CALCULATION_RESULT{ _( "Diff pair gap must be greater than 0 to calculate width" ) };
 
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::GAP )
     {
         if( !widthOpt || *widthOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Width must be > 0 to calculate diff pair gap" ) };
+            return CALCULATION_RESULT{ _( "Width must be greater than 0 to calculate diff pair gap" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::DELAY )
     {
         if( !widthOpt || !gapOpt || *widthOpt <= 0 || *gapOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Width and diff pair gap must be > 0 to calculate delay" ) };
+            return CALCULATION_RESULT{ _( "Width and diff pair gap must be greater than 0 to calculate delay" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
@@ -1221,17 +1211,17 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::Z_DIFF, targetZ );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, width );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_S, gap );
-    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, e_r );
+    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 10 );
-    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::H, dielectricLayerHeight );
-    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::T, signalLayerThickness );
+    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness );
+    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::H_T, 1e+20 );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, 0 );
-    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, tan_d );
+    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1 );
 
     switch( aCalculationType )
@@ -1279,74 +1269,15 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     const double targetZ = getTargetImpedance();
 
     if( targetZ <= 0 )
-        return CALCULATION_RESULT{ _( "Target impedance must be > 0" ) };
+        return CALCULATION_RESULT{ _( "Target impedance must be greater than 0" ) };
 
-    // Get the signal layer information from the stackup
-    BOARD_STACKUP                           stackup = m_parentPanel->m_board->GetStackupOrDefault();
-    const std::vector<BOARD_STACKUP_ITEM*>& stackupLayerList = stackup.GetList();
+    // Get board parameters
+    auto [boardParameters, result] = getStriplineBoardParameters( aRow, iuScale );
 
-    const wxString signalLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_SIGNAL_LAYER );
+    if( !result.OK )
+        return result;
 
-    if( !m_parentPanel->m_layerNamesToIDs.contains( signalLayerName ) )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const PCB_LAYER_ID signalLayer = m_parentPanel->m_layerNamesToIDs[signalLayerName];
-    const int          signalLayerStackupId = getStackupLayerId( stackupLayerList, signalLayer );
-
-    if( signalLayerStackupId == -1 )
-        return CALCULATION_RESULT{ _( "Signal layer not found in stackup" ) };
-
-    const double signalLayerThickness =
-            iuScale.IUTomm( stackupLayerList.at( signalLayerStackupId )->GetThickness() ) / 1000.0;
-
-    if( signalLayerThickness <= 0 )
-        return CALCULATION_RESULT{ _( "Signal layer thickness must be > 0" ) };
-
-    // Get top reference layer
-    const wxString topReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_TOP_REFERENCE );
-
-    if( !m_parentPanel->m_layerNamesToIDs.contains( topReferenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Top reference layer not found in stackup" ) };
-
-    const PCB_LAYER_ID topReferenceLayer = m_parentPanel->m_layerNamesToIDs[topReferenceLayerName];
-    const int          topReferenceLayerStackupId = getStackupLayerId( stackupLayerList, topReferenceLayer );
-
-    if( !IsCopperLayerLowerThan( signalLayer, topReferenceLayer ) )
-        return CALCULATION_RESULT{ _( "Top reference layer must be above signal layer in board stackup" ) };
-
-    // Get bottom reference layer
-    wxString bottomReferenceLayerName = m_trackPropagationGrid->GetCellValue( aRow, TRACK_GRID_BOTTOM_REFERENCE );
-
-    if( !m_parentPanel->m_layerNamesToIDs.contains( bottomReferenceLayerName ) )
-        return CALCULATION_RESULT{ _( "Bottom reference layer not found in stackup" ) };
-
-    const PCB_LAYER_ID bottomReferenceLayer = m_parentPanel->m_layerNamesToIDs[bottomReferenceLayerName];
-    const int          bottomReferenceLayerStackupId = getStackupLayerId( stackupLayerList, bottomReferenceLayer );
-
-    if( !IsCopperLayerLowerThan( bottomReferenceLayer, signalLayer ) )
-        return CALCULATION_RESULT{ _( "Bottom reference layer must be below signal layer in board stackup" ) };
-
-    // Get the dielectric layers between signal and reference layers
-    std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
-    double           topDielectricLayerHeight = 0.0;
-    double           bottomDielectricLayerHeight = 0.0;
-
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, topReferenceLayerStackupId,
-                          topDielectricLayerStackupIds, topDielectricLayerHeight );
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, bottomReferenceLayerStackupId,
-                          bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
-
-    if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
-        return CALCULATION_RESULT{ _( "Dielectric heights must be > 0" ) };
-
-    // Calculate geometric average of the dielectric materials
-    std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
-    allDielectricLayerStackupIds.insert( allDielectricLayerStackupIds.end(), bottomDielectricLayerStackupIds.begin(),
-                                         bottomDielectricLayerStackupIds.end() );
-    const auto [e_r, tan_d] =
-            calculateAverageDielectricConstants( stackupLayerList, allDielectricLayerStackupIds, iuScale );
-
-    // Get tuning parameters
+    // Set calculation parameters
     double width = 0.0;
     double gap = 0.0;
 
@@ -1356,21 +1287,21 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     if( aCalculationType == CalculationType::WIDTH )
     {
         if( !gapOpt || *gapOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Diff pair gap must be > 0 to calculate width" ) };
+            return CALCULATION_RESULT{ _( "Diff pair gap must be greater than 0 to calculate width" ) };
 
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::GAP )
     {
         if( !widthOpt || *widthOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Width must be > 0 to calculate diff pair gap" ) };
+            return CALCULATION_RESULT{ _( "Width must be greater than 0 to calculate diff pair gap" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
     }
     else if( aCalculationType == CalculationType::DELAY )
     {
         if( !widthOpt || !gapOpt || *widthOpt <= 0 || *gapOpt <= 0 )
-            return CALCULATION_RESULT{ _( "Width and diff pair gap must be > 0 to calculate delay" ) };
+            return CALCULATION_RESULT{ _( "Width and diff pair gap must be greater than 0 to calculate delay" ) };
 
         width = iuScale.IUTomm( widthOpt.value() ) / 1000.0;
         gap = iuScale.IUTomm( gapOpt.value() ) / 1000.0;
@@ -1382,10 +1313,11 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::Z_DIFF, targetZ );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, width );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_S, gap );
-    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::T, signalLayerThickness );
-    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::H, topDielectricLayerHeight + signalLayerThickness
-                                                                          + bottomDielectricLayerHeight );
-    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, e_r );
+    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
+    m_coupledStriplineCalc.SetParameter(
+            TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness + boardParameters.SignalLayerThickness
+                                             + boardParameters.BottomDielectricLayerThickness );
+    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 1.0 );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
