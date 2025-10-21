@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-08 13:56+0300\n"
-"PO-Revision-Date: 2025-10-20 04:51+0000\n"
+"PO-Revision-Date: 2025-10-21 20:15+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -7760,24 +7760,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "无法检索到提交 '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "作业运行失败"
+msgstr "合并失败"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema 加载失败。"
+msgstr "变基启动失败"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "数据库连接失败: %s"
+msgstr "变基提交失败"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "作业运行失败"
+msgstr "变基完成失败"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -8689,15 +8685,13 @@ msgstr "通孔"
 
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "盲/埋孔"
+msgstr "盲孔"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "埋孔:"
+msgstr "埋孔"
 
 #: common/layer_id.cpp:132
 msgid "Micro-vias"
@@ -8740,9 +8734,8 @@ msgid "DRC errors"
 msgstr "DRC 错误"
 
 #: common/layer_id.cpp:141
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC 形状 1"
+msgstr "DRC 形状"
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
@@ -16163,19 +16156,16 @@ msgid "View presets:"
 msgstr "预设视图:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Entire Project"
 msgstr "整个工程"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Current Sheet Only"
 msgstr "仅当前图纸"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Current Sheet and Down"
-msgstr "仅当前图纸"
+msgstr "当前图纸及以下"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
 msgid "Edit"
@@ -18898,14 +18888,12 @@ msgid "Units and Body Styles"
 msgstr "单元和主体样式"
 
 #: eeschema/lib_symbol.cpp:2145
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "位数"
+msgstr "符号单元数量"
 
 #: eeschema/lib_symbol.cpp:2148
-#, fuzzy
 msgid "Units are Interchangeable"
-msgstr "单元不能互换"
+msgstr "单元可以互换"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -19663,9 +19651,9 @@ msgid "Unknown or unexpected record id %d found in %s."
 msgstr "在 %2$s 中发现 '未知' 或 '意外' 记录 ID %1$d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1464
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr "符号 \"%s\"(位于图纸 \"%s\", 该图纸位于索引 %d) 被符号\"%s\"替换。"
+msgstr "图纸 '%2$s' 的索引 %3$d 处, 符号'%1$s' 被替换为符号 '%4$s'。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1634
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3695
@@ -20068,9 +20056,9 @@ msgid "httplib plugin missing library table handle!"
 msgstr "httplib 插件缺少库表句柄!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "HTTP 库设置文件 %s 丢失或无效"
+msgstr "HTTP 库设置文件 %s 丢失或无效。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
 #, c-format
@@ -20078,11 +20066,11 @@ msgid "HTTP library settings file %s is missing the API version number."
 msgstr "HTTP 库设置文件 %s 中缺少 API 版本号。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
-msgstr "HTTP 库设置文件 %s 使用 API 版本 %s, 但 KiCad 需要版本 %s"
+msgstr "HTTP 库设置文件 %s 使用 API 版本 %s, 但 KiCad 要求版本 %s。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:231
 #, c-format
@@ -20090,9 +20078,9 @@ msgid "HTTP library settings file %s is missing the root URL."
 msgstr "HTTP 库设置文件 %s 中缺少 根URL。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "HTTP 库设置文件 %s 存在无效的库类型"
+msgstr "HTTP 库设置文件 %s 存在无效的库类型。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:281
 #, c-format
@@ -20116,7 +20104,6 @@ msgstr "KiCad HTTP 库文件"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2931
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:156
-#, fuzzy
 msgid "Open canceled by user."
 msgstr "用户取消了打开操作。"
 
@@ -20827,9 +20814,9 @@ msgid "Exclude from"
 msgstr "排除自"
 
 #: eeschema/sch_sheet.cpp:1174
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "层次图纸 %s"
+msgstr "层次图纸 '%s'"
 
 #: eeschema/sch_sheet.cpp:1714 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:689 pcbnew/pcb_tablecell.cpp:234
@@ -20862,9 +20849,9 @@ msgid "(Deleted Item)"
 msgstr "(删除项目)"
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "层次图纸引脚 %s"
+msgstr "层次图纸引脚 '%s'"
 
 #: eeschema/sch_symbol.cpp:2153
 msgid "Power symbol"
@@ -23113,9 +23100,8 @@ msgid " (base)\n"
 msgstr " (相位)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid "Delete All Listed Symbols"
-msgstr "删除符号"
+msgstr "删除所有列出的符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1399 pcbnew/files.cpp:332
 #: pcbnew/footprint_libraries_utils.cpp:1150
@@ -24055,34 +24041,28 @@ msgid "Swap positions of selected items"
 msgstr "交换选定项目的位置"
 
 #: eeschema/tools/sch_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:1665
-#, fuzzy
 msgid "Swap Pins"
-msgstr "交换层"
+msgstr "交换引脚"
 
 #: eeschema/tools/sch_actions.cpp:778
-#, fuzzy
 msgid "Swap the selected symbol pins' positions"
-msgstr "交换所选项目的位置"
+msgstr "交换所选引脚的位置"
 
 #: eeschema/tools/sch_actions.cpp:784 eeschema/tools/sch_edit_tool.cpp:1768
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "交换层"
+msgstr "交换引脚标签"
 
 #: eeschema/tools/sch_actions.cpp:785
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "显示所选网络的飞线"
+msgstr "交换所选引脚上附着的标签"
 
 #: eeschema/tools/sch_actions.cpp:791 eeschema/tools/sch_edit_tool.cpp:1849
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "交换单位"
+msgstr "交换单元标签"
 
 #: eeschema/tools/sch_actions.cpp:792
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "剪切掉所选线条之间的角"
+msgstr "交换所选单元的标签"
 
 #: eeschema/tools/sch_actions.cpp:808
 msgid "Edit Reference Designator..."
@@ -28480,9 +28460,8 @@ msgid "What You Get with Templates"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:85
-#, fuzzy
 msgid "Pre-configured libraries"
-msgstr "迁移库"
+msgstr "预配置库"
 
 #: kicad/dialogs/template_default_html.h:85
 #, fuzzy
@@ -29604,7 +29583,6 @@ msgstr "默认远程设置失败。"
 
 #: kicad/project_tree_pane.cpp:1712 kicad/project_tree_pane.cpp:1743
 #: kicad/project_tree_pane.cpp:1766
-#, fuzzy
 msgid "Fetch Remote"
 msgstr "获取远程数据"
 
@@ -29882,9 +29860,8 @@ msgid "Failed to load PDF"
 msgstr "PDF 加载失败"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "筛选的封装"
+msgstr "打印失败"
 
 #: libs/kiplatform/include/printing.h:51
 msgid "Unsupported"
@@ -31249,9 +31226,8 @@ msgid "Indium"
 msgstr "铟"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "钛"
+msgstr "钛, 钝化"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -31344,14 +31320,12 @@ msgid "Carbon steel"
 msgstr "碳钢"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "铝"
+msgstr "铝, 铬化"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "铝铜合金"
+msgstr "铝(纯铝), 钝化"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -31363,7 +31337,7 @@ msgstr "铁"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:221
 msgid "Chrome, passive"
-msgstr ""
+msgstr "铬, 钝化"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:225
 msgid "Zinc"
@@ -31371,7 +31345,7 @@ msgstr "锌"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "镀锌钢"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -33976,9 +33950,8 @@ msgid "Through vias:"
 msgstr "通孔:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:194
-#, fuzzy
 msgid "Blind vias:"
-msgstr "埋孔:"
+msgstr "盲孔:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:195
 msgid "Buried vias:"
@@ -42884,9 +42857,9 @@ msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "%s 上的局部覆盖; 间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1045
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "正在检查断言 \"%s\"。"
+msgstr "正在检查断言 '%s'。"
 
 #: pcbnew/drc/drc_engine.cpp:1051 pcbnew/drc/drc_engine.cpp:1734
 msgid "Assertion passed."
@@ -43070,9 +43043,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "已应用无条件规则; 覆盖之前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1445 pcbnew/drc/drc_engine.cpp:1762
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "正在检查规则条件 \"%s\"。"
+msgstr "正在检查规则条件 '%s'。"
 
 #: pcbnew/drc/drc_engine.cpp:1455
 msgid "Constraint applied."
@@ -43135,9 +43108,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s 散热引线宽度: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "正在检查规则断言 \"%s\"。"
+msgstr "正在检查规则断言 '%s'。"
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2046
 msgid "Electrical"
@@ -46655,60 +46628,55 @@ msgstr "%2$s 上的条码 %1$s"
 
 #: pcbnew/pcb_barcode.cpp:692
 msgid "CODE_39"
-msgstr ""
+msgstr "CODE_39"
 
 #: pcbnew/pcb_barcode.cpp:693
 msgid "CODE_128"
-msgstr ""
+msgstr "CODE_128"
 
 #: pcbnew/pcb_barcode.cpp:694
 msgid "DATA_MATRIX"
-msgstr ""
+msgstr "DATA_MATRIX"
 
 #: pcbnew/pcb_barcode.cpp:695
 msgid "QR_CODE"
-msgstr ""
+msgstr "QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:696
 msgid "MICRO_QR_CODE"
-msgstr ""
+msgstr "MICRO_QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:703 pcbnew/pcb_barcode.cpp:759
 msgid "L (Low)"
-msgstr ""
+msgstr "L (Low)"
 
 #: pcbnew/pcb_barcode.cpp:704 pcbnew/pcb_barcode.cpp:760
-#, fuzzy
 msgid "M (Medium)"
-msgstr "铟"
+msgstr "M (Medium)"
 
 #: pcbnew/pcb_barcode.cpp:705 pcbnew/pcb_barcode.cpp:761
 msgid "Q (Quartile)"
-msgstr ""
+msgstr "Q (Quartile)"
 
 #: pcbnew/pcb_barcode.cpp:706 pcbnew/pcb_barcode.cpp:765
-#, fuzzy
 msgid "H (High)"
-msgstr "高"
+msgstr "H (High)"
 
 #: pcbnew/pcb_barcode.cpp:720
-#, fuzzy
 msgid "Show Text"
-msgstr "显示走线"
+msgstr "显示文本"
 
 #: pcbnew/pcb_barcode.cpp:738
 msgid "Barcode Type"
 msgstr "条码类型"
 
 #: pcbnew/pcb_barcode.cpp:773
-#, fuzzy
 msgid "Margin X"
-msgstr "Margin"
+msgstr "X 边距"
 
 #: pcbnew/pcb_barcode.cpp:777
-#, fuzzy
 msgid "Margin Y"
-msgstr "Margin"
+msgstr "Y 边距"
 
 #: pcbnew/pcb_base_edit_frame.cpp:385 pcbnew/toolbars_footprint_editor.cpp:203
 #: pcbnew/toolbars_pcb_editor.cpp:583
@@ -48760,14 +48728,12 @@ msgid "Micro Via"
 msgstr "微孔"
 
 #: pcbnew/pcb_track.cpp:1988
-#, fuzzy
 msgid "Blind Via"
-msgstr "盲孔/埋孔"
+msgstr "盲孔"
 
 #: pcbnew/pcb_track.cpp:1989
-#, fuzzy
 msgid "Buried Via"
-msgstr "埋孔:"
+msgstr "埋孔"
 
 #: pcbnew/pcb_track.cpp:1990
 msgid "Through Via"
@@ -50636,9 +50602,8 @@ msgstr "选择已连接的布线"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:704
-#, fuzzy
 msgid "Swap Pad Nets"
-msgstr "显示零焊盘网络"
+msgstr "交换焊盘网络"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
@@ -53270,89 +53235,72 @@ msgid "From rules"
 msgstr "来自设计规则"
 
 #: pcbnew/via_protection_ui_mixin.h:119
-#, fuzzy
 msgid "Type I-a (tented top)"
-msgstr "I a 型 (顶部帐篷式封孔)"
+msgstr "Type I-a (顶部帐篷式封孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:120
-#, fuzzy
 msgid "Type I-b (tented both sides)"
-msgstr "I b 型 (双面帐篷式封孔)"
+msgstr "Type I-b (双面帐篷式封孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:121
-#, fuzzy
 msgid "Type I-a (tented bottom)"
-msgstr "I a 型 (底部帐篷式封孔)"
+msgstr "Type I-a (底部帐篷式封孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:122
-#, fuzzy
 msgid "Type II-a (covered and tented top)"
-msgstr "II a 型 (顶部帐篷式封孔 + 覆孔)"
+msgstr "Type II-a (顶部帐篷式封孔 + 覆孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:123
-#, fuzzy
 msgid "Type II-b (covered and tented both sides)"
-msgstr "II b 型 (双面帐篷式封孔 + 覆孔)"
+msgstr "Type II-b (双面帐篷式封孔 + 覆孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:124
-#, fuzzy
 msgid "Type II-a (covered and tented bottom)"
-msgstr "II a 型 (底部帐篷式封孔 + 覆孔)"
+msgstr "Type II-a (底部帐篷式封孔 + 覆孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:125
-#, fuzzy
 msgid "Type III-a (plugged top)"
-msgstr "III a 型 (顶部塞孔)"
+msgstr "Type III-a (顶部塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
-#, fuzzy
 msgid "Type III-b (plugged both sides)"
-msgstr "III b 型 (双面塞孔)"
+msgstr "Type III-b (双面塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
-#, fuzzy
 msgid "Type III-a (plugged bottom)"
-msgstr "III a 型 (底部塞孔)"
+msgstr "Type III-a (底部塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:128
-#, fuzzy
 msgid "Type IV-a (plugged and tented top)"
-msgstr "IV a 型 (顶部帐篷式封孔 + 塞孔)"
+msgstr "Type IV-a (顶部帐篷式封孔 + 塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
-#, fuzzy
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "IV b 型 (双面帐篷式封孔 + 塞孔)"
+msgstr "Type IV-b (双面帐篷式封孔 + 塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
-#, fuzzy
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "IV a 型 (底部帐篷式封孔 + 塞孔)"
+msgstr "Type IV-a (底部帐篷式封孔 + 塞孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
-#, fuzzy
 msgid "Type V (filled )"
-msgstr "V 型 (全填孔)"
+msgstr "Type V (全填孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:132
-#, fuzzy
 msgid "Type VI-a (filled and tented top)"
-msgstr "VI a 型 (顶部帐篷式封孔 + 填孔)"
+msgstr "Type VI-a (顶部帐篷式封孔 + 填孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:133
-#, fuzzy
 msgid "Type VI-b (filled and tented both sides)"
-msgstr "VI b 型 (双面帐篷式封孔 + 填孔)"
+msgstr "Type VI-b (双面帐篷式封孔 + 填孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:134
-#, fuzzy
 msgid "Type VI-a (filled and tented bottom)"
-msgstr "VI a 型 (底部帐篷式封孔 + 填孔)"
+msgstr "Type VI-a (底部帐篷式封孔 + 填孔)"
 
 #: pcbnew/via_protection_ui_mixin.h:135
-#, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "VII 型 (填孔 + 盖孔)"
+msgstr "Type VII ((填孔 + 盖孔)"
 
 #: pcbnew/widgets/appearance_controls.cpp:332
 msgid "Show tracks"
@@ -53431,9 +53379,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "在封装和文字中央显示一个小十字"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "在封装和文字中央显示一个小十字"
+msgstr "使用交叉十字符号凸显捕捉点"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
@@ -54263,16 +54210,15 @@ msgstr "钻孔"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
-msgstr ""
+msgstr "X 坐标"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
 msgid "Y coord"
-msgstr ""
+msgstr "Y 坐标"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "编辑文本"
+msgstr "编辑顶点"
 
 #: pcbnew/zone.cpp:870
 msgid "No vias"
