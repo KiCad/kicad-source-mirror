@@ -498,6 +498,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     do
     {
         VECTOR2I movement;
+
+        if( ( hv45Enabled != Is45Limited() ) )
+        {
+            hv45Enabled = Is45Limited();
+            configureAngleSnap( hv45Enabled );
+            displayConstraintsMessage( hv45Enabled );
+        }
+
         editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
@@ -872,10 +880,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
-            hv45Enabled = Is45Limited();
-            configureAngleSnap( hv45Enabled );
-            displayConstraintsMessage( hv45Enabled );
-            evt->SetPassEvent( false );
+            evt->SetPassEvent( true );
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
