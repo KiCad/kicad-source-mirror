@@ -197,7 +197,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     // and mark any matching names as inherited rather than duplicating them.
     if( m_libEntry->IsAlias() )
     {
-        if( LIB_SYMBOL_SPTR parent = m_libEntry->GetParent().lock() )
+        if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
         {
             std::vector<SCH_FIELD*> parentFields;
             parent->GetFields( parentFields );
@@ -330,7 +330,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
         m_inheritanceSelectCombo->Append( symbolNames );
 
-        if( LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock() )
+        if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_libEntry->GetParent().lock() )
         {
             wxString parentName = UnescapeString( rootSymbol->GetName() );
             int selection = m_inheritanceSelectCombo->FindString( parentName );

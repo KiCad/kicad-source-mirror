@@ -1176,7 +1176,7 @@ bool LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
     {
         if( entry->GetSymbol().IsAlias() )
         {
-            LIB_SYMBOL_SPTR parent = entry->GetSymbol().GetParent().lock();
+            std::shared_ptr<LIB_SYMBOL> parent = entry->GetSymbol().GetParent().lock();
 
             // Check for inherited symbol without a valid parent.
             wxCHECK( parent, false );
@@ -1214,7 +1214,7 @@ size_t LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName, wxArraySt
         const LIB_SYMBOL& symbol = entry->GetSymbol();
         if( symbol.IsAlias() )
         {
-            LIB_SYMBOL_SPTR parent = symbol.GetParent().lock();
+            std::shared_ptr<LIB_SYMBOL> parent = symbol.GetParent().lock();
 
             // Check for inherited symbol without a valid parent.
             wxCHECK2( parent, continue );

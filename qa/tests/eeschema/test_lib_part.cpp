@@ -607,12 +607,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( child->GetRootSymbol().get() == parent.get() );
     BOOST_CHECK( grandChild->GetRootSymbol().get() == parent.get() );
 
-    LIB_SYMBOL_SPTR parentRef = child->GetParent().lock();
+    std::shared_ptr<LIB_SYMBOL> parentRef = child->GetParent().lock();
     BOOST_CHECK( parentRef );
     BOOST_CHECK( parentRef == parent->SharedPtr() );
     BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 3 );
 
-    LIB_SYMBOL_SPTR childRef = grandChild->GetParent().lock();
+    std::shared_ptr<LIB_SYMBOL> childRef = grandChild->GetParent().lock();
     BOOST_CHECK( childRef );
     BOOST_CHECK( childRef == child->SharedPtr() );
     BOOST_CHECK_EQUAL( child->SharedPtr().use_count(), 3 );

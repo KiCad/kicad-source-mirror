@@ -858,8 +858,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 {
     wxCHECK( symbol, CLI::EXIT_CODES::ERR_UNKNOWN );
 
-    LIB_SYMBOL_SPTR parent;
-    LIB_SYMBOL*     symbolToPlot = symbol;
+    std::shared_ptr<LIB_SYMBOL> parent;
+    LIB_SYMBOL*                 symbolToPlot = symbol;
 
     // if the symbol is an alias, then the draw items are stored in the root symbol
     if( symbol->IsAlias() )

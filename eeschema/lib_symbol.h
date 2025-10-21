@@ -49,8 +49,6 @@ namespace KIFONT
 }
 
 
-typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
-typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
 typedef MULTIVECTOR<SCH_ITEM, SCH_SHAPE_T, SCH_PIN_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
@@ -92,7 +90,7 @@ public:
     {}
 
     /// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared.
-    LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
+    std::shared_ptr<LIB_SYMBOL> SharedPtr() const { return m_me; }
 
     /**
      * Create a copy of a LIB_SYMBOL and assigns unique KIIDs to the copy and its children.
@@ -114,8 +112,8 @@ public:
     static LIB_SYMBOL* GetDummy();
 
     void SetParent( LIB_SYMBOL* aParent = nullptr );
-    LIB_SYMBOL_REF& GetParent() { return m_parent; }
-    const LIB_SYMBOL_REF& GetParent() const { return m_parent; }
+    std::weak_ptr<LIB_SYMBOL>& GetParent() { return m_parent; }
+    const std::weak_ptr<LIB_SYMBOL>& GetParent() const { return m_parent; }
 
     /**
      * Get the number of parents for this symbol.
@@ -132,7 +130,7 @@ public:
      *
      * @return the weak_ptr to the root symbol of this symbol.
      */
-    LIB_SYMBOL_SPTR GetRootSymbol() const;
+    std::shared_ptr<LIB_SYMBOL> GetRootSymbol() const;
 
     virtual wxString GetClass() const override
     {
@@ -170,7 +168,7 @@ public:
     {
         if( GetDescriptionField().GetText().IsEmpty() && IsAlias() )
         {
-            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+            if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
                 return parent->GetDescription();
         }
 
@@ -183,7 +181,7 @@ public:
     {
         if( m_keyWords.IsEmpty() && IsAlias() )
         {
-            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+            if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
                 return parent->GetKeyWords();
         }
 
@@ -218,7 +216,7 @@ public:
     {
         if( m_fpFilters.IsEmpty() && IsAlias() )
         {
-            if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+            if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
                 return parent->GetFPFilters();
         }
 
@@ -671,8 +669,9 @@ private:
     void deleteAllFields();
 
 private:
-    LIB_SYMBOL_SPTR     m_me;
-    LIB_SYMBOL_REF      m_parent;           ///< Use for inherited symbols.
+    std::shared_ptr<LIB_SYMBOL> m_me;
+    std::weak_ptr<LIB_SYMBOL>   m_parent;   ///< Use for inherited symbols.
+
     LIB_ID              m_libId;
     LIB_ID              m_sourceLibId;      ///< For database library symbols; the original symbol
     timestamp_t         m_lastModDate;

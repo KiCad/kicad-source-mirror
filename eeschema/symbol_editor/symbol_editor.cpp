@@ -541,13 +541,13 @@ void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs( bool aOpenCopy )
  *
  * If the symbol is not an alias, the list will contain only the symbol itself.
  */
-static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol )
+static std::vector<std::shared_ptr<LIB_SYMBOL>> GetParentChain( const LIB_SYMBOL& aSymbol )
 {
-    std::vector<LIB_SYMBOL_SPTR> chain( { aSymbol.SharedPtr() } );
+    std::vector<std::shared_ptr<LIB_SYMBOL>> chain( { aSymbol.SharedPtr() } );
 
     while( chain.back()->IsAlias() )
     {
-        LIB_SYMBOL_SPTR parent = chain.back()->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent = chain.back()->GetParent().lock();
         chain.push_back( parent );
     }
 
@@ -583,7 +583,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
     bool inDescendents = false;
 
     {
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromUs = GetParentChain( aSymbol );
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChainFromUs = GetParentChain( aSymbol );
 
         // Ignore the leaf symbol (0) - that must match
         for( size_t i = 1; i < parentChainFromUs.size(); ++i )
@@ -599,8 +599,8 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
 
     {
         LIB_SYMBOL* targetSymbol = aLibMgr.GetAlias( aNewSymbolName, aNewLibraryName );
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol );
-        const wxString                     oldSymbolName = aSymbol.GetName();
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChainFromTarget = GetParentChain( *targetSymbol );
+        const wxString                                 oldSymbolName = aSymbol.GetName();
 
         // Ignore the leaf symbol - it'll match if we're saving the symbol
         // to the same name, and that would be OK
@@ -644,7 +644,7 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
     else
     {
         // In a different library, check the whole chain
-        const std::vector<LIB_SYMBOL_SPTR> parentChain = GetParentChain( aSymbol );
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain = GetParentChain( aSymbol );
 
         for( size_t i = 0; i < parentChain.size(); ++i )
         {
@@ -658,7 +658,7 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
             }
             else
             {
-                LIB_SYMBOL_SPTR chainSymbol = parentChain[i];
+                std::shared_ptr<LIB_SYMBOL> chainSymbol = parentChain[i];
                 if( aLibMgr.SymbolExists( chainSymbol->GetName(), newLibraryName ) )
                 {
                     conflicts.push_back( chainSymbol->GetName() );
@@ -701,7 +701,7 @@ public:
 
     bool DoSave( LIB_SYMBOL& symbol, const wxString& aNewSymName, const wxString& aNewLibName )
     {
-        std::vector<LIB_SYMBOL_SPTR> parentChain;
+        std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain;
         // If we're saving into the same library, we don't need to check the parental chain
         // because we can just keep the same parent symbol
         if( aNewLibName == symbol.GetLibId().GetLibNickname().wx_str() )
@@ -714,9 +714,8 @@ public:
         // Iterate backwards (i.e. from the root down)
         for( int i = (int) parentChain.size() - 1; i >= 0; --i )
         {
-            LIB_SYMBOL_SPTR& oldSymbol = parentChain[i];
-
-            LIB_SYMBOL new_symbol( *oldSymbol );
+            std::shared_ptr<LIB_SYMBOL>& oldSymbol = parentChain[i];
+            LIB_SYMBOL                   new_symbol( *oldSymbol );
 
             wxString newName;
             if( i == 0 )
@@ -1742,7 +1741,7 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 
     if( m_symbol->IsAlias() )
     {
-        LIB_SYMBOL_SPTR parent = m_symbol->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
 
         msg = parent ? parent->GetName() : _( "Undefined!" );
         AppendMsgPanel( _( "Parent" ), UnescapeString( msg ), 8 );

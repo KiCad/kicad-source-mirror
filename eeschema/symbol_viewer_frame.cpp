@@ -449,9 +449,8 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         view->Add( m_previewItem.get() );
 
         wxString parentName;
-        std::shared_ptr<LIB_SYMBOL> parent  = symbol->GetParent().lock();
 
-        if( parent )
+        if( std::shared_ptr<LIB_SYMBOL> parent = symbol->GetParent().lock() )
             parentName = parent->GetName();
 
         AppendMsgPanel( _( "Name" ), UnescapeString( m_previewItem->GetName() ) );
@@ -950,21 +949,10 @@ void SYMBOL_VIEWER_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 
 const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    LIB_SYMBOL* symbol = GetSelectedSymbol();
+    if( LIB_SYMBOL* symbol = GetSelectedSymbol() )
+        return symbol->GetUnitBoundingBox( m_unit, m_bodyStyle );
 
-    if( !symbol )
-    {
-        return BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) );
-    }
-    else
-    {
-        std::shared_ptr<LIB_SYMBOL> tmp = symbol->IsAlias() ? symbol->GetParent().lock()
-                                                            : symbol->SharedPtr();
-
-        wxCHECK( tmp, BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) ) );
-
-        return tmp->GetUnitBoundingBox( m_unit, m_bodyStyle );
-    }
+    return BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) );
 }
 
 

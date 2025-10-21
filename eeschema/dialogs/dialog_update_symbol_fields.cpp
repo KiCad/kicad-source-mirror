@@ -44,7 +44,8 @@ DIALOG_UPDATE_SYMBOL_FIELDS::DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aPa
     wxASSERT( aParent );
     wxASSERT( aSymbol );
 
-    m_parentSymbolReadOnly->SetValue( UnescapeString( m_symbol->GetParent().lock()->GetName() ) );
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock() )
+        m_parentSymbolReadOnly->SetValue( UnescapeString( parent->GetName() ) );
 
     for( int i = 0; i < MANDATORY_FIELD_COUNT; ++i )
     {

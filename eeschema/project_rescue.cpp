@@ -426,7 +426,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             if( !cache_match && !lib_match )
                 continue;
 
-            LIB_SYMBOL_SPTR lib_match_parent;
+            std::shared_ptr<LIB_SYMBOL> lib_match_parent;
 
             // If it's a derive symbol, use the parent symbol to perform the pin test.
             if( lib_match && lib_match->IsAlias() )
