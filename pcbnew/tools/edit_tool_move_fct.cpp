@@ -452,6 +452,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
 
+    // Axis locking for arrow key movement
+    enum class AXIS_LOCK { NONE, HORIZONTAL, VERTICAL };
+    AXIS_LOCK axisLock = AXIS_LOCK::NONE;
+    long      lastArrowKeyAction = 0;
+
     // Used to test courtyard overlaps
     std::unique_ptr<DRC_INTERACTIVE_COURTYARD_CLEARANCE> drc_on_move = nullptr;
 
@@ -520,9 +525,48 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
                     VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
+                    long action = controls->GetSettings().m_lastKeyboardCursorCommand;
 
                     grid.SetSnap( false );
                     m_cursor = grid.Align( keyboardPos, selectionGrid );
+
+                    // Update axis lock based on arrow key press
+                    if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
+                    {
+                        if( axisLock == AXIS_LOCK::HORIZONTAL )
+                        {
+                            // Check if opposite horizontal key pressed to unlock
+                            if( ( lastArrowKeyAction == ACTIONS::CURSOR_LEFT && action == ACTIONS::CURSOR_RIGHT ) ||
+                                ( lastArrowKeyAction == ACTIONS::CURSOR_RIGHT && action == ACTIONS::CURSOR_LEFT ) )
+                            {
+                                axisLock = AXIS_LOCK::NONE;
+                            }
+                            // Same direction axis, keep locked
+                        }
+                        else
+                        {
+                            axisLock = AXIS_LOCK::HORIZONTAL;
+                        }
+                    }
+                    else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
+                    {
+                        if( axisLock == AXIS_LOCK::VERTICAL )
+                        {
+                            // Check if opposite vertical key pressed to unlock
+                            if( ( lastArrowKeyAction == ACTIONS::CURSOR_UP && action == ACTIONS::CURSOR_DOWN ) ||
+                                ( lastArrowKeyAction == ACTIONS::CURSOR_DOWN && action == ACTIONS::CURSOR_UP ) )
+                            {
+                                axisLock = AXIS_LOCK::NONE;
+                            }
+                            // Same direction axis, keep locked
+                        }
+                        else
+                        {
+                            axisLock = AXIS_LOCK::VERTICAL;
+                        }
+                    }
+
+                    lastArrowKeyAction = action;
                 }
                 else
                 {
@@ -530,6 +574,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     m_cursor = grid.BestSnapAnchor( mousePos, layers, selectionGrid, sel_items );
                 }
+
+                if( axisLock == AXIS_LOCK::HORIZONTAL )
+                    m_cursor.y = prevPos.y;
+                else if( axisLock == AXIS_LOCK::VERTICAL )
+                    m_cursor.x = prevPos.x;
 
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
