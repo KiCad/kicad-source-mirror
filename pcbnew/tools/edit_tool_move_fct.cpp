@@ -1047,7 +1047,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
 
-                if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
+                // We need to bypass refreshPreview action here because it is triggered by the move,
+                // so we were getting double-key events that toggled the axis locking if you
+                // pressed them in a certain order.
+                if( controls->GetSettings().m_lastKeyboardCursorPositionValid && ! evt->IsAction( &ACTIONS::refreshPreview ) )
                 {
                     VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
                     long action = controls->GetSettings().m_lastKeyboardCursorCommand;
