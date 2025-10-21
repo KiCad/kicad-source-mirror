@@ -677,15 +677,22 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
 
                 if( nearest && nearest->Distance( aOrigin ) <= snapRange )
                 {
-                    int snapLineDistance = ( *snapLineSnap - aOrigin ).EuclideanNorm();
-                    int anchorDistance = nearest->Distance( aOrigin );
-
-                    // Prefer the anchor if it's closer or within a small margin
-                    if( anchorDistance <= snapLineDistance * ADVANCED_CFG::GetCfg().m_SnapToAnchorMargin )
+                    preferAnchor = true;
+                    wxLogTrace( traceSnap, "    Preferring anchor over snap line (anchorDist=%f, snapRange=%d)",
+                                nearest->Distance( aOrigin ), snapRange );
+                }
+                else
+                {
+                    if( nearest )
                     {
-                        preferAnchor = true;
-                        wxLogTrace( traceSnap, "    Preferring anchor over snap line (anchorDist=%d, snapLineDist=%d)",
-                                    anchorDistance, snapLineDistance );
+                        wxLogTrace( traceSnap, "    Nearest anchor at (%d, %d), distance=%f is out of range (snapRange=%d)",
+                                    nearest->pos.x, nearest->pos.y,
+                                    nearest->Distance( aOrigin ),
+                                    snapRange );
+                    }
+                    else
+                    {
+                        wxLogTrace( traceSnap, "    No nearest anchor to consider" );
                     }
                 }
 
