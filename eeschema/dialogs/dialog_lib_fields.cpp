@@ -907,7 +907,6 @@ void DIALOG_LIB_FIELDS::UpdateFieldList()
     AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ),      true,  false,  false,  true );
 
     AddField( wxS( "Power" ),      _( "Power Symbol" ),       true, false, false, true );
-    AddField( wxS( "LocalPower" ), _( "Local Power Symbol" ), true, false, false, true );
 
     // User fields next
     std::set<wxString> userFieldNames;
@@ -1067,6 +1066,7 @@ void DIALOG_LIB_FIELDS::SetupColumnProperties( int aCol )
     {
         // Create symbol netlist for footprint picker
         wxString symbolNetlist;
+
         if( !m_symbolsList.empty() )
         {
             // Use the first symbol's netlist (all symbols in lib should have similar pin structure)
