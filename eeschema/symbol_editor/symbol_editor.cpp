@@ -1276,8 +1276,17 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
                 continue;
         }
 
-        if( IsCurrentSymbol( libId ) )
-            emptyScreen();
+        if( GetCurSymbol() )
+        {
+            for( const std::shared_ptr<LIB_SYMBOL>& symbol : GetParentChain( *GetCurSymbol() ) )
+            {
+                if( symbol->GetLibId() == libId )
+                {
+                    emptyScreen();
+                    break;
+                }
+            }
+        }
 
         m_libMgr->RemoveSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
     }
