@@ -480,17 +480,17 @@ void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs( bool aOpenCopy )
  * If aIncludeLeaf is false, the leaf symbol (the one that was actually named)
  * is not included in the list, so the list may be empty if the symbol is not derived.
  */
-static std::vector<LIB_SYMBOL_SPTR> GetParentChain( const LIB_SYMBOL& aSymbol, bool aIncludeLeaf = true )
+static std::vector<std::shared_ptr<LIB_SYMBOL>> GetParentChain( const LIB_SYMBOL& aSymbol, bool aIncludeLeaf = true )
 {
-    std::vector<LIB_SYMBOL_SPTR> chain;
-    LIB_SYMBOL_SPTR              sym = aSymbol.SharedPtr();
+    std::vector<std::shared_ptr<LIB_SYMBOL>> chain;
+    std::shared_ptr<LIB_SYMBOL>              sym = aSymbol.SharedPtr();
 
     if( aIncludeLeaf )
         chain.push_back( sym );
 
     while( sym->IsDerived() )
     {
-        LIB_SYMBOL_SPTR parent = sym->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent = sym->GetParent().lock();
         chain.push_back( parent );
         sym = parent;
     }
@@ -527,7 +527,7 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
     bool inDescendents = false;
 
     {
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromUs = GetParentChain( aSymbol, true );
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChainFromUs = GetParentChain( aSymbol, true );
 
         // Ignore the leaf symbol (0) - that must match
         for( size_t i = 1; i < parentChainFromUs.size(); ++i )
@@ -543,8 +543,8 @@ static std::pair<bool, bool> CheckSavingIntoOwnInheritance( LIB_SYMBOL_LIBRARY_M
 
     {
         LIB_SYMBOL* targetSymbol = aLibMgr.GetSymbol( aNewSymbolName, aNewLibraryName );
-        const std::vector<LIB_SYMBOL_SPTR> parentChainFromTarget = GetParentChain( *targetSymbol, true );
-        const wxString                     oldSymbolName = aSymbol.GetName();
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChainFromTarget = GetParentChain( *targetSymbol, true );
+        const wxString                                 oldSymbolName = aSymbol.GetName();
 
         // Ignore the leaf symbol - it'll match if we're saving the symbol
         // to the same name, and that would be OK
@@ -588,7 +588,7 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
     else
     {
         // In a different library with parents - check the whole chain
-        const std::vector<LIB_SYMBOL_SPTR> parentChain = GetParentChain( aSymbol, true );
+        const std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain = GetParentChain( aSymbol, true );
 
         for( size_t i = 0; i < parentChain.size(); ++i )
         {
@@ -600,7 +600,7 @@ static std::vector<wxString> CheckForParentalChainConflicts( LIB_SYMBOL_LIBRARY_
             }
             else
             {
-                LIB_SYMBOL_SPTR chainSymbol = parentChain[i];
+                std::shared_ptr<LIB_SYMBOL> chainSymbol = parentChain[i];
 
                 if( aLibMgr.SymbolNameInUse( chainSymbol->GetName(), newLibraryName ) )
                     conflicts.push_back( chainSymbol->GetName() );
@@ -641,8 +641,8 @@ public:
 
     bool DoSave( LIB_SYMBOL& symbol, const wxString& aNewSymName, const wxString& aNewLibName, bool aFlattenSymbol )
     {
-        std::unique_ptr<LIB_SYMBOL>  flattenedSymbol; // for ownership
-        std::vector<LIB_SYMBOL_SPTR> parentChain;
+        std::unique_ptr<LIB_SYMBOL>              flattenedSymbol; // for ownership
+        std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain;
 
         const bool sameLib = aNewLibName == symbol.GetLibId().GetLibNickname().wx_str();
 
@@ -672,9 +672,8 @@ public:
         // Iterate backwards (i.e. from the root down)
         for( int i = (int) parentChain.size() - 1; i >= 0; --i )
         {
-            LIB_SYMBOL_SPTR& oldSymbol = parentChain[i];
-
-            LIB_SYMBOL new_symbol( *oldSymbol );
+            std::shared_ptr<LIB_SYMBOL>& oldSymbol = parentChain[i];
+            LIB_SYMBOL                   new_symbol( *oldSymbol );
 
             wxString newName;
             if( i == 0 )
@@ -1719,7 +1718,7 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 
     if( m_symbol->IsDerived() )
     {
-        LIB_SYMBOL_SPTR parent = m_symbol->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
 
         msg = parent ? parent->GetName() : _( "Undefined!" );
         AppendMsgPanel( _( "Parent" ), UnescapeString( msg ), 8 );

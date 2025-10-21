@@ -828,8 +828,8 @@ void DIALOG_LIB_FIELDS_TABLE::setScope( SCOPE aScope )
 
     if( m_scope == SCOPE::SCOPE_RELATED_SYMBOLS )
     {
-        const LIB_SYMBOL* symbol = libMgr.GetBufferedSymbol( targetSymbol, targetLib );
-        LIB_SYMBOL_SPTR   root = symbol ? symbol->GetRootSymbol() : nullptr;
+        const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( targetSymbol, targetLib );
+        std::shared_ptr<LIB_SYMBOL> root = symbol ? symbol->GetRootSymbol() : nullptr;
 
         if( root )
         {

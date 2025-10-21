@@ -1144,13 +1144,8 @@ bool LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
 {
     for( const std::shared_ptr<SYMBOL_BUFFER>& entry : m_symbols )
     {
-        if( entry->GetSymbol().IsDerived() )
+        if( std::shared_ptr<LIB_SYMBOL> parent = entry->GetSymbol().GetParent().lock() )
         {
-            LIB_SYMBOL_SPTR parent = entry->GetSymbol().GetParent().lock();
-
-            // Check for inherited symbol without a valid parent.
-            wxCHECK( parent, false );
-
             if( parent->GetName() == aParentName )
                 return true;
         }
@@ -1180,40 +1175,34 @@ size_t LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName, wxArraySt
     wxCHECK( !aSymbolName.IsEmpty(), 0 );
 
     // Parent: children map
-    std::unordered_map<LIB_SYMBOL_SPTR, std::vector<LIB_SYMBOL_SPTR>> derivedMap;
+    std::unordered_map<std::shared_ptr<LIB_SYMBOL>, std::vector<std::shared_ptr<LIB_SYMBOL>>> derivedMap;
 
     // Iterate the library once to resolve all derived symbol links.
     // This means we only need to iterate the library once, and we can then look up the links
     // as needed.
     for( std::shared_ptr<SYMBOL_BUFFER>& entry : m_symbols )
     {
-        LIB_SYMBOL_SPTR symbol = entry->GetSymbol().SharedPtr();
+        std::shared_ptr<LIB_SYMBOL> symbol = entry->GetSymbol().SharedPtr();
 
-        if( symbol->IsDerived() )
-        {
-            LIB_SYMBOL_SPTR parent = symbol->GetParent().lock();
-
-            // Check for inherited symbol without a valid parent.
-            wxCHECK2( parent, continue );
-
+        if( std::shared_ptr<LIB_SYMBOL> parent = symbol->GetParent().lock() )
             derivedMap[parent].emplace_back( std::move( symbol ) );
-        }
     }
 
-    const auto visit = [&]( LIB_SYMBOL& aSymbol )
-    {
-        aList.Add( aSymbol.GetName() );
-    };
+    const auto visit =
+            [&]( LIB_SYMBOL& aSymbol )
+            {
+                aList.Add( aSymbol.GetName() );
+            };
 
     // Assign to std::function to allow recursion
-    const std::function<void( LIB_SYMBOL_SPTR& )> getDerived =
-            [&]( LIB_SYMBOL_SPTR& aSymbol )
+    const std::function<void( std::shared_ptr<LIB_SYMBOL>& )> getDerived =
+            [&]( std::shared_ptr<LIB_SYMBOL>& aSymbol )
             {
                 auto it = derivedMap.find( aSymbol );
 
                 if( it != derivedMap.end() )
                 {
-                    for( LIB_SYMBOL_SPTR& derivedSymbol : it->second )
+                    for( std::shared_ptr<LIB_SYMBOL>& derivedSymbol : it->second )
                     {
                         visit( *derivedSymbol );
 
@@ -1224,7 +1213,7 @@ size_t LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName, wxArraySt
             };
 
     // Start the recursion at the top
-    LIB_SYMBOL_SPTR symbol = GetSymbol( aSymbolName )->SharedPtr();
+    std::shared_ptr<LIB_SYMBOL> symbol = GetSymbol( aSymbolName )->SharedPtr();
     getDerived( symbol );
 
     return aList.GetCount();

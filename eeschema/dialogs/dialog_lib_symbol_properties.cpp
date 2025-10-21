@@ -89,41 +89,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     for( const SCH_FIELD& f : fields )
         m_fields->push_back( f );
 
-    if( m_libEntry->IsDerived() )
-    {
-        if( LIB_SYMBOL_SPTR parent = m_libEntry->GetParent().lock() )
-        {
-            std::vector<SCH_FIELD*> parentFields;
-            parent->GetFields( parentFields );
-
-            for( size_t ii = 0; ii < parentFields.size(); ++ii )
-            {
-                SCH_FIELD* pf = parentFields[ii];
-                bool       found = false;
-
-                if( pf->IsMandatory() )
-                    continue; // Don't inherit mandatory fields
-
-                for( size_t jj = 0; jj < m_fields->size(); ++jj )
-                {
-                    SCH_FIELD& f = m_fields->at( jj );
-
-                    if( f.IsMandatory() )
-                        continue; // Don't inherit mandatory fields
-
-                    if( f.GetCanonicalName() == pf->GetCanonicalName() )
-                    {
-                        m_fields->SetFieldInherited( jj, *pf );
-                        found = true;
-                        break;
-                    }
-                }
-
-                if( !found )
-                    m_fields->AddInheritedField( *pf );
-            }
-        }
-    }
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
+        addInheritedFields( parent );
 
     // Show/hide columns according to the user's preference
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
@@ -227,6 +194,42 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
     m_grid->PopEventHandler( true );
     m_unitNamesGrid->PopEventHandler( true );
     m_bodyStyleNamesGrid->PopEventHandler( true );
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::addInheritedFields( const std::shared_ptr<LIB_SYMBOL>& aParent )
+{
+    if( std::shared_ptr<LIB_SYMBOL> ancestor = aParent->GetParent().lock() )
+        addInheritedFields( ancestor );
+
+    std::vector<SCH_FIELD*> parentFields;
+    aParent->GetFields( parentFields );
+
+    for( SCH_FIELD* parentField : parentFields )
+    {
+        bool found = false;
+
+        if( parentField->IsMandatory() )
+            continue; // Don't inherit mandatory fields
+
+        for( size_t ii = 0; ii < m_fields->size(); ++ii )
+        {
+            SCH_FIELD& field = m_fields->at( ii );
+
+            if( field.IsMandatory() )
+                continue; // Don't inherit mandatory fields
+
+            if( field.GetCanonicalName() == parentField->GetCanonicalName() )
+            {
+                m_fields->SetFieldInherited( ii, *parentField );
+                found = true;
+                break;
+            }
+        }
+
+        if( !found )
+            m_fields->AddInheritedField( *parentField );
+    }
 }
 
 
@@ -380,7 +383,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
         m_inheritanceSelectCombo->Append( symbolNames );
 
-        if( LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock() )
+        if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_libEntry->GetParent().lock() )
         {
             wxString parentName = UnescapeString( rootSymbol->GetName() );
             int selection = m_inheritanceSelectCombo->FindString( parentName );

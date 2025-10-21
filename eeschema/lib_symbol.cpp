@@ -123,10 +123,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     addField( FIELD_T::DESCRIPTION, false );
 
     SetName( aName );
-
-    if( aParent )
-        SetParent( aParent );
-
+    SetParent( aParent );
     SetLib( aLibrary );
 }
 
@@ -174,10 +171,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary )
         }
     }
 
-    LIB_SYMBOL_SPTR parent = aSymbol.m_parent.lock();
-
-    if( parent )
-        SetParent( parent.get() );
+    SetParent( aSymbol.m_parent.lock().get() );
 }
 
 
@@ -219,9 +213,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 
     m_drawings.sort();
 
-    LIB_SYMBOL_SPTR parent = aSymbol.m_parent.lock();
-
-    SetParent( parent.get() );
+    SetParent( aSymbol.m_parent.lock().get() );
 
     EMBEDDED_FILES::operator=( aSymbol );
 
@@ -260,27 +252,17 @@ LIB_SYMBOL* LIB_SYMBOL::GetDummy()
 
 unsigned LIB_SYMBOL::GetInheritanceDepth() const
 {
-    unsigned depth = 0;
+    if( const std::shared_ptr<LIB_SYMBOL> parent = GetParent().lock() )
+        return parent->GetInheritanceDepth() + 1;
 
-    LIB_SYMBOL_SPTR parent = GetParent().lock();
-
-    while( parent )
-    {
-        depth += 1;
-        parent = parent->GetParent().lock();
-    }
-
-    return depth;
+    return 0;
 }
 
 
-LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
+std::shared_ptr<LIB_SYMBOL> LIB_SYMBOL::GetRootSymbol() const
 {
-    const LIB_SYMBOL_SPTR sp = m_parent.lock();
-
-    // Recurse until the parent symbol is empty.
-    if( sp )
-        return sp->GetRootSymbol();
+    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->GetRootSymbol();
 
     return m_me;
 }
@@ -338,10 +320,9 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
 
     if( IsDerived() )
     {
-        LIB_SYMBOL_SPTR parent = m_parent.lock();
+        std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
 
-        wxCHECK_MSG( parent, retv,
-                     wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
+        wxCHECK_MSG( parent, retv, wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
         // Copy the parent.
         if( parent->IsDerived() )
@@ -413,15 +394,8 @@ const wxString LIB_SYMBOL::GetLibraryName() const
 
 bool LIB_SYMBOL::IsLocalPower() const
 {
-    std::shared_ptr<LIB_SYMBOL> parent;
-
-    if( !m_parent.expired() && ( parent = m_parent.lock() ) )
-    {
-        if( parent->IsRoot() )
-            return parent->m_options == ENTRY_LOCAL_POWER;
-        else
-            return parent->IsLocalPower();
-    }
+    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->IsLocalPower();
 
     return m_options == ENTRY_LOCAL_POWER;
 }
@@ -429,12 +403,10 @@ bool LIB_SYMBOL::IsLocalPower() const
 
 void LIB_SYMBOL::SetLocalPower()
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
     {
-        if( parent->IsRoot() )
-            parent->m_options = ENTRY_LOCAL_POWER;
-        else
-            parent->SetLocalPower();
+        parent->SetLocalPower();
+        return;
     }
 
     m_options = ENTRY_LOCAL_POWER;
@@ -443,15 +415,8 @@ void LIB_SYMBOL::SetLocalPower()
 
 bool LIB_SYMBOL::IsGlobalPower() const
 {
-    std::shared_ptr<LIB_SYMBOL> parent;
-
-    if( !m_parent.expired() && ( parent = m_parent.lock() ) )
-    {
-        if( parent->IsRoot() )
-            return parent->m_options == ENTRY_GLOBAL_POWER;
-        else
-            return parent->IsGlobalPower();
-    }
+    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->IsGlobalPower();
 
     return m_options == ENTRY_GLOBAL_POWER;
 }
@@ -465,12 +430,10 @@ bool LIB_SYMBOL::IsPower() const
 
 void LIB_SYMBOL::SetGlobalPower()
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
     {
-        if( parent->IsRoot() )
-            parent->m_options = ENTRY_GLOBAL_POWER;
-        else
-            parent->SetGlobalPower();
+        parent->SetGlobalPower();
+        return;
     }
 
     m_options = ENTRY_GLOBAL_POWER;
@@ -479,13 +442,8 @@ void LIB_SYMBOL::SetGlobalPower()
 
 bool LIB_SYMBOL::IsNormal() const
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-    {
-        if( parent->IsRoot() )
-            return parent->m_options == ENTRY_NORMAL;
-        else
-            return parent->IsNormal();
-    }
+    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->IsNormal();
 
     return m_options == ENTRY_NORMAL;
 }
@@ -493,12 +451,10 @@ bool LIB_SYMBOL::IsNormal() const
 
 void LIB_SYMBOL::SetNormal()
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
     {
-        if( parent->IsRoot() )
-            parent->m_options = ENTRY_NORMAL;
-        else
-            parent->SetNormal();
+        parent->SetNormal();
+        return;
     }
 
     m_options = ENTRY_NORMAL;
@@ -789,6 +745,9 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 
 std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
 {
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->GetGraphicalPins( aUnit, aBodyStyle );
+
     std::vector<SCH_PIN*> pins;
 
     /* Notes:
@@ -798,10 +757,7 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
      * when m_bodyStyle == 0, the item is common to all body styles
      */
 
-    LIB_SYMBOL_SPTR            parent = m_parent.lock();
-    const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
-
-    for( const SCH_ITEM& item : drawItems[SCH_PIN_T] )
+    for( const SCH_ITEM& item : m_drawings[SCH_PIN_T] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
@@ -1010,11 +966,13 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
 }
 
 
-const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
-                                            bool aIgnoreHiddenFields,
+const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle, bool aIgnoreHiddenFields,
                                             bool aIgnoreLabelsOnInvisiblePins ) const
 {
     BOX2I bBox;     // Start with a fresh BOX2I so the Merge algorithm works
+
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        bBox = parent->GetUnitBoundingBox( aUnit, aBodyStyle, aIgnoreHiddenFields, aIgnoreLabelsOnInvisiblePins );
 
     for( const SCH_ITEM& item : m_drawings )
     {
@@ -1036,7 +994,9 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
             bBox.Merge( pin.GetBoundingBox( true, true, false ) );
         }
         else
+        {
             bBox.Merge( item.GetBoundingBox() );
+        }
     }
 
     return bBox;
@@ -1323,14 +1283,8 @@ bool LIB_SYMBOL::HasLegacyAlternateBodyStyle() const
             return true;
     }
 
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-    {
-        for( const SCH_ITEM& item : parent->GetDrawItems() )
-        {
-            if( item.m_bodyStyle > BODY_STYLE::BASE )
-                return true;
-        }
-    }
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->HasLegacyAlternateBodyStyle();
 
     return false;
 }
@@ -1338,11 +1292,12 @@ bool LIB_SYMBOL::HasLegacyAlternateBodyStyle() const
 
 int LIB_SYMBOL::GetMaxPinNumber() const
 {
-    int                        maxPinNumber = 0;
-    LIB_SYMBOL_SPTR            parent = m_parent.lock();
-    const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+        return parent->GetMaxPinNumber();
 
-    for( const SCH_ITEM& item : drawItems[SCH_PIN_T] )
+    int maxPinNumber = 0;
+
+    for( const SCH_ITEM& item : m_drawings[SCH_PIN_T] )
     {
         const SCH_PIN* pin = static_cast<const SCH_PIN*>( &item );
         long           currentPinNumber = 0;
@@ -1484,7 +1439,7 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
 int LIB_SYMBOL::GetUnitCount() const
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
         return parent->GetUnitCount();
 
     return m_unitCount;

@@ -136,7 +136,6 @@ public:
         m_isInherited[aRow] = true;
     }
 
-
     bool IsInherited( size_t aRow ) const
     {
         if( aRow >= m_isInherited.size() || aRow >= m_parentFields.size() )
