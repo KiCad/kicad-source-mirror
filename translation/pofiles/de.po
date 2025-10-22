@@ -9,7 +9,7 @@
 # Dominik Wernberger <dominik.wernberger@gmx.de>, 2021.
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
-# Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
+# Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024, 2025.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023, 2024, 2025.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
@@ -30,11 +30,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
-"PO-Revision-Date: 2025-10-10 08:24+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"PO-Revision-Date: 2025-10-16 19:07+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6978,7 +6978,7 @@ msgstr "Zeichnungselement"
 
 #: common/eda_shape.cpp:327
 msgid "Thermal Spoke"
-msgstr "Thermische Speiche"
+msgstr "Wärmefallensteg"
 
 #: common/eda_shape.cpp:328 pcbnew/pcb_shape.cpp:1083
 msgid "Number Box"
@@ -7017,7 +7017,7 @@ msgstr "Pad-Nummernfeld"
 
 #: common/eda_shape.cpp:1122 pcbnew/pcb_shape.cpp:1090
 msgid "Thermal Spoke Template"
-msgstr "Thermische Speiche-Vorlage"
+msgstr "Wärmefallensteg-Vorlage"
 
 #: common/eda_shape.cpp:1123 common/eda_shape.cpp:1136
 msgid "Unrecognized"
@@ -23733,7 +23733,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1259
 msgid " (base)\n"
-msgstr " (basis)\n"
+msgstr " (Basis)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
 msgid "Delete All Listed Symbols"
@@ -35347,8 +35347,7 @@ msgstr "Abrundungsradius:"
 #: pcbnew/zone_manager/panel_zone_properties.cpp:302
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
-"Breite einer thermischen Speiche kann nicht kleiner als die Mindestbreite "
-"sein."
+"Breite eines Wärmefallenstegs kann nicht kleiner als die Mindestbreite sein."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:607
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:359
@@ -35498,17 +35497,17 @@ msgstr ""
 #: pcbnew/pad.cpp:2773 pcbnew/zone.cpp:1810
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
-msgstr "Thermische Entlastungen"
+msgstr "Wärmefallen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
 msgid "Thermal relief gap:"
-msgstr "Thermischer Entlastungsspalt:"
+msgstr "Wärmefallenspalt:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:165
@@ -35517,7 +35516,7 @@ msgid ""
 "a pad connected by thermal relief spokes."
 msgstr ""
 "Der Abstand, der zwischen dem gefüllten Bereich der Zone und einem durch "
-"thermische Entlastungspeichen verbundenen Pad freigehalten wird."
+"Wärmefallenstege verbundenen Pad freigehalten wird."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:170
@@ -35527,12 +35526,12 @@ msgstr "Freiraum zwischen Pads im selben Netz und gefüllten Flächen."
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:178
 msgid "Thermal spoke width:"
-msgstr "Thermische Speichenbreite:"
+msgstr "Wärmefallen-Stegbreite:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:183
 msgid "Width of copper in thermal reliefs."
-msgstr "Kupferbreite in thermischen Entlastungen."
+msgstr "Stegbreite in Wärmefallen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:128
@@ -37688,7 +37687,7 @@ msgstr "Zoneneinstellung verwenden"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 msgid "Thermal relief"
-msgstr "Thermische Entlastung"
+msgstr "Wärmefalle"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
 msgid "Jumper groups:"
@@ -39779,19 +39778,19 @@ msgstr "Konvexe Pad-Hülle"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:910
 msgid "Thermal Relief Overrides"
-msgstr "Überschreibungen für thermische Entlastung"
+msgstr "Überschreibungen für Wärmefallen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:918
 msgid "Relief gap:"
-msgstr "Entlastungsspalt:"
+msgstr "Spaltbreite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:929
 msgid "Spoke width:"
-msgstr "Speichenbreite:"
+msgstr "Stegbreite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:940
 msgid "Spoke angle:"
-msgstr "Speichenwinkel:"
+msgstr "Stegwinkel:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:979
 msgid "Leave values blank to use parent footprint or netclass values."
@@ -42164,7 +42163,7 @@ msgstr "Verrundungen/Fasen außerhalb des Zonenumrisses zulassen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:449
 msgid "Minimum thermal relief spoke count:"
-msgstr "Mindestanzahl für thermische Entlastungsspeichen:"
+msgstr "Mindeststeganzahl für Wärmefallen:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:465
 msgid "Length Tuning"
@@ -42927,47 +42926,48 @@ msgstr ""
 "| "
 "Beschreibung                                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
 "| `annular_width`           | min/opt/"
 "max                                                                                                           "
-"| Prüft die Restringbreite von Vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| Prüft die Restringbreite von "
+"Vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Prüft den angegebenen Ausdruck."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `assertion`               | \"&lt;expression>\""
+"                                                                                                     "
+"| Prüft den angegebenen "
+"Ausdruck.<br>                                                                                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
-"| `bridged_mask`            "
-"|                                                                                                                       "
+"| `bridged_mask`            |"
+"                                                                                                                       "
 "| Prüft auf Lötstoppmaskenüberbrückungen zwischen Kupferelementen.  Diese "
 "Einschränkung nimmt keinen min/opt/max-Wert an.  In Kombination mit einer "
 "Schweregrad-Bestimmung kann diese Einschränkung dazu verwendet werden, um "
 "unter verschiedenen Bedingungen Lötstoppmaskenüberbrückungen zuzulassen oder "
-"zu verbieten."
-"<br>                                                                                                                              "
+"zu "
+"verbieten.<br>                                                                                                                              "
 "|\n"
 "| `clearance`               | "
 "min                                                                                                                   "
 "| Gibt den **elektrischen** Freiraum zwischen Kupferobjekten "
 "unterschiedlicher Netze an. (Wenn Sie den Abstand zwischen Objekten "
-"netzunabhängig festlegen möchten, nutzen Sie "
-"`physical_clearance`.)<br><br>Um zuzulassen, dass Kupferobjekte sich "
-"überlappen (kollidieren), erstellen Sie eine `clearance`-Einschränkung mit "
-"einem `min`-Wert kleiner als Null (zum Beispiel `-1`)."
-"<br>                                                                  |\n"
+"netzunabhängig festlegen möchten, nutzen Sie `physical_clearance`.)"
+"<br><br>Um zuzulassen, dass Kupferobjekte sich überlappen (kollidieren), "
+"erstellen Sie eine `clearance`-Einschränkung mit einem `min`-Wert kleiner "
+"als Null (zum Beispiel `-1`)"
+".<br>                                                                  |\n"
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
 "| Prüft den Freiraum zwischen Abstandsflächen von Footprints und erzeugt "
 "einen Fehler, wenn zwei Abstandsflächen näher als der `min` Abstand sind.  "
 "Wenn ein Footprint keine Abstandsfläche hat, werden durch diese "
-"Einschränkung keine Fehler erzeugt."
-"<br>                                                                                                                                                                                               "
+"Einschränkung keine Fehler "
+"erzeugt.<br>                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
 "min                                                                                                                   "
-"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze an."
-"<br>                                                                                                                                                                                                                                                                                                                                                                          "
+"| Gibt die Kriechstrecke zwischen Kupferobjekten unterschiedlicher Netze "
+"an.<br>                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `diff_pair_gap`           | min/opt/"
 "max                                                                                                           "
@@ -42975,54 +42975,53 @@ msgstr ""
 "Differentialpaar.  Gekoppelte Leiterbahnen sind Segmente, die parallel "
 "zueinander liegen.  Der Differentialpaar-Abstand wird an ungekoppelten "
 "Teilen eines Differentialpaares (z. B. dem Fanout einer Komponente) nicht "
-"geprüft."
-"<br>                                                                                                                                                       "
+"geprüft.<br>                                                                                                                                                       "
 "|\n"
 "| `diff_pair_uncoupled`     | "
 "max                                                                                                                   "
 "| Prüft die Entfernung, über die eine Differentialpaarleiterbahn entkoppelt "
 "von der anderen Leiterbahn des Paares verlegt ist (z. B. wenn sich das Paar "
 "von einem Bauteil ausgehend auffächert oder entkoppelt wird, um ein anderes "
-"Objekt wie ein Via zu umgehen)."
-"<br>                                                                                                                                                                                   "
+"Objekt wie ein Via zu umgehen)"
+".<br>                                                                                                                                                                                   "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, die "
-"ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`"
+"<br> | Gibt einen oder, getrennt durch Leerzeichen, mehrere Objekttypen an, "
+"die ferngehalten werden sollen.  Zum Beispiel: `(constraint disallow track)` "
 "oder `(constraint disallow track via pad)`.  Wenn ein Objekt dieser Typen "
 "die Regelbedingung erfüllt, wird ein DRC-Fehler erzeugt.<br><br>Diese "
-"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich "
-"(Sperrfläche), kann aber feiner abgestimmte Ausgrenzungen realisieren."
-"<br>                                            |\n"
+"Einschränkung ist im Wesentlichen dasselbe wie ein Regelbereich (Sperrfläche)"
+", kann aber feiner abgestimmte Ausgrenzungen realisieren.<br>           |\n"
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Prüft den Freiraum zwischen Objekten und dem Platinenrand.<br><br>Dies "
 "kann auch als \"Frästoleranz\" betrachtet werden, da der Platinenrand alle "
 "graphischen Objekte auf der Ebene `Edge.Cuts` sowie alle *ovalen* Pad-Löcher "
-"einschließt.  (Für die Bohrtoleranzprüfung ist `physical_hole_clearance` zu "
-"nutzen.)<br>                                                                                                                                   "
+"einschließt.  "
+"(Für die Bohrtoleranzprüfung ist `physical_hole_clearance` zu nutzen.)"
+"<br>                                                                                                                                   "
 "|\n"
 "| `length`                  | min/"
 "max                                                                                                               "
 "| Prüft die Gesamtlänge der Netze, die der Regelbedingung entsprechen, und "
 "erzeugt für jedes Netz, das unter dem `min`-Wert (sofern angegeben) oder "
-"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen Fehler."
-"<br>                                                                                                                                                                                                                         "
+"über dem `max`-Wert (sofern angegeben) der Bedingung liegt, einen "
+"Fehler.<br>                                                                                                                                                                                                                         "
 "|\n"
 "| `hole`                    | min/"
 "max                                                                                                               "
 "| Prüft den Durchmesser eines gebohrten Lochs in einem Pad oder Via.  Bei "
-"ovalen Löchern wird der kleinere Durchmesser gegen den `min`-Wert (sofern "
-"angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) geprüft."
-"<br>                                                                                                                                                                                                                     "
+"ovalen Löchern wird der kleinere Durchmesser gegen den `min`-Wert "
+"(sofern angegeben) und der größere Durchmesser gegen den `max`-Wert (sofern) "
+"geprüft.<br>                                                                                                                                                                                                                     "
 "|\n"
 "| `hole_clearance`          | "
 "min                                                                                                                   "
 "| Prüft den Freiraum zwischen einem Bohrloch innerhalb eines Pads oder Vias "
 "und Kupferobjekten anderer Netze.  Gemessen wird vom Rand des Lochs aus, "
-"nicht aus der Mitte."
-"<br>                                                                                                                                                                                                                                                                             "
+"nicht aus der "
+"Mitte.<br>                                                                                                                                                                                                                                                                             "
 "|\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -43031,38 +43030,38 @@ msgstr ""
 "Einschränkung dient ausschließlich dem Schutz der Bohrer.  Der Freiraum "
 "zwischen **lasergebohrten** (µVias) und anderen nicht mechanisch gebohrten "
 "Löchern wird nicht geprüft. Ebenso wenig wie der Freiraum zwischen "
-"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten Löchern."
-"<br>     |\n"
+"**gefrästen** (ovalen) und anderen nicht mechanisch gebohrten "
+"Löchern.<br>     |\n"
 "| `physical_clearance`      | "
 "min                                                                                                                   "
 "| Prüft den Freiraum zwischen zwei Objekten auf einer bestimmten Lage "
 "(einschließlich mechanischer Lagen etc.).<br><br>Hiermit können zwar "
 "allgemeinere Prüfungen als mit `clearance` durchgeführt werden, es ist aber "
-"viel langsamer.  Wo immer möglich sollte `clearance` verwendet werden."
-"<br>                                                                                                                                                         "
+"viel langsamer.  Wo immer möglich sollte `clearance` verwendet "
+"werden.<br>                                                                                                                                                         "
 "|\n"
 "| `physical_hole_clearance` | "
 "min                                                                                                                   "
 "| Prüft den Freiraum zwischen einem Bohrloch in einem Pad oder Via und einem "
 "anderen Objekt, unabhängig vom Netz. Der Freiraum wird vom Rand des Lochs "
-"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als "
-"\"Bohrtoleranz\" betrachtet werden, da sie nur **runde** Löcher umfasst (für "
-"\"Frästoleranz\" siehe `edge_clearance`)."
-"<br>                                                                                                                "
+"aus gemessen, nicht aus der Mitte.<br><br>Dies kann auch als \"Bohrtoleranz\""
+" betrachtet werden, da sie nur **runde** Löcher umfasst "
+"(für \"Frästoleranz\" siehe `edge_clearance`)"
+".<br>                                                                                                                "
 "|\n"
 "| `silk_clearance`          | min/opt/"
 "max                                                                                                           "
 "| Überprüft den Freiraum zwischen Objekten auf Bestückungsdrucklagen und "
-"anderen Objekten."
-"<br>                                                                                                                                                                                                                                                                                                                                                            "
+"anderen "
+"Objekten.<br>                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
 "| `skew`                    | "
 "max                                                                                                                   "
 "| Prüft den Gesamtversatz für die Netze, d.h. die Differenz zwischen der "
 "Länge eines jeden Netzes und dem Mittelwert der Längen aller Netze, die der "
 "Regel entsprechen.  Wenn die absolute Differenz zwischen jenem Mittelwert "
-"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                          "
+"und der Länge eines der Netze über `max`-Wert liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                          "
 "|\n"
 "| `solder_mask_expansion`   | "
 "opt                                                                                                                   "
@@ -43085,57 +43084,55 @@ msgstr ""
 "|\n"
 "| `thermal_relief_gap`      | "
 "min                                                                                                                   "
-"| Definiert die Spaltbreite einer thermischen Entlastung zwischen einem Pad "
-"und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"| Definiert die Spaltbreite einer Wärmefalle zwischen einem Pad und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `thermal_spoke_width`     | "
 "opt                                                                                                                   "
-"| Definiert die Speichenbreite einer thermischen Entlastung zwischen einem "
-"Pad und einer Zone."
-"<br>                                                                                                                                                                                                                                                                                                                                                        "
+"| Definiert die Stegbreite einer Wärmefalle zwischen einem Pad und einer "
+"Zone.<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `track_width`             | min/opt/"
 "max                                                                                                           "
 "| Prüft die Breite von Leiterbahn- und Bogensegmenten. Für jedes Segment, "
 "dessen Breite unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                           "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                           "
 "|\n"
 "| `track_angle`             | min/opt/"
 "max                                                                                                           "
 "| Prüft den Winkel zweier Leiterbahnsegmente. Erzeugt für jedes "
-"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern "
-"angegeben) oder überhalb des `max`-Wertes (sofern angegeben) einen Fehler."
-"<br>                                                                                                                                                                                                                                         "
+"Leiterbahnpaar mit einem Winkel unterhalb des `min`-Wertes (sofern angegeben)"
+" oder überhalb des `max`-Wertes (sofern angegeben) einen "
+"Fehler.<br>                                                                                                                                                                                                                                         "
 "|\n"
 "| `track_segment_length`    | min/"
 "max                                                                                                               "
 "| Prüft die Länge eines Leiterbahn- oder Bogensegments. Für jedes Segment, "
 "dessen Länge unter dem `min`-Wert (sofern angegeben) oder über dem `max`-"
-"Wert (sofern angegeben) liegt, wird ein Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                           "
+"Wert (sofern angegeben) liegt, wird ein Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                           "
 "|\n"
 "| `via_count`               | "
 "max                                                                                                                   "
 "| Überschreitet die Anzahl von Vias in einem Netz, auf das diese Regel "
 "zutrifft, den `max`-Wert dieser Einschränkung, wird für dieses Netz ein "
-"Fehler erzeugt."
-"<br>                                                                                                                                                                                                                                                                                        "
+"Fehler "
+"erzeugt.<br>                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `via_dangling`            "
-"|                                                                                                                       "
+"| `via_dangling`            |"
+"                                                                                                                       "
 "| Prüft auf Vias die nicht oder nur auf einer Lage verbunden sind.  Diese "
 "Einschränkung nimmt keinen min/opt/max-Wert an.  In Kombination mit einer "
 "Schweregrad-Bestimmung kann diese Einschränkung dazu verwendet werden, um "
 "unter verschiedenen Bedingungen baumelnde (`dangling`) Vias zuzulassen oder "
-"zu verbieten."
-"<br>                                                                                                                               "
+"zu "
+"verbieten.<br>                                                                                                                               "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Definiert den Verbindungstyp zwischen einer Zone und einem Pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`"
+"                                                                                "
+"| Definiert den Verbindungstyp zwischen einer Zone und einem "
+"Pad.<br>                                                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "\n"
 "\n"
@@ -43803,24 +43800,22 @@ msgstr ""
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Keine thermischen Entlastungen an Pads die als Kühlkörper dienen "
-"nutzen\n"
+"    # Keine Wärmefallen an Pads verwenden, die als Kühlkörper dienen\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
 "\n"
-"    # Es müssen vier thermische Entlastungsspeichen an Zonen angeschlossen "
-"sein \n"
+"    # Es müssen vier Wärmefallenstege an Zonen angeschlossen sein \n"
 "    (rule fully_spoked_pads\n"
 "        (constraint min_resolved_spokes 4))\n"
 "\n"
-"    # Spalt- und Speichenbreite aller thermischen Entlastungen definieren\n"
+"    # Spalt- und Stegbreite aller Wärmefallen definieren\n"
 "    (rule defined_relief\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # Spalt- und Speichenbreite aller thermischen Entlastungen für GND- and "
-"PWR-Zonen überschreiben\n"
+"    # Spalt- und Stegbreite aller Wärmefallen für GND- and PWR-Zonen "
+"überschreiben\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -44152,12 +44147,12 @@ msgstr "Lokale Überschreibung auf %s; Zonenverbindung: %s."
 #: pcbnew/drc/drc_engine.cpp:947
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Lokale Überschreibung auf %s; thermischer Entlastungsspalt: %s."
+msgstr "Lokale Überschreibung auf %s; Wärmefallenspalt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:964
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Lokale Überschreibung auf %s; thermische Speichenbreite: %s."
+msgstr "Lokale Überschreibung auf %s; Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:973
 #, c-format
@@ -44220,7 +44215,7 @@ msgstr "Prüfe %s Abstand: %s."
 #: pcbnew/drc/drc_engine.cpp:1103
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Prüfe %s thermische Speichenbreite: %s."
+msgstr "Prüfe %s Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1109
 #, c-format
@@ -44240,7 +44235,7 @@ msgstr "Prüfe %s relativen Lötpastenfreiraum: %s."
 #: pcbnew/drc/drc_engine.cpp:1127
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Prüfe %s Mindestanzahl Speichen: %s."
+msgstr "Prüfe %s min. Steganzahl: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1134
 #, c-format
@@ -44424,12 +44419,12 @@ msgstr "Zone"
 #: pcbnew/drc/drc_engine.cpp:1678
 #, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Thermischer Entlastungsspalt %s: %s."
+msgstr "Wärmefallenspalt %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1695
 #, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "%s thermale Speichenbreite: %s."
+msgstr "%s Wärmefallen-Stegbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1728
 #, c-format
@@ -44498,7 +44493,7 @@ msgstr "Isolierte Kupferfüllung"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Thermal relief connection to zone incomplete"
-msgstr "Verbindung der thermischen Entlastung zur Zone unvollständig"
+msgstr "Verbindung der Wärmefalle zur Zone unvollständig"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Via is not connected or connected on only one layer"
@@ -45071,17 +45066,17 @@ msgstr "%s überschreibt Zonenverbindung."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:246
 #, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s überschreibt thermischen Entlastungsspalt."
+msgstr "%s überschreibt Wärmefallenspalt."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:253
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s überschreibt thermische Speichenbreite."
+msgstr "%s überschreibt Wärmefallen-Stegbreite."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:259
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s überschreibt thermischen Speichenwinkel."
+msgstr "%s überschreibt Wärmefallen-Stegwinkel."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:265
 #, c-format
@@ -45268,12 +45263,12 @@ msgstr "%s Lokaler Freiraum weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:568
 #, c-format
 msgid "%s thermal relief gap differs."
-msgstr "Thermischer Entlastungsspalt ist unterschiedlich für %s."
+msgstr "Wärmefallenspalt unterschiedlich für %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "%s Speichenbreite der thermischen Entlastungen weicht ab."
+msgstr "%s Stegbreite der Wärmefallen weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
 #, c-format
@@ -45705,21 +45700,21 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:268
 #, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(Lage %s; %d Speichen zu isolierter Insel verbunden)"
+msgstr "(Lage %s; %d Stege zu isolierter Insel verbunden)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:206
 #, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(Lage %s; %s benutzerdef. Speichenanzahl %d; tatsächlich %d)"
+msgstr "(Lage %s; %s benutzerdef. Steganzahl %d; tatsächlich %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:275
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(Lage %s; %s min. Speichenanzahl %d; tatsächlich %d)"
+msgstr "(Lage %s; %s min. Steganzahl %d; tatsächlich %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:300
 msgid "Checking thermal reliefs..."
-msgstr "Prüfe thermische Entlastungen ..."
+msgstr "Prüfe Wärmefallen ..."
 
 #: pcbnew/edit_zone_helpers.cpp:95
 msgid "Edit Zone Properties"
@@ -46310,7 +46305,7 @@ msgstr "Vererbt"
 
 #: pcbnew/footprint.cpp:4412 pcbnew/pad.cpp:2775 pcbnew/zone.cpp:1812
 msgid "Thermal reliefs for PTH"
-msgstr "Thermische Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: pcbnew/footprint.cpp:4485
 msgid "Not in Schematic"
@@ -48007,15 +48002,15 @@ msgstr "Fertigungseigenschaften"
 
 #: pcbnew/pad.cpp:2960 pcbnew/zone.cpp:2072
 msgid "Thermal Relief Spoke Width"
-msgstr "Thermische Entlastung Speichenbreite"
+msgstr "Wärmefallen-Stegbreite"
 
 #: pcbnew/pad.cpp:2965
 msgid "Thermal Relief Spoke Angle"
-msgstr "Thermische Entlastung Speichenwinkel"
+msgstr "Wärmefallen-Stegwinkel"
 
 #: pcbnew/pad.cpp:2969 pcbnew/zone.cpp:2066
 msgid "Thermal Relief Gap"
-msgstr "Thermische Entlastung Spalt"
+msgstr "Wärmefallenspalt"
 
 #: pcbnew/pcb_barcode.cpp:463
 #, c-format
@@ -49008,8 +49003,8 @@ msgid ""
 "pads has been applied."
 msgstr ""
 "Die CADSTAR-Vorlage \"%s\" verfügt über unterschiedliche Einstellungen für "
-"thermische Entlastungen von Pads und Vias. KiCad unterstützt nur eine "
-"einzige Einstellung für beide. Die Einstellung für Pads wurde angewandt."
+"Wärmefallen von Pads und Vias. KiCad unterstützt nur eine einzige "
+"Einstellung für beide. Die Einstellung für Pads wurde angewandt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2060
 #, c-format
@@ -49020,11 +49015,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"Die CADSTAR-Vorlage \"%s\" hat im ursprünglichen Design thermische "
-"Entlastungen, aber die Speichenbreite (%.2f mm) ist dünner als die "
-"Mindestdicke der Zone (%.2f mm). KiCad verlangt, dass die Mindestdicke der "
-"Zone beibehalten wird. Daher wurde die Mindestdicke als neue Speichenbreite "
-"gesetzt, was beim nächsten Füllen der Zonen angewendet wird."
+"Die CADSTAR-Vorlage \"%s\" verwendet im ursprünglichen Design Wärmefallen, "
+"aber die Stegbreite (%.2f mm) ist schmaler als die Mindeststärke der Zone "
+"(%.2f mm). KiCad verlangt, dass die Mindeststärke der Zone beibehalten wird. "
+"Daher wurde diese als neue Stegbreite gesetzt, was beim nächsten Füllen der "
+"Zonen angewendet wird."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2107
 #, c-format
@@ -51634,30 +51629,30 @@ msgstr "Ermittlung der Zonenverbindungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:800
 msgid "Thermal-relief gap resolution for:"
-msgstr "Ermittlung des thermischen Entlastungsspalts für:"
+msgstr "Ermittlung des Wärmefallenspalts für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:809
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Ermittelter thermischer Entlastungsspalt: %s."
+msgstr "Ermittelter Wärmefallenspalt: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:814
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Ermittlung der thermischen Speichenbreite für:"
+msgstr "Ermittlung der Wärmefallen-Stegbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:823
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "Ermittelte Speichenbreite: %s."
+msgstr "Ermittelte Stegbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:828
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Ermittlung der min. thermischen Speichenanzahl für:"
+msgstr "Ermittlung der min. Wärmefallen-Steganzahl für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Ermittelte Mindestanzahl von Speichen: %d."
+msgstr "Ermittelte min. Steganzahl: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:846
 #: pcbnew/tools/board_inspection_tool.cpp:894
@@ -53260,8 +53255,7 @@ msgstr "Standard-Pad-Eigenschaften..."
 #: pcbnew/tools/pcb_actions.cpp:1171
 msgid "Edit the pad properties used when creating new pads"
 msgstr ""
-"Bearbeiten der Pad-Eigenschaften, die beim Erstellen neuer Pads verwendet "
-"werden"
+"Bearbeiten der Eigenschaften, die beim Erstellen neuer Pads verwendet werden"
 
 #: pcbnew/tools/pcb_actions.cpp:1182
 msgid "Reveal Plugin Folder in Finder"
@@ -56145,7 +56139,7 @@ msgstr "geerbt"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr "thermische Entlastungen"
+msgstr "Wärmefallen"
 
 #: pcbnew/zones.h:64
 msgid "solid"
@@ -56153,7 +56147,7 @@ msgstr "voll"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
-msgstr "thermische Entlastungen für PTH"
+msgstr "Wärmefallen für PTH"
 
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
