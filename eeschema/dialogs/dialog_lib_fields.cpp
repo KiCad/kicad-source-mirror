@@ -399,38 +399,36 @@ void DIALOG_LIB_FIELDS::loadSymbols( const wxArrayString& aSymbolNames )
     // Clear any existing data
     m_symbolsList.clear();
 
-    try
+    wxString libName = m_parent->GetTreeLIBID().GetLibNickname();
+
+    if( aSymbolNames.IsEmpty() )
     {
-        if( aSymbolNames.IsEmpty() )
+        wxMessageBox( wxString::Format( _( "No symbols found in library %s." ), m_libId ) );
+        return;
+    }
+
+    // Load each symbol from the library manager and add it to our list
+    for( const wxString& symbolName : aSymbolNames )
+    {
+        LIB_SYMBOL* canvasSymbol = m_parent->GetCurSymbol();
+
+        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName && canvasSymbol->GetName() == symbolName )
         {
-            wxMessageBox( wxString::Format( _( "No symbols found in library %s." ), m_libId ) );
-            return;
+            m_symbolsList.push_back( canvasSymbol );
         }
-
-        // Load each symbol from the library manager and add it to our list
-        for( const wxString& symbolName : aSymbolNames )
+        else
         {
-            LIB_SYMBOL* symbol = nullptr;
-
             try
             {
-                symbol = m_parent->GetLibManager().GetAlias( symbolName, m_libId );
-
-                if( symbol )
+                if( LIB_SYMBOL* symbol = m_parent->GetLibManager().GetAlias( symbolName, libName ) )
                     m_symbolsList.push_back( symbol );
             }
             catch( const IO_ERROR& ioe )
             {
                 // Log the error and continue
-                wxLogWarning( wxString::Format( _( "Error loading symbol %s: %s" ), symbolName, ioe.What() ) );
+                wxLogWarning( wxString::Format( _( "Error loading symbol '%s': %s" ), symbolName, ioe.What() ) );
             }
         }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxString msg = wxString::Format( _( "Error accessing library %s.\n\n%s" ), m_libId, ioe.What() );
-        DisplayErrorMessage( this, msg );
-        return;
     }
 
     if( m_symbolsList.empty() )
@@ -484,10 +482,15 @@ bool DIALOG_LIB_FIELDS::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    bool updateCanvas = false;
+
     m_dataModel->ApplyData(
-            [&]( LIB_SYMBOL* )
+            [&]( LIB_SYMBOL* symb )
             {
-                m_parent->OnModify();
+                m_parent->GetLibManager().UpdateSymbol( symb, symb->GetLibNickname() );
+
+                if( m_parent->GetCurSymbol() == symb )
+                    updateCanvas = true;
             },
             [&]()
             {
@@ -551,6 +554,15 @@ bool DIALOG_LIB_FIELDS::TransferDataFromWindow()
     wxLogTrace( traceLibFieldTable, "About to rebuild grid rows to include new symbols" );
     RegroupSymbols();
     wxLogTrace( traceLibFieldTable, "Grid rebuild completed" );
+
+    m_parent->RefreshLibraryTree();
+
+    if( updateCanvas )
+    {
+        m_parent->OnModify();
+        m_parent->HardRedraw();
+    }
+
     return true;
 }
 
