@@ -135,8 +135,10 @@ private:
 
     void DClickOnSymbolList( wxCommandEvent& event );
 
-    void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
-    void onUpdateBodyStyleChoice( wxUpdateUIEvent& aEvent );
+    // Rebuild the wxChoice m_unitChoice widget. Must be called after changing the selected symbol
+    void updateUnitChoice();
+    // Rebuild the wxChoice m_bodyStyleChoice widget. Must be called after changing the selected symbol
+    void updateBodyStyleChoice();
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnSymFilter( wxCommandEvent& aEvent );

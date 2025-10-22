@@ -99,9 +99,6 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
     // Menu (and/or hotkey) events
     EVT_MENU( wxID_CLOSE, SYMBOL_VIEWER_FRAME::CloseLibraryViewer )
 
-    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onUpdateUnitChoice )
-    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_BODY_STYLE, SYMBOL_VIEWER_FRAME::onUpdateBodyStyleChoice )
-
 END_EVENT_TABLE()
 
 
@@ -395,6 +392,9 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     GetCanvas()->Refresh();
+
+    updateUnitChoice();
+    updateBodyStyleChoice();
 }
 
 
@@ -418,7 +418,7 @@ void SYMBOL_VIEWER_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::updateUnitChoice()
 {
     LIB_SYMBOL* symbol = GetSelectedSymbol();
 
@@ -445,7 +445,7 @@ void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 }
 
 
-void SYMBOL_VIEWER_FRAME::onUpdateBodyStyleChoice( wxUpdateUIEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::updateBodyStyleChoice()
 {
     LIB_SYMBOL* symbol = GetSelectedSymbol();
 
