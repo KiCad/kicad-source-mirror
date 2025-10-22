@@ -265,7 +265,7 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     newRow.SetType( type );
     newRow.SetDescription( description );
 
-    Pgm().GetLibraryManager().Save( table ).map_error(
+    table->Save().map_error(
         [&]( const LIBRARY_ERROR& aError )
         {
             wxString msg = wxString::Format( _( "Error saving library table:\n\n%s" ), aError.message );

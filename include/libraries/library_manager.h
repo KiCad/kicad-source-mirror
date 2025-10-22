@@ -23,25 +23,11 @@
 
 #include <future>
 #include <memory>
-#include <tl/expected.hpp>
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
 #include <io/io_base.h>
 
-
-struct KICOMMON_API LIBRARY_ERROR
-{
-    LIBRARY_ERROR( const wxString& aMessage ) :
-        message( aMessage )
-    {};
-
-    wxString message;
-};
-
-
-template<typename ResultType>
-using LIBRARY_RESULT = tl::expected<ResultType, LIBRARY_ERROR>;
 
 class LIBRARY_MANAGER;
 class PROJECT;
@@ -270,8 +256,6 @@ public:
                                                             LIBRARY_TABLE_SCOPE::BOTH ) const;
 
     void LoadProjectTables( const wxString& aProjectPath );
-
-    LIBRARY_RESULT<void> Save( LIBRARY_TABLE* aTable ) const;
 
     /**
      * Return the full location specifying URI for the LIB, either in original UI form or

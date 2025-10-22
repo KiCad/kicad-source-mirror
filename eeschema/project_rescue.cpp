@@ -849,7 +849,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
         bool success = true;
 
-        manager.Save( projectTable ).map_error(
+        projectTable->Save().map_error(
             [&success]( const LIBRARY_ERROR& aError )
             {
                 success = false;

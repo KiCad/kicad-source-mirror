@@ -436,7 +436,7 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
 
             for( LIBRARY_TABLE* table : traverser.Modified() )
             {
-                Pgm().GetLibraryManager().Save( table ).map_error(
+                table->Save().map_error(
                     []( const LIBRARY_ERROR& aError )
                     {
                         wxLogTrace( traceLibraries, "Warning: save failed after PCM auto-add: %s",
@@ -463,7 +463,7 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
 
             if( !toErase.empty() )
             {
-                Pgm().GetLibraryManager().Save( table ).map_error(
+                table->Save().map_error(
                         []( const LIBRARY_ERROR& aError )
                         {
                             wxLogTrace( traceLibraries,
@@ -671,41 +671,6 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath )
                     "New project path %s is not readable, not loading project tables",
                     aProjectPath );
     }
-}
-
-
-LIBRARY_RESULT<void> LIBRARY_MANAGER::Save( LIBRARY_TABLE* aTable ) const
-{
-    wxCHECK( aTable, tl::unexpected( LIBRARY_ERROR( "Internal error" ) ) );
-
-    // TODO(JE) clean this up; shouldn't need to iterate
-    for( const std::unique_ptr<LIBRARY_TABLE>& t : m_tables | std::views::values )
-    {
-        if( t.get() == aTable )
-        {
-            wxLogTrace( traceLibraries, "Saving %s", aTable->Path() );
-            wxFileName fn( aTable->Path() );
-            // This should already be normalized, but just in case...
-            fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-
-            try
-            {
-                PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
-                aTable->Format( &formatter );
-            }
-            catch( IO_ERROR& e )
-            {
-                wxLogTrace( traceLibraries, "Exception while saving: %s", e.What() );
-                return tl::unexpected( LIBRARY_ERROR( e.What() ) );
-            }
-
-            return LIBRARY_RESULT<void>();
-        }
-    }
-
-    // Unmanaged table?  TODO(JE) should this happen?
-    wxLogTrace( traceLibraries, "Can't save %s; unmanaged library", aTable->Path() );
-    return tl::unexpected( LIBRARY_ERROR( "Internal error" ) );
 }
 
 

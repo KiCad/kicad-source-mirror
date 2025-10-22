@@ -260,3 +260,25 @@ std::optional<const LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNic
 
     return std::nullopt;
 }
+
+
+LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
+{
+    wxLogTrace( traceLibraries, "Saving %s", Path() );
+    wxFileName fn( Path() );
+    // This should already be normalized, but just in case...
+    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
+    try
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
+        Format( &formatter );
+    }
+    catch( IO_ERROR& e )
+    {
+        wxLogTrace( traceLibraries, "Exception while saving: %s", e.What() );
+        return tl::unexpected( LIBRARY_ERROR( e.What() ) );
+    }
+
+    return LIBRARY_RESULT<void>();
+}

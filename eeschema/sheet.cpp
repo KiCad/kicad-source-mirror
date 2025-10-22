@@ -562,7 +562,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
     if( libTableChanged && projectTable )
     {
-        Pgm().GetLibraryManager().Save( projectTable ).map_error(
+        projectTable->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
                 wxMessageDialog dlg( this, _( "Error saving project library table." ),

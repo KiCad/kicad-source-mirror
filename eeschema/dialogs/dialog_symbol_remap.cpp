@@ -239,7 +239,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
         // Don't save empty project symbol library table.
         if( !projectTable->Rows().empty() )
         {
-            Pgm().GetLibraryManager().Save( projectTable ).map_error(
+            projectTable->Save().map_error(
                 [&aReporter]( const LIBRARY_ERROR& aError )
                 {
                     aReporter.ReportTail( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),

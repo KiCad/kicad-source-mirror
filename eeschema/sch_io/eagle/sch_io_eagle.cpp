@@ -442,7 +442,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         row.SetURI( libTableUri );
         row.SetType( "KiCad" );
 
-        adapter->Manager().Save( table );
+        table->Save();
 
         adapter->LoadOne( getLibName() );
     }

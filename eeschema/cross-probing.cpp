@@ -878,7 +878,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 row.SetURI( fn.GetFullPath() );
                 row.SetType( SCH_IO_MGR::ShowType( type ) );
 
-                Pgm().GetLibraryManager().Save( table ).map_error(
+                table->Save().map_error(
                     []( const LIBRARY_ERROR& aError )
                     {
                         wxLogError( _( "Error saving project-specific library table:\n\n%s" ),

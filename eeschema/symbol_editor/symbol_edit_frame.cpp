@@ -1177,7 +1177,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         }
     }
 
-    Pgm().GetLibraryManager().Save( *table ).map_error(
+    ( *table )->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving library table:\n\n%s" ),
@@ -1221,7 +1221,7 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
             Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
     wxCHECK( table, /* void */ );
 
-    Pgm().GetLibraryManager().Save( *table ).map_error(
+    ( *table )->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving library table:\n\n%s" ),
@@ -1955,7 +1955,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
 
     bool success = true;
 
-    Pgm().GetLibraryManager().Save( table ).map_error(
+    table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
                 wxString msg = aScope == LIBRARY_TABLE_SCOPE::GLOBAL
@@ -2027,7 +2027,7 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
 
     bool success = true;
 
-    Pgm().GetLibraryManager().Save( table ).map_error(
+    table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
                 wxString msg = scope == LIBRARY_TABLE_SCOPE::GLOBAL

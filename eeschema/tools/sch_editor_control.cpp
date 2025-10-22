@@ -434,7 +434,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     {
         LIBRARY_TABLE* globalTable = adapter->GlobalTable();
 
-        Pgm().GetLibraryManager().Save( globalTable ).map_error(
+        globalTable->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ),
@@ -444,7 +444,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     }
     else if( std::optional<LIBRARY_TABLE*> optTable = adapter->ProjectTable() )
     {
-        Pgm().GetLibraryManager().Save( *optTable ).map_error(
+        ( *optTable )->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),

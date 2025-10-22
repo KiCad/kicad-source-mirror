@@ -1243,7 +1243,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         wxCHECK( optTable, /* void */ );
         LIBRARY_TABLE* globalTable = *optTable;
 
-        Pgm().GetLibraryManager().Save( globalTable ).map_error(
+        globalTable->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
@@ -1258,7 +1258,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( projectTable && dlg.m_ProjectTableChanged )
     {
-        Pgm().GetLibraryManager().Save( *projectTable ).map_error(
+        ( *projectTable )->Save().map_error(
             []( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),

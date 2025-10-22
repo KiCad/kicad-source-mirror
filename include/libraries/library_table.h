@@ -23,6 +23,7 @@
 
 #include <map>
 #include <optional>
+#include <tl/expected.hpp>
 #include <wx/filename.h>
 
 #include <kicommon.h>
@@ -50,6 +51,19 @@ struct LIBRARY_TABLE_ROW_IR;
 struct LIBRARY_TABLE_INTERNALS;
 class OUTPUTFORMATTER;
 class PROJECT;
+
+
+struct KICOMMON_API LIBRARY_ERROR
+{
+    LIBRARY_ERROR( const wxString& aMessage ) :
+        message( aMessage )
+    {};
+
+    wxString message;
+};
+
+template<typename ResultType>
+using LIBRARY_RESULT = tl::expected<ResultType, LIBRARY_ERROR>;
 
 
 class KICOMMON_API LIBRARY_TABLE_ROW
@@ -173,6 +187,8 @@ public:
 
     std::optional<LIBRARY_TABLE_ROW*> Row( const wxString& aNickname );
     std::optional<const LIBRARY_TABLE_ROW*> Row( const wxString& aNickname ) const;
+
+    LIBRARY_RESULT<void> Save();
 
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );

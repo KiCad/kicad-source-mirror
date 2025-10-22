@@ -620,7 +620,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         row.SetURI( libTableUri );
         row.SetType( "KiCad" );
 
-        adapter->Manager().Save( table );
+        table->Save();
 
         adapter->LoadOne( libName );
     }
