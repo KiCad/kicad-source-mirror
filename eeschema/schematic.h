@@ -170,7 +170,7 @@ public:
     /// A simple test if the schematic is loaded, not a complete one
     bool IsValid() const
     {
-        return m_rootSheet != nullptr;
+        return m_project && m_rootSheet != nullptr;
     }
 
     /// Helper to retrieve the screen of the root sheet

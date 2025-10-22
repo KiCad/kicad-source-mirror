@@ -787,6 +787,10 @@ void HIERARCHY_PANE::onCharHook( wxKeyEvent& aKeyStroke )
 
 wxString HIERARCHY_PANE::getRootString()
 {
+    // Pane may be repainting while schematic is in flux
+    if ( !m_frame->Schematic().IsValid() )
+        return _( "Schematic" );
+
     // Return the project name for the root node
     wxString projectName = m_frame->Schematic().Project().GetProjectName();
 
