@@ -55349,10 +55349,6 @@ msgstr "கிகாட் திட்ட அடையாளம்"
 msgid "KiCad Drawing Sheet"
 msgstr "கிகாட் வரைதல் தாள்"
 
-#, fuzzy
-#~ msgid "Cycle H/V/45 constraint"
-#~ msgstr "ஃச் அளவுகோல் கட்டுப்படுத்தப்பட்டுள்ளது."
-
 #~ msgid "&Expand Selection\tE"
 #~ msgstr "& தேர்வை விரிவாக்கு இ"
 
