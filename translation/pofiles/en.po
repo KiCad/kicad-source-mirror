@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
+"POT-Creation-Date: 2025-10-23 00:59+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8397,18 +8397,8 @@ msgid "No symbols found in library %s."
 msgstr "No symbols found in library %s."
 
 #, c-format
-msgid "Error loading symbol %s: %s"
-msgstr "Error loading symbol %s: %s"
-
-#, c-format
-msgid ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
-msgstr ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
+msgid "Error loading symbol '%s': %s"
+msgstr "Error loading symbol '%s': %s"
 
 msgid "No symbols could be loaded from the library."
 msgstr "No symbols could be loaded from the library."
@@ -8448,9 +8438,6 @@ msgstr "Exclude From Board"
 
 msgid "Power Symbol"
 msgstr "Power Symbol"
-
-msgid "Local Power Symbol"
-msgstr "Local Power Symbol"
 
 msgid "Library Fields Editor"
 msgstr "Library Fields Editor"
@@ -37254,6 +37241,23 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Error loading symbol %s: %s"
+#~ msgstr "Error loading symbol %s: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Local Power Symbol"
+#~ msgstr "Local Power Symbol"
 
 #~ msgid "Wire self-interference check failed. Allow retry"
 #~ msgstr "Wire self-interference check failed. Allow retry"

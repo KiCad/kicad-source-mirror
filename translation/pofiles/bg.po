@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
+"POT-Creation-Date: 2025-10-23 00:59+0300\n"
 "PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -2525,12 +2525,12 @@ msgstr "Захранващ символ"
 msgid "Footprints"
 msgstr "Цокли"
 
-#: common/dialog_about/AboutDialog_main.cpp:929
+#: common/dialog_about/AboutDialog_main.cpp:935
 #, fuzzy
 msgid "Icons"
 msgstr "X мащаб:"
 
-#: common/dialog_about/AboutDialog_main.cpp:936
+#: common/dialog_about/AboutDialog_main.cpp:942
 #, fuzzy
 msgid "Package Developers"
 msgstr "Разработчици"
@@ -7930,7 +7930,7 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:79
 #: common/http_lib/http_lib_connection.cpp:139
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, fuzzy, c-format
 msgid "Error: %s"
 msgstr "Грешка"
@@ -7942,12 +7942,12 @@ msgid "API Response:  %s"
 msgstr ""
 
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "API Response: %s"
 msgstr ""
 
-#: common/http_lib/http_lib_connection.cpp:364
+#: common/http_lib/http_lib_connection.cpp:360
 #, c-format
 msgid "API responded with error code: %s"
 msgstr ""
@@ -11536,7 +11536,7 @@ msgstr "%s не е Библиотечен файл"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/dialogs/dialog_lib_fields.cpp:902
+#: eeschema/dialogs/dialog_lib_fields.cpp:914
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -14178,8 +14178,8 @@ msgstr "Размер на текста V"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
-#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "Елемент"
@@ -14198,8 +14198,8 @@ msgid "Read Only"
 msgstr "[Четене само]"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_lib_fields.cpp:450
-#: eeschema/dialogs/dialog_lib_fields.cpp:862
+#: eeschema/dialogs/dialog_lib_fields.cpp:448
+#: eeschema/dialogs/dialog_lib_fields.cpp:874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 #, fuzzy
 msgid "Save changes?"
@@ -14342,95 +14342,82 @@ msgstr "Захранващ символ"
 msgid "No symbols found in library %s."
 msgstr "Компонент \"%s\" не е намерен в библиотека \"%s\"."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:425
+#: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, fuzzy, c-format
-msgid "Error loading symbol %s: %s"
+msgid "Error loading symbol '%s': %s"
 msgstr ""
 "Грешка при четене на PcbPlotParams от %s:\n"
 "%s"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
-msgid ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
-msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#: eeschema/dialogs/dialog_lib_fields.cpp:436
 #, fuzzy
 msgid "No symbols could be loaded from the library."
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 #, fuzzy
 msgid "New field name:"
 msgstr "Име на поле"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #, fuzzy
 msgid "Add Field"
 msgstr "Поле"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_lib_fields.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
 #, fuzzy
 msgid "Field must have a name."
 msgstr "Стойност на класа на веригите"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_lib_fields.cpp:698
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Лист с име \"%s\" вече съществува."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 #, fuzzy
 msgid "Rename Field"
 msgstr "Преименувай файл"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#: eeschema/dialogs/dialog_lib_fields.cpp:738
 #, fuzzy, c-format
 msgid "Field name '%s' already exists."
 msgstr "Библиотеката <%s> вече съществува."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
 #, fuzzy, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "ОК за изтриване на избраните артикули?"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#: eeschema/dialogs/dialog_lib_fields.cpp:917
 #, fuzzy
 msgid "Exclude From BOM"
 msgstr "Изчистване на платката"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Начертай конт.пл. на обозн. слой"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
 #: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Изчистване на платката"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1766
 msgid "Power Symbol"
-msgstr "Символ захранване"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
-msgid "Local Power Symbol"
 msgstr "Символ захранване"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
@@ -19132,7 +19119,7 @@ msgid "Allow Autoplacement"
 msgstr "Автом.поставяне на нови модули"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
+#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
 #, fuzzy
 msgid "Private"
 msgstr "Draft layer"
@@ -21155,24 +21142,24 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестна форма на подложка"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:634
+#: eeschema/sch_item.cpp:641
 #, fuzzy
 msgid "All units"
 msgstr "Drill файлове (за разпробиване)"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:663
 #, fuzzy
 msgid "All body styles"
 msgstr "За всички елементи"
 
-#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
+#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Тип на контура:"
 
-#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -21944,7 +21931,7 @@ msgstr ""
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 
-#: eeschema/schematic.cpp:1544
+#: eeschema/schematic.cpp:1548
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Размер на схемата"
@@ -55585,6 +55572,17 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Текстов редактор"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
+
+#, fuzzy
+#~ msgid "Local Power Symbol"
+#~ msgstr "Символ захранване"
 
 #, fuzzy
 #~ msgid "Generating IPC-2581 file"

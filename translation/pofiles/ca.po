@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
+"POT-Creation-Date: 2025-10-23 00:59+0300\n"
 "PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
@@ -2449,11 +2449,11 @@ msgstr "Símbols"
 msgid "Footprints"
 msgstr "Empremtes"
 
-#: common/dialog_about/AboutDialog_main.cpp:929
+#: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
 msgstr "Icones"
 
-#: common/dialog_about/AboutDialog_main.cpp:936
+#: common/dialog_about/AboutDialog_main.cpp:942
 msgid "Package Developers"
 msgstr "Desenvolupadors de paquets"
 
@@ -7732,7 +7732,7 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:79
 #: common/http_lib/http_lib_connection.cpp:139
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "Error: %s"
 msgstr "Error: %s"
@@ -7744,12 +7744,12 @@ msgid "API Response:  %s"
 msgstr ""
 
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "API Response: %s"
 msgstr ""
 
-#: common/http_lib/http_lib_connection.cpp:364
+#: common/http_lib/http_lib_connection.cpp:360
 #, c-format
 msgid "API responded with error code: %s"
 msgstr ""
@@ -11086,7 +11086,7 @@ msgstr "'%s' no és una empremta vàlida."
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/dialogs/dialog_lib_fields.cpp:902
+#: eeschema/dialogs/dialog_lib_fields.cpp:914
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -13626,8 +13626,8 @@ msgstr "Mida del text del nom"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
-#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "Unitat"
@@ -13645,8 +13645,8 @@ msgid "Read Only"
 msgstr "Només lectura"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_lib_fields.cpp:450
-#: eeschema/dialogs/dialog_lib_fields.cpp:862
+#: eeschema/dialogs/dialog_lib_fields.cpp:448
+#: eeschema/dialogs/dialog_lib_fields.cpp:874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 msgid "Save changes?"
 msgstr "Vols desar els canvis?"
@@ -13778,93 +13778,77 @@ msgstr "Agrupa per"
 msgid "No symbols found in library %s."
 msgstr "S'ha trobat «%s» a la biblioteca«%s»"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:425
+#: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, fuzzy, c-format
-msgid "Error loading symbol %s: %s"
+msgid "Error loading symbol '%s': %s"
 msgstr "Error en carregar els símbols:"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
-msgid ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
-msgstr ""
-"Error al carregar la biblioteca de símbols %s.\n"
-"\n"
-"%s\n"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#: eeschema/dialogs/dialog_lib_fields.cpp:436
 #, fuzzy
 msgid "No symbols could be loaded from the library."
 msgstr "Desa l'empremta a la biblioteca activa"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "New field name:"
 msgstr "Nou nom del camp:"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 msgid "Add Field"
 msgstr "Afegeix camp"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_lib_fields.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
 msgid "Field must have a name."
 msgstr "El camp ha de tenir un nom."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_lib_fields.cpp:698
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "El nom del camp '%s' ja està en ús."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 #, fuzzy
 msgid "Rename Field"
 msgstr "Reanomena el fitxer"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#: eeschema/dialogs/dialog_lib_fields.cpp:738
 #, fuzzy, c-format
 msgid "Field name '%s' already exists."
 msgstr "El fitxer %s ja existeix."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Estàs segur que vols eliminar el camp '%s'?"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#: eeschema/dialogs/dialog_lib_fields.cpp:917
 #, fuzzy
 msgid "Exclude From BOM"
 msgstr "exclou de la BOM"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Deshabilita el símbol per a la simulació"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
 #: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Exclou de la placa"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1766
 msgid "Power Symbol"
-msgstr "Símbol d'alimentació"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
-msgid "Local Power Symbol"
 msgstr "Símbol d'alimentació"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
@@ -18399,7 +18383,7 @@ msgid "Allow Autoplacement"
 msgstr "Posiciona automàticament els camps"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
+#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
 msgid "Private"
 msgstr "Privat"
 
@@ -20444,24 +20428,24 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valor desconegut de SCH_FILE_T: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:634
+#: eeschema/sch_item.cpp:641
 #, fuzzy
 msgid "All units"
 msgstr "Elements auxiliars"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:663
 #, fuzzy
 msgid "All body styles"
 msgstr "Comú per a tots els estils de cossos"
 
-#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
+#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Estil de la vora:"
 
-#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -21364,7 +21348,7 @@ msgstr ""
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 
-#: eeschema/schematic.cpp:1544
+#: eeschema/schematic.cpp:1548
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Configuració de l'esquemàtic"
@@ -54343,6 +54327,20 @@ msgstr "Símbol de l'esquemàtic"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Editor de fulles de dibuix"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error al carregar la biblioteca de símbols %s.\n"
+#~ "\n"
+#~ "%s\n"
+
+#, fuzzy
+#~ msgid "Local Power Symbol"
+#~ msgstr "Símbol d'alimentació"
 
 #, fuzzy
 #~ msgid "Generating IPC-2581 file"

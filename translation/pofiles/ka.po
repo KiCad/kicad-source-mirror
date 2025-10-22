@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-23 00:59+0300\n"
 "PO-Revision-Date: 2025-10-12 06:14+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
@@ -2270,11 +2270,11 @@ msgstr "სიმბოლოები"
 msgid "Footprints"
 msgstr ""
 
-#: common/dialog_about/AboutDialog_main.cpp:929
+#: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
 msgstr "ხატულები"
 
-#: common/dialog_about/AboutDialog_main.cpp:936
+#: common/dialog_about/AboutDialog_main.cpp:942
 msgid "Package Developers"
 msgstr "პაკეტის პროგრამისტები"
 
@@ -7212,7 +7212,7 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:79
 #: common/http_lib/http_lib_connection.cpp:139
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "Error: %s"
 msgstr "შეცდომა: %s"
@@ -7224,12 +7224,12 @@ msgid "API Response:  %s"
 msgstr ""
 
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "API Response: %s"
 msgstr ""
 
-#: common/http_lib/http_lib_connection.cpp:364
+#: common/http_lib/http_lib_connection.cpp:360
 #, c-format
 msgid "API responded with error code: %s"
 msgstr ""
@@ -10305,7 +10305,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/dialogs/dialog_lib_fields.cpp:902
+#: eeschema/dialogs/dialog_lib_fields.cpp:914
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -12654,8 +12654,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
-#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "განყოფილება"
@@ -12672,8 +12672,8 @@ msgid "Read Only"
 msgstr "მხოლოდ წაკითხვადი"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_lib_fields.cpp:450
-#: eeschema/dialogs/dialog_lib_fields.cpp:862
+#: eeschema/dialogs/dialog_lib_fields.cpp:448
+#: eeschema/dialogs/dialog_lib_fields.cpp:874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 msgid "Save changes?"
 msgstr "შევინახო ცვლილებები?"
@@ -12799,88 +12799,73 @@ msgstr ""
 msgid "No symbols found in library %s."
 msgstr "სიმბოლოები აღმოჩენილი არაა ბიბლიოთეკაში %s."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:425
-#, c-format
-msgid "Error loading symbol %s: %s"
+#: eeschema/dialogs/dialog_lib_fields.cpp:429
+#, fuzzy, c-format
+msgid "Error loading symbol '%s': %s"
 msgstr "ჩატვირთვის შეცდომა სიმბოლოსთვის %s: %s"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, c-format
-msgid ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
-msgstr ""
-"წვდომის შეცდომა ბიბლიოთეკისთვის %s\n"
-"\n"
-"%s"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "New field name:"
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 msgid "Add Field"
 msgstr "ველის დამატება"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_lib_fields.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
 msgid "Field must have a name."
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_lib_fields.cpp:698
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "Rename Field"
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#: eeschema/dialogs/dialog_lib_fields.cpp:738
 #, c-format
 msgid "Field name '%s' already exists."
 msgstr "ველის სახელი '%s' უკვე არსებობს."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#: eeschema/dialogs/dialog_lib_fields.cpp:917
 msgid "Exclude From BOM"
 msgstr "ამოღება BOM-დან"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
 msgid "Exclude From Simulation"
 msgstr "სიმულაციიდან ამოღება"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
 #: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
 msgid "Exclude From Board"
 msgstr "დაფიდან ამოღება"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1766
 msgid "Power Symbol"
 msgstr ""
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:910
-msgid "Local Power Symbol"
-msgstr "ლოკალური კვების სიმბოლო"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 msgid "Library Fields Editor"
@@ -16989,7 +16974,7 @@ msgid "Allow Autoplacement"
 msgstr ""
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
+#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
 msgid "Private"
 msgstr "პირადი"
 
@@ -18863,21 +18848,21 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr ""
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:634
+#: eeschema/sch_item.cpp:641
 msgid "All units"
 msgstr "ყველა ერთეული"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:663
 msgid "All body styles"
 msgstr "ყველა სხეულის სტილები"
 
-#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
+#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "სხეულის სტილი"
 
-#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -19591,7 +19576,7 @@ msgstr ""
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 
-#: eeschema/schematic.cpp:1544
+#: eeschema/schematic.cpp:1548
 msgid "Schematic Cleanup"
 msgstr ""
 
@@ -49204,6 +49189,19 @@ msgstr ""
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad-ის სახაზავის ფურცელი"
+
+#, c-format
+#~ msgid ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "წვდომის შეცდომა ბიბლიოთეკისთვის %s\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Local Power Symbol"
+#~ msgstr "ლოკალური კვების სიმბოლო"
 
 #, fuzzy
 #~ msgid "Circuit board"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"POT-Creation-Date: 2025-10-23 00:59+0300\n"
 "PO-Revision-Date: 2025-10-22 21:35+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
@@ -2302,11 +2302,11 @@ msgstr "குறியிடுகள்"
 msgid "Footprints"
 msgstr "தடம்"
 
-#: common/dialog_about/AboutDialog_main.cpp:929
+#: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
 msgstr "சின்னங்கள்"
 
-#: common/dialog_about/AboutDialog_main.cpp:936
+#: common/dialog_about/AboutDialog_main.cpp:942
 msgid "Package Developers"
 msgstr "தொகுப்பு உருவாக்குபவர்கள்"
 
@@ -7424,7 +7424,7 @@ msgstr "கிகாட் ஒரு வெற்று பதிலைப் �
 #: common/http_lib/http_lib_connection.cpp:79
 #: common/http_lib/http_lib_connection.cpp:139
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "Error: %s"
 msgstr "பிழை: %s"
@@ -7436,12 +7436,12 @@ msgid "API Response:  %s"
 msgstr "பநிஇ பதில்: %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
-#: common/http_lib/http_lib_connection.cpp:346
+#: common/http_lib/http_lib_connection.cpp:342
 #, c-format
 msgid "API Response: %s"
 msgstr "பநிஇ பதில்: %s"
 
-#: common/http_lib/http_lib_connection.cpp:364
+#: common/http_lib/http_lib_connection.cpp:360
 #, c-format
 msgid "API responded with error code: %s"
 msgstr "பிழைக் குறியீட்டுடன் பநிஇ பதிலளித்தது: %s"
@@ -10555,7 +10555,7 @@ msgstr "'%s' என்பது சரியான தடம் அல்ல."
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/dialogs/dialog_lib_fields.cpp:902
+#: eeschema/dialogs/dialog_lib_fields.cpp:914
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
 #: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
 #: eeschema/symbol_editor/symbol_editor.cpp:1772
@@ -13044,8 +13044,8 @@ msgstr "உரை அளவு பெயர்"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:579
-#: eeschema/sch_item.cpp:627 eeschema/sch_symbol.cpp:2993
+#: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
 #: eeschema/symbol_editor/symbol_editor.cpp:1754
 msgid "Unit"
 msgstr "அலகு"
@@ -13062,8 +13062,8 @@ msgid "Read Only"
 msgstr "படிக்கவும்"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_lib_fields.cpp:450
-#: eeschema/dialogs/dialog_lib_fields.cpp:862
+#: eeschema/dialogs/dialog_lib_fields.cpp:448
+#: eeschema/dialogs/dialog_lib_fields.cpp:874
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1510
 msgid "Save changes?"
 msgstr "மாற்றங்களைச் சேமிக்கவா?"
@@ -13149,8 +13149,7 @@ msgstr "பெறப்பட்ட சின்னத்தை உருவா�
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
 msgid "Create a new symbol derived from the selected one"
-msgstr ""
-"தேர்ந்தெடுக்கப்பட்ட ஒன்றிலிருந்து பெறப்பட்ட புதிய குறியீட்டை உருவாக்கவும்"
+msgstr "தேர்ந்தெடுக்கப்பட்ட ஒன்றிலிருந்து பெறப்பட்ட புதிய குறியீட்டை உருவாக்கவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13190,88 +13189,73 @@ msgstr "குழு"
 msgid "No symbols found in library %s."
 msgstr "அடையாளம் %s நூலகத்தில் ' %s' இல் காணப்படவில்லை."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:425
+#: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, fuzzy, c-format
-msgid "Error loading symbol %s: %s"
+msgid "Error loading symbol '%s': %s"
 msgstr "பிழைகள் ஏற்றுதல் சின்னங்கள்:"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:431
-#, fuzzy, c-format
-msgid ""
-"Error accessing library %s.\n"
-"\n"
-"%s"
-msgstr ""
-"பிழை ஏற்றுதல் குறியீட்டு நூலகம் %s. \n"
-"\n"
-"%s\n"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:438
+#: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
 msgstr "நூலகத்திலிருந்து எந்த சின்னங்களையும் ஏற்ற முடியவில்லை."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "New field name:"
 msgstr "புதிய புல பெயர்:"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:669
+#: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:745
 msgid "Add Field"
 msgstr "புலத்தைச் சேர்க்கவும்"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:678
+#: eeschema/dialogs/dialog_lib_fields.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:754
 msgid "Field must have a name."
 msgstr "புலத்திற்கு ஒரு பெயர் இருக்க வேண்டும்."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:686
+#: eeschema/dialogs/dialog_lib_fields.cpp:698
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "புலத்தின் பெயர் '%s' ஏற்கனவே பயன்பாட்டில் உள்ளது."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:714
+#: eeschema/dialogs/dialog_lib_fields.cpp:726
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 msgid "Rename Field"
 msgstr "புலம் மறுபெயரிடுங்கள்"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:726
+#: eeschema/dialogs/dialog_lib_fields.cpp:738
 #, c-format
 msgid "Field name '%s' already exists."
 msgstr "புலத்தின் பெயர் '%s' ஏற்கனவே உள்ளது."
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:753
+#: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "'%s' புலத்தை அகற்ற விரும்புகிறீர்களா?"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:905
+#: eeschema/dialogs/dialog_lib_fields.cpp:917
 msgid "Exclude From BOM"
 msgstr "BOM இலிருந்து விலக்கு"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
+#: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
 msgid "Exclude From Simulation"
 msgstr "உருவகப்படுத்துதலில் இருந்து விலக்கு"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:907 eeschema/sch_sheet.cpp:1762
+#: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
 #: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
 msgid "Exclude From Board"
 msgstr "போர்டில் இருந்து விலக்கு"
 
-#: eeschema/dialogs/dialog_lib_fields.cpp:909
+#: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1766
 msgid "Power Symbol"
 msgstr "ஆற்றல் அடையாளம்"
-
-#: eeschema/dialogs/dialog_lib_fields.cpp:910
-msgid "Local Power Symbol"
-msgstr "உள்ளக ஆற்றல் அடையாளம்"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
@@ -17529,7 +17513,7 @@ msgid "Allow Autoplacement"
 msgstr "தன்னியக்கமயமாக்கலை அனுமதிக்கவும்"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
-#: eeschema/sch_item.cpp:585 eeschema/sch_item.cpp:670
+#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
 msgid "Private"
 msgstr "தனிப்பட்ட"
 
@@ -17767,8 +17751,7 @@ msgstr "திட்ட சேமிப்பு"
 #: pcbnew/files.cpp:1233
 #, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr ""
-"படிக்க-மட்டும் கோப்புறையில் கோப்புகளைத் தானாகச் சேமிக்க முடியவில்லை: '%s'"
+msgstr "படிக்க-மட்டும் கோப்புறையில் கோப்புகளைத் தானாகச் சேமிக்க முடியவில்லை: '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -19535,21 +19518,21 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "அறியப்படாத Sch_file_t மதிப்பு: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:634
+#: eeschema/sch_item.cpp:641
 msgid "All units"
 msgstr "அனைத்து அலகுகள்"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:663
 msgid "All body styles"
 msgstr "அனைத்து உடல் பாணிகள்"
 
-#: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
+#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "உடல் நடை"
 
-#: eeschema/sch_item.cpp:599 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -20404,7 +20387,7 @@ msgstr "சமிக்ஞை பெயரில் '{' மற்றும் '}
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "சமிக்ஞை பெயரில் '[' அல்லது ']' உள்ளது, ஆனால் அது செல்லுபடியாகும் பச் பெயர் அல்ல."
 
-#: eeschema/schematic.cpp:1544
+#: eeschema/schematic.cpp:1548
 msgid "Schematic Cleanup"
 msgstr "திட்ட தூய்மை"
 
@@ -24435,8 +24418,7 @@ msgstr "இந்த நிலை ஏற்கனவே மற்றொரு �
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
-"இந்தச் செய்தியைத் தவிர்க்க, 'ஒத்திசைக்கப்பட்ட பின்ச் பயன்முறை' விருப்பத்தை முடக்கவும்."
+msgstr "இந்தச் செய்தியைத் தவிர்க்க, 'ஒத்திசைக்கப்பட்ட பின்ச் பயன்முறை' விருப்பத்தை முடக்கவும்."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -26637,15 +26619,15 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
-"போர்டு ச்டேக்கப்பில் வரையறுக்கப்பட்ட வண்ணங்கள் முன்னமைவில் உள்ளவற்றை மீறும்"
+msgstr "போர்டு ச்டேக்கப்பில் வரையறுக்கப்பட்ட வண்ணங்கள் முன்னமைவில் உள்ளவற்றை மீறும்"
 
 #: kicad/cli/command_pcb_render.cpp:270
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"தர அமைப்பில் முடக்கப்பட்டிருந்தாலும், தரை, நிழல்கள் மற்றும் பிந்தைய செயலாக்கத்தை செயல்படுத்துகிறது"
+"தர அமைப்பில் முடக்கப்பட்டிருந்தாலும், தரை, நிழல்கள் மற்றும் பிந்தைய செயலாக்கத்தை "
+"செயல்படுத்துகிறது"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -42497,8 +42479,7 @@ msgstr "பலகோணம் வழியாக/பேடைச் சேர்
 #: pcbnew/exporters/step/step_pcb_model.cpp:1196
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr ""
-"செப்பு அடுக்குகளுக்கு வடிவத்தை (%மற்றும் புள்ளிகள்) சேர்க்க முடியவில்லை."
+msgstr "செப்பு அடுக்குகளுக்கு வடிவத்தை (%மற்றும் புள்ளிகள்) சேர்க்க முடியவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1214
 #, c-format
@@ -42550,7 +42531,8 @@ msgstr "பிரிவு விளிம்பைச் சேர்ப்ப�
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"(%d %d), ஆர்க் p0 (%d %d), நடுப்பகுதி (%d %d), p1 (%d %d) இலிருந்து ஆர்க் வளைவைச் சேர்ப்பதில் தோல்வி"
+"(%d %d), ஆர்க் p0 (%d %d), நடுப்பகுதி (%d %d), p1 (%d %d) இலிருந்து ஆர்க் வளைவைச் "
+"சேர்ப்பதில் தோல்வி"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1642
 #, c-format
@@ -45974,14 +45956,16 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2726
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
-"பேட் ஆதரிக்கப்படாத பேட்ச்டாக்கைப் பயன்படுத்துகிறது; துரப்பணம் தரவுகளில் இருந்து துளை தவிர்க்கப்பட்டது."
+"பேட் ஆதரிக்கப்படாத பேட்ச்டாக்கைப் பயன்படுத்துகிறது; துரப்பணம் தரவுகளில் இருந்து துளை "
+"தவிர்க்கப்பட்டது."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2868
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
-"IPC-2581 திருத்தம் B இல் கண்ணீர்த் துளிகள் ஆதரிக்கப்படவில்லை; அவை மண்டலங்களாக ஏற்றுமதி செய்யப்பட்டன."
+"IPC-2581 திருத்தம் B இல் கண்ணீர்த் துளிகள் ஆதரிக்கப்படவில்லை; அவை மண்டலங்களாக ஏற்றுமதி "
+"செய்யப்பட்டன."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 msgid "Generating logistic section"
@@ -51962,6 +51946,19 @@ msgstr "கிகாட் திட்ட அடையாளம்"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "கிகாட் வரைதல் தாள்"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "Error accessing library %s.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "பிழை ஏற்றுதல் குறியீட்டு நூலகம் %s. \n"
+#~ "\n"
+#~ "%s\n"
+
+#~ msgid "Local Power Symbol"
+#~ msgstr "உள்ளக ஆற்றல் அடையாளம்"
 
 #, fuzzy
 #~ msgid "Wire self-interference check failed. Allow retry"
