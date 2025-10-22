@@ -727,10 +727,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                     for( const VECTOR2I& pt : line->GetConnectionPoints() )
                     {
-                        SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
+                        SCH_JUNCTION* jct =
+                                static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
 
                         if( jct && !jct->IsSelected()
-                            && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct ) == m_hiddenJunctions.end() )
+                            && std::find( m_hiddenJunctions.begin(),
+                                          m_hiddenJunctions.end(), jct ) == m_hiddenJunctions.end() )
                         {
                             jct->SetFlags( STRUCT_DELETED );
                             m_frame->RemoveFromScreen( jct, m_frame->GetScreen() );
@@ -779,7 +781,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     }
 
                     schItem->RunOnChildren(
-                            [&]( SCH_ITEM* schItem )
+                            [&]( SCH_ITEM* unused )
                             {
                                 item->SetFlags( IS_MOVING );
                             },
