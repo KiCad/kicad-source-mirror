@@ -167,16 +167,16 @@ void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_
         wxCHECK( !m_tables.contains( aType ), /* void */ );
         wxFileName fn( PATHS::GetUserSettingsPath(), tableFileName( aType ) );
 
-        m_tables[aType] = std::make_unique<LIBRARY_TABLE>( fn.GetFullPath(),
-                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
+        m_tables[aType] = std::make_unique<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+        m_tables[aType]->SetType( aType );
     }
     else if( aScope == LIBRARY_TABLE_SCOPE::PROJECT )
     {
         wxCHECK( !m_projectTables.contains( aType ), /* void */ );
         wxFileName fn( Pgm().GetSettingsManager().Prj().GetProjectDirectory(), tableFileName( aType ) );
 
-        m_projectTables[aType] = std::make_unique<LIBRARY_TABLE>( fn.GetFullPath(),
-                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
+        m_projectTables[aType] = std::make_unique<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::PROJECT );
+        m_projectTables[aType]->SetType( aType );
     }
 }
 
@@ -1011,6 +1011,11 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString&
                     {
                         return tl::unexpected( plugin.error() );
                     }
+                }
+                else
+                {
+                    wxLogTrace( traceLibraries, "Error: library %s (%s) not found in manager!",
+                                aNickname, magic_enum::enum_name( aScope ) );
                 }
 
                 return nullptr;
