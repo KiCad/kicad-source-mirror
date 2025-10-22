@@ -175,7 +175,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_viaPropagationSpeedLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Via Propagation Speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaPropagationSpeedLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Global Unit Delay:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaPropagationSpeedLabel->Wrap( -1 );
 	bSizer8->Add( m_viaPropagationSpeedLabel, 0, wxALL, 5 );
 
