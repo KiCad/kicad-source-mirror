@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 04:08+0300\n"
-"PO-Revision-Date: 2025-06-29 02:37+0000\n"
-"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"POT-Creation-Date: 2025-10-08 13:56+0300\n"
+"PO-Revision-Date: 2025-10-22 21:35+0000\n"
+"Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -2313,7 +2313,7 @@ msgstr "தொகுப்பு உருவாக்குபவர்கள�
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "பயன்பாட்டில் உள்ள GDI பொருள்கள் %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -4867,12 +4867,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"நீக்கப்பட்ட உட்பொதிக்கப்பட்ட கோப்புகள் சில தடயங்களில் குறிப்பிடப்படுகின்றன. \n"
+"கால்தடங்களில் இருந்தும் நீக்கவா?"
 
 #: common/dialogs/panel_embedded_files.cpp:204
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"நீக்கப்பட்ட உட்பொதிக்கப்பட்ட கோப்புகளும் சில குறியீடுகளில் குறிப்பிடப்படுகின்றன. \n"
+"சின்னங்களிலிருந்தும் நீக்கவா?"
 
 #: common/dialogs/panel_embedded_files.cpp:323
 #: common/dialogs/panel_embedded_files.cpp:438
@@ -7433,7 +7437,7 @@ msgstr "பநிஇ பதில்: %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "பநிஇ பதில்: %s"
 
@@ -11567,9 +11571,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** பொருந்தக்கூடிய அளவுகோல்கள் எதுவும் இல்லை ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** அடையாளம் காணப்படவில்லை ***"
+msgstr "*** சின்ன லிப் அடையாளம் செல்லாது ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -11932,7 +11935,7 @@ msgstr "%d அடையாளம்(கள்) க்கு சிறுகு�
 
 #: eeschema/dialogs/dialog_erc.cpp:478
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC பயனரால் கைவிடப்பட்டது. <br><br>"
+msgstr "-------- பயனரால் ERC ரத்துசெய்யப்பட்டது.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:480 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Done.<br><br>"
@@ -13125,34 +13128,29 @@ msgid "Pin Table"
 msgstr "முள் அட்டவணை"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "ஆற்றல் அடையாளம்"
+msgstr "சின்னத்தை மாற்றவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "கடைசி பதிப்பிற்கு '%s' ஐ மாற்றியமைக்கவா?"
+msgstr "சின்னத்தை அதன் கடைசியாக சேமித்த நிலைக்கு மாற்றவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "இசைவு"
+msgstr "தெளிவான செல்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "அண்மைக் கால துரப்பண கோப்புகளை அழிக்கவும்"
+msgstr "செல் மதிப்பை அழிக்கவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "தற்காலிக சேமிப்பு சின்னம்:"
+msgstr "பெறப்பட்ட சின்னத்தை உருவாக்கவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "ஏற்கனவே இருக்கும் சின்னத்திலிருந்து பெறப்பட்ட புதிய சின்னத்தை உருவாக்கவும்"
+msgstr ""
+"தேர்ந்தெடுக்கப்பட்ட ஒன்றிலிருந்து பெறப்பட்ட புதிய குறியீட்டை உருவாக்கவும்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13209,9 +13207,8 @@ msgstr ""
 "%s\n"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:438
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "நூலகத்திலிருந்து ஏதேனும் மாற்றங்களைச் சேர்க்க சின்னங்களை புதுப்பிக்கவும்"
+msgstr "நூலகத்திலிருந்து எந்த சின்னங்களையும் ஏற்ற முடியவில்லை."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:669
 #: eeschema/dialogs/dialog_lib_fields.cpp:714
@@ -13243,9 +13240,9 @@ msgid "Rename Field"
 msgstr "புலம் மறுபெயரிடுங்கள்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "புலம் பெயர் %s ஏற்கனவே உள்ளது."
+msgstr "புலத்தின் பெயர் '%s' ஏற்கனவே உள்ளது."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13254,9 +13251,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "'%s' புலத்தை அகற்ற விரும்புகிறீர்களா?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:905
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "போமிலிருந்து விலக்கப்பட்டது"
+msgstr "BOM இலிருந்து விலக்கு"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:906 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3030
@@ -13274,9 +13270,8 @@ msgid "Power Symbol"
 msgstr "ஆற்றல் அடையாளம்"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:910
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "ஆற்றல் அடையாளம்"
+msgstr "உள்ளக ஆற்றல் அடையாளம்"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
@@ -13408,9 +13403,9 @@ msgid "Edit Symbol Properties"
 msgstr "குறியீட்டு பண்புகளைத் திருத்தவும்"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "இந்த கோப்பு ஏற்கனவே திறந்திருக்கும்."
+msgstr "இந்தப் புலம் '%s' இலிருந்து பெறப்பட்டது."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -17005,9 +17000,9 @@ msgstr "சேமிக்க எந்த சின்னமும் தேர
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1149
 #: pcbnew/pcbnew_jobs_handler.cpp:1791
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "%s எதிர்பார்க்கிறது"
+msgstr "%s ஐ ஏற்றுமதி செய்கிறது"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1671
 msgid "Output path must not conflict with existing path\n"
@@ -17770,9 +17765,10 @@ msgstr "திட்ட சேமிப்பு"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1217
 #: pcbnew/files.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "'%s' கோப்புறையில் சூழ்ச்சி கோப்புகளை எழுத முடியவில்லை."
+msgstr ""
+"படிக்க-மட்டும் கோப்புறையில் கோப்புகளைத் தானாகச் சேமிக்க முடியவில்லை: '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -18291,9 +18287,8 @@ msgid "&Duplicate '%s'"
 msgstr "& நகல் '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "அலகுகள்"
+msgstr "இடமாற்று அலகுகள்"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -19541,15 +19536,13 @@ msgstr "அறியப்படாத Sch_file_t மதிப்பு: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:634
-#, fuzzy
 msgid "All units"
-msgstr "அனைத்து உருப்படிகளும்"
+msgstr "அனைத்து அலகுகள்"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
 #: eeschema/sch_item.cpp:656
-#, fuzzy
 msgid "All body styles"
-msgstr "அனைத்து உடல் பாணிகளுக்கும் பொதுவானது"
+msgstr "அனைத்து உடல் பாணிகள்"
 
 #: eeschema/sch_item.cpp:582 eeschema/sch_item.cpp:649
 #: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
@@ -20067,29 +20060,24 @@ msgid "Cell Height"
 msgstr "செல் உயரம்"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "செல் அகலம்"
+msgstr "நெடுவரிசை அகலம்"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "பெட்டி உயரம்"
+msgstr "வரிசை உயரம்"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "சிட்டை பண்புகள்"
+msgstr "செல் பண்புகள்"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
-msgstr "பின்னணி நிரப்பு"
+msgstr "பின்னணி நிரப்புதல்"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "பின்னணி நிறம்"
+msgstr "பின்னணி நிரப்பு வண்ணம்"
 
 #: eeschema/sch_text.cpp:467
 #, c-format
@@ -21753,7 +21741,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>எச்சரிக்கை: குறிப்பு காலியாக உள்ளது</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -23883,14 +23871,12 @@ msgid "All units of this symbol are already placed."
 msgstr "இந்த சின்னத்தின் அனைத்து அலகுகளும் ஏற்கனவே வைக்கப்பட்டுள்ளன."
 
 #: eeschema/tools/sch_drawing_tools.cpp:779
-#, fuzzy
 msgid "Add Design Block"
-msgstr "வடிவமைப்பு தொகுதி சேர்க்கவும்"
+msgstr "வடிவமைப்புத் தொகுதியைச் சேர்க்கவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:780
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "திட்ட தாள் உள்ளடக்கத்தை இறக்குமதி செய்யுங்கள் ..."
+msgstr "திட்டவட்டமான தாள் உள்ளடக்கத்தை இறக்குமதி செய்யவும்"
 
 #: eeschema/tools/sch_drawing_tools.cpp:814
 msgid "Choose Schematic"
@@ -24355,9 +24341,9 @@ msgstr "குறியீட்டு நூலகம் எதுவும் 
 #: eeschema/tools/symbol_editor_control.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:470
 #: eeschema/tools/symbol_editor_control.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "நூலகம் '%s' காணப்படவில்லை."
+msgstr "'%s' குறியீட்டு நூலகம் கிடைக்கவில்லை."
 
 #: eeschema/tools/symbol_editor_control.cpp:406
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -24450,6 +24436,7 @@ msgstr "இந்த நிலை ஏற்கனவே மற்றொரு �
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"இந்தச் செய்தியைத் தவிர்க்க, 'ஒத்திசைக்கப்பட்ட பின்ச் பயன்முறை' விருப்பத்தை முடக்கவும்."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -25910,9 +25897,8 @@ msgid "Show import issues"
 msgstr "இறக்குமதி சிக்கல்களைக் காட்டு"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
-msgstr "கோப்பு"
+msgstr "உட்பொதிவு கோப்பு"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -26652,15 +26638,14 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"போர்டு ச்டேக்கப்பில் வரையறுக்கப்பட்ட வண்ணங்கள் முன்னமைவில் உள்ளவற்றை மீறும்"
 
 #: kicad/cli/command_pcb_render.cpp:270
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"தரமான முன்னமைவில் முடக்கப்பட்டிருந்தாலும் கூட, தளம், நிழல்கள் மற்றும் பிந்தைய செயலாக்கத்தை "
-"செயல்படுத்துகிறது"
+"தர அமைப்பில் முடக்கப்பட்டிருந்தாலும், தரை, நிழல்கள் மற்றும் பிந்தைய செயலாக்கத்தை செயல்படுத்துகிறது"
 
 #: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
@@ -27103,9 +27088,8 @@ msgid "Last run failed"
 msgstr "கடைசி ரன் தோல்வியடைந்தது"
 
 #: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:966
-#, fuzzy
 msgid "Running Jobs"
-msgstr "வேலை செய்யும் வேலைகள்"
+msgstr "இயங்கும் வேலைகள்"
 
 #: kicad/dialogs/panel_jobset.cpp:286
 msgid "Edit Destination Options..."
@@ -27311,9 +27295,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "எளிதான ஈசி ஈடா புரோ திட்டத்தை இறக்குமதி செய்யுங்கள்"
 
 #: kicad/jobs_runner.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "வேலை செய்யும் வேலைகள்"
+msgstr "இயங்கும் வேலை %d: %s"
 
 #: kicad/jobs_runner.cpp:280
 msgid "Job successful"
@@ -34069,7 +34053,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
 msgid "IPC-2581 file generated successfully."
-msgstr ""
+msgstr "IPC-2581 கோப்பு வெற்றிகரமாக உருவாக்கப்பட்டது."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -42489,9 +42473,8 @@ msgstr ""
 "ஏற்றுமதி நேரம் %.3f கள்\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:647
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** வடிவங்களை இணைக்கும் போது சிக்கல்கள் கிடைத்தன **\n"
+msgstr "** வடிவங்களை இணைக்கும்போது சிக்கல்கள் ஏற்பட்டன **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:651
 #: pcbnew/exporters/step/step_pcb_model.cpp:2066
@@ -42504,137 +42487,130 @@ msgid "Warnings:\n"
 msgstr "எச்சரிக்கைகள்:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:682
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** shateupgrade_unifysamedamain ஒரு சுழிய வடிவத்தை உருவாக்கியது **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain ஒரு சுழிய வடிவத்தை உருவாக்கியது **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:943
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "பலகோணம் வழியாக பேட்/சேர்ப்பது OCC பிழை.\n"
+msgstr "பலகோணம் வழியாக/பேடைச் சேர்ப்பதில் OCC பிழை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1196
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "வடிவத்தை (%d புள்ளிகள்) செப்பு அடுக்கு %s க்கு சேர்க்க முடியவில்லை.\n"
+msgstr ""
+"செப்பு அடுக்குகளுக்கு வடிவத்தை (%மற்றும் புள்ளிகள்) சேர்க்க முடியவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1214
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "%s க்கு எந்த மாதிரியும் வரையறுக்கப்படவில்லை.\n"
+msgstr "%sக்கு எந்த மாதிரியும் வரையறுக்கப்படவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1229
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "கோப்பு பெயர் '%s' க்கு மாதிரி இல்லை.\n"
+msgstr "கோப்புப் பெயரான '%s'க்கான மாதிரி இல்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1240
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "கோப்பு பெயர் '%s' க்கான இருப்பிட தரவு இல்லை.\n"
+msgstr "கோப்புப் பெயரான '%s'க்கான இருப்பிடத் தரவு இல்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1250
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "'%s' என்ற கோப்பு பெயருடன் கூறுகளைச் சேர்க்க முடியவில்லை.\n"
+msgstr "'%s' என்ற கோப்புப் பெயருடன் கூறுகளைச் சேர்க்க முடியவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC விதிவிலக்கு கட்டிட வடிவ பிரிவு: %s\n"
+msgstr "OCC விதிவிலக்கு கட்டிட வடிவப் பிரிவு: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1435
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC விதிவிலக்கு கட்டிட முகம்: %s\n"
+msgstr "OCC விதிவிலக்கு கட்டிட முகம்: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1447
 #: pcbnew/exporters/step/step_pcb_model.cpp:1843
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "ஒரு பிரிச்மாடிக் வடிவத்தை உருவாக்கத் தவறிவிட்டது\n"
+msgstr "ப்ரிச்மாடிக் வடிவத்தை உருவாக்க முடியவில்லை"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1518
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "பிரிவு விளிம்பை ( %d %d) -> ( %d %d), ச்கிப்பிங் செய்யத் தவறிவிட்டது\n"
+msgstr "பிரிவு விளிம்பை உருவாக்க முடியவில்லை (%d %d) -> (%d %d), ச்கிப்பிங்"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "பிரிவு விளிம்பைச் சேர்க்கத் தவறிவிட்டது ( %d %d) -> ( %d %d)\n"
+msgstr "பிரிவு விளிம்பைச் சேர்ப்பதில் தோல்வி (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1566
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"( %d %d), ARC P0 ( %d %d), நடுப்பகுதி ( %d %d), p1 ( %d %d) ஆகியவற்றிலிருந்து "
-"வில் வளைவைச் சேர்க்கத் தவறிவிட்டது\n"
+"(%d %d), ஆர்க் p0 (%d %d), நடுப்பகுதி (%d %d), p1 (%d %d) இலிருந்து ஆர்க் வளைவைச் சேர்ப்பதில் தோல்வி"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1642
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "%d, %d -> %d, %d ** இல் கம்பியை மூடுவதில் தோல்வி\n"
+msgstr "%d, %d -> %d, %d ** இல் வயரை மூடுவதில் தோல்வி"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1652
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "OCC விதிவிலக்கு கம்பி உருவாக்குதல்: %s\n"
+msgstr "OCC விதிவிலக்கு உருவாக்கும் கம்பி: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"கம்பி செய்யப்படவில்லை (விளிம்பு புள்ளிகள் %d): OCC பிழை %d \n"
-"z: %g; எல்லை பெட்டி: %s\n"
+"வயர் செய்யப்படவில்லை (காண்டூர் புள்ளிகள் %d): OCC பிழை %d \n"
+"z: %g; எல்லைப் பெட்டி: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1749
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"கம்பி தன்வய குறுக்கீடு சோதனை தோல்வியடைந்தது \n"
-"z: %g; எல்லை பெட்டி: %s\n"
+"வயர் தன்வய குறுக்கீடு சோதனை தோல்வியடைந்தது \n"
+"z: %g; எல்லைப் பெட்டி: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1776
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "எளிமைப்படுத்தப்படாத பலகோணத்தைப் பயன்படுத்துதல்.\n"
+msgstr "எளிமைப்படுத்தப்படாத பலகோணத்தைப் பயன்படுத்துதல்."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1824
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "OCC விதிவிலக்கு உருவாக்குதல் விளிம்பு %d: %s\n"
+msgstr "OCC விதிவிலக்கு %d: %s விளிம்பை உருவாக்குகிறது"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1854
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** முகம் தவிர்க்கப்பட்டது **\n"
+msgstr "** முகம் தவிர்க்கப்பட்டது **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1944
 #: pcbnew/exporters/step/step_pcb_model.cpp:1961
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "OCC பிழை முக்கிய அவுட்லைன் உருவாக்குகிறது.\n"
+msgstr "முக்கிய அவுட்லைனை உருவாக்குவதில் OCC பிழை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1970
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "OCC பிழை முக்கிய அவுட்லைனில் துளை உருவாக்குகிறது.\n"
+msgstr "முக்கிய அவுட்லைனில் ஓட்டை உருவாக்குவதில் OCC பிழை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2012
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "%s க்கான துளைகளைக் கழித்தல்\n"
+msgstr "%sக்கான துளைகளைக் கழித்தல்"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2056
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** %s நெட் ' %s' ** ஐ வெட்டும்போது சிக்கல்கள் கிடைத்தன **\n"
+msgstr "** %s நிகர '%s' ஐ வெட்டும்போது சிக்கல் ஏற்பட்டது **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2110
 msgid "shapes"
@@ -42653,10 +42629,9 @@ msgstr "துளைகள்"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2483
 #: pcbnew/exporters/step/step_pcb_model.cpp:3270
 #: pcbnew/exporters/step/step_pcb_model.cpp:3339
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr ""
-"செல்லுபடியாகும் பிசிபி பேரவை இல்லை; வெளியீட்டு கோப்பை '%s' ஐ உருவாக்க முடியாது.\n"
+msgstr "சரியான PCB அசெம்பிளி இல்லை; '%s' வெளியீட்டு கோப்பை உருவாக்க முடியாது."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2416
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -42670,19 +42645,19 @@ msgstr "மேற்பரப்பு வளைவு பயன்முறை�
 #: pcbnew/exporters/step/step_pcb_model.cpp:3247
 #: pcbnew/exporters/step/step_pcb_model.cpp:3320
 #: pcbnew/exporters/step/step_pcb_model.cpp:3369
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "தற்காலிக கோப்பை '%s' '%s' க்கு மறுபெயரிட முடியாது.\n"
+msgstr "தற்காலிக கோப்பு '%s' ஐ '%s' என மறுபெயரிட முடியாது."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2916
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "'%s' க்கான உண்மையான கோப்பு வகையை அடையாளம் காண முடியாது.\n"
+msgstr "'%s'க்கான உண்மையான கோப்பு வகையை அடையாளம் காண முடியவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2926
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "'%s' கோப்பிலிருந்து மாதிரி தரவை மாற்ற முடியவில்லை.\n"
+msgstr "'%s' கோப்பிலிருந்து மாதிரித் தரவை மாற்ற முடியவில்லை."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
@@ -45952,7 +45927,7 @@ msgstr "உள்ளடக்கப் பகுதியை உருவாக�
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "பேடில் ஆதரிக்கப்படாத வகை உள்ளது; அது தவிர்க்கப்பட்டது."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -45964,28 +45939,27 @@ msgid "Generating BOM section"
 msgstr "போம் பிரிவு உருவாக்குகிறது"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "தடம் '%s' நூலகத்தில் '%s' காணப்படவில்லை."
+msgstr "%s தடம் அகராதியில் காணப்படவில்லை; BOM தரவு முழுமையடையாமல் இருக்கலாம்."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1274
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "கூறு \"%s\" ஒஇஎம் குறிப்பு இல்லை; BOM நுழைவு தவிர்க்கப்படும்."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
 msgstr "கேட் தரவை உருவாக்குதல்"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr "போர்டு அவுட்லைன் காணவில்லை அல்லது தவறாக உள்ளது. முழு பகுப்பாய்விற்கு டி.ஆர்.சி."
+msgstr "போர்டு அவுட்லைன் தவறானது அல்லது இல்லை. DRC ஐ இயக்கவும்."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2499
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
+msgstr "நகல் தடம் சுட்டிகள் எதிர்கொண்டன; IPC-2581 வெளியீடு தவறாக இருக்கலாம்."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2664
 #, c-format
@@ -45995,16 +45969,19 @@ msgstr "ஏற்றுமதி அடுக்கு %s, நிகர %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2700
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"ஆதரிக்கப்படாத பேட்ச்டாக்கைப் பயன்படுத்துகிறது; பயிற்சி தரவுகளில் இருந்து தவிர்க்கப்பட்டது."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2726
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"பேட் ஆதரிக்கப்படாத பேட்ச்டாக்கைப் பயன்படுத்துகிறது; துரப்பணம் தரவுகளில் இருந்து துளை தவிர்க்கப்பட்டது."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2868
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"IPC-2581 திருத்தம் B இல் கண்ணீர்த் துளிகள் ஆதரிக்கப்படவில்லை; அவை மண்டலங்களாக ஏற்றுமதி செய்யப்பட்டன."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 msgid "Generating logistic section"
@@ -46015,9 +45992,8 @@ msgid "Saving file"
 msgstr "கோப்பு சேமிப்பு"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3278
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "கோப்பை இடையகத்திற்கு சேமிப்பதில் தோல்வி"
+msgstr "IPC-2581 தரவை பஃபரில் சேமிப்பதில் தோல்வி."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -48487,9 +48463,8 @@ msgid "Some of the items could not be outset."
 msgstr "சில உருப்படிகள் தொடங்க முடியாது."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "நூலக அட்டவணை பாதையை '%s' உருவாக்க முடியாது."
+msgstr "செவ்வக வெளியை உருவாக்க முடியாது"
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
