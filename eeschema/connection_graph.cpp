@@ -865,8 +865,10 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
     // Restore the dangling states of items in the current SCH_SCREEN to match the current
     // SCH_SHEET_PATH.
-    m_schematic->CurrentSheet().LastScreen()->TestDanglingEnds( &m_schematic->CurrentSheet(),
-                                                                aChangedItemHandler );
+    SCH_SCREEN* currentScreen = m_schematic->CurrentSheet().LastScreen();
+
+    if( currentScreen )
+        currentScreen->TestDanglingEnds( &m_schematic->CurrentSheet(), aChangedItemHandler );
 
     for( SCH_ITEM* item : dirty_items )
         item->SetConnectivityDirty( false );

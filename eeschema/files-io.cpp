@@ -1492,7 +1492,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 newfilename.SetName( Prj().GetProjectName() );
                 newfilename.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
-                SetScreen( GetCurrentSheet().LastScreen() );
+                SetScreen( Schematic().RootScreen() );
 
                 Schematic().Root().SetFileName( newfilename.GetFullName() );
                 GetScreen()->SetFileName( newfilename.GetFullPath() );

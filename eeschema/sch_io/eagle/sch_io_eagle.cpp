@@ -404,6 +404,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     else
     {
         m_rootSheet = new SCH_SHEET( aSchematic );
+        const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
         m_rootSheet->SetFileName( newFilename.GetFullPath() );
         aSchematic->SetRoot( m_rootSheet );
     }
@@ -414,12 +415,11 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         screen->SetFileName( newFilename.GetFullPath() );
         m_rootSheet->SetScreen( screen );
 
-        // Virtual root sheet UUID must be the same as the schematic file UUID.
-        const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
+        // Virtual root sheet UUID must be nil since all Eagle pages are loaded as subsheets.
+        const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
 
         // There is always at least a root sheet.
         m_sheetPath.push_back( m_rootSheet );
-        m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
@@ -748,58 +748,35 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     // local labels will be used for nets found only on that sheet.
     countNets( aSchematic );
 
-    size_t sheetCount = aSchematic.sheets.size();
+    // Create all Eagle pages as top-level sheets (direct children of the root)
 
-    if( sheetCount > 1 )
+    for( const std::unique_ptr<ESHEET>& esheet : aSchematic.sheets )
     {
-        int x, y;
-        x = 1;
-        y = 1;
+        // Eagle schematics are never more than one sheet deep so the parent sheet is
+        // always the root sheet.
+        std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet );
+        SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+        sheet->SetScreen( screen );
+        screen->SetFileName( sheet->GetFileName() );
 
-        for( const std::unique_ptr<ESHEET>& esheet : aSchematic.sheets )
-        {
-            VECTOR2I pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
-                                        y * schIUScale.MilsToIU( 1000 ) );
+        wxCHECK2( sheet && screen, continue );
 
-            // Eagle schematics are never more than one sheet deep so the parent sheet is
-            // always the root sheet.
-            std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
-            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-            sheet->SetScreen( screen );
-            screen->SetFileName( sheet->GetFileName() );
+        wxString pageNo = wxString::Format( wxT( "%d" ), m_sheetIndex );
 
-            wxCHECK2( sheet && screen, continue );
+        m_sheetPath.push_back( sheet.get() );
+        loadSheet( esheet );
 
-            wxString pageNo = wxString::Format( wxT( "%d" ), m_sheetIndex );
+        m_sheetPath.SetPageNumber( pageNo );
+        m_sheetPath.pop_back();
 
-            m_sheetPath.push_back( sheet.get() );
-            loadSheet( esheet );
+        SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();
 
-            m_sheetPath.SetPageNumber( pageNo );
-            m_sheetPath.pop_back();
+        wxCHECK2( currentScreen, continue );
 
-            SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();
+        sheet->SetParent( m_sheetPath.Last() );
+        m_schematic->AddTopLevelSheet( sheet.release() );
 
-            wxCHECK2( currentScreen, continue );
-
-            sheet->SetParent( m_sheetPath.Last() );
-            currentScreen->Append( sheet.release() );
-
-            x += 2;
-
-            if( x > 10 ) // Start next row of sheets.
-            {
-                x = 1;
-                y += 2;
-            }
-
-            m_sheetIndex++;
-        }
-    }
-    else
-    {
-        for( const std::unique_ptr<ESHEET>& esheet : aSchematic.sheets )
-            loadSheet( esheet );
+        m_sheetIndex++;
     }
 
     // Handle the missing symbol units that need to be instantiated
