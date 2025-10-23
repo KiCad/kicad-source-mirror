@@ -326,6 +326,8 @@ public:
      */
     std::vector<int> ViewGetLayers() const override;
 
+    int GetMaxError() const;
+
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */

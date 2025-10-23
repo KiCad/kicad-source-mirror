@@ -677,9 +677,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                     ROUNDRECT rr( SHAPE_RECT( aShape->GetPosition(),
                                               aShape->GetRectangleWidth(),
                                               aShape->GetRectangleHeight() ),
-                                              aShape->GetCornerRadius() );
+                                  aShape->GetCornerRadius() );
                     SHAPE_POLY_SET poly;
-                    rr.TransformToPolygon( poly );
+                    rr.TransformToPolygon( poly, aShape->GetMaxError() );
                     SHAPE_LINE_CHAIN& r_outline = poly.Outline( 0 );
                     r_outline.SetClosed( true );
 

@@ -78,8 +78,12 @@ ROUNDRECT ROUNDRECT::GetInflated( int aOutset ) const
 }
 
 
-void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const
+void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) const
 {
+    // Roundrects won't have a gazillion points, so we use a higher definition than the
+    // typical maxError.
+    int               maxError = aMaxError / 5;
+
     const int         idx = aBuffer.NewOutline();
     SHAPE_LINE_CHAIN& outline = aBuffer.Outline( idx );
 
@@ -107,7 +111,7 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const
     {
         // It's a circle
         outline.Append( SHAPE_ARC( m_p0 + VECTOR2I( m_radius, m_radius ),
-                                   m_p0 + VECTOR2I( -m_radius, 0 ), ANGLE_360 ) );
+                                   m_p0 + VECTOR2I( -m_radius, 0 ), ANGLE_360 ), maxError );
     }
     else
     {
@@ -125,13 +129,13 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const
 
             if( y_edge > 0 )
             {
-                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::NE ) );
+                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::NE ), maxError );
                 outline.Append( m_p0 + VECTOR2I( w, m_radius + y_edge ) );
-                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::SE ) );
+                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::SE ), maxError );
             }
             else
             {
-                outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::E ) );
+                outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::E ), maxError );
             }
 
             // Bottom side
@@ -139,22 +143,22 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const
 
             if( y_edge > 0 )
             {
-                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::SW ) );
+                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::SW ), maxError );
                 outline.Append( m_p0 + VECTOR2I( 0, m_radius ) );
-                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::NW ) );
+                outline.Append( MakeCornerArcCw90( inner_rect, m_radius, DIRECTION_45::NW ), maxError );
             }
             else
             {
-                outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::W ) );
+                outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::W ), maxError );
             }
         }
         else
         {
             // x_edge is 0 but y_edge is not, so it's an oval the other way up
             outline.Append( m_p0 + VECTOR2I( 0, m_radius ) );
-            outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::N ) );
+            outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::N ), maxError );
             outline.Append( m_p0 + VECTOR2I( w, m_radius + y_edge ) );
-            outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::S ) );
+            outline.Append( MakeSideArcCw180( inner_rect, m_radius, DIRECTION_45::S ), maxError );
         }
     }
 

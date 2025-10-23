@@ -613,6 +613,15 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 }
 
 
+int SCH_ITEM::GetMaxError() const
+{
+    if( SCHEMATIC* schematic = Schematic() )
+        return schematic->Settings().m_MaxError;
+    else
+        return schIUScale.mmToIU( ARC_LOW_DEF_MM );
+}
+
+
 const wxString& SCH_ITEM::GetDefaultFont( const RENDER_SETTINGS* aSettings ) const
 {
     static wxString defaultName = KICAD_FONT_NAME;

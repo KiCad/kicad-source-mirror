@@ -607,7 +607,7 @@ void EDA_SHAPE::UpdateHatching() const
         {
             ROUNDRECT rr( SHAPE_RECT( getPosition(), GetRectangleWidth(), GetRectangleHeight() ),
                           GetCornerRadius() );
-            rr.TransformToPolygon( shapeBuffer );
+            rr.TransformToPolygon( shapeBuffer, getMaxError() );
         }
         break;
 
@@ -824,7 +824,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
             // Convert non-cardinally-rotated rect to a diamond
             ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
             m_shape = SHAPE_T::POLY;
-            rr.TransformToPolygon( m_poly );
+            rr.TransformToPolygon( m_poly, getMaxError() );
             m_poly.Rotate( aAngle, aRotCentre );
         }
 
@@ -1360,7 +1360,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         {
             ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
             SHAPE_POLY_SET poly;
-            rr.TransformToPolygon( poly );
+            rr.TransformToPolygon( poly, getMaxError() );
 
             if( poly.CollideEdge( aPosition, nullptr, maxdist ) )
                 return true;
@@ -1508,7 +1508,7 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         {
             ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
             SHAPE_POLY_SET poly;
-            rr.TransformToPolygon( poly );
+            rr.TransformToPolygon( poly, getMaxError() );
 
             // Account for the width of the line
             arect.Inflate( GetWidth() / 2 );
@@ -1838,7 +1838,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
         {
             ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
             SHAPE_POLY_SET poly;
-            rr.TransformToPolygon( poly );
+            rr.TransformToPolygon( poly, getMaxError() );
             SHAPE_LINE_CHAIN outline = poly.Outline( 0 );
 
             if( solidFill )
@@ -1846,6 +1846,8 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
             if( width > 0 || !solidFill )
             {
+                // TODO: need to handle arcs in outline!
+
                 for( int i = 0; i < outline.PointCount() - 1; ++i )
                 {
                     effectiveShapes.emplace_back( new SHAPE_SEGMENT( outline.CPoint( i ), outline.CPoint( i + 1 ),

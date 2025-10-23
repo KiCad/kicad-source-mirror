@@ -1998,7 +1998,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                                           aShape->GetRectangleHeight() ),
                               aShape->GetCornerRadius(), true /* normalize */  );
                 SHAPE_POLY_SET poly;
-                rr.TransformToPolygon( poly );
+                rr.TransformToPolygon( poly, aShape->GetMaxError() );
                 SHAPE_LINE_CHAIN outline = poly.Outline( 0 );
 
                 if( aShape->IsProxyItem() )

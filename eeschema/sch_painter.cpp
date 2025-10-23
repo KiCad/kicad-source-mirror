@@ -2045,9 +2045,9 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                         ROUNDRECT rr( SHAPE_RECT( shape->GetPosition(),
                                                   shape->GetRectangleWidth(),
                                                   shape->GetRectangleHeight() ),
-                                                  shape->GetCornerRadius(), true /* normalize */ );
+                                      shape->GetCornerRadius(), true /* normalize */ );
                         SHAPE_POLY_SET poly;
-                        rr.TransformToPolygon( poly );
+                        rr.TransformToPolygon( poly, shape->GetMaxError() );
                         m_gal->DrawPolygon( poly );
                     }
                     else
@@ -2067,8 +2067,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                         for( SHAPE* polySegment : polySegments )
                             pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegment )->GetSeg().A );
 
-                        pts.push_back(
-                                static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B );
+                        pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B );
 
                         for( SHAPE* polySegment : polySegments )
                             delete polySegment;

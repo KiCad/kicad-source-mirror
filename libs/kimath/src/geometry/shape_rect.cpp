@@ -123,13 +123,12 @@ const std::string SHAPE_RECT::Format( bool aCplusPlus ) const
 }
 
 
-void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
-                                     ERROR_LOC aErrorLoc ) const
+void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError, ERROR_LOC aErrorLoc ) const
 {
     if( m_radius > 0 )
     {
         ROUNDRECT rr( *this, m_radius );
-        rr.TransformToPolygon( aBuffer );
+        rr.TransformToPolygon( aBuffer, aError );
         return;
     }
 
@@ -143,24 +142,16 @@ void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
     outline.SetClosed( true );
 }
 
+
 const SHAPE_LINE_CHAIN SHAPE_RECT::Outline() const
 {
-    if( m_radius > 0 )
-    {
-        SHAPE_POLY_SET poly;
-        ROUNDRECT      rr( *this, m_radius );
-        rr.TransformToPolygon( poly );
-        return poly.Outline( 0 );
-    }
+    // TODO: we're DEPENDING on clients of this routine to use the actual arcs (if any)
+    // inserted into the SHAPE_LINE_CHAIN.  They must NOT use the approximated segments
+    // because we don't know what IUScale to generate them in.
 
-    SHAPE_LINE_CHAIN rv;
-    rv.Append( m_p0 );
-    rv.Append( m_p0.x, m_p0.y + m_h );
-    rv.Append( m_p0.x + m_w, m_p0.y + m_h );
-    rv.Append( m_p0.x + m_w, m_p0.y );
-    rv.Append( m_p0 );
-    rv.SetClosed( true );
-    return rv;
+    SHAPE_POLY_SET buffer;
+    TransformToPolygon( buffer, SHAPE_ARC::DefaultAccuracyForPCB(), ERROR_INSIDE );
+    return std::move( buffer.Outline( 0 ) );
 }
 
 

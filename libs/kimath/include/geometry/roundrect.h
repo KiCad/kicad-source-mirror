@@ -83,7 +83,7 @@ public:
     /**
      * Get the polygonal representation of the roundrect.
      */
-    void TransformToPolygon( SHAPE_POLY_SET& aBuffer ) const;
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) const;
 
 private:
     SHAPE_RECT m_rect;

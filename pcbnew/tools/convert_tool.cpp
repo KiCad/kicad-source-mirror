@@ -1190,7 +1190,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 ROUNDRECT  rrect( rect, graphic->GetCornerRadius(), true );
                 SHAPE_POLY_SET poly;
 
-                rrect.TransformToPolygon( poly );
+                rrect.TransformToPolygon( poly, graphic->GetMaxError() );
                 processPolySet( poly, itemWidth );
                 break;
             }

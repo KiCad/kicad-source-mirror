@@ -145,13 +145,7 @@ protected:
 
     bool isMoving() const override { return IsMoving(); }
 
-    int getMaxError() const override
-    {
-        if( SCHEMATIC* schematic = Schematic() )
-            return schematic->Settings().m_MaxError;
-        else
-            return schIUScale.mmToIU( ARC_LOW_DEF_MM );
-    }
+    int getMaxError() const override { return GetMaxError(); }
 
     /**
      * @copydoc SCH_ITEM::compare()

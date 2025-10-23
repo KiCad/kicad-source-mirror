@@ -945,7 +945,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             // No point doing a SHAPE_RECT as we may need to rotate it
             ROUNDRECT      rrect( box, radius );
             SHAPE_POLY_SET poly;
-            rrect.TransformToPolygon( poly );
+            rrect.TransformToPolygon( poly, pad.GetMaxError() );
 
             poly.Rotate( pad.GetOrientation(), pad.GetPosition() );
             addPoly( poly );
@@ -986,29 +986,26 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             box.Normalize();
 
             SHAPE_RECT rect( box );
+            int        cornerRadius = pcb_shape.GetCornerRadius();
 
             if( m_params.roundCorners )
-            {
-                if( m_params.gridRounding.has_value() )
-                    rect = GetRectRoundedToGridOutwards( rect, *m_params.gridRounding );
+                cornerRadius += m_params.outsetDistance;
 
-                try
-                {
-                    int cornerRadius = pcb_shape.GetCornerRadius() + m_params.outsetDistance;
-                    ROUNDRECT      rrect( rect, cornerRadius );
-                    SHAPE_POLY_SET poly;
-                    rrect.TransformToPolygon( poly );
-                    addPoly( poly );
-                }
-                catch( ... )
-                {
-                    DisplayErrorMessage( nullptr, _( "Cannot create rectangle outset" ) );
-                }
+            if( m_params.gridRounding.has_value() )
+                rect = GetRectRoundedToGridOutwards( rect, *m_params.gridRounding );
+
+            if( cornerRadius > 0 )
+            {
+                ROUNDRECT rrect( rect, cornerRadius );
+                SHAPE_POLY_SET poly;
+                rrect.TransformToPolygon( poly, pcb_shape.GetMaxError() );
+                addChain( poly.Outline( 0 ) );
             }
             else
             {
                 addRect( rect );
             }
+
             AddSuccess();
             break;
         }
