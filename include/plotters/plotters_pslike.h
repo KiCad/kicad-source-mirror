@@ -418,6 +418,9 @@ private:
     void drawOverbars( const std::vector<OverbarInfo>& aOverbars,
                        const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics );
 
+    std::string arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                         const EDA_ANGLE& aAngle, double aRadius );
+
 public:
     virtual void PlotText( const VECTOR2I&        aPos,
                            const COLOR4D&         aColor,

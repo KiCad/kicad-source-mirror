@@ -386,18 +386,10 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 }
 
 
-void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
+std::string PDF_PLOTTER::arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                                  const EDA_ANGLE& aAngle, double aRadius )
 {
-    wxASSERT( m_workFile );
-
-    SetCurrentLineWidth( aWidth );
-
-    if( aRadius <= 0 )
-    {
-        Circle( aCenter, GetCurrentLineWidth(), FILL_T::FILLED_SHAPE, 0 );
-        return;
-    }
+    std::string path;
 
     /*
      * Arcs are not so easily approximated by beziers (in the general case), so we approximate
@@ -416,20 +408,39 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     start.x = KiROUND( aCenter.x + aRadius * ( -startAngle ).Cos() );
     start.y = KiROUND( aCenter.y + aRadius * ( -startAngle ).Sin() );
     VECTOR2D pos_dev = userToDeviceCoordinates( start );
-    fmt::print( m_workFile, "{:g} {:g} m ", pos_dev.x, pos_dev.y );
+    path += fmt::format( "{:g} {:g} m ", pos_dev.x, pos_dev.y );
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
         end.x = KiROUND( aCenter.x + aRadius * ( -ii ).Cos() );
         end.y = KiROUND( aCenter.y + aRadius * ( -ii ).Sin() );
         pos_dev = userToDeviceCoordinates( end );
-        fmt::print( m_workFile, "{:g} {:g} l ", pos_dev.x, pos_dev.y );
+        path += fmt::format( "{:g} {:g} l ", pos_dev.x, pos_dev.y );
     }
 
     end.x = KiROUND( aCenter.x + aRadius * ( -endAngle ).Cos() );
     end.y = KiROUND( aCenter.y + aRadius * ( -endAngle ).Sin() );
     pos_dev = userToDeviceCoordinates( end );
-    fmt::print( m_workFile, "{:g} {:g} l ", pos_dev.x, pos_dev.y );
+    path += fmt::format( "{:g} {:g} l ", pos_dev.x, pos_dev.y );
+
+    return path;
+}
+
+
+void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
+{
+    wxASSERT( m_workFile );
+
+    SetCurrentLineWidth( aWidth );
+
+    if( aRadius <= 0 )
+    {
+        Circle( aCenter, GetCurrentLineWidth(), FILL_T::FILLED_SHAPE, 0 );
+        return;
+    }
+
+    fmt::print( m_workFile, "{}", arcPath( aCenter, aStartAngle, aAngle, aRadius ) );
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
     // closing the pie at the center
@@ -439,7 +450,7 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     }
     else
     {
-        pos_dev = userToDeviceCoordinates( aCenter );
+        VECTOR2D pos_dev = userToDeviceCoordinates( aCenter );
         fmt::println( m_workFile, "{:g} {:g} l b", pos_dev.x, pos_dev.y );
     }
 }
@@ -480,16 +491,43 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
                             void* aData )
 {
-    std::vector<VECTOR2I> cornerList;
-    cornerList.reserve( aCornerList.PointCount() );
+    SetCurrentLineWidth( aWidth );
 
-    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
-        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+    std::set<size_t> handledArcs;
 
-    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
-        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+    for( int ii = 0; ii < aCornerList.SegmentCount(); ++ii )
+    {
+        if( aCornerList.IsArcSegment( ii ) )
+        {
+            size_t arcIndex = aCornerList.ArcIndex( ii );
 
-    PlotPoly( cornerList, aFill, aWidth, aData );
+            if( !handledArcs.contains( arcIndex ) )
+            {
+                handledArcs.insert( arcIndex );
+                const SHAPE_ARC& arc( aCornerList.Arc( arcIndex ) );
+                fmt::print( m_workFile, "{}", arcPath( arc.GetCenter(), arc.GetStartAngle(),
+                                                       arc.GetCentralAngle(), arc.GetRadius() ) );
+            }
+        }
+        else
+        {
+            const SEG& seg( aCornerList.Segment( ii ) );
+
+            VECTOR2D pos = userToDeviceCoordinates( seg.A );
+            fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
+
+            pos = userToDeviceCoordinates( seg.B );
+            fmt::println( m_workFile, "{:f} {:f} l", pos.x, pos.y );
+        }
+    }
+
+    // Close path and stroke and/or fill
+    if( aFill == FILL_T::NO_FILL )
+        fmt::println( m_workFile, "S" );
+    else if( aWidth == 0 )
+        fmt::println( m_workFile, "f" );
+    else
+        fmt::println( m_workFile, "b" );
 }
 
 

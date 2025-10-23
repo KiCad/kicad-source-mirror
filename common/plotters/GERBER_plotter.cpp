@@ -851,14 +851,7 @@ void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, 
                            int aCornerRadius )
 {
     if( aCornerRadius > 0 )
-    {
-        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
-        box.Normalize();
-        SHAPE_RECT rect( box );
-        rect.SetRadius( aCornerRadius );
-        PlotPoly( rect.Outline(), fill, width, nullptr );
-        return;
-    }
+        wxFAIL_MSG( wxT( "GERBER_PLOTTER must use PlotPolyAsRegion() for rounded-corner rectangles!" ) );
 
     std::vector<VECTOR2I> cornerList;
 

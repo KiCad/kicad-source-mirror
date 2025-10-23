@@ -1099,18 +1099,18 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 BOX2I box( aShape->GetStart(), VECTOR2I( aShape->GetEnd().x - aShape->GetStart().x,
                                                          aShape->GetEnd().y - aShape->GetStart().y ) );
                 box.Normalize();
+
+                if( margin < 0 )
+                {
+                    box.Inflate( margin );
+                    radius += margin;
+                }
+
                 SHAPE_RECT rect( box );
                 rect.SetRadius( radius );
 
                 SHAPE_LINE_CHAIN outline = rect.Outline();
-                SHAPE_POLY_SET  poly;
-                poly.NewOutline();
-
-                for( int ii = 0; ii < outline.PointCount(); ++ii )
-                    poly.Append( outline.CPoint( ii ) );
-
-                if( margin < 0 )
-                    poly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );
+                SHAPE_POLY_SET  poly( outline );
 
                 FILL_T fill_mode = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
@@ -1119,11 +1119,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                     {
                         GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                        gbr_plotter->PlotPolyAsRegion( poly.COutline( 0 ), fill_mode, thickness,
-                                                       &gbr_metadata );
+                        gbr_plotter->PlotPolyAsRegion( poly.COutline( 0 ), fill_mode, thickness, &gbr_metadata );
                     }
                     else
                     {
+                        // TODO: PlotPoly needs to handle arcs...
                         m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness, getMetadata() );
                     }
                 }
