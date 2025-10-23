@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-10 12:59+0200\n"
+"POT-Creation-Date: 2025-10-23 08:59+0200\n"
+"PO-Revision-Date: 2025-10-23 08:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2319,15 +2319,14 @@ msgstr "Le répertoire de blocs de conception '%s' n'a pas pu être supprimé."
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "type via inconnu %d"
+msgstr "Type de librairie inconnu %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "Couches Internes"
+msgstr "Erreur interne"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4214,14 +4213,15 @@ msgstr ""
 "lignes du tableau"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Désactiver les \"aperture macro\""
+msgstr "Désactiver les curseurs personnalisés"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Si activé, KiCad utilisera les curseurs système par défaut au lieu des "
+"curseurs personnalisés"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4457,7 +4457,6 @@ msgid "MB"
 msgstr "Mo"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4483,7 +4482,7 @@ msgstr ""
 "utilisé qu’à des fins de rapport d’incident. Aucune information "
 "personnellement identifiable (PII), y compris l’adresse IP, n’est stockée ou "
 "connectée à cet identifiant. Vous pouvez réinitialiser cet identifiant à "
-"tout moment avec le bouton fourni.\n"
+"tout moment sur la page Préférences pour Données Collectées.\n"
 "\n"
 "Si vous choisissez de participer volontairement, KiCad gérera "
 "automatiquement l’envoi desdits rapports lorsque des plantages ou des "
@@ -5839,9 +5838,8 @@ msgid "DP Gap"
 msgstr "Dist Paire Diff"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Mode d'Ajustage"
+msgstr "Profil d'Ajustage"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5989,25 +5987,34 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad est livré avec un grand nombre de librairies de symboles et "
+"d'empreintes maintenues par l'équipe de bibliothécaires de KiCad.  Vous "
+"pouvez également créer vos propres librairies et installer des librairies "
+"tierces à partir du gestionnaire de plugins et de contenu ou d'autres "
+"sources.\n"
+"\n"
+"Les tables de librairies sont les fichiers de configuration qui listent les "
+"librairies à charger. Les librairies globales sont disponibles dans chaque "
+"projet, et vous pouvez également ajouter des librairies spécifiques à un "
+"projet si vous le souhaitez."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
 msgstr ""
+"<b>Les tables de librairies globale suivantes doivent être créées :</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Comment souhaitez-vous configurer KiCad ?"
+msgstr "Comment souhaitez-vous que KiCad les crée ?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Commencer par les librairies intégrées de KiCad (recommandé)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Importer les paramètres d’une version précédente à :"
+msgstr "Importer les tables d’une version précédente"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -6015,11 +6022,13 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Les tables de librairies seront importées à partir de la version que vous "
+"avez sélectionnée à l'étape précédente. Les tables qui ne peuvent pas être "
+"importées seront créées avec les librairies par défaut de KiCad."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Librairies d'Empreintes"
+msgstr "Démarrer sans librairies"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -6028,17 +6037,24 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Les tables de librairies intégrées n'ont pas pu être trouvées à "
+"l'emplacement prévu. Cela signifie généralement que vous avez installé KiCad "
+"sans installer les librairies. Vous pouvez poursuivre l'installation, mais "
+"vous devrez installer les librairies séparément pour qu'elles soient "
+"disponibles."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Mise à jour"
+msgstr "Mises à Jour"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Autoriser les connexions à Internet pour vérifier les versions mises à jour "
+"de KiCad et des paquets installés par l'intermédiaire du gestionnaire de "
+"plugins et de contenu ?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1321
@@ -6060,7 +6076,7 @@ msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Active la collecte de données anonymes"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6280,7 +6296,7 @@ msgstr "Toutes les Pages"
 
 #: common/drawing_sheet/ds_draw_item.cpp:152
 msgid "First Page Option"
-msgstr "Options pour Premiere Page"
+msgstr "Options pour Première Page"
 
 #: common/drawing_sheet/ds_draw_item.cpp:156
 msgid "Repeat Count"
@@ -8371,19 +8387,16 @@ msgid "PCB: Export Postscript"
 msgstr "PCB : Export Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Affiche les statistiques du circuit imprimé"
+msgstr "Exporter les statistiques du circuit imprimé"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Paramètres Job Exportation Netliste"
+msgstr "Paramètres Job Exportation des Statistiques du PCB"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Statistiques du CI"
+msgstr "PCB: Exporter Statistiques"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8752,9 +8765,8 @@ msgid "Net color highlight"
 msgstr "Couleur de surbrillance de netclasse"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Surbrillance des collisions"
+msgstr "Collisions de net en drag"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -9000,12 +9012,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -9030,44 +9040,41 @@ msgid "Show"
 msgstr "Visible"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Une librairie de nom logique '%s' existe déjà."
+msgstr "Une référence à cette table de librairies existe déjà"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Défaut"
+msgstr "Librairies KiCad par Défaut"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
 msgstr "Librairie '%s' non trouvée."
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "Le chemin spécifié n'existe pas"
+msgstr "Le chemin d'accès de la table de librairies '%s' n'existe pas"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
 msgstr ""
-"Une erreur s'est produite lors de l'écriture de la table des librairies "
-"d'empreinte vierge '%s'."
+"Une erreur inattendue s'est produite lors de la lecture de la table de "
+"librairies %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Erreur de syntaxe à la ligne %zu, colonne %zu"
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
 msgstr ""
-"Une erreur s'est produite lors de l'écriture de la table des librairies "
-"d'empreinte vierge '%s'."
+"Une erreur inattendue s'est produite lors de la lecture de la table des "
+"librairies"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1148 pcbnew/zone.cpp:919
@@ -9188,7 +9195,6 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Le fichier dictionnaire KiCad pour cette langue n’est pas installé."
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
 msgstr "Chargement des Librairies de Blocs de Conception"
 
@@ -9408,9 +9414,9 @@ msgid "KiCad Classic"
 msgstr "KiCad Classique"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Bienvenue à KiCad %s!"
+msgstr "Bienvenue à KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9420,36 +9426,40 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad démarre pour la première fois, ou certains de ses fichiers de "
+"configuration sont manquants.\n"
+"\n"
+"Prenons le temps de configurer quelques paramètres de base.  Vous pourrez "
+"toujours modifier ces paramètres ultérieurement en ouvrant la boîte de "
+"dialogue Préférences."
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
-msgstr ""
+msgstr "Pour obtenir de l'aide, veuillez consulter "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Options du CI"
+msgstr "Configuration de KiCad"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
+"Êtes-vous sûr?  Si vous annulez le réglage de KiCad, les paramètres par "
+"défaut seront choisis pour vous."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Librairie de symboles non activée."
+msgstr "Table de librairie de symboles"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Librairie d'empreintes non activée."
+msgstr "Table de librairie d'empreintes"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Librairies de Blocs de Conception"
+msgstr "Table de librairies de Blocs de Conception"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -10853,13 +10863,13 @@ msgstr "Description de Librairie"
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Erreur en enregistrant la table globale de librairie de symboles:\n"
+"Erreur en enregistrant la table de librairie:\n"
 "\n"
 "%s"
 
@@ -16279,6 +16289,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -17078,7 +17089,7 @@ msgstr "Préréglages Liste du Matériel"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 msgid "Bill of Materials Formatting Presets"
-msgstr "Préréglages de Formatage de Nomenclature "
+msgstr "Préréglages de Formatage de Nomenclature"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -17261,9 +17272,8 @@ msgid "(selection color can be edited in the \"Colors\" page)"
 msgstr "(la couleur de sélection peut être modifiée dans la page « Couleurs »)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:192
-#, fuzzy
 msgid "Net collision marker width:"
-msgstr "Épaiss. ligne par défaut:"
+msgstr "Largeur du marqueur de collision de nets"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:200
 msgid "Highlight thickness:"
@@ -17914,19 +17924,19 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Garder les pins attachées lorsque l'on déplace les bords"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Erreur lors du chargement de la table des librairies de symboles '%s'."
+msgstr "Erreur lors du chargement de la table des librairies '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "Erreur lors du chargement de la librairie de symboles %s."
+msgstr "Erreur lors du chargement de la librairie %s."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "Champs de Librairies de Symboles: %s"
+msgstr "Tables de Librairies de Symboles (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:544
 msgid "Nickname and path cannot be empty."
@@ -19353,9 +19363,8 @@ msgid "Error loading symbol library '%s'."
 msgstr "Erreur lors du chargement de la librairie de symboles %s."
 
 #: eeschema/libraries/symbol_library_adapter.cpp:425
-#, fuzzy
 msgid "Library not found in library table"
-msgstr "Librairie non trouvée dans la table des librairies de symboles."
+msgstr "Librairie introuvable dans la table des librairies"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
@@ -19968,34 +19977,28 @@ msgid "Filter nets"
 msgstr "Filtrage nets"
 
 #: eeschema/sch_edit_frame.cpp:2442
-#, fuzzy
 msgid "Wildcard Search"
-msgstr "Caractères &joker"
+msgstr "Recherche avec Caractères Joker"
 
 #: eeschema/sch_edit_frame.cpp:2444
-#, fuzzy
 msgid "Regex Search"
-msgstr "Redémarrer Recherche"
+msgstr "Recherche avec Regex"
 
 #: eeschema/sch_edit_frame.cpp:2592
-#, fuzzy
 msgid "Find in Net Inspector"
-msgstr "Inspecteur d'équipotentielles (nets)"
+msgstr "Rechercher dans Net Inspector"
 
 #: eeschema/sch_edit_frame.cpp:2906
-#, fuzzy
 msgid "Enter new variant name"
-msgstr "Ajouter nouveau nom de variante :"
+msgstr "Saisir un nouveau nom de variante"
 
 #: eeschema/sch_edit_frame.cpp:2906 eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Variant Name"
-msgstr "Nom de Variable"
+msgstr "Nom de Variante"
 
 #: eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "Sélectionner une couche à supprimer:"
+msgstr "Sélectionner le nom de la variante à supprimer"
 
 #: eeschema/sch_field.cpp:983
 #, c-format
@@ -20491,13 +20494,13 @@ msgstr ""
 "format XML peuvent être importés."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Invalide couche de pile de pad '%s'  dans le fichier '%s' ligne %d, offset "
-"%d."
+"Impossible de lire le fichier '%s'.\n"
+"'%s' à la ligne %d, colonne %d, décalage %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1028
 #, c-format
@@ -23962,9 +23965,8 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:136
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "Empreintes non verrouillées"
+msgstr "empreinte non numérotée"
 
 #: eeschema/tools/backannotate.cpp:179
 #, c-format
@@ -24745,14 +24747,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Attribuer une netclasse aux nets correspondants à un modèle"
 
 #: eeschema/tools/sch_actions.cpp:874
-#, fuzzy
 msgid "Find in Net Navigator"
-msgstr "Navigateur de Net"
+msgstr "Trouver dans Navigateur de Net"
 
 #: eeschema/tools/sch_actions.cpp:875
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Éditer le symbole sélectionné dans d'Éditeur de Symboles"
+msgstr "Localiser le net sélectionné dans le navigateur de net"
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Cycle Body Style"
@@ -25601,9 +25601,8 @@ msgid "Remove an existing variant from the schematic."
 msgstr "Supprimer une variante existante de la schématique."
 
 #: eeschema/tools/sch_align_tool.cpp:63
-#, fuzzy
 msgid "Align"
-msgstr "Alignement H"
+msgstr "Alignement"
 
 #: eeschema/tools/sch_align_tool.cpp:350
 #: pcbnew/tools/align_distribute_tool.cpp:434
@@ -25973,9 +25972,8 @@ msgstr ""
 "netclass."
 
 #: eeschema/tools/sch_editor_control.cpp:1077
-#, fuzzy
 msgid "No connected net selected."
-msgstr "Pas de \"net\" sélectionné."
+msgstr "Pas de \"net\" connecté sélectionné."
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1119
 msgid ""
@@ -26361,28 +26359,25 @@ msgstr "Modifier le nom de cette feuille"
 #: eeschema/widgets/hierarchy_pane.cpp:518
 #: eeschema/widgets/hierarchy_pane.cpp:596
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Supprimer Pins de Hiérarchie"
+msgstr "Supprimer Feuille de Niveau Supérieur"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
 msgid "Remove this top-level sheet from the project"
-msgstr ""
+msgstr "Supprimer cette feuille de premier niveau du projet"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
-#, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Quitter sous-feuille"
+msgstr "Nouvelle Feuille de Niveau Supérieur"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
-#, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Créer un nouveau répertoire pour le projet"
+msgstr "Créer une nouvelle feuille de niveau supérieur"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 msgid "Enter name for new top-level sheet:"
-msgstr ""
+msgstr "Entrer le nom de la nouvelle feuille de premier niveau :"
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
@@ -26391,7 +26386,7 @@ msgstr "Sans titre"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
 msgid "Add new top-level sheet"
-msgstr ""
+msgstr "Ajouter une nouvelle feuille de premier niveau"
 
 #: eeschema/widgets/hierarchy_pane.cpp:593
 #, c-format
@@ -26400,15 +26395,17 @@ msgid ""
 "\n"
 "This cannot be undone."
 msgstr ""
+"Supprimer la feuille de premier niveau '%s' ?\n"
+"\n"
+"Cette opération ne peut être annulée."
 
 #: eeschema/widgets/hierarchy_pane.cpp:601
 msgid "Cannot delete the last top-level sheet."
-msgstr ""
+msgstr "Impossible de supprimer la dernière feuille de premier niveau."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
-#, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Supprimer Net  Sélectionné"
+msgstr "Supprimer la feuille de niveau supérieur"
 
 #: eeschema/widgets/hierarchy_pane.cpp:627
 #, c-format
@@ -28675,22 +28672,18 @@ msgid "Force A4 paper size."
 msgstr "Forcer le format de papier A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
-msgstr "Affiche les statistiques du circuit imprimé"
+msgstr "Générer le rapport des statistiques du circuit imprimé"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
-#, fuzzy
 msgid "Report units; valid options: in, mm"
-msgstr "Unités du rapport, options valables : in, mm, mils"
+msgstr "Unités du rapport, options valables : in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
 msgstr "Exclure empreintes sans pad"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
 msgstr "Soustraire les trous de la surface du CI"
 
@@ -29154,30 +29147,25 @@ msgid "Execute Command Job Settings"
 msgstr "Exécute Commande Paramètres Job"
 
 #: kicad/dialogs/dialog_template_selector.cpp:230
-#, fuzzy
 msgid "Edit Template"
-msgstr "Modèle"
+msgstr "Editer Modèle"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
-#, fuzzy
 msgid "Duplicate Template"
-msgstr "Dupliquer Symbole"
+msgstr "Dupliquer Modèle"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Impossible de créer le répertoire source: '%s'"
+msgstr "Impossible d'ouvrir le répertoire des modèles."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "Aucun fichier de projet n'a été trouvé dans le dépôt."
+msgstr "Aucun fichier de projet n'a été trouvé dans le répertoire des modèles."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
-#, fuzzy
 msgid "Enter name for the new template:"
-msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
+msgstr "Entrer le nom du nouveau modèle :"
 
 #: kicad/dialogs/dialog_template_selector.cpp:301
 #: pcbnew/tools/footprint_editor_control.cpp:413
@@ -29185,34 +29173,31 @@ msgid "_copy"
 msgstr "_copy"
 
 #: kicad/dialogs/dialog_template_selector.cpp:310
-#, fuzzy
 msgid "Template name cannot be empty."
-msgstr "Le nom du net ne peut pas être vide."
+msgstr "Le nom du modèle ne peut pas être vide."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Impossible de créer le répertoire '%s'"
+msgstr "Impossible de trouver le répertoire des modèles utilisateur."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Le répertoire de sortie '%s' existe déjà."
+msgstr "Le répertoire '%s' existe déjà."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Impossible de créer le répertoire '%s'"
+msgstr "Impossible de créer le répertoire '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Impossible de créer le répertoire source: '%s'"
+msgstr "Impossible d'ouvrir le répertoire du modèle source."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format
 msgid "Template duplicated successfully to '%s'."
-msgstr ""
+msgstr "Le modèle a été dupliqué avec succès vers '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:452
 #: kicad/dialogs/dialog_template_selector_base.h:64
@@ -29324,9 +29309,9 @@ msgid "Running Jobs"
 msgstr "Exécution des Tâches"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "Impossible d'ouvrir le fichier '%s'."
+msgstr "Impossible d'ouvrir '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:323
 msgid "Edit Destination Options..."
@@ -29341,9 +29326,8 @@ msgid "View Last Run Log..."
 msgstr "Voir Résultats de Dernière Exécution..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
-#, fuzzy
 msgid "Open Output"
-msgstr "Sortie"
+msgstr "Ouvrir Sortie"
 
 #: kicad/dialogs/panel_jobset.cpp:428
 msgid "Edit Job Description"
@@ -29407,7 +29391,7 @@ msgstr "Générer Toutes les Destinations"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
 msgid "Open the generated output"
-msgstr ""
+msgstr "Ouvrir la sortie générée"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -29705,46 +29689,52 @@ msgid "You can copy styling from the default pages for consistency."
 msgstr "Vous pouvez copier le style des pages par défaut pour la cohérence."
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
-msgstr "Non Trouvé"
+msgstr "Pas de Modèle Trouvé"
 
 #: kicad/dialogs/template_default_html.h:180
-#, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "Le répertoire sélectionné est déjà un projet Git."
+msgstr ""
+"Le répertoire de modèles sélectionné ne contient aucun modèle de projet."
 
 #: kicad/dialogs/template_default_html.h:183
 msgid "What to do:"
-msgstr ""
+msgstr "Ce qu'il faut faire :"
 
 #: kicad/dialogs/template_default_html.h:185
 msgid "Browse to a different templates directory using the folder icon"
 msgstr ""
+"Naviguez vers un autre répertoire de modèles à l'aide de l'icône de dossier"
 
 #: kicad/dialogs/template_default_html.h:186
 msgid "Click the refresh icon to reload the current directory"
 msgstr ""
+"Cliquez sur l'icône d'actualisation pour recharger le répertoire actuel"
 
 #: kicad/dialogs/template_default_html.h:187
 msgid "Check that the directory path contains valid templates"
 msgstr ""
+"Vérifier que le chemin d'accès au répertoire contient des modèles valides"
 
 #: kicad/dialogs/template_default_html.h:188
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
+"Utiliser les modèles système par défaut en accédant à l'onglet des modèles "
+"de système"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid "Tip:"
-msgstr ""
+msgstr "Astuce :"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
+"Les modèles sont organisés en sous-répertoires. Chaque modèle a besoin d'un "
+"dossier \"meta\" contenant des fichiers de configuration."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -34546,14 +34536,12 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/board_statistics_report.cpp:110
-#, fuzzy
 msgid "Castellated:"
-msgstr "Castellated"
+msgstr "Castellated:"
 
 #: pcbnew/board_statistics_report.cpp:112
-#, fuzzy
 msgid "Press-fit:"
-msgstr "Press-fit"
+msgstr "Press-fit:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Through vias:"
@@ -34965,18 +34953,16 @@ msgid "Barcode Properties"
 msgstr "Propriétés du Code Barre"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
-#, fuzzy
 msgid "(not updated)"
-msgstr "(non activée)"
+msgstr "(non mis à jour)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
 msgid "(unannotated; not updated)"
-msgstr ""
+msgstr "(non numéroté ; non mis à jour)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
-#, fuzzy
 msgid "(excluded)"
-msgstr "Exclus"
+msgstr "(exclus)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:113
 msgid "Reannotate PCB"
@@ -34987,53 +34973,46 @@ msgid "PCB successfully reannotated"
 msgstr "PCB renuméroté avec succès"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:219
-#, fuzzy
 msgid ""
 "PCB annotation changes should be synchronized with schematic using \"Update "
 "Schematic from PCB\"."
 msgstr ""
 "Les modifications de numérotation du PCB doivent être synchronisées avec la "
-"schématique à l’aide de l’outil \"Mettre à jour le schéma à partir de PCB\"."
+"schématique avec l’outil \"Mettre à jour le schéma à partir de PCB\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
-#, fuzzy
 msgid "Reference Designator Prefixes in Use"
-msgstr "Références Schématique"
+msgstr "Préfixes de Références Schématique en Utilisation"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "Exclusion : %s de la réannotation<br/>"
+msgstr "(Excluant %s de la renumérotation.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
-#, fuzzy
 msgid "Change Log"
-msgstr "Changer Pour"
+msgstr "Change Log"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Front Footprints"
-msgstr "Export Empreintes"
+msgstr "Empreintes Dessus"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Back Footprints"
-msgstr "Grouper Empreintes"
+msgstr "Empreintes Dessous"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
-#, fuzzy
 msgid "(sorted by footprint location)"
-msgstr "Montrer Associations d'Empreintes"
+msgstr "(triés par position d'empreintes)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:370
-#, fuzzy
 msgid "(sorted by reference designator location)"
-msgstr "Change la référence schématique de %s en %s."
+msgstr "(triés par position de référence schématique)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%d %s X, Y: %s; arrondi X, Y: %s"
+msgstr "<br/>%d %s à %s (arrondi à %s)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:399
 msgid "Selected options resulted in errors! Change them and try again."
@@ -35041,21 +35020,22 @@ msgstr ""
 "Les options sélectionnées ont entraîné des erreurs! Changez-les et réessayez."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "Changer les empreintes en accord avec la référence schématique:"
+msgstr "Le PCB a %d référence schématiques vides ou non valides."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
-#, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
-msgstr "Test de parité entre PCB et schématique"
+msgstr ""
+"Vous pouvez exécuter le DRC en cochant la case \"Test de parité entre le PCB "
+"et le schéma\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>Ref sch: %s Empreinte: %s:%s à %s sur PCB."
+msgstr "<br/>Ref sch: %s Empreinte: %s à %s sur PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -35305,9 +35285,8 @@ msgstr "Modèles d'ajustage de longueur"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:193
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Tuning Profiles"
-msgstr "Mode d'Ajustage"
+msgstr "Profils d'Ajustage"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:215
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -36980,9 +36959,8 @@ msgstr ""
 "Ce numéro doit être unique pour chaque composant ."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:127
-#, fuzzy
 msgid "Generate unique"
-msgstr "Générer un ID Unique"
+msgstr "Générer ID unique"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
 msgid "Manufacturer P/N:"
@@ -38390,9 +38368,8 @@ msgid "Footprint Report"
 msgstr "Rapport sur Empreintes"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Chargement des textes..."
+msgstr "Texte simple"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41007,9 +40984,8 @@ msgid "Reset this value to the original value."
 msgstr "Remettre cette valeur à sa valeur d'origine."
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:62
-#, fuzzy
 msgid "Offset Item"
-msgstr "Éléments d'Enveloppe"
+msgstr "Déplacement Élément"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:197
 msgid "Rectangle cannot be zero-sized."
@@ -42179,27 +42155,24 @@ msgid "Minimum clearance:"
 msgstr "Isolation minimum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
 "Isolation minimale entre les éléments cuivre qui n’appartiennent pas au même "
-"net.  S’il est défini, il s’agit d’un minimum absolu qui ne peut pas être "
-"réduit par les netclasses, règles personnalisées ou autres paramètres."
+"net.  S’il est défini, il ne peut être réduit que par des règles "
+"personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Largeur minimum de piste:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Largeur minimale de la piste.  Si défini, il s’agit d’un minimum absolu qui "
-"ne peut pas être réduit par des netclasses, règles personnalisées ou autres "
-"paramètres."
+"Largeur minimale de la piste.  Si défini, elle ne peut être réduite que par "
+"des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -42214,55 +42187,47 @@ msgid "Minimum annular width:"
 msgstr "Largeur minimale d'anneau:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Largeur minimale de l’anneau annulaire.  Si défini, il s’agit d’un minimum "
-"absolu qui ne peut pas être réduit par des netclasses, règles personnalisées "
-"ou autres paramètres."
+"Largeur minimale de l’anneau annulaire.  Si défini, elle ne peut pas être "
+"réduite que par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
 msgstr "Diamètre minimum pour via:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Diamètre minimum de via.  Si défini, il s’agit d’un minimum absolu qui ne "
-"peut pas être réduit par des netclasses, règles personnalisées ou autres "
-"paramètres."
+"Diamètre minimum de via.  Si défini, Si défini il ne peut être réduit que "
+"par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
 msgstr "Isolation trou / cuivre:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
 "Isolation minimum entre un trou et un élément cuivre non associé.  Si "
-"défini, il s’agit d’un minimum absolu qui ne peut pas être réduit par des "
-"règles personnalisées ou autres paramètres."
+"défini, elle ne peut être réduite que par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Isolation cuivre/contour de CI:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"L'isolation entre le bord du PCB et tout élément cuivre.  Si défini, il "
-"s’agit d’un minimum absolu qui ne peut pas être réduit par des règles "
-"personnalisées ou autres paramètres."
+"L'isolation entre le bord du PCB et tout élément cuivre.  Si définie, elle "
+"ne peut être réduite que par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -42281,28 +42246,25 @@ msgid "Minimum through hole:"
 msgstr "Diamètre minimum trou traversant:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Taille minimale du trou traversant.  Si défini, il s’agit d’un minimum "
-"absolu qui ne peut pas être réduit par netclasses, règles personnalisées ou "
-"autres paramètres."
+"Taille minimale du trou traversant.  Si définie, elle ne peut être réduite "
+"que par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
 msgstr "Isolation trou à trou:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"L'isolation minimum entre deux trous percés.   Si défini, il s’agit d’un "
-"minimum absolu qui ne peut pas être réduit par des règles personnalisées ou "
-"autres paramètres. (Remarque : ne s’applique pas aux trous fraisés.)"
+"L'isolation minimum entre deux trous percés.   Si définie, elle ne peut être "
+"réduite que par des règles personnalisées. (Remarque : ne s’applique pas aux "
+"trous fraisés.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -42313,28 +42275,24 @@ msgid "Minimum uVia diameter:"
 msgstr "Diamètre min uVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Diamètre minimum pour les micro-vias.  Si défini, il s’agit d’un minimum "
-"absolu qui ne peut pas être réduit par des netclasses, règles personnalisées "
-"ou autres paramètres."
+"Diamètre minimum pour les micro-vias.  Si défini, il ne peut être réduit que "
+"par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
 msgstr "Perçage minimum uVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Diamètre minimum pour perçage micro-vias.  Si défini, il s’agit d’un minimum "
-"absolu qui ne peut pas être réduit par des netclasses, règles personnalisées "
-"ou autres paramètres."
+"Diamètre minimum pour trou micro-via.  Si défini, il ne peut être réduit que "
+"par des règles personnalisées."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -42345,13 +42303,12 @@ msgid "Minimum item clearance:"
 msgstr "Isolation minimum de l'élément:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
-#, fuzzy
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Isolation minumum entre deux éléments sur la même couche de sérigraphie.  Si "
+"Isolation minimum entre deux éléments sur la même couche de sérigraphie.  Si "
 "défini, cela peut améliorer la lisibilité.  (Remarque : ne s’applique pas à "
 "plusieurs formes dans une seule empreinte.)"
 
@@ -44204,20 +44161,17 @@ msgstr "Propriétés par Défaut pour les Asymétries de Paires Différentielles
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:756
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:807
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "Contrôle pour sélectionner la largeur de piste"
+msgstr "Impossible de calculer la largeur de piste"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:761
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Router paire différentielle"
+msgstr "Impossible de calculer l'écart des paires différentielles"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:766
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:812
-#, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Unité de temps de propagation :"
+msgstr "Impossible de calculer le délai de propagation de piste"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:832
 msgid "Tuning profile must have a name"
@@ -44226,154 +44180,150 @@ msgstr "Le profil de réglage doit avoir un nom"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:847
 msgid "Duplicated signal layer configuration in tuning profile"
 msgstr ""
+"Duplication de la configuration de la couche de signal dans le profil "
+"d'ajustage"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:875
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:886
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:943
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:949
-#, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "Les noms de signaux ne peuvent pas contenir d'espace"
+msgstr "La couche de signal n'a pas été trouvée dans le \"stackup\""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:881
 msgid "Internal error: Microstrip can only be on an outer copper layer"
 msgstr ""
+"Erreur interne : Les Microstrips ne peuvent se trouver que sur une couche "
+"externe de cuivre"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:892
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:955
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Le rayon doit être plus grand que 0"
+msgstr "L'épaisseur de la couche de signal doit être supérieure à 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:903
-#, fuzzy
 msgid "Reference layer not found in stackup"
-msgstr "Référence '%s' non trouvée."
+msgstr "La couche de référence n'a pas été trouvée dans le \"stackup\""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:909
 msgid "Reference layer must be different to signal layer"
-msgstr ""
+msgstr "La couche de référence doit être différente de la couche de signal"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:918
-#, fuzzy
 msgid "Dielectric height must be greater than 0"
-msgstr "L'angle de l'arc doit être supérieur à 0"
+msgstr "La hauteur du diélectrique doit être supérieure à 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:961
 msgid "Top reference layer not found in stackup"
 msgstr ""
+"La couche de référence supérieure n'a pas été trouvée dans le \"stackup\""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:967
 msgid "Top reference layer must be above signal layer in board stackup"
 msgstr ""
+"La couche de référence supérieure doit se trouver au-dessus de la couche de "
+"signal dans le \"stackup\" du PCB"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:973
 msgid "Bottom reference layer not found in stackup"
-msgstr ""
+msgstr "La couche de référence du bas n'a pas été trouvée dans le \"stackup\""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:979
 msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
+"La couche de référence inférieure doit se trouver en dessous de la couche de "
+"signal dans le \"stackup\" du PCB"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:992
-#, fuzzy
 msgid "Dielectric heights must be greater than 0"
-msgstr "L'angle de l'arc doit être supérieur à 0"
+msgstr "Les hauteurs de diélectriques doivent être supérieures à 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1019
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1095
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1170
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1272
-#, fuzzy
 msgid "Target impedance must be greater than 0"
-msgstr "L'angle de l'arc doit être supérieur à 0"
+msgstr "L'impédance cible doit être supérieure à 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1072
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1147
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1244
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1345
-#, fuzzy
 msgid "Width calculation failed"
-msgstr "Editer fichiers association d'empreintes"
+msgstr "Le calcul de la largeur a échoué"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1075
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1150
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1250
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1351
 msgid "Delay calculation failed"
-msgstr ""
+msgstr "Échec du calcul du délai"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1188
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1290
-#, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "La distance entre pistes doit être plus grande que 0."
+msgstr ""
+"L'écart de paire différentielle doit être supérieur à 0 pour calculer la "
+"largeur"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1195
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1297
-#, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
 msgstr ""
-"La largeur de la ligne doit être supérieure à zéro pour un cercle non rempli."
+"La largeur doit être supérieure à 0 pour calculer l'écart de paire "
+"différentielle"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1202
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1304
 msgid "Width and diff pair gap must be greater than 0 to calculate delay"
 msgstr ""
+"La largeur et l'écart entre les paires diff doivent être supérieurs à 0 pour "
+"calculer le retard"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1247
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1348
-#, fuzzy
 msgid "Diff pair gap calculation failed"
-msgstr "Résolution de l’écart de paire diff pour:"
+msgstr "Échec du calcul de l'écart de paire différentielle"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
-msgstr "Simple Run"
+msgstr "Simple"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target Impedance:"
-msgstr "Surfaces cibles:"
+msgstr "Impédance Cible :"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
-msgstr ""
+msgstr "ohms"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Generate Net Class DRC Rules"
-msgstr "Génération des couches des vias couvertes"
+msgstr "Générer Règles DRC pour Classes de Net"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
 msgid "Enable Time Domain Tuning"
-msgstr ""
+msgstr "Activer l'Ajustage du Domaine Temporel"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
-#, fuzzy
 msgid "Track Propagation"
-msgstr "Pistes se croisant"
+msgstr "Propagation de Piste"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:123
-#, fuzzy
 msgid "Signal Layer"
-msgstr "Couche de Signal Vers"
+msgstr "Couche de Signal"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
-#, fuzzy
 msgid "Top Reference"
-msgstr "Référence"
+msgstr "Référence Dessus"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
-#, fuzzy
 msgid "Bottom Reference"
-msgstr "Référence"
+msgstr "Référence Dessous"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Ecart Paire Différentielle: %s"
+msgstr "Ecart Paire Différentielle"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:128
 #, fuzzy
@@ -44381,23 +44331,21 @@ msgid "Unit Delay"
 msgstr "Délai de Net"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:166
-#, fuzzy
 msgid "Via Propagation"
-msgstr "Propriétés des Vias"
+msgstr "Propagation pour Via"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
 #, fuzzy
 msgid "Global Unit Delay:"
-msgstr "Suppression globale"
+msgstr "Délai de Net"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
 msgid "ps/cm"
-msgstr ""
+msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
-#, fuzzy
 msgid "Via Delay Overrides:"
-msgstr "Forçages de Délai de Via"
+msgstr "Forçages de Délai de Via:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:212
 msgid "Signal Layer From"
@@ -44484,9 +44432,9 @@ msgstr "netclasse '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:449 pcbnew/drc/drc_engine.cpp:471
 #: pcbnew/drc/drc_engine.cpp:486 pcbnew/drc/drc_engine.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "tuning profile '%s'"
-msgstr "Extraction fichier '%s'."
+msgstr "profil d'ajustage '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:580
 msgid "keepout area"
@@ -45095,9 +45043,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Texte non en miroir sur la couche de dessous"
 
 #: pcbnew/drc/drc_item.cpp:301
-#, fuzzy
 msgid "Missing tuning profile"
-msgstr "Valeur min manquante."
+msgstr "Profil d'ajustage manquant"
 
 #: pcbnew/drc/drc_item.cpp:498
 #, c-format
@@ -45134,9 +45081,8 @@ msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr "Le mot-clé '%s' est obsolète.  Veuillez utiliser '%s' à la place."
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "Variable texte non résolue"
+msgstr "Variable texte non résolue."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
@@ -45169,9 +45115,8 @@ msgid "Missing ')'."
 msgstr "Manquant ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:198 pcbnew/drc/drc_rule_parser.cpp:264
-#, fuzzy
 msgid "version number"
-msgstr "Numéro de version manquant."
+msgstr "numéro de version"
 
 #: pcbnew/drc/drc_rule_parser.cpp:208 pcbnew/drc/drc_rule_parser.cpp:274
 #: pcbnew/drc/drc_rule_parser.cpp:355 pcbnew/drc/drc_rule_parser.cpp:418
@@ -45194,9 +45139,8 @@ msgstr "Impossible d'analyser l'expression '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:338 pcbnew/drc/drc_rule_parser.cpp:412
 #: pcbnew/drc/drc_rule_parser.cpp:682
-#, fuzzy
 msgid "quoted expression"
-msgstr "Expression mal formée"
+msgstr "expression entre guillements"
 
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "'layer' keyword already present."
@@ -45225,9 +45169,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "La règle a déjà une contrainte '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:659
-#, fuzzy
 msgid "number"
-msgstr "Numéro"
+msgstr "nombre"
 
 #: pcbnew/drc/drc_rule_parser.cpp:670
 msgid "Missing assertion expression."
@@ -45314,9 +45257,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Vérification de l'isolation des graphiques sur cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Vérification de l'isolation des graphiques sur cuivre..."
+msgstr "Vérification de l'isolation des trous de graphiques sur cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
@@ -45930,9 +45872,8 @@ msgid "Checking assertions..."
 msgstr "Vérification des assertions..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:602
-#, fuzzy
 msgid "Checking for missing tuning profiles..."
-msgstr "Vérification des liens d'empreinte..."
+msgstr "Vérification des profils d'ajustage manquants..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -46485,6 +46426,8 @@ msgstr "Impossible de renommer le fichier temporaire '%s' en '%s'."
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
 msgid "Cannot use VRML models when exporting to non-mesh formats."
 msgstr ""
+"Impossible d'utiliser des modèles VRML lors de l'exportation vers des "
+"formats autres que formats maillés."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2975
 #, c-format
@@ -48224,34 +48167,31 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2301
 msgid "('fiducial' pads are normally plated)"
-msgstr ""
+msgstr "(les pads \"fiducial\" sont normalement plaqués)"
 
 #: pcbnew/pad.cpp:2305
 msgid "('testpoint' pads are normally plated)"
-msgstr ""
+msgstr "(les pads \"testpoint\" sont normalement plaqués)"
 
 #: pcbnew/pad.cpp:2308
 msgid "('heatsink' pads are normally plated)"
-msgstr ""
+msgstr "(les pads \"heatsink\" sont normalement plaqués)"
 
 #: pcbnew/pad.cpp:2311
-#, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr "(la propriété \"Castellated\" est pour pad à trou métallisé)"
+msgstr "(pads \"castellated\" sont normalement pour trous métallisés)"
 
 #: pcbnew/pad.cpp:2314
 msgid "('BGA' property is for SMD pads)"
 msgstr "(la propriété \"BGA\" est pour les pads CMS)"
 
 #: pcbnew/pad.cpp:2317
-#, fuzzy
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(la propriété \"Mécanique\" est pour pad à trou métallisé)"
+msgstr "(pads \"mécanique\" sont normalement pour trous métallisés)"
 
 #: pcbnew/pad.cpp:2322
-#, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
-msgstr "(la propriété \"press-fit\" est pour pad à trou rond métallisé)"
+msgstr "(pad \"press-fit\" est normalement pour trou rond métallisé)"
 
 #: pcbnew/pad.cpp:2339
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -50605,7 +50545,7 @@ msgstr "anneau annulaire enlevé"
 
 #: pcbnew/pcb_track.cpp:1427
 msgid "Via diameter is too small."
-msgstr "Le diamètre de via est trop petit"
+msgstr "Le diamètre de via est trop petit."
 
 #: pcbnew/pcb_track.cpp:1434
 msgid "Via drill is too small."
@@ -50912,14 +50852,14 @@ msgid "Successfully created genCAD file\n"
 msgstr "Le fichier GenCAD a été créé avec succès\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "Erreur lors de l'écriture du fichier '%s'."
+msgstr "Erreur lors de l'écriture du fichier '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Génération données de position de dessous dans '%s'.\n"
+msgstr "Écriture des statistiques du PCBe dans '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1834 pcbnew/pcbnew_jobs_handler.cpp:1908
 #, c-format
@@ -53143,18 +53083,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Déplacer les éléments sélectionnés un par un"
 
 #: pcbnew/tools/pcb_actions.cpp:603
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Déplacer avec Référence"
+msgstr "Déplacer avec Référence..."
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Déplace l’élément(s) sélectionné(s) avec un point de départ spécifié"
 
 #: pcbnew/tools/pcb_actions.cpp:612
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Copier avec Référence"
+msgstr "Copier avec Référence..."
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -54417,14 +54355,12 @@ msgstr ""
 "élément"
 
 #: pcbnew/tools/pcb_actions.cpp:2319
-#, fuzzy
 msgid "Interactive Offset Tool"
-msgstr "Outil Interactif de Suppression"
+msgstr "Outil Interactif de Déplacement"
 
 #: pcbnew/tools/pcb_actions.cpp:2320
-#, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
-msgstr "Déplace l'élément sélectionné d'une distance exacte"
+msgstr "Outil interactif pour déplace les éléments d'une distance exacte"
 
 #: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Select/Expand Connection"
@@ -56634,6 +56570,92 @@ msgstr "Symbole Schématique KiCad"
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
 
+#, fuzzy
+#~ msgid "Via Propagation Speed:"
+#~ msgstr "Unité de temps de propagation :"
+
+#~ msgid "Empty"
+#~ msgstr "Vide"
+
+#~ msgid "Invalid"
+#~ msgstr "Invalide"
+
+#, c-format
+#~ msgid ""
+#~ "<br/>There are %i reference designator prefixes in use<br/"
+#~ ">**********************************************************<br/>"
+#~ msgstr ""
+#~ "<br/>Il existe %i préfixes de référence utilisés<br/"
+#~ ">**********************************************************<br/>"
+
+#~ msgid ""
+#~ "<br/>Change Array\n"
+#~ "***********************<br/>"
+#~ msgstr ""
+#~ "<br/>    Change Ensemble\n"
+#~ "***********************<br/>"
+
+#~ msgid "(will be ignored)"
+#~ msgstr "(sera ignorée)"
+
+#~ msgid "<br/>No footprints"
+#~ msgstr "<br/>Pas d'empreinte"
+
+#~ msgid "<br/>*********** Sort on Footprint Coordinates ***********"
+#~ msgstr "<br/>*********** Tri par Coordonnées Empreinte ***********"
+
+#~ msgid "<br/>*********** Sort on Reference Coordinates ***********"
+#~ msgstr "<br/>*********** Tri par Coordonnées de Référence ***********"
+
+#, c-format
+#~ msgid ""
+#~ "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
+#~ "running DRC with 'Test for parity between PCB and schematic' checked.\n"
+#~ msgstr ""
+#~ "<br/>Le PCB a %d références schématiques vides ou non valides.<br/>Il est "
+#~ "recommandé d’exécuter le contrôle DRC avec 'Test des empreintes par "
+#~ "rapport à la schématique' activé.\n"
+
+#~ msgid "<br/><br/>Front Footprints"
+#~ msgstr "<br/><br/>Empreintes de Dessus"
+
+#~ msgid "<br/><br/>Back Footprints"
+#~ msgstr "<br/><br/>Empreintes de Dessous"
+
+#~ msgid "Set a new value for this offset:"
+#~ msgstr "Définir une nouvelle valeur pour ce décalage :"
+
+#~ msgid "Set Offset"
+#~ msgstr "Régler Décalage"
+
+#, c-format
+#~ msgid "Unrecognized item '%s'.| Expected version number."
+#~ msgstr "Elément non reconnu '%s'.| Numéro de Version attendu."
+
+#, c-format
+#~ msgid "Unrecognized item '%s'."
+#~ msgstr "Elément non reconnu '%s'."
+
+#, c-format
+#~ msgid "Unrecognized item '%s'.| Expected quoted expression."
+#~ msgstr "Élément non reconnu '%s'.| Expression entre guillemets attendue."
+
+#~ msgid "Expecting number."
+#~ msgstr "Nombre attendu."
+
+#~ msgid "Positioning Tools"
+#~ msgstr "Outils de Positionnement"
+
+#~ msgid "Position Interactively..."
+#~ msgstr "Positionner Interactivement..."
+
+#~ msgid ""
+#~ "Positions the selected item(s) by an exact amount relative to another, "
+#~ "interactively"
+#~ msgstr ""
+#~ "Positionne le(s) élément(s) sélectionné(s) d'une quantité exacte par "
+#~ "rapport à un autre, de manière interactive"
+
 #~ msgid "Loading design_blocks..."
 #~ msgstr "Chargement de_blocs de conception..."
 
@@ -56960,65 +56982,8 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgid "Check for Updates"
 #~ msgstr "Vérifier Mises à Jour"
 
-#~ msgid "Empty"
-#~ msgstr "Vide"
-
-#~ msgid "Invalid"
-#~ msgstr "Invalide"
-
-#, c-format
-#~ msgid ""
-#~ "<br/>There are %i reference designator prefixes in use<br/"
-#~ ">**********************************************************<br/>"
-#~ msgstr ""
-#~ "<br/>Il existe %i préfixes de référence utilisés<br/"
-#~ ">**********************************************************<br/>"
-
-#~ msgid ""
-#~ "<br/>Change Array\n"
-#~ "***********************<br/>"
-#~ msgstr ""
-#~ "<br/>    Change Ensemble\n"
-#~ "***********************<br/>"
-
-#~ msgid "(will be ignored)"
-#~ msgstr "(sera ignorée)"
-
-#~ msgid "<br/>No footprints"
-#~ msgstr "<br/>Pas d'empreinte"
-
-#~ msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-#~ msgstr "<br/>*********** Tri par Coordonnées Empreinte ***********"
-
-#~ msgid "<br/>*********** Sort on Reference Coordinates ***********"
-#~ msgstr "<br/>*********** Tri par Coordonnées de Référence ***********"
-
-#, c-format
-#~ msgid ""
-#~ "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
-#~ "running DRC with 'Test for parity between PCB and schematic' checked.\n"
-#~ msgstr ""
-#~ "<br/>Le PCB a %d références schématiques vides ou non valides.<br/>Il est "
-#~ "recommandé d’exécuter le contrôle DRC avec 'Test des empreintes par "
-#~ "rapport à la schématique' activé.\n"
-
-#~ msgid "<br/><br/>Front Footprints"
-#~ msgstr "<br/><br/>Empreintes de Dessus"
-
-#~ msgid "<br/><br/>Back Footprints"
-#~ msgstr "<br/><br/>Empreintes de Dessous"
-
 #~ msgid "Time Domain Parameters"
 #~ msgstr "Paramètres Domaine Temporel"
-
-#~ msgid "Castellated pad:"
-#~ msgstr "Castellated pad:"
-
-#~ msgid "Press-fit pad:"
-#~ msgstr "Pad \"press-fit\":"
-
-#~ msgid "ASCII"
-#~ msgstr "ASCII"
 
 #~ msgid "Please select a footprint library table file."
 #~ msgstr "Veuillez sélectionner un fichier table librairie d'empreintes."
@@ -57050,12 +57015,6 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgid "Time domain parameters"
 #~ msgstr "Paramètres domaine temporel"
 
-#~ msgid "Set a new value for this offset:"
-#~ msgstr "Définir une nouvelle valeur pour ce décalage :"
-
-#~ msgid "Set Offset"
-#~ msgstr "Régler Décalage"
-
 #~ msgid "No delay profiles to override"
 #~ msgstr "Pas de profils de délai à forcer"
 
@@ -57070,21 +57029,6 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Profile Name"
 #~ msgstr "Nom de Profil"
-
-#, c-format
-#~ msgid "Unrecognized item '%s'.| Expected version number."
-#~ msgstr "Elément non reconnu '%s'.| Numéro de Version attendu."
-
-#, c-format
-#~ msgid "Unrecognized item '%s'."
-#~ msgstr "Elément non reconnu '%s'."
-
-#, c-format
-#~ msgid "Unrecognized item '%s'.| Expected quoted expression."
-#~ msgstr "Élément non reconnu '%s'.| Expression entre guillemets attendue."
-
-#~ msgid "Expecting number."
-#~ msgstr "Nombre attendu."
 
 #~ msgid "('fiducial' property makes no sense on NPTH pads)"
 #~ msgstr ""
@@ -57101,18 +57045,14 @@ msgstr "Feuille de Dessin KiCad"
 #~ "(la propriété \"Heatsink\" n'a pas de sens pour des pads à trou non "
 #~ "métallisé)"
 
-#~ msgid "Positioning Tools"
-#~ msgstr "Outils de Positionnement"
+#~ msgid "Castellated pad:"
+#~ msgstr "Castellated pad:"
 
-#~ msgid "Position Interactively..."
-#~ msgstr "Positionner Interactivement..."
+#~ msgid "Press-fit pad:"
+#~ msgstr "Pad \"press-fit\":"
 
-#~ msgid ""
-#~ "Positions the selected item(s) by an exact amount relative to another, "
-#~ "interactively"
-#~ msgstr ""
-#~ "Positionne le(s) élément(s) sélectionné(s) d'une quantité exacte par "
-#~ "rapport à un autre, de manière interactive"
+#~ msgid "ASCII"
+#~ msgstr "ASCII"
 
 #~ msgid "Cycle H/V/45 constraint"
 #~ msgstr "Cycle dans contrainte H/V/45"
