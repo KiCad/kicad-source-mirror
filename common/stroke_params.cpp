@@ -91,12 +91,33 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
     case SH_RECT:
     {
         SHAPE_LINE_CHAIN outline = static_cast<const SHAPE_RECT*>( aShape )->Outline();
+        std::set<size_t> arcsHandled;
 
         for( int ii = 0; ii < outline.SegmentCount(); ++ii )
         {
-            SEG seg = outline.GetSegment( ii );
-            SHAPE_SEGMENT line( seg.A, seg.B );
-            STROKE_PARAMS::Stroke( &line, aLineStyle, aWidth, aRenderSettings, aStroker );
+            if( outline.IsArcSegment( ii ) )
+            {
+                size_t arcIndex = outline.ArcIndex( ii );
+
+                if( !arcsHandled.contains( arcIndex ) )
+                {
+                    arcsHandled.insert( arcIndex );
+                    const SHAPE_ARC& arc( outline.Arc( arcIndex ) );
+                    STROKE_PARAMS::Stroke( &arc, aLineStyle, aWidth, aRenderSettings, aStroker );
+                }
+            }
+            else
+            {
+                const SEG& seg = outline.GetSegment( ii );
+                SHAPE_SEGMENT line( seg.A, seg.B );
+                STROKE_PARAMS::Stroke( &line, aLineStyle, aWidth, aRenderSettings, aStroker );
+            }
+        }
+
+        for( int jj = 0; jj < (int) outline.ArcCount(); ++jj )
+        {
+            const SHAPE_ARC& arc( outline.Arc( jj ) );
+            STROKE_PARAMS::Stroke( &arc, aLineStyle, aWidth, aRenderSettings, aStroker );
         }
 
         break;

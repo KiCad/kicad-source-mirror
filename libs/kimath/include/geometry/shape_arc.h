@@ -81,6 +81,8 @@ public:
 
     SHAPE_ARC( const SHAPE_ARC& aOther );
 
+    SHAPE_ARC( const SHAPE_ARC& aOther, int aWidth );
+
     virtual ~SHAPE_ARC() {}
 
     SHAPE* Clone() const override

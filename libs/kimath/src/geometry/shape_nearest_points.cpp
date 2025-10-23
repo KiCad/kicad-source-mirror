@@ -39,6 +39,12 @@
 typedef VECTOR2I::extended_type ecoord;
 
 
+static bool NearestPoints( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
+                           VECTOR2I& aPtA, VECTOR2I& aPtB );
+
+static bool NearestPoints( const SEG& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain,
+                           VECTOR2I& aPtA, VECTOR2I& aPtB );
+
 /**
  * Find the nearest points between two circles.
  *
@@ -169,10 +175,14 @@ static bool NearestPoints( const SHAPE_CIRCLE& aCircle, const SEG& aSeg,
 static bool NearestPoints( const SHAPE_CIRCLE& aCircle, const SHAPE_LINE_CHAIN_BASE& aChain,
                           VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
+    const SHAPE_LINE_CHAIN* chain = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aChain );
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
     for( size_t i = 0; i < aChain.GetSegmentCount(); i++ )
     {
+        if( chain && chain->IsArcSegment( i ) )
+            continue;
+
         VECTOR2I ptA, ptB;
         if( NearestPoints( aCircle, aChain.GetSegment( i ), ptA, ptB ) )
         {
@@ -182,6 +192,29 @@ static bool NearestPoints( const SHAPE_CIRCLE& aCircle, const SHAPE_LINE_CHAIN_B
                 minDistSq = distSq;
                 aPtA = ptA;
                 aPtB = ptB;
+            }
+        }
+    }
+
+    // Also handle arcs if this is a SHAPE_LINE_CHAIN
+    if( chain )
+    {
+        for( size_t j = 0; j < chain->ArcCount(); j++ )
+        {
+            const SHAPE_ARC& arc = chain->Arc( j );
+
+            VECTOR2I ptA, ptB;
+            int64_t distSq;
+
+            // Reverse the output points to match the arc_from_chain/circle order
+            if( arc.NearestPoints( aCircle, ptB, ptA, distSq ) )
+            {
+                if( distSq < minDistSq )
+                {
+                    minDistSq = distSq;
+                    aPtA = ptA;
+                    aPtB = ptB;
+                }
             }
         }
     }
@@ -200,29 +233,7 @@ static bool NearestPoints( const SHAPE_RECT& aA, const SHAPE_RECT& aB,
     const SHAPE_LINE_CHAIN outlineA = aA.Outline();
     const SHAPE_LINE_CHAIN outlineB = aB.Outline();
 
-    int64_t minDistSq = std::numeric_limits<int64_t>::max();
-
-    for( int i = 0; i < outlineA.SegmentCount(); i++ )
-    {
-        for( int j = 0; j < outlineB.SegmentCount(); j++ )
-        {
-            SEG segA = outlineA.CSegment( i );
-            SEG segB = outlineB.CSegment( j );
-
-            VECTOR2I ptA = segA.NearestPoint( segB );
-            VECTOR2I ptB = segB.NearestPoint( segA );
-
-            int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
-            if( distSq < minDistSq )
-            {
-                minDistSq = distSq;
-                aPtA = ptA;
-                aPtB = ptB;
-            }
-        }
-    }
-
-    return true;
+    return NearestPoints( outlineA, outlineB, aPtA, aPtB );
 }
 
 
@@ -232,24 +243,9 @@ static bool NearestPoints( const SHAPE_RECT& aA, const SHAPE_RECT& aB,
 static bool NearestPoints( const SHAPE_RECT& aRect, const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     const SHAPE_LINE_CHAIN outline = aRect.Outline();
-    int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
-    for( int i = 0; i < outline.SegmentCount(); i++ )
-    {
-        SEG rectSeg = outline.CSegment( i );
-        VECTOR2I ptA = rectSeg.NearestPoint( aSeg );
-        VECTOR2I ptB = aSeg.NearestPoint( ptA );
-
-        int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
-        if( distSq < minDistSq )
-        {
-            minDistSq = distSq;
-            aPtA = ptA;
-            aPtB = ptB;
-        }
-    }
-
-    return true;
+    // Reverse the output points to match the seg/rect_outline order
+    return NearestPoints( aSeg, outline, aPtB, aPtA );
 }
 
 
@@ -260,29 +256,8 @@ static bool NearestPoints( const SHAPE_RECT& aRect, const SHAPE_LINE_CHAIN_BASE&
                           VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
     const SHAPE_LINE_CHAIN outline = aRect.Outline();
-    int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
-    for( int i = 0; i < outline.SegmentCount(); i++ )
-    {
-        for( size_t j = 0; j < aChain.GetSegmentCount(); j++ )
-        {
-            SEG rectSeg = outline.CSegment( i );
-            SEG chainSeg = aChain.GetSegment( j );
-
-            VECTOR2I ptA = rectSeg.NearestPoint( chainSeg );
-            VECTOR2I ptB = chainSeg.NearestPoint( ptA );
-
-            int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
-            if( distSq < minDistSq )
-            {
-                minDistSq = distSq;
-                aPtA = ptA;
-                aPtB = ptB;
-            }
-        }
-    }
-
-    return true;
+    return NearestPoints( outline, aChain, aPtA, aPtB );
 }
 
 
@@ -305,14 +280,17 @@ static bool NearestPoints( const SEG& aA, const SEG& aB,
 static bool NearestPoints( const SEG& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain,
                           VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
+    const SHAPE_LINE_CHAIN* chain = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aChain );
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
     for( size_t i = 0; i < aChain.GetSegmentCount(); i++ )
     {
+        if( chain && chain->IsArcSegment( i ) )
+            continue;
+
         VECTOR2I ptA, ptB;
 
-        // Reverse the output points to match the segment's order
-        if( NearestPoints( aSeg, aChain.GetSegment( i ), ptB, ptA ) )
+        if( NearestPoints( aSeg, aChain.GetSegment( i ), ptA, ptB ) )
         {
             int64_t distSq = ( ptB - ptA ).SquaredEuclideanNorm();
             if( distSq < minDistSq )
@@ -320,6 +298,29 @@ static bool NearestPoints( const SEG& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain,
                 minDistSq = distSq;
                 aPtA = ptA;
                 aPtB = ptB;
+            }
+        }
+    }
+
+    // Also handle arcs if this is a SHAPE_LINE_CHAIN
+    if( chain )
+    {
+        for( size_t j = 0; j < chain->ArcCount(); j++ )
+        {
+            const SHAPE_ARC& arc = chain->Arc( j );
+
+            VECTOR2I ptA, ptB;
+            int64_t distSq;
+
+            // Reverse the output points to match the arc_from_chain/seg order
+            if( arc.NearestPoints( aSeg, ptB, ptA, distSq ) )
+            {
+                if( distSq < minDistSq )
+                {
+                    minDistSq = distSq;
+                    aPtA = ptA;
+                    aPtB = ptB;
+                }
             }
         }
     }
@@ -334,13 +335,21 @@ static bool NearestPoints( const SEG& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain,
 static bool NearestPoints( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
                           VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
+    const SHAPE_LINE_CHAIN* chainA = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aA );
+    const SHAPE_LINE_CHAIN* chainB = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aB );
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
 
     // Check all segment pairs
     for( size_t i = 0; i < aA.GetSegmentCount(); i++ )
     {
+        if( chainA && chainA->IsArcSegment( i ) )
+            continue;
+
         for( size_t j = 0; j < aB.GetSegmentCount(); j++ )
         {
+            if( chainB && chainB->IsArcSegment( j ) )
+                continue;
+
             VECTOR2I ptA, ptB;
             if( NearestPoints( aA.GetSegment( i ), aB.GetSegment( j ), ptA, ptB ) )
             {
@@ -356,9 +365,6 @@ static bool NearestPoints( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHA
     }
 
     // Also handle arcs if this is a SHAPE_LINE_CHAIN
-    const SHAPE_LINE_CHAIN* chainA = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aA );
-    const SHAPE_LINE_CHAIN* chainB = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aB );
-
     if( chainA )
     {
         for( size_t i = 0; i < chainA->ArcCount(); i++ )
@@ -466,12 +472,16 @@ static bool NearestPoints( const SHAPE_ARC& aArcA, const SHAPE_ARC& aArcB, VECTO
 
 static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_LINE_CHAIN_BASE& aChain, VECTOR2I& aPtA, VECTOR2I& aPtB )
 {
+    const SHAPE_LINE_CHAIN* chain = dynamic_cast<const SHAPE_LINE_CHAIN*>( &aChain );
     int64_t distSq;
     int64_t minDistSq = std::numeric_limits<int64_t>::max();
     VECTOR2I tmp_ptA, tmp_ptB;
 
     for( size_t i = 0; i < aChain.GetSegmentCount(); i++ )
     {
+        if( chain && chain->IsArcSegment( i ) )
+            continue;
+
         if( aArc.NearestPoints( aChain.GetSegment( i ), tmp_ptA, tmp_ptB, distSq ) )
         {
             if( distSq < minDistSq )
@@ -479,6 +489,25 @@ static bool NearestPoints( const SHAPE_ARC& aArc, const SHAPE_LINE_CHAIN_BASE& a
                 aPtA = tmp_ptA;
                 aPtB = tmp_ptB;
                 minDistSq = distSq;
+            }
+        }
+    }
+
+    // Also handle arcs if this is a SHAPE_LINE_CHAIN
+    if( chain )
+    {
+        for( size_t j = 0; j < chain->ArcCount(); j++ )
+        {
+            const SHAPE_ARC& arc = chain->Arc( j );
+
+            if( aArc.NearestPoints( arc, tmp_ptA, tmp_ptB, distSq ) )
+            {
+                if( distSq < minDistSq )
+                {
+                    minDistSq = distSq;
+                    aPtA = tmp_ptA;
+                    aPtB = tmp_ptB;
+                }
             }
         }
     }

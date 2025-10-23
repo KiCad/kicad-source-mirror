@@ -1846,16 +1846,25 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
             if( width > 0 || !solidFill )
             {
-                // TODO: need to handle arcs in outline!
+                std::set<size_t> arcsHandled;
 
-                for( int i = 0; i < outline.PointCount() - 1; ++i )
+                for( int ii = 0; ii < outline.SegmentCount(); ++ii )
                 {
-                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( outline.CPoint( i ), outline.CPoint( i + 1 ),
-                                                                     width ) );
-                }
+                    if( outline.IsArcSegment( ii ) )
+                    {
+                        size_t arcIndex = outline.ArcIndex( ii );
 
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( outline.CPoint( outline.PointCount() - 1 ),
-                                                                 outline.CPoint( 0 ), width ) );
+                        if( !arcsHandled.contains( arcIndex ) )
+                        {
+                            arcsHandled.insert( arcIndex );
+                            effectiveShapes.emplace_back( new SHAPE_ARC( outline.Arc( arcIndex ), width ) );
+                        }
+                    }
+                    else
+                    {
+                        effectiveShapes.emplace_back( new SHAPE_SEGMENT( outline.Segment( ii ), width ) );
+                    }
+                }
             }
         }
         else

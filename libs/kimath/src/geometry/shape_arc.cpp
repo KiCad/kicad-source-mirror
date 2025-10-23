@@ -179,8 +179,8 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
 }
 
 
-SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
-    : SHAPE( SH_ARC )
+SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther ) :
+        SHAPE( SH_ARC )
 {
     m_start = aOther.m_start;
     m_end = aOther.m_end;
@@ -189,6 +189,13 @@ SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
     m_bbox = aOther.m_bbox;
     m_center = aOther.m_center;
     m_radius = aOther.m_radius;
+}
+
+
+SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther, int aWidth ) :
+        SHAPE_ARC( aOther )
+{
+    m_width = aWidth;
 }
 
 
@@ -579,9 +586,17 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I
     CIRCLE circle( GetCenter(), GetRadius() );
     aDistSq = std::numeric_limits<int64_t>::max();
 
-    // First check for intersections
     SHAPE_LINE_CHAIN lineChain( aRect.Outline() );
 
+    if( aRect.GetRadius() > 0 )
+    {
+        // Reverse the output points to match the rect_outline/arc order
+        lineChain.NearestPoints( this, aPtB, aPtA );
+        aDistSq = ( aPtA - aPtB ).SquaredEuclideanNorm();
+        return true;
+    }
+
+    // First check for intersections
     for( int i = 0; i < 4; ++i )
     {
         SEG seg( lineChain.CPoint( i ), lineChain.CPoint( i + 1 ) );

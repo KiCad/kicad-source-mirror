@@ -30,6 +30,12 @@
 
 bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
+    if( m_radius > 0 )
+    {
+        SHAPE_LINE_CHAIN lineChain( Outline() );
+        return lineChain.Collide( aSeg, aClearance, aActual, aLocation );
+    }
+
     BOX2I bbox( BBox() );
 
     if( bbox.Contains( aSeg.A ) )
