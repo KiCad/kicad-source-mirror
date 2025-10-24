@@ -32,6 +32,7 @@
 #include <settings/color_settings.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <text_eval/text_eval_wrapper.h>
 
 #include <drawing_sheet/ds_painter.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -203,7 +204,14 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 return false;
             };
 
-    return ExpandTextVars( aTextbase, &wsResolver, m_flags );
+    wxString retv = ExpandTextVars( aTextbase, &wsResolver, m_flags );
+
+    static EXPRESSION_EVALUATOR evaluator;
+
+    if( retv.Contains( wxS( "@{" ) ) )
+        retv = evaluator.Evaluate( retv );
+
+    return retv;
 }
 
 
