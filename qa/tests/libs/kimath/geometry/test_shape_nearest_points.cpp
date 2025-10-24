@@ -331,19 +331,19 @@ BOOST_AUTO_TEST_CASE( NearestPoints_RectToLineChain )
 
 BOOST_AUTO_TEST_CASE( NearestPoints_SegmentToLineChain )
 {
-    SHAPE_SEGMENT segment( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 10, 0 ) ), 2 );
+    SHAPE_SEGMENT segment( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 100, 0 ) ), 20 );
 
     SHAPE_LINE_CHAIN chain;
-    chain.Append( VECTOR2I( 5, 10 ) );
-    chain.Append( VECTOR2I( 15, 10 ) );
-    chain.Append( VECTOR2I( 15, 5 ) );
+    chain.Append( VECTOR2I( 50, 100 ) );
+    chain.Append( VECTOR2I( 150, 100 ) );
+    chain.Append( VECTOR2I( 150, 50 ) );
 
     VECTOR2I ptA, ptB;
     bool result = segment.NearestPoints( &chain, ptA, ptB );
 
     BOOST_CHECK( result );
-    BOOST_CHECK_MESSAGE( ptA == VECTOR2I( 11, 1 ), "Expected: " << VECTOR2I( 11, 1 ) << " Actual: " << ptA );
-    BOOST_CHECK_MESSAGE( ptB == VECTOR2I( 15, 5 ), "Expected: " << VECTOR2I( 15, 5 ) << " Actual: " << ptB );
+    BOOST_CHECK_MESSAGE( ptA == VECTOR2I( 107, 7 ), "Expected: " << VECTOR2I( 107, 7 ) << " Actual: " << ptA );
+    BOOST_CHECK_MESSAGE( ptB == VECTOR2I( 150, 50 ), "Expected: " << VECTOR2I( 150, 50 ) << " Actual: " << ptB );
 }
 
 BOOST_AUTO_TEST_CASE( NearestPoints_CircleToLineChain )
