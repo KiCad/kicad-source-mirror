@@ -1563,7 +1563,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( aLibrary );
         wxCHECK( optRow, false );
 
-        fn = LIBRARY_MANAGER::GetFullURI( *optRow );
+        fn = LIBRARY_MANAGER::GetFullURI( *optRow, true );
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
         if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
