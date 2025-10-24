@@ -825,6 +825,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     bool           clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
     SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true, false );
 
+    wxLogTrace( "KICAD_SCH_MOVE", "SCH_EDIT_TOOL::Rotate: start, clockwise=%d, selection size=%u",
+                clockwise, selection.GetSize() );
+
     if( selection.GetSize() == 0 )
         return 0;
 
@@ -1080,15 +1083,22 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
         else
         {
+            VECTOR2I posBefore = item->GetPosition();
             item->Rotate( rotPoint, !clockwise );
+            VECTOR2I posAfter = item->GetPosition();
+            wxLogTrace( "KICAD_SCH_MOVE", "  SCH_EDIT_TOOL::Rotate: item type=%d rotated, pos (%d,%d) -> (%d,%d)",
+                        item->Type(), posBefore.x, posBefore.y, posAfter.x, posAfter.y );
         }
 
         m_frame->UpdateItem( item, false, true );
         updateItem( item, true );
     }
 
+    wxLogTrace( "KICAD_SCH_MOVE", "SCH_EDIT_TOOL::Rotate: complete, moving=%d", moving );
+
     if( moving )
     {
+        wxLogTrace( "KICAD_SCH_MOVE", "SCH_EDIT_TOOL::Rotate: posting refreshPreview" );
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else

@@ -331,6 +331,13 @@ extern KICOMMON_API const wxChar* const traceLibWatch;
  */
 extern KICOMMON_API const wxChar* const traceLibraries;
 
+/**
+ * Flag to watch how schematic move tool actions are handled.
+ *
+ * Use "KICAD_SCH_MOVE" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchMove;
+
 ///@}
 
 /**

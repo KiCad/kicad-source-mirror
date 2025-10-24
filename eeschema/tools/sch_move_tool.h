@@ -41,6 +41,9 @@ class SCH_SELECTION;
 class SCH_SHEET;
 class SCH_COMMIT;
 class SCH_ITEM;
+class EE_GRID_HELPER;
+
+enum GRID_HELPER_GRIDS : int;
 
 
 struct SPECIAL_CASE_LABEL_INFO
@@ -58,6 +61,9 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
     /**
      * Run an interactive move of the selected items, or the item under the cursor.
@@ -97,6 +103,51 @@ private:
 
     ///< Cleanup dangling lines left after a drag
     void trimDanglingLines( SCH_COMMIT* aCommit );
+
+    // Helper methods for doMoveSelection refactoring
+    ///< Check if a move is already in progress and handle state transitions
+    bool checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool wasDragging );
+
+    ///< Promote pin selections to parent symbols and request final selection
+    SCH_SELECTION& prepareSelection( bool& aUnselect );
+
+    ///< Refresh selection traits (sheet pins, graphic items, etc.)
+    void refreshSelectionTraits( const SCH_SELECTION& aSelection, bool& aHasSheetPins,
+                                 bool& aHasGraphicItems, bool& aHasNonGraphicItems,
+                                 bool& aIsGraphicsOnly );
+
+    ///< Initialize the move/drag operation, setting up flags and connections
+    void initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection,
+                                  SCH_COMMIT* aCommit, bool aIsSlice,
+                                  std::vector<DANGLING_END_ITEM>& aInternalPoints,
+                                  GRID_HELPER_GRIDS& aSnapLayer );
+
+    ///< Setup items for drag operation, collecting connected items
+    void setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aIsSlice );
+
+    ///< Setup items for move operation, marking dangling ends
+    void setupItemsForMove( SCH_SELECTION& aSelection,
+                            std::vector<DANGLING_END_ITEM>& aInternalPoints );
+
+    ///< Find the target sheet for dropping items (if any)
+    SCH_SHEET* findTargetSheet( const SCH_SELECTION& aSelection, const VECTOR2I& aCursorPos,
+                                bool aHasSheetPins, bool aIsGraphicsOnly, bool aCtrlDown );
+
+    ///< Perform the actual move of items by delta, handling split moves and orthogonal dragging
+    void performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& aDelta,
+                          SCH_COMMIT* aCommit, int& aXBendCount, int& aYBendCount,
+                          const EE_GRID_HELPER& aGrid );
+
+    ///< Handle tool action events during the move operation
+    bool handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT* aCommit,
+                                const SCH_SELECTION& aSelection );
+
+    ///< Update stored positions after transformations (rotation, mirroring, etc.) during move
+    void updateStoredPositions( const SCH_SELECTION& aSelection );
+
+    ///< Finalize the move operation, updating junctions and cleaning up
+    void finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aIsSlice,
+                                bool aUnselect, const std::vector<DANGLING_END_ITEM>& aInternalPoints );
 
 private:
     ///< Re-entrancy guard
