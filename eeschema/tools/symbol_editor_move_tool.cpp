@@ -153,6 +153,11 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
     VECTOR2I    prevPos;
     VECTOR2I    moveOffset;
 
+    // Axis locking for arrow key movement
+    enum class AXIS_LOCK { NONE, HORIZONTAL, VERTICAL };
+    AXIS_LOCK axisLock = AXIS_LOCK::NONE;
+    long      lastArrowKeyAction = 0;
+
     aCommit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
 
     m_cursor = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
@@ -274,8 +279,66 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
             //------------------------------------------------------------------------
             // Follow the mouse
             //
-            m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer,
-                                            selection );
+            // We need to bypass refreshPreview action here because it is triggered by the move,
+            // so we were getting double-key events that toggled the axis locking if you
+            // pressed them in a certain order.
+            if( controls->GetSettings().m_lastKeyboardCursorPositionValid && !evt->IsAction( &ACTIONS::refreshPreview ) )
+            {
+                VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
+                long action = controls->GetSettings().m_lastKeyboardCursorCommand;
+
+                grid.SetSnap( false );
+                m_cursor = grid.Align( keyboardPos, snapLayer );
+
+                // Update axis lock based on arrow key press
+                if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
+                {
+                    if( axisLock == AXIS_LOCK::HORIZONTAL )
+                    {
+                        // Check if opposite horizontal key pressed to unlock
+                        if( ( lastArrowKeyAction == ACTIONS::CURSOR_LEFT && action == ACTIONS::CURSOR_RIGHT ) ||
+                            ( lastArrowKeyAction == ACTIONS::CURSOR_RIGHT && action == ACTIONS::CURSOR_LEFT ) )
+                        {
+                            axisLock = AXIS_LOCK::NONE;
+                        }
+                        // Same direction axis, keep locked
+                    }
+                    else
+                    {
+                        axisLock = AXIS_LOCK::HORIZONTAL;
+                    }
+                }
+                else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
+                {
+                    if( axisLock == AXIS_LOCK::VERTICAL )
+                    {
+                        // Check if opposite vertical key pressed to unlock
+                        if( ( lastArrowKeyAction == ACTIONS::CURSOR_UP && action == ACTIONS::CURSOR_DOWN ) ||
+                            ( lastArrowKeyAction == ACTIONS::CURSOR_DOWN && action == ACTIONS::CURSOR_UP ) )
+                        {
+                            axisLock = AXIS_LOCK::NONE;
+                        }
+                        // Same direction axis, keep locked
+                    }
+                    else
+                    {
+                        axisLock = AXIS_LOCK::VERTICAL;
+                    }
+                }
+
+                lastArrowKeyAction = action;
+            }
+            else
+            {
+                m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer,
+                                                selection );
+            }
+
+            if( axisLock == AXIS_LOCK::HORIZONTAL )
+                m_cursor.y = prevPos.y;
+            else if( axisLock == AXIS_LOCK::VERTICAL )
+                m_cursor.x = prevPos.x;
+
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
