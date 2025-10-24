@@ -565,7 +565,7 @@ static bool NearestPoints( const SHAPE_SEGMENT& aSegA, const SHAPE_SEGMENT& aSeg
 static bool NearestPoints( const SHAPE_SEGMENT& aSeg, const SHAPE_LINE_CHAIN_BASE& aChain, VECTOR2I& aPtA,
                            VECTOR2I& aPtB )
 {
-    if( NearestPoints( aSeg.GetSeg(), aChain, aPtB, aPtA ) )
+    if( NearestPoints( aSeg.GetSeg(), aChain, aPtA, aPtB ) )
     {
         // Adjust point A by half the segment width towards point B
         VECTOR2I dir = ( aPtB - aPtA ).Resize( aSeg.GetWidth() / 2 );
