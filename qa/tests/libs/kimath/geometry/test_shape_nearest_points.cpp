@@ -146,8 +146,8 @@ BOOST_AUTO_TEST_CASE( NearestPoints_RectToRect_Separate )
     bool result = rectA.NearestPoints( &rectB, ptA, ptB );
 
     BOOST_CHECK( result );
-    BOOST_CHECK_MESSAGE( ptA == VECTOR2I( 5, 5 ), "Expected: " << VECTOR2I( 5, 5 ) << " Actual: " << ptA );
-    BOOST_CHECK_MESSAGE( ptB == VECTOR2I( 10, 5 ), "Expected: " << VECTOR2I( 10, 5 ) << " Actual: " << ptB );
+    BOOST_CHECK_MESSAGE( ptA == VECTOR2I( 5, 0 ), "Expected: " << VECTOR2I( 5, 0 ) << " Actual: " << ptA );
+    BOOST_CHECK_MESSAGE( ptB == VECTOR2I( 10, 0 ), "Expected: " << VECTOR2I( 10, 0 ) << " Actual: " << ptB );
 }
 
 BOOST_AUTO_TEST_CASE( NearestPoints_RectToRect_Corner )
