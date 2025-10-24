@@ -3623,6 +3623,7 @@ void SCH_PAINTER::draw( const SCH_GROUP* aGroup, int aLayer )
     }
 }
 
+
 void SCH_PAINTER::drawLine( const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
                             LINE_STYLE aLineStyle, bool aDrawDirectLine, int aWidth )
 {
