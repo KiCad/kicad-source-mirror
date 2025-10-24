@@ -491,8 +491,27 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     if( m_part && m_part->IsMultiBodyStyle() )
     {
-        for( int ii = 0; ii < m_part->GetBodyStyleCount(); ii++ )
-            m_bodyStyleChoice->Append( m_part->GetBodyStyleNames()[ii] );
+        if( m_part->HasDeMorganBodyStyles() )
+        {
+            m_bodyStyleChoice->Append( _( "Standard" ) );
+            m_bodyStyleChoice->Append( _( "Alternate" ) );
+        }
+        else
+        {
+            wxASSERT( (int)m_part->GetBodyStyleNames().size() == m_part->GetBodyStyleCount() );
+
+            for( int ii = 0; ii < m_part->GetBodyStyleCount(); ii++ )
+            {
+                try
+                {
+                    m_bodyStyleChoice->Append( m_part->GetBodyStyleNames().at( ii ) );
+                }
+                catch( ... )
+                {
+                    m_bodyStyleChoice->Append( wxT( "???" ) );
+                }
+            }
+        }
 
         if( m_symbol->GetBodyStyle() <= (int) m_bodyStyleChoice->GetCount() )
             m_bodyStyleChoice->SetSelection( m_symbol->GetBodyStyle() - 1 );
