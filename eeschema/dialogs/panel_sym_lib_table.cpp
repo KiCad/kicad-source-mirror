@@ -333,9 +333,6 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     // Set special attributes
     wxGridCellAttr* attr = new wxGridCellAttr;
 
-    wxString fileFiltersStr;
-    wxString allWildcardsStr;
-
     if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
     {
         attr->SetEditor( new GRID_CELL_PATH_EDITOR(
@@ -1000,7 +997,6 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
     for( int row : legacyRows )
     {
-        wxString   libName = m_cur_grid->GetCellValue( row, COL_NICKNAME );
         wxString   relPath = m_cur_grid->GetCellValue( row, COL_URI );
         wxString   resolvedPath = ExpandEnvVarSubstitutions( relPath, m_project );
         wxFileName legacyLib( resolvedPath );

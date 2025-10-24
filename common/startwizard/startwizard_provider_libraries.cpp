@@ -107,6 +107,9 @@ public:
             case LIBRARY_TABLE_TYPE::DESIGN_BLOCK:
                 missingTablesText.Append( _( "Design Block library table" ) + "\n" );
                 break;
+
+            case LIBRARY_TABLE_TYPE::UNINITIALIZED:
+                break;
             }
         }
 

@@ -223,8 +223,6 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         return;
 
     wxArrayString   prmValues = footprintWizard->GetParameterValues( m_parameterGridPage );
-    wxArrayString   ptList = footprintWizard->GetParameterTypes( m_parameterGridPage );
-
     bool            has_changed = false;
     int             count = m_parameterGrid->GetNumberRows();
 
