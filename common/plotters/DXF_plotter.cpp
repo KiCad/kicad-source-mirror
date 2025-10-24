@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <ranges>
 #include <plotters/plotter_dxf.h>
 #include <macros.h>
 #include <string_utils.h>
@@ -617,17 +618,76 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
-void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
-                            void* aData )
+std::vector<VECTOR2I> arcPts( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                              const EDA_ANGLE& aAngle, double aRadius )
 {
+    std::vector<VECTOR2I> pts;
+
+    /*
+     * Arcs are not so easily approximated by beziers (in the general case), so we approximate
+     * them in the old way
+     */
+    EDA_ANGLE       startAngle = -aStartAngle;
+    EDA_ANGLE       endAngle = startAngle - aAngle;
+    VECTOR2I        start;
+    VECTOR2I        end;
+    const EDA_ANGLE delta( 5, DEGREES_T );   // increment to draw circles
+
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
+
+    // Usual trig arc plotting routine...
+    start.x = KiROUND( aCenter.x + aRadius * ( -startAngle ).Cos() );
+    start.y = KiROUND( aCenter.y + aRadius * ( -startAngle ).Sin() );
+    pts.emplace_back( start );
+
+    for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
+    {
+        end.x = KiROUND( aCenter.x + aRadius * ( -ii ).Cos() );
+        end.y = KiROUND( aCenter.y + aRadius * ( -ii ).Sin() );
+        pts.emplace_back( end );
+    }
+
+    end.x = KiROUND( aCenter.x + aRadius * ( -endAngle ).Cos() );
+    end.y = KiROUND( aCenter.y + aRadius * ( -endAngle ).Sin() );
+    pts.emplace_back( end );
+
+    return pts;
+}
+
+
+void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData )
+{
+    std::set<size_t>      handledArcs;
     std::vector<VECTOR2I> cornerList;
-    cornerList.reserve( aCornerList.PointCount() );
 
-    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
-        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+    for( int ii = 0; ii < aLineChain.SegmentCount(); ++ii )
+    {
+        if( aLineChain.IsArcSegment( ii ) )
+        {
+            size_t arcIndex = aLineChain.ArcIndex( ii );
 
-    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
-        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+            if( !handledArcs.contains( arcIndex ) )
+            {
+                handledArcs.insert( arcIndex );
+                const SHAPE_ARC& arc( aLineChain.Arc( arcIndex ) );
+                std::vector<VECTOR2I> pts = arcPts( arc.GetCenter(), arc.GetStartAngle(),
+                                                    arc.GetCentralAngle(), arc.GetRadius() );
+
+                for( const VECTOR2I& pt : std::ranges::reverse_view( pts ) )
+                    cornerList.emplace_back( pt );
+            }
+        }
+        else
+        {
+            const SEG& seg( aLineChain.Segment( ii ) );
+            cornerList.emplace_back( seg.A );
+            cornerList.emplace_back( seg.B );
+        }
+    }
+
+    if( aLineChain.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.emplace_back( aLineChain.CPoint( 0 ) );
 
     PlotPoly( cornerList, aFill, aWidth, aData );
 }

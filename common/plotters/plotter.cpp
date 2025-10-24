@@ -607,16 +607,16 @@ void PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData )
 }
 
 
-void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth, void* aData )
+void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData )
 {
     std::vector<VECTOR2I> cornerList;
-    cornerList.reserve( aCornerList.PointCount() );
+    cornerList.reserve( aLineChain.PointCount() );
 
-    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
-        cornerList.emplace_back( aCornerList.CPoint( ii ) );
+    for( int ii = 0; ii < aLineChain.PointCount(); ii++ )
+        cornerList.emplace_back( aLineChain.CPoint( ii ) );
 
-    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
-        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
+    if( aLineChain.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.emplace_back( aLineChain.CPoint( 0 ) );
 
     PlotPoly( cornerList, aFill, aWidth, aData );
 }

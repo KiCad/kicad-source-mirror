@@ -360,7 +360,7 @@ public:
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
@@ -418,8 +418,8 @@ private:
     void drawOverbars( const std::vector<OverbarInfo>& aOverbars,
                        const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics );
 
-    std::string arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                         const EDA_ANGLE& aAngle, double aRadius );
+    std::vector<VECTOR2D> arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                                   const EDA_ANGLE& aAngle, double aRadius );
 
 public:
     virtual void PlotText( const VECTOR2I&        aPos,

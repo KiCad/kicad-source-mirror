@@ -105,21 +105,19 @@ public:
      * It does not know thick segments, therefore filled polygons with thick outline
      * are converted to inflated polygon by aWidth/2.
      */
-    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth, void* aData = nullptr ) override;
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData = nullptr ) override;
 
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
-                           int aWidth, void* aData = nullptr ) override;
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth,
+                           void* aData = nullptr ) override;
 
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                void* aData ) override;
 
-    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle,
-                           const EDA_ANGLE& aAngle, double aRadius, int aWidth,
-                           void* aData ) override;
+    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle, const EDA_ANGLE& aAngle,
+                           double aRadius, int aWidth, void* aData ) override;
 
-    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
-                            void* aData ) override;
+    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData ) override;
 
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData ) override;
 

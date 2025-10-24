@@ -295,14 +295,13 @@ public:
     /**
      * Draw a polygon ( filled or not ).
      *
-     * @param aCornerList is the corners list (a SHAPE_LINE_CHAIN).
-     *        must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline.
+     * @param aLineChain is a list of segments and arcs.  Must be closed (IsClosed() == true) for
+     *                   a polygon. Otherwise this is a polyline.
      * @param aFill is the type of fill.
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
-                           void* aData );
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData );
 
     /**
      * Only PostScript plotters can plot bitmaps.

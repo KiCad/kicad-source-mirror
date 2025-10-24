@@ -26,6 +26,7 @@
 #include <iterator>
 #include <cstdio> // snprintf
 #include <stack>
+#include <ranges>
 
 #include <wx/filename.h>
 #include <wx/mstream.h>
@@ -386,10 +387,10 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 }
 
 
-std::string PDF_PLOTTER::arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                                  const EDA_ANGLE& aAngle, double aRadius )
+std::vector<VECTOR2D> PDF_PLOTTER::arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                                            const EDA_ANGLE& aAngle, double aRadius )
 {
-    std::string path;
+    std::vector<VECTOR2D> path;
 
     /*
      * Arcs are not so easily approximated by beziers (in the general case), so we approximate
@@ -407,21 +408,18 @@ std::string PDF_PLOTTER::arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aSta
     // Usual trig arc plotting routine...
     start.x = KiROUND( aCenter.x + aRadius * ( -startAngle ).Cos() );
     start.y = KiROUND( aCenter.y + aRadius * ( -startAngle ).Sin() );
-    VECTOR2D pos_dev = userToDeviceCoordinates( start );
-    path += fmt::format( "{:g} {:g} m ", pos_dev.x, pos_dev.y );
+    path.emplace_back( userToDeviceCoordinates( start ) );
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
         end.x = KiROUND( aCenter.x + aRadius * ( -ii ).Cos() );
         end.y = KiROUND( aCenter.y + aRadius * ( -ii ).Sin() );
-        pos_dev = userToDeviceCoordinates( end );
-        path += fmt::format( "{:g} {:g} l ", pos_dev.x, pos_dev.y );
+        path.emplace_back( userToDeviceCoordinates( end ) );
     }
 
     end.x = KiROUND( aCenter.x + aRadius * ( -endAngle ).Cos() );
     end.y = KiROUND( aCenter.y + aRadius * ( -endAngle ).Sin() );
-    pos_dev = userToDeviceCoordinates( end );
-    path += fmt::format( "{:g} {:g} l ", pos_dev.x, pos_dev.y );
+    path.emplace_back( userToDeviceCoordinates( end ) );
 
     return path;
 }
@@ -440,7 +438,15 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
         return;
     }
 
-    fmt::print( m_workFile, "{}", arcPath( aCenter, aStartAngle, aAngle, aRadius ) );
+    std::vector<VECTOR2D> path = arcPath( aCenter, aStartAngle, aAngle, aRadius );
+
+    if( path.size() >= 2 )
+    {
+        fmt::print( m_workFile, "{:g} {:g} m ", path[0].x, path[0].y );
+
+        for( int ii = 1; ii < (int) path.size(); ++ii )
+            fmt::print( m_workFile, "{:g} {:g} l ", path[ii].x, path[ii].y );
+    }
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
     // closing the pie at the center
@@ -470,12 +476,12 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
+    fmt::print( m_workFile, "{:f} {:f} m", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fmt::println( m_workFile, "{:f} {:f} l", pos.x, pos.y );
+        fmt::print( m_workFile, "{:f} {:f} l", pos.x, pos.y );
     }
 
     // Close path and stroke and/or fill
@@ -488,38 +494,45 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
-void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth,
-                            void* aData )
+void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData )
 {
     SetCurrentLineWidth( aWidth );
 
-    std::set<size_t> handledArcs;
+    std::set<size_t>      handledArcs;
+    std::vector<VECTOR2D> path;
 
-    for( int ii = 0; ii < aCornerList.SegmentCount(); ++ii )
+    for( int ii = 0; ii < aLineChain.SegmentCount(); ++ii )
     {
-        if( aCornerList.IsArcSegment( ii ) )
+        if( aLineChain.IsArcSegment( ii ) )
         {
-            size_t arcIndex = aCornerList.ArcIndex( ii );
+            size_t arcIndex = aLineChain.ArcIndex( ii );
 
             if( !handledArcs.contains( arcIndex ) )
             {
                 handledArcs.insert( arcIndex );
-                const SHAPE_ARC& arc( aCornerList.Arc( arcIndex ) );
-                fmt::print( m_workFile, "{}", arcPath( arc.GetCenter(), arc.GetStartAngle(),
-                                                       arc.GetCentralAngle(), arc.GetRadius() ) );
+                const SHAPE_ARC& arc( aLineChain.Arc( arcIndex ) );
+                std::vector<VECTOR2D> arc_path = arcPath( arc.GetCenter(), arc.GetStartAngle(),
+                                                          arc.GetCentralAngle(), arc.GetRadius() );
+
+                for( const VECTOR2D& pt : std::ranges::reverse_view( arc_path ) )
+                    path.emplace_back( pt );
             }
         }
         else
         {
-            const SEG& seg( aCornerList.Segment( ii ) );
-
-            VECTOR2D pos = userToDeviceCoordinates( seg.A );
-            fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
-
-            pos = userToDeviceCoordinates( seg.B );
-            fmt::println( m_workFile, "{:f} {:f} l", pos.x, pos.y );
+            const SEG& seg( aLineChain.Segment( ii ) );
+            path.emplace_back( userToDeviceCoordinates( seg.A ) );
+            path.emplace_back( userToDeviceCoordinates( seg.B ) );
         }
     }
+
+    if( path.size() <= 1 )
+        return;
+
+    fmt::print( m_workFile, "{:g} {:g} m ", path[0].x, path[0].y );
+
+    for( int ii = 1; ii < (int) path.size(); ++ii )
+        fmt::print( m_workFile, "{:g} {:g} l ", path[ii].x, path[ii].y );
 
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
