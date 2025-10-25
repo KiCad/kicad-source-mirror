@@ -315,7 +315,7 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
 
             // Start with the forward vector from the ruler item
             VECTOR2I          offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
-            DIALOG_SET_OFFSET dlg( *frame(), offsetVector, false );
+            DIALOG_SET_OFFSET dlg( *frame(), offsetVector );
 
             if( dlg.ShowModal() == wxID_OK )
             {

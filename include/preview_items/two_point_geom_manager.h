@@ -98,7 +98,7 @@ public:
 private:
     VECTOR2I        m_origin;
     VECTOR2I        m_end;
-    LEADER_MODE m_angleSnap = LEADER_MODE::DIRECT;
+    LEADER_MODE     m_angleSnap = LEADER_MODE::DIRECT;
     bool            m_originSet = false;
 };
 

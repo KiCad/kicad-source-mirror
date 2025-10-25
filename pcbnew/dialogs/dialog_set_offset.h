@@ -36,7 +36,7 @@ public:
      * @param aFrame The parent frame.
      * @param aOffset The offset to be edited.
      */
-    DIALOG_SET_OFFSET( PCB_BASE_FRAME& aFrame, VECTOR2I& aOffset, bool aClearToZero );
+    DIALOG_SET_OFFSET( PCB_BASE_FRAME& aFrame, VECTOR2I& aOffset );
 
     virtual void OnTextFocusLost( wxFocusEvent& event ) override;
     virtual void OnClear( wxCommandEvent& event ) override;
@@ -47,8 +47,6 @@ public:
 
 private:
     void updateDialogControls( bool aPolar );
-
-    bool m_clearToZero;
 
     const VECTOR2I m_originalOffset;
     VECTOR2I&      m_updatedOffset;

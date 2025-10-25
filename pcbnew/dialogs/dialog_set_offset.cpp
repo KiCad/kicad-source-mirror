@@ -24,8 +24,8 @@
 #include "dialog_set_offset.h"
 
 
-DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset, bool aClearToZero ) :
-        DIALOG_SET_OFFSET_BASE( &aParent ), m_clearToZero( aClearToZero ),
+DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset ) :
+        DIALOG_SET_OFFSET_BASE( &aParent ),
         m_originalOffset( aOffset ),
         m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
@@ -39,27 +39,6 @@ DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset
     m_yOffset.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );
 
     SetInitialFocus( m_xEntry );
-
-    if( m_clearToZero )
-    {
-        wxString text = _( "Clear" );
-        m_clearX->SetLabel( text );
-        m_clearY->SetLabel( text );
-
-        text = _( "Reset this value to zero." );
-        m_clearX->SetToolTip( text );
-        m_clearY->SetToolTip( text );
-    }
-    else
-    {
-        wxString text = _( "Reset" );
-        m_clearX->SetLabel( text );
-        m_clearY->SetLabel( text );
-
-        text = _( "Reset this value to the original value." );
-        m_clearX->SetToolTip( text );
-        m_clearY->SetToolTip( text );
-    }
 
     SetupStandardButtons();
 
@@ -89,18 +68,6 @@ static void ToPolar( double x, double y, double& r, EDA_ANGLE& q )
 
 void DIALOG_SET_OFFSET::OnClear( wxCommandEvent& event )
 {
-    if( m_clearToZero )
-    {
-        m_xOffset.SetDoubleValue( 0.0 );
-        m_yOffset.SetDoubleValue( 0.0 );
-
-        m_stateX = 0.0;
-        m_stateY = 0.0;
-        m_stateRadius = 0.0;
-        m_stateTheta = ANGLE_0;
-        return;
-    }
-
     const wxObject* const obj = event.GetEventObject();
     VECTOR2I              offset = m_originalOffset;
     double                r;
