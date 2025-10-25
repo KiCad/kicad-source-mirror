@@ -476,12 +476,12 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fmt::print( m_workFile, "{:f} {:f} m", pos.x, pos.y );
+    fmt::print( m_workFile, "{:f} {:f} m ", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fmt::print( m_workFile, "{:f} {:f} l", pos.x, pos.y );
+        fmt::print( m_workFile, "{:f} {:f} l ", pos.x, pos.y );
     }
 
     // Close path and stroke and/or fill
