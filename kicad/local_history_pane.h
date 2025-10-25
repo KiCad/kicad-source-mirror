@@ -34,7 +34,11 @@
 #include <wx/string.h>
 #include <wx/timer.h>
 #include <wx/tipwin.h>
+#include <wx/event.h>
+#include <mutex>
 #include <vector>
+
+wxDECLARE_EVENT( EVT_LOCAL_HISTORY_REFRESH, wxCommandEvent );
 
 class KICAD_MANAGER_FRAME;
 
@@ -59,14 +63,18 @@ private:
     void OnLeave( wxMouseEvent& aEvent );
     void OnTimer( wxTimerEvent& aEvent );
     void OnRightClick( wxListEvent& aEvent );
+    void OnRefreshEvent( wxCommandEvent& aEvent );
+    void OnRefreshTimer( wxTimerEvent& aEvent );
 
     KICAD_MANAGER_FRAME* m_frame;
     wxListCtrl*          m_list;
     std::vector<LOCAL_COMMIT_INFO> m_commits;
     wxTimer              m_timer;
+    wxTimer              m_refreshTimer;
     long                 m_hoverItem;
     wxPoint              m_hoverPos;
     wxTipWindow*         m_tip;
+    std::mutex           m_mutex;
 };
 
 #endif // LOCAL_HISTORY_PANE_H

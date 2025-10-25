@@ -25,12 +25,16 @@
 #include "kicad_manager_frame.h"
 
 #include <git2.h>
+#include <project.h>
 #include <wx/filename.h>
 #include <wx/intl.h>
 #include <wx/menu.h>
 
+wxDEFINE_EVENT( EVT_LOCAL_HISTORY_REFRESH, wxCommandEvent );
+
 LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel( aParent ),
-        m_frame( aParent ), m_list( nullptr ), m_timer( this ), m_hoverItem( -1 ), m_tip( nullptr )
+        m_frame( aParent ), m_list( nullptr ), m_timer( this ), m_refreshTimer( this ),
+        m_hoverItem( -1 ), m_tip( nullptr )
 {
     m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                              wxLC_REPORT | wxLC_SINGLE_SEL );
@@ -46,12 +50,18 @@ LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel
     m_list->Bind( wxEVT_MOTION, &LOCAL_HISTORY_PANE::OnMotion, this );
     m_list->Bind( wxEVT_LEAVE_WINDOW, &LOCAL_HISTORY_PANE::OnLeave, this );
     m_list->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK, &LOCAL_HISTORY_PANE::OnRightClick, this );
-    Bind( wxEVT_TIMER, &LOCAL_HISTORY_PANE::OnTimer, this );
+    Bind( wxEVT_TIMER, &LOCAL_HISTORY_PANE::OnTimer, this, m_timer.GetId() );
+    Bind( wxEVT_TIMER, &LOCAL_HISTORY_PANE::OnRefreshTimer, this, m_refreshTimer.GetId() );
+    Bind( EVT_LOCAL_HISTORY_REFRESH, &LOCAL_HISTORY_PANE::OnRefreshEvent, this );
+
+    // Start refresh timer to check for updates every 10 seconds
+    m_refreshTimer.Start( 10000 );
 }
 
 LOCAL_HISTORY_PANE::~LOCAL_HISTORY_PANE()
 {
     m_timer.Stop();
+    m_refreshTimer.Stop();
 
     if( m_tip )
     {
@@ -62,6 +72,8 @@ LOCAL_HISTORY_PANE::~LOCAL_HISTORY_PANE()
 
 void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
 {
+    std::lock_guard<std::mutex> lock( m_mutex );
+
     m_list->DeleteAllItems();
     m_commits.clear();
 
@@ -85,6 +97,8 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
         return;
     }
 
+    wxDateTime now = wxDateTime::Now();
+
     git_oid oid;
     while( git_revwalk_next( &oid, walk ) == 0 )
     {
@@ -98,8 +112,31 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
         info.message = wxString::FromUTF8( git_commit_message( commit ) );
         info.date = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
 
+        // Calculate relative time
+        wxTimeSpan elapsed = now - info.date;
+        wxString timeStr;
+
+        if( elapsed.GetMinutes() < 1 )
+        {
+            timeStr = _( "Moments ago" );
+        }
+        else if( elapsed.GetMinutes() < 91 )
+        {
+            int minutes = elapsed.GetMinutes();
+            timeStr = wxString::Format( _( "%d minutes ago" ), minutes );
+        }
+        else if( elapsed.GetHours() < 24 )
+        {
+            int hours = elapsed.GetHours();
+            timeStr = wxString::Format( _( "%d hours ago" ), hours );
+        }
+        else
+        {
+            timeStr = info.date.FormatISOCombined();
+        }
+
         long row = m_list->InsertItem( m_list->GetItemCount(), info.summary );
-        m_list->SetItem( row, 1, info.date.FormatISOCombined() );
+        m_list->SetItem( row, 1, timeStr );
 
         if( info.summary.StartsWith( wxS( "Autosave" ) ) )
             m_list->SetItemBackgroundColour( row, wxColour( 230, 255, 230 ) );
@@ -116,6 +153,8 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
 
 void LOCAL_HISTORY_PANE::OnMotion( wxMouseEvent& aEvent )
 {
+    std::lock_guard<std::mutex> lock( m_mutex );
+
     int flags = 0;
     long item = m_list->HitTest( aEvent.GetPosition(), flags );
 
@@ -138,9 +177,13 @@ void LOCAL_HISTORY_PANE::OnMotion( wxMouseEvent& aEvent )
 
 void LOCAL_HISTORY_PANE::OnLeave( wxMouseEvent& aEvent )
 {
+    std::lock_guard<std::mutex> lock( m_mutex );
+
     m_timer.Stop();
+
     if( m_hoverItem != -1 )
         m_list->SetItemState( m_hoverItem, 0, wxLIST_STATE_SELECTED );
+
     m_hoverItem = -1;
 
     if( m_tip )
@@ -154,6 +197,8 @@ void LOCAL_HISTORY_PANE::OnLeave( wxMouseEvent& aEvent )
 
 void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
 {
+    std::lock_guard<std::mutex> lock( m_mutex );
+
     if( m_hoverItem < 0 || m_hoverItem >= static_cast<long>( m_commits.size() ) )
         return;
 
@@ -166,12 +211,18 @@ void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
     wxString msg = m_commits[m_hoverItem].message + wxS( "\n" )
                     + m_commits[m_hoverItem].date.FormatISOCombined();
     m_tip = new wxTipWindow( this, msg );
+    m_tip->SetTipWindowPtr( &m_tip );
     m_tip->Position( ClientToScreen( m_hoverPos ), wxDefaultSize );
+    SetFocus();
 }
 
 void LOCAL_HISTORY_PANE::OnRightClick( wxListEvent& aEvent )
 {
+    // Temporarily disable right-click context menu (todo: SNH)
+    return;
+
     long item = aEvent.GetIndex();
+
     if( item < 0 || item >= static_cast<long>( m_commits.size() ) )
         return;
 
@@ -184,4 +235,22 @@ void LOCAL_HISTORY_PANE::OnRightClick( wxListEvent& aEvent )
                },
                restore->GetId() );
     PopupMenu( &menu );
+}
+
+
+void LOCAL_HISTORY_PANE::OnRefreshEvent( wxCommandEvent& aEvent )
+{
+    wxString projectPath = aEvent.GetString();
+
+    if( projectPath.IsEmpty() )
+        projectPath = m_frame->Prj().GetProjectPath();
+
+    RefreshHistory( projectPath );
+}
+
+
+void LOCAL_HISTORY_PANE::OnRefreshTimer( wxTimerEvent& aEvent )
+{
+    // Refresh the history to show updates from autosave
+    RefreshHistory( m_frame->Prj().GetProjectPath() );
 }

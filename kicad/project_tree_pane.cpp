@@ -1956,6 +1956,9 @@ void PROJECT_TREE_PANE::updateTreeCache()
 
         PROJECT_TREE_ITEM* nextItem = GetItemIdData( kid );
 
+        if( !nextItem )
+            continue;
+
         wxString gitAbsPath = nextItem->GetFileName();
 #ifdef _WIN32
         gitAbsPath.Replace( wxS( "\\" ), wxS( "/" ) );

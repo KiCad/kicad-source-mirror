@@ -1152,13 +1152,13 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
     if( !wxFileName::Mkdir( tempRestorePath, 0777, wxPATH_MKDIR_FULL ) )
     {
-        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create temp directory" ) );
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to create temp directory %s" ), tempRestorePath );
         git_tree_free( tree );
         git_commit_free( commit );
         return false;
     }
 
-    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Extracting to temp location" ) );
+    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Extracting to temp location %s" ), tempRestorePath );
 
     // Recursively extract git tree to temp location
     bool extractSuccess = true;
@@ -1242,7 +1242,10 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
     // Remove old backup if exists
     if( wxDirExists( backupPath ) )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Removing old backup %s" ), backupPath );
         wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
+    }
 
     // Track which files we moved to backup (for safe rollback)
     std::set<wxString> backedUpFiles;
@@ -1250,6 +1253,7 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
     // Move current project to backup (except .history)
     bool moveSuccess = true;
     wxDir currentDir( aProjectPath );
+
     if( currentDir.IsOpened() )
     {
         wxString filename;
@@ -1264,8 +1268,13 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
                 // Create backup directory if needed
                 if( !wxDirExists( backupPath ) )
+                {
+                    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Creating backup directory %s" ), backupPath );
                     wxFileName::Mkdir( backupPath, 0777, wxPATH_MKDIR_FULL );
+                }
 
+                wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Backing up '%s' to '%s'" ),
+                           source.GetFullPath(), dest.GetFullPath() );
                 if( !wxRenameFile( source.GetFullPath(), dest.GetFullPath() ) )
                 {
                     wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Failed to backup '%s'" ),
@@ -1287,6 +1296,7 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
     if( moveSuccess )
     {
         wxDir tempDir( tempRestorePath );
+
         if( tempDir.IsOpened() )
         {
             wxString filename;
@@ -1296,6 +1306,9 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
             {
                 wxFileName source( tempRestorePath, filename );
                 wxFileName dest( aProjectPath, filename );
+
+                wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Restoring '%s' to '%s'" ),
+                           source.GetFullPath(), dest.GetFullPath() );
 
                 if( !wxRenameFile( source.GetFullPath(), dest.GetFullPath() ) )
                 {
@@ -1321,6 +1334,9 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         for( const wxString& filename : restoredFiles )
         {
             wxFileName toRemove( aProjectPath, filename );
+            wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Rollback removing '%s'" ),
+                       toRemove.GetFullPath() );
+
             if( toRemove.DirExists() )
             {
                 wxFileName::Rmdir( toRemove.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
