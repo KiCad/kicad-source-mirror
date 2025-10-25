@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_set_offset_base.h"
+#include "dialog_offset_item_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SET_OFFSET_BASE::DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_OFFSET_ITEM_BASE::DIALOG_OFFSET_ITEM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -87,24 +87,24 @@ DIALOG_SET_OFFSET_BASE::DIALOG_SET_OFFSET_BASE( wxWindow* parent, wxWindowID id,
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SET_OFFSET_BASE::OnClose ) );
-	m_xEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SET_OFFSET_BASE::OnTextFocusLost ), NULL, this );
-	m_clearX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnClear ), NULL, this );
-	m_yEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SET_OFFSET_BASE::OnTextFocusLost ), NULL, this );
-	m_clearY->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnClear ), NULL, this );
-	m_polarCoords->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnPolarChanged ), NULL, this );
-	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnOkClick ), NULL, this );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClose ) );
+	m_xEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_OFFSET_ITEM_BASE::OnTextFocusLost ), NULL, this );
+	m_clearX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClear ), NULL, this );
+	m_yEntry->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_OFFSET_ITEM_BASE::OnTextFocusLost ), NULL, this );
+	m_clearY->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClear ), NULL, this );
+	m_polarCoords->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnPolarChanged ), NULL, this );
+	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnOkClick ), NULL, this );
 }
 
-DIALOG_SET_OFFSET_BASE::~DIALOG_SET_OFFSET_BASE()
+DIALOG_OFFSET_ITEM_BASE::~DIALOG_OFFSET_ITEM_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SET_OFFSET_BASE::OnClose ) );
-	m_xEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SET_OFFSET_BASE::OnTextFocusLost ), NULL, this );
-	m_clearX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnClear ), NULL, this );
-	m_yEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SET_OFFSET_BASE::OnTextFocusLost ), NULL, this );
-	m_clearY->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnClear ), NULL, this );
-	m_polarCoords->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnPolarChanged ), NULL, this );
-	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_OFFSET_BASE::OnOkClick ), NULL, this );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClose ) );
+	m_xEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_OFFSET_ITEM_BASE::OnTextFocusLost ), NULL, this );
+	m_clearX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClear ), NULL, this );
+	m_yEntry->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_OFFSET_ITEM_BASE::OnTextFocusLost ), NULL, this );
+	m_clearY->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnClear ), NULL, this );
+	m_polarCoords->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnPolarChanged ), NULL, this );
+	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_OFFSET_ITEM_BASE::OnOkClick ), NULL, this );
 
 }

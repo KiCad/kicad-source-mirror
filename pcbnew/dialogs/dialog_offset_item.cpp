@@ -21,11 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "dialog_set_offset.h"
+#include "dialog_offset_item.h"
 
 
-DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset ) :
-        DIALOG_SET_OFFSET_BASE( &aParent ),
+DIALOG_OFFSET_ITEM::DIALOG_OFFSET_ITEM( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset ) :
+        DIALOG_OFFSET_ITEM_BASE( &aParent ),
         m_originalOffset( aOffset ),
         m_updatedOffset( aOffset ),
         m_xOffset( &aParent, m_xLabel, m_xEntry, m_xUnit ),
@@ -46,7 +46,7 @@ DIALOG_SET_OFFSET::DIALOG_SET_OFFSET( PCB_BASE_FRAME& aParent, VECTOR2I& aOffset
 }
 
 
-void DIALOG_SET_OFFSET::OnTextFocusLost( wxFocusEvent& event )
+void DIALOG_OFFSET_ITEM::OnTextFocusLost( wxFocusEvent& event )
 {
     wxTextCtrl* obj = static_cast<wxTextCtrl*>( event.GetEventObject() );
 
@@ -66,7 +66,7 @@ static void ToPolar( double x, double y, double& r, EDA_ANGLE& q )
 }
 
 
-void DIALOG_SET_OFFSET::OnClear( wxCommandEvent& event )
+void DIALOG_OFFSET_ITEM::OnClear( wxCommandEvent& event )
 {
     const wxObject* const obj = event.GetEventObject();
     VECTOR2I              offset = m_originalOffset;
@@ -98,7 +98,7 @@ void DIALOG_SET_OFFSET::OnClear( wxCommandEvent& event )
     }
 }
 
-void DIALOG_SET_OFFSET::OnPolarChanged( wxCommandEvent& event )
+void DIALOG_OFFSET_ITEM::OnPolarChanged( wxCommandEvent& event )
 {
     bool   newPolar = m_polarCoords->IsChecked();
     double xOffset = m_xOffset.GetDoubleValue();
@@ -146,7 +146,7 @@ void DIALOG_SET_OFFSET::OnPolarChanged( wxCommandEvent& event )
     }
 }
 
-void DIALOG_SET_OFFSET::updateDialogControls( bool aPolar )
+void DIALOG_OFFSET_ITEM::updateDialogControls( bool aPolar )
 {
     if( aPolar )
     {
@@ -166,7 +166,7 @@ void DIALOG_SET_OFFSET::updateDialogControls( bool aPolar )
     }
 }
 
-bool DIALOG_SET_OFFSET::TransferDataToWindow()
+bool DIALOG_OFFSET_ITEM::TransferDataToWindow()
 {
     m_xOffset.ChangeValue( m_originalOffset.x );
     m_yOffset.ChangeValue( m_originalOffset.y );
@@ -180,7 +180,7 @@ bool DIALOG_SET_OFFSET::TransferDataToWindow()
     return true;
 }
 
-bool DIALOG_SET_OFFSET::TransferDataFromWindow()
+bool DIALOG_OFFSET_ITEM::TransferDataFromWindow()
 {
     if( m_polarCoords->GetValue() )
     {

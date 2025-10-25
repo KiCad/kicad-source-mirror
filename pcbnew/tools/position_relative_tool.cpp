@@ -26,7 +26,7 @@
 #include <board_commit.h>
 #include <collectors.h>
 #include <dialogs/dialog_position_relative.h>
-#include <dialogs/dialog_set_offset.h>
+#include <dialogs/dialog_offset_item.h>
 #include <footprint.h>
 #include <footprint_editor_settings.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -314,8 +314,8 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
             statusPopup.Hide();
 
             // Start with the forward vector from the ruler item
-            VECTOR2I          offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
-            DIALOG_SET_OFFSET dlg( *frame(), offsetVector );
+            VECTOR2I           offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
+            DIALOG_OFFSET_ITEM dlg( *frame(), offsetVector );
 
             if( dlg.ShowModal() == wxID_OK )
             {

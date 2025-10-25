@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialogs/dialog_set_offset_base.h>
+#include <dialogs/dialog_offset_item_base.h>
 
 #include <widgets/unit_binder.h>
 #include <pcb_base_frame.h>
@@ -29,14 +29,14 @@
 /**
  * Dialog that invites the user to enter some kind of offset.
  */
-class DIALOG_SET_OFFSET : public DIALOG_SET_OFFSET_BASE
+class DIALOG_OFFSET_ITEM : public DIALOG_OFFSET_ITEM_BASE
 {
 public:
     /**
      * @param aFrame The parent frame.
      * @param aOffset The offset to be edited.
      */
-    DIALOG_SET_OFFSET( PCB_BASE_FRAME& aFrame, VECTOR2I& aOffset );
+    DIALOG_OFFSET_ITEM( PCB_BASE_FRAME& aFrame, VECTOR2I& aOffset );
 
     virtual void OnTextFocusLost( wxFocusEvent& event ) override;
     virtual void OnClear( wxCommandEvent& event ) override;

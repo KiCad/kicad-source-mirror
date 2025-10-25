@@ -119,6 +119,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_import_netlist_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
+    dialogs/dialog_offset_item.cpp
+    dialogs/dialog_offset_item_base.cpp
     dialogs/dialog_outset_items.cpp
     dialogs/dialog_outset_items_base.cpp
     dialogs/dialog_pad_properties.cpp
@@ -135,8 +137,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_pcbnew.cpp
     dialogs/dialog_render_job_base.cpp
     dialogs/dialog_render_job.cpp
-    dialogs/dialog_set_offset_base.cpp
-    dialogs/dialog_set_offset.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
     dialogs/dialog_table_properties.cpp
