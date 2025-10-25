@@ -57,6 +57,7 @@ class LEGACY_SYMBOL_LIB;
 class LEGACY_SYMBOL_LIBS;
 class SCH_SCREEN;
 class SCH_COMMIT;
+class SCH_SHAPE;
 
 
 /// A container for several SCH_FIELD items
@@ -838,6 +839,18 @@ public:
      */
     void PlotDNP( PLOTTER* aPlotter ) const;
 
+    /**
+     * Build the local power pin indicator icon shape, at coordinate aPos.
+     * it is currently a set of 3 bezier curves + one filled cirle
+     * @param aShapeList is a std::vector<SCH_SHAPE> to store the set of SCH_SHAPE
+     * @param aPos is the position of icon
+     * @param aSize is the size of icon
+     * @param aLineWidth is the line width used to build shapes
+     * @param aHorizontal = false for a vertical icon, true for a horizontal icon shape
+     */
+    static void BuildLocalPowerIconShape( std::vector<SCH_SHAPE>& aShapeList, const VECTOR2D& aPos,
+                                          double aSize, double aLineWidth, bool aHorizontal );
+
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
@@ -926,5 +939,6 @@ private:
     /// @see SCH_SYMBOL::GetOrientation
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;
 };
+
 
 #endif /* SCH_SYMBOL_H */

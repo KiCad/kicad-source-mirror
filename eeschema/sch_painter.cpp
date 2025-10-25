@@ -811,46 +811,30 @@ void SCH_PAINTER::drawLocalPowerIcon( const VECTOR2D& aPos, double aSize, bool a
                                       const COLOR4D& aColor, bool aDrawingShadows,
                                       bool aBrightened )
 {
-    m_gal->Save();
-
-    m_gal->Translate( aPos );
-
-    if( aRotate )
-        m_gal->Rotate( ANGLE_270.AsRadians() );
-
     double lineWidth = aSize / 10.0;
 
     if( aDrawingShadows )
         lineWidth += getShadowWidth( aBrightened );
 
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
+    std::vector<SCH_SHAPE> shapeList;
+    SCH_SYMBOL::BuildLocalPowerIconShape( shapeList, aPos, aSize, lineWidth, aRotate );
+
     m_gal->SetLineWidth( lineWidth );
+    m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( aColor );
-
-    double x_right = aSize / 1.6180339887;
-    double x_middle = x_right / 2.0;
-
-    VECTOR2D bottomPt = VECTOR2D{ x_middle, 0 };
-    VECTOR2D leftPt = VECTOR2D{ 0, 2.0 * -aSize / 3.0 };
-    VECTOR2D rightPt = VECTOR2D{ x_right, 2.0 * -aSize / 3.0 };
-
-    VECTOR2D bottomAnchorPt = VECTOR2D{ x_middle, -aSize / 4.0 };
-    VECTOR2D leftSideAnchorPt1 = VECTOR2D{ 0, -aSize / 2.5 };
-    VECTOR2D leftSideAnchorPt2 = VECTOR2D{ 0, -aSize * 1.15 };
-    VECTOR2D rightSideAnchorPt1 = VECTOR2D{ x_right, -aSize / 2.5 };
-    VECTOR2D rightSideAnchorPt2 = VECTOR2D{ x_right, -aSize * 1.15 };
-
-    m_gal->DrawCurve( bottomPt, bottomAnchorPt, leftSideAnchorPt1, leftPt );
-    m_gal->DrawCurve( leftPt, leftSideAnchorPt2, rightSideAnchorPt2, rightPt );
-    m_gal->DrawCurve( rightPt, rightSideAnchorPt1, bottomAnchorPt, bottomPt );
-
-    m_gal->SetIsFill( true );
     m_gal->SetFillColor( aColor );
-    m_gal->DrawCircle( ( leftPt + rightPt ) / 2.0, aSize / 15.0 );
 
-    m_gal->Restore();
-};
+    for( const SCH_SHAPE& shape : shapeList )
+    {
+        // Currently there are only 2 shapes: BEZIER and CIRCLE
+        m_gal->SetIsFill( shape.GetFillMode() != FILL_T::NO_FILL );
+
+        if( shape.GetShape() == SHAPE_T::BEZIER )
+            m_gal->DrawCurve( shape.GetStart(), shape.GetBezierC1(), shape.GetBezierC2(), shape.GetEnd() );
+        else if( shape.GetShape() == SHAPE_T::CIRCLE )
+            m_gal->DrawCircle( shape.getCenter(), shape.GetRadius() );
+    }
+}
 
 
 /**
@@ -2979,7 +2963,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
         SCH_SYMBOL* parent = static_cast<SCH_SYMBOL*>( aField->GetParent() );
-        bool rotated = !orient.IsHorizontal() && !aField->CanAutoplace();
+        bool rotated = !orient.IsHorizontal();
 
         VECTOR2D    pos;
         double      size = bbox.GetHeight() / 1.5;
@@ -2996,7 +2980,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
                             bbox.GetBottom() - bbox.GetHeight() / 6.0 );
         }
 
-        if( parent->IsSymbolLikePowerLocalLabel() )
+        if( parent->IsSymbolLikePowerLocalLabel() && aField->GetId() == FIELD_T::VALUE )
             drawLocalPowerIcon( pos, size, rotated, color, drawingShadows, aField->IsBrightened() );
     }
 

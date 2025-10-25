@@ -3166,6 +3166,57 @@ double SCH_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
+void SCH_SYMBOL::BuildLocalPowerIconShape( std::vector<SCH_SHAPE>& aShapeList, const VECTOR2D& aPos,
+                                           double aSize, double aLineWidth, bool aHorizontal )
+{
+    SCH_LAYER_ID layer = LAYER_DEVICE;  //dummy param
+
+    double x_right = aSize / 1.6180339887;
+    double x_middle = x_right / 2.0;
+
+    VECTOR2D bottomPt = VECTOR2D{ x_middle, 0 };
+    VECTOR2D leftPt = VECTOR2D{ 0, 2.0 * -aSize / 3.0 };
+    VECTOR2D rightPt = VECTOR2D{ x_right, 2.0 * -aSize / 3.0 };
+
+    VECTOR2D bottomAnchorPt = VECTOR2D{ x_middle, -aSize / 4.0 };
+    VECTOR2D leftSideAnchorPt1 = VECTOR2D{ 0, -aSize / 2.5 };
+    VECTOR2D leftSideAnchorPt2 = VECTOR2D{ 0, -aSize * 1.15 };
+    VECTOR2D rightSideAnchorPt1 = VECTOR2D{ x_right, -aSize / 2.5 };
+    VECTOR2D rightSideAnchorPt2 = VECTOR2D{ x_right, -aSize * 1.15 };
+
+    aShapeList.emplace_back( SHAPE_T::BEZIER, layer, aLineWidth, FILL_T::NO_FILL );
+    aShapeList.back().SetStart( bottomPt );
+    aShapeList.back().SetBezierC1( bottomAnchorPt );
+    aShapeList.back().SetBezierC2( leftSideAnchorPt1 );
+    aShapeList.back().SetEnd( leftPt );
+
+
+    aShapeList.emplace_back( SHAPE_T::BEZIER, layer, aLineWidth, FILL_T::NO_FILL );
+    aShapeList.back().SetStart( leftPt );
+    aShapeList.back().SetBezierC1( leftSideAnchorPt2 );
+    aShapeList.back().SetBezierC2( rightSideAnchorPt2 );
+    aShapeList.back().SetEnd( rightPt );
+
+    aShapeList.emplace_back( SHAPE_T::BEZIER, layer, aLineWidth, FILL_T::NO_FILL );
+    aShapeList.back().SetStart( rightPt );
+    aShapeList.back().SetBezierC1( rightSideAnchorPt1 );
+    aShapeList.back().SetBezierC2( bottomAnchorPt );
+    aShapeList.back().SetEnd( bottomPt );
+
+    aShapeList.emplace_back( SHAPE_T::CIRCLE, layer, 0, FILL_T::FILLED_SHAPE );
+    aShapeList.back().SetCenter( ( leftPt + rightPt ) / 2.0 );
+    aShapeList.back().SetRadius( aSize / 15.0 );
+
+    for( SCH_SHAPE& shape : aShapeList )
+    {
+         if( aHorizontal )
+            shape.Rotate( VECTOR2I( 0, 0), true );
+
+        shape.Move( aPos );
+    }
+}
+
+
 static struct SCH_SYMBOL_DESC
 {
     SCH_SYMBOL_DESC()
@@ -3295,5 +3346,6 @@ static struct SCH_SYMBOL_DESC
                     groupAttributes );
     }
 } _SCH_SYMBOL_DESC;
+
 
 ENUM_TO_WXANY( SYMBOL_ORIENTATION_PROP )
