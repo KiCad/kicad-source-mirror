@@ -34,11 +34,8 @@ PCB_ORIGIN_TRANSFORMS::PCB_ORIGIN_TRANSFORMS( PCB_BASE_FRAME& aPcbBaseFrame ) :
         m_pcbBaseFrame( aPcbBaseFrame )
 {}
 
-PCB_ORIGIN_TRANSFORMS::~PCB_ORIGIN_TRANSFORMS()
-{}
 
-long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
-                                                COORD_TYPES_T aCoordType ) const
+long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const
 {
     long long int value = aValue;
 
@@ -54,6 +51,7 @@ long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
 
     return value;
 }
+
 
 double PCB_ORIGIN_TRANSFORMS::ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const
 {
@@ -72,8 +70,17 @@ double PCB_ORIGIN_TRANSFORMS::ToDisplay( double aValue, COORD_TYPES_T aCoordType
     return value;
 }
 
-long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
-                                                  COORD_TYPES_T aCoordType ) const
+
+double PCB_ORIGIN_TRANSFORMS::ToDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const
+{
+    if( !invertYAxis() && ( aCoordType == REL_X_COORD || aCoordType == REL_Y_COORD ) )
+        return -aValue.AsDegrees();
+
+    return aValue.AsDegrees();
+}
+
+
+long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const
 {
     long long value = aValue;
 
@@ -89,6 +96,7 @@ long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
 
     return value;
 }
+
 
 double PCB_ORIGIN_TRANSFORMS::FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const
 {
@@ -108,15 +116,26 @@ double PCB_ORIGIN_TRANSFORMS::FromDisplay( double aValue, COORD_TYPES_T aCoordTy
 }
 
 
+EDA_ANGLE PCB_ORIGIN_TRANSFORMS::FromDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const
+{
+    if( !invertYAxis() && ( aCoordType == REL_X_COORD || aCoordType == REL_Y_COORD ) )
+        return -aValue;
+
+    return aValue;
+}
+
+
 int PCB_ORIGIN_TRANSFORMS::getUserXOrigin() const
 {
     return m_pcbBaseFrame.GetUserOrigin().x;
 }
 
+
 int PCB_ORIGIN_TRANSFORMS::getUserYOrigin() const
 {
     return m_pcbBaseFrame.GetUserOrigin().y;
 }
+
 
 bool PCB_ORIGIN_TRANSFORMS::invertXAxis() const
 {
@@ -125,6 +144,7 @@ bool PCB_ORIGIN_TRANSFORMS::invertXAxis() const
     else
         return m_pcbBaseFrame.GetFootprintEditorSettings()->m_DisplayInvertXAxis;
 }
+
 
 bool PCB_ORIGIN_TRANSFORMS::invertYAxis() const
 {

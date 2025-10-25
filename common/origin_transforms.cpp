@@ -23,53 +23,52 @@
  */
 
 #include <origin_transforms.h>
+#include <geometry/eda_angle.h>
 
 
-ORIGIN_TRANSFORMS::ORIGIN_TRANSFORMS()
-{}
-
-
-ORIGIN_TRANSFORMS::~ORIGIN_TRANSFORMS()
-{}
-
-
-int ORIGIN_TRANSFORMS::ToDisplay( int           aValue,
-                                  COORD_TYPES_T aCoordType ) const
+int ORIGIN_TRANSFORMS::ToDisplay( int aValue, COORD_TYPES_T aCoordType ) const
 {
     return static_cast<int>( ToDisplay( static_cast<long long int>( aValue ), aCoordType ) );
 }
 
 
-long long int ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
-                                            COORD_TYPES_T aCoordType ) const
+long long int ORIGIN_TRANSFORMS::ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 
-double ORIGIN_TRANSFORMS::ToDisplay( double        aValue,
-                                     COORD_TYPES_T aCoordType ) const
+double ORIGIN_TRANSFORMS::ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 
-int ORIGIN_TRANSFORMS::FromDisplay( int           aValue,
-                                    COORD_TYPES_T aCoordType ) const
+double ORIGIN_TRANSFORMS::ToDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const
+{
+    return aValue.AsDegrees();
+}
+
+
+int ORIGIN_TRANSFORMS::FromDisplay( int aValue, COORD_TYPES_T aCoordType ) const
 {
     return static_cast<int>( FromDisplay( static_cast<long long int>( aValue ), aCoordType ) );
 }
 
 
-long long int ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
-                                              COORD_TYPES_T aCoordType ) const
+long long int ORIGIN_TRANSFORMS::FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 
-double ORIGIN_TRANSFORMS::FromDisplay( double        aValue,
-                                       COORD_TYPES_T aCoordType ) const
+double ORIGIN_TRANSFORMS::FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const
+{
+    return aValue;
+}
+
+
+EDA_ANGLE ORIGIN_TRANSFORMS::FromDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }

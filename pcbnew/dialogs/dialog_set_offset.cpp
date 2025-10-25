@@ -185,7 +185,7 @@ bool DIALOG_SET_OFFSET::TransferDataFromWindow()
     if( m_polarCoords->GetValue() )
     {
         m_stateRadius = m_xOffset.GetDoubleValue();
-        m_stateTheta = EDA_ANGLE( m_yOffset.GetDoubleValue(), DEGREES_T );
+        m_stateTheta = m_yOffset.GetAngleValue();
 
         m_updatedOffset.x = KiROUND( m_stateRadius * m_stateTheta.Cos() );
         m_updatedOffset.y = KiROUND( m_stateRadius * m_stateTheta.Sin() );

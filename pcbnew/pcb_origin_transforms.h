@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_ORIGIN_TRANSFORM_H_
-#define PCB_ORIGIN_TRANSFORM_H_
+#pragma once
 
 #include <origin_transforms.h>
 
@@ -34,21 +33,19 @@ class PCB_ORIGIN_TRANSFORMS : public ORIGIN_TRANSFORMS
 public:
     PCB_ORIGIN_TRANSFORMS( PCB_BASE_FRAME& aPcbBaseFrame );
 
-    virtual ~PCB_ORIGIN_TRANSFORMS() override;
+    ~PCB_ORIGIN_TRANSFORMS() = default;
 
     using ORIGIN_TRANSFORMS::ToDisplay;
 
     virtual long long int ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const override;
-
     virtual double ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const override;
-
+    virtual double ToDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const override;
 
     using ORIGIN_TRANSFORMS::FromDisplay;
 
     virtual long long int FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const override;
-
     virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const override;
-
+    virtual EDA_ANGLE FromDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const override;
 
     /**
      * Transform a 2-D coordinate point referenced to the internal origin
@@ -199,5 +196,3 @@ protected:
 protected:
     const PCB_BASE_FRAME& m_pcbBaseFrame;
 };
-
-#endif // PCB_ORIGIN_TRANSFORMS_H_

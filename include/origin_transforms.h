@@ -22,8 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ORIGIN_TRANSFORMS_H_
-#define ORIGIN_TRANSFORMS_H_
+#pragma once
+
+class EDA_ANGLE;
 
 /**
  * A class to perform either relative or absolute display origin
@@ -53,28 +54,17 @@ public:
         REL_Y_COORD,    //< A relative Y coordinate
     };
 
-    ORIGIN_TRANSFORMS();
+    ~ORIGIN_TRANSFORMS() = default;
 
-    virtual ~ORIGIN_TRANSFORMS();
+    virtual int ToDisplay( int aValue, COORD_TYPES_T aCoordType ) const;
+    virtual long long int ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const;
+    virtual double ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const;
+    virtual double ToDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const;
 
-    virtual int ToDisplay( int           aValue,
-                           COORD_TYPES_T aCoordType ) const;
-
-    virtual long long int ToDisplay( long long int aValue,
-                                     COORD_TYPES_T aCoordType ) const;
-
-    virtual double ToDisplay( double        aValue,
-                              COORD_TYPES_T aCoordType ) const;
-
-    virtual int FromDisplay( int           aValue,
-                             COORD_TYPES_T aCoordType ) const;
-
-    virtual long long int FromDisplay( long long int aValue,
-                                       COORD_TYPES_T aCoordType ) const;
-
-    virtual double FromDisplay( double        aValue,
-                                COORD_TYPES_T aCoordType ) const;
-
+    virtual int FromDisplay( int aValue, COORD_TYPES_T aCoordType ) const;
+    virtual long long int FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const;
+    virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const;
+    virtual EDA_ANGLE FromDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const;
 
     template<class T>
     T ToDisplayAbs( const T& aValue ) const
@@ -96,7 +86,6 @@ public:
         return displayValue;
     }
 
-
     template<class T>
     T FromDisplayAbs( const T& aValue ) const
     {
@@ -117,39 +106,33 @@ public:
         return displayValue;
     }
 
-
 protected:
-    template<class T> inline static
-    T ToDisplayRel( T    aInternalValue,
-                    bool aInvertAxis )
+    template<class T>
+    inline static T ToDisplayRel( T aInternalValue, bool aInvertAxis )
     {
         T displayValue = aInternalValue;
 
        // Invert the direction if needed
-        if( aInvertAxis && (displayValue != static_cast<T>(0)) )
+        if( aInvertAxis && ( displayValue != static_cast<T>( 0 ) ) )
             displayValue = -displayValue;
 
         return displayValue;
     }
 
-
-    template<class T> inline static
-    T FromDisplayRel( T    aDisplayValue,
-                      bool aInvertAxis )
+    template<class T>
+    inline static T FromDisplayRel( T aDisplayValue, bool aInvertAxis )
     {
         T internalValue = aDisplayValue;
 
        // Invert the direction if needed
-        if( aInvertAxis && (internalValue != static_cast<T>(0)) )
+        if( aInvertAxis && ( internalValue != static_cast<T>( 0 ) ) )
             internalValue = -internalValue;
 
         return internalValue;
     }
 
-    template<class T> inline static
-    T ToDisplayAbs( T    aInternalValue,
-                    int  aUserOrigin,
-                    bool aInvertAxis )
+    template<class T>
+    inline static T ToDisplayAbs( T aInternalValue, int aUserOrigin, bool aInvertAxis )
     {
         T displayValue = aInternalValue;
 
@@ -157,21 +140,19 @@ protected:
         displayValue -= aUserOrigin;
 
         // Invert the direction if needed
-        if( aInvertAxis && (displayValue != static_cast<T>(0)) )
+        if( aInvertAxis && ( displayValue != static_cast<T>( 0 ) ) )
             displayValue = -displayValue;
 
         return displayValue;
     }
 
-    template<class T> inline static
-    T FromDisplayAbs( T    aDisplayValue,
-                      int  aUserOrigin,
-                      bool aInvertAxis )
+    template<class T>
+    inline static T FromDisplayAbs( T aDisplayValue, int aUserOrigin, bool aInvertAxis )
     {
         T internalValue = aDisplayValue;
 
         // Invert the direction if needed
-        if( aInvertAxis && (internalValue != static_cast<T>(0)) )
+        if( aInvertAxis && ( internalValue != static_cast<T>( 0 ) ) )
             internalValue = -internalValue;
 
         // Make the value relative to the internal origin
@@ -180,5 +161,3 @@ protected:
         return internalValue;
     }
 };
-
-#endif // ORIGIN_TRANSFORMS_H

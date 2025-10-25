@@ -415,7 +415,7 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
 
 void UNIT_BINDER::SetAngleValue( const EDA_ANGLE& aValue )
 {
-    SetDoubleValue( aValue.AsDegrees() );
+    SetDoubleValue( m_originTransforms.ToDisplay( aValue, m_coordType ) );
 }
 
 
@@ -488,7 +488,7 @@ void UNIT_BINDER::ChangeDoubleValue( double aValue )
 
 void UNIT_BINDER::ChangeAngleValue( const EDA_ANGLE& aValue )
 {
-    ChangeDoubleValue( aValue.AsDegrees() );
+    ChangeDoubleValue( m_originTransforms.ToDisplay( aValue, m_coordType ) );
 }
 
 
@@ -602,7 +602,7 @@ double UNIT_BINDER::GetDoubleValue() const
 
 EDA_ANGLE UNIT_BINDER::GetAngleValue()
 {
-    return EDA_ANGLE( GetDoubleValue(), DEGREES_T );
+    return m_originTransforms.FromDisplay( EDA_ANGLE( GetDoubleValue(), DEGREES_T ), m_coordType );
 }
 
 
