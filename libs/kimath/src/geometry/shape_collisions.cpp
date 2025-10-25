@@ -679,8 +679,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
     VECTOR2I ptA, ptB;
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
-    int half_width = ( aA.GetWidth() + 1 ) / 2;
-    int min_dist = aClearance + half_width;
+    int min_dist = aClearance;
 
     if( dist_sq < SEG::Square( min_dist ) )
     {
@@ -688,7 +687,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
             *aLocation = ( ptA + ptB ) / 2;
 
         if( aActual )
-            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) - half_width ) );
+            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) ) );
 
         if( aMTV )
         {

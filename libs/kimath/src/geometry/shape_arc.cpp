@@ -582,72 +582,13 @@ bool SHAPE_ARC::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB,
 bool SHAPE_ARC::NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I& aPtB,
                                int64_t& aDistSq ) const
 {
-    BOX2I  bbox = aRect.BBox();
-    CIRCLE circle( GetCenter(), GetRadius() );
     aDistSq = std::numeric_limits<int64_t>::max();
 
     SHAPE_LINE_CHAIN lineChain( aRect.Outline() );
 
-    if( aRect.GetRadius() > 0 )
-    {
-        // Reverse the output points to match the rect_outline/arc order
-        lineChain.NearestPoints( this, aPtB, aPtA );
-        aDistSq = ( aPtA - aPtB ).SquaredEuclideanNorm();
-        return true;
-    }
-
-    // First check for intersections
-    for( int i = 0; i < 4; ++i )
-    {
-        SEG seg( lineChain.CPoint( i ), lineChain.CPoint( i + 1 ) );
-
-        std::vector<VECTOR2I> intersections = circle.Intersect( seg );
-
-        for( const VECTOR2I& pt : intersections )
-        {
-            if( sliceContainsPoint( pt ) )
-            {
-                aPtA = aPtB = pt;
-                aDistSq = 0;
-                return true;
-            }
-        }
-    }
-
-    // Check the endpoints of the arc against the nearest point on the rectangle
-    for( const VECTOR2I& pt : { m_start, m_end } )
-    {
-        VECTOR2I nearestPt = bbox.NearestPoint( pt );
-        int64_t distSq = pt.SquaredDistance( nearestPt );
-
-        if( distSq < aDistSq )
-        {
-            aDistSq = distSq;
-            aPtA = pt;
-            aPtB = nearestPt;
-        }
-    }
-
-    // Check the closest points on the rectangle to the circle
-    VECTOR2I rectNearestPt = bbox.NearestPoint( GetCenter() );
-
-    if( sliceContainsPoint( rectNearestPt ) )
-    {
-        VECTOR2I circleNearestPt = circle.NearestPoint( rectNearestPt );
-        int64_t distSq = rectNearestPt.SquaredDistance( circleNearestPt );
-
-        if( distSq < aDistSq )
-        {
-            aDistSq = distSq;
-            aPtA = rectNearestPt;
-            aPtB = circleNearestPt;
-        }
-    }
-
-    // Adjust point A by half the arc-width towards point B
-    VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
-    aPtA += dir;
-
+    // Reverse the output points to match the rect_outline/arc order
+    lineChain.NearestPoints( this, aPtB, aPtA );
+    aDistSq = ( aPtA - aPtB ).SquaredEuclideanNorm();
     return true;
 }
 
