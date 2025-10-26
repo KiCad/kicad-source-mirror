@@ -592,6 +592,26 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_RECT& aRect, VECTOR2I& aPtA, VECTOR2I
         }
     }
 
+    // Check the corners of the rect against the nearest points on the arc
+    for( const VECTOR2I& pt : { VECTOR2I( bbox.GetLeft(), bbox.GetTop() ),
+                                VECTOR2I( bbox.GetRight(), bbox.GetTop() ),
+                                VECTOR2I( bbox.GetRight(), bbox.GetBottom() ),
+                                VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) } )
+    {
+        if( sliceContainsPoint( pt ) )
+        {
+            VECTOR2I nearestPt = circle.NearestPoint( pt );
+            int64_t distSq = pt.SquaredDistance( nearestPt );
+
+            if( distSq < aDistSq )
+            {
+                aDistSq = distSq;
+                aPtA = nearestPt;
+                aPtB = pt;
+            }
+        }
+    }
+
     // Check the endpoints of the arc against the nearest point on the rectangle
     for( const VECTOR2I& pt : { m_start, m_end } )
     {
