@@ -28,7 +28,7 @@
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_edit_frame.h>
-#include <units_provider.h>
+#include <board_statistics_report.h>
 
 
 PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits )
@@ -38,6 +38,10 @@ PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayU
     UNITS_PROVIDER         units_provider( pcbIUScale, aDisplayUnits );
 
     stackup.SynchronizeWithBoard( &settings );
+
+    BOARD_STATISTICS_DATA brd_stat_data;
+    BOARD_STATISTICS_OPTIONS opts;
+    ComputeBoardStatistics( aBoard, opts, brd_stat_data );
 
     PCB_TABLE* table = new PCB_TABLE( aBoard, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
     table->SetColCount( 4 );
@@ -76,7 +80,7 @@ PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayU
                                                       settings.GetCopperLayerCount(), false ) );
 
     addDataCell( _( "Board thickness: " ) );
-    addDataCell( units_provider.MessageTextFromValue( settings.GetBoardThickness(), true ) );
+    addDataCell( units_provider.MessageTextFromValue(  brd_stat_data.boardThickness, true ) );
 
     SHAPE_POLY_SET outline;
     aBoard->GetBoardPolygonOutlines( outline );
@@ -92,13 +96,13 @@ PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayU
 
     addDataCell( _( "Min track/spacing: " ) );
     addDataCell( wxString::Format( wxT( "%s / %s" ),
-                                   units_provider.MessageTextFromValue( settings.m_TrackMinWidth, true ),
-                                   units_provider.MessageTextFromValue( settings.m_MinClearance, true ) ) );
+                                   units_provider.MessageTextFromValue( brd_stat_data.minTrackWidth, true ),
+                                   units_provider.MessageTextFromValue( brd_stat_data.minClearanceTrackToTrack, true ) ) );
 
-    double holeSize = std::min( settings.m_MinThroughDrill, settings.m_ViasMinSize );
+    double min_holeSize = brd_stat_data.minDrillSize;
 
     addDataCell( _( "Min hole diameter: " ) );
-    addDataCell( units_provider.MessageTextFromValue( holeSize, true ) );
+    addDataCell( units_provider.MessageTextFromValue( min_holeSize, true ) );
 
     addDataCell( _( "Copper finish: " ) );
     addDataCell( stackup.m_FinishType );
