@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-22 21:35+0000\n"
+"PO-Revision-Date: 2025-10-27 00:03+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -399,7 +399,7 @@ msgstr "வாரியத்தை நகர்த்தவும்"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:113
 msgid "Move Board Right"
-msgstr "பலகையை நகர்த்தவும்"
+msgstr "பலகையை வலதுபுறமாக நகர்த்து"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:122
 msgid "Move Board Up"
@@ -1187,7 +1187,7 @@ msgstr "முடக்கப்பட்டது"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "2x"
-msgstr "ஃச்"
+msgstr "2ஃ"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "4x"
@@ -1368,7 +1368,7 @@ msgstr "பலகை தடிமன்:"
 #: eeschema/sch_bitmap.cpp:320 pcbnew/pcb_reference_image.cpp:219
 #: pcbnew/pcb_reference_image.cpp:355
 msgid "Scale"
-msgstr "அளவு"
+msgstr "அளவீடு"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:31
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:76
@@ -1711,14 +1711,12 @@ msgid "Errors"
 msgstr "பிழைகள்"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "மாற்றவும் அடுத்து கண்டுபிடிக்கவும்"
+msgstr "ஏற்றப்பட்ட கோப்பை மாற்றவா?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "வெளியீட்டு கோப்புகள் '%s' ஏற்கனவே உள்ளன. அதை மேலெழுத விரும்புகிறீர்களா?"
+msgstr "ஏற்கனவே ஒரு கோப்பு ஏற்றப்பட்டுள்ளது. அதை மாற்ற விரும்புகிறீர்களா?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -5253,7 +5251,7 @@ msgstr "ஒவ்வொரு நெடுவரிசைக்கும் ஒ�
 
 #: common/dialogs/panel_mouse_settings_base.cpp:208
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:212
 #: pcbnew/dialogs/panel_edit_options_base.cpp:175
@@ -7433,7 +7431,7 @@ msgstr "பிழை: %s"
 #: common/http_lib/http_lib_connection.cpp:139
 #, c-format
 msgid "API Response:  %s"
-msgstr "பநிஇ பதில்: %s"
+msgstr "பநிஇ பதில்:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
@@ -8128,7 +8126,7 @@ msgstr "கர்சர்"
 
 #: common/layer_id.cpp:111
 msgid "Hovered items"
-msgstr "உருப்படிகள்"
+msgstr "வட்டமிட்ட உருப்படிகள்"
 
 #: common/layer_id.cpp:112
 msgid "Highlighted items"
@@ -8456,7 +8454,7 @@ msgstr "தரவு சேகரிப்பு தேர்வு"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr "தேர்வு"
+msgstr "தேர்வு உள்"
 
 #: common/pgm_base.cpp:391
 msgid "Decline"
@@ -8753,7 +8751,7 @@ msgstr "மாற்றங்களைச் சேமிக்கவும்"
 
 #: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:228
 msgid "Save As..."
-msgstr "சேமி ..."
+msgstr "எனச் சேமி..."
 
 #: common/tool/actions.cpp:101
 msgid "Save current document to another location"
@@ -9141,12 +9139,12 @@ msgstr "கர்சரில் பெரிதாக்கவும்"
 
 #: common/tool/actions.cpp:612
 msgid "Zoom Out at Cursor"
-msgstr "கர்சரில் பெரிதாக்கவும்"
+msgstr "கர்சரில் பெரிதாக்கு"
 
 #: common/tool/actions.cpp:618 common/widgets/mathplot.cpp:1402
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
 msgid "Zoom In"
-msgstr "பெரிதாக்கு"
+msgstr "உள் பெரிதாக்கு"
 
 #: common/tool/actions.cpp:624 common/widgets/mathplot.cpp:1403
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
@@ -9155,7 +9153,7 @@ msgstr "சிறிதாக்கு"
 
 #: common/tool/actions.cpp:630
 msgid "Zoom In Horizontally"
-msgstr "கிடைமட்டமாக பெரிதாக்கவும்"
+msgstr "கிடைமட்டமாக உள் பெரிதாக்கு"
 
 #: common/tool/actions.cpp:631
 msgid "Zoom in horizontally the plot area"
@@ -9171,7 +9169,7 @@ msgstr "சூழ்ச்சி பகுதியை கிடைமட்ட�
 
 #: common/tool/actions.cpp:644
 msgid "Zoom In Vertically"
-msgstr "செங்குத்தாக பெரிதாக்கவும்"
+msgstr "செங்குத்தாக உள் பெரிதாக்கு"
 
 #: common/tool/actions.cpp:645
 msgid "Zoom in vertically the plot area"
@@ -9641,7 +9639,7 @@ msgstr "கோப்பை அகற்று"
 
 #: common/tool/actions.cpp:1262
 msgid "Remove an embedded file"
-msgstr "உட்பொதிக்கப்பட்ட கோப்பை அகற்று"
+msgstr "உட்பொதிக்கப்பட்ட ஒரு கோப்பை அகற்று"
 
 #: common/tool/actions.cpp:1267
 msgid "Extract File"
@@ -9761,7 +9759,7 @@ msgstr "தாவல்"
 
 #: common/validators.cpp:395
 msgid "space"
-msgstr "இடைவெளி"
+msgstr "வெளி"
 
 #: common/validators.cpp:411
 msgid " or "
@@ -10254,7 +10252,7 @@ msgstr "கிகாட் திட்ட கோப்புகள்"
 
 #: common/wildcards_and_files_ext.cpp:254
 msgid "KiCad legacy project files"
-msgstr "கிகாட் மரபு திட்ட கோப்புகள்"
+msgstr "கிகாட் மரபு திட்டக் கோப்புகள்"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "All KiCad project files"
@@ -10276,7 +10274,7 @@ msgstr "கிகாட் எச்-எக்ச்பிரசன் திட
 
 #: common/wildcards_and_files_ext.cpp:289
 msgid "Altium Project files"
-msgstr "ஆல்டியம் திட்ட கோப்புகள்"
+msgstr "ஆல்டியம் திட்டக் கோப்புகள்"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10521,7 +10519,7 @@ msgstr "உலகளாவிய தடம் நூலக அட்டவணை
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr "தடம் ஒதுக்கவும்"
+msgstr "தடங்கள் ஒதுக்கவும்"
 
 #: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
@@ -11191,7 +11189,7 @@ msgstr "இருக்கும் சிறுகுறிப்புகள�
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:61
 msgid "Numbering"
-msgstr "எண்"
+msgstr "எண்ணுதல்"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:101
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:73
@@ -11560,7 +11558,7 @@ msgstr "மாற்றம்"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:720
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
 msgid "Update"
-msgstr "புதுப்பிப்பு"
+msgstr "புதுப்பி"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
 msgid "Update Symbols"
@@ -11595,12 +11593,12 @@ msgstr "'%s' முதல் '%s' வரை%s ஐ புதுப்பிக்
 #: eeschema/dialogs/dialog_change_symbols.cpp:907
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "'%s' இலிருந்து '%s' க்கு%s ஐ மாற்றவும்"
+msgstr "%s குறியீடை '%s' இலிருந்து '%s' ஆக மாற்றவும்"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:914
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "'%s' இலிருந்து '%s' க்கு%s ஐ மாற்றவும்"
+msgstr "%s குறியீடுகளை '%s' இலிருந்து '%s' ஆக மாற்றவும்"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
 msgid "Update all symbols in schematic"
@@ -11676,9 +11674,8 @@ msgstr "புல நிலைகளை புதுப்பிக்கவு�
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "விருப்பங்களை புதுப்பிக்கவும்"
+msgstr "அனைத்து புதுப்பிப்பு விருப்பங்களையும் சரிபார்"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11707,9 +11704,8 @@ msgstr "தனிப்பயன் ஆற்றல் சின்னங்க�
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "விருப்பங்களை புதுப்பிக்கவும்"
+msgstr "எல்லா புதுப்பிப்பு விருப்பங்களையும் தேர்வுநீக்கவும்"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12414,7 +12410,7 @@ msgstr "வலதுபுறம் சீரமைக்கவும்"
 #: eeschema/sch_label.cpp:1258
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:76
 msgid "Align top"
-msgstr "மேலே சீரமைக்கவும்"
+msgstr "மேலே சீரமை"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:197
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:85
@@ -12707,7 +12703,7 @@ msgstr "நிலை"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
-msgstr "குறிப்பு வடிவமைப்பாளர்:"
+msgstr "குறிப்பு வடிவமைப்பாளர் தொடங்கு:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:43
@@ -13182,7 +13178,7 @@ msgstr "சிட்டை"
 #: eeschema/dialogs/dialog_lib_fields.cpp:261
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:206
 msgid "Group By"
-msgstr "குழு"
+msgstr "மூலம் குழு"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
 #, fuzzy, c-format
@@ -16728,24 +16724,20 @@ msgid "Keep pins attached when dragging edges"
 msgstr "விளிம்புகளை இழுக்கும்போது ஊசிகளை இணைக்க வைக்கவும்"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "முள் பெயர் காலியாக இருக்க முடியாது."
+msgstr "புனைப்பெயரும் பாதை காலியாக இருக்க முடியாது."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "முள் பெயர் காலியாக இருக்க முடியாது."
+msgstr "புனைப்பெயர் காலியாக இருக்க முடியாது."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "உரை காலியாக இருக்க முடியாது."
+msgstr "பாதை காலியாக இருக்க முடியாது."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "நூலக புனைப்பெயர் பிழை"
+msgstr "நூலக அட்டவணை பிழை"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -20226,36 +20218,36 @@ msgstr ""
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <mamp> இயக்கி வாரியம்^{Rev A} </samp> </td> \n"
-"<Td> </td> \n"
-"<Td> & nbsp; <br> <samp> இயக்கி வாரியம் <up> rev a </up> </amp> </td> \n"
+"<td> </td> \n"
+"<td> & nbsp; <br> <samp> இயக்கி வாரியம் <up> rev a </up> </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> <br> </td> \n"
+"<td> <br> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <mamp> _ {subscript} </samp> </td> \n"
 "<Td> </td> \n"
-"<td> & nbsp; <br> <samp> <sub> சந்தா </sub> & nbsp; </samp> </td> \n"
+"<td> & nbsp; <br> <samp> <sub> சந்தா </sub> &nbsp; </samp> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <mamp> d_ {0} - d_ {15} </samp> </td> \n"
-"<Td> </td> \n"
+"<td> </td> \n"
 "இப்போது \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> </td> \n"
+"<td> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <samp> {{overbar} </samp> <br> & nbsp; \n"
-"<Td> </td> \n"
-"<td> <samp> <u> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; "
-"<MAMP> CLK </samp> </td> \n"
+"<td> </td> \n"
+"<td> <samp> <u> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <MAMP> CLK "
+"</samp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> </td> \n"
+"<td> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> $ {CLK} </samp> </td> \n"
+"<td> &nbsp; <br> <samp> $ {CLK} </samp> </td> \n"
 "<Td> </td> \n"
 "<td> & nbsp; <br> <samp> <i> viation_value </i> </amp> </td> \n"
 "</tr> \n"
@@ -20270,8 +20262,8 @@ msgstr ""
 "<tr> \n"
 "<td> & nbsp; <br> <samp> $ {REVISION} </samp> </td> \n"
 "<Td> </td> \n"
-"<td> & nbsp; <br> <samp> <i> புலம்_ மதிப்புள்ள </i> சின்னத்தின் <i> refdes </i> </"
-"amp> </td> \n"
+"<td> & nbsp; <br> <samp> <i> புலம்_ மதிப்புள்ள </i> சின்னத்தின் <i> refdes </i> </amp> "
+"</td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <samp> $ {refdes:field} </samp> </td> \n"
@@ -20291,9 +20283,9 @@ msgstr ""
 "<th> விளைவாக வலைகள் </th> \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> & nbsp; <br> <mamp> முன்னொட்டு [m..n] </amp> </td> \n"
-"<Td> </td> \n"
-"<td> & nbsp; <br> <samp> முன்னொட்டு முன்னொட்டு </samp> </td> \n"
+"<td> & nbsp; <br> <mamp> முன்னொட்டு [m..n] </amp> </td> \n"
+"<td> </td> \n"
+"<td> & nbsp; <br><samp> முன்னொட்டு </samp> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <samp> டி [0..7] </samp> </td> \n"
@@ -20301,24 +20293,24 @@ msgstr ""
 "<Td> & nbsp; <br> <mamp> d0, d1, d2, d3, d4, d5, d6, d7 </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> <br> </td> \n"
+"<td> <br> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <samp> {R3:VALUE} </samp> </td> \n"
-"<Td> </td> \n"
-"<Td> & nbsp; <br> <mamp> net1, net2, ... </samp> </td> \n"
+"<td> </td> \n"
+"<td> &nbsp; <br> <mamp> net1, net2, ... </samp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> {SCL SDA} </samp> </td> \n"
-"<Td> </td> \n"
-"<Td> & nbsp; <br> <samp> scl, sda </amp> </td> \n"
+"<td> &nbsp; <br> <samp> {SCL SDA} </samp> </td> \n"
+"<td> </td> \n"
+"<td> & nbsp; <br> <samp> scl, sda </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<Td> <br> </td> \n"
+"<td> <br> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> முன்னொட்டு {net1 net2 ...} </samp> </td> \n"
-"<Td> </td> \n"
+"<td> &nbsp; <br> <samp> முன்னொட்டு {net1 net2 ...} </samp> </td> \n"
+"<td> </td> \n"
 "<td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td> \n"
 "</tr> \n"
 "<tr> \n"
@@ -20335,12 +20327,11 @@ msgstr ""
 "<Td> & nbsp; <br> <samp> Mem.d1, Mem.d2, Mem.latch </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </"
-"td> \n"
+"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </td> "
+"\n"
 "<Td> </td> \n"
-"<td> <samp> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & "
-"nbsp; ! & nbsp; & nbsp; & nbsp; & nbsp; <u> & nbsp; & nbsp; & nbsp; & nbsp; "
-"& nbsp; \n"
+"<td> <samp> & nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <sub> &nbsp; </sub> &nbsp; ! "
+"&nbsp; &nbsp; &nbsp; &nbsp; <u> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; \n"
 "</tr> \n"
 "<tr> \n"
 "<Td> <br> </td> \n"
@@ -23371,15 +23362,15 @@ msgstr "தற்போதைய வலையில் முந்தைய உ
 
 #: eeschema/tools/sch_actions.cpp:1091
 msgid "Export Drawing to Clipboard"
-msgstr "இடைநிலைப்பலகைக்கு ஏற்றுமதி"
+msgstr "படத்தை இடைநிலைப்பலகைக்கு ஏற்றுமதி"
 
 #: eeschema/tools/sch_actions.cpp:1092
 msgid "Export drawing of current sheet to clipboard"
-msgstr "இடைநிலைப்பலகைக்கு தற்போதைய தாளின் ஏற்றுமதி"
+msgstr "இடைநிலைப்பலகைக்கு தற்போதைய தாளின் படத்தை ஏற்றுமதி"
 
 #: eeschema/tools/sch_actions.cpp:1100 pcbnew/tools/pcb_actions.cpp:338
 msgid "Import Graphics..."
-msgstr "இறக்குமதி கிராபிக்ச் ..."
+msgstr "இறக்குமதி கிராபிக்ச்..."
 
 #: eeschema/tools/sch_actions.cpp:1101 pcbnew/tools/pcb_actions.cpp:339
 msgid "Import 2D drawing file"
@@ -24107,12 +24098,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "நெட் கிளாசை ஒதுக்க நெட் பெயரிடப்பட வேண்டும்."
 
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"கோப்பு நீட்டிப்பை மாற்றுவது கோப்பு வகையை மாற்றும். \n"
-"நீங்கள் தொடர விரும்புகிறீர்களா?"
+"நீண்ட உரை சரம் ஒட்டுவது மிகவும் மெதுவாக இருக்கலாம். நீங்கள் தொடர விரும்புகிறீர்களா?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
@@ -26616,6 +26605,7 @@ msgstr "தரத்தை வழங்கவும். விருப்பங
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
+"தோற்றம் முன்னமைவு. விருப்பங்கள்: %s, %s, அல்லது பயனர் வரையறுக்கப்பட்ட முன்னமைக்கப்பட்ட பெயர்"
 
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
@@ -26674,9 +26664,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "பக்க விளக்குகள் டிகிரிகளில் உயர கோணம், வரம்பு: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:340
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "தவறான வடிவம்\n"
+msgstr "தவறான முன்னமைவு\n"
 
 #: kicad/cli/command_pcb_render.cpp:358
 msgid "Invalid background\n"
@@ -26940,7 +26929,7 @@ msgstr "வேலைகளைச் சேர்க்கவும்:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:152
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<இயக்கயநேரத்தில் அமைக்கப்பட்ட மதிப்பு>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -26951,9 +26940,8 @@ msgid "Ignore non-zero exit code"
 msgstr "பூச்சியமற்ற வெளியேறும் குறியீட்டை புறக்கணிக்கவும்"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "உரை மாறிகள்"
+msgstr "கிடைக்கும் உரை மாறிகள்:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -28552,21 +28540,21 @@ msgstr "ஃச் தொடக்க:"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
 msgid "Origin"
-msgstr "தோற்றம்"
+msgstr "மூலம்"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:275
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:328
 msgid "Upper Right"
-msgstr "மேல் வலது"
+msgstr "மேலே வலது"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:276
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:329
 msgid "Upper Left"
-msgstr "மேல் இடது"
+msgstr "மேலே இடது"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -32032,23 +32020,18 @@ msgstr ""
 "கருவியைப் பயன்படுத்தி திட்டவட்டத்துடன் ஒத்திசைக்கப்பட வேண்டும்."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"\n"
-"\n"
-"%i வகைகள் குறிப்பு பெயர்கள் உள்ளன \n"
-"********************************************************************************************ரோ\n"
+"<br/>பயன்பாட்டில் %i குறிப்பு வடிவமைப்பாளர் முன்னொட்டுகள் உள்ளன<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Excluding: %s from reannotation<br/>"
-msgstr ""
-"\n"
-"தவிர: மறுபயன்பாட்டிலிருந்து %s\n"
-"\n"
+msgstr "தவிர: மறுபயன்பாட்டிலிருந்து %s <br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
 #, fuzzy
@@ -32071,11 +32054,8 @@ msgid "<br/>No footprints"
 msgstr "தடம் இல்லை"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
-#, fuzzy
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
-msgstr ""
-"\n"
-"********** வரிசை %s இல் ***********"
+msgstr "<br/>*********** கால்தட ஆயங்களில் வரிசைப்படுத்தவும் ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
 #, fuzzy
@@ -32097,22 +32077,18 @@ msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள் பிழைகள் விளைவித்தன! அவற்றை மாற்றி மீண்டும் முயற்சிக்கவும்."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"\n"
-"பிசிபிக்கு %d வெற்று அல்லது தவறான குறிப்பு பெயர்கள் உள்ளன. \n"
-"சரிபார்க்கப்பட்ட 'பி.சி.பி மற்றும் திட்டவட்டத்திற்கு இடையில் சமநிலைக்கான சோதனை' உடன் டி."
-"ஆர்.சி.யை இயக்க பரிந்துரைக்கவும்.\n"
+"<br/>பிசிபிக்கு %d வெற்று அல்லது தவறான குறிப்புப் பெயர்கள் உள்ளன.<br/>'பிசிபி மற்றும் திட்ட இடையேயான சமநிலைக்கா"
+"ன சோதனை' சரிபார்க்கப்பட்டு டிஆர்சியை இயக்கப் பரிந்துரைக்கவும்.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
-msgstr ""
-"\n"
-"Refdes: %s தடம்: %s: %s PCB இல் %s இல்."
+msgstr "<br/> Refdes: %s தடம்: %s: pcb மேல் %s இல் %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:531
 msgid "Reannotate anyway?"
@@ -33374,7 +33350,7 @@ msgstr "உருப்படியை சுழற்றுங்கள், அ
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:409
 msgid "Numbering Options"
-msgstr "விருப்பங்கள்"
+msgstr "எண்ணிடுதல் விருப்பங்கள்"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:413
 msgid "Initial Pad Number:"
@@ -34915,11 +34891,11 @@ msgstr "நூலக தடம் திருத்து ..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:234
 msgid "Clearances"
-msgstr "இசைவு"
+msgstr "இசைவுகள்"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 msgid "Leave values blank to use Board Setup values."
-msgstr "பலகை அமைவு மதிப்புகளைப் பயன்படுத்த மதிப்புகளை காலியாக விடுங்கள்."
+msgstr "பலகை அமைவு மதிப்புகளைப் பயன்படுத்த மதிப்புகளைக் காலியாக விடுங்கள்."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
@@ -42479,7 +42455,7 @@ msgstr "பலகோணம் வழியாக/பேடைச் சேர்
 #: pcbnew/exporters/step/step_pcb_model.cpp:1196
 #, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "செப்பு அடுக்குகளுக்கு வடிவத்தை (%மற்றும் புள்ளிகள்) சேர்க்க முடியவில்லை."
+msgstr "வடிவத்தை (%d புள்ளிகள்) செப்பு அடுக்குக்கு %s சேர்க்க முடியவில்லை."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1214
 #, c-format
