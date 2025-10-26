@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-01 15:02+0000\n"
-"Last-Translator: William Lin <unrealin01@gmail.com>\n"
+"PO-Revision-Date: 2025-10-27 00:03+0000\n"
+"Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -81,12 +81,12 @@ msgstr "建立區域"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
 msgid "Build Tech layers"
-msgstr "建置工藝層"
+msgstr "建置疊層"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:947
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "建置工藝層 %d"
+msgstr "建置疊層 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
 msgid "Simplifying copper layer polygons"
@@ -107,7 +107,7 @@ msgstr "簡化通孔輪廓"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1330
 msgid "Build BVH for holes and vias"
-msgstr "為通孔和貫孔建置 BVH (盲埋孔)"
+msgstr "為通孔和貫孔建置 BVH（盲埋孔）"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
@@ -392,7 +392,7 @@ msgstr "設定 Pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "放置 PCB 板旋轉中心 (點擊鼠標中鍵)"
+msgstr "放置 PCB 板旋轉中心 (點擊滑鼠中鍵)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
@@ -573,7 +573,7 @@ msgstr "顯示模型邊框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "在實時算繪器中顯示 3D 模型邊框"
+msgstr "在即時算繪器中顯示 3D 模型邊框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -581,12 +581,12 @@ msgstr "顯示 3D 座標軸"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 msgid "Show Appearance Manager"
-msgstr "顯示外觀管理員"
+msgstr "顯示外觀管理器"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Show/hide the appearance manager"
-msgstr "顯示/隱藏 外觀管理員"
+msgstr "顯示/隱藏 外觀管理器"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
@@ -606,11 +606,11 @@ msgstr "顯示 底層 '銅/表面' 處理顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
-msgstr "黏合劑"
+msgstr "黏著劑"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show adhesive"
-msgstr "顯示點膠層"
+msgstr "顯示黏著層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
@@ -1259,7 +1259,7 @@ msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr "必須關閉並重新打開 3D 查看器才能套用此設定"
+msgstr "必須關閉並重新打開 3D 檢視器才能套用此設定"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1288,12 +1288,12 @@ msgstr "停用通孔繪製"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 #: pcbnew/dialogs/dialog_render_job_base.cpp:100
 msgid "Procedural textures (slow)"
-msgstr "使用過程紋理 (慢)"
+msgstr "使用程序式紋理 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:104
 msgid "Add floor (slow)"
-msgstr "添加地面陰影 (慢)"
+msgstr "新增地面陰影 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 #: pcbnew/dialogs/dialog_render_job_base.cpp:108
@@ -1553,7 +1553,7 @@ msgstr "圖片檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
 msgid "Create Drawing Sheet File"
-msgstr "建立圖紙檔案"
+msgstr "建立工程圖紙檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:452
 #: bitmap2component/bitmap2cmp_frame.cpp:485
@@ -1769,9 +1769,8 @@ msgid "Errors"
 msgstr "錯誤"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "取代並尋找下一項"
+msgstr "取代並尋找下一項?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -1881,7 +1880,7 @@ msgstr "黑 / 白閾值:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "移動滑桿以調整灰度圖片二值化處理效果。"
+msgstr "移動滑桿以調整灰階圖片二值化處理效果。"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:371
@@ -2432,7 +2431,7 @@ msgstr "建置版本資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Lib Version Info"
-msgstr "庫版本資訊"
+msgstr "函式庫版本資訊"
 
 #: common/dialog_about/dialog_about_base.cpp:54
 msgid "&Copy Version Info"
@@ -2494,7 +2493,7 @@ msgstr "注意：完整網路類別分配可以在原理圖設定 > 專案中編
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
-msgstr "添加網路類分配"
+msgstr "增加網路類分配"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
