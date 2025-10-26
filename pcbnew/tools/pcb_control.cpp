@@ -92,6 +92,12 @@ using namespace std::placeholders;
 // files.cpp
 extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 );
 
+// board_tables/board_stackup_table.cpp
+extern PCB_TABLE* Build_Board_Stackup_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits );
+// board_tables/board_characteristics_table.cpp
+extern PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits );
+
+
 
 PCB_CONTROL::PCB_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.Control" ),
@@ -2509,117 +2515,10 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
 {
-    BOARD_COMMIT           commit( this );
-    BOARD_DESIGN_SETTINGS& settings = m_frame->GetBoard()->GetDesignSettings();
-    BOARD_STACKUP&         stackup  = settings.GetStackupDescriptor();
-
-    stackup.SynchronizeWithBoard( &settings );
-
-    PCB_TABLE* table = new PCB_TABLE( m_frame->GetModel(), pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
+    BOARD_COMMIT commit( this );
+    EDA_UNITS    displayUnit = m_frame->GetUserUnits();
+    PCB_TABLE*   table = Build_Board_Characteristics_Table( m_frame->GetBoard(), displayUnit );
     table->SetLayer( m_frame->GetActiveLayer() );
-    table->SetColCount( 4 );
-
-    auto addHeaderCell =
-            [&]( const wxString& text )
-            {
-                PCB_TABLECELL* c = new PCB_TABLECELL( table );
-                c->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 2.0 ) ) );
-                c->SetTextThickness( pcbIUScale.mmToIU( 0.4 ) );
-                c->SetText( text );
-                c->SetColSpan( table->GetColCount() );
-                table->AddCell( c );
-            };
-
-    auto addDataCell =
-            [&]( const wxString& text )
-            {
-                PCB_TABLECELL* c = new PCB_TABLECELL( table );
-                c->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
-                c->SetTextThickness( pcbIUScale.mmToIU( 0.2 ) );
-                c->SetText( text );
-                table->AddCell( c );
-            };
-
-    addHeaderCell( _( "BOARD CHARACTERISTICS" ) );
-
-    for( int col = 1; col < table->GetColCount(); ++col )
-    {
-        addHeaderCell( wxEmptyString );
-        table->GetCell( 0, col )->SetColSpan( 0 );
-    }
-
-    addDataCell( _( "Copper layer count: " ) );
-    addDataCell( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                      settings.GetCopperLayerCount(), false ) );
-
-    addDataCell( _( "Board thickness: " ) );
-    addDataCell( m_frame->MessageTextFromValue( settings.GetBoardThickness(), true ) );
-
-    SHAPE_POLY_SET outline;
-    m_frame->GetBoard()->GetBoardPolygonOutlines( outline );
-    BOX2I size = outline.BBox();
-
-    addDataCell( _( "Board overall dimensions: " ) );
-    addDataCell( wxString::Format( wxT( "%s x %s" ),
-                                   m_frame->MessageTextFromValue( size.GetWidth(), true ),
-                                   m_frame->MessageTextFromValue( size.GetHeight(), true ) ) );
-
-    addDataCell( wxEmptyString );
-    addDataCell( wxEmptyString );
-
-    addDataCell( _( "Min track/spacing: " ) );
-    addDataCell( wxString::Format( wxT( "%s / %s" ),
-                                   m_frame->MessageTextFromValue( settings.m_TrackMinWidth, true ),
-                                   m_frame->MessageTextFromValue( settings.m_MinClearance, true ) ) );
-
-    double holeSize = std::min( settings.m_MinThroughDrill, settings.m_ViasMinSize );
-
-    addDataCell( _( "Min hole diameter: " ) );
-    addDataCell( m_frame->MessageTextFromValue( holeSize, true ) );
-
-    addDataCell( _( "Copper finish: " ) );
-    addDataCell( stackup.m_FinishType );
-
-    addDataCell( _( "Impedance control: " ) );
-    addDataCell( stackup.m_HasDielectricConstrains ? _( "Yes" ) : _( "No" ) );
-
-    addDataCell( _( "Castellated pads: " ) );
-    int castellated_pad_count = m_frame->GetBoard()->GetPadWithCastellatedAttrCount();
-    addDataCell( castellated_pad_count ? _( "Yes" ) : _( "No" ) );
-
-    addDataCell( _( "Press-fit pads: " ) );
-    int pressfit_pad_count = m_frame->GetBoard()->GetPadWithPressFitAttrCount();
-    addDataCell( pressfit_pad_count ? _( "Yes" ) : _( "No" ) );
-
-    addDataCell( _( "Plated board edge: " ) );
-    addDataCell( stackup.m_EdgePlating ? _( "Yes" ) : _( "No" ) );
-
-    wxString msg;
-
-    switch( stackup.m_EdgeConnectorConstraints )
-    {
-    case BS_EDGE_CONNECTOR_NONE:     msg = _( "No" );            break;
-    case BS_EDGE_CONNECTOR_IN_USE:   msg = _( "Yes" );           break;
-    case BS_EDGE_CONNECTOR_BEVELLED: msg = _( "Yes, Bevelled" ); break;
-    }
-
-    addDataCell( _( "Edge card connectors: " ) );
-    addDataCell( msg );
-
-    // We are building a table having 4 columns.
-    // So we must have a cell count multible of 4, to have fully build row.
-    // Othewise the table is really badly drawn.
-    std::vector<PCB_TABLECELL*> cells_list = table->GetCells();
-    int cell_to_add_cnt = cells_list.size() % table->GetColCount();
-
-    for( int ii = 0; ii < cell_to_add_cnt; ii++ )
-        addDataCell( wxEmptyString );
-
-    table->SetStrokeExternal( false );
-    table->SetStrokeHeaderSeparator( false );
-    table->SetStrokeColumns( false );
-    table->SetStrokeRows( false );
-    table->Autosize();
 
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
@@ -2633,105 +2532,13 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
 }
 
 
-
 int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT           commit( this );
-    BOARD_DESIGN_SETTINGS& settings = m_frame->GetBoard()->GetDesignSettings();
-    BOARD_STACKUP&         stackup  = settings.GetStackupDescriptor();
+    EDA_UNITS    displayUnit = m_frame->GetUserUnits();
 
-    stackup.SynchronizeWithBoard( &settings );
-
-    std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
-
-    PCB_TABLE* table = new PCB_TABLE( m_frame->GetModel(), pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
+    PCB_TABLE* table = Build_Board_Stackup_Table( m_frame->GetBoard(), displayUnit );
     table->SetLayer( m_frame->GetActiveLayer() );
-    table->SetColCount( 7 );
-
-    const auto addHeaderCell =
-            [&]( const wxString& text )
-            {
-                PCB_TABLECELL* c = new PCB_TABLECELL( table );
-                c->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
-                c->SetTextThickness( pcbIUScale.mmToIU( 0.3 ) );
-                c->SetText( text );
-                table->AddCell( c );
-            };
-
-    const auto addDataCell =
-            [&]( const wxString& text, const char align = 'L' )
-            {
-                PCB_TABLECELL* c = new PCB_TABLECELL( table );
-                c->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
-                c->SetTextThickness( pcbIUScale.mmToIU( 0.2 ) );
-
-                if( align == 'R' )
-                    c->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-
-                c->SetText( text );
-                table->AddCell( c );
-            };
-
-    const auto layerThicknessString =
-            [&]( const BOARD_STACKUP_ITEM& aStackupItem, int aSublayerId )
-            {
-                const int layerThickness = aStackupItem.GetThickness( aSublayerId );
-
-                // Layers like silkscreen, paste, etc. have no defined thickness, but that
-                // does not mean that they are specified as exactly 0mm
-                if( !aStackupItem.IsThicknessEditable() )
-                    return NotSpecifiedPrm();
-
-                return m_frame->StringFromValue( layerThickness, true );
-            };
-
-    addHeaderCell( _( "Layer Name" ) );
-    addHeaderCell( _( "Type" ) );
-    addHeaderCell( _( "Material" ) );
-    addHeaderCell( _( "Thickness" ) );
-    addHeaderCell( _( "Color" ) );
-    addHeaderCell( _( "Epsilon R" ) );
-    addHeaderCell( _( "Loss Tangent" ) );
-
-    for( int i = 0; i < stackup.GetCount(); i++ )
-    {
-        BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
-
-        for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
-        {
-            // Layer names are empty until we close at least once the board setup dialog.
-            // If the user did not open the dialog, then get the names from the board.
-            // But dielectric layer names will be missing.
-            // In this case, for dielectric, a dummy name will be used
-            if( stackup_item->GetLayerName().IsEmpty() )
-            {
-                wxString layerName;
-
-                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
-                    layerName = m_frame->GetBoard()->GetLayerName( stackup_item->GetBrdLayerId() );
-
-                if( layerName.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                    layerName = _( "Dielectric" );
-
-                addDataCell( layerName );
-            }
-            else
-            {
-                addDataCell( stackup_item->GetLayerName() );
-            }
-
-            addDataCell( InitialCaps( stackup_item->GetTypeName() ) );
-            addDataCell( stackup_item->GetMaterial( sublayer_id ) );
-            addDataCell( layerThicknessString( *stackup_item, sublayer_id ), 'R' );
-            addDataCell( stackup_item->GetColor( sublayer_id ) );
-            addDataCell( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                              stackup_item->GetEpsilonR( sublayer_id ) ), 'R' );
-            addDataCell( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                              stackup_item->GetLossTangent( sublayer_id ) ), 'R' );
-        }
-    }
-
-    table->Autosize();
 
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
