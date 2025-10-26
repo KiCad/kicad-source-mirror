@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 00:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -2361,7 +2361,7 @@ msgstr "Unbekannter Bibliothekstyp %s "
 #: eeschema/libraries/symbol_library_adapter.cpp:110
 #, fuzzy
 msgid "Internal error"
-msgstr "Interne Lagen"
+msgstr "Interner Fehler"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4228,7 +4228,7 @@ msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
-"Falls aktiviert, wird eine kurze Popup-Benachrichtigung angezeigt, wenn per "
+"Wenn aktiviert, wird eine kurze Popup-Benachrichtigung angezeigt, wenn per "
 "Tastenkombination zwischen Einstellungsmöglichkeiten umgeschaltet wird."
 
 #: common/dialogs/panel_common_settings_base.cpp:189
@@ -4238,17 +4238,21 @@ msgstr "Abwechselnde Farbe für Tabellenzeilen nutzen"
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
-"Wenn aktiv, wird für jede zweite Tabellenzeile eine andere Farbe verwendet"
+"Wenn aktiviert, wird für jede zweite Tabellenzeile eine andere Farbe "
+"verwendet"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 #, fuzzy
 msgid "Disable custom cursors"
-msgstr "Blendenmakros deaktivieren"
+msgstr "Benuzerdefinierte Cursor deaktivieren"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
+#, fuzzy
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Wenn aktiviert, verwendet KiCad die Standard-Cursor anstatt der "
+"benutzerdefinierten Cursor"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4501,8 +4505,8 @@ msgid ""
 msgstr ""
 "KiCad kann Entwicklern Abstürze und Daten zu besonderen Ereignissen anonym "
 "melden, um die Identifizierung kritischer Fehler in der gesamten "
-"Benutzerbasis effektiver zu unterstützen und die Funktionalität zu "
-"untersuchen, um Verbesserungen zu steuern.\n"
+"Benutzerbasis effektiver zu unterstützen und dabei helfen, die "
+"Funktionalität zu untersuchen, um Verbesserungen zu steuern.\n"
 "\n"
 "Um zu erkennen, dass automatische Berichte von derselben KiCad-Installation "
 "stammen, wird ein vollkommen zufälliger Identifizierer (ID) erstellt, der "
@@ -5866,7 +5870,7 @@ msgstr "DP-Abstand"
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 #, fuzzy
 msgid "Tuning Profile"
-msgstr "Abstimmungsmodus"
+msgstr "Abstimmungsprofil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -6003,6 +6007,7 @@ msgid "Reverse zoom direction"
 msgstr "Zoomrichtung umkehren"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
+#, fuzzy
 msgid ""
 "KiCad comes with a large set of symbol and footprint libraries maintained by "
 "the KiCad librarian team.  You may also create your own libraries, and "
@@ -6013,56 +6018,81 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad stellt eine große Anzahl an Symbol- und Footprint-Bibliotheken zur "
+"Verfügung, die vom KiCad-Bibliotheks-Team gepflegt werden.  Sie können auch "
+"eigene Bibliotheken erstellen und Bibliotheken von Drittanbietern aus dem "
+"Plugin- und Content-Manager oder anderen Quellen installieren.\n"
+"\n"
+"Bibliothekstabellen sind Konfigurationsdateien, in denen die zu ladenden "
+"Bibliotheken aufgelistet sind. Globale Bibliotheken sind in jedem Projekt "
+"verfügbar, und Sie können bei Bedarf auch projektspezifische Bibliotheken "
+"hinzufügen."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
+#, fuzzy
 msgid "<b>The following global library tables need to be created:</b>"
 msgstr ""
+"<b>Die folgenden globalen Bibliothekstabellen müssen erstellt werden:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Wie möchten Sie KiCad konfigurieren?"
+msgstr "Wie möchten Sie, dass KiCad diese erstellt?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
+#, fuzzy
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Mit den integrierten KiCad-Bibliotheken beginnen (empfohlen)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 #, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Einstellungen importieren aus einer vorherigen Version unter:"
+msgstr "Tabellen aus einer vorhergehenden Version importieren"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
+#, fuzzy
 msgid ""
 "Library tables will be imported from the version you selected on the "
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Bibliothekstabellen werden aus der Version importiert, die Sie im vorherigen "
+"Schritt ausgewählt haben.  Alle Tabellen, die nicht importiert werden "
+"können, werden mit den Standardbibliotheken von KiCad erstellt."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
 #, fuzzy
 msgid "Start with no libraries"
-msgstr "Footprintbibliotheken"
+msgstr "Ohne Bibliotheken beginnen"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
+#, fuzzy
 msgid ""
 "The built-in library tables could not be found in the expected location. "
 "This usually means that you have installed the KiCad software without also "
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Die integrierten Bibliothekstabellen konnten nicht am erwarteten Speicherort "
+"gefunden werden. Das bedeutet für gewöhnlich, daß Sie die KiCad-Software "
+"ohne die Bibliotheken installiert haben. Sie können mit dem Setup "
+"fortfahren, müssen jedoch die Bibliotheken separat installieren, damit sie "
+"verfügbar sind."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 #, fuzzy
 msgid "Updates"
-msgstr "Aktualisieren"
+msgstr "Aktualisierungen"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
+#, fuzzy
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Verbindung zum Internet zulassen, um nach aktualisierten Versionen von KiCad "
+"und über den Plugin- und Content-Manager installierten Paketen zu suchen?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1321
@@ -6070,6 +6100,7 @@ msgid "Data Collection"
 msgstr "Datensammlung"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:38
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and other event data to the development "
 "team in order to help identify and fix bugs and improve performance.\n"
@@ -6081,10 +6112,21 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad kann Entwicklern Abstürze und Daten zu besonderen Ereignissen anonym "
+"melden, um die Identifizierung und Behebung kritischer Fehler zu erleichtern "
+"und die Leistungsfähigkeit zu verbessern.\n"
+"\n"
+"Wenn die Datenerfassung aktiviert ist, sendet KiCad automatisch Berichte, "
+"wenn Abstürze oder andere besondere Ereignisse auftreten. Diese Berichte "
+"enthalten technische Details zum Stand der KiCad-Software zum Zeitpunkt der "
+"Berichterstellung. Es werden keine personenbezogenen Daten erfasst, und Ihre "
+"Designdateien wie Schaltpläne, Leiterplatten und Bibliotheken werden im "
+"Rahmen dieses Prozesses niemals weitergegeben."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
+#, fuzzy
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Aktiviert die anonyme Datenerfassung"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -9085,9 +9127,9 @@ msgstr "Unerwarteter Fehler beim Lesen der Bibliothekstabelle %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
-#, c-format
+#, c-format, fuzzy
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Syntax-Fehler in Zeile %zu, Spalte %zu"
 
 #: common/libraries/library_table_parser.cpp:222
 #, fuzzy
@@ -9437,6 +9479,7 @@ msgid "Welcome to KiCad %s"
 msgstr "Willkommen zu KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
+#, fuzzy
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -9444,10 +9487,17 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad wird zum ersten Mal gestartet oder einige seiner Konfigurationsdateien "
+"fehlen.\n"
+"\n"
+"Nehmen wir uns einen Moment Zeit, um einige Grundeinstellungen zu "
+"konfigurieren.  Sie können diese Einstellungen jederzeit später ändern, "
+"indem Sie das Dialogfeld „Einstellungen“ öffnen."
 
 #: common/startwizard/startwizard.cpp:90
+#, fuzzy
 msgid "For help, please visit "
-msgstr ""
+msgstr "Für Hilfe besuchen Sie bitte "
 
 #: common/startwizard/startwizard.cpp:160
 #, fuzzy
@@ -9455,10 +9505,13 @@ msgid "KiCad Setup"
 msgstr "Platinenkonfiguration"
 
 #: common/startwizard/startwizard.cpp:201
+#, fuzzy
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
+"Sind Sie sicher?  Wenn Sie das KiCad-Setup abbrechen, werden die "
+"Standardeinstellungen für Sie ausgewählt."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
 #, fuzzy
@@ -14680,8 +14733,8 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
-"Sofern aktiv, kann dieses Symbol mehr als einen Pin mit der gleichen Nummer "
-"haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
+"Wenn aktiviert, kann dieses Symbol mehr als einen Pin mit der gleichen "
+"Nummer haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:495
 msgid "Jumper Pin Groups"
@@ -26362,8 +26415,9 @@ msgid "Create a new top-level sheet"
 msgstr "Ein neues Verzeichnis für das Projekt erstellen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
+#, fuzzy
 msgid "Enter name for new top-level sheet:"
-msgstr ""
+msgstr "Geben Sie einen Namen für das neue Top-Level Schaltplanblatt ein:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
@@ -26371,20 +26425,25 @@ msgid "Untitled"
 msgstr "Unbenannt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
+#, fuzzy
 msgid "Add new top-level sheet"
-msgstr ""
+msgstr "Neues Top-Level Schaltplanblatt hinzufügen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:593
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Delete top-level sheet '%s'?\n"
 "\n"
 "This cannot be undone."
 msgstr ""
+"Top-Level Schaltplanblatt \"%s\" löschen?\n"
+"\n"
+"Dies kann nicht rückgängig gemacht werden."
 
 #: eeschema/widgets/hierarchy_pane.cpp:601
+#, fuzzy
 msgid "Cannot delete the last top-level sheet."
-msgstr ""
+msgstr "Das letzte Top-Level Schaltplanblatt kann nicht gelöscht werden."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
 #, fuzzy
@@ -38159,8 +38218,8 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
-"Sofern aktiv, kann dieser Footprint mehr als ein Pad mit der gleichen Nummer "
-"haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
+"Wenn aktiviert, kann dieser Footprint mehr als ein Pad mit der gleichen "
+"Nummer haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:518
 msgid "Explicit jumper pad groups:"
@@ -40617,9 +40676,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Wenn diese Option aktiviert ist, werden alle Leiterbahnsegmente bis zur "
-"Zeigerposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
-"Zeiger am nächsten liegt) frei und folgt dem Zeiger."
+"Wenn aktiviert, werden alle Leiterbahnsegmente bis zur Zeigerposition "
+"fixiert. Wenn deaktiviert, bleibt das letzte Segment "
+"(das dem Zeiger am nächsten liegt) frei und folgt dem Zeiger."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:62
 msgid "Interactive Router Settings"
@@ -42136,10 +42195,8 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
-"Mindestbreite des Freiraums zwischen Kupferelementen unterschiedlicher "
-"Netze.  Falls gesetzt, ist dies das absolute Minimum, was nicht durch "
-"Netzklassen, benutzerdefinierte Regeln oder andere Einstellungen "
-"unterschritten werden kann."
+"Der Mindestabstand zwischen Kupferelementen unterschiedlicher Netze. Falls "
+"gesetzt, kann dieser nur durch benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
@@ -42150,9 +42207,8 @@ msgstr "Minimale Leiterbahnbreite:"
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Mindestbreite von Leiterbahnen.  Falls gesetzt, ist dies ein absolutes "
-"Minimum, das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
-"Einstellungen unterschritten werden kann."
+"Mindestbreite von Leiterbahnen. Falls gesetzt, kann diese nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -42172,9 +42228,8 @@ msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Mindestbreite des Restrings.  Falls gesetzt, ist dies ein absolutes Minimum, "
-"das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
-"Einstellungen unterschritten werden kann."
+"Mindestbreite des Restrings. Falls gesetzt, kann diese nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
@@ -42185,9 +42240,8 @@ msgstr "Via-Mindestdurchmesser:"
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Mindestdurchmesser von Vias.  Falls gesetzt, ist dies ein absolutes Minimum, "
-"das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
-"Einstellungen unterschritten werden kann."
+"Mindestdurchmesser von Vias. Falls gesetzt, kann dieser nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
@@ -42200,8 +42254,8 @@ msgid ""
 "set, this can only be reduced by custom rules."
 msgstr ""
 "Der Mindestabstand zwischen einem Loch und einem nicht dazugehörigen "
-"Kupferelement.  Falls gesetzt, ist dies ein absolutes Minimum und kann nicht "
-"durch benutzerdefinierte Regeln oder andere Einstellungen reduziert werden."
+"Kupferelement. Falls gesetzt, kann dieser nur durch benutzerdefinierte "
+"Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
@@ -42214,8 +42268,8 @@ msgid ""
 "this can only be reduced by custom rules."
 msgstr ""
 "Der Mindestfreiraum zwischen der Platinenkante und einem beliebigen "
-"Kupferelement.  Falls gesetzt, ist dies ein absolutes Minimum und kann nicht "
-"durch benutzerdefinierte Regeln oder andere Einstellungen reduziert werden."
+"Kupferelement. Falls gesetzt, kann dieser nur durch benutzerdefinierte "
+"Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -42239,9 +42293,8 @@ msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Mindestgröße durchgehender Bohrungen.  Falls gesetzt, ist dies ein absolutes "
-"Minimum, das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
-"Einstellungen unterschritten werden kann."
+"Mindestgröße durchgehender Bohrungen. Falls gesetzt, kann diese nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
@@ -42253,10 +42306,9 @@ msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"Der Mindestfreiraum zwischen zwei gebohrten Löchern.   Falls gesetzt, ist "
-"dies ein absolutes Minimum und kann nicht durch benutzerdefinierte Regeln "
-"oder andere Einstellungen reduziert werden. (Hinweis: gilt nicht für "
-"gefräste Löcher.)"
+"Der Mindestfreiraum zwischen zwei gebohrten Löchern. Falls gesetzt, kann "
+"dieser nur durch benutzerdefinierte Regeln verringert werden. "
+"(Hinweis: gilt nicht für gefräste Löcher.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -42272,9 +42324,8 @@ msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Mindestdurchmesser von Mikro-Vias.  Falls gesetzt, ist dies ein absolutes "
-"Minimum, das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
-"Einstellungen unterschritten werden kann."
+"Mindestdurchmesser von Mikro-Vias. Falls gesetzt, kann dieser nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
@@ -42286,9 +42337,8 @@ msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Die minimale Mikro-Via-Lochgröße.  Falls gesetzt, ist dies ein absolutes "
-"Minimum und kann nicht durch Netzklassen, benutzerdefinierte Regeln oder "
-"andere Einstellungen reduziert werden."
+"Die minimale Mikro-Via-Lochgröße. Falls gesetzt, kann diese nur durch "
+"benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -42377,9 +42427,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
-"Falls aktiviert, wird der Abstand zwischen Kupferlagen bei "
-"Längenberechnungen für Leiterbahnen mit Vias berücksichtigt.  Falls "
-"deaktiviert, wird die Höhe des Lagenaufbaus ignoriert."
+"Wenn aktiviert, wird der Abstand zwischen Kupferlagen bei Längenberechnungen "
+"für Leiterbahnen mit Vias berücksichtigt.  Falls deaktiviert, wird die Höhe "
+"des Lagenaufbaus ignoriert."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
 msgid "Default Properties for New Dimension Objects"
