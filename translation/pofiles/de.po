@@ -31,16 +31,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-16 19:07+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-10-27 00:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2353,9 +2353,9 @@ msgstr "Designblock-Verzeichnis \"%s\" konnte nicht gelöscht werden."
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "Unbekannter Via-Typ %d"
+msgstr "Unbekannter Bibliothekstyp %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
@@ -9079,11 +9079,9 @@ msgid "The library table path '%s' does not exist"
 msgstr "Footprintbibliothekspfad \"%s\" existiert nicht"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr ""
-"Beim Schreiben der leeren Footprint-Bibliothekstabelle \"%s\" ist ein Fehler "
-"aufgetreten."
+msgstr "Unerwarteter Fehler beim Lesen der Bibliothekstabelle %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
@@ -9217,9 +9215,8 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Die KiCad-Sprachdatei für diese Sprache ist nicht installiert."
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Designblock-Bibliotheken laden"
+msgstr "Lade Designblock-Bibliotheken"
 
 #: common/plotters/PDF_plotter.cpp:742 common/plotters/PDF_plotter.cpp:747
 #, c-format
@@ -9435,9 +9432,9 @@ msgid "KiCad Classic"
 msgstr "KiCad Klassisch"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Willkommen zu KiCad %s!"
+msgstr "Willkommen zu KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -17915,9 +17912,9 @@ msgid "Error loading library '%s'"
 msgstr "Fehler beim Laden der Symbolbibliothek \"%s\"."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "Symbolbibliotheken"
+msgstr "Symbolbibliotheks-Tabellen (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:544
 msgid "Nickname and path cannot be empty."
@@ -50887,9 +50884,9 @@ msgid "Successfully created genCAD file\n"
 msgstr "genCAD-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "Beim Schreiben der Datei \"%s\" ist ein Fehler aufgetreten."
+msgstr "Fehler beim Schreiben der Datei \"%s\".\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
 #, fuzzy, c-format
