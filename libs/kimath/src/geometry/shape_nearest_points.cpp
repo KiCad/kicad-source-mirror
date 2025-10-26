@@ -670,6 +670,8 @@ static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB, VECTOR2
                 {
                     VECTOR2I ptA, ptB;
                     int64_t distSq;
+
+                    // Reverse the output points to match the arc/segment_from_rect order
                     if( arc->NearestPoints( chain->CSegment( i ), ptB, ptA, distSq ) )
                     {
                         if( distSq < minDistSq )
@@ -751,6 +753,8 @@ static bool nearestPointsSingleShapes( const SHAPE* aA, const SHAPE* aB, VECTOR2
                 {
                     VECTOR2I ptA, ptB;
                     int64_t distSq;
+
+                    // Reverse the output points to match the arc/segment_from_line_chain order
                     if( arc->NearestPoints( chain->GetSegment( i ), ptB, ptA, distSq ) )
                     {
                         if( distSq < minDistSq )

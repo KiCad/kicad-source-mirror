@@ -70,6 +70,15 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB, int 
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    if( aA.GetRadius() > 0 )
+    {
+        wxASSERT_MSG( !aMTV, wxT( "MTV not implemented for SHAPE_RECT to SHAPE_CIRCLE collisions when rect "
+                                  "has rounded corners" ) );
+
+        const SHAPE_LINE_CHAIN& outline = aA.Outline();
+        return outline.SHAPE::Collide( &aB, aClearance, aActual, aLocation );
+    }
+
     const VECTOR2I c = aB.GetCenter();
     const VECTOR2I p0 = aA.GetPosition();
     const VECTOR2I size = aA.GetSize();
@@ -550,21 +559,19 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
     VECTOR2I ptA, ptB;
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
-    int half_width = ( aA.GetWidth() + 1 ) / 2;
-    int min_dist = aClearance + half_width;
 
-    if( dist_sq < SEG::Square( min_dist ) )
+    if( dist_sq < SEG::Square( aClearance ) )
     {
         if( aLocation )
             *aLocation = ( ptA + ptB ) / 2;
 
         if( aActual )
-            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) - half_width ) );
+            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) ) );
 
         if( aMTV )
         {
             const VECTOR2I delta = ptB - ptA;
-            *aMTV = delta.Resize( min_dist - std::sqrt( dist_sq ) + 3 );
+            *aMTV = delta.Resize( aClearance - std::sqrt( dist_sq ) + 3 );
         }
 
         return true;
@@ -679,9 +686,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
     VECTOR2I ptA, ptB;
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
-    int min_dist = aClearance;
 
-    if( dist_sq < SEG::Square( min_dist ) )
+    if( dist_sq < SEG::Square( aClearance ) )
     {
         if( aLocation )
             *aLocation = ( ptA + ptB ) / 2;
@@ -692,7 +698,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
         if( aMTV )
         {
             const VECTOR2I delta = ptB - ptA;
-            *aMTV = delta.Resize( min_dist - std::sqrt( dist_sq ) + 3 );
+            *aMTV = delta.Resize( aClearance - std::sqrt( dist_sq ) + 3 );
         }
 
         return true;
@@ -812,21 +818,19 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClear
     VECTOR2I ptA, ptB;
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
-    int dual_width = ( aA.GetWidth() + aB.GetWidth() ) / 2;
-    int min_dist = aClearance + dual_width;
 
-    if( dist_sq < SEG::Square( min_dist ) )
+    if( dist_sq < SEG::Square( aClearance ) )
     {
         if( aLocation )
             *aLocation = ( ptA + ptB ) / 2;
 
         if( aActual )
-            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) - dual_width ) );
+            *aActual = std::max( 0, KiROUND( std::sqrt( dist_sq ) ) );
 
         if( aMTV )
         {
             const VECTOR2I delta = ptB - ptA;
-            *aMTV = delta.Resize( min_dist - std::sqrt( dist_sq ) + 3 );
+            *aMTV = delta.Resize( aClearance - std::sqrt( dist_sq ) + 3 );
         }
 
         return true;
