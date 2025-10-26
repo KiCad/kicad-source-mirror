@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-08 13:26+0000\n"
+"PO-Revision-Date: 2025-10-27 00:04+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -2310,15 +2310,14 @@ msgstr "Designblocksmapp '%s' kunde inte raderas."
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "okänd via typ %d"
+msgstr "Okänd bibliotekstyp %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "Inre kopparlager"
+msgstr "Internt fel"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4188,14 +4187,15 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "När aktiverat används olika färger för varannan tabellrad"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Inaktivera bländarmakron"
+msgstr "Inaktivera anpassade pekare"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Om aktiverat, använder KiCad systemets förinställda pekare istället för "
+"anpassade pekare"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4428,7 +4428,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4454,7 +4453,7 @@ msgstr ""
 "som endast används för kraschrapporteringsändamål. Ingen personligt "
 "identifierbar information (PII) inklusive IP-adress lagras eller kopplas "
 "till denna identifikation. Du kan nollställa denna identifikation "
-"närsomhelst med knappen som finns tillgänglig för ändamålet.\n"
+"närsomhelst inställningssidan för datainsamling.\n"
 "\n"
 "Om du väljer att delta frivilligt, kommer KiCad automatiskt att ta hand om "
 "sändning av dessa rapporter när krascher eller särskilda händelser "
@@ -5791,9 +5790,8 @@ msgid "DP Gap"
 msgstr "Diff.pars gap"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Längdjusteringsläge"
+msgstr "Längdjusteringsprofil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5939,25 +5937,31 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad kommer med ett stort urval av symbol- och fotavtrycksbibliotek som "
+"underhålls av KiCads biblioteksteam.  Du kan också skapa dina egna "
+"bibliotek, och installera tredjeparts bibliotek via Insticksprograms- och "
+"innehållshanteraren eller från andra källor. \n"
+" \n"
+"Bibliotekstabeller är konfigurationsfiler som listar bibliotek som skall "
+"läsas in. Globala bibliotek finns tillgängliga i alla projekt, och du kan "
+"också lägga till projektspecifika bibliotek om du så önskar."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>Följande globala bibliotekstabeller behöver skapas:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Hur vill du konfigurera KiCad?"
+msgstr "Hur vill du att KiCad skapar dem?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Starta med de inbyggda KiCad-biblioteken (rekommenderas)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Importera inställningar från en tidigare version i:"
+msgstr "Importera tabeller från den tidigare versionen"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -5965,11 +5969,13 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Bibliotekstabeller kommer att importeras från den version du valde i "
+"föregående steg.  Eventuella tabeller som inte kan importeras kommer att "
+"skapas med de förinställda KiCad-biblioteken."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Fotavtrycksbibliotek"
+msgstr "Starta utan bibliotek"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -5978,17 +5984,24 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"De inbyggda bibliotekstabellerna kunde inte hittas på den förväntade "
+"platsen. Detta betyder vanligen att du har installerat KiCad-mjukvaran utan "
+"att också installera biblioteken. Du kan fortsätta med inställningarna, men "
+"du kommer att behöva installera bibliotek separat för att de skall bli "
+"tillgängliga."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Uppdatera"
+msgstr "Uppdateringar"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Tillåt anslutningar till internet för att söka efter uppdaterade versioner "
+"av KiCad och installerade paket genom Insticksmoduls- och "
+"innehållshanteraren?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1321
@@ -6007,10 +6020,20 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad kan rapportera krascher och data för andra händelser anonymt till "
+"utvecklingsteamet för att hjälpa till att identifiera och fixa buggar och "
+"förbättra prestanda. \n"
+" \n"
+"När datainsamling är aktiverat, kommer KiCad automatiskt att skicka "
+"rapporter när krascher eller andra betydelsefulla händelser inträffar. Dessa "
+"rapporter innehåller tekniska detaljer om KiCad-mjukvarans tillstånd vid "
+"tillfället för rapporten. Ingen personligt identifierbar information (PII) "
+"samlas in, och dina designfiler såsom kretsschema, mönsterkort och bibliotek "
+"delas aldrig som del av denna process."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Aktivera anonym datainsamling"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -7799,9 +7822,8 @@ msgid "Could not lookup commit '%s'"
 msgstr "Kunde inte slå upp överlämning '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "Åtgärden misslyckades"
+msgstr "Sammanslagning misslyckades"
 
 #: common/git/libgit_backend.cpp:1065
 #, fuzzy
@@ -8317,19 +8339,16 @@ msgid "PCB: Export Postscript"
 msgstr "Mönsterkort: Exportera Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Visar mönsterkortsstatistik"
+msgstr "Exportera mönsterkortsstatistik"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Inställningar för åtgärden exportera nätlista"
+msgstr "Exportera inställningar för åtgärden exportera mönsterkortsstatistik"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Kortstatistik"
+msgstr "Mönsterkort: Exportera mönsterkortsstatistik"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8977,40 +8996,37 @@ msgid "Show"
 msgstr "Visa"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Ett bibliotek med kortnamnet \"%s\" finns redan."
+msgstr "En referens till detta bibliotek finns redan"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Standard"
+msgstr "KiCad standardbibliotek"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Biblioteket '%s' hittades inte."
+msgstr "Bibliotek %s hittades inte"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "sökväg \"%s\" för fotavtryck finns inte"
+msgstr "Bibliotekstabellssökväg '%s' finns inte"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Fel uppstod vid skrivning av tom fotavtrycksbibliotekstabell '%s'."
+msgstr "Ett oväntat fel uppstod vid inläsning av bibliotekstabell %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Syntaxfel på rad %zu, kolumn %zu"
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "Fel uppstod vid skrivning av tom fotavtrycksbibliotekstabell '%s'."
+msgstr "Ett oväntat fel uppstod vid läsning av bibliotekstabell"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1148 pcbnew/zone.cpp:919
@@ -9131,9 +9147,8 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-språkfilen för detta språk är inte installerad."
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Läs in designblocksbibliotek"
+msgstr "Läser in designblocksbibliotek"
 
 #: common/plotters/PDF_plotter.cpp:742 common/plotters/PDF_plotter.cpp:747
 #, c-format
@@ -9349,9 +9364,9 @@ msgid "KiCad Classic"
 msgstr "KiCad Klassisk"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Välkommen till KiCad %s!"
+msgstr "Välkommen till KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9361,36 +9376,40 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad startas för första gången, eller några av dess konfigurationsfiler "
+"saknas. \n"
+" \n"
+"Låt oss ta ett ögonblick för att göra några grundläggande inställningar.  Du "
+"kan alltid modifiera dessa inställningar senare genom att öppna "
+"Inställningar-dialogen."
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
-msgstr ""
+msgstr "För hjälp, vänligen besök "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Mönsterkortsinställningar"
+msgstr "KiCad-inställningar"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
+"Är du säker?  Om du avbryter KiCad-inställningarna, väljs "
+"standardinställningar åt dig."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Symbolbiblioteket är inte aktiverat."
+msgstr "Symbolbibliotekstabell"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Fotavtrycksbiblioteket är inte aktiverat."
+msgstr "Fotavtrycksbibliotekstabell"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Designblocksbibliotek"
+msgstr "Designblocksbibliotekstabell"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -10777,14 +10796,14 @@ msgstr "Biblioteksbeskrivning"
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Fel vid försök att spara global bibliotekstabell:\n"
-"\n"
+"Fel vid försök att spara bibliotekstabell: \n"
+" \n"
 "%s"
 
 #: common/widgets/design_block_pane.cpp:292
@@ -17117,9 +17136,8 @@ msgid "(selection color can be edited in the \"Colors\" page)"
 msgstr "(färg för valda objekt kan redigeras på sidan \"Färger\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:192
-#, fuzzy
 msgid "Net collision marker width:"
-msgstr "Text bredd:"
+msgstr "Markörbredd för nätkollisioner:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:200
 msgid "Highlight thickness:"
@@ -17765,19 +17783,19 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Håll stift anslutna vid förflyttning av konturer"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Fel vid inläsning av symbolbibliotekstabellen '%s'."
+msgstr "Fel vid inläsning av bibliotekstabellen '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "Fel vid inläsning av symbolbibliotek '%s'."
+msgstr "Fel vid inläsning av bibliotek '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "Symbolbibliotek"
+msgstr "Symbolbibliotekstabeller (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:544
 msgid "Nickname and path cannot be empty."
@@ -19187,9 +19205,8 @@ msgid "Error loading symbol library '%s'."
 msgstr "Fel vid inläsning av symbolbibliotek '%s'."
 
 #: eeschema/libraries/symbol_library_adapter.cpp:425
-#, fuzzy
 msgid "Library not found in library table"
-msgstr "Biblioteket hittades inte i symbolbibliotektabellen."
+msgstr "Biblioteket hittades inte i bibliotektabellen"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
@@ -19795,34 +19812,28 @@ msgid "Filter nets"
 msgstr "Filtrera nät"
 
 #: eeschema/sch_edit_frame.cpp:2442
-#, fuzzy
 msgid "Wildcard Search"
-msgstr "Delsträng med jokertecken"
+msgstr "Sökning med jokertecken"
 
 #: eeschema/sch_edit_frame.cpp:2444
-#, fuzzy
 msgid "Regex Search"
-msgstr "Starta om sökningen"
+msgstr "Sökning med reguljära uttryck"
 
 #: eeschema/sch_edit_frame.cpp:2592
-#, fuzzy
 msgid "Find in Net Inspector"
-msgstr "Nätinspektör"
+msgstr "Hitta i nätinspektör"
 
 #: eeschema/sch_edit_frame.cpp:2906
-#, fuzzy
 msgid "Enter new variant name"
-msgstr "Ange namn för ny variant:"
+msgstr "Ange namn för ny variant"
 
 #: eeschema/sch_edit_frame.cpp:2906 eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Variant Name"
-msgstr "Variabelnamn"
+msgstr "Variantnamn"
 
 #: eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "Välj lager att ta bort:"
+msgstr "Välj variantnamn att ta bort"
 
 #: eeschema/sch_field.cpp:983
 #, c-format
@@ -20306,11 +20317,13 @@ msgstr ""
 "importeras."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Ogiltigt kragstackslager '%s' i fil '%s' på rad %d, position %d."
+msgstr ""
+"Kan inte läsa fil '%s'.\n"
+"'%s' på rad %d, kolumn %d, offset %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1028
 #, c-format
@@ -23722,9 +23735,8 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:136
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "Olåsta fotavtryck"
+msgstr "icke numrerat fotavtryck"
 
 #: eeschema/tools/backannotate.cpp:179
 #, c-format
@@ -24503,14 +24515,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Tilldela en nätklass till nät som matchar vissa villkor"
 
 #: eeschema/tools/sch_actions.cpp:874
-#, fuzzy
 msgid "Find in Net Navigator"
-msgstr "Nätnavigator"
+msgstr "Hitta i nätnavigator"
 
 #: eeschema/tools/sch_actions.cpp:875
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Öppnar det valda fotavtrycket i fotavtrycksredigeraren"
+msgstr "Lokaliserar det valda nätet i nätnavigatorn"
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Cycle Body Style"
@@ -24960,9 +24970,8 @@ msgstr ""
 "45 graders vinkel"
 
 #: eeschema/tools/sch_actions.cpp:1327 pcbnew/tools/pcb_actions.cpp:1490
-#, fuzzy
 msgid "Switch to next angle snapping mode"
-msgstr "Byt till nästa linjeläge"
+msgstr "Byt till nästa läge för fäst vid vinkel"
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Annotate Automatically"
@@ -25693,9 +25702,8 @@ msgid "All selected nets must be labeled to assign a netclass."
 msgstr "Alla valda nät måst vara märkta för att tilldela en nätklass."
 
 #: eeschema/tools/sch_editor_control.cpp:1077
-#, fuzzy
 msgid "No connected net selected."
-msgstr "Inga nät valda."
+msgstr "Inget anslutet nät valt."
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1119
 msgid ""
@@ -26083,29 +26091,25 @@ msgstr "Byt namn på detta ark"
 #: eeschema/widgets/hierarchy_pane.cpp:518
 #: eeschema/widgets/hierarchy_pane.cpp:596
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Radera segment"
+msgstr "Radera toppnivåark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
-#, fuzzy
 msgid "Remove this top-level sheet from the project"
-msgstr "Ta bort signalen från plotten"
+msgstr "Ta bort detta toppnivåark från projektet"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
-#, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Lämna arket"
+msgstr "Nytt toppnivåark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
-#, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Skapa en ny katalog för projektet"
+msgstr "Skapa ett nytt toppnivåark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 msgid "Enter name for new top-level sheet:"
-msgstr ""
+msgstr "Ange namn för nytt toppnivåark:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
@@ -26114,7 +26118,7 @@ msgstr "Namnlös"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
 msgid "Add new top-level sheet"
-msgstr ""
+msgstr "Lägg till nytt toppnivåark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:593
 #, c-format
@@ -26123,15 +26127,17 @@ msgid ""
 "\n"
 "This cannot be undone."
 msgstr ""
+"Radera toppnivåark '%s'?\n"
+"\n"
+"Detta kan inte ångras."
 
 #: eeschema/widgets/hierarchy_pane.cpp:601
 msgid "Cannot delete the last top-level sheet."
-msgstr ""
+msgstr "Kan inte radera sista toppnivåarket."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
-#, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Radera valt nät"
+msgstr "Radera toppnivåark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:627
 #, c-format
@@ -28375,14 +28381,12 @@ msgid "Force A4 paper size."
 msgstr "Tvinga pappersstorlek A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
-msgstr "Visar mönsterkortsstatistik"
+msgstr "Generera rapport för mönsterkortsstatistik"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
-#, fuzzy
 msgid "Report units; valid options: in, mm"
-msgstr "Rapportens måttenhet; giltiga alternativ: tum, mm, mils (1/1000 tum)"
+msgstr "Rapportens måttenhet; giltiga alternativ: tum, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
 #, fuzzy
@@ -28390,7 +28394,6 @@ msgid "Exclude footprints without pads"
 msgstr "Uteslut fotavtryck utan lödytor"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
 msgstr "Subtrahera hål från mönsterkortsarea"
 
@@ -28844,30 +28847,25 @@ msgid "Execute Command Job Settings"
 msgstr "Inställningar för åtgärden kör kommando"
 
 #: kicad/dialogs/dialog_template_selector.cpp:230
-#, fuzzy
 msgid "Edit Template"
-msgstr "Mall"
+msgstr "Redigera mall"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
-#, fuzzy
 msgid "Duplicate Template"
-msgstr "Duplicera parametrar"
+msgstr "Duplicera mall"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Det gick inte att öppna katalogen: '%s'"
+msgstr "Det gick inte att öppna mallkatalogen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "Inga projektfiler hittades i förvaret."
+msgstr "Inga projektfiler hittades i mallkatalogen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
-#, fuzzy
 msgid "Enter name for the new template:"
-msgstr "Ange sidnummer för arkväg %s"
+msgstr "Ange namn för den nya mallen:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:301
 #: pcbnew/tools/footprint_editor_control.cpp:413
@@ -28875,34 +28873,31 @@ msgid "_copy"
 msgstr "_kopiera"
 
 #: kicad/dialogs/dialog_template_selector.cpp:310
-#, fuzzy
 msgid "Template name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Mallnamnet kan inte vara tomt."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Det gick inte att skapa katalogen '%s'"
+msgstr "Det gick inte att hitta mallkatalogen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Utmatningskatalogen '%s' finns redan."
+msgstr "Katalogen '%s' finns redan."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Det gick inte att skapa katalogen '%s'"
+msgstr "Det gick inte att skapa katalogen '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Det gick inte att öppna katalogen: '%s'"
+msgstr "Det gick inte att öppna käll-mallkatalogen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format
 msgid "Template duplicated successfully to '%s'."
-msgstr ""
+msgstr "Mallen duplicerades framgångsrikt till '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:452
 #: kicad/dialogs/dialog_template_selector_base.h:64
@@ -29011,9 +29006,9 @@ msgid "Running Jobs"
 msgstr "Pågående arbeten"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "Kunde inte öppna filen '%s'."
+msgstr "Kunde inte öppna '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:323
 msgid "Edit Destination Options..."
@@ -29028,9 +29023,8 @@ msgid "View Last Run Log..."
 msgstr "Visa logg från senaste körning..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
-#, fuzzy
 msgid "Open Output"
-msgstr "Utdata"
+msgstr "Öppna utmatning"
 
 #: kicad/dialogs/panel_jobset.cpp:428
 msgid "Edit Job Description"
@@ -29093,9 +29087,8 @@ msgid "Generate All Destinations"
 msgstr "Generera alla mål"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
-#, fuzzy
 msgid "Open the generated output"
-msgstr "Byt namn på det valda fotavtrycket"
+msgstr "Öppna den genererade utmatningen"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -29393,46 +29386,47 @@ msgid "You can copy styling from the default pages for consistency."
 msgstr "Du kan kopiera stil från de förinställda sidorna för enhetlighet."
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
-msgstr "Hittades inte"
+msgstr "Inga mallar hittades"
 
 #: kicad/dialogs/template_default_html.h:180
-#, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "Den valda katalogen är inte ett Git-projekt."
+msgstr "Den valda mallkatalogen innehåller inga mallar."
 
 #: kicad/dialogs/template_default_html.h:183
 msgid "What to do:"
-msgstr ""
+msgstr "Vad man kan göra:"
 
 #: kicad/dialogs/template_default_html.h:185
 msgid "Browse to a different templates directory using the folder icon"
-msgstr ""
+msgstr "Bläddra till ett annat mallbibliotek med hjälp av katalogikonen"
 
 #: kicad/dialogs/template_default_html.h:186
 msgid "Click the refresh icon to reload the current directory"
-msgstr ""
+msgstr "Klicka ikonen ladda om för att läsa in nuvarande katalog på nytt"
 
 #: kicad/dialogs/template_default_html.h:187
 msgid "Check that the directory path contains valid templates"
-msgstr ""
+msgstr "Kontrollera att sökvägen innehåller giltiga mallar"
 
 #: kicad/dialogs/template_default_html.h:188
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
+"Använd systemets standardmallar genom att navigera till en systemmallsflik"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid "Tip:"
-msgstr ""
+msgstr "Tips:"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
+"Mallar är sorterade i underkataloger. Varje mall behöver en 'meta'-katalog "
+"med konfigurationsfiler."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -34209,14 +34203,12 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/board_statistics_report.cpp:110
-#, fuzzy
 msgid "Castellated:"
-msgstr "Krenelerad"
+msgstr "Krenelerad:"
 
 #: pcbnew/board_statistics_report.cpp:112
-#, fuzzy
 msgid "Press-fit:"
-msgstr "Presspassning"
+msgstr "Presspassning:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Through vias:"
@@ -34627,18 +34619,16 @@ msgid "Barcode Properties"
 msgstr "Streckkodsegenskaper"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
-#, fuzzy
 msgid "(not updated)"
-msgstr "(inte aktiverad)"
+msgstr "(inte uppdaterad)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
 msgid "(unannotated; not updated)"
-msgstr ""
+msgstr "(onumrerad; inte uppdaterad)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
-#, fuzzy
 msgid "(excluded)"
-msgstr "Utesluten"
+msgstr "(utesluten)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:113
 msgid "Reannotate PCB"
@@ -34650,75 +34640,69 @@ msgstr ""
 "Mönsterkortets referensbeteckningar har numrerats om med lyckat resultat"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:219
-#, fuzzy
 msgid ""
 "PCB annotation changes should be synchronized with schematic using \"Update "
 "Schematic from PCB\"."
 msgstr ""
 "Förändringar i mönsterkortets komponentnumrering ska synkroniseras med "
-"kretsschemat med hjälp av verktyget \"Uppdatera kretsschema från "
-"mönsterkort\"."
+"kretsschemat med hjälp av verktyget "
+"\"Uppdatera kretsschema från mönsterkort\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
-#, fuzzy
 msgid "Reference Designator Prefixes in Use"
-msgstr "Referensbeteckningar"
+msgstr "Referensbeteckningsprefix som används"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "Utelämnar: %s från omnumrering<br/>"
+msgstr "(Utelämnar %s från omnumrering.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
-#, fuzzy
 msgid "Change Log"
-msgstr "Ändra till"
+msgstr "Ändringslogg"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Front Footprints"
-msgstr "Exportera fotavtryck"
+msgstr "Framsidans fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Back Footprints"
-msgstr "Samla fotavtryck"
+msgstr "Baksidans fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
-#, fuzzy
 msgid "(sorted by footprint location)"
-msgstr "plats för fotavtryck"
+msgstr "(sorterat enligt fotavtryckens placering)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:370
-#, fuzzy
 msgid "(sorted by reference designator location)"
-msgstr "referensbeteckningens plats"
+msgstr "(sorterat enligt referensbeteckningens plats)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%d %s X, Y: %s; rundad X, Y: %s"
+msgstr "<br/>%d %s vid %s (avrundat till %s)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:399
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr "Valda alternativ orsakar fel! Ändra alternativ och försök igen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "Ändra fotavtryck som matchar referensbeteckning:"
+msgstr "Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
-#, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
-msgstr "Kontrollera att mönsterkort och kretsschema överensstämmer"
+msgstr ""
+"Det rekommenderas att köra designregelkontroll med "
+"\"Kontrollera att mönsterkort och kretsschema överensstämmer\" aktiverat."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>Ref.bet.: %s Fotavtryck: %s:%s vid %s på mönsterkortet."
+msgstr "<br/>    Ref.bet.: %s; fotavtryck: %s vid %s på mönsterkortet."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -34966,9 +34950,8 @@ msgstr "Längdjusteringsmönster"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:193
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Tuning Profiles"
-msgstr "Längdjusteringsläge"
+msgstr "Längdjusteringsprofiler"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:215
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -36631,9 +36614,8 @@ msgstr ""
 "Detta nummer måste vara unikt för varje del."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:127
-#, fuzzy
 msgid "Generate unique"
-msgstr "Generera unik"
+msgstr "Generera unikt"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
 msgid "Manufacturer P/N:"
@@ -38030,9 +38012,8 @@ msgid "Footprint Report"
 msgstr "Fotavtrycksrapport"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Hitta text"
+msgstr "Klartext"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41759,27 +41740,23 @@ msgid "Minimum clearance:"
 msgstr "Minsta isolationsavstånd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
 "Minsta isolationsavstånd mellan kopparelement som inte hör till samma nät. "
-"Om angivet är detta ett absolut minimum som inte kan underskridas av "
-"nätklasser, användardefinierade regler, eller andra inställningar."
+"Om angivet, kan detta endast minskas med hjälp av användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Minsta ledarbredd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minsta ledarbredd. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, användardefinierade regler, eller andra "
-"inställningar."
+"Minsta ledarbredd. Om angiven. kan den bara minskas med hjälp av "
+"användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -41794,55 +41771,47 @@ msgid "Minimum annular width:"
 msgstr "Minsta kragbredd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minsta bredd för årsringar. Om angiven är detta ett absolut minimum som inte "
-"kan underskridas av nätklasser, användardefinierade regler, eller andra "
-"inställningar."
+"Minsta bredd för kragar. Om angiven, kan den bara minskas med hjälp av "
+"användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
 msgstr "Minsta viadiameter:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minsta via-diameter. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, användardefinierade regler, eller andra "
-"inställningar."
+"Minsta via-diameter. Om angiven, kan den bara minskas med hjälp av "
+"användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
 msgstr "Frigång koppar till hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
-"Minsta frigång mellan ett hål och ett oförknippat kopparelement. Om angivet "
-"är detta ett absolut minimum som inte kan underskridas av "
-"användardefinierade regler eller andra inställningar."
+"Minsta frigång mellan ett hål och ett oförknippat kopparelement. Om angivet, "
+"kan den bara minskas med hjälp av användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Frigång koppar till ytterkontur:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"Minsta frigång mellan mönsterkortets kant och kopparelement. Om angivet är "
-"detta ett absolut minimum som inte kan underskridas av användarderinierade "
-"regler eller andra inställningar."
+"Minsta frigång mellan mönsterkortets kant och något kopparelement. Om "
+"angivet, kan det bara minskas med hjälp av användarderinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -41861,28 +41830,24 @@ msgid "Minimum through hole:"
 msgstr "Minsta genomgående hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minsta diameter för genomgående hål. Om angiven är detta ett absolut minimum "
-"som inte kan underskridas av nätklasser, användardefinierade regler eller "
-"andra inställningar."
+"Minsta diameter för genomgående hål. Om angiven, kan den bra minskas med "
+"hjälp av användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
 msgstr "Hål till hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"Minsta frigång mellan två borrade hål. Om angivet är detta ett absolut "
-"minimum som inte kan underskridas av användardefinierade regler eller andra "
-"inställningar. (Obs: detta gäller inte frästa hål.)"
+"Minsta frigång mellan två borrade hål. Om angiven, kan den bara minskas med "
+"hjälp av användardefinierade regler. (Obs: detta gäller inte frästa hål.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -41893,28 +41858,24 @@ msgid "Minimum uVia diameter:"
 msgstr "Minsta µVia-diameter:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Minsta diameter för mikrovior.  Om angiven är denna ett absolut minimum som "
-"inte kan underskridas av nätklasser, användardefinierade regler, eller andra "
-"inställningar."
+"Minsta diameter för mikrovior. Om angiven, kan den bara minskas med hjälp av "
+"användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
 msgstr "Minsta uVia-hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minsta storlek för mikrovior. Om angiven är detta ett absolut minimum som "
-"inte kan underskridas av nätklasser, användardefinierade regler eller andra "
-"inställningar."
+"Minsta storlek för mikrovior. Om angiven, kan den bara minskas med hjälp av "
+"användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -41925,15 +41886,14 @@ msgid "Minimum item clearance:"
 msgstr "Minsta frigång mellan objekt:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
-#, fuzzy
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
 "Minsta avstånd mellan två element på samma lager för anvisningstryck. Om "
-"angiven kan tydligheten förbättras. (Obs: Detta gäller inte för former i "
-"samma fotavtryck.)"
+"angivet, kan tydligheten förbättras.  "
+"(Obs: Detta gäller inte för former i samma fotavtryck.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum text height:"
@@ -43714,20 +43674,17 @@ msgstr "Förinställda egenskaper för differentialpars skevhet"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:756
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:807
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "Kontrollobjekt för val av ledarbredd"
+msgstr "Det gick inte att beräkna ledarbredd"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:761
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Dra differentialpar"
+msgstr "Det gick inte att beräkna differentialpars ledaravstånd"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:766
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:812
-#, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Det gick inte att öppna konfigurationsfilen"
+msgstr "Det gick inte att beräkna ledarens utbredningsfördröjning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:832
 msgid "Tuning profile must have a name"
@@ -43735,106 +43692,106 @@ msgstr "Längdjusteringsprofilen måste ha ett namn"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:847
 msgid "Duplicated signal layer configuration in tuning profile"
-msgstr ""
+msgstr "Duplicerad signallagerkonfiguration i längdinställningsprofil"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:875
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:886
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:943
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:949
-#, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "Signalnamn får inte innehålla blanksteg"
+msgstr "Signallager hittades inte i lageruppbyggnaden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:881
+#, fuzzy
 msgid "Internal error: Microstrip can only be on an outer copper layer"
-msgstr ""
+msgstr "Internt fel: Mikrostrip kan bara förekomma på ett yttre kopparlager"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:892
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:955
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Signallagrets tjocklek måste vara större än noll"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:903
-#, fuzzy
 msgid "Reference layer not found in stackup"
-msgstr "Referens '%s' hittades inte."
+msgstr "Referenslagret hittades inte i lageruppbyggnaden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:909
 msgid "Reference layer must be different to signal layer"
-msgstr ""
+msgstr "Referenslagret måste vara ett annat än signallagret"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:918
-#, fuzzy
 msgid "Dielectric height must be greater than 0"
-msgstr "Bågvinkeln måste vara större än 0"
+msgstr "Dielektrisk höjd måste vara större än noll"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:961
 msgid "Top reference layer not found in stackup"
-msgstr ""
+msgstr "Övre referenslager hittades inte i lageruppbyggnaden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:967
 msgid "Top reference layer must be above signal layer in board stackup"
 msgstr ""
+"Övre referenslager måste vara över signallagret i mönsterkortets "
+"lageruppbyggnad"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:973
 msgid "Bottom reference layer not found in stackup"
-msgstr ""
+msgstr "Nedre referenslager hittades inte i lageruppbyggnaden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:979
 msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
+"Nedre referenslagret måste vara under signallagret i mönsterkortets "
+"lageruppbyggnad"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:992
-#, fuzzy
 msgid "Dielectric heights must be greater than 0"
-msgstr "Bågvinkeln måste vara större än 0"
+msgstr "Dielektriska höjder måste vara större än noll"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1019
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1095
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1170
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1272
-#, fuzzy
 msgid "Target impedance must be greater than 0"
-msgstr "Bågvinkeln måste vara större än 0"
+msgstr "Målimpedans måste vara större än noll"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1072
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1147
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1244
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1345
-#, fuzzy
 msgid "Width calculation failed"
-msgstr "Redigera fotavtryckstilldelningsfil"
+msgstr "Beräkning av bredd misslyckades"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1075
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1150
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1250
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1351
 msgid "Delay calculation failed"
-msgstr ""
+msgstr "Beräkning av fördröjning misslyckades"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1188
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1290
-#, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "Isolationsavståndet mellan ledarna måste vara större än 0."
+msgstr ""
+"Differentialpars ledaravstånd måste vara större än noll för att beräkna bredd"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1195
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1297
-#, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
-msgstr "Linjebredden måste vara större än 0 för en ofylld cirkel."
+msgstr ""
+"Ledarbredden måste vara större än noll för att beräkna differentialpars "
+"ledaravstånd"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1202
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1304
 msgid "Width and diff pair gap must be greater than 0 to calculate delay"
 msgstr ""
+"Bredd och differentialpars ledaravstånd måste vara större än noll för att "
+"beräkna fördröjning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1247
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1348
-#, fuzzy
 msgid "Diff pair gap calculation failed"
-msgstr "Tar reda på mellanrum för differentiellt par:"
+msgstr "Beräkning av differentialpars ledaravstånd misslyckades"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
 #, fuzzy
@@ -43842,71 +43799,62 @@ msgid "Single"
 msgstr "En körning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target Impedance:"
-msgstr "Målytor:"
+msgstr "Målimpedans:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
-msgstr ""
+msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
 #, fuzzy
 msgid "Generate Net Class DRC Rules"
-msgstr "Generera &nätlista"
+msgstr "Generera nätlistan"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
 msgid "Enable Time Domain Tuning"
-msgstr ""
+msgstr "Aktivera ledarjustering i tidsdomän"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
-#, fuzzy
 msgid "Track Propagation"
-msgstr "Ledare som korsar"
+msgstr "Ledarens signalutbredning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:123
-#, fuzzy
 msgid "Signal Layer"
-msgstr "Till signallager"
+msgstr "Signallager"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
-#, fuzzy
 msgid "Top Reference"
-msgstr "Referensbeteckning"
+msgstr "Övre referens"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
-#, fuzzy
 msgid "Bottom Reference"
-msgstr "Referensbeteckning"
+msgstr "Nedre referens"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Mellanrum för differentialpar: %s"
+msgstr "Mellanr. diff.par"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:128
-#, fuzzy
 msgid "Unit Delay"
-msgstr "Nätfördröjning"
+msgstr "Enhetsfördröjning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:166
-#, fuzzy
 msgid "Via Propagation"
-msgstr "Viaegenskaper"
+msgstr "Vias signalutbredning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
-#, fuzzy
 msgid "Global Unit Delay:"
-msgstr "Global radering"
+msgstr "Global enhetsfördröjning:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
+#, fuzzy
 msgid "ps/cm"
-msgstr ""
+msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
-#, fuzzy
 msgid "Via Delay Overrides:"
-msgstr "Åsidosättanden för fördröjning i vior"
+msgstr "Undantag för fördröjning i vior:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:212
 msgid "Signal Layer From"
@@ -43994,9 +43942,9 @@ msgstr "nätklass '%s' (mikrovia)"
 
 #: pcbnew/drc/drc_engine.cpp:449 pcbnew/drc/drc_engine.cpp:471
 #: pcbnew/drc/drc_engine.cpp:486 pcbnew/drc/drc_engine.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "tuning profile '%s'"
-msgstr "Extraherar fil '%s'."
+msgstr "längdjusteringsprofil '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:580
 msgid "keepout area"
@@ -44603,9 +44551,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Icke speglad text på bakre lager"
 
 #: pcbnew/drc/drc_item.cpp:301
-#, fuzzy
 msgid "Missing tuning profile"
-msgstr "Flyttalsnummer saknas"
+msgstr "Längdjusteringsprofil saknas"
 
 #: pcbnew/drc/drc_item.cpp:498
 #, c-format
@@ -44642,9 +44589,8 @@ msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr "Nyckelordet '%s' är föråldrat. Vänligen använd '%s' istället."
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "Oupplöst textvariabel"
+msgstr "Oupplöst textvariabel."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
@@ -44677,9 +44623,8 @@ msgid "Missing ')'."
 msgstr "Saknas ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:198 pcbnew/drc/drc_rule_parser.cpp:264
-#, fuzzy
 msgid "version number"
-msgstr "Versionsnummer saknas."
+msgstr "versionsnummer"
 
 #: pcbnew/drc/drc_rule_parser.cpp:208 pcbnew/drc/drc_rule_parser.cpp:274
 #: pcbnew/drc/drc_rule_parser.cpp:355 pcbnew/drc/drc_rule_parser.cpp:418
@@ -44704,7 +44649,7 @@ msgstr "Det gick inte att tolka uttrycket '%s'."
 #: pcbnew/drc/drc_rule_parser.cpp:682
 #, fuzzy
 msgid "quoted expression"
-msgstr "Felaktigt uttryckt"
+msgstr "citerat uttryckt"
 
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "'layer' keyword already present."
@@ -44733,9 +44678,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Regel har redan ett '%s' krav."
 
 #: pcbnew/drc/drc_rule_parser.cpp:659
-#, fuzzy
 msgid "number"
-msgstr "Nummer"
+msgstr "nummer"
 
 #: pcbnew/drc/drc_rule_parser.cpp:670
 msgid "Missing assertion expression."
@@ -45437,9 +45381,8 @@ msgid "Checking assertions..."
 msgstr "Kontrollerar villkor..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:602
-#, fuzzy
 msgid "Checking for missing tuning profiles..."
-msgstr "Kontrollerar för problem med fotavtryckslänkar..."
+msgstr "Kontrollerar för saknade längdjusteringsprofiler..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -45983,7 +45926,7 @@ msgstr "Kan inte döpa om temporär fil '%s' till '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
 msgid "Cannot use VRML models when exporting to non-mesh formats."
-msgstr ""
+msgstr "VRML-modeller kan inte användas vid export till icke-mesh-format."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2975
 #, c-format
@@ -47696,37 +47639,34 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2301
 msgid "('fiducial' pads are normally plated)"
-msgstr ""
+msgstr "(optiska riktmärken är vanligen pläterade)"
 
 #: pcbnew/pad.cpp:2305
 msgid "('testpoint' pads are normally plated)"
-msgstr ""
+msgstr "(testpunkter är vanligen pläterade)"
 
 #: pcbnew/pad.cpp:2308
 msgid "('heatsink' pads are normally plated)"
-msgstr ""
+msgstr "(kylelementsytor är vanligen pläterade)"
 
 #: pcbnew/pad.cpp:2311
-#, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr "(egenskapen krenelerad lödyta är avsedd för genompläterade hål (PTH))"
+msgstr "('krenelerade' lödytor är vanligen genompläterade hål (PTH))"
 
 #: pcbnew/pad.cpp:2314
 msgid "('BGA' property is for SMD pads)"
 msgstr "(BGA-egenskapen är avsedd för ytmonteringslödytor (SMD))"
 
 #: pcbnew/pad.cpp:2317
-#, fuzzy
 msgid "('mechanical' pads are normally PTH)"
 msgstr ""
-"(mekanisk-egenskapen är endast för lödytor med genompläterade hål (PTH))"
+"(lödytor med egenskapen 'mekanisk' är vanligen genompläterade hål (PTH))"
 
 #: pcbnew/pad.cpp:2322
-#, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
 msgstr ""
-"('presspassning'-egenskapen är endast för hålmonteringslödytor med runda "
-"genompläterade hål (PTH))"
+"(lödytor med egenskapen 'presspassning' är vanligen runda genompläterade hål "
+"(PTH))"
 
 #: pcbnew/pad.cpp:2339
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -50340,14 +50280,14 @@ msgid "Successfully created genCAD file\n"
 msgstr "Lyckades skapa genCAD-fil\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "Fel under skrivning av fil '%s'."
+msgstr "Fel vid skrivning av fil '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Skrev baksidans positionsdata till '%s'.\n"
+msgstr "Skrev mönsterkortsstatistik till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1834 pcbnew/pcbnew_jobs_handler.cpp:1908
 #, c-format
@@ -51994,11 +51934,11 @@ msgstr "Samla fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:847
 msgid "Angle snap lines: 45°"
-msgstr ""
+msgstr "Fästvinkel för linjer: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:851
 msgid "Angle snap lines: 90°"
-msgstr ""
+msgstr "Fästvinkel för linjer: 90°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:865
 #, c-format
@@ -52555,18 +52495,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Flyttar valda objekt individuellt"
 
 #: pcbnew/tools/pcb_actions.cpp:603
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Flytta med referens"
+msgstr "Flytta med referens..."
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Flyttar markerade objekt med en angiven startpunkt"
 
 #: pcbnew/tools/pcb_actions.cpp:612
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Kopiera med referens"
+msgstr "Kopiera med referens..."
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -53805,14 +53743,12 @@ msgstr ""
 "Positionerar markerade objekt med en exakt mängd i förhållande till en annan"
 
 #: pcbnew/tools/pcb_actions.cpp:2319
-#, fuzzy
 msgid "Interactive Offset Tool"
-msgstr "Interaktivt raderingsverktyg"
+msgstr "Interaktivt offsetverktyg"
 
 #: pcbnew/tools/pcb_actions.cpp:2320
-#, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
-msgstr "Flyttar markerade objekt med en exakt mängd"
+msgstr "Interaktivt verktyg för att flytta markerade objekt exakta avstånd"
 
 #: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Select/Expand Connection"
