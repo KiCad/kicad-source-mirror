@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-16 22:07+0000\n"
+"PO-Revision-Date: 2025-10-27 00:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2427,12 +2427,12 @@ msgstr "KiCad の問題点を報告する"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1227
 msgid "Donate"
-msgstr "寄付"
+msgstr "寄付をする"
 
 #: common/dialog_about/dialog_about_base.cpp:65
 #: common/tool/common_control.cpp:321
 msgid "Donate to KiCad"
-msgstr "KiCad に寄付する"
+msgstr "KiCad に寄付をする"
 
 #: common/dialog_shim.cpp:828
 msgid "&Apply"
@@ -9630,7 +9630,7 @@ msgstr "現在の ホットキー テーブル と割り付けコマンド を�
 
 #: common/tool/actions.cpp:1220
 msgid "Get Involved"
-msgstr "参加する"
+msgstr "参加貢献する"
 
 #: common/tool/actions.cpp:1221
 msgid "Open \"Contribute to KiCad\" in a web browser"
@@ -9638,7 +9638,7 @@ msgstr "Web ブラウザーで \"KiCad に貢献\" を開く"
 
 #: common/tool/actions.cpp:1228
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Web ブラウザーで \"寄付\" を開く"
+msgstr "Web ブラウザーで \"KiCad に寄付をする\" を開く"
 
 #: common/tool/actions.cpp:1233
 msgid "Report Bug"
@@ -10197,7 +10197,7 @@ msgstr "ホットキー"
 #: eeschema/symbol_editor/symbol_editor.cpp:1757
 #: eeschema/tools/sch_edit_tool.cpp:162
 msgid "Alternate"
-msgstr "代替ピン名"
+msgstr "代替割り当て"
 
 #: common/widgets/wx_html_report_panel.cpp:192
 #: common/widgets/wx_html_report_panel.cpp:214
@@ -13245,7 +13245,7 @@ msgid "No symbols found in library %s."
 msgstr "ライブラリー %s にシンボルが見つかりません。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
 msgstr "シンボル %s 読み込み中にエラー: %s"
 
@@ -13721,7 +13721,7 @@ msgstr "バスを移動"
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
-msgstr "代替ピン名:"
+msgstr "代替ピン名"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
@@ -23843,7 +23843,7 @@ msgstr "現在の解析タブと設定を保存する"
 
 #: eeschema/tools/sch_actions.cpp:1495
 msgid "Save Workbook As..."
-msgstr "ワークブックを保存…"
+msgstr "名前を付けてワークブックを保存…"
 
 #: eeschema/tools/sch_actions.cpp:1496
 msgid "Save the current set of analysis tabs and settings to another location"
@@ -24585,7 +24585,7 @@ msgstr "(%s ページ)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
 msgid "Loading Design Block Libraries"
-msgstr "デザインブロックライブラリのロード中"
+msgstr "デザインブロック ライブラリの読み込み"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:275
 msgid "Updating Design Block Libraries"
@@ -48431,7 +48431,7 @@ msgstr "フットプリントをまとめる"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "角度スナップガイド: H, V, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
