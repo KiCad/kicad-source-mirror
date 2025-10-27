@@ -1875,7 +1875,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
         shape->SetFlags( SKIP_STRUCT );
         toCleanup.insert( shape );
 
-        if( !itemPassesFilter( shape ), true )
+        if( !itemPassesFilter( shape, true ) )
             continue;
 
         select( shape );
