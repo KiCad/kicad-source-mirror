@@ -157,6 +157,7 @@ void SCH_MOVE_TOOL::Reset( RESET_REASON aReason )
             m_mode = MOVE;
             m_moveOffset = VECTOR2I( 0, 0 );
             m_anchorPos.reset();
+            m_breakPos.reset();
 
             // Clear cached data that references items from the previous sheet
             m_dragAdditions.clear();
@@ -551,10 +552,15 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
         useCursorForSingleLine = true;
 
     m_selectionTool->ClearSelection();
+    m_breakPos.reset();
 
     for( SCH_LINE* line : lines )
     {
         VECTOR2I  breakPos = useCursorForSingleLine ? cursorPos : line->GetMidPoint();
+
+        if( m_mode == BREAK && !m_breakPos )
+            m_breakPos = breakPos;
+
         SCH_LINE* newLine = nullptr;
 
         lwbTool->BreakSegment( aCommit, line, breakPos, &newLine, screen );
@@ -887,6 +893,18 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 didAtLeastOneBreak = true;
                 preprocessBreakOrSliceSelection( aCommit, *evt );
                 selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems, true );
+
+                if( m_breakPos )
+                {
+                    m_cursor = *m_breakPos;
+                    m_anchorPos = m_cursor;
+                    selection.SetReferencePoint( m_cursor );
+                    m_moveOffset = VECTOR2I( 0, 0 );
+                    m_breakPos.reset();
+
+                    controls->SetCursorPosition( m_cursor, false );
+                    prevPos = m_cursor;
+                }
             }
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
@@ -953,6 +971,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     m_dragAdditions.clear();
     m_lineConnectionCache.clear();
     m_moveInProgress = false;
+    m_breakPos.reset();
 
     m_hiddenJunctions.clear();
     m_view->ClearPreview();
@@ -1252,6 +1271,15 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
 
     // Set up the starting position and move/drag offset
     m_cursor = controls->GetCursorPosition();
+
+    if( m_mode == BREAK && m_breakPos )
+    {
+        m_cursor = *m_breakPos;
+        m_anchorPos = m_cursor;
+        aSelection.SetReferencePoint( m_cursor );
+        m_moveOffset = VECTOR2I( 0, 0 );
+        m_breakPos.reset();
+    }
 
     if( aEvent.IsAction( &SCH_ACTIONS::restartMove ) )
     {
