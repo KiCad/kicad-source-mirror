@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-27 00:04+0000\n"
+"PO-Revision-Date: 2025-10-27 23:14+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -3956,7 +3956,7 @@ msgstr "新的主題名稱:"
 
 #: common/dialogs/panel_color_settings.cpp:141
 msgid "Add Color Theme"
-msgstr "添加配色主題"
+msgstr "增加配色主題"
 
 #: common/dialogs/panel_color_settings.cpp:153
 msgid "Theme already exists!"
@@ -4175,7 +4175,7 @@ msgstr "停用光圈 (Aperture) 巨集"
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
-msgstr ""
+msgstr "啟用時，KiCad 將使用預設系統游標取代自訂游標"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4749,12 +4749,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"已刪除的嵌入式檔案，也被某些封裝所引用。\n"
+"是否同時從封裝中刪除？"
 
 #: common/dialogs/panel_embedded_files.cpp:195
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"已刪除的嵌入式檔案，也被某些符號所引用。\n"
+"是否同時從符號中刪除？"
 
 #: common/dialogs/panel_embedded_files.cpp:312
 #: common/dialogs/panel_embedded_files.cpp:420
@@ -4938,13 +4942,12 @@ msgstr "小十字"
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
 msgid "Full window crosshairs"
-msgstr "全屏十字遊標"
+msgstr "全螢幕十字遊標"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "45 度"
+msgstr "45 度十字線"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
@@ -5062,9 +5065,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| 操作 | 預設快捷鍵 | 描述"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "（焊盤大小必須為正）"
+msgstr "比例必須是正數"
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5181,7 +5183,7 @@ msgstr "清除最近的檔案"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "重設「不再顯示」的對話框"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
@@ -5252,7 +5254,7 @@ msgstr "自動平移速度:"
 #: common/dialogs/panel_mouse_settings_base.cpp:82
 #: common/dialogs/panel_spacemouse_base.cpp:55
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr "將物件移出屏幕邊緣時的平移速度"
+msgstr "將物件移出螢幕邊緣時的平移速度"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
@@ -5330,7 +5332,7 @@ msgstr "右鍵拖動:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "按鍵配合滑鼠移動進行平移:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5396,7 +5398,7 @@ msgstr "在觸摸板上使用左/右滾動手勢時, 將畫布左/右平移"
 #: common/dialogs/panel_mouse_settings_base.cpp:328
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
 msgid "Reset to Mouse Defaults"
-msgstr "重置鼠標滾輪動作為預設值"
+msgstr "重置滑鼠滾輪動作為預設值"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:331
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
@@ -5498,7 +5500,7 @@ msgstr "啟用 KiCad API"
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
-msgstr "啟用 KiCad API。 這將允許系統中運行的第三方軟體訪問 KiCad。"
+msgstr "啟用 KiCad API。 這將允許系統中運行的第三方軟體將能存取 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:42
 msgid "Python Interpreter"
@@ -5688,7 +5690,7 @@ msgstr "<b>滿足匹配規則 '%s' 的網路: </b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 msgid "Netclasses"
-msgstr "網路類"
+msgstr "網路類別"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:609
@@ -5861,11 +5863,11 @@ msgstr "自動平移速度:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "反轉垂直平移方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "反轉水平平移方向"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
 #, fuzzy
@@ -5883,11 +5885,18 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"$\\text{KiCad}$ 的程式庫說明$\\text{KiCad}$ 隨附了大量由 $\\text{KiCad}$ 程式"
+"庫團隊維護的符號程式庫與封裝程式庫。\n"
+"您也可以建立自己的程式庫，或透過外掛與內容管理器或其他來源安裝第三方程式庫。"
+"\n"
+"程式庫表（$\\text{Library tables}$）是列出要載入程式庫的組態檔案。全域程式庫"
+"（$\\text{Global libraries}$）在所有專案中皆可用，您也可以依需求新增專案專屬"
+"的程式庫。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>必須建立下列全域程式庫表:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
@@ -5896,7 +5905,7 @@ msgstr "您想如何配置 KiCad?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "從 $\\text{KiCad}$ 內建程式庫開始（建議）"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 #, fuzzy
@@ -5908,12 +5917,12 @@ msgid ""
 "Library tables will be imported from the version you selected on the "
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
-msgstr ""
+msgstr "程式庫表將從您上一步驟選取的版本匯入。任何無法匯入的程式庫表，將會使用 $"
+"\\text{KiCad}$ 的預設程式庫建立。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "封裝庫"
+msgstr "不使用任何程式庫開始"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -5922,6 +5931,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"無法在預期位置找到內建程式庫表。這通常表示您在安裝 $\\text{KiCad}$ 軟體時並未"
+"同時安裝程式庫。您可以繼續設定，但若要使用程式庫，則需要另外安裝。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 #, fuzzy
@@ -5932,7 +5943,8 @@ msgstr "更新"
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
-msgstr ""
+msgstr "是否允許連線至網際網路，以檢查 $\\text{KiCad}$ 及透過外掛與內容管理器(PCM)所"
+"安裝套件的更新版本？"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1321
@@ -5951,11 +5963,17 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad 數據收集聲明翻譯$\\text{KiCad}$ 可以匿名地將當機或其他事件資料回報給開"
+"發團隊，以協助識別並修復錯誤，並改善軟體效能。\n"
+"\n"
+"當資料收集功能啟用時，$\\text{KiCad}$ 會在發生當機或其他值得注意的事件時，自"
+"動傳送報告。這些報告包含回報當時 $\\text{KiCad}$ 軟體狀態的技術細節。我們不會"
+"收集任何個人身份資訊 ($\\text{PII}$)，且您的設計檔案（如原理圖、$\\text{PCB}$"
+" 或程式庫）絕不會在此流程中被分享。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
-#, fuzzy
 msgid "Enable anonymous data collection"
-msgstr "啟用動畫"
+msgstr "啟用匿名資料收集"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6228,14 +6246,14 @@ msgid "Expecting '%s'"
 msgstr "應為 '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "應為 '%s'"
+msgstr "應為 '%s'，實際為 '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
 msgid "Unexpected '%s'"
-msgstr "未預料的 '%s'"
+msgstr "未預期的 '%s'"
 
 #: common/dsnlexer.cpp:366
 #, c-format
@@ -6272,12 +6290,12 @@ msgstr "無效的浮點數"
 #: common/eda_base_frame.cpp:442 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:128
 msgid "Undo"
-msgstr "撤消"
+msgstr "復原"
 
 #: common/eda_base_frame.cpp:451 common/tool/actions.cpp:301
 #: pcbnew/dialogs/panel_setup_rules.cpp:129
 msgid "Redo"
-msgstr "重做"
+msgstr "取消復原"
 
 #: common/eda_base_frame.cpp:684
 #, fuzzy, c-format
@@ -6305,7 +6323,7 @@ msgstr "通用"
 
 #: common/eda_base_frame.cpp:1300
 msgid "Mouse and Touchpad"
-msgstr "鼠標和觸摸板"
+msgstr "滑鼠與觸控板"
 
 #: common/eda_base_frame.cpp:1306
 msgid "SpaceMouse"
@@ -6398,11 +6416,11 @@ msgstr "PCB 編輯器"
 
 #: common/eda_base_frame.cpp:1405 common/eda_base_frame.cpp:1477
 msgid "Plugins"
-msgstr "插件"
+msgstr "外掛程式"
 
 #: common/eda_base_frame.cpp:1416
 msgid "Realtime Renderer"
-msgstr "實時算繪器"
+msgstr "即時算繪器"
 
 #: common/eda_base_frame.cpp:1417
 msgid "Raytracing Renderer"
@@ -6428,7 +6446,7 @@ msgstr "圖框編輯器"
 
 #: common/eda_base_frame.cpp:1469
 msgid "Packages and Updates"
-msgstr "擴展和更新"
+msgstr "套件與更新"
 
 #: common/eda_base_frame.cpp:1480
 #, fuzzy
@@ -6582,7 +6600,7 @@ msgstr "網路檢查"
 
 #: common/eda_item.cpp:414
 msgid "Screen"
-msgstr "屏幕"
+msgstr "螢幕"
 
 #: common/eda_item.cpp:417 eeschema/lib_symbol.cpp:2049
 #: eeschema/sch_symbol.cpp:2220 eeschema/widgets/search_handlers.cpp:162
@@ -6684,7 +6702,7 @@ msgstr "網路資訊"
 
 #: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
-msgstr ""
+msgstr "條碼"
 
 #: common/eda_item.cpp:445 eeschema/sch_junction.cpp:297
 #: eeschema/sch_junction.h:102
@@ -6758,7 +6776,7 @@ msgstr "圖紙"
 
 #: common/eda_item.cpp:473
 msgid "SCH Screen"
-msgstr "原理圖屏幕"
+msgstr "原理圖畫面"
 
 #: common/eda_item.cpp:477
 msgid "Gerber Layout"
@@ -6797,7 +6815,7 @@ msgstr "圓形"
 
 #: common/eda_shape.cpp:340
 msgid "Bezier Curve"
-msgstr "貝塞爾曲線"
+msgstr "貝茲曲線"
 
 #: common/eda_shape.cpp:341 common/eda_shape.cpp:1139 common/eda_shape.cpp:2631
 msgid "Polygon"
@@ -6904,29 +6922,29 @@ msgstr "高度"
 
 #: common/eda_shape.cpp:2632
 msgid "Bezier"
-msgstr "貝塞爾曲線"
+msgstr "貝茲曲線"
 
 #: common/eda_shape.cpp:2651
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 msgid "Hatch"
-msgstr "陰影線"
+msgstr "網格填充"
 
 #: common/eda_shape.cpp:2652
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 msgid "Reverse Hatch"
-msgstr "反轉填充線"
+msgstr "反轉網格"
 
 #: common/eda_shape.cpp:2653
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 msgid "Cross-hatch"
-msgstr "交叉填充線"
+msgstr "交叉網格"
 
 #: common/eda_shape.cpp:2689 eeschema/sch_shape.cpp:593
 msgid "Shape Properties"
-msgstr "形狀屬性"
+msgstr "圖形屬性"
 
 #: common/eda_shape.cpp:2695 eeschema/sch_line.cpp:1276
 #: eeschema/sch_table.cpp:517 eeschema/sch_tablecell.cpp:214
@@ -7077,7 +7095,7 @@ msgstr "預設字體"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:940
 #: pcbnew/dialogs/dialog_shape_properties.cpp:943
 msgid "Center"
-msgstr "居中"
+msgstr "置中"
 
 #: common/eda_text.cpp:1349
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
@@ -7086,7 +7104,7 @@ msgstr "居中"
 #: eeschema/sch_field.cpp:1688 eeschema/sch_text.cpp:585
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
-msgstr "向上"
+msgstr "上"
 
 #: common/eda_text.cpp:1351
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
@@ -7095,7 +7113,7 @@ msgstr "向上"
 #: eeschema/sch_field.cpp:1690 eeschema/sch_text.cpp:587
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
-msgstr "向下"
+msgstr "下"
 
 #: common/eda_text.cpp:1357
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
@@ -7182,7 +7200,7 @@ msgstr "垂直對齊"
 #: pcbnew/pcb_tablecell.cpp:248 pcbnew/pcb_text.cpp:709
 #: pcbnew/pcb_textbox.cpp:900
 msgid "Hyperlink"
-msgstr "超鏈接"
+msgstr "超連結"
 
 #: common/eda_units.cpp:508
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
@@ -7204,7 +7222,7 @@ msgstr "最大"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr "本地安裝的系統封裝庫 (.pretty 資料夾) 的基礎路徑。"
+msgstr "本機安裝的系統封裝程式庫（.pretty 資料夾）的基礎路徑。"
 
 #: common/env_vars.cpp:114
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -7212,7 +7230,7 @@ msgstr "系統封裝 3D 模型 (.3Dshapes 資料夾) 的基礎路徑。"
 
 #: common/env_vars.cpp:117
 msgid "The base path of the locally installed symbol libraries."
-msgstr "本機安裝的符號庫的基本路徑。"
+msgstr "本機安裝的符號庫的基礎路徑。"
 
 #: common/env_vars.cpp:120
 msgid "A directory containing project templates installed with KiCad."
@@ -7259,7 +7277,7 @@ msgstr "%s 的已棄用版本。"
 #: common/exceptions.cpp:78
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s in '%s', line %d, offset %d。"
+msgstr "%s 在'%s'，第 %d 行，偏移 %d。"
 
 #: common/exceptions.cpp:109
 #, c-format
@@ -7343,17 +7361,17 @@ msgstr "發現重複的庫名稱 '%s', 位於封裝庫表檔案的行 %d。"
 
 #: common/fp_lib_table.cpp:573 common/libraries/library_manager.cpp:297
 msgid "Added by Plugin and Content Manager"
-msgstr "由擴展內容管理員添加"
+msgstr "由外掛與內容管理器新增"
 
 #: common/fp_lib_table.cpp:600
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "無法建立全域庫表路徑 '%s'。"
+msgstr "無法建立全域程式庫表路徑 '%s'。"
 
 #: common/gestfich.cpp:248
 #, c-format
 msgid "Command '%s' could not be found."
-msgstr "找不到命令 '%s'。"
+msgstr "找不到指令 '%s'。"
 
 #: common/gestfich.cpp:265
 #, c-format
@@ -7457,7 +7475,7 @@ msgstr "無法驗證身份"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
-msgstr "倉庫無效。"
+msgstr "儲存庫無效。"
 
 #: common/git/kicad_git_errors.cpp:41
 msgid "Failed to commit changes."
@@ -7469,15 +7487,15 @@ msgstr "合併分支失敗。"
 
 #: common/git/kicad_git_errors.cpp:45
 msgid "Failed to clone repository."
-msgstr "克隆倉庫失敗。"
+msgstr "無法複製儲存庫。"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Remote repository not found."
-msgstr "找不到遠程倉庫。"
+msgstr "找不到遠端儲存庫。"
 
 #: common/git/kicad_git_errors.cpp:47
 msgid "Authentication failed for remote repository."
-msgstr "遠程倉庫身份驗證失敗。"
+msgstr "遠端儲存庫身份驗證失敗。"
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Branch not found."
@@ -7509,19 +7527,19 @@ msgstr "遇到變基衝突。"
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Failed to pull changes from remote repository."
-msgstr "從遠程倉庫提取更改失敗。"
+msgstr "從遠端儲存庫拉取變更失敗。"
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "Failed to push changes to remote repository."
-msgstr "向遠程倉庫推送更改失敗。"
+msgstr "向遠端儲存庫推送更改失敗。"
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "No upstream branch configured."
-msgstr "未配置上游分支。"
+msgstr "未設定上游分支。"
 
 #: common/git/kicad_git_errors.cpp:67
 msgid "Failed to establish connection with remote repository."
-msgstr "與遠程倉庫建立連接失敗。"
+msgstr "與遠端儲存庫建立連接失敗。"
 
 #: common/git/kicad_git_errors.cpp:70
 msgid "Tag not found."
@@ -7555,12 +7573,12 @@ msgstr "無法建立目錄 '%s'"
 #: common/git/libgit_backend.cpp:139
 #, c-format
 msgid "Could not clone repository '%s'"
-msgstr "無法克隆倉庫 '%s'"
+msgstr "無法複製儲存庫 '%s'"
 
 #: common/git/libgit_backend.cpp:163
 #, c-format
 msgid "Failed to get repository index: %s"
-msgstr "無法取得倉庫索引: %s"
+msgstr "無法取得儲存庫索引: %s"
 
 #: common/git/libgit_backend.cpp:174
 #, c-format
@@ -7580,7 +7598,7 @@ msgstr "無法寫入樹: %s"
 #: common/git/libgit_backend.cpp:200
 #, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "無法搜索樹: %s"
+msgstr "查找樹失敗: %s"
 
 #: common/git/libgit_backend.cpp:214
 #, c-format
@@ -7590,7 +7608,7 @@ msgstr "無法獲取 HEAD 引用: %s"
 #: common/git/libgit_backend.cpp:223
 #, c-format
 msgid "Failed to get commit: %s"
-msgstr "無法獲取提交: %s"
+msgstr "無法取得提交: %s"
 
 #: common/git/libgit_backend.cpp:235
 #, c-format
@@ -7604,7 +7622,7 @@ msgstr "無法建立提交: %s"
 
 #: common/git/libgit_backend.cpp:282
 msgid "Could not lookup remote"
-msgstr "無法找到遠程"
+msgstr "無法找到遠端"
 
 #: common/git/libgit_backend.cpp:303
 #, c-format
@@ -7613,7 +7631,7 @@ msgstr "無法連接到遠端: '%s'"
 
 #: common/git/libgit_backend.cpp:317 common/git/libgit_backend.cpp:898
 msgid "Could not get repository head"
-msgstr "無法獲取倉庫 HEAD"
+msgstr "無法取得儲存庫 HEAD"
 
 #: common/git/libgit_backend.cpp:329
 #, c-format
@@ -7621,13 +7639,13 @@ msgid "Could not push to remote: %s"
 msgstr "無法推送到遠端：%s"
 
 #: common/git/libgit_backend.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "git 專案初始化失敗。"
+msgstr "git 專案初始化失敗：%s"
 
 #: common/git/libgit_backend.cpp:595
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "無儲存庫可用於設定遠端"
 
 #: common/git/libgit_backend.cpp:648
 #, fuzzy, c-format
@@ -7645,24 +7663,24 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "找不到分支 '%s': %s"
 
 #: common/git/libgit_backend.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "找不到 '%s' 的分支 head"
+msgstr "找不到 '%s' 的分支 head：%s"
 
 #: common/git/libgit_backend.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "切換到分支 '%s' 失敗"
+msgstr "切換到分支 '%s' 失敗：%s"
 
 #: common/git/libgit_backend.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "更新分支 '%s' 的 HEAD 引用失敗"
+msgstr "更新分支 '%s' 的 HEAD 引用失敗：%s"
 
 #: common/git/libgit_backend.cpp:758
 #, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "無法找到遠程 '%s'"
+msgstr "無法找到遠端 '%s'"
 
 #: common/git/libgit_backend.cpp:779
 #, c-format
@@ -7714,7 +7732,7 @@ msgstr "無法更新引用 '%s' 指向 '%s'"
 
 #: common/git/libgit_backend.cpp:990
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "快轉後無法清理儲存庫狀態。"
+msgstr "快速向前合併後，清理儲存庫狀態失敗。"
 
 #: common/git/libgit_backend.cpp:998
 msgid "Failed to initialize revision walker."
@@ -7730,24 +7748,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "無法查詢提交 '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "作業失敗"
+msgstr "合併失敗"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "未能載入 Eeschema。"
+msgstr "變基啟動失敗"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "資料庫連接失敗: %s"
+msgstr "資料庫連接失敗"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "上次執行失敗"
+msgstr "變基完成失敗"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -7836,7 +7850,7 @@ msgstr "完成繪圖"
 
 #: common/hotkey_store.cpp:50
 msgid "Add to Selection"
-msgstr "添加到選區"
+msgstr "新增到選區"
 
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:1004
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1517
@@ -7867,11 +7881,11 @@ msgstr "專案管理員"
 
 #: common/hotkey_store.cpp:159
 msgid "Gestures"
-msgstr "快捷操作"
+msgstr "手勢操作"
 
 #: common/http_lib/http_lib_connection.cpp:67
 msgid "KiCad received an empty response!"
-msgstr "KiCad 收到了一個空響應!"
+msgstr "KiCad 收到空白回應！"
 
 #: common/http_lib/http_lib_connection.cpp:80
 #: common/http_lib/http_lib_connection.cpp:140
@@ -7887,18 +7901,18 @@ msgstr "錯誤: %s"
 #: common/http_lib/http_lib_connection.cpp:140
 #, c-format
 msgid "API Response:  %s"
-msgstr "API 響應: %s"
+msgstr "API 回應: %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API 響應: %s"
+msgstr "API 回應: %s"
 
 #: common/http_lib/http_lib_connection.cpp:391
 #, c-format
 msgid "API responded with error code: %s"
-msgstr "API 響應錯誤代碼: %s"
+msgstr "API 回應錯誤代碼: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -7907,7 +7921,7 @@ msgstr "記憶體不足無法載入 DXF, 可能是由於檔案過大導致的。
 
 #: common/import_gfx/dxf_import_plugin.cpp:1549
 msgid "Invalid spline definition encountered"
-msgstr "遇到無效樣條曲線定義"
+msgstr "遇到無效的曲線定義"
 
 #: common/import_gfx/dxf_import_plugin.h:210
 #, c-format
@@ -7957,12 +7971,12 @@ msgstr "目前不支援 DXF 中的圖像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "導入的圖形太大。最大比例為 %f"
+msgstr "匯入的影像尺寸過大。最大比例為 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:180
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr "導入偏移調整為 (%f, %f) 以適應數位限制"
+msgstr "匯入偏移量已調整為 (%f, %f)，以符合數值限制"
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:108
 #, c-format
@@ -8040,9 +8054,9 @@ msgid "Invalid size %lld: too large"
 msgstr "無效的大小 %lld: 過大"
 
 #: common/io/eagle/eagle_parser.cpp:527
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "半徑為 %f 且角度為 %f 的無效弧線"
+msgstr "半徑為 %0.2f 且角度為 %0.2f 的無效弧線"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -8073,7 +8087,7 @@ msgstr ""
 #: common/io/easyedapro/easyedapro_import_utils.cpp:210
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "無法讀取 ZIP 壓縮包 '%s'"
+msgstr "無法讀取 ZIP 壓縮檔'%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:262
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
@@ -8254,14 +8268,12 @@ msgid "Export board statistics"
 msgstr "顯示電路板統計資訊"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "匯出網表作業設定"
+msgstr "匯出電路板統計作業設定"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "電路板統計"
+msgstr "電路板：匯出統計數據"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8279,15 +8291,15 @@ msgstr "印刷電路板: 匯出SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:86
 msgid "Generate bill of materials"
-msgstr "生成物料清單"
+msgstr "產生材料清單"
 
 #: common/jobs/job_export_sch_bom.cpp:92
 msgid "Generate Bill of Materials Job Settings"
-msgstr "生成物料清單作業設定"
+msgstr "產生材料清單作業設定"
 
 #: common/jobs/job_export_sch_bom.cpp:96
 msgid "Schematic: Generate Bill of Materials"
-msgstr "原理圖：生成物料清單"
+msgstr "原理圖：產生材料清單"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
@@ -8395,7 +8407,7 @@ msgstr "不再顯示"
 
 #: common/kidialog.cpp:121
 msgid "Message"
-msgstr "消息"
+msgstr "訊息"
 
 #: common/kidialog.cpp:122
 msgid "Question"
@@ -8494,7 +8506,7 @@ msgstr "符號欄位"
 
 #: common/layer_id.cpp:83
 msgid "Sheet references"
-msgstr "圖紙參考"
+msgstr "圖頁參考"
 
 #: common/layer_id.cpp:84
 msgid "Net class references"
@@ -8536,28 +8548,28 @@ msgstr "接腳"
 
 #: common/layer_id.cpp:93
 msgid "Sheet borders"
-msgstr "圖紙邊框"
+msgstr "圖頁邊框"
 
 #: common/layer_id.cpp:94
 msgid "Sheet backgrounds"
-msgstr "圖紙背景"
+msgstr "圖頁背景"
 
 #: common/layer_id.cpp:95
 msgid "Sheet names"
-msgstr "圖紙名稱"
+msgstr "圖頁名稱"
 
 #: common/layer_id.cpp:96
 msgid "Sheet fields"
-msgstr "圖紙欄位"
+msgstr "圖頁欄位"
 
 #: common/layer_id.cpp:97
 msgid "Sheet file names"
-msgstr "圖紙檔案名"
+msgstr "圖頁檔案名"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet pins"
-msgstr "圖紙接腳"
+msgstr "圖頁接腳"
 
 #: common/layer_id.cpp:99
 msgid "No-connect symbols"
@@ -8638,7 +8650,7 @@ msgstr "選擇區高亮度顯示"
 
 #: common/layer_id.cpp:117 common/layer_id.cpp:147
 msgid "Drawing sheet"
-msgstr "圖紙"
+msgstr "圖頁"
 
 #: common/layer_id.cpp:119
 msgid "Operating point voltages"
@@ -8735,9 +8747,8 @@ msgid "DRC errors"
 msgstr "DRC 錯誤"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "没有 3D 形狀"
+msgstr "$\\text{DRC}$ 圖形"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -8795,7 +8806,7 @@ msgstr "庫條目的編輯選項"
 
 #: common/lib_table_grid_tricks.cpp:77
 msgid "Activate selected"
-msgstr "激活所選"
+msgstr "啟動選取項目"
 
 #: common/lib_table_grid_tricks.cpp:80
 msgid "Deactivate selected"
@@ -8845,11 +8856,11 @@ msgstr "無法識別的字符 '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:863
 msgid "Unknown parent of function parameters"
-msgstr "函數參數的父級未知"
+msgstr "函數參數的父項未知"
 
 #: common/libeval_compiler/libeval_compiler.cpp:882
 msgid "Unknown parent of property"
-msgstr "屬性的父級未知"
+msgstr "屬性的父項未知"
 
 #: common/libeval_compiler/libeval_compiler.cpp:905
 #: common/libeval_compiler/libeval_compiler.cpp:933
@@ -8931,20 +8942,19 @@ msgid "The library table path '%s' does not exist"
 msgstr "封裝庫路徑 \"%s\" 不存在"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "寫入空封裝庫表檔案 '%s' 時出錯。"
+msgstr "讀取程式庫表 %s 時發生未預期錯誤。 "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "語法錯誤發生於第 %zu 列，第 %zu 欄"
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "寫入空封裝庫表檔案 '%s' 時出錯。"
+msgstr "寫入空封裝庫表檔案 '%s' 時出現未預期。"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1148 pcbnew/zone.cpp:919
@@ -8966,7 +8976,7 @@ msgstr "%s, %s 和 %d 更多"
 
 #: common/notifications_manager.cpp:95
 msgid "View Details"
-msgstr "查看詳情"
+msgstr "檢視詳細資訊"
 
 #: common/notifications_manager.cpp:99
 msgid "Dismiss"
@@ -9106,9 +9116,9 @@ msgid "Open %s"
 msgstr "打開 %s"
 
 #: common/plotters/PDF_plotter.cpp:2626
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "無法開啟檔案 '%s'。"
+msgstr "無法開啟3D模型檔案 '%s'。"
 
 #: common/project.cpp:434 common/project.cpp:439 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
