@@ -919,7 +919,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         vc->WarpMouseCursor( vc->GetCursorPosition(), true );
 
                         // Start the drag tool, canceling will remove the wires
-                        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, SCH_MOVE_TOOL::DRAG ) )
+                        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit ) )
                             commit.Push( wxS( "Wire Pins" ) );
                         else
                             commit.Revert();

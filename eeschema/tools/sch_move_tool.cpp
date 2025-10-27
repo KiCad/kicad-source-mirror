@@ -461,12 +461,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &SCH_ACTIONS::drag ) )
-    {
-        if( aEvent.HasParameter() )
-            m_mode = aEvent.Parameter<MOVE_MODE>();
-        else
-            m_mode = DRAG;
-    }
+        m_mode = DRAG;
     else if( aEvent.IsAction( &SCH_ACTIONS::breakWire ) )
         m_mode = BREAK;
     else if( aEvent.IsAction( &SCH_ACTIONS::slice ) )
@@ -2582,5 +2577,7 @@ void SCH_MOVE_TOOL::setTransitions()
 {
     Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::drag.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::breakWire.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::slice.MakeEvent() );
     Go( &SCH_MOVE_TOOL::AlignToGrid,        SCH_ACTIONS::alignToGrid.MakeEvent() );
 }

@@ -3185,39 +3185,6 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
-{
-    bool           isSlice = aEvent.Matches( SCH_ACTIONS::slice.MakeEvent() );
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
-    SCH_COMMIT     commit( m_toolMgr );
-
-    if( selection.Empty() )
-        return 0;
-
-    m_frame->TestDanglingEnds();
-
-    SCH_MOVE_TOOL::MOVE_MODE moveMode = isSlice ? SCH_MOVE_TOOL::SLICE : SCH_MOVE_TOOL::BREAK;
-
-    if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, moveMode ) )
-    {
-        commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
-
-        // Breaking wires is usually a repeated action, e.g. to add bends
-        if( !isSlice )
-            m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
-    }
-    else
-    {
-        commit.Revert();
-    }
-
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-    return 0;
-}
-
-
 int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
@@ -3539,8 +3506,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::centerJustify.MakeEvent() );
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::rightJustify.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakWire.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::slice.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setDNP.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromBOM.MakeEvent() );
