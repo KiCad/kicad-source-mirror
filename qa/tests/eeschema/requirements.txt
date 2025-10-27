@@ -1,0 +1,10 @@
+# KiCad Eeschema Test Scripts Dependencies
+# Install with: pip install -r requirements.txt
+
+# HTTP Library Test Server
+fastapi>=0.100.0
+pydantic>=2.0.0
+uvicorn[standard]>=0.23.0
+
+# Netlist Comparison Tool
+sexpdata>=1.0.0
