@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 23:13+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9087,9 +9087,9 @@ msgid "KiCad Default Libraries"
 msgstr "KiCad Standard-Bibliotheken"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Bibliothek %s wurde nicht gefunden"
+msgstr "Bibliothek %s nicht gefunden"
 
 #: common/libraries/library_table.cpp:67
 #, c-format
@@ -44206,9 +44206,8 @@ msgid "Could not compute track width"
 msgstr "Leiterbahnbreite konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:761
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Differentialpaar-Spalt konnte nicht berechnet werden"
+msgstr "Differenzialpaar-Abstand konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:766
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:812
@@ -44313,9 +44312,9 @@ msgstr "Verzögerungsberechnung fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1188
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1290
-#, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "Für die Berechung der Breite muss der Diff-Paar-Spalt größer als 0 sein"
+msgstr ""
+"Zur Berechnung der Breite muss der Differenzialpaar-Abstand größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1195
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1297
@@ -44333,9 +44332,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1247
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1348
-#, fuzzy
 msgid "Diff pair gap calculation failed"
-msgstr "Berechung des Diff-Paar-Spaltes fehlgeschlagen"
+msgstr "Berechnung des Differenzialpaar-Abstands fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
 #, fuzzy
@@ -44382,9 +44380,8 @@ msgid "Bottom Reference"
 msgstr "Untere Referenz"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Diff-Paar-Spalt"
+msgstr "Differenzialpaar-Abstand"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:128
 #, fuzzy
