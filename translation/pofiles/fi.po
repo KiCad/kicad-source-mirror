@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-09-15 11:02+0000\n"
+"PO-Revision-Date: 2025-10-28 02:06+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
 "Language: fi\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -7169,14 +7169,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Viite-OID:tä ei voitu hakea viitteelle '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Commit:tia ei voitu etsiä"
+msgstr "Kohdeversiota ei voitu hakea"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Muutoksia ei voitu yhdistää"
+msgstr "Kohdeversion tiedostorakennetta ei voitu hakea"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -7200,9 +7198,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Viittauksen siirtäminen versioselaimelle epäonnistui."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Ei voitu etsiä commit '{}'"
+msgstr "Versiota ei voitu löytää '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -8502,7 +8500,6 @@ msgid "Select Preferred Editor"
 msgstr "Valitse Suositeltu Editori"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8511,28 +8508,25 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCad voi ilmoittaa anonyymisti kaatumisista ja erikoistapahtumien tiedoista "
-"kehittäjille auttaakseen tunnistamaan kriittisiä virheitä koko "
-"käyttäjäkannassa tehokkaammin ja auttaakseen profiilitoimintoja ohjaamaan "
-"parannuksia.\n"
-"Jos päätät osallistua vapaaehtoisesti, KiCad käsittelee automaattisesti "
-"mainittujen raporttien lähettämisen kaatumisten tai tapahtumien sattuessa.\n"
-"Suunnittelutiedostojasi, kuten kaavioita tai piirilevyä, ei jaeta tässä "
-"prosessissa."
+"KiCad voi nimettömästi raportoida kaatumisista ja erityistapahtumista "
+"kehittäjille auttaakseen tunnistamaan kriittisiä virheitä ja profiloimaan "
+"toimintoja parannusten ohjaamiseksi.\n"
+"Jos päätät osallistua vapaaehtoisesti, KiCad lähettää kyseiset raportit "
+"automaattisesti, kun kaatumisia tai tapahtumia tapahtuu.\n"
+"Suunnittelutiedostojasi, kuten kytkentäkaavioita ja piirilevyjä, ei jaeta "
+"tässä prosessissa."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Tiedonkeruu"
+msgstr "Tiedonkeruu Opt In"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
 msgstr ""
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Luonnosviivat"
+msgstr "Hylkää"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -9348,9 +9342,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Älä enää pidä kirjastoa listan yläpäässä"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Kirjaston lempinimen virhe"
+msgstr "Kirjastotaulukko"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -10145,9 +10138,8 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Vaihda panorointia hakupaneelin valintoihin"
 
 #: common/widgets/search_pane.cpp:53
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Etsi &piilotetut kentät"
+msgstr "Etsi piilotettuja kenttiä"
 
 #: common/widgets/unit_binder.cpp:355
 #, c-format
@@ -10349,9 +10341,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-lausekkeen kytkentäkaaviotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Kaikki KiCad-projektitiedostot"
+msgstr "Altium projektitiedostot"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -11054,11 +11045,13 @@ msgid "Unconnected wire to bus entry"
 msgstr "Kytkemätön johto väyläliitäntään"
 
 #: eeschema/connection_graph.cpp:4221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "Hierarkisella nimiöllä %s ei ole vastaavaa lehtinastaa emolehdellä"
+msgstr ""
+"Hierarkisella nimiöllä \" %s\" Pääsivua ei voi yhdistää olemattomaan "
+"yläsivuun"
 
 #: eeschema/connection_graph.cpp:4286
 #, c-format
@@ -11669,9 +11662,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Kriteereitä vastaavia symboleja ei löytynyt ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbolia ei löydy ***"
+msgstr "*** symbolikirjaston tunnus ei kelvollinen ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -11775,9 +11767,8 @@ msgstr "Päivitä/nollaa kenttien sijainnit"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Päivitysasetukset"
+msgstr "Tarkista kaikki päivitysvaihtoehdot"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -11788,14 +11779,12 @@ msgid "Update keywords and footprint filters"
 msgstr "Päivitä avainsanat ja jalanjälkisuodattimet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "Päivitä/Nollaa kentän näkyvyydet"
+msgstr "Päivitä/nollaa nastan nimen/numeron näkyvyys"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
-#, fuzzy
 msgid "Reset alternate pin to default"
-msgstr "Palauta ohjatun toiminnon parametrit oletusasetuksiin"
+msgstr "Palauta vaihtoehtoinen nasta oletusasetuksiin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
 msgid "Update/reset symbol attributes"
@@ -11807,9 +11796,8 @@ msgstr "Nollaa mukautetut tehosymbolit"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Päivitysasetukset"
+msgstr "Poista kaikkien päivitysasetusten valinta"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
