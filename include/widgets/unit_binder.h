@@ -131,7 +131,15 @@ public:
      */
     virtual long long int GetValue() const;
 
-    int GetIntValue() const { return (int) GetValue(); }
+    int GetIntValue() const
+    {
+        const long long int value = GetValue();
+        const long long int clamped =
+                std::clamp<long long>( value, static_cast<long long>( std::numeric_limits<int>::lowest() ),
+                                       static_cast<long long>( std::numeric_limits<int>::max() ) );
+
+        return static_cast<int>( clamped );
+    }
 
     /**
      * Return the current value in Internal Units.

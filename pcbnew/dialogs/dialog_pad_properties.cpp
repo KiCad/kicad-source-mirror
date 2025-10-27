@@ -228,6 +228,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_pasteMarginRatio.SetNegativeZero();
 
     m_padToDieDelay.SetUnits( EDA_UNITS::PS );
+    m_padToDieDelay.SetDataType( EDA_DATA_TYPE::TIME );
 
     initValues();
 
