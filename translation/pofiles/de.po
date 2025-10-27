@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-27 00:02+0000\n"
+"PO-Revision-Date: 2025-10-28 02:06+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -32564,9 +32564,10 @@ msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
 msgstr "<br/>%d %s X, Y: %s; gerundet X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
+#, fuzzy
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
-"Gewählte Optionen führen zu Fehlern! Ändern Sie die Optionen und versuchen "
+"Gewählte Optionen führten zu Fehlern! Ändern Sie die Optionen und versuchen "
 "Sie es erneut."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:517
@@ -35387,7 +35388,7 @@ msgstr "Keine Abstandsfläche erforderlich"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
 msgstr ""
-"Es werden keine DRC-Fehler bezüglich einer fehlender "
+"Es werden keine DRC-Fehler bezüglich einer fehlenden "
 "Abstandsflächendefinition erstellt"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:229
