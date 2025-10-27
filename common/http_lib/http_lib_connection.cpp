@@ -323,7 +323,7 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
             part.id = item.at( "id" );
 
             if( item.contains( "description" ) )
-                part.desc = response.at( "description" );
+                part.desc = item.at( "description" );
 
             // API might not want to return an optional name.
             if( item.contains( "name" ) )
