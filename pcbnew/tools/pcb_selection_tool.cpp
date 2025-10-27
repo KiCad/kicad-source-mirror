@@ -2013,10 +2013,13 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
         if( shape->HasFlag( SKIP_STRUCT ) )
             continue;
 
-        select( shape );
         shape->SetFlags( SKIP_STRUCT );
         toCleanup.insert( shape );
 
+        if( !itemPassesFilter( shape, true ) )
+            continue;
+
+        select( shape );
         guide.SetLayerVisibleBits( shape->GetLayerSet() );
 
         searchPoint( shape->GetStart() );
