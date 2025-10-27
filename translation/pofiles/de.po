@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 11:23+0000\n"
-"Last-Translator: Sven <sven.wanzenried@gmail.com>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -23977,7 +23977,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:286
 #, fuzzy
 msgid "unannotated footprint"
-msgstr "Entsperrte Footprints"
+msgstr "Nicht annotierte Footprints"
 
 #: eeschema/tools/backannotate.cpp:179
 #, c-format
@@ -24762,12 +24762,12 @@ msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
 #: eeschema/tools/sch_actions.cpp:874
 #, fuzzy
 msgid "Find in Net Navigator"
-msgstr "Netznavigator"
+msgstr "Im Netznavigator finden"
 
 #: eeschema/tools/sch_actions.cpp:875
 #, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Öffnet den ausgewählten Footprint im Footprint Editor"
+msgstr "Lokalisiert das selektierte Netz im Netznavigator"
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Cycle Body Style"
@@ -25224,7 +25224,7 @@ msgstr ""
 #: eeschema/tools/sch_actions.cpp:1327 pcbnew/tools/pcb_actions.cpp:1490
 #, fuzzy
 msgid "Switch to next angle snapping mode"
-msgstr "Zu nächstem Linienmodus springen"
+msgstr "Zu nächstem Linienfangmodus wechseln"
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Annotate Automatically"
@@ -25978,7 +25978,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:1077
 #, fuzzy
 msgid "No connected net selected."
-msgstr "Keine Netze ausgewählt."
+msgstr "Keine verbundenen Netze ausgewählt."
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1119
 msgid ""
@@ -26377,23 +26377,23 @@ msgstr "Seitenname ändern"
 #: eeschema/widgets/hierarchy_pane.cpp:601
 #, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Schaltplanpins löschen"
+msgstr "Top-Level Schaltplanblatt löschen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
 #, fuzzy
 msgid "Remove this top-level sheet from the project"
-msgstr "Entfernt das Signal aus dem Diagramm"
+msgstr "Entfernt dieses Top-Level Schaltplanblatt aus dem Projekt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
 #, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Schaltplan verlassen"
+msgstr "Neues Top-Level Schaltplanblatt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Ein neues Verzeichnis für das Projekt erstellen"
+msgstr "Ein neues Top-Level Schaltplanblatt erstellen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 #, fuzzy
@@ -26429,7 +26429,7 @@ msgstr "Das letzte Top-Level Schaltplanblatt kann nicht gelöscht werden."
 #: eeschema/widgets/hierarchy_pane.cpp:611
 #, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Ausgewähltes Netz löschen"
+msgstr "Top-Level Schaltplanblatt löschen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:627
 #, c-format
@@ -28684,12 +28684,12 @@ msgstr "A4 Papiergröße erzwingen."
 #: kicad/cli/command_pcb_export_stats.cpp:36
 #, fuzzy
 msgid "Generate a board statistics report"
-msgstr "Anzeige der Statistik zur Platine"
+msgstr "Statistikbericht zur Platine erstellen"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
 #, fuzzy
 msgid "Report units; valid options: in, mm"
-msgstr "Bericht-Einheiten; gültige Optionen: in, mm, mils"
+msgstr "Einheiten in Berichten; gültige Optionen: in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
 #, fuzzy
@@ -29158,13 +29158,13 @@ msgstr "Kommando-ausführen-Auftragseinstellungen exportieren"
 #: kicad/dialogs/dialog_template_selector.cpp:230
 #, fuzzy
 msgid "Edit Template"
-msgstr "Vorlage"
+msgstr "Vorlage bearbeiten"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
 #, fuzzy
 msgid "Duplicate Template"
-msgstr "Parameter duplizieren"
+msgstr "Vorlage duplizieren"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
 msgid "Could not open template directory."
@@ -29173,7 +29173,7 @@ msgstr "Konnte Vorlagenverzeichnis nicht öffnen."
 #: kicad/dialogs/dialog_template_selector.cpp:271
 #, fuzzy
 msgid "No project file found in template directory."
-msgstr "Es wurden keine Projektdateien in dem Repository gefunden."
+msgstr "Es wurde keine Projektdatei im Vorlagenverzeichnis gefunden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
 #, fuzzy
@@ -29188,7 +29188,7 @@ msgstr "_Kopie"
 #: kicad/dialogs/dialog_template_selector.cpp:310
 #, fuzzy
 msgid "Template name cannot be empty."
-msgstr "Der Netzname darf nicht leer sein."
+msgstr "Vorlage darf nicht leer sein."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
 msgid "Could not find user templates directory."
@@ -29712,13 +29712,13 @@ msgstr ""
 #: kicad/dialogs/template_default_html.h:178
 #, fuzzy
 msgid "No Templates Found"
-msgstr "Nicht gefunden"
+msgstr "Keine Vorlagen gefunden"
 
 #: kicad/dialogs/template_default_html.h:180
 #, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
+msgstr "Das ausgewählte Verzeichnis enthält keine Projektvorlagen."
 
 #: kicad/dialogs/template_default_html.h:183
 #, fuzzy
@@ -29727,7 +29727,7 @@ msgstr "Was ist zu tun:"
 
 #: kicad/dialogs/template_default_html.h:185
 msgid "Browse to a different templates directory using the folder icon"
-msgstr "Mithilfe des Ordnersymbols anderes Vorlagenverzeichnis wählen"
+msgstr "Mithilfe des Ordnersymbols ein anderes Vorlagenverzeichnis wählen."
 
 #: kicad/dialogs/template_default_html.h:186
 #, fuzzy
@@ -29746,7 +29746,7 @@ msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
 "Verwenden Sie die Standard-Systemvorlagen, indem Sie die Registerkarte "
-"„Systemvorlagen“ wählen"
+"„Systemvorlagen“ wählen."
 
 #: kicad/dialogs/template_default_html.h:192
 #, fuzzy
@@ -35317,7 +35317,7 @@ msgstr "Längenabstimmungsmuster"
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
 #, fuzzy
 msgid "Tuning Profiles"
-msgstr "Abstimmungsmodus"
+msgstr "Abstimmungsprofile"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:215
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -38405,7 +38405,7 @@ msgstr "Footprint Protokolldatei"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 #, fuzzy
 msgid "Plain text"
-msgstr "Text suchen"
+msgstr "Einfacher Text"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -48269,7 +48269,7 @@ msgstr "(\"Kühlkörperpads\" haben normalerweise ein Kupferpad)"
 #: pcbnew/pad.cpp:2311
 #, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr "(Halbloch-Eigenschaft kann nur für Durchsteckpads gesetzt werden.)"
+msgstr "(\"Halblochpads\" sind normalerweise Durchkontaktierungen (PTH))"
 
 #: pcbnew/pad.cpp:2314
 msgid "('BGA' property is for SMD pads)"
@@ -48278,12 +48278,14 @@ msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 #: pcbnew/pad.cpp:2317
 #, fuzzy
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(Mechanisch-Eigenschaft ist für Durchsteckpads)"
+msgstr "(\"Mechanische Pads\" sind normalerweise NPTH)"
 
 #: pcbnew/pad.cpp:2322
 #, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
-msgstr "(Einpress-Eigenschaft ist für Durchsteckpads mit runden Löchern)"
+msgstr ""
+"(\"Einpresspads\" sind normalerweise Durchkontaktierungen (PTH) mit runden "
+"Löchern)"
 
 #: pcbnew/pad.cpp:2339
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -50948,7 +50950,7 @@ msgstr "Fehler beim Schreiben der Datei \"%s\".\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
 #, fuzzy, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Rückseitige Platzierungsdaten wurden nach \"%s\" geschrieben.\n"
+msgstr "Platinenstatistik nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1834 pcbnew/pcbnew_jobs_handler.cpp:1908
 #, c-format
