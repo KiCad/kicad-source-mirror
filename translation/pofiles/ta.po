@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-27 00:03+0000\n"
+"PO-Revision-Date: 2025-10-28 02:06+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
 "Language: ta\n"
@@ -12699,7 +12699,7 @@ msgstr "பட பண்புகள்"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:240
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr "நிலை"
+msgstr "நிலைமை"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16622,11 +16622,11 @@ msgstr "மேலே/கீழ்"
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
 msgid "Zoom horizontally"
-msgstr "கிடைமட்டமாக பெரிதாக்கவும்"
+msgstr "கிடைமட்டமாகப் பெரிதாக்கு"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
 msgid "Zoom vertically"
-msgstr "செங்குத்தாக பெரிதாக்கவும்"
+msgstr "செங்குத்தாகப் பெரிதாக்கு"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
 msgid "Vertical Touchpad or Scroll Wheel Movement"
@@ -17486,7 +17486,7 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:296 eeschema/files-io.cpp:877
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
-msgstr "திட்ட கோப்புகள்"
+msgstr "திட்டவட்டமான கோப்புகள்"
 
 #: eeschema/fields_grid_table.cpp:327 eeschema/fields_grid_table.cpp:803
 #: eeschema/fields_grid_table.cpp:971
@@ -18318,7 +18318,7 @@ msgstr "இணைக்கப்படாதது"
 
 #: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2092
 msgid "Inverted"
-msgstr "தலைகீழ்"
+msgstr "தலைகீழாக்கு"
 
 #: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2093
 msgid "Clock"
@@ -19705,7 +19705,7 @@ msgstr "ERC மார்க்கர்"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:250
 msgid "No Connect"
-msgstr "இணைப்பு இல்லை"
+msgstr "இணை இல்லை"
 
 #: eeschema/sch_pin.cpp:1585
 msgid "Pos X"
@@ -21473,7 +21473,7 @@ msgstr "கர்சர் 2"
 #: eeschema/sim/simulator_frame_ui.cpp:1240
 #: eeschema/sim/simulator_frame_ui.cpp:2795
 msgid "Diff"
-msgstr "வேறுபாடு"
+msgstr "வேறு"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1505
 #: eeschema/sim/simulator_frame_ui.cpp:1527
@@ -23484,7 +23484,7 @@ msgstr "விலக்கப்பட்ட மின் விதி சோத
 
 #: eeschema/tools/sch_actions.cpp:1201
 msgid "Mark items excluded from simulation"
-msgstr "உருவகப்படுத்துதலில் இருந்து விலக்கப்பட்ட உருப்படிகளைக் குறிக்கவும்"
+msgstr "உருவகப்படுத்துதலிலிருந்து விலக்கப்பட்ட உருப்படிகளைக் குறிக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:1202
 msgid "Draw 'X's over items which have been excluded from simulation"
@@ -24271,7 +24271,7 @@ msgstr "பக்கம் '%s' காணப்படவில்லை."
 #: eeschema/tools/sch_point_editor.cpp:1140
 #: pcbnew/tools/pcb_point_editor.cpp:2395
 msgid "Move Point"
-msgstr "நகர்த்தவும்"
+msgstr "புள்ளியை நகர்த்து"
 
 #: eeschema/tools/sch_point_editor.cpp:1347
 msgid "Add Corner"
@@ -24326,7 +24326,7 @@ msgstr "பொதுவான அமைப்புகளில் காணா�
 #: eeschema/tools/symbol_editor_control.cpp:435
 #: pcbnew/tools/footprint_editor_control.cpp:675
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "கிகேடில் உரை எடிட்டர் தேர்ந்தெடுக்கப்படவில்லை. ஒன்றைத் தேர்வுசெய்க."
+msgstr "கிகேடில் உரை திருத்தியில் தேர்ந்தெடுக்கப்படவில்லை. ஒன்றைத் தேர்வுசெய்க."
 
 #: eeschema/tools/symbol_editor_control.cpp:505
 #: eeschema/widgets/panel_symbol_chooser.cpp:705
@@ -24805,7 +24805,7 @@ msgstr "அனைத்தையும் தெரிவுசெய்"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:194
 msgid "Deselect all"
-msgstr "அனைத்தையும் தேர்வு செய்யுங்கள்"
+msgstr "அனைத்தையும் தேர்வு செய்"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:87
 #, c-format
@@ -25392,7 +25392,7 @@ msgstr ""
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "கெர்பர் வேலை கோப்பு"
+msgstr "கெர்பர் வேலை கோப்பு திற"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
@@ -27308,7 +27308,7 @@ msgstr "ஏற்றுமதி VRML"
 
 #: kicad/kicad_cli.cpp:125
 msgid "Export PLY"
-msgstr "ஏற்றுமதி"
+msgstr "ஏற்றுமதி பிஎல்ஒய்"
 
 #: kicad/kicad_cli.cpp:126
 msgid "Export STL"
@@ -28004,7 +28004,7 @@ msgstr "அடைவு பெயர்:"
 
 #: kicad/project_tree_pane.cpp:304
 msgid "Create New Directory"
-msgstr "புதிய கோப்பகத்தை உருவாக்கவும்"
+msgstr "புதிய கோப்பகத்தை உருவாக்கு"
 
 #: kicad/project_tree_pane.cpp:760
 #, c-format
@@ -29650,7 +29650,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
 msgid "Max altitude:"
-msgstr "அதிகபட்ச உயரம்:"
+msgstr "அதிக உயரம்:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:223
 msgid ""
@@ -31399,7 +31399,7 @@ msgstr "நிரப்பிடங்கள்"
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "துளைகள்"
+msgstr "வழிகள்"
 
 #: pcbnew/board.cpp:2063 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
@@ -31868,7 +31868,7 @@ msgstr "வடிவமைப்பாளர்"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Quantity"
-msgstr "அளவு"
+msgstr "எண்ணிக்கை"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 msgid "Designation"
@@ -32034,42 +32034,34 @@ msgid "Excluding: %s from reannotation<br/>"
 msgstr "தவிர: மறுபயன்பாட்டிலிருந்து %s <br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:455
-#, fuzzy
 msgid ""
 "<br/>Change Array\n"
 "***********************<br/>"
 msgstr ""
-"\n"
-"    வரிசையை மாற்றவும் \n"
-"*******************************************************\n"
+"<br/> வரிசையை மாற்றவும் \n"
+"******************************* <br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " புறக்கணிக்கப்படும்"
+msgstr "(புறக்கணிக்கப்படும்)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
-#, fuzzy
 msgid "<br/>No footprints"
-msgstr "தடம் இல்லை"
+msgstr "<br/> தடம் இல்லை"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:482
 msgid "<br/>*********** Sort on Footprint Coordinates ***********"
 msgstr "<br/>*********** கால்தட ஆயங்களில் வரிசைப்படுத்தவும் ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
-#, fuzzy
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
 msgstr ""
-"\n"
-"********** வரிசை %s இல் ***********"
+"<br/> ************* குறிப்பு ஒருங்கிணைப்புகளில் வரிசைப்படுத்துங்கள் *********************"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
-msgstr ""
-"\n"
-"%d %s uuid: [ %s], x, y: %s, வட்டமான x, y, %s"
+msgstr "<br/> %d %s ஃச், ஒய்: %s; வட்டமான ஃச், ஒய்: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 msgid "Selected options resulted in errors! Change them and try again."
@@ -32108,20 +32100,12 @@ msgid "Aborted: too many errors"
 msgstr "கைவிடப்பட்டது: பல பிழைகள்"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:749
-#, fuzzy
 msgid "<br/><br/>Front Footprints"
-msgstr ""
-"\n"
-"\n"
-"முன் தடம்"
+msgstr "<br/><br/> முன் தடம்"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:750
-#, fuzzy
 msgid "<br/><br/>Back Footprints"
-msgstr ""
-"\n"
-"\n"
-"பின் தடம்"
+msgstr "<br/><br/> பின் தடம்"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:814
 msgid "Footprint not found in changelist"
@@ -32338,7 +32322,7 @@ msgstr "உரை மற்றும் கிராபிக்ச்"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:127
 msgid "Defaults"
-msgstr "இயல்புநிலை"
+msgstr "இயல்புநிலைகள்"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:142
 msgid "Design Rules"
@@ -32936,7 +32920,7 @@ msgstr "வெப்ப நிவாரணங்கள்"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "பி.டி.எச்"
+msgstr "பிடிஎச் க்கான நிவாரணங்கள்"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
@@ -33358,7 +33342,7 @@ msgstr "தொடக்க பேட் எண்:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:417
 msgid "Pad Numbering:"
-msgstr "திண்டு எண்:"
+msgstr "திண்டு எண்ணிடுதல்:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:462
 msgid "Circular Array"
@@ -33832,7 +33816,7 @@ msgstr "திண்டு கணக்கீட்டு அமைப்பு�
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Change Footprints"
-msgstr "தடம் மாற்றவும்"
+msgstr "தடங்கள் மாற்று"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change all footprints on board"
@@ -33936,9 +33920,8 @@ msgid "New footprint library id:"
 msgstr "புதிய தடம் நூலக ஐடி:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
-msgstr "நூலக தடம் இல்லாத உரை உருப்படிகளை அகற்று"
+msgstr "நூலக தடம் இல்லையென்றால் உரை உருப்படிகளை அகற்று"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
@@ -33995,9 +33978,8 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "'%s' கோப்பை எழுத போதுமான அனுமதிகள் இல்லை."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "ஐபிசி -2581 கோப்பை உருவாக்கவும்"
+msgstr "ஐபிசி -2581 கோப்பை உருவாக்கு"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
@@ -35394,7 +35376,7 @@ msgstr "முன்னணி பூச்சியங்களை அடக்�
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Suppress trailing zeros"
-msgstr "பின்தங்கிய பூச்சியங்களை அடக்கவும்"
+msgstr "பின்தங்கிய சுழியங்களை அடக்கவும்"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Keep zeros"
@@ -35559,7 +35541,7 @@ msgstr "கண்ணீர் துளிகளைத் திருத்த�
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
 msgid "PTH pads"
-msgstr "பி.டி.எச்"
+msgstr "பிடிஎச் பட்டைகள்"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
@@ -35704,7 +35686,7 @@ msgstr "%("
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:106
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:157
 msgid "d"
-msgstr "டி"
+msgstr "ஈ"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:251
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:298
@@ -36111,7 +36093,7 @@ msgstr "பல வலைகளைக் குறைக்கும் தடங
 #: pcbnew/dialogs/dialog_import_settings.cpp:47
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
 msgid "Deselect All"
-msgstr "அனைத்தையும் தேர்வு செய்யுங்கள்"
+msgstr "அனைத்தையும் தேர்வு நீக்கு"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
@@ -36378,7 +36360,7 @@ msgstr "பட்டம்"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zone Properties"
-msgstr "செப்பு மண்டல பண்புகள்"
+msgstr "செப்பு அல்லாத மண்டல பண்புகள்"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -37741,9 +37723,8 @@ msgid "x"
 msgstr "ஃச்"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "தோற்றம்"
+msgstr "முன்னமைக்கப்பட்ட தோற்றம்:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37763,7 +37744,7 @@ msgstr "செங்கோண, செங்குத்து"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:155
 msgid "Projection"
-msgstr "திட்டம்"
+msgstr "விழுதல்"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
 msgid "Positioning"
@@ -38221,7 +38202,7 @@ msgstr "விட்டம் வழியாக:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via hole:"
-msgstr "துளை வழியாக:"
+msgstr "ஓட்டை வழியாக:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:346
 msgid "Via type:"
@@ -42580,7 +42561,7 @@ msgstr "நிரப்பிடங்கள்"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2119
 msgid "vias"
-msgstr "துளைகள்"
+msgstr "வழிகள்"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2363
 #: pcbnew/exporters/step/step_pcb_model.cpp:2395
@@ -50432,7 +50413,6 @@ msgid "Resolved Edge Clearance"
 msgstr "தீர்க்கப்பட்ட விளிம்பு இடம்"
 
 #: pcbnew/tools/pcb_control.cpp:1873
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "தீர்க்கப்பட்ட விளிம்பு இடைவெளி"
 
