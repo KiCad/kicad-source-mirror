@@ -1852,16 +1852,17 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
     GENERAL_COLLECTOR        collector;
     GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
 
-    auto searchPoint = [&]( const VECTOR2I& aWhere )
-    {
-        collector.Collect( board(), { PCB_SHAPE_T }, aWhere, guide );
+    auto searchPoint =
+            [&]( const VECTOR2I& aWhere )
+            {
+                collector.Collect( board(), { PCB_SHAPE_T }, aWhere, guide );
 
-        for( EDA_ITEM* item : collector )
-        {
-            if( isExpandableGraphicShape( item ) )
-                toSearch.push( static_cast<PCB_SHAPE*>( item ) );
-        }
-    };
+                for( EDA_ITEM* item : collector )
+                {
+                    if( isExpandableGraphicShape( item ) )
+                        toSearch.push( static_cast<PCB_SHAPE*>( item ) );
+                }
+            };
 
     while( !toSearch.empty() )
     {
@@ -1871,10 +1872,13 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
         if( shape->HasFlag( SKIP_STRUCT ) )
             continue;
 
-        select( shape );
         shape->SetFlags( SKIP_STRUCT );
         toCleanup.insert( shape );
 
+        if( !itemPassesFilter( shape ), true )
+            continue;
+
+        select( shape );
         guide.SetLayerVisibleBits( shape->GetLayerSet() );
 
         searchPoint( shape->GetStart() );
