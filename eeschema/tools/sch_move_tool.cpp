@@ -523,11 +523,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     std::unique_ptr<SCH_DRAG_NET_COLLISION_MONITOR> netCollisionMonitor;
 
-    auto refreshTraits = [&]()
-    {
-        refreshSelectionTraits( selection, selectionHasSheetPins, selectionHasGraphicItems,
-                                selectionHasNonGraphicItems, selectionIsGraphicsOnly );
-    };
+    auto refreshTraits =
+            [&]()
+            {
+                refreshSelectionTraits( selection, selectionHasSheetPins, selectionHasGraphicItems,
+                                        selectionHasNonGraphicItems, selectionIsGraphicsOnly );
+            };
 
     refreshTraits();
 
@@ -657,8 +658,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             }
             else
             {
-                m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
-                                            snapLayer, selection );
+                m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer, selection );
             }
 
             if( axisLock == AXIS_LOCK::HORIZONTAL )
@@ -749,7 +749,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                 evt->SetPassEvent( false );
                 restore_state = true;
-                m_moveInProgress=false;
             }
 
             clearNewDragLines();
@@ -838,6 +837,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         finalizeMoveOperation( selection, aCommit, aIsSlice, unselect, internalPoints );
     }
 
+    m_dragAdditions.clear();
+    m_lineConnectionCache.clear();
+    m_moveInProgress = false;
+
+    m_hiddenJunctions.clear();
     m_view->ClearPreview();
     m_frame->PopTool( aEvent );
 
@@ -1603,11 +1607,6 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
         m_toolMgr->RunAction( ACTIONS::selectionClear );
     else
         m_selectionTool->RebuildSelection();  // Schematic cleanup might have merged lines, etc.
-
-    m_dragAdditions.clear();
-    m_lineConnectionCache.clear();
-    m_moveInProgress = false;
-    m_hiddenJunctions.clear();
 }
 
 
