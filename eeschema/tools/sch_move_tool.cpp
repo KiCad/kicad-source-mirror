@@ -749,6 +749,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                 evt->SetPassEvent( false );
                 restore_state = true;
+                m_moveInProgress=false;
             }
 
             clearNewDragLines();
