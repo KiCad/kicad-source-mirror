@@ -819,7 +819,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClear
     int64_t  dist_sq = std::numeric_limits<int64_t>::max();
     aA.NearestPoints( aB, ptA, ptB, dist_sq );
 
-    if( dist_sq < SEG::Square( aClearance ) )
+    if( dist_sq == 0 || dist_sq < SEG::Square( aClearance ) )
     {
         if( aLocation )
             *aLocation = ( ptA + ptB ) / 2;

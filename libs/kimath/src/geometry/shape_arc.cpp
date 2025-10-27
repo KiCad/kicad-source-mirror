@@ -501,7 +501,11 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECT
     // Adjust point A by half the arc width towards point B
     VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
     aPtA += dir;
-    aDistSq = aPtA.SquaredDistance( aPtB );
+
+    if( aDistSq < SEG::Square( GetWidth() / 2 ) )
+        aDistSq = 0;
+    else
+        aDistSq = aPtA.SquaredDistance( aPtB );
 
     return true;
 }
@@ -576,7 +580,11 @@ bool SHAPE_ARC::NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB,
     // Adjust point A by half the arc width towards point B
     VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
     aPtA += dir;
-    aDistSq = aPtA.SquaredDistance( aPtB );
+
+    if( aDistSq < SEG::Square( GetWidth() / 2 ) )
+        aDistSq = 0;
+    else
+        aDistSq = aPtA.SquaredDistance( aPtB );
 
     return true;
 }
@@ -605,19 +613,26 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
                 // Adjust point A by half the arc-width towards point B
                 VECTOR2I dir = ( aPtB - aPtA ).Resize( GetWidth() / 2 );
                 aPtA += dir;
+
                 // Adjust point B by half the other arc-width towards point A
                 dir = ( aPtA - aPtB ).Resize( aArc.GetWidth() / 2 );
                 aPtB += dir;
-                aDistSq = aPtA.SquaredDistance( aPtB );
-            };
 
+                if( aDistSq < SEG::Square( GetWidth() / 2 + aArc.GetWidth() / 2 ) )
+                    aDistSq = 0;
+                else
+                    aDistSq = aPtA.SquaredDistance( aPtB );
+            };
 
     aDistSq = std::numeric_limits<int64_t>::max();
 
     VECTOR2I center1 = GetCenter();
     VECTOR2I center2 = aArc.GetCenter();
 
+    // Centers aren't exact, so center_dist_sq won't be exact either
     int64_t center_dist_sq = center1.SquaredDistance( center2 );
+    int64_t center_epsilon = KiROUND( std::min( m_radius, aArc.GetRadius() ) / 1000 );
+    bool    colocated = center_dist_sq < center_epsilon * center_epsilon;
 
     // Start by checking endpoints
     std::vector<VECTOR2I> pts1 = { m_start, m_end };
@@ -650,7 +665,7 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
             aPtB = circle.NearestPoint( pt );
             aDistSq = aPtA.SquaredDistance( aPtB );
 
-            if( center_dist_sq == 0 || aDistSq == 0 )
+            if( colocated || aDistSq == 0 )
             {
                 if( aDistSq != 0 )
                     adjustForArcWidths();
@@ -669,7 +684,7 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
             aPtB = pt;
             aDistSq = aPtA.SquaredDistance( aPtB );
 
-            if( center_dist_sq == 0 || aDistSq == 0 )
+            if( colocated || aDistSq == 0 )
             {
                 if( aDistSq != 0 )
                     adjustForArcWidths();
@@ -680,7 +695,7 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
     }
 
     // The remaining checks are require the arcs to be on non-concentric circles
-    if( center_dist_sq == 0 )
+    if( colocated )
         return true;
 
     CIRCLE circle1( center1, GetRadius() );
