@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-27 11:23+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-27 23:13+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6029,9 +6029,8 @@ msgid "<b>The following global library tables need to be created:</b>"
 msgstr "<b>Folgende globale Bibliothekstabellen müssen erstellt werden:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Wie möchten Sie, dass KiCad diese erstellt?"
+msgstr "Wie sollen diese durch KiCad erstellt werden?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
@@ -6052,7 +6051,6 @@ msgstr ""
 "können, werden mit den Standardbibliotheken von KiCad erstellt."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
 msgstr "Ohne Bibliotheken beginnen"
 
@@ -6086,7 +6084,6 @@ msgid "Data Collection"
 msgstr "Datensammlung"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:38
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and other event data to the development "
 "team in order to help identify and fix bugs and improve performance.\n"
@@ -6110,9 +6107,8 @@ msgstr ""
 "Rahmen dieses Prozesses niemals weitergegeben."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
-#, fuzzy
 msgid "Enable anonymous data collection"
-msgstr "Aktiviert die anonyme Datenerfassung"
+msgstr "Anonyme Datenerfassung aktivieren"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -8428,17 +8424,14 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: Postscript exportieren"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Anzeige der Statistik zur Platine"
+msgstr "Platinenstatistik exportieren"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Auftragseinstellungen für Platinenstatistiken exportieren"
+msgstr "Platinenstatistik-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
 msgstr "PCB: Statistiken exportieren"
 
@@ -8809,9 +8802,8 @@ msgid "Net color highlight"
 msgstr "Netzhervorhebungsfarbe"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Kollisionen hervorheben"
+msgstr "Netzkollisionen während des Ziehend hervorheben"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -9091,7 +9083,6 @@ msgid "A reference to this library table already exists"
 msgstr "Eine Referenz zu dieser Bibliothekstabelle besteht bereits"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
 msgstr "KiCad Standard-Bibliotheken"
 
@@ -9101,7 +9092,7 @@ msgid "Library %s not found"
 msgstr "Bibliothek %s wurde nicht gefunden"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
 msgstr "Der Bibliothekstabellenpfad \"%s\" existiert nicht"
 
@@ -9112,7 +9103,7 @@ msgstr "Unerwarteter Fehler beim Lesen der Bibliothekstabelle %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
-#, c-format, fuzzy
+#, c-format
 msgid "Syntax error at line %zu, column %zu"
 msgstr "Syntax-Fehler in Zeile %zu, Spalte %zu"
 
@@ -9461,7 +9452,6 @@ msgid "Welcome to KiCad %s"
 msgstr "Willkommen zu KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
-#, fuzzy
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -9472,28 +9462,25 @@ msgstr ""
 "KiCad wird zum ersten Mal gestartet oder einige seiner Konfigurationsdateien "
 "fehlen.\n"
 "\n"
-"Nehmen wir uns einen Moment Zeit, um einige Grundeinstellungen zu "
-"konfigurieren.  Sie können diese Einstellungen jederzeit später ändern, "
-"indem Sie das Dialogfeld „Einstellungen“ öffnen."
+"Nehmen wir uns einen Moment Zeit, um einige Grundeinstellungen vor zu "
+"nehmen.  Sie können diese später jederzeit ändern, indem Sie das Dialogfeld "
+"\"Einstellungen\" öffnen."
 
 #: common/startwizard/startwizard.cpp:90
-#, fuzzy
 msgid "For help, please visit "
-msgstr "Für Hilfe besuchen Sie bitte "
+msgstr "Sollten Sie Hilfe benötigen, besuchen Sie gerne "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
 msgstr "KiCad-Setup"
 
 #: common/startwizard/startwizard.cpp:201
-#, fuzzy
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
-"Sind Sie sicher?  Wenn Sie das KiCad-Setup abbrechen, werden die "
-"Standardeinstellungen für Sie ausgewählt."
+"Sind Sie sicher?  Wenn Sie die KiCad-Einrichtung abbrechen, werden die "
+"Standardeinstellungen ausgewählt."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
 msgid "Symbol library table"
@@ -9504,9 +9491,8 @@ msgid "Footprint library table"
 msgstr "Footprintbibliothek-Tabelle"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Designblock-Bibliotheken"
+msgstr "Designblock-Bibliothekstabelle"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -10902,7 +10888,7 @@ msgstr "Bibliotheksbeschreibung"
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
@@ -17284,9 +17270,8 @@ msgid "(selection color can be edited in the \"Colors\" page)"
 msgstr "(Auswahlfarbe kann auf der Seite \"Farben\" bearbeitet werden)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:192
-#, fuzzy
 msgid "Net collision marker width:"
-msgstr "Voreinstellung für Linienbreite:"
+msgstr "Netzkollision-Markerbreite:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:200
 msgid "Highlight thickness:"
@@ -29730,14 +29715,12 @@ msgid "Browse to a different templates directory using the folder icon"
 msgstr "Mithilfe des Ordnersymbols ein anderes Vorlagenverzeichnis wählen."
 
 #: kicad/dialogs/template_default_html.h:186
-#, fuzzy
 msgid "Click the refresh icon to reload the current directory"
 msgstr ""
-"Auf das Symbol „Aktualisieren“ klicken, um das aktuelle Verzeichnis neu zu "
+"Auf \"Aktualisieren\"-Symbol klicken, um das aktuelle Verzeichnis neu zu "
 "laden."
 
 #: kicad/dialogs/template_default_html.h:187
-#, fuzzy
 msgid "Check that the directory path contains valid templates"
 msgstr "Überprüfen Sie, ob der Verzeichnispfad gültige Vorlagen enthält."
 
@@ -29745,8 +29728,8 @@ msgstr "Überprüfen Sie, ob der Verzeichnispfad gültige Vorlagen enthält."
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
-"Verwenden Sie die Standard-Systemvorlagen, indem Sie die Registerkarte "
-"„Systemvorlagen“ wählen."
+"Die Standard-Systemvorlagen verwenden, indem Sie die Registerkarte "
+"\"Systemvorlagen\" wählen."
 
 #: kicad/dialogs/template_default_html.h:192
 #, fuzzy
@@ -44336,10 +44319,10 @@ msgstr "Für die Berechung der Breite muss der Diff-Paar-Spalt größer als 0 se
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1195
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1297
-#, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
 msgstr ""
-"Für die Berechnung des Diff-Paar-Spaltes muss die Breite größer als 0 sein"
+"Zur Berechnung des Differenzialpaar-Abstands muss die Breite größer als 0 "
+"sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1202
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1304
