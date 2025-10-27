@@ -191,12 +191,13 @@ std::string EDA_UNIT_UTILS::FormatAngle( const EDA_ANGLE& aAngle )
 }
 
 
-std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue )
+std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const int aValue,
+                                                 const EDA_DATA_TYPE aDataType )
 {
     std::string buf;
     double engUnits = aValue;
 
-    engUnits /= aIuScale.IU_PER_MM;
+    engUnits /= GetScaleForInternalUnitType( aIuScale, aDataType );
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
@@ -229,6 +230,18 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
 {
     return FormatInternalUnits( aIuScale, aPoint.x ) + " "
            + FormatInternalUnits( aIuScale, aPoint.y );
+}
+
+
+double EDA_UNIT_UTILS::GetScaleForInternalUnitType( const EDA_IU_SCALE& aIuScale, const EDA_DATA_TYPE aDataType )
+{
+    switch( aDataType )
+    {
+    case EDA_DATA_TYPE::TIME: return aIuScale.IU_PER_PS;
+    case EDA_DATA_TYPE::LENGTH_DELAY: return aIuScale.IU_PER_PS_PER_MM;
+    case EDA_DATA_TYPE::UNITLESS: return 1.0;
+    default: return aIuScale.IU_PER_MM;
+    }
 }
 
 

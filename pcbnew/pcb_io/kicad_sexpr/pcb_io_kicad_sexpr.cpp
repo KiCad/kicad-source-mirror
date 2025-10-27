@@ -435,9 +435,9 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
 }
 
 
-std::string formatInternalUnits( int aValue )
+std::string formatInternalUnits( const int aValue, const EDA_DATA_TYPE aDataType = EDA_DATA_TYPE::DISTANCE )
 {
-    return EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aValue );
+    return EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aValue, aDataType );
 }
 
 
@@ -1756,7 +1756,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
     if( aPad->GetPadToDieDelay() != 0 )
     {
-        m_out->Print( "(die_delay %s)", formatInternalUnits( aPad->GetPadToDieDelay() ).c_str() );
+        m_out->Print( "(die_delay %s)", formatInternalUnits( aPad->GetPadToDieDelay(), EDA_DATA_TYPE::TIME ).c_str() );
     }
 
     if( aPad->GetLocalSolderMaskMargin().has_value() )

@@ -195,7 +195,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20250907  // uuids for tables
 //#define SEXPR_BOARD_FILE_VERSION    20250909  // footprint unit metadata (units/pins)
 //#define SEXPR_BOARD_FILE_VERSION    20250914  // Add support for PCB_BARCODE objects
-#define SEXPR_BOARD_FILE_VERSION      20250926  // Split via types into blind/buried/through
+//#define SEXPR_BOARD_FILE_VERSION    20250926  // Split via types into blind/buried/through
+#define SEXPR_BOARD_FILE_VERSION      20251027  // Store pad-to-die delays with correct scaling
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

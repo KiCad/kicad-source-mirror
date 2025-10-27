@@ -30,6 +30,7 @@
 #ifndef _PCBNEW_PARSER_H_
 #define _PCBNEW_PARSER_H_
 
+#include <eda_units.h>
 #include <core/wx_stl_compat.h>
 #include <hashtables.h>
 #include <lib_id.h>
@@ -353,11 +354,11 @@ private:
 
     int parseBoardUnits();
 
-    int parseBoardUnits( const char* aExpected );
+    int parseBoardUnits( const char* aExpected, EDA_DATA_TYPE aDataType );
 
-    inline int parseBoardUnits( PCB_KEYS_T::T aToken )
+    inline int parseBoardUnits( const PCB_KEYS_T::T aToken, const EDA_DATA_TYPE aDataType = EDA_DATA_TYPE::DISTANCE )
     {
-        return parseBoardUnits( GetTokenText( aToken ) );
+        return parseBoardUnits( GetTokenText( aToken ), aDataType );
     }
 
     inline int parseInt()

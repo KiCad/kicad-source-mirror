@@ -211,9 +211,11 @@ int PCB_IO_KICAD_SEXPR_PARSER::parseBoardUnits()
 }
 
 
-int PCB_IO_KICAD_SEXPR_PARSER::parseBoardUnits( const char* aExpected )
+int PCB_IO_KICAD_SEXPR_PARSER::parseBoardUnits( const char*         aExpected,
+                                                const EDA_DATA_TYPE aDataType = EDA_DATA_TYPE::DISTANCE )
 {
-    auto retval = parseDouble( aExpected ) * pcbIUScale.IU_PER_MM;
+    const double scale = EDA_UNIT_UTILS::GetScaleForInternalUnitType( pcbIUScale, aDataType );
+    auto         retval = parseDouble( aExpected ) * scale;
 
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
@@ -5671,9 +5673,15 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_die_delay:
-            pad->SetPadToDieDelay( parseBoardUnits( T_die_delay ) );
+        {
+            if( m_requiredVersion <= 20250926 )
+                pad->SetPadToDieDelay( parseBoardUnits( T_die_delay ) );
+            else
+                pad->SetPadToDieDelay( parseBoardUnits( T_die_delay, EDA_DATA_TYPE::TIME ) );
+
             NeedRIGHT();
             break;
+        }
 
         case T_solder_mask_margin:
             pad->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
