@@ -505,9 +505,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const TOOL_EVENT& aEvent )
 {
-    if( m_moveInProgress )
-        return;
-
     if( m_mode != BREAK && m_mode != SLICE )
         return;
 
@@ -529,7 +526,16 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() == SCH_LINE_T )
+        {
+            // This function gets called every time segments are broken, which can
+            // also be for subsequent breaks in a loop without leaving the current move tool.
+            // Skip already placed segments (segment keeps IS_BROKEN but will have IS_NEW cleared below)
+            // so that only the actively placed tail segment gets split again.
+            if( item->HasFlag( IS_BROKEN ) && !item->HasFlag( IS_NEW ) )
+                continue;
+
             lines.push_back( static_cast<SCH_LINE*>( item ) );
+        }
     }
 
     if( lines.empty() )
@@ -542,12 +548,7 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
     bool useCursorForSingleLine = false;
 
     if( lines.size() == 1 )
-    {
-        SCH_LINE* line = lines.front();
-
-        if( line->HitTest( cursorPos ) && !line->IsEndPoint( cursorPos ) )
-            useCursorForSingleLine = true;
-    }
+        useCursorForSingleLine = true;
 
     m_selectionTool->ClearSelection();
 
@@ -561,9 +562,14 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
         if( !newLine )
             continue;
 
-        newLine->ClearFlags( ENDPOINT | STARTPOINT );
-        line->ClearFlags( STARTPOINT );
+        // If this is a second+ round break, we need to get rid of the IS_NEW flag since
+        // the new segment is now an existing segment we are breaking from, this will be checked for
+        // in the line selection gathering above
+        line->ClearFlags( STARTPOINT | IS_NEW );
         line->SetFlags( ENDPOINT );
+        m_selectionTool->AddItemToSel( line );
+
+        newLine->ClearFlags( ENDPOINT | STARTPOINT );
 
         if( m_mode == BREAK )
         {
@@ -580,6 +586,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  currentModeIsDragLike = ( m_mode != MOVE );
     bool                  wasDragging = m_moveInProgress && currentModeIsDragLike;
+    bool                  didAtLeastOneBreak = false;
 
     m_anchorPos.reset();
 
@@ -815,7 +822,14 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                  || evt->IsAction( &ACTIONS::undo ) )
         {
             if( evt->IsCancelInteractive() )
+            {
                 m_frame->GetInfoBar()->Dismiss();
+
+                // When breaking, the user can cancel after multiple breaks to keep all but the last
+                // break, so exit normally if we have done at least one break
+                if( didAtLeastOneBreak && m_mode == BREAK )
+                    break;
+            }
 
             if( m_moveInProgress )
             {
@@ -864,11 +878,21 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         //------------------------------------------------------------------------
         // Handle drop
         //
-        else if( evt->IsMouseUp( BUT_LEFT )
-                || evt->IsClick( BUT_LEFT )
-                || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            break; // Finish
+            if( m_mode != BREAK )
+                break; // Finish
+            else
+            {
+                didAtLeastOneBreak = true;
+                preprocessBreakOrSliceSelection( aCommit, *evt );
+                selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems, true );
+            }
+        }
+        else if( evt->IsDblClick( BUT_LEFT ) )
+        {
+            // Double click always finishes, even breaks
+            break;
         }
         // Don't call SetPassEvent() for events we've handled - let them be consumed
         else if( evt->IsAction( &SCH_ACTIONS::rotateCW )
