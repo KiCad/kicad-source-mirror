@@ -89,12 +89,19 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
 
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
+        wxString report;
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
 
-        BOOST_ERROR( wxString::Format( "DRC copper graphics test failed board <%s>", brd_name ) );
+        BOOST_ERROR( wxString::Format( "DRC copper graphics: %s\n"
+                                       "%d violations found (expected %d)\n"
+                                       "%s",
+                                       brd_name,
+                                       (int) violations.size(),
+                                       expected_err_cnt,
+                                       report ) );
     }
 }

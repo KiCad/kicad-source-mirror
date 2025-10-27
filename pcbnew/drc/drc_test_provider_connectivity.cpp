@@ -77,7 +77,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             break;
         else if( track->Type() == PCB_VIA_T && exceedV )
             continue;
-        else if( track->Type() == PCB_TRACE_T && exceedT )
+        else if( ( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T ) && exceedT )
             continue;
 
         if( !reportProgress( ii++, count, progressDelta ) )

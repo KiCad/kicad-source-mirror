@@ -94,17 +94,20 @@ BOOST_FIXTURE_TEST_CASE( DRCOrientation, DRC_REGRESSION_TEST_FIXTURE )
         {
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
+            wxString report;
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
 
             for( const DRC_ITEM& item : violations )
-            {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
-            }
+                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
 
-            BOOST_ERROR( wxString::Format( "DRC orientation: %s, failed (violations found %d expected %d)",
-                                            test.first, (int)violations.size(), test.second ) );
+            BOOST_ERROR( wxString::Format( "DRC orientation: %s\n"
+                                           "%d violations found (expected %d)\n"
+                                           "%s",
+                                           test.first,
+                                           (int) violations.size(),
+                                           test.second,
+                                           report ) );
         }
     }
 }
