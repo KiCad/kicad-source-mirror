@@ -3196,24 +3196,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
     std::vector<SCH_LINE*> lines;
 
-    // Save the current orthogonal mode so we can restore it later
-    static enum LINE_MODE lineMode = LINE_MODE::LINE_MODE_90;
-    static bool           lineModeChanged = false;
-
-    auto revertLineMode =
-            [&]()
-            {
-                if( lineModeChanged )
-                {
-                    if( lineMode == LINE_MODE::LINE_MODE_90 )
-                        m_toolMgr->RunAction( SCH_ACTIONS::lineMode90 );
-                    else if( lineMode == LINE_MODE::LINE_MODE_45)
-                        m_toolMgr->RunAction( SCH_ACTIONS::lineMode45 );
-
-                    lineModeChanged = false;
-                }
-            };
-
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() == SCH_LINE_T )
@@ -3250,16 +3232,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     if( !lines.empty() )
     {
-        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        {
-            if( cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE )
-            {
-                lineMode = (enum LINE_MODE) cfg->m_Drawing.line_mode;
-                lineModeChanged = true;
-                m_toolMgr->RunAction( SCH_ACTIONS::lineModeFree );
-            }
-        }
-
         m_frame->TestDanglingEnds();
 
         SCH_MOVE_TOOL::MOVE_MODE moveMode = isSlice ? SCH_MOVE_TOOL::SLICE : SCH_MOVE_TOOL::BREAK;
@@ -3271,14 +3243,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
             // Breaking wires is usually a repeated action, e.g. to add bends
             if( !isSlice )
                 m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
-            else
-                revertLineMode();
         }
         else
-        {
             commit.Revert();
-            revertLineMode();
-        }
     }
 
     if( selection.IsHover() )
