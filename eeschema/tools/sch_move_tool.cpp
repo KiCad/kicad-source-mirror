@@ -508,6 +508,77 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
+void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const TOOL_EVENT& aEvent )
+{
+    if( m_moveInProgress )
+        return;
+
+    if( m_mode != BREAK && m_mode != SLICE )
+        return;
+
+    if( !aCommit )
+        return;
+
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+
+    if( !lwbTool )
+        return;
+
+    SCH_SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Empty() )
+        return;
+
+    std::vector<SCH_LINE*> lines;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == SCH_LINE_T )
+            lines.push_back( static_cast<SCH_LINE*>( item ) );
+    }
+
+    if( lines.empty() )
+        return;
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    SCH_SCREEN*           screen = m_frame->GetScreen();
+    VECTOR2I              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
+
+    bool useCursorForSingleLine = false;
+
+    if( lines.size() == 1 )
+    {
+        SCH_LINE* line = lines.front();
+
+        if( line->HitTest( cursorPos ) && !line->IsEndPoint( cursorPos ) )
+            useCursorForSingleLine = true;
+    }
+
+    m_selectionTool->ClearSelection();
+
+    for( SCH_LINE* line : lines )
+    {
+        VECTOR2I  breakPos = useCursorForSingleLine ? cursorPos : line->GetMidPoint();
+        SCH_LINE* newLine = nullptr;
+
+        lwbTool->BreakSegment( aCommit, line, breakPos, &newLine, screen );
+
+        if( !newLine )
+            continue;
+
+        newLine->ClearFlags( ENDPOINT | STARTPOINT );
+        line->ClearFlags( STARTPOINT );
+        line->SetFlags( ENDPOINT );
+
+        if( m_mode == BREAK )
+        {
+            m_selectionTool->AddItemToSel( newLine );
+            newLine->SetFlags( STARTPOINT );
+        }
+    }
+}
+
+
 bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -525,6 +596,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         return false;
 
     REENTRANCY_GUARD guard( &m_inMoveTool );
+
+    preprocessBreakOrSliceSelection( aCommit, aEvent );
 
     // Prepare selection (promote pins to symbols, request selection)
     bool           unselect = false;

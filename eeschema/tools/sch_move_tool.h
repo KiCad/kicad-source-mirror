@@ -112,6 +112,9 @@ private:
     ///< Cleanup dangling lines left after a drag
     void trimDanglingLines( SCH_COMMIT* aCommit );
 
+    ///< Break or slice the current selection before initiating a move, if required
+    void preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const TOOL_EVENT& aEvent );
+
     // Helper methods for doMoveSelection refactoring
     ///< Check if a move is already in progress and handle state transitions
     bool checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aCurrentModeIsDragLike,

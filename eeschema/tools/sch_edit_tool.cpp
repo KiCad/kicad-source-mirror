@@ -3187,65 +3187,28 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    bool           isSlice   = aEvent.Matches( SCH_ACTIONS::slice.MakeEvent() );
-    VECTOR2I       cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    bool           isSlice = aEvent.Matches( SCH_ACTIONS::slice.MakeEvent() );
     SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
-    SCH_SCREEN*    screen = m_frame->GetScreen();
     SCH_COMMIT     commit( m_toolMgr );
 
-    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-    std::vector<SCH_LINE*> lines;
+    if( selection.Empty() )
+        return 0;
 
-    for( EDA_ITEM* item : selection )
+    m_frame->TestDanglingEnds();
+
+    SCH_MOVE_TOOL::MOVE_MODE moveMode = isSlice ? SCH_MOVE_TOOL::SLICE : SCH_MOVE_TOOL::BREAK;
+
+    if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, moveMode ) )
     {
-        if( item->Type() == SCH_LINE_T )
-            lines.push_back( static_cast<SCH_LINE*>( item ) );
-    }
+        commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
 
-    m_selectionTool->ClearSelection();
-
-    for( SCH_LINE* line : lines )
-    {
-        SCH_LINE* newLine;
-
-        // We let the user select the break point if they're on a single line
-        if( lines.size() == 1 && line->HitTest( cursorPos ) && !line->IsEndPoint( cursorPos ) )
-            lwbTool->BreakSegment( &commit, line, cursorPos, &newLine, screen );
-        else
-            lwbTool->BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
-
-        // Make sure both endpoints are deselected
-        newLine->ClearFlags( ENDPOINT | STARTPOINT );
-        line->SetFlags( ENDPOINT );
-
-        // If we're a break, we want to drag both wires.
-        // Side note: the drag/move tool only checks whether the first item is
-        // new to determine if it should append undo or not, someday this should
-        // be cleaned up and explictly controlled but for now the newLine
-        // selection addition must be after the existing line.
+        // Breaking wires is usually a repeated action, e.g. to add bends
         if( !isSlice )
-        {
-            m_selectionTool->AddItemToSel( newLine );
-            newLine->SetFlags( STARTPOINT );
-        }
+            m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
     }
-
-    if( !lines.empty() )
+    else
     {
-        m_frame->TestDanglingEnds();
-
-        SCH_MOVE_TOOL::MOVE_MODE moveMode = isSlice ? SCH_MOVE_TOOL::SLICE : SCH_MOVE_TOOL::BREAK;
-
-        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, moveMode ) )
-        {
-            commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
-
-            // Breaking wires is usually a repeated action, e.g. to add bends
-            if( !isSlice )
-                m_toolMgr->PostAction( SCH_ACTIONS::breakWire );
-        }
-        else
-            commit.Revert();
+        commit.Revert();
     }
 
     if( selection.IsHover() )
