@@ -32,7 +32,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 11:23+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -4247,7 +4247,6 @@ msgid "Disable custom cursors"
 msgstr "Benuzerdefinierte Cursor deaktivieren"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
-#, fuzzy
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
@@ -4487,7 +4486,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5868,7 +5866,6 @@ msgid "DP Gap"
 msgstr "DP-Abstand"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
 msgstr "Abstimmungsprofil"
 
@@ -6007,7 +6004,6 @@ msgid "Reverse zoom direction"
 msgstr "Zoomrichtung umkehren"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad comes with a large set of symbol and footprint libraries maintained by "
 "the KiCad librarian team.  You may also create your own libraries, and "
@@ -6030,10 +6026,8 @@ msgstr ""
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
-#, fuzzy
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
-"<b>Die folgenden globalen Bibliothekstabellen müssen erstellt werden:</b>"
+msgstr "<b>Folgende globale Bibliothekstabellen müssen erstellt werden:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
@@ -6041,17 +6035,14 @@ msgid "How would you like KiCad to create them?"
 msgstr "Wie möchten Sie, dass KiCad diese erstellt?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr "Mit den integrierten KiCad-Bibliotheken beginnen (empfohlen)"
+msgstr "Mit integrierten KiCad-Bibliotheken beginnen (empfohlen)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Tabellen aus einer vorhergehenden Version importieren"
+msgstr "Tabellen aus voriger Version importieren"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
-#, fuzzy
 msgid ""
 "Library tables will be imported from the version you selected on the "
 "previous step.  Any tables that cannot be imported will be created with the "
@@ -6067,32 +6058,28 @@ msgid "Start with no libraries"
 msgstr "Ohne Bibliotheken beginnen"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
-#, fuzzy
 msgid ""
 "The built-in library tables could not be found in the expected location. "
 "This usually means that you have installed the KiCad software without also "
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"Die integrierten Bibliothekstabellen konnten nicht am erwarteten Speicherort "
-"gefunden werden. Das bedeutet für gewöhnlich, daß Sie die KiCad-Software "
-"ohne die Bibliotheken installiert haben. Sie können mit dem Setup "
-"fortfahren, müssen jedoch die Bibliotheken separat installieren, damit sie "
-"verfügbar sind."
+"Die integrierten Bibliothekstabellen wurden nicht am erwarteten Speicherort "
+"gefunden. Das bedeutet für gewöhnlich, dass Sie die KiCad ohne Bibliotheken "
+"installiert haben. Sie können mit dem Setup fortfahren, müssen jedoch die "
+"Bibliotheken gesondert installieren um sie verfügbar zu machen."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
 msgstr "Aktualisierungen"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
-#, fuzzy
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
-"Verbindung zum Internet zulassen, um nach aktualisierten Versionen von KiCad "
-"und über den Plugin- und Content-Manager installierten Paketen zu suchen?"
+"Internetverbindung nutzen, um nach aktualisierten Versionen von KiCad und "
+"über den Plugin- und Content-Manager installierten Paketen zu suchen?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1321
@@ -9131,11 +9118,8 @@ msgid "Syntax error at line %zu, column %zu"
 msgstr "Syntax-Fehler in Zeile %zu, Spalte %zu"
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr ""
-"Beim Schreiben der leeren Footprint-Bibliothekstabelle \"%s\" ist ein Fehler "
-"aufgetreten."
+msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1148 pcbnew/zone.cpp:919
@@ -9513,14 +9497,12 @@ msgstr ""
 "Standardeinstellungen für Sie ausgewählt."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Symbolbibliothek nicht aktiviert."
+msgstr "Symbolbibliothek-Tabelle"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Footprintbibliothek nicht aktiviert."
+msgstr "Footprintbibliothek-Tabelle"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
 #, fuzzy
@@ -17954,14 +17936,14 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Beim Ziehen von Kanten Pins verbunden halten"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Fehler beim Laden der Symbol-Bibliothekstabelle \"%s\"."
+msgstr "Fehler beim Laden der Bibliothekstabelle \"%s\""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "Fehler beim Laden der Symbolbibliothek \"%s\"."
+msgstr "Fehler beim Laden der Bibliothek \"%s\""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #, c-format
@@ -19396,9 +19378,8 @@ msgid "Error loading symbol library '%s'."
 msgstr "Fehler beim Laden der Symbolbibliothek \"%s\"."
 
 #: eeschema/libraries/symbol_library_adapter.cpp:425
-#, fuzzy
 msgid "Library not found in library table"
-msgstr "Bibliothek wurde nicht in der Symbol-Bibliothekstabelle gefunden."
+msgstr "Bibliothek nicht in Bibliothekstabelle gefunden"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
@@ -29187,9 +29168,8 @@ msgid "Duplicate Template"
 msgstr "Parameter duplizieren"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Konnte Quellverzeichnis nicht öffnen: %s"
+msgstr "Konnte Vorlagenverzeichnis nicht öffnen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
 #, fuzzy
@@ -29212,9 +29192,8 @@ msgid "Template name cannot be empty."
 msgstr "Der Netzname darf nicht leer sein."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Konnte Verzeichnis \"%s\" nicht erstellen"
+msgstr "Konnte Benutzer-Vorlagenverzeichnis nicht finden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
 #, fuzzy, c-format
@@ -29222,14 +29201,13 @@ msgid "Directory '%s' already exists."
 msgstr "Ausgabeverzeichnis \"%s\" existiert bereits."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Konnte Verzeichnis \"%s\" nicht erstellen"
+msgstr "Konnte Verzeichnis \"%s\" nicht erstellen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Konnte Quellverzeichnis nicht öffnen: %s"
+msgstr "Konnte Quell-Vorlagenverzeichnis nicht öffnen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format, fuzzy
@@ -29749,11 +29727,8 @@ msgid "What to do:"
 msgstr "Was ist zu tun:"
 
 #: kicad/dialogs/template_default_html.h:185
-#, fuzzy
 msgid "Browse to a different templates directory using the folder icon"
-msgstr ""
-"Navigieren Sie mithilfe des Ordnersymbols zu einem anderen "
-"Vorlagenverzeichnis."
+msgstr "Mithilfe des Ordnersymbols anderes Vorlagenverzeichnis wählen"
 
 #: kicad/dialogs/template_default_html.h:186
 #, fuzzy
@@ -29768,12 +29743,11 @@ msgid "Check that the directory path contains valid templates"
 msgstr "Überprüfen Sie, ob der Verzeichnispfad gültige Vorlagen enthält."
 
 #: kicad/dialogs/template_default_html.h:188
-#, fuzzy
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
-"Verwenden Sie die Standard-Systemvorlagen, indem Sie zur Registerkarte "
-"„Systemvorlagen“ navigieren."
+"Verwenden Sie die Standard-Systemvorlagen, indem Sie die Registerkarte "
+"„Systemvorlagen“ wählen"
 
 #: kicad/dialogs/template_default_html.h:192
 #, fuzzy
@@ -44246,9 +44220,8 @@ msgstr "Standardeigenschaften für Differenzialpaar-Versätze"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:756
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:807
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "Leiterbahnbreite konnte nicht berechnet werden."
+msgstr "Leiterbahnbreite konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:761
 #, fuzzy
@@ -44538,9 +44511,9 @@ msgstr "Netzklasse \"%s\" (µVia)"
 
 #: pcbnew/drc/drc_engine.cpp:449 pcbnew/drc/drc_engine.cpp:471
 #: pcbnew/drc/drc_engine.cpp:486 pcbnew/drc/drc_engine.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "tuning profile '%s'"
-msgstr "Entpacke Datei \"%s\"."
+msgstr "Abstimmungsprofil \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:580
 msgid "keepout area"
@@ -45148,9 +45121,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Nicht-gespiegelter Text auf Rückseite"
 
 #: pcbnew/drc/drc_item.cpp:301
-#, fuzzy
 msgid "Missing tuning profile"
-msgstr "Gleitkommazahl fehlt"
+msgstr "Abstimmungsprofil fehlt"
 
 #: pcbnew/drc/drc_item.cpp:498
 #, c-format
@@ -45189,9 +45161,8 @@ msgstr ""
 "\"%s\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "Nicht-aufgelöste Textvariable"
+msgstr "Unaufgelöste Textvariable."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
@@ -45224,9 +45195,8 @@ msgid "Missing ')'."
 msgstr "Fehlendes \")\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:198 pcbnew/drc/drc_rule_parser.cpp:264
-#, fuzzy
 msgid "version number"
-msgstr "Fehlende Versionsnummer."
+msgstr "Versionsnummer"
 
 #: pcbnew/drc/drc_rule_parser.cpp:208 pcbnew/drc/drc_rule_parser.cpp:274
 #: pcbnew/drc/drc_rule_parser.cpp:355 pcbnew/drc/drc_rule_parser.cpp:418
@@ -45982,9 +45952,8 @@ msgid "Checking assertions..."
 msgstr "Zusicherungen werden geprüft..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:602
-#, fuzzy
 msgid "Checking for missing tuning profiles..."
-msgstr "Prüfe auf Probleme mit Footprintverlinkungen..."
+msgstr "Prüfe auf fehlende Abstimmungsprofile..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -52651,12 +52620,10 @@ msgid "Pack Footprints"
 msgstr "Footprints zusammenfassen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:847
-#, fuzzy
 msgid "Angle snap lines: 45°"
 msgstr "Linien-Fangwinkel: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:851
-#, fuzzy
 msgid "Angle snap lines: 90°"
 msgstr "Linien-Fangwinkel: 90°"
 
@@ -53223,18 +53190,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Verschiebt die ausgewählten Elemente nacheinander"
 
 #: pcbnew/tools/pcb_actions.cpp:603
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Mit Referenz verschieben"
+msgstr "Mit Referenz verschieben ..."
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Verschiebt die ausgewählten Elemente mit einem bestimmten Startpunkt"
 
 #: pcbnew/tools/pcb_actions.cpp:612
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Mit Referenz kopieren"
+msgstr "Mit Referenz kopieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -54495,14 +54460,14 @@ msgstr ""
 "Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:2319
-#, fuzzy
 msgid "Interactive Offset Tool"
-msgstr "Interaktives Löschwerkzeug"
+msgstr "Interaktives Verschiebewerkzeug"
 
 #: pcbnew/tools/pcb_actions.cpp:2320
-#, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
-msgstr "Die ausgewählte(n) Element(e) um einen exakten Wert verschieben"
+msgstr ""
+"Interaktives Werkzeug um Verschieben ausgewählter Elemente um einen exakten "
+"Wert"
 
 #: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Select/Expand Connection"
