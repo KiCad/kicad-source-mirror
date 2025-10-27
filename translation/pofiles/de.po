@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 23:13+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9472,7 +9472,7 @@ msgstr "Sollten Sie Hilfe benötigen, besuchen Sie gerne "
 
 #: common/startwizard/startwizard.cpp:160
 msgid "KiCad Setup"
-msgstr "KiCad-Setup"
+msgstr "KiCad-Einrichtung"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
@@ -19981,7 +19981,7 @@ msgstr "Filter Netze"
 #: eeschema/sch_edit_frame.cpp:2442
 #, fuzzy
 msgid "Wildcard Search"
-msgstr "Platzhalter Teilstring"
+msgstr "Suche mit Platzhalter"
 
 #: eeschema/sch_edit_frame.cpp:2444
 #, fuzzy
@@ -19991,7 +19991,7 @@ msgstr "Suche von vorn beginnen"
 #: eeschema/sch_edit_frame.cpp:2592
 #, fuzzy
 msgid "Find in Net Inspector"
-msgstr "Netzinspektor"
+msgstr "Im Netzinspektor finden"
 
 #: eeschema/sch_edit_frame.cpp:2906
 #, fuzzy
@@ -29182,7 +29182,7 @@ msgstr "Konnte Benutzer-Vorlagenverzeichnis nicht finden."
 #: kicad/dialogs/dialog_template_selector.cpp:331
 #, fuzzy, c-format
 msgid "Directory '%s' already exists."
-msgstr "Ausgabeverzeichnis \"%s\" existiert bereits."
+msgstr "Verzeichnis \"%s\" existiert bereits."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
 #, c-format
@@ -29391,7 +29391,7 @@ msgstr "Alle Ziele generieren"
 #: kicad/dialogs/panel_jobset_base.cpp:211
 #, fuzzy
 msgid "Open the generated output"
-msgstr "Ausgewählten Footprint umbenennen"
+msgstr "Die erstellte Ausgabe öffnen"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -29703,7 +29703,7 @@ msgstr "Keine Vorlagen gefunden"
 #, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "Das ausgewählte Verzeichnis enthält keine Projektvorlagen."
+msgstr "Das ausgewählte Vorlagenverzeichnis enthält keine Projektvorlagen."
 
 #: kicad/dialogs/template_default_html.h:183
 #, fuzzy
@@ -38157,7 +38157,7 @@ msgstr "Keine Abstandsfläche erforderlich"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:415
 msgid "Will not generate \"missing courtyard\" DRC violations"
 msgstr ""
-"Es werden keine DRC-Fehler bezüglich einer fehlender "
+"Es werden keine DRC-Fehler bezüglich einer fehlenden "
 "Abstandsflächendefinition erstellt"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:426
@@ -42330,9 +42330,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Mindestfreiraum zwischen zwei Elementen auf derselben Bestückungsdrucklage.  "
-"Dies kann die Lesbarkeit verbessern.  (Hinweis: gilt nicht für mehrere "
-"Elemente eines Footprints.)"
+"Mindestfreiraum zwischen zwei Elementen auf derselben Bestückungsdrucklage. "
+"Dies kann die Lesbarkeit verbessern.  "
+"(Hinweis: gilt nicht für mehrere Elemente eines Footprints.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum text height:"
@@ -44214,7 +44214,7 @@ msgstr "Differentialpaar-Spalt konnte nicht berechnet werden"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:812
 #, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Verzögerungszeit konnte nicht berechnet werden"
+msgstr "Verzögerungszeit der Leiterbahn konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:832
 msgid "Tuning profile must have a name"
@@ -44326,11 +44326,10 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1202
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1304
-#, fuzzy
 msgid "Width and diff pair gap must be greater than 0 to calculate delay"
 msgstr ""
-"Für die Berechung der Verzögerung müssen die Breite und der Diff-Paar-Spalt "
-"größer als 0 sein"
+"Zur Berechnung der Verzögerung müssen die Breite und der Differenzialpaar-"
+"Abstand größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1247
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1348
