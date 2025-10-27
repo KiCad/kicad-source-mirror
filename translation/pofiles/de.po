@@ -26,13 +26,14 @@
 # John Beard <john.j.beard@gmail.com>, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # weblateuser <useross@disroot.org>, 2025.
+# Sven <sven.wanzenried@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
 "PO-Revision-Date: 2025-10-27 11:23+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Sven <sven.wanzenried@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -2359,7 +2360,6 @@ msgstr "Unbekannter Bibliothekstyp %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
 msgstr "Interner Fehler"
 
@@ -4242,7 +4242,6 @@ msgstr ""
 "verwendet"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
 msgstr "Benuzerdefinierte Cursor deaktivieren"
 
