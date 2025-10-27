@@ -42,7 +42,6 @@ target_include_directories( qa_schematic_utils PUBLIC
 
 target_link_libraries( qa_schematic_utils PUBLIC
     qa_utils
-    pcbcommon
 )
 
 # # we need to pretend to be something to appease the units code

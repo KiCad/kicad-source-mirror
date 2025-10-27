@@ -34,7 +34,7 @@
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_spice.h>
 #include <netlist_reader/netlist_reader.h>
-#include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/netlist.h>
 #include <project.h>
 #include <sch_sheet.h>
 #include <schematic.h>

@@ -21,6 +21,9 @@ include_directories(
 # Get the GAL Target
 add_subdirectory( gal )
 
+# Get the netlist reader library
+add_subdirectory( netlist_reader )
+
 # Only for win32 cross compilation using MXE
 add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
 
@@ -130,6 +133,9 @@ set( KICOMMON_SRCS
     jobs/job_sym_upgrade.cpp
     jobs/job_pcb_upgrade.cpp
     jobs/job_sch_upgrade.cpp
+
+    local_history.cpp
+    history_lock.cpp
 
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
@@ -688,8 +694,6 @@ set( COMMON_SRCS
     executable_names.cpp
     filename_resolver.cpp
     file_history.cpp
-    history_lock.cpp
-    local_history.cpp
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp
@@ -797,6 +801,7 @@ endif()
 
 add_library( common STATIC
     ${COMMON_SRCS}
+    $<TARGET_OBJECTS:netlist_reader_obj>
     )
 
 if( KICAD_USE_PCH )
