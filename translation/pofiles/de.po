@@ -31,7 +31,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-27 00:02+0000\n"
+"PO-Revision-Date: 2025-10-27 11:23+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8449,12 +8449,12 @@ msgstr "Anzeige der Statistik zur Platine"
 #: common/jobs/job_export_pcb_stats.cpp:59
 #, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Netzlisten-Export-Auftragseinstellungen"
+msgstr "Auftragseinstellungen für Platinenstatistiken exportieren"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
 #, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Platinenstatistik"
+msgstr "PCB: Statistiken exportieren"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -9101,24 +9101,23 @@ msgid "Show"
 msgstr "Zeigen"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Eine Bibliothek mit dem Aliasnamen \"%s\" existiert bereits."
+msgstr "Eine Referenz zu dieser Bibliothekstabelle besteht bereits"
 
 #: common/libraries/library_manager.cpp:386
 #, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Standard"
+msgstr "KiCad Standard-Bibliotheken"
 
 #: common/libraries/library_manager.cpp:1038
 #, fuzzy, c-format
 msgid "Library %s not found"
-msgstr "Bibliothek \"%s\" wurde nicht gefunden."
+msgstr "Bibliothek %s wurde nicht gefunden"
 
 #: common/libraries/library_table.cpp:67
 #, fuzzy, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "Footprintbibliothekspfad \"%s\" existiert nicht"
+msgstr "Der Bibliothekstabellenpfad \"%s\" existiert nicht"
 
 #: common/libraries/library_table_parser.cpp:172
 #, c-format
@@ -9502,7 +9501,7 @@ msgstr "Für Hilfe besuchen Sie bitte "
 #: common/startwizard/startwizard.cpp:160
 #, fuzzy
 msgid "KiCad Setup"
-msgstr "Platinenkonfiguration"
+msgstr "KiCad-Setup"
 
 #: common/startwizard/startwizard.cpp:201
 #, fuzzy
@@ -20032,7 +20031,7 @@ msgstr "Netzinspektor"
 #: eeschema/sch_edit_frame.cpp:2906
 #, fuzzy
 msgid "Enter new variant name"
-msgstr "Neuen Variantennamen hinzufügen:"
+msgstr "Neuen Variantennamen eingeben"
 
 #: eeschema/sch_edit_frame.cpp:2906 eeschema/sch_edit_frame.cpp:2944
 #, fuzzy
@@ -20042,7 +20041,7 @@ msgstr "Variablenname"
 #: eeschema/sch_edit_frame.cpp:2944
 #, fuzzy
 msgid "Select variant name to remove"
-msgstr "Wählen Sie die zu löschende Lage:"
+msgstr "Wählen Sie den zu löschenden Variantennamen"
 
 #: eeschema/sch_field.cpp:983
 #, c-format
@@ -20543,7 +20542,9 @@ msgstr ""
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Unzulässige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr ""
+"Datei \"%s\" kann nicht gelesen werden.\n"
+"\"%s\" in Zeile %d, Spalte %d, Versatz %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1028
 #, c-format
@@ -29198,7 +29199,7 @@ msgstr "Es wurden keine Projektdateien in dem Repository gefunden."
 #: kicad/dialogs/dialog_template_selector.cpp:299
 #, fuzzy
 msgid "Enter name for the new template:"
-msgstr "Seitennummer für Blattpfad eingeben%s"
+msgstr "Neuen Namen für die Vorlage eingeben:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:301
 #: pcbnew/tools/footprint_editor_control.cpp:413
@@ -29231,9 +29232,9 @@ msgid "Could not open source template directory."
 msgstr "Konnte Quellverzeichnis nicht öffnen: %s"
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
-#, c-format
+#, c-format, fuzzy
 msgid "Template duplicated successfully to '%s'."
-msgstr ""
+msgstr "Vorlage erfolgreich zu \"%s\" dupliziert."
 
 #: kicad/dialogs/dialog_template_selector.cpp:452
 #: kicad/dialogs/dialog_template_selector_base.h:64
@@ -29745,34 +29746,48 @@ msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
 #: kicad/dialogs/template_default_html.h:183
 #, fuzzy
 msgid "What to do:"
-msgstr "Pad zu Die"
+msgstr "Was ist zu tun:"
 
 #: kicad/dialogs/template_default_html.h:185
+#, fuzzy
 msgid "Browse to a different templates directory using the folder icon"
 msgstr ""
+"Navigieren Sie mithilfe des Ordnersymbols zu einem anderen "
+"Vorlagenverzeichnis."
 
 #: kicad/dialogs/template_default_html.h:186
+#, fuzzy
 msgid "Click the refresh icon to reload the current directory"
 msgstr ""
+"Auf das Symbol „Aktualisieren“ klicken, um das aktuelle Verzeichnis neu zu "
+"laden."
 
 #: kicad/dialogs/template_default_html.h:187
+#, fuzzy
 msgid "Check that the directory path contains valid templates"
-msgstr ""
+msgstr "Überprüfen Sie, ob der Verzeichnispfad gültige Vorlagen enthält."
 
 #: kicad/dialogs/template_default_html.h:188
+#, fuzzy
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
+"Verwenden Sie die Standard-Systemvorlagen, indem Sie zur Registerkarte "
+"„Systemvorlagen“ navigieren."
 
 #: kicad/dialogs/template_default_html.h:192
+#, fuzzy
 msgid "Tip:"
-msgstr ""
+msgstr "Hinweis:"
 
 #: kicad/dialogs/template_default_html.h:192
+#, fuzzy
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
+"Vorlagen sind in Unterverzeichnissen organisiert. Jede Vorlage benötigt "
+"einen \"Meta\"-Ordner mit Konfigurationsdateien."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -34569,12 +34584,12 @@ msgstr "NPTH:"
 #: pcbnew/board_statistics_report.cpp:110
 #, fuzzy
 msgid "Castellated:"
-msgstr "Castellated (Halbloch)"
+msgstr "Castellated (Halbloch):"
 
 #: pcbnew/board_statistics_report.cpp:112
 #, fuzzy
 msgid "Press-fit:"
-msgstr "Einpress"
+msgstr "Einpress:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Through vias:"
@@ -34984,16 +34999,17 @@ msgstr "Barcode-Eigenschaften"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 #, fuzzy
 msgid "(not updated)"
-msgstr "(nicht aktiviert)"
+msgstr "(nicht aktualisiert)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
+#, fuzzy
 msgid "(unannotated; not updated)"
-msgstr ""
+msgstr "(nicht annotiert; nicht aktualisiert)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
 #, fuzzy
 msgid "(excluded)"
-msgstr "Ausgeschlossen"
+msgstr "(ausgeschlossen)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:113
 msgid "Reannotate PCB"
@@ -35015,65 +35031,68 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, fuzzy
 msgid "Reference Designator Prefixes in Use"
-msgstr "Referenzbezeichner"
+msgstr "Verwendete Präfixe der Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
 #, fuzzy, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "Ausgenommen: %s von Neu-Annotierung<br/>"
+msgstr "(Ausgenommen %s von Neu-Annotierung.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
 #, fuzzy
 msgid "Change Log"
-msgstr "Ändern zu"
+msgstr "Änderungsliste"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
 #, fuzzy
 msgid "Front Footprints"
-msgstr "Footprints exportieren"
+msgstr "Footprints vorne"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
 #, fuzzy
 msgid "Back Footprints"
-msgstr "Footprints zusammenfassen"
+msgstr "Footprints hinten"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 #, fuzzy
 msgid "(sorted by footprint location)"
-msgstr "Footprint-Standort"
+msgstr "(sortiert über Footprintposition)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:370
 #, fuzzy
 msgid "(sorted by reference designator location)"
-msgstr "Referenzbezeichnerposition"
+msgstr "(sortiert über Referenzbezeichnerposition)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:378
 #, fuzzy, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%d %s X, Y: %s; gerundet X, Y: %s"
+msgstr "<br/>%d %s bei %s (aufgerundet zu %s)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:399
+#, fuzzy
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
-"Gewählte Optionen führen zu Fehlern! Ändern Sie die Optionen und versuchen "
+"Gewählte Optionen führten zu Fehlern! Ändern Sie die Optionen und versuchen "
 "Sie es erneut."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
 #, fuzzy, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "Ändere Footprints mit diesem Referenzbezeichner:"
+msgstr "Leiterplatte hat %d leere oder ungültige Referenzbezeichner."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
 #, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
-msgstr "Platine und Schaltplan auf Parität prüfen"
+msgstr ""
+"Sie können den DRC mit aktivierter Option „Platine und Schaltplan auf "
+"Parität prüfen” ausführen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
 #, fuzzy, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>RefDes: %s Footprint: %s: %s bei %s auf der Leiterplatte."
+msgstr "<br/>    RefDes: %s; Footprint: %s bei %s auf der Leiterplatte."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -44229,26 +44248,27 @@ msgstr "Standardeigenschaften für Differenzialpaar-Versätze"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:807
 #, fuzzy
 msgid "Could not compute track width"
-msgstr "Steuerelement zum Wählen der Leiterbahnbreite"
+msgstr "Leiterbahnbreite konnte nicht berechnet werden."
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:761
 #, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Interaktives Routen eines differenziellen Leitungspaares"
+msgstr "Differentialpaar-Spalt konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:766
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:812
 #, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Die Konfigurationsdatei konnte nicht geöffnet werden"
+msgstr "Verzögerungszeit konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:832
 msgid "Tuning profile must have a name"
 msgstr "Abstimmungsprofil muss einen Namen haben"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:847
+#, fuzzy
 msgid "Duplicated signal layer configuration in tuning profile"
-msgstr ""
+msgstr "Doppelte Signallagen-Konfiguration im Abstimmungsprofil"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:875
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:886
@@ -44256,53 +44276,61 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:949
 #, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "Signalnamen dürfen keine Leerzeichen enthalten"
+msgstr "Signallagen nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:881
+#, fuzzy
 msgid "Internal error: Microstrip can only be on an outer copper layer"
 msgstr ""
+"Interner Fehler: Microstrip kann sich nur auf Kupferaussenlagen befinden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:892
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:955
 #, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Die Breite des Elements muss größer als 0 sein."
+msgstr "Die Dicke der Signallagen muss größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:903
 #, fuzzy
 msgid "Reference layer not found in stackup"
-msgstr "Referenz \"%s\" wurde nicht gefunden."
+msgstr "Referenzlage nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:909
 #, fuzzy
 msgid "Reference layer must be different to signal layer"
-msgstr "Interaktives Routen eines differenziellen Paares"
+msgstr "Referenzlage muss sich von der Signallage unterscheiden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:918
 #, fuzzy
 msgid "Dielectric height must be greater than 0"
-msgstr "Bogenwinkel muss größer als 0 sein"
+msgstr "Dicke des Dielektrikums muss größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:961
+#, fuzzy
 msgid "Top reference layer not found in stackup"
-msgstr ""
+msgstr "Obere Referenzlage nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:967
+#, fuzzy
 msgid "Top reference layer must be above signal layer in board stackup"
 msgstr ""
+"Obere Referenzlage muss sich über der Signallage im Lagenaufbau befinden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:973
+#, fuzzy
 msgid "Bottom reference layer not found in stackup"
-msgstr ""
+msgstr "Untere Referenzlage nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:979
+#, fuzzy
 msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
+"Untere Referenzlage muss sich unter der Signallage im Lagenaufbau befinden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:992
 #, fuzzy
 msgid "Dielectric heights must be greater than 0"
-msgstr "Bogenwinkel muss größer als 0 sein"
+msgstr "Die dielektrischen Dicken müssen größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1019
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1095
@@ -44310,7 +44338,7 @@ msgstr "Bogenwinkel muss größer als 0 sein"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1272
 #, fuzzy
 msgid "Target impedance must be greater than 0"
-msgstr "Bogenwinkel muss größer als 0 sein"
+msgstr "Die Zielimpedanz muss größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1072
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1147
@@ -44318,109 +44346,114 @@ msgstr "Bogenwinkel muss größer als 0 sein"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1345
 #, fuzzy
 msgid "Width calculation failed"
-msgstr "Zuordnungsdatei bearbeiten"
+msgstr "Breitenberechnung fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1075
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1150
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1250
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1351
+#, fuzzy
 msgid "Delay calculation failed"
-msgstr ""
+msgstr "Verzögerungsberechnung fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1188
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1290
 #, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "Der Leiterbahnabstand muss größer als 0 sein."
+msgstr "Für die Berechung der Breite muss der Diff-Paar-Spalt größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1195
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1297
 #, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
-msgstr "Linienbreite für einen ungefüllten Kreis muss größer als Null sein."
+msgstr ""
+"Für die Berechnung des Diff-Paar-Spaltes muss die Breite größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1202
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1304
+#, fuzzy
 msgid "Width and diff pair gap must be greater than 0 to calculate delay"
 msgstr ""
+"Für die Berechung der Verzögerung müssen die Breite und der Diff-Paar-Spalt "
+"größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1247
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1348
 #, fuzzy
 msgid "Diff pair gap calculation failed"
-msgstr "Ermittlung des Differenzialpaar-Abstands für:"
+msgstr "Berechung des Diff-Paar-Spaltes fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
 #, fuzzy
 msgid "Single"
-msgstr "Einzelner Durchlauf"
+msgstr "Einzeln"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
 #, fuzzy
 msgid "Target Impedance:"
-msgstr "Zielfläche:"
+msgstr "Zielimpedanz:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
-msgstr ""
+msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
 #, fuzzy
 msgid "Generate Net Class DRC Rules"
-msgstr "Netzliste erstellen"
+msgstr "DRC-Regeln für Netzklassen erstellen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
+#, fuzzy
 msgid "Enable Time Domain Tuning"
-msgstr ""
+msgstr "Zeitbereichsabstimmung aktivieren"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
 #, fuzzy
 msgid "Track Propagation"
-msgstr "Leiterbahnkreuzung"
+msgstr "Ausbreitung auf Leiterbahnen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:123
 #, fuzzy
 msgid "Signal Layer"
-msgstr "Signallage bis"
+msgstr "Signallage"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
 #, fuzzy
 msgid "Top Reference"
-msgstr "Referenz"
+msgstr "Obere Referenz"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
 #, fuzzy
 msgid "Bottom Reference"
-msgstr "Referenz"
+msgstr "Untere Referenz"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
 #, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Differenzialpaar-Abstand: %s"
+msgstr "Diff-Paar-Spalt"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:128
 #, fuzzy
 msgid "Unit Delay"
-msgstr "Netzverzögerung"
+msgstr "Einheit der Verzögerung"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:166
 #, fuzzy
 msgid "Via Propagation"
-msgstr "Via-Eigenschaften"
+msgstr "Ausbreitung im Via"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
 #, fuzzy
 msgid "Global Unit Delay:"
-msgstr "Globales Entfernen"
+msgstr "Globale Einheit der Verzögerung:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
 msgid "ps/cm"
-msgstr ""
+msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
-#, fuzzy
 msgid "Via Delay Overrides:"
-msgstr "Viaverzögerung-Überschreibungen"
+msgstr "Viaverzögerung-Überschreibungen:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:212
 msgid "Signal Layer From"
@@ -46501,8 +46534,11 @@ msgid "Cannot rename temporary file '%s' to '%s'."
 msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
+#, fuzzy
 msgid "Cannot use VRML models when exporting to non-mesh formats."
 msgstr ""
+"VRML-Modelle können beim Exportieren in Nicht-Netzformate nicht verwendet "
+"werden."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2975
 #, c-format
@@ -48248,16 +48284,19 @@ msgstr ""
 "einer Außenlage.)"
 
 #: pcbnew/pad.cpp:2301
+#, fuzzy
 msgid "('fiducial' pads are normally plated)"
-msgstr ""
+msgstr "(\"Passermarken\" haben normalerweise ein Kupferpad)"
 
 #: pcbnew/pad.cpp:2305
+#, fuzzy
 msgid "('testpoint' pads are normally plated)"
-msgstr ""
+msgstr "(\"Testpunkte\" haben normalerweise ein Kupferpad)"
 
 #: pcbnew/pad.cpp:2308
+#, fuzzy
 msgid "('heatsink' pads are normally plated)"
-msgstr ""
+msgstr "(\"Kühlkörperpads\" haben normalerweise ein Kupferpad)"
 
 #: pcbnew/pad.cpp:2311
 #, fuzzy
@@ -52612,12 +52651,14 @@ msgid "Pack Footprints"
 msgstr "Footprints zusammenfassen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:847
+#, fuzzy
 msgid "Angle snap lines: 45°"
-msgstr ""
+msgstr "Linien-Fangwinkel: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:851
+#, fuzzy
 msgid "Angle snap lines: 90°"
-msgstr ""
+msgstr "Linien-Fangwinkel: 90°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:865
 #, c-format
