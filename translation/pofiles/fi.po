@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-09-15 10:02+0000\n"
+"PO-Revision-Date: 2025-10-27 23:13+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -2315,15 +2315,14 @@ msgstr "Suunnittelulohkokansiota '%s' ei voitu poistaa."
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "tuntematon läpiviennin tyyppi %d"
+msgstr "Tuntematon kirjastotyyppi %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "Sisäiset kerrokset"
+msgstr "Sisäinen virhe"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4195,9 +4194,8 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "Kun tämä on käytössä, käytä eri väriä joka toiselle taulukon riville"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Kytke aukkomakrot pois käytöstä"
+msgstr "Poista mukautetut kursorit käytöstä"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -4435,7 +4433,6 @@ msgid "MB"
 msgstr "Mt"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4457,10 +4454,10 @@ msgstr ""
 "ohjaamaan parannuksia.\n"
 "\n"
 "Saman KiCad-asennuksen automaattisten raporttien linkittämiseksi luodaan "
-"yksilöllinen tunniste, joka on täysin satunnainen ja sitä käytetään vain "
+"yksilöllinen tunniste, joka on täysin satunnainen ja jota käytetään vain "
 "virheraportointiin. Tähän tunnisteeseen ei tallenneta tai yhdistetä "
-"henkilökohtaisia tunnistetietoja (PII), mukaan lukien IP-osoite. Voit "
-"nollata tämän tunnuksen milloin tahansa mukana tulevalla painikkeella.\n"
+"henkilötietoja, kuten IP-osoitetta. Voit nollata tämän tunnisteen milloin "
+"tahansa Tietojenkeruun asetussivulla.\n"
 "\n"
 "Jos päätät osallistua vapaaehtoisesti, KiCad käsittelee automaattisesti "
 "mainittujen raporttien lähettämisen kaatumisten tai tapahtumien sattuessa. "
@@ -5209,9 +5206,8 @@ msgid "Convert to Greyscale"
 msgstr "Muunna harmaasävyksi"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "Tiedostohistoria tyhjennetty:"
+msgstr "Tiedostohistoria tyhjennetty."
 
 #: common/dialogs/panel_maintenance.cpp:111
 msgid "\"Don't show again\" dialogs reset."
@@ -5803,9 +5799,8 @@ msgid "DP Gap"
 msgstr "DP-aukko"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Viritystila"
+msgstr "Viritysprofiili"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5957,18 +5952,16 @@ msgid "<b>The following global library tables need to be created:</b>"
 msgstr ""
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Kuinka haluat määrittää KiCadin?"
+msgstr "Miten haluaisit KiCadin luovan ne?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
 msgstr ""
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Tuo asetukset aiemmasta versiosta:"
+msgstr "Tuo taulukoita edellisestä versiosta"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -5978,9 +5971,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Jalanjälkikirjastot"
+msgstr "Aloita ilman kirjastoja"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -5991,9 +5983,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Päivitä"
+msgstr "Päivitykset"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
@@ -6020,9 +6011,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
-#, fuzzy
 msgid "Enable anonymous data collection"
-msgstr "Ota animaatio käyttöön"
+msgstr "Ota käyttöön anonyymi tiedonkeruu"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6345,14 +6335,14 @@ msgid "Redo"
 msgstr "Tee uudelleen"
 
 #: common/eda_base_frame.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "Suorita %s > %s"
+msgstr "Suorita: %s > %s"
 
 #: common/eda_base_frame.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Sääntö: %s"
+msgstr "Suorita: %s"
 
 #: common/eda_base_frame.cpp:1221
 #, c-format
@@ -7777,14 +7767,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Viite-OID:tä ei voitu hakea viitteelle '%s'"
 
 #: common/git/libgit_backend.cpp:921
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Commit:tia ei voitu etsiä"
+msgstr "Kohdeversiota ei voitu hakea"
 
 #: common/git/libgit_backend.cpp:932
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Muutoksia ei voitu yhdistää"
+msgstr "Kohdeversion tiedostorakennetta ei voitu hakea"
 
 #: common/git/libgit_backend.cpp:981
 #, c-format
@@ -7804,29 +7792,25 @@ msgid "Failed to push reference to revision walker."
 msgstr "Viittauksen siirtäminen versioselaimelle epäonnistui."
 
 #: common/git/libgit_backend.cpp:1022
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Ei voitu etsiä commit '{}'"
+msgstr "Versiota ei voitu löytää '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "Tehtävä epäonnistui"
+msgstr "Yhdistäminen epäonnistui"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eescheman lataaminen epäonnistui."
+msgstr "Rebasen käynnistäminen epäonnistui"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "Tietokantayhteys epäonnistui: %s"
+msgstr "Rebase epäonnistui commitin kohdalla"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Viimeinen ajo epäonnistui"
+msgstr "Rebasen viimeistely epäonnistui"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -8074,7 +8058,6 @@ msgstr "Tiedostoa %s ei voi avata"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:119
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Käyttäjä peruutti tiedoston tuomisen."
 
@@ -8124,9 +8107,9 @@ msgid "Invalid size %lld: too large"
 msgstr "Virheellinen koko %ll d: liian suuri"
 
 #: common/io/eagle/eagle_parser.cpp:527
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "Virheellinen kaari säteellä %f ja kulmalla %f"
+msgstr "Virheellinen kaari säteellä %0.2f ja kulmalla %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -8213,18 +8196,16 @@ msgstr "PCB: Vie DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Vie SVG-tiedosto"
+msgstr "Vie GenCAD-tiedosto"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "Vie GenCAD työasetukset"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "PCB: Vie DXF"
+msgstr "PCB: Vie GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:59
 msgid "Export single Gerber"
@@ -8252,9 +8233,8 @@ msgid "Export HPGL"
 msgstr "Vie HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "PCB: Vie PDF"
+msgstr "PCB: Vie HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:88
@@ -8330,24 +8310,20 @@ msgid "Export Postscript Job Settings"
 msgstr "Vie Postscript työasetukset"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Vie PostScript"
+msgstr "PCB: Vie PostScript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Näyttää piirilevyn tilastot"
+msgstr "Vie piirilevyn tilastot"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Vie Netlist työasetukset"
+msgstr "Vie Piirilevyn tilastotyöasetukset"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Piirilevyn tilastot"
+msgstr "PCB: Vie tilastot"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8715,9 +8691,8 @@ msgid "Net color highlight"
 msgstr "Verkkovärin korostus"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Korosta törmäykset"
+msgstr "Vetotörmäykset"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8771,15 +8746,13 @@ msgstr "Läpimenevät läpivienit"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "Piiloläpiviennit"
+msgstr "Sokeat läpiviennit"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Haudatut läpiviennit:"
+msgstr "Piilotetut läpiviennit"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
@@ -8822,9 +8795,8 @@ msgid "DRC errors"
 msgstr "DRC virheet"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC muoto 1"
+msgstr "DRC muodot"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -8847,7 +8819,6 @@ msgid "Courtyard collision shadow"
 msgstr "Piha-alueen törmäysvarjo"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Board outline area"
 msgstr "Piirilevyn ääriviivat"
 
@@ -8921,9 +8892,8 @@ msgid "Already Placed"
 msgstr "Jo sijoitettu"
 
 #: common/libeval_compiler/libeval_compiler.cpp:599
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Ratkaisematon tekstimuuttuja"
+msgstr "Ratkaisematon tekstimuuttujan viite"
 
 #: common/libeval_compiler/libeval_compiler.cpp:601
 #, c-format
@@ -8998,29 +8968,27 @@ msgid "Show"
 msgstr "Näytä"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Kirjasto lempinimellä '%s' on jo olemassa."
+msgstr "Viittaus tähän kirjastotaulukkoon on jo olemassa"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Oletus"
+msgstr "KiCadin Oletuskirjastot"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Kirjastoa '%s' ei löydy."
+msgstr "Kirjastoa '%s' ei löydy"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "jalanjälkikirjastopolkua \"%s\" ei ole olemassa"
+msgstr "Kirjastotaulukkopolkua \"%s\" ei ole olemassa"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Virhe tallennettaessa kirjaston dokumentaatiotiedostoa \""
+msgstr "Kirjastotaulukkoa %s luettaessa tapahtui odottamaton virhe "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
@@ -9029,9 +8997,8 @@ msgid "Syntax error at line %zu, column %zu"
 msgstr ""
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "Virhe tallennettaessa kirjaston dokumentaatiotiedostoa \""
+msgstr "Kirjastotaulukon lukemisessa tapahtui odottamaton virhe"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1148 pcbnew/zone.cpp:919
@@ -9068,78 +9035,64 @@ msgid "There are no notifications available"
 msgstr "Ilmoituksia ei ole saatavilla"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "8,5x11 tuumaa"
+msgstr "A 8,5 x 11 tuumaa"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17 tuumaa"
+msgstr "B 11 x 17 tuumaa"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22 tuumaa"
+msgstr "C 17 x 22 tuumaa"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34 tuumaa"
+msgstr "D 22 x 34 tuumaa"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44 tuumaa"
+msgstr "E 34 x 44 tuumaa"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "Käyttäjä (Mukautettu)"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5\"x11\""
+msgstr "US Letter 8.5 x 11 tuumaa"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5\"x14\""
+msgstr "US Legal 8.5 x 14 tuumaa"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11\"x17\""
+msgstr "US Ledger 11 x 17 tuumaa"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
@@ -9166,7 +9119,6 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Tämän kielen KiCad-kielitiedostoa ei ole asennettu."
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
 msgstr "Ladataan suunnittelulohkokirjastoja"
 
@@ -9193,9 +9145,9 @@ msgid "Open %s"
 msgstr "Avaa %s"
 
 #: common/plotters/PDF_plotter.cpp:2626
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "Tiedoston '%s' avaaminen epäonnistui."
+msgstr "3D-mallitiedoston avaaminen epäonnistui: %s"
 
 #: common/project.cpp:434 common/project.cpp:439 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -9384,9 +9336,9 @@ msgid "KiCad Classic"
 msgstr "KiCad Classic"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Tervetuloa KiCadiin %s!"
+msgstr "Tervetuloa KiCadiin %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9402,9 +9354,8 @@ msgid "For help, please visit "
 msgstr ""
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Piirilevyasetukset"
+msgstr "KiCad Asetukset"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
@@ -9413,19 +9364,16 @@ msgid ""
 msgstr ""
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Symbolikirjastoa ei ole otettu käyttöön."
+msgstr "Symbolikirjastotaulukko"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Jalanjälkikirjastoa ei ole otettu käyttöön."
+msgstr "Jalanjälkikirjastotaulukko"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Suunnittelun lohkokirjastot"
+msgstr "Suunnittelulohkon kirjastotaulukko"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9446,68 +9394,56 @@ msgid "Quit %s"
 msgstr "Lopeta %s"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Grid Selector"
-msgstr "Puolen valinta"
+msgstr "Ristikon valitsin"
 
 #: common/tool/action_toolbar.cpp:1050
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "Ainoastaan Valinta"
+msgstr "Ristikon valintalaatikko"
 
 #: common/tool/action_toolbar.cpp:1052
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "Zoomaa Valintaan"
+msgstr "Zoomausvalitsin"
 
 #: common/tool/action_toolbar.cpp:1053
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Zoomaa Valintaan"
+msgstr "Zoomauksen valintaruutu"
 
 #: common/tool/action_toolbar.cpp:1055
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Komentosarjakonsoli"
+msgstr "IPC/skriptauslaajennukset"
 
 #: common/tool/action_toolbar.cpp:1056
 msgid "Region to hold the IPC/Scripting action buttons"
 msgstr "Alue, jossa IPC/Scripting-toimintopainikkeita pidetään"
 
 #: common/tool/action_toolbar.cpp:1058
-#, fuzzy
 msgid "Layer selector"
-msgstr "Kerrosten valinta:"
+msgstr "Kerrosvalitsin"
 
 #: common/tool/action_toolbar.cpp:1059
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Tyhjennä valittu graafinen taso"
+msgstr "Valitse kerros Control-näppäimellä"
 
 #: common/tool/action_toolbar.cpp:1061
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Symboliyksikön merkintä:"
+msgstr "Symboliyksikön valitsin"
 
 #: common/tool/action_toolbar.cpp:1062
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Sulje nykyinen editori"
+msgstr "Näyttää nykyisen yksikön"
 
 #: common/tool/action_toolbar.cpp:1065
-#, fuzzy
 msgid "Symbol body style selector"
-msgstr "Symboliyksikön merkintä:"
+msgstr "Symbolin runkotyylin valitsin"
 
 #: common/tool/action_toolbar.cpp:1066
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "Sulje nykyinen editori"
+msgstr "Näytää nykyisen runkotyylin"
 
 #: common/tool/action_toolbar.cpp:1069
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "Salli lukittujen kohteiden valitseminen"
+msgstr "Salli lukittujen kohteiden siirtäminen hiirellä"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
@@ -9640,14 +9576,12 @@ msgid "Ungroup any selected groups"
 msgstr "Pura valitut ryhmät"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add Items"
-msgstr "Kohteet"
+msgstr "Lisää kohteet"
 
 #: common/tool/actions.cpp:217
-#, fuzzy
 msgid "Add items to group"
-msgstr "Poista kohteet ryhmästä"
+msgstr "Lisää kohteet ryhmään"
 
 #: common/tool/actions.cpp:223
 msgid "Remove Items"
@@ -9714,9 +9648,8 @@ msgid "Paste item(s) from clipboard"
 msgstr "Liitä kohteet leikepöydältä"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Piirrä valintaan suorakulmio"
+msgstr "Aseta valinta käyttämään suorakulmiota"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
@@ -9961,16 +9894,14 @@ msgstr ""
 "toisen pisteen suunnan"
 
 #: common/tool/actions.cpp:593
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Pidä kaari keskellä, säädä sädettä"
+msgstr "Säilytä kaaren säde ja keskipiste, säädä kulmaa"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Switch arc editing mode to maintainign radius when endpoint are moved"
 msgstr ""
-"Vaihda kaaren muokkaustilaa säilyttääksesi keskipisteen, säätääksesi sädettä "
-"ja päätepisteitä"
+"Vaihda kaaren muokkaustilaa säilyttääksesi oikean säteen päätepisteitä "
+"siirrettäessä"
 
 #: common/tool/actions.cpp:601
 msgid "Cycle Arc Editing Mode"
@@ -10044,19 +9975,16 @@ msgstr ""
 "Zoomaa työlista-alueeseen, jos sellainen on olemassa tai sitä on muokattu"
 
 #: common/tool/actions.cpp:721
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Zoomaa Kohteeseen"
+msgstr "Zoomaa kaikkiin objekteihin"
 
 #: common/tool/actions.cpp:722
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Valitse kaikki näytöllä olevat kohteet"
+msgstr "Zoomaa kaikkiin näytön objekteihin"
 
 #: common/tool/actions.cpp:728
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "kytkentäverkkoa ei ole valittu"
+msgstr "Zoomaa valittuna oleviin kohteisiin"
 
 #: common/tool/actions.cpp:729
 msgid "Zoom to Selected Objects"
@@ -10117,9 +10045,8 @@ msgid "Center on Cursor"
 msgstr "Keskitä kohdistin"
 
 #: common/tool/actions.cpp:809
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Zoomaa Valintaan"
+msgstr "Zoomaa valittuun alueeseen"
 
 #: common/tool/actions.cpp:810
 msgid "Zoom to an area selection created by a mouse drag"
@@ -10210,9 +10137,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Älä enää pidä kirjastoa listan yläpäässä"
 
 #: common/tool/actions.cpp:959
-#, fuzzy
 msgid "Library Fields Table"
-msgstr "Symbolikenttätaulukko"
+msgstr "Kirjastokenttien taulukko"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
@@ -10673,18 +10599,16 @@ msgstr ""
 "Lahjoittaksesi KiCad projektiin, vieraile %s"
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "Suunnittelun lohkokirjastot"
+msgstr "Uusi suunnittelulohkokirjasto"
 
 #: common/tool/group_tool.cpp:44
 msgid "Grouping"
 msgstr "Ryhmittely"
 
 #: common/tool/group_tool.cpp:239
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "Kohdista kohteet ruudukkoon"
+msgstr "Lisää kohteet ryhmään"
 
 #: common/tool/group_tool.cpp:266
 msgid "Remove Group Items"
@@ -10699,9 +10623,8 @@ msgid "Select &All\tA"
 msgstr "Valitse & Kaikki A"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "Näytä lähde ..."
+msgstr "Näytä &Enemmän vaihtoehtoja...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -10833,13 +10756,13 @@ msgstr "Kirjastokuvaus"
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Virhe globaalin kirjastotaulukon tallennuksessa:\n"
+"Virhe tallennettaessa kirjastotaulukkoa:\n"
 "\n"
 "%s"
 
@@ -10928,9 +10851,8 @@ msgstr "Jalanjälkeä ei löydy."
 #: common/widgets/footprint_select_widget.cpp:65 cvpcb/cvpcb_mainframe.cpp:908
 #: pcbnew/footprint_edit_frame.cpp:1128
 #: pcbnew/widgets/panel_footprint_chooser.cpp:70
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Ladataan Jalanjälkikirjastoja"
+msgstr "Lataa jalanjälkikirjastoja"
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
@@ -11015,9 +10937,8 @@ msgid "Reset %s to Defaults"
 msgstr "Palauta %s Oletusasetuksille"
 
 #: common/widgets/panel_design_block_chooser.cpp:400
-#, fuzzy
 msgid "Errors were encountered loading design blocks:"
-msgstr "Latausjälkien lataamisessa havaittiin virheitä:"
+msgstr "Suunnittelulohkojen lataamisessa ilmeni virheitä:"
 
 #: common/widgets/properties_panel.cpp:78
 #: common/widgets/properties_panel.cpp:205
@@ -11050,14 +10971,12 @@ msgid "Toggle panning to selections in the search pane"
 msgstr "Vaihda panorointia hakupaneelin valintoihin"
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Etsi &piilotetut kentät"
+msgstr "Etsi piilotettuja kenttiä"
 
 #: common/widgets/search_pane.cpp:56
-#, fuzzy
 msgid "Search Metadata"
-msgstr "Metadata"
+msgstr "Etsi Metadataa"
 
 #: common/widgets/search_pane.cpp:56
 msgid "Search library links, descriptions and keywords"
@@ -11256,9 +11175,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-lausekkeen kytkentäkaaviotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Kaikki KiCad-projektitiedostot"
+msgstr "Altium projektitiedostot"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "CADSTAR Archive files"
@@ -11342,9 +11260,8 @@ msgid "CSV Files"
 msgstr "CSV-tiedostot"
 
 #: common/wildcards_and_files_ext.cpp:422
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "CSV-tiedostot"
+msgstr "CSV/TSV-tiedostot"
 
 #: common/wildcards_and_files_ext.cpp:428
 msgid "Portable document format files"
@@ -11761,23 +11678,20 @@ msgid "Footprint Filters:"
 msgstr "Jalanjälkisuodattimet:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Jalanjälkisuodattimet:"
+msgstr "Jalanjälkisuodattimet"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Jalanjälkisuodattimet:"
+msgstr "Jalanjäljen suodatussäätimet"
 
 #: cvpcb/toolbars_display_footprints.cpp:50
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:66
 #: eeschema/toolbars_sch_editor.cpp:72 gerbview/toolbars_gerber.cpp:62
 #: pcbnew/toolbars_footprint_editor.cpp:58
 #: pcbnew/toolbars_footprint_viewer.cpp:85 pcbnew/toolbars_pcb_editor.cpp:144
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Poikkipalkin korkeus"
+msgstr "Ristikkotilamoodit"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 msgid "View Selected Footprint"
@@ -11969,11 +11883,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "Kytkemätön johto väyläliitäntään"
 
 #: eeschema/connection_graph.cpp:4250
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
-msgstr "Hierarkisella nimiöllä %s ei ole vastaavaa lehtinastaa emolehdellä"
+msgstr ""
+"Hierarkista nimiötä '%s' pääsivussa ei voi yhdistää olemattomaan yläsivuun"
 
 #: eeschema/connection_graph.cpp:4316
 #, c-format
@@ -12008,9 +11923,8 @@ msgid "%s not found"
 msgstr "%s ei löytynyt"
 
 #: eeschema/cross-probing.cpp:239
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "Korostettu verkko: %s"
+msgstr "Korostettu verkko:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -12432,15 +12346,13 @@ msgid "Update symbol attributes"
 msgstr "Päivitä symbolimääritteet"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:72
-#, fuzzy
 msgid "Update pin name/number visibilities"
-msgstr "Päivitä kentän näkyvyydet"
+msgstr "Päivitä nastan nimi/numeron näkyvyydet"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:73
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "Palauta ohjatun toiminnon parametrit oletusasetuksiin"
+msgstr "Nollaa vaihtoehtoisen nastan toiminnot"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
@@ -12477,9 +12389,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Kriteereitä vastaavia symboleja ei löytynyt ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbolia ei löydy ***"
+msgstr "*** symbolikirjaston tunnus ei kelvollinen ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -12583,9 +12494,8 @@ msgstr "Päivitä/nollaa kenttien sijainnit"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Päivitysasetukset"
+msgstr "Tarkista kaikki päivitysvaihtoehdot"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -12596,9 +12506,8 @@ msgid "Update keywords and footprint filters"
 msgstr "Päivitä avainsanat ja jalanjälkisuodattimet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibilities"
-msgstr "Päivitä/Nollaa kentän näkyvyydet"
+msgstr "Päivitä/nollaa nastan nimen/numeron näkyvyydet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
 msgid "Update/reset symbol attributes"
@@ -12606,9 +12515,8 @@ msgstr "Päivitä/nollaa symbolien määritteet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:148
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Päivitysasetukset"
+msgstr "Poista kaikkien päivitysasetusten valinta"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12778,14 +12686,12 @@ msgstr ""
 "Kaaviota ei ole täydellisesti merkitty. ERC: n tulokset ovat epätäydelliset."
 
 #: eeschema/dialogs/dialog_erc.cpp:222 pcbnew/dialogs/dialog_drc.cpp:275
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Valitut Kohteet"
+msgstr "Ristivertaile valitut kohteet"
 
 #: eeschema/dialogs/dialog_erc.cpp:223
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Korosta valittuja jalanjälkiä vastaavat symbolit"
+msgstr "Korosta vastaavat kohteet kankaalla, kun ne on valittu ERC-luettelossa"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:280
 #, fuzzy
