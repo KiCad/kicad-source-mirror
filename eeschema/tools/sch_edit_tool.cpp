@@ -3262,7 +3262,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
         m_frame->TestDanglingEnds();
 
-        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, isSlice ) )
+        SCH_MOVE_TOOL::MOVE_MODE moveMode = isSlice ? SCH_MOVE_TOOL::SLICE : SCH_MOVE_TOOL::BREAK;
+
+        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, moveMode ) )
         {
             commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
 

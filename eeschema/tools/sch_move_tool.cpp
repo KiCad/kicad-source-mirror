@@ -108,7 +108,7 @@ SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_inMoveTool( false ),
         m_moveInProgress( false ),
-        m_isDrag( false ),
+        m_mode( MOVE ),
         m_moveOffset( 0, 0 )
 {
 }
@@ -154,7 +154,7 @@ void SCH_MOVE_TOOL::Reset( RESET_REASON aReason )
         {
             // Clear the move state
             m_moveInProgress = false;
-            m_isDrag = false;
+            m_mode = MOVE;
             m_moveOffset = VECTOR2I( 0, 0 );
             m_anchorPos.reset();
 
@@ -460,19 +460,26 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_isDrag = aEvent.IsAction( &SCH_ACTIONS::drag );
+    if( aEvent.IsAction( &SCH_ACTIONS::drag ) )
+    {
+        if( aEvent.HasParameter() )
+            m_mode = aEvent.Parameter<MOVE_MODE>();
+        else
+            m_mode = DRAG;
+    }
+    else if( aEvent.IsAction( &SCH_ACTIONS::breakWire ) )
+        m_mode = BREAK;
+    else if( aEvent.IsAction( &SCH_ACTIONS::slice ) )
+        m_mode = SLICE;
+    else
+        m_mode = MOVE;
 
     if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
     {
-        bool isSlice = false;
-
-        if( m_isDrag )
-            isSlice = aEvent.Parameter<bool>();
-
         wxCHECK( aEvent.SynchronousState(), 0 );
         aEvent.SynchronousState()->store( STS_RUNNING );
 
-        if( doMoveSelection( aEvent, commit, isSlice ) )
+        if( doMoveSelection( aEvent, commit ) )
             aEvent.SynchronousState()->store( STS_FINISHED );
         else
             aEvent.SynchronousState()->store( STS_CANCELLED );
@@ -481,26 +488,37 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         SCH_COMMIT localCommit( m_toolMgr );
 
-        if( doMoveSelection( aEvent, &localCommit, false ) )
-            localCommit.Push( m_isDrag ? _( "Drag" ) : _( "Move" ) );
+        if( doMoveSelection( aEvent, &localCommit ) )
+        {
+            switch( m_mode )
+            {
+            case MOVE: localCommit.Push( _( "Move" ) ); break;
+            case DRAG: localCommit.Push( _( "Drag" ) ); break;
+            case BREAK: localCommit.Push( _( "Break Wire" ) ); break;
+            case SLICE: localCommit.Push( _( "Slice Wire" ) ); break;
+            }
+        }
         else
+        {
             localCommit.Revert();
+        }
     }
 
     return 0;
 }
 
 
-bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice )
+bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
-    bool                  wasDragging = m_moveInProgress && m_isDrag;
+    bool                  currentModeIsDragLike = ( m_mode != MOVE );
+    bool                  wasDragging = m_moveInProgress && currentModeIsDragLike;
 
     m_anchorPos.reset();
 
     // Check if already in progress and handle state transitions
-    if( checkMoveInProgress( aEvent, aCommit, wasDragging ) )
+    if( checkMoveInProgress( aEvent, aCommit, currentModeIsDragLike, wasDragging ) )
         return false;
 
     if( m_inMoveTool )      // Must come after m_moveInProgress checks above...
@@ -597,7 +615,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
-                initializeMoveOperation( aEvent, selection, aCommit, aIsSlice, internalPoints, snapLayer );
+                initializeMoveOperation( aEvent, selection, aCommit, internalPoints, snapLayer );
                 prevPos = m_cursor;
                 refreshTraits();
             }
@@ -738,10 +756,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     // Allowing other tools to activate during a move runs the risk of race
                     // conditions in which we try to spool up both event loops at once.
 
-                    if( m_isDrag )
-                        m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drag." ) );
-                    else
-                        m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) );
+                    switch( m_mode )
+                    {
+                    case MOVE: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) ); break;
+                    case DRAG: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drag." ) ); break;
+                    case BREAK: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel break." ) ); break;
+                    case SLICE: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel slice." ) ); break;
+                    }
 
                     evt->SetPassEvent( false );
                     continue;
@@ -834,7 +855,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     }
     else
     {
-        finalizeMoveOperation( selection, aCommit, aIsSlice, unselect, internalPoints );
+        finalizeMoveOperation( selection, aCommit, unselect, internalPoints );
     }
 
     m_dragAdditions.clear();
@@ -849,21 +870,21 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 }
 
 
-bool SCH_MOVE_TOOL::checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit,
-                                         bool wasDragging )
+bool SCH_MOVE_TOOL::checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aCurrentModeIsDragLike,
+                                         bool aWasDragging )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     if( !m_moveInProgress )
         return false;
 
-    if( m_isDrag != wasDragging )
+    if( aCurrentModeIsDragLike != aWasDragging )
     {
         EDA_ITEM* sel = m_selectionTool->GetSelection().Front();
 
         if( sel && !sel->IsNew() )
         {
-            // Reset the selected items so we can start again with the current m_isDrag state
+            // Reset the selected items so we can start again with the current drag mode state
             aCommit->Revert();
 
             m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
@@ -941,12 +962,11 @@ void SCH_MOVE_TOOL::refreshSelectionTraits( const SCH_SELECTION& aSelection, boo
 }
 
 
-void SCH_MOVE_TOOL::setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
-                                       bool aIsSlice )
+void SCH_MOVE_TOOL::setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit )
 {
     // Drag of split items start over top of their other segment, so we want to skip grabbing
     // the segments we split from
-    if( !m_isDrag || aIsSlice )
+    if( m_mode != DRAG && m_mode != BREAK )
         return;
 
     EDA_ITEMS connectedDragItems;
@@ -1033,10 +1053,9 @@ void SCH_MOVE_TOOL::setupItemsForMove( SCH_SELECTION& aSelection,
 }
 
 
-void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection,
-                                             SCH_COMMIT* aCommit, bool aIsSlice,
+void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
                                              std::vector<DANGLING_END_ITEM>& aInternalPoints,
-                                             GRID_HELPER_GRIDS& aSnapLayer )
+                                             GRID_HELPER_GRIDS&              aSnapLayer )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
@@ -1060,7 +1079,7 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
             it->ClearFlags( STARTPOINT | ENDPOINT );
     }
 
-    setupItemsForDrag( aSelection, aCommit, aIsSlice );
+    setupItemsForDrag( aSelection, aCommit );
     setupItemsForMove( aSelection, aInternalPoints );
 
     // Hide junctions connected to line endpoints that are not selected
@@ -1318,7 +1337,7 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
                 isLineModeConstrained = cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE;
 
             // Only partially selected drag lines in orthogonal line mode need special handling
-            if( m_isDrag && isLineModeConstrained && line
+            if( ( m_mode == DRAG ) && isLineModeConstrained && line
                 && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
             {
                 orthoLineDrag( aCommit, line, splitDelta, aXBendCount, aYBendCount, aGrid );
@@ -1518,11 +1537,12 @@ void SCH_MOVE_TOOL::updateStoredPositions( const SCH_SELECTION& aSelection )
 }
 
 
-void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
-                                           bool aIsSlice, bool aUnselect,
+void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aUnselect,
                                            const std::vector<DANGLING_END_ITEM>& aInternalPoints )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    const bool            isSlice = ( m_mode == SLICE );
+    const bool            isDragLike = ( m_mode == DRAG || m_mode == BREAK );
 
     // Save whatever new bend lines and changed lines survived the drag
     for( SCH_LINE* newLine : m_newDragLines )
@@ -1586,7 +1606,7 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
 
     // This needs to run prior to `RecalculateConnections` because we need to identify the
     // lines that are newly dangling
-    if( m_isDrag && !aIsSlice )
+    if( isDragLike && !isSlice )
         trimDanglingLines( aCommit );
 
     // Auto-rotate any moved labels
@@ -2224,10 +2244,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
 
-        if( aItem->HasFlag( STARTPOINT ) || !m_isDrag )
+        if( aItem->HasFlag( STARTPOINT ) || ( m_mode == MOVE ) )
             line->MoveStart( aDelta );
 
-        if( aItem->HasFlag( ENDPOINT ) || !m_isDrag )
+        if( aItem->HasFlag( ENDPOINT ) || ( m_mode == MOVE ) )
             line->MoveEnd( aDelta );
 
         break;
@@ -2309,10 +2329,10 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
 
                 // Ensure only one end is moved when calling moveItem
                 // i.e. we are in drag mode
-                bool tmp_isDrag = m_isDrag;
-                m_isDrag = true;
+                MOVE_MODE tmpMode = m_mode;
+                m_mode = DRAG;
                 moveItem( item, delta );
-                m_isDrag = tmp_isDrag;
+                m_mode = tmpMode;
 
                 item->ClearFlags( IS_MOVING );
                 updateItem( item, true );
@@ -2491,5 +2511,3 @@ void SCH_MOVE_TOOL::setTransitions()
     Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::drag.MakeEvent() );
     Go( &SCH_MOVE_TOOL::AlignToGrid,        SCH_ACTIONS::alignToGrid.MakeEvent() );
 }
-
-

@@ -56,6 +56,14 @@ struct SPECIAL_CASE_LABEL_INFO
 class SCH_MOVE_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
+    enum MOVE_MODE
+    {
+        MOVE,
+        DRAG,
+        BREAK,
+        SLICE
+    };
+
     SCH_MOVE_TOOL();
     ~SCH_MOVE_TOOL() override { }
 
@@ -79,7 +87,7 @@ public:
     int AlignToGrid( const TOOL_EVENT& aEvent );
 
 private:
-    bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice );
+    bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit );
 
     void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
@@ -106,7 +114,8 @@ private:
 
     // Helper methods for doMoveSelection refactoring
     ///< Check if a move is already in progress and handle state transitions
-    bool checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool wasDragging );
+    bool checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aCurrentModeIsDragLike,
+                              bool aWasDragging );
 
     ///< Promote pin selections to parent symbols and request final selection
     SCH_SELECTION& prepareSelection( bool& aUnselect );
@@ -117,13 +126,11 @@ private:
                                  bool& aIsGraphicsOnly );
 
     ///< Initialize the move/drag operation, setting up flags and connections
-    void initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection,
-                                  SCH_COMMIT* aCommit, bool aIsSlice,
-                                  std::vector<DANGLING_END_ITEM>& aInternalPoints,
-                                  GRID_HELPER_GRIDS& aSnapLayer );
+    void initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                                  std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer );
 
     ///< Setup items for drag operation, collecting connected items
-    void setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aIsSlice );
+    void setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit );
 
     ///< Setup items for move operation, marking dangling ends
     void setupItemsForMove( SCH_SELECTION& aSelection,
@@ -146,8 +153,8 @@ private:
     void updateStoredPositions( const SCH_SELECTION& aSelection );
 
     ///< Finalize the move operation, updating junctions and cleaning up
-    void finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aIsSlice,
-                                bool aUnselect, const std::vector<DANGLING_END_ITEM>& aInternalPoints );
+    void finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aUnselect,
+                                const std::vector<DANGLING_END_ITEM>& aInternalPoints );
 
 private:
     ///< Re-entrancy guard
@@ -155,7 +162,7 @@ private:
 
     ///< Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
-    bool                  m_isDrag;
+    MOVE_MODE             m_mode;
 
     ///< Items (such as wires) which were added to the selection for a drag
     std::vector<KIID>                   m_dragAdditions;
