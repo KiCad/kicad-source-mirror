@@ -299,11 +299,14 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
         wxMkdir( hist );
 
     git_repository* rawRepo = nullptr;
+    bool isNewRepo = false;
 
     if( git_repository_open( &rawRepo, hist.mb_str().data() ) != 0 )
     {
         if( git_repository_init( &rawRepo, hist.mb_str().data(), 0 ) != 0 )
             return false;
+
+        isNewRepo = true;
 
         wxFileName ignoreFile( hist, wxS( ".gitignore" ) );
         if( !ignoreFile.FileExists() )
@@ -318,6 +321,70 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     }
 
     git_repository_free( rawRepo );
+
+    // If this is a newly initialized repository with no commits, create an initial snapshot
+    // of all existing project files
+    if( isNewRepo )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] Init: New repository created, collecting existing files" ) );
+
+        // Collect all files in the project directory (excluding backups and hidden files)
+        wxArrayString files;
+        std::function<void( const wxString& )> collect = [&]( const wxString& path )
+        {
+            wxString name;
+            wxDir d( path );
+
+            if( !d.IsOpened() )
+                return;
+
+            bool cont = d.GetFirst( &name );
+
+            while( cont )
+            {
+                // Skip hidden files/directories and backup directories
+                if( name.StartsWith( wxS( "." ) ) || name.EndsWith( wxS( "-backups" ) ) )
+                {
+                    cont = d.GetNext( &name );
+                    continue;
+                }
+
+                wxFileName fn( path, name );
+
+                if( fn.DirExists() )
+                {
+                    collect( fn.GetFullPath() );
+                }
+                else if( fn.FileExists() )
+                {
+                    // Skip transient files
+                    if( fn.GetFullName() != wxS( "fp-info-cache" ) && fn.GetExt() != wxS( "kicad_prl" ) )
+                        files.Add( fn.GetFullPath() );
+                }
+
+                cont = d.GetNext( &name );
+            }
+        };
+
+        collect( aProjectPath );
+
+        if( files.GetCount() > 0 )
+        {
+            std::vector<wxString> vec;
+            vec.reserve( files.GetCount() );
+
+            for( unsigned i = 0; i < files.GetCount(); ++i )
+                vec.push_back( files[i] );
+
+            wxLogTrace( traceAutoSave, wxS( "[history] Init: Creating initial snapshot with %zu files" ), vec.size() );
+            CommitSnapshot( vec, wxS( "Initial snapshot" ) );
+        }
+        else
+        {
+            wxLogTrace( traceAutoSave, wxS( "[history] Init: No files found to add to initial snapshot" ) );
+        }
+    }
+
     return true;
 }
 
