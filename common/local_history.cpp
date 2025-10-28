@@ -536,7 +536,7 @@ bool LOCAL_HISTORY::CommitFullProjectSnapshot( const wxString& aProjectPath, con
 
             wxFileName fn( path, name );
 
-            if( fn.DirExists() )
+            if( fn.IsDir() && fn.DirExists() )
             {
                 collect( fn.GetFullPath() );
             }
