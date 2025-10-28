@@ -1150,14 +1150,45 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
     addAttribute( slotNode, "minusTol", "0.0" );
 
     if( m_version > 'B' )
-        addLocationNode( slotNode, 0.0, 0.0 );
+        addLocationNode( slotNode, aPad, false );
 
-    SHAPE_POLY_SET poly_set;
+    // Normally only oblong drill shapes should reach this code path since m_slot_holes
+    // is filtered to pads where DrillSizeX != DrillSizeY. However, use a fallback to
+    // ensure valid XML is always generated.
+    if( aPad.GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
+    {
+        VECTOR2I  drill_size = aPad.GetDrillSize();
+        EDA_ANGLE rotation = aPad.GetOrientation();
 
-    int maxError = m_board->GetDesignSettings().m_MaxError;
-    aPad.TransformHoleToPolygon( poly_set, 0, maxError, ERROR_INSIDE );
+        // IPC-2581C requires width >= height for Oval primitive
+        // Swap dimensions if needed and adjust rotation accordingly
+        if( drill_size.y > drill_size.x )
+        {
+            std::swap( drill_size.x, drill_size.y );
+            rotation += ANGLE_90;
+        }
 
-    addOutlineNode( slotNode, poly_set );
+        // Add Xform if rotation is needed (must come before Feature per IPC-2581C schema)
+        if( rotation != ANGLE_0 )
+        {
+            wxXmlNode* xformNode = appendNode( slotNode, "Xform" );
+            addAttribute( xformNode, "rotation", floatVal( rotation.AsDegrees() ) );
+        }
+
+        // Use IPC-2581 Oval primitive for oblong slots
+        wxXmlNode* ovalNode = appendNode( slotNode, "Oval" );
+        addAttribute( ovalNode, "width", floatVal( m_scale * drill_size.x ) );
+        addAttribute( ovalNode, "height", floatVal( m_scale * drill_size.y ) );
+    }
+    else
+    {
+        // Fallback to polygon outline for non-oblong shapes
+        SHAPE_POLY_SET poly_set;
+        int            maxError = m_board->GetDesignSettings().m_MaxError;
+        aPad.TransformHoleToPolygon( poly_set, 0, maxError, ERROR_INSIDE );
+
+        addOutlineNode( slotNode, poly_set );
+    }
 }
 
 
