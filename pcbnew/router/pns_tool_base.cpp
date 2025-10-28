@@ -421,16 +421,6 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     controls()->ForceCursorPosition( true, m_endSnapPoint );
 
-    if( Is45Limited() && m_router->GetState() == ROUTER::ROUTE_TRACK )
-    {
-        VECTOR2I moveVector = m_endSnapPoint - m_startSnapPoint;
-
-        if( Is45Limited() )
-            m_endSnapPoint = m_startSnapPoint + GetVectorSnapped45( moveVector );
-
-        controls()->ForceCursorPosition( true, m_endSnapPoint );
-    }
-
     if( m_endItem )
     {
         wxLogTrace( wxT( "PNS" ), wxT( "%s, layer : %d" ),
