@@ -28,6 +28,8 @@
 #include <bitmaps.h>
 #include <file_history.h>
 #include <kiplatform/policy.h>
+#include <kiway.h>
+#include <local_history.h>
 #include <paths.h>
 #include <policy_keys.h>
 #include <tool/action_manager.h>
@@ -106,7 +108,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     historyCond.Enable( [&]( const SELECTION& )
     {
         return Pgm().GetCommonSettings()->m_System.local_history_enabled
-               && LOCAL_HISTORY::HistoryExists( Prj().GetProjectPath() );
+               && Kiway().LocalHistory().HistoryExists( Prj().GetProjectPath() );
     } );
     RegisterUIUpdateHandler( restoreItem->GetId(), historyCond );
 

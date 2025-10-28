@@ -106,7 +106,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxString   fullFileName( aFileSet[0] );
     wxFileName wx_filename( fullFileName );
-    LOCAL_HISTORY::Init( wx_filename.GetPath() );
+    Kiway().LocalHistory().Init( wx_filename.GetPath() );
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wx_filename.IsAbsolute(), wxS( "Path is not absolute!" ) );
@@ -925,8 +925,8 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
         SetStatusText( msg, 0 );
 
         // Record a full project snapshot so related files (symbols, libs, sheets) are captured.
-        LOCAL_HISTORY::CommitFullProjectSnapshot( schematicFileName.GetPath(), wxS( "SCH Save" ) );
-        LOCAL_HISTORY::TagSave( schematicFileName.GetPath(), wxS( "sch" ) );
+        Kiway().LocalHistory().CommitFullProjectSnapshot( schematicFileName.GetPath(), wxS( "SCH Save" ) );
+        Kiway().LocalHistory().TagSave( schematicFileName.GetPath(), wxS( "sch" ) );
 
         if( m_autoSaveTimer )
             m_autoSaveTimer->Stop();

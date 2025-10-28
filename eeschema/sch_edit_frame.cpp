@@ -170,6 +170,14 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( &Prj() );
     m_schematic->SetSchematicHolder( this );
+
+    // Register schematic saver for autosave history
+    Kiway().LocalHistory().RegisterSaver( m_schematic,
+        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+        {
+            m_schematic->SaveToHistory( aProjectPath, aFiles );
+        } );
+
     CreateDefaultScreens();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
@@ -1163,9 +1171,9 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( GetLastUnsavedChangesResponse() == wxID_NO )
         {
             wxString projPath = Prj().GetProjectPath();
-            if( !projPath.IsEmpty() && LOCAL_HISTORY::HistoryExists( projPath ) )
+            if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
             {
-                LOCAL_HISTORY::CommitDuplicateOfLastSave( projPath, wxS("Schematic"),
+                Kiway().LocalHistory().CommitDuplicateOfLastSave( projPath, wxS("Schematic"),
                         wxS("Discard unsaved schematic changes") );
             }
         }
@@ -1269,7 +1277,7 @@ void SCH_EDIT_FRAME::OnModify()
     if( GetScreen() )
     {
         GetScreen()->SetContentModified();
-        LOCAL_HISTORY::NoteFileChange( GetScreen()->GetFileName() );
+        Kiway().LocalHistory().NoteFileChange( GetScreen()->GetFileName() );
     }
 
     if( m_isClosing )
@@ -2112,93 +2120,11 @@ wxString SCH_EDIT_FRAME::GetCurrentFileName() const
     return Schematic().GetFileName();
 }
 
-// Register saver after construction when first queried for file (simple lazy init)
-static bool s_schSaverRegistered = false;
-static void ensureSchSaverRegistered( SCH_EDIT_FRAME* frame )
-{
-    if( s_schSaverRegistered )
-        return;
-    LOCAL_HISTORY::RegisterSaver( [frame]( const wxString& aProjectPath, std::vector<wxString>& files )
-    {
-        wxString projPath = frame->Prj().GetProjectPath();
-        if( projPath.IsEmpty() )
-            return; // no project yet
-
-        // Verify we're saving for the correct project
-        if( !projPath.IsSameAs( aProjectPath ) )
-        {
-            wxLogTrace( traceAutoSave, wxS("[history] sch saver skipping - project path mismatch: %s vs %s"),
-                       projPath, aProjectPath );
-            return;
-        }
-
-        // Ensure project path has trailing separator for StartsWith tests & Mid calculations.
-        if( !projPath.EndsWith( wxFILE_SEP_PATH ) )
-            projPath += wxFILE_SEP_PATH;
-
-        wxFileName historyRoot( projPath, wxEmptyString );
-        historyRoot.AppendDir( wxS( ".history" ) );
-        wxString historyRootPath = historyRoot.GetPath();
-
-        // Iterate full schematic hierarchy (all sheets & their screens).
-        SCH_SHEET_LIST sheetList = frame->Schematic().Hierarchy();
-
-        // Acquire plugin once.
-        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-        for( const SCH_SHEET_PATH& path : sheetList )
-        {
-            SCH_SHEET*  sheet  = path.Last();
-            SCH_SCREEN* screen = path.LastScreen();
-
-            if( !sheet || !screen )
-                continue;
-
-            wxFileName abs = frame->Prj().AbsolutePath( screen->GetFileName() );
-
-            if( !abs.IsOk() )
-                continue; // no filename
-
-            wxString absPath = abs.GetFullPath();
-
-            if( absPath.IsEmpty() || !absPath.StartsWith( projPath ) )
-                continue; // external / unsaved subsheet
-
-            wxString rel = absPath.Mid( projPath.length() );
-
-            // Destination mirrors project-relative path under .history
-            wxFileName dst( historyRootPath, rel );
-
-            // Ensure destination directory exists
-            wxFileName dstDir( dst );
-            dstDir.SetFullName( wxEmptyString );
-            if( !dstDir.DirExists() )
-                wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
-
-            try
-            {
-                pi->SaveSchematicFile( dst.GetFullPath(), sheet, &frame->Schematic() );
-                files.push_back( dst.GetFullPath() );
-                wxLogTrace( traceAutoSave, wxS("[history] sch saver exported sheet '%s' -> '%s'"),
-                            absPath, dst.GetFullPath() );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxLogTrace( traceAutoSave, wxS("[history] sch saver export failed for '%s': %s"),
-                            absPath, wxString::FromUTF8( ioe.What() ) );
-            }
-        }
-    } );
-    s_schSaverRegistered = true;
-}
-
 
 SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
 {
-    ensureSchSaverRegistered( this );
     return m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 }
-
 
 void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 {

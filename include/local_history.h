@@ -23,7 +23,10 @@
 
 #pragma once
 
+#include <kicommon.h>
 #include <vector>
+#include <set>
+#include <map>
 #include <functional>
 #include <wx/string.h>
 #include <wx/window.h>
@@ -32,60 +35,75 @@
  * Simple local history manager built on libgit2.  Stores history for project files in
  * a hidden .history git repository within the project directory.
  */
-class LOCAL_HISTORY
+class KICOMMON_API LOCAL_HISTORY
 {
 public:
+    LOCAL_HISTORY();
+    ~LOCAL_HISTORY();
+
     /** Initialize the local history repository for the given project path. */
-    static bool Init( const wxString& aProjectPath );
+    bool Init( const wxString& aProjectPath );
 
     /** Commit the given files to the local history repository. */
-    static bool CommitSnapshot( const std::vector<wxString>& aFiles, const wxString& aTitle );
+    bool CommitSnapshot( const std::vector<wxString>& aFiles, const wxString& aTitle );
 
     /**
      * Commit a snapshot of the entire project directory (excluding the .history directory and
      * ignored transient files) to the local history repository.  This does not modify any
      * document dirty flags; it purely mirrors on-disk state for history purposes.
      */
-    static bool CommitFullProjectSnapshot( const wxString& aProjectPath, const wxString& aTitle );
+    bool CommitFullProjectSnapshot( const wxString& aProjectPath, const wxString& aTitle );
 
     /** Register a saver callback invoked during autosave history commits.
      *  The callback receives the project path and should append absolute file paths
-     *  (within that project) to aFiles for inclusion. */
-    static void RegisterSaver( const std::function<void( const wxString&, std::vector<wxString>& )>& aSaver );
+     *  (within that project) to aFiles for inclusion.
+     *  @param aSaverObject Unique object pointer identifier for this saver (to prevent duplicate registration)
+     *  @param aSaver The saver callback function */
+    void RegisterSaver( const void* aSaverObject,
+                       const std::function<void( const wxString&, std::vector<wxString>& )>& aSaver );
+
+    /** Unregister a previously registered saver callback.
+     *  @param aSaverObject The object pointer that was used to register the saver */
+    void UnregisterSaver( const void* aSaverObject );
 
     /** Run all registered savers and, if any staged changes differ from HEAD, create a commit. */
-    static bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );
+    bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );
 
     /** Record that a file has been modified and should be included in the next snapshot. */
-    static void NoteFileChange( const wxString& aFile );
+    void NoteFileChange( const wxString& aFile );
 
     /** Commit any pending modified files to the history repository. */
-    static bool CommitPending();
+    bool CommitPending();
+
     /** Return true if history exists for the project. */
-    static bool HistoryExists( const wxString& aProjectPath );
+    bool HistoryExists( const wxString& aProjectPath );
 
     /** Tag a manual save in the local history repository. */
-    static bool TagSave( const wxString& aProjectPath, const wxString& aFileType );
+    bool TagSave( const wxString& aProjectPath, const wxString& aFileType );
 
     /** Create a new commit duplicating the tree pointed to by Last_Save_<fileType> and move the
      *  Last_Save_<fileType> tag to the new commit (used when user discards changes). */
-    static bool CommitDuplicateOfLastSave( const wxString& aProjectPath, const wxString& aFileType,
-                                           const wxString& aMessage );
+    bool CommitDuplicateOfLastSave( const wxString& aProjectPath, const wxString& aFileType,
+                                    const wxString& aMessage );
 
     /** Enforce total size limit by rebuilding trimmed history keeping newest commits whose
      *  cumulative unique blob sizes fit within limit. */
-    static bool EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes );
+    bool EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes );
 
     /** Return true if the autosave data is newer than the last manual save. */
-    static bool HeadNewerThanLastSave( const wxString& aProjectPath );
+    bool HeadNewerThanLastSave( const wxString& aProjectPath );
 
     /** Return the current head commit hash. */
-    static wxString GetHeadHash( const wxString& aProjectPath );
+    wxString GetHeadHash( const wxString& aProjectPath );
 
     /** Restore the project files to the state recorded by the given commit hash. */
-    static bool RestoreCommit( const wxString& aProjectPath, const wxString& aHash );
+    bool RestoreCommit( const wxString& aProjectPath, const wxString& aHash, wxWindow* aParent = nullptr );
 
     /** Show a dialog allowing the user to choose a snapshot to restore. */
-    static void ShowRestoreDialog( const wxString& aProjectPath, wxWindow* aParent );
+    void ShowRestoreDialog( const wxString& aProjectPath, wxWindow* aParent );
+
+private:
+    std::set<wxString> m_pendingFiles;
+    std::map<const void*, std::function<void(const wxString&, std::vector<wxString>&)>> m_savers;
 };
 

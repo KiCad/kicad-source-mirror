@@ -72,6 +72,9 @@
 #include <zone.h>
 #include <mutex>
 #include <pcb_board_outline.h>
+#include <local_history.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <trace_helpers.h>
 
 // This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
 // tried it.
@@ -3425,4 +3428,62 @@ int BOARD::GetPadWithCastellatedAttrCount()
     }
 
     return count;
+}
+
+
+void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+{
+    wxString projPath = GetProject()->GetProjectPath();
+
+    if( projPath.IsEmpty() )
+        return;
+
+    // Verify we're saving for the correct project
+    if( !projPath.IsSameAs( aProjectPath ) )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - project path mismatch: %s vs %s"),
+                   projPath, aProjectPath );
+        return;
+    }
+
+    wxString boardPath = GetFileName();
+
+    if( boardPath.IsEmpty() )
+        return; // unsaved board
+
+    // Derive relative path from project root.
+    if( !boardPath.StartsWith( projPath ) )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - board not under project: %s"),
+                   boardPath );
+        return; // not under project
+    }
+
+    wxString rel = boardPath.Mid( projPath.length() );
+
+    // Build destination path inside .history mirror.
+    wxFileName historyRoot( projPath, wxEmptyString );
+    historyRoot.AppendDir( wxS( ".history" ) );
+    wxFileName dst( historyRoot.GetPath(), rel );
+
+    // Ensure destination directories exist.
+    wxFileName dstDir( dst );
+    dstDir.SetFullName( wxEmptyString );
+
+    if( !dstDir.DirExists() )
+        wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
+
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        // Save directly to history mirror path.
+        pi->SaveBoard( dst.GetFullPath(), this, nullptr );
+        aFiles.push_back( dst.GetFullPath() );
+        wxLogTrace( traceAutoSave, wxS("[history] pcb saver exported '%s'"), dst.GetFullPath() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] pcb saver export failed: %s"),
+                   wxString::FromUTF8( ioe.What() ) );
+    }
 }

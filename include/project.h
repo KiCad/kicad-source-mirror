@@ -304,6 +304,16 @@ public:
 
     LOCKFILE* GetProjectLock() const;
 
+    /**
+     * Save project files (.kicad_pro and .kicad_prl) to the .history directory.
+     *
+     * This method is used as a saver callback for LOCAL_HISTORY during autosave operations.
+     *
+     * @param aProjectPath The path to check against this project's path
+     * @param aFiles Output vector to append absolute file paths for history inclusion
+     */
+    void SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles );
+
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path
     friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required

@@ -130,8 +130,6 @@ PRIVATE
     eeschema_kiface_objects
     common
     kicommon
-    pcbcommon
-    3d-viewer
     scripting
     kimath
     qa_utils

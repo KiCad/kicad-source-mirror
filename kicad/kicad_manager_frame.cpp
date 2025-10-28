@@ -752,7 +752,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
             auto limit = Pgm().GetCommonSettings()->m_Backup.limit_total_size;
 
             if( limit > 0 )
-                LOCAL_HISTORY::EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit );
+                Kiway().LocalHistory().EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit );
         }
 
         mgr.UnloadProject( &Prj() );
@@ -847,14 +847,14 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() );
 
-    LOCAL_HISTORY::Init( Prj().GetProjectPath() );
+    Kiway().LocalHistory().Init( Prj().GetProjectPath() );
 
-    if( LOCAL_HISTORY::HeadNewerThanLastSave( Prj().GetProjectPath() ) )
+    if( Kiway().LocalHistory().HeadNewerThanLastSave( Prj().GetProjectPath() ) )
     {
-        wxString head = LOCAL_HISTORY::GetHeadHash( Prj().GetProjectPath() );
+        wxString head = Kiway().LocalHistory().GetHeadHash( Prj().GetProjectPath() );
         if( wxMessageBox( _( "A newer local history snapshot is available. Restore it?" ),
                           _( "Restore" ), wxYES_NO | wxICON_QUESTION, this ) == wxYES )
-            LOCAL_HISTORY::RestoreCommit( Prj().GetProjectPath(), head );
+            Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), head, this );
     }
 
     // Save history & window state to disk now.  Don't wait around for a crash.
@@ -1348,7 +1348,7 @@ void KICAD_MANAGER_FRAME::RestoreCommitFromHistory( const wxString& aHash )
     if( !Kiway().PlayersClose( true ) )
         return;
 
-    LOCAL_HISTORY::RestoreCommit( Prj().GetProjectPath(), aHash );
+    Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), aHash, this );
     m_leftWin->ReCreateTreePrj();
     m_openSavedWindows = true;
     m_historyPane->RefreshHistory( Prj().GetProjectPath() );

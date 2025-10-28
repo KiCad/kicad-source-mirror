@@ -47,6 +47,7 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <title_block.h>
+#include <local_history.h>
 
 
 
@@ -466,13 +467,56 @@ DESIGN_BLOCK_LIBRARY_ADAPTER* PROJECT::DesignBlockLibs()
 }
 
 
+LOCKFILE* PROJECT::GetProjectLock() const
+{
+    return m_project_lock.get();
+}
+
+
 void PROJECT::SetProjectLock( LOCKFILE* aLockFile )
 {
     m_project_lock.reset( aLockFile );
 }
 
 
-LOCKFILE* PROJECT::GetProjectLock() const
+void PROJECT::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles )
 {
-    return m_project_lock.get();
+    wxString projectFile = GetProjectFullName();
+
+    if( projectFile.IsEmpty() )
+        return;
+
+    wxFileName projectFn( projectFile );
+    wxFileName requestedFn( aProjectPath );
+
+    if( !projectFn.Normalize( wxPATH_NORM_ALL ) || !requestedFn.Normalize( wxPATH_NORM_ALL ) )
+        return;
+
+    if( projectFn.GetFullPath() != requestedFn.GetFullPath() )
+        return;
+
+    wxFileName historyDir( projectFn.GetPath(), wxS( ".history" ) );
+
+    if( !historyDir.DirExists() )
+    {
+        if( !historyDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+            return;
+    }
+
+    // Save project file (.kicad_pro)
+    wxFileName historyProFile( historyDir.GetFullPath(), projectFn.GetName(),
+                               projectFn.GetExt() );
+    wxCopyFile( projectFile, historyProFile.GetFullPath(), true );
+    aFiles.push_back( historyProFile.GetFullPath() );
+
+    // Save project local settings (.kicad_prl) if it exists
+    wxFileName prlFile( projectFn.GetPath(), projectFn.GetName(), FILEEXT::ProjectLocalSettingsFileExtension );
+
+    if( prlFile.FileExists() )
+    {
+        wxFileName historyPrlFile( historyDir.GetFullPath(), prlFile.GetName(),
+                                   prlFile.GetExt() );
+        wxCopyFile( prlFile.GetFullPath(), historyPrlFile.GetFullPath(), true );
+        aFiles.push_back( historyPrlFile.GetFullPath() );
+    }
 }

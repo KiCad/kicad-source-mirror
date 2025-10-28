@@ -52,6 +52,9 @@
 #include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <undo_redo_container.h>
+#include <local_history.h>
+#include <sch_io/sch_io_mgr.h>
+#include <sch_io/sch_io.h>
 
 #include <wx/log.h>
 
@@ -1992,4 +1995,79 @@ void SCHEMATIC::DeleteVariant( const wxString& aVariantName )
     SCH_SCREENS allScreens( m_rootSheet );
 
     allScreens.DeleteVariant( aVariantName );
+}
+
+
+void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+{
+    wxString projPath = m_project->GetProjectPath();
+
+    if( projPath.IsEmpty() )
+        return; // no project yet
+
+    // Verify we're saving for the correct project
+    if( !projPath.IsSameAs( aProjectPath ) )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] sch saver skipping - project path mismatch: %s vs %s"),
+                   projPath, aProjectPath );
+        return;
+    }
+
+    // Ensure project path has trailing separator for StartsWith tests & Mid calculations.
+    if( !projPath.EndsWith( wxFILE_SEP_PATH ) )
+        projPath += wxFILE_SEP_PATH;
+
+    wxFileName historyRoot( projPath, wxEmptyString );
+    historyRoot.AppendDir( wxS( ".history" ) );
+    wxString historyRootPath = historyRoot.GetPath();
+
+    // Iterate full schematic hierarchy (all sheets & their screens).
+    SCH_SHEET_LIST sheetList = Hierarchy();
+
+    // Acquire plugin once.
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+    for( const SCH_SHEET_PATH& path : sheetList )
+    {
+        SCH_SHEET*  sheet  = path.Last();
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !sheet || !screen )
+            continue;
+
+        wxFileName abs = m_project->AbsolutePath( screen->GetFileName() );
+
+        if( !abs.IsOk() )
+            continue; // no filename
+
+        wxString absPath = abs.GetFullPath();
+
+        if( absPath.IsEmpty() || !absPath.StartsWith( projPath ) )
+            continue; // external / unsaved subsheet
+
+        wxString rel = absPath.Mid( projPath.length() );
+
+        // Destination mirrors project-relative path under .history
+        wxFileName dst( historyRootPath, rel );
+
+        // Ensure destination directory exists
+        wxFileName dstDir( dst );
+        dstDir.SetFullName( wxEmptyString );
+
+        if( !dstDir.DirExists() )
+            wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
+
+        try
+        {
+            pi->SaveSchematicFile( dst.GetFullPath(), sheet, this );
+            aFiles.push_back( dst.GetFullPath() );
+            wxLogTrace( traceAutoSave, wxS("[history] sch saver exported sheet '%s' -> '%s'"),
+                        absPath, dst.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogTrace( traceAutoSave, wxS("[history] sch saver export failed for '%s': %s"),
+                        absPath, wxString::FromUTF8( ioe.What() ) );
+        }
+    }
 }

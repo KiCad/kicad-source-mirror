@@ -42,16 +42,14 @@ static wxString historyPath( const wxString& aProjectPath )
 }
 
 
-HISTORY_LOCK_MANAGER::HISTORY_LOCK_MANAGER( const wxString& aProjectPath, int aStaleTimeoutSec )
-    : m_projectPath( aProjectPath )
-    , m_historyPath( historyPath( aProjectPath ) )
-    , m_repo( nullptr )
-    , m_index( nullptr )
-    , m_repoOwned( false )
-    , m_indexOwned( false )
-    , m_staleTimeoutSec( aStaleTimeoutSec <= 0 ?
-                         ADVANCED_CFG::GetCfg().m_HistoryLockStaleTimeout :
-                         aStaleTimeoutSec )
+HISTORY_LOCK_MANAGER::HISTORY_LOCK_MANAGER( const wxString& aProjectPath, int aStaleTimeoutSec ) :
+        m_projectPath( aProjectPath ),
+        m_historyPath( historyPath( aProjectPath ) ),
+        m_repo( nullptr ),
+        m_index( nullptr ),
+        m_repoOwned( false ),
+        m_indexOwned( false ),
+        m_staleTimeoutSec( aStaleTimeoutSec <= 0 ? ADVANCED_CFG::GetCfg().m_HistoryLockStaleTimeout : aStaleTimeoutSec )
 {
     wxLogTrace( HISTORY_LOCK_TRACE, "Attempting to acquire lock for project: %s (timeout: %d sec)",
                aProjectPath, m_staleTimeoutSec );

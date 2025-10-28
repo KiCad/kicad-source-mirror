@@ -99,5 +99,5 @@ void KICAD_MANAGER_FRAME::UnarchiveFiles()
 
 void KICAD_MANAGER_FRAME::RestoreLocalHistory()
 {
-    LOCAL_HISTORY::ShowRestoreDialog( Prj().GetProjectPath(), this );
+    Kiway().LocalHistory().ShowRestoreDialog( Prj().GetProjectPath(), this );
 }

@@ -218,9 +218,6 @@ void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
 
 void LOCAL_HISTORY_PANE::OnRightClick( wxListEvent& aEvent )
 {
-    // Temporarily disable right-click context menu (todo: SNH)
-    return;
-
     long item = aEvent.GetIndex();
 
     if( item < 0 || item >= static_cast<long>( m_commits.size() ) )

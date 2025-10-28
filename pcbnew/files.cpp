@@ -471,7 +471,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxString   fullFileName( aFileSet[0] );
     wxFileName wx_filename( fullFileName );
-    LOCAL_HISTORY::Init( wx_filename.GetPath() );
+    Kiway().LocalHistory().Init( wx_filename.GetPath() );
     wxString   msg;
 
     if( Kiface().IsSingle() )
@@ -1061,8 +1061,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     UpdateStatusBar();
 
     // Capture entire project state for PCB save events.
-    LOCAL_HISTORY::CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
-    LOCAL_HISTORY::TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+    Kiway().LocalHistory().CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
+    Kiway().LocalHistory().TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
     if( m_autoSaveTimer )
         m_autoSaveTimer->Stop();
     m_autoSavePending = false;

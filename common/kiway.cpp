@@ -39,6 +39,7 @@
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
 #include <logging.h>
+#include <local_history.h>
 
 #include <wx/dynlib.h>
 #include <wx/stdpaths.h>
@@ -52,8 +53,9 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
 KIWAY::KIWAY( int aCtlBits, wxFrame* aTop ):
-     m_ctl( aCtlBits ), m_top( nullptr ), m_blockingDialog( wxID_NONE )
+     m_ctl( aCtlBits ), m_top( nullptr ), m_blockingDialog( wxID_NONE ), m_local_history( nullptr )
 {
+    m_local_history = new LOCAL_HISTORY();
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
     // Set the array of all known frame window IDs to empty = wxID_NONE,
@@ -64,6 +66,12 @@ KIWAY::KIWAY( int aCtlBits, wxFrame* aTop ):
     //   to allow a call to wxWindow::FindWindowById() using a FRAME_T frame type
     for( int n = 0; n < KIWAY_PLAYER_COUNT; n++ )
         m_playerFrameId[n] = wxID_NONE;
+}
+
+
+KIWAY::~KIWAY()
+{
+    delete m_local_history;
 }
 
 

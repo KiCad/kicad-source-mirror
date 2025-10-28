@@ -136,6 +136,7 @@ class JOB;
 class REPORTER;
 class PROGRESS_REPORTER;
 class STARTWIZARD_PROVIDER;
+class LOCAL_HISTORY;
 
 
 /**
@@ -307,7 +308,7 @@ public:
         KIWAY_FACE_COUNT
     };
 
-    ~KIWAY() throw () {}
+    ~KIWAY();
 
     /**
      * A simple mapping function which returns the FACE_T which is known to implement
@@ -396,6 +397,11 @@ public:
      * in a place decided by the implementation, and not known to the caller.
      */
     virtual PROJECT& Prj() const;
+
+    /**
+     * Return the LOCAL_HISTORY associated with this KIWAY.
+     */
+    LOCAL_HISTORY& LocalHistory() { return *m_local_history; }
 
     /**
      * Change the language and then calls ShowChangedLanguage() on all #KIWAY_PLAYERs.
@@ -492,6 +498,8 @@ private:
     // Call: wxWindow::FindWindowById( m_playerFrameId[aFrameType] )
     // to know if still exists (or GetPlayerFrame( FRAME_T aFrameType )
     std::atomic<wxWindowID> m_playerFrameId[KIWAY_PLAYER_COUNT];
+
+    LOCAL_HISTORY*  m_local_history;
 };
 
 

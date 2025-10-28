@@ -1365,6 +1365,16 @@ public:
 
     PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::BOARD; }
 
+    /**
+     * Save board file to the .history directory.
+     *
+     * This method is used as a saver callback for LOCAL_HISTORY during autosave operations.
+     *
+     * @param aProjectPath The path to check against this board's project path
+     * @param aFiles Output vector to append absolute file paths for history inclusion
+     */
+    void SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles );
+
     const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const
     {
         return m_itemByIdCache;

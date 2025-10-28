@@ -1347,9 +1347,9 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( GetLastUnsavedChangesResponse() == wxID_NO )
         {
             wxString projPath = Prj().GetProjectPath();
-            if( !projPath.IsEmpty() && LOCAL_HISTORY::HistoryExists( projPath ) )
+            if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
             {
-                LOCAL_HISTORY::CommitDuplicateOfLastSave( projPath, wxS("pcb"),
+                Kiway().LocalHistory().CommitDuplicateOfLastSave( projPath, wxS("pcb"),
                         wxS("Discard unsaved pcb changes") );
             }
         }
@@ -1775,7 +1775,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 void PCB_EDIT_FRAME::OnBoardLoaded()
 {
     wxFileName fn( GetBoard()->GetFileName() );
-    LOCAL_HISTORY::Init( fn.GetPath() );
+    Kiway().LocalHistory().Init( fn.GetPath() );
     ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
     layerEnum.Choices().Clear();
@@ -1933,7 +1933,7 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
 void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
-    LOCAL_HISTORY::NoteFileChange( GetBoard()->GetFileName() );
+    Kiway().LocalHistory().NoteFileChange( GetBoard()->GetFileName() );
     m_ZoneFillsDirty = true;
 
     if( m_isClosing )
@@ -2952,68 +2952,17 @@ void PCB_EDIT_FRAME::ThemeChanged()
 void PCB_EDIT_FRAME::ProjectChanged()
 {
     PythonSyncProjectName();
-    // Register autosave history saver once (idempotent guard via static flag)
-    static bool s_registeredSaver = false;
-    if( !s_registeredSaver )
+
+    // Register autosave history saver for the board.
+    // Saver exports the in-memory BOARD into the history mirror preserving the original
+    // relative path and file name (reparented under .history) without touching dirty flags.
+    if( GetBoard() )
     {
-        // Saver exports the in-memory BOARD into the history mirror preserving the original
-        // relative path and file name (reparented under .history) without touching dirty flags.
-        LOCAL_HISTORY::RegisterSaver( [this]( const wxString& aProjectPath, std::vector<wxString>& files )
-        {
-            if( !GetBoard() )
-                return;
-
-            wxString projPath = Prj().GetProjectPath();
-            if( projPath.IsEmpty() )
-                return;
-
-            // Verify we're saving for the correct project
-            if( !projPath.IsSameAs( aProjectPath ) )
+        Kiway().LocalHistory().RegisterSaver( GetBoard(),
+            [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
             {
-                wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - project path mismatch: %s vs %s"),
-                           projPath, aProjectPath );
-                return;
-            }
-
-            wxString boardPath = GetBoard()->GetFileName();
-            if( boardPath.IsEmpty() )
-                return; // unsaved board
-
-            // Derive relative path from project root.
-            if( !boardPath.StartsWith( projPath ) )
-            {
-                wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - board not under project: %s"),
-                           boardPath );
-                return; // not under project
-            }
-
-            wxString rel = boardPath.Mid( projPath.length() );
-
-            // Build destination path inside .history mirror.
-            wxFileName historyRoot( projPath, wxEmptyString );
-            historyRoot.AppendDir( wxS( ".history" ) );
-            wxFileName dst( historyRoot.GetPath(), rel );
-
-            // Ensure destination directories exist.
-            wxFileName dstDir( dst );
-            dstDir.SetFullName( wxEmptyString );
-            if( !dstDir.DirExists() )
-                wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
-
-            try
-            {
-                IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
-                // Save directly to history mirror path.
-                pi->SaveBoard( dst.GetFullPath(), GetBoard(), nullptr );
-                files.push_back( dst.GetFullPath() );
-                wxLogTrace( traceAutoSave, wxS("[history] pcb saver exported '%s'"), dst.GetFullPath() );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxLogTrace( traceAutoSave, wxS("[history] pcb saver export failed: %s"), wxString::FromUTF8( ioe.What() ) );
-            }
-        } );
-        s_registeredSaver = true;
+                GetBoard()->SaveToHistory( aProjectPath, aFiles );
+            } );
     }
 }
 

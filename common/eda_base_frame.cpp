@@ -192,63 +192,14 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
 
     commonInit( aFrameType );
 
-    // Register project file saver (once per process). Ensures project file participates in
+    // Register project file saver. Ensures project file participates in
     // autosave history commits without affecting dirty state.
-    static bool s_projectSaverRegistered = false;
-
-    if( !s_projectSaverRegistered )
-    {
-        LOCAL_HISTORY::RegisterSaver( [this]( const wxString& aProjectPath, std::vector<wxString>& files )
+    Kiway().LocalHistory().RegisterSaver( &Prj(),
+        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
         {
-            wxString projectPath = Prj().GetProjectFullName(); // path to *.kicad_pro
-
-            if( projectPath.IsEmpty() )
-                return;
-
-            // Verify project file is within the specified project directory
-            wxFileName projFnCheck( projectPath );
-            wxFileName expectedDir( aProjectPath, wxEmptyString );
-            expectedDir.Normalize( wxPATH_NORM_DEPR_OLD_DEFAULT );
-
-            wxFileName projDir( projFnCheck.GetPath(), wxEmptyString );
-            projDir.Normalize( wxPATH_NORM_DEPR_OLD_DEFAULT );
-
-            if( projDir.GetFullPath() != expectedDir.GetFullPath() )
-            {
-                wxLogTrace( traceAutoSave, wxS("[history] project saver skipping - project not in specified path: %s vs %s"),
-                           projDir.GetFullPath(), expectedDir.GetFullPath() );
-                return;
-            }
-
-            wxFileName historyRoot = projDir;
-            historyRoot.AppendDir( wxS( ".history" ) );
-
-            if( !historyRoot.DirExists() )
-                wxFileName::Mkdir( historyRoot.GetPath(), 0777, wxPATH_MKDIR_FULL );
-
-            // Copy project file preserving original filename under .history.
-            if( wxFileExists( projectPath ) )
-            {
-                wxFileName dstProj( historyRoot.GetPath(), projFnCheck.GetFullName() );
-                wxCopyFile( projectPath, dstProj.GetFullPath(), true );
-                files.push_back( dstProj.GetFullPath() );
-                wxLogTrace( traceAutoSave, wxS("[history] project saver exported '%s'"), dstProj.GetFullPath() );
-            }
-
-            // Copy local settings (.kicad_prl) if exists.
-            wxFileName localSettings( projDir.GetPath(), projFnCheck.GetName(), wxS( "kicad_prl" ) );
-
-            if( localSettings.FileExists() )
-            {
-                wxFileName dstLocal( historyRoot.GetPath(), localSettings.GetFullName() );
-                wxCopyFile( localSettings.GetFullPath(), dstLocal.GetFullPath(), true );
-                files.push_back( dstLocal.GetFullPath() );
-                wxLogTrace( traceAutoSave, wxS("[history] project saver exported '%s'"), dstLocal.GetFullPath() );
-            }
+            Prj().SaveToHistory( aProjectPath, aFiles );
         } );
 
-        s_projectSaverRegistered = true;
-    }
 }
 
 
@@ -429,7 +380,7 @@ bool EDA_BASE_FRAME::doAutoSave()
     m_autoSavePending = false;
     // Use registered saver callbacks to snapshot editor state into .history and only commit
     // if there are material changes.
-    LOCAL_HISTORY::RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
+    Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
     return true;
 }
 
@@ -789,7 +740,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
     }
 
     if( Pgm().GetCommonSettings()->m_Backup.enabled )
-        LOCAL_HISTORY::Init( Prj().GetProjectPath() );
+        Kiway().LocalHistory().Init( Prj().GetProjectPath() );
 
     GetBitmapStore()->ThemeChanged();
     ThemeChanged();
