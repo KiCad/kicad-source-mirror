@@ -35,6 +35,8 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <math/util.h>
+#include <deque>
+#include <unordered_set>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_line_chain.h>
@@ -42,8 +44,10 @@
 #include <preview_items/selection_area.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <connection_graph.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
+#include <sch_pin.h>
 #include <sch_group.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
@@ -216,6 +220,25 @@ static std::vector<KICAD_T> connectedLineTypes =
     SCH_ITEM_LOCATE_BUS_T
 };
 
+static std::vector<KICAD_T> expandConnectionGraphTypes =
+{
+    SCH_SYMBOL_T,
+    SCH_SYMBOL_LOCATE_POWER_T,
+    SCH_PIN_T,
+    SCH_ITEM_LOCATE_WIRE_T,
+    SCH_ITEM_LOCATE_BUS_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_DIRECTIVE_LABEL_T,
+    SCH_JUNCTION_T,
+    SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
+    SCH_SHAPE_T
+};
+
 static std::vector<KICAD_T> crossProbingTypes =
 {
     SCH_SYMBOL_T,
@@ -249,6 +272,8 @@ bool SCH_SELECTION_TOOL::Init()
     auto linesSelection =        SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( lineTypes );
     auto wireOrBusSelection =    SCH_CONDITIONS::Count( 1 )    && SCH_CONDITIONS::OnlyTypes( connectedLineTypes );
     auto connectedSelection =    SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( connectedTypes );
+    auto expandableSelection =
+                                 SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( expandConnectionGraphTypes );
     auto sheetSelection =        SCH_CONDITIONS::Count( 1 )    && SCH_CONDITIONS::OnlyTypes( sheetTypes );
     auto crossProbingSelection = SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::HasTypes( crossProbingTypes );
     auto tableCellSelection =    SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( tableCellTypes );
@@ -327,6 +352,7 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( SCH_ACTIONS::clearHighlight,        haveHighlight && SCH_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                                haveHighlight && SCH_CONDITIONS::Idle, 1 );
 
+    menu.AddItem( SCH_ACTIONS::selectConnection,      expandableSelection && SCH_CONDITIONS::Idle, 2 );
     menu.AddItem( ACTIONS::selectColumns,             tableCellSelection && SCH_CONDITIONS::Idle, 2 );
     menu.AddItem( ACTIONS::selectRows,                tableCellSelection && SCH_CONDITIONS::Idle, 2 );
     menu.AddItem( ACTIONS::selectTable,               tableCellSelection && SCH_CONDITIONS::Idle, 2 );
@@ -2859,31 +2885,206 @@ int SCH_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 }
 
 
+std::set<SCH_ITEM*> SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( m_isSymbolEditor || m_isSymbolViewer || !editFrame )
+        return {};
+
+    CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
+
+    if( !graph )
+        return {};
+
+    SCH_SHEET_PATH&        currentSheet = editFrame->GetCurrentSheet();
+    std::vector<SCH_ITEM*> startItems;
+    std::set<SCH_ITEM*>    added;
+
+    // Build the list of starting items for the connection graph traversal
+    for( auto item : aItems )
+    {
+        if( !item->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+        // If we're a symbol, start from all its pins
+        if( schItem->Type() == SCH_SYMBOL_T )
+        {
+            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( schItem )->GetPins( &currentSheet ) )
+            {
+                if( pin )
+                    startItems.push_back( pin );
+            }
+        }
+        else if( schItem->IsConnectable() )
+        {
+            startItems.push_back( schItem );
+        }
+    }
+
+    if( startItems.empty() )
+        return {};
+
+    std::deque<SCH_ITEM*>         queue;
+    std::unordered_set<SCH_ITEM*> visited;
+
+    auto enqueue = [&]( SCH_ITEM* aItem )
+    {
+        if( !aItem )
+            return;
+
+        if( visited.insert( aItem ).second )
+            queue.push_back( aItem );
+    };
+
+    for( SCH_ITEM* item : startItems )
+        enqueue( item );
+
+    while( !queue.empty() )
+    {
+        SCH_ITEM* item = queue.front();
+        queue.pop_front();
+
+        if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item ) )
+        {
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParent() );
+
+            if( symbol && Selectable( symbol ) && itemPassesFilter( symbol, nullptr ) && !symbol->IsSelected() )
+                added.insert( symbol );
+        }
+
+        const SCH_ITEM_VEC& neighbors = item->ConnectedItems( currentSheet );
+
+        for( SCH_ITEM* neighbor : neighbors )
+        {
+            if( !neighbor )
+                continue;
+
+            if( neighbor->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( neighbor );
+
+                if( Selectable( symbol ) && itemPassesFilter( symbol, nullptr ) && !symbol->IsSelected() )
+                    added.insert( symbol );
+
+                continue;
+            }
+
+            enqueue( neighbor );
+        }
+
+        if( !Selectable( item ) || !itemPassesFilter( item, nullptr ) )
+            continue;
+
+        added.insert( item );
+    }
+
+    return added;
+}
+
+
+std::set<SCH_ITEM*> SCH_SELECTION_TOOL::expandConnectionGraphically( const SCH_SELECTION& aItems )
+{
+    std::set<SCH_ITEM*> added;
+
+    for( auto item : aItems )
+    {
+        if( !item->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( schItem, schItem->IsConnectable() );
+
+        // Make sure we don't add things the user has disabled in the selection filter
+        for( SCH_ITEM* connItem : conns )
+        {
+            if( !Selectable( connItem ) || !itemPassesFilter( connItem, nullptr ) )
+                continue;
+
+            added.insert( connItem );
+        }
+    }
+
+    return added;
+}
+
+
 int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
-    RequestSelection( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
-                        SCH_ITEM_LOCATE_GRAPHIC_LINE_T, SCH_SHAPE_T } );
+    SCH_SELECTION originalSelection = RequestSelection( expandConnectionGraphTypes );
 
     if( m_selection.Empty() )
         return 0;
 
-    m_frame->GetScreen()->ClearDrawingState();
+    SCH_SELECTION connectableSelection;
+    SCH_SELECTION graphicalSelection;
 
-    for( EDA_ITEM* selItem : m_selection.GetItems() )
+    // We need to filter the selection into connectable items (wires, pins, symbols)
+    // and non-connectable items (shapes, unconnectable lines) for processing
+    // with the graph or by the graphical are-endpoints-touching method.
+    for( EDA_ITEM* selItem : originalSelection.GetItems() )
     {
         if( !selItem->IsSCH_ITEM() )
             continue;
 
-        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( selItem );
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selItem );
 
-        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( schItem, true );
-
-        for( SCH_ITEM* item : conns )
-            select( item );
+        if( item->Type() == SCH_LINE_T && !item->IsConnectable() )
+            graphicalSelection.Add( item );
+        else if( item->Type() == SCH_SHAPE_T )
+            graphicalSelection.Add( item );
+        else
+            connectableSelection.Add( item );
     }
 
-    if( m_selection.GetSize() > 1 )
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    ClearSelection( true );
+
+    std::set<SCH_ITEM*> graphAdded;
+    std::set<SCH_ITEM*> graphicalAdded;
+
+    if( !connectableSelection.Empty() )
+        graphAdded = expandConnectionWithGraph( connectableSelection );
+
+    if( !graphicalSelection.Empty() )
+        graphicalAdded = expandConnectionGraphically( graphicalSelection );
+
+    // For whatever reason, the connection graph isn't working (e.g. in symbol editor )
+    // so fall back to graphical expansion for those items if nothing was added.
+    if( graphAdded.empty() && !connectableSelection.Empty() )
+    {
+        SCH_SELECTION combinedSelection = connectableSelection;
+
+        for( EDA_ITEM* selItem : graphicalSelection.GetItems() )
+            combinedSelection.Add( selItem );
+
+        graphicalSelection = combinedSelection;
+    }
+
+    graphicalAdded = expandConnectionGraphically( graphicalSelection );
+
+    // Add everything to the selection, including the original selection
+    for( auto item : graphAdded )
+        AddItemToSel( item, true );
+
+    for( auto item : graphicalAdded )
+        AddItemToSel( item, true );
+
+    for( auto item : originalSelection )
+        AddItemToSel( item, true );
+
+    m_selection.SetIsHover( originalSelection.IsHover() );
+
+    if( originalSelection.HasReferencePoint() )
+        m_selection.SetReferencePoint( originalSelection.GetReferencePoint() );
+    else
+        m_selection.ClearReferencePoint();
+
+    getView()->Update( &m_selection );
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }

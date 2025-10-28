@@ -232,6 +232,9 @@ protected:
 private:
     OPT_TOOL_EVENT autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid, SCH_ITEM* aItem );
 
+    std::set<SCH_ITEM*> expandConnectionWithGraph( const SCH_SELECTION& aItems );
+    std::set<SCH_ITEM*> expandConnectionGraphically( const SCH_SELECTION& aItems );
+
     /**
      * Apply rules to narrow the collection down to selectable objects, and then heuristics
      * to try and narrow it to a single object.

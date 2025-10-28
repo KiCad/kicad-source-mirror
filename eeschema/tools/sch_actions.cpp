@@ -108,8 +108,8 @@ TOOL_ACTION SCH_ACTIONS::selectConnection( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + '4' )
         .LegacyHotkeyName( "Select Connection" )
-        .FriendlyName( _( "Select Connection" ) )
-        .Tooltip( _( "Select a complete connection" ) )
+        .FriendlyName( _( "Select/Expand Connection" ) )
+        .Tooltip( _( "Selects a connection or expands an existing selection to pins, symbols, or entire connections" ) )
         .Icon( BITMAPS::net_highlight_schematic ) );
 
 TOOL_ACTION SCH_ACTIONS::syncSelection( TOOL_ACTION_ARGS()

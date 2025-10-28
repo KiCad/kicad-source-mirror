@@ -450,7 +450,8 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_ITEM* aItem, bool aSecondPa
         return {};
     };
 
-    wxCHECK_MSG( aItem && !getItemEndpoints( aItem ).empty(), retval, wxT( "Invalid pointer." ) );
+    if( !aItem || getItemEndpoints( aItem ).empty() )
+        return retval;
 
     toSearch.push( aItem );
 
