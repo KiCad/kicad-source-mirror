@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-12 06:14+0000\n"
+"PO-Revision-Date: 2025-10-29 02:05+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ka/>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:349
@@ -2250,15 +2250,14 @@ msgstr ""
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "გახსნა ბიბლიოთეკაში %s"
+msgstr "უცნობი ბიბლიოთეკის ტიპი %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "მითითება"
+msgstr "შიდა შეცდომა"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4071,9 +4070,8 @@ msgid "When enabled, use a different color for every other table row"
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "სისქის გამორთვა"
+msgstr "მომხმარებლის კურსორების გამორთვა"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -8732,9 +8730,9 @@ msgid "KiCad Default Libraries"
 msgstr "KiCad-ის ნაგულისხმევი"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "სიმბოლოების ბიბლიოთეკა '%s' აღმოჩენილი არაა."
+msgstr "ბიბლიოთეკა '%s' აღმოჩენილი არაა"
 
 #: common/libraries/library_table.cpp:67
 #, c-format
@@ -10495,13 +10493,14 @@ msgstr ""
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1183
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
 "%s"
 msgstr ""
-"დიზაინის ბლოკის ბიბლიოთეკის ცხრილის '%s' ჩატვირთვის შეცდომა.\n"
+"ბიბლიოთეკის ცხრილის შენახვის შეცდომა.\n"
+"\n"
 "%s"
 
 #: common/widgets/design_block_pane.cpp:292
@@ -17153,21 +17152,19 @@ msgid "Keep pins attached when dragging edges"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr ""
-"დიზაინის ბლოკის ბიბლიოთეკის ცხრილის '%s' ჩატვირთვის შეცდომა.\n"
-"%s"
+msgstr "ბიბლიოთეკის ცხრილის '%s' ჩატვირთვის შეცდომა"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "შექმნის შეცდომა სიმბოლოების ბიბლიოთეკისთვის '%s'."
+msgstr "ბიბლიოთეკის '%s' ჩატვირთვის შეცდომა"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "სიმბოლოს ბიბლიოთეკები"
+msgstr "სიმბოლოს ბიბლიოთეკის ცხრილები (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:544
 msgid "Nickname and path cannot be empty."
@@ -27108,9 +27105,8 @@ msgid "Report units; valid options: in, mm"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
-msgstr "ნაკვალევების გატანა ბიბლიოთეკაში:"
+msgstr "უპადო ნაკვალევების გამოტოვება"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
 msgid "Subtract holes from the board area"
@@ -27536,9 +27532,8 @@ msgid "Duplicate Template"
 msgstr "მონიშნულის დუბლირება"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "წყარო საქაღალდე ვერ გავხსენი: %s"
+msgstr "შაბლონების საქაღალდის გახსნა შეუძლებელია."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
 msgid "No project file found in template directory."
@@ -27559,9 +27554,8 @@ msgid "Template name cannot be empty."
 msgstr "ბილიკი ცარიელი ვერ იქნება."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "ვერ ვიპოვე მოსალოდნელი საქაღალდე 'meta' მისამართზე '%s'"
+msgstr "მომხმარებლის შაბლონების საქაღალდის აღმოჩენა შეუძლებელია."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
 #, fuzzy, c-format
@@ -27569,14 +27563,13 @@ msgid "Directory '%s' already exists."
 msgstr "გამოტანის საქაღალდე '%s' უკვე არსებობს."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "გამოტანს საქაღალდის შექმნა ჩავარდა\n"
+msgstr "ვერ შეიქმნა საქაღალდე '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "წყარო საქაღალდე ვერ გავხსენი: %s"
+msgstr "წყარო შაბლონების საქაღალდის გახსნა შეუძლებელია."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format
@@ -32558,14 +32551,12 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/board_statistics_report.cpp:110
-#, fuzzy
 msgid "Castellated:"
-msgstr "დაკბილული"
+msgstr "დაკბილული:"
 
 #: pcbnew/board_statistics_report.cpp:112
-#, fuzzy
 msgid "Press-fit:"
-msgstr "პრესფიტინგი"
+msgstr "პრესფიტინგი:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Through vias:"
@@ -33002,9 +32993,9 @@ msgid "Reference Designator Prefixes in Use"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "სიმულაციიდან ამოღება"
+msgstr "(%s-ის ამოღება რეანოტაციიდან.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
 #, fuzzy
@@ -33027,9 +33018,8 @@ msgid "(sorted by footprint location)"
 msgstr "ნაკვალევის გატანა რედაქტორში"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:370
-#, fuzzy
 msgid "(sorted by reference designator location)"
-msgstr "საწყისი მიმართვის დადგენა:"
+msgstr "(დალაგებულია მიმართვის მინიჭების მდებარეობით)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:378
 #, c-format
@@ -33041,9 +33031,9 @@ msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "მშობლის მიმართვის დამდგენით:"
+msgstr "პლატაზე %d ცარიელი, ან არასწორი მიმართვის მიმნიჭებელია."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
 msgid ""
@@ -41221,18 +41211,16 @@ msgid "Via Propagation"
 msgstr "დარღვევა"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
-#, fuzzy
 msgid "Global Unit Delay:"
-msgstr "გლობალური წაშლა"
+msgstr "გლობალური ერთეულის დაყოვნება:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
 msgid "ps/cm"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
-#, fuzzy
 msgid "Via Delay Overrides:"
-msgstr "გადაფარვები"
+msgstr "გამტარი ნახვრეტის დაყოვნების გადაფარვები:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:212
 msgid "Signal Layer From"
@@ -41964,9 +41952,8 @@ msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "ხელმისაწვდომი ტექსტური ცვლადები:"
+msgstr "ამოუხსნელი ტექსტური ცვლადი."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
@@ -47306,9 +47293,9 @@ msgid "Successfully created genCAD file\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "ვერ ჩავწერე ფაილი '%s'."
+msgstr "ვერ ჩავწერე ფაილი '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
 #, fuzzy, c-format
