@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-28 02:06+0000\n"
+"PO-Revision-Date: 2025-10-29 03:05+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -12217,7 +12217,7 @@ msgstr "Pin-zu-Pin-Konfliktmatrix bearbeiten..."
 #: eeschema/dialogs/dialog_erc.cpp:726 eeschema/dialogs/dialog_erc.cpp:732
 #: eeschema/dialogs/dialog_erc.cpp:739
 msgid "Open the Schematic Setup... dialog"
-msgstr "Den Dialog für die Einrichtung des Schaltplans öffnen"
+msgstr "Den Dialog \"Schaltplan einrichten...\" öffnen"
 
 #: eeschema/dialogs/dialog_erc.cpp:731 pcbnew/dialogs/dialog_drc.cpp:778
 msgid "Edit violation severities..."
@@ -47685,7 +47685,7 @@ msgid ""
 "differential pair make sure you are at the end."
 msgstr ""
 "Kann keinen geeigneten Ausgangspunkt finden. Wenn Sie von einem vorhandenem "
-"differenziellem Paar aus starten stellen Sie sicher, dass sich am Ende "
+"differenziellem Paar aus starten, stellen Sie sicher, dass Sie sich am Ende "
 "dieses Paares befinden."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:595
