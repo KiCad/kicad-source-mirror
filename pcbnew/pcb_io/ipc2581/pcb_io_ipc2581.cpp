@@ -1143,7 +1143,9 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
         addLocationNode( slotNode, 0.0, 0.0 );
 
     SHAPE_POLY_SET poly_set;
-    aPad.GetEffectiveShape( PADSTACK::ALL_LAYERS )->TransformToPolygon( poly_set, 0, ERROR_INSIDE );
+
+    int maxError = m_board->GetDesignSettings().m_MaxError;
+    aPad.TransformHoleToPolygon( poly_set, 0, maxError, ERROR_INSIDE );
 
     addOutlineNode( slotNode, poly_set );
 }
