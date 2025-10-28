@@ -1392,7 +1392,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     }
 
     if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
-        aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+        aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
 
     if( aFrame->GetName() == FOOTPRINT_EDIT_FRAME_NAME )
     {
@@ -1673,12 +1673,12 @@ wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) c
                 return wxString::Format( _( "Pad %s of %s on %s" ),
                                          GetNetnameMsg(),
                                          parentFP->GetReference(),
-                                         layerMaskDescribe() );
+                                         LayerMaskDescribe() );
             }
             else
             {
                 return wxString::Format( _( "Pad on %s" ),
-                                         layerMaskDescribe() );
+                                         LayerMaskDescribe() );
             }
         }
         else
@@ -1705,13 +1705,13 @@ wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) c
                                          GetNumber(),
                                          GetNetnameMsg(),
                                          parentFP->GetReference(),
-                                         layerMaskDescribe() );
+                                         LayerMaskDescribe() );
             }
             else
             {
                 return wxString::Format( _( "Pad %s on %s" ),
                                          GetNumber(),
-                                         layerMaskDescribe() );
+                                         LayerMaskDescribe() );
             }
         }
         else

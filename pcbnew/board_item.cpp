@@ -170,7 +170,7 @@ bool BOARD_ITEM::IsSideSpecific() const
 }
 
 
-wxString BOARD_ITEM::layerMaskDescribe() const
+wxString BOARD_ITEM::LayerMaskDescribe() const
 {
     const BOARD* board = GetBoard();
     LSET         layers = GetLayerSet() & board->GetEnabledLayers();

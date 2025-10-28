@@ -1078,13 +1078,33 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
         }
     }
 
+    // Board connectivity net names are not the same as schematic connectivity net names.
+    // Footprints that contain multiple overlapping pads with the same number are suffixed
+    // with "_N" for internal use.  Somewhere along the line, these pseudo net names were
+    // exposed in the zone net name list.
+    auto isInNetlist = [&]( const wxString& aNetName ) -> bool
+    {
+        if( netlistNetnames.count( aNetName ) )
+            return true;
+
+        // If the zone net name is a pseudo net name, check if the root net name is in the net
+        // list.  If so, then this is a valid net.
+        for( const wxString& netName : netlistNetnames )
+        {
+            if( aNetName.StartsWith( netName ) )
+                return true;
+        }
+
+        return false;
+    };
+
     // Test copper zones to detect "dead" nets (nets without any pad):
     for( ZONE* zone : m_board->Zones() )
     {
         if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() )
             continue;
 
-        if( netlistNetnames.count( zone->GetNetname() ) == 0 )
+        if( !isInNetlist( zone->GetNetname() ) )
         {
             // Look for a pad in the zone's connected-pad-cache which has been updated to
             // a new net and use that. While this won't always be the right net, the dead
@@ -1170,8 +1190,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                 }
                 else
                 {
-                    PCB_LAYER_ID layer = zone->GetLayer();
-                    VECTOR2I     pt = zone->GetPosition();
+                    wxString layerNames = zone->LayerMaskDescribe();
+                    VECTOR2I         pt = zone->GetPosition();
 
                     if( m_frame && m_frame->GetPcbNewSettings() )
                     {
@@ -1182,12 +1202,13 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                             pt.y *= -1;
                     }
 
-                    msg.Printf( _( "Copper zone on layer %s at (%s, %s) has no pads connected." ),
-                                EscapeHTML( m_board->GetLayerName( layer ) ),
+                    msg.Printf( _( "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"." ),
+                                EscapeHTML( layerNames ),
                                 m_frame ? m_frame->MessageTextFromValue( pt.x )
                                         : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.x ),
                                 m_frame ? m_frame->MessageTextFromValue( pt.y )
-                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.y ) );
+                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.y ),
+                                zone->GetNetname() );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );

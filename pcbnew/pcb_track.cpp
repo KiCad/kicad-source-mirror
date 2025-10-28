@@ -174,7 +174,7 @@ wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
     default:                    formatStr = _( "Via %s on %s" );              break;
     }
 
-    return wxString::Format( formatStr, GetNetnameMsg(), layerMaskDescribe() );
+    return wxString::Format( formatStr, GetNetnameMsg(), LayerMaskDescribe() );
 }
 
 
@@ -1641,7 +1641,7 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
 
     aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( m_width ) );
 
@@ -1708,7 +1708,7 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
     // TODO(JE) padstacks
     aList.emplace_back( _( "Diameter" ),
                         aFrame->MessageTextFromValue( GetWidth( PADSTACK::ALL_LAYERS ) ) );
@@ -1756,7 +1756,7 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 }
 
 
-wxString PCB_VIA::layerMaskDescribe() const
+wxString PCB_VIA::LayerMaskDescribe() const
 {
     const BOARD* board = GetBoard();
     PCB_LAYER_ID top_layer;

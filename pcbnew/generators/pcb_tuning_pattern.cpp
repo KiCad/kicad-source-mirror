@@ -2158,7 +2158,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         aList.emplace_back( _( "Resolved Netclass" ),
                             UnescapeString( netclass->GetHumanReadableName() ) );
 
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
 
     if( width && !mixedWidth )
         aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( width ) );

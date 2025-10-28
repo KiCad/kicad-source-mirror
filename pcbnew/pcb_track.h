@@ -671,10 +671,10 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
+    wxString LayerMaskDescribe() const override;
+
 protected:
     void swapData( BOARD_ITEM* aImage ) override;
-
-    wxString layerMaskDescribe() const override;
 
 private:
     // Silence GCC warning about hiding the PCB_TRACK base method
