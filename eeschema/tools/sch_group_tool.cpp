@@ -143,6 +143,9 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
         SCH_ITEM* schItem = static_cast<SCH_ITEM*>( selection[ii] );
 
+        if( schItem->GetParentSymbol() )
+            selection.Remove( schItem );
+
         if( !schItem->IsGroupableType() )
             selection.Remove( schItem );
     }
