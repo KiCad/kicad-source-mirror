@@ -430,6 +430,11 @@ public:
 
     const std::vector<wxString>* GetEmbeddedFonts() override;
 
+    /**
+     * Return a string (to be shown to the user) describing a layer mask.
+     */
+    virtual wxString LayerMaskDescribe() const;
+
     enum COMPARE_FLAGS : int
     {
         DRC                  = 0x01,
@@ -442,11 +447,6 @@ public:
     };
 
 protected:
-    /**
-     * Return a string (to be shown to the user) describing a layer mask.
-     */
-    virtual wxString layerMaskDescribe() const;
-
     virtual void swapData( BOARD_ITEM* aImage );
 
 protected:
