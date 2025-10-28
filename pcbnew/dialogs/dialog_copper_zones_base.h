@@ -125,7 +125,6 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnShowNetNameFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNetSelectionUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPadInZoneSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveIslandsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }

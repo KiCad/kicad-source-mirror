@@ -55,11 +55,6 @@ private:
 
     static constexpr int INVALID_NET_CODE{ 0 };
 
-    static constexpr int DEFAULT_SORT_CONFIG{ -1 };
-    static constexpr int NO_PERSISTENT_SORT_MODE{ 0 };
-    static constexpr int HIDE_ANONYMOUS_NETS{ 1 << 0 };
-    static constexpr int SORT_BY_PAD_COUNT{ 1 << 1 };
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
@@ -75,7 +70,6 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& ) override;
     void OnNetSelectionUpdated( wxCommandEvent& event ) override;
     void OnRemoveIslandsSelection( wxCommandEvent& event ) override;
-    void OnPadInZoneSelection( wxCommandEvent& event ) override;
 
     void          readNetInformation();
     void          readFilteringAndSortingCriteria();
@@ -194,24 +188,8 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_settings.SetupLayersList( m_layers, m_Parent, LSET::AllCuMask( aParent->GetBoard()->GetCopperLayerCount() ) );
     m_isTeardrop = m_settings.m_TeardropType != TEARDROP_TYPE::TD_NONE;
 
-    switch( m_settings.m_TeardropType )
-    {
-    case TEARDROP_TYPE::TD_NONE:
-        // standard copper zone
-        break;
-
-    case TEARDROP_TYPE::TD_VIAPAD:
-        SetTitle( _( "Teardrop on Vias/Pads Properties" ) );
-        break;
-
-    case TEARDROP_TYPE::TD_TRACKEND:
-        SetTitle( _( "Teardrop on Tracks Properties" ) );
-        break;
-
-    default:
-        SetTitle( _( "Teardrop Properties" ) );
-        break;
-    }
+    if( m_isTeardrop )
+        SetTitle( _( "Legacy Teardrop Properties" ) );
 
     if( aConvertSettings )
     {
@@ -330,6 +308,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     {
         m_PadInZoneOpt->SetSelection( 0 );
         m_PadInZoneOpt->Enable( false );
+        m_antipadClearance.Enable( false );
+        m_spokeWidth.Enable( false );
     }
 
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
@@ -352,12 +332,13 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // Initialize information required to display nets list
     readNetInformation();
 
-    if( !m_isTeardrop && m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
-        m_GridStyleCtrl->SetSelection( 1 );
-    else
-        m_GridStyleCtrl->SetSelection( 0 );
+    m_GridStyleCtrl->SetSelection( m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN ? 1 : 0 );
 
-    m_GridStyleCtrl->Enable( !m_isTeardrop );
+    if( m_isTeardrop )
+    {
+        m_GridStyleCtrl->SetSelection( 0 );
+        m_GridStyleCtrl->Enable( false );
+    }
 
     m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
     m_gridStyleRotation.SetAngleValue( m_settings.m_HatchOrientation );
@@ -375,7 +356,6 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     wxCommandEvent event;
     OnStyleSelection( event );
     OnNetSelectionUpdated( event );
-    OnPadInZoneSelection( event );
 
     Fit();
 
@@ -465,15 +445,6 @@ void DIALOG_COPPER_ZONE::OnNetSelectionUpdated( wxCommandEvent& event )
 void DIALOG_COPPER_ZONE::OnRemoveIslandsSelection( wxCommandEvent& event )
 {
     m_islandThreshold.Enable( m_cbRemoveIslands->GetSelection() == 2 );
-}
-
-
-void DIALOG_COPPER_ZONE::OnPadInZoneSelection( wxCommandEvent& event )
-{
-    int  selection = m_PadInZoneOpt->GetSelection();
-    bool enabled = selection == 1 || selection == 2;
-    m_antipadClearance.Enable( enabled );
-    m_spokeWidth.Enable( enabled );
 }
 
 
