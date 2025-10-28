@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-27 23:13+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-10-29 02:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -8803,7 +8803,7 @@ msgstr "Netzhervorhebungsfarbe"
 
 #: common/layer_id.cpp:115
 msgid "Drag net collisions"
-msgstr "Netzkollisionen während des Ziehend hervorheben"
+msgstr "Netzkollisionen während des Ziehens hervorheben"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -9479,7 +9479,7 @@ msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
-"Sind Sie sicher?  Wenn Sie die KiCad-Einrichtung abbrechen, werden die "
+"Sind Sie sicher?  Wenn Sie die KiCad-Konfiguration abbrechen, werden die "
 "Standardeinstellungen ausgewählt."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
@@ -12955,7 +12955,7 @@ msgstr "Pin-zu-Pin-Konfliktmatrix bearbeiten..."
 #: eeschema/dialogs/dialog_erc.cpp:781 eeschema/dialogs/dialog_erc.cpp:787
 #: eeschema/dialogs/dialog_erc.cpp:794
 msgid "Open the Schematic Setup... dialog"
-msgstr "Den Dialog für die Einrichtung des Schaltplans öffnen"
+msgstr "Den Dialog \"Schaltplan einrichten...\" öffnen"
 
 #: eeschema/dialogs/dialog_erc.cpp:786 pcbnew/dialogs/dialog_drc.cpp:793
 msgid "Edit violation severities..."
@@ -15330,7 +15330,7 @@ msgstr "Formatierungseinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Annotation preferences"
-msgstr "Anmerkungseinstellungen"
+msgstr "Annotationseinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
@@ -51120,7 +51120,7 @@ msgid ""
 "differential pair make sure you are at the end."
 msgstr ""
 "Kann keinen geeigneten Ausgangspunkt finden. Wenn Sie von einem vorhandenem "
-"differenziellem Paar aus starten stellen Sie sicher, dass sich am Ende "
+"differenziellem Paar aus starten, stellen Sie sicher, dass Sie sich am Ende "
 "dieses Paares befinden."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:596
