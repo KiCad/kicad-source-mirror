@@ -1494,12 +1494,22 @@ int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
         }
     }
 
+    // Because selectAllConnectedTracks() use m_filter to collect connected tracks
+    // to pads, enable filter for these items, regardless the curent filter options
+    // via filter is not changed, because it can be useful to keep via filter disabled
+    struct PCB_SELECTION_FILTER_OPTIONS save_filter = m_filter;
+    m_filter.tracks      = true;
+    m_filter.pads        = true;
+
     // Clear selection so we don't delete our footprints/pads
     ClearSelection( true );
 
     // Get the tracks on our list of pads, then delete them
     selectAllConnectedTracks( toUnroute, STOP_CONDITION::STOP_AT_PAD );
     m_toolMgr->RunAction( ACTIONS::doDelete );
+    ClearSelection( true );
+
+    m_filter = save_filter;     // restore current filter options
 
     // Reselect our footprint/pads as they were in our original selection
     for( EDA_ITEM* item : selectedItems )
