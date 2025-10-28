@@ -55,6 +55,8 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::initPanel()
     else
         m_viaPropagationUnits.SetUnits( EDA_UNITS::PS_PER_CM );
 
+    m_viaPropagationUnits.SetDataType( EDA_DATA_TYPE::LENGTH_DELAY );
+
     int x = 0, y = 0;
     m_name->GetTextExtent( "XXXXXXXXXXXXXXXXXXXXX", &x, &y );
     m_name->SetMinSize( wxSize( x, -1 ) );
@@ -213,7 +215,7 @@ TUNING_PROFILE PANEL_SETUP_TUNING_PROFILE_INFO::GetProfile() const
     profile.m_Type = static_cast<TUNING_PROFILE::PROFILE_TYPE>( m_type->GetSelection() );
     profile.m_GenerateNetClassDRCRules = m_enableDrcGeneration->GetValue();
     profile.m_EnableTimeDomainTuning = m_enableDelayTuning->GetValue();
-    profile.m_ViaPropagationDelay = m_viaPropagationUnits.GetValue();
+    profile.m_ViaPropagationDelay = m_viaPropagationUnits.GetIntValue();
 
     double targetImpedance;
 
