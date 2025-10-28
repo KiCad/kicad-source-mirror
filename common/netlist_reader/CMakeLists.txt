@@ -38,6 +38,7 @@ target_include_directories( netlist_reader_obj PRIVATE
     ${CMAKE_SOURCE_DIR}/libs/kimath/include
     ${CMAKE_SOURCE_DIR}/libs/kicommon/include
     ${CMAKE_SOURCE_DIR}/libs/core/include
+    ${CMAKE_SOURCE_DIR}/thirdparty/nlohmann_json
     ${CMAKE_BINARY_DIR}/common  # For generated netlist_lexer.h
     ${CMAKE_BINARY_DIR}  # For kicad_build_version.h
 )
