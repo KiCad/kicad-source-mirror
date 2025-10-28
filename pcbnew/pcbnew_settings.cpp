@@ -49,7 +49,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
         : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
           m_FootprintChooser(),
-          m_Zones(),
           m_FootprintViewer(),
           m_FootprintWizard(),
           m_Display(),
@@ -287,9 +286,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "export_d356.doNotExportUnconnectedPads",
             &m_ExportD356.doNotExportUnconnectedPads, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
-            &m_Zones.net_sort_mode, -1 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );

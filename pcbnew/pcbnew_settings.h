@@ -187,11 +187,6 @@ public:
         bool filter_on_pin_count;
     };
 
-    struct ZONES
-    {
-        int         net_sort_mode;
-    };
-
     struct DISPLAY_OPTIONS
     {
         // Note: Display options common to  Cvpcb and Pcbnew are stored in
@@ -236,8 +231,6 @@ public:
     DIALOG_EXPORT_D356 m_ExportD356;
     DIALOG_DRC         m_DRCDialog;
     FOOTPRINT_CHOOSER  m_FootprintChooser;
-
-    ZONES              m_Zones;
 
     WINDOW_SETTINGS    m_FootprintViewer;
     WINDOW_SETTINGS    m_FootprintWizard;
