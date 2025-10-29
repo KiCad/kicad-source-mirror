@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-27 00:03+0000\n"
+"PO-Revision-Date: 2025-10-30 01:50+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -34749,7 +34749,7 @@ msgstr "配線長の調整パターン"
 #: pcbnew/dialogs/dialog_board_setup.cpp:193
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
 msgid "Tuning Profiles"
-msgstr "プロファイル調整"
+msgstr "調整プロファイル"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:215
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -43490,11 +43490,11 @@ msgstr "配線伝播遅延を計算できませんでした"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:832
 msgid "Tuning profile must have a name"
-msgstr "チューニングプロファイルには名前を付ける必要があります"
+msgstr "調整プロファイルには名前を付ける必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:847
 msgid "Duplicated signal layer configuration in tuning profile"
-msgstr "チューニング プロファイル内の重複した信号レイアーの構成"
+msgstr "調整プロファイル内の重複した信号レイアーの構成"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:875
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:886
@@ -43737,7 +43737,7 @@ msgstr "ネットクラス '%s' (uvia)"
 #: pcbnew/drc/drc_engine.cpp:486 pcbnew/drc/drc_engine.cpp:505
 #, c-format
 msgid "tuning profile '%s'"
-msgstr "チューニング プロファイル '%s'"
+msgstr "調整プロファイル '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:580
 msgid "keepout area"
@@ -44346,7 +44346,7 @@ msgstr "裏面レイヤーの非ミラーテキスト"
 
 #: pcbnew/drc/drc_item.cpp:301
 msgid "Missing tuning profile"
-msgstr "チューニング プロファイル がありません"
+msgstr "調整プロファイル がありません"
 
 #: pcbnew/drc/drc_item.cpp:498
 #, c-format
@@ -45071,7 +45071,7 @@ msgstr "フットプリント ライブラリ テーブルを読み込み中…"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:987
 msgid "Checking board footprints against library..."
-msgstr "ライブラリに対するフットプリントをチェックしています..."
+msgstr "ライブラリに対するフットプリントをチェック..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1053
 #, c-format
@@ -45173,7 +45173,7 @@ msgstr "アサーションをチェック..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:602
 msgid "Checking for missing tuning profiles..."
-msgstr "チューニング プロファイルの不足をチェック..."
+msgstr "調整プロファイルをチェック..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -45181,7 +45181,7 @@ msgstr "物理的なアイテムを収集しています..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:178
 msgid "Checking physical clearances..."
-msgstr "物理的なクリアランスをチェックしています..."
+msgstr "物理的なクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:511
 #, c-format
