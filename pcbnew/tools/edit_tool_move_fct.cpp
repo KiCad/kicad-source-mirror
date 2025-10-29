@@ -813,7 +813,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             restore_state = true; // Perform undo locally
             break;                // Finish
         }
-        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &ACTIONS::cut ) )
+        else if( evt->IsAction( &ACTIONS::duplicate )  && evt != &copy )
+        {
+            wxBell();
+        }
+        else if( evt->IsAction( &ACTIONS::cut ) )
         {
             wxBell();
         }
