@@ -116,16 +116,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-06-27 08:05+0000\n"
+"PO-Revision-Date: 2025-10-30 01:50+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -235,7 +235,7 @@ msgstr "Ultimo tempo di rendering %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "Errore OpenGL durante il rendering fuori schermo: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:962
 #, c-format
@@ -344,15 +344,13 @@ msgstr "Griglia 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Ruota"
+msgstr "Ruota scheda"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Sposta scheda in alto"
+msgstr "Sposta scheda"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -509,14 +507,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Copia immagine 3D corrente negli appunti"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Esporta..."
+msgstr "Esporta immagine..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Esporta la vista corrente come immagine PNG"
+msgstr "Esporta la vista corrente come file immagine"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -732,14 +728,12 @@ msgid "Show board body"
 msgstr "Mostra il corpo scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Fori metallizzati"
+msgstr "Cilindri metallizzati"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Mostra le piazzole a fori passanti"
+msgstr "Mostra cilindri via e fori passanti metallizzati"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -1241,14 +1235,12 @@ msgid "(unsaved)"
 msgstr "(non salvato)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Esporta modello 3D"
+msgstr "Esporta vista 3D"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Dimensioni immagine:"
+msgstr "Dimensioni immagine"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1465,9 +1457,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Pin"
+msgstr "in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1478,34 +1469,29 @@ msgid "Height:"
 msgstr "Altezza:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Soluzione 3R:"
+msgstr "Risoluzione"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Soluzione 3R:"
+msgstr "Risoluzione X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "Pixels"
+msgstr "pixel/in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "Pixels"
+msgstr "pixel/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Soluzione 3R:"
+msgstr "Risoluzione Y:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pixel"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1990,9 +1976,8 @@ msgid "Errors"
 msgstr "Errori"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Rimpiazza e trova il prossimo"
+msgstr "Rimpiazzare file caricato?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -3564,21 +3549,21 @@ msgid "Warning: custom scale is not a number."
 msgstr "Attenzione: la scala non è un numero."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"Attenzione: scala impostata a un valore molto grande.\n"
+"Attenzione: scala personalizzata troppo grande.\n"
 "Verrà fermata a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"Attenzione: scala impostata a un valore molto piccolo.\n"
+"Attenzione: scala personalizzata troppo piccola.\n"
 "Verrà fermata a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:227
@@ -4225,7 +4210,6 @@ msgid "Rendering Engine"
 msgstr "Motore di rendering"
 
 #: common/dialogs/panel_common_settings_base.cpp:35
-#, fuzzy
 msgid "Accelerated Graphics"
 msgstr "Grafica accelerata"
 
