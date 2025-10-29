@@ -435,8 +435,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     {
                         xproperty->AddChild( groupNode = node( wxT( "group" ) ) );
 
-                        for( const wxString& padName : group )
-                            groupNode->AddAttribute( wxT( "pin" ), padName );
+                        for( const wxString& pinName : group )
+                            groupNode->AddChild( node( wxT( "pin" ), pinName ) );
                     }
                 }
             }
