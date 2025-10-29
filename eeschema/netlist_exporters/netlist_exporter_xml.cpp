@@ -339,7 +339,10 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( wxT( "part" ), partName );
 
-            xlibsource->AddAttribute( wxT( "description" ), symbol->GetDescription() );
+            if( m_resolveTextVars )
+                xlibsource->AddAttribute( wxT( "description" ), symbol->GetShownDescription() );
+            else
+                xlibsource->AddAttribute( wxT( "description" ), symbol->GetDescription() );
 
             /* Add the symbol properties. */
             XNODE* xproperty;

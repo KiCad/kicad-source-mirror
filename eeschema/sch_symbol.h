@@ -205,11 +205,13 @@ public:
      * @return the associated LIB_SYMBOL's description field (or wxEmptyString).
      */
     wxString GetDescription() const override;
+    wxString GetShownDescription( int aDepth = 0 ) const override;
 
     /**
      * @return the associated LIB_SYMBOL's keywords field (or wxEmptyString).
      */
     wxString GetKeyWords() const override;
+    wxString GetShownKeyWords( int aDepth = 0 ) const override;
 
     /**
      * Return the documentation text for the given part alias

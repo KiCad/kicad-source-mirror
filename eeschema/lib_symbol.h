@@ -146,7 +146,8 @@ public:
     wxString GetName() const override { return m_name; }
 
     LIB_ID GetLIB_ID() const override { return m_libId; }
-    wxString GetDesc() override { return GetDescription(); }
+    wxString GetDesc() override { return GetShownDescription(); }
+    wxString GetFootprint() override { return GetFootprintField().GetShownText( false ); }
     int GetSubUnitCount() const override { return GetUnitCount(); }
 
     const LIB_ID& GetLibId() const override { return m_libId; }
@@ -175,6 +176,8 @@ public:
         return GetDescriptionField().GetText();
     }
 
+    wxString GetShownDescription( int aDepth = 0 ) const override;
+
     void SetKeyWords( const wxString& aKeyWords ) { m_keyWords = aKeyWords; }
 
     wxString GetKeyWords() const override
@@ -188,12 +191,9 @@ public:
         return m_keyWords;
     }
 
-    std::vector<SEARCH_TERM> GetSearchTerms() override;
+    wxString GetShownKeyWords( int aDepth = 0 ) const override;
 
-    wxString GetFootprint() override
-    {
-        return GetFootprintField().GetText();
-    }
+    std::vector<SEARCH_TERM> GetSearchTerms() override;
 
     void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) override;
 
