@@ -28,6 +28,7 @@
 
 #include <netlist_reader/netlist.h>
 #include <netlist_reader/netlist_reader.h>
+#include <config.h>     // to define strncasecmp for some platforms
 
 void LEGACY_NETLIST_READER::LoadNetlist()
 {
