@@ -310,9 +310,6 @@ void PCB_IO_KICAD_SEXPR::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     else
         m_board->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
-    // Prepare net mapping that assures that net codes saved in a file are consecutive integers
-    m_mapping->SetBoard( aBoard );
-
     PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aFileName );
 
     m_out = &formatter;     // no ownership
@@ -691,20 +688,6 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::formatNetInformation( const BOARD* aBoard ) const
-{
-    for( NETINFO_ITEM* net : *m_mapping )
-    {
-        if( net == nullptr )    // Skip not actually existing nets (orphan nets)
-            continue;
-
-        m_out->Print( "(net %d %s)",
-                      m_mapping->Translate( net->GetNetCode() ),
-                      m_out->Quotew( net->GetNetname() ).c_str() );
-    }
-}
-
-
 void PCB_IO_KICAD_SEXPR::formatProperties( const BOARD* aBoard ) const
 {
     for( const std::pair<const wxString, wxString>& prop : aBoard->GetProperties() )
@@ -728,9 +711,6 @@ void PCB_IO_KICAD_SEXPR::formatHeader( const BOARD* aBoard ) const
 
     // Properties
     formatProperties( aBoard );
-
-    // Save net codes and names
-    formatNetInformation( aBoard );
 }
 
 
@@ -1078,7 +1058,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
     }
 
     if( aShape->GetNetCode() > 0 )
-        m_out->Print( "(net %d)", m_mapping->Translate( aShape->GetNetCode() ) );
+        m_out->Print( "(net %s)", m_out->Quotew( aShape->GetNetname() ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aShape->m_Uuid );
     m_out->Print( ")" );
@@ -1731,11 +1711,8 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     formatCornerProperties( PADSTACK::ALL_LAYERS );
 
     // Unconnected pad is default net so don't save it.
-    if( !( m_ctl & CTL_OMIT_PAD_NETS ) && aPad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
-    {
-        m_out->Print( "(net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
-                      m_out->Quotew( aPad->GetNetname() ).c_str() );
-    }
+    if( !( m_ctl & CTL_OMIT_PAD_NETS ) && aPad->GetNetCode() > 0 )
+        m_out->Print( "(net %s)", m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     // Pin functions and types are closely related to nets, so if CTL_OMIT_NETS is set, omit
     // them as well (for instance when saved from library editor).
@@ -2637,7 +2614,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
         }
     }
 
-    m_out->Print( "(net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
+    m_out->Print( "(net %s)", m_out->Quotew( aTrack->GetNetname() ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aTrack->m_Uuid );
     m_out->Print( ")" );
@@ -2646,16 +2623,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
 
 void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 {
-    // Save the NET info.
-    // For keepout and non copper zones, net code and net name are irrelevant
-    // so be sure a dummy value is stored, just for ZONE compatibility
-    // (perhaps netcode and netname should be not stored)
+    m_out->Print( "(zone" );
 
-    bool has_no_net = aZone->GetIsRuleArea() || !aZone->IsOnCopperLayer();
-
-    m_out->Print( "(zone (net %d) (net_name %s)",
-                  has_no_net ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
-                  m_out->Quotew( has_no_net ? wxString( wxT("") ) : aZone->GetNetname() ).c_str() );
+    if( aZone->IsOnCopperLayer() && !aZone->GetIsRuleArea() && aZone->GetNetCode() > 0 )
+        m_out->Print( "(net %s)", m_out->Quotew( aZone->GetNetname() ).c_str() );
 
     if( aZone->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
@@ -2898,8 +2869,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE_LAYER_PROPERTIES& aZoneLayerProperti
 
 PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) : PCB_IO( wxS( "KiCad" ) ),
     m_cache( nullptr ),
-    m_ctl( aControlFlags ),
-    m_mapping( new NETINFO_MAPPING() )
+    m_ctl( aControlFlags )
 {
     init( nullptr );
     m_out = &m_sf;
@@ -2909,7 +2879,6 @@ PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) : PCB_IO( wxS( "KiCa
 PCB_IO_KICAD_SEXPR::~PCB_IO_KICAD_SEXPR()
 {
     delete m_cache;
-    delete m_mapping;
 }
 
 

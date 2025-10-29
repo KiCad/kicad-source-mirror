@@ -290,6 +290,54 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parseMaybeAbsentBool( bool aDefaultValue )
 }
 
 
+void PCB_IO_KICAD_SEXPR_PARSER::parseNet( BOARD_CONNECTED_ITEM* aItem )
+{
+    int token = NextTok();
+
+    // Legacy files (pre-10.0) will have a netcode instead of a netname.  This netcode
+    // is authoratative (though may be mapped by getNetCode() to prevent collisions).
+    if( IsNumber( token ) )
+    {
+        if( !aItem->SetNetCode( std::max( 0, getNetCode( parseInt() ) ), /* aNoAssert */ true ) )
+        {
+            wxLogError( _( "Invalid net ID in\nfile: %s;\nline: %d\noffset: %d." ),
+                        CurSource(), CurLineNumber(), CurOffset() );
+        }
+
+        NeedRIGHT();
+        return;
+    }
+
+    if( !IsSymbol( token ) )
+    {
+        Expecting( "net name" );
+        return;
+    }
+
+    if( m_board )
+    {
+        wxString netName( FromUTF8() );
+
+        // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
+        // first merge so the version is a bit later.
+        if( m_requiredVersion < 20210606 )
+            netName = ConvertToNewOverbarNotation( netName );
+
+        NETINFO_ITEM* netinfo = m_board->FindNet( netName );
+
+        if( !netinfo )
+        {
+            netinfo = new NETINFO_ITEM( m_board, netName );
+            m_board->Add( netinfo, ADD_MODE::INSERT, true );
+        }
+
+        aItem->SetNet( netinfo );
+    }
+
+    NeedRIGHT();
+}
+
+
 wxString PCB_IO_KICAD_SEXPR_PARSER::GetRequiredVersion()
 {
     int year, month, day;
@@ -3269,13 +3317,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             break;
 
         case T_net:
-            if( !shape->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-            {
-                wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
-                            CurSource(), CurLineNumber(), CurOffset() );
-            }
-
-            NeedRIGHT();
+            parseNet( shape.get() );
             break;
 
         default:
@@ -5422,6 +5464,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     VECTOR2I sz;
     VECTOR2I pt;
     bool     foundNet = false;
+    bool     foundNetcode = false;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
@@ -5626,16 +5669,29 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_net:
             foundNet = true;
 
-            if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+            token = NextTok();
+
+            // Legacy files (pre-10.0) will have a netcode written before the netname.  This netcode
+            // is authoratative (though may be mapped by getNetCode() to prevent collisions).
+            if( IsNumber( token ) )
             {
-                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
-                            CurSource(), CurLineNumber(), CurOffset() );
+                if( !pad->SetNetCode( getNetCode( parseInt() ), /* aNoAssert */ true ) )
+                {
+                    wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
+                                CurSource(), CurLineNumber(), CurOffset() );
+                }
+
+                foundNetcode = true;
+                token = NextTok();
             }
 
-            NeedSYMBOLorNUMBER();
+            if( !IsSymbol( token ) )
+            {
+                Expecting( "net name" );
+                break;
+            }
 
-            // Test validity of the netname in file for netcodes expected having a net name
-            if( m_board && pad->GetNetCode() > 0 )
+            if( m_board )
             {
                 wxString netName( FromUTF8() );
 
@@ -5644,11 +5700,26 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 if( m_requiredVersion < 20210606 )
                     netName = ConvertToNewOverbarNotation( netName );
 
-                if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+                if( foundNetcode )
                 {
-                    pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
-                    wxLogError( _( "Net name doesn't match ID in\nfile: %s\nline: %d offset: %d" ),
-                                CurSource(), CurLineNumber(), CurOffset() );
+                    if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+                    {
+                        pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
+                        wxLogError( _( "Net name doesn't match ID in\nfile: %s\nline: %d offset: %d" ),
+                                    CurSource(), CurLineNumber(), CurOffset() );
+                    }
+                }
+                else
+                {
+                    NETINFO_ITEM* netinfo = m_board->FindNet( netName );
+
+                    if( !netinfo )
+                    {
+                        netinfo = new NETINFO_ITEM( m_board, netName );
+                        m_board->Add( netinfo, ADD_MODE::INSERT, true );
+                    }
+
+                    pad->SetNet( netinfo );
                 }
             }
 
@@ -6743,12 +6814,7 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
             break;
 
         case T_net:
-            if( !arc->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-            {
-                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d\noffset: %d." ),
-                            CurSource(), CurLineNumber(), CurOffset() );
-            }
-            NeedRIGHT();
+            parseNet( arc.get() );
             break;
 
         case T_tstamp:
@@ -6844,12 +6910,7 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
             break;
 
         case T_net:
-            if( !track->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-            {
-                wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
-                            CurSource(), CurLineNumber(), CurOffset() );
-            }
-            NeedRIGHT();
+            parseNet( track.get() );
             break;
 
         case T_tstamp:
@@ -6959,13 +7020,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
         }
 
         case T_net:
-            if( !via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-            {
-                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d\noffset: %d" ),
-                            CurSource(), CurLineNumber(), CurOffset() );
-            }
-
-            NeedRIGHT();
+            parseNet( via.get() );
             break;
 
         case T_remove_unused_layers:
@@ -7255,7 +7310,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     int      hatchPitch = ZONE::GetDefaultHatchPitch();
     T        token;
     int      tmp;
-    wxString netnameFromfile;    // the zone net name find in file
+    wxString legacyNetnameFromFile;    // the (non-authoratative) zone net name found in a legacy file
 
     // bigger scope since each filled_polygon is concatenated in here
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
@@ -7289,26 +7344,12 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         switch( token )
         {
         case T_net:
-            // Init the net code only, not the netname, to be sure
-            // the zone net name is the name read in file.
-            // (When mismatch, the user will be prompted in DRC, to fix the actual name)
-            tmp = getNetCode( parseInt( "net number" ) );
-
-            if( tmp < 0 )
-                tmp = 0;
-
-            if( !zone->SetNetCode( tmp, /* aNoAssert */ true ) )
-            {
-                wxLogError( _( "Invalid net ID in\nfile: %s;\nline: %d\noffset: %d." ),
-                            CurSource(), CurLineNumber(), CurOffset() );
-            }
-
-            NeedRIGHT();
+            parseNet( zone.get() );
             break;
 
         case T_net_name:
             NeedSYMBOLorNUMBER();
-            netnameFromfile = FromUTF8();
+            legacyNetnameFromFile = FromUTF8();
             NeedRIGHT();
             break;
 
@@ -7939,23 +7980,22 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     if( !zone_has_net )
         zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-    // Ensure the zone net name is valid, and matches the net code, for copper zones
-    if( zone_has_net
-        && ( !zone->GetNet() || zone->GetNet()->GetNetname() != netnameFromfile ) )
+    // In legacy files, ensure the zone net name is valid, and matches the net code
+    if( !legacyNetnameFromFile.IsEmpty() && zone->GetNetname() != legacyNetnameFromFile )
     {
         // Can happens which old boards, with nonexistent nets ...
         // or after being edited by hand
         // We try to fix the mismatch.
-        NETINFO_ITEM* net = m_board->FindNet( netnameFromfile );
+        NETINFO_ITEM* net = m_board->FindNet( legacyNetnameFromFile );
 
         if( net )   // An existing net has the same net name. use it for the zone
         {
             zone->SetNetCode( net->GetNetCode() );
         }
-        else    // Not existing net: add a new net to keep trace of the zone netname
+        else    // Not existing net: add a new net to keep track of the zone netname
         {
             int newnetcode = m_board->GetNetCount();
-            net = new NETINFO_ITEM( m_board, netnameFromfile, newnetcode );
+            net = new NETINFO_ITEM( m_board, legacyNetnameFromFile, newnetcode );
             m_board->Add( net, ADD_MODE::INSERT, true );
 
             // Store the new code mapping

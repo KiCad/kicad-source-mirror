@@ -48,6 +48,7 @@
 class PCB_ARC;
 class BOARD;
 class BOARD_ITEM;
+class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM_CONTAINER;
 class PAD;
 class BOARD_DESIGN_SETTINGS;
@@ -396,6 +397,8 @@ private:
 
     std::pair<std::optional<bool>, std::optional<bool>>
     parseFrontBackOptBool( bool aLegacy = false );
+
+    void parseNet( BOARD_CONNECTED_ITEM* aItem );
 
     /*
      * @return if m_appendToExisting, returns new KIID(), otherwise returns CurStr() as KIID.
