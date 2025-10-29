@@ -37,14 +37,17 @@
 
 SCH_GROUP::SCH_GROUP() : SCH_ITEM( nullptr, SCH_GROUP_T )
 {
+    SetLayer( LAYER_GROUP );
 }
 
 SCH_GROUP::SCH_GROUP( SCH_ITEM* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
 {
+    SetLayer( LAYER_GROUP );
 }
 
 SCH_GROUP::SCH_GROUP( SCH_SCREEN* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
 {
+    SetLayer( LAYER_GROUP );
 }
 
 std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
