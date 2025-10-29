@@ -1338,7 +1338,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             // Exit on a delete; there will no longer be anything to drag.
             break;
         }
-        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &ACTIONS::cut ) )
+        else if( evt->IsAction( &ACTIONS::duplicate )  && evt != &copy )
+        {
+            wxBell();
+        }
+        else if( evt->IsAction( &ACTIONS::cut ) )
         {
             wxBell();
         }
