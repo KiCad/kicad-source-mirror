@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-10-29 03:08+0000\n"
+"PO-Revision-Date: 2025-10-30 01:50+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
@@ -17258,7 +17258,7 @@ msgstr "在原理圖中只出現一次的全域標籤"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr "本地和全域標籤具有相同名稱"
+msgstr "區域標籤與全域標籤名稱相同"
 
 #: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
