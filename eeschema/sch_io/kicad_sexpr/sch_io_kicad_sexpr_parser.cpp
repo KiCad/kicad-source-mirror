@@ -455,15 +455,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             // it doesn't need to be escaped.
             name.Replace( wxS( "{slash}" ), wxT( "/" ) );
 
-            auto it = aSymbolLibMap.find( name );
-
-            if( it == aSymbolLibMap.end() )
-            {
-                error.Printf( _( "No parent for extended symbol %s" ), name.c_str() );
-                THROW_PARSE_ERROR( error, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-            }
-
-            symbol->SetParent( it->second );
+            symbol->SetParentName( name );
             NeedRIGHT();
             break;
         }

@@ -826,6 +826,10 @@ public:
      * @return a measure of similarity from 1.0 (identical) to 0.0 (no similarity).
     */
     double Similarity( const SCH_ITEM& aSymbol ) const override;
+
+    void SetParentName( const wxString& aParentName ) { m_parentName = aParentName; }
+    const wxString& GetParentName() const { return m_parentName; }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -847,6 +851,8 @@ private:
 private:
     std::shared_ptr<LIB_SYMBOL> m_me;
     std::weak_ptr<LIB_SYMBOL>   m_parent;   ///< Use for inherited symbols.
+
+    wxString            m_parentName;       ///< The name of the parent symbol or empty if root symbol.
 
     LIB_ID              m_libId;
     LIB_ID              m_sourceLibId;      ///< For database library symbols; the original symbol

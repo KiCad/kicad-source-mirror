@@ -20,6 +20,7 @@
 #include <magic_enum.hpp>
 #include <wx/log.h>
 
+#include <common.h>
 #include <lib_symbol.h>
 #include <sch_shape.h>
 #include <sch_pin.h>
@@ -1461,7 +1462,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::Save( const std::optional<bool>& aOpt )
     formatter->Print( 0, "#\n#End Library\n" );
     formatter.reset();
 
-    m_fileModTime = fn.GetModificationTime();
+    m_fileModTime = TimestampDir( fn.GetPath(), fn.GetFullName() );
     m_isModified = false;
 
     if( doSaveDocFile )

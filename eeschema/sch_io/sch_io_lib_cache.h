@@ -73,7 +73,7 @@ public:
     // If m_libFileName is a symlink follow it to the real source file
     wxFileName GetRealFile() const;
 
-    wxDateTime GetLibModificationTime();
+    long long GetLibModificationTime();
 
     bool IsFile( const wxString& aFullPathAndFileName ) const;
 
@@ -97,7 +97,7 @@ protected:
 
     wxString          m_fileName;     // Absolute path and file name.
     wxFileName        m_libFileName;  // Absolute path and file name is required here.
-    wxDateTime        m_fileModTime;
+    long long         m_fileModTime;
     LIB_SYMBOL_MAP    m_symbols;      // Map of names of #LIB_SYMBOL pointers.
     bool              m_isWritable;
     bool              m_isModified;

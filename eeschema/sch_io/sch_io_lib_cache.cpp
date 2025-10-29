@@ -21,6 +21,7 @@
 
 #include "sch_io_lib_cache.h"
 
+#include <common.h>
 #include <lib_symbol.h>
 #include <wx_filename.h>
 
@@ -62,15 +63,23 @@ wxFileName SCH_IO_LIB_CACHE::GetRealFile() const
 }
 
 
-wxDateTime SCH_IO_LIB_CACHE::GetLibModificationTime()
+long long SCH_IO_LIB_CACHE::GetLibModificationTime()
 {
     wxFileName fn = GetRealFile();
+    wxString wildcard = fn.GetFullName();
 
-    // update the writable flag while we have a wxFileName, in a network this
-    // is possibly quite dynamic anyway.
-    m_isWritable = fn.IsFileWritable();
+    // Update the writable flag while we have a wxFileName, in a network this is possibly quite dynamic anyway.
+    if( !fn.IsDir() )
+    {
+        m_isWritable = fn.IsFileWritable();
+    }
+    else
+    {
+        m_isWritable = fn.IsDirWritable();
+        wildcard = wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
+    }
 
-    return fn.GetModificationTime();
+    return TimestampDir( fn.GetPath(), wildcard );
 }
 
 
@@ -84,8 +93,15 @@ bool SCH_IO_LIB_CACHE::IsFileChanged() const
 {
     wxFileName fn = GetRealFile();
 
-    if( m_fileModTime.IsValid() && fn.IsOk() && fn.FileExists() )
-        return fn.GetModificationTime() != m_fileModTime;
+    if( !fn.IsOk() )
+        return false;
+
+    if( !fn.IsDir() && fn.IsFileReadable() )
+        return TimestampDir( fn.GetPath(), fn.GetFullName() ) != m_fileModTime;
+
+    if( fn.IsDir() && fn.IsDirReadable() )
+        return TimestampDir( fn.GetPath(),
+                             wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) ) != m_fileModTime;
 
     return false;
 }

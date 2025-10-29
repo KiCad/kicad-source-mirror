@@ -1718,10 +1718,17 @@ void SCH_IO_KICAD_SEXPR::DeleteSymbol( const wxString& aLibraryPath, const wxStr
 void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
                                         const std::map<std::string, UTF8>* aProperties )
 {
-    if( wxFileExists( aLibraryPath ) )
+    wxFileName fn( aLibraryPath );
+
+    if( !fn.IsDir() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' already exists." ),
-                                          aLibraryPath.GetData() ) );
+        if( fn.FileExists() )
+            THROW_IO_ERROR( wxString::Format( _( "Symbol library file '%s' already exists." ), fn.GetFullPath() ) );
+    }
+    else
+    {
+        if( fn.DirExists() )
+            THROW_IO_ERROR( wxString::Format( _( "Symbol library path '%s' already exists." ), fn.GetPath() ) );
     }
 
     delete m_cache;
@@ -1742,10 +1749,19 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
-    if( wxRemove( aLibraryPath ) )
+    if( !fn.IsDir() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' cannot be deleted." ),
-                                          aLibraryPath.GetData() ) );
+        if( wxRemove( aLibraryPath ) )
+            THROW_IO_ERROR( wxString::Format( _( "Symbol library file '%s' cannot be deleted." ),
+                                              aLibraryPath.GetData() ) );
+    }
+    else
+    {
+        // This may be overly agressive.  Perhaps in the future we should remove all of the *.kicad_sym
+        // files and only delete the folder if it's empty.
+        if( !fn.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+            THROW_IO_ERROR( wxString::Format( _( "Symbol library folder '%s' cannot be deleted." ),
+                                              fn.GetPath() ) );
     }
 
     if( m_cache && m_cache->IsFile( aLibraryPath ) )

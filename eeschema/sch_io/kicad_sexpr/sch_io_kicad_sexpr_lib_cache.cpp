@@ -22,9 +22,11 @@
 #include <fmt/format.h>
 
 #include <wx/log.h>
+#include <wx/dir.h>
 
 #include <base_units.h>
 #include <build_version.h>
+#include <common.h>
 #include <sch_shape.h>
 #include <lib_symbol.h>
 #include <sch_textbox.h>
@@ -52,30 +54,76 @@ SCH_IO_KICAD_SEXPR_LIB_CACHE::~SCH_IO_KICAD_SEXPR_LIB_CACHE()
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 {
-    if( !m_libFileName.FileExists() )
+    if( !isLibraryPathValid() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library file '%s' not found." ),
-                                          m_libFileName.GetFullPath() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' not found." ), m_libFileName.GetFullPath() ) );
     }
 
     wxCHECK_RET( m_libFileName.IsAbsolute(),
                  wxString::Format( "Cannot use relative file paths in sexpr plugin to "
                                    "open library '%s'.", m_libFileName.GetFullPath() ) );
 
-    wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file '%s'",
-                m_libFileName.GetFullPath() );
+    if( !m_libFileName.IsDir() )
+    {
+        wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file '%s'",
+                    m_libFileName.GetFullPath() );
 
-    FILE_LINE_READER reader( m_libFileName.GetFullPath() );
+        FILE_LINE_READER reader( m_libFileName.GetFullPath() );
 
-    SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
+        SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
 
-    parser.ParseLib( m_symbols );
-    IncrementModifyHash();
+        parser.ParseLib( m_symbols );
+        SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
+        updateParentSymbolLinks();
+        IncrementModifyHash();
+    }
+    else
+    {
+        wxString libFileName;
+
+        wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library folder '%s'", m_libFileName.GetPath() );
+
+        wxFileName tmp( m_libFileName.GetPath(), wxS( "dummy" ), wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+        wxDir dir( m_libFileName.GetPath() );
+        wxString fileSpec = wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
+
+        if( dir.GetFirst( &libFileName, fileSpec ) )
+        {
+            wxString errorCache;
+
+            do
+            {
+                tmp.SetFullName( libFileName );
+
+                try
+                {
+                    FILE_LINE_READER reader( tmp.GetFullPath() );
+                    SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
+
+                    parser.ParseLib( m_symbols );
+                    SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    if( !errorCache.IsEmpty() )
+                        errorCache += wxT( "\n\n" );
+
+                    errorCache += wxString::Format( _( "Unable to read file '%s'" ) + '\n', tmp.GetFullPath() );
+                    errorCache += ioe.What();
+                }
+            } while( dir.GetNext( &libFileName ) );
+
+            if( !errorCache.IsEmpty() )
+                THROW_IO_ERROR( errorCache );
+        }
+
+        updateParentSymbolLinks();
+        IncrementModifyHash();
+    }
 
     // Remember the file modification time of library file when the cache snapshot was made,
     // so that in a networked environment we will reload the cache as needed.
     m_fileModTime = GetLibModificationTime();
-    SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
 }
 
 
@@ -87,42 +135,65 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
 
-    auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
-
-    formatter->Print( "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") "
-                      "(generator_version \"%s\")",
-                      SEXPR_SYMBOL_LIB_FILE_VERSION,
-                      GetMajorMinorVersion().c_str().AsChar() );
-
-    std::vector<LIB_SYMBOL*> orderedSymbols;
-
-    for( const auto& [ name, symbol ] : m_symbols )
+    if( !fn.IsDir() )
     {
-        if( symbol )
-            orderedSymbols.push_back( symbol );
+        auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
+
+        formatLibraryHeader( *formatter.get() );
+
+        std::vector<LIB_SYMBOL*> orderedSymbols;
+
+        for( const auto& [ name, symbol ] : m_symbols )
+        {
+            if( symbol )
+                orderedSymbols.push_back( symbol );
+        }
+
+        // Library must be ordered by inheritance depth.
+        std::sort( orderedSymbols.begin(), orderedSymbols.end(),
+                   []( const LIB_SYMBOL* aLhs, const LIB_SYMBOL* aRhs )
+                   {
+                       unsigned int lhDepth = aLhs->GetInheritanceDepth();
+                       unsigned int rhDepth = aRhs->GetInheritanceDepth();
+
+                       if( lhDepth == rhDepth )
+                           return aLhs->GetName() < aRhs->GetName();
+
+                       return lhDepth < rhDepth;
+                   } );
+
+        for( LIB_SYMBOL* symbol : orderedSymbols )
+            SaveSymbol( symbol, *formatter.get() );
+
+        formatter->Print( ")" );
+        formatter.reset();
+    }
+    else
+    {
+        if( !fn.DirExists() )
+        {
+            if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+                THROW_IO_ERROR( wxString::Format( _( "Cannot create symbol library path '%s'." ), fn.GetPath() ) );
+        }
+
+        for( const auto& [ name, symbol ] : m_symbols )
+        {
+            wxFileName saveFn( fn );
+            saveFn.SetName( EscapeString( name, CTX_FILENAME ) );
+            saveFn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
+
+            auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( saveFn.GetFullPath() );
+
+            formatLibraryHeader( *formatter.get() );
+
+            SaveSymbol( symbol, *formatter.get() );
+
+            formatter->Print( ")" );
+            formatter.reset();
+        }
     }
 
-    // Library must be ordered by inheritance depth.
-    std::sort( orderedSymbols.begin(), orderedSymbols.end(),
-               []( const LIB_SYMBOL* aLhs, const LIB_SYMBOL* aRhs )
-               {
-                   unsigned int lhDepth = aLhs->GetInheritanceDepth();
-                   unsigned int rhDepth = aRhs->GetInheritanceDepth();
-
-                   if( lhDepth == rhDepth )
-                       return aLhs->GetName() < aRhs->GetName();
-
-                   return lhDepth < rhDepth;
-               } );
-
-    for( LIB_SYMBOL* symbol : orderedSymbols )
-        SaveSymbol( symbol, *formatter.get() );
-
-    formatter->Print( ")" );
-
-    formatter.reset();
-
-    m_fileModTime = fn.GetModificationTime();
+    m_fileModTime = GetLibModificationTime();
     m_isModified = false;
 }
 
@@ -603,4 +674,45 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::DeleteSymbol( const wxString& aSymbolName )
 
     IncrementModifyHash();
     m_isModified = true;
+}
+
+
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::updateParentSymbolLinks()
+{
+    for( auto& [name, symbol] : m_symbols )
+    {
+        if( symbol->GetParentName().IsEmpty() )
+            continue;
+
+        auto it = m_symbols.find( symbol->GetParentName() );
+
+        if( it == m_symbols.end() )
+        {
+            wxString error;
+
+            error.Printf( _( "No parent for extended symbol %s found in library '%s'" ),
+                          name.c_str(), m_libFileName.GetFullPath() );
+            THROW_IO_ERROR( error );
+        }
+
+        symbol->SetParent( it->second );
+    }
+}
+
+
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::formatLibraryHeader( OUTPUTFORMATTER& aFormatter )
+{
+    aFormatter.Print( "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") "
+                      "(generator_version \"%s\")",
+                      SEXPR_SYMBOL_LIB_FILE_VERSION,
+                      GetMajorMinorVersion().c_str().AsChar() );
+}
+
+
+bool SCH_IO_KICAD_SEXPR_LIB_CACHE::isLibraryPathValid() const
+{
+    if( !m_libFileName.IsDir() )
+        return m_libFileName.FileExists();
+    else
+        return m_libFileName.DirExists();
 }

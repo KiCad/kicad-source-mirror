@@ -60,6 +60,20 @@ public:
 private:
     friend SCH_IO_KICAD_SEXPR;
 
+    /**
+     * Update the parent symbol links for derived symbols.
+     *
+     * This is now performed post library load because the symbol load order cannot be controlled
+     * when the symbol library is saved as a single symbol per file in a folder.
+     *
+     * @throw #IO_ERROR if a parent symbol name cannot be found for any symbols in the library.
+     */
+    void updateParentSymbolLinks();
+
+    void formatLibraryHeader( OUTPUTFORMATTER& aFormatter );
+
+    bool isLibraryPathValid() const;
+
     int m_fileFormatVersionAtLoad;
 
     static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter );
