@@ -108,7 +108,9 @@ public:
 
     virtual const LIB_ID& GetLibId() const = 0;
     virtual wxString GetDescription() const = 0;
+    virtual wxString GetShownDescription( int aDepth = 0 ) const = 0;
     virtual wxString GetKeyWords() const = 0;
+    virtual wxString GetShownKeyWords( int aDepth = 0 ) const = 0;
 
     virtual bool IsGlobalPower() const = 0;
     virtual bool IsLocalPower() const = 0;

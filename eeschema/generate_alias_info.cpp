@@ -132,7 +132,7 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString esc_desc = EscapeHTML( UnescapeString( m_symbol->GetDescription() ) );
+        wxString esc_desc = EscapeHTML( UnescapeString( m_symbol->GetShownDescription() ) );
 
         // Add line breaks
         esc_desc.Replace( wxS( "\n" ), wxS( "<br>" ) );
@@ -145,7 +145,7 @@ protected:
 
     void SetHtmlKeywords()
     {
-        wxString keywords = m_symbol->GetKeyWords();
+        wxString keywords = m_symbol->GetShownKeyWords();
 
         if( keywords.empty() )
             m_html.Replace( wxS( "__KEY__" ), wxEmptyString );

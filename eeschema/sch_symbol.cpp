@@ -274,10 +274,28 @@ wxString SCH_SYMBOL::GetDescription() const
 }
 
 
+wxString SCH_SYMBOL::GetShownDescription( int aDepth ) const
+{
+    if( m_part )
+        return m_part->GetShownDescription( aDepth );
+
+    return wxEmptyString;
+}
+
+
 wxString SCH_SYMBOL::GetKeyWords() const
 {
     if( m_part )
         return m_part->GetKeyWords();
+
+    return wxEmptyString;
+}
+
+
+wxString SCH_SYMBOL::GetShownKeyWords( int aDepth ) const
+{
+    if( m_part )
+        return m_part->GetShownKeyWords( aDepth );
 
     return wxEmptyString;
 }
@@ -1695,12 +1713,12 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
     {
-        *token = GetDescription();
+        *token = GetShownDescription( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
-        *token = GetKeyWords();
+        *token = GetShownKeyWords( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
@@ -2327,10 +2345,10 @@ bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
         if( EDA_ITEM::Matches( GetSchSymbolLibraryName(), aSearchData ) )
             return true;
 
-        if( EDA_ITEM::Matches( GetDescription(), aSearchData ) )
+        if( EDA_ITEM::Matches( GetShownDescription(), aSearchData ) )
             return true;
 
-        if( EDA_ITEM::Matches( GetKeyWords(), aSearchData ) )
+        if( EDA_ITEM::Matches( GetShownKeyWords(), aSearchData ) )
             return true;
     }
 

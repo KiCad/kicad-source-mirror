@@ -34,6 +34,8 @@
 #include <sch_pin.h>
 #include <sch_shape.h>
 #include <trace_helpers.h>
+#include <common.h>
+#include <text_eval/text_eval_wrapper.h>
 
 // TODO(JE) remove m_library; shouldn't be needed with legacy remapping
 #include <libraries/legacy_symbol_library.h>
@@ -41,6 +43,43 @@
 #include <algorithm>
 #include <memory>
 #include <unordered_set>
+
+
+wxString LIB_SYMBOL::GetShownDescription( int aDepth ) const
+{
+    wxString shownText = GetDescriptionField().GetShownText( false, aDepth );
+
+    if( shownText.IsEmpty() && IsDerived() )
+    {
+        if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+            shownText = parent->GetShownDescription( aDepth );
+    }
+
+    return shownText;
+}
+
+
+wxString LIB_SYMBOL::GetShownKeyWords( int aDepth ) const
+{
+    static EXPRESSION_EVALUATOR evaluator;
+
+    wxString text = GetKeyWords();
+
+    std::function<bool( wxString* )> libSymbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( token, aDepth + 1 );
+            };
+
+    while( text.Contains( wxT( "${" ) ) && aDepth++ <= ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
+        text = ExpandTextVars( text, &libSymbolResolver );
+
+    if( text.Contains( wxT( "@{" ) ) )
+        text = evaluator.Evaluate( text );
+
+    return text;
+}
+
 
 std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 {
@@ -50,19 +89,19 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
     terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
     terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
 
-    wxStringTokenizer keywordTokenizer( GetKeyWords(), " \t\r\n", wxTOKEN_STRTOK );
+    wxStringTokenizer keywordTokenizer( GetShownKeyWords(), " \t\r\n", wxTOKEN_STRTOK );
 
     while( keywordTokenizer.HasMoreTokens() )
         terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
     // Also include keywords as one long string, just in case
-    terms.emplace_back( SEARCH_TERM( GetKeyWords(), 1 ) );
-    terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetShownKeyWords(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetShownDescription(), 1 ) );
 
     wxString footprint = GetFootprint();
 
     if( !footprint.IsEmpty() )
-        terms.emplace_back( SEARCH_TERM( GetFootprintField().GetText(), 1 ) );
+        terms.emplace_back( SEARCH_TERM( footprint, 1 ) );
 
     return terms;
 }
@@ -548,12 +587,12 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
     {
-        *token = GetDescription();
+        *token = GetShownDescription( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
-        *token = GetKeyWords();
+        *token = GetShownKeyWords( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
