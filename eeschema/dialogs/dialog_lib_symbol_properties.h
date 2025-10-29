@@ -81,10 +81,8 @@ private:
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnPageChanging( wxNotebookEvent& event ) override;
     void OnFpFilterDClick( wxMouseEvent& event ) override;
-    void OnBtnCreateJumperPinGroup( wxCommandEvent& event ) override;
-    void OnBtnRemoveJumperPinGroup( wxCommandEvent& event ) override;
-    void OnGroupedPinListClick( wxCommandEvent& event ) override;
-    void OnAvailablePinsClick( wxCommandEvent& event ) override;
+    void OnAddJumperGroup( wxCommandEvent& event ) override;
+    void OnRemoveJumperGroup( wxCommandEvent& event ) override;
 
     bool updateUnitCount();
     void syncControlStates( bool aIsAlias );
