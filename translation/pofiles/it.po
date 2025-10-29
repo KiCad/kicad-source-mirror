@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:59+0300\n"
-"PO-Revision-Date: 2025-06-27 06:01+0000\n"
+"PO-Revision-Date: 2025-10-30 01:50+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -1853,9 +1853,8 @@ msgid "Errors"
 msgstr "Errori"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Rimpiazza e trova il prossimo"
+msgstr "Rimpiazzare file caricato?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
