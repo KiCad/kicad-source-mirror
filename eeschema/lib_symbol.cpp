@@ -43,6 +43,7 @@
 #include <algorithm>
 #include <memory>
 #include <unordered_set>
+#include <advanced_config.h>
 
 
 wxString LIB_SYMBOL::GetShownDescription( int aDepth ) const
