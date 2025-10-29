@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-29 02:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-30 01:49+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19979,34 +19979,28 @@ msgid "Filter nets"
 msgstr "Filter Netze"
 
 #: eeschema/sch_edit_frame.cpp:2442
-#, fuzzy
 msgid "Wildcard Search"
 msgstr "Suche mit Platzhalter"
 
 #: eeschema/sch_edit_frame.cpp:2444
-#, fuzzy
 msgid "Regex Search"
-msgstr "Suche von vorn beginnen"
+msgstr "Suche mit regulärem Ausdruck"
 
 #: eeschema/sch_edit_frame.cpp:2592
-#, fuzzy
 msgid "Find in Net Inspector"
 msgstr "Im Netzinspektor finden"
 
 #: eeschema/sch_edit_frame.cpp:2906
-#, fuzzy
 msgid "Enter new variant name"
 msgstr "Neuen Variantennamen eingeben"
 
 #: eeschema/sch_edit_frame.cpp:2906 eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Variant Name"
-msgstr "Variablenname"
+msgstr "Variantenname"
 
 #: eeschema/sch_edit_frame.cpp:2944
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "Wählen Sie den zu löschenden Variantennamen"
+msgstr "Zu löschenden Variantennamen wählen"
 
 #: eeschema/sch_field.cpp:983
 #, c-format
@@ -20503,7 +20497,7 @@ msgstr ""
 "können importiert werden."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
@@ -23960,7 +23954,6 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:136
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
 msgstr "Nicht annotierte Footprints"
 
@@ -24745,14 +24738,12 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
 
 #: eeschema/tools/sch_actions.cpp:874
-#, fuzzy
 msgid "Find in Net Navigator"
 msgstr "Im Netznavigator finden"
 
 #: eeschema/tools/sch_actions.cpp:875
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Lokalisiert das selektierte Netz im Netznavigator"
+msgstr "Zeigt das selektierte Netz im Netznavigator"
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Cycle Body Style"
@@ -25207,9 +25198,8 @@ msgstr ""
 "Zeichnen und ziehen auf horizontale, vertikale oder 45°-Winkel beschränken"
 
 #: eeschema/tools/sch_actions.cpp:1327 pcbnew/tools/pcb_actions.cpp:1490
-#, fuzzy
 msgid "Switch to next angle snapping mode"
-msgstr "Zu nächstem Linienfangmodus wechseln"
+msgstr "Zum nächsten Linienfangmodus wechseln"
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Annotate Automatically"
@@ -25961,7 +25951,6 @@ msgstr ""
 "zuzuweisen."
 
 #: eeschema/tools/sch_editor_control.cpp:1077
-#, fuzzy
 msgid "No connected net selected."
 msgstr "Keine verbundenen Netze ausgewählt."
 
@@ -28667,22 +28656,18 @@ msgid "Force A4 paper size."
 msgstr "A4 Papiergröße erzwingen."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
 msgstr "Statistikbericht zur Platine erstellen"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
-#, fuzzy
 msgid "Report units; valid options: in, mm"
 msgstr "Einheiten in Berichten; gültige Optionen: in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
 msgstr "Footprints ohne Pads ausschließen"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
 msgstr "Löcher von Platinenfläche abziehen"
 
@@ -29161,7 +29146,6 @@ msgid "No project file found in template directory."
 msgstr "Es wurde keine Projektdatei im Vorlagenverzeichnis gefunden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
-#, fuzzy
 msgid "Enter name for the new template:"
 msgstr "Neuen Namen für die Vorlage eingeben:"
 
@@ -29171,7 +29155,6 @@ msgid "_copy"
 msgstr "_Kopie"
 
 #: kicad/dialogs/dialog_template_selector.cpp:310
-#, fuzzy
 msgid "Template name cannot be empty."
 msgstr "Vorlage darf nicht leer sein."
 
@@ -29180,7 +29163,7 @@ msgid "Could not find user templates directory."
 msgstr "Konnte Benutzer-Vorlagenverzeichnis nicht finden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
 msgstr "Verzeichnis \"%s\" existiert bereits."
 
@@ -29194,7 +29177,7 @@ msgid "Could not open source template directory."
 msgstr "Konnte Quell-Vorlagenverzeichnis nicht öffnen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
-#, c-format, fuzzy
+#, c-format
 msgid "Template duplicated successfully to '%s'."
 msgstr "Vorlage erfolgreich zu \"%s\" dupliziert."
 
@@ -29307,9 +29290,9 @@ msgid "Running Jobs"
 msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "Konnte Datei \"%s\" nicht öffnen."
+msgstr "Konnte \"%s\" nicht öffnen."
 
 #: kicad/dialogs/panel_jobset.cpp:323
 msgid "Edit Destination Options..."
@@ -29324,9 +29307,8 @@ msgid "View Last Run Log..."
 msgstr "Ergebnisse des letzten Laufs anzeigen..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
-#, fuzzy
 msgid "Open Output"
-msgstr "Ausgang"
+msgstr "Ausgabe öffnen"
 
 #: kicad/dialogs/panel_jobset.cpp:428
 msgid "Edit Job Description"
@@ -29389,7 +29371,6 @@ msgid "Generate All Destinations"
 msgstr "Alle Ziele generieren"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
-#, fuzzy
 msgid "Open the generated output"
 msgstr "Die erstellte Ausgabe öffnen"
 
@@ -29695,12 +29676,10 @@ msgstr ""
 "Erscheinungsbild zu gewährleisten."
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
 msgstr "Keine Vorlagen gefunden"
 
 #: kicad/dialogs/template_default_html.h:180
-#, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
 msgstr "Das ausgewählte Vorlagenverzeichnis enthält keine Projektvorlagen."
@@ -29732,18 +29711,16 @@ msgstr ""
 "\"Systemvorlagen\" wählen."
 
 #: kicad/dialogs/template_default_html.h:192
-#, fuzzy
 msgid "Tip:"
 msgstr "Hinweis:"
 
 #: kicad/dialogs/template_default_html.h:192
-#, fuzzy
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
 "Vorlagen sind in Unterverzeichnissen organisiert. Jede Vorlage benötigt "
-"einen \"Meta\"-Ordner mit Konfigurationsdateien."
+"einen \"meta\"-Ordner mit Konfigurationsdateien."
 
 #: kicad/files-io.cpp:40
 msgid "KiCad project file"
@@ -34538,12 +34515,10 @@ msgid "NPTH:"
 msgstr "NPTH:"
 
 #: pcbnew/board_statistics_report.cpp:110
-#, fuzzy
 msgid "Castellated:"
 msgstr "Castellated (Halbloch):"
 
 #: pcbnew/board_statistics_report.cpp:112
-#, fuzzy
 msgid "Press-fit:"
 msgstr "Einpress:"
 
@@ -34953,17 +34928,14 @@ msgid "Barcode Properties"
 msgstr "Barcode-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
-#, fuzzy
 msgid "(not updated)"
 msgstr "(nicht aktualisiert)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
-#, fuzzy
 msgid "(unannotated; not updated)"
 msgstr "(nicht annotiert; nicht aktualisiert)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
-#, fuzzy
 msgid "(excluded)"
 msgstr "(ausgeschlossen)"
 
@@ -34976,13 +34948,13 @@ msgid "PCB successfully reannotated"
 msgstr "Leiterplatte erfolgreich neu annotiert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:219
-#, fuzzy
 msgid ""
 "PCB annotation changes should be synchronized with schematic using \"Update "
 "Schematic from PCB\"."
 msgstr ""
-"Änderungen an der Leiterplattenannotation sollten mittels \"Schaltplan aus "
-"Leiterplatte aktualisieren\" mit dem Schaltplan synchronisiert werden."
+"Änderungen der Annotation in der Leiterplatte sollten mit "
+"\"Schaltplan aus Platine aktualisieren\" mit dem Schaltplan synchronisiert "
+"werden."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, fuzzy
