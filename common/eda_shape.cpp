@@ -1946,20 +1946,25 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 }
 
 
-void EDA_SHAPE::DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const
+std::vector<VECTOR2I> EDA_SHAPE::GetPolyPoints() const
 {
+    std::vector<VECTOR2I> points;
+
     for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
     {
-        int pointCount = m_poly.COutline( ii ).PointCount();
+        const SHAPE_LINE_CHAIN& outline = m_poly.COutline( ii );
+        int                     pointCount = outline.PointCount();
 
         if( pointCount )
         {
-            aBuffer.reserve( pointCount );
+            points.reserve( points.size() + pointCount );
 
-            for ( auto iter = m_poly.CIterate(); iter; iter++ )
-                aBuffer.emplace_back( iter->x, iter->y );
+            for( const VECTOR2I& pt : outline.CPoints() )
+                points.emplace_back( pt );
         }
     }
+
+    return points;
 }
 
 

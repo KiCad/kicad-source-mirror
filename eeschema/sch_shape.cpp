@@ -181,10 +181,7 @@ bool SCH_SHAPE::IsEndPoint( const VECTOR2I& aPt ) const
 
     if( shape == SHAPE_T::POLY )
     {
-        std::vector<VECTOR2I> points;
-        DupPolyPointsList( points );
-
-        for( const VECTOR2I& pt : points )
+        for( const VECTOR2I& pt : GetPolyPoints() )
         {
             if( pt == aPt )
                 return true;

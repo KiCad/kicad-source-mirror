@@ -444,11 +444,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_ITEM* aItem, bool aSecondPa
             else if( shape->GetShape() == SHAPE_T::SEGMENT )
                 return { shape->GetStart(), shape->GetEnd() };
             else if( shape->GetShape() == SHAPE_T::POLY )
-            {
-                std::vector<VECTOR2I> pts;
-                shape->DupPolyPointsList( pts );
-                return pts;
-            }
+                return shape->GetPolyPoints();
         }
 
         return {};

@@ -542,10 +542,7 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
         }
         case SHAPE_T::POLY:
         {
-            std::vector<VECTOR2I> points;
-            d->DupPolyPointsList( points );
-
-            for( auto p : points )
+            for( const VECTOR2I& p : d->GetPolyPoints() )
             {
                 BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
                 m_shapeCollection.push_back( a );
@@ -1714,8 +1711,7 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
         case SHAPE_T::POLY:
         {
-            std::vector<VECTOR2I> points;
-            d->DupPolyPointsList( points );
+            std::vector<VECTOR2I> points = d->GetPolyPoints();
 
             if( points.size() < 2 )
                 break;
