@@ -61,7 +61,7 @@ void EC_45DEGREE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
     VECTOR2I lineVector( aHandle.GetPosition() - m_constrainer.GetPosition() );
     VECTOR2I newLineVector = GetVectorSnapped45( lineVector );
 
-    if( aHandle.GetGridConstraint() == SNAP_TO_GRID
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID && !aGrid.GetSnappedPoint()
             && ( newLineVector.x == 0 || newLineVector.y == 0 ) )
     {
         VECTOR2I snap = aGrid.AlignGrid( m_constrainer.GetPosition() + newLineVector );

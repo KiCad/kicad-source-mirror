@@ -2329,16 +2329,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             constraintEnabled = constraintEnabled && !evt->Modifier( MD_CTRL );
             setAltConstraint( constraintEnabled );
+            m_editedPoint->SetPosition( pos );
 
-            // Apply 45 degree or other constraints
-            if( m_altConstraint )
+            if( m_editedPoint->IsConstrained() )
             {
-                m_editedPoint->SetPosition( pos );
-                m_altConstraint->Apply( grid );
-            }
-            else if( m_editedPoint->IsConstrained() )
-            {
-                m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
@@ -2346,10 +2340,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, grid.GetItemGrid( item ),
                                                                  { item } ) );
             }
-            else
-            {
-                m_editedPoint->SetPosition( pos );
-            }
+
+            if( m_altConstraint )
+                m_altConstraint->Apply( grid );
 
             updateItem( commit );
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
