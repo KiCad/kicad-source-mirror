@@ -25,6 +25,7 @@
  */
 
 #include <stack>
+#include <vector>
 #include <wx/filefn.h>
 #include <wx/log.h>
 
@@ -414,54 +415,100 @@ SCH_ITEM* SCH_SCREEN::GetItem( const VECTOR2I& aPosition, int aAccuracy, KICAD_T
 }
 
 
-std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aSecondPass )
+std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_ITEM* aItem, bool aSecondPass )
 {
 #define PROCESSED CANDIDATE     // Don't use SKIP_STRUCT; IsConnected() returns false if it's set.
 
     std::set<SCH_ITEM*>   retval;
-    std::stack<SCH_LINE*> to_search;
+    std::stack<SCH_ITEM*> toSearch;
 
-    wxCHECK_MSG( aSegment && aSegment->Type() == SCH_LINE_T, retval, wxT( "Invalid pointer." ) );
-
-    to_search.push( aSegment );
-
-    while( !to_search.empty() )
+    auto getItemEndpoints = []( SCH_ITEM* aCandidate ) -> std::vector<VECTOR2I>
     {
-        SCH_ITEM* item = to_search.top();
-        to_search.pop();
+        if( !aCandidate )
+            return {};
+
+        if( aCandidate->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( aCandidate );
+            return { line->GetStartPoint(), line->GetEndPoint() };
+        }
+
+        if( aCandidate->Type() == SCH_SHAPE_T )
+        {
+            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aCandidate );
+
+            if( shape->GetShape() == SHAPE_T::ARC || shape->GetShape() == SHAPE_T::BEZIER )
+                return { shape->GetStart(), shape->GetEnd() };
+            else if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                return shape->GetRectCorners();
+            else if( shape->GetShape() == SHAPE_T::SEGMENT )
+                return { shape->GetStart(), shape->GetEnd() };
+            else if( shape->GetShape() == SHAPE_T::POLY )
+            {
+                std::vector<VECTOR2I> pts;
+                shape->DupPolyPointsList( pts );
+                return pts;
+            }
+        }
+
+        return {};
+    };
+
+    wxCHECK_MSG( aItem && !getItemEndpoints( aItem ).empty(), retval, wxT( "Invalid pointer." ) );
+
+    toSearch.push( aItem );
+
+    while( !toSearch.empty() )
+    {
+        SCH_ITEM* item = toSearch.top();
+        toSearch.pop();
 
         if( item->HasFlag( PROCESSED ) )
             continue;
 
         item->SetFlags( PROCESSED );
 
-        for( SCH_ITEM* candidate : Items().Overlapping( SCH_LINE_T, item->GetBoundingBox() ) )
+        const BOX2I bbox = item->GetBoundingBox();
+
+        for( KICAD_T type : { SCH_LINE_T, SCH_SHAPE_T } )
         {
-            SCH_LINE* line = static_cast<SCH_LINE*>( candidate );
-
-            if( line->HasFlag( PROCESSED ) )
-                continue;
-
-            // Skip connecting lines on different layers (e.g. buses)
-            if( item->GetLayer() != line->GetLayer() )
-                continue;
-
-            // SCH_RTREE::Overlapping() included crossing lines.
-            if( !item->IsEndPoint( line->GetStartPoint() ) && !item->IsEndPoint( line->GetEndPoint() ) )
-                continue;
-
-            to_search.push( line );
-            retval.insert( line );
-
-            for( VECTOR2I pt : { line->GetStartPoint(), line->GetEndPoint() } )
+            for( SCH_ITEM* candidate : Items().Overlapping( type, bbox ) )
             {
-                if( item->IsConnected( pt ) )
-                {
-                    SCH_ITEM* junction = GetItem( pt, 0, SCH_JUNCTION_T );
+                if( candidate->HasFlag( PROCESSED ) )
+                    continue;
 
-                    if( aSecondPass && junction )
-                        retval.insert( junction );
+                std::vector<VECTOR2I> endpoints = getItemEndpoints( candidate );
+
+                if( endpoints.empty() )
+                    continue;
+
+                // Skip connecting items on different layers (e.g. buses)
+                if( item->GetLayer() != candidate->GetLayer() )
+                    continue;
+
+                bool sharesEndpoint = false;
+
+                for( const VECTOR2I& pt : endpoints )
+                {
+                    if( item->IsEndPoint( pt ) )
+                    {
+                        sharesEndpoint = true;
+
+                        if( aSecondPass && item->IsConnected( pt ) )
+                        {
+                            SCH_ITEM* junction = GetItem( pt, 0, SCH_JUNCTION_T );
+
+                            if( junction )
+                                retval.insert( junction );
+                        }
+                    }
                 }
+
+                if( !sharesEndpoint )
+                    continue;
+
+                toSearch.push( candidate );
+                retval.insert( candidate );
             }
         }
     }

@@ -298,16 +298,13 @@ public:
                            std::function<void( SCH_ITEM* )>* aChangedHandler = nullptr ) const;
 
     /**
-     * Return all wires and junctions connected to \a aSegment which are not connected any
-     * symbol pin or all graphical lines connected to \a aSegement.
+     * Return all wires and junctions connected to \a aItem which are not connected any
+     * symbol pin or all graphical segments lines connected to \a aItem.
      *
-     * @note This only works for line segments.  It will need to be modified for connected arcs and/or
-     *       Bezier curves.
-     *
-     * @param aSegment The segment to test for connections.
-     * @return a set of all #SCH_ITEM objects connected to \a aSegment.
+     * @param aItem The item to test for connections.
+     * @return a set of all #SCH_ITEM objects connected to \a aItem.
      */
-    std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment, bool aSecondPass );
+    std::set<SCH_ITEM*> MarkConnections( SCH_ITEM* aItem, bool aSecondPass );
 
     /**
      * Clear the state flags of all the items in the screen.

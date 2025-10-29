@@ -165,8 +165,33 @@ bool SCH_SHAPE::IsEndPoint( const VECTOR2I& aPt ) const
 {
     SHAPE_T shape = GetShape();
 
-    if( ( shape == SHAPE_T::ARC ) || ( shape == SHAPE_T::BEZIER ) )
+    if( shape == SHAPE_T::ARC || shape == SHAPE_T::BEZIER || shape == SHAPE_T::SEGMENT )
         return ( aPt == GetStart() ) || ( aPt == GetEnd() );
+
+    if( shape == SHAPE_T::RECTANGLE )
+    {
+        for( const VECTOR2I& corner : GetRectCorners() )
+        {
+            if( corner == aPt )
+                return true;
+        }
+
+        return false;
+    }
+
+    if( shape == SHAPE_T::POLY )
+    {
+        std::vector<VECTOR2I> points;
+        DupPolyPointsList( points );
+
+        for( const VECTOR2I& pt : points )
+        {
+            if( pt == aPt )
+                return true;
+        }
+
+        return false;
+    }
 
     return false;
 }

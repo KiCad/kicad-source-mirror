@@ -2862,7 +2862,7 @@ int SCH_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
     RequestSelection( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
-                        SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
+                        SCH_ITEM_LOCATE_GRAPHIC_LINE_T, SCH_SHAPE_T } );
 
     if( m_selection.Empty() )
         return 0;
@@ -2871,12 +2871,12 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* selItem : m_selection.GetItems() )
     {
-        if( selItem->Type() != SCH_LINE_T )
+        if( !selItem->IsSCH_ITEM() )
             continue;
 
-        SCH_LINE* line = static_cast<SCH_LINE*>( selItem );
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( selItem );
 
-        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line, line->IsConnectable() );
+        std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( schItem, true );
 
         for( SCH_ITEM* item : conns )
             select( item );
