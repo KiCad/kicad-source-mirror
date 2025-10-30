@@ -222,6 +222,7 @@ static std::vector<KICAD_T> connectedLineTypes =
 
 static std::vector<KICAD_T> expandConnectionGraphTypes =
 {
+    SCH_NO_CONNECT_T,
     SCH_SYMBOL_T,
     SCH_SYMBOL_LOCATE_POWER_T,
     SCH_PIN_T,
@@ -273,7 +274,7 @@ bool SCH_SELECTION_TOOL::Init()
     auto wireOrBusSelection =    SCH_CONDITIONS::Count( 1 )    && SCH_CONDITIONS::OnlyTypes( connectedLineTypes );
     auto connectedSelection =    SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( connectedTypes );
     auto expandableSelection =
-                                 SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( expandConnectionGraphTypes );
+                                 SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::HasTypes( expandConnectionGraphTypes );
     auto sheetSelection =        SCH_CONDITIONS::Count( 1 )    && SCH_CONDITIONS::OnlyTypes( sheetTypes );
     auto crossProbingSelection = SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::HasTypes( crossProbingTypes );
     auto tableCellSelection =    SCH_CONDITIONS::MoreThan( 0 ) && SCH_CONDITIONS::OnlyTypes( tableCellTypes );
@@ -3065,15 +3066,23 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     graphicalAdded = expandConnectionGraphically( graphicalSelection );
 
+    auto smartAddToSel = [&]( EDA_ITEM* aItem )
+    {
+        AddItemToSel( aItem, true );
+
+        if( aItem->Type() == SCH_LINE_T )
+            aItem->SetFlags( STARTPOINT | ENDPOINT );
+    };
+
     // Add everything to the selection, including the original selection
     for( auto item : graphAdded )
-        AddItemToSel( item, true );
+        smartAddToSel( item );
 
     for( auto item : graphicalAdded )
-        AddItemToSel( item, true );
+        smartAddToSel( item );
 
     for( auto item : originalSelection )
-        AddItemToSel( item, true );
+        smartAddToSel( item );
 
     m_selection.SetIsHover( originalSelection.IsHover() );
 
