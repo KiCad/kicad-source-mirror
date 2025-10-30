@@ -43,7 +43,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_info_impl.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
@@ -654,7 +654,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // An empty libname is OK - you get that when creating a new footprint from the main menu
     // In that case. treat is as editable, and the user will be prompted for save-as when saving.
     else if( !libName.empty()
-             && !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( libName ) )
+             && !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( libName ) )
     {
         wxString msg = wxString::Format( _( "Editing footprint from read-only library %s." ),
                                          UnescapeString( libName ) );
@@ -1069,7 +1069,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
     {
         try
         {
-            writable = PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( fpid.GetLibNickname() );
+            writable = PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( fpid.GetLibNickname() );
         }
         catch( const IO_ERROR& )
         {
@@ -1123,20 +1123,20 @@ void FOOTPRINT_EDIT_FRAME::UpdateView()
 
 void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 {
-    FP_LIB_TABLE*   fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Load Footprint Libraries" ), 1, PR_CAN_ABORT );
 
     if( GFootprintList.GetCount() == 0 )
         GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
 
-    GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
+    GFootprintList.ReadFootprintFiles( footprints, nullptr, &progressReporter );
     progressReporter.Show( false );
 
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( this );
 
-    m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, fpTable );
+    m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, footprints );
     auto adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
 
     adapter->AddLibraries( this );
@@ -1145,7 +1145,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 
 void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
 {
-    FP_LIB_TABLE* fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID        target = GetTargetFPID();
     bool          targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
@@ -1154,12 +1154,12 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     if( aProgress )
     {
         WX_PROGRESS_REPORTER progressReporter( this, _( "Update Footprint Libraries" ), 1, PR_CAN_ABORT );
-        GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
+        GFootprintList.ReadFootprintFiles( footprints, nullptr, &progressReporter );
         progressReporter.Show( false );
     }
     else
     {
-        GFootprintList.ReadFootprintFiles( fpTable, nullptr, nullptr );
+        GFootprintList.ReadFootprintFiles( footprints, nullptr, nullptr );
     }
 
     // Unselect before syncing to avoid null reference in the adapter
@@ -1167,7 +1167,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     GetLibTree()->Unselect();
 
     // Sync the LIB_TREE to the FOOTPRINT_INFO list
-    adapter->Sync( fpTable );
+    adapter->Sync( footprints );
 
     GetLibTree()->Regenerate( true );
 

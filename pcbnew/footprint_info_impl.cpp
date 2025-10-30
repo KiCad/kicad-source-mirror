@@ -25,7 +25,7 @@
 #include <dialogs/html_message_box.h>
 #include <footprint.h>
 #include <footprint_info.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <kiway.h>
 #include <lib_id.h>
 #include <progress_reporter.h>
@@ -42,11 +42,10 @@
 
 void FOOTPRINT_INFO_IMPL::load()
 {
-    FP_LIB_TABLE* fptable = m_owner->GetTable();
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = m_owner->GetAdapter();
+    wxCHECK( adapter, /* void */ );
 
-    wxASSERT( fptable );
-
-    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
+    const FOOTPRINT* footprint = adapter->LoadFootprint( m_nickname, m_fpname, false );
 
     if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {
@@ -103,14 +102,14 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 }
 
 
-bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
+bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxString* aNickname,
                                               PROGRESS_REPORTER* aProgressReporter )
 {
     long long int generatedTimestamp = 0;
 
     if( !CatchErrors( [&]()
                  {
-                     generatedTimestamp = aTable->GenerateTimestamp( aNickname );
+                     generatedTimestamp = aAdapter->GenerateTimestamp( aNickname );
                  } ) )
     {
         return false;
@@ -125,7 +124,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     m_progress_reporter = aProgressReporter;
 
     m_cancelled = false;
-    m_lib_table = aTable;
+    m_adapter = aAdapter;
 
     // Clear data before reading files
     m_errors.clear();
@@ -138,7 +137,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     }
     else
     {
-        for( const wxString& nickname : aTable->GetLogicalLibs() )
+        for( const wxString& nickname : aAdapter->GetLibraryNames() )
             m_queue.push( nickname );
     }
 
@@ -179,12 +178,12 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                 if( m_cancelled || !m_queue.pop( nickname ) )
                     return 0;
 
-                wxArrayString fpnames;
+                std::vector<wxString> fpnames;
 
                 CatchErrors(
                         [&]()
                         {
-                            m_lib_table->FootprintEnumerate( fpnames, nickname, false );
+                            fpnames = m_adapter->GetFootprintNames( nickname );
                         } );
 
                 for( wxString fpname : fpnames )

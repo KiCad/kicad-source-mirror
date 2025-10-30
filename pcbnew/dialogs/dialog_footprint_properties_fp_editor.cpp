@@ -58,7 +58,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <widgets/wx_grid.h>
 
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <project_pcb.h>
 #include <kidialog.h>
 
@@ -507,9 +507,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& 
     LIB_ID        fpID = m_footprint->GetFPID();
     wxString      libraryName = fpID.GetLibNickname();
     wxString      originalFPName = fpID.GetLibItemName();
-    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
 
-    if( aFootprintName != originalFPName && tbl->FootprintExists( libraryName, aFootprintName ) )
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() );
+
+    if( aFootprintName != originalFPName && adapter->FootprintExists( libraryName, aFootprintName ) )
     {
         wxString msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
                                          aFootprintName, libraryName );

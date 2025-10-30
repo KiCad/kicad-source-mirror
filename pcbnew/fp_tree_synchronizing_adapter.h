@@ -34,11 +34,11 @@ class FP_TREE_SYNCHRONIZING_ADAPTER : public FP_TREE_MODEL_ADAPTER
 {
 public:
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                           FP_LIB_TABLE* aLibs );
+                                                           FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
-    void Sync( FP_LIB_TABLE* aLibs );
+    void Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
     int GetLibrariesCount() const override;
 
@@ -51,7 +51,7 @@ public:
     void ShutdownPreview( wxWindow* aParent ) override;
 
 protected:
-    FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs );
+    FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame, FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
     void updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode );
 

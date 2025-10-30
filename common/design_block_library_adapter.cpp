@@ -51,7 +51,7 @@ wxString DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 }
 
 
-DESIGN_BLOCK_IO* DESIGN_BLOCK_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
+DESIGN_BLOCK_IO* DESIGN_BLOCK_LIBRARY_ADAPTER::dbplugin( const LIB_DATA* aRow )
 {
     DESIGN_BLOCK_IO* ret = dynamic_cast<DESIGN_BLOCK_IO*>( aRow->plugin.get() );
     wxCHECK( aRow->plugin && ret, nullptr );
@@ -76,6 +76,12 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
     wxCHECK( plugin, tl::unexpected( LIBRARY_ERROR( _( "Internal error" ) ) ) );
 
     return plugin;
+}
+
+
+IO_BASE* DESIGN_BLOCK_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
+{
+    return dbplugin( aRow );
 }
 
 
@@ -166,7 +172,7 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
 
                     try
                     {
-                        plugin( lib )->DesignBlockEnumerate( dummyList, getUri( lib->row ), false, &options );
+                        dbplugin( lib )->DesignBlockEnumerate( dummyList, getUri( lib->row ), false, &options );
                         wxLogTrace( traceLibraries, "DB: %s: library enumerated %zu items", nickname, dummyList.size() );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
@@ -252,7 +258,7 @@ std::vector<DESIGN_BLOCK*> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlocks( const 
 
     try
     {
-        plugin( lib )->DesignBlockEnumerate( blockNames, getUri( lib->row ), false, &options );
+        dbplugin( lib )->DesignBlockEnumerate( blockNames, getUri( lib->row ), false, &options );
     }
     catch( IO_ERROR& e )
     {
@@ -264,7 +270,7 @@ std::vector<DESIGN_BLOCK*> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlocks( const 
     {
         try
         {
-            blocks.emplace_back( plugin( lib )->DesignBlockLoad( getUri( lib->row ), blockName, false, &options ) );
+            blocks.emplace_back( dbplugin( lib )->DesignBlockLoad( getUri( lib->row ), blockName, false, &options ) );
         }
         catch( IO_ERROR& e )
         {
@@ -287,7 +293,7 @@ std::vector<wxString> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlockNames( const w
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        plugin( lib )->DesignBlockEnumerate( namesAS, getUri( lib->row ), true, &options );
+        dbplugin( lib )->DesignBlockEnumerate( namesAS, getUri( lib->row ), true, &options );
     }
 
     for( const wxString& name : namesAS )
@@ -305,7 +311,7 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::LoadDesignBlock( const wxString& aNi
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        DESIGN_BLOCK* db = plugin( lib )->DesignBlockLoad( getUri( lib->row ), aDesignBlockName, aKeepUUID, &options );
+        DESIGN_BLOCK* db = dbplugin( lib )->DesignBlockLoad( getUri( lib->row ), aDesignBlockName, aKeepUUID, &options );
         db->GetLibId().SetLibNickname( aNickname );
         return db;
     }
@@ -321,7 +327,7 @@ bool DESIGN_BLOCK_LIBRARY_ADAPTER::DesignBlockExists( const wxString& aNickname,
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        return plugin( lib )->DesignBlockExists( getUri( lib->row ), aDesignBlockName, &options );
+        return dbplugin( lib )->DesignBlockExists( getUri( lib->row ), aDesignBlockName, &options );
     }
 
     return false;
@@ -336,7 +342,7 @@ const DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::GetEnumeratedDesignBlock( cons
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        return plugin( lib )->GetEnumeratedDesignBlock( getUri( lib->row ), aDesignBlockName, &options );
+        return dbplugin( lib )->GetEnumeratedDesignBlock( getUri( lib->row ), aDesignBlockName, &options );
     }
 
     return nullptr;
@@ -351,10 +357,10 @@ DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_T DESIGN_BLOCK_LIBRARY_ADAPTER::SaveDesignBlo
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        if( !aOverwrite && plugin( lib )->DesignBlockExists( getUri( lib->row ), aDesignBlock->GetName(), &options ) )
+        if( !aOverwrite && dbplugin( lib )->DesignBlockExists( getUri( lib->row ), aDesignBlock->GetName(), &options ) )
             return SAVE_SKIPPED;
 
-        plugin( lib )->DesignBlockSave( getUri( lib->row ), aDesignBlock, &options );
+        dbplugin( lib )->DesignBlockSave( getUri( lib->row ), aDesignBlock, &options );
     }
 
     return SAVE_OK;
@@ -368,7 +374,7 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::DeleteDesignBlock( const wxString& aNickname,
     {
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-        return plugin( lib )->DesignBlockDelete( getUri( lib->row ), aDesignBlockName, &options );
+        return dbplugin( lib )->DesignBlockDelete( getUri( lib->row ), aDesignBlockName, &options );
     }
 }
 

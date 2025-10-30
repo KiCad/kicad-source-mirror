@@ -21,6 +21,7 @@
 #include <kiway.h>
 #include <kiway_player.h>
 #include <project.h>
+#include <project_pcb.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
 #include <widgets/wx_progress_reporters.h>
@@ -67,10 +68,10 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 
         // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
         // project yet), load footprints the hard way.
-        FP_LIB_TABLE*        fpTable = aProject.PcbFootprintLibs( aKiway );
+        FOOTPRINT_LIBRARY_ADAPTER* footprints = aProject.FootprintLibAdapter( aKiway );
         FOOTPRINT_LIST_IMPL& fpList = static_cast<FOOTPRINT_LIST_IMPL&>( *m_fp_list );
 
-        fpList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
+        fpList.ReadFootprintFiles( footprints, nullptr, &progressReporter );
     }
 
     m_fp_filter.SetList( *m_fp_list );

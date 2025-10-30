@@ -47,7 +47,7 @@
 #include <pad.h>
 #include <pcb_group.h>
 #include <zone.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <dialogs/dialog_footprint_checker.h>
 #include <footprint_wizard_frame.h>
@@ -181,9 +181,7 @@ void FOOTPRINT_EDITOR_CONTROL::tryToSaveFootprintInLibrary( FOOTPRINT&    aFootp
     }
     else
     {
-        FP_LIB_TABLE& libTable = *PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
-
-        if( !libTable.IsFootprintLibWritable( libraryName ) )
+        if( !PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->IsFootprintLibWritable( libraryName ) )
         {
             // If the library is not writeable, we'll give the user a
             // footprint not in a library. But add a warning to let them know
@@ -332,11 +330,14 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 {
     if( m_frame->GetTargetFPID().GetLibItemName().empty() )
     {
+        LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
         // Save Library As
         const wxString& src_libNickname = m_frame->GetTargetFPID().GetLibNickname();
-        wxString src_libFullName = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->GetFullURI( src_libNickname );
+        std::optional<wxString> optUri = manager.GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, src_libNickname, true );
+        wxCHECK( optUri, 0 );
 
-        if( m_frame->SaveLibraryAs( src_libFullName ) )
+        if( m_frame->SaveLibraryAs( *optUri ) )
             m_frame->SyncLibraryTree( true );
     }
     else if( m_frame->GetTargetFPID() == m_frame->GetLoadedFPID() )
@@ -409,7 +410,7 @@ int FOOTPRINT_EDITOR_CONTROL::PasteFootprint( const TOOL_EVENT& aEvent )
         wxString newLib = m_frame->GetLibTree()->GetSelectedLibId().GetLibNickname();
         wxString newName = m_copiedFootprint->GetFPID().GetLibItemName();
 
-        while( PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->FootprintExists( newLib, newName ) )
+        while( PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->FootprintExists( newLib, newName ) )
             newName += _( "_copy" );
 
         m_copiedFootprint->SetFPID( LIB_ID( newLib, newName ) );
@@ -450,7 +451,7 @@ int FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 {
     LIBRARY_EDITOR_CONTROL* libTool   = m_toolMgr->GetTool<LIBRARY_EDITOR_CONTROL>();
-    FP_LIB_TABLE*           tbl = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() );
 
     LIB_ID   fpID = m_frame->GetLibTree()->GetSelectedLibId();
     wxString libraryName = fpID.GetLibNickname();
@@ -470,7 +471,7 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
                 }
 
                 // If no change, accept it without prompting
-                if( oldName != newName && tbl->FootprintExists( libraryName, newName ) )
+                if( oldName != newName && adapter->FootprintExists( libraryName, newName ) )
                 {
                     msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
                                             newName, libraryName );
@@ -523,7 +524,7 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 
                 m_frame->SaveFootprintInLibrary( footprint, libraryName );
 
-                PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->FootprintDelete( libraryName, oldName );
+                adapter->DeleteFootprint( libraryName, oldName );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -604,31 +605,19 @@ int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
 {
     // No check for multi selection since the context menu option must be hidden in that case
-    FP_LIB_TABLE* globalTable = dynamic_cast<FP_LIB_TABLE*>( &GFootprintTable );
-    FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
     LIB_ID        libId = m_frame->GetTargetFPID();
 
     wxString    libName = libId.GetLibNickname();
     wxString    libItemName = libId.GetLibItemName();
     wxString    path = wxEmptyString;
 
-    for( FP_LIB_TABLE* table : { globalTable, projectTable } )
-    {
-        if( !table )
-            break;
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    std::optional<wxString> optUri = manager.GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, libName, true );
 
-        try
-        {
-            path = table->FindRow( libName, true )->GetFullURI( true );
-        }
-        catch( IO_ERROR& )
-        {
-            // Do nothing: libName can be not found in globalTable if libName is in projectTable
-        }
+    if( !optUri )
+        return 0;
 
-        if( !path.IsEmpty() )
-            break;
-    }
+    path = *optUri;
 
     wxString fileExt = wxEmptyString;
 
@@ -684,31 +673,19 @@ int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
     }
 
     // No check for multi selection since the context menu option must be hidden in that case
-    FP_LIB_TABLE* globalTable = dynamic_cast<FP_LIB_TABLE*>( &GFootprintTable );
-    FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
     LIB_ID        libId = m_frame->GetLibTree()->GetSelectedLibId();
+
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
     wxString    libName = libId.GetLibNickname();
     wxString    libItemName = wxEmptyString;
 
-    for( FP_LIB_TABLE* table : { globalTable, projectTable } )
-    {
-        if( !table )
-            break;
+    std::optional<wxString> optUri = manager.GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, libName, true );
 
-        try
-        {
-            libItemName = table->FindRow( libName, true )->GetFullURI( true );
-        }
-        catch( IO_ERROR& )
-        {
-            // Do nothing: libName can be not found in globalTable if libName is in projectTable
-        }
+    if( !optUri )
+        return 0;
 
-        if( !libItemName.IsEmpty() )
-            break;
-    }
-
+    libItemName = *optUri;
     libItemName << wxFileName::GetPathSeparator();
     libItemName << libId.GetLibItemName();
     libItemName << '.' + FILEEXT::KiCadFootprintFileExtension;

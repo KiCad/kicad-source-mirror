@@ -23,7 +23,7 @@
 
 #pragma once
 
-class FP_LIB_TABLE;
+class FOOTPRINT_LIBRARY_ADAPTER;
 class PROJECT;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
@@ -31,10 +31,7 @@ class FILENAME_RESOLVER;
 class PROJECT_PCB
 {
 public:
-    /**
-     * Return the table of footprint libraries without Kiway
-     */
-    static FP_LIB_TABLE* PcbFootprintLibs( PROJECT* aProject );
+    static FOOTPRINT_LIBRARY_ADAPTER* FootprintLibAdapter( PROJECT* aProject );
 
     /**
      * Return a pointer to an instance of the 3D cache manager.
@@ -52,4 +49,7 @@ public:
 
 private:
     PROJECT_PCB() {}
+
+    /// Used to synchronise access to FootprintLibAdapter
+    static std::mutex s_libAdapterMutex;
 };

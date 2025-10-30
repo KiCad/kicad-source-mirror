@@ -29,7 +29,6 @@
 #include <wx/snglinst.h>
 #include <wx/app.h>
 #include <board.h>
-#include <fp_lib_table.h>
 #include <footprint_viewer_frame.h>
 #include <footprint.h>
 #include <tools/pcb_actions.h>
@@ -40,8 +39,6 @@
 #include <zone_filler.h>
 struct PCB_SELECTION_FILTER_OPTIONS;
 #include <preview_items/selection_area.h>
-
-FP_LIB_TABLE GFootprintTable;
 
 
 DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME* aParent ) :

@@ -37,7 +37,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <board.h>
 #include <footprint.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <dialog_footprint_properties_fp_editor.h>
@@ -421,21 +421,12 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     if( dm.IsEmbedded3DModel() )
     {
         wxString libraryName = m_footprint->GetFPID().GetLibNickname();
-        const FP_LIB_TABLE_ROW* fpRow = nullptr;
-
         wxString footprintBasePath = wxEmptyString;
 
-        try
-        {
-            fpRow = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->FindRow( libraryName, false );
-
-            if( fpRow )
-                footprintBasePath = fpRow->GetFullURI( true );
-        }
-        catch( ... )
-        {
-            // if libraryName is not found in table, do nothing
-        }
+        std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                            PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->GetRow( libraryName );
+        if( fpRow )
+            footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
 
         std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
         embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
@@ -571,21 +562,12 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
         return MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME;
 
     wxString libraryName = m_footprint->GetFPID().GetLibNickname();
-    const FP_LIB_TABLE_ROW* fpRow = nullptr;
-
-    try
-    {
-        fpRow = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() )->FindRow( libraryName, false );
-    }
-    catch( ... )
-    {
-        // if libraryName is not found in table, do nothing
-    }
-
     wxString footprintBasePath = wxEmptyString;
 
+    std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                            PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->GetRow( libraryName );
     if( fpRow )
-        footprintBasePath = fpRow->GetFullURI( true );
+        footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
 
     std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
     embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );

@@ -29,7 +29,6 @@
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <api/api_plugin_manager.h>
-#include <fp_lib_table.h>
 #include <geometry/geometry_utils.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -136,6 +135,8 @@
 
 #include <action_plugin.h>
 #include <pcbnew_scripting_helpers.h>
+#include <richio.h>
+
 #include "../scripting/python_scripting.h"
 
 #include <wx/filedlg.h>

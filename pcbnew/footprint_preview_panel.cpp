@@ -32,7 +32,7 @@
 #include <dpi_scaling_common.h>
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiway.h>
 #include <math/box2.h>
@@ -172,11 +172,11 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 
     GetView()->Clear();
 
-    FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     try
     {
-        const FOOTPRINT* fp = fptbl->GetEnumeratedFootprint( aFPID.GetLibNickname(), aFPID.GetLibItemName() );
+        const FOOTPRINT* fp = adapter->LoadFootprint( aFPID.GetLibNickname(), aFPID.GetLibItemName(), false );
 
         if( fp )
             m_currentFootprint.reset( static_cast<FOOTPRINT*>( fp->Duplicate( IGNORE_PARENT_GROUP ) ) );

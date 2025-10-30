@@ -38,7 +38,8 @@
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <panel_fp_lib_table.h>
 #include <lib_id.h>
-#include <fp_lib_table.h>
+#include <lib_table_base.h>
+#include <footprint_library_adapter.h>
 #include <lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
 #include <bitmaps.h>
@@ -137,7 +138,7 @@ protected:
             std::map<std::string, UTF8> choices;
 
             PCB_IO_MGR::PCB_FILE_T pi_type = PCB_IO_MGR::EnumFromStr( row.Type() );
-            IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pi_type ) );
+            IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row.Nickname(), choices, options, &result );
@@ -1083,7 +1084,7 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     // not used yet.  It is automatically set by KiCad to the directory holding
     // the current project.
     unique.insert( PROJECT_VAR_NAME );
-    unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
+    unique.insert( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ) );
 
     // This special environment variable is used to locate 3d shapes
     unique.insert( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
@@ -1140,9 +1141,6 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
             } );
 
         Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
-
-        // TODO(JE) library tables - remove after legacy loading is upgrade
-        GFootprintTable.Load( FP_LIB_TABLE::GetGlobalTableFileName() );
     }
 
     std::optional<LIBRARY_TABLE*> projectTable =
@@ -1160,10 +1158,6 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 
         // Trigger a reload of the table and cancel an in-progress background load
         Pgm().GetLibraryManager().ProjectChanged();
-
-        // TODO(JE) library tables - remove after legacy loading is upgrade
-        PROJECT* prj = &aKiway->Prj();
-        PROJECT_PCB::PcbFootprintLibs( prj )->Load( prj->FootprintLibTblName() );
     }
 
     // Trigger a reload in case any libraries have been added or removed

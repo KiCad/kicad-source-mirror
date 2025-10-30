@@ -288,7 +288,7 @@ BOOST_DATA_TEST_CASE( CheckCanReadBoard, boost::unit_test::data::make( BoardPlug
     {
         BOOST_TEST_CONTEXT( entry.m_name )
         {
-            auto plugin = IO_RELEASER<PCB_IO>( PCB_IO_MGR::PluginFind( entry.m_type ) );
+            auto plugin = IO_RELEASER<PCB_IO>( PCB_IO_MGR::FindPlugin( entry.m_type ) );
             bool expectValidHeader = c.m_expected_type == entry.m_type;
 
             BOOST_CHECK_EQUAL( plugin->CanReadBoard( dataPath ), expectValidHeader );

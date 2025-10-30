@@ -935,6 +935,64 @@ bool LIBRARY_MANAGER_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
 }
 
 
+std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibraryStatuses() const
+{
+    std::vector<std::pair<wxString, LIB_STATUS>> ret;
+
+    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( Type() ) )
+    {
+        if( std::optional<LIB_STATUS> result = GetLibraryStatus( row->Nickname() ) )
+        {
+            ret.emplace_back( std::make_pair( row->Nickname(), *result ) );
+        }
+        else
+        {
+            // This should probably never happen, but until that can be proved...
+            ret.emplace_back( std::make_pair( row->Nickname(), LIB_STATUS( {
+                    .load_status = LOAD_STATUS::LOAD_ERROR,
+                    .error = LIBRARY_ERROR( _( "Library not found in library table" ) )
+                } ) ) );
+        }
+    }
+
+    return ret;
+}
+
+
+bool LIBRARY_MANAGER_ADAPTER::IsWritable( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        return rowData->plugin->IsLibraryWritable( getUri( rowData->row ) );
+    }
+
+    return false;
+}
+
+
+bool LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
+{
+    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
+    {
+        LIB_DATA* data = *result;
+        std::map<std::string, UTF8> options = data->row->GetOptionsMap();
+
+        try
+        {
+            data->plugin->CreateLibrary( getUri( data->row ), &options );
+            return true;
+        }
+        catch( ... )
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
 wxString LIBRARY_MANAGER_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
 {
     return LIBRARY_MANAGER::ExpandURI( aRow->URI(), Pgm().GetSettingsManager().Prj() );

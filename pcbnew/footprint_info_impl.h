@@ -89,7 +89,7 @@ public:
     void WriteCacheToFile( const wxString& aFilePath ) override;
     void ReadCacheFromFile( const wxString& aFilePath ) override;
 
-    bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
+    bool ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxString* aNickname = nullptr,
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void Clear() override;

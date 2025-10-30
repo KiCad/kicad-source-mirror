@@ -175,7 +175,7 @@ int PCB_CONTROL::DdAddLibrary( const TOOL_EVENT& aEvent )
 {
     const wxString fn = *aEvent.Parameter<wxString*>();
     static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary( _( "Add Footprint Library" ), fn,
-                                                              PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() ) );
+                                                              LIBRARY_TABLE_SCOPE::PROJECT );
     return 0;
 }
 
@@ -1336,7 +1336,7 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
         return 1;
 
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
-    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
+    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( pluginType ) );
 
     if( !pi )
         return 1;
@@ -1363,7 +1363,7 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
-    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pluginType ) );
+    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::FindPlugin( pluginType ) );
 
     if( !pi )
         return 1;
@@ -1593,7 +1593,7 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
 
 
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
-    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pluginType ) );
+    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::FindPlugin( pluginType ) );
 
     if( !pi )
         return 1;
@@ -2504,7 +2504,7 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
 
     wxString filePath = fileName.GetFullPath();
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( filePath );
-    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
+    IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( pluginType ) );
 
     if( !pi )
         return 1;

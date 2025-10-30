@@ -33,7 +33,7 @@
 #include <trigo.h>
 #include <project.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <eda_3d_viewer_frame.h>
 #include <project_pcb.h>
 
@@ -1020,12 +1020,12 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
             try
             {
                 // FindRow() can throw an exception
-                const FP_LIB_TABLE_ROW* fpRow =
-                    PROJECT_PCB::PcbFootprintLibs( m_boardAdapter.GetBoard()->GetProject() )
-                            ->FindRow( libraryName, false );
+                std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                    PROJECT_PCB::FootprintLibAdapter( m_boardAdapter.GetBoard()->GetProject() )
+                            ->GetRow( libraryName );
 
                 if( fpRow )
-                    footprintBasePath = fpRow->GetFullURI( true );
+                    footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
             }
             catch( ... )
             {

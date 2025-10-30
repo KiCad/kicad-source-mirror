@@ -25,8 +25,7 @@
 #include <lib_tree_model_adapter.h>
 #include <footprint_info.h>
 
-class LIB_TABLE;
-class FP_LIB_TABLE;
+class FOOTPRINT_LIBRARY_ADAPTER;
 class PCB_BASE_FRAME;
 
 class FP_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
@@ -38,7 +37,7 @@ public:
      * @param aLibs library set from which parts will be loaded
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( PCB_BASE_FRAME* aParent,
-                                                           LIB_TABLE* aLibs );
+                                                           FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
     void AddLibraries( EDA_BASE_FRAME* aParent );
 
@@ -48,14 +47,14 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs );
+    FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
     std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::FOOTPRINT_LIB; }
 
 protected:
-    FP_LIB_TABLE*   m_libs;
+    FOOTPRINT_LIBRARY_ADAPTER* m_libs;
 };
 
 #endif // FP_TREE_MODEL_ADAPTER_H

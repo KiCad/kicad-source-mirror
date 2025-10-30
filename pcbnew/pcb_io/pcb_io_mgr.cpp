@@ -65,7 +65,7 @@
 // plugins coexisting.
 
 
-PCB_IO* PCB_IO_MGR::PluginFind( PCB_FILE_T aFileType )
+PCB_IO* PCB_IO_MGR::FindPlugin( PCB_FILE_T aFileType )
 {
     // This implementation is subject to change, any magic is allowed here.
     // The public IO_MGR API is the only pertinent public information.
@@ -160,7 +160,7 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
                      const std::map<std::string, UTF8>* aProperties, PROJECT* aProject,
                      PROGRESS_REPORTER* aProgressReporter )
 {
-    IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
+    IO_RELEASER<PCB_IO> pi( FindPlugin( aFileType ) );
 
     if( pi )  // test pi->plugin
     {
@@ -175,7 +175,7 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
 void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
                    const std::map<std::string, UTF8>* aProperties )
 {
-    IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
+    IO_RELEASER<PCB_IO> pi( FindPlugin( aFileType ) );
 
     if( pi )
     {
@@ -196,8 +196,8 @@ bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProp
     if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
         return false;
 
-    IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
-    IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+    IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::FindPlugin( oldFileType ) );
+    IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 

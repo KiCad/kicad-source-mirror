@@ -26,7 +26,7 @@
 #include <dialog_footprint_properties_fp_editor.h>
 #include <footprint_edit_frame.h>
 #include <footprint_tree_pane.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <functional>
 #include <kiway_express.h>
 #include <pcb_group.h>
@@ -346,10 +346,10 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxString   libNickname;
             wxString   msg;
 
-            FP_LIB_TABLE*        libTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-            const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( fpFileName.GetPath() );
+            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+            std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->FindRowByURI( fpFileName.GetPath() );
 
-            if( !libTableRow )
+            if( !optRow )
             {
                 msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
                             fpFileName.GetPath() );
@@ -359,9 +359,9 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 break;
             }
 
-            libNickname = libTableRow->GetNickName();
+            libNickname = ( *optRow )->Nickname();
 
-            if( !libTable->HasLibrary( libNickname, true ) )
+            if( !adapter->HasLibrary( libNickname, true ) )
             {
                 msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
                             libNickname );

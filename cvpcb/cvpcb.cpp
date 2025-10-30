@@ -24,7 +24,7 @@
  */
 
 #include <confirm.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <footprint_info_impl.h>
 #include <kiface_base.h>
 #include <pgm_base.h>
@@ -40,8 +40,7 @@ namespace CV {
 
 int testFootprintLink( const wxString& aFootprint, PROJECT* aProject )
 {
-    FP_LIB_TABLE*           libTable = PROJECT_PCB::PcbFootprintLibs( aProject );
-    const FP_LIB_TABLE_ROW* libTableRow = nullptr;
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( aProject );
     LIB_ID                  fpID;
 
     fpID.Parse( aFootprint );
@@ -49,23 +48,14 @@ int testFootprintLink( const wxString& aFootprint, PROJECT* aProject )
     wxString libName = fpID.GetLibNickname();
     wxString fpName = fpID.GetLibItemName();
 
-    try
-    {
-        libTableRow = libTable->FindRow( libName );
-    }
-    catch( const IO_ERROR& )
-    {
-        // Error state processed below
-    }
-
-    if( !libTableRow )
+    if( !adapter->HasLibrary( libName, false ) )
         return KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY;
-    else if( !libTable->HasLibrary( libName, true ) )
+    else if( !adapter->HasLibrary( libName, true ) )
         return KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED;
-    else if( !libTable->FootprintExists( libName, fpName ) )
+    else if( !adapter->FootprintExists( libName, fpName ) )
         return KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT;
-    else
-        return 0;
+
+    return 0;
 }
 
 
@@ -110,14 +100,6 @@ static struct IFACE : public KIFACE_BASE
         case KIFACE_FOOTPRINT_LIST:
             return (void*) &GFootprintList;
 
-        // Return a new FP_LIB_TABLE with the global table installed as a fallback.
-        case KIFACE_NEW_FOOTPRINT_TABLE:
-            return (void*) new FP_LIB_TABLE( &GFootprintTable );
-
-        // Return a pointer to the global instance of the global footprint table.
-        case KIFACE_GLOBAL_FOOTPRINT_TABLE:
-            return (void*) &GFootprintTable;
-
         case KIFACE_TEST_FOOTPRINT_LINK:
             return (void*) testFootprintLink;
 
@@ -144,12 +126,6 @@ KIFACE_API KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_B
 }
 
 
-/// The global footprint library table.  This is not dynamically allocated because
-/// in a multiple project environment we must keep its address constant (since it is
-/// the fallback table for multiple projects).
-FP_LIB_TABLE        GFootprintTable;
-
-
 /// The global footprint info table.  This is performance-intensive to build so we
 /// keep a hash-stamped global version.  Any deviation from the request vs. stored
 /// hash will result in it being rebuilt.
@@ -171,43 +147,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
-
-    /*  Now that there are no *.mod files in the standard library, this function
-        has no utility.  User should simply set the variable manually.
-        Looking for *.mod files which do not exist is fruitless.
-
-    // SetFootprintLibTablePath();
-    */
-
-    try
-    {
-        // The global table is not related to a specific project.  All projects
-        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-        // of avoiding anything project specific is not violated here.
-
-        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
-        {
-            DisplayInfoMessage( nullptr, _( "You have run CvPcb for the first time using the "
-                                            "new footprint library table method for finding "
-                                            "footprints.\nCvPcb has either copied the default "
-                                            "table or created an empty table in your home "
-                                            "folder.\nYou must first configure the library "
-                                            "table to include all footprint libraries not "
-                                            "included with KiCad.\nSee the \"Footprint Library "
-                                            "Table\" section of the CvPcb documentation for "
-                                            "more information." ) );
-        }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        // we didnt get anywhere deregister the settings
-        aProgram->GetSettingsManager().FlushAndRelease( KifaceSettings(), false );
-
-        DisplayErrorMessage( nullptr, _( "An error occurred attempting to load the global "
-                                         "footprint library table." ),
-                             ioe.What() );
-        return false;
-    }
 
     return true;
 }

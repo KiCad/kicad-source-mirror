@@ -39,7 +39,7 @@
 #include <footprint_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
@@ -59,6 +59,7 @@
 #include <panel_3D_display_options.h>
 #include <panel_3D_opengl_options.h>
 #include <panel_3D_raytracing_options.h>
+#include <project_pcb.h>
 #include <python_scripting.h>
 
 #include "invoke_pcb_dialog.h"
@@ -362,13 +363,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case KIFACE_FOOTPRINT_LIST:
             return (void*) &GFootprintList;
 
-        // Return a new FP_LIB_TABLE with the global table installed as a fallback.
-        case KIFACE_NEW_FOOTPRINT_TABLE:
-            return (void*) new FP_LIB_TABLE( &GFootprintTable );
-
-        // Return a pointer to the global instance of the global footprint table.
-        case KIFACE_GLOBAL_FOOTPRINT_TABLE:
-            return (void*) &GFootprintTable;
+        case KIFACE_FOOTPRINT_LIBRARY_ADAPTER:
+            // This is the mechanism by which FOOTPRINT_SELECT_WIDGET can get access to the adapter
+            // without directly linking to pcbnew or pcbcommon, going through PROJECT::FootprintLibAdapter
+            // TODO this is kind of cursed and needs thought to support multi-project
+            return PROJECT_PCB::FootprintLibAdapter( &Pgm().GetSettingsManager().Prj() );
 
         case KIFACE_SCRIPTING_LEGACY:
             return reinterpret_cast<void*>( PyInit__pcbnew );
@@ -392,8 +391,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
 private:
-    bool loadGlobalLibTable();
-
     std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
@@ -414,11 +411,6 @@ KIFACE_API KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BA
     return &kiface;
 }
 
-
-/// The global footprint library table.  This is not dynamically allocated because
-/// in a multiple project environment we must keep its address constant (since it is
-/// the fallback table for multiple projects).
-FP_LIB_TABLE          GFootprintTable;
 
 /// The global footprint info table.  This is performance-intensive to build so we
 /// keep a hash-stamped global version.  Any deviation from the request vs. stored
@@ -449,17 +441,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
     start_common( aCtlBits );
 
-    if( !loadGlobalLibTable() )
-    {
-        // we didnt get anywhere deregister the settings
-        mgr.FlushAndRelease( GetAppSettings<CVPCB_SETTINGS>( "cvpcb" ), false );
-        mgr.FlushAndRelease( KifaceSettings(), false );
-        mgr.FlushAndRelease( GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ), false );
-        mgr.FlushAndRelease( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ), false );
-
-        return false;
-    }
-
     m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>( aKiway );
 
     if( m_start_flags & KFCTL_CLI )
@@ -474,42 +455,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
 void IFACE::Reset()
 {
-    loadGlobalLibTable();
-}
-
-
-bool IFACE::loadGlobalLibTable()
-{
-    wxFileName fn = FP_LIB_TABLE::GetGlobalTableFileName();
-
-    if( !fn.FileExists() )
-    {
-    }
-    else
-    {
-        try
-        {
-            // The global table is not related to a specific project.  All projects
-            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-            // of avoiding anything project specific is not violated here.
-            if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
-                return false;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            // if we are here, a incorrect global footprint library table was found.
-            // Incorrect global symbol library table is not a fatal error:
-            // the user just has to edit the (partially) loaded table.
-            wxString msg = _( "An error occurred attempting to load the global footprint library "
-                              "table.\n"
-                              "Please edit this global footprint library table in Preferences "
-                              "menu." );
-
-            DisplayErrorMessage( nullptr, msg, ioe.What() );
-        }
-    }
-
-    return true;
 }
 
 
@@ -571,6 +516,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         // name.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
+    // TODO(JE) library tables - does this feature even need to exist?
+#if 0
     else if( destFile.GetName() == FILEEXT::FootprintLibraryTableFileName )
     {
         try
@@ -602,6 +549,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
             aErrors += msg;
         }
     }
+#endif
     else
     {
         wxFAIL_MSG( wxT( "Unexpected filetype for Pcbnew::SaveFileAs()" ) );

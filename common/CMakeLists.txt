@@ -881,7 +881,6 @@ target_include_directories( common SYSTEM PUBLIC
     )
 
 set( PCB_COMMON_SRCS
-    fp_lib_table.cpp
     hash_eda.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcbexpr_evaluator.cpp
@@ -903,6 +902,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_group.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_marker.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/footprint_library_adapter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/fix_board_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/layer_utils.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_item.cpp

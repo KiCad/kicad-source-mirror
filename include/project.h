@@ -44,13 +44,12 @@
 #define NAMELESS_PROJECT _( "untitled" )
 
 class DESIGN_BLOCK_LIBRARY_ADAPTER;
-class FP_LIB_TABLE;
 class LEGACY_SYMBOL_LIBS;
 class SEARCH_STACK;
 class S3D_CACHE;
 class KIWAY;
-class SYMBOL_LIB_TABLE;
 class FILENAME_RESOLVER;
+class FOOTPRINT_LIBRARY_ADAPTER;
 class PROJECT_FILE;
 class PROJECT_LOCAL_SETTINGS;
 class LOCKFILE;
@@ -290,10 +289,9 @@ public:
     virtual const wxString AbsolutePath( const wxString& aFileName ) const;
 
     /**
-     * Return the table of footprint libraries. Requires an active Kiway as this is fetched
-     * from Pcbnew.
+     * Fetches the footprint library adapter from the PCB editor instance
      */
-    virtual FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
+    virtual FOOTPRINT_LIBRARY_ADAPTER* FootprintLibAdapter( KIWAY& aKiway );
 
     /**
      * Return the table of design block libraries.

@@ -37,7 +37,7 @@
 #include <pcb_painter.h>
 #include <pad.h>
 #include <zone.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include "step_pcb_model.h"
 
 #include <pgm_base.h>
@@ -299,19 +299,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
 
     if( m_board->GetProject() )
     {
-        try
-        {
-            // FindRow() can throw an exception
-            const FP_LIB_TABLE_ROW* fpRow =
-                    PROJECT_PCB::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
-
-            if( fpRow )
-                footprintBasePath = fpRow->GetFullURI( true );
-        }
-        catch( ... )
-        {
-            // Do nothing if the libraryName is not found in lib table
-        }
+        std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                            PROJECT_PCB::FootprintLibAdapter( m_board->GetProject() )->GetRow( libraryName );
+        if( fpRow )
+            footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
     }
 
     // Exit early if we don't want to include footprint models

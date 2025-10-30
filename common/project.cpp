@@ -30,7 +30,6 @@
 #include <confirm.h>
 #include <core/kicad_algo.h>
 #include <design_block_library_adapter.h>
-#include <fp_lib_table.h>
 #include <string_utils.h>
 #include <kiface_ids.h>
 #include <kiway.h>
@@ -41,6 +40,9 @@
 #include <git/project_git_utils.h>
 #include <git2.h>
 #include <project.h>
+
+#include <footprint_library_adapter.h>
+
 #include <project/project_file.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
@@ -405,43 +407,22 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
 }
 
 
-FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
+FOOTPRINT_LIBRARY_ADAPTER* PROJECT::FootprintLibAdapter( KIWAY& aKiway )
 {
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( GetElem( ELEM::FPTBL ) );
 
-    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) GetElem( PROJECT::ELEM::FPTBL );
-
-    if( tbl )
+    if( adapter )
     {
-        wxASSERT( tbl->ProjectElementType() == PROJECT::ELEM::FPTBL );
+        wxASSERT( adapter->ProjectElementType() == PROJECT::ELEM::FPTBL );
     }
     else
     {
-        try
-        {
-            // Build a new project specific FP_LIB_TABLE with the global table as a fallback.
-            // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-            // stack this way, all using the same global fallback table.
-            KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-
-            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_NEW_FOOTPRINT_TABLE );
-            tbl->Load( FootprintLibTblName() );
-
-            SetElem( PROJECT::ELEM::FPTBL, tbl );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ),
-                                 ioe.What() );
-        }
-        catch( ... )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ) );
-        }
+        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+        adapter = static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( kiface->IfaceOrAddress( KIFACE_FOOTPRINT_LIBRARY_ADAPTER ) );
+        SetElem( ELEM::FPTBL, adapter );
     }
 
-    return tbl;
+    return adapter;
 }
 
 

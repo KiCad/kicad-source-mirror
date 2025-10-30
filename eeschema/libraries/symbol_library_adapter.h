@@ -65,10 +65,7 @@ public:
     std::optional<LIB_STATUS> LoadOne( const wxString& aNickname );
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
-    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const;
-
-    /// Returns a list of all library nicknames and their status (even if they failed to load)
-    std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
+    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const override;
 
     /// Returns a list of additional (non-mandatory) symbol fields present in the given library
     std::vector<wxString> GetAvailableExtraFields( const wxString& aNickname );
@@ -158,14 +155,7 @@ public:
 
     std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
 
-    /// Creates the library (i.e. saves to disk) for the given row if it exists
-    bool CreateLibrary( const wxString& aNickname );
-
-    static std::optional<SCH_IO_MGR::SCH_FILE_T> ParseLibType( const wxString& aType );
-
     int GetModifyHash() const;
-
-    bool IsWritable( const wxString& aNickname ) const override;
 
 protected:
     std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }
@@ -174,9 +164,11 @@ protected:
 
     LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override;
 
+    IO_BASE* plugin( const LIB_DATA* aRow ) override { return schplugin( aRow ); }
+
 private:
     /// Helper to cast the ABC plugin in the LIB_DATA* to a concrete plugin
-    static SCH_IO* plugin( const LIB_DATA* aRow );
+    static SCH_IO* schplugin( const LIB_DATA* aRow );
 
     // The global libraries, potentially shared between multiple different open
     // projects, each of which has their own instance of this adapter class

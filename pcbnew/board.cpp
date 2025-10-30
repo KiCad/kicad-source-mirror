@@ -3475,7 +3475,7 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& 
 
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         // Save directly to history mirror path.
         pi->SaveBoard( dst.GetFullPath(), this, nullptr );
         aFiles.push_back( dst.GetFullPath() );

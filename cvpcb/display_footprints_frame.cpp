@@ -31,7 +31,7 @@
 #include <confirm.h>
 #include <settings/cvpcb_settings.h>
 #include <footprint_editor_settings.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <id.h>
 #include <kiface_base.h>
 #include <lib_id.h>
@@ -283,11 +283,10 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     wxString libNickname = From_UTF8( fpid.GetLibNickname().c_str() );
     wxString fpName      = From_UTF8( fpid.GetLibItemName().c_str() );
 
-    FP_LIB_TABLE* fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-    wxASSERT( fpTable );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     // See if the library requested is in the library table
-    if( !fpTable->HasLibrary( libNickname ) )
+    if( !adapter->HasLibrary( libNickname ) )
     {
         aReporter.Report( wxString::Format( _( "Library '%s' is not in the footprint library table." ),
                                             libNickname ),
@@ -296,7 +295,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     }
 
     // See if the footprint requested is in the library
-    if( !fpTable->FootprintExists( libNickname, fpName ) )
+    if( !adapter->FootprintExists( libNickname, fpName ) )
     {
         aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                           RPT_SEVERITY_ERROR );
@@ -305,7 +304,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     try
     {
-        if( const FOOTPRINT* fp = fpTable->GetEnumeratedFootprint( libNickname, fpName ) )
+        if( const FOOTPRINT* fp = adapter->LoadFootprint( libNickname, fpName, false ) )
             footprint = static_cast<FOOTPRINT*>( fp->Duplicate( IGNORE_PARENT_GROUP ) );
     }
     catch( const IO_ERROR& ioe )

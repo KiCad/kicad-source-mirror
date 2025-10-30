@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_dde.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
@@ -36,6 +36,7 @@
 #include <netlist_reader/netlist_reader.h>
 #include <lib_tree_model_adapter.h>
 #include <numeric>
+#include <richio.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -882,10 +883,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     // Extract the library information
-    FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
-    if( fptbl->HasLibrary( lib ) )
-        msg = wxString::Format( _( "Library location: %s" ), fptbl->GetFullURI( lib ) );
+    if( std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( lib ); optRow )
+        msg = wxString::Format( _( "Library location: %s" ), LIBRARY_MANAGER::GetFullURI( *optRow ) );
     else
         msg = wxString::Format( _( "Library location: unknown" ) );
 
@@ -895,10 +896,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     // Check if there are footprint libraries in the footprint library table.
-    if( !fptbl || !fptbl->GetLogicalLibs().size() )
+    if( !adapter || !adapter->Rows().size() )
     {
         wxMessageBox( _( "No PCB footprint libraries are listed in the current footprint "
                          "library table." ), _( "Configuration Error" ), wxOK | wxICON_ERROR );
@@ -907,7 +908,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Load Footprint Libraries" ), 1, PR_CAN_ABORT );
 
-    m_FootprintsList->ReadFootprintFiles( fptbl, nullptr, &progressReporter );
+    m_FootprintsList->ReadFootprintFiles( adapter, nullptr, &progressReporter );
 
     if( m_FootprintsList->GetErrorCount() )
         m_FootprintsList->DisplayErrors( this );
@@ -1008,7 +1009,7 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
 {
     COMMON_SETTINGS*   cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
-    FP_LIB_TABLE*      tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     // Use same sorting algorithm as LIB_TREE_NODE::AssignIntrinsicRanks
     struct library_sort
@@ -1039,9 +1040,9 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
             };
 
 
-    if( tbl )
+    if( adapter )
     {
-        std::vector<wxString> libNickNames = tbl->GetLogicalLibs();
+        std::vector<wxString> libNickNames = adapter->GetLibraryNames();
 
         for( const wxString& libNickName : libNickNames )
             process( libNickName );

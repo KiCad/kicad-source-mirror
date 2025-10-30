@@ -138,8 +138,17 @@ public:
 
     bool IsLibraryLoaded( const wxString& aNickname );
 
+    /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
+    virtual std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const = 0;
+
+    /// Returns a list of all library nicknames and their status (even if they failed to load)
+    std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
+
     /// Return true if the given nickname exists and is not a read-only library
-    virtual bool IsWritable( const wxString& aNickname ) const { return false; }
+    virtual bool IsWritable( const wxString& aNickname ) const;
+
+    /// Creates the library (i.e. saves to disk) for the given row if it exists
+    bool CreateLibrary( const wxString& aNickname );
 
     virtual bool SupportsConfigurationDialog( const wxString& aNickname ) const { return false; }
 
@@ -164,6 +173,8 @@ protected:
 
     /// Creates a concrete plugin for the given row
     virtual LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) = 0;
+
+    virtual IO_BASE* plugin( const LIB_DATA* aRow ) = 0;
 
     LIBRARY_MANAGER& m_manager;
 

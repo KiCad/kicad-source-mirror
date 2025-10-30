@@ -34,7 +34,7 @@ using namespace std::placeholders;
 #include <footprint_edit_frame.h>
 #include <footprint_chooser_frame.h>
 #include <footprint_viewer_frame.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
 #include <kiway.h>
@@ -240,10 +240,7 @@ FOOTPRINT* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 
 FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 {
-    FP_LIB_TABLE*   fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-
-    wxCHECK_MSG( fptbl, nullptr, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
-
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     FOOTPRINT *footprint = nullptr;
 
     // When loading a footprint from a library in the footprint editor
@@ -252,7 +249,7 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 
     try
     {
-        footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId, keepUUID );
+        footprint = adapter->LoadFootprintWithOptionalNickname( aFootprintId, keepUUID );
     }
     catch( const IO_ERROR& )
     {
@@ -345,8 +342,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
     try
     {
-        IO_RELEASER<PCB_IO> cur( PCB_IO_MGR::PluginFind( curType ) );
-        IO_RELEASER<PCB_IO> dst( PCB_IO_MGR::PluginFind( dstType ) );
+        IO_RELEASER<PCB_IO> cur( PCB_IO_MGR::FindPlugin( curType ) );
+        IO_RELEASER<PCB_IO> dst( PCB_IO_MGR::FindPlugin( dstType ) );
 
         if( !cur )
         {

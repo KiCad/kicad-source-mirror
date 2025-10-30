@@ -22,55 +22,39 @@
  */
 
 #include "project_pcb.h"
-#include <fp_lib_table.h>
 #include <project.h>
 #include <confirm.h>
 #include <pgm_base.h>
 #include <3d_cache/3d_cache.h>
 #include <paths.h>
 #include <settings/common_settings.h>
+#include <footprint_library_adapter.h>
 
 #include <mutex>
 
 static std::mutex mutex3D_cacheManager;
+std::mutex PROJECT_PCB::s_libAdapterMutex;
 
-FP_LIB_TABLE* PROJECT_PCB::PcbFootprintLibs( PROJECT* aProject )
+
+FOOTPRINT_LIBRARY_ADAPTER* PROJECT_PCB::FootprintLibAdapter( PROJECT* aProject )
 {
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
+    std::scoped_lock lock( s_libAdapterMutex );
 
-    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM::FPTBL );
+    LIBRARY_MANAGER& mgr = Pgm().GetLibraryManager();
+    std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = mgr.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT );
 
-    // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->ProjectElementType() == PROJECT::ELEM::FPTBL );
-
-    if( !tbl )
+    if( !adapter )
     {
-        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
-        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        tbl = new FP_LIB_TABLE( &GFootprintTable );
+        mgr.RegisterAdapter( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                             std::make_unique<FOOTPRINT_LIBRARY_ADAPTER>( mgr ) );
 
-        aProject->SetElem( PROJECT::ELEM::FPTBL, tbl );
-
-        wxString projectFpLibTableFileName = aProject->FootprintLibTblName();
-
-        try
-        {
-            tbl->Load( projectFpLibTableFileName );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint libraries." ),
-                                 ioe.What() );
-        }
-        catch( ... )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ) );
-        }
+        std::optional<LIBRARY_MANAGER_ADAPTER*> created = mgr.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT );
+        wxCHECK( created && ( *created )->Type() == LIBRARY_TABLE_TYPE::FOOTPRINT, nullptr );
+        return static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( *created );
     }
 
-    return tbl;
+    wxCHECK( ( *adapter )->Type() == LIBRARY_TABLE_TYPE::FOOTPRINT, nullptr );
+    return static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( *adapter );
 }
 
 

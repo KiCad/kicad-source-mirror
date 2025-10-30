@@ -28,9 +28,10 @@
 #include <fp_tree_synchronizing_adapter.h>
 #include <footprint_edit_frame.h>
 #include <footprint_preview_panel.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <footprint_info_impl.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <project_pcb.h>
 #include <string_utils.h>
 #include <board.h>
 #include <footprint.h>
@@ -40,7 +41,7 @@
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs )
+FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame, FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 {
     auto* adapter = new FP_TREE_SYNCHRONIZING_ADAPTER( aFrame, aLibs );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
@@ -48,7 +49,7 @@ FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABL
 
 
 FP_TREE_SYNCHRONIZING_ADAPTER::FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                              FP_LIB_TABLE* aLibs ) :
+                                                              FOOTPRINT_LIBRARY_ADAPTER* aLibs ) :
         FP_TREE_MODEL_ADAPTER( aFrame, aLibs ),
         m_frame( aFrame )
 {
@@ -70,7 +71,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 
 #define PROGRESS_INTERVAL_MILLIS 33     // 30 FPS refresh rate
 
-void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
+void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 {
     m_libs = aLibs;
 
@@ -84,7 +85,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
             // Remove the library if it no longer exists or it exists in both the global and the
             // project library but the project library entry is disabled.
             if( !m_libs->HasLibrary( name, true )
-                || m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) )
+                || m_libs->HasLibrary( name, true ) != m_libs->HasLibrary( name, false ) )
             {
                 it = deleteLibrary( it );
                 continue;
@@ -107,22 +108,18 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
     PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
     size_t           count = m_libMap.size();
 
-    for( const wxString& libName : m_libs->GetLogicalLibs() )
+    for( const wxString& libName : m_libs->GetLibraryNames() )
     {
         if( m_libMap.count( libName ) == 0 )
         {
-            try
+            if( std::optional<wxString> optDesc = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->
+                    GetLibraryDescription( libName ) )
             {
-                const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
                 bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                                 || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-                DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
+                DoAddLibrary( libName, *optDesc, getFootprints( libName ), pinned, true );
                 m_libMap.insert( libName  );
-            }
-            catch( ... )
-            {
-                // do nothing if libname is not found. Just skip it
             }
         }
     }
@@ -134,7 +131,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
 
 int FP_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 {
-    return GFootprintTable.GetCount();
+    return m_libs->GetLibraryNames().size();
 }
 
 
@@ -241,16 +238,10 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         }
         else if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
         {
-            try
+            if( std::optional<wxString> optDesc = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->
+                    GetLibraryDescription( node->m_LibId.GetLibNickname() ) )
             {
-                const FP_LIB_TABLE_ROW* lib =
-                        GFootprintTable.FindRow( node->m_LibId.GetLibNickname() );
-
-                if( lib )
-                    node->m_Desc = lib->GetDescr();
-            }
-            catch( IO_ERROR& )
-            {
+                node->m_Desc = *optDesc;
             }
         }
 

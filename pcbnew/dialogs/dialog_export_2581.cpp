@@ -271,7 +271,7 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
 
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
         pi->SetProgressReporter( &progress );
         pi->SetReporter( &reporter );
         pi->SaveBoard( tempFile, m_parent->GetBoard(), &props );

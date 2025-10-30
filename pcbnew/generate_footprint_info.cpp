@@ -19,9 +19,10 @@
  */
 
 #include <generate_footprint_info.h>
+#include <ki_exception.h>
 #include <string_utils.h>
 #include <footprint.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <wx/log.h>
 
 
@@ -102,9 +103,9 @@ std::optional<wxString> GetFootprintDocumentationURL( const FOOTPRINT& aFootprin
 class FOOTPRINT_INFO_GENERATOR
 {
 public:
-    FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId ) :
+    FOOTPRINT_INFO_GENERATOR( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, LIB_ID const& aLibId ) :
             m_html( DescriptionFormat ),
-            m_fp_lib_table( aFpLibTable ),
+            m_adapter( aAdapter ),
             m_lib_id( aLibId ),
             m_footprint( nullptr )
     { }
@@ -114,15 +115,14 @@ public:
      */
     void GenerateHtml()
     {
-        wxCHECK_RET( m_fp_lib_table, wxT( "Footprint library table pointer is not valid" ) );
+        wxCHECK_RET( m_adapter, wxT( "Footprint library table pointer is not valid" ) );
 
         if( !m_lib_id.IsValid() )
             return;
 
         try
         {
-            m_footprint = m_fp_lib_table->GetEnumeratedFootprint( m_lib_id.GetLibNickname(),
-                                                                  m_lib_id.GetLibItemName() );
+            m_footprint = m_adapter->LoadFootprint( m_lib_id, false );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -178,17 +178,17 @@ public:
     }
 
 private:
-    wxString         m_html;
-    FP_LIB_TABLE*    m_fp_lib_table;
-    LIB_ID const     m_lib_id;
+    wxString                   m_html;
+    FOOTPRINT_LIBRARY_ADAPTER* m_adapter;
+    LIB_ID const               m_lib_id;
 
     const FOOTPRINT* m_footprint;
 };
 
 
-wxString GenerateFootprintInfo( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )
+wxString GenerateFootprintInfo( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, LIB_ID const& aLibId )
 {
-    FOOTPRINT_INFO_GENERATOR gen( aFpLibTable, aLibId );
+    FOOTPRINT_INFO_GENERATOR gen( aAdapter, aLibId );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

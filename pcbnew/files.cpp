@@ -37,7 +37,7 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <kiface_base.h>
 #include <macros.h>
 #include <trace_helpers.h>
@@ -602,7 +602,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     else
     {
         BOARD*              loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( pluginType ) );
 
         if( LAYER_MAPPABLE_PLUGIN* mappable_pi = dynamic_cast<LAYER_MAPPABLE_PLUGIN*>( pi.get() ) )
         {
@@ -783,6 +783,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                     wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
         }
 
+        // TODO(JE) library tables -- I think this functionality should be deleted
+#if 0
+
         // Import footprints into a project-specific library
         //==================================================
         // TODO: This should be refactored out of here into somewhere specific to the Project Import
@@ -804,7 +807,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // which prompts the user to continue with overwrite or abort)
             if( newLibPath.Length() > 0 )
             {
-                IO_RELEASER<PCB_IO> piSexpr( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+                IO_RELEASER<PCB_IO> piSexpr( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
 
                 for( FOOTPRINT* footprint : loadedFootprints )
                 {
@@ -868,6 +871,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 }
             }
         }
+#endif
     }
 
     {
@@ -1013,7 +1017,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
 
         pi->SaveBoard( pcbFileName.GetFullPath(), GetBoard(), nullptr );
     }
@@ -1093,7 +1097,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
 
         wxASSERT( pcbFileName.IsAbsolute() );
 

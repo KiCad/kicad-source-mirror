@@ -162,7 +162,7 @@ public:
      * @param aFileType is from #PCB_FILE_T and tells which plugin to find.
      * @return the plug in corresponding to \a aFileType or NULL if not found.
      */
-    static PCB_IO* PluginFind( PCB_FILE_T aFileType );
+    static PCB_IO* FindPlugin( PCB_FILE_T aFileType );
 
     /**
      * Return a brief name for a plugin given \a aFileType enum.

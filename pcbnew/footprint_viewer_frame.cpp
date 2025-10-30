@@ -32,7 +32,7 @@
 #include <eda_pattern_match.h>
 #include <footprint_info.h>
 #include <footprint_viewer_frame.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -406,7 +406,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    std::vector<wxString> nicknames = PROJECT_PCB::PcbFootprintLibs( &Prj() )->GetLogicalLibs();
+    std::vector<wxString> nicknames = PROJECT_PCB::FootprintLibAdapter( &Prj() )->GetLibraryNames();
     std::vector<wxString> pinnedMatches;
     std::vector<wxString> otherMatches;
 
@@ -491,7 +491,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     wxString nickname = getCurNickname();
 
-    fp_info_list->ReadFootprintFiles( PROJECT_PCB::PcbFootprintLibs( &Prj() ), !nickname ? nullptr : &nickname );
+    fp_info_list->ReadFootprintFiles( PROJECT_PCB::FootprintLibAdapter( &Prj() ), !nickname ? nullptr : &nickname );
 
     if( fp_info_list->GetErrorCount() )
     {
@@ -909,7 +909,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     if( event.GetActive() )
     {
         // Ensure we have the right library list:
-        std::vector< wxString > libNicknames = PROJECT_PCB::PcbFootprintLibs( &Prj() )->GetLogicalLibs();
+        std::vector< wxString > libNicknames = PROJECT_PCB::FootprintLibAdapter( &Prj() )->GetLibraryNames();
         bool                    stale = false;
 
         if( libNicknames.size() != m_libList->GetCount() )
@@ -982,20 +982,14 @@ COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor()
 void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 {
     wxString title;
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
     if( !getCurNickname().IsEmpty() )
     {
-        try
-        {
-            FP_LIB_TABLE* libtable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-            const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
-
-            title = getCurNickname() + wxT( " \u2014 " ) + row->GetFullURI( true );
-        }
-        catch( ... )
-        {
+        if( std::optional<wxString> optUri = manager.GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, getCurNickname(), true ) )
+            title = getCurNickname() + wxT( " \u2014 " ) + *optUri;
+        else
             title = _( "[no library selected]" );
-        }
     }
     else
     {
@@ -1041,8 +1035,8 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( FPVIEWER_CONSTANTS aMode )
         GetBoard()->DeleteAllFootprints();
         GetBoard()->RemoveUnusedNets( nullptr );
 
-        FOOTPRINT* footprint = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintLoad( getCurNickname(),
-                                                                                       getCurFootprintName() );
+        FOOTPRINT* footprint = PROJECT_PCB::FootprintLibAdapter( &Prj() )->LoadFootprint( getCurNickname(),
+                                                                                          getCurFootprintName(), false );
 
         if( footprint )
             displayFootprint( footprint );

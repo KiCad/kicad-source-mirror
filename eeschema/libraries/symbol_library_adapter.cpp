@@ -56,7 +56,7 @@ wxString SYMBOL_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 }
 
 
-SCH_IO* SYMBOL_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
+SCH_IO* SYMBOL_LIBRARY_ADAPTER::schplugin( const LIB_DATA* aRow )
 {
     SCH_IO* ret = dynamic_cast<SCH_IO*>( aRow->plugin.get() );
     wxCHECK( aRow->plugin && ret, nullptr );
@@ -77,7 +77,7 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& aNick
         try
         {
             wxArrayString dummyList;
-            plugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+            schplugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
             wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aNickname, dummyList.size() );
             lib->status.load_status = LOAD_STATUS::LOADED;
         }
@@ -136,7 +136,7 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_ADAPTER::GetSymbols( const wxString& aNi
 
     try
     {
-        plugin( lib )->EnumerateSymbolLib( symbols, getUri( lib->row ), &options );
+        schplugin( lib )->EnumerateSymbolLib( symbols, getUri( lib->row ), &options );
     }
     catch( IO_ERROR& e )
     {
@@ -169,7 +169,7 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aN
         if( aType == SYMBOL_TYPE::POWER_ONLY )
             options[PropPowerSymsOnly] = "";
 
-        plugin( lib )->EnumerateSymbolLib( namesAS, getUri( lib->row ), &options );
+        schplugin( lib )->EnumerateSymbolLib( namesAS, getUri( lib->row ), &options );
     }
 
     for( const wxString& name : namesAS )
@@ -183,7 +183,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
-        if( LIB_SYMBOL* symbol = plugin( *lib )->LoadSymbol( getUri( ( *lib )->row ), aName ) )
+        if( LIB_SYMBOL* symbol = schplugin( *lib )->LoadSymbol( getUri( ( *lib )->row ), aName ) )
         {
             LIB_ID id = symbol->GetLibId();
             id.SetLibNickname( ( *lib )->row->Nickname() );
@@ -303,7 +303,7 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
                     try
                     {
-                        plugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+                        schplugin( lib )->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
                         wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", nickname, dummyList.size() );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
@@ -373,28 +373,6 @@ std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_ADAPTER::LibraryError(
 }
 
 
-bool SYMBOL_LIBRARY_ADAPTER::CreateLibrary( const wxString& aNickname )
-{
-    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
-    {
-        LIB_DATA* data = *result;
-        std::map<std::string, UTF8> options = data->row->GetOptionsMap();
-
-        try
-        {
-            data->plugin->CreateLibrary( getUri( data->row ), &options );
-            return true;
-        }
-        catch( ... )
-        {
-            return false;
-        }
-    }
-
-    return false;
-}
-
-
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
 {
     if( m_libraries.contains( aNickname ) )
@@ -407,30 +385,6 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatus( const wxStri
 }
 
 
-std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatuses() const
-{
-    std::vector<std::pair<wxString, LIB_STATUS>> ret;
-
-    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
-    {
-        if( std::optional<LIB_STATUS> result = GetLibraryStatus( row->Nickname() ) )
-        {
-            ret.emplace_back( std::make_pair( row->Nickname(), *result ) );
-        }
-        else
-        {
-            // This should probably never happen, but until that can be proved...
-            ret.emplace_back( std::make_pair( row->Nickname(), LIB_STATUS( {
-                    .load_status = LOAD_STATUS::LOAD_ERROR,
-                    .error = LIBRARY_ERROR( _( "Library not found in library table" ) )
-                } ) ) );
-        }
-    }
-
-    return ret;
-}
-
-
 std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetAvailableExtraFields(
         const wxString& aNickname )
 {
@@ -439,12 +393,12 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetAvailableExtraFields(
     if( std::optional<LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
         LIB_DATA* rowData = *result;
-        int hash = plugin( rowData )->GetModifyHash();
+        int hash = schplugin( rowData )->GetModifyHash();
 
         if( hash != rowData->modify_hash )
         {
             rowData->modify_hash = hash;
-            plugin( rowData )->GetAvailableSymbolFields( rowData->available_fields_cache );
+            schplugin( rowData )->GetAvailableSymbolFields( rowData->available_fields_cache );
         }
 
         return rowData->available_fields_cache;
@@ -459,7 +413,7 @@ bool SYMBOL_LIBRARY_ADAPTER::SupportsSubLibraries( const wxString& aNickname ) c
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* rowData = *result;
-        return plugin( rowData )->SupportsSubLibraries();
+        return schplugin( rowData )->SupportsSubLibraries();
     }
 
     return false;
@@ -475,13 +429,13 @@ std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_ADAPTER::GetSubLibraries(
     {
         const LIB_DATA* rowData = *result;
         std::vector<wxString> names;
-        plugin( rowData )->GetSubLibraryNames( names );
+        schplugin( rowData )->GetSubLibraryNames( names );
 
         for( const wxString& name : names )
         {
             ret.emplace_back( SUB_LIBRARY {
                     .nickname = name,
-                    .description = plugin( rowData )->GetSubLibraryDescription( name )
+                    .description = schplugin( rowData )->GetSubLibraryDescription( name )
                 } );
         }
     }
@@ -522,21 +476,9 @@ int SYMBOL_LIBRARY_ADAPTER::GetModifyHash() const
         {
             const LIB_DATA* rowData = *result;
             wxCHECK2( rowData->row, continue );
-            hash += plugin( rowData )->GetModifyHash();
+            hash += schplugin( rowData )->GetModifyHash();
         }
     }
 
     return hash;
-}
-
-
-bool SYMBOL_LIBRARY_ADAPTER::IsWritable( const wxString& aNickname ) const
-{
-    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
-    {
-        const LIB_DATA* rowData = *result;
-        return rowData->plugin->IsLibraryWritable( getUri( rowData->row ) );
-    }
-
-    return false;
 }

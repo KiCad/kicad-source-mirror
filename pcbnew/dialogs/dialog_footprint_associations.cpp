@@ -26,7 +26,7 @@
 #include <widgets/wx_grid.h>
 #include <pcb_base_frame.h>
 #include <kiface_base.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <board.h>
 #include <footprint.h>
 #include <project_pcb.h>
@@ -58,24 +58,17 @@ bool DIALOG_FOOTPRINT_ASSOCIATIONS::TransferDataToWindow()
     wxString libDesc;
     wxString fpDesc;
 
-    PROJECT*             project = m_footprint->GetBoard()->GetProject();
-    FP_LIB_TABLE* libTable = PROJECT_PCB::PcbFootprintLibs( project );
-    const LIB_TABLE_ROW* libTableRow = nullptr;
+    PROJECT* project = m_footprint->GetBoard()->GetProject();
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
 
-    try
-    {
-        libTableRow = libTable->FindRow( libName );
-        libDesc = libTableRow->GetDescr();
-    }
-    catch( const IO_ERROR& )
-    {
-    }
+    if( std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( libName ); row )
+        libDesc = ( *row )->Description();
 
     std::shared_ptr<FOOTPRINT> libFootprint;
 
     try
     {
-        libFootprint.reset( libTable->FootprintLoad( libName, fpName, true ) );
+        libFootprint.reset( adapter->LoadFootprint( libName, fpName, true ) );
         fpDesc = libFootprint->GetLibDescription();
     }
     catch( const IO_ERROR& )

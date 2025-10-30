@@ -25,7 +25,7 @@
 #include <project/project_file.h>
 #include <wx/tokenzr.h>
 #include <string_utils.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
 #include <generate_footprint_info.h>
@@ -33,17 +33,17 @@
 #include "fp_tree_model_adapter.h"
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-FP_TREE_MODEL_ADAPTER::Create( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs )
+FP_TREE_MODEL_ADAPTER::Create( PCB_BASE_FRAME* aParent, FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 {
     auto* adapter = new FP_TREE_MODEL_ADAPTER( aParent, aLibs );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
+FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, FOOTPRINT_LIBRARY_ADAPTER* aLibs ) :
         LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_footprint_libs" ),
                                 aParent->GetViewerSettingsBase()->m_LibTree ),
-        m_libs( (FP_LIB_TABLE*) aLibs )
+        m_libs( aLibs )
 {}
 
 
@@ -52,23 +52,15 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aParent->Prj().GetProjectFile();
 
-    for( const wxString& libName : m_libs->GetLogicalLibs() )
+    for( const wxString& libName : m_libs->GetLibraryNames() )
     {
-        const FP_LIB_TABLE_ROW* library = nullptr;
-
-        try
-        {
-            library = m_libs->FindRow( libName, true );
-        }
-        catch( ... )
-        {
-            // Skip loading this library, if not exists/ not found
+        if( !m_libs->HasLibrary( libName, true ) )
             continue;
-        }
+
         bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                         || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-        DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
+        DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), getFootprints( libName ), pinned, true );
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );

@@ -33,7 +33,7 @@
 #include "3d_cache/3d_info.h"
 #include "board.h"
 #include "board_design_settings.h"
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include "footprint.h"
 #include "pad.h"
 #include "pcb_text.h"
@@ -1000,19 +1000,10 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
     if( m_board->GetProject() )
     {
-        const FP_LIB_TABLE_ROW* fpRow = nullptr;
-
-        try
-        {
-            fpRow = PROJECT_PCB::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
-        }
-        catch( ... )
-        {
-            // Not found: do nothing
-        }
-
+        std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                            PROJECT_PCB::FootprintLibAdapter( m_board->GetProject() )->GetRow( libraryName );
         if( fpRow )
-            footprintBasePath = fpRow->GetFullURI( true );
+            footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
     }
 
 

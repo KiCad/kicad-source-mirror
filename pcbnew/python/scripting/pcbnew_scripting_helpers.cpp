@@ -40,7 +40,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <core/ignore.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
@@ -333,7 +333,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, bool aSkipSettings )
 }
 
 
-FP_LIB_TABLE* GetFootprintLibraryTable()
+FOOTPRINT_LIBRARY_ADAPTER* getFootprintAdapter()
 {
     BOARD* board = GetBoard();
 
@@ -345,7 +345,7 @@ FP_LIB_TABLE* GetFootprintLibraryTable()
     if( !project )
         return nullptr;
 
-    return PROJECT_PCB::PcbFootprintLibs( project );
+    return PROJECT_PCB::FootprintLibAdapter( project );
 }
 
 
@@ -353,12 +353,12 @@ wxArrayString GetFootprintLibraries()
 {
     wxArrayString footprintLibraryNames;
 
-    FP_LIB_TABLE* tbl = GetFootprintLibraryTable();
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = getFootprintAdapter();
 
-    if( !tbl )
+    if( !adapter )
         return footprintLibraryNames;
 
-    for( const wxString& name : tbl->GetLogicalLibs() )
+    for( const wxString& name : adapter->GetLibraryNames() )
         footprintLibraryNames.Add( name );
 
     return footprintLibraryNames;
@@ -369,12 +369,13 @@ wxArrayString GetFootprints( const wxString& aNickName )
 {
     wxArrayString footprintNames;
 
-    FP_LIB_TABLE* tbl = GetFootprintLibraryTable();
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = getFootprintAdapter();
 
-    if( !tbl )
+    if( !adapter )
         return footprintNames;
 
-    tbl->FootprintEnumerate( footprintNames, aNickName, true );
+    std::vector<wxString> names = adapter->GetFootprintNames( aNickName, true );
+    footprintNames.assign( names.begin(), names.end() );
 
     return footprintNames;
 }
@@ -554,12 +555,6 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
         prj = &s_SettingsManager->Prj();
 
     wxCHECK( prj, false );
-
-    // Load the global fp-lib-table otherwise we can't check the libs parity
-    wxFileName  fn_flp = FP_LIB_TABLE::GetGlobalTableFileName();
-
-    if( fn_flp.FileExists() )
-        GFootprintTable.Load( fn_flp.GetFullPath() );
 
     wxString drcRulesPath = prj->AbsolutePath( fn.GetFullName() );
 

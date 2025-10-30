@@ -37,20 +37,7 @@ enum KIFACE_ADDR_ID : int
      * Caller does NOT own.
      */
     KIFACE_FOOTPRINT_LIST,
-
-    /**
-     * Return a new FP_LIB_TABLE with the global table installed as a fallback.
-     * Type is FP_LIB_TABLE*
-     * Caller takes ownership
-     */
-    KIFACE_NEW_FOOTPRINT_TABLE,
-
-    /**
-     * Return the global FP_LIB_TABLE.
-     * Type is FP_LIB_TABLE*
-     * Caller does NOT own.
-     */
-    KIFACE_GLOBAL_FOOTPRINT_TABLE,
+    KIFACE_FOOTPRINT_LIBRARY_ADAPTER,
 
     KIFACE_LOAD_SCHEMATIC,
     KIFACE_NETLIST_SCHEMATIC,

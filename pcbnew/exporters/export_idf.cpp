@@ -30,7 +30,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <idf_parser.h>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -280,19 +280,10 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
     if( aPcb->GetProject() )
     {
-        const FP_LIB_TABLE_ROW* fpRow = nullptr;
-
-        try
-        {
-            fpRow = PROJECT_PCB::PcbFootprintLibs( aPcb->GetProject() )->FindRow( libraryName, false );
-        }
-        catch( ... )
-        {
-            // Not found: do nothing
-        }
-
+        std::optional<LIBRARY_TABLE_ROW*> fpRow =
+                            PROJECT_PCB::FootprintLibAdapter( aPcb->GetProject() )->GetRow( libraryName );
         if( fpRow )
-            footprintBasePath = fpRow->GetFullURI( true );
+            footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
     }
 
     if( crefdes.empty() || !crefdes.compare( "~" ) )

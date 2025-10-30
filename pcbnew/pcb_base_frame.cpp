@@ -42,7 +42,7 @@
 #include <confirm.h>
 #include <footprint.h>
 #include <footprint_editor_settings.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <lset.h>
 #include <kiface_base.h>
 #include <pcb_painter.h>
@@ -1089,19 +1089,19 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     }
 
     wxString libfullname;
-    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
-    if( !aFootprint || !tbl )
+    if( !aFootprint || !adapter )
         return;
 
     try
     {
-        const FP_LIB_TABLE_ROW* row = tbl->FindRow( aFootprint->GetFPID().GetLibNickname() );
+        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( aFootprint->GetFPID().GetLibNickname() );
 
         if( !row )
             return;
 
-        libfullname = row->GetFullURI( true );
+        libfullname = LIBRARY_MANAGER::GetFullURI( *row, true );
     }
     catch( const std::exception& e )
     {
@@ -1181,13 +1181,13 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     m_watcherLastModified = lastModified;
 
     FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
-    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     // When loading a footprint from a library in the footprint editor
     // the items UUIDs must be keep and not reinitialized
     bool keepUUID = IsType( FRAME_FOOTPRINT_EDITOR );
 
-    if( !fp || !tbl )
+    if( !fp || !adapter )
         return;
 
     m_inFpChangeTimerEvent = true;
@@ -1201,7 +1201,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
         try
         {
-            FOOTPRINT* newfp = tbl->FootprintLoad( nickname, fpname, keepUUID );
+            FOOTPRINT* newfp = adapter->LoadFootprint( nickname, fpname, keepUUID );
 
             if( newfp )
             {

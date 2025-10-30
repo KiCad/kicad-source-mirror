@@ -24,15 +24,15 @@
 
 #include <wx/string.h>
 
-class FP_LIB_TABLE;
+class FOOTPRINT_LIBRARY_ADAPTER;
 class FOOTPRINT;
 class LIB_ID;
 
 /**
- * Return an HTML page describing a #LIB_ID in a #FP_LIB_TABLE. This is suitable for inclusion
+ * Return an HTML page describing a #LIB_ID in a footprint library. This is suitable for inclusion
  * in a wxHtmlWindow.
  */
-wxString GenerateFootprintInfo( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId );
+wxString GenerateFootprintInfo( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, LIB_ID const& aLibId );
 
 /**
  * Get a URL to the documentation for a #LIB_ID in a #FP_LIB_TABLE. This is suitable for opening

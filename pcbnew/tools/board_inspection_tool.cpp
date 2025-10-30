@@ -39,7 +39,7 @@
 #include <kiplatform/ui.h>
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <pcb_shape.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
@@ -1604,18 +1604,9 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWind
     r->Report( "" );
 
     PROJECT*             project = aFootprint->GetBoard()->GetProject();
-    FP_LIB_TABLE*        libTable = PROJECT_PCB::PcbFootprintLibs( project );
-    const LIB_TABLE_ROW* libTableRow = nullptr;
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
 
-    try
-    {
-        libTableRow = libTable->FindRow( libName );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
-
-    if( !libTableRow )
+    if( !adapter->HasLibrary( libName, false ) )
     {
         r->Report( _( "The library is not included in the current configuration." )
                    + wxS( "&nbsp;&nbsp;&nbsp" )
@@ -1623,7 +1614,7 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWind
                    + wxS( "</a>" ) );
 
     }
-    else if( !libTable->HasLibrary( libName, true ) )
+    else if( !adapter->HasLibrary( libName, true ) )
     {
         r->Report( _( "The library is not enabled in the current configuration." )
                    + wxS( "&nbsp;&nbsp;&nbsp" )
@@ -1637,7 +1628,7 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWind
 
         try
         {
-            libFootprint.reset( libTable->FootprintLoad( libName, fpName, true ) );
+            libFootprint.reset( adapter->LoadFootprint( libName, fpName, true ) );
         }
         catch( const IO_ERROR& )
         {

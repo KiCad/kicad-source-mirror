@@ -2444,7 +2444,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
         pi->SetProgressReporter( m_progressReporter );
         pi->SaveBoard( tempFile, brd, &props );
     }
@@ -2600,7 +2600,7 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
 
     try
     {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         BOARD*              brd = getBoard( job->m_filename );
         if( brd->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
             shouldSave = true;

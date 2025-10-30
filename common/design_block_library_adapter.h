@@ -42,6 +42,9 @@ public:
 
     void AsyncLoad() override;
 
+    // Currently unused for design blocks
+    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const override { return std::nullopt; }
+
     /// @return all the design blocks in the given library, if it exists and is loaded (or an empty list)
     std::vector<DESIGN_BLOCK*> GetDesignBlocks( const wxString& aNickname );
 
@@ -151,10 +154,12 @@ protected:
 
     LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override;
 
+    IO_BASE* plugin( const LIB_DATA* aRow ) override;
+
 private:
 
     /// Helper to cast the ABC plugin in the LIB_DATA* to a concrete plugin
-    static DESIGN_BLOCK_IO* plugin( const LIB_DATA* aRow );
+    static DESIGN_BLOCK_IO* dbplugin( const LIB_DATA* aRow );
 
     // The global libraries, potentially shared between multiple different open
     // projects, each of which has their own instance of this adapter class

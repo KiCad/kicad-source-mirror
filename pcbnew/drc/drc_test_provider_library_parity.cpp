@@ -26,7 +26,7 @@
 #include <kiway.h>
 #include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <board.h>
 #include <pcb_shape.h>
 #include <pcb_barcode.h>
@@ -979,7 +979,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
 
     std::map<LIB_ID, std::shared_ptr<FOOTPRINT>> libFootprintCache;
 
-    FP_LIB_TABLE* libTable = PROJECT_PCB::PcbFootprintLibs( project );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
     wxString      msg;
     int           ii = 0;
     const int     progressDelta = 250;
@@ -1001,7 +1001,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
         LIB_ID               fpID = footprint->GetFPID();
         wxString             libName = fpID.GetLibNickname();
         wxString             fpName = fpID.GetLibItemName();
-        const LIB_TABLE_ROW* libTableRow = nullptr;
+        LIBRARY_TABLE_ROW*   libTableRow = nullptr;
 
         if( libName.IsEmpty() )
         {
@@ -1009,13 +1009,8 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             continue;
         }
 
-        try
-        {
-            libTableRow = libTable->FindRow( libName );
-        }
-        catch( const IO_ERROR& )
-        {
-        }
+        if( std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( libName ); optRow )
+            libTableRow = *optRow;
 
         if( !libTableRow )
         {
@@ -1031,7 +1026,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
 
             continue;
         }
-        else if( !libTable->HasLibrary( libName, true ) )
+        else if( !adapter->HasLibrary( libName, true ) )
         {
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
@@ -1045,14 +1040,14 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
 
             continue;
         }
-        else if( !libTableRow->LibraryExists() )
+        else if( !adapter->IsLibraryLoaded( libName ) )
         {
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
                 msg.Printf( _( "The footprint library '%s' was not found at '%s'" ),
                             UnescapeString( libName ),
-                            libTableRow->GetFullURI( true ) );
+                            LIBRARY_MANAGER::GetFullURI( libTableRow, true ) );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
@@ -1072,7 +1067,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
         {
             try
             {
-                libFootprint.reset( libTable->FootprintLoad( libName, fpName, true ) );
+                libFootprint.reset( adapter->LoadFootprint( libName, fpName, true ) );
 
                 if( libFootprint )
                     libFootprintCache[ fpID ] = libFootprint;

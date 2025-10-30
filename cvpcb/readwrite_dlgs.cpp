@@ -24,10 +24,11 @@
  */
 
 #include <confirm.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <dialogs/html_message_box.h>
 #include <kiway.h>
 #include <lib_id.h>
+#include <richio.h>
 #include <string_utils.h>
 
 #include <cvpcb_mainframe.h>
@@ -43,7 +44,7 @@
  *
  * @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches.
  */
-static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
+static int guessNickname( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, LIB_ID* aFootprintId )
 {
     if( aFootprintId->GetLibNickname().size() )
         return 0;
@@ -51,18 +52,14 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
     wxString    nick;
     wxString    fpname = aFootprintId->GetLibItemName();
 
-    std::vector<wxString> nicks = aTbl->GetLogicalLibs();
+    std::vector<wxString> nicks = aAdapter->GetLibraryNames();
 
     // Search each library going through libraries alphabetically.
     for( unsigned libNdx = 0; libNdx < nicks.size(); ++libNdx )
     {
-        wxArrayString fpnames;
-
-        aTbl->FootprintEnumerate( fpnames, nicks[libNdx], true );
-
-        for( unsigned nameNdx = 0; nameNdx < fpnames.size(); ++nameNdx )
+        for( const wxString& name : aAdapter->GetFootprintNames( nicks[libNdx], true ) )
         {
-            if( fpname == fpnames[nameNdx] )
+            if( fpname == name )
             {
                 if( !nick )
                     nick = nicks[libNdx];
@@ -136,9 +133,9 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
                     if( component->GetFPID().IsLegacy() )
                     {
                         // get this first here, it's possibly obsoleted if we get it too soon.
-                        FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
+                        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
-                        int guess = guessNickname( tbl, (LIB_ID*) &component->GetFPID() );
+                        int guess = guessNickname( adapter, (LIB_ID*) &component->GetFPID() );
 
                         switch( guess )
                         {

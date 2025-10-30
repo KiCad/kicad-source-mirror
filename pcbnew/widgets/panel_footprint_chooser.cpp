@@ -35,7 +35,7 @@
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
-#include <fp_lib_table.h>
+#include <footprint_library_adapter.h>
 #include <settings/settings_manager.h>
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
@@ -64,12 +64,12 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
         m_escapeHandler( std::move( aEscapeHandler ) )
 {
     m_CurrFootprint = nullptr;
-    FP_LIB_TABLE*   fpTable = PROJECT_PCB::PcbFootprintLibs( &aFrame->Prj() );
+    FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &aFrame->Prj() );
 
     // Load footprint files:
     auto* progressReporter = new WX_PROGRESS_REPORTER( aParent, _( "Load Footprint Libraries" ), 1,
                                                        PR_CAN_ABORT );
-    GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
+    GFootprintList.ReadFootprintFiles( footprints, nullptr, progressReporter );
 
     // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
     // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
@@ -81,7 +81,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( aParent );
 
-    m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, fpTable );
+    m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, footprints );
     FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( m_adapter.get() );
 
     std::vector<LIB_TREE_ITEM*> historyInfos;

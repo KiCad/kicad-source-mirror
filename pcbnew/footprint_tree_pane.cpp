@@ -25,7 +25,7 @@
 #include "fp_tree_synchronizing_adapter.h"
 #include <widgets/lib_tree.h>
 #include <footprint_edit_frame.h>
-#include <fp_lib_table.h>
+
 
 FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
         : wxPanel( aParent ),
