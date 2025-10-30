@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-31 11:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -47914,11 +47914,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Kupferzone \"%s\" hat keine verbundenen Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
-"Kupferzone auf Lage %s bei (%s, %s) hat keine mit dem Netz \"%s\" verbundene "
-"Pads."
+"Kupferzone auf Lage %s bei (%s, %s) hat keine Pads, die mit dem Netz \"%s\" "
+"verbunden sind."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1478
 #, c-format
