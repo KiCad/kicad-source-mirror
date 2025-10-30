@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"PO-Revision-Date: 2025-10-31 08:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -925,7 +925,7 @@ msgstr "PCBエディターの銅色を使用する"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "基板エディタの銅色を使用する（リアルタイム レンダラーのみ）"
+msgstr "PCBエディターの銅色を使用する（リアルタイム レンダラーのみ）"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -23397,9 +23397,8 @@ msgstr "フットプリントの割り当てをインポート..."
 #: eeschema/tools/sch_actions.cpp:1029
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr ""
-"基板エディターで作成した .cmp ファイルからシンボルのフットプリント割り当てを"
-"インポート"
+msgstr "PCBエディターで作成した .cmp ファイルからシンボルのフットプリント割り当てをイ"
+"ンポート"
 
 #: eeschema/tools/sch_actions.cpp:1035
 msgid "Annotate Schematic..."
@@ -23495,7 +23494,7 @@ msgstr "PCBエディターに切り替え"
 
 #: eeschema/tools/sch_actions.cpp:1109
 msgid "Open PCB in board editor"
-msgstr "基板をPCBエディターを開く"
+msgstr "プリント基板をPCBエディターで開く"
 
 #: eeschema/tools/sch_actions.cpp:1115
 msgid "Export Netlist..."
@@ -32372,7 +32371,7 @@ msgstr "基板スタックアップ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:95
 msgid "Board Editor Layers"
-msgstr "基板編集レイヤー"
+msgstr "PCBエディターのレイヤー"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 msgid "Physical Stackup"
