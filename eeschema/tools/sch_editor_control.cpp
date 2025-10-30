@@ -1962,13 +1962,15 @@ int SCH_EDITOR_CONTROL::LinkComponents( const TOOL_EVENT& aEvent )
             symbols.push_back( sym );
     }
 
-    if( symbols.empty() )
-        return 0;
-
     std::vector<SCH_SYMBOL*> sources;
     std::vector<SCH_SYMBOL*> targets;
 
-    if( symbols.size() == 1 )
+    if( symbols.empty() )
+    {
+        // Invoked from the main menu with no selection: open the dialog unseeded.
+        // The dialog already loads all schematic symbols into its source/target lists.
+    }
+    else if( symbols.size() == 1 )
     {
         sources.push_back( symbols[0] );
     }

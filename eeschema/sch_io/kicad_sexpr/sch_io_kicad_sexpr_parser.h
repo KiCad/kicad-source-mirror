@@ -127,6 +127,18 @@ public:
         return m_signalTerminals;
     }
 
+    // Access parsed per-chain netclass overrides (chain name -> netclass name).
+    const std::map<wxString, wxString>& GetSignalNetClasses() const
+    {
+        return m_signalNetClasses;
+    }
+
+    // Access parsed per-chain colour overrides (chain name -> RGBA).
+    const std::map<wxString, COLOR4D>& GetSignalColors() const
+    {
+        return m_signalColors;
+    }
+
 private:
     // Group membership info refers to other Uuids in the file.
     // We don't want to rely on group declarations being last in the file, so
@@ -313,6 +325,8 @@ private:
     std::vector<wxString>   m_parseWarnings;    ///< Non-fatal warnings collected during parsing
 
     std::map<wxString, std::pair<KIID, KIID>> m_signalTerminals;
+    std::map<wxString, wxString>              m_signalNetClasses;
+    std::map<wxString, COLOR4D>               m_signalColors;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

@@ -22,6 +22,9 @@
 
 #include <eda_pattern_match.h>
 #include <string_utils.h>
+#include <board.h>
+#include <board_design_settings.h>
+#include <project/net_settings.h>
 
 
 /**
@@ -901,7 +904,23 @@ protected:
             }
             else if( aCol == COLUMN_SIGNAL )
             {
-                aOutValue = i->GetSignalName();
+                wxString chainName = i->GetSignalName();
+
+                // If the chain is assigned to a class, append it for visibility:
+                //   "DDR_DQ0  [DDR_DATA]"
+                if( !chainName.IsEmpty() && m_parent.m_board )
+                {
+                    if( const std::shared_ptr<NET_SETTINGS>& ns =
+                            m_parent.m_board->GetDesignSettings().m_NetSettings )
+                    {
+                        wxString className = ns->GetNetChainClass( chainName );
+
+                        if( !className.IsEmpty() )
+                            chainName += wxString::Format( wxT( "  [%s]" ), className );
+                    }
+                }
+
+                aOutValue = chainName;
             }
             else if( aCol == COLUMN_NETCLASS )
             {

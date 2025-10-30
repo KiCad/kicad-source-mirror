@@ -359,6 +359,11 @@ private:
     int selectNet( const TOOL_EVENT& aEvent );
 
     /**
+     * Select all copper connections belonging to every net in the selected item's net chain.
+     */
+    int selectNetChain( const TOOL_EVENT& aEvent );
+
+    /**
      * Select nearest unconnected footprints on same net as selected items.
      */
     int selectUnconnected( const TOOL_EVENT& aEvent );

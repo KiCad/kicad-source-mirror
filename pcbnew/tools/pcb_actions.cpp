@@ -2448,6 +2448,13 @@ TOOL_ACTION PCB_ACTIONS::deselectNet( TOOL_ACTION_ARGS()
         .Tooltip( _( "Deselects all tracks & vias belonging to the same net." ) )
         .Parameter<int>( 0 ) );
 
+TOOL_ACTION PCB_ACTIONS::selectNetChain( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.SelectNetChain" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select All Tracks in Net Chain" ) )
+        .Tooltip( _( "Selects all tracks & vias belonging to every net in the same net "
+                     "chain (nets joined through series passives)." ) ) );
+
 TOOL_ACTION PCB_ACTIONS::selectUnconnected( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveSelection.SelectUnconnected" )
         .Scope( AS_GLOBAL )

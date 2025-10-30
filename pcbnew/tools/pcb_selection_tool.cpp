@@ -88,6 +88,7 @@ public:
 
         Add( PCB_ACTIONS::selectConnection );
         Add( PCB_ACTIONS::selectNet );
+        Add( PCB_ACTIONS::selectNetChain );
 
         // This could be enabled if we have better logic for picking the target net with the mouse
         // Add( PCB_ACTIONS::deselectNet );
@@ -2637,6 +2638,50 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_SELECTION_TOOL::selectNetChain( const TOOL_EVENT& aEvent )
+{
+    if( !selectCursor() )
+        return 0;
+
+    auto selection = m_selection.GetItems();
+
+    for( EDA_ITEM* i : selection )
+    {
+        BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( i );
+
+        if( !connItem )
+            continue;
+
+        NETINFO_ITEM* netInfo = connItem->GetNet();
+
+        if( !netInfo )
+            continue;
+
+        const wxString& chainName = netInfo->GetSignal();
+
+        if( chainName.IsEmpty() )
+        {
+            // Net is not part of any chain; fall back to single-net behaviour.
+            SelectAllItemsOnNet( connItem->GetNetCode(), true );
+            continue;
+        }
+
+        for( NETINFO_ITEM* candidate : board()->GetNetInfo() )
+        {
+            if( candidate && candidate->GetSignal() == chainName )
+                SelectAllItemsOnNet( candidate->GetNetCode(), true );
+        }
+    }
+
+    if( m_selection.Size() > 0 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    else
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    return 0;
+}
+
+
 void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
     std::vector<BOARD_ITEM*> footprints;
@@ -4887,6 +4932,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::unrouteSegment,        PCB_ACTIONS::unrouteSegment.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,             PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,             PCB_ACTIONS::deselectNet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectNetChain,        PCB_ACTIONS::selectNetChain.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectUnconnected,     PCB_ACTIONS::selectUnconnected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::grabUnconnected,       PCB_ACTIONS::grabUnconnected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelection,         PCB_ACTIONS::syncSelection.MakeEvent() );

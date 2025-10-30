@@ -34,6 +34,8 @@
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
 #include <connection_graph.h>
+#include <sch_signal.h>
+#include <schematic.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <trigo.h>
@@ -1018,6 +1020,12 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
         {
             aList.emplace_back( _( "Resolved Netclass" ),
                                 UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
+
+            if( SCHEMATIC* schematic = Schematic() )
+            {
+                if( SCH_NETCHAIN* chain = schematic->ConnectionGraph()->GetSignalForNet( conn->Name() ) )
+                    aList.emplace_back( _( "Net Chain" ), UnescapeString( chain->GetName() ) );
+            }
         }
     }
 }

@@ -1693,7 +1693,10 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
             if( sig->GetTerminalPinA() == aPin->m_Uuid || sig->GetTerminalPinB() == aPin->m_Uuid )
             {
                 CIRCLE c = cache.GetDanglingIndicator();
-                m_gal->SetStrokeColor( color.Brightened( 0.5 ) );
+                COLOR4D emphasis = sig->GetColor() != COLOR4D::UNSPECIFIED
+                                        ? sig->GetColor()
+                                        : color.Brightened( 0.5 );
+                m_gal->SetStrokeColor( emphasis );
                 m_gal->SetIsFill( false );
                 m_gal->SetIsStroke( true );
                 m_gal->SetLineWidth( getShadowWidth( true ) );
@@ -1851,6 +1854,28 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
             color = m_schSettings.GetLayerColor( LAYER_WIRE );
         else if( drawingBusses )
             color = m_schSettings.GetLayerColor( LAYER_BUS );
+    }
+
+    // If the user has highlighted a chain and this wire belongs to that chain,
+    // and the chain has a colour override, tint the wire in that colour so the
+    // highlighted chain is immediately visible.
+    if( drawingWires && !drawingShadows && m_schematic
+        && !m_schematic->GetHighlightedSignal().IsEmpty() )
+    {
+        SCH_CONNECTION* conn = !aLine->IsConnectivityDirty() ? aLine->Connection() : nullptr;
+
+        if( conn && !conn->Name().IsEmpty() )
+        {
+            if( SCH_NETCHAIN* chain =
+                        m_schematic->ConnectionGraph()->GetSignalForNet( conn->Name() ) )
+            {
+                if( chain->GetName() == m_schematic->GetHighlightedSignal()
+                    && chain->GetColor() != COLOR4D::UNSPECIFIED )
+                {
+                    color = chain->GetColor().WithAlpha( color.a );
+                }
+            }
+        }
     }
 
     if( drawingNetColorHighlights )

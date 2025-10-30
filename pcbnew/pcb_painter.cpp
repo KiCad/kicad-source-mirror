@@ -832,6 +832,28 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     int      track_width = aTrack->GetWidth();
     COLOR4D  color       = m_pcbSettings.GetColor( aTrack, aLayer );
 
+    // If a chain highlight is active and the track belongs to the highlighted
+    // chain, and the chain has a colour override configured on the board,
+    // prefer that colour.  Only do this when we're drawing the actual copper
+    // (not netname labels, clearance outlines, etc.).
+    if( IsCopperLayer( aLayer ) && !m_pcbSettings.m_highlightedSignal.IsEmpty() )
+    {
+        if( NETINFO_ITEM* netinfo = aTrack->GetNet() )
+        {
+            if( netinfo->GetSignal() == m_pcbSettings.m_highlightedSignal )
+            {
+                if( const BOARD* board = aTrack->GetBoard() )
+                {
+                    COLOR4D chainColor =
+                            board->GetNetChainColor( m_pcbSettings.m_highlightedSignal );
+
+                    if( chainColor != COLOR4D::UNSPECIFIED )
+                        color = chainColor.WithAlpha( color.a );
+                }
+            }
+        }
+    }
+
     if( IsNetnameLayer( aLayer ) )
     {
         if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
@@ -1069,6 +1091,24 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
     if( color == COLOR4D::CLEAR )
         return;
+
+    // Chain highlight colour override for copper/hole layers.
+    if( board && !m_pcbSettings.m_highlightedSignal.IsEmpty()
+        && ( IsCopperLayer( aLayer ) || IsViaCopperLayer( aLayer )
+             || aLayer == LAYER_VIA_HOLES ) )
+    {
+        if( NETINFO_ITEM* netinfo = aVia->GetNet() )
+        {
+            if( netinfo->GetSignal() == m_pcbSettings.m_highlightedSignal )
+            {
+                COLOR4D chainColor =
+                        board->GetNetChainColor( m_pcbSettings.m_highlightedSignal );
+
+                if( chainColor != COLOR4D::UNSPECIFIED )
+                    color = chainColor.WithAlpha( color.a );
+            }
+        }
+    }
 
     const int copperLayer = IsViaCopperLayer( aLayer ) ? aLayer - LAYER_VIA_COPPER_START : aLayer;
 
@@ -1998,7 +2038,22 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             if( !m_pcbSettings.m_highlightedSignal.IsEmpty()
                     && net && net->GetSignal() == m_pcbSettings.m_highlightedSignal )
             {
-                termColor = termColor.Brightened( 0.25 );
+                // Prefer the chain's own colour override if the board has one.
+                if( const BOARD* board = aPad->GetBoard() )
+                {
+                    COLOR4D chainColor =
+                            board->GetNetChainColor( m_pcbSettings.m_highlightedSignal );
+
+                    if( chainColor != COLOR4D::UNSPECIFIED )
+                        termColor = chainColor;
+                    else
+                        termColor = termColor.Brightened( 0.25 );
+                }
+                else
+                {
+                    termColor = termColor.Brightened( 0.25 );
+                }
+
                 baseWidth = m_pcbSettings.m_outlineWidth * 3;
             }
 

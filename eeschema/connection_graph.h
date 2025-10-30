@@ -30,6 +30,7 @@
 #include <optional>
 
 #include <erc/erc_settings.h>
+#include <gal/color4d.h>
 #include <sch_connection.h>
 #include <sch_item.h>
 #include <sch_signal.h>
@@ -450,6 +451,31 @@ public:
     SCH_NETCHAIN* GetSignalByName( const wxString& aName );
     void ReplaceSignalTerminalPin( const wxString& aSignal, const KIID& aPrev, const KIID& aNew );
     void SetSignalTerminalOverrides( const std::map<wxString, std::pair<KIID, KIID>>& aOverrides );
+
+    /**
+     * Stash per-net-chain netclass overrides read from the schematic file.  These are
+     * consumed by RebuildSignals when committed chains are named: if a chain matches
+     * one of the keys, its netclass override is set from the value.
+     */
+    void SetSignalNetClassOverrides( const std::map<wxString, wxString>& aOverrides )
+    {
+        m_signalNetClassOverrides = aOverrides;
+    }
+
+    const std::map<wxString, wxString>& GetSignalNetClassOverrides() const
+    {
+        return m_signalNetClassOverrides;
+    }
+
+    void SetSignalColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
+    {
+        m_signalColorOverrides = aOverrides;
+    }
+
+    const std::map<wxString, COLOR4D>& GetSignalColorOverrides() const
+    {
+        return m_signalColorOverrides;
+    }
 
     /**
      * Return the subgraph for a given net name on a given sheet.
@@ -878,6 +904,8 @@ private:
     std::vector<std::unique_ptr<SCH_NETCHAIN>> m_potentialNetChains; ///< last built potential (uncommitted) net chains
     std::map<std::pair<KIID, KIID>, wxString> m_netChains;
     std::map<wxString, std::pair<KIID, KIID>> m_signalTerminalOverrides;
+    std::map<wxString, wxString>              m_signalNetClassOverrides;
+    std::map<wxString, COLOR4D>               m_signalColorOverrides;
 
     int m_last_net_code;
 

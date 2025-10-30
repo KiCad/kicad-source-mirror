@@ -3365,6 +3365,19 @@ SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPote
     for( SCH_SYMBOL* sym : aPotential->GetSymbols() )
         sig->AddSymbol( sym );
     sig->SetName( aName );
+
+    // Apply any parsed netclass override for this chain name.
+    auto ncIt = m_signalNetClassOverrides.find( aName );
+
+    if( ncIt != m_signalNetClassOverrides.end() )
+        sig->SetNetClass( ncIt->second );
+
+    // Apply any parsed colour override for this chain name.
+    auto colIt = m_signalColorOverrides.find( aName );
+
+    if( colIt != m_signalColorOverrides.end() )
+        sig->SetColor( colIt->second );
+
     // Apply name to symbols now
     for( SCH_SYMBOL* sym : sig->GetSymbols() )
         if( sym ) sym->SetSignalName( sig->GetName() );

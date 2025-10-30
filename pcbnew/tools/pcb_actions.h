@@ -84,6 +84,9 @@ public:
     /// Remove all connections belonging to a single net from the active selection
     static TOOL_ACTION deselectNet;
 
+    /// Select all connections belonging to every net in the current item's net chain.
+    static TOOL_ACTION selectNetChain;
+
     /// Select unconnected footprints from ratsnest of selection
     static TOOL_ACTION selectUnconnected;
 

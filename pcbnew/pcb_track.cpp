@@ -2463,6 +2463,14 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<
 {
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
+    if( NETINFO_ITEM* netInfo = GetNet() )
+    {
+        const wxString& chainName = netInfo->GetSignal();
+
+        if( !chainName.IsEmpty() )
+            aList.emplace_back( _( "Net Chain" ), UnescapeString( chainName ) );
+    }
+
     aList.emplace_back( _( "Resolved Netclass" ),
                         UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
 

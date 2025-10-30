@@ -324,6 +324,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( ACTIONS::updateSchematicFromPcb )->Enable( !Kiface().IsSingle() );
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( SCH_ACTIONS::linkComponents );
+
+    toolsMenu->AppendSeparator();
     ACTION_MENU* submenuVariants = new ACTION_MENU( false, selTool );
     submenuVariants->SetTitle( _( "Variants" ) );
     submenuVariants->Add( SCH_ACTIONS::addVariant );

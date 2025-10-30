@@ -1124,14 +1124,14 @@ TOOL_ACTION SCH_ACTIONS::nameSignal( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::createSignalBetweenPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.createSignalBetweenPins" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Create Signal Between Pins" ) )
-        .Tooltip( _( "Create a new signal connecting the two selected pins" ) ) );
+        .FriendlyName( _( "Create Net Chain Between Pins" ) )
+        .Tooltip( _( "Create a new net chain connecting the two selected pins" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::linkComponents( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.linkComponents" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Link Components..." ) )
-        .Tooltip( _( "Create KiLinks between components" ) ) );
+        .FriendlyName( _( "Net Chains..." ) )
+        .Tooltip( _( "Create and manage net chains linking components through series passives" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::showNetNavigator( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showNetNavigator" )

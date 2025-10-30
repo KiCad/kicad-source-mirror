@@ -23,6 +23,7 @@
 #include <set>
 #include <utility>
 #include <wx/string.h>
+#include <gal/color4d.h>
 #include <kiid.h>
 
 /**
@@ -68,11 +69,30 @@ public:
             m_terminalPins[1] = aNew;
     }
 
+    /**
+     * Net chains may override the netclass applied to every member net.
+     * Empty string means "do not override".  The active netclass is
+     * propagated to every member when the PCB is updated from the netlist.
+     */
+    void SetNetClass( const wxString& aNetClass ) { m_netClass = aNetClass; }
+    const wxString& GetNetClass() const { return m_netClass; }
+
+    /**
+     * Optional display color for the chain.  When set to an opaque colour,
+     * the PCB and schematic painters prefer it over the default chain
+     * highlight emphasis.  UNSPECIFIED / fully-transparent means "use the
+     * default scheme".
+     */
+    void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
+    const KIGFX::COLOR4D& GetColor() const { return m_color; }
+
 private:
     wxString                       m_name;
     std::set<wxString>             m_nets;
     std::set<class SCH_SYMBOL*>    m_symbols; // owning symbol pointers (non-owning, symbols live elsewhere)
     KIID                           m_terminalPins[2];
+    wxString                       m_netClass;
+    KIGFX::COLOR4D                 m_color = KIGFX::COLOR4D::UNSPECIFIED;
 };
 
 #endif

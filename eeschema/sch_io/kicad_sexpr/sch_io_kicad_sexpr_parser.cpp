@@ -5471,9 +5471,53 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchSignal()
     KIID b = parseKIID();
     NeedRIGHT();
 
-    NeedRIGHT();
+    wxString netClass;
+    COLOR4D  color = COLOR4D::UNSPECIFIED;
+
+    for( T tok = NextTok(); tok != T_RIGHT; tok = NextTok() )
+    {
+        if( tok == T_LEFT )
+            tok = NextTok();
+
+        if( tok == T_net_class )
+        {
+            NeedSYMBOLorNUMBER();
+            netClass = FromUTF8();
+            NeedRIGHT();
+        }
+        else if( tok == T_color )
+        {
+            int    r = parseInt( "red" );
+            int    g = parseInt( "green" );
+            int    b = parseInt( "blue" );
+            double al = parseDouble( "alpha" );
+            color = COLOR4D( r / 255.0, g / 255.0, b / 255.0, al );
+            NeedRIGHT();
+        }
+        else
+        {
+            // Skip an unknown subsection; walk to its matching RIGHT.
+            int depth = 1;
+            while( depth > 0 )
+            {
+                T inner = NextTok();
+                if( inner == T_EOF )
+                    break;
+                if( inner == T_LEFT )
+                    ++depth;
+                else if( inner == T_RIGHT )
+                    --depth;
+            }
+        }
+    }
 
     m_signalTerminals[name] = std::make_pair( a, b );
+
+    if( !netClass.IsEmpty() )
+        m_signalNetClasses[name] = netClass;
+
+    if( color != KIGFX::COLOR4D::UNSPECIFIED )
+        m_signalColors[name] = color;
 }
 
 

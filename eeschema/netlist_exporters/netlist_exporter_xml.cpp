@@ -25,7 +25,9 @@
 
 #include "netlist_exporter_xml.h"
 
+#include <algorithm>
 #include <build_version.h>
+#include <gal/color4d.h>
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
 #include <sch_group.h>
@@ -1316,6 +1318,20 @@ XNODE* NETLIST_EXPORTER_XML::makeSignals()
         XNODE* xsignal;
         xsignals->AddChild( xsignal = node( wxT( "net_chain" ) ) );
         xsignal->AddAttribute( wxT( "name" ), signal->GetName() );
+
+        if( !signal->GetNetClass().IsEmpty() )
+            xsignal->AddAttribute( wxT( "netclass" ), signal->GetNetClass() );
+
+        if( signal->GetColor() != COLOR4D::UNSPECIFIED )
+        {
+            const COLOR4D& c = signal->GetColor();
+            xsignal->AddAttribute( wxT( "color" ),
+                                   wxString::Format( wxT( "#%02X%02X%02X%02X" ),
+                                                     (int) std::clamp( KiROUND( c.r * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.g * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.b * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.a * 255.0 ), 0, 255 ) ) );
+        }
 
         XNODE* xmembers;
         xsignal->AddChild( xmembers = node( wxT( "members" ) ) );
