@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 08:21+0000\n"
+"PO-Revision-Date: 2025-10-31 11:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -7829,26 +7829,26 @@ msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 #: common/history_lock.cpp:156
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "Historikförråd är låst av %s@%s"
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "Källkatalog finns inte: %s"
+msgstr "Historikkatalog finns inte: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Lyckades inte hämta förvarets index: %s"
+msgstr "Lyckades inte öppna git-förvar: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "Lyckas inte få indexlås: förvaret är inte öppet"
 
 #: common/history_lock.cpp:207
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
-msgstr ""
+msgstr "Lyckades inte få git-indexlås (pågår en annan process?): %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -8666,9 +8666,8 @@ msgid "Net color highlight"
 msgstr "Nätfärg markering"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Markera kollisioner"
+msgstr "Nätkollisioner under dragning"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8978,12 +8977,11 @@ msgid "An unexpected error occurred while reading library table"
 msgstr "Ett oväntat fel uppstod vid läsning av bibliotekstabell"
 
 #: common/local_history.cpp:1366
-#, fuzzy
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"Följande filer kommer skrivas över:\n"
+"Följande filer kommer att raderas när denna överlämning återställs:\n"
 "\n"
 
 #: common/local_history.cpp:1377
@@ -8992,20 +8990,20 @@ msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... och %zu ytterligare filer\n"
 
 #: common/local_history.cpp:1381
-#, fuzzy
 msgid "Delete Files during Restore"
-msgstr "Ta bort katalog"
+msgstr "Radera filer under återställning"
 
 #: common/local_history.cpp:1383
 msgid "Proceed"
-msgstr ""
+msgstr "Fortsätt"
 
 #: common/local_history.cpp:1383
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Alla filer"
+msgstr "Behåll alla filer"
 
 #: common/local_history.cpp:1383 eeschema/files-io.cpp:533
 msgid "Abort"
@@ -9017,16 +9015,20 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"Om \"behåll alla filer\" väljs, kommer den valda överlämningen att "
+"återställas men alla existerande filer i projektkatalogen behålls. Om "
+"\"fortsätt\" väljs, kommer filer som inte finns i den återställda "
+"överlämningen att raderas."
 
 #: common/local_history.cpp:1803
 #, fuzzy
 msgid "Select snapshot"
-msgstr "Välj sökväg"
+msgstr "Välj ögonblicksbild"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
 #, fuzzy
 msgid "Restore"
-msgstr "Motstånd"
+msgstr "Återställ"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:919
@@ -14654,9 +14656,8 @@ msgid "Footprint Filters"
 msgstr "Filter för fotavtryck"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:489
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "Alla lödytor med samma nummer är sammankopplade"
+msgstr "Alla lödytor med samma nummer är byglar"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:511
@@ -29596,9 +29597,8 @@ msgid "Project Files"
 msgstr "Projektfiler"
 
 #: kicad/kicad_manager_frame.cpp:238 kicad/tools/kicad_manager_actions.cpp:244
-#, fuzzy
 msgid "Local History"
-msgstr "Lokal fil"
+msgstr "Lokal historik"
 
 #: kicad/kicad_manager_frame.cpp:400
 msgid "PCM Updates Available"
@@ -29616,6 +29616,7 @@ msgstr "Fel vid försök att öppna åtgärdsseriefil"
 #: kicad/kicad_manager_frame.cpp:855
 msgid "A newer local history snapshot is available. Restore it?"
 msgstr ""
+"En nyare lokal ögonblicksbild av historik finns tillgänglig. Återställ den?"
 
 #: kicad/kicad_manager_frame.cpp:1020
 msgid "Edit File in Text Editor"
@@ -29645,24 +29646,22 @@ msgid "Restoring '%s'"
 msgstr "Återställer '%s'"
 
 #: kicad/local_history_pane.cpp:121
-#, fuzzy
 msgid "Moments ago"
-msgstr "Kommentarer"
+msgstr "För ett ögonblick sedan"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "minuter"
+msgstr "%d minuter sedan"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
 msgid "%d hours ago"
-msgstr ""
+msgstr "%d timmar sedan"
 
 #: kicad/local_history_pane.cpp:227
-#, fuzzy
 msgid "Restore Commit"
-msgstr "Senaste överlämning"
+msgstr "Återställ överlämning"
 
 #: kicad/menubar.cpp:63
 msgid "Clear Recent Projects"
@@ -30613,19 +30612,16 @@ msgid "Open project directory in file explorer"
 msgstr "Öppna projektkatalogen i filutforskaren"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "Klona projekt från förvar..."
+msgstr "Återställ projekt från lokal historik..."
 
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "Packa upp arkiverat projekt från zip-arkiv"
+msgstr "Återställ projektfiler från lokal historik"
 
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "Visa eller dölj detta lager"
+msgstr "Visa eller dölj panel för lokal historik"
 
 #: kicad/tools/kicad_manager_control.cpp:80
 msgid "Create New Project"
@@ -35350,9 +35346,8 @@ msgid "Cleanup Tracks and Vias"
 msgstr "Städa upp ledare och vior"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:192
-#, fuzzy
 msgid "Legacy Teardrop Properties"
-msgstr "Egenskaper för kragförstärkningar"
+msgstr "Egenskaper för äldre kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:196
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
@@ -43802,7 +43797,6 @@ msgid "Signal layer not found in stackup"
 msgstr "Signallager hittades inte i lageruppbyggnaden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:883
-#, fuzzy
 msgid "Internal error: Microstrip can only be on an outer copper layer"
 msgstr "Internt fel: Mikrostrip kan bara förekomma på ett yttre kopparlager"
 
@@ -43907,9 +43901,8 @@ msgid "ohms"
 msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Generate Net Class DRC Rules"
-msgstr "Generera nätlistan"
+msgstr "Generera designregler för nätklasser"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
 msgid "Enable Time Domain Tuning"
@@ -43944,12 +43937,10 @@ msgid "Via Propagation"
 msgstr "Vias signalutbredning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
-#, fuzzy
 msgid "Global Unit Delay:"
 msgstr "Global enhetsfördröjning:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
-#, fuzzy
 msgid "ps/cm"
 msgstr "ps/cm"
 
@@ -44748,9 +44739,8 @@ msgstr "Det gick inte att tolka uttrycket '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:338 pcbnew/drc/drc_rule_parser.cpp:412
 #: pcbnew/drc/drc_rule_parser.cpp:682
-#, fuzzy
 msgid "quoted expression"
-msgstr "citerat uttryckt"
+msgstr "uttryckt inom citattecken"
 
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "'layer' keyword already present."
@@ -44867,9 +44857,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Kontrollerar frigång för koppargrafik..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Kontrollerar frigång för koppargrafik..."
+msgstr "Kontrollerar frigång för koppargrafik till hål..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
@@ -47415,9 +47404,10 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Kopparzon '%s' har inga lödytor anslutna."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna."
+msgstr ""
+"Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna till nät \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1478
 #, c-format
