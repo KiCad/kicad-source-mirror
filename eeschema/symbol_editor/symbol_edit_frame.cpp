@@ -1138,8 +1138,6 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
                                                                  : LIBRARY_TABLE_SCOPE::PROJECT;
 
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
-
-    // SelectSymLibTable should never return PROJECT when there is no project
     wxCHECK( table, wxEmptyString );
 
     wxString libName = fn.GetName();
@@ -1184,6 +1182,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     adapter->LoadOne( fn.GetName() );
 
     std::string packet = fn.GetFullPath().ToStdString();
+    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, packet );
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
 
     return fn.GetFullPath();
@@ -1225,6 +1224,7 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
             } );
 
     std::string packet = fn.GetFullPath().ToStdString();
+    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, packet );
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
 }
 
