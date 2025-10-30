@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-27 00:04+0000\n"
+"PO-Revision-Date: 2025-10-30 08:21+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43944,6 +43944,7 @@ msgid "Via Propagation"
 msgstr "Vias signalutbredning"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:178
+#, fuzzy
 msgid "Global Unit Delay:"
 msgstr "Global enhetsfördröjning:"
 
