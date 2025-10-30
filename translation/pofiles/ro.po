@@ -8,23 +8,22 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-06-20 20:01+0000\n"
-"Last-Translator: Peter B <sleepyghostshark@users.noreply.hosted.weblate."
-"org>\n"
+"PO-Revision-Date: 2025-10-31 08:03+0000\n"
+"Last-Translator: Tatu Bogdan <bogdan.tatu@proton.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
-"20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : "
+"(n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "All Files"
-msgstr "Toate fișierele"
+msgstr "Toate Fișierele"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:334
 msgid "Build board outline"
@@ -107,7 +106,7 @@ msgid "Last render time %.0f ms"
 msgstr "Ultima durată a randării %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Net %s\tClasă Net %s"
 
@@ -407,12 +406,10 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Rotiți Z în sens contrar acelor de ceasornic"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
-#, fuzzy
 msgid "Move Board Left"
 msgstr "Mutați placa în stânga"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:113
-#, fuzzy
 msgid "Move Board Right"
 msgstr "Mutați placa în dreapta"
 
@@ -1030,10 +1027,14 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Salvează și restaurează poziția camerei și nivelul de zoom.\n"
+"Folosește %s+Tab pentru a activa selectorul.\n"
+"Tab-uri succesive în timpul apasării %s vor parcurge ciclul ferestrelor de "
+"vizualizare din fereastra pop-up."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:565
 msgid "Left double click or middle click to change color"
-msgstr ""
+msgstr "Dublu click stânga sau click mijloc pentru a schimba culoarea"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:575
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
@@ -1268,7 +1269,7 @@ msgstr "În timpul mutării"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "Viteză redesenare:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1846,9 +1847,8 @@ msgid "Replace Loaded File?"
 msgstr "Înlocuiește și găsește următorul"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Fișierul '%s' există deja în listă."
+msgstr "Există un fișier încărcat deja. Vrei să îl înlocuiești?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2043,9 +2043,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Foaie de lucru (fișier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Exportați în fișier"
+msgstr "Exportați ca fișier..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2475,9 +2474,9 @@ msgid "Package Developers"
 msgstr "Dezvoltatori"
 
 #: common/dialog_about/dialog_about.cpp:118
-#, c-format
+#, c-format, fuzzy
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "Obiecte GDI utilizate %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -2593,7 +2592,7 @@ msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 msgid "Pattern:"
-msgstr ""
+msgstr "Șablon:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 #, fuzzy
@@ -2813,9 +2812,9 @@ msgstr "Selectați fișierul tabelului bibliotecii globale %s:"
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:84
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:84
 #: pcbnew/footprint_libraries_utils.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "Fișierul %s nu a fost găsit"
+msgstr "Fișierul ' %s' nu a fost găsit."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:102
 #, c-format
@@ -3073,8 +3072,9 @@ msgid "unit"
 msgstr "unitate"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
+#, fuzzy
 msgid "Linked"
-msgstr ""
+msgstr "Legat"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -3782,7 +3782,7 @@ msgstr "Configurarți pagina..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:277
@@ -3817,7 +3817,7 @@ msgstr "Avertizări"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Raportează eșecul lucrării atunci când există încălcări ale regulilor"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -3827,7 +3827,7 @@ msgstr ""
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "Testează paritatea dintre PCB și schematic"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_text_entry_base.cpp:32
@@ -3957,12 +3957,12 @@ msgstr ""
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
@@ -3990,7 +3990,7 @@ msgstr "Anulați"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4005,7 +4005,7 @@ msgstr "Porecla"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 msgid "Password"
-msgstr ""
+msgstr "Parola"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 #, fuzzy
@@ -4036,7 +4036,7 @@ msgstr "Rețea"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Modified"
-msgstr ""
+msgstr "Modificat"
 
 #: common/dialogs/git/dialog_git_commit.cpp:117
 #, fuzzy
@@ -4050,7 +4050,7 @@ msgstr "Mesaj"
 
 #: common/dialogs/git/dialog_git_commit.cpp:140
 msgid "Author:"
-msgstr ""
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:161
 msgid "C&ommit"
@@ -4069,7 +4069,7 @@ msgstr "Conexiuni"
 #: common/dialogs/git/dialog_git_repository.cpp:166
 #: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Introduceți parola pentru cheia SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:315
 #, fuzzy
@@ -4092,9 +4092,8 @@ msgid "Invalid SSH Key"
 msgstr "Nume de semnal nevalabil"
 
 #: common/dialogs/git/dialog_git_repository.cpp:353
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
+msgstr "Fișierul selectat nu este o cheie SSH privata validă"
 
 #: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
@@ -4114,12 +4113,12 @@ msgstr "Nu se poate crea fișierul de raport '%s'"
 #: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
-msgstr ""
+msgstr "Parola cheii SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Parolă:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
 #, fuzzy
@@ -4133,7 +4132,7 @@ msgstr "Conexiuni"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:464
@@ -4170,16 +4169,17 @@ msgid "Git Branch Switch"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:52
+#, fuzzy
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Selectează sau adaugă un nume pentru ramură:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
-msgstr ""
+msgstr "Ramură"
 
 #: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
-msgstr ""
+msgstr "Ultimul Commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:60
 #, fuzzy
@@ -4242,7 +4242,7 @@ msgstr "Denumiri Net"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
-msgstr ""
+msgstr "E-mailul autorului:"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
@@ -18807,11 +18807,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1640
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Fișierul de salvare automată \"%s\" nu a putut fi eliminat!"
+msgstr ""
+"Fișierul de salvare automată \"%s\" nu a putut fi șters.\n"
+"Va fi necesară ștergerea manuală."
 
 #: eeschema/files-io.cpp:1674
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -18859,9 +18861,8 @@ msgid "Import Graphics"
 msgstr "Importați grafică..."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
-#, fuzzy
 msgid "No file selected!"
-msgstr "Nicio magistrală selectată"
+msgstr "Niciun fișier selectat!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:262
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:294
@@ -21030,9 +21031,9 @@ msgid "No library defined!"
 msgstr "Identificator nou al bibliotecii:"
 
 #: eeschema/sch_symbol.cpp:2081
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol not found in %s!"
-msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
+msgstr "Simbolul nu a fost găsit în %s!"
 
 #: eeschema/sch_symbol.cpp:2345
 #, fuzzy, c-format
@@ -52717,7 +52718,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:350
 msgid "Dimmed"
-msgstr ""
+msgstr "Întunecat"
 
 #: pcbnew/tools/pcb_control.cpp:351
 #, fuzzy
@@ -53235,8 +53236,9 @@ msgstr "Straturi inactive:"
 
 #: pcbnew/widgets/appearance_controls.cpp:648
 #: pcbnew/widgets/appearance_controls.cpp:1857
+#, fuzzy
 msgid "Inactive layers will be shown in full color"
-msgstr ""
+msgstr "Straturile inactive vor fi prezentate in culore"
 
 #: pcbnew/widgets/appearance_controls.cpp:653
 #: pcbnew/widgets/appearance_controls.cpp:1859
@@ -53391,6 +53393,8 @@ msgstr ""
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
+"Dublu click (sau click mijloc) pentru a schimba culoarea; click dreapta "
+"pentru mai multe acțiuni"
 
 #: pcbnew/widgets/appearance_controls.cpp:1033
 #: pcbnew/widgets/appearance_controls_base.cpp:45
@@ -53400,6 +53404,8 @@ msgstr "Obiecte"
 #: pcbnew/widgets/appearance_controls.cpp:1592
 msgid "Double click or middle click for color change, right click for menu"
 msgstr ""
+"Dublu click sau click mijloc pentru a schimba culoarea, click dreapta pentru "
+"meniu"
 
 #: pcbnew/widgets/appearance_controls.cpp:1600
 #, fuzzy
@@ -53408,11 +53414,11 @@ msgstr "Afișați straturile de maști de sudură"
 
 #: pcbnew/widgets/appearance_controls.cpp:1673
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "Adeziv pe fața plăcii"
 
 #: pcbnew/widgets/appearance_controls.cpp:1674
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "Adeziv pe spatele plăcii"
 
 #: pcbnew/widgets/appearance_controls.cpp:1675
 #, fuzzy
@@ -53446,11 +53452,11 @@ msgstr "Distanța minimă a cuprului"
 
 #: pcbnew/widgets/appearance_controls.cpp:1681
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "Desene explicative"
 
 #: pcbnew/widgets/appearance_controls.cpp:1682
 msgid "Explanatory comments"
-msgstr ""
+msgstr "Comentarii explicative"
 
 #: pcbnew/widgets/appearance_controls.cpp:1683
 #: pcbnew/widgets/appearance_controls.cpp:1684
@@ -53773,7 +53779,7 @@ msgstr "Afișați straturile de maști de sudură"
 #: pcbnew/widgets/appearance_controls.cpp:2301
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Setează opacitatea lui %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2420
 #, fuzzy
@@ -53949,7 +53955,7 @@ msgstr "Grup"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1293
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "(Folosește /.../ pentru a indica un regex.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1367
 #, fuzzy
@@ -54189,7 +54195,7 @@ msgstr "Zonele"
 #: pcbnew/zone.cpp:1134
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr ""
+msgstr "Zona '%s' %s %s, prioritate %d"
 
 #: pcbnew/zone.cpp:1988
 #, fuzzy
@@ -54243,7 +54249,7 @@ msgstr "Orientare"
 
 #: pcbnew/zone.cpp:2067
 msgid "Cannot be less than zone minimum width"
-msgstr ""
+msgstr "Nu poate fi mai mică decât lățimea minimă a zonei"
 
 #: pcbnew/zone.cpp:2073
 #, fuzzy
@@ -54314,7 +54320,7 @@ msgstr "Reumpleți"
 
 #: pcbnew/zone_filler.cpp:891
 msgid "Continue without Refill"
-msgstr ""
+msgstr "Continuă fară Reumplere"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:57
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:62
@@ -54365,7 +54371,7 @@ msgstr "Lățimea reliefului termic"
 #: plugins/3d/vrml/vrml.cpp:239
 #, c-format
 msgid "[INFO] load failed: %s"
-msgstr ""
+msgstr "[INFO] incărcare eșuată: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
@@ -54377,7 +54383,7 @@ msgstr "Convertor Bitmap în Componentă"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "Creează o componenta dintr-un bitmap pentru a o folosi în KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
@@ -54419,7 +54425,7 @@ msgstr "Manager de Proiect;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
-msgstr ""
+msgstr "Suita EDA"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
@@ -54441,7 +54447,7 @@ msgstr "KiCad Predefinit"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Calculator pentru diverse calcule legate de electronică"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
