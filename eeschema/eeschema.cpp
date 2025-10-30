@@ -403,7 +403,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
-    void PreloadLibraries( PROJECT* aProject ) override;
+    void PreloadLibraries( KIWAY* aKiway ) override;
     void ProjectChanged() override;
 
 private:
@@ -467,10 +467,12 @@ void IFACE::Reset()
 }
 
 
-void IFACE::PreloadLibraries( PROJECT* aProject )
+void IFACE::PreloadLibraries( KIWAY* aKiway )
 {
     constexpr static int interval = 150;
     constexpr static int timeLimit = 120000;
+
+    wxCHECK( aKiway, /* void */ );
 
     if( m_libraryPreloadInProgress.load() )
         return;
@@ -479,12 +481,12 @@ void IFACE::PreloadLibraries( PROJECT* aProject )
             Pgm().GetBackgroundJobMonitor().Create( _( "Loading Symbol Libraries" ) );
 
     auto preload =
-        [this, aProject]() -> void
+        [this, aKiway]() -> void
         {
             std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
                     m_libraryPreloadBackgroundJob->m_reporter;
 
-            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( aProject );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aKiway->Prj() );
 
             int elapsed = 0;
 
@@ -526,6 +528,11 @@ void IFACE::PreloadLibraries( PROJECT* aProject )
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
             m_libraryPreloadInProgress.store( false );
+
+            std::string payload = "";
+            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
+            aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+            aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
         };
 
     thread_pool& tp = GetKiCadThreadPool();

@@ -505,11 +505,14 @@ void KIWAY::PlayerDidClose( FRAME_T aFrameType )
 
 
 void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
-                         wxWindow* aSource )
+                         wxWindow* aSource, bool aFromOtherThread  )
 {
-    KIWAY_EXPRESS   mail( aDestination, aCommand, aPayload, aSource );
+    std::unique_ptr<KIWAY_EXPRESS> mail = std::make_unique<KIWAY_EXPRESS>( aDestination, aCommand, aPayload, aSource );
 
-    ProcessEvent( mail );
+    if( aFromOtherThread )
+        QueueEvent( mail.release() );
+    else
+        ProcessEvent( *mail );
 }
 
 
@@ -710,6 +713,25 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
     }
 
     return false;
+}
+
+
+void KIWAY::QueueEvent( wxEvent* aEvent )
+{
+    KIWAY_EXPRESS* mail = dynamic_cast<KIWAY_EXPRESS*>( aEvent );
+
+    if( mail )
+    {
+        FRAME_T dest = mail->Dest();
+
+        // see if recipient is alive
+        KIWAY_PLAYER* alive = Player( dest, false );
+
+        if( alive )
+        {
+            alive->GetEventHandler()->QueueEvent( aEvent );
+        }
+    }
 }
 
 

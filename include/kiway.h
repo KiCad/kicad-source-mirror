@@ -255,7 +255,7 @@ struct KIFACE
         return 0;
     }
 
-    virtual void PreloadLibraries( PROJECT* aProject ) {}
+    virtual void PreloadLibraries( KIWAY* aKiway ) {}
 
     virtual void ProjectChanged() {}
 };
@@ -383,7 +383,7 @@ public:
      * efficiently switch() based on @a aCommand in there.
      */
     virtual void ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
-                              wxWindow* aSource = nullptr );
+                              wxWindow* aSource = nullptr, bool aFromOtherThread = false );
 
     /**
      * Append all registered actions to the given list.
@@ -449,6 +449,8 @@ public:
     void OnKiwayEnd();
 
     bool ProcessEvent( wxEvent& aEvent ) override;
+
+    void QueueEvent( wxEvent* aEvent ) override;
 
     int  ProcessJob( KIWAY::FACE_T aFace, JOB* aJob, REPORTER* aReporter = nullptr,
                      PROGRESS_REPORTER* aProgressReporter = nullptr );

@@ -410,7 +410,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     // Preload libraries, since for single-top this won't have been done earlier
     if( KIFACE* topFrame = Kiway.KiFACE( KIWAY::KifaceType( TOP_FRAME ) ) )
-        topFrame->PreloadLibraries( &Kiway.Prj() );
+        topFrame->PreloadLibraries( &Kiway );
 
     PreloadDesignBlockLibraries( &Kiway );
 

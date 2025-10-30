@@ -896,7 +896,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     CallAfter( [&]()
         {
             KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-            schface->PreloadLibraries( &Prj() );
+            schface->PreloadLibraries( &Kiway() );
 
             Pgm().PreloadDesignBlockLibraries( &Kiway() );
         } );

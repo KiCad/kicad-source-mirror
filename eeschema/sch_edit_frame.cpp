@@ -1430,7 +1430,7 @@ void SCH_EDIT_FRAME::LoadProject()
     CallAfter( [&]()
         {
             KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-            schface->PreloadLibraries( &Prj() );
+            schface->PreloadLibraries( &Kiway() );
         } );
 }
 

@@ -967,7 +967,7 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
     Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
 
     if( KIFACE *face = m_parent->Kiway().KiFACE( KIWAY::FACE_PCB ) )
-        face->PreloadLibraries( &m_parent->Kiway().Prj() );
+        face->PreloadLibraries( &m_parent->Kiway() );
 
     m_global_grid->Freeze();
 
@@ -1169,7 +1169,7 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 
     // Trigger a reload in case any libraries have been added or removed
     if( KIFACE *face = aKiway->KiFACE( KIWAY::FACE_PCB ) )
-        face->PreloadLibraries( &aKiway->Prj() );
+        face->PreloadLibraries( aKiway );
 
     std::string payload = "";
     aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );

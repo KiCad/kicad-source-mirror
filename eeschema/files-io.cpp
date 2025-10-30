@@ -717,7 +717,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     CallAfter( [&]()
             {
                 KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-                schface->PreloadLibraries( &Prj() );
+                schface->PreloadLibraries( &Kiway() );
             } );
 
     return true;

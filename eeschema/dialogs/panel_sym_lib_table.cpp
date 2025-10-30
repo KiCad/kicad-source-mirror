@@ -906,7 +906,7 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
     Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
 
     if( KIFACE *schface = m_parent->Kiway().KiFACE( KIWAY::FACE_SCH ) )
-        schface->PreloadLibraries( &m_parent->Kiway().Prj() );
+        schface->PreloadLibraries( &m_parent->Kiway() );
 
     m_global_grid->Freeze();
 
@@ -1268,13 +1268,8 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     // Trigger a reload in case any libraries have been added or removed
     if( KIFACE *schface = aKiway->KiFACE( KIWAY::FACE_SCH ) )
-        schface->PreloadLibraries( &aKiway->Prj() );
+        schface->PreloadLibraries( aKiway );
 
     if( symbolEditor )
         symbolEditor->ThawLibraryTree();
-
-    std::string payload = "";
-    aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
-    aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
-    aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
 }
