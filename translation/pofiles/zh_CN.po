@@ -37,13 +37,14 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # KK0571 <190506420@qq.com>, 2025.
 # yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025.
+# Li Yi <yilibj@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 00:58+0300\n"
-"PO-Revision-Date: 2025-10-21 20:15+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"Last-Translator: Li Yi <yilibj@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -51,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2309,9 +2310,9 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "未知过孔类型 %d"
+msgstr "未知库类型 %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
@@ -17547,9 +17548,9 @@ msgid "Error loading library '%s'"
 msgstr "加载符号库 '%s' 时出现错误。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "符号库"
+msgstr "符号库表 (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:544
 msgid "Nickname and path cannot be empty."
@@ -17971,9 +17972,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
 #: eeschema/erc/erc.cpp:1224
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "引脚 %s 同时连接到 %s 和 %s"
+msgstr "引脚 %s 未连接到接地网"
 
 #: eeschema/erc/erc.cpp:1479
 #, c-format
@@ -19993,11 +19994,13 @@ msgstr ""
 "'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被导入。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "无效的 padstack 层 '%s', 位于文件: %s, 行: %d, 偏移: %d。"
+msgstr ""
+"无法读取文件 '%s'.\n"
+"'%s' 在文件: %d行, %d列,偏移量 %d处"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1028
 #, c-format
@@ -23368,9 +23371,9 @@ msgid "Footprint re-linking canceled by user."
 msgstr "用户取消了封装重链接。"
 
 #: eeschema/tools/backannotate.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "为 %1$s 添加值为 '%3$s' 的字段 '%2$s'。"
+msgstr "将 %s 单位 %s 与单位 %s 交换"
 
 #: eeschema/tools/backannotate.cpp:812
 msgid "true"
@@ -25563,9 +25566,9 @@ msgid "All pins must be at the same location"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "连接 %s 的引脚 %s 到 %s。"
+msgstr "将 %zu 堆叠引脚转换为 '%s'"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1042
 msgid "Select a single pin with stacked notation to explode"
@@ -34043,9 +34046,9 @@ msgid "Selected options resulted in errors! Change them and try again."
 msgstr "所选的选项导致错误! 更改它们, 再试一次。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "替换此位号对应的封装:"
+msgstr "PCB 中有 %d 个空或无效的参考标识"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
 #, fuzzy
@@ -34055,9 +34058,9 @@ msgid ""
 msgstr "检查 PCB 和原理图是否一致"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>参考位号: %s 封装: %s:%s, 位于 PCB 上的 %s。"
+msgstr "<br/>元件标识符: %s 封装: %s:%s位于 PCB 上的 %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -44430,9 +44433,9 @@ msgid "Footprint layers differ."
 msgstr "'封装筛选规则' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:668
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "封装已经存在于电路板上。"
+msgstr "元件封装中有 %lu 层未安装在板上:%s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:679
 #, fuzzy, c-format
