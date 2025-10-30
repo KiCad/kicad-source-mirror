@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:59+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-10-20 05:00+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v9/el/>\n"
@@ -1415,7 +1415,7 @@ msgstr "Κλίμακα"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "X:"
 msgstr "Χ:"
 
@@ -1439,7 +1439,7 @@ msgstr "Χ:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Y:"
 msgstr "Ψ:"
 
@@ -25003,7 +25003,7 @@ msgid "Page '%s' not found."
 msgstr "Η σελίδα '%s' δεν βρέθηκε."
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2395
+#: pcbnew/tools/pcb_point_editor.cpp:2388
 msgid "Move Point"
 msgstr "Μετακίνηση Σημείου"
 
@@ -52040,58 +52040,58 @@ msgstr "Επιλεγμένα Αντικείμενα"
 msgid "Selected 2D Length"
 msgstr "Επιλεγμένο net:"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2391
+#: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
 msgstr "Αλλαγή Μεγέθους Κελιών Πίνακα"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2476
+#: pcbnew/tools/pcb_point_editor.cpp:2469
 msgid "Move Midpoint to Location"
 msgstr "Μετακίνηση Μεσαίου Σημείου σε Τοποθεσία"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2477
+#: pcbnew/tools/pcb_point_editor.cpp:2470
 msgid "Move Midpoint"
 msgstr "Μετακίνηση Μεσαίου Σημείου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2481
+#: pcbnew/tools/pcb_point_editor.cpp:2474
 msgid "Move Corner to Location"
 msgstr "Μετακίνηση Γωνίας σε Τοποθεσία"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2482
+#: pcbnew/tools/pcb_point_editor.cpp:2475
 msgid "Move Corner"
 msgstr "Μετακίνηση Γωνίας"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2822
 msgid "Add Zone Corner"
 msgstr "Προσθήκη Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2846
 msgid "Split Segment"
 msgstr "Διαχωρισμός Τμήματος"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2868
 #, fuzzy
 msgid "Split Arc"
 msgstr "Διαγραφή Τόξου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2945
 msgid "Remove Zone Corner"
 msgstr "Αφαίρεση Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2947
 msgid "Remove Polygon Corner"
 msgstr "Αφαίρεση Γωνίας Πολυγώνου"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3052
+#: pcbnew/tools/pcb_point_editor.cpp:3045
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "Προσθήκη Γωνίας Ζώνης"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3054
+#: pcbnew/tools/pcb_point_editor.cpp:3047
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "Αφαίρεση Γωνίας Πολυγώνου"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1439
+#: pcbnew/tools/pcb_selection_tool.cpp:1449
 msgid "Select/Expand Connection..."
 msgstr "Επιλογή/Επέκταση Σύνδεσης..."
 

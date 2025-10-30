@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:59+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-04-30 19:05+0000\n"
 "Last-Translator: Stian Kristensen <stiank@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -1404,7 +1404,7 @@ msgstr "Skala"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "X:"
 msgstr "X:"
 
@@ -1428,7 +1428,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Y:"
 msgstr "Y:"
 
@@ -25706,7 +25706,7 @@ msgid "Page '%s' not found."
 msgstr "Fil %s ble ikke funnet."
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2395
+#: pcbnew/tools/pcb_point_editor.cpp:2388
 #, fuzzy
 msgid "Move Point"
 msgstr "Flytt ned"
@@ -52882,66 +52882,66 @@ msgstr "Valgte elementer"
 msgid "Selected 2D Length"
 msgstr "Valgt nett:"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2391
+#: pcbnew/tools/pcb_point_editor.cpp:2384
 #, fuzzy
 msgid "Resize Table Cells"
 msgstr "Fjern elementer"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2476
+#: pcbnew/tools/pcb_point_editor.cpp:2469
 #, fuzzy
 msgid "Move Midpoint to Location"
 msgstr "plassering av fotavtrykk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2477
+#: pcbnew/tools/pcb_point_editor.cpp:2470
 #, fuzzy
 msgid "Move Midpoint"
 msgstr "Flytt ned"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2481
+#: pcbnew/tools/pcb_point_editor.cpp:2474
 #, fuzzy
 msgid "Move Corner to Location"
 msgstr "plassering av fotavtrykk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2482
+#: pcbnew/tools/pcb_point_editor.cpp:2475
 #, fuzzy
 msgid "Move Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2822
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Legg til et sonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2846
 #, fuzzy
 msgid "Split Segment"
 msgstr "Delt segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2868
 msgid "Split Arc"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2945
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Fjern hjørnet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2947
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Fjern et sone / polygonhjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3052
+#: pcbnew/tools/pcb_point_editor.cpp:3045
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "Legg til et sonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3054
+#: pcbnew/tools/pcb_point_editor.cpp:3047
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "Fjern et sone / polygonhjørne"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1439
+#: pcbnew/tools/pcb_selection_tool.cpp:1449
 #, fuzzy
 msgid "Select/Expand Connection..."
 msgstr "Velg / utvid tilkobling"

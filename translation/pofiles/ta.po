@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:59+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-10-29 03:05+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
@@ -1384,7 +1384,7 @@ msgstr "அளவீடு"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "X:"
 msgstr "X:"
 
@@ -1408,7 +1408,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Y:"
 msgstr "ஒய்:"
 
@@ -20258,8 +20258,8 @@ msgstr ""
 "<tr> \n"
 "<td> & nbsp; <br> <samp> $ {REVISION} </samp> </td> \n"
 "<Td> </td> \n"
-"<td> & nbsp; <br> <samp> <i> புலம்_ மதிப்புள்ள </i> சின்னத்தின் <i> refdes </i> </amp> "
-"</td> \n"
+"<td> & nbsp; <br> <samp> <i> புலம்_ மதிப்புள்ள </i> சின்னத்தின் <i> refdes </i> </"
+"amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
 "<td> & nbsp; <br> <samp> $ {refdes:field} </samp> </td> \n"
@@ -20323,8 +20323,8 @@ msgstr ""
 "<Td> & nbsp; <br> <samp> Mem.d1, Mem.d2, Mem.latch </amp> </td> \n"
 "</tr> \n"
 "<tr> \n"
-"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </td> "
-"\n"
+"<td> & nbsp; <br> <samp> mem {d _ {[1..2]} ~ {net1 net2 ...}} </samp> </"
+"td> \n"
 "<Td> </td> \n"
 "<td> <samp> & nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <sub> &nbsp; </sub> &nbsp; ! "
 "&nbsp; &nbsp; &nbsp; &nbsp; <u> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; \n"
@@ -24096,8 +24096,7 @@ msgstr "நெட் கிளாசை ஒதுக்க நெட் பெ�
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"நீண்ட உரை சரம் ஒட்டுவது மிகவும் மெதுவாக இருக்கலாம். நீங்கள் தொடர விரும்புகிறீர்களா?"
+msgstr "நீண்ட உரை சரம் ஒட்டுவது மிகவும் மெதுவாக இருக்கலாம். நீங்கள் தொடர விரும்புகிறீர்களா?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
@@ -24265,7 +24264,7 @@ msgid "Page '%s' not found."
 msgstr "பக்கம் '%s' காணப்படவில்லை."
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2395
+#: pcbnew/tools/pcb_point_editor.cpp:2388
 msgid "Move Point"
 msgstr "புள்ளியை நகர்த்து"
 
@@ -32051,7 +32050,8 @@ msgstr "<br/>*********** கால்தட ஆயங்களில் வர�
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:484
 msgid "<br/>*********** Sort on Reference Coordinates ***********"
 msgstr ""
-"<br/> ************* குறிப்பு ஒருங்கிணைப்புகளில் வரிசைப்படுத்துங்கள் *********************"
+"<br/> ************* குறிப்பு ஒருங்கிணைப்புகளில் வரிசைப்படுத்துங்கள் "
+"*********************"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:488
 #, c-format
@@ -32069,8 +32069,8 @@ msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"<br/>பிசிபிக்கு %d வெற்று அல்லது தவறான குறிப்புப் பெயர்கள் உள்ளன.<br/>'பிசிபி மற்றும் திட்ட இடையேயான சமநிலைக்கா"
-"ன சோதனை' சரிபார்க்கப்பட்டு டிஆர்சியை இயக்கப் பரிந்துரைக்கவும்.\n"
+"<br/>பிசிபிக்கு %d வெற்று அல்லது தவறான குறிப்புப் பெயர்கள் உள்ளன.<br/>'பிசிபி மற்றும் "
+"திட்ட இடையேயான சமநிலைக்கான சோதனை' சரிபார்க்கப்பட்டு டிஆர்சியை இயக்கப் பரிந்துரைக்கவும்.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
 #, c-format
@@ -50412,55 +50412,55 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட உருப�
 msgid "Selected 2D Length"
 msgstr "தேர்ந்தெடுக்கப்பட்ட 2 டி நீளம்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2391
+#: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
 msgstr "அட்டவணை செல்களை மறுஅளவிடுங்கள்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2476
+#: pcbnew/tools/pcb_point_editor.cpp:2469
 msgid "Move Midpoint to Location"
 msgstr "இடத்திற்கு நடுப்பகுதிக்கு நகர்த்தவும்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2477
+#: pcbnew/tools/pcb_point_editor.cpp:2470
 msgid "Move Midpoint"
 msgstr "நடுப்பகுதி நகர்த்தவும்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2481
+#: pcbnew/tools/pcb_point_editor.cpp:2474
 msgid "Move Corner to Location"
 msgstr "மூலையில் இருப்பிடத்திற்கு நகர்த்தவும்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2482
+#: pcbnew/tools/pcb_point_editor.cpp:2475
 msgid "Move Corner"
 msgstr "மூலையில் நகர்த்தவும்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2822
 msgid "Add Zone Corner"
 msgstr "மண்டல மூலையில் சேர்க்கவும்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2846
 msgid "Split Segment"
 msgstr "பிளவு பிரிவு"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2868
 msgid "Split Arc"
 msgstr "பிளவு வளைவு"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2945
 msgid "Remove Zone Corner"
 msgstr "மண்டல மூலையை அகற்று"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2947
 msgid "Remove Polygon Corner"
 msgstr "பலகோண மூலையை அகற்று"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3052
+#: pcbnew/tools/pcb_point_editor.cpp:3045
 msgid "Break Zone Corner"
 msgstr "முறிவு மண்டல மூலையில்"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3054
+#: pcbnew/tools/pcb_point_editor.cpp:3047
 msgid "Break Polygon Corner"
 msgstr "பலகோண மூலையை உடைக்கவும்"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1439
+#: pcbnew/tools/pcb_selection_tool.cpp:1449
 msgid "Select/Expand Connection..."
 msgstr "இணைப்பைத் தேர்ந்தெடுக்கவும்/விரிவாக்கவும் ..."
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:59+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1659,7 +1659,7 @@ msgstr "Merilo"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 #, fuzzy
 msgid "X:"
 msgstr "X:"
@@ -1684,7 +1684,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 #, fuzzy
 msgid "Y:"
 msgstr "Y:"
@@ -27660,7 +27660,7 @@ msgid "Page '%s' not found."
 msgstr "Datoteke '%s' ni mogoče najti."
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2395
+#: pcbnew/tools/pcb_point_editor.cpp:2388
 #, fuzzy
 msgid "Move Point"
 msgstr "Premakni nogico"
@@ -56754,66 +56754,66 @@ msgstr "Izbrani predmeti"
 msgid "Selected 2D Length"
 msgstr "Izbrano vozlišče:"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2391
+#: pcbnew/tools/pcb_point_editor.cpp:2384
 #, fuzzy
 msgid "Resize Table Cells"
 msgstr "Odstrani element"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2476
+#: pcbnew/tools/pcb_point_editor.cpp:2469
 #, fuzzy
 msgid "Move Midpoint to Location"
 msgstr "lokacija odtisa"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2477
+#: pcbnew/tools/pcb_point_editor.cpp:2470
 #, fuzzy
 msgid "Move Midpoint"
 msgstr "Premakni nogico"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2481
+#: pcbnew/tools/pcb_point_editor.cpp:2474
 #, fuzzy
 msgid "Move Corner to Location"
 msgstr "Premakni obmoèje"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2482
+#: pcbnew/tools/pcb_point_editor.cpp:2475
 #, fuzzy
 msgid "Move Corner"
 msgstr "Premakni obmoèje"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2822
 #, fuzzy
 msgid "Add Zone Corner"
 msgstr "Dodajte conski kotiček"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2846
 #, fuzzy
 msgid "Split Segment"
 msgstr "Razdeljeni segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2868
 msgid "Split Arc"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2945
 #, fuzzy
 msgid "Remove Zone Corner"
 msgstr "Odstranite vogal"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2947
 #, fuzzy
 msgid "Remove Polygon Corner"
 msgstr "Odstranite cono / vogal mnogokotnika"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3052
+#: pcbnew/tools/pcb_point_editor.cpp:3045
 #, fuzzy
 msgid "Break Zone Corner"
 msgstr "Dodajte conski kotiček"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3054
+#: pcbnew/tools/pcb_point_editor.cpp:3047
 #, fuzzy
 msgid "Break Polygon Corner"
 msgstr "Odstranite cono / vogal mnogokotnika"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1439
+#: pcbnew/tools/pcb_selection_tool.cpp:1449
 #, fuzzy
 msgid "Select/Expand Connection..."
 msgstr "Izberite / Razširi povezavo"

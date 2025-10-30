@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:59+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-10-30 01:50+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -1442,7 +1442,7 @@ msgstr "比例"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:405
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "X:"
 msgstr "X:"
 
@@ -1466,7 +1466,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2485
+#: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Y:"
 msgstr "Y:"
 
@@ -10476,8 +10476,8 @@ msgid ""
 msgstr ""
 "您首次執行 $\\text{CvPcb}$，並使用了新的「封裝元件庫表格」方法來尋找封裝。\n"
 "$\\text{CvPcb}$ 已在您的家目錄中複製了預設表格，或建立了空表格。\n"
-"您必須首先配置此元件庫表格，將所有非 $\\text{KiCad}$ 內建的封裝元件庫納入其中"
-"。\n"
+"您必須首先配置此元件庫表格，將所有非 $\\text{KiCad}$ 內建的封裝元件庫納入其"
+"中。\n"
 "請參閱 $\\text{CvPcb}$ 文件中的「封裝元件庫表格」章節以獲取更多資訊。"
 
 #: cvpcb/cvpcb.cpp:206
@@ -14432,7 +14432,8 @@ msgstr "無法將原理圖檔案‘%s’複製到目標‘%s’。"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:574
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "是否將「$\\text{\\%s}$」的連結從「$\\text{\\%s}$」變更為「$\\text{\\%s}$」？"
+msgstr ""
+"是否將「$\\text{\\%s}$」的連結從「$\\text{\\%s}$」變更為「$\\text{\\%s}$」？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:579
 #: eeschema/dialogs/dialog_sheet_properties.cpp:596
@@ -24059,7 +24060,7 @@ msgid "Page '%s' not found."
 msgstr "找不到 '%s' 頁面。"
 
 #: eeschema/tools/sch_point_editor.cpp:1140
-#: pcbnew/tools/pcb_point_editor.cpp:2395
+#: pcbnew/tools/pcb_point_editor.cpp:2388
 msgid "Move Point"
 msgstr "移動端點"
 
@@ -49832,55 +49833,55 @@ msgstr "被選項目"
 msgid "Selected 2D Length"
 msgstr "選擇的網路:"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2391
+#: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
 msgstr "重新調整單元格"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2476
+#: pcbnew/tools/pcb_point_editor.cpp:2469
 msgid "Move Midpoint to Location"
 msgstr "移動中點至指定位置"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2477
+#: pcbnew/tools/pcb_point_editor.cpp:2470
 msgid "Move Midpoint"
 msgstr "移動中點"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2481
+#: pcbnew/tools/pcb_point_editor.cpp:2474
 msgid "Move Corner to Location"
 msgstr "移動拐角到指定位置"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2482
+#: pcbnew/tools/pcb_point_editor.cpp:2475
 msgid "Move Corner"
 msgstr "移動拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2829
+#: pcbnew/tools/pcb_point_editor.cpp:2822
 msgid "Add Zone Corner"
 msgstr "添加區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2853
+#: pcbnew/tools/pcb_point_editor.cpp:2846
 msgid "Split Segment"
 msgstr "分割線段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2875
+#: pcbnew/tools/pcb_point_editor.cpp:2868
 msgid "Split Arc"
 msgstr "分割弧"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2952
+#: pcbnew/tools/pcb_point_editor.cpp:2945
 msgid "Remove Zone Corner"
 msgstr "移除區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2954
+#: pcbnew/tools/pcb_point_editor.cpp:2947
 msgid "Remove Polygon Corner"
 msgstr "移除覆銅或多邊形的轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3052
+#: pcbnew/tools/pcb_point_editor.cpp:3045
 msgid "Break Zone Corner"
 msgstr "添加區域轉角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3054
+#: pcbnew/tools/pcb_point_editor.cpp:3047
 msgid "Break Polygon Corner"
 msgstr "移除覆銅或多邊形的轉角"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1439
+#: pcbnew/tools/pcb_selection_tool.cpp:1449
 msgid "Select/Expand Connection..."
 msgstr "選擇/擴展連接..."
 
