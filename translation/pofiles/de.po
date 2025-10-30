@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 08:21+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-10-31 11:02+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7900,7 +7900,7 @@ msgid "Select all cells"
 msgstr "Alle Zellen auswählen"
 
 #: common/history_lock.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
 msgstr "Kann das Historieverzeichnis \"%s\" nicht erstellen."
 
@@ -7921,7 +7921,7 @@ msgstr "Konnte Git-Repository nicht öffnen: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "Konnte Sperre für Index nicht erhalten: Repository ist nicht geöffnet"
 
 #: common/history_lock.cpp:207
 #, c-format, fuzzy
@@ -9114,7 +9114,6 @@ msgid "Select snapshot"
 msgstr "Snapshot auswählen"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
-#, fuzzy
 msgid "Restore"
 msgstr "Wiederherstellen"
 
@@ -35098,12 +35097,10 @@ msgid "Change Log"
 msgstr "Änderungsliste"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Front Footprints"
 msgstr "Footprints vorne"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Back Footprints"
 msgstr "Footprints hinten"
 
@@ -35118,19 +35115,18 @@ msgid "(sorted by reference designator location)"
 msgstr "(sortiert über Referenzbezeichnerposition)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%d %s bei %s (aufgerundet zu %s)"
+msgstr "<br/>%d %s bei %s (gerundet auf %s)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:399
-#, fuzzy
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
 "Gewählte Optionen führten zu Fehlern! Ändern Sie die Optionen und versuchen "
 "Sie es erneut."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "PCB has %d empty or invalid reference designations."
 msgstr "Leiterplatte hat %d leere oder ungültige Referenzbezeichner."
 
@@ -35144,7 +35140,7 @@ msgstr ""
 "Parität prüfen” ausführen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
 msgstr "<br/>    RefDes: %s; Footprint: %s bei %s auf der Leiterplatte."
 
@@ -35396,7 +35392,6 @@ msgstr "Längenabstimmungsmuster"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:193
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
-#, fuzzy
 msgid "Tuning Profiles"
 msgstr "Abstimmungsprofile"
 
@@ -35665,9 +35660,8 @@ msgid "Cleanup Tracks and Vias"
 msgstr "Leiterbahnen und Vias aufräumen"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:192
-#, fuzzy
 msgid "Legacy Teardrop Properties"
-msgstr "Teardrop-Eigenschaften"
+msgstr "Klassische Teardrop-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:196
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
@@ -36720,7 +36714,6 @@ msgstr ""
 "gemeldet."
 
 #: pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
 msgstr ""
 "Elemente entsprechend der Auswahl in der DRC-Liste auf der Zeichenfläche "
@@ -37066,9 +37059,8 @@ msgstr ""
 "Diese Nummer muss je Bauteil eindeutig sein."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:127
-#, fuzzy
 msgid "Generate unique"
-msgstr "Erzeuge Eindeutige"
+msgstr "Eindeutige erzeugen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
 msgid "Manufacturer P/N:"
@@ -39612,9 +39604,8 @@ msgid "Reset to the current Y offset from the reference position."
 msgstr "Auf den aktuellen Y-Versatz von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_offset_item_base.h:62
-#, fuzzy
 msgid "Offset Item"
-msgstr "Außenlinienelemente"
+msgstr "Element verschieben"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:175
 msgid "Outset must be a positive value."
@@ -42233,7 +42224,6 @@ msgid "Minimum clearance:"
 msgstr "Mindestfreiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
@@ -42246,7 +42236,6 @@ msgid "Minimum track width:"
 msgstr "Minimale Leiterbahnbreite:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
@@ -42266,7 +42255,6 @@ msgid "Minimum annular width:"
 msgstr "Minimale Restring-Breite:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
@@ -42279,7 +42267,6 @@ msgid "Minimum via diameter:"
 msgstr "Via-Mindestdurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
@@ -42291,7 +42278,6 @@ msgid "Copper to hole clearance:"
 msgstr "Kupfer-zu-Loch-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
@@ -42305,7 +42291,6 @@ msgid "Copper to edge clearance:"
 msgstr "Kupfer-zu-Rand-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
@@ -42331,27 +42316,25 @@ msgid "Minimum through hole:"
 msgstr "Minimales Durchloch:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Mindestgröße durchgehender Bohrungen. Falls gesetzt, kann diese nur durch "
-"benutzerdefinierte Regeln verringert werden."
+"Die Mindestgröße durchgehender Bohrungen. Falls gesetzt, kann diese nur "
+"durch benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
 msgstr "Loch-zu-Loch-Freiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
 "Der Mindestfreiraum zwischen zwei gebohrten Löchern. Falls gesetzt, kann "
-"dieser nur durch benutzerdefinierte Regeln verringert werden. (Hinweis: gilt "
-"nicht für gefräste Löcher.)"
+"dieser nur durch benutzerdefinierte Regeln verringert werden. "
+"(Hinweis: Gilt nicht für gefräste Löcher.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -42362,7 +42345,6 @@ msgid "Minimum uVia diameter:"
 msgstr "µVia-Mindestdurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
@@ -42375,7 +42357,6 @@ msgid "Minimum uVia hole:"
 msgstr "Mindestgröße µVia-Loch:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
@@ -42392,15 +42373,14 @@ msgid "Minimum item clearance:"
 msgstr "Mindestfreiraum:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
-#, fuzzy
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
 "Mindestfreiraum zwischen zwei Elementen auf derselben Bestückungsdrucklage. "
-"Dies kann die Lesbarkeit verbessern.  (Hinweis: gilt nicht für mehrere "
-"Elemente eines Footprints.)"
+"Dies kann die Lesbarkeit verbessern.  "
+"(Hinweis: Gilt nicht für mehrere Elemente eines Footprints.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum text height:"
@@ -44274,7 +44254,6 @@ msgstr "Differenzialpaar-Abstand konnte nicht berechnet werden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:768
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:814
-#, fuzzy
 msgid "Could not compute track propagation delay"
 msgstr "Verzögerungszeit der Leiterbahn konnte nicht berechnet werden"
 
@@ -44283,7 +44262,6 @@ msgid "Tuning profile must have a name"
 msgstr "Abstimmungsprofil muss einen Namen haben"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:849
-#, fuzzy
 msgid "Duplicated signal layer configuration in tuning profile"
 msgstr "Doppelte Signallagen-Konfiguration im Abstimmungsprofil"
 
@@ -44291,9 +44269,8 @@ msgstr "Doppelte Signallagen-Konfiguration im Abstimmungsprofil"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:888
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:945
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:951
-#, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "Signallagen nicht im Lagenaufbau gefunden"
+msgstr "Signallage nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:883
 #, fuzzy
@@ -44303,27 +44280,22 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:894
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:957
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Die Dicke der Signallagen muss größer als 0 sein"
+msgstr "Die Dicke der Signallage muss größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:905
-#, fuzzy
 msgid "Reference layer not found in stackup"
 msgstr "Referenzlage nicht im Lagenaufbau gefunden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:911
-#, fuzzy
 msgid "Reference layer must be different to signal layer"
 msgstr "Referenzlage muss sich von der Signallage unterscheiden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:920
-#, fuzzy
 msgid "Dielectric height must be greater than 0"
 msgstr "Dicke des Dielektrikums muss größer als 0 sein"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:963
-#, fuzzy
 msgid "Top reference layer not found in stackup"
 msgstr "Obere Referenzlage nicht im Lagenaufbau gefunden"
 
@@ -44334,7 +44306,6 @@ msgstr ""
 "Obere Referenzlage muss sich über der Signallage im Lagenaufbau befinden"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:975
-#, fuzzy
 msgid "Bottom reference layer not found in stackup"
 msgstr "Untere Referenzlage nicht im Lagenaufbau gefunden"
 
@@ -44353,7 +44324,6 @@ msgstr "Die dielektrischen Dicken müssen größer als 0 sein"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1097
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1172
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1274
-#, fuzzy
 msgid "Target impedance must be greater than 0"
 msgstr "Die Zielimpedanz muss größer als 0 sein"
 
@@ -44361,7 +44331,6 @@ msgstr "Die Zielimpedanz muss größer als 0 sein"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1149
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1246
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1347
-#, fuzzy
 msgid "Width calculation failed"
 msgstr "Breitenberechnung fehlgeschlagen"
 
@@ -44369,7 +44338,6 @@ msgstr "Breitenberechnung fehlgeschlagen"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1152
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1252
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1353
-#, fuzzy
 msgid "Delay calculation failed"
 msgstr "Verzögerungsberechnung fehlgeschlagen"
 
@@ -44399,12 +44367,10 @@ msgid "Diff pair gap calculation failed"
 msgstr "Berechnung des Differenzialpaar-Abstands fehlgeschlagen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
 msgstr "Einzeln"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target Impedance:"
 msgstr "Zielimpedanz:"
 
@@ -44413,32 +44379,26 @@ msgid "ohms"
 msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Generate Net Class DRC Rules"
 msgstr "DRC-Regeln für Netzklassen erstellen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
-#, fuzzy
 msgid "Enable Time Domain Tuning"
 msgstr "Zeitbereichsabstimmung aktivieren"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
-#, fuzzy
 msgid "Track Propagation"
 msgstr "Ausbreitung auf Leiterbahnen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:123
-#, fuzzy
 msgid "Signal Layer"
 msgstr "Signallage"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
-#, fuzzy
 msgid "Top Reference"
 msgstr "Obere Referenz"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
-#, fuzzy
 msgid "Bottom Reference"
 msgstr "Untere Referenz"
 
@@ -44452,7 +44412,6 @@ msgid "Unit Delay"
 msgstr "Einheit der Verzögerung"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:166
-#, fuzzy
 msgid "Via Propagation"
 msgstr "Ausbreitung im Via"
 
@@ -45260,9 +45219,8 @@ msgstr "Konnte Ausdruck \"%s\" nicht verarbeiten."
 
 #: pcbnew/drc/drc_rule_parser.cpp:338 pcbnew/drc/drc_rule_parser.cpp:412
 #: pcbnew/drc/drc_rule_parser.cpp:682
-#, fuzzy
 msgid "quoted expression"
-msgstr "Fehlerhafter Ausdruck"
+msgstr "Ausdruck in Anführungszeichen"
 
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "'layer' keyword already present."
@@ -45291,7 +45249,6 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Regel hat bereits eine \"%s\"-Beschränkung."
 
 #: pcbnew/drc/drc_rule_parser.cpp:659
-#, fuzzy
 msgid "number"
 msgstr "Nummer"
 
@@ -45380,9 +45337,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Prüfe Freiräume von Kupfer-Grafikelementen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Prüfe Freiräume von Kupfer-Grafikelementen ..."
+msgstr "Prüfe Freiräume von Kupfergrafik-Elementen zu Löchern ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
@@ -46544,7 +46500,6 @@ msgid "Cannot rename temporary file '%s' to '%s'."
 msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
-#, fuzzy
 msgid "Cannot use VRML models when exporting to non-mesh formats."
 msgstr ""
 "VRML-Modelle können beim Exportieren in Nicht-Netzformate nicht verwendet "
@@ -48213,24 +48168,20 @@ msgstr ""
 "einer Außenlage.)"
 
 #: pcbnew/pad.cpp:2301
-#, fuzzy
 msgid "('fiducial' pads are normally plated)"
 msgstr "(\"Passermarken\" haben normalerweise ein Kupferpad)"
 
 #: pcbnew/pad.cpp:2305
-#, fuzzy
 msgid "('testpoint' pads are normally plated)"
-msgstr "(\"Testpunkte\" haben normalerweise ein Kupferpad)"
+msgstr "(\"Testpunkt\"-Pads sind normalerweise metallisiert)"
 
 #: pcbnew/pad.cpp:2308
-#, fuzzy
 msgid "('heatsink' pads are normally plated)"
-msgstr "(\"Kühlkörperpads\" haben normalerweise ein Kupferpad)"
+msgstr "(\"Kühlkörper\"-Pads sind normalerweise metallisiert)"
 
 #: pcbnew/pad.cpp:2311
-#, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr "(\"Halblochpads\" sind normalerweise Durchkontaktierungen (PTH))"
+msgstr "(\"Halbloch\"-Pads sind normalerweise Durchkontaktierungen (PTH))"
 
 #: pcbnew/pad.cpp:2314
 msgid "('BGA' property is for SMD pads)"
@@ -48238,13 +48189,12 @@ msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2317
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(\"Mechanische Pads\" sind normalerweise NPTH)"
+msgstr "(\"Mechanische\" Pads sind normalerweise NPTH)"
 
 #: pcbnew/pad.cpp:2322
-#, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
 msgstr ""
-"(\"Einpresspads\" sind normalerweise Durchkontaktierungen (PTH) mit runden "
+"(\"Einpress\"-Pads sind normalerweise Durchkontaktierungen (PTH) mit runden "
 "Löchern)"
 
 #: pcbnew/pad.cpp:2339
@@ -50868,7 +50818,7 @@ msgid "Error writing file '%s'.\n"
 msgstr "Fehler beim Schreiben der Datei \"%s\".\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
 msgstr "Platinenstatistik nach \"%s\" geschrieben.\n"
 
