@@ -173,15 +173,13 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
 
                     TMATCH::COMPONENT_MATCHES result;
 
-                    CONNECTION_GRAPH::STATUS status =
-                        cgRef->FindIsomorphism( cgTarget.get(), result );
+                    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+                    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
 
                     BOOST_TEST_MESSAGE( wxString::Format(
-                            "topo match: '%s' [%d] -> '%s' [%d] result %d",
-                            refArea.m_ruleName.c_str().AsChar(),
-                            static_cast<int>( refArea.m_components.size() ),
-                            targetArea.m_ruleName.c_str().AsChar(),
-                            static_cast<int>( targetArea.m_components.size() ), status ) );
+                            "topo match: '%s' [%d] -> '%s' [%d] result %d", refArea.m_ruleName.c_str().AsChar(),
+                            static_cast<int>( refArea.m_components.size() ), targetArea.m_ruleName.c_str().AsChar(),
+                            static_cast<int>( targetArea.m_components.size() ), status ? 1 : 0 ) );
 
                     for( const auto& iter : result )
                     {
@@ -190,7 +188,8 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                                                               iter.first->GetReference() ) );
                     }
 
-                    BOOST_CHECK_EQUAL( status, TMATCH::CONNECTION_GRAPH::ST_OK );
+                    BOOST_CHECK( status );
+                    BOOST_CHECK( details.empty() );
                 }
             }
         }

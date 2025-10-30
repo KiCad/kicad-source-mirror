@@ -38,6 +38,8 @@
 #include <reporter.h>
 #include <zone_settings.h>
 
+class wxWindow;
+
 struct REPEAT_LAYOUT_OPTIONS
 {
     bool                    m_copyRouting = true;
@@ -57,6 +59,7 @@ struct RULE_AREA_COMPAT_DATA
     bool                      m_doCopy = false;
     wxString                  m_errorMsg;
     TMATCH::COMPONENT_MATCHES m_matchingComponents;
+    std::vector<wxString>     m_mismatchReasons;
     /// Filled in by copyRuleAreaContents with items that were affected by the copy operation.
     std::unordered_set<BOARD_ITEM*> m_affectedItems;
     /// Filled in by copyRuleAreaContents with affected items that can be grouped together.
@@ -104,6 +107,9 @@ public:
 
     void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override {};
     void UpdatePickedItem( const EDA_ITEM* aItem ) override;
+
+    void ShowMismatchDetails( wxWindow* aParent, const wxString& aSummary,
+                              const std::vector<wxString>& aReasons ) const;
 
     RULE_AREAS_DATA* GetData() { return &m_areas; }
 

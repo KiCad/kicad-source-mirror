@@ -49,12 +49,35 @@
 #include <random>
 #include <core/profile.h>
 #include <wx/log.h>
+#include <wx/richmsgdlg.h>
 #include <pgm_base.h>
 
 
 #define MULTICHANNEL_EXTRA_DEBUG
 
 static const wxString traceMultichannelTool = wxT( "MULTICHANNEL_TOOL" );
+
+
+static void ShowTopologyMismatchReasons( wxWindow* aParent, const wxString& aSummary,
+                                         const std::vector<wxString>& aReasons )
+{
+    if( !aParent || aReasons.empty() )
+        return;
+
+    wxString reasonText;
+
+    for( size_t idx = 0; idx < aReasons.size(); ++idx )
+    {
+        if( idx > 0 )
+            reasonText += wxT( "\n" );
+
+        reasonText += aReasons[idx];
+    }
+
+    wxRichMessageDialog dlg( aParent, aSummary, _( "Topology mismatch" ), wxICON_ERROR | wxOK );
+    dlg.ShowDetailedText( reasonText );
+    dlg.ShowModal();
+}
 
 
 MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
@@ -65,6 +88,13 @@ MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
 MULTICHANNEL_TOOL::~MULTICHANNEL_TOOL()
 {
 
+}
+
+void MULTICHANNEL_TOOL::ShowMismatchDetails( wxWindow* aParent, const wxString& aSummary,
+                                             const std::vector<wxString>& aReasons ) const
+{
+    wxWindow* parent = aParent ? aParent : frame();
+    ShowTopologyMismatchReasons( parent, aSummary, aReasons );
 }
 
 
@@ -581,8 +611,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     {
         if( Pgm().IsGUI() )
         {
-            auto errMsg = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
-            frame()->ShowInfoBarError( errMsg, true );
+                wxString summary = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
+                ShowTopologyMismatchReasons( frame(), summary, compat.m_mismatchReasons );
         }
         return -1;
     }
@@ -1162,35 +1192,48 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     std::unique_ptr<CONNECTION_GRAPH> cgRef ( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components ) );
     std::unique_ptr<CONNECTION_GRAPH> cgTarget ( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components ) );
 
-    auto status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents );
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> mismatchReasons;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents, mismatchReasons );
 
-    switch( status )
+    aMatches.m_isOk = status;
+
+    if( status )
     {
-        case CONNECTION_GRAPH::ST_OK:
-            aMatches.m_isOk = true;
-            aMatches.m_errorMsg = _( "OK" );
-            break;
-        case CONNECTION_GRAPH::ST_EMPTY:
-            aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _( "One or both of the areas has no components assigned." );
-            break;
-        case CONNECTION_GRAPH::ST_COMPONENT_COUNT_MISMATCH:
-            aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _( "Component count mismatch" );
-            break;
-        case CONNECTION_GRAPH::ST_ITERATION_COUNT_EXCEEDED:
-            aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _( "Iteration count exceeded (timeout)" );
-            break;
-        case CONNECTION_GRAPH::ST_TOPOLOGY_MISMATCH:
-            aMatches.m_isOk = false;
-            aMatches.m_errorMsg = _( "Topology mismatch" );
-            break;
-        default:
-            break;
+        aMatches.m_errorMsg = _( "OK" );
+        aMatches.m_mismatchReasons.clear();
+        return true;
     }
 
-    return ( status == TMATCH::CONNECTION_GRAPH::ST_OK );
+    aMatches.m_mismatchReasons.clear();
+
+    for( const auto& reason : mismatchReasons )
+    {
+        if( reason.m_reason.IsEmpty() )
+            continue;
+
+        if( !reason.m_reference.IsEmpty() && !reason.m_candidate.IsEmpty() )
+        {
+            aMatches.m_mismatchReasons.push_back( wxString::Format( wxT( "%s -> %s: %s" ),
+                                                                    reason.m_reference,
+                                                                    reason.m_candidate,
+                                                                    reason.m_reason ) );
+        }
+        else if( !reason.m_reference.IsEmpty() )
+        {
+            aMatches.m_mismatchReasons.push_back( wxString::Format( wxT( "%s: %s" ),
+                                                                    reason.m_reference,
+                                                                    reason.m_reason ) );
+        }
+        else
+            aMatches.m_mismatchReasons.push_back( reason.m_reason );
+    }
+
+    if( aMatches.m_mismatchReasons.empty() )
+        aMatches.m_mismatchReasons.push_back( _( "Topology mismatch" ) );
+
+    aMatches.m_errorMsg = aMatches.m_mismatchReasons.front();
+
+    return status;
 }
 
 

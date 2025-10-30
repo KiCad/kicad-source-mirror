@@ -35,6 +35,7 @@
 #include <pad.h>
 #include <footprint.h>
 #include <refdes_utils.h>
+#include <board.h>
 #include <wx/string.h>
 #include <wx/log.h>
 
@@ -46,7 +47,7 @@ static const wxString traceTopoMatch = wxT( "TOPO_MATCH" );
 namespace TMATCH
 {
 
-bool PIN::IsIsomorphic( const PIN& b ) const
+bool PIN::IsIsomorphic( const PIN& b, TOPOLOGY_MISMATCH_REASON& aReason ) const
 {
     if( m_conns.size() != b.m_conns.size() )
     {
@@ -61,6 +62,13 @@ bool PIN::IsIsomorphic( const PIN& b ) const
             m_ref,
             b.m_parent->m_reference,
             b.m_ref );
+
+        aReason.m_reference = m_parent->GetParent()->GetReferenceAsString();
+        aReason.m_candidate = b.m_parent->GetParent()->GetReferenceAsString();
+        aReason.m_reason = wxString::Format(
+                _( "Pad %s of %s connects to %lu pads, but candidate pad %s of %s connects to %lu." ), m_ref,
+                aReason.m_reference, static_cast<unsigned long>( m_conns.size() ), b.m_ref, aReason.m_candidate,
+                static_cast<unsigned long>( b.m_conns.size() ) );
 
         for( auto c : m_conns )
         {
@@ -110,6 +118,12 @@ bool PIN::IsIsomorphic( const PIN& b ) const
     {
         if( !matches[i] )
         {
+            aReason.m_reference = m_parent->GetParent()->GetReferenceAsString();
+            aReason.m_candidate = b.m_parent->GetParent()->GetReferenceAsString();
+            aReason.m_reason = wxString::Format(
+                    _( "Pad %s of %s cannot match candidate pad %s of %s due to differing connectivity." ), m_ref,
+                    aReason.m_reference, b.m_ref, aReason.m_candidate );
+
             return false;
         }
     }
@@ -119,8 +133,8 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 
 
 // fixme: terrible performance, but computers are fast these days, ain't they? :D
-bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph,
-                          COMPONENT* aRef, COMPONENT* aTgt )
+bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef,
+                          COMPONENT* aTgt, TOPOLOGY_MISMATCH_REASON& aReason )
 {
     std::map<PIN*, PIN*> pairs;
     std::vector<PIN*>    pref, ptgt;
@@ -151,6 +165,12 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
 
     if( pref.size() != ptgt.size() )
     {
+        aReason.m_reference = aRef->GetParent()->GetReferenceAsString();
+        aReason.m_candidate = aTgt->GetParent()->GetReferenceAsString();
+        aReason.m_reason =
+                wxString::Format( _( "Component %s expects %lu matching pads but candidate %s provides %lu." ),
+                                  aReason.m_reference, static_cast<unsigned long>( pref.size() ),
+                                  aReason.m_candidate, static_cast<unsigned long>( ptgt.size() ) );
         return false;
     }
 
@@ -186,6 +206,36 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
                     if( prevNet && ( *prevNet != nc ) )
                     {
                         wxLogTrace( traceTopoMatch, wxT( "nets inconsistent\n" ) );
+
+                        aReason.m_reference = aRef->GetParent()->GetReferenceAsString();
+                        aReason.m_candidate = aTgt->GetParent()->GetReferenceAsString();
+
+                        wxString refNetName;
+                        wxString tgtNetName;
+
+                        if( const BOARD* refBoard = aRef->GetParent()->GetBoard() )
+                        {
+                            if( const NETINFO_ITEM* net = refBoard->FindNet( refPin->GetNetCode() ) )
+                                refNetName = net->GetNetname();
+                        }
+
+                        if( const BOARD* tgtBoard = aTgt->GetParent()->GetBoard() )
+                        {
+                            if( const NETINFO_ITEM* net = tgtBoard->FindNet( nc ) )
+                                tgtNetName = net->GetNetname();
+                        }
+
+                        if( refNetName.IsEmpty() )
+                            refNetName = wxString::Format( _( "net %d" ), refPin->GetNetCode() );
+
+                        if( tgtNetName.IsEmpty() )
+                            tgtNetName = wxString::Format( _( "net %d" ), nc );
+
+                        aReason.m_reason = wxString::Format(
+                                _( "Pad %s of %s is on net %s but its match in candidate %s is on net %s." ),
+                                refPin->GetReference(), aReason.m_reference, refNetName, aReason.m_candidate,
+                                tgtNetName );
+
                         return false;
                     }
 
@@ -201,8 +251,10 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
 
 std::vector<COMPONENT*>
 CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef,
-                                          const BACKTRACK_STAGE& partialMatches )
+                                          const BACKTRACK_STAGE&                 partialMatches,
+                                          std::vector<TOPOLOGY_MISMATCH_REASON>& aMismatchReasons )
 {
+    aMismatchReasons.clear();
     std::vector<COMPONENT*> matches;
     for( auto cmpTarget : m_components )
     {
@@ -217,10 +269,14 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
 
         // first, a basic heuristic (reference prefix, pin count & footprint) followed by a pin
         // connection topology check
-        if( aRef->MatchesWith( cmpTarget ) )
+        TOPOLOGY_MISMATCH_REASON localReason;
+        localReason.m_reference = aRef->GetParent()->GetReferenceAsString();
+        localReason.m_candidate = cmpTarget->GetParent()->GetReferenceAsString();
+
+        if( aRef->MatchesWith( cmpTarget, localReason ) )
         {
             // then a net integrity check (expensive because of poor optimization)
-            if( checkIfPadNetsMatch( partialMatches, aRefGraph, aRef, cmpTarget ) )
+            if( checkIfPadNetsMatch( partialMatches, aRefGraph, aRef, cmpTarget, localReason ) )
             {
                 wxLogTrace( traceTopoMatch, wxT("match!\n") );
                 matches.push_back( cmpTarget );
@@ -228,11 +284,13 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
             else
             {
                 wxLogTrace( traceTopoMatch, wxT("Reject [net topo mismatch]\n") );
+                aMismatchReasons.push_back( localReason );
             }
         }
         else
         {
             wxLogTrace( traceTopoMatch, wxT("reject\n") );
+            aMismatchReasons.push_back( localReason );
         }
     }
 
@@ -258,6 +316,16 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
         return padSimilarity( aRef,a ) > padSimilarity( aRef, b );
     }
 );
+
+    if( matches.empty() )
+    {
+        TOPOLOGY_MISMATCH_REASON reason;
+        reason.m_reference = aRef->GetParent()->GetReferenceAsString();
+        reason.m_reason = _( "No compatible component found in the target area." );
+
+        if( aMismatchReasons.empty() )
+            aMismatchReasons.push_back( reason );
+    }
 
     return matches;
 }
@@ -320,17 +388,31 @@ void CONNECTION_GRAPH::BuildConnectivity()
 }
 
 
-CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget,
-                                                            COMPONENT_MATCHES&  aResult )
+bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MATCHES& aResult,
+                                        std::vector<TOPOLOGY_MISMATCH_REASON>& aMismatchReasons )
 {
     std::vector<BACKTRACK_STAGE> stack;
     BACKTRACK_STAGE              top;
 
+    aMismatchReasons.clear();
+
+    std::vector<TOPOLOGY_MISMATCH_REASON> localReasons;
+
     if( m_components.empty()|| aTarget->m_components.empty() )
-        return ST_EMPTY;
+    {
+        TOPOLOGY_MISMATCH_REASON reason;
+        reason.m_reason = _( "One or both of the areas has no components assigned." );
+        aMismatchReasons.push_back( reason );
+        return false;
+    }
 
     if( m_components.size() != aTarget->m_components.size() )
-        return ST_COMPONENT_COUNT_MISMATCH;
+    {
+        TOPOLOGY_MISMATCH_REASON reason;
+        reason.m_reason = _( "Component count mismatch" );
+        aMismatchReasons.push_back( reason );
+        return false;
+    }
 
     top.m_ref = m_components.front();
     top.m_refIndex = 0;
@@ -359,12 +441,26 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
         if( nloops >= c_ITER_LIMIT )
         {
             wxLogTrace( traceTopoMatch, wxT( "stk: Iter cnt exceeded\n" ) );
-            return ST_ITERATION_COUNT_EXCEEDED;
+
+            TOPOLOGY_MISMATCH_REASON reason;
+            reason.m_reason = _( "Iteration count exceeded (timeout)" );
+
+            if( aMismatchReasons.empty() )
+                aMismatchReasons.push_back( reason );
+            else
+                aMismatchReasons.insert( aMismatchReasons.begin(), reason );
+
+            return false;
         }
 
         if( current.m_currentMatch < 0 )
         {
-            current.m_matches = aTarget->findMatchingComponents( this, current.m_ref, current );
+            localReasons.clear();
+            current.m_matches = aTarget->findMatchingComponents( this, current.m_ref, current, localReasons );
+
+            if( current.m_matches.empty() && aMismatchReasons.empty() && !localReasons.empty() )
+                aMismatchReasons = localReasons;
+
             current.m_currentMatch = 0;
         }
 
@@ -407,11 +503,12 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             current.m_nloops = nloops;
 
             aResult.clear();
+            aMismatchReasons.clear();
 
             for( auto iter : current.m_locked )
                 aResult[ iter.second->GetParent() ] = iter.first->GetParent();
 
-            return ST_OK;
+            return true;
         }
 
 
@@ -442,7 +539,8 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             if( found )
                 continue;
 
-            auto matches = aTarget->findMatchingComponents( this, cmp, current );
+            localReasons.clear();
+            auto matches = aTarget->findMatchingComponents( this, cmp, current, localReasons );
 
             int nMatches = matches.size();
 
@@ -456,6 +554,9 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             {
                 altNextRef = cmp;
                 altRefIndex = i;
+
+                if( aMismatchReasons.empty() && !localReasons.empty() )
+                    aMismatchReasons = localReasons;
             }
             else if( nMatches < minMatches )
             {
@@ -482,8 +583,7 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
         stack.push_back( next );
     };
 
-
-    return ST_TOPOLOGY_MISMATCH;
+    return false;
 }
 
 
@@ -572,22 +672,60 @@ void COMPONENT::AddPin( PIN* aPin )
 }
 
 
-bool COMPONENT::MatchesWith( COMPONENT* b )
+bool COMPONENT::MatchesWith( COMPONENT* b, TOPOLOGY_MISMATCH_REASON& aReason )
 {
     if( GetPinCount() != b->GetPinCount() )
     {
+        aReason.m_reference = GetParent()->GetReferenceAsString();
+        aReason.m_candidate = b->GetParent()->GetReferenceAsString();
+        aReason.m_reason =
+                wxString::Format( _( "Component %s has %d pads but candidate %s has %d." ), aReason.m_reference,
+                                  GetPinCount(), aReason.m_candidate, b->GetPinCount() );
         return false;
     }
 
     if( !IsSameKind( *b ) )
     {
+        aReason.m_reference = GetParent()->GetReferenceAsString();
+        aReason.m_candidate = b->GetParent()->GetReferenceAsString();
+
+        if( m_prefix != b->m_prefix )
+        {
+            aReason.m_reason = wxString::Format(
+                    _( "Reference prefix mismatch: %s uses prefix '%s' but candidate %s uses '%s'." ),
+                    aReason.m_reference, m_prefix, aReason.m_candidate, b->m_prefix );
+        }
+        else
+        {
+            wxString refFootprint = GetParent()->GetFPIDAsString();
+            wxString candFootprint = b->GetParent()->GetFPIDAsString();
+
+            if( refFootprint.IsEmpty() )
+                refFootprint = _( "(no library ID)" );
+
+            if( candFootprint.IsEmpty() )
+                candFootprint = _( "(no library ID)" );
+
+            aReason.m_reason =
+                    wxString::Format( _( "Library link mismatch: %s expects '%s' but candidate %s is '%s'." ),
+                                      aReason.m_reference, refFootprint, aReason.m_candidate, candFootprint );
+        }
+
         return false;
     }
 
     for( int pin = 0; pin < b->GetPinCount(); pin++ )
     {
-        if( !b->m_pins[pin]->IsIsomorphic( *m_pins[pin] ) )
+        if( !b->m_pins[pin]->IsIsomorphic( *m_pins[pin], aReason ) )
         {
+            if( aReason.m_reason.IsEmpty() )
+            {
+                aReason.m_reference = GetParent()->GetReferenceAsString();
+                aReason.m_candidate = b->GetParent()->GetReferenceAsString();
+                aReason.m_reason = wxString::Format( _( "Component pads differ between %s and %s." ),
+                                                     aReason.m_reference, aReason.m_candidate );
+            }
+
             return false;
         }
 

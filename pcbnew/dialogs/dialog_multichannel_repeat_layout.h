@@ -25,6 +25,7 @@
 #define __DIALOG_MULTICHANNEL_REPEAT_LAYOUT__
 
 #include <vector>
+#include <wx/bitmap.h>
 #include <board.h>
 #include <widgets/unit_binder.h>
 
@@ -33,6 +34,7 @@
 class PCB_BASE_FRAME;
 class MULTICHANNEL_TOOL;
 struct RULE_AREA;
+class wxGridEvent;
 
 class DIALOG_MULTICHANNEL_REPEAT_LAYOUT : public DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE
 {
@@ -52,12 +54,15 @@ private:
         bool m_doCopy;
         wxString m_raName;
         wxString m_errMsg;
+        std::vector<wxString> m_mismatchReasons;
     };
+
+    void OnGridCellLeftClick( wxGridEvent& aEvent );
 
     std::vector<TABLE_ENTRY> m_targetRAs;
     MULTICHANNEL_TOOL* m_parentTool;
     BOARD* m_board;
+    wxBitmap m_detailsIcon;
 };
 
 #endif
-

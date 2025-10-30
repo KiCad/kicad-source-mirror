@@ -28,7 +28,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_raGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
-	m_raGrid->CreateGrid( 1, 3 );
+	m_raGrid->CreateGrid( 1, 4 );
 	m_raGrid->EnableEditing( false );
 	m_raGrid->EnableGridLines( true );
 	m_raGrid->EnableDragGridSize( false );
