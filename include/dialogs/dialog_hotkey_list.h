@@ -36,7 +36,7 @@ class PANEL_HOTKEYS_EDITOR;
 
 
 /**
- * A dialog that presents the user with a read-only list of hotkeys and their current bindings.
+ * A dialog that presents the user with a list of hotkeys and allows editing their bindings.
  */
 class DIALOG_LIST_HOTKEYS: public DIALOG_SHIM
 {
@@ -55,6 +55,11 @@ protected:
      * Called on dialog initialisation - inits the dialog's own widgets
      */
     bool TransferDataToWindow() override;
+
+    /**
+     * Called on dialog close to save the hotkey changes
+     */
+    bool TransferDataFromWindow() override;
 
 private:
     PANEL_HOTKEYS_EDITOR* m_hk_list;
