@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 00:58+0300\n"
+"POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2534,16 +2534,6 @@ msgstr ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 
-msgid "&Auto save:"
-msgstr "&Auto save:"
-
-msgid ""
-"Delay after the first change to create a backup file of the board on disk.\n"
-"If set to 0, auto backup is disabled"
-msgstr ""
-"Delay after the first change to create a backup file of the board on disk.\n"
-"If set to 0, auto backup is disabled"
-
 msgid "File history size:"
 msgstr "File history size:"
 
@@ -2557,38 +2547,6 @@ msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
 "Automatically create backup archives of the current project when saving files"
-
-msgid "Create backups when auto save occurs"
-msgstr "Create backups when auto save occurs"
-
-msgid ""
-"Create backups when the auto save feature is enabled.  If not checked, "
-"backups will only be created when you manually save a file."
-msgstr ""
-"Create backups when the auto save feature is enabled.  If not checked, "
-"backups will only be created when you manually save a file."
-
-msgid "Maximum backups to keep:"
-msgstr "Maximum backups to keep:"
-
-msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr "How many backup files total to keep (set to 0 for no limit)"
-
-msgid "Maximum backups per day:"
-msgstr "Maximum backups per day:"
-
-msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr "How many backup files to keep each day (set to 0 for no limit)"
-
-msgid "Minimum time between backups:"
-msgstr "Minimum time between backups:"
-
-msgid ""
-"Number of minutes since the last backup before another will be created the "
-"next time you save (set to 0 for no minimum)"
-msgstr ""
-"Number of minutes since the last backup before another will be created the "
-"next time you save (set to 0 for no minimum)"
 
 msgid "Maximum total backup size:"
 msgstr "Maximum total backup size:"
@@ -3845,25 +3803,6 @@ msgstr "Maintenance"
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Insufficient permissions to folder '%s'."
 
-#, c-format
-msgid ""
-"Well this is potentially embarrassing!\n"
-"It appears that the last time you were editing\n"
-"%s\n"
-"KiCad exited before saving.\n"
-"\n"
-"Do you wish to open the auto-saved file instead?"
-msgstr ""
-"Well this is potentially embarrassing!\n"
-"It appears that the last time you were editing\n"
-"%s\n"
-"KiCad exited before saving.\n"
-"\n"
-"Do you wish to open the auto-saved file instead?"
-
-msgid "The auto save file could not be renamed to the board file name."
-msgstr "The auto save file could not be renamed to the board file name."
-
 msgid "Set Language"
 msgstr "Set Language"
 
@@ -4663,6 +4602,29 @@ msgstr "Select All"
 msgid "Select all cells"
 msgstr "Select all cells"
 
+#, c-format
+msgid "Cannot create history directory: %s"
+msgstr "Cannot create history directory: %s"
+
+#, c-format
+msgid "History repository is locked by %s@%s"
+msgstr "History repository is locked by %s@%s"
+
+#, c-format
+msgid "History directory does not exist: %s"
+msgstr "History directory does not exist: %s"
+
+#, c-format
+msgid "Failed to open git repository: %s"
+msgstr "Failed to open git repository: %s"
+
+msgid "Cannot acquire index lock: repository not open"
+msgstr "Cannot acquire index lock: repository not open"
+
+#, c-format
+msgid "Failed to acquire git index lock (another operation in progress?): %s"
+msgstr "Failed to acquire git index lock (another operation in progress?): %s"
+
 msgid "Accept Autocomplete"
 msgstr "Accept Autocomplete"
 
@@ -5435,6 +5397,48 @@ msgstr "Syntax error at line %zu, column %zu"
 msgid "An unexpected error occurred while reading library table"
 msgstr "An unexpected error occurred while reading library table"
 
+msgid ""
+"The following files will be deleted when restoring this commit:\n"
+"\n"
+msgstr ""
+"The following files will be deleted when restoring this commit:\n"
+"\n"
+
+#, c-format
+msgid ""
+"\n"
+"... and %zu more files\n"
+msgstr ""
+"\n"
+"... and %zu more files\n"
+
+msgid "Delete Files during Restore"
+msgstr "Delete Files during Restore"
+
+msgid "Proceed"
+msgstr "Proceed"
+
+msgid "Keep All Files"
+msgstr "Keep All Files"
+
+msgid "Abort"
+msgstr "Abort"
+
+msgid ""
+"Choosing 'Keep All Files' will restore the selected commit but retain any "
+"existing files in the project directory. Choosing 'Proceed' will delete "
+"files that are not present in the restored commit."
+msgstr ""
+"Choosing 'Keep All Files' will restore the selected commit but retain any "
+"existing files in the project directory. Choosing 'Proceed' will delete "
+"files that are not present in the restored commit."
+
+msgid "Select snapshot"
+msgstr "Select snapshot"
+
+msgid "Restore"
+msgstr "Restore"
+
 #, c-format
 msgid "%s and %s"
 msgstr "%s and %s"
@@ -5446,6 +5450,62 @@ msgstr "%s, %s and %s"
 #, c-format
 msgid "%s, %s and %d more"
 msgstr "%s, %s and %d more"
+
+#, c-format
+msgid ""
+"Invalid footprint ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+msgstr ""
+"Invalid footprint ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+
+#, c-format
+msgid ""
+"Invalid lib_id ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+msgstr ""
+"Invalid lib_id ID in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offf: %d"
+
+msgid "Cannot parse time stamp in symbol section of netlist."
+msgstr "Cannot parse time stamp in symbol section of netlist."
+
+msgid "Cannot parse footprint name in symbol section of netlist."
+msgstr "Cannot parse footprint name in symbol section of netlist."
+
+msgid "Cannot parse reference designator in symbol section of netlist."
+msgstr "Cannot parse reference designator in symbol section of netlist."
+
+msgid "Cannot parse value in symbol section of netlist."
+msgstr "Cannot parse value in symbol section of netlist."
+
+msgid "Cannot parse pin name in symbol net section of netlist."
+msgstr "Cannot parse pin name in symbol net section of netlist."
+
+msgid "Cannot parse net name in symbol net section of netlist."
+msgstr "Cannot parse net name in symbol net section of netlist."
+
+#, c-format
+msgid "Cannot find symbol %s in footprint filter section of netlist."
+msgstr "Cannot find symbol %s in footprint filter section of netlist."
+
+#, c-format
+msgid ""
+"Invalid footprint ID in\n"
+"file: '%s'\n"
+"line: %d"
+msgstr ""
+"Invalid footprint ID in\n"
+"file: '%s'\n"
+"line: %d"
 
 msgid "View Details"
 msgstr "View Details"
@@ -9176,32 +9236,20 @@ msgstr "Delete footprint filter"
 msgid "Footprint Filters"
 msgstr "Footprint Filters"
 
-msgid "Pins with duplicate numbers are jumpers"
-msgstr "Pins with duplicate numbers are jumpers"
+msgid "All pins with duplicate numbers are jumpers"
+msgstr "All pins with duplicate numbers are jumpers"
 
 msgid ""
-"When enabled, this symbol can have more than one pin with the same number, "
-"and pins with the same number will be considered to be jumpered together "
-"internally."
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
 msgstr ""
-"When enabled, this symbol can have more than one pin with the same number, "
-"and pins with the same number will be considered to be jumpered together "
-"internally."
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
 
-msgid "Jumper Pin Groups"
-msgstr "Jumper Pin Groups"
-
-msgid "Available pins:"
-msgstr "Available pins:"
-
-msgid "Create jumper group from the selected pins"
-msgstr "Create jumper group from the selected pins"
-
-msgid "Remove the selected jumper pin group"
-msgstr "Remove the selected jumper pin group"
-
-msgid "Grouped pins:"
-msgstr "Grouped pins:"
+msgid "Explicit jumper pin groups:"
+msgstr "Explicit jumper pin groups:"
 
 msgid "Pin Connections"
 msgstr "Pin Connections"
@@ -10463,6 +10511,9 @@ msgstr "Base Name"
 
 msgid "Alternate Assignment"
 msgstr "Alternate Assignment"
+
+msgid "Standard"
+msgstr "Standard"
 
 msgid "Body style:"
 msgstr "Body style:"
@@ -12067,9 +12118,6 @@ msgstr ""
 msgid "Load Without Cache File"
 msgstr "Load Without Cache File"
 
-msgid "Abort"
-msgstr "Abort"
-
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -12160,56 +12208,11 @@ msgid "Abort Project Save"
 msgstr "Abort Project Save"
 
 #, c-format
-msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Could not autosave files to read-only folder:  '%s'"
-
-#, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Unhandled exception occurred loading schematic '%s'."
 
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "The current schematic has been modified.  Save changes?"
-
-msgid ""
-"Well this is potentially embarrassing!\n"
-"It appears that the last time you were editing one or more of the schematic "
-"files\n"
-"were not saved properly.  Do you wish to restore the last saved edits you "
-"made?"
-msgstr ""
-"Well this is potentially embarrassing!\n"
-"It appears that the last time you were editing one or more of the schematic "
-"files\n"
-"were not saved properly.  Do you wish to restore the last saved edits you "
-"made?"
-
-#, c-format
-msgid ""
-"The file '%s' could not be opened.\n"
-"Manual recovery of automatically saved files is required."
-msgstr ""
-"The file '%s' could not be opened.\n"
-"Manual recovery of automatically saved files is required."
-
-msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "The following automatically saved file(s) could not be restored\n"
-
-msgid "Manual recovery will be required to restore the file(s) above."
-msgstr "Manual recovery will be required to restore the file(s) above."
-
-#, c-format
-msgid ""
-"The autosave file '%s' could not be removed.\n"
-"Manual removal will be required."
-msgstr ""
-"The autosave file '%s' could not be removed.\n"
-"Manual removal will be required."
-
-msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "The following automatically saved file(s) could not be removed\n"
-
-msgid "Manual removal will be required for the file(s) above."
-msgstr "Manual removal will be required for the file(s) above."
 
 msgid "Derived from"
 msgstr "Derived from"
@@ -12275,9 +12278,6 @@ msgstr "Import Vector Graphics File"
 #, c-format
 msgid "Unit %s"
 msgstr "Unit %s"
-
-msgid "Standard"
-msgstr "Standard"
 
 msgid "Excluded from BOM"
 msgstr "Excluded from BOM"
@@ -17226,12 +17226,6 @@ msgstr "Rule Area Properties"
 msgid "<empty>"
 msgstr "<empty>"
 
-msgid "Slice Wire"
-msgstr "Slice Wire"
-
-msgid "Break Wire"
-msgstr "Break Wire"
-
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
 
@@ -17393,11 +17387,23 @@ msgstr "Bus has no members"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Press <ESC> to cancel drawing."
 
-msgid "Press <ESC> to cancel drag."
-msgstr "Press <ESC> to cancel drag."
+msgid "Break Wire"
+msgstr "Break Wire"
+
+msgid "Slice Wire"
+msgstr "Slice Wire"
 
 msgid "Press <ESC> to cancel move."
 msgstr "Press <ESC> to cancel move."
+
+msgid "Press <ESC> to cancel drag."
+msgstr "Press <ESC> to cancel drag."
+
+msgid "Press <ESC> to cancel break."
+msgstr "Press <ESC> to cancel break."
+
+msgid "Press <ESC> to cancel slice."
+msgstr "Press <ESC> to cancel slice."
 
 #, c-format
 msgid "Page '%s' not found."
@@ -20024,6 +20030,9 @@ msgstr "Editors"
 msgid "Project Files"
 msgstr "Project Files"
 
+msgid "Local History"
+msgstr "Local History"
+
 msgid "PCM Updates Available"
 msgstr "PCM Updates Available"
 
@@ -20033,6 +20042,9 @@ msgstr "%d package update(s) avaliable"
 
 msgid "Error opening jobs file"
 msgstr "Error opening jobs file"
+
+msgid "A newer local history snapshot is available. Restore it?"
+msgstr "A newer local history snapshot is available. Restore it?"
 
 msgid "Edit File in Text Editor"
 msgstr "Edit File in Text Editor"
@@ -20054,6 +20066,20 @@ msgstr "Restoring session"
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Restoring '%s'"
+
+msgid "Moments ago"
+msgstr "Moments ago"
+
+#, c-format
+msgid "%d minutes ago"
+msgstr "%d minutes ago"
+
+#, c-format
+msgid "%d hours ago"
+msgstr "%d hours ago"
+
+msgid "Restore Commit"
+msgstr "Restore Commit"
 
 msgid "Clear Recent Projects"
 msgstr "Clear Recent Projects"
@@ -20775,6 +20801,15 @@ msgstr "Reveal project folder in Finder"
 
 msgid "Open project directory in file explorer"
 msgstr "Open project directory in file explorer"
+
+msgid "Restore Project from Local History..."
+msgstr "Restore Project from Local History..."
+
+msgid "Restore project files from local history"
+msgstr "Restore project files from local history"
+
+msgid "Show or hide local history panel"
+msgstr "Show or hide local history panel"
 
 msgid "Create New Project"
 msgstr "Create New Project"
@@ -23513,6 +23548,54 @@ msgstr "NPTH"
 msgid "N/A"
 msgstr "N/A"
 
+msgid "BOARD CHARACTERISTICS"
+msgstr "BOARD CHARACTERISTICS"
+
+msgid "Copper layer count: "
+msgstr "Copper layer count: "
+
+msgid "Board thickness: "
+msgstr "Board thickness: "
+
+msgid "Board overall dimensions: "
+msgstr "Board overall dimensions: "
+
+msgid "Min track/spacing: "
+msgstr "Min track/spacing: "
+
+msgid "Min hole diameter: "
+msgstr "Min hole diameter: "
+
+msgid "Copper finish: "
+msgstr "Copper finish: "
+
+msgid "Impedance control: "
+msgstr "Impedance control: "
+
+msgid "Castellated pads: "
+msgstr "Castellated pads: "
+
+msgid "Press-fit pads: "
+msgstr "Press-fit pads: "
+
+msgid "Plated board edge: "
+msgstr "Plated board edge: "
+
+msgid "Yes, Bevelled"
+msgstr "Yes, Bevelled"
+
+msgid "Edge card connectors: "
+msgstr "Edge card connectors: "
+
+msgid "Layer Name"
+msgstr "Layer Name"
+
+msgid "Loss Tangent"
+msgstr "Loss Tangent"
+
+msgid "Dielectric"
+msgstr "Dielectric"
+
 msgid "Cannot export BOM: there are no footprints on the PCB."
 msgstr "Cannot export BOM: there are no footprints on the PCB."
 
@@ -24091,14 +24174,8 @@ msgstr "Progress:"
 msgid "Cleanup Tracks and Vias"
 msgstr "Cleanup Tracks and Vias"
 
-msgid "Teardrop on Vias/Pads Properties"
-msgstr "Teardrop on Vias/Pads Properties"
-
-msgid "Teardrop on Tracks Properties"
-msgstr "Teardrop on Tracks Properties"
-
-msgid "Teardrop Properties"
-msgstr "Teardrop Properties"
+msgid "Legacy Teardrop Properties"
+msgstr "Legacy Teardrop Properties"
 
 msgid "Conversion Settings"
 msgstr "Conversion Settings"
@@ -25170,9 +25247,6 @@ msgstr ""
 msgid "Model Scale Warning"
 msgstr "Model Scale Warning"
 
-msgid "STEP export failed!  Please save the PCB and try again"
-msgstr "STEP export failed!  Please save the PCB and try again"
-
 msgid "STEP files"
 msgstr "STEP files"
 
@@ -25900,15 +25974,6 @@ msgstr "Jumpers"
 
 msgid "All pads with duplicate numbers are jumpers"
 msgstr "All pads with duplicate numbers are jumpers"
-
-msgid ""
-"When enabled, this footprint can have more than one pad with the same "
-"number, and pads with the same number will be considered to be jumpered "
-"together internally."
-msgstr ""
-"When enabled, this footprint can have more than one pad with the same "
-"number, and pads with the same number will be considered to be jumpered "
-"together internally."
 
 msgid "Explicit jumper pad groups:"
 msgstr "Explicit jumper pad groups:"
@@ -26750,6 +26815,21 @@ msgstr "degree"
 
 msgid "Non Copper Zone Properties"
 msgstr "Non Copper Zone Properties"
+
+msgid "Reset to the current distance from the reference position."
+msgstr "Reset to the current distance from the reference position."
+
+msgid "Reset to the current angle from the reference position."
+msgstr "Reset to the current angle from the reference position."
+
+msgid "Reset to the current X offset from the reference position."
+msgstr "Reset to the current X offset from the reference position."
+
+msgid "Reset to the current Y offset from the reference position."
+msgstr "Reset to the current Y offset from the reference position."
+
+msgid "Offset Item"
+msgstr "Offset Item"
 
 msgid "Outset must be a positive value."
 msgstr "Outset must be a positive value."
@@ -27597,18 +27677,6 @@ msgstr ""
 msgid "Interactive Router Settings"
 msgstr "Interactive Router Settings"
 
-msgid "Reset to the current distance from the reference position."
-msgstr "Reset to the current distance from the reference position."
-
-msgid "Reset to the current angle from the reference position."
-msgstr "Reset to the current angle from the reference position."
-
-msgid "Reset to the current X offset from the reference position."
-msgstr "Reset to the current X offset from the reference position."
-
-msgid "Reset to the current Y offset from the reference position."
-msgstr "Reset to the current Y offset from the reference position."
-
 msgid "Select reference item..."
 msgstr "Select reference item…"
 
@@ -27844,15 +27912,6 @@ msgstr "A unique name for this rule area for use in DRC rules"
 
 msgid "Distance between parallel lines used for hatching the area"
 msgstr "Distance between parallel lines used for hatching the area"
-
-msgid "Reset this value to zero."
-msgstr "Reset this value to zero."
-
-msgid "Reset this value to the original value."
-msgstr "Reset this value to the original value."
-
-msgid "Offset Item"
-msgstr "Offset Item"
 
 msgid "Rectangle cannot be zero-sized."
 msgstr "Rectangle cannot be zero-sized."
@@ -28946,9 +29005,6 @@ msgstr "If you want a layer for documentation drawings"
 
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "Use the Physical Stackup page to change the number of copper layers."
-
-msgid "Layer Name"
-msgstr "Layer Name"
 
 msgid "signal"
 msgstr "signal"
@@ -32149,14 +32205,6 @@ msgid "Printed circuit board"
 msgstr "Printed circuit board"
 
 #, c-format
-msgid "Recovery file '%s' not found."
-msgstr "Recovery file '%s' not found."
-
-#, c-format
-msgid "OK to load recovery file '%s'?"
-msgstr "OK to load recovery file '%s'?"
-
-#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "Current board will be closed, save changes to '%s' before continuing?"
 
@@ -33181,8 +33229,8 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Copper zone '%s' has no pads connected."
 
 #, c-format
-msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
+msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
+msgstr "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 
 #, c-format
 msgid "Change group name to '%s' to '%s'."
@@ -33248,52 +33296,6 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Total warnings: %d, errors: %d."
 
 #, c-format
-msgid ""
-"Invalid footprint ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offf: %d"
-msgstr ""
-"Invalid footprint ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offf: %d"
-
-#, c-format
-msgid ""
-"Invalid lib_id ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offf: %d"
-msgstr ""
-"Invalid lib_id ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offf: %d"
-
-msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "Cannot parse time stamp in symbol section of netlist."
-
-msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr "Cannot parse footprint name in symbol section of netlist."
-
-msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Cannot parse reference designator in symbol section of netlist."
-
-msgid "Cannot parse value in symbol section of netlist."
-msgstr "Cannot parse value in symbol section of netlist."
-
-msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Cannot parse pin name in symbol net section of netlist."
-
-msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "Cannot parse net name in symbol net section of netlist."
-
-#, c-format
-msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Cannot find symbol %s in footprint filter section of netlist."
-
-#, c-format
 msgid "Cannot open netlist file '%s'."
 msgstr "Cannot open netlist file '%s'."
 
@@ -33322,16 +33324,6 @@ msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-
-#, c-format
-msgid ""
-"Invalid footprint ID in\n"
-"file: '%s'\n"
-"line: %d"
-msgstr ""
-"Invalid footprint ID in\n"
-"file: '%s'\n"
-"line: %d"
 
 msgid "pad"
 msgstr "pad"
@@ -34955,6 +34947,18 @@ msgid "KiCad footprint file"
 msgstr "KiCad footprint file"
 
 #, c-format
+msgid ""
+"Invalid net ID in\n"
+"file: %s;\n"
+"line: %d\n"
+"offset: %d."
+msgstr ""
+"Invalid net ID in\n"
+"file: %s;\n"
+"line: %d\n"
+"offset: %d."
+
+#, c-format
 msgid "Cannot interpret date code %d"
 msgstr "Cannot interpret date code %d"
 
@@ -34992,18 +34996,6 @@ msgstr "%d is not a valid layer count"
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-
-#, c-format
-msgid ""
-"Invalid net ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d."
-msgstr ""
-"Invalid net ID in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d."
 
 #, c-format
 msgid "Cannot handle footprint text type %s"
@@ -35082,42 +35074,6 @@ msgstr ""
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-
-#, c-format
-msgid ""
-"Invalid net ID in\n"
-"file: %s\n"
-"line: %d\n"
-"offset: %d."
-msgstr ""
-"Invalid net ID in\n"
-"file: %s\n"
-"line: %d\n"
-"offset: %d."
-
-#, c-format
-msgid ""
-"Invalid net ID in\n"
-"file: %s\n"
-"line: %d\n"
-"offset: %d"
-msgstr ""
-"Invalid net ID in\n"
-"file: %s\n"
-"line: %d\n"
-"offset: %d"
-
-#, c-format
-msgid ""
-"Invalid net ID in\n"
-"file: %s;\n"
-"line: %d\n"
-"offset: %d."
-msgstr ""
-"Invalid net ID in\n"
-"file: %s;\n"
-"line: %d\n"
-"offset: %d."
 
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
@@ -36859,9 +36815,6 @@ msgstr "Unable to outset the selected items."
 msgid "Some of the items could not be outset."
 msgstr "Some of the items could not be outset."
 
-msgid "Cannot create rectangle outset"
-msgstr "Cannot create rectangle outset"
-
 msgid "Select a reference Rule Area to copy from..."
 msgstr "Select a reference Rule Area to copy from..."
 
@@ -38485,53 +38438,8 @@ msgstr "Selected 2D Length"
 msgid "Selected 2D Copper Area"
 msgstr "Selected 2D Copper Area"
 
-msgid "BOARD CHARACTERISTICS"
-msgstr "BOARD CHARACTERISTICS"
-
-msgid "Copper layer count: "
-msgstr "Copper layer count: "
-
-msgid "Board thickness: "
-msgstr "Board thickness: "
-
-msgid "Board overall dimensions: "
-msgstr "Board overall dimensions: "
-
-msgid "Min track/spacing: "
-msgstr "Min track/spacing: "
-
-msgid "Min hole diameter: "
-msgstr "Min hole diameter: "
-
-msgid "Copper finish: "
-msgstr "Copper finish: "
-
-msgid "Impedance control: "
-msgstr "Impedance control: "
-
-msgid "Castellated pads: "
-msgstr "Castellated pads: "
-
-msgid "Press-fit pads: "
-msgstr "Press-fit pads: "
-
-msgid "Plated board edge: "
-msgstr "Plated board edge: "
-
-msgid "Yes, Bevelled"
-msgstr "Yes, Bevelled"
-
-msgid "Edge card connectors: "
-msgstr "Edge card connectors: "
-
 msgid "Place Board Characteristics"
 msgstr "Place Board Characteristics"
-
-msgid "Loss Tangent"
-msgstr "Loss Tangent"
-
-msgid "Dielectric"
-msgstr "Dielectric"
 
 msgid "Place Board Stackup Table"
 msgstr "Place Board Stackup Table"
@@ -39718,6 +39626,210 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "&Auto save:"
+#~ msgstr "&Auto save:"
+
+#~ msgid ""
+#~ "Delay after the first change to create a backup file of the board on "
+#~ "disk.\n"
+#~ "If set to 0, auto backup is disabled"
+#~ msgstr ""
+#~ "Delay after the first change to create a backup file of the board on "
+#~ "disk.\n"
+#~ "If set to 0, auto backup is disabled"
+
+#~ msgid "Create backups when auto save occurs"
+#~ msgstr "Create backups when auto save occurs"
+
+#~ msgid ""
+#~ "Create backups when the auto save feature is enabled.  If not checked, "
+#~ "backups will only be created when you manually save a file."
+#~ msgstr ""
+#~ "Create backups when the auto save feature is enabled.  If not checked, "
+#~ "backups will only be created when you manually save a file."
+
+#~ msgid "Maximum backups to keep:"
+#~ msgstr "Maximum backups to keep:"
+
+#~ msgid "How many backup files total to keep (set to 0 for no limit)"
+#~ msgstr "How many backup files total to keep (set to 0 for no limit)"
+
+#~ msgid "Maximum backups per day:"
+#~ msgstr "Maximum backups per day:"
+
+#~ msgid "How many backup files to keep each day (set to 0 for no limit)"
+#~ msgstr "How many backup files to keep each day (set to 0 for no limit)"
+
+#~ msgid "Minimum time between backups:"
+#~ msgstr "Minimum time between backups:"
+
+#~ msgid ""
+#~ "Number of minutes since the last backup before another will be created "
+#~ "the next time you save (set to 0 for no minimum)"
+#~ msgstr ""
+#~ "Number of minutes since the last backup before another will be created "
+#~ "the next time you save (set to 0 for no minimum)"
+
+#, c-format
+#~ msgid ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing\n"
+#~ "%s\n"
+#~ "KiCad exited before saving.\n"
+#~ "\n"
+#~ "Do you wish to open the auto-saved file instead?"
+#~ msgstr ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing\n"
+#~ "%s\n"
+#~ "KiCad exited before saving.\n"
+#~ "\n"
+#~ "Do you wish to open the auto-saved file instead?"
+
+#~ msgid "The auto save file could not be renamed to the board file name."
+#~ msgstr "The auto save file could not be renamed to the board file name."
+
+#~ msgid "Pins with duplicate numbers are jumpers"
+#~ msgstr "Pins with duplicate numbers are jumpers"
+
+#~ msgid ""
+#~ "When enabled, this symbol can have more than one pin with the same "
+#~ "number, and pins with the same number will be considered to be jumpered "
+#~ "together internally."
+#~ msgstr ""
+#~ "When enabled, this symbol can have more than one pin with the same "
+#~ "number, and pins with the same number will be considered to be jumpered "
+#~ "together internally."
+
+#~ msgid "Jumper Pin Groups"
+#~ msgstr "Jumper Pin Groups"
+
+#~ msgid "Available pins:"
+#~ msgstr "Available pins:"
+
+#~ msgid "Create jumper group from the selected pins"
+#~ msgstr "Create jumper group from the selected pins"
+
+#~ msgid "Remove the selected jumper pin group"
+#~ msgstr "Remove the selected jumper pin group"
+
+#~ msgid "Grouped pins:"
+#~ msgstr "Grouped pins:"
+
+#, c-format
+#~ msgid "Could not autosave files to read-only folder:  '%s'"
+#~ msgstr "Could not autosave files to read-only folder:  '%s'"
+
+#~ msgid ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing one or more of the "
+#~ "schematic files\n"
+#~ "were not saved properly.  Do you wish to restore the last saved edits you "
+#~ "made?"
+#~ msgstr ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing one or more of the "
+#~ "schematic files\n"
+#~ "were not saved properly.  Do you wish to restore the last saved edits you "
+#~ "made?"
+
+#, c-format
+#~ msgid ""
+#~ "The file '%s' could not be opened.\n"
+#~ "Manual recovery of automatically saved files is required."
+#~ msgstr ""
+#~ "The file '%s' could not be opened.\n"
+#~ "Manual recovery of automatically saved files is required."
+
+#~ msgid "The following automatically saved file(s) could not be restored\n"
+#~ msgstr "The following automatically saved file(s) could not be restored\n"
+
+#~ msgid "Manual recovery will be required to restore the file(s) above."
+#~ msgstr "Manual recovery will be required to restore the file(s) above."
+
+#, c-format
+#~ msgid ""
+#~ "The autosave file '%s' could not be removed.\n"
+#~ "Manual removal will be required."
+#~ msgstr ""
+#~ "The autosave file '%s' could not be removed.\n"
+#~ "Manual removal will be required."
+
+#~ msgid "The following automatically saved file(s) could not be removed\n"
+#~ msgstr "The following automatically saved file(s) could not be removed\n"
+
+#~ msgid "Manual removal will be required for the file(s) above."
+#~ msgstr "Manual removal will be required for the file(s) above."
+
+#~ msgid "Teardrop on Vias/Pads Properties"
+#~ msgstr "Teardrop on Vias/Pads Properties"
+
+#~ msgid "Teardrop on Tracks Properties"
+#~ msgstr "Teardrop on Tracks Properties"
+
+#~ msgid "Teardrop Properties"
+#~ msgstr "Teardrop Properties"
+
+#~ msgid "STEP export failed!  Please save the PCB and try again"
+#~ msgstr "STEP export failed!  Please save the PCB and try again"
+
+#~ msgid "Reset this value to zero."
+#~ msgstr "Reset this value to zero."
+
+#~ msgid "Reset this value to the original value."
+#~ msgstr "Reset this value to the original value."
+
+#, c-format
+#~ msgid "Recovery file '%s' not found."
+#~ msgstr "Recovery file '%s' not found."
+
+#, c-format
+#~ msgid "OK to load recovery file '%s'?"
+#~ msgstr "OK to load recovery file '%s'?"
+
+#, c-format
+#~ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+#~ msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid net ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offset: %d."
+#~ msgstr ""
+#~ "Invalid net ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offset: %d."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid net ID in\n"
+#~ "file: %s\n"
+#~ "line: %d\n"
+#~ "offset: %d."
+#~ msgstr ""
+#~ "Invalid net ID in\n"
+#~ "file: %s\n"
+#~ "line: %d\n"
+#~ "offset: %d."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid net ID in\n"
+#~ "file: %s\n"
+#~ "line: %d\n"
+#~ "offset: %d"
+#~ msgstr ""
+#~ "Invalid net ID in\n"
+#~ "file: %s\n"
+#~ "line: %d\n"
+#~ "offset: %d"
+
+#~ msgid "Cannot create rectangle outset"
+#~ msgstr "Cannot create rectangle outset"
 
 #~ msgid "Loading design_blocks..."
 #~ msgstr "Loading design_blocks..."
