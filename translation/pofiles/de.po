@@ -32,10 +32,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:49+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-10-30 08:21+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14784,9 +14784,8 @@ msgstr ""
 "Nummer haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
-#, fuzzy
 msgid "Explicit jumper pin groups:"
-msgstr "Explizite Jumperpadgruppen:"
+msgstr "Explizite Jumperpad-Gruppen:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:552
 msgid "Pin Connections"
@@ -26146,9 +26145,8 @@ msgid "Press <ESC> to cancel break."
 msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
+msgstr "<ESC> drücken, um Schneidevorgang abzubrechen."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -29142,13 +29140,11 @@ msgid "Execute Command Job Settings"
 msgstr "Kommando-ausführen-Auftragseinstellungen exportieren"
 
 #: kicad/dialogs/dialog_template_selector.cpp:230
-#, fuzzy
 msgid "Edit Template"
 msgstr "Vorlage bearbeiten"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
-#, fuzzy
 msgid "Duplicate Template"
 msgstr "Vorlage duplizieren"
 
@@ -29157,9 +29153,8 @@ msgid "Could not open template directory."
 msgstr "Konnte Vorlagenverzeichnis nicht öffnen."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "Es wurde keine Projektdatei im Vorlagenverzeichnis gefunden."
+msgstr "Im Vorlagenverzeichnis wurde keine Projektdatei gefunden."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
 msgid "Enter name for the new template:"
@@ -29703,7 +29698,7 @@ msgstr "Das ausgewählte Vorlagenverzeichnis enthält keine Projektvorlagen."
 #: kicad/dialogs/template_default_html.h:183
 #, fuzzy
 msgid "What to do:"
-msgstr "Was ist zu tun:"
+msgstr "Was tun?"
 
 #: kicad/dialogs/template_default_html.h:185
 msgid "Browse to a different templates directory using the folder icon"
@@ -29883,9 +29878,8 @@ msgid "Project Files"
 msgstr "Projektdateien"
 
 #: kicad/kicad_manager_frame.cpp:238 kicad/tools/kicad_manager_actions.cpp:244
-#, fuzzy
 msgid "Local History"
-msgstr "Lokale Datei"
+msgstr "Lokaler Verlauf"
 
 #: kicad/kicad_manager_frame.cpp:400
 msgid "PCM Updates Available"
@@ -29932,28 +29926,26 @@ msgid "Restoring '%s'"
 msgstr "Wiederherstellen von \"%s\""
 
 #: kicad/local_history_pane.cpp:121
-#, fuzzy
 msgid "Moments ago"
-msgstr "Kommentare"
+msgstr "Kürzlich"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "Minuten"
+msgstr "Vor %d Minuten"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
 msgid "%d hours ago"
-msgstr ""
+msgstr "Vor %d Stunden"
 
 #: kicad/local_history_pane.cpp:227
-#, fuzzy
 msgid "Restore Commit"
-msgstr "Letzter Commit"
+msgstr "Letzten Commit wiederherstellen"
 
 #: kicad/menubar.cpp:63
 msgid "Clear Recent Projects"
-msgstr "Liste der zuletzt verwendeten Projekte leeren"
+msgstr "Liste zuletzt verwendeter Projekte leeren"
 
 #: kicad/menubar.cpp:122
 msgid "Import Non-KiCad Project..."
@@ -30903,19 +30895,16 @@ msgid "Open project directory in file explorer"
 msgstr "Projektverzeichnis im Dateiexplorer öffnen"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "Projekt von Repository klonen ..."
+msgstr "Projekt aus lokalem Verlauf wiederherstellen ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "Importieren von Projektdateien aus einer anderen Applikation"
+msgstr "Projektdateien aus lokalem Verlauf wiederherstellen"
 
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "Diese Lage ein- oder ausblenden"
+msgstr "Verlaufspanel ein- oder ausblenden"
 
 #: kicad/tools/kicad_manager_control.cpp:80
 msgid "Create New Project"
@@ -35082,17 +35071,15 @@ msgstr ""
 "Platine aktualisieren\" mit dem Schaltplan synchronisiert werden."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
-#, fuzzy
 msgid "Reference Designator Prefixes in Use"
 msgstr "Verwendete Präfixe der Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "(Ausgenommen %s von Neu-Annotierung.)"
+msgstr "(Schließe %s von Neu-Annotierung aus.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
-#, fuzzy
 msgid "Change Log"
 msgstr "Änderungsliste"
 
