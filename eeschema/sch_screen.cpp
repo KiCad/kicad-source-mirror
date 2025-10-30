@@ -70,8 +70,6 @@
 #include "sch_bus_entry.h"
 #include "sch_shape.h"
 
-static void plotLocalPowerIcon( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
-                                const VECTOR2D& aPos, double aSize, bool aRotate );
 /**
  * Flag to enable profiling of the TestDanglingEnds() function.
  *
@@ -982,41 +980,10 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
             field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 },
                         static_cast<const SYMBOL*>( sym )->GetDNP() );
 
-            if( sym->IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE )  //
+            if( sym->IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
+                && ( field.IsVisible() || field.IsForceVisible() ) )
             {
-                BOX2I bbox = field.GetBoundingBox();
-
-                // Calculate the text orientation according to the parent orientation.
-                EDA_ANGLE orient = field.GetTextAngle();
-
-                if( sym->GetTransform().y1 )
-                {
-                    // Rotate symbol 90 degrees.
-                    if( orient.IsHorizontal() )
-                        orient = ANGLE_VERTICAL;
-                    else
-                        orient = ANGLE_HORIZONTAL;
-                }
-
-                bool rotated = !orient.IsHorizontal();
-
-                VECTOR2D    pos;
-                double      size = bbox.GetHeight() / 1.5;
-
-                if( rotated )
-                {
-                    pos = VECTOR2D( bbox.GetRight() - bbox.GetWidth() / 6.0,
-                                    bbox.GetBottom() + bbox.GetWidth() / 2.0 );
-                    size = bbox.GetWidth() / 1.5;
-                }
-                else
-                {
-                    pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0,
-                                    bbox.GetBottom() - bbox.GetHeight() / 6.0 );
-                }
-
-                // TODO: build and plot icon shape
-                plotLocalPowerIcon( aPlotter, aPlotOpts, pos, size, rotated );
+                sym->PlotLocalPowerIconShape( aPlotter );
             }
         }
 
@@ -1032,31 +999,6 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
     {
         aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
         item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
-    }
-}
-
-/**
- * plot a local power pin indicator icon.
- */
-static void plotLocalPowerIcon( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
-                                const VECTOR2D& aPos, double aSize, bool aRotate )
-{
-    double lineWidth = aSize / 10.0;
-
-    std::vector<SCH_SHAPE> shapeList;
-    SCH_SYMBOL::BuildLocalPowerIconShape( shapeList, aPos, aSize, lineWidth, aRotate );
-    int tolerance = 100;    // approx error to approximate a Bezier curve by segments
-
-    for( const SCH_SHAPE& shape : shapeList )
-    {
-        // Currently there are only 2 shapes: BEZIER and CIRCLE
-        FILL_T filled = shape.GetFillMode() == FILL_T::NO_FILL ? FILL_T::NO_FILL : FILL_T::FILLED_SHAPE;
-
-        if( shape.GetShape() == SHAPE_T::BEZIER )
-             aPlotter->BezierCurve( shape.GetStart(), shape.GetBezierC1(), shape.GetBezierC2(), shape.GetEnd(),
-                                   tolerance, lineWidth );
-        else if( shape.GetShape() == SHAPE_T::CIRCLE )
-            aPlotter->Circle( shape.getCenter(), shape.GetRadius() * 2, filled, lineWidth );
     }
 }
 

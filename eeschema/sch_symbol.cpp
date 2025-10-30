@@ -2773,11 +2773,11 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
     if( m_part )
     {
-    std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source so we can re-orient and translate it.
         LIB_SYMBOL            tempSymbol( *m_part );
-    std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the pin info from the symbol to the temp pins
         for( unsigned i = 0; i < tempPins.size(); ++ i )
@@ -2819,6 +2819,12 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
                 field.ClearRenderCache();
                 field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
                             m_pos, GetDNP() );
+
+                if( IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
+                    && ( field.IsVisible() || field.IsForceVisible() ) )
+                {
+                    PlotLocalPowerIconShape( aPlotter );
+                }
             }
         }
 
@@ -2885,6 +2891,74 @@ void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
                             bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
                             strokeWidth, nullptr );
 }
+
+
+
+/**
+ * plot a local power pin indicator icon.
+ */
+static void plotLocalPowerIcon( PLOTTER* aPlotter,
+                                const VECTOR2D& aPos, double aSize, bool aRotate )
+{
+    double lineWidth = aSize / 10.0;
+
+    std::vector<SCH_SHAPE> shapeList;
+    SCH_SYMBOL::BuildLocalPowerIconShape( shapeList, aPos, aSize, lineWidth, aRotate );
+    int tolerance = 100;    // approx error to approximate a Bezier curve by segments
+
+    for( const SCH_SHAPE& shape : shapeList )
+    {
+        // Currently there are only 2 shapes: BEZIER and CIRCLE
+        FILL_T filled = shape.GetFillMode() == FILL_T::NO_FILL ? FILL_T::NO_FILL : FILL_T::FILLED_SHAPE;
+
+        if( shape.GetShape() == SHAPE_T::BEZIER )
+             aPlotter->BezierCurve( shape.GetStart(), shape.GetBezierC1(), shape.GetBezierC2(), shape.GetEnd(),
+                                   tolerance, lineWidth );
+        else if( shape.GetShape() == SHAPE_T::CIRCLE )
+            aPlotter->Circle( shape.getCenter(), shape.GetRadius() * 2, filled, lineWidth );
+    }
+}
+
+void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
+{
+    const SCH_FIELD* field = GetField( FIELD_T::VALUE );
+
+    // Plot the local power pin indicator icon shape
+    BOX2I bbox = field->GetBoundingBox();
+
+    // Calculate the text orientation according to the parent orientation.
+    EDA_ANGLE orient = field->GetTextAngle();
+
+    if( GetTransform().y1 )
+    {
+        // Rotate symbol 90 degrees.
+        if( orient.IsHorizontal() )
+            orient = ANGLE_VERTICAL;
+        else
+            orient = ANGLE_HORIZONTAL;
+    }
+
+    bool rotated = !orient.IsHorizontal();
+
+    VECTOR2D    pos;
+    double      size = bbox.GetHeight() / 1.5;
+
+    if( rotated )
+    {
+        pos = VECTOR2D( bbox.GetRight() - bbox.GetWidth() / 6.0,
+                        bbox.GetBottom() + bbox.GetWidth() / 2.0 );
+        size = bbox.GetWidth() / 1.5;
+    }
+    else
+    {
+        pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0,
+                        bbox.GetBottom() - bbox.GetHeight() / 6.0 );
+    }
+
+    // TODO: build and plot icon shape
+    plotLocalPowerIcon( aPlotter, pos, size, rotated );
+}
+
 
 
 void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const

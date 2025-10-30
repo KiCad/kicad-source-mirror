@@ -834,6 +834,13 @@ public:
     void PlotPins( PLOTTER* aPlotter ) const;
 
     /**
+     * Plot the local power pin indicator icon shape
+     *
+     * @param aPlotter the #PLOTTER object used to draw  the icon
+     */
+    void PlotLocalPowerIconShape( PLOTTER* aPlotter ) const;
+
+    /**
      * Plot the red 'X' over the symbol.  This is separated to allow it being used from the
      * screen plot function, overlapping the pins
      *
