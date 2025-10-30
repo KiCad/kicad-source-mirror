@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-29 03:05+0000\n"
+"PO-Revision-Date: 2025-10-31 08:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -13405,9 +13405,9 @@ msgid "No symbols found in library %s."
 msgstr "In Bibliothek %s wurden keine Symbole gefunden."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Fehler beim Einlesen des Symbols %s: %s"
+msgstr "Fehler beim Einlesen des Symbols \"%s\": %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
@@ -27829,7 +27829,7 @@ msgstr "Wiederherstellen von \"%s\""
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
-msgstr "Liste der zuletzt verwendeten Projekte leeren"
+msgstr "Liste zuletzt verwendeter Projekte leeren"
 
 #: kicad/menubar.cpp:112
 msgid "Import Non-KiCad Project..."
@@ -32564,7 +32564,6 @@ msgid "<br/>%d %s X, Y: %s; rounded X, Y: %s"
 msgstr "<br/>%d %s X, Y: %s; gerundet X, Y: %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:510
-#, fuzzy
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
 "Gewählte Optionen führten zu Fehlern! Ändern Sie die Optionen und versuchen "
@@ -34568,7 +34567,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:127
 msgid "Generate Unique"
-msgstr "Erzeuge Eindeutige"
+msgstr "Eindeutige erzeugen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
 msgid "Manufacturer P/N:"
@@ -49104,7 +49103,7 @@ msgstr "Footprints zusammenfassen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "Fangwinkel-Hilfen: H, V, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
