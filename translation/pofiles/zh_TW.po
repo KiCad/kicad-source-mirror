@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"PO-Revision-Date: 2025-10-30 08:21+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -1864,6 +1864,7 @@ msgid "Errors"
 msgstr "錯誤"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
+#, fuzzy
 msgid "Replace Loaded File?"
 msgstr "取代並尋找下一項?"
 
@@ -5277,6 +5278,7 @@ msgid "Right button drag:"
 msgstr "右鍵拖動:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
+#, fuzzy
 msgid "Pan on mouse movement with key:"
 msgstr "按鍵配合滑鼠移動進行平移:"
 
