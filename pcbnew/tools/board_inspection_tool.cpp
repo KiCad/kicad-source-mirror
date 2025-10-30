@@ -1296,7 +1296,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     if( selection.Size() != 1 )
     {
-        m_frame->ShowInfoBarError( _( "Select an item for a constraints resolution report." ) );
+        m_frame->ShowInfoBarError( _( "Select a single item for a constraints resolution report." ) );
         return 0;
     }
 
