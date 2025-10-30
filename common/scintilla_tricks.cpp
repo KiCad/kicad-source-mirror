@@ -557,10 +557,11 @@ int SCINTILLA_TRICKS::firstNonWhitespace( int aLine, int* aWhitespaceCharCount )
 
 void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 {
-    auto isBrace = [this]( int c ) -> bool
-                   {
-                       return m_braces.Find( (wxChar) c ) >= 0;
-                   };
+    auto isBrace =
+            [this]( int c ) -> bool
+            {
+                return m_braces.Find( (wxChar) c ) >= 0;
+            };
 
     // Has the caret changed position?
     int caretPos = m_te->GetCurrentPos();

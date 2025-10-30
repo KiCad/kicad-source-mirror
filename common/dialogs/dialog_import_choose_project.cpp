@@ -37,13 +37,14 @@ DIALOG_IMPORT_CHOOSE_PROJECT::DIALOG_IMPORT_CHOOSE_PROJECT( wxWindow* aParent,
     // Load the project/PCB/schematic names
     int row = 0;
 
-    auto convertName = []( const wxString& aName, const wxString& aId ) -> wxString
-    {
-        if( aId.empty() )
-            return wxEmptyString;
+    auto convertName =
+            []( const wxString& aName, const wxString& aId ) -> wxString
+            {
+                if( aId.empty() )
+                    return wxEmptyString;
 
-        return aName;
-    };
+                return aName;
+            };
 
     for( const IMPORT_PROJECT_DESC& desc : m_project_desc )
     {

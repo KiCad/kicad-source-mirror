@@ -86,13 +86,14 @@ void CONSTRUCTION_GEOM::ViewDraw( int aLayer, VIEW* aView ) const
     const bool haveSnapLine = m_snapLine && m_snapLine->Length() >= minSnapLineLength;
 
     // Avoid fighting with the snap line
-    const auto drawLineIfNotAlsoSnapLine = [&]( const SEG& aLine )
-    {
-        if( !haveSnapLine || !aLine.ApproxCollinear( *m_snapLine, 1 ) )
-        {
-            gal.DrawLine( aLine.A, aLine.B );
-        }
-    };
+    const auto drawLineIfNotAlsoSnapLine =
+            [&]( const SEG& aLine )
+            {
+                if( !haveSnapLine || !aLine.ApproxCollinear( *m_snapLine, 1 ) )
+                {
+                    gal.DrawLine( aLine.A, aLine.B );
+                }
+            };
 
     // Draw all the items
     for( const DRAWABLE_INFO& drawable : m_drawables )

@@ -611,16 +611,17 @@ private:
      */
     void setCurrentSelection( int aLeftRow, int aRightRow )
     {
-        const auto selectGridRow = []( wxGrid& aGrid, int aRow, bool aSelect )
-        {
-            // At start, there is no old row
-            if( aRow < 0 )
-                return;
+        const auto selectGridRow =
+                []( wxGrid& aGrid, int aRow, bool aSelect )
+                {
+                    // At start, there is no old row
+                    if( aRow < 0 )
+                        return;
 
-            const wxString val = aSelect ? wxT( "1" ) : wxEmptyString;
-            aGrid.SetCellValue( aRow, (int) CU_LAYER_COLNUMS::SELECT, val );
-            aGrid.SetGridCursor( aRow, (int) CU_LAYER_COLNUMS::COLOR );
-        };
+                    const wxString val = aSelect ? wxT( "1" ) : wxEmptyString;
+                    aGrid.SetCellValue( aRow, (int) CU_LAYER_COLNUMS::SELECT, val );
+                    aGrid.SetGridCursor( aRow, (int) CU_LAYER_COLNUMS::COLOR );
+                };
 
         if( m_leftCurrRow != aLeftRow )
         {

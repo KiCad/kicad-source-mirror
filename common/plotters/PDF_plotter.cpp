@@ -588,44 +588,45 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     VECTOR2D dev_start = userToDeviceCoordinates( start );
 
     // Deduplicate images
-    auto findHandleForImage = [&]( const wxImage& aCurrImage ) -> int
-    {
-        for( const auto& [imgHandle, image] : m_imageHandles )
-        {
-            if( image.IsSameAs( aCurrImage ) )
-                return imgHandle;
+    auto findHandleForImage =
+            [&]( const wxImage& aCurrImage ) -> int
+            {
+                for( const auto& [imgHandle, image] : m_imageHandles )
+                {
+                    if( image.IsSameAs( aCurrImage ) )
+                        return imgHandle;
 
-            if( image.GetWidth() != aCurrImage.GetWidth() )
-                continue;
+                    if( image.GetWidth() != aCurrImage.GetWidth() )
+                        continue;
 
-            if( image.GetHeight() != aCurrImage.GetHeight() )
-                continue;
+                    if( image.GetHeight() != aCurrImage.GetHeight() )
+                        continue;
 
-            if( image.GetType() != aCurrImage.GetType() )
-                continue;
+                    if( image.GetType() != aCurrImage.GetType() )
+                        continue;
 
-            if( image.HasAlpha() != aCurrImage.HasAlpha() )
-                continue;
+                    if( image.HasAlpha() != aCurrImage.HasAlpha() )
+                        continue;
 
-            if( image.HasMask() != aCurrImage.HasMask()
-              || image.GetMaskRed() != aCurrImage.GetMaskRed()
-              || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
-              || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
-                continue;
+                    if( image.HasMask() != aCurrImage.HasMask()
+                      || image.GetMaskRed() != aCurrImage.GetMaskRed()
+                      || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
+                      || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
+                        continue;
 
-            int pixCount = image.GetWidth() * image.GetHeight();
+                    int pixCount = image.GetWidth() * image.GetHeight();
 
-            if( memcmp( image.GetData(), aCurrImage.GetData(), pixCount * 3 ) != 0 )
-                continue;
+                    if( memcmp( image.GetData(), aCurrImage.GetData(), pixCount * 3 ) != 0 )
+                        continue;
 
-            if( image.HasAlpha() && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
-                continue;
+                    if( image.HasAlpha() && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
+                        continue;
 
-            return imgHandle;
-        }
+                    return imgHandle;
+                }
 
-        return -1;
-    };
+                return -1;
+            };
 
     int imgHandle = findHandleForImage( aImage );
 

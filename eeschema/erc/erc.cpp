@@ -1179,7 +1179,8 @@ int ERC_TESTER::TestGroundPins()
 {
     int errors = 0;
 
-    auto isGround = []( const wxString& txt )
+    auto isGround =
+            []( const wxString& txt )
             {
                 wxString upper = txt.Upper();
                 return upper.Contains( wxT( "GND" ) );

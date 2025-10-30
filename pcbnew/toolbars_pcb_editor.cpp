@@ -241,32 +241,34 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         /* TODO (ISM): Support context menus
         PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
 
-        auto makeArcMenu = [&]()
-        {
-            std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        auto makeArcMenu =
+                [&]()
+                {
+                    std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
 
-            arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-            arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
-            arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
 
-            return arcMenu;
-        };
+                    return arcMenu;
+                };
 
         m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
 
-        auto makeRouteMenu = [&]()
-        {
-            std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        auto makeRouteMenu =
+                [&]()
+                {
+                    std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
 
-            routeMenu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
-            routeMenu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
-            routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+                    routeMenu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
+                    routeMenu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
+                    routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
 
-            routeMenu->AppendSeparator();
-            routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
+                    routeMenu->AppendSeparator();
+                    routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
 
-            return routeMenu;
-        };
+                    return routeMenu;
+                };
 
         m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
         m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );

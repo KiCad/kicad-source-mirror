@@ -126,16 +126,17 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
         /* TODO (ISM): Implement context menus
         PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
 
-        auto makeArcMenu = [&]()
-        {
-            std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        auto makeArcMenu =
+                [&]()
+                {
+                    std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
 
-            arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-            arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
-            arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+                    arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
 
-            return arcMenu;
-        };
+                    return arcMenu;
+                };
 
         m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
     */

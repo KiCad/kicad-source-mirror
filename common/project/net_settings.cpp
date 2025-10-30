@@ -666,38 +666,40 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetCachedEffectiveNetClass( const wxStri
 std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aNetName )
 {
     // Lambda to fetch an explicit netclass. Returns a nullptr if not found
-    auto getExplicitNetclass = [this]( const wxString& netclass ) -> std::shared_ptr<NETCLASS>
-    {
-        if( netclass == NETCLASS::Default )
-            return m_defaultNetClass;
+    auto getExplicitNetclass =
+            [this]( const wxString& netclass ) -> std::shared_ptr<NETCLASS>
+            {
+                if( netclass == NETCLASS::Default )
+                    return m_defaultNetClass;
 
-        auto ii = m_netClasses.find( netclass );
+                auto ii = m_netClasses.find( netclass );
 
-        if( ii == m_netClasses.end() )
-            return {};
-        else
-            return ii->second;
-    };
+                if( ii == m_netClasses.end() )
+                    return {};
+                else
+                    return ii->second;
+            };
 
     // Lambda to fetch or create an implicit netclass (defined with a label, but not configured)
     // These are needed as while they do not provide any netclass parameters, they do now appear in
     // DRC matching strings as an assigned netclass.
-    auto getOrAddImplicitNetcless = [this]( const wxString& netclass ) -> std::shared_ptr<NETCLASS>
-    {
-        auto ii = m_impicitNetClasses.find( netclass );
+    auto getOrAddImplicitNetcless =
+            [this]( const wxString& netclass ) -> std::shared_ptr<NETCLASS>
+            {
+                auto ii = m_impicitNetClasses.find( netclass );
 
-        if( ii == m_impicitNetClasses.end() )
-        {
-            std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( netclass, false );
-            nc->SetPriority( std::numeric_limits<int>::max() - 1 ); // Priority > default netclass
-            m_impicitNetClasses[netclass] = nc;
-            return nc;
-        }
-        else
-        {
-            return ii->second;
-        }
-    };
+                if( ii == m_impicitNetClasses.end() )
+                {
+                    std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( netclass, false );
+                    nc->SetPriority( std::numeric_limits<int>::max() - 1 ); // Priority > default netclass
+                    m_impicitNetClasses[netclass] = nc;
+                    return nc;
+                }
+                else
+                {
+                    return ii->second;
+                }
+            };
 
     // <no net> is forced to be part of the default netclass.
     if( aNetName.IsEmpty() )
@@ -1052,11 +1054,12 @@ static bool isSuperSubOverbar( wxChar c )
 bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
                                    std::vector<wxString>* aMemberList )
 {
-    auto isDigit = []( wxChar c )
-                   {
-                       static   wxString digits( wxT( "0123456789" ) );
-                       return digits.Contains( c );
-                   };
+    auto isDigit =
+            []( wxChar c )
+            {
+                static   wxString digits( wxT( "0123456789" ) );
+                return digits.Contains( c );
+            };
 
     size_t   busLen = aBus.length();
     size_t   i = 0;

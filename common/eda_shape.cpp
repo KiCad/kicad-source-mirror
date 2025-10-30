@@ -740,11 +740,12 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
 
 void EDA_SHAPE::scale( double aScale )
 {
-    auto scalePt = [&]( VECTOR2I& pt )
-                   {
-                       pt.x = KiROUND( pt.x * aScale );
-                       pt.y = KiROUND( pt.y * aScale );
-                   };
+    auto scalePt =
+            [&]( VECTOR2I& pt )
+            {
+                pt.x = KiROUND( pt.x * aScale );
+                pt.y = KiROUND( pt.y * aScale );
+            };
 
     switch( m_shape )
     {

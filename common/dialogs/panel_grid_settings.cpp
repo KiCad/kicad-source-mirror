@@ -217,13 +217,14 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
 
     // lambda that gives us a safe index into grids regardless of config idx
-    auto safeGrid = [this]( int idx ) -> int
-    {
-        if( idx < 0 || idx >= (int) m_grids.size() )
-            return 0;
+    auto safeGrid =
+            [this]( int idx ) -> int
+            {
+                if( idx < 0 || idx >= (int) m_grids.size() )
+                    return 0;
 
-        return idx;
-    };
+                return idx;
+            };
 
     Layout();
 

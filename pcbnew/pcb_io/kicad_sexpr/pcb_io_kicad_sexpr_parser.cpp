@@ -1224,18 +1224,19 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             // Make sure the destination layer is enabled, even if not in the file
             m_board->SetEnabledLayers( LSET( m_board->GetEnabledLayers() ).set( destLayer ) );
 
-            const auto visitItem = [&]( BOARD_ITEM& curr_item )
-            {
-                LSET layers = curr_item.GetLayerSet();
+            const auto visitItem =
+                    [&]( BOARD_ITEM& curr_item )
+                    {
+                        LSET layers = curr_item.GetLayerSet();
 
-                if( layers.test( Rescue ) )
-                {
-                    layers.set( destLayer );
-                    layers.reset( Rescue );
-                }
+                        if( layers.test( Rescue ) )
+                        {
+                            layers.set( destLayer );
+                            layers.reset( Rescue );
+                        }
 
-                curr_item.SetLayerSet( layers );
-            };
+                        curr_item.SetLayerSet( layers );
+                    };
 
             for( PCB_TRACK* track : m_board->Tracks() )
             {

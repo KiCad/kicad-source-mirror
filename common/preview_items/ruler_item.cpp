@@ -363,35 +363,36 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     double   offsetX = 15.0;                   // same as DrawTextNextToCursor()
     double   offsetY = dims.LinePitch * scale; // vertical spacing from cursor
 
-    auto fits = [&]( int sx, int sy )
-    {
-        double left, right, top, bottom;
-        double xStart = cursorScreen.x + ( sx < 0 ? offsetX : -offsetX );
+    auto fits =
+            [&]( int sx, int sy )
+            {
+                double left, right, top, bottom;
+                double xStart = cursorScreen.x + ( sx < 0 ? offsetX : -offsetX );
 
-        if( sx < 0 )
-        {
-            left = xStart;
-            right = left + width * scale;
-        }
-        else
-        {
-            right = xStart;
-            left = right - width * scale;
-        }
+                if( sx < 0 )
+                {
+                    left = xStart;
+                    right = left + width * scale;
+                }
+                else
+                {
+                    right = xStart;
+                    left = right - width * scale;
+                }
 
-        if( sy > 0 ) // above cursor
-        {
-            bottom = cursorScreen.y - offsetY;
-            top = bottom - height * scale;
-        }
-        else // below cursor
-        {
-            top = cursorScreen.y + offsetY;
-            bottom = top + height * scale;
-        }
+                if( sy > 0 ) // above cursor
+                {
+                    bottom = cursorScreen.y - offsetY;
+                    top = bottom - height * scale;
+                }
+                else // below cursor
+                {
+                    top = cursorScreen.y + offsetY;
+                    bottom = top + height * scale;
+                }
 
-        return left >= 0 && right <= screenSize.x && top >= 0 && bottom <= screenSize.y;
-    };
+                return left >= 0 && right <= screenSize.x && top >= 0 && bottom <= screenSize.y;
+            };
 
     std::vector<VECTOR2I> candidates = { { prefX, prefY }, { -prefX, prefY },
                                          { prefX, -prefY }, { -prefX, -prefY } };

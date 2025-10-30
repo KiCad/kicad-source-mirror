@@ -497,13 +497,14 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
     logicSize = physSize / bmpsf;
 
-    auto toBitmap = [&]( BITMAPS aBmps )
-    {
-        wxBitmap bmp = KiBitmap( aBmps, physSize );
-        bmp.SetScaleFactor( bmpsf );
-        wxASSERT(bmp.IsOk());
-        return bmp;
-    };
+    auto toBitmap =
+            [&]( BITMAPS aBmps )
+            {
+                wxBitmap bmp = KiBitmap( aBmps, physSize );
+                bmp.SetScaleFactor( bmpsf );
+                wxASSERT(bmp.IsOk());
+                return bmp;
+            };
 
     m_actionImageList = new wxImageList( logicSize, logicSize, true,
                                          static_cast<int>( m_availableTools.size() ) );

@@ -253,26 +253,27 @@ void RENDER_3D_RAYTRACE_BASE::renderTracing( uint8_t* ptrPBO, REPORTER* aStatusR
     thread_pool& tp = GetKiCadThreadPool();
     const int timeLimit = m_blockPositions.size() > 40000 ? 750 : 400;
 
-    auto processBlocks = [&]()
-    {
-        for( size_t iBlock = currentBlock.fetch_add( 1 );
-                    iBlock < m_blockPositions.size();
-                    iBlock = currentBlock.fetch_add( 1 ) )
-        {
-            if( !m_blockPositionsWasProcessed[iBlock] )
+    auto processBlocks =
+            [&]()
             {
-                renderBlockTracing( ptrPBO, iBlock );
-                m_blockPositionsWasProcessed[iBlock] = 1;
-                numBlocksRendered++;
-            }
+                for( size_t iBlock = currentBlock.fetch_add( 1 );
+                            iBlock < m_blockPositions.size();
+                            iBlock = currentBlock.fetch_add( 1 ) )
+                {
+                    if( !m_blockPositionsWasProcessed[iBlock] )
+                    {
+                        renderBlockTracing( ptrPBO, iBlock );
+                        m_blockPositionsWasProcessed[iBlock] = 1;
+                        numBlocksRendered++;
+                    }
 
-            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::steady_clock::now() - startTime );
+                    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - startTime );
 
-            if( diff.count() > timeLimit )
-                break;
-        }
-    };
+                    if( diff.count() > timeLimit )
+                        break;
+                }
+            };
 
     BS::multi_future<void> futures;
 
@@ -1737,31 +1738,32 @@ void RENDER_3D_RAYTRACE_BASE::initializeBlockPositions()
     // Hilbert curve position calculation
     // modified from Matters Computational, Springer 2011
     // GPLv3, Copyright Joerg Arndt
-    constexpr auto hilbert_get_pos = []( size_t aT, size_t& aX, size_t& aY )
-    {
-        static const size_t htab[] = { 0b0010, 0b0100, 0b1100, 0b1001, 0b1111, 0b0101,
-                                       0b0001, 0b1000, 0b0000, 0b1010, 0b1110, 0b0111,
-                                       0b1101, 0b1011, 0b0011, 0b0110 };
-        static const size_t size = sizeof( size_t ) * 8;
-        size_t xv = 0;
-        size_t yv = 0;
-        size_t c01 = 0;
+    constexpr auto hilbert_get_pos =
+            []( size_t aT, size_t& aX, size_t& aY )
+            {
+                static const size_t htab[] = { 0b0010, 0b0100, 0b1100, 0b1001, 0b1111, 0b0101,
+                                               0b0001, 0b1000, 0b0000, 0b1010, 0b1110, 0b0111,
+                                               0b1101, 0b1011, 0b0011, 0b0110 };
+                static const size_t size = sizeof( size_t ) * 8;
+                size_t xv = 0;
+                size_t yv = 0;
+                size_t c01 = 0;
 
-        for( size_t i = 0; i < ( size / 2 ); ++i )
-        {
-            size_t abi = aT >> ( size - 2 );
-            aT <<= 2;
+                for( size_t i = 0; i < ( size / 2 ); ++i )
+                {
+                    size_t abi = aT >> ( size - 2 );
+                    aT <<= 2;
 
-            size_t st = htab[( c01 << 2 ) | abi];
-            c01 = st & 3;
+                    size_t st = htab[( c01 << 2 ) | abi];
+                    c01 = st & 3;
 
-            yv = ( yv << 1 ) | ( ( st >> 2 ) & 1 );
-            xv = ( xv << 1 ) | ( st >> 3 );
-        }
+                    yv = ( yv << 1 ) | ( ( st >> 2 ) & 1 );
+                    xv = ( xv << 1 ) | ( st >> 3 );
+                }
 
-        aX = xv;
-        aY = yv;
-    };
+                aX = xv;
+                aY = yv;
+            };
 
     size_t total_blocks = blocks_x * blocks_y;
     size_t pos = 0;

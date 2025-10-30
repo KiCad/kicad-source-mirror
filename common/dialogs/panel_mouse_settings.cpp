@@ -224,42 +224,43 @@ void PANEL_MOUSE_SETTINGS::OnScrollRadioButton( wxCommandEvent& event )
     else if( btn == m_rbZoomAlt || btn == m_rbPanHAlt || btn == m_rbPanVAlt )
         modifier = WXK_ALT;
 
-    auto column_taken = [this]( int mod )
-    {
-        switch( mod )
-        {
-        case 0: return m_rbZoomNone->GetValue() || m_rbPanHNone->GetValue() || m_rbPanVNone->GetValue();
-        case WXK_CONTROL: return m_rbZoomCtrl->GetValue() || m_rbPanHCtrl->GetValue() || m_rbPanVCtrl->GetValue();
-        case WXK_SHIFT: return m_rbZoomShift->GetValue() || m_rbPanHShift->GetValue() || m_rbPanVShift->GetValue();
-        case WXK_ALT: return m_rbZoomAlt->GetValue() || m_rbPanHAlt->GetValue() || m_rbPanVAlt->GetValue();
-        default: return false;
-        }
-    };
+    auto column_taken =
+            [this]( int mod )
+            {
+                switch( mod )
+                {
+                case 0: return m_rbZoomNone->GetValue() || m_rbPanHNone->GetValue() || m_rbPanVNone->GetValue();
+                case WXK_CONTROL: return m_rbZoomCtrl->GetValue() || m_rbPanHCtrl->GetValue() || m_rbPanVCtrl->GetValue();
+                case WXK_SHIFT: return m_rbZoomShift->GetValue() || m_rbPanHShift->GetValue() || m_rbPanVShift->GetValue();
+                case WXK_ALT: return m_rbZoomAlt->GetValue() || m_rbPanHAlt->GetValue() || m_rbPanVAlt->GetValue();
+                default: return false;
+                }
+            };
 
     auto assign_first_available =
             [&]( wxRadioButton* noneBtn, wxRadioButton* ctrlBtn, wxRadioButton* shiftBtn, wxRadioButton* altBtn )
-    {
-        int candidates[] = { 0, WXK_CONTROL, WXK_SHIFT, WXK_ALT };
-
-        for( int candidate : candidates )
-        {
-            if( candidate == modifier )
-                continue;
-
-            if( !column_taken( candidate ) )
             {
-                switch( candidate )
-                {
-                case 0: noneBtn->SetValue( true ); break;
-                case WXK_CONTROL: ctrlBtn->SetValue( true ); break;
-                case WXK_SHIFT: shiftBtn->SetValue( true ); break;
-                case WXK_ALT: altBtn->SetValue( true ); break;
-                }
+                int candidates[] = { 0, WXK_CONTROL, WXK_SHIFT, WXK_ALT };
 
-                break;
-            }
-        }
-    };
+                for( int candidate : candidates )
+                {
+                    if( candidate == modifier )
+                        continue;
+
+                    if( !column_taken( candidate ) )
+                    {
+                        switch( candidate )
+                        {
+                        case 0: noneBtn->SetValue( true ); break;
+                        case WXK_CONTROL: ctrlBtn->SetValue( true ); break;
+                        case WXK_SHIFT: shiftBtn->SetValue( true ); break;
+                        case WXK_ALT: altBtn->SetValue( true ); break;
+                        }
+
+                        break;
+                    }
+                }
+            };
 
     if( modifier == WXK_CONTROL )
     {

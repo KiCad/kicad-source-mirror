@@ -270,7 +270,8 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
             {
                 return m_boardAdapter.m_Cfg->m_Render.show_model_bbox;
             };
-    auto showNavig = [this]( const SELECTION& aSel )
+    auto showNavig =
+            [this]( const SELECTION& aSel )
             {
                 return m_boardAdapter.m_Cfg->m_Render.show_navigator;
             };

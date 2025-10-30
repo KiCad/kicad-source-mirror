@@ -187,26 +187,27 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
 
     // Intersection test done
 
-    auto drawBillboardCircle = []( const glm::vec3& aCenter, float aRadius, const glm::vec3& aColor,
-                                   const glm::vec3& aCamRight, const glm::vec3& aCamUp, int aSegments = 64 )
-    {
-        float thickness = aRadius * 0.4f;
-        glColor3f( aColor.r, aColor.g, aColor.b );
+    auto drawBillboardCircle =
+            []( const glm::vec3& aCenter, float aRadius, const glm::vec3& aColor,
+                const glm::vec3& aCamRight, const glm::vec3& aCamUp, int aSegments = 64 )
+            {
+                float thickness = aRadius * 0.4f;
+                glColor3f( aColor.r, aColor.g, aColor.b );
 
-        glBegin( GL_TRIANGLE_STRIP );
-        for( int i = 0; i <= aSegments; ++i )
-        {
-            float     angle = 2.0f * glm::pi<float>() * i / aSegments;
-            glm::vec3 dir = cos( angle ) * aCamRight + sin( angle ) * aCamUp;
+                glBegin( GL_TRIANGLE_STRIP );
+                for( int i = 0; i <= aSegments; ++i )
+                {
+                    float     angle = 2.0f * glm::pi<float>() * i / aSegments;
+                    glm::vec3 dir = cos( angle ) * aCamRight + sin( angle ) * aCamUp;
 
-            glm::vec3 outer = aCenter + dir * ( aRadius + thickness * 0.5f );
-            glm::vec3 inner = aCenter + dir * ( aRadius - thickness * 0.5f );
+                    glm::vec3 outer = aCenter + dir * ( aRadius + thickness * 0.5f );
+                    glm::vec3 inner = aCenter + dir * ( aRadius - thickness * 0.5f );
 
-            glVertex3f( outer.x, outer.y, outer.z );
-            glVertex3f( inner.x, inner.y, inner.z );
-        }
-        glEnd();
-    };
+                    glVertex3f( outer.x, outer.y, outer.z );
+                    glVertex3f( inner.x, inner.y, inner.z );
+                }
+                glEnd();
+            };
 
     glm::vec3 camRight( aCameraRotationMatrix[0][0], aCameraRotationMatrix[1][0], aCameraRotationMatrix[2][0] );
     glm::vec3 camUp( aCameraRotationMatrix[0][1], aCameraRotationMatrix[1][1], aCameraRotationMatrix[2][1] );
@@ -241,73 +242,76 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
 
     glColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
 
-    auto drawX = []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
-                     const glm::vec3& aCamUp )
-    {
-        glColor3f( aColor.r, aColor.g, aColor.b );
-        glLineWidth( 3.0f );
+    auto drawX =
+            []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
+                const glm::vec3& aCamUp )
+            {
+                glColor3f( aColor.r, aColor.g, aColor.b );
+                glLineWidth( 3.0f );
 
-        float h = aSize * 0.5f;
+                float h = aSize * 0.5f;
 
-        // Define two diagonal line directions in camera-facing plane
-        glm::vec3 dir1 = ( -aCamRight + aCamUp ) * h; // one diagonal
-        glm::vec3 dir2 = ( -aCamRight - aCamUp ) * h; // other diagonal
+                // Define two diagonal line directions in camera-facing plane
+                glm::vec3 dir1 = ( -aCamRight + aCamUp ) * h; // one diagonal
+                glm::vec3 dir2 = ( -aCamRight - aCamUp ) * h; // other diagonal
 
-        glBegin( GL_LINES );
-        glVertex3f( ( aPos - dir1 ).x, ( aPos - dir1 ).y, ( aPos - dir1 ).z );
-        glVertex3f( ( aPos + dir1 ).x, ( aPos + dir1 ).y, ( aPos + dir1 ).z );
+                glBegin( GL_LINES );
+                glVertex3f( ( aPos - dir1 ).x, ( aPos - dir1 ).y, ( aPos - dir1 ).z );
+                glVertex3f( ( aPos + dir1 ).x, ( aPos + dir1 ).y, ( aPos + dir1 ).z );
 
-        glVertex3f( ( aPos - dir2 ).x, ( aPos - dir2 ).y, ( aPos - dir2 ).z );
-        glVertex3f( ( aPos + dir2 ).x, ( aPos + dir2 ).y, ( aPos + dir2 ).z );
-        glEnd();
-    };
+                glVertex3f( ( aPos - dir2 ).x, ( aPos - dir2 ).y, ( aPos - dir2 ).z );
+                glVertex3f( ( aPos + dir2 ).x, ( aPos + dir2 ).y, ( aPos + dir2 ).z );
+                glEnd();
+            };
 
-    auto drawY = []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
-                     const glm::vec3& aCamUp )
-    {
-        glColor3f( aColor.r, aColor.g, aColor.b );
-        glLineWidth( 3.0f );
+    auto drawY =
+            []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
+                const glm::vec3& aCamUp )
+            {
+                glColor3f( aColor.r, aColor.g, aColor.b );
+                glLineWidth( 3.0f );
 
-        float h = aSize * 0.5f;
+                float h = aSize * 0.5f;
 
-        // Top-left and top-right in screen plane
-        glm::vec3 topLeft = aPos + aCamUp * h - aCamRight * h;
-        glm::vec3 topRight = aPos + aCamUp * h + aCamRight * h;
-        glm::vec3 bottom = aPos - aCamUp * h;
+                // Top-left and top-right in screen plane
+                glm::vec3 topLeft = aPos + aCamUp * h - aCamRight * h;
+                glm::vec3 topRight = aPos + aCamUp * h + aCamRight * h;
+                glm::vec3 bottom = aPos - aCamUp * h;
 
-        glBegin( GL_LINES );
-        glVertex3f( topLeft.x, topLeft.y, topLeft.z );
-        glVertex3f( aPos.x, aPos.y, aPos.z );
+                glBegin( GL_LINES );
+                glVertex3f( topLeft.x, topLeft.y, topLeft.z );
+                glVertex3f( aPos.x, aPos.y, aPos.z );
 
-        glVertex3f( topRight.x, topRight.y, topRight.z );
-        glVertex3f( aPos.x, aPos.y, aPos.z );
+                glVertex3f( topRight.x, topRight.y, topRight.z );
+                glVertex3f( aPos.x, aPos.y, aPos.z );
 
-        glVertex3f( aPos.x, aPos.y, aPos.z );
-        glVertex3f( bottom.x, bottom.y, bottom.z );
-        glEnd();
-    };
+                glVertex3f( aPos.x, aPos.y, aPos.z );
+                glVertex3f( bottom.x, bottom.y, bottom.z );
+                glEnd();
+            };
 
-    auto drawZ = []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
-                     const glm::vec3& aCamUp )
-    {
-        glColor3f( aColor.r, aColor.g, aColor.b );
-        glLineWidth( 3.0f );
+    auto drawZ =
+            []( const glm::vec3& aPos, float aSize, const glm::vec3& aColor, const glm::vec3& aCamRight,
+                const glm::vec3& aCamUp )
+            {
+                glColor3f( aColor.r, aColor.g, aColor.b );
+                glLineWidth( 3.0f );
 
-        float h = aSize * 0.5f;
+                float h = aSize * 0.5f;
 
-        // Define corners in screen plane relative to camera
-        glm::vec3 topLeft = aPos + aCamUp * h - aCamRight * h;
-        glm::vec3 topRight = aPos + aCamUp * h + aCamRight * h;
-        glm::vec3 bottomLeft = aPos - aCamUp * h - aCamRight * h;
-        glm::vec3 bottomRight = aPos - aCamUp * h + aCamRight * h;
+                // Define corners in screen plane relative to camera
+                glm::vec3 topLeft = aPos + aCamUp * h - aCamRight * h;
+                glm::vec3 topRight = aPos + aCamUp * h + aCamRight * h;
+                glm::vec3 bottomLeft = aPos - aCamUp * h - aCamRight * h;
+                glm::vec3 bottomRight = aPos - aCamUp * h + aCamRight * h;
 
-        glBegin( GL_LINE_STRIP );
-        glVertex3f( topLeft.x, topLeft.y, topLeft.z );
-        glVertex3f( topRight.x, topRight.y, topRight.z );
-        glVertex3f( bottomLeft.x, bottomLeft.y, bottomLeft.z );
-        glVertex3f( bottomRight.x, bottomRight.y, bottomRight.z );
-        glEnd();
-    };
+                glBegin( GL_LINE_STRIP );
+                glVertex3f( topLeft.x, topLeft.y, topLeft.z );
+                glVertex3f( topRight.x, topRight.y, topRight.z );
+                glVertex3f( bottomLeft.x, bottomLeft.y, bottomLeft.z );
+                glVertex3f( bottomRight.x, bottomRight.y, bottomRight.z );
+                glEnd();
+            };
 
     for( size_t i = 0; i < m_spheres.size(); ++i )
     {

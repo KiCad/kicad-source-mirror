@@ -957,11 +957,12 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         RAY                mouseRay = getRayAtCurrentMousePosition();
         BOARD_ITEM*        rollOverItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
-        auto printNetInfo = []( BOARD_CONNECTED_ITEM* aItem )
-        {
-            return wxString::Format( _( "Net %s\tNet class %s" ), aItem->GetNet()->GetNetname(),
-                                     aItem->GetNet()->GetNetClass()->GetHumanReadableName() );
-        };
+        auto printNetInfo =
+                []( BOARD_CONNECTED_ITEM* aItem )
+                {
+                    return wxString::Format( _( "Net %s\tNet class %s" ), aItem->GetNet()->GetNetname(),
+                                             aItem->GetNet()->GetNetClass()->GetHumanReadableName() );
+                };
 
         if( rollOverItem )
         {
