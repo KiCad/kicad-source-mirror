@@ -135,10 +135,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_hullCacheTimeStamp             = aFootprint.m_hullCacheTimeStamp;
 
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
-
-    std::ranges::copy( aFootprint.m_jumperPadGroups,
-                       std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
-
+    m_jumperPadGroups                = aFootprint.m_jumperPadGroups;
     m_duplicatePadNumbersAreJumpers  = aFootprint.m_duplicatePadNumbersAreJumpers;
     m_allowMissingCourtyard          = aFootprint.m_allowMissingCourtyard;
     m_allowSolderMaskBridges         = aFootprint.m_allowSolderMaskBridges;
@@ -808,9 +805,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
     m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
-
-    std::ranges::copy( aOther.m_jumperPadGroups,
-                       std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
+    m_jumperPadGroups                = aOther.m_jumperPadGroups;
 
     // Move the fields
     for( PCB_FIELD* field : m_fields )

@@ -192,10 +192,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
                 m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
             } );
 
-    m_layerProperties.clear();
-
-    std::ranges::copy( aZone.LayerProperties(),
-                       std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+    m_layerProperties = aZone.m_layerProperties;
 
     m_borderStyle             = aZone.m_borderStyle;
     m_borderHatchPitch        = aZone.m_borderHatchPitch;
@@ -553,9 +550,7 @@ const ZONE_LAYER_PROPERTIES& ZONE::LayerProperties( PCB_LAYER_ID aLayer ) const
 
 void ZONE::SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aOther )
 {
-    m_layerProperties.clear();
-
-    std::ranges::copy( aOther, std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+    m_layerProperties = aOther;
 }
 
 
@@ -1048,10 +1043,7 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     for( auto& [oldLayer, shapePtr] : m_FilledPolysList )
         fillsCopy[oldLayer] = *shapePtr;
 
-    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layerPropertiesCopy;
-
-    std::ranges::copy( m_layerProperties,
-                       std::inserter( layerPropertiesCopy, std::end( layerPropertiesCopy ) ) );
+    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layerPropertiesCopy = m_layerProperties;
 
     LSET flipped;
 

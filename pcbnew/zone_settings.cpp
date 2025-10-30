@@ -177,11 +177,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_Locked                      = aSource.IsLocked();
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
-
-    m_LayerProperties.clear();
-
-    std::ranges::copy( aSource.LayerProperties(),
-                       std::inserter( m_LayerProperties, std::end( m_LayerProperties ) ) );
+    m_LayerProperties             = aSource.LayerProperties();
 
     // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
     // but a ZONE parameter only.
@@ -251,7 +247,6 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
 
 void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
 {
-    // clang-format off
     m_ZonePriority                = aOther.m_ZonePriority;
     m_FillMode                    = aOther.m_FillMode;
     m_ZoneClearance               = aOther.m_ZoneClearance;
@@ -284,18 +279,12 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
     m_Locked                      = aOther.m_Locked;
     m_removeIslands               = aOther.m_removeIslands;
     m_minIslandArea               = aOther.m_minIslandArea;
-    // clang-format on
 
     if( aCopyFull )
     {
-        m_LayerProperties.clear();
-
-        std::ranges::copy( aOther.m_LayerProperties,
-                           std::inserter( m_LayerProperties, std::end( m_LayerProperties ) ) );
-
-        m_TeardropType = aOther.m_TeardropType;
-
-        m_Layers = aOther.m_Layers;
+        m_LayerProperties = aOther.m_LayerProperties;
+        m_TeardropType    = aOther.m_TeardropType;
+        m_Layers          = aOther.m_Layers;
     }
 }
 

@@ -407,7 +407,6 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 
         case T_jumper_pin_groups:
         {
-            // This should only be formatted if there is at least one group
             std::vector<std::set<wxString>>& groups = symbol->JumperPinGroups();
             std::set<wxString>* currentGroup = nullptr;
 

@@ -184,7 +184,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary )
     m_libId          = aSymbol.m_libId;
     m_keyWords       = aSymbol.m_keyWords;
 
-    std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
+    m_jumperPinGroups = aSymbol.m_jumperPinGroups;
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
@@ -233,7 +233,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_libId       = aSymbol.m_libId;
     m_keyWords    = aSymbol.m_keyWords;
 
-    std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
+    m_jumperPinGroups = aSymbol.m_jumperPinGroups;
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
