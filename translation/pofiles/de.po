@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
 "PO-Revision-Date: 2025-10-30 08:21+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7902,31 +7902,33 @@ msgstr "Alle Zellen auswählen"
 #: common/history_lock.cpp:135
 #, fuzzy, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Kann das Historieverzeichnis \"%s\" nicht erstellen."
 
 #: common/history_lock.cpp:156
-#, c-format
+#, c-format, fuzzy
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "Historieverzeichnis ist durch %s@%s gesperrt"
 
 #: common/history_lock.cpp:171
 #, fuzzy, c-format
 msgid "History directory does not exist: %s"
-msgstr "Das Quellverzeichnis %s existiert nicht"
+msgstr "Das Historieverzeichnis %s existiert nicht"
 
 #: common/history_lock.cpp:182
 #, fuzzy, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Konnte Repository-Index nicht beziehen: %s"
+msgstr "Konnte Git-Repository nicht öffnen: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
 msgstr ""
 
 #: common/history_lock.cpp:207
-#, c-format
+#, c-format, fuzzy
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr ""
+"Zugriff auf \"Git-Index Sperre\" fehlgeschlagen (eine andere Operation läuft)"
+": %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -9062,49 +9064,59 @@ msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"Die folgenden Dateien werden überschrieben:\n"
+"Die folgenden Dateien werden bei der Wiederherstellung dieses Commits "
+"gelöscht:\n"
 "\n"
 
 #: common/local_history.cpp:1377
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... und %zu weitere Dateien\n"
 
 #: common/local_history.cpp:1381
+#, fuzzy
 msgid "Delete Files during Restore"
-msgstr ""
+msgstr "Dateien im Zuge der Wiederherstellung löschen"
 
 #: common/local_history.cpp:1383
+#, fuzzy
 msgid "Proceed"
-msgstr ""
+msgstr "Fortfahren"
 
 #: common/local_history.cpp:1383
 #, fuzzy
 msgid "Keep All Files"
-msgstr "Alle Dateien"
+msgstr "Alle Dateien behalten"
 
 #: common/local_history.cpp:1383 eeschema/files-io.cpp:533
 msgid "Abort"
 msgstr "Abbrechen"
 
 #: common/local_history.cpp:1385
+#, fuzzy
 msgid ""
 "Choosing 'Keep All Files' will restore the selected commit but retain any "
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"\"Alle Dateien behalten\" stellt den ausgewählten Commit wieder her, behält "
+"aber jegliche im Projektverzeichnis existierende Dateien. \"Fortfahren\" "
+"löscht alle Dateien, welche nicht im wiederherzustellenden Commit enthalten "
+"sind."
 
 #: common/local_history.cpp:1803
 #, fuzzy
 msgid "Select snapshot"
-msgstr "Pfad auswählen"
+msgstr "Snapshot auswählen"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
 #, fuzzy
 msgid "Restore"
-msgstr "Widerstand"
+msgstr "Wiederherstellen"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:919
@@ -26142,7 +26154,7 @@ msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
 #: eeschema/tools/sch_move_tool.cpp:851
 #, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
+msgstr "<ESC> drücken, um den Abruchvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:852
 msgid "Press <ESC> to cancel slice."
@@ -29895,8 +29907,10 @@ msgid "Error opening jobs file"
 msgstr "Fehler beim Öffnen der Auftragsdatei"
 
 #: kicad/kicad_manager_frame.cpp:855
+#, fuzzy
 msgid "A newer local history snapshot is available. Restore it?"
 msgstr ""
+"Lokal ist ein neuerer Snapshot der Historie verfügbar. Wiederherstellen?"
 
 #: kicad/kicad_manager_frame.cpp:1020
 msgid "Edit File in Text Editor"
@@ -47947,7 +47961,9 @@ msgstr "Kupferzone \"%s\" hat keine verbundenen Pads."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, fuzzy, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "Kupferzone auf Lage %s bei (%s, %s) hat keine verbundenen Pads."
+msgstr ""
+"Kupferzone auf Lage %s bei (%s, %s) hat keine mit dem Netz \"%s\" verbundene "
+"Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1478
 #, c-format
