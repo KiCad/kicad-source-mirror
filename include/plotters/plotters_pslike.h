@@ -333,8 +333,8 @@ public:
      * PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!)
      */
-    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
-                              double aScale, bool aMirror ) override;
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, double aScale,
+                              bool aMirror ) override;
 
     /**
      * Rectangles in PDF. Supported by the native operator.
@@ -350,9 +350,8 @@ public:
     /**
      * The PDF engine can't directly plot arcs so we use polygonization.
      */
-    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
-                      int aWidth ) override;
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
+                      double aRadius, FILL_T aFill, int aWidth ) override;
 
     /**
      * Polygon plotting for PDF. Everything is supported
@@ -382,21 +381,20 @@ public:
 
 private:
     // Structure to hold overbar drawing information
-    struct OverbarInfo
+    struct OVERBAR_INFO
     {
-        VECTOR2I startPos;  // Start position of overbar text
-        VECTOR2I endPos;    // End position of overbar text
-        VECTOR2I fontSize;  // Font size for proper overbar positioning
-        bool     isOutline; // True if the overbar applies to an outline font run
-        GR_TEXT_V_ALIGN_T vAlign; // Original vertical alignment of the parent text
+        VECTOR2I          startPos;    // Start position of overbar text
+        VECTOR2I          endPos;      // End position of overbar text
+        VECTOR2I          fontSize;    // Font size for proper overbar positioning
+        bool              isOutline;   // True if the overbar applies to an outline font run
+        GR_TEXT_V_ALIGN_T vAlign;      // Original vertical alignment of the parent text
     };
 
     /**
      * Render a single word with the given style parameters
      */
-    VECTOR2I renderWord( const wxString& aWord, const VECTOR2I& aPosition,
-                         const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
-                         bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
+    VECTOR2I renderWord( const wxString& aWord, const VECTOR2I& aPosition, const VECTOR2I& aSize,
+                         const EDA_ANGLE& aOrient, bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
                          KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics,
                          enum GR_TEXT_V_ALIGN_T aV_justify, TEXT_STYLE_FLAGS aTextStyle );
 
@@ -404,19 +402,16 @@ private:
      * Recursively render markup nodes with appropriate styling
      */
     VECTOR2I renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
-                               const VECTOR2I& aBaseSize, const EDA_ANGLE& aOrient,
-                               bool aTextMirrored, int aWidth, bool aBaseBold,
-                               bool aBaseItalic, KIFONT::FONT* aFont,
-                               const KIFONT::METRICS& aFontMetrics,
-                               enum GR_TEXT_V_ALIGN_T aV_justify,
-                               TEXT_STYLE_FLAGS aTextStyle,
-                               std::vector<OverbarInfo>& aOverbars );
+                               const VECTOR2I& aBaseSize, const EDA_ANGLE& aOrient, bool aTextMirrored,
+                               int aWidth, bool aBaseBold, bool aBaseItalic, KIFONT::FONT* aFont,
+                               const KIFONT::METRICS& aFontMetrics, enum GR_TEXT_V_ALIGN_T aV_justify,
+                               TEXT_STYLE_FLAGS aTextStyle, std::vector<OVERBAR_INFO>& aOverbars );
 
     /**
      * Draw overbar lines above text
      */
-    void drawOverbars( const std::vector<OverbarInfo>& aOverbars,
-                       const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics );
+    void drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, const EDA_ANGLE& aOrient,
+                       const KIFONT::METRICS& aFontMetrics );
 
     std::vector<VECTOR2D> arcPath( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                                    const EDA_ANGLE& aAngle, double aRadius );
@@ -460,10 +455,10 @@ public:
      *
      */
     static std::vector<float> CreateC2WMatrixFromAngles( const VECTOR3D& aTargetPosition,
-                                                            float aCameraDistance,
-                                                            float aYawDegrees,
-                                                            float aPitchDegrees,
-                                                            float aRollDegrees );
+                                                         float aCameraDistance,
+                                                         float aYawDegrees,
+                                                         float aPitchDegrees,
+                                                         float aRollDegrees );
 
 protected:
     struct OUTLINE_NODE

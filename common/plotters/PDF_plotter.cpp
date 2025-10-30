@@ -1972,14 +1972,6 @@ bool PDF_PLOTTER::EndPlot()
 }
 
 
-struct OverbarInfo
-{
-    VECTOR2I startPos;
-    VECTOR2I endPos;
-    VECTOR2I fontSize;
-};
-
-
 void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
                         const COLOR4D&         aColor,
                         const wxString&        aText,
@@ -2064,7 +2056,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         pos += box_y;
 
     // Render markup tree
-    std::vector<OverbarInfo> overbars;
+    std::vector<OVERBAR_INFO> overbars;
     renderMarkupNode( markupTree.get(), pos, t_size, aOrient, textMirrored, aWidth,
                       aBold, aItalic, aFont, aFontMetrics, aV_justify, 0, overbars );
 
@@ -2369,12 +2361,10 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
 
 VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
                                          const VECTOR2I& aBaseSize, const EDA_ANGLE& aOrient,
-                                         bool aTextMirrored, int aWidth, bool aBaseBold,
-                                         bool aBaseItalic, KIFONT::FONT* aFont,
-                                         const KIFONT::METRICS& aFontMetrics,
-                                         enum GR_TEXT_V_ALIGN_T aV_justify,
-                                         TEXT_STYLE_FLAGS aTextStyle,
-                                         std::vector<OverbarInfo>& aOverbars )
+                                         bool aTextMirrored, int aWidth, bool aBaseBold, bool aBaseItalic,
+                                         KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics,
+                                         enum GR_TEXT_V_ALIGN_T aV_justify, TEXT_STYLE_FLAGS aTextStyle,
+                                         std::vector<OVERBAR_INFO>& aOverbars )
 {
     VECTOR2I nextPosition = aPosition;
 
@@ -2447,14 +2437,13 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
 }
 
 
-void PDF_PLOTTER::drawOverbars( const std::vector<OverbarInfo>& aOverbars,
-                                 const EDA_ANGLE& aOrient, const KIFONT::METRICS& aFontMetrics )
+void PDF_PLOTTER::drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, const EDA_ANGLE& aOrient,
+                                const KIFONT::METRICS& aFontMetrics )
 {
-    for( const OverbarInfo& overbar : aOverbars )
+    for( const OVERBAR_INFO& overbar : aOverbars )
     {
         // Baseline direction (vector from start to end). If zero length, derive from orientation.
-        VECTOR2D dir( overbar.endPos.x - overbar.startPos.x,
-                      overbar.endPos.y - overbar.startPos.y );
+        VECTOR2D dir( overbar.endPos.x - overbar.startPos.x, overbar.endPos.y - overbar.startPos.y );
 
         double len = hypot( dir.x, dir.y );
         if( len <= 1e-6 )
