@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 08:21+0000\n"
+"PO-Revision-Date: 2025-10-31 11:03+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7795,33 +7795,34 @@ msgid "Select all cells"
 msgstr "すべてのセルを選択"
 
 #: common/history_lock.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "履歴ディレクトリを作成できません: %s"
 
 #: common/history_lock.cpp:156
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "履歴リポジトリは %s@%s によってロックされている"
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "ソースディレクトリー %s がありません"
+msgstr "履歴ディレクトリがありません: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "リポジトリ インデックスの取得に失敗しました: %s"
+msgstr "gitリポジトリを開く事に失敗しました: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "gitのindex.lockを得られていません:リポジトリは開いていません"
 
 #: common/history_lock.cpp:207
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
-msgstr ""
+msgstr "gitのindex.lockを得られていません (別のプロセスがindex.lockを保持していますか"
+" ?): %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -8953,12 +8954,11 @@ msgid "An unexpected error occurred while reading library table"
 msgstr "ライブラリ テーブルの読み取り中に予期しないエラーが発生しました"
 
 #: common/local_history.cpp:1366
-#, fuzzy
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"次のファイルが上書きされます:\n"
+"このコミットを復元すると、次のファイルが削除されます:\n"
 "\n"
 
 #: common/local_history.cpp:1377
@@ -8967,20 +8967,20 @@ msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... 並びに %zu 個のファイルたち\n"
 
 #: common/local_history.cpp:1381
-#, fuzzy
 msgid "Delete Files during Restore"
-msgstr "ディレクトリーを削除"
+msgstr "復元中にファイルを削除"
 
 #: common/local_history.cpp:1383
 msgid "Proceed"
-msgstr ""
+msgstr "続行"
 
 #: common/local_history.cpp:1383
-#, fuzzy
 msgid "Keep All Files"
-msgstr "すべてのファイル"
+msgstr "すべてのファイルを保持"
 
 #: common/local_history.cpp:1383 eeschema/files-io.cpp:533
 msgid "Abort"
@@ -8992,16 +8992,17 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"'すべてのファイルを保持'を選択すると選択したコミットが復元されますがプロジェ"
+"クトディレクトリ内の他の既存のファイルは保持されます。'続行'を選択すると復元"
+"されたコミットに存在しないファイルは削除されます。"
 
 #: common/local_history.cpp:1803
-#, fuzzy
 msgid "Select snapshot"
-msgstr "パスを選択"
+msgstr "スナップショットを選択"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
-#, fuzzy
 msgid "Restore"
-msgstr "抵抗"
+msgstr "復元"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:919
@@ -14606,9 +14607,8 @@ msgid "Footprint Filters"
 msgstr "フットプリント フィルター"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:489
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "重複する番号のパッドはすべてジャンパー接続"
+msgstr "重複する番号のピンはすべてジャンパー接続"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:511
@@ -14621,9 +14621,8 @@ msgstr ""
 "のパッドは内部でジャンパー接続されているものと見なします。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
-#, fuzzy
 msgid "Explicit jumper pin groups:"
-msgstr "ジャンパーパッドグループを更新:"
+msgstr "詳しいジャンパーピングループ:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:552
 msgid "Pin Connections"
@@ -25793,14 +25792,12 @@ msgid "Press <ESC> to cancel drag."
 msgstr "<ESC>を押すと、ドラッグをキャンセルします。"
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "<ESC>を押すと、ドラッグをキャンセルします。"
+msgstr "<ESC>を押すと、分割をキャンセルします。"
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "<ESC>を押すと、移動をキャンセルします。"
+msgstr "<ESC>を押すと、切断をキャンセルします。"
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -29456,9 +29453,8 @@ msgid "Project Files"
 msgstr "プロジェクト ファイル"
 
 #: kicad/kicad_manager_frame.cpp:238 kicad/tools/kicad_manager_actions.cpp:244
-#, fuzzy
 msgid "Local History"
-msgstr "履歴"
+msgstr "ローカル履歴"
 
 #: kicad/kicad_manager_frame.cpp:400
 msgid "PCM Updates Available"
@@ -29475,7 +29471,7 @@ msgstr "ジョブファイルを開く際のエラー"
 
 #: kicad/kicad_manager_frame.cpp:855
 msgid "A newer local history snapshot is available. Restore it?"
-msgstr ""
+msgstr "新しいローカル履歴スナップショットが利用可能です。復元しますか?"
 
 #: kicad/kicad_manager_frame.cpp:1020
 msgid "Edit File in Text Editor"
@@ -29505,24 +29501,22 @@ msgid "Restoring '%s'"
 msgstr "'%s' を復元しています"
 
 #: kicad/local_history_pane.cpp:121
-#, fuzzy
 msgid "Moments ago"
-msgstr "コメント"
+msgstr "直前"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "分"
+msgstr "%d 分前"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
 msgid "%d hours ago"
-msgstr ""
+msgstr "%d 時間前"
 
 #: kicad/local_history_pane.cpp:227
-#, fuzzy
 msgid "Restore Commit"
-msgstr "最後のコミット"
+msgstr "コミットを復元"
 
 #: kicad/menubar.cpp:63
 msgid "Clear Recent Projects"
@@ -30473,19 +30467,16 @@ msgid "Open project directory in file explorer"
 msgstr "ファイル エクスプローラーでプロジェクト ディレクトリを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "リポジトリからプロジェクトをクローン..."
+msgstr "ローカル履歴からプロジェクトを復元..."
 
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "他のソフトウェアからプロジェクト ファイルをインポートします"
+msgstr "ローカル履歴からプロジェクトファイルを復元します"
 
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "このレイヤーの表示/非表示"
+msgstr "ローカル履歴パネルの表示/非表示"
 
 #: kicad/tools/kicad_manager_control.cpp:80
 msgid "Create New Project"
@@ -35165,7 +35156,6 @@ msgid "Cleanup Tracks and Vias"
 msgstr "配線とビアをクリーンアップ"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:192
-#, fuzzy
 msgid "Legacy Teardrop Properties"
 msgstr "ティアドロップのプロパティ"
 
@@ -37733,7 +37723,7 @@ msgstr "重複する番号のパッドはすべてジャンパー接続"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:518
 msgid "Explicit jumper pad groups:"
-msgstr "ジャンパーパッドグループを更新:"
+msgstr "詳しいジャンパーパッドグループ:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:120
 msgid "All footprint generator scripts were loaded"
@@ -47231,9 +47221,10 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "導体ゾーン '%s' はパッドへの接続がありません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "レイヤー %s 上の( %s, %s) の導体ゾーンにパッドが接続されていません。"
+msgstr "%s レイヤー 上の 導体ゾーン(%s, %s) は、ネット \"%s\" に接続されたパッドがあ"
+"りません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1478
 #, c-format
