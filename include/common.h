@@ -108,6 +108,11 @@ KICOMMON_API wxString GetGeneratedFieldDisplayName( const wxString& aSource );
 KICOMMON_API bool IsGeneratedField( const wxString& aSource );
 
 /**
+ * Returns a user-visible HTML string describing a footprint reference designator.
+ */
+KICOMMON_API wxString DescribeRef( const wxString& aRef );
+
+/**
  * Replace any environment and/or text variables in URIs
  */
 KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProject );

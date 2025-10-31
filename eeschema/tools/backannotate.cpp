@@ -26,6 +26,7 @@
 #include <backannotate.h>
 #include <boost/property_tree/ptree.hpp>
 #include <confirm.h>
+#include <common.h>
 #include <dsnlexer.h>
 #include <ptree.h>
 #include <reporter.h>
@@ -130,15 +131,6 @@ void BACK_ANNOTATE::PushNewLinksToPCB()
 }
 
 
-wxString describeRef( const wxString& aRef )
-{
-    if( aRef.IsEmpty() )
-        return wxT( "<i>" ) + _( "unannotated footprint" ) + wxT( " </i>" );
-    else
-        return aRef;
-}
-
-
 void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 {
     auto getStr = []( const PTREE& pt ) -> wxString
@@ -176,7 +168,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint '%s' has no assigned symbol." ), describeRef( ref ) );
+                msg.Printf( _( "Footprint '%s' has no assigned symbol." ), DescribeRef( ref ) );
                 m_reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
@@ -250,8 +242,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         {
             // Module with this path already exists - generate error
             msg.Printf( _( "Footprints '%s' and '%s' linked to same symbol." ),
-                        describeRef( nearestItem->second->m_ref ),
-                        describeRef( ref ) );
+                        DescribeRef( nearestItem->second->m_ref ),
+                        DescribeRef( ref ) );
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
         }
         else
@@ -312,7 +304,7 @@ void BACK_ANNOTATE::getChangeList()
         {
             // Haven't found linked symbol in multiunits or common refs. Generate error
             m_reporter.ReportTail( wxString::Format( _( "Cannot find symbol for footprint '%s'." ),
-                                                     describeRef( pcbData->m_ref ) ),
+                                                     DescribeRef( pcbData->m_ref ) ),
                                    RPT_SEVERITY_ERROR );
         }
     }
@@ -343,7 +335,7 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
                 m_reporter.ReportTail( wxString::Format( _( "Footprint '%s' is not present on PCB. "
                                                             "Corresponding symbols in schematic must be "
                                                             "manually deleted (if desired)." ),
-                                                         describeRef( m_refs[i].GetRef() ) ),
+                                                         DescribeRef( m_refs[i].GetRef() ) ),
                                        RPT_SEVERITY_WARNING );
             }
 
@@ -760,7 +752,7 @@ void BACK_ANNOTATE::applyChangelist()
                         unitBString.Printf( wxT( "%d" ), bUnit );
 
                     msg.Printf( _( "Swap %s unit %s with unit %s." ),
-                                describeRef( baseRef ),
+                                DescribeRef( baseRef ),
                                 unitAString,
                                 unitBString );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -820,7 +812,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s reference designator to '%s'." ),
-                        describeRef( ref.GetRef() ),
+                        DescribeRef( ref.GetRef() ),
                         fpData.m_ref );
 
             if( !m_dryRun )
@@ -834,7 +826,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint assignment from '%s' to '%s'." ),
-                        describeRef( ref.GetRef() ),
+                        DescribeRef( ref.GetRef() ),
                         EscapeHTML( oldFootprint ),
                         EscapeHTML( fpData.m_footprint ) );
 
@@ -849,7 +841,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s value from '%s' to '%s'." ),
-                        describeRef( ref.GetRef() ),
+                        DescribeRef( ref.GetRef() ),
                         EscapeHTML( oldValue ),
                         EscapeHTML( fpData.m_value ) );
 
@@ -863,7 +855,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s 'Do not populate' from '%s' to '%s'." ),
-                        describeRef( ref.GetRef() ),
+                        DescribeRef( ref.GetRef() ),
                         boolString( oldDNP ),
                         boolString( fpData.m_DNP ) );
 
@@ -877,7 +869,7 @@ void BACK_ANNOTATE::applyChangelist()
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s 'Exclude from bill of materials' from '%s' to '%s'." ),
-                        describeRef( ref.GetRef() ),
+                        DescribeRef( ref.GetRef() ),
                         boolString( oldExBOM ),
                         boolString( fpData.m_excludeFromBOM ) );
 
@@ -908,7 +900,7 @@ void BACK_ANNOTATE::applyChangelist()
                 if( !pin )
                 {
                     msg.Printf( _( "Cannot find %s pin '%s'." ),
-                                describeRef( ref.GetRef() ),
+                                DescribeRef( ref.GetRef() ),
                                 EscapeHTML( pinNumber ) );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
 
@@ -951,7 +943,7 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     m_changesCount++;
                     msg.Printf( _( "Change %s field '%s' value to '%s'." ),
-                                describeRef( ref.GetRef() ),
+                                DescribeRef( ref.GetRef() ),
                                 EscapeHTML( symField->GetCanonicalName() ),
                                 EscapeHTML( fpFieldValue ) );
 
@@ -966,7 +958,7 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     m_changesCount++;
                     msg.Printf( _( "Add %s field '%s' with value '%s'." ),
-                                describeRef( ref.GetRef() ),
+                                DescribeRef( ref.GetRef() ),
                                 EscapeHTML( fpFieldName ),
                                 EscapeHTML( fpFieldValue ) );
 
@@ -996,7 +988,7 @@ void BACK_ANNOTATE::applyChangelist()
                     // Field not found in footprint field map, delete it
                     m_changesCount++;
                     msg.Printf( _( "Delete %s field '%s.'" ),
-                                describeRef( ref.GetRef() ),
+                                DescribeRef( ref.GetRef() ),
                                 EscapeHTML( field.GetName() ) );
 
                     if( !m_dryRun )
@@ -1259,7 +1251,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
                 if( projects.IsEmpty() )
                 {
                     msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared across other projects." ),
-                                describeRef( aReference.GetRef() ),
+                                DescribeRef( aReference.GetRef() ),
                                 EscapeHTML( change.pin->GetShownNumber() ),
                                 EscapeHTML( partner.pin->GetShownNumber() ) );
                 }
@@ -1277,14 +1269,14 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
 
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is used by multiple sheet "
                                "instances (%s)." ),
-                            describeRef( aReference.GetRef() ),
+                            DescribeRef( aReference.GetRef() ),
                             EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ), sheets );
             }
             else if( sharedSheetSymbol )
             {
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but the symbol is shared." ),
-                            describeRef( aReference.GetRef() ),
+                            DescribeRef( aReference.GetRef() ),
                             EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ) );
             }
@@ -1292,7 +1284,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
             {
                 msg.Printf( _( "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are disabled in "
                                "the schematic preferences." ),
-                            describeRef( aReference.GetRef() ),
+                            DescribeRef( aReference.GetRef() ),
                             EscapeHTML( change.pin->GetShownNumber() ),
                             EscapeHTML( partner.pin->GetShownNumber() ) );
             }
@@ -1327,7 +1319,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
         ++m_changesCount;
 
         msg.Printf( _( "Swap %s pins %s and %s to match PCB." ),
-                    describeRef( aReference.GetRef() ),
+                    DescribeRef( aReference.GetRef() ),
                     EscapeHTML( change.pin->GetShownNumber() ),
                     EscapeHTML( partner.pin->GetShownNumber() ) );
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -1402,7 +1394,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         ++m_changesCount;
 
         msg.Printf( _( "Change %s pin %s net label from '%s' to '%s'." ),
-                    describeRef( aRef ),
+                    DescribeRef( aRef ),
                     EscapeHTML( aPin->GetShownNumber() ),
                     EscapeHTML( aOldName ),
                     EscapeHTML( aNewName ) );
@@ -1434,7 +1426,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         ++m_changesCount;
         msg.Printf( _( "Add label '%s' to %s pin %s net." ),
                     EscapeHTML( aNewName ),
-                    describeRef( aRef ),
+                    DescribeRef( aRef ),
                     EscapeHTML( aPin->GetShownNumber() ) );
 
         if( !m_dryRun )

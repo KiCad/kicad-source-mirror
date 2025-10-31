@@ -26,6 +26,7 @@
 #include <atomic>
 #include <wx/log.h>
 #include <reporter.h>
+#include <common.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <board_design_settings.h>
@@ -559,12 +560,71 @@ void DRC_ENGINE::loadImplicitRules()
     }
 
     // 5) keepout area rules
-    std::vector<ZONE*> keepoutZones;
+    auto addKeepoutZoneRule =
+            [&]( ZONE* zone, FOOTPRINT* parentFP )
+            {
+                const wxString& name = zone->GetZoneName();
+
+                if( name.IsEmpty() )
+                {
+                    if( parentFP )
+                    {
+                        rule = createImplicitRule( wxString::Format( _( "keepout area of %s" ),
+                                                                     DescribeRef( parentFP->GetReference() ) ) );
+                    }
+                    else
+                    {
+                        rule = createImplicitRule( _( "keepout area" ) );
+                    }
+
+                }
+                else
+                {
+                    if( parentFP )
+                    {
+                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s' of %s" ),
+                                                                     name,
+                                                                     DescribeRef( parentFP->GetReference() ) ) );
+                    }
+                    else
+                    {
+                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
+                    }
+                }
+
+                rule->m_ImplicitItemId = zone->m_Uuid;
+
+                rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.intersectsArea('%s')" ),
+                                                                              zone->m_Uuid.AsString() ) );
+
+                rule->m_LayerCondition = zone->GetLayerSet();
+
+                int disallowFlags = 0;
+
+                if( zone->GetDoNotAllowTracks() )
+                    disallowFlags |= DRC_DISALLOW_TRACKS;
+
+                if( zone->GetDoNotAllowVias() )
+                    disallowFlags |= DRC_DISALLOW_VIAS;
+
+                if( zone->GetDoNotAllowPads() )
+                    disallowFlags |= DRC_DISALLOW_PADS;
+
+                if( zone->GetDoNotAllowZoneFills() )
+                    disallowFlags |= DRC_DISALLOW_ZONES;
+
+                if( zone->GetDoNotAllowFootprints() )
+                    disallowFlags |= DRC_DISALLOW_FOOTPRINTS;
+
+                DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
+                disallowConstraint.m_DisallowFlags = disallowFlags;
+                rule->AddConstraint( disallowConstraint );
+            };
 
     for( ZONE* zone : m_board->Zones() )
     {
         if( isKeepoutZone( zone, true ) )
-            keepoutZones.push_back( zone );
+            addKeepoutZoneRule( zone, nullptr );
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -572,46 +632,8 @@ void DRC_ENGINE::loadImplicitRules()
         for( ZONE* zone : footprint->Zones() )
         {
             if( isKeepoutZone( zone, true ) )
-                keepoutZones.push_back( zone );
+                addKeepoutZoneRule( zone, footprint );
         }
-    }
-
-    for( ZONE* zone : keepoutZones )
-    {
-        wxString name = zone->GetZoneName();
-
-        if( name.IsEmpty() )
-            rule = createImplicitRule( _( "keepout area" ) );
-        else
-            rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
-
-        rule->m_ImplicitItemId = zone->m_Uuid;
-
-        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.intersectsArea('%s')" ),
-                                                                      zone->m_Uuid.AsString() ) );
-
-        rule->m_LayerCondition = zone->GetLayerSet();
-
-        int disallowFlags = 0;
-
-        if( zone->GetDoNotAllowTracks() )
-            disallowFlags |= DRC_DISALLOW_TRACKS;
-
-        if( zone->GetDoNotAllowVias() )
-            disallowFlags |= DRC_DISALLOW_VIAS;
-
-        if( zone->GetDoNotAllowPads() )
-            disallowFlags |= DRC_DISALLOW_PADS;
-
-        if( zone->GetDoNotAllowZoneFills() )
-            disallowFlags |= DRC_DISALLOW_ZONES;
-
-        if( zone->GetDoNotAllowFootprints() )
-            disallowFlags |= DRC_DISALLOW_FOOTPRINTS;
-
-        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
-        disallowConstraint.m_DisallowFlags = disallowFlags;
-        rule->AddConstraint( disallowConstraint );
     }
 }
 

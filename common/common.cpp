@@ -30,6 +30,7 @@
 #include <env_vars.h>
 #include <reporter.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <mutex>
 #include <wx/config.h>
 #include <wx/log.h>
@@ -137,6 +138,15 @@ bool IsGeneratedField( const wxString& aSource )
 {
     static wxRegEx expr( wxS( "^\\$\\{\\w*\\}$" ) );
     return expr.Matches( aSource );
+}
+
+
+wxString DescribeRef( const wxString& aRef )
+{
+    if( aRef.IsEmpty() )
+        return wxT( "<i>" ) + _( "unannotated footprint" ) + wxT( " </i>" );
+    else
+        return EscapeHTML( aRef );
 }
 
 
