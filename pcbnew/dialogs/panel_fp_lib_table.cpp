@@ -228,13 +228,12 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
             };
 
-    // Give a bit more room for wxChoice editors
-    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
-        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
-
     // add Cut, Copy, and Paste to wxGrids
     aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid,
-            [this]( wxCommandEvent& event ) { appendRowHandler( event ); } ) );
+            [this]( wxCommandEvent& event )
+            {
+                appendRowHandler( event );
+            } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
@@ -298,8 +297,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
         m_project( aProject ),
         m_parent( aParent )
 {
-    std::optional<LIBRARY_TABLE*> table =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
     m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *table.value() ), true );
@@ -324,8 +323,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     populateEnvironReadOnlyTable();
 
-    std::optional<LIBRARY_TABLE*> projectTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable )
     {

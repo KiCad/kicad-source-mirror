@@ -94,12 +94,12 @@ void LIB_TABLE_GRID::SetValue( int aRow, int aCol, const wxString& aValue )
         {
         case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
         case COL_URI:      r.SetURI( aValue );                                  break;
-        case COL_TYPE:     r.SetType( aValue );                                break;
+        case COL_TYPE:     r.SetType( aValue );                                 break;
         case COL_OPTIONS:  r.SetOptions( aValue );                              break;
         case COL_DESCR:    r.SetDescription( aValue );                          break;
         case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
         case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
-        case COL_STATUS: break;
+        case COL_STATUS:                                                        break;
         }
     }
 }
@@ -121,18 +121,12 @@ bool LIB_TABLE_GRID::InsertRows( size_t aPos, size_t aNumRows  )
     if( aPos < size() )
     {
         for( size_t i = 0; i < aNumRows; i++ )
-        {
             insert( begin() + i, makeNewRow() );
-        }
 
         // use the (wxGridStringTable) source Luke.
         if( GetView() )
         {
-            wxGridTableMessage msg( this,
-                                    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                    aPos,
-                                    aNumRows );
-
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aPos, aNumRows );
             GetView()->ProcessTableMessage( msg );
         }
 
@@ -238,8 +232,7 @@ LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID::begin()
 }
 
 
-LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID::insert( LIBRARY_TABLE_ROWS_ITER aIterator,
-                                                const LIBRARY_TABLE_ROW& aRow )
+LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID::insert( LIBRARY_TABLE_ROWS_ITER aIterator, const LIBRARY_TABLE_ROW& aRow )
 {
     return m_table.Rows().insert( aIterator, aRow );
 }
@@ -251,8 +244,7 @@ void LIB_TABLE_GRID::push_back( const LIBRARY_TABLE_ROW& aRow )
 }
 
 
-LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID::erase( LIBRARY_TABLE_ROWS_ITER aFirst,
-                                               LIBRARY_TABLE_ROWS_ITER aLast )
+LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID::erase( LIBRARY_TABLE_ROWS_ITER aFirst, LIBRARY_TABLE_ROWS_ITER aLast )
 {
     return m_table.Rows().erase( aFirst, aLast );
 }

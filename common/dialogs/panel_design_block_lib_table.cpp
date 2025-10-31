@@ -184,7 +184,8 @@ class DESIGN_BLOCK_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
     DESIGN_BLOCK_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
-            LIB_TABLE_GRID_TRICKS( aGrid ), m_dialog( aParent )
+            LIB_TABLE_GRID_TRICKS( aGrid ),
+            m_dialog( aParent )
     {
     }
 
@@ -202,8 +203,7 @@ protected:
             wxString        result = options;
             std::map<std::string, UTF8> choices;
 
-            DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T pi_type =
-                    DESIGN_BLOCK_IO_MGR::EnumFromStr( row.Type() );
+            DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T pi_type = DESIGN_BLOCK_IO_MGR::EnumFromStr( row.Type() );
             IO_RELEASER<DESIGN_BLOCK_IO> pi( DESIGN_BLOCK_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
@@ -264,8 +264,8 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
         m_project( aProject ),
         m_parent( aParent )
 {
-    std::optional<LIBRARY_TABLE*> table =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
+                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
     m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID( *table.value() ), true );
@@ -360,8 +360,8 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 
     populateEnvironReadOnlyTable();
 
-    std::optional<LIBRARY_TABLE*> projectTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
+                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable )
     {
@@ -404,20 +404,21 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
-    auto joinExts = []( const std::vector<std::string>& aExts )
-    {
-        wxString joined;
+    auto joinExts =
+            []( const std::vector<std::string>& aExts )
+            {
+                wxString joined;
 
-        for( const std::string& ext : aExts )
-        {
-            if( !joined.empty() )
-                joined << wxS( ", " );
+                for( const std::string& ext : aExts )
+                {
+                    if( !joined.empty() )
+                        joined << wxS( ", " );
 
-            joined << wxS( "*." ) << ext;
-        }
+                    joined << wxS( "*." ) << ext;
+                }
 
-        return joined;
-    };
+                return joined;
+            };
 
     for( auto& [type, desc] : m_supportedDesignBlockFiles )
     {
@@ -443,8 +444,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     Layout();
 
     // This is the button only press for the browse button instead of the menu
-    m_browseButton->Bind( wxEVT_BUTTON, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler,
-                          this );
+    m_browseButton->Bind( wxEVT_BUTTON, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler, this );
 }
 
 
@@ -473,8 +473,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::~PANEL_DESIGN_BLOCK_LIB_TABLE()
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::populatePluginList()
 {
-    for( const DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T& type :
-         { DESIGN_BLOCK_IO_MGR::KICAD_SEXP } )
+    for( const DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T& type : { DESIGN_BLOCK_IO_MGR::KICAD_SEXP } )
     {
         IO_RELEASER<DESIGN_BLOCK_IO> pi( DESIGN_BLOCK_IO_MGR::FindPlugin( type ) );
 

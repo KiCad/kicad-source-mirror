@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIB_TABLE_GRID_H__
-#define __LIB_TABLE_GRID_H__
+#pragma once
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
@@ -52,8 +51,8 @@ class KICOMMON_API LIB_TABLE_GRID : public wxGridTableBase
 
 public:
     LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit, LIBRARY_MANAGER_ADAPTER* aAdapter = nullptr ) :
-        m_table( aTableToEdit ),
-        m_adapter( aAdapter )
+            m_table( aTableToEdit ),
+            m_adapter( aAdapter )
     {}
 
     //-----<wxGridTableBase overloads>-------------------------------------------
@@ -105,20 +104,16 @@ protected:
 
     virtual LIBRARY_TABLE_ROWS_ITER begin();
 
-    virtual LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator,
-                                            const LIBRARY_TABLE_ROW& aRow );
+    virtual LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator, const LIBRARY_TABLE_ROW& aRow );
 
     virtual void push_back( const LIBRARY_TABLE_ROW& aRow );
 
-    virtual LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst,
-                                           LIBRARY_TABLE_ROWS_ITER aLast );
+    virtual LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst, LIBRARY_TABLE_ROWS_ITER aLast );
 
+protected:
     /// Working copy of a table
     LIBRARY_TABLE m_table;
 
     /// Handle to the adapter for the type of table this grid represents (may be null)
     LIBRARY_MANAGER_ADAPTER* m_adapter;
 };
-
-
-#endif // __LIB_TABLE_GRID_H__

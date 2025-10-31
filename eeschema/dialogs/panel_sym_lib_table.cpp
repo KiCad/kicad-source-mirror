@@ -294,9 +294,6 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
     {
-        // Give a bit more room for combobox editors
-        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
-
         auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( aGrid->GetTable() );
 
         if( LIBRARY_TABLE_ROW& tableRow = libTable->at( ii ); tableRow.IsOk() )
@@ -326,7 +323,10 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 
     // add Cut, Copy, and Paste to wxGrids
     aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid, m_parent->Kiway().Prj(),
-            [this]( wxCommandEvent& event ) { appendRowHandler( event ); } ) );
+            [this]( wxCommandEvent& event )
+            {
+                appendRowHandler( event );
+            } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
@@ -412,8 +412,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
         m_project( aProject ),
         m_parent( aParent )
 {
-    std::optional<LIBRARY_TABLE*> table =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
@@ -447,8 +447,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     setupGrid( m_global_grid );
 
-    std::optional<LIBRARY_TABLE*> projectTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable )
     {
