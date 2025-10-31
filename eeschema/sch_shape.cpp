@@ -246,8 +246,8 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
             break;
 
         case FILL_T::FILLED_WITH_COLOR:
-            // drop fill in B&W mode
-            if( !aPlotter->GetColorMode() )
+            // drop separate fills in B&W mode
+            if( !aPlotter->GetColorMode() && pen_size > 0 )
                 return;
 
             color = GetFillColor();
