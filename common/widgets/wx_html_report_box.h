@@ -65,8 +65,6 @@ public:
 
 private:
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
-    void onRightClick( wxMouseEvent& event );
-    void onMenuEvent( wxMenuEvent& event );
 
     wxString generateHtml( const wxString& aLine );
 

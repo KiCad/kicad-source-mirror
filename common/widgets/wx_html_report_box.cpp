@@ -36,19 +36,14 @@ WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const w
 {
     Flush();
 
-    Bind( wxEVT_SYS_COLOUR_CHANGED,
-          wxSysColourChangedEventHandler( WX_HTML_REPORT_BOX::onThemeChanged ), this );
-
-    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( WX_HTML_REPORT_BOX::onRightClick ), nullptr,
-             this );
+    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( WX_HTML_REPORT_BOX::onThemeChanged ), this );
 }
 
 
 WX_HTML_REPORT_BOX::~WX_HTML_REPORT_BOX()
 {
 	// Disconnect Events
-	Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( WX_HTML_REPORT_BOX::onRightClick ), nullptr,
-                this );
+    Unbind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( WX_HTML_REPORT_BOX::onThemeChanged ), this );
 }
 
 
@@ -57,33 +52,6 @@ void WX_HTML_REPORT_BOX::onThemeChanged( wxSysColourChangedEvent &aEvent )
     Flush();
 
     aEvent.Skip();
-}
-
-
-void WX_HTML_REPORT_BOX::onRightClick( wxMouseEvent& event )
-{
-    wxMenu popup;
-    popup.Append( wxID_COPY, "Copy" );
-    PopupMenu( &popup );
-}
-
-
-void WX_HTML_REPORT_BOX::onMenuEvent( wxMenuEvent& event )
-{
-    if( event.GetId() == wxID_COPY )
-    {
-        wxLogNull doNotLog; // disable logging of failed clipboard actions
-
-        if( wxTheClipboard->Open() )
-        {
-            bool primarySelection = wxTheClipboard->IsUsingPrimarySelection();
-            wxTheClipboard->UsePrimarySelection( false );   // required to use the main clipboard
-            wxTheClipboard->SetData( new wxTextDataObject( SelectionToText() ) );
-            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-            wxTheClipboard->Close();
-            wxTheClipboard->UsePrimarySelection( primarySelection );
-        }
-    }
 }
 
 

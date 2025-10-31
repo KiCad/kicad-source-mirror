@@ -37,6 +37,7 @@ HTML_WINDOW::HTML_WINDOW( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos
           wxSysColourChangedEventHandler( HTML_WINDOW::onThemeChanged ), this );
 
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( HTML_WINDOW::onRightClick ), nullptr, this );
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( HTML_WINDOW::onMenuEvent ), nullptr, this );
 }
 
 
@@ -44,6 +45,7 @@ HTML_WINDOW::~HTML_WINDOW()
 {
 	// Disconnect Events
 	Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( HTML_WINDOW::onRightClick ), nullptr, this );
+    Disconnect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( HTML_WINDOW::onMenuEvent ), nullptr, this );
 }
 
 
@@ -99,7 +101,8 @@ void HTML_WINDOW::onThemeChanged( wxSysColourChangedEvent &aEvent )
 void HTML_WINDOW::onRightClick( wxMouseEvent& event )
 {
     wxMenu popup;
-    popup.Append( wxID_COPY, "Copy" );
+    popup.Append( wxID_COPY, _( "Copy" ) );
+    popup.Append( wxID_SELECTALL, _( "Select All" ) );
     PopupMenu( &popup );
 }
 
@@ -119,6 +122,10 @@ void HTML_WINDOW::onMenuEvent( wxMenuEvent& event )
             wxTheClipboard->Close();
             wxTheClipboard->UsePrimarySelection( primarySelection );
         }
+    }
+    else if( event.GetId() == wxID_SELECTALL )
+    {
+        SelectAll();
     }
 }
 
