@@ -156,6 +156,7 @@ std::shared_ptr<DRC_RULE> DRC_ENGINE::createImplicitRule( const wxString& name )
 void DRC_ENGINE::loadImplicitRules()
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    wxString               expr, expr2, ncName;
 
     // 1) global defaults
 
@@ -253,9 +254,7 @@ void DRC_ENGINE::loadImplicitRules()
     auto makeNetclassRules =
             [&]( const std::shared_ptr<NETCLASS>& nc, bool isDefault )
             {
-                wxString ncName = nc->GetName();
-                wxString expr;
-
+                ncName = nc->GetName();
                 ncName.Replace( "'", "\\'" );
 
                 if( nc->HasClearance() )
@@ -439,83 +438,88 @@ void DRC_ENGINE::loadImplicitRules()
         addRule( ncRule );
 
     // 4) tuning profile rules
-    auto addTuningSingleRule = [this, &bds]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry,
-                                             const wxString& aProfileName, const wxString& aNetclassName )
-    {
-        if( aLayerEntry.GetWidth() <= 0 )
-            return;
+    auto addTuningSingleRule =
+            [&]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry, const wxString& aProfileName,
+                 const wxString& aNetclassName )
+            {
+                if( aLayerEntry.GetWidth() <= 0 )
+                    return;
 
-        std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
-        tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-        tuningRule->m_Implicit = true;
+                std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+                tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+                tuningRule->m_Implicit = true;
 
-        wxString expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s'" ), aNetclassName,
+                expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s'" ),
+                                         aNetclassName,
+                                         LSET::Name( aLayerEntry.GetSignalLayer() ) );
+                tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+
+                DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
+                constraint.Value().SetMin( bds.m_TrackMinWidth );
+                constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+                tuningRule->AddConstraint( constraint );
+
+                addRule( tuningRule );
+            };
+
+    auto addTuningDifferentialRules =
+            [&]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry, const wxString& aProfileName,
+                 const NETCLASS* aNetclass )
+            {
+                if( aLayerEntry.GetWidth() <= 0 || aLayerEntry.GetDiffPairGap() <= 0 )
+                    return;
+
+                std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+                tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+                tuningRule->m_Implicit = true;
+
+                expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                         aNetclass->GetName(),
+                                         LSET::Name( aLayerEntry.GetSignalLayer() ) );
+                tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+
+                DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
+                constraint.Value().SetMin( bds.m_TrackMinWidth );
+                constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+                tuningRule->AddConstraint( constraint );
+
+                addRule( tuningRule );
+
+                std::shared_ptr<DRC_RULE> tuningRule2 = std::make_shared<DRC_RULE>();
+                tuningRule2->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+                tuningRule2->m_Implicit = true;
+
+                expr2 = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                          aNetclass->GetName(),
                                           LSET::Name( aLayerEntry.GetSignalLayer() ) );
-        tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                tuningRule2->m_Condition = new DRC_RULE_CONDITION( expr2 );
 
-        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
-        constraint.Value().SetMin( bds.m_TrackMinWidth );
-        constraint.Value().SetOpt( aLayerEntry.GetWidth() );
-        tuningRule->AddConstraint( constraint );
+                DRC_CONSTRAINT constraint2( DIFF_PAIR_GAP_CONSTRAINT );
+                constraint2.Value().SetMin( bds.m_TrackMinWidth );
+                constraint2.Value().SetOpt( aLayerEntry.GetDiffPairGap() );
+                tuningRule2->AddConstraint( constraint2 );
 
-        addRule( tuningRule );
-    };
+                addRule( tuningRule2 );
 
-    auto addTuningDifferentialRules = [this, &bds]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry,
-                                                    const wxString& aProfileName, const NETCLASS* aNetclass )
-    {
-        if( aLayerEntry.GetWidth() <= 0 || aLayerEntry.GetDiffPairGap() <= 0 )
-            return;
+                // A narrower diffpair gap overrides the netclass min clearance
+                if( aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
+                {
+                    std::shared_ptr<DRC_RULE> diffPairClearanceRule = std::make_shared<DRC_RULE>();
+                    diffPairClearanceRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
+                    diffPairClearanceRule->m_Implicit = true;
 
-        std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
-        tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-        tuningRule->m_Implicit = true;
+                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
+                                             aNetclass->GetName(),
+                                             LSET::Name( aLayerEntry.GetSignalLayer() ) );
+                    diffPairClearanceRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
-        wxString expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                          aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
-        tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
+                    min_clearanceConstraint.Value().SetMin( aLayerEntry.GetDiffPairGap() );
+                    diffPairClearanceRule->AddConstraint( min_clearanceConstraint );
 
-        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
-        constraint.Value().SetMin( bds.m_TrackMinWidth );
-        constraint.Value().SetOpt( aLayerEntry.GetWidth() );
-        tuningRule->AddConstraint( constraint );
-
-        addRule( tuningRule );
-
-        std::shared_ptr<DRC_RULE> tuningRule2 = std::make_shared<DRC_RULE>();
-        tuningRule2->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-        tuningRule2->m_Implicit = true;
-
-        const wxString expr2 =
-                wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                  aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
-        tuningRule2->m_Condition = new DRC_RULE_CONDITION( expr2 );
-
-        DRC_CONSTRAINT constraint2( DIFF_PAIR_GAP_CONSTRAINT );
-        constraint2.Value().SetMin( bds.m_TrackMinWidth );
-        constraint2.Value().SetOpt( aLayerEntry.GetDiffPairGap() );
-        tuningRule2->AddConstraint( constraint2 );
-
-        addRule( tuningRule2 );
-
-        // A narrower diffpair gap overrides the netclass min clearance
-        if( aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
-        {
-            std::shared_ptr<DRC_RULE> diffPairClearanceRule = std::make_shared<DRC_RULE>();
-            diffPairClearanceRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-            diffPairClearanceRule->m_Implicit = true;
-
-            expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                     aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
-            diffPairClearanceRule->m_Condition = new DRC_RULE_CONDITION( expr );
-
-            DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
-            min_clearanceConstraint.Value().SetMin( aLayerEntry.GetDiffPairGap() );
-            diffPairClearanceRule->AddConstraint( min_clearanceConstraint );
-
-            addRule( diffPairClearanceRule );
-        }
-    };
+                    addRule( diffPairClearanceRule );
+                }
+            };
 
     if( PROJECT* project = m_board->GetProject() )
     {
@@ -523,27 +527,27 @@ void DRC_ENGINE::loadImplicitRules()
 
         auto addNetclassTuningProfileRules =
                 [&tuningParams, &addTuningSingleRule, &addTuningDifferentialRules]( NETCLASS* aNetclass )
-        {
-            if( aNetclass->HasTuningProfile() )
-            {
-                const wxString        delayProfileName = aNetclass->GetTuningProfile();
-                const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( delayProfileName );
-
-                if( !profile.m_GenerateNetClassDRCRules )
-                    return;
-
-                for( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& layerEntry : profile.m_TrackPropagationEntries )
                 {
-                    if( layerEntry.GetWidth() <= 0 )
-                        continue;
+                    if( aNetclass->HasTuningProfile() )
+                    {
+                        const wxString        delayProfileName = aNetclass->GetTuningProfile();
+                        const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( delayProfileName );
 
-                    if( profile.m_Type == TUNING_PROFILE::PROFILE_TYPE::SINGLE )
-                        addTuningSingleRule( layerEntry, delayProfileName, aNetclass->GetName() );
-                    else
-                        addTuningDifferentialRules( layerEntry, delayProfileName, aNetclass );
-                }
-            }
-        };
+                        if( !profile.m_GenerateNetClassDRCRules )
+                            return;
+
+                        for( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& entry : profile.m_TrackPropagationEntries )
+                        {
+                            if( entry.GetWidth() <= 0 )
+                                continue;
+
+                            if( profile.m_Type == TUNING_PROFILE::PROFILE_TYPE::SINGLE )
+                                addTuningSingleRule( entry, delayProfileName, aNetclass->GetName() );
+                            else
+                                addTuningDifferentialRules( entry, delayProfileName, aNetclass );
+                        }
+                    }
+                };
 
         addNetclassTuningProfileRules( bds.m_NetSettings->GetDefaultNetclass().get() );
 
