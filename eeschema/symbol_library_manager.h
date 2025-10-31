@@ -368,14 +368,6 @@ public:
                          SYMBOL_NAME_FILTER aFilter = SYMBOL_NAME_FILTER::ALL );
 
     /**
-     * Check if symbol \a aSymbolName in library \a aLibraryName is a root symbol that
-     * has derived symbols.
-     *
-     * @return true if \aSymbolName in \a aLibraryName has derived symbols.
-     */
-    bool HasDerivedSymbols( const wxString& aSymbolName, const wxString& aLibraryName );
-
-    /**
      * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
      */
     size_t GetDerivedSymbolNames( const wxString& aSymbolName, const wxString& aLibraryName, wxArrayString& aList );

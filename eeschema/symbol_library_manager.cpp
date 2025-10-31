@@ -184,7 +184,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
                     if( !libParent )
                     {
-                        libParent = new LIB_SYMBOL( *oldParent.get() );
+                        libParent = new LIB_SYMBOL( *oldParent );
                         pi->SaveSymbol( aLibrary, libParent, &properties );
                     }
 
@@ -227,8 +227,7 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::IsSymbolModified( const wxString& aSymbolName,
-                                               const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsSymbolModified( const wxString& aSymbolName, const wxString& aLibrary ) const
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -242,8 +241,7 @@ bool SYMBOL_LIBRARY_MANAGER::IsSymbolModified( const wxString& aSymbolName,
 }
 
 
-void SYMBOL_LIBRARY_MANAGER::SetSymbolModified( const wxString& aSymbolName,
-                                                const wxString& aLibrary )
+void SYMBOL_LIBRARY_MANAGER::SetSymbolModified( const wxString& aSymbolName, const wxString& aLibrary )
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -278,8 +276,7 @@ bool SYMBOL_LIBRARY_MANAGER::ClearLibraryModified( const wxString& aLibrary ) co
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::ClearSymbolModified( const wxString& aSymbolName,
-                                                  const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::ClearSymbolModified( const wxString& aSymbolName, const wxString& aLibrary ) const
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -296,9 +293,6 @@ bool SYMBOL_LIBRARY_MANAGER::ClearSymbolModified( const wxString& aSymbolName,
 
 bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
-    wxCHECK_MSG( LibraryExists( aLibrary ), true,
-                 wxString::Format( "Library missing: %s", aLibrary ) );
-
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return !adapter->IsSymbolLibWritable( aLibrary );
 }
@@ -306,9 +300,6 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 
 bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 {
-    wxCHECK_MSG( LibraryExists( aLibrary ), false,
-                 wxString::Format( "Library missing: %s", aLibrary ) );
-
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     return adapter->IsLibraryLoaded( aLibrary );
 }
@@ -317,9 +308,6 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::EnumerateSymbols( const wxString& aLibrary ) const
 {
     std::list<LIB_SYMBOL*> ret;
-    wxCHECK_MSG( LibraryExists( aLibrary ), ret,
-                 wxString::Format( "Library missing: %s", aLibrary ) );
-
     auto libIt = m_libs.find( aLibrary );
 
     if( libIt != m_libs.end() )
@@ -339,13 +327,8 @@ std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::EnumerateSymbols( const wxString&
 }
 
 
-LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolName,
-                                                       const wxString& aLibrary )
+LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolName, const wxString& aLibrary )
 {
-    wxCHECK_MSG( LibraryExists( aLibrary ), nullptr, wxString::Format( "Library missing: %s, for symbol %s",
-                                                                       aLibrary,
-                                                                       aSymbolName ) );
-
     // try the library buffers first
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     LIB_SYMBOL* bufferedSymbol = libBuf.GetSymbol( aSymbolName );
@@ -376,7 +359,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
 
                 if( !bufferedParent )
                 {
-                    std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *parent.get() );
+                    std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *parent );
                     bufferedParent = newParent.get();
                     libBuf.CreateBuffer( std::move( newParent ), std::make_unique<SCH_SCREEN>() );
                 }
@@ -406,13 +389,8 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
 }
 
 
-SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aSymbolName,
-                                               const wxString& aLibrary )
+SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aSymbolName, const wxString& aLibrary )
 {
-    wxCHECK_MSG( LibraryExists( aLibrary ), nullptr,
-                 wxString::Format( "Library missing: %s, for symbol %s", aLibrary, aSymbolName ) );
-    wxCHECK_MSG( !aSymbolName.IsEmpty(), nullptr,
-                 wxString::Format( "Symbol missing in library: %s", aLibrary ) );
     auto it = m_libs.find( aLibrary );
     wxCHECK( it != m_libs.end(), nullptr );
 
@@ -425,11 +403,6 @@ SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aSymbolName,
 
 bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& aLibrary )
 {
-    wxCHECK_MSG( aSymbol, false, wxString::Format( "Null symbol in library: %s", aLibrary ) );
-    wxCHECK_MSG( LibraryExists( aLibrary ), false, wxString::Format( "Library missing: %s, for symbol %s",
-                                                                     aLibrary,
-                                                                     aSymbol->GetName() ) );
-
     LIB_BUFFER&                    libBuf = getLibraryBuffer( aLibrary );
     std::shared_ptr<SYMBOL_BUFFER> symbolBuf = libBuf.GetBuffer( aSymbol->GetName() );
 
@@ -556,8 +529,7 @@ bool SYMBOL_LIBRARY_MANAGER::RemoveSymbol( const wxString& aSymbolName, const wx
 }
 
 
-LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetSymbol( const wxString& aSymbolName,
-                                               const wxString& aLibrary ) const
+LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetSymbol( const wxString& aSymbolName, const wxString& aLibrary ) const
 {
     // Try the library buffers first
     auto libIt = m_libs.find( aLibrary );
@@ -669,22 +641,12 @@ wxString SYMBOL_LIBRARY_MANAGER::GetUniqueLibraryName() const
 }
 
 
-void SYMBOL_LIBRARY_MANAGER::GetSymbolNames( const wxString& aLibraryName,
-                                             wxArrayString& aSymbolNames,
+void SYMBOL_LIBRARY_MANAGER::GetSymbolNames( const wxString& aLibraryName, wxArrayString& aSymbolNames,
                                              SYMBOL_NAME_FILTER aFilter )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
 
     libBuf.GetSymbolNames( aSymbolNames, aFilter );
-}
-
-
-bool SYMBOL_LIBRARY_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
-                                                 const wxString& aLibraryName )
-{
-    LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
-
-    return libBuf.HasDerivedSymbols( aSymbolName );
 }
 
 
