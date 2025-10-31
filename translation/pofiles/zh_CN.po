@@ -43,8 +43,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
-"Last-Translator: Li Yi <yilibj@gmail.com>\n"
+"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2312,13 +2312,12 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 #: eeschema/libraries/symbol_library_adapter.cpp:105
 #, c-format
 msgid "Unknown library type %s "
-msgstr "未知库类型 %s "
+msgstr "未知的库类型 %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "内层"
+msgstr "内部错误"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -4162,9 +4161,8 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "启用后, 每隔一行表格都会使用不同的颜色"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "禁用自定义光圈 (宏光圈)"
+msgstr "禁用自定义光标"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -4336,7 +4334,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4358,10 +4355,10 @@ msgstr ""
 "为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
 "符, 仅用于崩溃报告的目的, 不会存储或关联任何个人可识别信息 (PII), 包括 IP 地"
 "址。\n"
-"您可以随时通过提供的按钮重置该标识符。\n"
+"您可以随时在数据收集的偏好设置页面重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
-"告。\n"
+"如果您选择自愿参与, KiCad 将在发生崩溃或特殊事件时会自动处理并发送这些报告。"
+"\n"
 "在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
@@ -5853,7 +5850,6 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
 msgstr "更新"
 
@@ -8914,14 +8910,12 @@ msgid ""
 msgstr ""
 
 #: common/local_history.cpp:1803
-#, fuzzy
 msgid "Select snapshot"
-msgstr "选择路径"
+msgstr "选择快照"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
-#, fuzzy
 msgid "Restore"
-msgstr "电阻"
+msgstr "恢复"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:919
@@ -18045,7 +18039,7 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
 #: eeschema/erc/erc.cpp:1224
-#, c-format
+#, c-format, fuzzy
 msgid "Pin %s not connected to ground net"
 msgstr "引脚 %s 未连接到接地网"
 
@@ -20017,8 +20011,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"无法读取文件 '%s'.\n"
-"'%s' 在文件: %d行, %d列,偏移量 %d处"
+"无法读取文件 '%s'。\n"
+"'%s' at line %d, column %d, offset %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1005
 #, c-format
@@ -23391,7 +23385,7 @@ msgstr "用户取消了封装重链接。"
 #: eeschema/tools/backannotate.cpp:762
 #, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "将 %s 单位 %s 与单位 %s 交换"
+msgstr ""
 
 #: eeschema/tools/backannotate.cpp:812
 msgid "true"
@@ -25594,7 +25588,7 @@ msgid "All pins must be at the same location"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#, c-format
+#, c-format, fuzzy
 msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "将 %zu 堆叠引脚转换为 '%s'"
 
@@ -34186,7 +34180,7 @@ msgstr "所选的选项导致错误! 更改它们, 再试一次。"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:405
 #, c-format
 msgid "PCB has %d empty or invalid reference designations."
-msgstr "PCB 中有 %d 个空或无效的参考标识"
+msgstr "PCB 中存在 %d 个空的或无效的参考位号。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
 #, fuzzy
@@ -34198,7 +34192,7 @@ msgstr "检查 PCB 和原理图是否一致"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
 #, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>元件标识符: %s 封装: %s:%s位于 PCB 上的 %s."
+msgstr "<br/>    参考位号: %s; 封装: %s%s; 位于 %s。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -34346,7 +34340,7 @@ msgstr "顶层前缀:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:252
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "元件位号的可选前缀 (如: F_)"
+msgstr "参考位号的可选前缀 (如: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:261
 msgid "Back prefix:"
@@ -34355,7 +34349,7 @@ msgstr "底层前缀:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "元件位号的可选前缀 (例如: B_)"
+msgstr "参考位号的可选前缀 (例如: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:272
 msgid "Remove front prefix"
@@ -44542,7 +44536,7 @@ msgstr "'封装筛选规则' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:668
 #, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "元件封装中有 %lu 层未安装在板上:%s"
+msgstr "封装有 %lu 个层未处在电路板上:%s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:679
 #, fuzzy, c-format
@@ -48652,8 +48646,8 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"无效浮点数在文件: \"%s\"\n"
-"行: %d, 位移: %d"
+"Invalid floating point number in file: '%s'\n"
+"line: %d, offset: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2920
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2959
@@ -48662,8 +48656,8 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"缺失的浮点数在文件: \"%s\"\n"
-"行: %d, 偏移: %d"
+"Missing floating point number in file: '%s'\n"
+"line: %d, offset: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3103
 #, c-format
@@ -48788,7 +48782,7 @@ msgstr "页面类型 '%s' 无效。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2063
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr "层 '%s' 在文件 '%s' 的 %d 行, 不是固定层散列。"
+msgstr "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2100
 #, c-format
