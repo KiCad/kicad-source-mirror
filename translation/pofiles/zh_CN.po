@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-20 05:00+0000\n"
+"PO-Revision-Date: 2025-10-31 08:03+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -31779,7 +31779,7 @@ msgstr "顶层前缀:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:234
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:239
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "元件位号的可选前缀 (如: F_)"
+msgstr "参考位号的可选前缀 (如: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:243
 msgid "Back prefix:"
@@ -31788,7 +31788,7 @@ msgstr "底层前缀:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:250
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "元件位号的可选前缀 (例如: B_)"
+msgstr "参考位号的可选前缀 (例如: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:254
 msgid "Remove front prefix"
@@ -45428,8 +45428,8 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"无效浮点数在文件: \"%s\"\n"
-"行: %d, 位移: %d"
+"Invalid floating point number in file: '%s'\n"
+"line: %d, offset: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2866
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2905
@@ -45438,8 +45438,8 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"缺失的浮点数在文件: \"%s\"\n"
-"行: %d, 偏移: %d"
+"Missing floating point number in file: '%s'\n"
+"line: %d, offset: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3049
 #, c-format
@@ -45570,7 +45570,7 @@ msgstr "页面类型 '%s' 无效。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2011
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr "层 '%s' 在文件 '%s' 的 %d 行, 不是固定层散列。"
+msgstr "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2048
 #, c-format
