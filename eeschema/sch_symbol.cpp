@@ -808,9 +808,9 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
 }
 
 
-void SCH_SYMBOL::SetDNP(bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+void SCH_SYMBOL::SetDNP( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
     {
         m_DNP = aEnable;
         return;
@@ -825,6 +825,9 @@ void SCH_SYMBOL::SetDNP(bool aEnable, const SCH_SHEET_PATH* aInstance, const wxS
     if( aVariantName.IsEmpty() )
     {
         instance.m_DNP = aEnable;
+
+        // @todo: remove this when/if we allow per symbol instance DNP setting.
+        m_DNP = aEnable;
     }
     else
     {
@@ -846,7 +849,7 @@ void SCH_SYMBOL::SetDNP(bool aEnable, const SCH_SHEET_PATH* aInstance, const wxS
 
 bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
         return m_DNP;
 
     SCH_SYMBOL_INSTANCE instance;
@@ -857,7 +860,10 @@ bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVaria
 
     if( aVariantName.IsEmpty() )
     {
-        return instance.m_DNP;
+        return m_DNP;
+
+        // @todo: uncomment this when/if we allow per symbol instance DNP setting.
+        // return instance.m_DNP;
     }
     else
     {
@@ -880,7 +886,7 @@ void SCH_SYMBOL::SetDNP( bool aEnable, const SCH_SHEET_PATH& aInstance, const st
 void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance,
                                      const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
     {
         m_excludedFromBOM = aEnable;
         return;
@@ -895,6 +901,9 @@ void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstan
     if( aVariantName.IsEmpty() )
     {
         instance.m_ExcludedFromBOM = aEnable;
+
+        // @todo: remove this when/if we allow per symbol instance exclude from BOM setting.
+        m_excludedFromBOM = aEnable;
     }
     else
     {
@@ -916,7 +925,7 @@ void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstan
 
 bool SCH_SYMBOL::GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
         return m_excludedFromBOM;
 
     SCH_SYMBOL_INSTANCE instance;
@@ -927,7 +936,9 @@ bool SCH_SYMBOL::GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxSt
 
     if( aVariantName.IsEmpty() )
     {
-        return instance.m_ExcludedFromBOM;
+        return m_excludedFromBOM;
+        // @todo: uncomment this when/if we allow per symbol instance exclude from BOM setting.
+        // return instance.m_ExcludedFromBOM;
     }
     else
     {
@@ -950,7 +961,7 @@ void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH& aInstan
 
 void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
     {
         m_excludedFromSim = aEnable;
         return;
@@ -965,6 +976,9 @@ void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstan
     if( aVariantName.IsEmpty() )
     {
         instance.m_ExcludedFromSim = aEnable;
+
+        // @todo: remove this when/if we allow per symbol instance exclude from simulation setting.
+        m_excludedFromSim = aEnable;
     }
     else
     {
@@ -986,7 +1000,7 @@ void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstan
 
 bool SCH_SYMBOL::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
-    if( !aInstance || aVariantName.IsEmpty() )
+    if( !aInstance )
         return m_excludedFromSim;
 
     SCH_SYMBOL_INSTANCE instance;
@@ -997,7 +1011,9 @@ bool SCH_SYMBOL::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxSt
 
     if( aVariantName.IsEmpty() )
     {
-        return instance.m_ExcludedFromSim;
+        return m_excludedFromSim;
+        // @todo: uncooment this when/if we allow per symbol instance exclude from simulation setting.
+        // return instance.m_ExcludedFromSim;
     }
     else
     {
