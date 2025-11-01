@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-11-01 05:28+0000\n"
+"PO-Revision-Date: 2025-11-02 02:45+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -25980,6 +25980,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Gli scambi di pin sono disabilitati per i simboli condivisi con altri "
+"progetti (%s). Duplicare il foglio per modificare i pin in modo indipendente."
 
 #: eeschema/tools/sch_edit_tool.cpp:1605
 #, c-format
@@ -25987,24 +25989,32 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Gli scambi di pin sono disabilitati per i simboli utilizzati da più istanze "
+"di fogli (%s). Duplicare il foglio per modificare i pin in modo indipendente."
 
 #: eeschema/tools/sch_edit_tool.cpp:1610
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
+"Gli scambi di pin sono disabilitati per i simboli condivisi. Duplicare il "
+"foglio per modificare i pin in modo indipendente."
 
 #: eeschema/tools/sch_edit_tool.cpp:1754
 msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
+"Ogni pin selezionato deve avere esattamente un'etichetta di collegamento "
+"(net) associata e nessun'altra connessione pin."
 
 #: eeschema/tools/sch_edit_tool.cpp:1810
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
+"Ogni pin delle unità selezionate deve avere esattamente un'etichetta di "
+"collegamento (net) associata e nessun'altra connessione pin."
 
 #: eeschema/tools/sch_edit_tool.cpp:1902
 msgid "Label value cannot go below zero"
@@ -26089,7 +26099,7 @@ msgstr "Includere i simboli di potenza nello schema nella libreria?"
 
 #: eeschema/tools/sch_editor_control.cpp:352
 msgid "Update schematic symbols to link to exported symbols"
-msgstr ""
+msgstr "Aggiorna i simboli schematici per collegarli ai simboli esportati"
 
 #: eeschema/tools/sch_editor_control.cpp:780
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -26441,11 +26451,11 @@ msgstr "Modifica pin"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:825
 msgid "At least two pins are needed to convert to stacked pins"
-msgstr ""
+msgstr "Sono necessari almeno due pin per convertire in pin impilati"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:835
 msgid "All pins must be at the same location"
-msgstr ""
+msgstr "Tutti i pin devono essere nella stessa posizione"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
 #, fuzzy, c-format
@@ -26454,7 +26464,7 @@ msgstr "Connetti %s pin %s a %s."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1042
 msgid "Select a single pin with stacked notation to explode"
-msgstr ""
+msgstr "Seleziona un singolo pin con notazione impilata da esplodere"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1054
 #, fuzzy
@@ -26478,6 +26488,8 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Per evitare questo messaggio, disattivare l'opzione "
+"\"Modalità pin sincronizzati\"."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Place Pin Anyway"
@@ -26527,7 +26539,7 @@ msgstr "Elimina pin fogli"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
 msgid "Remove this top-level sheet from the project"
-msgstr ""
+msgstr "Rimuovi questo foglio di livello superiore dal progetto"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
@@ -26542,7 +26554,7 @@ msgstr "Crea una nuova cartella per il progetto"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 msgid "Enter name for new top-level sheet:"
-msgstr ""
+msgstr "Inserire il nome del nuovo foglio di livello superiore:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
@@ -26551,7 +26563,7 @@ msgstr "Senza-titolo"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
 msgid "Add new top-level sheet"
-msgstr ""
+msgstr "Aggiungi nuovo foglio di livello superiore"
 
 #: eeschema/widgets/hierarchy_pane.cpp:593
 #, c-format
@@ -26560,10 +26572,13 @@ msgid ""
 "\n"
 "This cannot be undone."
 msgstr ""
+"Eliminare il foglio di livello superiore '%s'?\n"
+"\n"
+"L'operazione non può essere annullata."
 
 #: eeschema/widgets/hierarchy_pane.cpp:601
 msgid "Cannot delete the last top-level sheet."
-msgstr ""
+msgstr "Impossibile eliminare l'ultimo foglio di livello superiore."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
 #, fuzzy
@@ -26761,7 +26776,7 @@ msgstr "Documento singolo"
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
 msgid "Multi Run"
-msgstr ""
+msgstr "Esecuzione multipla"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
@@ -28127,6 +28142,10 @@ msgid ""
 "When no --variants arguement is provided the default variant is output.\n"
 "To output all variants use '--variants=all'"
 msgstr ""
+"Elenco dei nomi delle varianti da visualizzare.\n"
+"Se non viene specificato l'argomento --variants, viene visualizzata la "
+"variante predefinita.\n"
+"Per emettere tutte le varianti, utilizzare '--variants=all'"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -28252,7 +28271,7 @@ msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
-msgstr ""
+msgstr "Salva la scheda dopo il DRC, deve essere utilizzata con --refill-zones"
 
 #: kicad/cli/command_pcb_drc.cpp:156 kicad/cli/command_pcb_export_3d.cpp:297
 #: kicad/cli/command_pcb_export_drill.cpp:155
@@ -28905,6 +28924,7 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"I colori definiti nello stackup della scheda sovrascrivono quelli predefiniti"
 
 #: kicad/cli/command_pcb_render.cpp:269
 #, fuzzy
@@ -29145,7 +29165,7 @@ msgstr ""
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
-msgstr ""
+msgstr "Aggiorna il formato del file schema all'ultima versione"
 
 #: kicad/cli/command_sch_upgrade.cpp:34
 #, fuzzy
@@ -29258,11 +29278,11 @@ msgstr "Ricarica configurazione"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:154
 msgid "Key"
-msgstr ""
+msgstr "Chiave"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:156
 msgid "Extant"
-msgstr ""
+msgstr "Esistente"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:271
 #, fuzzy
@@ -29348,7 +29368,7 @@ msgstr "Impossibile aprire la cartella sorgente: %s"
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format
 msgid "Template duplicated successfully to '%s'."
-msgstr ""
+msgstr "Modello duplicato correttamente in '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:452
 #: kicad/dialogs/dialog_template_selector_base.h:64
@@ -29602,6 +29622,10 @@ msgid ""
 "PCB design. Templates provide ready-to-use project structures with common "
 "components, libraries, and design rules."
 msgstr ""
+"Scegliere tra una varietà di modelli preconfigurati per iniziare la "
+"progettazione del circuito stampato. I modelli forniscono strutture di "
+"progetto pronte all'uso con componenti, librerie e regole di progettazione "
+"comuni."
 
 #: kicad/dialogs/template_default_html.h:66
 #, fuzzy
@@ -29614,6 +29638,9 @@ msgid ""
 "project templates. Each tab contains templates organized by type or "
 "complexity."
 msgstr ""
+"Naviga tra le schede dei modelli qui sopra per esplorare le diverse "
+"categorie di progetto. Ogni scheda contiene modelli organizzati per "
+"tipologia o complessità."
 
 #: kicad/dialogs/template_default_html.h:70
 #, fuzzy
@@ -29635,6 +29662,8 @@ msgid ""
 "The template information will appear in this panel, showing descriptions, "
 "included components, and project structure."
 msgstr ""
+"Le informazioni sul modello appariranno in questo pannello, mostrando "
+"descrizioni, componenti inclusi e struttura del progetto."
 
 #: kicad/dialogs/template_default_html.h:74
 #, fuzzy
@@ -29656,6 +29685,9 @@ msgid ""
 "above to browse custom template directories. Click the folder icon to "
 "browse, or the refresh icon to reload templates."
 msgstr ""
+"qui sopra per esplorare le directory dei modelli personalizzati. Fai clic "
+"sull'icona della cartella per esplorare o sull'icona di aggiornamento per "
+"ricaricare i modelli."
 
 #: kicad/dialogs/template_default_html.h:78
 #, fuzzy
@@ -29664,17 +29696,19 @@ msgstr "Crea nuovo progetto"
 
 #: kicad/dialogs/template_default_html.h:79
 msgid "Once you've found the right template, click "
-msgstr ""
+msgstr "Una volta trovato il modello giusto, fare clic "
 
 #: kicad/dialogs/template_default_html.h:79
 msgid ""
 "to create a new project based on the selected template. Your project will "
 "inherit all template settings and files."
 msgstr ""
+"per creare un nuovo progetto basato sul modello selezionato. Il progetto "
+"erediterà tutte le impostazioni e i file del modello."
 
 #: kicad/dialogs/template_default_html.h:83
 msgid "What You Get with Templates"
-msgstr ""
+msgstr "Cosa si ottiene assieme ai modelli"
 
 #: kicad/dialogs/template_default_html.h:85
 #, fuzzy
@@ -29693,7 +29727,7 @@ msgstr "Regole di progettazione"
 
 #: kicad/dialogs/template_default_html.h:86
 msgid "- Appropriate electrical and mechanical constraints"
-msgstr ""
+msgstr "- Vincoli elettrici e meccanici appropriati"
 
 #: kicad/dialogs/template_default_html.h:87
 #, fuzzy
@@ -29702,7 +29736,7 @@ msgstr "Stackup scheda"
 
 #: kicad/dialogs/template_default_html.h:87
 msgid "- Optimized for the intended application"
-msgstr ""
+msgstr "- Ottimizzati per l'applicazione prevista"
 
 #: kicad/dialogs/template_default_html.h:88
 #, fuzzy
@@ -29711,7 +29745,7 @@ msgstr "File di piazzamento componenti"
 
 #: kicad/dialogs/template_default_html.h:88
 msgid "- Basic layout and routing guidelines"
-msgstr ""
+msgstr "- Linee guida di base per la disposizione e lo sbroglio"
 
 #: kicad/dialogs/template_default_html.h:89
 #: pcbnew/generate_footprint_info.cpp:43
@@ -29720,7 +29754,7 @@ msgstr "Documentazione"
 
 #: kicad/dialogs/template_default_html.h:89
 msgid "- README files and design notes"
-msgstr ""
+msgstr "- File LEGGIMI e note di progettazione"
 
 #: kicad/dialogs/template_default_html.h:90
 #, fuzzy
@@ -29729,11 +29763,11 @@ msgstr "Fabbricante:"
 
 #: kicad/dialogs/template_default_html.h:90
 msgid "- Gerber and drill file configurations"
-msgstr ""
+msgstr "- Configurazioni dei file Gerber e forature"
 
 #: kicad/dialogs/template_default_html.h:94
 msgid "Pro Tips"
-msgstr ""
+msgstr "Suggerimenti professionali"
 
 #: kicad/dialogs/template_default_html.h:95
 #, fuzzy
@@ -29743,6 +29777,8 @@ msgstr "Strato iniziale:"
 #: kicad/dialogs/template_default_html.h:95
 msgid "Begin with basic templates and add more elements as you go."
 msgstr ""
+"Iniziare con modelli di base e aggiungere altri elementi man mano che si "
+"procede."
 
 #: kicad/dialogs/template_default_html.h:96
 #, fuzzy
@@ -29754,6 +29790,8 @@ msgid ""
 "Templates are starting points - you can modify libraries, rules, and layouts "
 "after project creation."
 msgstr ""
+"I modelli sono punti di partenza: è possibile modificare librerie, regole e "
+"disposizioni dopo la creazione del progetto."
 
 #: kicad/dialogs/template_default_html.h:97
 #, fuzzy
@@ -29765,6 +29803,8 @@ msgid ""
 "Once you develop preferred settings, create a custom template for future "
 "projects."
 msgstr ""
+"Una volta definite le impostazioni preferite, creare un modello "
+"personalizzato per i progetti futuri."
 
 #: kicad/dialogs/template_default_html.h:130
 #, fuzzy
@@ -29776,10 +29816,12 @@ msgid ""
 "This project template doesn't include an info page yet. You can still use it "
 "to create a new project."
 msgstr ""
+"Questo modello di progetto non include ancora una pagina informativa. Si può "
+"comunque utilizzarlo per creare un nuovo progetto."
 
 #: kicad/dialogs/template_default_html.h:133
 msgid "To use this template:"
-msgstr ""
+msgstr "Per utilizzare questo modello:"
 
 #: kicad/dialogs/template_default_html.h:135
 #, fuzzy
@@ -29791,6 +29833,8 @@ msgid ""
 "Click OK below. KiCad will create a new project folder populated with the "
 "contents of this template."
 msgstr ""
+"Fare clic su OK qui sotto. KiCad creerà una nuova cartella di progetto "
+"popolata con il contenuto di questo modello."
 
 #: kicad/dialogs/template_default_html.h:136
 #, fuzzy
@@ -29802,6 +29846,8 @@ msgid ""
 "Use the Project Manager tree or launch Schematic and PCB editors to begin "
 "designing."
 msgstr ""
+"Per iniziare la progettazione, utilizzare l'albero della Gestione Progetti o "
+"avviare gli editor di schemi e circuiti stampati."
 
 #: kicad/dialogs/template_default_html.h:137
 #, fuzzy
@@ -29813,10 +29859,12 @@ msgid ""
 "Confirm symbol/footprint libraries, design rules, and board stackup match "
 "your needs."
 msgstr ""
+"Verificare che le librerie di simboli/impronte, le regole di progettazione e "
+"lo stackup della scheda corrispondano alle proprie esigenze."
 
 #: kicad/dialogs/template_default_html.h:141
 msgid "Add an info page later:"
-msgstr ""
+msgstr "Aggiungere una pagina informativa in seguito:"
 
 #: kicad/dialogs/template_default_html.h:142
 #, fuzzy
@@ -29828,10 +29876,12 @@ msgid ""
 "inside this template's directory to provide rich documentation, images, or "
 "guidance."
 msgstr ""
+"all'interno della cartella di questo modello per fornire documentazione, "
+"immagini o indicazioni dettagliate."
 
 #: kicad/dialogs/template_default_html.h:143
 msgid "You can copy styling from the default pages for consistency."
-msgstr ""
+msgstr "Per coerenza, è possibile copiare lo stile dalle pagine predefinite."
 
 #: kicad/dialogs/template_default_html.h:178
 #, fuzzy
@@ -29846,34 +29896,40 @@ msgstr "La cartella selezionata non è un progetto Git."
 
 #: kicad/dialogs/template_default_html.h:183
 msgid "What to do:"
-msgstr ""
+msgstr "Cosa fare:"
 
 #: kicad/dialogs/template_default_html.h:185
 msgid "Browse to a different templates directory using the folder icon"
 msgstr ""
+"Passare a una directory di modelli diversa utilizzando l'icona della cartella"
 
 #: kicad/dialogs/template_default_html.h:186
 msgid "Click the refresh icon to reload the current directory"
 msgstr ""
+"Fare clic sull'icona di aggiornamento per ricaricare la cartella corrente"
 
 #: kicad/dialogs/template_default_html.h:187
 msgid "Check that the directory path contains valid templates"
-msgstr ""
+msgstr "Verificare che il percorso della cartella contenga modelli validi"
 
 #: kicad/dialogs/template_default_html.h:188
 msgid ""
 "Use the default system templates by navigating to a system templates tab"
 msgstr ""
+"Utilizzare i modelli di sistema predefiniti accedendo alla scheda dei "
+"modelli di sistema"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid "Tip:"
-msgstr ""
+msgstr "Suggerimento:"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
+"I modelli sono organizzati in cartelle. Ogni modello necessita di una "
+"cartella \"meta\" con i file di configurazione."
 
 #: kicad/files-io.cpp:41
 msgid "KiCad project file"
@@ -30042,6 +30098,8 @@ msgstr "Errore nel aprire il file lavori"
 #: kicad/kicad_manager_frame.cpp:855
 msgid "A newer local history snapshot is available. Restore it?"
 msgstr ""
+"È disponibile un'istantanea più recente della cronologia locale. "
+"Ripristinarla?"
 
 #: kicad/kicad_manager_frame.cpp:1020
 msgid "Edit File in Text Editor"
@@ -30083,7 +30141,7 @@ msgstr "minuti"
 #: kicad/local_history_pane.cpp:131
 #, c-format
 msgid "%d hours ago"
-msgstr ""
+msgstr "%d ore fa"
 
 #: kicad/local_history_pane.cpp:227
 #, fuzzy
@@ -30140,7 +30198,7 @@ msgstr "Importa schema e schera EasyEDA (JLCEDA) Professional"
 
 #: kicad/menubar.cpp:173
 msgid "Edit Advanced Config..."
-msgstr ""
+msgstr "Modifica configurazione avanzata..."
 
 #: kicad/menubar.cpp:174
 #, fuzzy
@@ -35154,39 +35212,39 @@ msgstr "Margini:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 39 (ISO 16388)"
-msgstr ""
+msgstr "Codice 39 (ISO 16388)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Code 128 (ISO 15417)"
-msgstr ""
+msgstr "Codice 128 (ISO 15417)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Data Matrix (ECC 200)"
-msgstr ""
+msgstr "Matrice di dati (ECC 200)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "QR Code (ISO 18004)"
-msgstr ""
+msgstr "QR Code (ISO 18004)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:175
 msgid "Micro QR Code"
-msgstr ""
+msgstr "Micro QR Code"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~20% (Level L)"
-msgstr ""
+msgstr "~20% (Livello L)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~37% (Level M)"
-msgstr ""
+msgstr "~37% (Livello M)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~55% (Level Q)"
-msgstr ""
+msgstr "~55% (Livello Q)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~65% (Level H)"
-msgstr ""
+msgstr "~65% (Livello H)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:772
@@ -35207,7 +35265,7 @@ msgstr "(non attivato)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
 msgid "(unannotated; not updated)"
-msgstr ""
+msgstr "(non annotato; non aggiornato)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
 #, fuzzy
@@ -36257,7 +36315,7 @@ msgstr "Distanza tra le colonne"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "2.54"
-msgstr ""
+msgstr "2.54"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Vertical spacing:"
@@ -37437,7 +37495,7 @@ msgstr "File STL"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:265
 msgid "Universal 3D files"
-msgstr ""
+msgstr "File 3D universali"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:267
 #, fuzzy
@@ -37491,11 +37549,11 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -38272,6 +38330,8 @@ msgid ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
 msgstr ""
+"Si sta tentando di rimuovere gli strati usati dall'impronta: %s.\n"
+"Rimuovere prima gli oggetti che utilizzano questi strati."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
