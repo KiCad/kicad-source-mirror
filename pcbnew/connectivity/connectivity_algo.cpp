@@ -273,17 +273,19 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
         {
             returns[ii] = tp.submit_task(
-                [&dirtyItems, ii, this] () ->size_t {
-                    if( m_progressReporter && m_progressReporter->IsCancelled() )
-                        return 0;
+                    [&dirtyItems, ii, this] () ->size_t
+                    {
+                        if( m_progressReporter && m_progressReporter->IsCancelled() )
+                            return 0;
 
-                    CN_VISITOR visitor( dirtyItems[ii] );
-                    m_itemList.FindNearby( dirtyItems[ii], visitor );
+                        CN_VISITOR visitor( dirtyItems[ii] );
+                        m_itemList.FindNearby( dirtyItems[ii], visitor );
 
-                    if( m_progressReporter )
-                        m_progressReporter->AdvanceProgress();
+                        if( m_progressReporter )
+                            m_progressReporter->AdvanceProgress();
 
-                    return 1; } );
+                        return 1;
+                    } );
         }
 
         for( const std::future<size_t>& ret : returns )
@@ -641,9 +643,8 @@ void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 }
 
 
-void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap(
-                                std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
-                                bool aConnectivityAlreadyRebuilt )
+void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>>& aMap,
+                                                   bool aConnectivityAlreadyRebuilt )
 {
     int progressDelta = 50;
     int ii = 0;
@@ -807,8 +808,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     if( !boxA.Intersects( boxB ) )
         return;
 
-    const SHAPE_LINE_CHAIN& outline =
-            zoneA->GetFilledPolysList( layer )->COutline( aZoneLayerA->SubpolyIndex() );
+    const SHAPE_LINE_CHAIN& outline = zoneA->GetFilledPolysList( layer )->COutline( aZoneLayerA->SubpolyIndex() );
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
@@ -823,8 +823,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         }
     }
 
-    const SHAPE_LINE_CHAIN& outline2 =
-            zoneB->GetFilledPolysList( layer )->COutline( aZoneLayerB->SubpolyIndex() );
+    const SHAPE_LINE_CHAIN& outline2 = zoneB->GetFilledPolysList( layer )->COutline( aZoneLayerB->SubpolyIndex() );
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {
