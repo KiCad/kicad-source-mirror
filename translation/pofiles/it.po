@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-11-01 05:26+0000\n"
+"PO-Revision-Date: 2025-11-02 02:44+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -24802,6 +24802,8 @@ msgstr ""
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Per evitare questo messaggio, disattivare l'opzione "
+"\"Modalità pin sincronizzati\"."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -27004,6 +27006,7 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"I colori definiti nello stackup della scheda sovrascrivono quelli predefiniti"
 
 #: kicad/cli/command_pcb_render.cpp:270
 #, fuzzy
