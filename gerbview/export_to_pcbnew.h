@@ -26,6 +26,20 @@
 #include <layer_ids.h>
 
 
+struct EXPORT_SLOT
+{
+    EXPORT_SLOT( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth ) :
+            m_Start( aStart ),
+            m_End( aEnd ),
+            m_Width( aWidth )
+    { }
+
+    VECTOR2I m_Start;
+    VECTOR2I m_End;
+    int      m_Width;
+};
+
+
 struct EXPORT_VIA
 {
     EXPORT_VIA( const VECTOR2I& aPos, int aSize, int aDrill ) :
@@ -79,6 +93,8 @@ private:
      * info on how to group them into footprints.)
      */
     void export_via( const EXPORT_VIA& aVia );
+
+    void export_slot( const EXPORT_SLOT& aSlot );
 
     /**
      * Write a non copper line or arc to the board file.
@@ -188,9 +204,10 @@ private:
     }
 
 private:
-    GERBVIEW_FRAME*         m_gerbview_frame;   // the main gerber frame
-    wxString                m_pcb_file_name;    // BOARD file to write to
-    FILE*                   m_fp;               // the board file
-    int                     m_pcbCopperLayersCount;
-    std::vector<EXPORT_VIA> m_vias;
+    GERBVIEW_FRAME*          m_gerbview_frame;   // the main gerber frame
+    wxString                 m_pcb_file_name;    // BOARD file to write to
+    FILE*                    m_fp;               // the board file
+    int                      m_pcbCopperLayersCount;
+    std::vector<EXPORT_VIA>  m_vias;
+    std::vector<EXPORT_SLOT> m_slots;
 };
