@@ -46,7 +46,7 @@ static std::map<TOOLBAR_LOC, wxString> s_toolbarNameMap = {
     { TOOLBAR_LOC::LEFT,     _( "Left" ) },
     { TOOLBAR_LOC::RIGHT,    _( "Right" ) },
     { TOOLBAR_LOC::TOP_MAIN, _( "Top main" ) },
-    { TOOLBAR_LOC::TOP_AUX,  _( "Top auxillary" ) }
+    { TOOLBAR_LOC::TOP_AUX,  _( "Top auxiliary" ) }
 };
 
 

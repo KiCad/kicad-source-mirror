@@ -112,7 +112,7 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_nameVisible = new wxCheckBox( this, wxID_ANY, _("Show field name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameVisible->Hide();
-	m_nameVisible->SetToolTip( _("Show the field name in addtion to its value") );
+	m_nameVisible->SetToolTip( _("Show the field name in addition to its value") );
 
 	bSizer9->Add( m_nameVisible, 0, wxRIGHT|wxLEFT, 20 );
 

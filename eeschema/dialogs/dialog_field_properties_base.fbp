@@ -761,7 +761,7 @@
                     <property name="style"></property>
                     <property name="subclass">; ; forward_declare</property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Show the field name in addtion to its value</property>
+                    <property name="tooltip">Show the field name in addition to its value</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>

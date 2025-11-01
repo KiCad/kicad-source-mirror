@@ -1258,7 +1258,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     break;
 
                 case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s solder paste absolute cleraance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s solder paste absolute clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
                     break;

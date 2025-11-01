@@ -398,7 +398,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
     // Some tests:
     if( ( vouttyp < vrefmin || vouttyp < vreftyp || vouttyp < vrefmax ) && id != 2 )
     {
-        m_RegulMessage->SetLabel( _( "Vout must be greater than vref" ) );
+        m_RegulMessage->SetLabel( _( "Vout must be greater than Vref" ) );
         return;
     }
 

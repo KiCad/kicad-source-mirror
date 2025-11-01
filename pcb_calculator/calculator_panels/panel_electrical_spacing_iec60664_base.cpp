@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText52111 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("Overvoltage category:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52111->Wrap( -1 );
-	m_staticText52111->SetToolTip( _("OVC I: Equipment with no direct connection to mains supply\n\nOVC II: Energy-consuming equipment to be supplied from the fixed installation. (eg: appliances, portable tools, household loads). OVCIII applies if there are reliability and avaibility requirements\n\nOVC III :  Equipment in fixed installations with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)\n\nOVC IV: Equipment at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)") );
+	m_staticText52111->SetToolTip( _("OVC I: Equipment with no direct connection to mains supply\n\nOVC II: Energy-consuming equipment to be supplied from the fixed installation. (eg: appliances, portable tools, household loads). OVCIII applies if there are reliability and availability requirements\n\nOVC III :  Equipment in fixed installations with reliability and availability requirements. (eg: electrical switches, equipment for industrial use)\n\nOVC IV: Equipment at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)") );
 
 	fgSizer111->Add( m_staticText52111, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

@@ -547,7 +547,7 @@ TOOL_ACTION PCB_ACTIONS::editDesignBlockProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PcbDesignBlockControl.editDesignBlockProperties" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Properties..." ) )
-        .Tooltip( _( "Edit properies of design block" ) )
+        .Tooltip( _( "Edit properties of design block" ) )
         .Icon( BITMAPS::edit ) );
 
 // EDIT_TOOL

@@ -362,7 +362,7 @@
                       <property name="close_button">1</property>
                       <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                       <property name="col_label_size">22</property>
-                      <property name="col_label_values">&quot;Active&quot; &quot;Visible&quot; &quot;Nickname&quot; &quot;Library Path&quot; &quot;LIbrary Format&quot; &quot;Options&quot; &quot;Description&quot;</property>
+                      <property name="col_label_values">&quot;Active&quot; &quot;Visible&quot; &quot;Nickname&quot; &quot;Library Path&quot; &quot;Library Format&quot; &quot;Options&quot; &quot;Description&quot;</property>
                       <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                       <property name="cols">7</property>
                       <property name="column_sizes">48,48,100,240,100,80,240</property>

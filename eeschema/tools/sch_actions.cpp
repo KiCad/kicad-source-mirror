@@ -163,7 +163,7 @@ TOOL_ACTION SCH_ACTIONS::editDesignBlockProperties( TOOL_ACTION_ARGS()
         .Name( "eeschema.SchDesignBlockControl.editDesignBlockProperties" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Properties..." ) )
-        .Tooltip( _( "Edit properies of design block" ) )
+        .Tooltip( _( "Edit properties of design block" ) )
         .Icon( BITMAPS::edit ) );
 
 // SYMBOL_EDITOR_CONTROL

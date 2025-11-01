@@ -94,7 +94,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	m_project_grid->SetColLabelValue( 1, _("Visible") );
 	m_project_grid->SetColLabelValue( 2, _("Nickname") );
 	m_project_grid->SetColLabelValue( 3, _("Library Path") );
-	m_project_grid->SetColLabelValue( 4, _("LIbrary Format") );
+	m_project_grid->SetColLabelValue( 4, _("Library Format") );
 	m_project_grid->SetColLabelValue( 5, _("Options") );
 	m_project_grid->SetColLabelValue( 6, _("Description") );
 	m_project_grid->SetColLabelSize( 22 );

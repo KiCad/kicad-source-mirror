@@ -14,7 +14,7 @@ Clicking the **Generate** button creates a BOM file with the selected generator.
 
 The default settings present several generator script options, although some additional scripts are installed with KiCad and can be added to the list with the **+** button.
 
-**Note:** On Windows, there is an additional option **Show console window**. When this option is unchecked, BOM generators run in a hidden console window and any output is redirected and printed in the dialog. When this option is checked, BOM generators run in a visisble console window.
+**Note:** On Windows, there is an additional option **Show console window**. When this option is unchecked, BOM generators run in a hidden console window and any output is redirected and printed in the dialog. When this option is checked, BOM generators run in a visible console window.
 
 # 3. Custom generators and command lines
 
