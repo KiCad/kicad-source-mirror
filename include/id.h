@@ -160,7 +160,7 @@ enum main_id
     // The extra here need to minimum be larger than MAX_BUS_UNFOLD_MENU_ITEMS +
     // MAX_UNIT_COUNT_PER_PACKAGE.
     // These values are stored in eeschema_id.h
-    ID_POPUP_MENU_END = ID_POPUP_MENU_START + 2048,
+    ID_POPUP_MENU_END = ID_POPUP_MENU_START + 4096,
 
     ID_END_LIST
 };
