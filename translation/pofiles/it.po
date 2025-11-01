@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"PO-Revision-Date: 2025-11-01 05:28+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2573,7 +2573,7 @@ msgstr "Sviluppo pacchetti"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "Oggetti GDI in uso %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -4325,6 +4325,8 @@ msgstr "Disabilita macro aperture"
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Se abilitata, KiCad userà i puntatori predefiniti di sistema invece dei "
+"personalizzati"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4879,12 +4881,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"I file incorporati eliminati vengono referenziati anche in alcune impronte.\n"
+"Cancellarli anche dalle impronte?"
 
 #: common/dialogs/panel_embedded_files.cpp:195
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"I file incorporati eliminati sono referenziati anche in alcuni simboli.\n"
+"Cancellarli anche dai simboli?"
 
 #: common/dialogs/panel_embedded_files.cpp:312
 #: common/dialogs/panel_embedded_files.cpp:420
@@ -5316,7 +5322,7 @@ msgstr "Cancella file recenti"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "Reimposta le finestre \"Non mostrare più\""
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
@@ -5471,7 +5477,7 @@ msgstr "Trascinamento pulsante destro:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Pan con spostamento del mouse tramite il tasto:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5969,7 +5975,7 @@ msgstr "Netclass"
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:241
 #: pcbnew/pcb_marker.cpp:234
 msgid "Warning"
-msgstr "Attenzione"
+msgstr "Avvertimento"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
@@ -6018,11 +6024,11 @@ msgstr "Velocità autopan:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Inverti direzione del pan verticale"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Inverti direzione del pan orizzontale"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
 #, fuzzy
@@ -6040,11 +6046,20 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad include un ampio insieme di librerie di simboli e impronte mantenute "
+"dal gruppo che si occupa di gestire le librerie di KiCad. È anche possibile "
+"creare le proprie librerie e installarne altre di terze parti dalla Gestore "
+"contenuti e plugin o da altre fonti.\n"
+"\n"
+"Le tabelle delle librerie sono i file di configurazione che elencano le "
+"librerie da caricare. Le librerie globali sono disponibili in ogni progetto "
+"ed è anche possibile aggiungere a piacimento librerie specifiche per il "
+"progetto."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>È necessario creare le seguenti tabelle di librerie globali:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
@@ -6053,7 +6068,7 @@ msgstr "Vuoi configurare KiCad?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Inizia con le librerie KiCad integrate (consigliato)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 #, fuzzy
@@ -6066,6 +6081,9 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Le tabelle delle librerie verranno importate dalla versione selezionata nel "
+"passaggio precedente. Le tabelle che non possono essere importate verranno "
+"create con le librerie KiCad predefinite."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
 #, fuzzy
@@ -6079,6 +6097,11 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Le tabelle delle librerie integrate non sono state trovate nella posizione "
+"prevista. Questo di solito significa che si ha installato il software KiCad "
+"senza installare anche le librerie. Si può procedere con la configurazione, "
+"ma sarà necessario installare le librerie separatamente affinché siano "
+"disponibili."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 #, fuzzy
@@ -6090,6 +6113,9 @@ msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Consentire la connessione a Internet per verificare la presenza di versioni "
+"aggiornate di KiCad e dei pacchetti installati tramite il Gestore contenuti "
+"e plugin?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1338
@@ -6108,10 +6134,20 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad può segnalare in forma anonima blocchi del software e altri dati sugli "
+"eventi al gruppo di sviluppo per aiutare a identificare e correggere difetti "
+"e migliorare le prestazioni.\n"
+"\n"
+"Quando la raccolta dati è abilitata, KiCad invierà automaticamente dei "
+"rapporti quando si verificano blocchi o altri eventi degni di nota. Questi "
+"rapporti contengono dettagli tecnici sullo stato di KiCad al momento della "
+"segnalazione. Non vengono raccolte informazioni personali identificabili "
+"(PII) e i file di progettazione, come schemi elettrici, circuiti stampati e "
+"librerie, non vengono mai condivisi nell'ambito di questo processo."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Abilita la raccolta dati anonima"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6466,7 +6502,7 @@ msgstr "Mouse e touchpad"
 
 #: common/eda_base_frame.cpp:1323
 msgid "SpaceMouse"
-msgstr ""
+msgstr "SpaceMouse"
 
 #: common/eda_base_frame.cpp:1325
 msgid "Hotkeys"
@@ -6819,7 +6855,7 @@ msgstr "Info net"
 
 #: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
-msgstr ""
+msgstr "Codice a barre"
 
 #: common/eda_item.cpp:445 eeschema/sch_junction.cpp:297
 #: eeschema/sch_junction.h:102
@@ -7777,7 +7813,7 @@ msgstr "Fallita inizializzazione progetto Git."
 
 #: common/git/libgit_backend.cpp:595
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "Nessun repository disponibile per configurare il remote"
 
 #: common/git/libgit_backend.cpp:648
 #, fuzzy, c-format
@@ -7969,7 +8005,7 @@ msgstr "Impossibile creare la cartella risultati '%s'."
 #: common/history_lock.cpp:156
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "Il repository della cronologia è bloccato da %s@%s"
 
 #: common/history_lock.cpp:171
 #, fuzzy, c-format
@@ -7983,12 +8019,14 @@ msgstr "Fallito recupero indice repository: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "Impossibile acquisire il blocco dell'indice: repository non aperto"
 
 #: common/history_lock.cpp:207
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr ""
+"Impossibile acquisire il blocco dell'indice git "
+"(un'altra operazione in corso?): %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -9119,7 +9157,7 @@ msgstr "Errore nello scrivere il file vuoto tabella librerie impronte '%s'."
 #: common/libraries/library_table_parser.cpp:235
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Errore di sintassi alla riga %zu, colonna %zu"
 
 #: common/libraries/library_table_parser.cpp:222
 #, fuzzy
@@ -9141,14 +9179,16 @@ msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... e %zu altri file\n"
 
 #: common/local_history.cpp:1381
 msgid "Delete Files during Restore"
-msgstr ""
+msgstr "Elimina i file durante il ripristino"
 
 #: common/local_history.cpp:1383
 msgid "Proceed"
-msgstr ""
+msgstr "Procedere"
 
 #: common/local_history.cpp:1383
 #, fuzzy
@@ -9165,6 +9205,10 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"Scegliendo \"Mantieni tutti i file\" verrà ripristinato il commit "
+"selezionato, ma verranno mantenuti tutti i file esistenti nella cartella del "
+"progetto. Scegliendo \"Procedi\" verranno eliminati i file non presenti nel "
+"commit ripristinato."
 
 #: common/local_history.cpp:1803
 #, fuzzy
@@ -9626,10 +9670,16 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad si sta avviando per la prima volta o alcuni dei suoi file di "
+"configurazione sono mancanti.\n"
+"\n"
+"Dedicare un momento alla configurazione di alcune impostazioni di base. È "
+"sempre possibile modificare queste impostazioni in seguito aprendo la "
+"finestra di dialogo Preferenze."
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
-msgstr ""
+msgstr "Per assistenza, visitare "
 
 #: common/startwizard/startwizard.cpp:160
 #, fuzzy
@@ -9641,6 +9691,8 @@ msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
+"Sicuri? Se si annulla l'installazione di KiCad, verranno selezionate "
+"automaticamente le impostazioni predefinite."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
 #, fuzzy
@@ -9941,11 +9993,11 @@ msgstr "Disegna rettangolo selezione"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Lazo"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Imposta la modalità di selezione per utilizzare il lazo poligonale"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10432,11 +10484,13 @@ msgstr "Tabella campi simbolo"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
-msgstr ""
+msgstr "Tabella campi libreria dei simboli correlati"
 
 #: common/tool/actions.cpp:966
 msgid "Edit a table of fields of all symbols related to the selected symbol"
 msgstr ""
+"Modifica una tabella di campi di tutti i simboli correlati al simbolo "
+"selezionato"
 
 #: common/tool/actions.cpp:972
 msgid "Library Tree"
@@ -10584,7 +10638,7 @@ msgstr "Mostra il crocino anche quando non vengono disegnati oggetti"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Utilizzare piccoli mirini allineati a 0 e 90 gradi"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -10592,15 +10646,15 @@ msgstr "Croce a pieno schermo"
 
 #: common/tool/actions.cpp:1197
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Mostra i mirini a finestra intera allineati a 0 e 90 gradi"
 
 #: common/tool/actions.cpp:1204
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "Mirini a 45 gradi"
 
 #: common/tool/actions.cpp:1205
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Visualizza i mirini a finestra intera allineati a 45 e 135 gradi"
 
 #: common/tool/actions.cpp:1213
 msgid "Inactive Layer View Mode"
@@ -13003,6 +13057,8 @@ msgstr "Centra sul puntatore"
 #: eeschema/dialogs/dialog_erc.cpp:228 pcbnew/dialogs/dialog_drc.cpp:281
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
+"Durante la ricerca incrociata, scorrere l'area di disegno in modo che "
+"l'elemento sia visibile"
 
 #: eeschema/dialogs/dialog_erc.cpp:398 pcbnew/dialogs/dialog_drc.cpp:1286
 msgid "Delete exclusions too?"
@@ -14818,7 +14874,7 @@ msgstr "Comune a tutti gli stili del corpo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "Stili corpi De Morgan \"standard\" e \"alternativo\""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 #, fuzzy
@@ -16528,6 +16584,9 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"Mostra i simboli contrassegnati con \"DNP\" nella tabella.  Questa "
+"impostazione controlla anche se i simboli \"DNP\" vengono inclusi o meno "
+"nell'esportazione."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
 #, fuzzy
@@ -16539,6 +16598,9 @@ msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"Mostra i simboli contrassegnati con \"Escludi dalla DIBA\" nella tabella. I "
+"simboli contrassegnati con \"Escludi dalla DIBA\" non vengono mai inclusi "
+"nell'esportazione."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 #, fuzzy
@@ -17152,12 +17214,16 @@ msgstr "Nomi connessioni"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
 msgid "Prefer symbol unit swaps over label swaps"
 msgstr ""
+"Preferisci gli scambi di unità di simboli rispetto agli scambi di etichette"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
+"Se possibile, rileva gli scambi di gate di impronta e applica gli scambi di "
+"unità simbolo corrispondenti anziché modificare le etichette dei "
+"collegamenti."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -17170,12 +17236,16 @@ msgstr "Aggiorna tutti gli altri campi nel simbolo dall'impronta"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
 msgid "Prefer symbol pin swaps over label swaps"
 msgstr ""
+"Preferisci lo scambio di pin dei simboli rispetto allo scambio di etichette"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
 msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
 msgstr ""
+"Se possibile, scambia i pin dei simboli per farli corrispondere agli scambi "
+"di collegamenti delle piazzole impronta anziché cambiare le etichette dei "
+"collegamenti."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1023
@@ -17521,13 +17591,15 @@ msgstr "Annota automaticamente i simboli"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid "Allow unconstrained pin swaps"
-msgstr ""
+msgstr "Consenti scambi di pin senza vincoli"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
 msgstr ""
+"Consente di scambiare le posizioni dei pin dei simboli. Può causare "
+"modifiche di progettazione non valide; usare con cautela."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:85
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -18404,7 +18476,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1257
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr ""
+msgstr "File schema salvato correttamente utilizzando il formato più recente\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1031
 msgid "Net Navigator"
@@ -18796,7 +18868,7 @@ msgstr "Impossibile connettersi ad un remote"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
-msgstr ""
+msgstr "Il nome del pin assomiglia a un pin impilato"
 
 #: eeschema/erc/erc_item.cpp:169 pcbnew/drc/drc_item.cpp:217
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -23320,7 +23392,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:230
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Attenzione: il riferimento è vuoto</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:239
 #, c-format
@@ -23776,6 +23848,9 @@ msgid ""
 "Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
 msgstr ""
+"L'eliminazione di un simbolo base eliminerà tutti i simboli da esso derivati."
+"\n"
+"\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
 #, fuzzy
@@ -24143,6 +24218,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
+"Si potrebbero scambiare i pin %s %s e %s per adattarli al C.S., ma il "
+"simbolo è condiviso con altri progetti."
 
 #: eeschema/tools/backannotate.cpp:1268
 #, c-format
@@ -24150,6 +24227,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
+"Si potrebbero scambiare i pin %s %s e %s per adattarli al C.S., ma il "
+"simbolo è condiviso con altri progetti (%s)."
 
 #: eeschema/tools/backannotate.cpp:1278
 #, c-format
@@ -24157,11 +24236,15 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
+"Si potrebbe scambiare i pin %s %s e %s per farli corrispondere al C.S., ma "
+"il simbolo è utilizzato da più istanze di foglio (%s)."
 
 #: eeschema/tools/backannotate.cpp:1286
 #, c-format
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
 msgstr ""
+"Si potrebbero scambiare i pin %s %s e %s per adattarli al C.S., ma il "
+"simbolo è condiviso."
 
 #: eeschema/tools/backannotate.cpp:1293
 #, c-format
@@ -24169,11 +24252,13 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
 msgstr ""
+"Si potrebbero scambiare i pin %s %s e %s per adattarli al C.S., ma gli "
+"scambi di pin senza vincoli sono disabilitati nelle preferenze dello schema."
 
 #: eeschema/tools/backannotate.cpp:1329
 #, c-format
 msgid "Swap %s pins %s and %s to match PCB."
-msgstr ""
+msgstr "Scambia %s pin %s e %s per farli corrispondere al C.S. ."
 
 #: eeschema/tools/backannotate.cpp:1404
 #, c-format
@@ -24925,15 +25010,17 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
+"Converti più pin nella stessa posizione in un singolo pin con la notazione "
+"impilata"
 
 #: eeschema/tools/sch_actions.cpp:976
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
 msgid "Explode Stacked Pin"
-msgstr ""
+msgstr "Esplodi i pin impilati"
 
 #: eeschema/tools/sch_actions.cpp:977
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr ""
+msgstr "Converti un pin con notazione impilata in più pin individuali"
 
 #: eeschema/tools/sch_actions.cpp:983
 msgid "Break"
@@ -25884,6 +25971,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
+"Gli scambi di pin sono disabilitati per i simboli condivisi con altri "
+"progetti. Duplicare il foglio per modificare i pin in modo indipendente."
 
 #: eeschema/tools/sch_edit_tool.cpp:1597
 #, c-format
