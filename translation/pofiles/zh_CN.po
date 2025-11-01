@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-31 08:03+0000\n"
+"PO-Revision-Date: 2025-11-01 05:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -959,9 +959,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"保存和恢复颜色和可见性组合。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换预设。"
+"保存和还原颜色和可见性组合。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键循环切换预设弹窗中的预设。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:211
 #, c-format
@@ -971,9 +971,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"保存并恢复相机位置和缩放参数。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的视角。"
+"保存和还原相机位置和缩放参数。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的视角。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:565
 msgid "Left double click or middle click to change color"
@@ -10068,7 +10068,7 @@ msgstr "清除已分配的备选快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:456
 msgid "Restore Defaults"
-msgstr "重置为默认值"
+msgstr "还原为默认值"
 
 #: common/widgets/widget_hotkey_list.cpp:496
 #, c-format
@@ -17601,9 +17601,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"好吧, 这可能有点尴尬!\n"
-"看来你上次编辑过的一个或多个原理图文件没有正确保存\n"
-"是否要恢复你所做的最后一批已保存的编辑?"
+"情况有点尴尬😅\n"
+"您上次编辑的一个或多个原理图文件似乎未能正确保存。\n"
+"是否要还原您上次保存的修改内容？"
 
 #: eeschema/files-io.cpp:1575
 #, c-format
@@ -17616,11 +17616,11 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1626
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "无法恢复以下自动保存的文件\n"
+msgstr "无法还原以下自动保存的文件\n"
 
 #: eeschema/files-io.cpp:1631
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr "需要手动恢复才能恢复以上文件。"
+msgstr "需要手动还原才能恢复以上文件。"
 
 #: eeschema/files-io.cpp:1640
 #, c-format
@@ -18260,7 +18260,7 @@ msgstr "找不到以下库:"
 #: eeschema/project_sch.cpp:169 eeschema/sheet.cpp:407
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "加载符号库表 '%s' 时出错误。"
+msgstr "加载符号库表 '%s' 时出错。"
 
 #: eeschema/sch_base_frame.cpp:252
 #, c-format
@@ -21439,7 +21439,7 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"加载符号库 %s 时出现错误。\n"
+"加载符号库 %s 时出错。\n"
 "\n"
 "%s\n"
 
@@ -22019,7 +22019,7 @@ msgstr "在符号库表文件的行 %2$d 中出现了重复的库名称 '%1$s'"
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:222
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "加载符号库 '%s' 时出现错误。"
+msgstr "加载符号库 '%s' 时出错。"
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
@@ -28191,7 +28191,7 @@ msgstr "打印图框"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "尝试打印图框时出现错误。"
+msgstr "尝试打印图框时出错。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
 msgid "Printing"
@@ -28417,7 +28417,7 @@ msgstr "原点位置: 右下页角"
 
 #: pagelayout_editor/pl_editor_frame.cpp:478
 msgid "Error Init Printer info"
-msgstr "初始化打印机信息出现错误"
+msgstr "初始化打印机信息出错"
 
 #: pagelayout_editor/pl_editor_frame.cpp:564
 msgid "[no drawing sheet loaded]"
@@ -32095,7 +32095,7 @@ msgstr "生成报告文件..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
-msgstr "电路板统计"
+msgstr "电路板统计报告"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:48
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:323
@@ -33509,7 +33509,6 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "写入文件 '%s' 的权限不足。"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "生成 IPC-2581 文件"
 
@@ -33524,9 +33523,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "文件已经成功创建。"
+msgstr "IPC-2581 文件已经成功生成。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -37839,7 +37837,7 @@ msgstr "移除未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
 msgid "Restore All Layers"
-msgstr "恢复所有层"
+msgstr "还原所有层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:205
 msgid "Remove Unused Pads"
@@ -48390,7 +48388,7 @@ msgstr "移除未使用的焊盘..."
 #: pcbnew/tools/pcb_actions.cpp:799
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr "移除或恢复未连接内层的通孔焊盘及过孔"
+msgstr "移除或还原未连接内层的通孔焊盘及过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "Assign a different footprint from the library"
@@ -49124,11 +49122,11 @@ msgstr "循环切换活动层对"
 
 #: pcbnew/tools/pcb_actions.cpp:1838
 msgid "Show Board Statistics"
-msgstr "显示电路板统计信息"
+msgstr "显示电路板统计报告"
 
 #: pcbnew/tools/pcb_actions.cpp:1839
 msgid "Shows board statistics"
-msgstr "显示电路板统计信息"
+msgstr "显示电路板统计报告"
 
 #: pcbnew/tools/pcb_actions.cpp:1844
 msgid "Clearance Resolution"
@@ -50072,10 +50070,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"保存或加载层可见性设置。\n"
-"使用 %s+Tab 打开层可见性设置选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的层可见性设"
-"置。"
+"保存或还原层可见性设置。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的预设。"
 
 #: pcbnew/widgets/appearance_controls.cpp:454
 #, c-format
@@ -50085,9 +50082,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"保存或加载视角位置和缩放设置。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的视角。"
+"保存或还原视角位置和缩放设置。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的视角。"
 
 #: pcbnew/widgets/appearance_controls.cpp:469
 msgid "Filter nets"
