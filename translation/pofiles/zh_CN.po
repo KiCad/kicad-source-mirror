@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"PO-Revision-Date: 2025-11-01 05:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -992,9 +992,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"保存和恢复颜色和可见性组合。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换预设。"
+"保存和还原颜色和可见性组合。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键循环切换预设弹窗中的预设。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:210
 #, c-format
@@ -1004,9 +1004,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"保存并恢复相机位置和缩放参数。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的视角。"
+"保存和还原相机位置和缩放参数。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的视角。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:572
 msgid "Left double click or middle click to change color"
@@ -6354,7 +6354,6 @@ msgid "Packages and Updates"
 msgstr "扩展和更新"
 
 #: common/eda_base_frame.cpp:1497
-#, fuzzy
 msgid "Maintenance"
 msgstr "维护者"
 
@@ -7720,14 +7719,14 @@ msgid "History repository is locked by %s@%s"
 msgstr ""
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "源目录不存在: %s"
+msgstr "历史记录目录不存在: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "无法取得仓库索引: %s"
+msgstr "无法打开 git 仓库: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
@@ -8174,19 +8173,16 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: 导出 Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "显示电路板统计信息"
+msgstr "导出电路板统计报告"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "导出网表作业设置"
+msgstr "导出电路板报告和作业设置"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "电路板统计"
+msgstr "PCB: 导出统计报告"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8838,24 +8834,23 @@ msgid "A reference to this library table already exists"
 msgstr "名称为 '%s' 的库已存在。"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad 默认"
+msgstr "KiCad 默认库"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "库 '%s' 未找到。"
+msgstr "找不到库 %s"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "封装库路径 \"%s\" 不存在"
+msgstr "库路径 '%s' 不存在"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "写入空封装库表文件 '%s' 时出错。"
+msgstr ""
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
@@ -8885,9 +8880,8 @@ msgid ""
 msgstr ""
 
 #: common/local_history.cpp:1381
-#, fuzzy
 msgid "Delete Files during Restore"
-msgstr "删除目录"
+msgstr "还原过程中删除文件"
 
 #: common/local_history.cpp:1383
 msgid "Proceed"
@@ -8915,7 +8909,7 @@ msgstr "选择快照"
 
 #: common/local_history.cpp:1803 kicad/kicad_manager_frame.cpp:856
 msgid "Restore"
-msgstr "恢复"
+msgstr "还原"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:919
@@ -9112,7 +9106,6 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
 msgstr "加载设计图块库"
 
@@ -9330,9 +9323,9 @@ msgid "KiCad Classic"
 msgstr "KiCad 经典"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "欢迎来到 KiCad %s!"
+msgstr "欢迎使用 KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9345,12 +9338,11 @@ msgstr ""
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
-msgstr ""
+msgstr "需要帮助, 请访问 "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "电路板配置"
+msgstr "KiCad 配置"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
@@ -9359,19 +9351,16 @@ msgid ""
 msgstr ""
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "符号库未启用。"
+msgstr "符号库表"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "封装库未启用。"
+msgstr "封装库表"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "设计图块库"
+msgstr "设计图块库表"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -10926,7 +10915,7 @@ msgstr "重置 %s 为默认值"
 
 #: common/widgets/panel_design_block_chooser.cpp:400
 msgid "Errors were encountered loading design blocks:"
-msgstr "加载设计图块时出现错误:"
+msgstr "加载设计图块时出错:"
 
 #: common/widgets/properties_panel.cpp:78
 #: common/widgets/properties_panel.cpp:205
@@ -11028,7 +11017,7 @@ msgstr "清除已分配的备选快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:456
 msgid "Restore Defaults"
-msgstr "重置为默认值"
+msgstr "还原为默认值"
 
 #: common/widgets/widget_hotkey_list.cpp:496
 #, c-format
@@ -13936,15 +13925,13 @@ msgstr "在浏览器中显示数据书册"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:393
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:437
-#, fuzzy
 msgid "Expand left panel"
-msgstr "展开全部"
+msgstr "展开左侧面板"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:398
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:442
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "收起全部"
+msgstr "折叠左侧面板"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:563
 #, c-format
@@ -15062,9 +15049,8 @@ msgid "Formatting preferences"
 msgstr "格式偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Annotation preferences"
-msgstr "格式偏好设置"
+msgstr "批注偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
@@ -16784,14 +16770,12 @@ msgid "Wire & Bus Properties"
 msgstr "连线 & 总线属性"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "物料清单预设:"
+msgstr "物料清单预设"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
-#, fuzzy
 msgid "Bill of Materials Formatting Presets"
-msgstr "物料清单格式预设:"
+msgstr "物料清单格式预设"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -16822,9 +16806,8 @@ msgid "_1"
 msgstr "_1"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:113
-#, fuzzy
 msgid "Allow reference reuse"
-msgstr "对话框偏好设置"
+msgstr "允许重用参考位号"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:147
 msgid ""
@@ -16911,7 +16894,6 @@ msgid "Show hidden fields"
 msgstr "显示隐藏字段"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
-#, fuzzy
 msgid "Show directive labels"
 msgstr "显示指令标签"
 
@@ -17226,14 +17208,13 @@ msgid "(source)"
 msgstr "(源)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
-msgstr "'%s' 的成员:"
+msgstr "'%s' 的成员"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
-#, fuzzy
 msgid "Net or Nested Bus Name"
-msgstr "网络/嵌套总线名称"
+msgstr "网络或嵌套总线名称"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:33
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
@@ -17605,14 +17586,14 @@ msgid "Keep pins attached when dragging edges"
 msgstr "拖动边缘时保持引脚附着"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "加载符号库表 '%s' 时出错误。"
+msgstr "加载库表 '%s' 时出错"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "加载符号库 '%s' 时出现错误。"
+msgstr "加载库 '%s' 时出错。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #, c-format
@@ -18919,7 +18900,7 @@ msgstr "符号库 '%s' 加载失败。"
 #: eeschema/libraries/legacy_symbol_library.cpp:605
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "加载符号库 '%s' 时出现错误。"
+msgstr "加载符号库 '%s' 时出错。"
 
 #: eeschema/libraries/symbol_library_adapter.cpp:425
 #, fuzzy
@@ -19524,14 +19505,12 @@ msgid "Filter nets"
 msgstr "筛选网络"
 
 #: eeschema/sch_edit_frame.cpp:2456
-#, fuzzy
 msgid "Wildcard Search"
-msgstr "通配符子字符串"
+msgstr "通配符搜索"
 
 #: eeschema/sch_edit_frame.cpp:2458
-#, fuzzy
 msgid "Regex Search"
-msgstr "重新搜索"
+msgstr "正则搜索"
 
 #: eeschema/sch_edit_frame.cpp:2606
 #, fuzzy
@@ -19539,19 +19518,16 @@ msgid "Find in Net Inspector"
 msgstr "网络检查"
 
 #: eeschema/sch_edit_frame.cpp:2920
-#, fuzzy
 msgid "Enter new variant name"
-msgstr "添加新的变体名称:"
+msgstr "输入新的变体名称"
 
 #: eeschema/sch_edit_frame.cpp:2920 eeschema/sch_edit_frame.cpp:2958
-#, fuzzy
 msgid "Variant Name"
-msgstr "变量名"
+msgstr "变量名称"
 
 #: eeschema/sch_edit_frame.cpp:2958
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "选择要移除的层:"
+msgstr "选择要移除的变体名称:"
 
 #: eeschema/sch_field.cpp:983
 #, c-format
@@ -21434,7 +21410,7 @@ msgstr ""
 #: eeschema/sheet.cpp:407
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "加载符号库表 '%s' 时出错误。"
+msgstr "加载符号库表 '%s' 时出错。"
 
 #: eeschema/sheet.cpp:436
 msgid ""
@@ -23098,9 +23074,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid " (base)\n"
-msgstr " (相位)"
+msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1273
 msgid "Delete All Listed Symbols"
@@ -23292,9 +23267,8 @@ msgstr "引脚模型:"
 
 #: eeschema/toolbars_sch_editor.cpp:105 pcbnew/toolbars_footprint_editor.cpp:93
 #: pcbnew/toolbars_pcb_editor.cpp:196
-#, fuzzy
 msgid "Selection modes"
-msgstr "选区已复制"
+msgstr "选区模式"
 
 #: eeschema/toolbars_sch_editor.cpp:238
 msgid "Select the current variant to display and edit."
@@ -23348,9 +23322,8 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:136
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "解锁封装"
+msgstr "未批注的封装"
 
 #: eeschema/tools/backannotate.cpp:179
 #, c-format
@@ -26743,9 +26716,9 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "无效的 Gerber 文件: 缺少 G74 或 G75 弧线命令"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X: 无效的 GERBER 格式命令 '%c' 在行 %d: \"%s\""
+msgstr "RS274X: 无效的 GERBER 格式命令 '%c', 位于第 %d 行: '%s'"
 
 #: gerbview/rs274x.cpp:235
 #, fuzzy, c-format
@@ -27888,9 +27861,8 @@ msgid "Force A4 paper size."
 msgstr "强制使用 A4 纸尺寸。"
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
-msgstr "显示电路板统计信息"
+msgstr "生成电路板统计报告"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
 #, fuzzy
@@ -28487,9 +28459,9 @@ msgid "Running Jobs"
 msgstr "运行中的作业"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "打开文件 '%s' 失败。"
+msgstr "无法打开 '%s'。"
 
 #: kicad/dialogs/panel_jobset.cpp:323
 msgid "Edit Destination Options..."
@@ -28504,9 +28476,8 @@ msgid "View Last Run Log..."
 msgstr "查看上次运行日志..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
-#, fuzzy
 msgid "Open Output"
-msgstr "输出"
+msgstr "打开输出目录"
 
 #: kicad/dialogs/panel_jobset.cpp:428
 msgid "Edit Job Description"
@@ -28569,9 +28540,8 @@ msgid "Generate All Destinations"
 msgstr "生成所有目标"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
-#, fuzzy
 msgid "Open the generated output"
-msgstr "重命名所选封装"
+msgstr "打开已生成内容的输出目录"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -28664,9 +28634,8 @@ msgid "Use the "
 msgstr "使用 "
 
 #: kicad/dialogs/template_default_html.h:75
-#, fuzzy
 msgid "folder path field"
-msgstr "存有 %s 文件的文件夹"
+msgstr "文件夹路径字段"
 
 #: kicad/dialogs/template_default_html.h:75
 msgid ""
@@ -28734,7 +28703,7 @@ msgstr "文档"
 
 #: kicad/dialogs/template_default_html.h:89
 msgid "- README files and design notes"
-msgstr ""
+msgstr "- README 文件和设计说明"
 
 #: kicad/dialogs/template_default_html.h:90
 #, fuzzy
@@ -28743,7 +28712,7 @@ msgstr "制造商:"
 
 #: kicad/dialogs/template_default_html.h:90
 msgid "- Gerber and drill file configurations"
-msgstr ""
+msgstr "- Gerber 和 钻孔文件配置"
 
 #: kicad/dialogs/template_default_html.h:94
 msgid "Pro Tips"
@@ -28842,9 +28811,8 @@ msgid "You can copy styling from the default pages for consistency."
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
-msgstr "找不到"
+msgstr "找不到任何模板"
 
 #: kicad/dialogs/template_default_html.h:180
 #, fuzzy
@@ -28876,7 +28844,7 @@ msgstr ""
 
 #: kicad/dialogs/template_default_html.h:192
 msgid "Tip:"
-msgstr ""
+msgstr "提示:"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid ""
@@ -29026,9 +28994,8 @@ msgid "Project Files"
 msgstr "工程文件"
 
 #: kicad/kicad_manager_frame.cpp:238 kicad/tools/kicad_manager_actions.cpp:244
-#, fuzzy
 msgid "Local History"
-msgstr "本地文件"
+msgstr "本地历史记录"
 
 #: kicad/kicad_manager_frame.cpp:400
 msgid "PCM Updates Available"
@@ -29075,14 +29042,13 @@ msgid "Restoring '%s'"
 msgstr "正在恢复 \"%s\""
 
 #: kicad/local_history_pane.cpp:121
-#, fuzzy
 msgid "Moments ago"
-msgstr "注释层"
+msgstr "片刻之前"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "分钟"
+msgstr "%d 分钟之前"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
@@ -29090,9 +29056,8 @@ msgid "%d hours ago"
 msgstr ""
 
 #: kicad/local_history_pane.cpp:227
-#, fuzzy
 msgid "Restore Commit"
-msgstr "最后的提交"
+msgstr "还原提交"
 
 #: kicad/menubar.cpp:63
 msgid "Clear Recent Projects"
@@ -30021,19 +29986,16 @@ msgid "Open project directory in file explorer"
 msgstr "在文件管理器中打开工程目录"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "从仓库克隆工程..."
+msgstr "从本地历史记录中还原工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "选择一个 Zip 归档文件, 并解压缩至工程"
+msgstr "从本地历史记录中还原工程文件"
 
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "显示或隐藏此层"
+msgstr "显示或隐藏本地历史记录面板"
 
 #: kicad/tools/kicad_manager_control.cpp:80
 msgid "Create New Project"
@@ -30263,7 +30225,7 @@ msgstr "打印图框"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "尝试打印图框时出现错误。"
+msgstr "尝试打印图框时出错。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
 msgid "Printing"
@@ -30488,7 +30450,7 @@ msgstr "原点位置: 右下页角"
 
 #: pagelayout_editor/pl_editor_frame.cpp:488
 msgid "Error Init Printer info"
-msgstr "初始化打印机信息出现错误"
+msgstr "初始化打印机信息出错"
 
 #: pagelayout_editor/pl_editor_frame.cpp:574
 msgid "[no drawing sheet loaded]"
@@ -34149,14 +34111,12 @@ msgid "Change Log"
 msgstr "修改为"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Front Footprints"
-msgstr "导出封装"
+msgstr "顶部封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
-#, fuzzy
 msgid "Back Footprints"
-msgstr "打包封装"
+msgstr "底部封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 #, fuzzy
@@ -34537,7 +34497,7 @@ msgstr "生成报告文件..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:71
 msgid "Board Statistics"
-msgstr "电路板统计"
+msgstr "电路板统计报告"
 
 #: pcbnew/dialogs/dialog_board_stats_job_base.cpp:43
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
@@ -36012,7 +35972,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
 msgid "IPC-2581 file generated successfully."
-msgstr "成功生成 IPC-2581 文件。"
+msgstr "IPC-2581 文件已经成功生成。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -37315,14 +37275,12 @@ msgid "Size Y"
 msgstr "Y 尺寸"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:71
-#, fuzzy
 msgid "Drill X"
-msgstr "钻孔"
+msgstr "钻孔 X"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Drill Y"
-msgstr "钻孔"
+msgstr "钻孔 Y"
 
 # Die 裸芯片
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:73
@@ -37424,9 +37382,8 @@ msgid "Footprint Report"
 msgstr "封装报告"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "查找文本"
+msgstr "纯文本"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -40439,7 +40396,7 @@ msgstr "移除未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
 msgid "Restore All Layers"
-msgstr "恢复所有层"
+msgstr "还原所有层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:205
 msgid "Remove Unused Pads"
@@ -43160,9 +43117,8 @@ msgid "Diff Pair Gap"
 msgstr "差分对间隙: %s"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:128
-#, fuzzy
 msgid "Unit Delay"
-msgstr "网络延迟"
+msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:166
 #, fuzzy
@@ -43176,7 +43132,7 @@ msgstr "全局删除"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
 msgid "ps/cm"
-msgstr ""
+msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
 #, fuzzy
@@ -50979,14 +50935,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "金属化焊盘:"
+msgstr "未连接的焊盘:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "删除未使用的焊盘"
+msgstr "忽略未连接的焊盘"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 #, fuzzy
@@ -51530,9 +51484,8 @@ msgid "Add selected design block to current board"
 msgstr "添加选中设计图块到当前电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:491
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "新建设计图块库"
+msgstr "应用设计图块布局"
 
 #: pcbnew/tools/pcb_actions.cpp:492
 #, fuzzy
@@ -51818,9 +51771,8 @@ msgid "Footprint Properties..."
 msgstr "封装属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:939
-#, fuzzy
 msgid "Pad Table..."
-msgstr "引脚属性表..."
+msgstr "焊盘表..."
 
 #: pcbnew/tools/pcb_actions.cpp:940
 #, fuzzy
@@ -51878,7 +51830,7 @@ msgstr "移除未使用的焊盘..."
 #: pcbnew/tools/pcb_actions.cpp:998
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr "移除或恢复未连接内层的通孔焊盘及过孔"
+msgstr "移除或还原未连接内层的通孔焊盘及过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Assign a different footprint from the library"
@@ -52671,11 +52623,11 @@ msgstr "循环切换活动层对"
 
 #: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Show Board Statistics"
-msgstr "显示电路板统计信息"
+msgstr "显示电路板统计报告"
 
 #: pcbnew/tools/pcb_actions.cpp:2146
 msgid "Shows board statistics"
-msgstr "显示电路板统计信息"
+msgstr "显示电路板统计报告"
 
 #: pcbnew/tools/pcb_actions.cpp:2152
 msgid "Clearance Resolution"
@@ -53737,10 +53689,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"保存或加载层可见性设置。\n"
-"使用 %s+Tab 打开层可见性设置选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的层可见性设"
-"置。"
+"保存或还原层可见性设置。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的预设。"
 
 #: pcbnew/widgets/appearance_controls.cpp:457
 #, c-format
@@ -53750,9 +53701,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"保存或加载视角位置和缩放设置。\n"
-"使用 %s+Tab 打开视图选择器。\n"
-"在按住 %s 的同时, 连续按下 Tab 键将在弹出的窗口中循环切换已保存的视角。"
+"保存或还原视角位置和缩放设置。\n"
+"使用 %s+Tab 激活选择器。\n"
+"按住 %s 不放, 同时连续按下 Tab 键可以循环切换弹窗中的视角。"
 
 #: pcbnew/widgets/appearance_controls.cpp:622
 #: pcbnew/widgets/appearance_controls.cpp:1866
