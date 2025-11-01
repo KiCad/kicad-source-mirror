@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"PO-Revision-Date: 2025-11-01 05:26+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -2170,7 +2170,7 @@ msgstr "&OK"
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
-msgstr "Attenzione"
+msgstr "Avvertimento"
 
 #: common/confirm.cpp:239
 msgid "Information"
@@ -2457,7 +2457,7 @@ msgstr "Sviluppo pacchetti"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "Oggetti GDI in uso %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -5041,12 +5041,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"I file incorporati eliminati vengono referenziati anche in alcune impronte.\n"
+"Cancellarli anche dalle impronte?"
 
 #: common/dialogs/panel_embedded_files.cpp:204
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"I file incorporati eliminati sono referenziati anche in alcuni simboli.\n"
+"Cancellarli anche dai simboli?"
 
 #: common/dialogs/panel_embedded_files.cpp:323
 #: common/dialogs/panel_embedded_files.cpp:438
@@ -22060,7 +22064,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Attenzione: il riferimento è vuoto</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
