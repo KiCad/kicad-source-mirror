@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-30 08:21+0000\n"
+"PO-Revision-Date: 2025-11-02 22:36+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -17853,7 +17853,7 @@ msgstr "載入原理圖失敗\n"
 #: kicad/cli/command_pcb_export_hpgl.cpp:36
 #: kicad/cli/command_sch_export_plot.cpp:130 pcbnew/pcbnew_jobs_handler.cpp:272
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
-msgstr "自 $\\text{KiCad}$ 10.0 版起，不再支援匯出 $\\text{HPGL}$ 格式。\n"
+msgstr "自 KiCad 10.0 版起，不再支援匯出 HPGL 格式。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:327
 #: eeschema/eeschema_jobs_handler.cpp:473
@@ -17929,13 +17929,13 @@ msgstr "沒有符號被選來儲存。"
 #: eeschema/eeschema_jobs_handler.cpp:992
 #, c-format
 msgid "Unable to create output directory '%s'."
-msgstr "無法建立輸出目錄「$\\text{\\%s}$」。"
+msgstr "無法建立輸出目錄「%s」。"
 
 #: eeschema/eeschema_jobs_handler.cpp:1021 pcbnew/pcbnew_jobs_handler.cpp:1358
 #: pcbnew/pcbnew_jobs_handler.cpp:2085
 #, c-format
 msgid "Exporting %s"
-msgstr "正在匯出 $\\text{\\%s}$"
+msgstr "正在匯出 %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1051 pcbnew/pcbnew_jobs_handler.cpp:1962
 msgid "Output path must not conflict with existing path\n"
@@ -18075,18 +18075,17 @@ msgstr "符號 %s 有未放置的單元 %s"
 #: eeschema/erc/erc.cpp:614
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
-msgstr ""
-"符號「$\\text{\\%s}$」的輸入電源接腳位於單元「$\\text{\\%s}$」內但未被放置"
+msgstr "符號「%s」的輸入電源接腳位於單元「%s}」內但未被放置"
 
 #: eeschema/erc/erc.cpp:620
 #, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
-msgstr "符號「$\\text{\\%s}$」的輸入接腳位於單元「$\\text{\\%s}$」內但未被放置"
+msgstr "符號「%s」的輸入接腳位於單元「%s」內但未被放置"
 
 #: eeschema/erc/erc.cpp:626
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
-msgstr "符號「$\\text{\\%s}$」的雙向接腳位於單元「$\\text{\\%s}$」內但未被放置"
+msgstr "符號「%s」的雙向接腳位於單元「%s」內但未被放置"
 
 #: eeschema/erc/erc.cpp:649
 #, c-format
@@ -18120,12 +18119,12 @@ msgstr "接腳 %s 同時連接到 %s 和 %s"
 #: eeschema/erc/erc.cpp:1225
 #, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "接腳 $\\text{\\%s}$ 未連接至接地網路"
+msgstr "接腳 %s 未連接至接地網路"
 
 #: eeschema/erc/erc.cpp:1480
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "目前的配置不包含符號庫「$\\text{\\%s}$」"
+msgstr "目前的配置不包含符號庫「%s」"
 
 #: eeschema/erc/erc.cpp:1498
 #, c-format
@@ -18140,23 +18139,23 @@ msgstr "在符號庫 '%s' 中找不到符號 '%s'"
 #: eeschema/erc/erc.cpp:1542
 #, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "符號「$\\text{\\%s}$」具有多個接腳共用相同的腳位編號"
+msgstr "符號「%s」具有多個接腳共用相同的腳位編號"
 
 #: eeschema/erc/erc.cpp:1552
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "符號「$\\text{\\%s}$」與元件庫「$\\text{\\%s}$」中的複本不符"
+msgstr "符號「%s」與元件庫「%s」中的複本不符"
 
 #: eeschema/erc/erc.cpp:1601
 #, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "「$\\text{\\%s}$」不是有效的封裝識別碼"
+msgstr "「%s」不是有效的封裝識別碼"
 
 #: eeschema/erc/erc.cpp:1615
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1025
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "目前的配置不包含封裝庫「$\\text{\\%s}$」"
+msgstr "目前的配置不包含封裝庫「%s」"
 
 #: eeschema/erc/erc.cpp:1624
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1039
@@ -18168,12 +18167,12 @@ msgstr "封裝庫「%s」在目前的配置中未啟用"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1090
 #, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "封裝「$\\text{\\%s}$」未在元件庫「$\\text{\\%s}$」中找到"
+msgstr "封裝「%s」未在元件庫「%s」中找到"
 
 #: eeschema/erc/erc.cpp:1703
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "指定的封裝「$\\text{\\%s}$」不符合封裝過濾條件「$\\text{\\%s}$」"
+msgstr "指定的封裝「%s」不符合封裝過濾條件「%s」"
 
 #: eeschema/erc/erc.cpp:1868
 msgid "Checking sheet names..."
