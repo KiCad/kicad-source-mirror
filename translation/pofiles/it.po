@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 02:45+0000\n"
+"PO-Revision-Date: 2025-11-02 22:37+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17231,7 +17231,7 @@ msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
-"Se possibile, rileva gli scambi di gate di impronta e applica gli scambi di "
+"Se possibile, rileva gli scambi di porte impronta e applica gli scambi di "
 "unità simbolo corrispondenti anziché modificare le etichette dei "
 "collegamenti."
 
@@ -27476,7 +27476,7 @@ msgstr "Nessun attributo"
 #: gerbview/gerber_draw_item.cpp:682
 #, c-format
 msgid "D Code %d"
-msgstr "Codice D %d"
+msgstr "D Code %d"
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Graphic Layer"
@@ -35050,7 +35050,7 @@ msgstr "Piazzole dentellate: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:117
 msgid "Press-fit pads: "
-msgstr ""
+msgstr "Piazzole press-fit: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:121
 msgid "Plated board edge: "
@@ -41422,6 +41422,8 @@ msgstr "La larghezza della linea deve essere >0 per un rettangolo non pieno."
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1263
 msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
+"Il raggio dell'angolo deve essere minore o uguale alla metà del lato più "
+"piccolo."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
 msgid "Line width must be greater than zero for an unfilled polygon."
@@ -41689,7 +41691,7 @@ msgstr "Micro"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2405
 msgid "Blind"
-msgstr ""
+msgstr "Cieco"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2406
@@ -42013,7 +42015,7 @@ msgstr "Nome strato %s già in uso."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:44
 msgid "Use via color for normal through hole padstacks"
-msgstr ""
+msgstr "Usare il colore via per normali padstack passanti"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:50
 msgid "Clearance Outlines"
@@ -43163,7 +43165,7 @@ msgstr "ERRORE:"
 #: pcbnew/dialogs/panel_setup_rules.cpp:770
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
-msgstr ""
+msgstr "Le regole '%s' e '%s' condividono la stessa condizione."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:790
 #, fuzzy, c-format
@@ -44737,6 +44739,7 @@ msgstr "Il profilo di regolazione deve avere un nome"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:849
 msgid "Duplicated signal layer configuration in tuning profile"
 msgstr ""
+"Configurazione del livello del segnale duplicata nel profilo di regolazione"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:877
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:888
@@ -44749,6 +44752,8 @@ msgstr "I nomi dei segnali non possono contenere spazi"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:883
 msgid "Internal error: Microstrip can only be on an outer copper layer"
 msgstr ""
+"Errore interno: la microstriscia può essere posizionata solo su uno strato "
+"di rame esterno"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:894
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:957
@@ -44763,7 +44768,7 @@ msgstr "Riferimento \"%s\" non trovato."
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:911
 msgid "Reference layer must be different to signal layer"
-msgstr ""
+msgstr "Lo strato di riferimento deve essere diverso dallo strato del segnale"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:920
 #, fuzzy
@@ -44772,19 +44777,23 @@ msgstr "L'angolo dell'arco deve essere maggiore di 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:963
 msgid "Top reference layer not found in stackup"
-msgstr ""
+msgstr "Strato di riferimento superiore non trovato nello stackup"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:969
 msgid "Top reference layer must be above signal layer in board stackup"
 msgstr ""
+"Lo strato di riferimento superiore deve essere sopra lo strato del segnale "
+"nello stackup della scheda"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:975
 msgid "Bottom reference layer not found in stackup"
-msgstr ""
+msgstr "Strato di riferimento inferiore non trovato nello stackup"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:981
 msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
+"Lo strato di riferimento inferiore deve essere sotto lo strato del segnale "
+"nello stackup della scheda"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:994
 #, fuzzy
@@ -44812,7 +44821,7 @@ msgstr "Modifica file di associazione"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1252
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1353
 msgid "Delay calculation failed"
-msgstr ""
+msgstr "Calcolo del ritardo non riuscito"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1190
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1292
@@ -44830,6 +44839,8 @@ msgstr "La larghezza della linea deve essere >0 per un cerchio non pieno."
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1306
 msgid "Width and diff pair gap must be greater than 0 to calculate delay"
 msgstr ""
+"Larghezza e spazio tra coppie differenziali devono essere maggiori di 0 per "
+"calcolare il ritardo"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1249
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1350
@@ -44849,7 +44860,7 @@ msgstr "Aree obiettivo:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
-msgstr ""
+msgstr "ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
 #, fuzzy
@@ -44858,7 +44869,7 @@ msgstr "Genera strati tenting"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:85
 msgid "Enable Time Domain Tuning"
-msgstr ""
+msgstr "Abilita la regolazione nel dominio del tempo"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
 #, fuzzy
@@ -44902,7 +44913,7 @@ msgstr "Cancellazioni globali"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:185
 msgid "ps/cm"
-msgstr ""
+msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:192
 #, fuzzy
@@ -44971,7 +44982,7 @@ msgstr "vincoli impostazioni scheda microvia"
 
 #: pcbnew/drc/drc_engine.cpp:244
 msgid "barcode visual separation default"
-msgstr ""
+msgstr "separazione visiva predefinita del codice a barre"
 
 #: pcbnew/drc/drc_engine.cpp:264 pcbnew/drc/drc_engine.cpp:280
 #: pcbnew/drc/drc_engine.cpp:348 pcbnew/drc/drc_engine.cpp:365
@@ -46272,7 +46283,7 @@ msgstr "Il nome impronta non può contenere '%s'."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:679
 #, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
-msgstr ""
+msgstr "La scheda ha %lu strati di rame non nell'impronta: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:730
 msgid "Footprint types differ."
@@ -46985,11 +46996,11 @@ msgstr "Impossibile creare la cartella risultati '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2418
 msgid "Impossible create compress stream"
-msgstr ""
+msgstr "Impossibile creare un flusso compresso"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2426
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Errore di lettura o scrittura della compressione"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2461
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -47013,6 +47024,8 @@ msgstr "Impossibile rinominare il file temporaneo '%s' in '%s'\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
 msgid "Cannot use VRML models when exporting to non-mesh formats."
 msgstr ""
+"Non è possibile utilizzare modelli VRML durante l'esportazione in formati "
+"non mesh."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2975
 #, fuzzy, c-format
@@ -48670,15 +48683,15 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2301
 msgid "('fiducial' pads are normally plated)"
-msgstr ""
+msgstr "(le piazzole di 'allineamento' sono normalmente metallizzate)"
 
 #: pcbnew/pad.cpp:2305
 msgid "('testpoint' pads are normally plated)"
-msgstr ""
+msgstr "(le piazzole di 'test' sono normalmente metallizzate)"
 
 #: pcbnew/pad.cpp:2308
 msgid "('heatsink' pads are normally plated)"
-msgstr ""
+msgstr "(le piazzole di 'dissipazione' sono normalmente metallizzate)"
 
 #: pcbnew/pad.cpp:2311
 #, fuzzy
@@ -48881,27 +48894,27 @@ msgstr "Piazzola %s su %s"
 
 #: pcbnew/pcb_barcode.cpp:714
 msgid "CODE_39"
-msgstr ""
+msgstr "CODE_39"
 
 #: pcbnew/pcb_barcode.cpp:715
 msgid "CODE_128"
-msgstr ""
+msgstr "CODE_128"
 
 #: pcbnew/pcb_barcode.cpp:716
 msgid "DATA_MATRIX"
-msgstr ""
+msgstr "DATA_MATRIX"
 
 #: pcbnew/pcb_barcode.cpp:717
 msgid "QR_CODE"
-msgstr ""
+msgstr "QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:718
 msgid "MICRO_QR_CODE"
-msgstr ""
+msgstr "MICRO_QR_CODE"
 
 #: pcbnew/pcb_barcode.cpp:725 pcbnew/pcb_barcode.cpp:781
 msgid "L (Low)"
-msgstr ""
+msgstr "L (Basso)"
 
 #: pcbnew/pcb_barcode.cpp:726 pcbnew/pcb_barcode.cpp:782
 #, fuzzy
@@ -48910,7 +48923,7 @@ msgstr "Media"
 
 #: pcbnew/pcb_barcode.cpp:727 pcbnew/pcb_barcode.cpp:783
 msgid "Q (Quartile)"
-msgstr ""
+msgstr "Q (Quartile)"
 
 #: pcbnew/pcb_barcode.cpp:728 pcbnew/pcb_barcode.cpp:787
 #, fuzzy
@@ -50403,7 +50416,7 @@ msgstr "Generazione sezione contenuti"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Tipo piazzola non supportato; ignorato."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1178
 msgid "Generating history section"
@@ -50423,6 +50436,7 @@ msgstr "Impronta '%s' non trovata nella libreria '%s'."
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Riferimento OEM mancante nel componente \"%s\"; la voce DIBA verrà saltata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1371
 msgid "Generating CAD data"
@@ -50438,6 +50452,8 @@ msgstr ""
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Sono stati rilevati puntatori impronte duplicati; il risultato IPC-2581 "
+"potrebbe essere errato."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2807
 #, c-format
@@ -50446,17 +50462,21 @@ msgstr "Esportazione strato %s, collegamento %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2843
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "Il via usa un padstack non supportato; omesso dai dati di perforazione."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2869
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"La piazzola usa un padstack non supportato; il foro è stato omesso dai dati "
+"di perforazione."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3011
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Le lacrime non sono supportate nella revisione B dell'IPC-2581; sono state "
+"esportate come zone."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3457
 msgid "Generating logistic section"
@@ -50706,17 +50726,19 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5435
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr ""
+msgstr "Stackup non valido nell'impronta: numero dispari di strati rame (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5443
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr ""
+msgstr "Stackup non valido nell'impronta: gli strati rame non sono contigui."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5449
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"Stackup non valido nell'impronta: gli strati tecnici sono impliciti nelle "
+"impronte e non devono essere specificati nello stackup."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5681
 #, c-format
@@ -50992,7 +51014,7 @@ msgstr "Selettore diametro via"
 
 #: pcbnew/pcb_track.cpp:1434
 msgid "Via drill is too small."
-msgstr ""
+msgstr "Foro via troppo piccolo."
 
 #: pcbnew/pcb_track.cpp:1441
 msgid "No via hole size defined."
@@ -51403,7 +51425,7 @@ msgstr "Impossibile creare il file IPC-D-356\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2611
 msgid "Successfully saved board file using the latest format\n"
-msgstr ""
+msgstr "File scheda salvato correttamente utilizzando il formato più recente\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2615
 #, fuzzy
@@ -52774,9 +52796,8 @@ msgid "Shape Modification"
 msgstr "Forma modifiche"
 
 #: pcbnew/tools/edit_tool.cpp:251
-#, fuzzy
 msgid "Swap Gate Nets..."
-msgstr "Scambia strati..."
+msgstr "Scambia collegamenti porte..."
 
 #: pcbnew/tools/edit_tool.cpp:433
 #, fuzzy, c-format
@@ -52915,12 +52936,17 @@ msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
+"%zu piazzole non selezionate collegate a queste connessioni (net). Come "
+"procedere?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
+"Le tracce connesse, i fori passanti e altri elementi in rame non di zona "
+"continueranno a scambiarsi i collegamenti (net) anche se si ignorano le "
+"piazzole non selezionate."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
 #, fuzzy
@@ -52934,7 +52960,7 @@ msgstr "Rimuovi piazzole inutilizzate"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 msgid "Swap All Connected Pads"
-msgstr ""
+msgstr "Scambia tutte le piazzole collegate"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:704
@@ -52946,24 +52972,29 @@ msgstr "Mostra collegamenti senza piazzole"
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
 msgstr ""
+"Lo scambio di porte deve essere eseguito sulle piazzole all'interno di una "
+"impronta multi-porta."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
 msgid "Gate swapping must be performed on gates with equal pin counts."
 msgstr ""
+"Lo scambio di porte deve essere eseguito su porte con lo stesso numero di "
+"pin."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
 msgid "Gate swapping failed: pad in unit missing from footprint."
-msgstr ""
+msgstr "Scambio di porte fallito: piazzola nell'unità mancante dall'impronta."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
 msgid "Gate swapping has no effect: all selected gates have identical nets."
 msgstr ""
+"Lo scambio di porte non ha alcun effetto: tutte le porte selezionate hanno "
+"connessioni identiche."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:614
 #: pcbnew/tools/edit_tool_move_fct.cpp:656 pcbnew/tools/pcb_actions.cpp:711
-#, fuzzy
 msgid "Swap Gate Nets"
-msgstr "Aggiorna netlist"
+msgstr "Scambia collegamenti porte"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:713
 msgid "Pack Footprints"
