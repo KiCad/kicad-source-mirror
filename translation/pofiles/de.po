@@ -32,10 +32,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"PO-Revision-Date: 2025-11-02 05:12+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13387,7 +13387,7 @@ msgstr "Feldname anzeigen"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
 #, fuzzy
 msgid "Show the field name in addition to its value"
-msgstr "Feldname zusätzlich zu seinem Wert anzeigen"
+msgstr "Feldnamen zusätzlich zu seinem Wert anzeigen"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
 msgid "Allow automatic placement"
@@ -20777,22 +20777,22 @@ msgstr "Trotzdem speichern"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
 #, fuzzy, c-format
 msgid "Symbol library file '%s' already exists."
-msgstr "Symbolbibliothek \"%s\" existiert bereits."
+msgstr "Symbolbibliothek-Datei \"%s\" existiert bereits."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1731
 #, fuzzy, c-format
 msgid "Symbol library path '%s' already exists."
-msgstr "Symbolbibliothek \"%s\" existiert bereits."
+msgstr "Symbolbibliothek-Pfad \"%s\" existiert bereits."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
 #, fuzzy, c-format
 msgid "Symbol library file '%s' cannot be deleted."
-msgstr "Symbolbibliothek \"%s\" kann nicht gelöscht werden."
+msgstr "Symbolbibliothek-Datei \"%s\" kann nicht gelöscht werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
 #, fuzzy, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
-msgstr "Symbolbibliothek \"%s\" kann nicht gelöscht werden."
+msgstr "Symbolbibliothek-Ordner \"%s\" kann nicht gelöscht werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:111
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:359
@@ -20804,14 +20804,13 @@ msgstr "Kann Datei \"%s\" nicht lesen"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
 #, fuzzy, c-format
 msgid "Cannot create symbol library path '%s'."
-msgstr ""
-"Der Pfad \"%s\" für die globale Bibliothekstabelle konnte nicht erstellt "
-"werden."
+msgstr "Der Pfad \"%s\" für die Symbolbibliothek kann nicht erstellt werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
 #, fuzzy, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Keine entsprechenden Symbole in Bibliothek \"%s\" gefunden."
+msgstr ""
+"Kein Stammsymbol für erweitertes Symbol %s in Bibliothek \"%s\" gefunden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
@@ -32053,16 +32052,18 @@ msgstr ""
 "OVC I: Betriebsmittel ohne direkten Anschluss an das Stromnetz\n"
 "\n"
 "OVC II: Energie verbrauchende Betriebsmittel, die von der festen "
-"Installation versorgt werden. (z. B.: Haushaltsgeräte, tragbare Werkzeuge, "
-"Fernseher). OVC III gilt, wenn besondere Anforderungen an Zuverlässigkeit "
-"und Verfügbarkeit bestehen\n"
+"Installation versorgt werden. "
+"(z. B.: Haushaltsgeräte, tragbare Werkzeuge, Fernseher). OVC III gilt, wenn "
+"besondere Anforderungen an Zuverlässigkeit und Verfügbarkeit bestehen\n"
 "\n"
-"OVC III: Betriebsmittel in festen Installationen in deren Falle besondere "
-"Anforderungen an die Zuverlässigkeit und die Verfügbarkeit. (z.B.: "
-"elektrische Schutzschalter, Geräte für den industriellen Gebrauch)\n"
+"OVC III: Betriebsmittel in festen Installationen und für solche Fälle, in "
+"denen besondere Anforderungen an die Zuverlässigkeit und die Verfügbarkeit "
+"der Betriebsmittel gestellt werden. "
+"(z.B.: Schalter in festen Installationen (FI-Schutzschalter), Geräte für den "
+"industriellen Gebrauch)\n"
 "\n"
 "OVC IV: Betriebsmittel für den Einsatz am Anschlusspunkt der Installation "
-"(z. B. Stromzähler, primäre Überstromschutzgeräte)"
+"(z. B. Elektrizitätszähler, primäre Überstromschutzgeräte)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -32759,7 +32760,6 @@ msgid "Remove Regulator"
 msgstr "Spannungsregler entfernen"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:401
-#, fuzzy
 msgid "Vout must be greater than Vref"
 msgstr "Vout muss größer als Vref sein"
 
@@ -33480,7 +33480,6 @@ msgstr ""
 "Standardfarbe des Systems angezeigt.\n"
 
 #: pcb_calculator/iec60664_help.h:2
-#, fuzzy
 msgid ""
 "The goal of the IEC60664-1 is to provide guidance on designing insulation "
 "for products that have a connection to mains supply.\n"
@@ -33505,8 +33504,8 @@ msgstr ""
 "- Bei Frequenzen über 30 kHz verschlechtern sich dielektrische "
 "Eigenschaften. IEC60664-4 deckt diese Fälle ab.\n"
 "- Bei Verwendung eines Schutzlacks oder eines Vergusses zum Schutz vor "
-"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind "
-"– die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
+"Verschmutzung können – sofern alle Bedingungen nach IEC60664-3 erfüllt sind –"
+" die Luft- und Kriechstrecken reduziert werden. Lötstopplack wird nicht als "
 "hinreichende Beschichtung betrachtet.\n"
 "- Isolation durch Flüssigkeiten, Druckluft oder andere Gase als Luft fallen "
 "nicht in den Anwendungsbereich der IEC60664."
@@ -44564,7 +44563,7 @@ msgstr "Abstimmungsprofil \"%s\""
 #: pcbnew/drc/drc_engine.cpp:572
 #, fuzzy, c-format
 msgid "keepout area of %s"
-msgstr "Sperrbereich \"%s\""
+msgstr "Sperrbereich von %s"
 
 #: pcbnew/drc/drc_engine.cpp:577
 msgid "keepout area"
@@ -44573,7 +44572,7 @@ msgstr "Sperrfläche"
 #: pcbnew/drc/drc_engine.cpp:585
 #, fuzzy, c-format
 msgid "keepout area '%s' of %s"
-msgstr "Sperrbereich \"%s\""
+msgstr "Sperrbereich \"%s\" von %s"
 
 #: pcbnew/drc/drc_engine.cpp:591
 #, c-format
@@ -48245,7 +48244,7 @@ msgstr "(BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden.)"
 
 #: pcbnew/pad.cpp:2317
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(\"Mechanische\" Pads sind normalerweise NPTH)"
+msgstr "(\"Mechanische\" Pads sind normalerweise PTH)"
 
 #: pcbnew/pad.cpp:2322
 msgid "('press-fit' pads are normally PTH with round holes)"
