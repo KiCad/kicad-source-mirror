@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-31 08:02+0000\n"
+"PO-Revision-Date: 2025-11-03 05:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -35329,9 +35329,8 @@ msgid "Footprint Report"
 msgstr "フットプリント レポート"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "テキストを検索"
+msgstr "プレーン テキスト"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41042,22 +41041,22 @@ msgstr "--> アサーション 不合格。 <--"
 #: pcbnew/drc/drc_engine.cpp:962
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s のクリアランスをチェックしています: %s."
+msgstr "%s のクリアランスを確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:967
 #, c-format
 msgid "Checking %s creepage: %s."
-msgstr "%s の沿面距離をチェックしています: %s."
+msgstr "%s の沿面距離を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:972
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "%s の最大非結合長をチェックしています: %s."
+msgstr "%s の最大非結合長を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:978
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s の 最大遅延をチェックしています: %s."
+msgstr "%s の 最大遅延を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:984
 #, c-format
@@ -41067,12 +41066,12 @@ msgstr "%s の 幅を確認中:%s。"
 #: pcbnew/drc/drc_engine.cpp:990
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "%s のサーマルスポーク幅: %s をチェックしています。"
+msgstr "%s のサーマルスポーク幅を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:996
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "%s の 最小スポーク数をチェックしています: %s."
+msgstr "%s の 最小スポーク数を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
@@ -41082,68 +41081,68 @@ msgstr "%sのゾーン接続を確認中:%s。"
 #: pcbnew/drc/drc_engine.cpp:1035
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "%s の配線幅を確認しています:選択肢は：%s。"
+msgstr "%s の配線幅を確認中:選択肢は： %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1041
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "%s の配線幅をチェック中: 最小 %s."
+msgstr "%s の配線幅を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "%sのアニュラーリングのサイズを確認しています:最小は%s。"
+msgstr "%sのアニュラー幅を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1057
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "%sのビアの直径を確認しています:最適は %s。"
+msgstr "%sのビア直径を確認中: 最適は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1063
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "%sのビアの直径をチェック中: 最小 %s."
+msgstr "%sのビア直径を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1072
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "%s のホールサイズをチェックしています:選択肢: %s."
+msgstr "%s のスルーホール サイズを確認中: 選択肢は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1078
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "%s の穴サイズをチェックしています:選択肢: %s."
+msgstr "%s のスルーホール サイズを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1088
 #, c-format
 msgid "Checking %s: min %s."
-msgstr "%sを確認しています: 最小は%s."
+msgstr "%sを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1096
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "%s の差動ペアのギャップをチェックしています: 最適は %s."
+msgstr "%s の差動ペアのギャップを確認中: 最適は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1102
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "%s のクリアランスをチェックしています: 最小 %s."
+msgstr "%s のクリアランスを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1110
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "%s の穴間をチェック中: 最小 %s."
+msgstr "%s の穴間を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1116 pcbnew/drc/drc_engine.cpp:1142
 #: pcbnew/drc/drc_engine.cpp:1588
 #, c-format
 msgid "Checking %s."
-msgstr "%s をチェックしています。"
+msgstr "%s を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:1131
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "%s をチェック: 最小 %s; 最適 %s; 最大 %s."
+msgstr "%s を確認中: 最小 %s; 最適 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1152
 msgid "Netclass clearances apply only between copper items."
@@ -41713,12 +41712,11 @@ msgstr "パッドをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:174
 msgid "Checking copper graphic clearances..."
-msgstr "導体層の図形のクリアランスをチェック..."
+msgstr "導体の図形のクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "導体層の図形のクリアランスをチェック..."
+msgstr "導体のスルホールのクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
