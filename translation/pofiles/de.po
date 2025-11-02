@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 05:12+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-11-02 22:36+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -14790,9 +14790,8 @@ msgid "Footprint Filters"
 msgstr "Footprintfilter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:489
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "Alle Pads mit mehrfach vergebenen Nummern sind Jumper"
+msgstr "Alle Pins mit mehrfach vergebenen Nummern sind Jumper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:511
@@ -24217,13 +24216,12 @@ msgid "Select/Expand Connection"
 msgstr "Verbindung auswählen/erweitern"
 
 #: eeschema/tools/sch_actions.cpp:112
-#, fuzzy
 msgid ""
 "Selects a connection or expands an existing selection to pins, symbols, or "
 "entire connections"
 msgstr ""
-"Wählt eine Verbindung oder erweitert eine vorhandene Auswahl bis zu "
-"Abzweigungen oder Pads, oder auf gesamte Verbindungen"
+"Wählt eine Verbindung oder erweitert eine vorhandene Auswahl bis zu Pins, "
+"Symbole oder auf gesamte Verbindungen"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:508
 msgid "Show/hide design blocks library"
