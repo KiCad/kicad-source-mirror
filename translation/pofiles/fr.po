@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 12:43+0100\n"
+"POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-01 12:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1943,7 +1943,7 @@ msgstr "Verrouiller le rapport hauteur/largeur"
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_design_block_lib_table_base.cpp:49
 #: common/dialogs/panel_design_block_lib_table_base.cpp:98
-#: common/libraries/lib_table_grid.cpp:193
+#: common/libraries/lib_table_grid.cpp:187
 #: eeschema/dialogs/dialog_annotate_base.cpp:92
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:49
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:25
@@ -2335,8 +2335,8 @@ msgstr "Erreur interne"
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:2095
-#: eeschema/sch_symbol.cpp:2243 eeschema/sch_symbol.cpp:2855
-#: eeschema/sch_symbol.cpp:3371 eeschema/symbol_editor/symbol_editor.cpp:1745
+#: eeschema/sch_symbol.cpp:2259 eeschema/sch_symbol.cpp:2871
+#: eeschema/sch_symbol.cpp:3387 eeschema/symbol_editor/symbol_editor.cpp:1745
 #: eeschema/symbol_viewer_frame.cpp:390 pcbnew/footprint.cpp:4468
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
@@ -2354,11 +2354,11 @@ msgstr "Erreur lors du chargement du bloc de conception %s de la librairie %s."
 #: common/dialogs/panel_design_block_lib_table_base.cpp:99
 #: common/lib_tree_model_adapter.cpp:144 common/lib_tree_model_adapter.cpp:146
 #: common/lib_tree_model_adapter.cpp:154
-#: common/libraries/lib_table_grid.cpp:194
+#: common/libraries/lib_table_grid.cpp:188
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_base_frame.cpp:662 eeschema/sch_symbol.cpp:2241
+#: eeschema/sch_base_frame.cpp:662 eeschema/sch_symbol.cpp:2257
 #: eeschema/symbol_editor/symbol_editor.cpp:1744
 #: eeschema/symbol_viewer_frame.cpp:389
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2445,7 +2445,7 @@ msgstr "Modèles 3D"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:2866
+#: eeschema/sch_symbol.cpp:2882
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2761,8 +2761,8 @@ msgstr "Variables d'Environnement"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:474
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:525 eeschema/sch_group.cpp:439
-#: eeschema/sch_pin.cpp:1344 eeschema/sch_symbol.cpp:2202
-#: eeschema/sch_symbol.cpp:2254 eeschema/symbol_editor/symbol_editor.cpp:1726
+#: eeschema/sch_pin.cpp:1344 eeschema/sch_symbol.cpp:2218
+#: eeschema/sch_symbol.cpp:2270 eeschema/symbol_editor/symbol_editor.cpp:1726
 #: eeschema/symbol_viewer_frame.cpp:387
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:420
@@ -2775,7 +2775,7 @@ msgstr "Variables d'Environnement"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:120
 #: pcbnew/dialogs/panel_display_options.cpp:60
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:342 pcbnew/pcb_field.cpp:291
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:341 pcbnew/pcb_field.cpp:291
 #: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/pcb_group.cpp:499
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:109
 #: pcbnew/widgets/search_handlers.cpp:205
@@ -2822,8 +2822,8 @@ msgstr "Champs par Défaut"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:475
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2086
-#: eeschema/sch_symbol.cpp:1228 eeschema/sch_symbol.cpp:2199
-#: eeschema/sch_symbol.cpp:2251 eeschema/sch_symbol.cpp:3362
+#: eeschema/sch_symbol.cpp:1244 eeschema/sch_symbol.cpp:2215
+#: eeschema/sch_symbol.cpp:2267 eeschema/sch_symbol.cpp:3378
 #: eeschema/sim/simulator_frame_ui.cpp:749
 #: eeschema/sim/simulator_frame_ui.cpp:3198
 #: eeschema/sim/simulator_frame_ui.cpp:3239
@@ -2839,7 +2839,7 @@ msgstr "Champs par Défaut"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:80
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:343 pcbnew/footprint.cpp:4458
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:342 pcbnew/footprint.cpp:4458
 #: pcbnew/footprint_wizard_frame.cpp:332 pcbnew/pcb_dimension.cpp:639
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:122
@@ -4440,35 +4440,35 @@ msgstr "J’accepte de fournir des rapports anonymes"
 msgid "Reset Unique Id"
 msgstr "Réinitialiser l’ID unique"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:432
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:395
+#: common/dialogs/panel_design_block_lib_table.cpp:433
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:394
 #, c-format
 msgid "folder with %s files"
 msgstr "répertoire avec %s fichiers"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:508
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:466
+#: common/dialogs/panel_design_block_lib_table.cpp:507
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:465
 msgid "A library table row nickname and path cells are empty."
 msgstr ""
 "Des cellules de nom logique et de chemin de la table des librairies est vide."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:510
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:468
+#: common/dialogs/panel_design_block_lib_table.cpp:509
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:467
 msgid "A library table row nickname cell is empty."
 msgstr "Une cellule de nom logique de la table des librairies est vide."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:512
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:470
+#: common/dialogs/panel_design_block_lib_table.cpp:511
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:469
 msgid "A library table row path cell is empty."
 msgstr "Une cellule de chemin de la table des librairies est vide."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:516
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:474
+#: common/dialogs/panel_design_block_lib_table.cpp:515
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:473
 msgid "Invalid Row Definition"
 msgstr "Définition de Ligne non Valide"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:518
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:476
+#: common/dialogs/panel_design_block_lib_table.cpp:517
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:475
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
@@ -4476,71 +4476,71 @@ msgstr ""
 "Des cellules vides auront pour résultat que toutes les lignes invalides "
 "seront retirées de la table."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:520
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:478
+#: common/dialogs/panel_design_block_lib_table.cpp:519
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:477
 msgid "Remove Invalid Cells"
 msgstr "Supprimer Cellules Invalides"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:521
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:479
+#: common/dialogs/panel_design_block_lib_table.cpp:520
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:478
 msgid "Cancel Table Update"
 msgstr "Annuler Mise à jour de la Table"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:535
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:492
+#: common/dialogs/panel_design_block_lib_table.cpp:534
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:491
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Caractère illégal \"%c\" dans le nom logique: '%s'."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:546
-#: common/dialogs/panel_design_block_lib_table.cpp:593
+#: common/dialogs/panel_design_block_lib_table.cpp:545
+#: common/dialogs/panel_design_block_lib_table.cpp:592
 #: eeschema/dialogs/panel_sym_lib_table.cpp:585
 #: eeschema/dialogs/panel_sym_lib_table.cpp:640
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:505
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:552
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:504
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
 msgid "Library Nickname Error"
 msgstr "Erreur de Nom Logique de Librairie"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:580
+#: common/dialogs/panel_design_block_lib_table.cpp:579
 #: eeschema/dialogs/panel_sym_lib_table.cpp:626
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:539
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:538
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 "Plusieurs librairie ne peuvent pas partager le même nom logique ('%s')."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:755
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:713
+#: common/dialogs/panel_design_block_lib_table.cpp:754
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:712
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 "Sélectionnez une ou plusieurs lignes de la table contenant des librairie à "
 "sauver au format actuel."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:763
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:721
+#: common/dialogs/panel_design_block_lib_table.cpp:762
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:720
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr "Sauver '%s' au format actuel et remplacer l’entrée dans la table?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:768
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:726
+#: common/dialogs/panel_design_block_lib_table.cpp:767
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:725
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 "Sauver %d librairies au format actuel et remplacer les entrées dans la "
 "table ?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:785
+#: common/dialogs/panel_design_block_lib_table.cpp:784
 #: eeschema/dialogs/dialog_symbol_remap.cpp:233
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1006
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:59
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:742
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:741
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Librairie '%s' non trouvée."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:797
+#: common/dialogs/panel_design_block_lib_table.cpp:796
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
@@ -4548,66 +4548,66 @@ msgstr ""
 "Le répertoire: '%s' existe déjà. Voulez-vous remplacer tous les blocs de "
 "conception existantes?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:801
+#: common/dialogs/panel_design_block_lib_table.cpp:800
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1022
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:757
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:756
 msgid "Migrate Library"
 msgstr "Migrer Librairie"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:828
+#: common/dialogs/panel_design_block_lib_table.cpp:827
 #, c-format
 msgid "Failed to save design block library file '%s'."
 msgstr "Impossible de sauver la librairie de blocks de conception '%s'."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:863
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:824
+#: common/dialogs/panel_design_block_lib_table.cpp:862
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:823
 #, c-format
 msgid "Select %s Library"
 msgstr "Sélection Librairie %s"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:910
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:872
+#: common/dialogs/panel_design_block_lib_table.cpp:909
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:871
 msgid "Warning: Duplicate Nicknames"
 msgstr "Attention: Noms logiques dupliqués"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:911
+#: common/dialogs/panel_design_block_lib_table.cpp:910
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:873
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:872
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "Une librairie de nom logique '%s' existe déjà."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:912
+#: common/dialogs/panel_design_block_lib_table.cpp:911
 #: eeschema/dialogs/panel_sym_lib_table.cpp:727
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:874
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:873
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
 "SVP changer le nom logique d'une des librairies après l’ajout de cette "
 "librairie."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:931
+#: common/dialogs/panel_design_block_lib_table.cpp:930
 #: common/dialogs/panel_embedded_files.cpp:423
 #: common/dialogs/panel_embedded_files.cpp:443
 #: eeschema/dialogs/panel_sym_lib_table.cpp:729
-#: kicad/project_tree_pane.cpp:1689 pcbnew/dialogs/panel_fp_lib_table.cpp:896
+#: kicad/project_tree_pane.cpp:1689 pcbnew/dialogs/panel_fp_lib_table.cpp:895
 #: pcbnew/tools/pcb_actions.cpp:728
 msgid "Skip"
 msgstr "Passer"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:931
+#: common/dialogs/panel_design_block_lib_table.cpp:930
 #: eeschema/dialogs/panel_sym_lib_table.cpp:729
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:896
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:895
 msgid "Add Anyway"
 msgstr "Ajouter de Toute Façon"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:1097
+#: common/dialogs/panel_design_block_lib_table.cpp:1096
 msgid "Design Block Libraries"
 msgstr "Librairies de Blocs de Conception"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:1114
+#: common/dialogs/panel_design_block_lib_table.cpp:1113
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
 #: eeschema/tools/sch_editor_control.cpp:440
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1139
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1138
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -4618,8 +4618,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:1115
-#: common/dialogs/panel_design_block_lib_table.cpp:1131
+#: common/dialogs/panel_design_block_lib_table.cpp:1114
+#: common/dialogs/panel_design_block_lib_table.cpp:1130
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1246
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1262
 #: eeschema/project_rescue.cpp:858 eeschema/sheet.cpp:569
@@ -4629,16 +4629,16 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2027
 #: eeschema/tools/sch_editor_control.cpp:442
 #: eeschema/tools/sch_editor_control.cpp:452
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1140
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1159
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1139
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1158
 msgid "File Save Error"
 msgstr "Erreur Écriture  Fichier"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:1129
+#: common/dialogs/panel_design_block_lib_table.cpp:1128
 #: eeschema/cross-probing.cpp:884 eeschema/dialogs/dialog_symbol_remap.cpp:245
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1260
 #: eeschema/project_rescue.cpp:856 eeschema/tools/sch_editor_control.cpp:450
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1157
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1156
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -4678,7 +4678,7 @@ msgstr "Visible"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:46
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
-#: common/libraries/lib_table_grid.cpp:188
+#: common/libraries/lib_table_grid.cpp:182
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
@@ -4688,7 +4688,7 @@ msgstr "Pseudo nom"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:47
 #: common/dialogs/panel_design_block_lib_table_base.cpp:96
-#: common/libraries/lib_table_grid.cpp:189
+#: common/libraries/lib_table_grid.cpp:183
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:47
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
@@ -4698,7 +4698,7 @@ msgstr "Chemin Librairie"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:48
 #: common/dialogs/panel_design_block_lib_table_base.cpp:97
-#: common/libraries/lib_table_grid.cpp:192
+#: common/libraries/lib_table_grid.cpp:186
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
@@ -6635,7 +6635,7 @@ msgid "Screen"
 msgstr "Ecran"
 
 #: common/eda_item.cpp:417 eeschema/lib_symbol.cpp:2089
-#: eeschema/sch_symbol.cpp:2238 eeschema/widgets/search_handlers.cpp:162
+#: eeschema/sch_symbol.cpp:2254 eeschema/widgets/search_handlers.cpp:162
 #: pcbnew/build_BOM_from_board.cpp:109
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/load_select_footprint.cpp:296 pcbnew/pad.cpp:1350
@@ -7154,7 +7154,7 @@ msgstr "Dessous"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1733
 #: eeschema/sch_pin.cpp:1354 eeschema/sch_pin.cpp:1939
-#: eeschema/sch_symbol.cpp:3333 eeschema/sch_tablecell.cpp:232
+#: eeschema/sch_symbol.cpp:3349 eeschema/sch_tablecell.cpp:232
 #: eeschema/sch_text.cpp:711 eeschema/sch_textbox.cpp:646
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -8573,11 +8573,11 @@ msgstr "Labels globaux"
 msgid "Hierarchical labels"
 msgstr "Labels hiérarchiques"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3349
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:3365
 msgid "Pin numbers"
 msgstr "Numéros de pins"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3353
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3369
 msgid "Pin names"
 msgstr "Noms de pins"
 
@@ -8906,7 +8906,7 @@ msgid "Unset visible flag"
 msgstr "Désactiver le drapeau visible"
 
 #: common/lib_table_grid_tricks.cpp:101
-#: eeschema/dialogs/panel_sym_lib_table.cpp:313
+#: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #, c-format
 msgid "Library settings for %s..."
 msgstr "Paramètres de la librairie pour %s..."
@@ -8976,18 +8976,20 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
-#: common/libraries/lib_table_grid.cpp:195 pcbnew/zone.cpp:1947
+#: common/libraries/lib_table_grid.cpp:189 pcbnew/zone.cpp:1947
 msgid "Enable"
 msgstr "Activer"
 
-#: common/libraries/lib_table_grid.cpp:196
+#: common/libraries/lib_table_grid.cpp:190
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
@@ -9364,7 +9366,7 @@ msgstr "Erreur en extrayant le fichier!"
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:43
 #: eeschema/sch_plotter.cpp:173 eeschema/sch_plotter.cpp:392
 #: eeschema/sch_plotter.cpp:410 eeschema/sch_plotter.cpp:549
-#: eeschema/sch_plotter.cpp:736 gerbview/export_to_pcbnew.cpp:64
+#: eeschema/sch_plotter.cpp:736 gerbview/export_to_pcbnew.cpp:65
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:444
 #: pcbnew/dialogs/dialog_drc.cpp:1098 pcbnew/dialogs/dialog_export_2581.cpp:294
@@ -9464,8 +9466,8 @@ msgstr "Défaut d'Edition"
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:124
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2083
-#: eeschema/sch_symbol.cpp:2195 eeschema/sch_symbol.cpp:2248
-#: eeschema/sch_symbol.cpp:3359 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:2211 eeschema/sch_symbol.cpp:2264
+#: eeschema/sch_symbol.cpp:3375 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:256
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4455 pcbnew/widgets/search_handlers.cpp:121
@@ -9486,7 +9488,7 @@ msgstr "Groupés par Valeur et Empreinte"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:203
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:74
 #: eeschema/lib_symbol.cpp:2124 eeschema/menubar.cpp:165
-#: eeschema/sch_sheet.cpp:1743 eeschema/sch_symbol.cpp:3425
+#: eeschema/sch_sheet.cpp:1743 eeschema/sch_symbol.cpp:3441
 #: eeschema/tools/sch_edit_tool.cpp:624 pcbnew/footprint.cpp:4478
 msgid "Attributes"
 msgstr "Attributs"
@@ -10958,7 +10960,7 @@ msgstr "La librairie '%s' existe déjà."
 msgid "Enter a description for the library:"
 msgstr "Entrez une description pour la lirairie:"
 
-#: common/widgets/design_block_pane.cpp:238 eeschema/sch_symbol.cpp:3368
+#: common/widgets/design_block_pane.cpp:238 eeschema/sch_symbol.cpp:3384
 #: eeschema/widgets/search_handlers.cpp:171 pcbnew/footprint.cpp:4465
 #: pcbnew/plot_board_layers.cpp:189 pcbnew/widgets/search_handlers.cpp:127
 msgid "Library Description"
@@ -11039,13 +11041,13 @@ msgid "<not found>"
 msgstr "<non trouvé>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:890
-#: eeschema/sch_symbol.cpp:2170 pcbnew/board_statistics_report.cpp:475
+#: eeschema/sch_symbol.cpp:2186 pcbnew/board_statistics_report.cpp:475
 msgid "Board"
 msgstr "Circuit Imprimé"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:823
-#: eeschema/sch_base_frame.cpp:661 eeschema/sch_symbol.cpp:2224
-#: eeschema/sch_symbol.cpp:2228 eeschema/sch_symbol.cpp:2264
+#: eeschema/sch_base_frame.cpp:661 eeschema/sch_symbol.cpp:2240
+#: eeschema/sch_symbol.cpp:2244 eeschema/sch_symbol.cpp:2280
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1792
 #: pcbnew/footprint_libraries_utils.cpp:1286
 msgid "Library"
@@ -11647,7 +11649,7 @@ msgstr ""
 msgid "Assign Footprints"
 msgstr "Assigner Empreintes"
 
-#: cvpcb/cvpcb_mainframe.cpp:119 pcbnew/dialogs/panel_fp_lib_table.cpp:1121
+#: cvpcb/cvpcb_mainframe.cpp:119 pcbnew/dialogs/panel_fp_lib_table.cpp:1120
 msgid "Footprint Libraries"
 msgstr "Librairies d'Empreintes"
 
@@ -13845,7 +13847,7 @@ msgstr "Afficher la fenêtre d’aide de syntaxe"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2081 eeschema/sch_symbol.cpp:3357
+#: eeschema/lib_symbol.cpp:2081 eeschema/sch_symbol.cpp:3373
 #: eeschema/widgets/sch_properties_panel.cpp:260
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14042,14 +14044,14 @@ msgstr "Taille Texte Nom"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:81
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/dialogs/dialog_sim_model.cpp:614 eeschema/sch_item.cpp:689
-#: eeschema/sch_item.cpp:753 eeschema/sch_symbol.cpp:3393
+#: eeschema/sch_item.cpp:753 eeschema/sch_symbol.cpp:3409
 msgid "Unit"
 msgstr "Unité"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:107
 #: eeschema/sch_item.cpp:692 eeschema/sch_item.cpp:775
-#: eeschema/sch_symbol.cpp:3409 eeschema/tools/sch_edit_tool.cpp:151
+#: eeschema/sch_symbol.cpp:3425 eeschema/tools/sch_edit_tool.cpp:151
 msgid "Body Style"
 msgstr "Style de Corps"
 
@@ -14337,13 +14339,13 @@ msgid "Exclude From BOM"
 msgstr "Exclure de la Liste du Matériel"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1055
-#: eeschema/sch_sheet.cpp:1748 eeschema/sch_symbol.cpp:3430
+#: eeschema/sch_sheet.cpp:1748 eeschema/sch_symbol.cpp:3446
 msgid "Exclude From Simulation"
 msgstr "Exclure de la Simulation"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1056
-#: eeschema/sch_sheet.cpp:1745 eeschema/sch_symbol.cpp:1229
-#: eeschema/sch_symbol.cpp:3427
+#: eeschema/sch_sheet.cpp:1745 eeschema/sch_symbol.cpp:1245
+#: eeschema/sch_symbol.cpp:3443
 msgid "Exclude From Board"
 msgstr "Exclure du Circuit Imprimé"
 
@@ -16379,7 +16381,6 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -18072,7 +18073,7 @@ msgid "Warning: Duplicate Nickname"
 msgstr "Attention: Nom Logique dupliqué"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:897
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:958
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:957
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
@@ -19105,7 +19106,7 @@ msgstr ""
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "La schématique courante a été modifiée. Sauver les changements?"
 
-#: eeschema/generate_alias_info.cpp:38 eeschema/sch_symbol.cpp:2220
+#: eeschema/generate_alias_info.cpp:38 eeschema/sch_symbol.cpp:2236
 msgid "Derived from"
 msgstr "Dérivé de"
 
@@ -19216,23 +19217,23 @@ msgid "Unit %s"
 msgstr "Unité %s"
 
 #: eeschema/lib_symbol.cpp:601 eeschema/sch_label.cpp:874
-#: eeschema/sch_sheet.cpp:287 eeschema/sch_symbol.cpp:1729
+#: eeschema/sch_sheet.cpp:287 eeschema/sch_symbol.cpp:1745
 msgid "Excluded from BOM"
 msgstr "Exclure de la Liste du Matériel"
 
 #: eeschema/lib_symbol.cpp:606 eeschema/sch_label.cpp:887
-#: eeschema/sch_sheet.cpp:296 eeschema/sch_symbol.cpp:1738
+#: eeschema/sch_sheet.cpp:296 eeschema/sch_symbol.cpp:1754
 msgid "Excluded from board"
 msgstr "Exclure du PCB"
 
 #: eeschema/lib_symbol.cpp:611 eeschema/sch_label.cpp:900
-#: eeschema/sch_sheet.cpp:305 eeschema/sch_symbol.cpp:1747
+#: eeschema/sch_sheet.cpp:305 eeschema/sch_symbol.cpp:1763
 msgid "Excluded from simulation"
 msgstr "Exclus de la simulation"
 
 #: eeschema/lib_symbol.cpp:616 eeschema/sch_label.cpp:913
 #: eeschema/sch_sheet.cpp:314 eeschema/sch_sheet.cpp:893
-#: eeschema/sch_symbol.cpp:1756 eeschema/sch_symbol.cpp:2173
+#: eeschema/sch_symbol.cpp:1772 eeschema/sch_symbol.cpp:2189
 #: eeschema/widgets/search_handlers.cpp:169 pcbnew/footprint.cpp:1840
 msgid "DNP"
 msgstr "DNP"
@@ -19804,7 +19805,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:306 eeschema/sch_group.cpp:433
 #: eeschema/sch_pin.cpp:1931 eeschema/sch_shape.cpp:600
-#: eeschema/sch_symbol.cpp:3326 pcbnew/board_item.cpp:441
+#: eeschema/sch_symbol.cpp:3342 pcbnew/board_item.cpp:441
 #: pcbnew/pcb_group.cpp:492 pcbnew/pcb_point.cpp:168 pcbnew/pcb_shape.cpp:972
 #: pcbnew/pcb_tablecell.cpp:223 pcbnew/pcb_track.cpp:2558
 #: pcbnew/widgets/pcb_properties_panel.cpp:498
@@ -19815,7 +19816,7 @@ msgstr "Position X"
 
 #: eeschema/sch_bitmap.cpp:311 eeschema/sch_group.cpp:434
 #: eeschema/sch_pin.cpp:1935 eeschema/sch_shape.cpp:602
-#: eeschema/sch_symbol.cpp:3329 pcbnew/board_item.cpp:445
+#: eeschema/sch_symbol.cpp:3345 pcbnew/board_item.cpp:445
 #: pcbnew/pcb_group.cpp:493 pcbnew/pcb_point.cpp:169 pcbnew/pcb_shape.cpp:974
 #: pcbnew/pcb_tablecell.cpp:224 pcbnew/pcb_track.cpp:2562
 #: pcbnew/widgets/pcb_properties_panel.cpp:499 pcbnew/zone.cpp:1847
@@ -21403,16 +21404,16 @@ msgstr "Chemin Hiérarchique"
 msgid "File Name"
 msgstr "Nom Fichier"
 
-#: eeschema/sch_sheet.cpp:884 eeschema/sch_symbol.cpp:2164
+#: eeschema/sch_sheet.cpp:884 eeschema/sch_symbol.cpp:2180
 #: eeschema/sch_text.cpp:561 eeschema/sch_textbox.cpp:471
 msgid "Simulation"
 msgstr "Simulation"
 
-#: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2167
+#: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2183
 msgid "BOM"
 msgstr "Liste du Matériel"
 
-#: eeschema/sch_sheet.cpp:899 eeschema/sch_symbol.cpp:2179
+#: eeschema/sch_sheet.cpp:899 eeschema/sch_symbol.cpp:2195
 #: eeschema/sch_text.cpp:561 eeschema/sch_textbox.cpp:471
 msgid "Exclude from"
 msgstr "Exclure de"
@@ -21437,13 +21438,13 @@ msgstr "Couleur de Bordure"
 msgid "Background Color"
 msgstr "Couleur de Fond"
 
-#: eeschema/sch_sheet.cpp:1752 eeschema/sch_symbol.cpp:1230
-#: eeschema/sch_symbol.cpp:3433 pcbnew/footprint.cpp:4485
+#: eeschema/sch_sheet.cpp:1752 eeschema/sch_symbol.cpp:1246
+#: eeschema/sch_symbol.cpp:3449 pcbnew/footprint.cpp:4485
 msgid "Exclude From Bill of Materials"
 msgstr "Exclure de la Liste du Matériel"
 
-#: eeschema/sch_sheet.cpp:1756 eeschema/sch_symbol.cpp:1231
-#: eeschema/sch_symbol.cpp:3436 eeschema/tools/sch_actions.cpp:1064
+#: eeschema/sch_sheet.cpp:1756 eeschema/sch_symbol.cpp:1247
+#: eeschema/sch_symbol.cpp:3452 eeschema/tools/sch_actions.cpp:1064
 #: pcbnew/footprint.cpp:4488
 msgid "Do not Populate"
 msgstr "Ne pas Monter"
@@ -21457,49 +21458,49 @@ msgstr "(Élément Supprimé)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Pins de Hiérarchie '%s'"
 
-#: eeschema/sch_symbol.cpp:2190
+#: eeschema/sch_symbol.cpp:2206
 msgid "Power symbol"
 msgstr "Symbole d'alimentation"
 
-#: eeschema/sch_symbol.cpp:2208
+#: eeschema/sch_symbol.cpp:2224
 msgid "flags"
 msgstr "flags"
 
-#: eeschema/sch_symbol.cpp:2213
+#: eeschema/sch_symbol.cpp:2229
 msgid "Missing parent"
 msgstr "Parent manquant"
 
-#: eeschema/sch_symbol.cpp:2228
+#: eeschema/sch_symbol.cpp:2244
 msgid "Undefined!!!"
 msgstr "Non Défini!!!"
 
-#: eeschema/sch_symbol.cpp:2236
+#: eeschema/sch_symbol.cpp:2252
 msgid "<Unknown>"
 msgstr "<Inconnu>"
 
-#: eeschema/sch_symbol.cpp:2260
+#: eeschema/sch_symbol.cpp:2276
 msgid "No library defined!"
 msgstr "Pas de librairie définie!"
 
-#: eeschema/sch_symbol.cpp:2262
+#: eeschema/sch_symbol.cpp:2278
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbole non trouvé en '%s'!"
 
-#: eeschema/sch_symbol.cpp:2538
+#: eeschema/sch_symbol.cpp:2554
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbole %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3335
+#: eeschema/sch_symbol.cpp:3351
 msgid "Mirror X"
 msgstr "Miroir X"
 
-#: eeschema/sch_symbol.cpp:3337
+#: eeschema/sch_symbol.cpp:3353
 msgid "Mirror Y"
 msgstr "Miroir Y"
 
-#: eeschema/sch_symbol.cpp:3365 eeschema/widgets/search_handlers.cpp:170
+#: eeschema/sch_symbol.cpp:3381 eeschema/widgets/search_handlers.cpp:170
 #: pcbnew/footprint.cpp:4462 pcbnew/widgets/search_handlers.cpp:126
 msgid "Library Link"
 msgstr "Lien de Librairie"
@@ -42142,7 +42143,7 @@ msgstr "Valeurs par Défaut pour les Nouveaux Eléments Graphiques"
 msgid "Hidden footprint libraries are not yet supported."
 msgstr "Librairies d'empreintes cachées non encre supportées."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:754
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:753
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
@@ -42150,7 +42151,7 @@ msgstr ""
 "Le répertoire: '%s' existe déjà. Voulez-vous remplacer toutes les empreintes "
 "existantes?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:783
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:782
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Impossible de sauver la librairie d'empreintes '%s'."
