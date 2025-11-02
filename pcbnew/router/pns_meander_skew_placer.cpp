@@ -131,7 +131,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         m_coupledLength = m_padToDieLengthN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
         m_lastLength = m_padToDieLengthP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
 
-        m_coupledDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_p, m_endPad_p );
+        m_coupledDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
         m_lastDelay = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
 
         m_tunedPath = m_tunedPathP;
@@ -142,7 +142,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         m_lastLength = m_padToDieLengthN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
 
         m_coupledDelay = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
-        m_lastDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_p, m_endPad_p );
+        m_lastDelay = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
 
         m_tunedPath = m_tunedPathN;
     }
@@ -223,22 +223,30 @@ int64_t MEANDER_SKEW_PLACER::TuningDelayResult() const
 
 void MEANDER_SKEW_PLACER::calculateTimeDomainTargets()
 {
+    auto calculateTargetSkew = [this]( const int64_t targetSkewDelay )
+    {
+        const int64_t curSkewDelay = m_lastDelay - m_coupledDelay;
+        const int64_t skewDelayDifference = targetSkewDelay - curSkewDelay;
+
+        int64_t skewLengthDiff = m_router->GetInterface()->CalculateLengthForDelay(
+                std::abs( skewDelayDifference ), m_originPair.Width(), true, m_originPair.Gap(),
+                m_router->GetCurrentLayer(), m_netClass );
+
+        const int64_t curSkew = CurrentSkew();
+        skewLengthDiff = skewDelayDifference > 0 ? skewLengthDiff : -skewLengthDiff;
+
+        return static_cast<int>( curSkew + skewLengthDiff );
+    };
+
     if( m_settings.m_isTimeDomain )
     {
-        const int64_t minSkew = m_router->GetInterface()->CalculateLengthForDelay(
-                m_settings.m_targetSkewDelay.Min(), m_originPair.Width(), true, m_originPair.Gap(),
-                m_router->GetCurrentLayer(), m_netClass );
-
-        const int64_t optSkew = m_router->GetInterface()->CalculateLengthForDelay(
-                m_settings.m_targetSkewDelay.Opt(), m_originPair.Width(), true, m_originPair.Gap(),
-                m_router->GetCurrentLayer(), m_netClass );
-
-        const int64_t maxSkew = m_router->GetInterface()->CalculateLengthForDelay(
-                m_settings.m_targetSkewDelay.Max(), m_originPair.Width(), true, m_originPair.Gap(),
-                m_router->GetCurrentLayer(), m_netClass );
-
+        const int minSkew = calculateTargetSkew( m_settings.m_targetSkewDelay.Min() );
         m_settings.m_targetSkew.SetMin( static_cast<int>( minSkew ) );
+
+        const int optSkew = calculateTargetSkew( m_settings.m_targetSkewDelay.Opt() );
         m_settings.m_targetSkew.SetOpt( static_cast<int>( optSkew ) );
+
+        const int maxSkew = calculateTargetSkew( m_settings.m_targetSkewDelay.Max() );
         m_settings.m_targetSkew.SetMax( static_cast<int>( maxSkew ) );
     }
 }
