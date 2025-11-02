@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 02:44+0000\n"
+"PO-Revision-Date: 2025-11-03 05:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -25659,7 +25659,7 @@ msgstr "Nessun attributo"
 #: gerbview/gerber_draw_item.cpp:682
 #, c-format
 msgid "D Code %d"
-msgstr "Codice D %d"
+msgstr "D Code %d"
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Graphic Layer"
@@ -46875,7 +46875,7 @@ msgstr "Generazione sezione contenuti"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Tipo piazzola non supportato; ignorato."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1175
 msgid "Generating history section"
@@ -46895,6 +46895,7 @@ msgstr "Impronta '%s' non trovata nella libreria '%s'."
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"Riferimento OEM mancante nel componente \"%s\"; la voce DIBA verrà saltata."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1368
 msgid "Generating CAD data"
@@ -46910,6 +46911,8 @@ msgstr ""
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Sono stati rilevati puntatori impronte duplicati; il risultato IPC-2581 "
+"potrebbe essere errato."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2664
 #, c-format
@@ -46918,17 +46921,21 @@ msgstr "Esportazione strato %s, collegamento %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2700
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "Il via usa un padstack non supportato; omesso dai dati di perforazione."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2726
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"La piazzola usa un padstack non supportato; il foro è stato omesso dai dati "
+"di perforazione."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2868
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"Le lacrime non sono supportate nella revisione B dell'IPC-2581; sono state "
+"esportate come zone."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 msgid "Generating logistic section"
