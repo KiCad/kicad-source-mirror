@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"PO-Revision-Date: 2025-11-02 22:36+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6027,7 +6027,6 @@ msgid "Top main"
 msgstr "上 メイン"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxiliary"
 msgstr "上 サブ"
 
@@ -9995,7 +9994,6 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "孤の半径と中心を維持、角度を調整"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr "端点を移動しても半径を維持するように、円弧編集モードを切り替えます"
 
@@ -12223,7 +12221,6 @@ msgid "Bill of Materials"
 msgstr "部品表(BOM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -12309,8 +12306,8 @@ msgstr ""
 "\n"
 "部品表ツールは、設計内のすべての部品を一覧にした部品表(BOM)を作成します。\n"
 "\n"
-"このツールは外部スクリプトを使用して、目的の出力形式でを部品表(BOM)生成しま"
-"す。別のスクリプトを選択すると、部品表(BOM)の書式が変わります。\n"
+"このツールは外部スクリプトを使用して、目的の出力形式でを部品表(BOM)生成します"
+"。別のスクリプトを選択すると、部品表(BOM)の書式が変わります。\n"
 "\n"
 "部品表の生成の生成の詳細については、回路図エディターのマニュアルに記載されて"
 "います。\n"
@@ -12318,39 +12315,39 @@ msgstr ""
 "# 2. 使用方法\n"
 "\n"
 "**部品表(BOM)ジェネレーター スクリプト**のリストからジェネレーター スクリプト"
-"を選択します。選択したジェネレーターの詳細がダイアログの右側に表示されま"
-"す。\n"
+"を選択します。選択したジェネレーターの詳細がダイアログの右側に表示されます。"
+"\n"
 "\n"
 "**生成** ボタンをクリックすると、選択したジェネレーターで部品表(BOM)ファイル"
 "を作成します。\n"
 "\n"
 "デフォルト設定ではいくつかのジェネレータースクリプトが表示されますが、KiCadと"
-"共にインストールされた追加のスクリプトは、**+** ボタンでリストに追加できま"
-"す。\n"
+"共にインストールされた追加のスクリプトは、**+** ボタンでリストに追加できます"
+"。\n"
 "\n"
 "**注:** Windowsでは、追加のオプション **コンソール ウィンドウを表示する**があ"
-"ります。このオプションをオフにすると、部品表(BOM)ジェネレータは非表示のコン"
-"ソール ウィンドウで実行され、出力はリダイレクトされてダイアログに出力されま"
-"す。このオプションをオンにすると、部品表(BOM)ジェネレータは独立したコンソー"
-"ル ウィンドウで実行されます。\n"
+"ります。このオプションをオフにすると、部品表(BOM)ジェネレータは非表示のコンソ"
+"ール ウィンドウで実行され、出力はリダイレクトされてダイアログに出力されます。"
+"このオプションをオンにすると、部品表(BOM)ジェネレータは独立したコンソール ウ"
+"ィンドウで実行されます。\n"
 "\n"
 "# 3.カスタムジェネレーターとコマンドライン\n"
 "\n"
-"内部的には、KiCadはデザイン内のすべてのコンポーネントに関する情報を含む中間"
-"ネットリスト ファイルをXMLフォーマットで作成します。部品表(BOM)ジェネレー"
-"ター スクリプトは、中間ネットリスト ファイルを目的の出力形式に変換します。"
-"KiCadは部品表(BOM)ダイアログの一番下に入力されたコマンドラインに従って部品表"
-"(BOM)ジェネレーター スクリプトを実行します。\n"
+"内部的には、KiCadはデザイン内のすべてのコンポーネントに関する情報を含む中間ネ"
+"ットリスト ファイルをXMLフォーマットで作成します。部品表(BOM)ジェネレーター "
+"スクリプトは、中間ネットリスト ファイルを目的の出力形式に変換します。KiCadは"
+"部品表(BOM)ダイアログの一番下に入力されたコマンドラインに従って部品表(BOM)ジ"
+"ェネレーター スクリプトを実行します。\n"
 "\n"
 "コマンドラインでファイル名のパラメータを受け付けます。各書式設定パラメーター"
 "は、プロジェクト固有のパスまたはファイル名に置き換えられます。サポートされて"
 "いるパラメーターは次のとおりです。\n"
 "\n"
-" * `%I`: B部品表(BOM)ジェネレーターへの入力である中間ネットリスト ファイルの"
-"絶対パスとファイル名\n"
+" * `%I`: 部品表(BOM)ジェネレーターへの入力である中間ネットリスト ファイルの絶"
+"対パスとファイル名\n"
 " * `%O`: 出力部品表(BOM)ファイルの絶対パスとファイル名 (ファイル拡張子なし)\n"
 " * `%B`: 出力部品表(BOM)ファイルの基本ファイル名 (ファイル拡張子なし)\n"
-" * `%P`: 末尾のスラッシュなしのプロジェクトディレクトリの絶対パス\n"
+" * `%P`:プロジェクトディレクトリの絶対パス(末尾のスラッシュなし)\n"
 "\n"
 "**注:** `%O` 出力ファイル パラメーターにはファイル拡張子は含まれていません。"
 "KiCad はコマンドラインに適切な拡張子を自動的に追加しようとしますが、 拡張子は"
@@ -12367,13 +12364,13 @@ msgstr ""
 "python <スクリプトファイル名> <入力ファイル名> <出力ファイル名>\n"
 "```\n"
 "\n"
-"Windowsでは、CSV 部品表(BOM)に使うジェネレーター スクリプトが `C:"
-"\\Users\\username\\kicad\\my_python_script.py` の場合、コマンドラインは以下の"
-"ようになります。\n"
+"Windowsでは、CSV 部品表(BOM)に使うジェネレーター スクリプトが `C:\\Users"
+"\\username\\kicad\\my_python_script.py` の場合、コマンドラインは以下のように"
+"なります。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
 "Linuxでは、CSV 部品表(BOM)に使うジェネレーター スクリプトが `/home/username/"
@@ -13223,7 +13220,6 @@ msgid "Show field name"
 msgstr "フィールド名を表示"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "フィールド名とその値を表示する"
 
@@ -20515,24 +20511,24 @@ msgid "Save Anyway"
 msgstr "強制的に保存"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
-msgstr "シンボル ライブラリ '%s' はすでに存在します。"
+msgstr "シンボル ライブラリ ファイル '%s' はすでに存在します。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library path '%s' already exists."
-msgstr "シンボル ライブラリ '%s' はすでに存在します。"
+msgstr "シンボル ライブラリ パス '%s' はすでに存在します。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' cannot be deleted."
-msgstr "シンボル ライブラリ '%s' が削除できませんでした。"
+msgstr "シンボル ライブラリ ファイル '%s' が削除できませんでした。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
-msgstr "シンボル ライブラリ '%s' が削除できませんでした。"
+msgstr "シンボル ライブラリ フォルダ '%s' が削除できませんでした。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:111
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:359
@@ -20542,9 +20538,9 @@ msgid "Unable to read file '%s'"
 msgstr "ファイル '%s' を読み込めません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create symbol library path '%s'."
-msgstr "グローバル ライブラリ テーブルのパス '%s' が生成できません。"
+msgstr "シンボル ライブラリ パス '%s' が生成できません。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
 #, fuzzy, c-format
@@ -23916,13 +23912,10 @@ msgid "Select/Expand Connection"
 msgstr "接続を選択/拡張"
 
 #: eeschema/tools/sch_actions.cpp:112
-#, fuzzy
 msgid ""
 "Selects a connection or expands an existing selection to pins, symbols, or "
 "entire connections"
-msgstr ""
-"ジャンクション、パッドあるいは全体の接続への既存の選択部分の接続または拡張を"
-"選択"
+msgstr "ピン、シンボルあるいは全体の接続への既存の選択部分の接続または拡張を選択"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:508
 msgid "Show/hide design blocks library"
@@ -23974,7 +23967,6 @@ msgid "Properties..."
 msgstr "プロパティ..."
 
 #: eeschema/tools/sch_actions.cpp:166 pcbnew/tools/pcb_actions.cpp:550
-#, fuzzy
 msgid "Edit properties of design block"
 msgstr "デザインブロックのプロパティを編集"
 
@@ -29503,7 +29495,7 @@ msgid "PCM Updates Available"
 msgstr "プラグイン＆コンテンツ マネージャーの更新が利用可能"
 
 #: kicad/kicad_manager_frame.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) available"
 msgstr "%d 個のパッケージの更新があります"
 
@@ -31587,7 +31579,6 @@ msgid "Overvoltage category:"
 msgstr "過電圧のカテゴリー:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -32293,7 +32284,6 @@ msgid "Remove Regulator"
 msgstr "レギュレーターを削除"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:401
-#, fuzzy
 msgid "Vout must be greater than Vref"
 msgstr "Vout は Vref より大きくなければなりません"
 
@@ -33003,7 +32993,6 @@ msgstr ""
 "れます。\n"
 
 #: pcb_calculator/iec60664_help.h:2
-#, fuzzy
 msgid ""
 "The goal of the IEC60664-1 is to provide guidance on designing insulation "
 "for products that have a connection to mains supply.\n"
@@ -33026,10 +33015,10 @@ msgstr ""
 "\n"
 "- 30kHz を超える周波数では誘電性能が低下します。 IEC60664-4 がこれらのケース"
 "をカバーします\n"
-"- 汚染を防ぐためにコンフォーマル コーティングまたはポッティングを使用する場"
-"合、IEC60664-3 で指定されたすべての条件が満たされていれば、空間距離および沿面"
-"距離を短縮できます。 ハンダマスクは通常、コンフォーマル コーティングとはみな"
-"されません。\n"
+"- 汚染を防ぐためにコンフォーマル コーティングまたはポッティングを使用する場合"
+"、IEC60664-3 で指定されたすべての条件が満たされていれば、空間距離および沿面距"
+"離を短縮できます。 ハンダマスクは通常、コンフォーマル コーティングとはみなさ"
+"れません。\n"
 "- 液体、圧縮空気、または空気以外の気体による断熱は IEC60664 の範囲には含まれ"
 "ません"
 
@@ -43907,7 +43896,7 @@ msgid "tuning profile '%s'"
 msgstr "調整プロファイル '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
 msgstr "キープアウト(禁止)エリア %s"
 
@@ -43916,9 +43905,9 @@ msgid "keepout area"
 msgstr "キープアウト(禁止)エリア"
 
 #: pcbnew/drc/drc_engine.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
-msgstr "キープアウト(禁止)エリア %s"
+msgstr "キープアウト(禁止)エリア '%s' の %s"
 
 #: pcbnew/drc/drc_engine.cpp:591
 #, c-format
@@ -44007,7 +43996,7 @@ msgstr "%s のローカルで上書き; ハンダペーストの相対的クリ�
 #: pcbnew/drc/drc_engine.cpp:1191
 #, c-format
 msgid "Checking assertion '%s'."
-msgstr "アサーション '%s' をチェックしています。"
+msgstr "アサーション '%s' を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:1197 pcbnew/drc/drc_engine.cpp:1880
 msgid "Assertion passed."
@@ -44020,22 +44009,22 @@ msgstr "--> アサーション 不合格。 <--"
 #: pcbnew/drc/drc_engine.cpp:1221
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s のクリアランスをチェックしています: %s."
+msgstr "%s のクリアランスを確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1226
 #, c-format
 msgid "Checking %s creepage: %s."
-msgstr "%s の沿面距離をチェックしています: %s."
+msgstr "%s の沿面距離を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1231
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "%s の最大非結合長をチェックしています: %s."
+msgstr "%s の最大非結合長を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1237
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s の 最大遅延をチェックしています: %s."
+msgstr "%s の 最大遅延を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1243
 #, c-format
@@ -44045,27 +44034,27 @@ msgstr "%s の 幅を確認中:%s。"
 #: pcbnew/drc/drc_engine.cpp:1249
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "%s のサーマルスポーク幅: %s をチェックしています。"
+msgstr "%s のサーマルスポーク幅を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1255
 #, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "ハンダマスク拡張 %s をチェックしています: %s."
+msgstr "%s のハンダマスク拡張 を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
-msgstr "確認中 %s ハンダペーストの絶対クリアランス: %s."
+msgstr "%s のハンダペースト 絶対クリアランスを確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1267
 #, c-format
 msgid "Checking %s solder paste relative clearance: %s."
-msgstr "確認中 %s ハンダペーストの相対クリアランス: %s."
+msgstr "%s のハンダペーストの相対クリアランスを確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1273
 #, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "%s の 最小スポーク数をチェックしています: %s."
+msgstr "%s の 最小スポーク数を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1280
 #, c-format
@@ -44075,68 +44064,68 @@ msgstr "%sのゾーン接続を確認中:%s。"
 #: pcbnew/drc/drc_engine.cpp:1312
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "%s の配線幅を確認しています:選択肢は：%s。"
+msgstr "%s の配線幅を確認中:選択肢は： %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1318
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "%s の配線幅をチェック中: 最小 %s."
+msgstr "%s の配線幅を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1326
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "%sのアニュラーリングのサイズを確認しています:最小は%s。"
+msgstr "%sのアニュラー幅を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1334
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "%sのビアの直径を確認しています:最適は %s。"
+msgstr "%sのビア直径を確認中: 最適は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1340
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "%sのビアの直径をチェック中: 最小 %s."
+msgstr "%sのビア直径を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1349
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "%s のホールサイズをチェックしています:選択肢: %s."
+msgstr "%s のスルーホール サイズを確認中: 選択肢は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1355
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "%s の穴サイズをチェックしています:選択肢: %s."
+msgstr "%s のスルーホール サイズを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1365
 #, c-format
 msgid "Checking %s: min %s."
-msgstr "%sを確認しています: 最小は%s."
+msgstr "%sを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1373
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "%s の差動ペアのギャップをチェックしています: 最適は %s."
+msgstr "%s の差動ペアのギャップを確認中: 最適は %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1379
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "%s のクリアランスをチェックしています: 最小 %s."
+msgstr "%s のクリアランスを確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1387
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "%s の穴間をチェック中: 最小 %s."
+msgstr "%s の穴間を確認中: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1393 pcbnew/drc/drc_engine.cpp:1419
 #: pcbnew/drc/drc_engine.cpp:1893
 #, c-format
 msgid "Checking %s."
-msgstr "%s をチェックしています。"
+msgstr "%s を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:1408
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "%s をチェック: 最小 %s; 最適 %s; 最大 %s."
+msgstr "%s を確認中: 最小 %s; 最適 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1429
 msgid "Netclass clearances apply only between copper items."
@@ -44193,7 +44182,7 @@ msgstr "条件なしのルールを適用します; 以前の制約を上書き�
 #: pcbnew/drc/drc_engine.cpp:1591 pcbnew/drc/drc_engine.cpp:1908
 #, c-format
 msgid "Checking rule condition '%s'."
-msgstr "ルールの条件 '%s' をチェックしています。"
+msgstr "ルールの条件 '%s' を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:1601
 msgid "Constraint applied."
@@ -44262,7 +44251,7 @@ msgstr "%s のサーマルスポーク幅: %s."
 #: pcbnew/drc/drc_engine.cpp:1874
 #, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "ルールのアサーション '%s' をチェックしています。"
+msgstr "ルールのアサーション '%s' を確認中。"
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2038
 msgid "Electrical"
@@ -44734,7 +44723,7 @@ msgstr "パッドをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:150
 msgid "Checking copper graphic clearances..."
-msgstr "導体層の図形のクリアランスをチェック..."
+msgstr "導体の図形のクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
 msgid "Checking copper graphic hole clearances..."
@@ -51354,7 +51343,6 @@ msgstr ""
 "ません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
 msgstr "制約解決レポートの項目を選択します。"
 
