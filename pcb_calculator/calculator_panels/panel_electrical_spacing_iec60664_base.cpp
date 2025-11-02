@@ -178,7 +178,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText52 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Pollution Degree:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52->Wrap( -1 );
-	m_staticText52->SetToolTip( _("PD1: No pollution or only dry, non-conductive pollution occurs\n\nPD2: Only non-conductive pollution occurs . Condensation may occur.\n\nPD3: Conductive pollution occurs, or non-conductive pollution occurs which becomes conductive due to expected condensation.\n\nPD4: Continous conductivity occurs due to conductive dust, rain, ...") );
+	m_staticText52->SetToolTip( _("PD1: No pollution or only dry, non-conductive pollution occurs\n\nPD2: Only non-conductive pollution occurs . Condensation may occur.\n\nPD3: Conductive pollution occurs, or non-conductive pollution occurs which becomes conductive due to expected condensation.\n\nPD4: Continuous conductivity occurs due to conductive dust, rain, ...") );
 
 	fgSizer11->Add( m_staticText52, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
