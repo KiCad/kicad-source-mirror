@@ -11,15 +11,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 02:44+0000\n"
+"PO-Revision-Date: 2025-11-03 05:51+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -35431,9 +35432,8 @@ msgid "Footprint Report"
 msgstr "Звіт посадкових місць"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Знайти текст"
+msgstr "Звичайний текст"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41897,9 +41897,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Перевірка зазорів між мідними графіками..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Перевірка зазорів між мідними графіками..."
+msgstr "Перевірка зазорів отворів для мідної графіки..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
