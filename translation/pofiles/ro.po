@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 04:51+0300\n"
-"PO-Revision-Date: 2025-10-31 11:04+0000\n"
+"PO-Revision-Date: 2025-11-02 02:46+0000\n"
 "Last-Translator: Tatu Bogdan <bogdan.tatu@proton.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ro/>\n"
@@ -2729,6 +2729,7 @@ msgid "<b>Currently matching nets:</b>"
 msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
+#, fuzzy
 msgid "Pattern:"
 msgstr "Șablon:"
 
