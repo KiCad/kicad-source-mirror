@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 22:36+0000\n"
+"PO-Revision-Date: 2025-11-03 22:51+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -20545,7 +20545,7 @@ msgstr "シンボル ライブラリ パス '%s' が生成できません。"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "ライブラリ '%s' 内に拡張シンボル %s の親が見つかりません"
+msgstr "拡張シンボル %s の親がライブラリ '%s' 内に見つかりません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
