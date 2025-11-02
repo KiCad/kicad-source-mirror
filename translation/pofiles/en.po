@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 04:51+0300\n"
+"POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -24399,8 +24399,8 @@ msgstr ""
 msgid "Footprint Report"
 msgstr "Footprint Report"
 
-msgid "ASCII"
-msgstr "ASCII"
+msgid "Plain text"
+msgstr "Plain text"
 
 msgid "Gerber X3"
 msgstr "Gerber X3"
@@ -29337,6 +29337,9 @@ msgstr "Checking pads..."
 
 msgid "Checking copper graphic clearances..."
 msgstr "Checking copper graphic clearances..."
+
+msgid "Checking copper graphic hole clearances..."
+msgstr "Checking copper graphic hole clearances..."
 
 msgid "Checking copper zone clearances..."
 msgstr "Checking copper zone clearances..."
@@ -37241,6 +37244,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "ASCII"
+#~ msgstr "ASCII"
 
 #, c-format
 #~ msgid "Error loading symbol %s: %s"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 04:51+0300\n"
+"POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-10-31 08:03+0000\n"
 "Last-Translator: Tatu Bogdan <bogdan.tatu@proton.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : "
-"(n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
 "X-Generator: Weblate 5.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -1697,7 +1697,7 @@ msgstr "Creați biblioteca de capsule"
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:278
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:294
 #: pcb_calculator/widgets/unit_selector.cpp:34
-#: pcbnew/dialogs/dialog_copper_zones.cpp:238
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:171
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
@@ -2173,8 +2173,8 @@ msgstr "&BINE"
 #: eeschema/sch_marker.cpp:376 eeschema/sheet.cpp:778
 #: eeschema/symbol_editor/symbol_editor.cpp:133
 #: eeschema/symbol_editor/symbol_editor.cpp:503
-#: eeschema/symbol_editor/symbol_editor.cpp:1299
-#: eeschema/symbol_editor/symbol_editor.cpp:1697
+#: eeschema/symbol_editor/symbol_editor.cpp:1298
+#: eeschema/symbol_editor/symbol_editor.cpp:1696
 #: pcbnew/dialogs/dialog_drc.cpp:1007 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
@@ -2191,10 +2191,10 @@ msgstr "Configurație"
 #: common/dialogs/panel_embedded_files.cpp:441
 #: eeschema/design_block_utils.cpp:50 eeschema/design_block_utils.cpp:183
 #: eeschema/symbol_editor/symbol_editor.cpp:371
-#: eeschema/symbol_editor/symbol_editor.cpp:1004
-#: eeschema/symbol_editor/symbol_editor.cpp:1027
-#: eeschema/symbol_editor/symbol_editor.cpp:1144
-#: eeschema/symbol_editor/symbol_editor.cpp:1186
+#: eeschema/symbol_editor/symbol_editor.cpp:1003
+#: eeschema/symbol_editor/symbol_editor.cpp:1026
+#: eeschema/symbol_editor/symbol_editor.cpp:1143
+#: eeschema/symbol_editor/symbol_editor.cpp:1185
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:566
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
@@ -2355,9 +2355,9 @@ msgstr "Nu se poate crea calea globală a tabelului de bibliotecă '%s'."
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2059 eeschema/symbol_editor/symbol_editor.cpp:828
-#: eeschema/symbol_editor/symbol_editor.cpp:1771
-#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
+#: eeschema/sch_symbol.cpp:2077 eeschema/symbol_editor/symbol_editor.cpp:827
+#: eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/symbol_viewer_frame.cpp:458 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:50
@@ -2447,7 +2447,7 @@ msgstr "Modele 3D"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2654
+#: eeschema/sch_symbol.cpp:2672
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2474,7 +2474,7 @@ msgid "Package Developers"
 msgstr "Dezvoltatori"
 
 #: common/dialog_about/dialog_about.cpp:118
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "GDI objects in use %u"
 msgstr "Obiecte GDI utilizate %u"
 
@@ -2762,9 +2762,9 @@ msgstr "Variabile de mediu"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_pin.cpp:1571
-#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2073
-#: eeschema/symbol_editor/symbol_editor.cpp:1741
-#: eeschema/symbol_viewer_frame.cpp:457
+#: eeschema/sch_symbol.cpp:2038 eeschema/sch_symbol.cpp:2091
+#: eeschema/symbol_editor/symbol_editor.cpp:1740
+#: eeschema/symbol_viewer_frame.cpp:456
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:411
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2982,7 +2982,7 @@ msgstr "Dimensiunea grilă Y este în afara intervalului."
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
-#: eeschema/symbol_editor/symbol_editor.cpp:861
+#: eeschema/symbol_editor/symbol_editor.cpp:860
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1056
@@ -3586,9 +3586,9 @@ msgstr "Opțiune"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
-#: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
-#: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1068
+#: eeschema/sch_symbol.cpp:2034 eeschema/sch_symbol.cpp:2087
+#: eeschema/sch_symbol.cpp:2980 eeschema/sim/simulator_frame_ui.cpp:617
 #: eeschema/sim/simulator_frame_ui.cpp:2804
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -3878,7 +3878,7 @@ msgstr "Adnotarea amprentei"
 #: eeschema/sim/simulator_frame_ui.cpp:606 eeschema/symbol_diff_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:154 eeschema/symbol_viewer_frame.cpp:169
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
-#: pcbnew/dialogs/dialog_copper_zones.cpp:274
+#: pcbnew/dialogs/dialog_copper_zones.cpp:269
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:95
@@ -3980,7 +3980,7 @@ msgstr "Bine"
 #: eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#: eeschema/symbol_editor/symbol_editor.cpp:1030
+#: eeschema/symbol_editor/symbol_editor.cpp:1029
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:370
@@ -4977,7 +4977,7 @@ msgstr "Vizibil"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
-#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:210
+#: eeschema/symbol_editor/symbol_editor.cpp:826 include/lib_table_grid.h:210
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:95
 #: pcbnew/footprint_libraries_utils.cpp:1021
@@ -5098,9 +5098,9 @@ msgstr "'%s' există deja."
 #: common/dialogs/panel_embedded_files.cpp:443
 #: eeschema/design_block_utils.cpp:51 eeschema/design_block_utils.cpp:184
 #: eeschema/symbol_editor/symbol_editor.cpp:372
-#: eeschema/symbol_editor/symbol_editor.cpp:1006
-#: eeschema/symbol_editor/symbol_editor.cpp:1145
-#: eeschema/symbol_editor/symbol_editor.cpp:1187
+#: eeschema/symbol_editor/symbol_editor.cpp:1005
+#: eeschema/symbol_editor/symbol_editor.cpp:1144
+#: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
@@ -5690,7 +5690,7 @@ msgstr "Fără conexiuni"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4159
-#: pcbnew/pad.cpp:2719 pcbnew/pcb_table.cpp:619 pcbnew/pcb_textbox.cpp:789
+#: pcbnew/pad.cpp:2719 pcbnew/pcb_table.cpp:662 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:861 pcbnew/zone.cpp:1879
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5700,7 +5700,7 @@ msgstr "Masiv"
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1051
-#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:620
+#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:663
 #: pcbnew/pcb_textbox.cpp:790
 msgid "Dashed"
 msgstr "Traforat"
@@ -5709,7 +5709,7 @@ msgstr "Traforat"
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1052
-#: eeschema/sch_line.cpp:1064 pcbnew/pcb_table.cpp:621
+#: eeschema/sch_line.cpp:1064 pcbnew/pcb_table.cpp:664
 #: pcbnew/pcb_textbox.cpp:791
 msgid "Dotted"
 msgstr "Punctată"
@@ -5718,7 +5718,7 @@ msgstr "Punctată"
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1053
-#: eeschema/sch_line.cpp:1065 pcbnew/pcb_table.cpp:622
+#: eeschema/sch_line.cpp:1065 pcbnew/pcb_table.cpp:665
 #: pcbnew/pcb_textbox.cpp:792
 msgid "Dash-Dot"
 msgstr "Linie-Punct"
@@ -5727,7 +5727,7 @@ msgstr "Linie-Punct"
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1054
-#: eeschema/sch_line.cpp:1066 pcbnew/pcb_table.cpp:623
+#: eeschema/sch_line.cpp:1066 pcbnew/pcb_table.cpp:666
 #: pcbnew/pcb_textbox.cpp:793
 msgid "Dash-Dot-Dot"
 msgstr "Linie-Punct-Punct"
@@ -6506,7 +6506,7 @@ msgstr "&Inspectare"
 msgid "Screen"
 msgstr "Ecran"
 
-#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2056
+#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2074
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1324
@@ -6543,7 +6543,7 @@ msgid "Text Box"
 msgstr "Casetă text"
 
 #: common/eda_item.cpp:394 common/eda_item.cpp:422 eeschema/sch_table.cpp:582
-#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_table.cpp:455
+#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_table.cpp:498
 #: pcbnew/pcb_tablecell.cpp:245
 #, fuzzy
 msgid "Table"
@@ -6658,7 +6658,7 @@ msgid "Field"
 msgstr "Câmp"
 
 #: common/eda_item.cpp:429 common/eda_item.cpp:441
-#: eeschema/symbol_editor/symbol_editor.cpp:1768
+#: eeschema/symbol_editor/symbol_editor.cpp:1767
 msgid "Symbol"
 msgstr "Simbol"
 
@@ -6829,14 +6829,14 @@ msgid "Shape Properties"
 msgstr "Proprietăți text"
 
 #: common/eda_shape.cpp:2388 eeschema/sch_table.cpp:662
-#: eeschema/sch_tablecell.cpp:222 pcbnew/pcb_table.cpp:634
+#: eeschema/sch_tablecell.cpp:222 pcbnew/pcb_table.cpp:677
 #: pcbnew/pcb_tablecell.cpp:227 pcbnew/pcb_textbox.cpp:804
 #: pcbnew/pcb_track.cpp:2127
 msgid "Start X"
 msgstr "Începe X"
 
 #: common/eda_shape.cpp:2393 eeschema/sch_table.cpp:665
-#: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_table.cpp:637
+#: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_table.cpp:680
 #: pcbnew/pcb_tablecell.cpp:228 pcbnew/pcb_textbox.cpp:805
 #: pcbnew/pcb_track.cpp:2131
 msgid "Start Y"
@@ -7005,7 +7005,7 @@ msgstr "Partea de jos"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1905
 #: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2152
-#: eeschema/sch_symbol.cpp:2933 eeschema/sch_tablecell.cpp:239
+#: eeschema/sch_symbol.cpp:2951 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -8375,11 +8375,11 @@ msgstr "Etichete globale"
 msgid "Hierarchical labels"
 msgstr "Etichete ierarhice"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2949
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2967
 msgid "Pin numbers"
 msgstr "Numerele pinilor"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2953
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2971
 msgid "Pin names"
 msgstr "Numele pinilor"
 
@@ -9050,8 +9050,8 @@ msgstr "Predefinit"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2012
-#: eeschema/sch_symbol.cpp:2066 eeschema/sch_symbol.cpp:2959
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_symbol.cpp:2084 eeschema/sch_symbol.cpp:2977
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4195
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -9072,7 +9072,7 @@ msgstr "Grupat după valoare și capsulă"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3025
+#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3043
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -9126,7 +9126,7 @@ msgstr "Nou..."
 msgid "Create a new document in the editor"
 msgstr "Creați un nou document în editor"
 
-#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:867
+#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:866
 #: pcbnew/footprint_libraries_utils.cpp:1066
 msgid "New Library..."
 msgstr "Biblioteca nouă..."
@@ -9171,7 +9171,7 @@ msgstr "Deschideți directorul proiectului în browserul de fișiere"
 msgid "Open a library file with system file explorer"
 msgstr "Editor de schemă"
 
-#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:857
+#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:856
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1052
 msgid "Save"
@@ -9973,7 +9973,7 @@ msgid "Show 3D viewer window"
 msgstr "Afișați fereastra de vizualizare 3D"
 
 #: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
-#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1114
+#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1102
 msgid "Symbol Library Browser"
 msgstr "Explorator de biblioteci de simboluri"
 
@@ -10351,13 +10351,13 @@ msgid "<not found>"
 msgstr "%s nu a fost găsit"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
-#: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:2004 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
 msgstr "Placă"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2042
-#: eeschema/sch_symbol.cpp:2046 eeschema/sch_symbol.cpp:2083
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2060
+#: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2101
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1726
 msgid "Library"
 msgstr "Bibliotecă"
@@ -10541,10 +10541,10 @@ msgid "Set plot view to show all items"
 msgstr "Setați trasarea pentru a afișa toate elementele"
 
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
-#: pcbnew/dialogs/dialog_copper_zones.cpp:404
-#: pcbnew/dialogs/dialog_copper_zones.cpp:779
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:287
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:288
+#: pcbnew/dialogs/dialog_copper_zones.cpp:401
+#: pcbnew/dialogs/dialog_copper_zones.cpp:767
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
 msgid "<no net>"
 msgstr "<fără rețea>"
 
@@ -10701,8 +10701,8 @@ msgstr "Comandă rapidă"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
-#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:463
-#: eeschema/symbol_editor/symbol_editor.cpp:1757
+#: eeschema/lib_symbol.cpp:319 eeschema/sch_symbol.cpp:481
+#: eeschema/symbol_editor/symbol_editor.cpp:1756
 #: eeschema/tools/sch_edit_tool.cpp:162
 msgid "Alternate"
 msgstr ""
@@ -11115,10 +11115,10 @@ msgstr "'%s' nu este o capsulă validă."
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
 #: eeschema/dialogs/dialog_lib_fields.cpp:914
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
-#: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
-#: eeschema/symbol_editor/symbol_editor.cpp:1772
-#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4208
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2079
+#: eeschema/sch_symbol.cpp:2661 eeschema/sch_symbol.cpp:2989
+#: eeschema/symbol_editor/symbol_editor.cpp:1771
+#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4208
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "Cuvinte cheie"
@@ -11676,7 +11676,7 @@ msgstr "Biblioteca '%s' există deja."
 msgid "Enter a description for the library:"
 msgstr "Adăugați un dosar de bibliotecă existent"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2968
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2986
 #: pcbnew/footprint.cpp:4205 pcbnew/plot_board_layers.cpp:189
 #, fuzzy
 msgid "Library Description"
@@ -13484,7 +13484,7 @@ msgstr "Afișează fereastra de ajutor pentru sintaxă"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2957
+#: eeschema/sch_symbol.cpp:2975
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
@@ -13643,8 +13643,8 @@ msgid "ALL"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:465
-#: eeschema/symbol_editor/symbol_editor.cpp:1759
+#: eeschema/lib_symbol.cpp:321 eeschema/sch_symbol.cpp:483
+#: eeschema/symbol_editor/symbol_editor.cpp:1758
 #: eeschema/tools/sch_edit_tool.cpp:159
 msgid "Standard"
 msgstr ""
@@ -13699,8 +13699,8 @@ msgstr "Dimensiunea textului:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
-#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
-#: eeschema/symbol_editor/symbol_editor.cpp:1754
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:3011
+#: eeschema/symbol_editor/symbol_editor.cpp:1753
 msgid "Unit"
 msgstr "Unitate"
 
@@ -13917,19 +13917,19 @@ msgid "Exclude From BOM"
 msgstr "Excludeți din BOM"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
-#: eeschema/sch_symbol.cpp:3030
+#: eeschema/sch_symbol.cpp:3048
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Excludeți din fișierele de poziție"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
-#: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
+#: eeschema/sch_symbol.cpp:1069 eeschema/sch_symbol.cpp:3045
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Excludeți din BOM"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
-#: eeschema/symbol_editor/symbol_editor.cpp:1766
+#: eeschema/symbol_editor/symbol_editor.cpp:1765
 msgid "Power Symbol"
 msgstr "Simbol alimentare"
 
@@ -14055,7 +14055,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:362
-#: eeschema/symbol_editor/symbol_editor.cpp:952
+#: eeschema/symbol_editor/symbol_editor.cpp:951
 #: eeschema/tools/symbol_editor_control.cpp:556
 #, fuzzy
 msgid "Symbol must have a name."
@@ -15916,7 +15916,7 @@ msgstr "Parametru"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:628 eeschema/sch_label.cpp:1243
 #: eeschema/sch_marker.cpp:367 eeschema/sch_pin.cpp:1567
-#: eeschema/sch_pin.cpp:1573 eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/sch_pin.cpp:1573 eeschema/symbol_editor/symbol_editor.cpp:1769
 #: eeschema/widgets/search_handlers.cpp:323
 #: eeschema/widgets/search_handlers.cpp:410 gerbview/gerber_draw_item.cpp:668
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -16604,7 +16604,7 @@ msgstr "Coloane"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:669 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:641
+#: pcbnew/pcb_table.cpp:684
 #, fuzzy
 msgid "Table Properties"
 msgstr "Proprietățile etichetei"
@@ -16786,7 +16786,7 @@ msgstr ""
 msgid "Update Schematic from PCB"
 msgstr "Actualizați schema de la PCB..."
 
-#: eeschema/dialogs/dialog_update_symbol_fields.cpp:227
+#: eeschema/dialogs/dialog_update_symbol_fields.cpp:228
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 #, fuzzy
 msgid "Update Symbol Fields"
@@ -17947,7 +17947,7 @@ msgid "Unable to load library\n"
 msgstr "Biblioteca nu poate fi încărcată\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:996
-#: eeschema/symbol_editor/symbol_editor.cpp:1099
+#: eeschema/symbol_editor/symbol_editor.cpp:1098
 #, fuzzy
 msgid "There is no symbol selected to save."
 msgstr "Niciun simbol selectat"
@@ -18823,7 +18823,7 @@ msgstr "Următoarele fișiere salvate automat nu au putut fi eliminate\n"
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2038
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2056
 msgid "Derived from"
 msgstr ""
 
@@ -18932,123 +18932,123 @@ msgstr "Predefinit"
 msgid "Import Vector Graphics File"
 msgstr "Importați grafică..."
 
-#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:452
+#: eeschema/lib_symbol.cpp:310 eeschema/sch_symbol.cpp:470
 #, fuzzy, c-format
 msgid "Unit %s"
 msgstr "Unităţi"
 
-#: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
-#: eeschema/sch_symbol.cpp:1546
+#: eeschema/lib_symbol.cpp:594 eeschema/sch_sheet.cpp:312
+#: eeschema/sch_symbol.cpp:1564
 #, fuzzy
 msgid "Excluded from BOM"
 msgstr "Excludeți din BOM"
 
-#: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
-#: eeschema/sch_symbol.cpp:1555
+#: eeschema/lib_symbol.cpp:599 eeschema/sch_sheet.cpp:321
+#: eeschema/sch_symbol.cpp:1573
 #, fuzzy
 msgid "Excluded from board"
 msgstr "Excludeți din BOM"
 
-#: eeschema/lib_symbol.cpp:597 eeschema/sch_sheet.cpp:330
-#: eeschema/sch_symbol.cpp:1564
+#: eeschema/lib_symbol.cpp:604 eeschema/sch_sheet.cpp:330
+#: eeschema/sch_symbol.cpp:1582
 #, fuzzy
 msgid "Excluded from simulation"
 msgstr "Excludeți din fișierele de poziție"
 
-#: eeschema/lib_symbol.cpp:602 eeschema/sch_sheet.cpp:339
-#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1573
-#: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/lib_symbol.cpp:609 eeschema/sch_sheet.cpp:339
+#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1591
+#: eeschema/sch_symbol.cpp:2007 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 #, fuzzy
 msgid "DNP"
 msgstr "DPI"
 
-#: eeschema/lib_symbol.cpp:1617
+#: eeschema/lib_symbol.cpp:1622
 msgid "Power flag differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1626
+#: eeschema/lib_symbol.cpp:1631
 #, fuzzy
 msgid "Unit count differs."
 msgstr "Nu s-au găsit elemente grafice în fișier."
 
-#: eeschema/lib_symbol.cpp:1666
+#: eeschema/lib_symbol.cpp:1671
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:767
 #, fuzzy
 msgid "Graphic item count differs."
 msgstr "Nu s-au găsit elemente grafice în fișier."
 
-#: eeschema/lib_symbol.cpp:1678
+#: eeschema/lib_symbol.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:781
 #, c-format
 msgid "%s differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1689
+#: eeschema/lib_symbol.cpp:1694
 #, fuzzy
 msgid "Pin count differs."
 msgstr "Reguli"
 
-#: eeschema/lib_symbol.cpp:1705
+#: eeschema/lib_symbol.cpp:1710
 #, fuzzy, c-format
 msgid "Pin %s not found."
 msgstr "Fișierul %s nu a fost găsit."
 
-#: eeschema/lib_symbol.cpp:1713
+#: eeschema/lib_symbol.cpp:1718
 #, fuzzy, c-format
 msgid "Pin %s differs."
 msgstr "Filtre de amprentă:"
 
-#: eeschema/lib_symbol.cpp:1740
+#: eeschema/lib_symbol.cpp:1745
 #, c-format
 msgid "%s field differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1750
+#: eeschema/lib_symbol.cpp:1755
 #, fuzzy
 msgid "Field count differs."
 msgstr "Reguli"
 
-#: eeschema/lib_symbol.cpp:1759
+#: eeschema/lib_symbol.cpp:1764
 #, fuzzy
 msgid "Footprint filters differs."
 msgstr "Filtre de amprentă:"
 
-#: eeschema/lib_symbol.cpp:1771
+#: eeschema/lib_symbol.cpp:1776
 #, fuzzy
 msgid "Footprint filters differ."
 msgstr "Filtre de amprentă:"
 
-#: eeschema/lib_symbol.cpp:1782
+#: eeschema/lib_symbol.cpp:1787
 #, fuzzy
 msgid "Symbol keywords differ."
 msgstr "Editor de amprente"
 
-#: eeschema/lib_symbol.cpp:1791
+#: eeschema/lib_symbol.cpp:1796
 msgid "Symbol pin name offsets differ."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1802
+#: eeschema/lib_symbol.cpp:1807
 #, fuzzy
 msgid "Show pin names settings differ."
 msgstr "Nume fișiere foaie"
 
-#: eeschema/lib_symbol.cpp:1811
+#: eeschema/lib_symbol.cpp:1816
 #, fuzzy
 msgid "Show pin numbers settings differ."
 msgstr "Numerele pinilor"
 
-#: eeschema/lib_symbol.cpp:1820
+#: eeschema/lib_symbol.cpp:1825
 #, fuzzy
 msgid "Exclude from simulation settings differ."
 msgstr "Excludeți din BOM"
 
-#: eeschema/lib_symbol.cpp:1829
+#: eeschema/lib_symbol.cpp:1834
 #, fuzzy
 msgid "Exclude from bill of materials settings differ."
 msgstr "Excludeți lista de materiale din schematică"
 
-#: eeschema/lib_symbol.cpp:1838
+#: eeschema/lib_symbol.cpp:1843
 #, fuzzy
 msgid "Exclude from board settings differ."
 msgstr "Excludeți din BOM"
@@ -19463,7 +19463,7 @@ msgid "No symbols were rescued."
 msgstr "Niciun simbol selectat"
 
 #: eeschema/project_rescue.cpp:716
-#: eeschema/symbol_editor/symbol_editor.cpp:1214
+#: eeschema/symbol_editor/symbol_editor.cpp:1213
 #, fuzzy, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
@@ -19530,7 +19530,7 @@ msgid ""
 msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2144
-#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
+#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2943
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
 #: pcbnew/widgets/pcb_properties_panel.cpp:246
@@ -19541,7 +19541,7 @@ msgid "Position X"
 msgstr "Poziția X:"
 
 #: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2148
-#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
+#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2946
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
 #: pcbnew/widgets/pcb_properties_panel.cpp:247 pcbnew/zone.cpp:1923
@@ -19619,7 +19619,7 @@ msgstr "Fișierul %s nu a fost găsit."
 
 #: eeschema/sch_edit_frame.cpp:1023
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:637
-#: eeschema/symbol_editor/symbol_editor.cpp:1675
+#: eeschema/symbol_editor/symbol_editor.cpp:1674
 #: kicad/dialogs/panel_jobset.cpp:819 pagelayout_editor/pl_editor_frame.cpp:413
 #: pcbnew/footprint_edit_frame.cpp:875 pcbnew/footprint_edit_frame.cpp:915
 #: pcbnew/pcb_edit_frame.cpp:1186
@@ -20567,7 +20567,7 @@ msgid "All body styles"
 msgstr "Comun tuturor unităților"
 
 #: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
-#: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
+#: eeschema/sch_symbol.cpp:3027 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Stil linie"
@@ -20941,17 +20941,17 @@ msgstr "Etichetă ierarhică"
 msgid "File Name"
 msgstr "Numele variabilei"
 
-#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1980
+#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1998
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 #, fuzzy
 msgid "Simulation"
 msgstr "Simulare"
 
-#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
+#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:2001
 msgid "BOM"
 msgstr "Listă de materiale (BOM)"
 
-#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
+#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:2013
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 #, fuzzy
 msgid "Exclude from"
@@ -20963,14 +20963,14 @@ msgid "Hierarchical Sheet %s"
 msgstr "Etichete ierarhice"
 
 #: eeschema/sch_sheet.cpp:1750 eeschema/sch_table.cpp:679
-#: pcbnew/pcb_table.cpp:651 pcbnew/pcb_tablecell.cpp:225
+#: pcbnew/pcb_table.cpp:694 pcbnew/pcb_tablecell.cpp:225
 #: pcbnew/pcb_textbox.cpp:831
 #, fuzzy
 msgid "Border Width"
 msgstr "Lățimea reliefului termic"
 
 #: eeschema/sch_sheet.cpp:1754 eeschema/sch_table.cpp:688
-#: pcbnew/pcb_table.cpp:660
+#: pcbnew/pcb_table.cpp:703
 #, fuzzy
 msgid "Border Color"
 msgstr "Culori circuit"
@@ -20980,14 +20980,14 @@ msgstr "Culori circuit"
 msgid "Background Color"
 msgstr "Culoarea fundalului, partea de sus"
 
-#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
-#: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
+#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1070
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4225
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Excludeți lista de materiale din schematică"
 
-#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1053
-#: eeschema/sch_symbol.cpp:3036 eeschema/tools/sch_actions.cpp:993
+#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1071
+#: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:993
 #: pcbnew/footprint.cpp:4228
 #, fuzzy
 msgid "Do not Populate"
@@ -21003,104 +21003,104 @@ msgstr "Ștergerea elementelor pe care s-a făcut clic"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Etichete ierarhice"
 
-#: eeschema/sch_symbol.cpp:2006
+#: eeschema/sch_symbol.cpp:2024
 #, fuzzy
 msgid "Power symbol"
 msgstr "Simbol alimentare"
 
-#: eeschema/sch_symbol.cpp:2026
+#: eeschema/sch_symbol.cpp:2044
 msgid "flags"
 msgstr "steaguri"
 
-#: eeschema/sch_symbol.cpp:2031
+#: eeschema/sch_symbol.cpp:2049
 #, fuzzy
 msgid "Missing parent"
 msgstr "Se verifică numele foilor..."
 
-#: eeschema/sch_symbol.cpp:2046
+#: eeschema/sch_symbol.cpp:2064
 msgid "Undefined!!!"
 msgstr "Nedefinit!!!"
 
-#: eeschema/sch_symbol.cpp:2054
+#: eeschema/sch_symbol.cpp:2072
 msgid "<Unknown>"
 msgstr "<Necunoscut>"
 
-#: eeschema/sch_symbol.cpp:2079
+#: eeschema/sch_symbol.cpp:2097
 #, fuzzy
 msgid "No library defined!"
 msgstr "Identificator nou al bibliotecii:"
 
-#: eeschema/sch_symbol.cpp:2081
+#: eeschema/sch_symbol.cpp:2099
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Simbolul nu a fost găsit în %s!"
 
-#: eeschema/sch_symbol.cpp:2345
+#: eeschema/sch_symbol.cpp:2363
 #, fuzzy, c-format
 msgid "Symbol %s [%s]"
 msgstr "Autori simbolurilor"
 
-#: eeschema/sch_symbol.cpp:2935
+#: eeschema/sch_symbol.cpp:2953
 #, fuzzy
 msgid "Mirror X"
 msgstr "Oglindiț"
 
-#: eeschema/sch_symbol.cpp:2937
+#: eeschema/sch_symbol.cpp:2955
 #, fuzzy
 msgid "Mirror Y"
 msgstr "Oglindiț"
 
-#: eeschema/sch_symbol.cpp:2965 pcbnew/footprint.cpp:4202
+#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4202
 #, fuzzy
 msgid "Library Link"
 msgstr "Bibliotecă"
 
-#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:419
+#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:462
 #, c-format
 msgid "%d Column Table"
 msgstr ""
 
-#: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:455
+#: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:498
 #, fuzzy, c-format
 msgid "%d Columns"
 msgstr "Coloane"
 
-#: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:643
+#: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:686
 #, fuzzy
 msgid "External Border"
 msgstr "Include straturi"
 
-#: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:647
+#: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:690
 #, fuzzy
 msgid "Header Border"
 msgstr "Reîncarcă placa"
 
-#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:656
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:699
 #: pcbnew/pcb_tablecell.cpp:224 pcbnew/pcb_textbox.cpp:827
 #, fuzzy
 msgid "Border Style"
 msgstr "Stil linie"
 
-#: eeschema/sch_table.cpp:692 pcbnew/pcb_table.cpp:664
+#: eeschema/sch_table.cpp:692 pcbnew/pcb_table.cpp:707
 #, fuzzy
 msgid "Row Separators"
 msgstr "Adăugați un generator"
 
-#: eeschema/sch_table.cpp:696 pcbnew/pcb_table.cpp:668
+#: eeschema/sch_table.cpp:696 pcbnew/pcb_table.cpp:711
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:700 pcbnew/pcb_table.cpp:672
+#: eeschema/sch_table.cpp:700 pcbnew/pcb_table.cpp:715
 #, fuzzy
 msgid "Separators Width"
 msgstr "Lățime:"
 
-#: eeschema/sch_table.cpp:705 pcbnew/pcb_table.cpp:677
+#: eeschema/sch_table.cpp:705 pcbnew/pcb_table.cpp:720
 #, fuzzy
 msgid "Separators Style"
 msgstr "Fișiere generator:"
 
-#: eeschema/sch_table.cpp:709 pcbnew/pcb_table.cpp:681
+#: eeschema/sch_table.cpp:709 pcbnew/pcb_table.cpp:724
 #, fuzzy
 msgid "Separators Color"
 msgstr "Resetați culoarea"
@@ -23184,7 +23184,7 @@ msgstr "Schemă salvată"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:499
-#: eeschema/symbol_editor/symbol_editor.cpp:1692
+#: eeschema/symbol_editor/symbol_editor.cpp:1691
 #: eeschema/tools/symbol_editor_control.cpp:327
 #: eeschema/tools/symbol_editor_control.cpp:472
 #: eeschema/tools/symbol_editor_control.cpp:521
@@ -23194,139 +23194,139 @@ msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:501
-#: eeschema/symbol_editor/symbol_editor.cpp:1693
+#: eeschema/symbol_editor/symbol_editor.cpp:1692
 msgid "You must save to a different location."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
-#: eeschema/symbol_editor/symbol_editor.cpp:1498
+#: eeschema/symbol_editor/symbol_editor.cpp:1497
 #, fuzzy
 msgid "The current symbol has been modified.  Save changes?"
 msgstr ""
 "A fost modificată atribuirea simbolurilor la amprente. Salvați modificările?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
-#: eeschema/symbol_editor/symbol_editor.cpp:1141
+#: eeschema/symbol_editor/symbol_editor.cpp:1140
 #: eeschema/tools/symbol_editor_control.cpp:563
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:817
+#: eeschema/symbol_editor/symbol_editor.cpp:816
 #, fuzzy
 msgid "Save Symbol As"
 msgstr "Schimbați simbolurile"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:856
+#: eeschema/symbol_editor/symbol_editor.cpp:855
 #: pcbnew/footprint_libraries_utils.cpp:1051
 #, fuzzy
 msgid "Save in library:"
 msgstr "Eroare la încărcarea tabelului bibliotecii de amprentă."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:946
+#: eeschema/symbol_editor/symbol_editor.cpp:945
 #: pcbnew/footprint_libraries_utils.cpp:1134
 #, fuzzy
 msgid "A library must be specified."
 msgstr "Nicio magistrală selectată"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:958
+#: eeschema/symbol_editor/symbol_editor.cpp:957
 #, fuzzy, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:975
+#: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:985
+#: eeschema/symbol_editor/symbol_editor.cpp:984
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:999
+#: eeschema/symbol_editor/symbol_editor.cpp:998
 #, fuzzy, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1017
+#: eeschema/symbol_editor/symbol_editor.cpp:1016
 #, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
 msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\":\n"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1029
+#: eeschema/symbol_editor/symbol_editor.cpp:1028
 #, fuzzy
 msgid "Overwrite All"
 msgstr "Suprascrieți"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1029
+#: eeschema/symbol_editor/symbol_editor.cpp:1028
 #, fuzzy
 msgid "Rename All"
 msgstr "Redenumiți"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1108
+#: eeschema/symbol_editor/symbol_editor.cpp:1107
 #, fuzzy
 msgid "Export Symbol"
 msgstr "Simbol alimentare"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1134
+#: eeschema/symbol_editor/symbol_editor.cpp:1133
 #, fuzzy, c-format
 msgid "Library '%s' is read-only."
 msgstr "Calea de acces `%s` este numai pentru citire."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1174
+#: eeschema/symbol_editor/symbol_editor.cpp:1173
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr ""
 "S-a produs o eroare la încercarea de a încărca fișierul de bibliotecă de "
 "simboluri \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1182
+#: eeschema/symbol_editor/symbol_editor.cpp:1181
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "Simbolul %s există deja în biblioteca \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1197
+#: eeschema/symbol_editor/symbol_editor.cpp:1196
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "Permisiuni insuficiente pentru a salva biblioteca \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1216
+#: eeschema/symbol_editor/symbol_editor.cpp:1215
 #, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "Eroare la crearea bibliotecii de simboluri '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1223
+#: eeschema/symbol_editor/symbol_editor.cpp:1222
 #, fuzzy, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "Simbolul %s a fost alocat bibliotecii de simboluri \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1241
+#: eeschema/symbol_editor/symbol_editor.cpp:1240
 #, c-format
 msgid "Symbol name '%s' already in use."
 msgstr "Numele simbolului „%s” este deja utilizat."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1279
+#: eeschema/symbol_editor/symbol_editor.cpp:1278
 #, fuzzy, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1291
+#: eeschema/symbol_editor/symbol_editor.cpp:1290
 #, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
@@ -23335,67 +23335,67 @@ msgid ""
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1296
+#: eeschema/symbol_editor/symbol_editor.cpp:1295
 #: eeschema/tools/sch_actions.cpp:242
 #, fuzzy
 msgid "Delete Symbol"
 msgstr "Simbol alimentare"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1297
+#: eeschema/symbol_editor/symbol_editor.cpp:1296
 #, fuzzy
 msgid "Keep Symbol"
 msgstr "Simbol"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:340
+#: eeschema/symbol_editor/symbol_editor.cpp:1433 pcbnew/files.cpp:340
 #: pcbnew/footprint_libraries_utils.cpp:1220
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1512
+#: eeschema/symbol_editor/symbol_editor.cpp:1511
 #, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1541
+#: eeschema/symbol_editor/symbol_editor.cpp:1540
 #, fuzzy
 msgid "No library specified."
 msgstr "Nicio magistrală selectată"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1560
+#: eeschema/symbol_editor/symbol_editor.cpp:1559
 #, c-format
 msgid "Save Library '%s' As..."
 msgstr "Salvați biblioteca '%s' ca..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1600
+#: eeschema/symbol_editor/symbol_editor.cpp:1599
 #, fuzzy, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1602
+#: eeschema/symbol_editor/symbol_editor.cpp:1601
 #, fuzzy
 msgid "Error Saving Library"
 msgstr "Eroare la încărcarea editorului"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1648
+#: eeschema/symbol_editor/symbol_editor.cpp:1647
 #, c-format
 msgid "Symbol library file '%s' saved."
 msgstr "Fișierul bibliotecii de simboluri \"%s\" salvat."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1747
+#: eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Undefined!"
 msgstr "Nedefinit!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1748
-#: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:407
+#: eeschema/symbol_editor/symbol_editor.cpp:1747
+#: eeschema/symbol_viewer_frame.cpp:457 pcbnew/board_item.cpp:407
 msgid "Parent"
 msgstr "Părinte"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1763
+#: eeschema/symbol_editor/symbol_editor.cpp:1762
 msgid "Body"
 msgstr "Corp"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1773
+#: eeschema/symbol_editor/symbol_editor.cpp:1772
 msgid "Datasheet"
 msgstr "Fișă tehnică"
 
@@ -23488,7 +23488,7 @@ msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
 msgid "KiCad Symbol Library Browser"
 msgstr "Explorator de biblioteci de simboluri"
 
-#: eeschema/symbol_viewer_frame.cpp:1112 pcbnew/footprint_viewer_frame.cpp:1033
+#: eeschema/symbol_viewer_frame.cpp:1100 pcbnew/footprint_viewer_frame.cpp:1033
 #: pcbnew/footprint_viewer_frame.cpp:1038
 #, fuzzy
 msgid "[no library selected]"
@@ -23746,7 +23746,7 @@ msgstr ""
 msgid "Create Corner"
 msgstr "Creați zone"
 
-#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1389
+#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1386
 #: pcbnew/tools/pcb_actions.cpp:1985
 #, fuzzy
 msgid "Remove Corner"
@@ -27455,33 +27455,33 @@ msgstr "Ascundeți acest mesaj."
 msgid "Failed to output data"
 msgstr "Ieșirea datelor a eșuat"
 
-#: kicad/cli/command.cpp:126
+#: kicad/cli/command.cpp:125
 #, fuzzy
 msgid "Input directory"
 msgstr "Trasați directorul de ieșire"
 
-#: kicad/cli/command.cpp:132
+#: kicad/cli/command.cpp:131
 #, fuzzy
 msgid "Input file"
 msgstr "Fișier zip"
 
-#: kicad/cli/command.cpp:143
+#: kicad/cli/command.cpp:142
 #, fuzzy
 msgid "Output directory"
 msgstr "Trasați directorul de ieșire"
 
-#: kicad/cli/command.cpp:150
+#: kicad/cli/command.cpp:149
 #, fuzzy
 msgid "Output file"
 msgstr "Mod de ieșire:"
 
-#: kicad/cli/command.cpp:163
+#: kicad/cli/command.cpp:162
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
 
-#: kicad/cli/command.cpp:177
+#: kicad/cli/command.cpp:176
 msgid ""
 "Overrides or adds project variables, can be used multiple times to declare "
 "multiple variables.\n"
@@ -27594,14 +27594,14 @@ msgstr ""
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
 
-#: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:292
+#: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:291
 #: kicad/cli/command_pcb_export_drill.cpp:150
 #: kicad/cli/command_pcb_export_dxf.cpp:160
-#: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:133
+#: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:132
 msgid "Invalid units specified\n"
 msgstr "Unitatea de măsura specificată nu este cea corectă\n"
 
-#: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:149
+#: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:148
 msgid "Invalid report format\n"
 msgstr "Formatul raportului este incorect\n"
 
@@ -27624,126 +27624,126 @@ msgstr "Nu se poate redenumi fișierul temporar \"%s\" în \"%s"
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
 msgstr "Comutați modele 3D cu atributul „Virtual”"
 
-#: kicad/cli/command_pcb_export_3d.cpp:93
+#: kicad/cli/command_pcb_export_3d.cpp:92
 #, fuzzy
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
 msgstr "Comutați modele 3D cu atributul „Virtual”"
 
-#: kicad/cli/command_pcb_export_3d.cpp:101
+#: kicad/cli/command_pcb_export_3d.cpp:100
 #, fuzzy
 msgid "Use Grid Origin for output origin"
 msgstr "Folosiți originea fișierului de foraj/plasare ca origine"
 
-#: kicad/cli/command_pcb_export_3d.cpp:105
+#: kicad/cli/command_pcb_export_3d.cpp:104
 #, fuzzy
 msgid "Use Drill Origin for output origin"
 msgstr "Folosiți originea fișierului de foraj/plasare ca origine"
 
-#: kicad/cli/command_pcb_export_3d.cpp:109
+#: kicad/cli/command_pcb_export_3d.cpp:108
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:114
+#: kicad/cli/command_pcb_export_3d.cpp:113
 msgid "Only generate a board with no components"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:118
+#: kicad/cli/command_pcb_export_3d.cpp:117
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:123
+#: kicad/cli/command_pcb_export_3d.cpp:122
 #, fuzzy
 msgid "Exclude board body"
 msgstr "Excludeți din BOM"
 
-#: kicad/cli/command_pcb_export_3d.cpp:127
+#: kicad/cli/command_pcb_export_3d.cpp:126
 #, fuzzy
 msgid "Exclude 3D models for components"
 msgstr "Comutați modele 3D cu atributul „Virtual”"
 
-#: kicad/cli/command_pcb_export_3d.cpp:131
+#: kicad/cli/command_pcb_export_3d.cpp:130
 msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:137
+#: kicad/cli/command_pcb_export_3d.cpp:136
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
 #, fuzzy
 msgid "Export tracks and vias"
 msgstr "Creați trasee și via"
 
-#: kicad/cli/command_pcb_export_3d.cpp:141
+#: kicad/cli/command_pcb_export_3d.cpp:140
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
 #, fuzzy
 msgid "Export pads"
 msgstr "Trasee"
 
-#: kicad/cli/command_pcb_export_3d.cpp:145
+#: kicad/cli/command_pcb_export_3d.cpp:144
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
 #, fuzzy
 msgid "Export zones"
 msgstr "Exportați"
 
-#: kicad/cli/command_pcb_export_3d.cpp:149
+#: kicad/cli/command_pcb_export_3d.cpp:148
 #, fuzzy
 msgid "Export elements on inner copper layers"
 msgstr "Simplificarea %d straturi de cupru"
 
-#: kicad/cli/command_pcb_export_3d.cpp:153
+#: kicad/cli/command_pcb_export_3d.cpp:152
 #, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces"
 msgstr "Afișați straturi de serigrafie"
 
-#: kicad/cli/command_pcb_export_3d.cpp:157
+#: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:161
+#: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:165
+#: kicad/cli/command_pcb_export_3d.cpp:164
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
 #, fuzzy
 msgid "Don't cut via holes in conductor layers."
 msgstr "Simplificarea %d straturi de cupru"
 
-#: kicad/cli/command_pcb_export_3d.cpp:170
+#: kicad/cli/command_pcb_export_3d.cpp:169
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:176
+#: kicad/cli/command_pcb_export_3d.cpp:175
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:183
+#: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:190
+#: kicad/cli/command_pcb_export_3d.cpp:189
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:197
+#: kicad/cli/command_pcb_export_3d.cpp:196
 msgid "Output units; valid options: mm, m, in, tenths"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:201
+#: kicad/cli/command_pcb_export_3d.cpp:200
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:206
+#: kicad/cli/command_pcb_export_3d.cpp:205
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_3d.cpp:273
+#: kicad/cli/command_pcb_export_3d.cpp:272
 msgid "Invalid format specified\n"
 msgstr "Formatul specificat este incorect\n"
 
@@ -27834,7 +27834,7 @@ msgid "Invalid origin mode specified\n"
 msgstr "Modul de origine specificat este incorect\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:247
-#: kicad/cli/command_pcb_export_gerber.cpp:149
+#: kicad/cli/command_pcb_export_gerber.cpp:148
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr ""
 
@@ -27902,8 +27902,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:130
-#: kicad/cli/command_pcb_export_gencad.cpp:81
-#: kicad/cli/command_pcb_export_gerber.cpp:143
+#: kicad/cli/command_pcb_export_gencad.cpp:75
+#: kicad/cli/command_pcb_export_gerber.cpp:142
 #: kicad/cli/command_pcb_export_ipc2581.cpp:114
 #: kicad/cli/command_pcb_export_ipcd356.cpp:45
 #: kicad/cli/command_pcb_export_odb.cpp:70
@@ -27930,29 +27930,29 @@ msgstr ""
 msgid "Export the PCB in Gencad format"
 msgstr "Export netlist utilizat pentru a actualiza schemele"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:39
+#: kicad/cli/command_pcb_export_gencad.cpp:38
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
 #, fuzzy
 msgid "Flip bottom footprint padstacks"
 msgstr "Trasați valorile amprentei"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:44
+#: kicad/cli/command_pcb_export_gencad.cpp:42
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 #, fuzzy
 msgid "Generate unique pin names"
 msgstr "Porecla generatorului:"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:50
+#: kicad/cli/command_pcb_export_gencad.cpp:46
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_gencad.cpp:55
+#: kicad/cli/command_pcb_export_gencad.cpp:50
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Use drill/place file origin as origin"
 msgstr "Folosiți originea fișierului de foraj/plasare ca origine"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:60
+#: kicad/cli/command_pcb_export_gencad.cpp:54
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 #, fuzzy
 msgid "Save the origin coordinates in the file"
@@ -27977,22 +27977,22 @@ msgstr ""
 msgid "Disable aperture macros"
 msgstr "Lumina camerei ambientale:"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:88
+#: kicad/cli/command_pcb_export_gerber.cpp:87
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Use drill/place file origin"
 msgstr "Utilizați originea fișierului de foraj/plasare"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:92
+#: kicad/cli/command_pcb_export_gerber.cpp:91
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_gerber.cpp:98
+#: kicad/cli/command_pcb_export_gerber.cpp:97
 #, fuzzy
 msgid "Use KiCad Gerber file extension"
 msgstr "Extensie neașteptată a fișierului: \"%s\"."
 
-#: kicad/cli/command_pcb_export_gerber.cpp:160
+#: kicad/cli/command_pcb_export_gerber.cpp:159
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
@@ -28158,97 +28158,97 @@ msgstr "Opțiuni de randare"
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:266
+#: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:270
+#: kicad/cli/command_pcb_render.cpp:269
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:275
+#: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:281
+#: kicad/cli/command_pcb_render.cpp:280
 #, fuzzy
 msgid "Camera zoom"
 msgstr "Opțiuni cameră"
 
-#: kicad/cli/command_pcb_render.cpp:286
+#: kicad/cli/command_pcb_render.cpp:285
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:291
+#: kicad/cli/command_pcb_render.cpp:290
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:298
+#: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:303
+#: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:308
+#: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:313
+#: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:318
+#: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:324
+#: kicad/cli/command_pcb_render.cpp:323
 msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr ""
 
-#: kicad/cli/command_pcb_render.cpp:340
+#: kicad/cli/command_pcb_render.cpp:339
 #, fuzzy
 msgid "Invalid preset\n"
 msgstr "Format incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:358
+#: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
 msgstr "Fundal incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:364
+#: kicad/cli/command_pcb_render.cpp:363
 msgid "Invalid rotation format\n"
 msgstr "Formatul rotirii este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:370
+#: kicad/cli/command_pcb_render.cpp:369
 msgid "Invalid pan format\n"
 msgstr "Formatul mișcării este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:376
+#: kicad/cli/command_pcb_render.cpp:375
 msgid "Invalid pivot format\n"
 msgstr "Formatul pivotului este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:383
+#: kicad/cli/command_pcb_render.cpp:382
 msgid "Invalid light top intensity format\n"
 msgstr "Formatul intensității iluminării de sus este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:390
+#: kicad/cli/command_pcb_render.cpp:389
 msgid "Invalid light bottom intensity format\n"
 msgstr "Formatul intensității luminii de jos este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:397
+#: kicad/cli/command_pcb_render.cpp:396
 msgid "Invalid light side intensity format\n"
 msgstr "Formatul intensității iluminării laterale este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:404
+#: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid light camera intensity format\n"
 msgstr "Formatul intensității luminii aparatului foto este incorect\n"
 
-#: kicad/cli/command_pcb_render.cpp:419
+#: kicad/cli/command_pcb_render.cpp:418
 msgid "Invalid image format\n"
 msgstr "Formatul imaginii este incorect\n"
 
@@ -28280,13 +28280,13 @@ msgid ""
 "severity arguments"
 msgstr ""
 
-#: kicad/cli/command_sch_erc.cpp:74
+#: kicad/cli/command_sch_erc.cpp:73
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
 
-#: kicad/cli/command_sch_erc.cpp:79
+#: kicad/cli/command_sch_erc.cpp:78
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr ""
 
@@ -28299,9 +28299,9 @@ msgstr ""
 msgid "Generate a Bill of Materials (BOM)"
 msgstr "Listă de materiale(BOM)"
 
-#: kicad/cli/command_sch_export_bom.cpp:180
+#: kicad/cli/command_sch_export_bom.cpp:179
 #: kicad/cli/command_sch_export_netlist.cpp:56
-#: kicad/cli/command_sch_export_plot.cpp:140
+#: kicad/cli/command_sch_export_plot.cpp:139
 #: kicad/cli/command_sch_export_pythonbom.cpp:51
 msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Fișierul de schemă electrică nu există sau nu este accesibil\n"
@@ -28321,43 +28321,43 @@ msgstr ""
 msgid "Color theme to use (will default to schematic settings)"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:82
+#: kicad/cli/command_sch_export_plot.cpp:81
 #, fuzzy
 msgid "Default font name"
 msgstr "Predefinit"
 
-#: kicad/cli/command_sch_export_plot.cpp:88
+#: kicad/cli/command_sch_export_plot.cpp:87
 msgid "Do not generate property popups in PDF"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:92
+#: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate clickable links for hierarchical elements in PDF"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:97
+#: kicad/cli/command_sch_export_plot.cpp:96
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:106
+#: kicad/cli/command_sch_export_plot.cpp:105
 msgid "Avoid setting a background color (regardless of theme)"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:112
+#: kicad/cli/command_sch_export_plot.cpp:111
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:119
+#: kicad/cli/command_sch_export_plot.cpp:118
 #, fuzzy
 msgid "Pen size [mm]"
 msgstr "Fișiere imagine"
 
-#: kicad/cli/command_sch_export_plot.cpp:125
+#: kicad/cli/command_sch_export_plot.cpp:124
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr ""
 
-#: kicad/cli/command_sch_export_plot.cpp:197
+#: kicad/cli/command_sch_export_plot.cpp:196
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr ""
 
@@ -28908,7 +28908,7 @@ msgstr "Exportați"
 msgid "Export PS"
 msgstr "Exportați"
 
-#: kicad/kicad_cli.cpp:334
+#: kicad/kicad_cli.cpp:333
 msgid "prints version information and exits"
 msgstr ""
 
@@ -34404,7 +34404,7 @@ msgid "Build Changes"
 msgstr "Anulează modificările"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:196
 #, fuzzy
 msgid "Checking zones..."
 msgstr "Se verifică pinii..."
@@ -34509,22 +34509,22 @@ msgstr "Progres general"
 msgid "Cleanup Tracks and Vias"
 msgstr "Creați trasee și via"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:212
+#: pcbnew/dialogs/dialog_copper_zones.cpp:207
 #, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "Proprietăți text"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:216
+#: pcbnew/dialogs/dialog_copper_zones.cpp:211
 #, fuzzy
 msgid "Teardrop on Tracks Properties"
 msgstr "Proprietăți text"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:215
 #, fuzzy
 msgid "Teardrop Properties"
 msgstr "Proprietăți text"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:226
+#: pcbnew/dialogs/dialog_copper_zones.cpp:221
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:144
 #: pcbnew/tools/convert_tool.cpp:64
@@ -34532,7 +34532,7 @@ msgstr "Proprietăți text"
 msgid "Conversion Settings"
 msgstr "Setări grilă"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:229
+#: pcbnew/dialogs/dialog_copper_zones.cpp:224
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:147
 #: pcbnew/tools/convert_tool.cpp:86
@@ -34540,7 +34540,7 @@ msgstr "Setări grilă"
 msgid "Use centerlines"
 msgstr "Folosiți țoli"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_copper_zones.cpp:228
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:122
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:151
 #: pcbnew/tools/convert_tool.cpp:98
@@ -34548,26 +34548,26 @@ msgstr "Folosiți țoli"
 msgid "Create bounding hull"
 msgstr "Creați fișier de siglă"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:236
+#: pcbnew/dialogs/dialog_copper_zones.cpp:231
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:125
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
 #: pcbnew/tools/convert_tool.cpp:100
 msgid "Gap:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:250
+#: pcbnew/dialogs/dialog_copper_zones.cpp:245
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:169
 #: pcbnew/tools/convert_tool.cpp:136
 msgid "Delete source objects after conversion"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:259
+#: pcbnew/dialogs/dialog_copper_zones.cpp:254
 #, fuzzy
 msgid "Convert to Copper Zone"
 msgstr "Convertit"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:433
+#: pcbnew/dialogs/dialog_copper_zones.cpp:430
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:178
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
@@ -34577,25 +34577,25 @@ msgstr "Convertit"
 msgid "Chamfer distance:"
 msgstr "Rezistenţă:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:435
+#: pcbnew/dialogs/dialog_copper_zones.cpp:432
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:180
 #: pcbnew/zone_manager/panel_zone_properties.cpp:187
 #, fuzzy
 msgid "Fillet radius:"
 msgstr "Recesiune"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:589
+#: pcbnew/dialogs/dialog_copper_zones.cpp:577
 #: pcbnew/zone_manager/panel_zone_properties.cpp:303
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:609
+#: pcbnew/dialogs/dialog_copper_zones.cpp:597
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:361
 #, fuzzy
 msgid "No layer selected."
 msgstr "Nicio magistrală selectată"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:864
+#: pcbnew/dialogs/dialog_copper_zones.cpp:852
 msgid "<no net> will result in an isolated copper island."
 msgstr ""
 
@@ -37220,8 +37220,9 @@ msgid "Footprint Report"
 msgstr "Text capsulă"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-msgid "ASCII"
-msgstr "ASCII"
+#, fuzzy
+msgid "Plain text"
+msgstr "Găsiți textul"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 #, fuzzy
@@ -43391,29 +43392,32 @@ msgstr "Se verifică pinii..."
 msgid "Checking copper graphic clearances..."
 msgstr "Se verifică etichetele..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
+#, fuzzy
+msgid "Checking copper graphic hole clearances..."
+msgstr "Se verifică etichetele..."
+
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 #, fuzzy
 msgid "Checking copper zone clearances..."
 msgstr "Se verifică etichetele..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:852
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
 #, fuzzy, c-format
 msgid "(nets %s and %s)"
 msgstr "Solid"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:302
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:476
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:597
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:900
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1258
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -43423,18 +43427,18 @@ msgstr "Solid"
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:750
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:837
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:884
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:244
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:241
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:297
 #, fuzzy, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "Verific %s lungime maximă necuplată: %s."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:359
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1250
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -44024,7 +44028,7 @@ msgstr ""
 msgid "Checking PCB to schematic parity..."
 msgstr "Se verifică etichetele..."
 
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:94
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:91
 #, fuzzy
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Se verifică amprentele ..."
@@ -47925,7 +47929,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2534
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7315
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7318
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -48095,7 +48099,7 @@ msgstr ""
 "Nume NETCLASS duplicat \"%s\" în fișierul \"%s\" la linia %d, decalaj %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3179
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6355
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6358
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48113,7 +48117,7 @@ msgstr ""
 msgid "Cannot handle footprint text type %s"
 msgstr "Nu se poate crea biblioteca de amprente '%s'."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4411
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4414
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -48126,7 +48130,7 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5192
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5195
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48137,7 +48141,7 @@ msgstr ""
 "fișier: \"%s\"\n"
 "linie: %d decalaj: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5211
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5214
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -48148,7 +48152,7 @@ msgstr ""
 "fișier: %s\n"
 "linie: %d decalaj: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5542
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5545
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -48161,8 +48165,8 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5665
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6615
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5668
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6618
 #, fuzzy, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -48175,14 +48179,14 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5680
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6630
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5683
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6633
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr ""
 "Nume NETCLASS duplicat \"%s\" în fișierul \"%s\" la linia %d, decalaj %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6254
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6257
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48195,7 +48199,7 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6466
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6469
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48208,7 +48212,7 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6721
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6724
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48221,7 +48225,7 @@ msgstr ""
 "linie: %d\n"
 "decalaj: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7285
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7288
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -52903,7 +52907,7 @@ msgstr ""
 msgid "Set Relative Position Interactively"
 msgstr "Repetați poziția de incrementare"
 
-#: pcbnew/tools/position_relative_tool.cpp:428
+#: pcbnew/tools/position_relative_tool.cpp:422
 #, fuzzy
 msgid "Position Relative"
 msgstr "Poziția X:"
@@ -54528,6 +54532,9 @@ msgstr "Schematică KiCad"
 msgid "KiCad Drawing Sheet"
 msgstr "Editor foi de desen"
 
+#~ msgid "ASCII"
+#~ msgstr "ASCII"
+
 #, fuzzy, c-format
 #~ msgid ""
 #~ "Error accessing library %s.\n"
@@ -55848,9 +55855,6 @@ msgstr "Editor foi de desen"
 
 #~ msgid "Redo last edit"
 #~ msgstr "Refaceți ultima modificare"
-
-#~ msgid "Find text"
-#~ msgstr "Găsiți textul"
 
 #~ msgid "Find and replace text"
 #~ msgstr "Găsește și înlocuiește textul"

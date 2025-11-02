@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 04:51+0300\n"
+"POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-10-29 03:05+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v9/ta/>\n"
@@ -1566,7 +1566,7 @@ msgstr "தடம் நூலகத்தை உருவாக்கவும�
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:278
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:294
 #: pcb_calculator/widgets/unit_selector.cpp:34
-#: pcbnew/dialogs/dialog_copper_zones.cpp:238
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:171
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
@@ -2020,8 +2020,8 @@ msgstr "சரி (&o)"
 #: eeschema/sch_marker.cpp:376 eeschema/sheet.cpp:778
 #: eeschema/symbol_editor/symbol_editor.cpp:133
 #: eeschema/symbol_editor/symbol_editor.cpp:503
-#: eeschema/symbol_editor/symbol_editor.cpp:1299
-#: eeschema/symbol_editor/symbol_editor.cpp:1697
+#: eeschema/symbol_editor/symbol_editor.cpp:1298
+#: eeschema/symbol_editor/symbol_editor.cpp:1696
 #: pcbnew/dialogs/dialog_drc.cpp:1007 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
@@ -2037,10 +2037,10 @@ msgstr "தகவல்"
 #: common/dialogs/panel_embedded_files.cpp:441
 #: eeschema/design_block_utils.cpp:50 eeschema/design_block_utils.cpp:183
 #: eeschema/symbol_editor/symbol_editor.cpp:371
-#: eeschema/symbol_editor/symbol_editor.cpp:1004
-#: eeschema/symbol_editor/symbol_editor.cpp:1027
-#: eeschema/symbol_editor/symbol_editor.cpp:1144
-#: eeschema/symbol_editor/symbol_editor.cpp:1186
+#: eeschema/symbol_editor/symbol_editor.cpp:1003
+#: eeschema/symbol_editor/symbol_editor.cpp:1026
+#: eeschema/symbol_editor/symbol_editor.cpp:1143
+#: eeschema/symbol_editor/symbol_editor.cpp:1185
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:566
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
@@ -2196,9 +2196,9 @@ msgstr "உலகளாவிய நூலக அட்டவணை பாதை
 #: common/widgets/widget_hotkey_list.cpp:530
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2059 eeschema/symbol_editor/symbol_editor.cpp:828
-#: eeschema/symbol_editor/symbol_editor.cpp:1771
-#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:216
+#: eeschema/sch_symbol.cpp:2077 eeschema/symbol_editor/symbol_editor.cpp:827
+#: eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/symbol_viewer_frame.cpp:458 include/lib_table_grid.h:216
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:50
@@ -2284,7 +2284,7 @@ msgstr "3 டி மாதிரிகள்"
 #: common/dialog_about/AboutDialog_main.cpp:908
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2654
+#: eeschema/sch_symbol.cpp:2672
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2594,9 +2594,9 @@ msgstr "சுற்றுச்சூழல் மாறிகள்"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:490 eeschema/sch_pin.cpp:1571
-#: eeschema/sch_symbol.cpp:2020 eeschema/sch_symbol.cpp:2073
-#: eeschema/symbol_editor/symbol_editor.cpp:1741
-#: eeschema/symbol_viewer_frame.cpp:457
+#: eeschema/sch_symbol.cpp:2038 eeschema/sch_symbol.cpp:2091
+#: eeschema/symbol_editor/symbol_editor.cpp:1740
+#: eeschema/symbol_viewer_frame.cpp:456
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:411
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2812,7 +2812,7 @@ msgstr "கட்டம் அளவு ஒய் வரம்பிற்கு
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
-#: eeschema/symbol_editor/symbol_editor.cpp:861
+#: eeschema/symbol_editor/symbol_editor.cpp:860
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1056
@@ -3406,9 +3406,9 @@ msgstr "சூதம்"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:381
-#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1050
-#: eeschema/sch_symbol.cpp:2016 eeschema/sch_symbol.cpp:2069
-#: eeschema/sch_symbol.cpp:2962 eeschema/sim/simulator_frame_ui.cpp:617
+#: eeschema/fields_grid_table.cpp:491 eeschema/sch_symbol.cpp:1068
+#: eeschema/sch_symbol.cpp:2034 eeschema/sch_symbol.cpp:2087
+#: eeschema/sch_symbol.cpp:2980 eeschema/sim/simulator_frame_ui.cpp:617
 #: eeschema/sim/simulator_frame_ui.cpp:2804
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -3687,7 +3687,7 @@ msgstr "இருப்பிடத்திற்குச் செல்ல�
 #: eeschema/sim/simulator_frame_ui.cpp:606 eeschema/symbol_diff_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:154 eeschema/symbol_viewer_frame.cpp:169
 #: kicad/pcm/dialogs/panel_packages_view.cpp:77
-#: pcbnew/dialogs/dialog_copper_zones.cpp:274
+#: pcbnew/dialogs/dialog_copper_zones.cpp:269
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:95
@@ -3784,7 +3784,7 @@ msgstr "சரி"
 #: eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
-#: eeschema/symbol_editor/symbol_editor.cpp:1030
+#: eeschema/symbol_editor/symbol_editor.cpp:1029
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:370
@@ -4769,7 +4769,7 @@ msgstr "தெரியும்"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
-#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:210
+#: eeschema/symbol_editor/symbol_editor.cpp:826 include/lib_table_grid.h:210
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:95
 #: pcbnew/footprint_libraries_utils.cpp:1021
@@ -4885,9 +4885,9 @@ msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது."
 #: common/dialogs/panel_embedded_files.cpp:443
 #: eeschema/design_block_utils.cpp:51 eeschema/design_block_utils.cpp:184
 #: eeschema/symbol_editor/symbol_editor.cpp:372
-#: eeschema/symbol_editor/symbol_editor.cpp:1006
-#: eeschema/symbol_editor/symbol_editor.cpp:1145
-#: eeschema/symbol_editor/symbol_editor.cpp:1187
+#: eeschema/symbol_editor/symbol_editor.cpp:1005
+#: eeschema/symbol_editor/symbol_editor.cpp:1144
+#: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
@@ -5453,7 +5453,7 @@ msgstr "<வரையறுக்கப்படவில்லை>"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4159
-#: pcbnew/pad.cpp:2719 pcbnew/pcb_table.cpp:619 pcbnew/pcb_textbox.cpp:789
+#: pcbnew/pad.cpp:2719 pcbnew/pcb_table.cpp:662 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:861 pcbnew/zone.cpp:1879
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5463,7 +5463,7 @@ msgstr "திடமான"
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1051
-#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:620
+#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:663
 #: pcbnew/pcb_textbox.cpp:790
 msgid "Dashed"
 msgstr "கோடு"
@@ -5472,7 +5472,7 @@ msgstr "கோடு"
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1052
-#: eeschema/sch_line.cpp:1064 pcbnew/pcb_table.cpp:621
+#: eeschema/sch_line.cpp:1064 pcbnew/pcb_table.cpp:664
 #: pcbnew/pcb_textbox.cpp:791
 msgid "Dotted"
 msgstr "புள்ளியிடப்பட்ட"
@@ -5481,7 +5481,7 @@ msgstr "புள்ளியிடப்பட்ட"
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1053
-#: eeschema/sch_line.cpp:1065 pcbnew/pcb_table.cpp:622
+#: eeschema/sch_line.cpp:1065 pcbnew/pcb_table.cpp:665
 #: pcbnew/pcb_textbox.cpp:792
 msgid "Dash-Dot"
 msgstr "டாச்-டாட்"
@@ -5490,7 +5490,7 @@ msgstr "டாச்-டாட்"
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1054
-#: eeschema/sch_line.cpp:1066 pcbnew/pcb_table.cpp:623
+#: eeschema/sch_line.cpp:1066 pcbnew/pcb_table.cpp:666
 #: pcbnew/pcb_textbox.cpp:793
 msgid "Dash-Dot-Dot"
 msgstr "டாச்-டாட்-டாட்"
@@ -6243,7 +6243,7 @@ msgstr "நிகர ஆய்வாளர்"
 msgid "Screen"
 msgstr "திரை"
 
-#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2056
+#: common/eda_item.cpp:386 eeschema/sch_symbol.cpp:2074
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:294 pcbnew/pad.cpp:1324
@@ -6277,7 +6277,7 @@ msgid "Text Box"
 msgstr "உரை பெட்டி"
 
 #: common/eda_item.cpp:394 common/eda_item.cpp:422 eeschema/sch_table.cpp:582
-#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_table.cpp:455
+#: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_table.cpp:498
 #: pcbnew/pcb_tablecell.cpp:245
 msgid "Table"
 msgstr "அட்டவணை"
@@ -6385,7 +6385,7 @@ msgid "Field"
 msgstr "புலம்"
 
 #: common/eda_item.cpp:429 common/eda_item.cpp:441
-#: eeschema/symbol_editor/symbol_editor.cpp:1768
+#: eeschema/symbol_editor/symbol_editor.cpp:1767
 msgid "Symbol"
 msgstr "அடையாளம்"
 
@@ -6551,14 +6551,14 @@ msgid "Shape Properties"
 msgstr "வடிவ பண்புகள்"
 
 #: common/eda_shape.cpp:2388 eeschema/sch_table.cpp:662
-#: eeschema/sch_tablecell.cpp:222 pcbnew/pcb_table.cpp:634
+#: eeschema/sch_tablecell.cpp:222 pcbnew/pcb_table.cpp:677
 #: pcbnew/pcb_tablecell.cpp:227 pcbnew/pcb_textbox.cpp:804
 #: pcbnew/pcb_track.cpp:2127
 msgid "Start X"
 msgstr "ஃச் தொடங்கு"
 
 #: common/eda_shape.cpp:2393 eeschema/sch_table.cpp:665
-#: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_table.cpp:637
+#: eeschema/sch_tablecell.cpp:223 pcbnew/pcb_table.cpp:680
 #: pcbnew/pcb_tablecell.cpp:228 pcbnew/pcb_textbox.cpp:805
 #: pcbnew/pcb_track.cpp:2131
 msgid "Start Y"
@@ -6723,7 +6723,7 @@ msgstr "கீழே"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1905
 #: eeschema/sch_pin.cpp:1581 eeschema/sch_pin.cpp:2152
-#: eeschema/sch_symbol.cpp:2933 eeschema/sch_tablecell.cpp:239
+#: eeschema/sch_symbol.cpp:2951 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7977,11 +7977,11 @@ msgstr "உலகளாவிய லேபிள்கள்"
 msgid "Hierarchical labels"
 msgstr "படிநிலை லேபிள்கள்"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2949
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2967
 msgid "Pin numbers"
 msgstr "முள் எண்கள்"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2953
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2971
 msgid "Pin names"
 msgstr "முள் பெயர்கள்"
 
@@ -8624,8 +8624,8 @@ msgstr "இயல்புநிலை திருத்துதல்"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2012
-#: eeschema/sch_symbol.cpp:2066 eeschema/sch_symbol.cpp:2959
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_symbol.cpp:2084 eeschema/sch_symbol.cpp:2977
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4195
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8645,7 +8645,7 @@ msgstr "மதிப்பு மற்றும் தடம் மூலம்
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
-#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3025
+#: eeschema/sch_sheet.cpp:1760 eeschema/sch_symbol.cpp:3043
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -8697,7 +8697,7 @@ msgstr "புதியது ..."
 msgid "Create a new document in the editor"
 msgstr "எடிட்டரில் புதிய ஆவணத்தை உருவாக்கவும்"
 
-#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:867
+#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:866
 #: pcbnew/footprint_libraries_utils.cpp:1066
 msgid "New Library..."
 msgstr "புதிய நூலகம் ..."
@@ -8738,7 +8738,7 @@ msgstr "கோப்பு எக்ச்ப்ளோரரில் திற�
 msgid "Open a library file with system file explorer"
 msgstr "கணினி கோப்பு எக்ச்ப்ளோரருடன் நூலகக் கோப்பைத் திறக்கவும்"
 
-#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:857
+#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:856
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1052
 msgid "Save"
@@ -9472,7 +9472,7 @@ msgid "Show 3D viewer window"
 msgstr "3D பார்வையாளர் சாளரத்தைக் காட்டு"
 
 #: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
-#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1114
+#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1102
 msgid "Symbol Library Browser"
 msgstr "குறியீட்டு நூலக உலாவி"
 
@@ -9830,13 +9830,13 @@ msgid "<not found>"
 msgstr "<கண்டுபிடிக்கப்படவில்லை>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
-#: eeschema/sch_symbol.cpp:1986 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: eeschema/sch_symbol.cpp:2004 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
 msgstr "பலகை"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2042
-#: eeschema/sch_symbol.cpp:2046 eeschema/sch_symbol.cpp:2083
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2060
+#: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2101
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1726
 msgid "Library"
 msgstr "நூலகம்"
@@ -10008,10 +10008,10 @@ msgid "Set plot view to show all items"
 msgstr "எல்லா பொருட்களையும் காட்ட சூழ்ச்சி காட்சியை அமைக்கவும்"
 
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
-#: pcbnew/dialogs/dialog_copper_zones.cpp:404
-#: pcbnew/dialogs/dialog_copper_zones.cpp:779
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:287
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:288
+#: pcbnew/dialogs/dialog_copper_zones.cpp:401
+#: pcbnew/dialogs/dialog_copper_zones.cpp:767
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
 msgid "<no net>"
 msgstr "<நிகர இல்லை>"
 
@@ -10158,8 +10158,8 @@ msgstr "ஆட்ச்கி"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
-#: eeschema/lib_symbol.cpp:304 eeschema/sch_symbol.cpp:463
-#: eeschema/symbol_editor/symbol_editor.cpp:1757
+#: eeschema/lib_symbol.cpp:319 eeschema/sch_symbol.cpp:481
+#: eeschema/symbol_editor/symbol_editor.cpp:1756
 #: eeschema/tools/sch_edit_tool.cpp:162
 msgid "Alternate"
 msgstr "மாற்று"
@@ -10552,10 +10552,10 @@ msgstr "'%s' என்பது சரியான தடம் அல்ல."
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
 #: eeschema/dialogs/dialog_lib_fields.cpp:914
-#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2061
-#: eeschema/sch_symbol.cpp:2643 eeschema/sch_symbol.cpp:2971
-#: eeschema/symbol_editor/symbol_editor.cpp:1772
-#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4208
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2079
+#: eeschema/sch_symbol.cpp:2661 eeschema/sch_symbol.cpp:2989
+#: eeschema/symbol_editor/symbol_editor.cpp:1771
+#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4208
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "முக்கிய வார்த்தைகள்"
@@ -11066,7 +11066,7 @@ msgstr "நூலகம் %s ஏற்கனவே உள்ளன."
 msgid "Enter a description for the library:"
 msgstr "நூலகத்திற்கான விளக்கத்தை உள்ளிடவும்:"
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2968
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2986
 #: pcbnew/footprint.cpp:4205 pcbnew/plot_board_layers.cpp:189
 msgid "Library Description"
 msgstr "நூலக விளக்கம்"
@@ -12831,7 +12831,7 @@ msgstr "தொடரியல் உதவி சாளரத்தைக் க
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2957
+#: eeschema/sch_symbol.cpp:2975
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4193
@@ -12984,8 +12984,8 @@ msgid "ALL"
 msgstr "அனைத்தும்"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
-#: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:465
-#: eeschema/symbol_editor/symbol_editor.cpp:1759
+#: eeschema/lib_symbol.cpp:321 eeschema/sch_symbol.cpp:483
+#: eeschema/symbol_editor/symbol_editor.cpp:1758
 #: eeschema/tools/sch_edit_tool.cpp:159
 msgid "Standard"
 msgstr "தரநிலை"
@@ -13038,8 +13038,8 @@ msgstr "உரை அளவு பெயர்"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
-#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:2993
-#: eeschema/symbol_editor/symbol_editor.cpp:1754
+#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:3011
+#: eeschema/symbol_editor/symbol_editor.cpp:1753
 msgid "Unit"
 msgstr "அலகு"
 
@@ -13236,17 +13236,17 @@ msgid "Exclude From BOM"
 msgstr "BOM இலிருந்து விலக்கு"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
-#: eeschema/sch_symbol.cpp:3030
+#: eeschema/sch_symbol.cpp:3048
 msgid "Exclude From Simulation"
 msgstr "உருவகப்படுத்துதலில் இருந்து விலக்கு"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
-#: eeschema/sch_symbol.cpp:1051 eeschema/sch_symbol.cpp:3027
+#: eeschema/sch_symbol.cpp:1069 eeschema/sch_symbol.cpp:3045
 msgid "Exclude From Board"
 msgstr "போர்டில் இருந்து விலக்கு"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
-#: eeschema/symbol_editor/symbol_editor.cpp:1766
+#: eeschema/symbol_editor/symbol_editor.cpp:1765
 msgid "Power Symbol"
 msgstr "ஆற்றல் அடையாளம்"
 
@@ -13362,7 +13362,7 @@ msgstr "சின்னத்திலிருந்து மாற்று �
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:362
-#: eeschema/symbol_editor/symbol_editor.cpp:952
+#: eeschema/symbol_editor/symbol_editor.cpp:951
 #: eeschema/tools/symbol_editor_control.cpp:556
 msgid "Symbol must have a name."
 msgstr "சின்னத்திற்கு ஒரு பெயர் இருக்க வேண்டும்."
@@ -15122,7 +15122,7 @@ msgstr "கூறளவு"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:628 eeschema/sch_label.cpp:1243
 #: eeschema/sch_marker.cpp:367 eeschema/sch_pin.cpp:1567
-#: eeschema/sch_pin.cpp:1573 eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/sch_pin.cpp:1573 eeschema/symbol_editor/symbol_editor.cpp:1769
 #: eeschema/widgets/search_handlers.cpp:323
 #: eeschema/widgets/search_handlers.cpp:410 gerbview/gerber_draw_item.cpp:668
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -15751,7 +15751,7 @@ msgstr "நெடுவரிசை கோடுகள்"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:669 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:641
+#: pcbnew/pcb_table.cpp:684
 msgid "Table Properties"
 msgstr "அட்டவணை பண்புகள்"
 
@@ -15920,7 +15920,7 @@ msgstr "தடம் இருந்து மற்ற எல்லா பு�
 msgid "Update Schematic from PCB"
 msgstr "பிசிபியிலிருந்து திட்டவட்டத்தைப் புதுப்பிக்கவும்"
 
-#: eeschema/dialogs/dialog_update_symbol_fields.cpp:227
+#: eeschema/dialogs/dialog_update_symbol_fields.cpp:228
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
 msgstr "குறியீட்டு புலங்களைப் புதுப்பிக்கவும்"
@@ -16966,7 +16966,7 @@ msgid "Unable to load library\n"
 msgstr "நூலகத்தை ஏற்ற முடியவில்லை\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:996
-#: eeschema/symbol_editor/symbol_editor.cpp:1099
+#: eeschema/symbol_editor/symbol_editor.cpp:1098
 msgid "There is no symbol selected to save."
 msgstr "சேமிக்க எந்த சின்னமும் தேர்ந்தெடுக்கப்படவில்லை."
 
@@ -17801,7 +17801,7 @@ msgstr "பின்வரும் தானாக சேமிக்கப்�
 msgid "Manual removal will be required for the file(s) above."
 msgstr "மேலே உள்ள கோப்பு (கள்) க்கு கையேடு அகற்றுதல் தேவைப்படும்."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2038
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2056
 msgid "Derived from"
 msgstr "இருந்து பெறப்பட்டது"
 
@@ -17905,108 +17905,108 @@ msgstr "இயல்புநிலை அலகுகள்:"
 msgid "Import Vector Graphics File"
 msgstr "திசையன் கிராபிக்ச் கோப்பை இறக்குமதி செய்க"
 
-#: eeschema/lib_symbol.cpp:295 eeschema/sch_symbol.cpp:452
+#: eeschema/lib_symbol.cpp:310 eeschema/sch_symbol.cpp:470
 #, c-format
 msgid "Unit %s"
 msgstr "அலகு %s"
 
-#: eeschema/lib_symbol.cpp:587 eeschema/sch_sheet.cpp:312
-#: eeschema/sch_symbol.cpp:1546
+#: eeschema/lib_symbol.cpp:594 eeschema/sch_sheet.cpp:312
+#: eeschema/sch_symbol.cpp:1564
 msgid "Excluded from BOM"
 msgstr "போமிலிருந்து விலக்கப்பட்டது"
 
-#: eeschema/lib_symbol.cpp:592 eeschema/sch_sheet.cpp:321
-#: eeschema/sch_symbol.cpp:1555
+#: eeschema/lib_symbol.cpp:599 eeschema/sch_sheet.cpp:321
+#: eeschema/sch_symbol.cpp:1573
 msgid "Excluded from board"
 msgstr "போர்டில் இருந்து விலக்கப்பட்டது"
 
-#: eeschema/lib_symbol.cpp:597 eeschema/sch_sheet.cpp:330
-#: eeschema/sch_symbol.cpp:1564
+#: eeschema/lib_symbol.cpp:604 eeschema/sch_sheet.cpp:330
+#: eeschema/sch_symbol.cpp:1582
 msgid "Excluded from simulation"
 msgstr "உருவகப்படுத்துதலில் இருந்து விலக்கப்பட்டது"
 
-#: eeschema/lib_symbol.cpp:602 eeschema/sch_sheet.cpp:339
-#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1573
-#: eeschema/sch_symbol.cpp:1989 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/lib_symbol.cpp:609 eeschema/sch_sheet.cpp:339
+#: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1591
+#: eeschema/sch_symbol.cpp:2007 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1774
 msgid "DNP"
 msgstr "டி.என்.பி."
 
-#: eeschema/lib_symbol.cpp:1617
+#: eeschema/lib_symbol.cpp:1622
 msgid "Power flag differs."
 msgstr "ஆற்றல் கொடி வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1626
+#: eeschema/lib_symbol.cpp:1631
 msgid "Unit count differs."
 msgstr "அலகு எண்ணிக்கை வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1666
+#: eeschema/lib_symbol.cpp:1671
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:767
 msgid "Graphic item count differs."
 msgstr "கிராஃபிக் உருப்படி எண்ணிக்கை வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1678
+#: eeschema/lib_symbol.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:781
 #, c-format
 msgid "%s differs."
 msgstr "%s வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1689
+#: eeschema/lib_symbol.cpp:1694
 msgid "Pin count differs."
 msgstr "முள் எண்ணிக்கை வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1705
+#: eeschema/lib_symbol.cpp:1710
 #, c-format
 msgid "Pin %s not found."
 msgstr "முள் %s கண்டுபிடிக்கப்படவில்லை."
 
-#: eeschema/lib_symbol.cpp:1713
+#: eeschema/lib_symbol.cpp:1718
 #, c-format
 msgid "Pin %s differs."
 msgstr "முள் %s வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1740
+#: eeschema/lib_symbol.cpp:1745
 #, c-format
 msgid "%s field differs."
 msgstr "%s புலம் வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1750
+#: eeschema/lib_symbol.cpp:1755
 msgid "Field count differs."
 msgstr "புலம் எண்ணிக்கை வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1759
+#: eeschema/lib_symbol.cpp:1764
 msgid "Footprint filters differs."
 msgstr "தடம் வடிப்பான்கள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1771
+#: eeschema/lib_symbol.cpp:1776
 msgid "Footprint filters differ."
 msgstr "தடம் வடிப்பான்கள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1782
+#: eeschema/lib_symbol.cpp:1787
 msgid "Symbol keywords differ."
 msgstr "குறியீட்டு முக்கிய வார்த்தைகள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1791
+#: eeschema/lib_symbol.cpp:1796
 msgid "Symbol pin name offsets differ."
 msgstr "குறியீட்டு முள் பெயர் ஆஃப்செட்டுகள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1802
+#: eeschema/lib_symbol.cpp:1807
 msgid "Show pin names settings differ."
 msgstr "முள் பெயர்கள் அமைப்புகள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1811
+#: eeschema/lib_symbol.cpp:1816
 msgid "Show pin numbers settings differ."
 msgstr "முள் எண்களைக் காட்டு அமைப்புகள் வேறுபடுகின்றன."
 
-#: eeschema/lib_symbol.cpp:1820
+#: eeschema/lib_symbol.cpp:1825
 msgid "Exclude from simulation settings differ."
 msgstr "உருவகப்படுத்துதல் அமைப்புகளிலிருந்து விலக்கு வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1829
+#: eeschema/lib_symbol.cpp:1834
 msgid "Exclude from bill of materials settings differ."
 msgstr "பொருட்களின் அமைப்புகளின் மசோதாவிலிருந்து விலக்கு வேறுபடுகிறது."
 
-#: eeschema/lib_symbol.cpp:1838
+#: eeschema/lib_symbol.cpp:1843
 msgid "Exclude from board settings differ."
 msgstr "பலகை அமைப்புகளிலிருந்து விலக்கு வேறுபடுகிறது."
 
@@ -18402,7 +18402,7 @@ msgid "No symbols were rescued."
 msgstr "சின்னங்கள் எதுவும் மீட்கப்படவில்லை."
 
 #: eeschema/project_rescue.cpp:716
-#: eeschema/symbol_editor/symbol_editor.cpp:1214
+#: eeschema/symbol_editor/symbol_editor.cpp:1213
 #, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "குறியீட்டு நூலகக் கோப்பை '%s' உருவாக்கத் தவறிவிட்டது."
@@ -18464,7 +18464,7 @@ msgstr ""
 "நீங்கள் நூலகத்தை மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2144
-#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2925
+#: eeschema/sch_shape.cpp:754 eeschema/sch_symbol.cpp:2943
 #: pcbnew/board_item.cpp:412 pcbnew/pcb_group.cpp:496 pcbnew/pcb_shape.cpp:889
 #: pcbnew/pcb_tablecell.cpp:215 pcbnew/pcb_track.cpp:2126
 #: pcbnew/widgets/pcb_properties_panel.cpp:246
@@ -18474,7 +18474,7 @@ msgid "Position X"
 msgstr "நிலை ஃச்"
 
 #: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2148
-#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2928
+#: eeschema/sch_shape.cpp:756 eeschema/sch_symbol.cpp:2946
 #: pcbnew/board_item.cpp:415 pcbnew/pcb_group.cpp:497 pcbnew/pcb_shape.cpp:891
 #: pcbnew/pcb_tablecell.cpp:216 pcbnew/pcb_track.cpp:2130
 #: pcbnew/widgets/pcb_properties_panel.cpp:247 pcbnew/zone.cpp:1923
@@ -18544,7 +18544,7 @@ msgstr "புதிய திட்ட கோப்பு சேமிக்க
 
 #: eeschema/sch_edit_frame.cpp:1023
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:637
-#: eeschema/symbol_editor/symbol_editor.cpp:1675
+#: eeschema/symbol_editor/symbol_editor.cpp:1674
 #: kicad/dialogs/panel_jobset.cpp:819 pagelayout_editor/pl_editor_frame.cpp:413
 #: pcbnew/footprint_edit_frame.cpp:875 pcbnew/footprint_edit_frame.cpp:915
 #: pcbnew/pcb_edit_frame.cpp:1186
@@ -19516,7 +19516,7 @@ msgid "All body styles"
 msgstr "அனைத்து உடல் பாணிகள்"
 
 #: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
-#: eeschema/sch_symbol.cpp:3009 eeschema/tools/sch_edit_tool.cpp:138
+#: eeschema/sch_symbol.cpp:3027 eeschema/tools/sch_edit_tool.cpp:138
 msgid "Body Style"
 msgstr "உடல் நடை"
 
@@ -19874,16 +19874,16 @@ msgstr "படிநிலை பாதை"
 msgid "File Name"
 msgstr "கோப்பு பெயர்"
 
-#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1980
+#: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1998
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Simulation"
 msgstr "பாவனை"
 
-#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:1983
+#: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:2001
 msgid "BOM"
 msgstr "வெடிகுண்டு"
 
-#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:1995
+#: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:2013
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
 msgid "Exclude from"
 msgstr "இருந்து விலக்கு"
@@ -19894,13 +19894,13 @@ msgid "Hierarchical Sheet %s"
 msgstr "படிநிலை தாள் %s"
 
 #: eeschema/sch_sheet.cpp:1750 eeschema/sch_table.cpp:679
-#: pcbnew/pcb_table.cpp:651 pcbnew/pcb_tablecell.cpp:225
+#: pcbnew/pcb_table.cpp:694 pcbnew/pcb_tablecell.cpp:225
 #: pcbnew/pcb_textbox.cpp:831
 msgid "Border Width"
 msgstr "எல்லை அகலம்"
 
 #: eeschema/sch_sheet.cpp:1754 eeschema/sch_table.cpp:688
-#: pcbnew/pcb_table.cpp:660
+#: pcbnew/pcb_table.cpp:703
 msgid "Border Color"
 msgstr "எல்லை நிறம்"
 
@@ -19908,13 +19908,13 @@ msgstr "எல்லை நிறம்"
 msgid "Background Color"
 msgstr "பின்னணி நிறம்"
 
-#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1052
-#: eeschema/sch_symbol.cpp:3033 pcbnew/footprint.cpp:4225
+#: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1070
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4225
 msgid "Exclude From Bill of Materials"
 msgstr "பொருட்களின் மசோதாவிலிருந்து விலக்கு"
 
-#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1053
-#: eeschema/sch_symbol.cpp:3036 eeschema/tools/sch_actions.cpp:993
+#: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1071
+#: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:993
 #: pcbnew/footprint.cpp:4228
 msgid "Do not Populate"
 msgstr "மக்கள்தொகை செய்ய வேண்டாம்"
@@ -19928,92 +19928,92 @@ msgstr "(நீக்கப்பட்ட உருப்படி)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "படிநிலை தாள் முள் %s"
 
-#: eeschema/sch_symbol.cpp:2006
+#: eeschema/sch_symbol.cpp:2024
 msgid "Power symbol"
 msgstr "ஆற்றல் அடையாளம்"
 
-#: eeschema/sch_symbol.cpp:2026
+#: eeschema/sch_symbol.cpp:2044
 msgid "flags"
 msgstr "கொடிகள்"
 
-#: eeschema/sch_symbol.cpp:2031
+#: eeschema/sch_symbol.cpp:2049
 msgid "Missing parent"
 msgstr "பெற்றோர் காணவில்லை"
 
-#: eeschema/sch_symbol.cpp:2046
+#: eeschema/sch_symbol.cpp:2064
 msgid "Undefined!!!"
 msgstr "வரையறுக்கப்படவில்லை !!!"
 
-#: eeschema/sch_symbol.cpp:2054
+#: eeschema/sch_symbol.cpp:2072
 msgid "<Unknown>"
 msgstr "<அறியப்படாத>"
 
-#: eeschema/sch_symbol.cpp:2079
+#: eeschema/sch_symbol.cpp:2097
 msgid "No library defined!"
 msgstr "நூலகம் வரையறுக்கப்படவில்லை!"
 
-#: eeschema/sch_symbol.cpp:2081
+#: eeschema/sch_symbol.cpp:2099
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "குறியீடு %s இல் காணப்படவில்லை!"
 
-#: eeschema/sch_symbol.cpp:2345
+#: eeschema/sch_symbol.cpp:2363
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "அடையாளம் %s [ %s]"
 
-#: eeschema/sch_symbol.cpp:2935
+#: eeschema/sch_symbol.cpp:2953
 msgid "Mirror X"
 msgstr "மிரர் ஃச்"
 
-#: eeschema/sch_symbol.cpp:2937
+#: eeschema/sch_symbol.cpp:2955
 msgid "Mirror Y"
 msgstr "மிரர் ஒய்"
 
-#: eeschema/sch_symbol.cpp:2965 pcbnew/footprint.cpp:4202
+#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4202
 msgid "Library Link"
 msgstr "நூலக இணைப்பு"
 
-#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:419
+#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:462
 #, c-format
 msgid "%d Column Table"
 msgstr "%d நெடுவரிசை அட்டவணை"
 
-#: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:455
+#: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:498
 #, c-format
 msgid "%d Columns"
 msgstr "%d நெடுவரிசைகள்"
 
-#: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:643
+#: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:686
 msgid "External Border"
 msgstr "வெளிப்புற எல்லை"
 
-#: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:647
+#: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:690
 msgid "Header Border"
 msgstr "தலைப்பு எல்லை"
 
-#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:656
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:699
 #: pcbnew/pcb_tablecell.cpp:224 pcbnew/pcb_textbox.cpp:827
 msgid "Border Style"
 msgstr "எல்லை நடை"
 
-#: eeschema/sch_table.cpp:692 pcbnew/pcb_table.cpp:664
+#: eeschema/sch_table.cpp:692 pcbnew/pcb_table.cpp:707
 msgid "Row Separators"
 msgstr "வரிசை பிரிப்பான்கள்"
 
-#: eeschema/sch_table.cpp:696 pcbnew/pcb_table.cpp:668
+#: eeschema/sch_table.cpp:696 pcbnew/pcb_table.cpp:711
 msgid "Cell Separators"
 msgstr "செல் பிரிப்பான்கள்"
 
-#: eeschema/sch_table.cpp:700 pcbnew/pcb_table.cpp:672
+#: eeschema/sch_table.cpp:700 pcbnew/pcb_table.cpp:715
 msgid "Separators Width"
 msgstr "பிரிப்பான்கள் அகலம்"
 
-#: eeschema/sch_table.cpp:705 pcbnew/pcb_table.cpp:677
+#: eeschema/sch_table.cpp:705 pcbnew/pcb_table.cpp:720
 msgid "Separators Style"
 msgstr "பிரிப்பான் பாணி"
 
-#: eeschema/sch_table.cpp:709 pcbnew/pcb_table.cpp:681
+#: eeschema/sch_table.cpp:709 pcbnew/pcb_table.cpp:724
 msgid "Separators Color"
 msgstr "பிரிப்பான் நிறம்"
 
@@ -22026,7 +22026,7 @@ msgstr "தற்போது எந்த திட்டமும் திற
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:499
-#: eeschema/symbol_editor/symbol_editor.cpp:1692
+#: eeschema/symbol_editor/symbol_editor.cpp:1691
 #: eeschema/tools/symbol_editor_control.cpp:327
 #: eeschema/tools/symbol_editor_control.cpp:472
 #: eeschema/tools/symbol_editor_control.cpp:521
@@ -22036,37 +22036,37 @@ msgstr "குறியீட்டு நூலகம் '%s' எழுத ம�
 
 #: eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:501
-#: eeschema/symbol_editor/symbol_editor.cpp:1693
+#: eeschema/symbol_editor/symbol_editor.cpp:1692
 msgid "You must save to a different location."
 msgstr "நீங்கள் வேறு இடத்திற்கு சேமிக்க வேண்டும்."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
-#: eeschema/symbol_editor/symbol_editor.cpp:1498
+#: eeschema/symbol_editor/symbol_editor.cpp:1497
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "தற்போதைய அடையாளம் மாற்றியமைக்கப்பட்டுள்ளது. மாற்றங்களைச் சேமிக்கவா?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
-#: eeschema/symbol_editor/symbol_editor.cpp:1141
+#: eeschema/symbol_editor/symbol_editor.cpp:1140
 #: eeschema/tools/symbol_editor_control.cpp:563
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "'%s' அடையாளம் ஏற்கனவே நூலகத்தில் உள்ளது '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:817
+#: eeschema/symbol_editor/symbol_editor.cpp:816
 msgid "Save Symbol As"
 msgstr "சின்னத்தை சேமிக்கவும்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:856
+#: eeschema/symbol_editor/symbol_editor.cpp:855
 #: pcbnew/footprint_libraries_utils.cpp:1051
 msgid "Save in library:"
 msgstr "நூலகத்தில் சேமிக்கவும்:"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:946
+#: eeschema/symbol_editor/symbol_editor.cpp:945
 #: pcbnew/footprint_libraries_utils.cpp:1134
 msgid "A library must be specified."
 msgstr "ஒரு நூலகம் குறிப்பிடப்பட வேண்டும்."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:958
+#: eeschema/symbol_editor/symbol_editor.cpp:957
 #, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
@@ -22074,24 +22074,24 @@ msgid ""
 msgstr ""
 "நூலகம் '%s' படிக்க மட்டுமே. '%s' குறியீட்டைச் சேமிக்க வேறு நூலகத்தைத் தேர்வுசெய்க."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:975
+#: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr "'%s' அடையாளம் '%s' என்ற குறியீட்டை மாற்ற முடியாது"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:985
+#: eeschema/symbol_editor/symbol_editor.cpp:984
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr "'%s' அடையாளம் அதன் சந்ததியினரான '%s' என்ற மற்றொரு குறியீட்டை மாற்ற முடியாது."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:999
+#: eeschema/symbol_editor/symbol_editor.cpp:998
 #, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "'%s' அடையாளம் ஏற்கனவே நூலகத்தில் உள்ளது '%s'. அதை மேலெழுத விரும்புகிறீர்களா?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1017
+#: eeschema/symbol_editor/symbol_editor.cpp:1016
 #, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
@@ -22099,7 +22099,7 @@ msgid ""
 msgstr ""
 "'%s' இன் பரம்பரை சங்கிலியில் பின்வரும் சின்னங்கள் ஏற்கனவே நூலகத்தில் '%s' இல் உள்ளன:\n"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
@@ -22108,55 +22108,55 @@ msgstr ""
 "அவை அனைத்தையும் மேலெழுத விரும்புகிறீர்களா, அல்லது புதிய சின்னங்களை மறுபெயரிட "
 "விரும்புகிறீர்களா?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1029
+#: eeschema/symbol_editor/symbol_editor.cpp:1028
 msgid "Overwrite All"
 msgstr "அனைத்தையும் மேலெழுதவும்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1029
+#: eeschema/symbol_editor/symbol_editor.cpp:1028
 msgid "Rename All"
 msgstr "அனைத்தையும் மறுபெயரிடுங்கள்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1108
+#: eeschema/symbol_editor/symbol_editor.cpp:1107
 msgid "Export Symbol"
 msgstr "ஏற்றுமதி அடையாளம்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1134
+#: eeschema/symbol_editor/symbol_editor.cpp:1133
 #, c-format
 msgid "Library '%s' is read-only."
 msgstr "நூலகம் '%s' படிக்க மட்டுமே."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1174
+#: eeschema/symbol_editor/symbol_editor.cpp:1173
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "குறியீட்டு நூலகக் கோப்பை '%s' ஏற்ற முயற்சிப்பதில் பிழை ஏற்பட்டது."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1182
+#: eeschema/symbol_editor/symbol_editor.cpp:1181
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "அடையாளம் %s ஏற்கனவே நூலகத்தில் ' %s' உள்ளன."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1197
+#: eeschema/symbol_editor/symbol_editor.cpp:1196
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "நூலகத்தை '%s' சேமிக்க போதுமான அனுமதிகள் இல்லை."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1216
+#: eeschema/symbol_editor/symbol_editor.cpp:1215
 #, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "குறியீட்டு நூலகத்தை உருவாக்கும் பிழை '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1223
+#: eeschema/symbol_editor/symbol_editor.cpp:1222
 #, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "அடையாளம் %s நூலகத்தில் ' %s' க்கு சேமிக்கப்பட்டன."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1241
+#: eeschema/symbol_editor/symbol_editor.cpp:1240
 #, c-format
 msgid "Symbol name '%s' already in use."
 msgstr "குறியீட்டு பெயர் '%s' ஏற்கனவே பயன்பாட்டில் உள்ளது."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1279
+#: eeschema/symbol_editor/symbol_editor.cpp:1278
 #, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
@@ -22165,7 +22165,7 @@ msgstr ""
 "'%s' அடையாளம் மாற்றியமைக்கப்பட்டுள்ளது. \n"
 "அதை நூலகத்திலிருந்து அகற்ற விரும்புகிறீர்களா?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1291
+#: eeschema/symbol_editor/symbol_editor.cpp:1290
 #, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
@@ -22178,63 +22178,63 @@ msgstr ""
 "\n"
 "இந்த சின்னத்தையும் அதன் அனைத்து வழித்தோன்றல்களையும் நீக்க விரும்புகிறீர்களா?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1296
+#: eeschema/symbol_editor/symbol_editor.cpp:1295
 #: eeschema/tools/sch_actions.cpp:242
 msgid "Delete Symbol"
 msgstr "சின்னத்தை நீக்கு"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1297
+#: eeschema/symbol_editor/symbol_editor.cpp:1296
 msgid "Keep Symbol"
 msgstr "சின்னத்தை வைத்திருங்கள்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:340
+#: eeschema/symbol_editor/symbol_editor.cpp:1433 pcbnew/files.cpp:340
 #: pcbnew/footprint_libraries_utils.cpp:1220
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "கடைசி பதிப்பிற்கு '%s' ஐ மாற்றியமைக்கவா?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1512
+#: eeschema/symbol_editor/symbol_editor.cpp:1511
 #, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "அடையாளம் %s நூலகத்தில் ' %s' இல் காணப்படவில்லை."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1541
+#: eeschema/symbol_editor/symbol_editor.cpp:1540
 msgid "No library specified."
 msgstr "எந்த நூலகமும் குறிப்பிடப்படவில்லை."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1560
+#: eeschema/symbol_editor/symbol_editor.cpp:1559
 #, c-format
 msgid "Save Library '%s' As..."
 msgstr "நூலகத்தை '%s' என சேமிக்கவும் ..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1600
+#: eeschema/symbol_editor/symbol_editor.cpp:1599
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr "குறியீட்டு நூலகக் கோப்பில் '%s' இல் மாற்றங்களைச் சேமிக்கத் தவறிவிட்டது."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1602
+#: eeschema/symbol_editor/symbol_editor.cpp:1601
 msgid "Error Saving Library"
 msgstr "நூலகம் சேமிப்பதில் பிழை"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1648
+#: eeschema/symbol_editor/symbol_editor.cpp:1647
 #, c-format
 msgid "Symbol library file '%s' saved."
 msgstr "குறியீட்டு நூலக கோப்பு '%s' சேமிக்கப்பட்டது."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1747
+#: eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Undefined!"
 msgstr "வரையறுக்கப்படவில்லை!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1748
-#: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:407
+#: eeschema/symbol_editor/symbol_editor.cpp:1747
+#: eeschema/symbol_viewer_frame.cpp:457 pcbnew/board_item.cpp:407
 msgid "Parent"
 msgstr "பெற்றோர்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1763
+#: eeschema/symbol_editor/symbol_editor.cpp:1762
 msgid "Body"
 msgstr "உடல்"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1773
+#: eeschema/symbol_editor/symbol_editor.cpp:1772
 msgid "Datasheet"
 msgstr "தரவுத்தாள்"
 
@@ -22320,7 +22320,7 @@ msgstr "(ஏற்றுவதில் தோல்வி)"
 msgid "KiCad Symbol Library Browser"
 msgstr "கிகாட் அடையாளம் நூலக உலாவி"
 
-#: eeschema/symbol_viewer_frame.cpp:1112 pcbnew/footprint_viewer_frame.cpp:1033
+#: eeschema/symbol_viewer_frame.cpp:1100 pcbnew/footprint_viewer_frame.cpp:1033
 #: pcbnew/footprint_viewer_frame.cpp:1038
 msgid "[no library selected]"
 msgstr "[எந்த நூலகமும் தேர்ந்தெடுக்கப்படவில்லை]"
@@ -22568,7 +22568,7 @@ msgstr ""
 msgid "Create Corner"
 msgstr "மூலையை உருவாக்கு"
 
-#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1389
+#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1386
 #: pcbnew/tools/pcb_actions.cpp:1985
 msgid "Remove Corner"
 msgstr "மூலையை அகற்று"
@@ -25877,23 +25877,23 @@ msgstr "இந்த செய்தியை மறைக்கவும்."
 msgid "Failed to output data"
 msgstr "தரவை வெளியிடுவதில் தோல்வி"
 
-#: kicad/cli/command.cpp:126
+#: kicad/cli/command.cpp:125
 msgid "Input directory"
 msgstr "உள்ளீட்டு அடைவு"
 
-#: kicad/cli/command.cpp:132
+#: kicad/cli/command.cpp:131
 msgid "Input file"
 msgstr "உள்ளீட்டு கோப்பு"
 
-#: kicad/cli/command.cpp:143
+#: kicad/cli/command.cpp:142
 msgid "Output directory"
 msgstr "வெளியீட்டு அடைவு"
 
-#: kicad/cli/command.cpp:150
+#: kicad/cli/command.cpp:149
 msgid "Output file"
 msgstr "வெளியீட்டு கோப்பு"
 
-#: kicad/cli/command.cpp:163
+#: kicad/cli/command.cpp:162
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
@@ -25901,7 +25901,7 @@ msgstr ""
 "வரைதல் தாளுக்கான பாதை, இது பயன்படுத்தும்போது ஏற்கனவே இருக்கும் திட்ட வரையறுக்கப்பட்ட "
 "தாளை மீறுகிறது"
 
-#: kicad/cli/command.cpp:177
+#: kicad/cli/command.cpp:176
 msgid ""
 "Overrides or adds project variables, can be used multiple times to declare "
 "multiple variables.\n"
@@ -26026,14 +26026,14 @@ msgstr ""
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "டி.ஆர்.சி மீறல்கள் இருந்தால் ஒரு நொன்செரோ வெளியேறும் குறியீட்டைத் தரவும்"
 
-#: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:292
+#: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:291
 #: kicad/cli/command_pcb_export_drill.cpp:150
 #: kicad/cli/command_pcb_export_dxf.cpp:160
-#: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:133
+#: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:132
 msgid "Invalid units specified\n"
 msgstr "தவறான அலகுகள் குறிப்பிடப்பட்டுள்ளன\n"
 
-#: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:149
+#: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:148
 msgid "Invalid report format\n"
 msgstr "தவறான அறிக்கை வடிவம்\n"
 
@@ -26055,44 +26055,44 @@ msgstr "வெளியீட்டு கோப்பை மேலெழுத�
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
 msgstr "'குறிப்பிடப்படாத' தடம் வகையுடன் கூறுகளுக்கான 3D மாதிரிகளை விலக்குங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:93
+#: kicad/cli/command_pcb_export_3d.cpp:92
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
 msgstr "'மக்கள்தொகை செய்யாதீர்கள்' பண்புக்கூறுடன் கூறுகளுக்கான 3D மாதிரிகளை விலக்குங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:101
+#: kicad/cli/command_pcb_export_3d.cpp:100
 msgid "Use Grid Origin for output origin"
 msgstr "வெளியீட்டு தோற்றத்திற்கு கட்டம் தோற்றத்தைப் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:105
+#: kicad/cli/command_pcb_export_3d.cpp:104
 msgid "Use Drill Origin for output origin"
 msgstr "வெளியீட்டு தோற்றத்திற்கு துரப்பண தோற்றம் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:109
+#: kicad/cli/command_pcb_export_3d.cpp:108
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
 msgstr ""
 "வி.ஆர்.எம்.எல் மாதிரிகளுக்கு பதிலாக அதே பெயருடன் மாற்று படி அல்லது ஐ.சி.எச் மாதிரிகள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:114
+#: kicad/cli/command_pcb_export_3d.cpp:113
 msgid "Only generate a board with no components"
 msgstr "கூறுகள் இல்லாத பலகையை மட்டுமே உருவாக்கவும்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:118
+#: kicad/cli/command_pcb_export_3d.cpp:117
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
 "கடத்தி அடுக்குகள் ஏற்றுமதி செய்யப்படாவிட்டாலும் போர்டு உடலில் உள்ள துளைகள் வழியாக "
 "வெட்டவும்."
 
-#: kicad/cli/command_pcb_export_3d.cpp:123
+#: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Exclude board body"
 msgstr "போர்டு உடலை விலக்கு"
 
-#: kicad/cli/command_pcb_export_3d.cpp:127
+#: kicad/cli/command_pcb_export_3d.cpp:126
 msgid "Exclude 3D models for components"
 msgstr "கூறுகளுக்கான 3D மாதிரிகளை விலக்கு"
 
-#: kicad/cli/command_pcb_export_3d.cpp:131
+#: kicad/cli/command_pcb_export_3d.cpp:130
 msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
@@ -26100,57 +26100,57 @@ msgstr ""
 "குறிப்பு வடிவமைப்பாளர்களின் இந்த பட்டியலுடன் பொருந்தக்கூடிய கூறு 3D மாதிரிகள் மட்டுமே "
 "சேர்க்கவும் (கமாவால் பிரிக்கப்பட்ட, காடு கார்டுகள் ஆதரிக்கப்படுகின்றன)"
 
-#: kicad/cli/command_pcb_export_3d.cpp:137
+#: kicad/cli/command_pcb_export_3d.cpp:136
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
 msgid "Export tracks and vias"
 msgstr "ஏற்றுமதி தடங்கள் மற்றும் வழிமம் கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:141
+#: kicad/cli/command_pcb_export_3d.cpp:140
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
 msgid "Export pads"
 msgstr "ஏற்றுமதி பட்டைகள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:145
+#: kicad/cli/command_pcb_export_3d.cpp:144
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
 msgid "Export zones"
 msgstr "ஏற்றுமதி மண்டலங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:149
+#: kicad/cli/command_pcb_export_3d.cpp:148
 msgid "Export elements on inner copper layers"
 msgstr "உள் செப்பு அடுக்குகளில் கூறுகளை ஏற்றுமதி செய்யுங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:153
+#: kicad/cli/command_pcb_export_3d.cpp:152
 msgid "Export silkscreen graphics as a set of flat faces"
 msgstr "தட்டையான முகங்களின் தொகுப்பாக சில்க்ச்கிரீன் கிராபிக்ச் ஏற்றுமதி செய்யுங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:157
+#: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
 msgstr "தட்டையான முகங்களின் தொகுப்பாக சாலிடர்மாச்க் அடுக்குகளை ஏற்றுமதி செய்யுங்கள்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:161
+#: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
 msgstr "ஒன்றுடன் ஒன்று வடிவவியலை உருகி"
 
-#: kicad/cli/command_pcb_export_3d.cpp:165
+#: kicad/cli/command_pcb_export_3d.cpp:164
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
 msgid "Don't cut via holes in conductor layers."
 msgstr "கடத்தி அடுக்குகளில் உள்ள துளைகள் வழியாக வெட்ட வேண்டாம்."
 
-#: kicad/cli/command_pcb_export_3d.cpp:170
+#: kicad/cli/command_pcb_export_3d.cpp:169
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "புள்ளிகளுக்கு இடையிலான குறைந்தபட்ச தூரம் அவற்றை தனித்தனி என்று கருதுகிறது"
 
-#: kicad/cli/command_pcb_export_3d.cpp:176
+#: kicad/cli/command_pcb_export_3d.cpp:175
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
 "இந்த வைல்டு கார்டுடன் பொருந்தக்கூடிய வலைகளுக்கு சொந்தமான செப்பு பொருட்களை மட்டுமே "
 "சேர்க்கவும்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:183
+#: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr "படி கோப்பை மேம்படுத்த வேண்டாம் (அளவுரு வளைவுகளை எழுதுவதை இயக்குகிறது)"
 
-#: kicad/cli/command_pcb_export_3d.cpp:190
+#: kicad/cli/command_pcb_export_3d.cpp:189
 msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
@@ -26158,11 +26158,11 @@ msgstr ""
 "பயனர் குறிப்பிட்ட வெளியீட்டு தோற்றம் முன்னாள். 1x1in, 1x1inch, 25.4x25.4 மிமீ "
 "(இயல்புநிலை அலகு மிமீ)"
 
-#: kicad/cli/command_pcb_export_3d.cpp:197
+#: kicad/cli/command_pcb_export_3d.cpp:196
 msgid "Output units; valid options: mm, m, in, tenths"
 msgstr "வெளியீட்டு அலகுகள்; செல்லுபடியாகும் விருப்பங்கள்: மிமீ, எம், ஐ.என், பத்தாவது"
 
-#: kicad/cli/command_pcb_export_3d.cpp:201
+#: kicad/cli/command_pcb_export_3d.cpp:200
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
@@ -26171,13 +26171,13 @@ msgstr ""
 "காலியாக இருந்தால், மாதிரிகள் முதன்மையான ஏற்றுமதி செய்யப்பட்ட வி.ஆர்.எம்.எல் கோப்பில் "
 "உட்பொதிக்கப்படும்"
 
-#: kicad/cli/command_pcb_export_3d.cpp:206
+#: kicad/cli/command_pcb_export_3d.cpp:205
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
 "இதன் விளைவாக வரும் கோப்பில் உறவினர் பாதைகளை வெளியீட்டுக்கு-மாடல்கள்-டி.ஐ.ஆர் உடன் "
 "பயன்படுத்தப்படுகிறது"
 
-#: kicad/cli/command_pcb_export_3d.cpp:273
+#: kicad/cli/command_pcb_export_3d.cpp:272
 msgid "Invalid format specified\n"
 msgstr "தவறான வடிவம் குறிப்பிடப்பட்டுள்ளது\n"
 
@@ -26272,7 +26272,7 @@ msgid "Invalid origin mode specified\n"
 msgstr "தவறான தோற்றம் பயன்முறை குறிப்பிடப்பட்டுள்ளது\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:247
-#: kicad/cli/command_pcb_export_gerber.cpp:149
+#: kicad/cli/command_pcb_export_gerber.cpp:148
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "கெர்பர் ஒருங்கிணைப்பு துல்லியம் 5 அல்லது 6 ஆக இருக்க வேண்டும்\n"
 
@@ -26342,8 +26342,8 @@ msgstr ""
 "கோப்பகத்தைக் குறிப்பிடுகிறது."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:130
-#: kicad/cli/command_pcb_export_gencad.cpp:81
-#: kicad/cli/command_pcb_export_gerber.cpp:143
+#: kicad/cli/command_pcb_export_gencad.cpp:75
+#: kicad/cli/command_pcb_export_gerber.cpp:142
 #: kicad/cli/command_pcb_export_ipc2581.cpp:114
 #: kicad/cli/command_pcb_export_ipcd356.cpp:45
 #: kicad/cli/command_pcb_export_odb.cpp:70
@@ -26371,29 +26371,29 @@ msgstr "புதிய நடத்தை-முறை-மல்டி பொ�
 msgid "Export the PCB in Gencad format"
 msgstr "பிசிபியை சென்காட் வடிவத்தில் ஏற்றுமதி செய்யுங்கள்"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:39
+#: kicad/cli/command_pcb_export_gencad.cpp:38
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
 msgid "Flip bottom footprint padstacks"
 msgstr "கீழே தடம் பேட்ச்டேக்குகளை புரட்டவும்"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:44
+#: kicad/cli/command_pcb_export_gencad.cpp:42
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Generate unique pin names"
 msgstr "தனித்துவமான முள் பெயர்களை உருவாக்குங்கள்"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:50
+#: kicad/cli/command_pcb_export_gencad.cpp:46
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
 msgstr ""
 "ஒவ்வொரு தடம் நிகழ்விற்கும் ஒரு புதிய வடிவத்தை உருவாக்குங்கள் (வடிவங்களை மீண்டும் பயன்படுத்த "
 "வேண்டாம்)"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:55
+#: kicad/cli/command_pcb_export_gencad.cpp:50
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Use drill/place file origin as origin"
 msgstr "துரப்பணம்/இடம் கோப்பு தோற்றத்தை தோற்றமாகப் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_export_gencad.cpp:60
+#: kicad/cli/command_pcb_export_gencad.cpp:54
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Save the origin coordinates in the file"
 msgstr "கோப்பில் தோற்றம் ஆயத்தொகுதிகளைச் சேமிக்கவும்"
@@ -26414,21 +26414,21 @@ msgstr "நெட்லிச்ட் பண்புகளை உருவா�
 msgid "Disable aperture macros"
 msgstr "துளை மேக்ரோக்களை முடக்கு"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:88
+#: kicad/cli/command_pcb_export_gerber.cpp:87
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Use drill/place file origin"
 msgstr "துரப்பணம்/இடம் கோப்பு தோற்றம் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:92
+#: kicad/cli/command_pcb_export_gerber.cpp:91
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
 msgstr "கெர்பர் ஆயங்களின் துல்லியம், செல்லுபடியாகும் விருப்பங்கள்: 5 அல்லது 6"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:98
+#: kicad/cli/command_pcb_export_gerber.cpp:97
 msgid "Use KiCad Gerber file extension"
 msgstr "கிகாட் கெர்பர் கோப்பு நீட்டிப்பைப் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_export_gerber.cpp:160
+#: kicad/cli/command_pcb_export_gerber.cpp:159
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
@@ -26601,11 +26601,11 @@ msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
 "தோற்றம் முன்னமைவு. விருப்பங்கள்: %s, %s, அல்லது பயனர் வரையறுக்கப்பட்ட முன்னமைக்கப்பட்ட பெயர்"
 
-#: kicad/cli/command_pcb_render.cpp:266
+#: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
 msgstr "போர்டு ச்டேக்கப்பில் வரையறுக்கப்பட்ட வண்ணங்கள் முன்னமைவில் உள்ளவற்றை மீறும்"
 
-#: kicad/cli/command_pcb_render.cpp:270
+#: kicad/cli/command_pcb_render.cpp:269
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
@@ -26613,19 +26613,19 @@ msgstr ""
 "தர அமைப்பில் முடக்கப்பட்டிருந்தாலும், தரை, நிழல்கள் மற்றும் பிந்தைய செயலாக்கத்தை "
 "செயல்படுத்துகிறது"
 
-#: kicad/cli/command_pcb_render.cpp:275
+#: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
 msgstr "ஆர்த்தோகனலுக்கு பதிலாக முன்னோக்கு திட்டத்தைப் பயன்படுத்தவும்"
 
-#: kicad/cli/command_pcb_render.cpp:281
+#: kicad/cli/command_pcb_render.cpp:280
 msgid "Camera zoom"
 msgstr "கேமரா சூம்"
 
-#: kicad/cli/command_pcb_render.cpp:286
+#: kicad/cli/command_pcb_render.cpp:285
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
 msgstr "பான் கேமரா, வடிவமைப்பு 'ஃச், ஒய், சட்' எ.கா.: '3,0,0'"
 
-#: kicad/cli/command_pcb_render.cpp:291
+#: kicad/cli/command_pcb_render.cpp:290
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
@@ -26633,67 +26633,67 @@ msgstr ""
 "போர்டு சென்டருடன் ஒப்பிடும்போது சென்டிமீட்டர், 'ஃச், ஒய், சட்' எ.கா.: '-10,2,0' வடிவத்தில் "
 "பிவோட் புள்ளியை அமைக்கவும்"
 
-#: kicad/cli/command_pcb_render.cpp:298
+#: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr "ஐசோமெட்ரிக் பார்வைக்கு 'ஃச், ஒய், சட்' எ.கா.: '-45,0,45' வடிவம்"
 
-#: kicad/cli/command_pcb_render.cpp:303
+#: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "சிறந்த ஒளி தீவிரம், வடிவம் 'ஆர், சி, பி' அல்லது ஒற்றை எண், வரம்பு: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:308
+#: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "கீழ் ஒளி தீவிரம், வடிவம் 'ஆர், சி, பி' அல்லது ஒற்றை எண், வரம்பு: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:313
+#: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "பக்க விளக்குகள் தீவிரம், வடிவமைப்பு 'ஆர், சி, பி' அல்லது ஒற்றை எண், வரம்பு: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:318
+#: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "கேமரா ஒளி தீவிரம், வடிவம் 'ஆர், சி, பி' அல்லது ஒற்றை எண், வரம்பு: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:324
+#: kicad/cli/command_pcb_render.cpp:323
 msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "பக்க விளக்குகள் டிகிரிகளில் உயர கோணம், வரம்பு: 0-90"
 
-#: kicad/cli/command_pcb_render.cpp:340
+#: kicad/cli/command_pcb_render.cpp:339
 msgid "Invalid preset\n"
 msgstr "தவறான முன்னமைவு\n"
 
-#: kicad/cli/command_pcb_render.cpp:358
+#: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
 msgstr "தவறான பின்னணி\n"
 
-#: kicad/cli/command_pcb_render.cpp:364
+#: kicad/cli/command_pcb_render.cpp:363
 msgid "Invalid rotation format\n"
 msgstr "தவறான சுழற்சி வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:370
+#: kicad/cli/command_pcb_render.cpp:369
 msgid "Invalid pan format\n"
 msgstr "தவறான பான் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:376
+#: kicad/cli/command_pcb_render.cpp:375
 msgid "Invalid pivot format\n"
 msgstr "தவறான பிவோட் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:383
+#: kicad/cli/command_pcb_render.cpp:382
 msgid "Invalid light top intensity format\n"
 msgstr "தவறான ஒளி மேல் தீவிரம் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:390
+#: kicad/cli/command_pcb_render.cpp:389
 msgid "Invalid light bottom intensity format\n"
 msgstr "தவறான ஒளி கீழ் தீவிரம் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:397
+#: kicad/cli/command_pcb_render.cpp:396
 msgid "Invalid light side intensity format\n"
 msgstr "தவறான ஒளி பக்க தீவிரம் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:404
+#: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid light camera intensity format\n"
 msgstr "தவறான ஒளி கேமரா தீவிரம் வடிவம்\n"
 
-#: kicad/cli/command_pcb_render.cpp:419
+#: kicad/cli/command_pcb_render.cpp:418
 msgid "Invalid image format\n"
 msgstr "தவறான பட வடிவம்\n"
 
@@ -26732,7 +26732,7 @@ msgstr ""
 "அனைத்து ஈ.ஆர்.சி முன்னறிவிப்பு நிலை மீறல்களையும் புகாரளிக்கவும், இது மற்ற தீவிர "
 "வாதங்களுடன் இணைக்கப்படலாம்"
 
-#: kicad/cli/command_sch_erc.cpp:74
+#: kicad/cli/command_sch_erc.cpp:73
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
@@ -26740,7 +26740,7 @@ msgstr ""
 "விலக்கப்பட்ட அனைத்து ஈ.ஆர்.சி மீறல்களையும் புகாரளிக்கவும், இது மற்ற தீவிர வாதங்களுடன் "
 "இணைக்கப்படலாம்"
 
-#: kicad/cli/command_sch_erc.cpp:79
+#: kicad/cli/command_sch_erc.cpp:78
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr "ERC மீறல்கள் இருந்தால் ஒரு nonzero வெளியேறும் குறியீட்டைத் தரவும்"
 
@@ -26752,9 +26752,9 @@ msgstr "ஏற்றுமதி பயன்பாடுகள் (NetList, PDF
 msgid "Generate a Bill of Materials (BOM)"
 msgstr "பொருட்களின் மசோதாவை உருவாக்குங்கள் (BOM)"
 
-#: kicad/cli/command_sch_export_bom.cpp:180
+#: kicad/cli/command_sch_export_bom.cpp:179
 #: kicad/cli/command_sch_export_netlist.cpp:56
-#: kicad/cli/command_sch_export_plot.cpp:140
+#: kicad/cli/command_sch_export_plot.cpp:139
 #: kicad/cli/command_sch_export_pythonbom.cpp:51
 msgid "Schematic file does not exist or is not accessible\n"
 msgstr "திட்ட கோப்பு இல்லை அல்லது அணுக முடியாது\n"
@@ -26775,28 +26775,28 @@ msgstr ""
 msgid "Color theme to use (will default to schematic settings)"
 msgstr "பயன்படுத்த வண்ண கருப்பொருள் (திட்ட அமைப்புகளுக்கு இயல்புநிலையாக இருக்கும்)"
 
-#: kicad/cli/command_sch_export_plot.cpp:82
+#: kicad/cli/command_sch_export_plot.cpp:81
 msgid "Default font name"
 msgstr "இயல்புநிலை எழுத்துரு பெயர்"
 
-#: kicad/cli/command_sch_export_plot.cpp:88
+#: kicad/cli/command_sch_export_plot.cpp:87
 msgid "Do not generate property popups in PDF"
 msgstr "PDF இல் சொத்து பாப்அப்களை உருவாக்க வேண்டாம்"
 
-#: kicad/cli/command_sch_export_plot.cpp:92
+#: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate clickable links for hierarchical elements in PDF"
 msgstr "PDF இல் படிநிலை கூறுகளுக்கு சொடுக்கு செய்யக்கூடிய இணைப்புகளை உருவாக்க வேண்டாம்"
 
-#: kicad/cli/command_sch_export_plot.cpp:97
+#: kicad/cli/command_sch_export_plot.cpp:96
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
 msgstr ""
 "ஆசிரியர் மற்றும் பொருள் மாறிகள் ஆகியவற்றிலிருந்து PDF மெட்டாடேட்டாவை உருவாக்க வேண்டாம்"
 
-#: kicad/cli/command_sch_export_plot.cpp:106
+#: kicad/cli/command_sch_export_plot.cpp:105
 msgid "Avoid setting a background color (regardless of theme)"
 msgstr "பின்னணி நிறத்தை அமைப்பதைத் தவிர்க்கவும் (தீம் பொருட்படுத்தாமல்)"
 
-#: kicad/cli/command_sch_export_plot.cpp:112
+#: kicad/cli/command_sch_export_plot.cpp:111
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
@@ -26804,16 +26804,16 @@ msgstr ""
 "அச்சிட கமாவால் பிரிக்கப்பட்ட பக்க எண்களின் பட்டியல், வெற்று அல்லது குறிப்பிடப்படாதது "
 "அனைத்து பக்கங்களுக்கும் சமம்"
 
-#: kicad/cli/command_sch_export_plot.cpp:119
+#: kicad/cli/command_sch_export_plot.cpp:118
 msgid "Pen size [mm]"
 msgstr "பேனா அளவு [மிமீ]"
 
-#: kicad/cli/command_sch_export_plot.cpp:125
+#: kicad/cli/command_sch_export_plot.cpp:124
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr ""
 "தோற்றம் மற்றும் அளவு: 0 கீழ் இடது, 1 மையப்படுத்தப்பட்ட, 2 பக்க பொருத்தம், 3 உள்ளடக்க பொருத்தம்"
 
-#: kicad/cli/command_sch_export_plot.cpp:197
+#: kicad/cli/command_sch_export_plot.cpp:196
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "HPGL தோற்றம் விருப்பம் 0, 1, 2 அல்லது 3 ஆக இருக்க வேண்டும்\n"
 
@@ -27312,7 +27312,7 @@ msgstr "ஏற்றுமதி எச்.டி.எல்"
 msgid "Export PS"
 msgstr "ஏற்றுமதி ps"
 
-#: kicad/kicad_cli.cpp:334
+#: kicad/kicad_cli.cpp:333
 msgid "prints version information and exits"
 msgstr "பதிப்பு செய்தி மற்றும் வெளியேறும் அச்சிடுகிறது"
 
@@ -32597,7 +32597,7 @@ msgid "Build Changes"
 msgstr "மாற்றங்களை உருவாக்குங்கள்"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:196
 msgid "Checking zones..."
 msgstr "மண்டலங்களை சரிபார்க்கிறது ..."
 
@@ -32693,58 +32693,58 @@ msgstr "முன்னேற்றம்:"
 msgid "Cleanup Tracks and Vias"
 msgstr "தூய்மைப்படுத்தும் தடங்கள் மற்றும் வழிமம் கள்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:212
+#: pcbnew/dialogs/dialog_copper_zones.cpp:207
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "VIAS/BADS பண்புகளில் கண்ணீர் துளி"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:216
+#: pcbnew/dialogs/dialog_copper_zones.cpp:211
 msgid "Teardrop on Tracks Properties"
 msgstr "தடங்கள் பண்புகளில் கண்ணீர் துளி"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:215
 msgid "Teardrop Properties"
 msgstr "கண்ணீர் துளி பண்புகள்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:226
+#: pcbnew/dialogs/dialog_copper_zones.cpp:221
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:144
 #: pcbnew/tools/convert_tool.cpp:64
 msgid "Conversion Settings"
 msgstr "மாற்று அமைப்புகள்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:229
+#: pcbnew/dialogs/dialog_copper_zones.cpp:224
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:147
 #: pcbnew/tools/convert_tool.cpp:86
 msgid "Use centerlines"
 msgstr "சென்டர்லைன்களைப் பயன்படுத்துங்கள்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_copper_zones.cpp:228
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:122
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:151
 #: pcbnew/tools/convert_tool.cpp:98
 msgid "Create bounding hull"
 msgstr "எல்லை அல் உருவாக்கவும்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:236
+#: pcbnew/dialogs/dialog_copper_zones.cpp:231
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:125
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
 #: pcbnew/tools/convert_tool.cpp:100
 msgid "Gap:"
 msgstr "இடைவெளி:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:250
+#: pcbnew/dialogs/dialog_copper_zones.cpp:245
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:169
 #: pcbnew/tools/convert_tool.cpp:136
 msgid "Delete source objects after conversion"
 msgstr "மாற்றத்திற்குப் பிறகு மூல பொருட்களை நீக்கு"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:259
+#: pcbnew/dialogs/dialog_copper_zones.cpp:254
 msgid "Convert to Copper Zone"
 msgstr "செப்பு மண்டலத்திற்கு மாற்றவும்"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:433
+#: pcbnew/dialogs/dialog_copper_zones.cpp:430
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:178
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
@@ -32753,23 +32753,23 @@ msgstr "செப்பு மண்டலத்திற்கு மாற்�
 msgid "Chamfer distance:"
 msgstr "சேம்பர் தூரம்:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:435
+#: pcbnew/dialogs/dialog_copper_zones.cpp:432
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:180
 #: pcbnew/zone_manager/panel_zone_properties.cpp:187
 msgid "Fillet radius:"
 msgstr "ஃபில்லட் ஆரம்:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:589
+#: pcbnew/dialogs/dialog_copper_zones.cpp:577
 #: pcbnew/zone_manager/panel_zone_properties.cpp:303
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "வெப்ப பேச்சாளர் அகலம் குறைந்தபட்ச அகலத்தை விட சிறியதாக இருக்க முடியாது."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:609
+#: pcbnew/dialogs/dialog_copper_zones.cpp:597
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:361
 msgid "No layer selected."
 msgstr "எந்த அடுக்கு தேர்ந்தெடுக்கப்படவில்லை."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:864
+#: pcbnew/dialogs/dialog_copper_zones.cpp:852
 msgid "<no net> will result in an isolated copper island."
 msgstr "<NET> ஒரு தனிமைப்படுத்தப்பட்ட செப்பு தீவுக்கு வழிவகுக்கும்."
 
@@ -35251,8 +35251,9 @@ msgid "Footprint Report"
 msgstr "தடம் அறிக்கை"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-msgid "ASCII"
-msgstr "ASCII"
+#, fuzzy
+msgid "Plain text"
+msgstr "உரையை ஏற்றுகிறது ..."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41532,28 +41533,31 @@ msgstr "பட்டைகள் சரிபார்க்கிறது ..."
 msgid "Checking copper graphic clearances..."
 msgstr "செப்பு கிராஃபிக் அனுமதிகளை சரிபார்க்கிறது ..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
+#, fuzzy
+msgid "Checking copper graphic hole clearances..."
+msgstr "செப்பு கிராஃபிக் அனுமதிகளை சரிபார்க்கிறது ..."
+
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
 msgstr "செப்பு மண்டல அனுமதிகளை சரிபார்க்கிறது ..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:852
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(நெட்ச் %s மற்றும் %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:302
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:476
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:514
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:597
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:900
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:975
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1258
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -41563,18 +41567,18 @@ msgstr "(நெட்ச் %s மற்றும் %s)"
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:750
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:837
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:884
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:244
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:241
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:297
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "( %s இசைவு %s; உண்மையான %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:359
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "( %s இசைவு %s; உண்மையான <0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1250
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "(வெட்டு மண்டலங்களுக்கு தனித்துவமான முன்னுரிமைகள் இருக்க வேண்டும்)"
 
@@ -42138,7 +42142,7 @@ msgstr "திட்டத்தில் முள் %s எதுவும் 
 msgid "Checking PCB to schematic parity..."
 msgstr "திட்ட சமநிலைக்கு பிசிபியை சரிபார்க்கிறது ..."
 
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:94
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:91
 msgid "Checking silkscreen for overlapping items..."
 msgstr "பொருட்களை ஒன்றுடன் ஒன்று சேர்ப்பதற்கு சில்க்ச்கிரீனை சரிபார்க்கிறது ..."
 
@@ -45971,7 +45975,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2534
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7315
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7318
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -46146,7 +46150,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "நெட் கிளாச் பெயர் ' %s' கோப்பில் ' %s' வரி %d, ஆஃப்செட் %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3179
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6355
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6358
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46164,7 +46168,7 @@ msgstr ""
 msgid "Cannot handle footprint text type %s"
 msgstr "தடம் உரை வகை %s ஐ கையாள முடியாது"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4411
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4414
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -46177,7 +46181,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5192
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5195
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46188,7 +46192,7 @@ msgstr ""
 "கோப்பு: %s \n"
 "வரி: %d ஆஃப்செட்: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5211
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5214
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -46199,7 +46203,7 @@ msgstr ""
 "கோப்பு: %s \n"
 "வரி: %d ஆஃப்செட்: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5542
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5545
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -46212,8 +46216,8 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5665
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6615
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5668
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6618
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -46226,13 +46230,13 @@ msgstr ""
 " வரி: %d\n"
 " ஆஃப்செட்: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5680
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6630
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5683
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6633
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "தவறான பேட்ச்டாக் '%s' அடுக்கு '%s' கோப்பில் வரி %d இல், ஆஃப்செட் %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6254
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6257
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46245,7 +46249,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6466
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6469
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46258,7 +46262,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6721
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6724
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46271,7 +46275,7 @@ msgstr ""
 "வரி: %d \n"
 "ஆஃப்செட்: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7285
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7288
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -50476,7 +50480,7 @@ msgstr "புதிய ஆஃப்செட்டை வரையறுக்�
 msgid "Set Relative Position Interactively"
 msgstr "உறவினர் நிலையை ஊடாடும் வகையில் அமைக்கவும்"
 
-#: pcbnew/tools/position_relative_tool.cpp:428
+#: pcbnew/tools/position_relative_tool.cpp:422
 msgid "Position Relative"
 msgstr "நிலை உறவினர்"
 
@@ -51890,6 +51894,9 @@ msgstr "கிகாட் திட்ட அடையாளம்"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "கிகாட் வரைதல் தாள்"
+
+#~ msgid "ASCII"
+#~ msgstr "ASCII"
 
 #, fuzzy, c-format
 #~ msgid ""
