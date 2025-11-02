@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-02 22:36+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -20543,9 +20543,9 @@ msgid "Cannot create symbol library path '%s'."
 msgstr "シンボル ライブラリ パス '%s' が生成できません。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "ライブラリ '%s' 内に関連するシンボルが見つかりません。"
+msgstr "ライブラリ '%s' 内に拡張シンボル %s の親が見つかりません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
@@ -41658,9 +41658,8 @@ msgstr "最小クリアランス:"
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
-msgstr ""
-"同じネットに属していない導体アイテム間の最小クリアランス。設定されている場"
-"合、カスタム ルールによってのみ消滅することが出来ます。"
+msgstr "同じネットに属していない導体アイテム間の最小クリアランス。設定されている場合"
+"、カスタムルールによってのみ小さくできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
@@ -41669,9 +41668,7 @@ msgstr "最小配線幅:"
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
-msgstr ""
-"配線の最小幅。設定されている場合、カスタム ルールの設定によってのみ減少させる"
-"ことが出来ます。"
+msgstr "配線の最小幅。設定されている場合、カスタムルールによってのみ小さくできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -41689,9 +41686,8 @@ msgstr "最小アニュラー幅:"
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
-msgstr ""
-"アニュラーリングの最小幅。設定されている場合、カスタム ルールの設定によっての"
-"み減少させることが出来ます。"
+msgstr "アニュラーリングの最小幅。設定されている場合、カスタムルールによってのみ小さ"
+"くできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
@@ -41700,9 +41696,8 @@ msgstr "最小ビア直径:"
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
-msgstr ""
-"ビアの最小直径。設定されている場合、カスタム ルールの設定によってのみ減少させ"
-"ることが出来ます。"
+msgstr "ビアの最小直径。設定されている場合、カスタムルールによってのみ小さくできます"
+"。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
@@ -41712,9 +41707,8 @@ msgstr "導体から穴のクリアランス:"
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
-msgstr ""
-"穴と関連付けのない導体アイテムとの間の最小クリアランス。設定されている場合、"
-"カスタム ルールの設定によってのみ減少させることが出来ます。"
+msgstr "穴と関連付けのない導体アイテムとの間の最小クリアランス。設定されている場合、"
+"カスタムルールによってのみ小さくできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
@@ -41724,9 +41718,8 @@ msgstr "導体から基板端クリアランス:"
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
-msgstr ""
-"基板の端と導体アイテムの間の最小クリアランス。 設定されている場合、カスタム "
-"ルールの設定によってのみ減少させることが出来ます。"
+msgstr "基板の端と導体アイテムの間の最小クリアランス。設定されている場合、カスタムル"
+"ールによってのみ小さくできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -41748,9 +41741,8 @@ msgstr "最小スルーホール:"
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
-msgstr ""
-"スルーホールの最小サイズ。設定されている場合、カスタム ルールの設定によっての"
-"み減少させることが出来ます。"
+msgstr "スルーホールの最小サイズ。設定されている場合、カスタムルールによってのみ小さ"
+"くできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
@@ -41761,9 +41753,9 @@ msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"2つのドリル穴の間の最小クリアランス。設定されている場合、カスタム ルールの設"
-"定によってのみ減少させることが出来ます。(注：フライス加工された穴（milled "
-"holes）には適用されません。)"
+"2つのドリル穴の間の最小クリアランス。設定されている場合、カスタムルールによっ"
+"てのみ小さくできます。(注：フライス加工された穴（milled holes）には適用されま"
+"せん。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -41777,9 +41769,8 @@ msgstr "最小マイクロビア直径:"
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
-msgstr ""
-"マイクロビアの最小直径。設定されている場合、カスタム ルールの設定によってのみ"
-"減少させることが出来ます。"
+msgstr "マイクロビアの最小直径。設定されている場合、カスタムルールによってのみ小さく"
+"できます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
@@ -41789,9 +41780,8 @@ msgstr "最小マイクロビア穴径:"
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
-msgstr ""
-"マイクロビアホールの最小サイズ。設定されている場合、カスタム ルールの設定に"
-"よってのみ減少させることが出来ます。"
+msgstr "マイクロビアホールの最小サイズ。設定されている場合、カスタムルールによっての"
+"み小さくできます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -43748,7 +43738,6 @@ msgid "Diff pair gap calculation failed"
 msgstr "差分ペアギャップを計算できませんでした"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
 msgstr "単線"
 
