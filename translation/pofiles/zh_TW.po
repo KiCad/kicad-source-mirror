@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-30 01:50+0000\n"
+"PO-Revision-Date: 2025-11-03 05:51+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
@@ -16876,7 +16876,7 @@ msgstr "沒有符號被選來儲存。"
 #: pcbnew/pcbnew_jobs_handler.cpp:1791
 #, c-format
 msgid "Exporting %s"
-msgstr "正在匯出 $\\text{\\%s}$"
+msgstr "正在匯出 %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1671
 msgid "Output path must not conflict with existing path\n"
@@ -17046,7 +17046,7 @@ msgstr "接腳 %s 同時連接到 %s 和 %s"
 #: eeschema/erc/erc.cpp:1424
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "目前的配置不包含符號庫「$\\text{\\%s}$」"
+msgstr "目前的配置不包含符號庫「%s」"
 
 #: eeschema/erc/erc.cpp:1439
 #, c-format
@@ -17066,12 +17066,12 @@ msgstr "在符號庫 '%s' 中找不到符號 '%s'"
 #: eeschema/erc/erc.cpp:1499
 #, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "符號「$\\text{\\%s}$」具有多個接腳共用相同的腳位編號"
+msgstr "符號「%s」具有多個接腳共用相同的腳位編號"
 
 #: eeschema/erc/erc.cpp:1509
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "符號「$\\text{\\%s}$」與元件庫「$\\text{\\%s}$」中的複本不符"
+msgstr "符號「%s」與元件庫「%s」中的複本不符"
 
 #: eeschema/erc/erc.cpp:1558
 #, c-format
