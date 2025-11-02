@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 05:12+0000\n"
+"PO-Revision-Date: 2025-11-02 22:37+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -28399,7 +28399,7 @@ msgstr "Примусово встановити формат паперу A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
-msgstr "Створити звіт зі статистики дошки"
+msgstr "Створити звіт зі статистики дошку"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
 msgid "Report units; valid options: in, mm"
@@ -29592,7 +29592,7 @@ msgstr "Доступні оновлення PCM"
 #: kicad/kicad_manager_frame.cpp:401
 #, c-format
 msgid "%d package update(s) available"
-msgstr "Доступно %d оновлення пакети(ів)"
+msgstr "Доступно %d Оновлення Пакета(ів)"
 
 #: kicad/kicad_manager_frame.cpp:821
 msgid "Error opening jobs file"
@@ -44114,18 +44114,18 @@ msgid "tuning profile '%s'"
 msgstr "профіль налаштування '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
-msgstr "площина заборони '%s'"
+msgstr "заборонена зона %s"
 
 #: pcbnew/drc/drc_engine.cpp:577
 msgid "keepout area"
 msgstr "площина заборони"
 
 #: pcbnew/drc/drc_engine.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
-msgstr "площина заборони '%s'"
+msgstr "заборонена зона '%s' з %s"
 
 #: pcbnew/drc/drc_engine.cpp:591
 #, c-format
@@ -44260,7 +44260,7 @@ msgid "Checking %s solder mask expansion: %s."
 msgstr "Перевірка розширення маски паяння %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
 msgstr "Перевірка абсолютного зазору %s паяльної пасти: %s."
 
@@ -51579,9 +51579,8 @@ msgstr ""
 "не застосовуватимуться."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
-msgstr "Виберіть елементи для звіту про обмеження."
+msgstr "Виберіть один елемент для звіту про вирішення обмежень."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 #, c-format
