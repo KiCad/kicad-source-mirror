@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 22:37+0000\n"
+"PO-Revision-Date: 2025-11-03 22:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -2428,9 +2428,9 @@ msgstr "La cartella blocco progetto '%s' non può essere eliminata."
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "tipo via sconosciuto %d"
+msgstr "Tipo libreria sconosciuto %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
@@ -3011,9 +3011,8 @@ msgid "Timeout"
 msgstr "Tempo"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Stringa di connessione:"
+msgstr "Stringa di connessione"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -3032,9 +3031,8 @@ msgid "Unable to connect to database"
 msgstr "Nessuna connessione al database"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Errore file dati."
+msgstr "Errore database"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
@@ -4432,9 +4430,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Fattore di attenuazione modalità alto contrasto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
-#, fuzzy
 msgid "Scaling"
-msgstr "Scala:"
+msgstr "Scala"
 
 #: common/dialogs/panel_common_settings_base.cpp:314
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -5203,9 +5200,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Azione | Tasto predefinito | Descrizione"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "(la piazzola deve avere una dimensione positiva)"
+msgstr "La scala deve essere un numero positivo."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5288,19 +5284,16 @@ msgid "Convert to Greyscale"
 msgstr "Converti in scala di grigi"
 
 #: common/dialogs/panel_maintenance.cpp:88
-#, fuzzy
 msgid "File history cleared."
-msgstr "Dimensione cronologia file:"
+msgstr "Cronologia file cancellata."
 
 #: common/dialogs/panel_maintenance.cpp:111
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "Non mostrare più"
+msgstr "Reimposta messaggio \"Non mostrare più\"."
 
 #: common/dialogs/panel_maintenance.cpp:132
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "Reimposta ai predefiniti"
+msgstr "Reimposta ai predefiniti tutte le finestre."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -6011,9 +6004,8 @@ msgid "Rotation speed:"
 msgstr "Rotazione:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Direzione freccia:"
+msgstr "Inverti il senso di rotazione"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
 #, fuzzy
@@ -6074,9 +6066,8 @@ msgid "Start with the built-in KiCad libraries (recommended)"
 msgstr "Inizia con le librerie KiCad integrate (consigliato)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Importa impostazioni da una versione precedente in:"
+msgstr "Importa tabelle dalla versione precedente"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -6425,9 +6416,9 @@ msgid "Expecting '%s'"
 msgstr "Era atteso '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Era atteso '%s'"
+msgstr "Era atteso '%s'. Ottenuto '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -17432,6 +17423,8 @@ msgstr "Azione analisi-incrociata:"
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
 msgid "Temporarily flash the newly cross-probed selection 3 times"
 msgstr ""
+"Esegui temporaneamente il flashing della selezione appena sottoposta a "
+"sondaggio incrociato per 3 volte"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -53002,11 +52995,11 @@ msgstr "Compatta impronte"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:847
 msgid "Angle snap lines: 45°"
-msgstr ""
+msgstr "Angolo scatto linee: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:851
 msgid "Angle snap lines: 90°"
-msgstr ""
+msgstr "Angolo scatto linee: 90"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:865
 #, c-format
@@ -53185,7 +53178,7 @@ msgstr "Non sono state trovate aree regole da ripetere nel layout."
 #: pcbnew/tools/multichannel_tool.cpp:584
 #, c-format
 msgid "Rule Area topologies do not match: %s"
-msgstr ""
+msgstr "Le topologie dell'area regole non corrispondono: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:594
 #: pcbnew/tools/multichannel_tool.cpp:658
@@ -53197,7 +53190,7 @@ msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:615
 msgid "Target group does not have a group."
-msgstr ""
+msgstr "Il gruppo obiettivo non ha un gruppo."
 
 #: pcbnew/tools/multichannel_tool.cpp:632
 #: pcbnew/tools/multichannel_tool.cpp:691
@@ -53631,10 +53624,12 @@ msgstr "Rendi speculari gli elementi selezionati lungo l'asse X"
 #: pcbnew/tools/pcb_actions.cpp:705
 msgid "Swap nets between two selected pads and their connected copper"
 msgstr ""
+"Scambia le connessioni tra due piazzole selezionate e il loro rame connesso"
 
 #: pcbnew/tools/pcb_actions.cpp:712
 msgid "Swap nets between gates of a footprint and their connected copper"
 msgstr ""
+"Scambia le connessioni tra le porte di un'impronta e il loro rame connesso"
 
 #: pcbnew/tools/pcb_actions.cpp:720
 msgid "Pack and Move Footprints"
@@ -53707,7 +53702,7 @@ msgstr "Caricamento netclass..."
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Edit polygon vertices using a table"
-msgstr ""
+msgstr "Modifica i vertici del poligono utilizzando una tabella"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid ""
@@ -54241,7 +54236,7 @@ msgstr "Seleziona modello 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "Raccogli modelli 3D di impronte e incorporali nella scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Switch Track Width to Next"
@@ -55395,7 +55390,7 @@ msgstr "Incorpora modello"
 #: pcbnew/tools/pcb_control.cpp:2639
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d modelli 3D incorporati correttamente."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2506
 msgid "Resize Table Cells"
@@ -56592,11 +56587,11 @@ msgstr "File forature"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
-msgstr ""
+msgstr "Coord X"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:57
 msgid "Y coord"
-msgstr ""
+msgstr "Coord Y"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
 #, fuzzy
