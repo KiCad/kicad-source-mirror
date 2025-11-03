@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-03 22:51+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -46534,7 +46534,7 @@ msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen."
 #: pcbnew/exporters/step/step_pcb_model.cpp:2965
 msgid "Cannot use VRML models when exporting to non-mesh formats."
 msgstr ""
-"VRML-Modelle können beim Exportieren in Nicht-Netzformate nicht verwendet "
+"VRML-Modelle können nicht für den Export in Nicht-Netzformate verwendet "
 "werden."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2975
