@@ -113,14 +113,6 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     m_draggedLine      = m_world->AssembleLine( aSeg, &m_draggedSegmentIndex );
     m_lastDragSolution = m_draggedLine;
 
-    if ( m_world->CheckColliding( &m_draggedLine ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
-
-
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
     auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
 
@@ -156,13 +148,6 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
     m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
     m_mode = DM_ARC;
 
-    if ( m_world->CheckColliding( &m_draggedLine ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
-
     return true;
 }
 
@@ -173,13 +158,6 @@ bool DRAGGER::startDragVia( VIA* aVia )
     m_draggedVia = m_initialVia;
 
     m_mode = DM_VIA;
-
-    if ( m_world->CheckColliding( aVia ) )
-    {
-        // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode.
-        m_forceMarkObstaclesMode = true;
-    }
 
     return true;
 }
@@ -763,6 +741,7 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
 {
     m_mouseTrailTracer.AddTrailPoint( aP );
 
+    bool firstDrag = m_lastNode == nullptr;
     bool ret = false;
 
     if( m_freeAngleMode || m_forceMarkObstaclesMode )
@@ -786,8 +765,19 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     }
     else
     {
-        if( m_lastNode )
+        if( firstDrag )
         {
+            // First collision resolution failed, switch to highlight mode
+            m_forceMarkObstaclesMode = true;
+
+            ret = dragMarkObstacles( aP );
+
+            if( ret )
+                m_lastValidPoint = aP;
+        }
+        else if( m_lastNode )
+        {
+            // Restore last solution
             NODE* parent = m_lastNode->GetParent()->Branch();
             delete m_lastNode;
             m_lastNode = parent;
