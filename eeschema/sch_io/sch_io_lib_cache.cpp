@@ -30,6 +30,7 @@ SCH_IO_LIB_CACHE::SCH_IO_LIB_CACHE( const wxString& aFullPathAndFileName ) :
     m_modHash( 1 ),
     m_fileName( aFullPathAndFileName ),
     m_libFileName( aFullPathAndFileName ),
+    m_fileModTime( 0 ),
     m_isWritable( true ),
     m_isModified( false )
 {
@@ -72,14 +73,14 @@ long long SCH_IO_LIB_CACHE::GetLibModificationTime()
     if( !fn.IsDir() )
     {
         m_isWritable = fn.IsFileWritable();
+        return fn.GetModificationTime().GetValue().GetValue();
     }
     else
     {
         m_isWritable = fn.IsDirWritable();
         wildcard = wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
+        return TimestampDir( fn.GetPath(), wildcard );
     }
-
-    return TimestampDir( fn.GetPath(), wildcard );
 }
 
 
@@ -97,7 +98,7 @@ bool SCH_IO_LIB_CACHE::IsFileChanged() const
         return false;
 
     if( !fn.IsDir() && fn.IsFileReadable() )
-        return TimestampDir( fn.GetPath(), fn.GetFullName() ) != m_fileModTime;
+        return fn.GetModificationTime().GetValue().GetValue() != m_fileModTime;
 
     if( fn.IsDir() && fn.IsDirReadable() )
         return TimestampDir( fn.GetPath(),

@@ -1603,11 +1603,16 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
 
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
+        bool isNewCache = false;
+
+        if( !m_cache )
+            isNewCache = true;
+
         // a spectacular episode in memory management:
         delete m_cache;
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryFileName );
 
-        if( !isBuffering( aProperties ) )
+        if( !isBuffering( aProperties ) || isNewCache )
             m_cache->Load();
     }
 }
