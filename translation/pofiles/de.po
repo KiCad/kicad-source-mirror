@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 05:51+0000\n"
+"PO-Revision-Date: 2025-11-04 10:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -24685,12 +24685,12 @@ msgstr "<ESC> drücken, um den Zeichenvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:829
 msgid "Press <ESC> to cancel drag."
-msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
+msgstr "<ESC> drücken, um Ziehen abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:831
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
-msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
+msgstr "<ESC> drücken, um Verschieben abzubrechen."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -42294,9 +42294,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Prüfe Freiräume von Kupfer-Grafikelementen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Prüfe Freiräume von Kupfer-Grafikelementen ..."
+msgstr "Prüfe Freiräume von Kupfergrafik-Elementen zu Löchern ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
