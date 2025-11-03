@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-01 05:27+0000\n"
+"PO-Revision-Date: 2025-11-03 05:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -881,7 +881,7 @@ msgstr "模型边框"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Values"
-msgstr "值"
+msgstr "数值"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:121
 #: pcbnew/widgets/appearance_controls.cpp:339
@@ -2510,7 +2510,7 @@ msgstr "饱和度:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:113
 msgid "Value:"
-msgstr "值:"
+msgstr "数值:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:95
