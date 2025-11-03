@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 22:36+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-11-03 22:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -12124,7 +12124,7 @@ msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner \"%s\" in Haupschaltplanblatt kann nicht zu nicht-"
+"Hierarchischer Bezeichner \"%s\" in Hauptschaltplanblatt kann nicht zu nicht-"
 "vorhandenem übergeordneten Schaltplanblatt verbunden werden"
 
 #: eeschema/connection_graph.cpp:4318
@@ -13385,7 +13385,6 @@ msgid "Show field name"
 msgstr "Feldname anzeigen"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "Feldnamen zusätzlich zu seinem Wert anzeigen"
 
@@ -19326,7 +19325,6 @@ msgstr "Als lokales Spannungssymbol definieren"
 # For dialog with options about polar coordinates...
 # 2) einblenden
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Pin Display"
 msgstr "Pin-Darstellung"
 
@@ -20774,22 +20772,22 @@ msgid "Save Anyway"
 msgstr "Trotzdem speichern"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
 msgstr "Symbolbibliothek-Datei \"%s\" existiert bereits."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library path '%s' already exists."
 msgstr "Symbolbibliothek-Pfad \"%s\" existiert bereits."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' cannot be deleted."
 msgstr "Symbolbibliothek-Datei \"%s\" kann nicht gelöscht werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Symbolbibliothek-Ordner \"%s\" kann nicht gelöscht werden."
 
@@ -20801,7 +20799,7 @@ msgid "Unable to read file '%s'"
 msgstr "Kann Datei \"%s\" nicht lesen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create symbol library path '%s'."
 msgstr "Der Pfad \"%s\" für die Symbolbibliothek kann nicht erstellt werden."
 
@@ -24273,7 +24271,6 @@ msgid "Properties..."
 msgstr "Eigenschaften..."
 
 #: eeschema/tools/sch_actions.cpp:166 pcbnew/tools/pcb_actions.cpp:550
-#, fuzzy
 msgid "Edit properties of design block"
 msgstr "Designblock-Eigenschaften bearbeiten"
 
@@ -26183,20 +26180,19 @@ msgstr "Verbindung zerschneiden"
 #: eeschema/tools/sch_move_tool.cpp:849
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
-msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
+msgstr "<ESC> drücken, um Verschieben abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:850
 msgid "Press <ESC> to cancel drag."
-msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
+msgstr "<ESC> drücken, um Ziehen abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "<ESC> drücken, um den Abruchvorgang abzubrechen."
+msgstr "<ESC> drücken, um Zerteilen abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:852
 msgid "Press <ESC> to cancel slice."
-msgstr "<ESC> drücken, um Schneidevorgang abzubrechen."
+msgstr "<ESC> drücken, um Schneiden abzubrechen."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -26413,23 +26409,19 @@ msgstr "Seitenname ändern"
 #: eeschema/widgets/hierarchy_pane.cpp:518
 #: eeschema/widgets/hierarchy_pane.cpp:596
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Delete Top-Level Sheet"
 msgstr "Top-Level Schaltplanblatt löschen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
-#, fuzzy
 msgid "Remove this top-level sheet from the project"
 msgstr "Entfernt dieses Top-Level Schaltplanblatt aus dem Projekt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
-#, fuzzy
 msgid "New Top-Level Sheet"
 msgstr "Neues Top-Level Schaltplanblatt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
-#, fuzzy
 msgid "Create a new top-level sheet"
 msgstr "Ein neues Top-Level Schaltplanblatt erstellen"
 
@@ -26444,12 +26436,11 @@ msgid "Untitled"
 msgstr "Unbenannt"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
-#, fuzzy
 msgid "Add new top-level sheet"
 msgstr "Neues Top-Level Schaltplanblatt hinzufügen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:593
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete top-level sheet '%s'?\n"
 "\n"
@@ -26460,12 +26451,10 @@ msgstr ""
 "Dies kann nicht rückgängig gemacht werden."
 
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Cannot delete the last top-level sheet."
 msgstr "Das letzte Top-Level Schaltplanblatt kann nicht gelöscht werden."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
-#, fuzzy
 msgid "Delete top-level sheet"
 msgstr "Top-Level Schaltplanblatt löschen"
 
@@ -29936,7 +29925,7 @@ msgid "PCM Updates Available"
 msgstr "PCM-Aktualisierungen verfügbar"
 
 #: kicad/kicad_manager_frame.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) available"
 msgstr "%d Paketaktualisierung(en) verfügbar"
 
@@ -32032,7 +32021,6 @@ msgid "Overvoltage category:"
 msgstr "Überspannungskategorie:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -44550,7 +44538,7 @@ msgid "tuning profile '%s'"
 msgstr "Abstimmungsprofil \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
 msgstr "Sperrbereich von %s"
 
@@ -44559,7 +44547,7 @@ msgid "keepout area"
 msgstr "Sperrfläche"
 
 #: pcbnew/drc/drc_engine.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
 msgstr "Sperrbereich \"%s\" von %s"
 
@@ -44696,7 +44684,7 @@ msgid "Checking %s solder mask expansion: %s."
 msgstr "Lötstoppmaskenerweiterung %s wird geprüft: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
 msgstr "Prüfe %s absoluten Lötpastenfreiraum: %s."
 
@@ -52085,11 +52073,10 @@ msgstr ""
 "\"physical_clearance\"-Beschränkungen angewendet."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
 msgstr ""
-"Wählen Sie ein einzelnes Element für einen Bericht zur Ermittlung von "
-"Einschränkungen aus."
+"Einzelnes Element für einen Bericht zur Ermittlung von Einschränkungen "
+"auswählen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 #, c-format
