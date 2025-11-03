@@ -736,6 +736,7 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
 {
     m_mouseTrailTracer.AddTrailPoint( aP );
 
+    bool firstDrag = m_lastNode == nullptr;
     bool ret = false;
 
     if( m_freeAngleMode || m_forceMarkObstaclesMode )
@@ -759,8 +760,19 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     }
     else
     {
-        if( m_lastNode )
+        if( firstDrag )
         {
+            // First collision resolution failed, switch to highlight mode
+            m_forceMarkObstaclesMode = true;
+
+            ret = dragMarkObstacles( aP );
+
+            if( ret )
+                m_lastValidPoint = aP;
+        }
+        else if( m_lastNode )
+        {
+            // Restore last solution
             NODE* parent = m_lastNode->GetParent()->Branch();
             delete m_lastNode;
             m_lastNode = parent;
