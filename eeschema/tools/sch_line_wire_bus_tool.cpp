@@ -128,6 +128,8 @@ private:
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
         }
 
+        std::unordered_map<wxString, ACTION_MENU*> diff_busses{};
+
         for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
@@ -135,14 +137,61 @@ private:
 
             if( member->Type() == CONNECTION_TYPE::BUS )
             {
-                ACTION_MENU* submenu = new ACTION_MENU( true, m_tool );
-                AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
+                ACTION_MENU* submenu = nullptr;
+                // If we are building the menu for suffixed bus vectors, we need to do some more massaging
+                if( ( name.ends_with( '+' ) || name.ends_with( '-' ) || name.ends_with( 'P' ) || name.ends_with( 'N' ) )
+                    && member->Members().size() > 0 )
+                {
+                    wxString submenu_name = name.substr( 0, name.length() - 1 );
+                    auto     bus_submenu = diff_busses.find( submenu_name );
+
+                    if( bus_submenu == diff_busses.end() )
+                    {
+                        submenu = new ACTION_MENU( true, m_tool );
+                        diff_busses.emplace( submenu_name, submenu );
+                        AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( submenu_name ), submenu_name );
+                    }
+                    else
+                    {
+                        submenu = bus_submenu->second;
+                    }
+                }
+                else
+                {
+                    // Otherwise we can set the submenu up like normal
+                    submenu = new ACTION_MENU( true, m_tool );
+                    AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
+                }
 
                 for( const std::shared_ptr<SCH_CONNECTION>& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
                     name = sub_member->FullLocalName();
-                    submenu->Append( id, SCH_CONNECTION::PrintBusForUI( name ), name );
+
+                    if( ( name.ends_with( '+' ) || name.ends_with( '-' ) || name.ends_with( 'P' )
+                          || name.ends_with( 'N' ) ) )
+                    {
+                        wxString submenu_name = name.substr( 0, name.length() - 1 );
+                        auto     bus_submenu = diff_busses.find( submenu_name );
+
+                        ACTION_MENU* diff_submenu = nullptr;
+                        if( bus_submenu == diff_busses.end() )
+                        {
+                            diff_submenu = new ACTION_MENU( true, m_tool );
+                            diff_busses.emplace( submenu_name, diff_submenu );
+                            submenu->AppendSubMenu( diff_submenu, SCH_CONNECTION::PrintBusForUI( submenu_name ),
+                                                    submenu_name );
+                        }
+                        else
+                        {
+                            diff_submenu = bus_submenu->second;
+                        }
+                        diff_submenu->Append( id, SCH_CONNECTION::PrintBusForUI( name ), name );
+                    }
+                    else
+                    {
+                        submenu->Append( id, SCH_CONNECTION::PrintBusForUI( name ), name );
+                    }
                 }
             }
             else
