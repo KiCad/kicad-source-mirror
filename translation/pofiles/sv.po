@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-31 11:03+0000\n"
+"PO-Revision-Date: 2025-11-03 22:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7637,7 +7637,6 @@ msgid "Failed to initialize Git repository: %s"
 msgstr "Lyckades inte initialisera Git-förvar: %s"
 
 #: common/git/libgit_backend.cpp:595
-#, fuzzy
 msgid "No repository available to set up remote"
 msgstr "Inget mjukvaruförråd tillgängligt för att upprätta fjärranslutning"
 
@@ -9028,12 +9027,10 @@ msgstr ""
 "överlämningen att raderas."
 
 #: common/local_history.cpp:1806
-#, fuzzy
 msgid "Select snapshot"
 msgstr "Välj ögonblicksbild"
 
 #: common/local_history.cpp:1806 kicad/kicad_manager_frame.cpp:856
-#, fuzzy
 msgid "Restore"
 msgstr "Återställ"
 
@@ -10025,7 +10022,6 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "Behåll bågens radie och centrum, justera vinkeln"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr "Byt bågredigeringsläge till att behålla radie när slutpunkter flyttas"
 
@@ -13266,7 +13262,6 @@ msgid "Show field name"
 msgstr "Visa fältnamn"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "Visa fältets namn i tillägg till dess värde"
 
@@ -14680,7 +14675,6 @@ msgstr ""
 "och lödytor med samma nummer kommer att anses vara internt sammankopplade."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
-#, fuzzy
 msgid "Explicit jumper pin groups:"
 msgstr "Explicita grupper av byglade lödytor:"
 
@@ -20591,24 +20585,24 @@ msgid "Save Anyway"
 msgstr "Spara ändå"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
-msgstr "Biblioteket '%s' finns redan."
+msgstr "Symbolbiblioteksfil '%s' finns redan."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library path '%s' already exists."
-msgstr "Biblioteket '%s' finns redan."
+msgstr "Symbolbibliotekssökväg '%s' finns redan."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' cannot be deleted."
-msgstr "biblioteket '%s' kan inte raderas."
+msgstr "Symbolbiblioteksfil '%s' kan inte raderas."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
-msgstr "biblioteket '%s' kan inte raderas."
+msgstr "Symbolbibliotekskatalog '%s' kan inte raderas."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:111
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:359
@@ -20618,14 +20612,14 @@ msgid "Unable to read file '%s'"
 msgstr "Kunde inte läsa fil: '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create symbol library path '%s'."
-msgstr "Kan inte skapa global sökväg '%s' för bibliotekstabellen."
+msgstr "Kan inte skapa symbolbibliotekssökväg '%s'."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Inga relaterade symboler hittades i bibliotek '%s'."
+msgstr "Ingen överordnad symbol för utökad symbol %s hittades i bibliotek '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
@@ -23993,13 +23987,12 @@ msgid "Select/Expand Connection"
 msgstr "Välj / Expandera anslutning"
 
 #: eeschema/tools/sch_actions.cpp:112
-#, fuzzy
 msgid ""
 "Selects a connection or expands an existing selection to pins, symbols, or "
 "entire connections"
 msgstr ""
-"Väljer en anslutning eller expanderar ett befintligt val till korsningar, "
-"lödytor eller hela anslutningar"
+"Väljer en anslutning eller expanderar ett befintligt val till stift, "
+"symboler eller hela anslutningar"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:508
 msgid "Show/hide design blocks library"
@@ -24051,7 +24044,6 @@ msgid "Properties..."
 msgstr "Egenskaper..."
 
 #: eeschema/tools/sch_actions.cpp:166 pcbnew/tools/pcb_actions.cpp:550
-#, fuzzy
 msgid "Edit properties of design block"
 msgstr "Redigera egenskaper för designblock"
 
@@ -29645,7 +29637,7 @@ msgid "PCM Updates Available"
 msgstr "Uppdateringar för insticksprogram"
 
 #: kicad/kicad_manager_frame.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) available"
 msgstr "%d paketuppdatering(ar) tillgänglig(a)"
 
@@ -31728,7 +31720,6 @@ msgid "Overvoltage category:"
 msgstr "Överspänningskategori:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -31743,18 +31734,18 @@ msgid ""
 "OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
 "primary overcurrent protection devices)"
 msgstr ""
-"OVC I: Utrustning utan direkt anslutning till nätspänning\n"
-"\n"
+"OVC I: Utrustning utan direkt anslutning till nätspänning \n"
+" \n"
 "OVC II: Energiförbrukande utrustning som skall strömförsörjas från den fasta "
 "installationen. (t.ex. apparater, portabla elverktyg, hushållsförbrukare). "
-"OVCIII tillämpas om det finns krav på tillförlitlighet och tillgänglighet.\n"
-"\n"
+"OVCIII tillämpas om det finns krav på tillförlitlighet och tillgänglighet. \n"
+" \n"
 "OVC III :  Utrustning i den fasta installationen med krav på "
-"tillförlitlighet och tillgänglighet. (t.ex. elektriska brytare, utrustning "
-"för industriell användning)\n"
-"\n"
-"OVC IV: Utrustning vid installationens källpunkt (t.ex. elmätare, primära "
-"överströmsskydd)"
+"tillförlitlighet och tillgänglighet. "
+"(t.ex. elektriska brytare, utrustning för industriell användning) \n"
+" \n"
+"OVC IV: Utrustning vid installationens källpunkt "
+"(t.ex. elmätare, primära överströmsskydd)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -32444,9 +32435,8 @@ msgid "Remove Regulator"
 msgstr "Ta bort regulatorn"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:401
-#, fuzzy
 msgid "Vout must be greater than Vref"
-msgstr "Vout måste vara större än vref"
+msgstr "Vout måste vara större än Vref"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:407
 msgid "Vref set to 0 !"
@@ -44083,18 +44073,18 @@ msgid "tuning profile '%s'"
 msgstr "längdjusteringsprofil '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
-msgstr "Spärrzon '%s'"
+msgstr "spärrzon för %s"
 
 #: pcbnew/drc/drc_engine.cpp:577
 msgid "keepout area"
 msgstr "spärrzon"
 
 #: pcbnew/drc/drc_engine.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
-msgstr "Spärrzon '%s'"
+msgstr "spärrzon '%s' för %s"
 
 #: pcbnew/drc/drc_engine.cpp:591
 #, c-format
@@ -44229,7 +44219,7 @@ msgid "Checking %s solder mask expansion: %s."
 msgstr "Kontrollerar %s lödmaskmarginal: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
 msgstr "Kontrollerar lodpastans absoluta frigång för %s: %s."
 
@@ -51527,9 +51517,8 @@ msgstr ""
 "kommer att appliceras."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
-msgstr "Välj ett objekt för en begränsningsupplösningsrapport."
+msgstr "Välj ett objekt för en rapport över fastställda begränsningsar."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 #, c-format
