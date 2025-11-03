@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-03 22:51+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -30107,7 +30107,7 @@ msgstr "パッケージ %s をアンインストールしました"
 #: kicad/pcm/pcm_task_manager.cpp:661
 #, c-format
 msgid "%d out of %d operations failed."
-msgstr "%d/%d 件の操作に失敗しました。"
+msgstr "%d 件(%d 件適用中)の操作が失敗しました。"
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 msgid "All operations completed successfully."
@@ -30116,7 +30116,7 @@ msgstr "すべての操作が正常に完了しました。"
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr "%d 件中 %d 件の操作が初期化されましたが、成功しませんでした。"
+msgstr "%d 件(%d 件適用中)の初期化が、成功しませんでした。"
 
 #: kicad/project_template.cpp:54
 #, c-format
