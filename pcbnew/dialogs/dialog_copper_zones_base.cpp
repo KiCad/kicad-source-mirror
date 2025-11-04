@@ -5,6 +5,9 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
+#include "widgets/wx_grid.h"
+
 #include "dialog_copper_zones_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -20,374 +23,387 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_copperZoneInfo->SetEffectDuration( 500 );
 	m_MainBoxSizer->Add( m_copperZoneInfo, 0, wxBOTTOM|wxEXPAND, 5 );
 
-	wxBoxSizer* m_OptionsBoxSizer;
-	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxVERTICAL );
+	wxBoxSizer* bSizerLeft;
+	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 
-	sbSizer2->SetMinSize( wxSize( 180,-1 ) );
-	m_layers = new wxDataViewListCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxBORDER_SIMPLE );
-	m_layers->SetMinSize( wxSize( 120,-1 ) );
-
-	sbSizer2->Add( m_layers, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayerSelection->Wrap( -1 );
+	bSizerLeft->Add( m_staticTextLayerSelection, 0, wxLEFT|wxRIGHT|wxTOP, 7 );
 
 
-	m_OptionsBoxSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( 0, 2, 0, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net") ), wxVERTICAL );
+	m_layers = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER|wxBORDER_SIMPLE );
+	m_layers->SetMinSize( wxSize( 180,-1 ) );
 
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bFilteringSizer;
-	bFilteringSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_ShowNetNameFilter = new wxTextCtrl( sbSizer3->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_ShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nOnly net names matching this pattern are displayed.") );
-
-	bFilteringSizer->Add( m_ShowNetNameFilter, 5, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	bSizerLeft->Add( m_layers, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bFilteringSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerLeft, 0, wxEXPAND, 5 );
 
-	m_hideAutoGenNetNamesOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide automatically generated net names"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hideAutoGenNetNamesOpt->SetValue(true);
-	bFilteringSizer->Add( m_hideAutoGenNetNamesOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxBoxSizer* bRightCol;
+	bRightCol = new wxBoxSizer( wxVERTICAL );
 
+	wxGridBagSizer* gbSizer8;
+	gbSizer8 = new wxGridBagSizer( 3, 5 );
+	gbSizer8->SetFlexibleDirection( wxBOTH );
+	gbSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	bFilteringSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_sortByPadsOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Sort nets by pad count"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFilteringSizer->Add( m_sortByPadsOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	bSizer8->Add( bFilteringSizer, 1, wxEXPAND, 20 );
-
-
-	sbSizer3->Add( bSizer8, 1, wxEXPAND, 5 );
-
-	m_ListNetNameSelection = new wxListBox( sbSizer3->GetStaticBox(), ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	sbSizer3->Add( m_ListNetNameSelection, 8, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-
-	m_OptionsBoxSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizerMiddle;
-	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bLeftColumn;
-	bLeftColumn = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbGeneral;
-	sbGeneral = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General") ), wxHORIZONTAL );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_zoneNameLabel = new wxStaticText( sbGeneral->GetStaticBox(), wxID_ANY, _("Zone name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_zoneNameLabel = new wxStaticText( this, wxID_ANY, _("Zone name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_zoneNameLabel->Wrap( -1 );
-	m_zoneNameLabel->SetToolTip( _("A unique name for this zone to identify it for DRC") );
+	gbSizer8->Add( m_zoneNameLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	fgSizer1->Add( m_zoneNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_tcZoneName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer8->Add( m_tcZoneName, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_tcZoneName = new wxTextCtrl( sbGeneral->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_tcZoneName, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netLabel->Wrap( -1 );
+	gbSizer8->Add( m_netLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextPriorityLevel = new wxStaticText( sbGeneral->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPriorityLevel->Wrap( -1 );
-	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside another zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
-
-	fgSizer1->Add( m_staticTextPriorityLevel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_PriorityLevelCtrl = new wxSpinCtrl( sbGeneral->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 2147483647, 0 );
-	fgSizer1->Add( m_PriorityLevelCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer8->Add( m_netSelector, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	sbGeneral->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM, 5 );
+	gbSizer8->AddGrowableCol( 1 );
 
+	bRightCol->Add( gbSizer8, 0, wxEXPAND|wxALL, 5 );
 
-	bLeftColumn->Add( sbGeneral, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightCol->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
 
-	wxStaticBoxSizer* m_ExportableSetupSizer;
-	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Shape") ), wxHORIZONTAL );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearancesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bClearancesSizer;
+	bClearancesSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 5, 5 );
-	gbSizer1->SetFlexibleDirection( wxBOTH );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizerClearances;
+	gbSizerClearances = new wxGridBagSizer( 1, 1 );
+	gbSizerClearances->SetFlexibleDirection( wxBOTH );
+	gbSizerClearances->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizerClearances->SetEmptyCellSize( wxSize( -1,10 ) );
 
-	m_cbLocked = new wxCheckBox( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_cbLocked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT, 5 );
-
-	m_staticTextStyle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextStyle->Wrap( -1 );
-	gbSizer1->Add( m_staticTextStyle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxString m_OutlineDisplayCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
-	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
-	m_OutlineDisplayCtrl = new wxChoice( m_ExportableSetupSizer->GetStaticBox(), ID_M_OUTLINEAPPEARANCECTRL, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
-	m_OutlineDisplayCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_stBorderHatchPitchText = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline hatch pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stBorderHatchPitchText->Wrap( -1 );
-	gbSizer1->Add( m_stBorderHatchPitchText, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_outlineHatchPitchCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_outlineHatchPitchCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_outlineHatchUnits = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_outlineHatchUnits->Wrap( -1 );
-	gbSizer1->Add( m_outlineHatchUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_staticline4 = new wxStaticLine( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	gbSizer1->Add( m_staticline4, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxEXPAND | wxALL, 5 );
-
-	m_staticTextSmoothing = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSmoothing->Wrap( -1 );
-	gbSizer1->Add( m_staticTextSmoothing, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
-	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
-	m_cornerSmoothingChoice = new wxChoice( m_ExportableSetupSizer->GetStaticBox(), ID_CORNER_SMOOTHING, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
-	m_cornerSmoothingChoice->SetSelection( 1 );
-	gbSizer1->Add( m_cornerSmoothingChoice, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_cornerRadiusLabel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Chamfer distance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cornerRadiusLabel->Wrap( -1 );
-	gbSizer1->Add( m_cornerRadiusLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_cornerRadiusCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_cornerRadiusCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_cornerRadiusUnits = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cornerRadiusUnits->Wrap( -1 );
-	gbSizer1->Add( m_cornerRadiusUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	gbSizer1->AddGrowableCol( 0 );
-
-	m_ExportableSetupSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
-
-
-	bLeftColumn->Add( m_ExportableSetupSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
-
-
-	bSizerMiddle->Add( bLeftColumn, 0, wxEXPAND, 5 );
-
-	wxBoxSizer* bMiddleColumn;
-	bMiddleColumn = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Electrical Properties") ), wxVERTICAL );
-
-	wxGridBagSizer* gbSizerSettings;
-	gbSizerSettings = new wxGridBagSizer( 1, 1 );
-	gbSizerSettings->SetFlexibleDirection( wxBOTH );
-	gbSizerSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_clearanceLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearanceLabel = new wxStaticText( m_clearancesPanel, wxID_ANY, _("Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearanceLabel->Wrap( -1 );
 	m_clearanceLabel->SetToolTip( _("Copper clearance for this zone (set to 0 to use the netclass clearance)") );
 
-	gbSizerSettings->Add( m_clearanceLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerClearances->Add( m_clearanceLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_clearanceCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerSettings->Add( m_clearanceCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	m_clearanceCtrl = new wxTextCtrl( m_clearancesPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerClearances->Add( m_clearanceCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 4 );
 
-	m_clearanceUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearanceUnits = new wxStaticText( m_clearancesPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearanceUnits->Wrap( -1 );
-	gbSizerSettings->Add( m_clearanceUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerClearances->Add( m_clearanceUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_minWidthLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minWidthLabel = new wxStaticText( m_clearancesPanel, wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minWidthLabel->Wrap( -1 );
 	m_minWidthLabel->SetToolTip( _("Minimum thickness of filled areas.") );
 
-	gbSizerSettings->Add( m_minWidthLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerClearances->Add( m_minWidthLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_minWidthCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerSettings->Add( m_minWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	m_minWidthCtrl = new wxTextCtrl( m_clearancesPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerClearances->Add( m_minWidthCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
-	m_minWidthUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minWidthUnits = new wxStaticText( m_clearancesPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minWidthUnits->Wrap( -1 );
-	gbSizerSettings->Add( m_minWidthUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerClearances->Add( m_minWidthUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticline2 = new wxStaticLine( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	gbSizerSettings->Add( m_staticline2, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_connectionLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Pad connections:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_connectionLabel = new wxStaticText( m_clearancesPanel, wxID_ANY, _("Pad connections:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_connectionLabel->Wrap( -1 );
 	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
 
-	gbSizerSettings->Add( m_connectionLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	gbSizerClearances->Add( m_connectionLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal reliefs"), _("Reliefs for PTH"), _("None") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
-	m_PadInZoneOpt = new wxChoice( sbSizer5->GetStaticBox(), ID_M_PADINZONEOPT, wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 0 );
+	m_PadInZoneOpt = new wxChoice( m_clearancesPanel, ID_M_PADINZONEOPT, wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 0 );
 	m_PadInZoneOpt->SetSelection( 0 );
-	gbSizerSettings->Add( m_PadInZoneOpt, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerClearances->Add( m_PadInZoneOpt, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_antipadLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Thermal relief gap:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_antipadLabel = new wxStaticText( m_clearancesPanel, wxID_ANY, _("Thermal relief gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_antipadLabel->Wrap( -1 );
 	m_antipadLabel->SetToolTip( _("The distance that will be kept clear between the filled area of the zone and a pad connected by thermal relief spokes.") );
 
-	gbSizerSettings->Add( m_antipadLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 4 );
+	gbSizerClearances->Add( m_antipadLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 4 );
 
-	m_antipadCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_antipadCtrl = new wxTextCtrl( m_clearancesPanel, wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_antipadCtrl->SetToolTip( _("Clearance between pads in the same net and filled areas.") );
 
-	gbSizerSettings->Add( m_antipadCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 4 );
+	gbSizerClearances->Add( m_antipadCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 4 );
 
-	m_antipadUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_antipadUnits = new wxStaticText( m_clearancesPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_antipadUnits->Wrap( -1 );
-	gbSizerSettings->Add( m_antipadUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	gbSizerClearances->Add( m_antipadUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_spokeWidthLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Thermal spoke width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeWidthLabel = new wxStaticText( m_clearancesPanel, wxID_ANY, _("Thermal spoke width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spokeWidthLabel->Wrap( -1 );
-	gbSizerSettings->Add( m_spokeWidthLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 4 );
+	gbSizerClearances->Add( m_spokeWidthLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 4 );
 
-	m_spokeWidthCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeWidthCtrl = new wxTextCtrl( m_clearancesPanel, wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_spokeWidthCtrl->SetToolTip( _("Width of copper in thermal reliefs.") );
 
-	gbSizerSettings->Add( m_spokeWidthCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 4 );
+	gbSizerClearances->Add( m_spokeWidthCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 4 );
 
-	m_spokeWidthUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_spokeWidthUnits = new wxStaticText( m_clearancesPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spokeWidthUnits->Wrap( -1 );
-	gbSizerSettings->Add( m_spokeWidthUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerClearances->Add( m_spokeWidthUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	gbSizerSettings->AddGrowableCol( 1 );
+	gbSizerClearances->AddGrowableCol( 2 );
 
-	sbSizer5->Add( gbSizerSettings, 0, wxEXPAND, 5 );
-
-
-	bMiddleColumn->Add( sbSizer5, 1, wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bClearancesSizer->Add( gbSizerClearances, 0, wxALL, 5 );
 
 
-	bSizerMiddle->Add( bMiddleColumn, 1, wxEXPAND, 5 );
+	m_clearancesPanel->SetSizer( bClearancesSizer );
+	m_clearancesPanel->Layout();
+	bClearancesSizer->Fit( m_clearancesPanel );
+	m_notebook->AddPage( m_clearancesPanel, _("Clearances && Pad Connections"), true );
+	m_displayOverridesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bDisplayOverridesSizer;
+	bDisplayOverridesSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerZoneStyle;
-	sbSizerZoneStyle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill") ), wxVERTICAL );
+	wxGridBagSizer* gbSizerDisplayOverrides;
+	gbSizerDisplayOverrides = new wxGridBagSizer( 5, 5 );
+	gbSizerDisplayOverrides->SetFlexibleDirection( wxBOTH );
+	gbSizerDisplayOverrides->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxGridBagSizer* gbSizer3;
-	gbSizer3 = new wxGridBagSizer( 0, 0 );
-	gbSizer3->SetFlexibleDirection( wxBOTH );
-	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer3->SetEmptyCellSize( wxSize( -1,10 ) );
+	m_staticTextStyle = new wxStaticText( m_displayOverridesPanel, wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStyle->Wrap( -1 );
+	gbSizerDisplayOverrides->Add( m_staticTextStyle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
-	m_staticTextGridFillType = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Fill type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGridFillType->Wrap( -1 );
-	gbSizer3->Add( m_staticTextGridFillType, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	wxString m_OutlineDisplayCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
+	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
+	m_OutlineDisplayCtrl = new wxChoice( m_displayOverridesPanel, ID_M_OUTLINEAPPEARANCECTRL, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
+	m_OutlineDisplayCtrl->SetSelection( 0 );
+	gbSizerDisplayOverrides->Add( m_OutlineDisplayCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	wxString m_GridStyleCtrlChoices[] = { _("Solid fill"), _("Hatch pattern") };
-	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
-	m_GridStyleCtrl = new wxChoice( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
-	m_GridStyleCtrl->SetSelection( 0 );
-	gbSizer3->Add( m_GridStyleCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_stBorderHatchPitchText = new wxStaticText( m_displayOverridesPanel, wxID_ANY, _("Outline hatch pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stBorderHatchPitchText->Wrap( -1 );
+	gbSizerDisplayOverrides->Add( m_stBorderHatchPitchText, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_staticTextGrindOrient = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outlineHatchPitchCtrl = new wxTextCtrl( m_displayOverridesPanel, ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerDisplayOverrides->Add( m_outlineHatchPitchCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_outlineHatchUnits = new wxStaticText( m_displayOverridesPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outlineHatchUnits->Wrap( -1 );
+	gbSizerDisplayOverrides->Add( m_outlineHatchUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	gbSizerDisplayOverrides->AddGrowableCol( 2 );
+
+	bDisplayOverridesSizer->Add( gbSizerDisplayOverrides, 0, wxALL, 5 );
+
+
+	m_displayOverridesPanel->SetSizer( bDisplayOverridesSizer );
+	m_displayOverridesPanel->Layout();
+	bDisplayOverridesSizer->Fit( m_displayOverridesPanel );
+	m_notebook->AddPage( m_displayOverridesPanel, _("Display Overrides"), false );
+	m_hatchedFillPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bHatchedFillSizer;
+	bHatchedFillSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	wxGridBagSizer* gbSizerHatchedFill;
+	gbSizerHatchedFill = new wxGridBagSizer( 0, 0 );
+	gbSizerHatchedFill->SetFlexibleDirection( wxBOTH );
+	gbSizerHatchedFill->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizerHatchedFill->SetEmptyCellSize( wxSize( -1,10 ) );
+
+	m_cbHatched = new wxCheckBox( m_hatchedFillPanel, wxID_ANY, _("Hatched fill"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerHatchedFill->Add( m_cbHatched, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_staticTextGrindOrient = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrindOrient->Wrap( -1 );
-	gbSizer3->Add( m_staticTextGrindOrient, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	gbSizerHatchedFill->Add( m_staticTextGrindOrient, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
-	m_tcGridStyleOrientation = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer3->Add( m_tcGridStyleOrientation, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_tcGridStyleOrientation = new wxTextCtrl( m_hatchedFillPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerHatchedFill->Add( m_tcGridStyleOrientation, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_staticTextRotUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotUnits = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotUnits->Wrap( -1 );
-	gbSizer3->Add( m_staticTextRotUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerHatchedFill->Add( m_staticTextRotUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextStyleThickness = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Hatch width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStyleThickness = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Hatch width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyleThickness->Wrap( -1 );
-	gbSizer3->Add( m_staticTextStyleThickness, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerHatchedFill->Add( m_staticTextStyleThickness, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_tcGridStyleThickness = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer3->Add( m_tcGridStyleThickness, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_tcGridStyleThickness = new wxTextCtrl( m_hatchedFillPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerHatchedFill->Add( m_tcGridStyleThickness, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_GridStyleThicknessUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GridStyleThicknessUnits = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GridStyleThicknessUnits->Wrap( -1 );
-	gbSizer3->Add( m_GridStyleThicknessUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerHatchedFill->Add( m_GridStyleThicknessUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextGridGap = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Hatch gap:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGridGap = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Hatch gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridGap->Wrap( -1 );
-	gbSizer3->Add( m_staticTextGridGap, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerHatchedFill->Add( m_staticTextGridGap, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_tcGridStyleGap = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer3->Add( m_tcGridStyleGap, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_tcGridStyleGap = new wxTextCtrl( m_hatchedFillPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerHatchedFill->Add( m_tcGridStyleGap, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_GridStyleGapUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GridStyleGapUnits = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_GridStyleGapUnits->Wrap( -1 );
-	gbSizer3->Add( m_GridStyleGapUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerHatchedFill->Add( m_GridStyleGapUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextGridSmoothingLevel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Smoothing effort:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGridSmoothingLevel = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Smoothing effort:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridSmoothingLevel->Wrap( -1 );
 	m_staticTextGridSmoothingLevel->SetToolTip( _("Value of smoothing effort\n0 = no smoothing\n1 = chamfer\n2 = round corners\n3 = round corners (finer shape)") );
 
-	gbSizer3->Add( m_staticTextGridSmoothingLevel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerHatchedFill->Add( m_staticTextGridSmoothingLevel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_spinCtrlSmoothLevel = new wxSpinCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 3, 0 );
-	gbSizer3->Add( m_spinCtrlSmoothLevel, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_spinCtrlSmoothLevel = new wxSpinCtrl( m_hatchedFillPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 3, 0 );
+	gbSizerHatchedFill->Add( m_spinCtrlSmoothLevel, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_staticTextGridSmootingVal = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Smoothing amount:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGridSmootingVal = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Smoothing amount:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridSmootingVal->Wrap( -1 );
 	m_staticTextGridSmootingVal->SetToolTip( _("Ratio between smoothed corners size and the gap between lines\n0 = no smoothing\n1.0 = max radius/chamfer size (half gap value)") );
 
-	gbSizer3->Add( m_staticTextGridSmootingVal, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerHatchedFill->Add( m_staticTextGridSmootingVal, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_spinCtrlSmoothValue = new wxSpinCtrlDouble( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.1, 0.1 );
+	m_spinCtrlSmoothValue = new wxSpinCtrlDouble( m_hatchedFillPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.1, 0.1 );
 	m_spinCtrlSmoothValue->SetDigits( 2 );
-	gbSizer3->Add( m_spinCtrlSmoothValue, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizerHatchedFill->Add( m_spinCtrlSmoothValue, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_staticline5 = new wxStaticLine( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	gbSizer3->Add( m_staticline5, wxGBPosition( 6, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_staticText40 = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerHatchedFill->AddGrowableCol( 2 );
+
+	bHatchedFillSizer->Add( gbSizerHatchedFill, 0, wxALL, 5 );
+
+
+	bHatchedFillSizer->Add( 15, 0, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerOffsetOverrides;
+	bSizerOffsetOverrides = new wxBoxSizer( wxVERTICAL );
+
+	m_offsetOverridesLabel = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Hatch offset overrides:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_offsetOverridesLabel->Wrap( -1 );
+	bSizerOffsetOverrides->Add( m_offsetOverridesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerOffsetOverrides->Add( 0, 2, 0, 0, 5 );
+
+	m_layerSpecificOverrides = new WX_GRID( m_hatchedFillPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+
+	// Grid
+	m_layerSpecificOverrides->CreateGrid( 0, 3 );
+	m_layerSpecificOverrides->EnableEditing( true );
+	m_layerSpecificOverrides->EnableGridLines( true );
+	m_layerSpecificOverrides->EnableDragGridSize( false );
+	m_layerSpecificOverrides->SetMargins( 0, 0 );
+
+	// Columns
+	m_layerSpecificOverrides->SetColSize( 0, 90 );
+	m_layerSpecificOverrides->SetColSize( 1, 90 );
+	m_layerSpecificOverrides->SetColSize( 2, 90 );
+	m_layerSpecificOverrides->EnableDragColMove( false );
+	m_layerSpecificOverrides->EnableDragColSize( true );
+	m_layerSpecificOverrides->SetColLabelValue( 0, _("Layer") );
+	m_layerSpecificOverrides->SetColLabelValue( 1, _("X Offset") );
+	m_layerSpecificOverrides->SetColLabelValue( 2, _("Y Offset") );
+	m_layerSpecificOverrides->SetColLabelSize( 22 );
+	m_layerSpecificOverrides->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_layerSpecificOverrides->EnableDragRowSize( true );
+	m_layerSpecificOverrides->SetRowLabelSize( 0 );
+	m_layerSpecificOverrides->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_layerSpecificOverrides->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizerOffsetOverrides->Add( m_layerSpecificOverrides, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bButtonSizer;
+	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddCustomLayer = new STD_BITMAP_BUTTON( m_hatchedFillPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSizer->Add( m_bpAddCustomLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bButtonSizer->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpDeleteCustomLayer = new STD_BITMAP_BUTTON( m_hatchedFillPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSizer->Add( m_bpDeleteCustomLayer, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizerOffsetOverrides->Add( bButtonSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	bHatchedFillSizer->Add( bSizerOffsetOverrides, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	m_hatchedFillPanel->SetSizer( bHatchedFillSizer );
+	m_hatchedFillPanel->Layout();
+	bHatchedFillSizer->Fit( m_hatchedFillPanel );
+	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), false );
+
+	bRightCol->Add( m_notebook, 1, wxEXPAND|wxALL, 5 );
+
+
+	bRightCol->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	wxGridBagSizer* gbSizerGeneralProps;
+	gbSizerGeneralProps = new wxGridBagSizer( 10, 5 );
+	gbSizerGeneralProps->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizerGeneralProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+
+	m_cornerSmoothingLabel = new wxStaticText( this, wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerSmoothingLabel->Wrap( -1 );
+	gbSizerGeneralProps->Add( m_cornerSmoothingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
+	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
+	m_cornerSmoothingChoice = new wxChoice( this, ID_CORNER_SMOOTHING, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
+	m_cornerSmoothingChoice->SetSelection( 1 );
+	gbSizerGeneralProps->Add( m_cornerSmoothingChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+	m_cornerRadiusLabel = new wxStaticText( this, wxID_ANY, _("Chamfer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRadiusLabel->Wrap( -1 );
+	gbSizerGeneralProps->Add( m_cornerRadiusLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+
+	m_cornerRadiusCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerGeneralProps->Add( m_cornerRadiusCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_cornerRadiusUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRadiusUnits->Wrap( -1 );
+	gbSizerGeneralProps->Add( m_cornerRadiusUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticText40 = new wxStaticText( this, wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText40->Wrap( -1 );
 	m_staticText40->SetToolTip( _("Choose what to do with unconnected copper islands") );
 
-	gbSizer3->Add( m_staticText40, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	gbSizerGeneralProps->Add( m_staticText40, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_cbRemoveIslandsChoices[] = { _("Always"), _("Never"), _("Below area limit") };
 	int m_cbRemoveIslandsNChoices = sizeof( m_cbRemoveIslandsChoices ) / sizeof( wxString );
-	m_cbRemoveIslands = new wxChoice( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbRemoveIslandsNChoices, m_cbRemoveIslandsChoices, 0 );
+	m_cbRemoveIslands = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbRemoveIslandsNChoices, m_cbRemoveIslandsChoices, 0 );
 	m_cbRemoveIslands->SetSelection( 0 );
-	gbSizer3->Add( m_cbRemoveIslands, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizerGeneralProps->Add( m_cbRemoveIslands, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 2 );
 
-	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Area limit:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdLabel = new wxStaticText( this, wxID_ANY, _("Area limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdLabel->Wrap( -1 );
-	m_islandThresholdLabel->Enable( false );
 	m_islandThresholdLabel->SetToolTip( _("Isolated islands smaller than this will be removed") );
 
-	gbSizer3->Add( m_islandThresholdLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerGeneralProps->Add( m_islandThresholdLabel, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
-	m_tcIslandThreshold = new wxTextCtrl( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_tcIslandThreshold->Enable( false );
+	m_tcIslandThreshold = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerGeneralProps->Add( m_tcIslandThreshold, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	gbSizer3->Add( m_tcIslandThreshold, wxGBPosition( 8, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_islandThresholdUnits = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdUnits->Wrap( -1 );
-	m_islandThresholdUnits->Enable( false );
-
-	gbSizer3->Add( m_islandThresholdUnits, wxGBPosition( 8, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	gbSizer3->AddGrowableCol( 0 );
-
-	sbSizerZoneStyle->Add( gbSizer3, 1, wxEXPAND|wxBOTTOM, 5 );
+	bRightCol->Add( gbSizerGeneralProps, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bSizerMiddle->Add( sbSizerZoneStyle, 0, wxEXPAND|wxTOP|wxRIGHT, 10 );
+	bMainSizer->Add( bRightCol, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	m_MainBoxSizer->Add( bSizerMiddle, 0, wxEXPAND, 5 );
+	m_MainBoxSizer->Add( bMainSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerbottom;
 	bSizerbottom = new wxBoxSizer( wxHORIZONTAL );
@@ -413,12 +429,10 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
-	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
-	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
-	m_hideAutoGenNetNamesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
-	m_sortByPadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
-	m_ListNetNameSelection->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSelectionUpdated ), NULL, this );
-	m_GridStyleCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnStyleSelection ), NULL, this );
+	m_cbHatched->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::onHatched ), NULL, this );
+	m_bpAddCustomLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteCustomLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnDeleteLayerItem ), NULL, this );
+	m_cornerSmoothingChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnCornerSmoothingSelection ), NULL, this );
 	m_cbRemoveIslands->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRemoveIslandsSelection ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 }
@@ -429,12 +443,10 @@ DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
-	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
-	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnShowNetNameFilterChange ), NULL, this );
-	m_hideAutoGenNetNamesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
-	m_sortByPadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
-	m_ListNetNameSelection->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSelectionUpdated ), NULL, this );
-	m_GridStyleCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnStyleSelection ), NULL, this );
+	m_cbHatched->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::onHatched ), NULL, this );
+	m_bpAddCustomLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteCustomLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnDeleteLayerItem ), NULL, this );
+	m_cornerSmoothingChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnCornerSmoothingSelection ), NULL, this );
 	m_cbRemoveIslands->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRemoveIslandsSelection ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 

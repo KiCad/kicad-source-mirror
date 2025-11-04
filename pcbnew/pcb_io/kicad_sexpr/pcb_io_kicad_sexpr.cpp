@@ -584,11 +584,11 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
 
     KICAD_FORMAT::FormatBool( m_out, "filling", dsnSettings.m_FillVias );
 
-    if( !dsnSettings.GetDefaultZoneSettings().m_LayerProperties.empty() )
+    if( !dsnSettings.m_ZoneLayerProperties.empty() )
     {
         m_out->Print( 0, " (zone_defaults" );
 
-        for( const auto& [layer, properties] : dsnSettings.GetDefaultZoneSettings().m_LayerProperties )
+        for( const auto& [layer, properties] : dsnSettings.m_ZoneLayerProperties )
             format( properties, 0, layer );
 
         m_out->Print( 0, ")\n" );

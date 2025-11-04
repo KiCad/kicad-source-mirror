@@ -209,6 +209,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_tuning_profiles.cpp
     dialogs/panel_setup_tuning_profile_info_base.cpp
     dialogs/panel_setup_tuning_profile_info.cpp
+    dialogs/panel_setup_zone_hatch_offsets.cpp
+    dialogs/panel_setup_zone_hatch_offsets_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp

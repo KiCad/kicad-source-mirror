@@ -67,6 +67,8 @@ public:
     DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo );
     ~DIALOG_ZONE_MANAGER() override;
 
+    bool GetRepourOnClose() { return m_checkRepour->GetValue(); }
+
 protected:
     void OnZoneSelectionChanged( ZONE* aZone );
 
@@ -86,6 +88,7 @@ protected:
 #endif // wxUSE_DRAG_AND_DROP
 
     void OnZoneNameUpdate( wxCommandEvent& aEvent );
+    void OnZoneNetUpdate( wxCommandEvent& aEvent );
     void OnZonesTableRowCountChange( wxCommandEvent& aEvent );
     void OnCheckBoxClicked( wxCommandEvent& aEvent );
 
@@ -97,7 +100,6 @@ protected:
     void OnFilterCtrlSearch( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlTextChange( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlEnter( wxCommandEvent& aEvent ) override;
-    void OnRepourCheck( wxCommandEvent& aEvent ) override;
     void OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent ) override;
 
     void PostProcessZoneViewSelChange( wxDataViewItem const& aItem );

@@ -54,8 +54,7 @@ void MODEL_ZONES_OVERVIEW::OnRowCountChange()
 }
 
 
-static wxBitmap MakeBitmapForLayers( LSEQ const& layers, COLOR_SETTINGS const& settings,
-                                     const wxSize& aSize )
+static wxBitmap MakeBitmapForLayers( LSEQ const& layers, COLOR_SETTINGS const& settings, const wxSize& aSize )
 {
     wxBitmap   bitmap( aSize );
     wxBrush    brush;
@@ -77,7 +76,7 @@ static wxBitmap MakeBitmapForLayers( LSEQ const& layers, COLOR_SETTINGS const& s
         layersToDraw = layers;
     }
 
-    const int step = static_cast<int>( aSize.x / layersToDraw.size() );
+    const int step = static_cast<int>( aSize.y / layersToDraw.size() );
 
     for( size_t i = 0; i < layersToDraw.size(); ++i )
     {

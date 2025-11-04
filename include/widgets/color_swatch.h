@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef COLOR_SWATCH__H_
-#define COLOR_SWATCH__H_
+#pragma once
 
 #include <wx/bitmap.h>
 #include <wx/gdicmn.h>
@@ -90,11 +89,6 @@ public:
     void SetSwatchBackground( const KIGFX::COLOR4D& aBackground );
 
     /**
-     * Fetch a reference to the user colors list.
-     */
-    void SetUserColors( CUSTOM_COLORS_LIST* aUserColors ) { m_userColors = aUserColors; }
-
-    /**
      * @return the current swatch color.
      */
     KIGFX::COLOR4D GetSwatchColor() const;
@@ -130,12 +124,13 @@ public:
 
     static wxBitmap MakeBitmap( const KIGFX::COLOR4D& aColor, const KIGFX::COLOR4D& aBackground,
                                 const wxSize& aSize, const wxSize& aCheckerboardSize,
-                                const KIGFX::COLOR4D& aCheckerboardBackground );
+                                const KIGFX::COLOR4D& aCheckerboardBackground,
+                                const std::vector<int>& aMargins = { 0, 0, 0, 0 } );
 
-    static void RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
-                            const KIGFX::COLOR4D& aBackground, const wxRect& aRect,
-                            const wxSize&         aCheckerboardSize,
-                            const KIGFX::COLOR4D& aCheckerboardBackground );
+    static void RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KIGFX::COLOR4D& aBackground,
+                            const wxRect& aRect, const wxSize& aCheckerboardSize,
+                            const KIGFX::COLOR4D& aCheckerboardBackground,
+                            const std::vector<int>& aMargins = { 0, 0, 0, 0 } );
 
 private:
     void setupEvents( bool aTriggerWithSingleClick );
@@ -171,5 +166,3 @@ private:
  * Event signaling a swatch has changed color
  */
 wxDECLARE_EVENT( COLOR_SWATCH_CHANGED, wxCommandEvent );
-
-#endif // COLOR_SWATCH__H_

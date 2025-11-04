@@ -2606,28 +2606,13 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // Build holes
     SHAPE_POLY_SET holes;
 
-    VECTOR2I offset_opt = VECTOR2I();
-    bool     zone_has_offset = false;
+    auto& defaultOffsets = m_board->GetDesignSettings().m_ZoneLayerProperties;
+    auto& localOffsets = aZone->LayerProperties();
 
-    if( aZone->LayerProperties().contains( aLayer ) )
-    {
-        zone_has_offset = aZone->HatchingOffset( aLayer ).has_value();
+    VECTOR2I offset = defaultOffsets[aLayer].hatching_offset.value_or( VECTOR2I() );
 
-        offset_opt = aZone->HatchingOffset( aLayer ).value_or( VECTOR2I( 0, 0 ) );
-    }
-
-    if( !zone_has_offset )
-    {
-        ZONE_SETTINGS& defaultZoneSettings = m_board->GetDesignSettings().GetDefaultZoneSettings();
-
-        if( defaultZoneSettings.m_LayerProperties.contains( aLayer ) )
-        {
-            const ZONE_LAYER_PROPERTIES& properties = defaultZoneSettings.m_LayerProperties.at( aLayer );
-
-            offset_opt = properties.hatching_offset.value_or( VECTOR2I( 0, 0 ) );
-        }
-    }
-
+    if( localOffsets.contains( aLayer ) && localOffsets.at( aLayer ).hatching_offset.has_value() )
+        offset = localOffsets.at( aLayer ).hatching_offset.value();
 
     int x_offset = bbox.GetX() - ( bbox.GetX() ) % gridsize - gridsize;
     int y_offset = bbox.GetY() - ( bbox.GetY() ) % gridsize - gridsize;
@@ -2646,7 +2631,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                 hole.Rotate( aZone->GetHatchOrientation() );
             }
 
-            hole.Move( VECTOR2I( offset_opt.x % gridsize, offset_opt.y % gridsize ) );
+            hole.Move( VECTOR2I( offset.x % gridsize, offset.y % gridsize ) );
 
             holes.AddOutline( hole );
         }

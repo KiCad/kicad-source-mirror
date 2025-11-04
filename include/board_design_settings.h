@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BOARD_DESIGN_SETTINGS_H_
-#define BOARD_DESIGN_SETTINGS_H_
+#pragma once
 
 #include <memory>
 
@@ -759,6 +758,9 @@ public:
     // Map between user layer default names and custom names
     std::map<std::string, wxString>  m_UserLayerNames;
 
+    // Default zone hatching offsets
+    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> m_ZoneLayerProperties;
+
     // Arrays of default values for the various layer classes.
     int        m_LineThickness[ LAYER_CLASS_COUNT ];
     VECTOR2I   m_TextSize[LAYER_CLASS_COUNT];
@@ -814,9 +816,7 @@ private:
     DIFF_PAIR_DIMENSION m_customDiffPair;
 
     int        m_copperLayerCount; ///< Number of copper layers for this design
-
     int        m_userDefinedLayerCount; ///< Number of user defined layers for this design
-
     LSET       m_enabledLayers;    ///< Bit-mask for layer enabling
 
     int        m_boardThickness;   ///< Board thickness for 3D viewer
@@ -836,5 +836,3 @@ private:
     /// The default settings that will be used for new zones.
     ZONE_SETTINGS m_defaultZoneSettings;
 };
-
-#endif  // BOARD_DESIGN_SETTINGS_H_

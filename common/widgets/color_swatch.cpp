@@ -36,14 +36,15 @@ using KIGFX::COLOR4D;
 
 wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackground,
                                    const wxSize& aSize, const wxSize& aCheckerboardSize,
-                                   const COLOR4D& aCheckerboardBackground )
+                                   const COLOR4D& aCheckerboardBackground,
+                                   const std::vector<int>& aMargins )
 {
     wxBitmap   bitmap( aSize );
     wxMemoryDC iconDC;
 
     iconDC.SelectObject( bitmap );
 
-    RenderToDC( &iconDC, aColor, aBackground, aSize, aCheckerboardSize, aCheckerboardBackground );
+    RenderToDC( &iconDC, aColor, aBackground, aSize, aCheckerboardSize, aCheckerboardBackground, aMargins );
 
     return bitmap;
 }
@@ -60,10 +61,9 @@ wxBitmap COLOR_SWATCH::makeBitmap()
 }
 
 
-void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
-                               const KIGFX::COLOR4D& aBackground, const wxRect& aRect,
-                               const wxSize&         aCheckerboardSize,
-                               const KIGFX::COLOR4D& aCheckerboardBackground )
+void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KIGFX::COLOR4D& aBackground,
+                               const wxRect& aRect, const wxSize& aCheckerboardSize,
+                               const KIGFX::COLOR4D& aCheckerboardBackground, const std::vector<int>& aMargins )
 {
     wxColor fg = aColor.ToColour();
 
@@ -131,6 +131,20 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
 
         rowCycle = !rowCycle;
     }
+
+    aDC->SetBrush( *wxWHITE_BRUSH );
+
+    if( aMargins[0] )
+        aDC->DrawRectangle( 0, 0, aMargins[0], aRect.GetHeight() );
+
+    if( aMargins[1] )
+        aDC->DrawRectangle( 0, 0, aRect.GetWidth(), aMargins[1] );
+
+    if( aMargins[2] )
+        aDC->DrawRectangle( aRect.GetWidth() - aMargins[2], 0, aMargins[2], aRect.GetHeight() );
+
+    if( aMargins[3] )
+        aDC->DrawRectangle( 0, aRect.GetHeight() - aMargins[3], aRect.GetWidth(), aMargins[3] );
 }
 
 

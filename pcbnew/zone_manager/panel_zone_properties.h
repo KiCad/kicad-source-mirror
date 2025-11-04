@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_ZONE_PROPERTIES_H
-#define PANEL_ZONE_PROPERTIES_H
+#pragma once
 
 
 #include "widgets/unit_binder.h"
@@ -36,18 +35,21 @@
 #include <zone_settings.h>
 
 wxDECLARE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
+wxDECLARE_EVENT( EVT_ZONE_NET_UPDATE, wxCommandEvent );
 
 
 class PCB_BASE_FRAME;
 class ZONES_CONTAINER;
+
+
 class PANEL_ZONE_PROPERTIES : public PANEL_ZONE_PROPERTIES_BASE,
                               public ZONE_SELECTION_CHANGE_NOTIFIER,
                               public ZONE_MANAGEMENT_BASE
 {
 public:
-    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aPcb,
-                           ZONES_CONTAINER& aZoneContainer );
+    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONES_CONTAINER& aZoneContainer );
 
+    ~PANEL_ZONE_PROPERTIES() override;
 
     void ActivateSelectedZone( ZONE* new_zone ) override;
 
@@ -60,11 +62,6 @@ public:
 private:
     static constexpr int INVALID_NET_CODE{ 0 };
 
-    static constexpr int DEFAULT_SORT_CONFIG{ -1 };
-    static constexpr int NO_PERSISTENT_SORT_MODE{ 0 };
-    static constexpr int HIDE_ANONYMOUS_NETS{ 1 << 0 };
-    static constexpr int SORT_BY_PAD_COUNT{ 1 << 1 };
-
     bool TransferZoneSettingsToWindow();
 
     /**
@@ -74,18 +71,22 @@ private:
      */
     bool AcceptOptions( bool aUseExportableSetupOnly = false );
 
-    void OnStyleSelection( wxCommandEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent& ) override;
-    void OnRemoveIslandsSelection( wxCommandEvent& event ) override;
-    void OnPadInZoneSelection( wxCommandEvent& event ) override;
     void OnZoneNameChanged( wxCommandEvent& event ) override;
-
+    void onHatched( wxCommandEvent& event ) override;
+    void onNetSelector( wxCommandEvent& aEvent );
+    void OnRemoveIslandsSelection( wxCommandEvent& event ) override;
+    void OnCornerSmoothingSelection( wxCommandEvent& event ) override;
+    void OnAddLayerItem( wxCommandEvent& event ) override;
+    void OnDeleteLayerItem( wxCommandEvent& event ) override;
 
 private:
+    PCB_BASE_FRAME*                m_Parent;
+
     ZONES_CONTAINER&               m_ZoneContainer;
     std::shared_ptr<ZONE_SETTINGS> m_settings;
 
-    int         m_cornerSmoothingType;
+    LAYER_PROPERTIES_GRID_TABLE*   m_layerPropsTable;
+
     UNIT_BINDER m_outlineHatchPitch;
 
     UNIT_BINDER m_cornerRadius;
@@ -100,6 +101,3 @@ private:
     UNIT_BINDER m_islandThreshold;
     bool        m_isTeardrop;
 };
-
-
-#endif

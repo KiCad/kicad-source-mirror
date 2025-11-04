@@ -10,6 +10,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/infobar.h>
 #include <wx/gdicmn.h>
@@ -17,18 +20,23 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/dataview.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
-#include <wx/listbox.h>
-#include <wx/stattext.h>
-#include <wx/spinctrl.h>
-#include <wx/choice.h>
-#include <wx/statline.h>
+#include <widgets/net_selector.h>
 #include <wx/gbsizer.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/spinctrl.h>
+#include <wx/grid.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,48 +51,32 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			ID_DIALOG_COPPER_ZONE_BASE = 1000,
-			ID_TEXTCTRL_NETNAMES_FILTER,
-			ID_NETNAME_SELECTION,
-			ID_M_PRIORITYLEVELCTRL,
-			ID_M_OUTLINEAPPEARANCECTRL,
-			ID_M_CORNERSMOOTHINGCTRL,
-			ID_CORNER_SMOOTHING,
+			ID_DIALOG_COPPER_ZONE_BASE = 27300,
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
 			wxID_COPPER_BRIDGE_VALUE,
+			ID_M_OUTLINEAPPEARANCECTRL,
+			ID_M_CORNERSMOOTHINGCTRL,
+			ID_CORNER_SMOOTHING,
 		};
 
 		wxBoxSizer* m_MainBoxSizer;
 		wxInfoBar* m_copperZoneInfo;
+		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
-		wxTextCtrl* m_ShowNetNameFilter;
-		wxCheckBox* m_hideAutoGenNetNamesOpt;
-		wxCheckBox* m_sortByPadsOpt;
-		wxListBox* m_ListNetNameSelection;
 		wxStaticText* m_zoneNameLabel;
 		wxTextCtrl* m_tcZoneName;
-		wxStaticText* m_staticTextPriorityLevel;
-		wxSpinCtrl* m_PriorityLevelCtrl;
+		wxStaticText* m_netLabel;
+		NET_SELECTOR* m_netSelector;
 		wxCheckBox* m_cbLocked;
-		wxStaticText* m_staticTextStyle;
-		wxChoice* m_OutlineDisplayCtrl;
-		wxStaticText* m_stBorderHatchPitchText;
-		wxTextCtrl* m_outlineHatchPitchCtrl;
-		wxStaticText* m_outlineHatchUnits;
-		wxStaticLine* m_staticline4;
-		wxStaticText* m_staticTextSmoothing;
-		wxChoice* m_cornerSmoothingChoice;
-		wxStaticText* m_cornerRadiusLabel;
-		wxTextCtrl* m_cornerRadiusCtrl;
-		wxStaticText* m_cornerRadiusUnits;
+		wxNotebook* m_notebook;
+		wxPanel* m_clearancesPanel;
 		wxStaticText* m_clearanceLabel;
 		wxTextCtrl* m_clearanceCtrl;
 		wxStaticText* m_clearanceUnits;
 		wxStaticText* m_minWidthLabel;
 		wxTextCtrl* m_minWidthCtrl;
 		wxStaticText* m_minWidthUnits;
-		wxStaticLine* m_staticline2;
 		wxStaticText* m_connectionLabel;
 		wxChoice* m_PadInZoneOpt;
 		wxStaticText* m_antipadLabel;
@@ -93,8 +85,14 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_spokeWidthLabel;
 		wxTextCtrl* m_spokeWidthCtrl;
 		wxStaticText* m_spokeWidthUnits;
-		wxStaticText* m_staticTextGridFillType;
-		wxChoice* m_GridStyleCtrl;
+		wxPanel* m_displayOverridesPanel;
+		wxStaticText* m_staticTextStyle;
+		wxChoice* m_OutlineDisplayCtrl;
+		wxStaticText* m_stBorderHatchPitchText;
+		wxTextCtrl* m_outlineHatchPitchCtrl;
+		wxStaticText* m_outlineHatchUnits;
+		wxPanel* m_hatchedFillPanel;
+		wxCheckBox* m_cbHatched;
 		wxStaticText* m_staticTextGrindOrient;
 		wxTextCtrl* m_tcGridStyleOrientation;
 		wxStaticText* m_staticTextRotUnits;
@@ -108,7 +106,15 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlSmoothLevel;
 		wxStaticText* m_staticTextGridSmootingVal;
 		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
-		wxStaticLine* m_staticline5;
+		wxStaticText* m_offsetOverridesLabel;
+		WX_GRID* m_layerSpecificOverrides;
+		STD_BITMAP_BUTTON* m_bpAddCustomLayer;
+		STD_BITMAP_BUTTON* m_bpDeleteCustomLayer;
+		wxStaticText* m_cornerSmoothingLabel;
+		wxChoice* m_cornerSmoothingChoice;
+		wxStaticText* m_cornerRadiusLabel;
+		wxTextCtrl* m_cornerRadiusCtrl;
+		wxStaticText* m_cornerRadiusUnits;
 		wxStaticText* m_staticText40;
 		wxChoice* m_cbRemoveIslands;
 		wxStaticText* m_islandThresholdLabel;
@@ -122,10 +128,10 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnShowNetNameFilterChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnNetSelectionUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHatched( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddLayerItem( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteLayerItem( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCornerSmoothingSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveIslandsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 

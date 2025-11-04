@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Ethan Chien <liangtie.qian@gmail.com>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,23 +21,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "zone_manager_preference.h"
-#include <kiplatform/ui.h>
+
+#pragma once
+
+#include <board.h>
+#include <widgets/unit_binder.h>
+#include <widgets/paged_dialog.h>
+
+#include <panel_setup_zone_hatch_offsets_base.h>
+
+class BOARD_DESIGN_SETTINGS;
+class LAYER_PROPERTIES_GRID_TABLE;
 
 
-wxColour ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor()
+class PANEL_SETUP_ZONE_HATCH_OFFSETS : public PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE
 {
-    if( KIPLATFORM::UI::IsDarkTheme() )
-        return wxColour( 0, 0, 0, 30 );
+public:
+    PANEL_SETUP_ZONE_HATCH_OFFSETS( wxWindow* aParentWindow, PCB_BASE_FRAME* aFrame,
+                            BOARD_DESIGN_SETTINGS& aBrdSettings );
+    ~PANEL_SETUP_ZONE_HATCH_OFFSETS( ) override;
 
-    return wxColour( 238, 243, 243 );
-}
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
+    void LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings );
+    void SyncCopperLayers( int aCopperLayerCount );
 
-wxColour ZONE_MANAGER_PREFERENCE::GetBoundBoundingFillColor()
-{
-    if( KIPLATFORM::UI::IsDarkTheme() )
-        return wxColour( 238, 243, 243, 60 );
+    void ImportSettingsFrom( BOARD* aBoard );
 
-    return wxColour( 84, 84, 84, 40 );
-}
+private:
+    PCB_BASE_FRAME*              m_frame;
+    LAYER_PROPERTIES_GRID_TABLE* m_layerPropsTable;
+    BOARD_DESIGN_SETTINGS*       m_brdSettings;
+};

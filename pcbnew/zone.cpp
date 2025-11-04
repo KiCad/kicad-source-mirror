@@ -192,7 +192,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
                 m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
             } );
 
-    m_layerProperties = aZone.m_layerProperties;
+    m_layerProperties         = aZone.m_layerProperties;
 
     m_borderStyle             = aZone.m_borderStyle;
     m_borderHatchPitch        = aZone.m_borderHatchPitch;
@@ -539,27 +539,9 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
 }
 
 
-const ZONE_LAYER_PROPERTIES& ZONE::LayerProperties( PCB_LAYER_ID aLayer ) const
-{
-    wxCHECK_MSG( m_layerProperties.contains( aLayer ), m_layerProperties.at( GetFirstLayer() ),
-                 "Zone has no layer " + std::string( magic_enum::enum_name( aLayer ) ) );
-
-    return m_layerProperties.at( aLayer );
-}
-
-
 void ZONE::SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aOther )
 {
     m_layerProperties = aOther;
-}
-
-
-const std::optional<VECTOR2I>& ZONE::HatchingOffset( PCB_LAYER_ID aLayer ) const
-{
-    wxCHECK_MSG( m_layerProperties.contains( aLayer ), m_layerProperties.at( GetFirstLayer() ).hatching_offset,
-                 "Zone has no layer " + std::string( magic_enum::enum_name( aLayer ) ) );
-
-    return m_layerProperties.at( aLayer ).hatching_offset;
 }
 
 

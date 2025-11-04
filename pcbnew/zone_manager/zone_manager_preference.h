@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ZONE_MANAGER_PREFERENCE_H
-#define ZONE_MANAGER_PREFERENCE_H
+#pragma once
 
 #include <wx/colour.h>
 #include <wx/colour.h>
+
 class ZONE_MANAGER_PREFERENCE
 {
 public:
@@ -38,16 +38,5 @@ public:
     };
 
     static wxColour GetCanvasBackgroundColor();
-
     static wxColour GetBoundBoundingFillColor();
-
-    /**
-     * @brief Should all the zones be re-poured on dialog close
-     *
-     */
-    static void SetRefillOnClose( bool aRepour );
-
-    static bool GetRepourOnClose();
 };
-
-#endif

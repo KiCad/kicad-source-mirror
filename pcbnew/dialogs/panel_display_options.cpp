@@ -42,7 +42,7 @@ static const UTIL::CFG_MAP<TRACK_CLEARANCE_MODE> clearanceModeMap =
 };
 
 
-class LAYER_NAMES_GRID_TABLE : public wxGridTableBase
+class LAYER_NAMES_GRID_TABLE : public WX_GRID_TABLE_BASE
 {
     std::vector<TEXT_ITEM_INFO> m_items;
 

@@ -29,14 +29,11 @@
 #include <wx/event.h>
 #include <wx/gdicmn.h>
 #include <wx/wupdlock.h>
-#include <kiface_base.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <wx/string.h>
 #include <board_commit.h>
 #include <widgets/std_bitmap_button.h>
 #include <zone.h>
-#include <pad.h>
 #include <board.h>
 #include <bitmaps.h>
 #include <string_utils.h>
@@ -73,21 +70,18 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
-    m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( this, aParent, *m_zonesContainer );
+    m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, *m_zonesContainer );
     m_sizerProperties->Add( m_panelZoneProperties, 1, wxTOP | wxEXPAND, 5 );
 
-    m_zoneViewer = new PANE_ZONE_VIEWER( this, aParent );
-    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 5 );
-
-    m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
-    //m_zoneViewer->SetId( ZONE_VIEWER );
+    m_zoneViewer = new PANE_ZONE_VIEWER( m_zonePanel, aParent );
+    m_rightColumn->Add( m_zoneViewer, 1, wxALL | wxEXPAND, 5 );
 
     for( const auto& [k, v] : MODEL_ZONES_OVERVIEW::GetColumnNames() )
     {
         if( k == MODEL_ZONES_OVERVIEW::LAYERS )
-            m_viewZonesOverview->AppendIconTextColumn( v, k );
+            m_viewZonesOverview->AppendIconTextColumn( v, k, wxDATAVIEW_CELL_INERT, 140 );
         else
-            m_viewZonesOverview->AppendTextColumn( v, k );
+            m_viewZonesOverview->AppendTextColumn( v, k, wxDATAVIEW_CELL_INERT, 160 );
     }
 
     m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( m_zonesContainer->GetManagedZones(), aParent->GetBoard(),
@@ -105,6 +99,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
 #endif // wxUSE_DRAG_AND_DROP
 
     Bind( EVT_ZONE_NAME_UPDATE, &DIALOG_ZONE_MANAGER::OnZoneNameUpdate, this );
+    Bind( EVT_ZONE_NET_UPDATE, &DIALOG_ZONE_MANAGER::OnZoneNetUpdate, this );
     Bind( EVT_ZONES_OVERVIEW_COUNT_CHANGE, &DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange, this );
     Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
     Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
@@ -261,12 +256,6 @@ void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 }
 
 
-void DIALOG_ZONE_MANAGER::OnRepourCheck( wxCommandEvent& aEvent )
-{
-    ZONE_MANAGER_PREFERENCE::SetRefillOnClose( m_checkRepour->IsChecked() );
-}
-
-
 #if wxUSE_DRAG_AND_DROP
 
 void DIALOG_ZONE_MANAGER::OnBeginDrag( wxDataViewEvent& aEvent )
@@ -419,9 +408,19 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
 void DIALOG_ZONE_MANAGER::OnZoneNameUpdate( wxCommandEvent& aEvent )
 {
-    if( ZONE* zone = m_panelZoneProperties->GetZone(); zone != nullptr )
+    if( ZONE* zone = m_panelZoneProperties->GetZone() )
     {
         zone->SetZoneName( aEvent.GetString() );
+        m_modelZonesOverview->RowChanged( m_modelZonesOverview->GetRow( m_modelZonesOverview->GetItemByZone( zone ) ) );
+    }
+}
+
+
+void DIALOG_ZONE_MANAGER::OnZoneNetUpdate( wxCommandEvent& aEvent )
+{
+    if( ZONE* zone = m_panelZoneProperties->GetZone() )
+    {
+        zone->SetNetCode( aEvent.GetId() );
         m_modelZonesOverview->RowChanged( m_modelZonesOverview->GetRow( m_modelZonesOverview->GetItemByZone( zone ) ) );
     }
 }

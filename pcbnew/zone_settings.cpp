@@ -279,10 +279,10 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
     m_Locked                      = aOther.m_Locked;
     m_removeIslands               = aOther.m_removeIslands;
     m_minIslandArea               = aOther.m_minIslandArea;
+    m_LayerProperties             = aOther.m_LayerProperties;
 
     if( aCopyFull )
     {
-        m_LayerProperties = aOther.m_LayerProperties;
         m_TeardropType    = aOther.m_TeardropType;
         m_Layers          = aOther.m_Layers;
     }
@@ -322,8 +322,8 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     BOARD* board = aFrame->GetBoard();
     COLOR4D backgroundColor = aFrame->GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 
-    wxDataViewColumn* checkColumn = aList->AppendToggleColumn(
-            wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, wxCOL_WIDTH_DEFAULT, wxALIGN_CENTER );
+    wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE,
+                                                               wxCOL_WIDTH_DEFAULT, wxALIGN_CENTER );
 
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
     wxDataViewColumn* layerIDColumn = aList->AppendTextColumn( wxEmptyString );
@@ -360,9 +360,158 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
     // for the tree expanders... but you'd be wrong.  Force indent to 0.
     aList->SetIndent( 0 );
-    aList->SetMinClientSize( wxSize( checkColSize + layerColSize,
-                                     aList->GetMinClientSize().y ) );
 
     checkColumn->SetWidth( checkColSize );
     layerColumn->SetWidth( layerColSize );
+
+#ifdef __WXMAC__
+    // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
+    // also be that the width of the column would get set too wide (to 30), but that's patched in
+    // our local wxWidgets fork.)
+    checkColSize += 50;
+#endif
+
+    aList->SetMinClientSize( wxSize( checkColSize + layerColSize, aList->GetMinClientSize().y ) );
 }
+
+
+LAYER_PROPERTIES_GRID_TABLE::LAYER_PROPERTIES_GRID_TABLE( PCB_BASE_FRAME* aFrame, std::function<LSET()> getLayers ) :
+        m_frame( aFrame ),
+        m_getLayersFunc( getLayers )
+{
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &LAYER_PROPERTIES_GRID_TABLE::onUnitsChanged, this );
+}
+
+
+LAYER_PROPERTIES_GRID_TABLE::~LAYER_PROPERTIES_GRID_TABLE()
+{
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &LAYER_PROPERTIES_GRID_TABLE::onUnitsChanged, this );
+}
+
+
+wxString LAYER_PROPERTIES_GRID_TABLE::GetValue( int aRow, int aCol )
+{
+    VECTOR2I offset = m_items[aRow].second.hatching_offset.value_or( VECTOR2I() );
+
+    switch( aCol )
+    {
+    case 1:  return m_frame->StringFromValue( offset.x, true );
+    case 2:  return m_frame->StringFromValue( offset.y, true );
+
+    default:
+        // we can't assert here because wxWidgets sometimes calls this without checking
+        // the column type when trying to see if there's an overflow
+        return wxT( "bad wxWidgets!" );
+    }
+}
+
+
+void LAYER_PROPERTIES_GRID_TABLE::SetValue( int aRow, int aCol, const wxString& aValue )
+{
+    VECTOR2I offset = m_items[aRow].second.hatching_offset.value_or( VECTOR2I() );
+
+    switch( aCol )
+    {
+    case 1:  offset.x = m_frame->ValueFromString( aValue );                           break;
+    case 2:  offset.y = m_frame->ValueFromString( aValue );                           break;
+    default: wxFAIL_MSG( wxString::Format( wxT( "column %d isn't a long" ), aCol ) ); break;
+    }
+
+    m_items[aRow].second.hatching_offset = offset;
+}
+
+
+long LAYER_PROPERTIES_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
+{
+    switch( aCol )
+    {
+    case 0:  return m_items[aRow].first;
+    default: wxFAIL_MSG( wxString::Format( wxT( "column %d isn't a long" ), aCol ) ); return -1;
+    }
+}
+
+
+void LAYER_PROPERTIES_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
+{
+    switch( aCol )
+    {
+    case 0:  m_items[aRow].first = ToLAYER_ID( (int) aValue );                        break;
+    default: wxFAIL_MSG( wxString::Format( wxT( "column %d isn't a long" ), aCol ) ); break;
+    }
+}
+
+
+void LAYER_PROPERTIES_GRID_TABLE::AddItem( PCB_LAYER_ID aLayer, const ZONE_LAYER_PROPERTIES& aProps )
+{
+    m_items.emplace_back( std::make_pair( aLayer, aProps ) );
+
+    if( GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+        GetView()->ProcessTableMessage( msg );
+    }
+}
+
+
+bool LAYER_PROPERTIES_GRID_TABLE::AppendRows( size_t aNumRows )
+{
+    PCB_LAYER_ID next = F_Cu;
+
+    auto contains =
+            [&]( PCB_LAYER_ID candidate )
+            {
+                for( const auto& [l, props] : m_items )
+                {
+                    if( candidate == l )
+                        return true;
+                }
+
+                return false;
+            };
+
+    for( PCB_LAYER_ID layer : m_getLayersFunc() )
+    {
+        if( !contains( layer ) )
+        {
+            next = layer;
+            break;
+        }
+    }
+
+    for( int jj = 0; jj < (int) aNumRows; ++jj )
+        AddItem( next, ZONE_LAYER_PROPERTIES() );
+
+    return true;
+}
+
+
+bool LAYER_PROPERTIES_GRID_TABLE::DeleteRows( size_t aPos, size_t aNumRows )
+{
+    // aPos may be a large positive, e.g. size_t(-1), and the sum of
+    // aPos+aNumRows may wrap here, so both ends of the range are tested.
+    if( aPos < m_items.size() && aPos + aNumRows <= m_items.size() )
+    {
+        m_items.erase( m_items.begin() + (int) aPos, m_items.begin() + (int) aPos + (int) aNumRows );
+
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, (int) aPos, (int) aNumRows );
+            GetView()->ProcessTableMessage( msg );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
+void LAYER_PROPERTIES_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    if( GetView() )
+        GetView()->ForceRefresh();
+
+    aEvent.Skip();
+}
+
+

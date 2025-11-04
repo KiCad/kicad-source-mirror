@@ -36,8 +36,7 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
         m_maskToCopperClearance( aFrame, m_maskToCopperClearanceLabel, m_maskToCopperClearanceCtrl,
                                  m_maskToCopperClearanceUnits ),
         m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
-        m_pasteMarginRatio( aFrame, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
-                            m_pasteMarginRatioUnits )
+        m_pasteMarginRatio( aFrame, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl, m_pasteMarginRatioUnits )
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
@@ -71,13 +70,13 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
-    m_BrdSettings->m_SolderMaskExpansion = m_maskExpansion.GetValue();
-    m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
-    m_BrdSettings->m_SolderMaskToCopperClearance = m_maskToCopperClearance.GetValue();
+    m_BrdSettings->m_SolderMaskExpansion = m_maskExpansion.GetIntValue();
+    m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetIntValue();
+    m_BrdSettings->m_SolderMaskToCopperClearance = m_maskToCopperClearance.GetIntValue();
     m_BrdSettings->m_TentViasFront = m_tentViasFront->GetValue();
     m_BrdSettings->m_TentViasBack = m_tentViasBack->GetValue();
 
-    m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetValue();
+    m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetIntValue();
     m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;
 
     m_BrdSettings->m_AllowSoldermaskBridgesInFPs = m_allowBridges->GetValue();

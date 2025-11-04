@@ -250,7 +250,7 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
 
     int dialogResult = dlg.ShowQuasiModal();
 
-    if( dialogResult == wxID_OK && ZONE_MANAGER_PREFERENCE::GetRepourOnClose() )
+    if( dialogResult == wxID_OK && dlg.GetRepourOnClose() )
         dialogResult = ZONE_MANAGER_REPOUR;
 
     if( dialogResult == wxID_CANCEL )

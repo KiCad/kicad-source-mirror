@@ -2594,7 +2594,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             break;
         }
         case T_zone_defaults:
-            parseZoneDefaults( bds.GetDefaultZoneSettings() );
+            parseZoneDefaults( bds.m_ZoneLayerProperties );
             break;
 
         default:
@@ -2613,24 +2613,23 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings )
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
 {
     T token;
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
-        {
             Expecting( T_LEFT );
-        }
 
         token = NextTok();
 
         switch( token )
         {
         case T_property:
-            parseZoneLayerProperty( aZoneSettings.m_LayerProperties );
+            parseZoneLayerProperty( aProperties );
             break;
+
         default:
             Unexpected( CurText() );
         }
@@ -2638,8 +2637,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings 
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
-        std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
 {
     T token;
 
@@ -2649,9 +2647,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
-        {
             Expecting( T_LEFT );
-        }
 
         token = NextTok();
 
@@ -2661,12 +2657,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
             layer = parseBoardItemLayer();
             NeedRIGHT();
             break;
+
         case T_hatch_position:
         {
             properties.hatching_offset = parseXY();
             NeedRIGHT();
             break;
         }
+
         default:
             Unexpected( CurText() );
             break;

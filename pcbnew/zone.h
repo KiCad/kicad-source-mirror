@@ -147,8 +147,6 @@ public:
         return m_layerProperties[aLayer];
     }
 
-    const ZONE_LAYER_PROPERTIES& LayerProperties( PCB_LAYER_ID aLayer ) const;
-
     std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& LayerProperties() { return m_layerProperties; }
 
     const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& LayerProperties() const
@@ -157,8 +155,6 @@ public:
     }
 
     void SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aOther );
-
-    const std::optional<VECTOR2I>& HatchingOffset( PCB_LAYER_ID aLayer ) const;
 
     const wxString& GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }

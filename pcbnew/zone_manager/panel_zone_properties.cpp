@@ -26,6 +26,7 @@
 #include "panel_zone_properties.h"
 #include "zone_manager/zones_container.h"
 
+#include <grid_tricks.h>
 #include <wx/radiobut.h>
 #include <kiface_base.h>
 #include <confirm.h>
@@ -33,41 +34,75 @@
 #include <pcbnew_settings.h>
 #include <wx/string.h>
 #include <widgets/unit_binder.h>
+#include <widgets/std_bitmap_button.h>
+#include <widgets/wx_grid.h>
 #include <pad.h>
-#include <trigo.h>
+#include <grid_layer_box_helpers.h>
 
 #include <dialog_copper_zones_base.h>
-#include <string_utils.h>
+
 
 wxDEFINE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
+wxDEFINE_EVENT( EVT_ZONE_NET_UPDATE, wxCommandEvent );
 
-PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aPCB_FRAME,
+PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
                                               ZONES_CONTAINER& aZoneContainer ) :
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
         m_ZoneContainer( aZoneContainer ),
-        m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
-        m_outlineHatchPitch( aPCB_FRAME, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl,
-                             m_outlineHatchUnits ),
-        m_cornerRadius( aPCB_FRAME, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
-        m_clearance( aPCB_FRAME, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
-        m_minThickness( aPCB_FRAME, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
-        m_antipadClearance( aPCB_FRAME, m_antipadLabel, m_antipadCtrl, m_antipadUnits ),
-        m_spokeWidth( aPCB_FRAME, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
-        m_gridStyleRotation( aPCB_FRAME, m_staticTextGrindOrient, m_tcGridStyleOrientation,
-                             m_staticTextRotUnits ),
-        m_gridStyleThickness( aPCB_FRAME, m_staticTextStyleThickness, m_tcGridStyleThickness,
-                              m_GridStyleThicknessUnits ),
-        m_gridStyleGap( aPCB_FRAME, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
-        m_islandThreshold( aPCB_FRAME, m_islandThresholdLabel, m_tcIslandThreshold,
-                           m_islandThresholdUnits ),
-        m_isTeardrop()
+        m_outlineHatchPitch( aFrame, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
+        m_cornerRadius( aFrame, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
+        m_clearance( aFrame, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
+        m_minThickness( aFrame, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
+        m_antipadClearance( aFrame, m_antipadLabel, m_antipadCtrl, m_antipadUnits ),
+        m_spokeWidth( aFrame, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
+        m_gridStyleRotation( aFrame, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits ),
+        m_gridStyleThickness( aFrame, m_staticTextStyleThickness, m_tcGridStyleThickness, m_GridStyleThicknessUnits ),
+        m_gridStyleGap( aFrame, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
+        m_islandThreshold( aFrame, m_islandThresholdLabel, m_tcIslandThreshold, m_islandThresholdUnits )
 {
-    m_cbRemoveIslands->Bind( wxEVT_CHOICE,
-                             [&]( wxCommandEvent& )
-                             {
-                                 // Area mode is index 2
-                                 m_islandThreshold.Enable( m_cbRemoveIslands->GetSelection() == 2 );
-                             } );
+    m_Parent = aFrame;
+
+    m_netSelector->SetNetInfo( &m_Parent->GetBoard()->GetNetInfo() );
+
+    m_layerPropsTable = new LAYER_PROPERTIES_GRID_TABLE( m_Parent,
+            [&]() -> LSET
+            {
+                return m_settings->m_Layers;
+            } );
+
+    m_layerSpecificOverrides->SetTable( m_layerPropsTable, true );
+    m_layerSpecificOverrides->PushEventHandler( new GRID_TRICKS( m_layerSpecificOverrides ) );
+    m_layerSpecificOverrides->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
+    LSET forbiddenLayers = LSET::AllNonCuMask();
+
+    for( PCB_LAYER_ID copper : LSET::AllCuMask() )
+    {
+        if( !m_Parent->GetBoard()->IsLayerEnabled( copper ) )
+            forbiddenLayers.set( copper );
+    }
+
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, forbiddenLayers ) );
+    m_layerSpecificOverrides->SetColAttr( 0, attr );
+    m_layerSpecificOverrides->SetupColumnAutosizer( 0 );
+
+    m_bpAddCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDeleteCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
+    m_netSelector->Bind( FILTERED_ITEM_SELECTED, &PANEL_ZONE_PROPERTIES::onNetSelector, this );
+}
+
+
+PANEL_ZONE_PROPERTIES::~PANEL_ZONE_PROPERTIES()
+{
+    // we passed ownership of table to grid
+    // delete m_layerPropsTable;
+
+    m_layerSpecificOverrides->PopEventHandler( true );
+
+    m_netSelector->Unbind( FILTERED_ITEM_SELECTED, &PANEL_ZONE_PROPERTIES::onNetSelector, this );
 }
 
 
@@ -82,6 +117,7 @@ void PANEL_ZONE_PROPERTIES::ActivateSelectedZone( ZONE* aZone )
     TransferZoneSettingsToWindow();
 }
 
+
 void PANEL_ZONE_PROPERTIES::OnUserConfirmChange()
 {
     TransferZoneSettingsFromWindow();
@@ -93,6 +129,8 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     if( !m_settings )
         return false;
 
+    m_tcZoneName->SetValue( m_settings->m_Name );
+    m_netSelector->SetSelectedNetcode( std::max( 0, m_settings->m_Netcode ) );
     m_cbLocked->SetValue( m_settings->m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings->GetCornerSmoothingType() );
     m_cornerRadius.SetValue( m_settings->GetCornerRadius() );
@@ -101,15 +139,14 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     {
         m_cornerSmoothingChoice->SetSelection( 0 );
         m_cornerSmoothingChoice->Enable( false );
-        m_cornerRadius.SetValue( 0 );
-        m_cornerRadius.Enable( false );
+        m_cornerRadius.Show( false );
     }
 
     switch( m_settings->m_ZoneBorderDisplayStyle )
     {
-    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH: m_OutlineDisplayCtrl->SetSelection( 0 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:         m_OutlineDisplayCtrl->SetSelection( 0 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE:    m_OutlineDisplayCtrl->SetSelection( 1 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL:    m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER: break;
     }
 
@@ -121,16 +158,18 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     switch( m_settings->GetPadConnection() )
     {
     default:
-    case ZONE_CONNECTION::THERMAL: m_PadInZoneOpt->SetSelection( 1 ); break;
+    case ZONE_CONNECTION::THERMAL:     m_PadInZoneOpt->SetSelection( 1 ); break;
     case ZONE_CONNECTION::THT_THERMAL: m_PadInZoneOpt->SetSelection( 2 ); break;
-    case ZONE_CONNECTION::NONE: m_PadInZoneOpt->SetSelection( 3 ); break;
-    case ZONE_CONNECTION::FULL: m_PadInZoneOpt->SetSelection( 0 ); break;
+    case ZONE_CONNECTION::NONE:        m_PadInZoneOpt->SetSelection( 3 ); break;
+    case ZONE_CONNECTION::FULL:        m_PadInZoneOpt->SetSelection( 0 ); break;
     }
 
     if( m_isTeardrop )
     {
         m_PadInZoneOpt->SetSelection( 0 );
         m_PadInZoneOpt->Enable( false );
+        m_antipadClearance.Enable( false );
+        m_spokeWidth.Enable( false );
     }
 
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
@@ -143,15 +182,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
 
     m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
 
-    m_islandThreshold.Enable( m_settings->GetIslandRemovalMode() == ISLAND_REMOVAL_MODE::AREA );
-
-
-    if( !m_isTeardrop && m_settings->m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
-        m_GridStyleCtrl->SetSelection( 1 );
-    else
-        m_GridStyleCtrl->SetSelection( 0 );
-
-    m_GridStyleCtrl->Enable( !m_isTeardrop );
+    m_cbHatched->SetValue( m_settings->m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN && !m_isTeardrop );
 
     m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
     m_gridStyleRotation.SetAngleValue( m_settings->m_HatchOrientation );
@@ -161,47 +192,57 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     m_spinCtrlSmoothLevel->SetValue( m_settings->m_HatchSmoothingLevel );
     m_spinCtrlSmoothValue->SetValue( m_settings->m_HatchSmoothingValue );
 
-    m_tcZoneName->SetValue( m_settings->m_Name );
-
+    for( const auto& [layer, props] : m_settings->m_LayerProperties )
+    {
+        if( props.hatching_offset.has_value() )
+            m_layerPropsTable->AddItem( layer, props );
+    }
 
     // Enable/Disable some widgets
     wxCommandEvent aEvent;
-    OnStyleSelection( aEvent );
-    OnPadInZoneSelection( aEvent );
+    onNetSelector( aEvent );
+    OnCornerSmoothingSelection( aEvent );
+    OnRemoveIslandsSelection( aEvent );
+    onHatched( aEvent );
+
     Fit();
 
     return true;
 }
 
 
-void PANEL_ZONE_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& )
-{
-    if( m_cornerSmoothingType != m_cornerSmoothingChoice->GetSelection() )
-    {
-        m_cornerSmoothingType = m_cornerSmoothingChoice->GetSelection();
-
-        if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
-            m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
-        else
-            m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
-    }
-
-    m_cornerRadiusCtrl->Enable( m_cornerSmoothingType > ZONE_SETTINGS::SMOOTHING_NONE );
-}
-
-
 void PANEL_ZONE_PROPERTIES::OnRemoveIslandsSelection( wxCommandEvent& aEvent )
 {
-    m_islandThreshold.Enable( m_cbRemoveIslands->GetSelection() == 2 );
+    m_islandThreshold.Show( m_cbRemoveIslands->GetSelection() == 2 );
+
+    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+        dlg->Layout();
 }
 
-void PANEL_ZONE_PROPERTIES::OnPadInZoneSelection( wxCommandEvent& event )
+
+void PANEL_ZONE_PROPERTIES::OnCornerSmoothingSelection( wxCommandEvent& event )
 {
-    int  selection = m_PadInZoneOpt->GetSelection();
-    bool enabled = selection == 1 || selection == 2;
-    m_antipadClearance.Enable( enabled );
-    m_spokeWidth.Enable( enabled );
+    switch( m_cornerSmoothingChoice->GetSelection() )
+    {
+    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+        m_cornerRadiusLabel->SetLabel( _( "Chamfer:" ) );
+        m_cornerRadius.Show( true );
+        break;
+
+    case ZONE_SETTINGS::SMOOTHING_FILLET:
+        m_cornerRadiusLabel->SetLabel( _( "Fillet:" ) );
+        m_cornerRadius.Show( true );
+        break;
+
+    default:
+        m_cornerRadius.Show( false );
+        break;
+    }
+
+    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+        dlg->Layout();
 }
+
 
 void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 {
@@ -213,22 +254,14 @@ void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 
 bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsFromWindow()
 {
+    if( !m_layerSpecificOverrides->CommitPendingChanges() )
+        return false;
+
     if( !m_settings )
         return false;
 
-    if( m_GridStyleCtrl->GetSelection() > 0 )
-        m_settings->m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
-    else
-        m_settings->m_FillMode = ZONE_FILL_MODE::POLYGONS;
-
     if( !AcceptOptions() )
         return false;
-
-    m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
-    m_settings->m_HatchThickness = m_gridStyleThickness.GetIntValue();
-    m_settings->m_HatchGap = m_gridStyleGap.GetIntValue();
-    m_settings->m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
-    m_settings->m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
     return true;
 }
@@ -278,7 +311,9 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     if( !m_outlineHatchPitch.Validate( pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ),
                                        pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+    {
         return false;
+    }
 
     m_settings->m_BorderHatchPitch = m_outlineHatchPitch.GetIntValue();
 
@@ -310,18 +345,86 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     if( aUseExportableSetupOnly )
         return true;
 
+    m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
     m_settings->m_Name = m_tcZoneName->GetValue();
+
+    m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN : ZONE_FILL_MODE::POLYGONS;
+    m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
+    m_settings->m_HatchThickness = m_gridStyleThickness.GetIntValue();
+    m_settings->m_HatchGap = m_gridStyleGap.GetIntValue();
+    m_settings->m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
+    m_settings->m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
+
+    for( auto& [layer, props] : m_settings->m_LayerProperties )
+        props.hatching_offset = std::nullopt;
+
+    for( const auto& [layer, props] : m_layerPropsTable->GetItems() )
+        m_settings->m_LayerProperties[layer] = props;
 
     return true;
 }
 
 
-void PANEL_ZONE_PROPERTIES::OnStyleSelection( wxCommandEvent& aEvent )
+void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
 {
-    bool enable = m_GridStyleCtrl->GetSelection() >= 1;
-    m_tcGridStyleThickness->Enable( enable );
-    m_tcGridStyleGap->Enable( enable );
-    m_tcGridStyleOrientation->Enable( enable );
-    m_spinCtrlSmoothLevel->Enable( enable );
-    m_spinCtrlSmoothValue->Enable( enable );
+    // Zones with no net never have islands removed
+    if( m_netSelector->GetSelectedNetcode() == INVALID_NET_CODE )
+    {
+        if( m_cbRemoveIslands->IsEnabled() )
+            m_settings->SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
+
+        m_cbRemoveIslands->SetSelection( 1 );
+        m_staticText40->Enable( false );
+        m_cbRemoveIslands->Enable( false );
+    }
+    else if( !m_cbRemoveIslands->IsEnabled() )
+    {
+        m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
+        m_staticText40->Enable( true );
+        m_cbRemoveIslands->Enable( true );
+    }
+
+    wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NET_UPDATE );
+    evt->SetId( m_netSelector->GetSelectedNetcode() );
+    wxQueueEvent( m_parent, evt );
 }
+
+
+void PANEL_ZONE_PROPERTIES::onHatched( wxCommandEvent& event )
+{
+    bool enable = m_cbHatched->GetValue();
+    m_gridStyleThickness.Enable( enable );
+    m_gridStyleGap.Enable( enable );
+    m_gridStyleRotation.Enable( enable );
+    m_staticTextGridSmoothingLevel->Enable( enable );
+    m_spinCtrlSmoothLevel->Enable( enable );
+    m_staticTextGridSmootingVal->Enable( enable );
+    m_spinCtrlSmoothValue->Enable( enable );
+    m_offsetOverridesLabel->Enable( enable );
+    m_layerSpecificOverrides->Enable( enable );
+    m_bpAddCustomLayer->Enable( enable );
+    m_bpDeleteCustomLayer->Enable( enable );
+}
+
+
+void PANEL_ZONE_PROPERTIES::OnAddLayerItem( wxCommandEvent& event )
+{
+    m_layerSpecificOverrides->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_layerSpecificOverrides->GetTable()->AppendRows( 1 );
+                return { m_layerSpecificOverrides->GetNumberRows() - 1, -1 };
+            } );
+}
+
+
+void PANEL_ZONE_PROPERTIES::OnDeleteLayerItem( wxCommandEvent& event )
+{
+    m_layerSpecificOverrides->OnDeleteRows(
+            [&]( int row )
+            {
+                m_layerSpecificOverrides->GetTable()->DeleteRows( row, 1 );
+            } );
+}
+
+

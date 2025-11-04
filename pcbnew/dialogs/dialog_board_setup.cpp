@@ -22,6 +22,7 @@
 #include <panel_setup_constraints.h>
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
+#include <panel_setup_zone_hatch_offsets.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <../board_stackup_manager/panel_board_finish.h>
 #include <confirm.h>
@@ -63,6 +64,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_layers( nullptr ),
         m_boardFinish( nullptr ),
         m_physicalStackup( nullptr ),
+        m_zoneHatchOffsets( nullptr ),
         m_tuningProfiles( nullptr ),
         m_netClasses( nullptr ),
         m_currentPage( 0 ),
@@ -71,7 +73,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_boardFinishPage( 0 ),
         m_textAndGraphicsPage( 0 ),
         m_formattingPage( 0 ),
-        m_maskAndPagePage( 0 ),
+        m_maskAndPastePage( 0 ),
+        m_zoneHatchOffsetsPage( 0 ),
         m_constraintsPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_teardropsPage( 0 ),
@@ -118,12 +121,21 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_BOARD_FINISH( aParent, m_frame );
             }, _( "Board Finish" ) );
 
-    m_maskAndPagePage = m_treebook->GetPageCount();
+    m_maskAndPastePage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
                 return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
             }, _( "Solder Mask/Paste" ) );
+
+    m_zoneHatchOffsetsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+                return new PANEL_SETUP_ZONE_HATCH_OFFSETS( aParent, m_frame, bds );
+            }, _( "Zone Hatch Offsets" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Text & Graphics" ) );
 
@@ -250,8 +262,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
 
     if( Prj().IsReadOnly() )
     {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Some settings will not "
-                                   "be editable." ),
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Some settings will not be editable." ),
                                 wxICON_WARNING );
     }
 
@@ -275,12 +286,13 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     if( m_physicalStackupPage > 0 )     // Don't run this during initialization
     {
         if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage || page == m_netclassesPage
-            || page == m_tuningProfilesPage )
+            || page == m_tuningProfilesPage || page == m_zoneHatchOffsetsPage )
         {
             m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
             m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
             m_tuningProfiles = RESOLVE_PAGE( PANEL_SETUP_TUNING_PROFILES, m_tuningProfilesPage );
             m_netClasses = RESOLVE_PAGE( PANEL_SETUP_NETCLASSES, m_netclassesPage );
+            m_zoneHatchOffsets = RESOLVE_PAGE( PANEL_SETUP_ZONE_HATCH_OFFSETS, m_zoneHatchOffsetsPage );
         }
 
         // Ensure layer page always gets updated even if we aren't moving towards it
@@ -303,6 +315,10 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
         else if( page == m_tuningProfilesPage )
         {
             m_tuningProfiles->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+        }
+        else if( page == m_zoneHatchOffsetsPage )
+        {
+            m_zoneHatchOffsets->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
         }
 
         if( Prj().IsReadOnly() )
@@ -375,8 +391,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         {
             if( ioe.Problem() != wxT( "CANCEL" ) )
             {
-                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ),
-                                                 boardFn.GetFullPath() );
+                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ), boardFn.GetFullPath() );
                 DisplayErrorMessage( this, msg, ioe.What() );
             }
 
@@ -406,22 +421,13 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_TEXT_AND_GRAPHICS,
-                          m_textAndGraphicsPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_TEXT_AND_GRAPHICS, m_textAndGraphicsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_FormattingOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_FORMATTING,
-                          m_formattingPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_FORMATTING, m_formattingPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_ConstraintsOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_CONSTRAINTS,
-                          m_constraintsPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_CONSTRAINTS, m_constraintsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_NetclassesOpt->GetValue() )
         {
@@ -435,39 +441,27 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         {
             PROJECT_FILE& otherProjectFile = otherPrj->GetProjectFile();
 
-            RESOLVE_PAGE( PANEL_ASSIGN_COMPONENT_CLASSES, m_componentClassesPage )
-                    ->ImportSettingsFrom( otherProjectFile.m_ComponentClassSettings );
+            RESOLVE_PAGE( PANEL_ASSIGN_COMPONENT_CLASSES,
+                          m_componentClassesPage )->ImportSettingsFrom( otherProjectFile.m_ComponentClassSettings );
         }
 
         if( importDlg.m_TracksAndViasOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS,
-                          m_tracksAndViasPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS, m_tracksAndViasPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_TeardropsOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_TEARDROPS,
-                          m_teardropsPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_TEARDROPS, m_teardropsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_TuningPatternsOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_TUNING_PATTERNS,
-                          m_tuningPatternsPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_TUNING_PATTERNS, m_tuningPatternsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE,
-                          m_maskAndPagePage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE, m_maskAndPastePage )->ImportSettingsFrom( otherBoard );
+
+        if( importDlg.m_ZoneHatchingOffsetsOpt->GetValue() )
+            RESOLVE_PAGE( PANEL_SETUP_ZONE_HATCH_OFFSETS, m_zoneHatchOffsetsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_CustomRulesOpt->GetValue() )
-        {
-            RESOLVE_PAGE( PANEL_SETUP_RULES,
-                          m_customRulesPage )->ImportSettingsFrom( otherBoard );
-        }
+            RESOLVE_PAGE( PANEL_SETUP_RULES, m_customRulesPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
         {
@@ -476,12 +470,13 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_SEVERITIES,
                           m_severitiesPage )->ImportSettingsFrom( otherSettings.m_DRCSeverities );
         }
+
         if( importDlg.m_TuningProfilesOpt->GetValue() )
         {
             PROJECT_FILE& otherProjectFile = otherPrj->GetProjectFile();
 
-            RESOLVE_PAGE( PANEL_SETUP_TUNING_PROFILES, m_tuningProfilesPage )
-                    ->ImportSettingsFrom( otherProjectFile.TuningProfileParameters() );
+            RESOLVE_PAGE( PANEL_SETUP_TUNING_PROFILES,
+                          m_tuningProfilesPage )->ImportSettingsFrom( otherProjectFile.TuningProfileParameters() );
         }
 
         if( otherPrj != &m_frame->Prj() )
