@@ -96,7 +96,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
 
     for( const auto& plugin : plugins )
     {
-        if ( plugin.m_name == aType )
+        if( plugin.m_name.CmpNoCase( aType ) == 0 )
         {
             return plugin.m_type;
         }
