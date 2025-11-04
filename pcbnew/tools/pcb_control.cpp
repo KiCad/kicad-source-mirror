@@ -1407,6 +1407,28 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     if( !group->HasDesignBlockLink() )
         return 1;
 
+    // Get the associated design block
+    DESIGN_BLOCK_PANE* designBlockPane = editFrame->GetDesignBlockPane();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
+
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
+    if( designBlock->GetBoardFile().IsEmpty() )
+    {
+        wxString msg;
+        msg.Printf( _( "Design block %s does not have a board file." ),
+                    group->GetDesignBlockLibId().GetUniStringLibId() );
+        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+        return 1;
+    }
+
     BOARD_COMMIT tempCommit( m_frame );
 
     std::set<EDA_ITEM*> originalItems;
