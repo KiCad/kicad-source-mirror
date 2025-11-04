@@ -1209,6 +1209,8 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 
     aBoardItem->ClearEditFlags();
     aBoardItem->SetParent( this );
+
+    InvalidateGeometryCaches();
 }
 
 
@@ -1308,6 +1310,8 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     }
 
     aBoardItem->SetFlags( STRUCT_DELETED );
+
+    InvalidateGeometryCaches();
 }
 
 
