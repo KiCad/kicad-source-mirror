@@ -38,7 +38,6 @@
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <panel_fp_lib_table.h>
 #include <lib_id.h>
-#include <lib_table_base.h>
 #include <footprint_library_adapter.h>
 #include <lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
@@ -763,7 +762,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::map<std::string, UTF8> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::map<std::string, UTF8> props( LIBRARY_TABLE::ParseOptions( options.ToStdString() ) );
 
         if( PCB_IO_MGR::ConvertLibrary( props, legacyLib.GetFullPath(), newLib.GetFullPath(),
                                         errorReporter.m_Reporter ) )

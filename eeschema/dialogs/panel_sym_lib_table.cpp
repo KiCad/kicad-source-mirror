@@ -45,7 +45,6 @@
 #include <symbol_viewer_frame.h>
 #include <sch_edit_frame.h>
 #include <kiway.h>
-#include <lib_table_base.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -1029,7 +1028,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::map<std::string, UTF8> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::map<std::string, UTF8> props( LIBRARY_TABLE::ParseOptions( options.ToStdString() ) );
 
         if( SCH_IO_MGR::ConvertLibrary( &props, legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {

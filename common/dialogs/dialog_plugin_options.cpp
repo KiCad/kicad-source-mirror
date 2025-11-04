@@ -26,7 +26,7 @@
 
 #include <dialogs/dialog_plugin_options.h>
 #include <grid_tricks.h>
-#include <lib_table_base.h>
+#include <libraries/library_table.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
@@ -98,7 +98,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
     // Fill the grid with existing aOptions
     std::string options = TO_UTF8( m_callers_options );
 
-    std::map<std::string, UTF8> props = LIB_TABLE::ParseOptions( options );
+    std::map<std::string, UTF8> props = LIBRARY_TABLE::ParseOptions( options );
 
     if( !props.empty() )
     {
@@ -138,7 +138,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataFromWindow()
             props[name] = value;
     }
 
-    *m_result = LIB_TABLE::FormatOptions( &props ).wx_str();
+    *m_result = LIBRARY_TABLE::FormatOptions( &props ).wx_str();
     return true;
 }
 

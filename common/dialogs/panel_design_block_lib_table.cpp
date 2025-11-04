@@ -42,7 +42,6 @@
 #include <project.h>
 #include <env_vars.h>
 #include <lib_id.h>
-#include <lib_table_base.h>
 #include <bitmaps.h>
 #include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
@@ -806,7 +805,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
 
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
-        std::map<std::string, UTF8> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+        std::map<std::string, UTF8> props( LIBRARY_TABLE::ParseOptions( options.ToStdString() ) );
 
         if( DESIGN_BLOCK_IO_MGR::ConvertLibrary( &props, legacyLib.GetFullPath(),
                                                  newLib.GetFullPath() ) )

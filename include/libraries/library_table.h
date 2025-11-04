@@ -190,6 +190,9 @@ public:
 
     LIBRARY_RESULT<void> Save();
 
+    static std::map<std::string, UTF8> ParseOptions( const std::string& aOptionsList );
+    static UTF8 FormatOptions( const std::map<std::string, UTF8>* aProperties );
+
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );
     bool addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR );

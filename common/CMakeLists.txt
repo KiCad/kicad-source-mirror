@@ -227,7 +227,6 @@ set( KICOMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     launch_ext.cpp
-    lib_table_base.cpp
     layer_id.cpp
     lib_id.cpp
     locale_io.cpp

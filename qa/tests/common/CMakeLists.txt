@@ -45,7 +45,6 @@ set( QA_COMMON_SRCS
     test_hotkey_store.cpp
     test_increment.cpp
     test_ki_any.cpp
-    test_lib_table.cpp
     test_library_tables.cpp
     test_markup_parser.cpp
     test_kicad_string.cpp
@@ -54,7 +53,6 @@ set( QA_COMMON_SRCS
     test_kiid.cpp
     test_layer_ids.cpp
     test_layer_range.cpp
-    test_lib_table.cpp
     test_lset.cpp
     test_markup_parser.cpp
     test_notifications_manager.cpp

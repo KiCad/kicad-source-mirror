@@ -20,9 +20,9 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <lib_table_base.h>
 #include <libraries/library_table.h>
 #include <libraries/library_table_parser.h>
+#include <richio.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <wx_filename.h>
@@ -48,7 +48,7 @@ bool LIBRARY_TABLE_ROW::operator==( const LIBRARY_TABLE_ROW& aOther ) const
 
 std::map<std::string, UTF8> LIBRARY_TABLE_ROW::GetOptionsMap() const
 {
-    return LIB_TABLE::ParseOptions( TO_UTF8( m_options ) );
+    return LIBRARY_TABLE::ParseOptions( TO_UTF8( m_options ) );
 }
 
 
@@ -281,4 +281,108 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
     }
 
     return LIBRARY_RESULT<void>();
+}
+
+
+#define OPT_SEP     '|'         ///< options separator character
+
+std::map<std::string, UTF8> LIBRARY_TABLE::ParseOptions( const std::string& aOptionsList )
+{
+    std::map<std::string, UTF8> props;
+
+    if( aOptionsList.size() )
+    {
+        const char* cp  = &aOptionsList[0];
+        const char* end = cp + aOptionsList.size();
+
+        std::string pair;
+
+        // Parse all name=value pairs
+        while( cp < end )
+        {
+            pair.clear();
+
+            // Skip leading white space.
+            while( cp < end && isspace( *cp )  )
+                ++cp;
+
+            // Find the end of pair/field
+            while( cp < end )
+            {
+                if( *cp == '\\'  &&  cp + 1 < end  &&  cp[1] == OPT_SEP  )
+                {
+                    ++cp;           // skip the escape
+                    pair += *cp++;  // add the separator
+                }
+                else if( *cp == OPT_SEP )
+                {
+                    ++cp;           // skip the separator
+                    break;          // process the pair
+                }
+                else
+                {
+                    pair += *cp++;
+                }
+            }
+
+            // stash the pair
+            if( pair.size() )
+            {
+                // first equals sign separates 'name' and 'value'.
+                size_t  eqNdx = pair.find( '=' );
+
+                if( eqNdx != pair.npos )
+                {
+                    std::string name  = pair.substr( 0, eqNdx );
+                    std::string value = pair.substr( eqNdx + 1 );
+                    props[name] = value;
+                }
+                else
+                {
+                    props[pair] = "";       // property is present, but with no value.
+                }
+            }
+        }
+    }
+
+    return props;
+}
+
+
+UTF8 LIBRARY_TABLE::FormatOptions( const std::map<std::string, UTF8>* aProperties )
+{
+    UTF8 ret;
+
+    if( aProperties )
+    {
+        for( std::map<std::string, UTF8>::const_iterator it = aProperties->begin();
+             it != aProperties->end(); ++it )
+        {
+            const std::string& name = it->first;
+
+            const UTF8& value = it->second;
+
+            if( ret.size() )
+                ret += OPT_SEP;
+
+            ret += name;
+
+            // the separation between name and value is '='
+            if( value.size() )
+            {
+                ret += '=';
+
+                for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
+                {
+                    // escape any separator in the value.
+                    if( *si == OPT_SEP )
+                        ret += '\\';
+
+                    ret += *si;
+                }
+            }
+        }
+    }
+
+    return ret;
 }
