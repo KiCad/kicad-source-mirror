@@ -106,15 +106,13 @@ public:
 
         mainSizer->Add( new wxStaticLine( this ), 0, wxALL | wxEXPAND, 2 );
 
-        wxPanel* panelDisplayCurrent = new wxPanel( this, wxID_ANY, wxDefaultPosition,
-                                                    wxDefaultSize );
+        wxPanel* panelDisplayCurrent = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
         mainSizer->Add( panelDisplayCurrent, 0, wxALL | wxEXPAND, 5 );
 
         wxFlexGridSizer* fgsizer = new wxFlexGridSizer( 2 );
         panelDisplayCurrent->SetSizer( fgsizer );
 
-        wxStaticText* cmd_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY,
-                                                      _( "Command:" ) );
+        wxStaticText* cmd_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY, _( "Command:" ) );
         fgsizer->Add( cmd_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
         wxStaticText* cmd_label_1 = new wxStaticText( panelDisplayCurrent, wxID_ANY, wxEmptyString );
@@ -122,8 +120,7 @@ public:
         cmd_label_1->SetLabel( aName );
         fgsizer->Add( cmd_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* key_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY,
-                                                      _( "Current key:" ) );
+        wxStaticText* key_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY, _( "Current key:" ) );
         fgsizer->Add( key_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
         wxStaticText* key_label_1 = new wxStaticText( panelDisplayCurrent, wxID_ANY, wxEmptyString );
@@ -133,8 +130,7 @@ public:
 
         fgsizer->AddStretchSpacer();
 
-        wxButton* resetButton = new wxButton( this, wxID_ANY, _( "Clear assigned hotkey" ),
-                                              wxDefaultPosition, wxDefaultSize, 0 );
+        wxButton* resetButton = new wxButton( this, wxID_ANY, _( "Clear assigned hotkey" ) );
 
         mainSizer->Add( resetButton, 0, wxALL | wxALIGN_CENTRE_HORIZONTAL, 5 );
 
@@ -513,16 +509,11 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 }
 
 
-WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore,
-                                        bool aReadOnly ) :
+WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore ) :
         wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
-        m_hk_store( aHotkeyStore ),
-        m_readOnly( aReadOnly )
+        m_hk_store( aHotkeyStore )
 {
-    wxString command_header = _( "Command" );
-
-    if( !m_readOnly )
-        command_header << wxS( " " ) << _( "(double-click to edit)" );
+    wxString command_header = _( "Command (double-click to edit)" );
 
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
@@ -568,13 +559,10 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     GetDataView()->SetIndent( 10 );
 
-    if( !m_readOnly )
-    {
-        // The event only apply if the widget is in editable mode
-        Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
-        Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
-        Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
-    }
+    // The event only apply if the widget is in editable mode
+    Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
+    Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
+    Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
 }
 
 
@@ -670,7 +658,7 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
 {
     long key = aEvent.GetKeyCode();
     bool is_tab = aEvent.IsKeyInCategory( WXK_CATEGORY_TAB );
-printf("key %lX mod %X\n", key, aEvent.GetModifiers());
+
     if( key == WXK_ESCAPE )
     {
         return 0;

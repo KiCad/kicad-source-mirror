@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIMPLE_BUTTON_PANEL_H
-#define SIMPLE_BUTTON_PANEL_H
+#pragma once
 
 #include "wx/panel.h"
 
@@ -86,12 +85,9 @@ public:
      * @param aLeftBtns: buttons on the left side, from left to right
      * @param aRightBtns: buttons on the right side, from left to right
      */
-    BUTTON_ROW_PANEL( wxWindow* aWindow,
-        const BTN_DEF_LIST& aLeftBtns,
-        const BTN_DEF_LIST& aRightBtns );
+    BUTTON_ROW_PANEL( wxWindow* aWindow, const BTN_DEF_LIST& aLeftBtns, const BTN_DEF_LIST& aRightBtns );
 
 private:
-
     /**
      * Add a set of buttons to one side of the panel.
      *
@@ -101,7 +97,6 @@ private:
      */
     void addButtons( bool aLeft, const BTN_DEF_LIST& aDefs );
 
+private:
     wxBoxSizer* m_sizer;
 };
-
-#endif // SIMPLE_BUTTON_PANEL_H

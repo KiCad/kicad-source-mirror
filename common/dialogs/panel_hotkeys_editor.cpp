@@ -64,11 +64,9 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 }
 
 
-PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
-                                            bool aReadOnly ) :
+PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow ) :
         RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_frame( aFrame ),
-        m_readOnly( aReadOnly ),
         m_hotkeyStore()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -77,12 +75,13 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     m_filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
     bMargins->Add( m_filterSearch, 0, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore );
     bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
-    if( !m_readOnly )
-        installButtons( bMargins );
+    m_bottomSizer = new wxBoxSizer( wxHORIZONTAL );
+    installButtons( m_bottomSizer );
 
+    bMargins->Add( m_bottomSizer, 0, wxEXPAND, 5 );
     mainSizer->Add( bMargins, 1, wxEXPAND, 0 );
 
 #ifdef __WXGTK__
@@ -159,16 +158,20 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
     auto btnPanel = std::make_unique<BUTTON_ROW_PANEL>( this, l_btn_defs, r_btn_defs );
 
-    aSizer->Add( btnPanel.release(), 0, wxEXPAND | wxALL, KIUI::GetStdMargin() );
+    aSizer->Add( btnPanel.release(), 1, wxEXPAND | wxALL, KIUI::GetStdMargin() );
 }
 
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
-    m_hotkeyStore.Init( m_actions, m_readOnly );
+    m_hotkeyStore.Init( m_actions, true );
 
     if( !m_hotkeyListCtrl->TransferDataToControl() )
         return false;
+
+    // we may have loaded a query from the saved dialog state, so make sure to run it
+    if( !m_filterSearch->IsEmpty() )
+        m_hotkeyListCtrl->ApplyFilterString( m_filterSearch->GetValue() );
 
     return true;
 }
@@ -176,9 +179,6 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
 {
-    if( m_readOnly )
-        return true;
-
     if( !m_hotkeyListCtrl->TransferDataFromControl() )
         return false;
 

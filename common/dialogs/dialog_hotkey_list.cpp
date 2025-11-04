@@ -35,11 +35,10 @@
 DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     DIALOG_SHIM( aParent, wxID_ANY, _( "Hotkey List" ) )
 {
-    const int   margin = KIUI::GetStdMargin();
     wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
     KIFACE*     kiface = nullptr;
 
-    m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, false );
+    m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this );
 
     wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 
@@ -67,14 +66,14 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     // the KiFACE will only get us the default hotkeys
     ReadHotKeyConfigIntoActions( wxEmptyString, m_hk_list->ActionsList() );
 
-    main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
+    main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, KIUI::GetStdMargin() );
 
     wxStdDialogButtonSizer* sdb_sizer = new wxStdDialogButtonSizer;
-    sdb_sizer->AddButton( new wxButton( this, wxID_OK ) );
-    sdb_sizer->AddButton( new wxButton( this, wxID_CANCEL ) );
+    sdb_sizer->AddButton( new wxButton( m_hk_list, wxID_OK ) );
+    sdb_sizer->AddButton( new wxButton( m_hk_list, wxID_CANCEL ) );
     sdb_sizer->Realize();
 
-    main_sizer->Add( sdb_sizer, 0, wxEXPAND | wxALL, margin );
+    m_hk_list->GetBottomSizer()->Add( sdb_sizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, KIUI::GetStdMargin() );
 
     SetSizer( main_sizer );
     main_sizer->SetMinSize( 600, 400 );

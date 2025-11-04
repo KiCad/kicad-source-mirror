@@ -28,10 +28,9 @@
 #include <wx/sizer.h>
 
 
-BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
-    const BTN_DEF_LIST& aLeftBtns,
-    const BTN_DEF_LIST& aRightBtns ):
-    wxPanel( aWindow, wxID_ANY )
+BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow, const BTN_DEF_LIST& aLeftBtns,
+                                    const BTN_DEF_LIST& aRightBtns ) :
+        wxPanel( aWindow, wxID_ANY )
 {
     m_sizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -49,8 +48,6 @@ BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
 
 void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
 {
-    const int btn_margin = KIUI::GetStdMargin();
-
     // No button expands to fill horizontally
     const int btn_proportion = 0;
 
@@ -59,8 +56,7 @@ void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
         const auto& def = aDefs[i];
         wxButton* btn = new wxButton( this, def.m_id, def.m_text );
 
-        // Buttons expand to fill the size vertically
-        long this_style = wxEXPAND;
+        int this_style = wxTOP | wxBOTTOM;
 
         if( ( aLeft && i > 0 ) || ( !aLeft ) )
             this_style |= wxLEFT;
@@ -70,7 +66,7 @@ void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
 
         btn->SetToolTip( def.m_tooltip );
 
-        m_sizer->Add( btn, btn_proportion, this_style, btn_margin );
+        m_sizer->Add( btn, btn_proportion, this_style, KIUI::GetStdMargin() );
 
         btn->Bind( wxEVT_COMMAND_BUTTON_CLICKED, def.m_callback );
     }
