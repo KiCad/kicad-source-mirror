@@ -1622,11 +1622,12 @@ TOOL_ACTION PCB_ACTIONS::showNetInspector( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::tools ) );
 
-TOOL_ACTION PCB_ACTIONS::zonesManager( "pcbnew.Control.zonesManager",
-        AS_GLOBAL, 0, "",
-        _( "Zone Manager..." ),
-        _( "Show the zone manager dialog" ),
-        BITMAPS::show_zone );
+TOOL_ACTION PCB_ACTIONS::zonesManager( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.zonesManager" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zone Manager..." ) )
+        .Tooltip( _( "Show the zone manager dialog" ) )
+        .Icon( BITMAPS::show_zone ) );
 
 TOOL_ACTION PCB_ACTIONS::flipBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.flipBoard" )
