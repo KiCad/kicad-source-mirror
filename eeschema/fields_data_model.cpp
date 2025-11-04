@@ -81,18 +81,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
             return;
         }
 
-        // Use GetShownText() instead of GetText() to get the properly resolved value
-        // that includes text variable resolution and inherited library symbol values.
-        // This ensures BOM exports show the correct value that users see in the schematic.
-        wxString getText = field->GetText();
-        wxString getShownText = field->GetShownText( aSheetPath, false );
-        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( getShownText );
-
-        wxLogTrace( "KICAD_FIELDS",
-                    "Fields Table updateDataStore: Symbol %s, Field %s: GetText()='%s', "
-                    "GetShownText()='%s', final='%s'",
-                    aSymbol.GetRef( aSheetPath ), aFieldName, getText, getShownText, value );
-
+        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( field->GetText() );
         m_dataStore[key][aFieldName] = value;
     }
     else if( IsGeneratedField( aFieldName ) )
@@ -1158,11 +1147,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
                 if( !field.IsPrivate() )
                 {
                     wxString name = field.GetCanonicalName();
-                    // Use GetShownText() instead of GetText() to get the properly resolved value
-                    // that includes text variable resolution and inherited library symbol values.
-                    // This ensures BOM exports show the correct value that users see in the schematic.
-                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs(
-                            field.GetShownText( &ref.GetSheetPath(), false ) );
+                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() );
 
                     KIID_PATH key = makeDataStoreKey( ref );
                     m_dataStore[key][name] = value;
