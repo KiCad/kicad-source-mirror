@@ -749,6 +749,53 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
         return true;    // Cross-reference is resolved whether or not the actual textvar was
     }
 
+    // If UUID resolution failed, try to resolve by reference designator
+    // This handles both exact matches (J601A) and parent references for multi-unit symbols (J601)
+    if( !refItem )
+    {
+        SCH_REFERENCE_LIST refs;
+        Hierarchy().GetSymbols( refs );
+
+        SCH_SYMBOL*    foundSymbol = nullptr;
+        SCH_SHEET_PATH foundPath;
+
+        for( int ii = 0; ii < (int) refs.GetCount(); ii++ )
+        {
+            SCH_REFERENCE& reference = refs[ii];
+            wxString       symbolRef = reference.GetSymbol()->GetRef( &reference.GetSheetPath(), false );
+
+            // Try exact match first
+            if( symbolRef == ref )
+            {
+                foundSymbol = reference.GetSymbol();
+                foundPath = reference.GetSheetPath();
+                break;
+            }
+
+            // For multi-unit symbols, try matching parent reference (e.g., J601 matches J601A)
+            if( symbolRef.StartsWith( ref ) && symbolRef.Length() == ref.Length() + 1 )
+            {
+                wxChar lastChar = symbolRef.Last();
+                if( lastChar >= 'A' && lastChar <= 'Z' )
+                {
+                    foundSymbol = reference.GetSymbol();
+                    foundPath = reference.GetSheetPath();
+                    // Don't break - continue looking for exact match
+                }
+            }
+        }
+
+        if( foundSymbol )
+        {
+            if( foundSymbol->ResolveTextVar( &foundPath, &remainder, aDepth + 1 ) )
+                *token = std::move( remainder );
+            else
+                *token = foundSymbol->GetRef( &foundPath, true ) + wxS( ":" ) + remainder;
+
+            return true;
+        }
+    }
+
     return false;
 }
 

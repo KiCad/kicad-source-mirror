@@ -1535,6 +1535,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "NET_NAME(<pin_number>)" ) );
     aVars->push_back( wxT( "NET_CLASS(<pin_number>)" ) );
     aVars->push_back( wxT( "PIN_NAME(<pin_number>)" ) );
+    aVars->push_back( wxT( "UNIT(<pin_number>)" ) );
 }
 
 
@@ -1774,16 +1775,33 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     else if( token->StartsWith( wxT( "SHORT_NET_NAME(" ) )
                  || token->StartsWith( wxT( "NET_NAME(" ) )
                  || token->StartsWith( wxT( "NET_CLASS(" ) )
-                 || token->StartsWith( wxT( "PIN_NAME(" ) ) )
+                 || token->StartsWith( wxT( "PIN_NAME(" ) )
+                 || token->StartsWith( wxT( "UNIT(" ) ) )
     {
         wxString pinNumber = token->AfterFirst( '(' );
         pinNumber = pinNumber.BeforeLast( ')' );
 
-        for( SCH_PIN* pin : GetPins( aPath ) )
+        // First, try to find the pin in the current unit (for backward compatibility)
+        // For UNIT(), always search all pins to find which unit the pin belongs to
+        std::vector<SCH_PIN*> pinsToSearch = token->StartsWith( wxT( "UNIT(" ) )
+                                              ? GetAllLibPins()
+                                              : GetPins( aPath );
+
+        for( SCH_PIN* pin : pinsToSearch )
         {
             if( pin->GetNumber() == pinNumber )
             {
-                if( token->StartsWith( wxT( "PIN_NAME" ) ) )
+                if( token->StartsWith( wxT( "UNIT(" ) ) )
+                {
+                    // Return the full unit reference (e.g., "J601A")
+                    int pinUnit = pin->GetUnit();
+                    if( pinUnit > 0 )
+                        *token = GetRef( aPath, false ) + SubReference( pinUnit, false );
+                    else
+                        *token = GetRef( aPath, false );
+                    return true;
+                }
+                else if( token->StartsWith( wxT( "PIN_NAME" ) ) )
                 {
                     *token = pin->GetAlt().IsEmpty() ? pin->GetName() : pin->GetAlt();
                     return true;
@@ -1794,13 +1812,58 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                 if( !conn )
                     *token = wxEmptyString;
                 else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
-                    *token = conn->LocalName();
+                {
+                    wxString netName = conn->LocalName();
+                    if( netName.Lower().StartsWith( wxT( "unconnected" ) ) )
+                        *token = wxT( "NC" );
+                    else
+                        *token = netName;
+                }
                 else if( token->StartsWith( wxT( "NET_NAME" ) ) )
                     *token = conn->Name();
                 else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
                     *token = pin->GetEffectiveNetClass( aPath )->GetName();
 
                 return true;
+            }
+        }
+
+        // If pin not found in current unit, search all units (auto-resolution)
+        if( !token->StartsWith( wxT( "UNIT(" ) ) )
+        {
+            for( SCH_PIN* pin : GetAllLibPins() )
+            {
+                if( pin->GetNumber() == pinNumber )
+                {
+                    if( token->StartsWith( wxT( "PIN_NAME" ) ) )
+                    {
+                        *token = pin->GetAlt().IsEmpty() ? pin->GetName() : pin->GetAlt();
+                        return true;
+                    }
+
+                    // For net-related functions, we need to find the correct sheet path
+                    // that has this pin's unit selected
+                    // Note: This is a simplification - in practice we may need to search
+                    // for the actual instance with this unit
+                    SCH_CONNECTION* conn = pin->Connection( aPath );
+
+                    if( !conn )
+                        *token = wxEmptyString;
+                    else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
+                    {
+                        wxString netName = conn->LocalName();
+                        if( netName.Lower().StartsWith( wxT( "unconnected" ) ) )
+                            *token = wxT( "NC" );
+                        else
+                            *token = netName;
+                    }
+                    else if( token->StartsWith( wxT( "NET_NAME" ) ) )
+                        *token = conn->Name();
+                    else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
+                        *token = pin->GetEffectiveNetClass( aPath )->GetName();
+
+                    return true;
+                }
             }
         }
     }
