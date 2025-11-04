@@ -110,6 +110,7 @@ private:
     PROGRESS_REPORTER*       m_progress_reporter;
     std::atomic_bool         m_cancelled;
     std::mutex               m_join;
+    std::mutex               m_loadInProgress;
 };
 
 extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.

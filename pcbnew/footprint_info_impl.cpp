@@ -105,6 +105,8 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxString* aNickname,
                                               PROGRESS_REPORTER* aProgressReporter )
 {
+    std::unique_lock<std::mutex> lock( m_loadInProgress );
+
     long long int generatedTimestamp = 0;
 
     if( !CatchErrors( [&]()
