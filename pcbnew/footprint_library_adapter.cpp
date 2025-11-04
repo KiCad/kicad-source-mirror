@@ -21,6 +21,8 @@
 #include <footprint_library_adapter.h>
 
 #include <env_vars.h>
+#include <footprint_info_impl.h>
+#include <thread_pool.h>
 #include <trace_helpers.h>
 
 #include <magic_enum.hpp>
@@ -46,7 +48,133 @@ wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 
 void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
 {
+    // TODO(JE) this shares most code with the symbol adapter
+    // TODO(JE) any reason to clean these up earlier?
+    std::erase_if( m_futures,
+                   []( const std::future<void>& aFuture ) { return aFuture.valid(); } );
 
+    if( !m_futures.empty() )
+    {
+        wxLogTrace( traceLibraries, "FP: Cannot AsyncLoad, futures from a previous call remain!" );
+        return;
+    }
+
+    std::vector<LIBRARY_TABLE_ROW*> rows = m_manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+    m_loadTotal = rows.size();
+    m_loadCount.store( 0 );
+
+    if( m_loadTotal == 0 )
+    {
+        wxLogTrace( traceLibraries, "FP: AsyncLoad: no libraries left to load; exiting" );
+        return;
+    }
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    auto check =
+        []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
+        {
+            std::lock_guard lock( aMutex );
+
+            if( aMap.contains( aLib ) )
+            {
+                if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
+                    return true;
+
+                aMap.erase( aLib );
+            }
+
+            return false;
+        };
+
+    for( const LIBRARY_TABLE_ROW* row : rows )
+    {
+        wxString nickname = row->Nickname();
+        LIBRARY_TABLE_SCOPE scope = row->Scope();
+
+        // TODO(JE) library tables -- check for modified global files
+        if( check( nickname, m_libraries, m_libraries_mutex ) )
+        {
+            --m_loadTotal;
+            continue;
+        }
+
+        if( check( nickname, GlobalLibraries, GlobalLibraryMutex ) )
+        {
+            --m_loadTotal;
+            continue;
+        }
+
+        m_futures.emplace_back( tp.submit_task(
+            [this, nickname, scope]()
+            {
+                if( m_abort.load() )
+                    return;
+
+                LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
+
+                if( result.has_value() )
+                {
+                    LIB_DATA* lib = *result;
+                    wxArrayString dummyList;
+                    std::lock_guard lock ( lib->mutex );
+                    lib->status.load_status = LOAD_STATUS::LOADING;
+
+                    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+                    try
+                    {
+                        pcbplugin( lib )->FootprintEnumerate( dummyList, getUri( lib->row ), false, &options );
+                        wxLogTrace( traceLibraries, "FP: %s: library enumerated %zu items", nickname, dummyList.size() );
+                        lib->status.load_status = LOAD_STATUS::LOADED;
+                    }
+                    catch( IO_ERROR& e )
+                    {
+                        lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+                        lib->status.error = LIBRARY_ERROR( { e.What() } );
+                        wxLogTrace( traceLibraries, "FP: %s: plugin threw exception: %s", nickname, e.What() );
+                    }
+                }
+                else
+                {
+                    switch( scope )
+                    {
+                    case LIBRARY_TABLE_SCOPE::GLOBAL:
+                    {
+                        std::lock_guard lock( GlobalLibraryMutex );
+
+                        GlobalLibraries[nickname].status = LIB_STATUS( {
+                            .load_status = LOAD_STATUS::LOAD_ERROR,
+                            .error = result.error()
+                        } );
+
+                        break;
+                    }
+
+                    case LIBRARY_TABLE_SCOPE::PROJECT:
+                    {
+                        wxLogTrace( traceLibraries, "FP: project library error: %s: %s", nickname, result.error().message );
+                        std::lock_guard lock( m_libraries_mutex );
+
+                        m_libraries[nickname].status = LIB_STATUS( {
+                            .load_status = LOAD_STATUS::LOAD_ERROR,
+                            .error = result.error()
+                        } );
+
+                        break;
+                    }
+
+                    default:
+                        wxFAIL_MSG( "Unexpected library table scope" );
+                    }
+                }
+
+                ++m_loadCount;
+            } ) );
+    }
+
+    wxLogTrace( traceLibraries, "FP: Started async load of %zu libraries", m_loadTotal );
 }
 
 

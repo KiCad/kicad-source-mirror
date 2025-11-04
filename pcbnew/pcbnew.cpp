@@ -25,6 +25,7 @@
 
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
+#include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
 #include <confirm.h>
 #include <kiface_base.h>
@@ -61,6 +62,7 @@
 #include <panel_3D_raytracing_options.h>
 #include <project_pcb.h>
 #include <python_scripting.h>
+#include <thread_pool.h>
 
 #include "invoke_pcb_dialog.h"
 #include <wildcards_and_files_ext.h>
@@ -390,8 +392,15 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
+    void PreloadLibraries( KIWAY* aKiway ) override;
+    void ProjectChanged() override;
+
 private:
     std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
+    std::shared_ptr<BACKGROUND_JOB>      m_libraryPreloadBackgroundJob;
+    std::future<void>                    m_libraryPreloadReturn;
+    std::atomic_bool                     m_libraryPreloadInProgress;
+    std::atomic_bool                     m_libraryPreloadAbort;
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
@@ -566,4 +575,88 @@ int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgre
 bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 {
     return m_jobHandler->HandleJobConfig( aJob, aParent );
+}
+
+
+void IFACE::PreloadLibraries( KIWAY* aKiway )
+{
+    constexpr static int interval = 150;
+    constexpr static int timeLimit = 120000;
+
+    wxCHECK( aKiway, /* void */ );
+
+    if( m_libraryPreloadInProgress.load() )
+        return;
+
+    m_libraryPreloadBackgroundJob =
+            Pgm().GetBackgroundJobMonitor().Create( _( "Loading Footprint Libraries" ) );
+
+    auto preload =
+        [this, aKiway]() -> void
+        {
+            std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
+                    m_libraryPreloadBackgroundJob->m_reporter;
+
+            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &aKiway->Prj() );
+
+            int elapsed = 0;
+
+            reporter->Report( _( "Loading Footprint Libraries" ) );
+            adapter->AsyncLoad();
+
+            while( true )
+            {
+                if( m_libraryPreloadAbort.load() )
+                {
+                    m_libraryPreloadAbort.store( false );
+                    break;
+                }
+
+                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
+
+                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
+                {
+                    float progress = *loadStatus;
+                    reporter->SetCurrentProgress( progress );
+
+                    if( progress >= 1 )
+                        break;
+                }
+                else
+                {
+                    reporter->SetCurrentProgress( 1 );
+                    break;
+                }
+
+                elapsed += interval;
+
+                if( elapsed > timeLimit )
+                    break;
+            }
+
+            adapter->BlockUntilLoaded();
+
+            // TODO: Remove once fp-info-cache isn't a thing
+            GFootprintList.ReadFootprintFiles( adapter, nullptr, reporter.get() );
+
+            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+            m_libraryPreloadBackgroundJob.reset();
+            m_libraryPreloadInProgress.store( false );
+
+            std::string payload = "";
+            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+            aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+            aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
+        };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    m_libraryPreloadInProgress.store( true );
+    m_libraryPreloadReturn = tp.submit_task( preload );
+}
+
+
+void IFACE::ProjectChanged()
+{
+    if( m_libraryPreloadInProgress.load() )
+        m_libraryPreloadAbort.store( true );
 }

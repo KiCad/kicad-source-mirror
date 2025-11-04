@@ -663,6 +663,9 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( const wxDataViewItem& aItem ) 
     LIB_TREE_NODE* node   = ToNode( aItem );
     LIB_TREE_NODE* parent = node ? node->m_Parent : nullptr;
 
+    if( node->m_Type == LIB_TREE_NODE::TYPE::INVALID )
+        return ToItem( nullptr );
+
     // wxDataViewModel has no root node, but rather top-level elements have
     // an invalid (null) parent.
     if( !node || !parent || parent->m_Type == LIB_TREE_NODE::TYPE::ROOT )

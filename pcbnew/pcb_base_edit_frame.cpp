@@ -25,6 +25,7 @@
 
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
+#include <background_jobs_monitor.h>
 #include <pcb_base_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <tool/tool_manager.h>
@@ -48,6 +49,8 @@
 #include <widgets/vertex_editor_pane.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
+
+#include <widgets/kistatusbar.h>
 #include <widgets/wx_aui_utils.h>
 
 
@@ -88,11 +91,14 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                   m_darkMode = KIPLATFORM::UI::IsDarkTheme();
               }
           } );
+
+    Pgm().GetBackgroundJobMonitor().RegisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
 }
 
 
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
+    Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
     CloseVertexEditor();
     GetCanvas()->GetView()->Clear();
 }
