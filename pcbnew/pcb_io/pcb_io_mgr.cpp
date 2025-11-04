@@ -102,7 +102,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
         }
     }
 
-    return PCB_FILE_T( -1 );
+    return PCB_IO_MGR::PCB_FILE_UNKNOWN;
 }
 
 
