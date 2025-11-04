@@ -793,13 +793,15 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 
     if( !uri )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "Could not get URI for library %s",
+        wxLogTrace( traceLibWatch, "Could not get URI for library %s",
                     wxString( aID->GetLibNickname().c_str() ) );
         return;
     }
 
-    wxLogTrace( "KICAD_LIB_WATCH", "Setting up watcher for %s", *uri );
-    m_watcherFileName.Assign( *uri );
+    wxString tmp = ExpandEnvVarSubstitutions( *uri, &Prj() );
+
+    wxLogTrace( traceLibWatch, "Setting up watcher for %s", tmp );
+    m_watcherFileName.Assign( tmp );
 
     if( !m_watcherFileName.FileExists() )
         return;
