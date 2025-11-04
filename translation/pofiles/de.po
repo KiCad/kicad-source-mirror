@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 22:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-11-05 01:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6119,7 +6119,6 @@ msgid "Top main"
 msgstr "Oben (Haupt)"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxiliary"
 msgstr "Oben (Zusatz)"
 
@@ -7922,7 +7921,7 @@ msgid "History directory does not exist: %s"
 msgstr "Das Historieverzeichnis %s existiert nicht"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
 msgstr "Konnte Git-Repository nicht öffnen: %s"
 
@@ -9066,7 +9065,6 @@ msgid "An unexpected error occurred while reading library table"
 msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/local_history.cpp:1369
-#, fuzzy
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
@@ -9076,7 +9074,7 @@ msgstr ""
 "\n"
 
 #: common/local_history.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "... and %zu more files\n"
@@ -9085,17 +9083,14 @@ msgstr ""
 "... und %zu weitere Dateien\n"
 
 #: common/local_history.cpp:1384
-#, fuzzy
 msgid "Delete Files during Restore"
 msgstr "Dateien im Zuge der Wiederherstellung löschen"
 
 #: common/local_history.cpp:1386
-#, fuzzy
 msgid "Proceed"
 msgstr "Fortfahren"
 
 #: common/local_history.cpp:1386
-#, fuzzy
 msgid "Keep All Files"
 msgstr "Alle Dateien behalten"
 
@@ -9104,7 +9099,6 @@ msgid "Abort"
 msgstr "Abbrechen"
 
 #: common/local_history.cpp:1388
-#, fuzzy
 msgid ""
 "Choosing 'Keep All Files' will restore the selected commit but retain any "
 "existing files in the project directory. Choosing 'Proceed' will delete "
@@ -9116,7 +9110,6 @@ msgstr ""
 "sind."
 
 #: common/local_history.cpp:1806
-#, fuzzy
 msgid "Select snapshot"
 msgstr "Snapshot auswählen"
 
@@ -10119,7 +10112,6 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "Bogenradius und -mitte beibehalten, Winkel anpassen"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
 "Bogenbearbeitungsmodus wechseln um Radius beizubehalten wenn Endpunkte "
@@ -12367,7 +12359,6 @@ msgid "Bill of Materials"
 msgstr "Stückliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -12494,11 +12485,11 @@ msgstr ""
 "\n"
 " * `%I`: Absoluter Pfad und Dateiname der Netzlistenzwischendatei "
 "(Datenquelle für den Stücklistengenerator)\n"
-" * `%O`: Absoluter Pfad und Dateiname der Stücklistendatei (ohne "
-"Dateierweiterung)\n"
+" * `%O`: Absoluter Pfad und Dateiname der Stücklistendatei "
+"(ohne Dateierweiterung)\n"
 " * `%B`: Basisdateiname der Stücklistendatei (ohne Dateierweiterung)\n"
-" * `%P`: Absoluter Pfad des Projektverzeichnisses (ohne abschließenden "
-"Schrägstrich)\n"
+" * `%P`: Absoluter Pfad des Projektverzeichnisses "
+"(ohne abschließenden Schrägstrich)\n"
 "\n"
 "**Hinweis:** Der Parameter `%O` für die Ausgabedatei enthält keine "
 "Dateierweiterung. KiCad versucht diese automatisch einzufügen, u.U. muss "
@@ -12520,8 +12511,8 @@ msgstr ""
 "Kommandozeile:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
 "Unter Linux, wenn das gewünschte Generatorscript für eine CSV-Stückliste `/"
