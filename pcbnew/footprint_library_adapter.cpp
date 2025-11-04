@@ -24,9 +24,11 @@
 #include <footprint_info_impl.h>
 #include <thread_pool.h>
 #include <trace_helpers.h>
+#include <footprint.h>
 
 #include <magic_enum.hpp>
 #include <wx/hash.h>
+#include <wx/log.h>
 
 
 std::map<wxString, LIB_DATA> FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraries;

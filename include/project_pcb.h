@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <mutex>
+
 class FOOTPRINT_LIBRARY_ADAPTER;
 class PROJECT;
 class S3D_CACHE;
