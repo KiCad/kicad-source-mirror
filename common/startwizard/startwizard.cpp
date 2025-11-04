@@ -158,6 +158,7 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
     Pgm().HideSplash();
 
     m_wizard = new wxWizard( aParent, wxID_ANY, _( "KiCad Setup" ) );
+    m_wizard->SetWindowStyleFlag( wxRESIZE_BORDER );
 
     STARTWIZARD_WELCOME_PAGE* firstPage = new STARTWIZARD_WELCOME_PAGE( m_wizard );
     wxWizardPageSimple* lastPage = nullptr;
