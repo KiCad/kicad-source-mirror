@@ -38,16 +38,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-08-20 01:21+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-11-05 01:51+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4199,7 +4199,7 @@ msgstr "조리개 매크로 비활성화"
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
-msgstr ""
+msgstr "이 옵션이 활성화되면 KiCad는 사용자 정의 커서 대신 기본 시스템 커서를 사용함"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4726,12 +4726,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"삭제된 내장 파일도 일부 심볼에서 참조됩니다.\n"
+"심볼에서도 삭제할까요?"
 
 #: common/dialogs/panel_embedded_files.cpp:195
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"삭제된 내장 파일도 일부 심볼에서 참조됩니다.\n"
+"심볼에서도 삭제할까요?"
 
 #: common/dialogs/panel_embedded_files.cpp:312
 #: common/dialogs/panel_embedded_files.cpp:420
@@ -7887,7 +7891,7 @@ msgstr "API 응답: %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "API 응답: %s"
 
@@ -8361,7 +8365,6 @@ msgid "Schematic: Perform ERC"
 msgstr "회로도: ERC 수행"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "특별 기능: 파일 복사"
 
@@ -12466,9 +12469,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** 기준과 일치하는 심볼을 찾을 수 없음 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** 심볼을 찾을 수 없음 ***"
+msgstr "*** 심볼 라이브러리 ID가 맞지 않음 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -12572,9 +12574,8 @@ msgstr "필드 위치 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "업데이트 설정"
+msgstr "모든 업데이트 옵션 선택"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
@@ -12595,9 +12596,8 @@ msgstr "심볼 속성 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:148
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "업데이트 설정"
+msgstr "모든 업데이트 옵션 선택 해제"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -14036,34 +14036,28 @@ msgid "Pin Table"
 msgstr "핀 테이블"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert symbol"
-msgstr "심볼 변경"
+msgstr "심볼 복구"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "마지막으로 저장된 버전으로 '%s'을(를) 되돌리시겠습니까?"
+msgstr "심볼을 마지막으로 저장된 상태로 복구"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear cell"
-msgstr "공간거리"
+msgstr "셀 지우기"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "최근에 불러온 드릴 파일 목록 삭제"
+msgstr "셀 값 지우기"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "새 파일 만들기:"
+msgstr "파생 심볼 생성"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "기존 심볼에서 파생된 새 심볼 만들기"
+msgstr "선택한 심볼로 파생된 새 심볼 생성"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
@@ -14106,9 +14100,9 @@ msgid "No symbols found in library '%s'."
 msgstr "심볼 %s이(가) 라이브러리 '%s'에서 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "보드 '%s' 로드 오류: %s"
+msgstr "심볼 '%s'를 불러오는 중 오류: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
 #, fuzzy
@@ -14116,9 +14110,8 @@ msgid "No related symbols could be loaded from the library."
 msgstr "라이브러리의 변경점을 포함시키기 위해 심볼 업데이트"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:599
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "라이브러리의 변경점을 포함시키기 위해 심볼 업데이트"
+msgstr "라이브러리에서 심볼을 불러올 수 없습니다."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:701
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:768
@@ -14156,9 +14149,9 @@ msgid "Rename Field"
 msgstr "필드 이름 변경"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "필드 이름 %s가 이미 존재함."
+msgstr "필드 이름 '%s'가 이미 존재함."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:825
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
@@ -14172,9 +14165,8 @@ msgid "Symbol Name"
 msgstr "심볼 이름"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "BOM에서 제외됨"
+msgstr "BOM에서 제외"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1055
 #: eeschema/sch_sheet.cpp:1748 eeschema/sch_symbol.cpp:3446
@@ -14389,9 +14381,9 @@ msgid "Edit Symbol Properties"
 msgstr "심볼 속성 편집"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "이 파일은 이미 열려 있습니다."
+msgstr "이 필드는 '%s'에서 상속됨."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:764
 #, c-format
@@ -17834,24 +17826,20 @@ msgid "Symbol Library Tables (%s)|*"
 msgstr "심볼 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:541
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Pin 이름은 비워둘 수 없습니다."
+msgstr "별명과 경로는 비워둘 수 없습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:546
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Pin 이름은 비워둘 수 없습니다."
+msgstr "별명은 비워둘 수 없습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:551
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "텍스트는 비워둘 수 없습니다."
+msgstr "경로는 비워둘 수 없습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:564
-#, fuzzy
 msgid "Library Table Error"
-msgstr "라이브러리 별명 오류"
+msgstr "라이브러리 테이블 오류"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:572
 #, c-format
@@ -18084,9 +18072,9 @@ msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
 
 #: eeschema/eeschema_jobs_handler.cpp:1021 pcbnew/pcbnew_jobs_handler.cpp:1358
 #: pcbnew/pcbnew_jobs_handler.cpp:2085
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "설정 가져오기"
+msgstr "%s 내보내기"
 
 #: eeschema/eeschema_jobs_handler.cpp:1051 pcbnew/pcbnew_jobs_handler.cpp:1962
 msgid "Output path must not conflict with existing path\n"
@@ -19405,9 +19393,8 @@ msgid "&Duplicate '%s'"
 msgstr "복제(&D) '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "단위"
+msgstr "유닛 교환"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20752,13 +20739,12 @@ msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180 또는 M270 필요"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:495
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, "
 "VBOTTOM or INVISIBLE"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM를 예"
-"상"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM 또는 "
+"INVISIBLE 로 예상됨"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:518
 msgid ""
@@ -20806,15 +20792,13 @@ msgstr "알 수 없는 SCH_FILE_T 값: %d"
 
 #: eeschema/sch_item.cpp:171 eeschema/sch_item.cpp:191
 #: eeschema/sch_item.cpp:760
-#, fuzzy
 msgid "All units"
-msgstr "모든 항목"
+msgstr "모든 유닛"
 
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:218
 #: eeschema/sch_item.cpp:782
-#, fuzzy
 msgid "All body styles"
-msgstr "모든 바디 스타일에 공통"
+msgstr "모든 바디 유형"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -21324,29 +21308,24 @@ msgid "Cell Height"
 msgstr "셀 높이"
 
 #: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:253
-#, fuzzy
 msgid "Column Width"
-msgstr "셀 너비"
+msgstr "열 너비"
 
 #: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:258
-#, fuzzy
 msgid "Row Height"
-msgstr "상자 높이"
+msgstr "행 높이"
 
 #: eeschema/sch_tablecell.cpp:249
-#, fuzzy
 msgid "Cell Properties"
-msgstr "라벨 속성"
+msgstr "셀 속성"
 
 #: eeschema/sch_tablecell.cpp:251
-#, fuzzy
 msgid "Background Fill"
 msgstr "배경 채우기"
 
 #: eeschema/sch_tablecell.cpp:255
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "배경색"
+msgstr "배경색 채우기"
 
 #: eeschema/sch_text.cpp:377
 #, c-format
@@ -23041,7 +23020,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:230
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>경고: 참조가 비어 있습니다</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:239
 #, c-format
@@ -23406,11 +23385,10 @@ msgid ""
 msgstr "심볼 '%s'는 이 심볼의 자손인 다른 심볼 '%s'를 대체할 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:959
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr ""
-"심볼 '%s'가 라이브러리 '%s'에 이미 있습니다.이 심볼을 덮어쓰시겠습니까?"
+msgstr "심볼 ‘%s'는 라이브러리 ’%s'에 이미 존재합니다. 덮어쓰시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:975
 #, c-format
@@ -23441,9 +23419,9 @@ msgid "Export Symbol"
 msgstr "심볼 내보내기"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
-msgstr "%s 라이브러리는 읽기 전용입니다."
+msgstr "라이브러리 '%s'는 읽기 전용입니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1149
 #, c-format
@@ -23662,15 +23640,13 @@ msgid "Delete Hierarchical Labels"
 msgstr "계층 라벨 삭제"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "시트 핀과 계층적 라벨 동기화"
+msgstr "라벨 이름을 사용하여 선택된 시트 핀과 계층적 라벨을 연결시킴"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "시트 핀과 계층적 라벨 연결 끊기"
+msgstr "핀 이름을 사용하여 선택된 핀과 계층적 레이블을 연결시킴"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -24080,9 +24056,8 @@ msgid "Import a symbol to the current library"
 msgstr "현재 라이브러리로 심볼 가져오기"
 
 #: eeschema/tools/sch_actions.cpp:262
-#, fuzzy
 msgid "Export..."
-msgstr "내보내기(&E)..."
+msgstr "내보내기..."
 
 #: eeschema/tools/sch_actions.cpp:263
 msgid "Export a symbol to a new library file"
@@ -24793,24 +24768,20 @@ msgid ""
 msgstr "오래된 회로도의 라이브러리 심볼 참조를 심볼 라이브러리 테이블에 리매핑"
 
 #: eeschema/tools/sch_actions.cpp:1149
-#, fuzzy
 msgid "Next Net Item"
-msgstr "텍스트 항목"
+msgstr "다음 네트 항목"
 
 #: eeschema/tools/sch_actions.cpp:1150
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "커서 아래의 연결 항목 선택"
+msgstr "현재 네트에서 다음 항목 선택"
 
 #: eeschema/tools/sch_actions.cpp:1156
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "이전 시트"
+msgstr "이전 네트 항목"
 
 #: eeschema/tools/sch_actions.cpp:1157
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "커서 아래의 연결 항목 선택"
+msgstr "현재 네트에서 이전 항목 선택"
 
 #: eeschema/tools/sch_actions.cpp:1162
 msgid "Export Drawing to Clipboard"
@@ -25383,14 +25354,12 @@ msgid "Requested unit already placed."
 msgstr "이미 배치된 유닛"
 
 #: eeschema/tools/sch_drawing_tools.cpp:870
-#, fuzzy
 msgid "Add Design Block"
 msgstr "디자인 블록 추가"
 
 #: eeschema/tools/sch_drawing_tools.cpp:871
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "회로도 시트 내용 가져오기..."
+msgstr "회로도 시트 내용 가져오기"
 
 #: eeschema/tools/sch_drawing_tools.cpp:905
 msgid "Choose Schematic"
@@ -25701,11 +25670,9 @@ msgid "No connected net selected."
 msgstr "선택한 네트가 없음."
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1125
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"긴 텍스트 문자열을 붙여넣으면 매우 느려질 수 있습니다. 계속하시겠습니까?"
+msgstr "긴 텍스트 문자열 붙여넣기가 매우 느릴 수 있습니다. 계속하시겠습니까?"
 
 #: eeschema/tools/sch_editor_control.cpp:1829
 #, c-format
@@ -25945,9 +25912,9 @@ msgstr "선택한 심볼 라이브러리가 없습니다."
 #: eeschema/tools/symbol_editor_control.cpp:310
 #: eeschema/tools/symbol_editor_control.cpp:471
 #: eeschema/tools/symbol_editor_control.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "라이브러리 에디터 실행"
+msgstr "심볼 라이브러리 '%s'를 찾을 수 없음."
 
 #: eeschema/tools/symbol_editor_control.cpp:400
 #: pcbnew/tools/footprint_editor_control.cpp:657
@@ -26063,7 +26030,7 @@ msgstr "유닛 %d 안의 해당 위치에 이미 다른 핀이 존재합니다."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr ""
+msgstr "이 메시지를 피하려면 ‘동기화 핀 모드’ 옵션을 비활성화하세요."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Place Pin Anyway"
@@ -27658,7 +27625,6 @@ msgid "Delete Column"
 msgstr "열 삭제"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
-#, fuzzy
 msgid "Embed file"
 msgstr "파일 삽입"
 
@@ -28184,9 +28150,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "새로운 동작은 --mode-multi와 일치함"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:32
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "KiCad 형식으로 네트리스트 내보내기"
+msgstr "PCB를 Gencad 형식으로 내보내기"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:213
@@ -28423,9 +28388,8 @@ msgstr ""
 "이지 크기, 2 = 보드 영역만)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:93
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "영역 채우기"
+msgstr "페이지를 보드 크기에 맞추기"
 
 #: kicad/cli/command_pcb_export_svg.cpp:97
 #: kicad/cli/command_sch_export_plot.cpp:68
@@ -28463,18 +28427,17 @@ msgstr "렌더링 품질. 옵션: %s"
 #: kicad/cli/command_pcb_render.cpp:258
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
-msgstr "모양 사전 설정. 옵션: %s, %s 또는 사용자 정의 사전 설정 이름"
+msgstr "외관 사전 설정. 옵션: %s, %s 또는 사용자 정의 사전 설정 이름"
 
 #: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
-msgstr ""
+msgstr "보드 적층에서 정의된 색상이 사전 설정된 색상보다 우선 적용됨"
 
 #: kicad/cli/command_pcb_render.cpp:269
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
-msgstr "품질 사전 설정을 비활성화해도 바닥, 그림자 및 후처리가 가능함"
+msgstr "품질 설정에서 비활성화된 경우에도 바닥, 그림자 및 후처리 효과를 적용함"
 
 #: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
@@ -28521,9 +28484,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "측면 조명 고도각(도, 범위): 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:339
-#, fuzzy
 msgid "Invalid preset\n"
-msgstr "잘못된 형식\n"
+msgstr "잘못된 사전 설정\n"
 
 #: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
@@ -28784,9 +28746,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "목적지:"
+msgstr "대상 경로:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -28813,7 +28774,7 @@ msgstr "기본값으로 재설정"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:153
 msgid "<value set at runtime>"
-msgstr ""
+msgstr "<실행 시점에 설정된 값>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:79
 msgid "Record output messages"
@@ -28824,9 +28785,8 @@ msgid "Ignore non-zero exit code"
 msgstr "종료 코드가 0이 아닌 경우 무시"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
-#, fuzzy
 msgid "Available text variables:"
-msgstr "사용 가능한 재료:"
+msgstr "사용 가능한 텍스트 변수:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
@@ -28997,9 +28957,8 @@ msgid "Last run failed"
 msgstr "마지막 실행 실패"
 
 #: kicad/dialogs/panel_jobset.cpp:276 kicad/dialogs/panel_jobset.cpp:998
-#, fuzzy
 msgid "Running Jobs"
-msgstr "작업 실행"
+msgstr "실행 중인 작업"
 
 #: kicad/dialogs/panel_jobset.cpp:305
 #, fuzzy, c-format
@@ -29007,19 +28966,16 @@ msgid "Failed to open '%s'."
 msgstr "파일 ' %s '을(를) 열수 없음."
 
 #: kicad/dialogs/panel_jobset.cpp:323
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "출력 대상 옵션 편집..."
+msgstr "대상 옵션 편집..."
 
 #: kicad/dialogs/panel_jobset.cpp:324
-#, fuzzy
 msgid "Delete Destination"
-msgstr "연결 삭제"
+msgstr "대상 삭제"
 
 #: kicad/dialogs/panel_jobset.cpp:327
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "최근 실행 결과 보기..."
+msgstr "마지막 실행 로그 보기..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
 #, fuzzy
@@ -29055,42 +29011,36 @@ msgid "Select job type:"
 msgstr "작업 유형 선택:"
 
 #: kicad/dialogs/panel_jobset.cpp:804
-#, fuzzy
 msgid "Destination Types"
-msgstr "목적지:"
+msgstr "대상 유형"
 
 #: kicad/dialogs/panel_jobset.cpp:813
-#, fuzzy
 msgid "Add New Destination"
-msgstr "목적지:"
+msgstr "새 대상 추가"
 
 #: kicad/dialogs/panel_jobset.cpp:814
-#, fuzzy
 msgid "Select destination type:"
-msgstr "작업 유형 선택:"
+msgstr "대상 유형 선택:"
 
 #: kicad/dialogs/panel_jobset.cpp:979
-#, fuzzy
 msgid "No destinations defined"
-msgstr "정의된 출력 없음"
+msgstr "정의된 대상이 없음"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "작업"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "목적지:"
+msgstr "목적지"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "작업 설정 저장"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "전체 출력 생성"
+msgstr "모든 대상 생성"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
 #, fuzzy
@@ -29098,9 +29048,8 @@ msgid "Open the generated output"
 msgstr "선택한 풋프린트 이름 바꾸기"
 
 #: kicad/dialogs/panel_jobset_base.h:136
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "작업 출력 실행 로그"
+msgstr "작업집합 실행 로그"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:148
 msgid "Edit the project schematic"
@@ -29475,9 +29424,8 @@ msgstr ""
 "를 가져올 수 없습니다."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Eagle 프로젝트 파일 가져오기"
+msgstr "Altium 프로젝트 파일 가져오기"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -29496,9 +29444,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro 프로젝트 가져오기"
 
 #: kicad/jobs_runner.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "작업 실행"
+msgstr "작업 실행중 %d: %s"
 
 #: kicad/jobs_runner.cpp:282
 msgid "Job successful"
@@ -29649,14 +29597,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "KiCad 이외의 프로젝트 가져오기..."
 
 #: kicad/menubar.cpp:125
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Eagle 프로젝트..."
+msgstr "Altium 프로젝트..."
 
 #: kicad/menubar.cpp:126
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "CADSTAR 보관 회로도와 PCB 가져오기 (*.csa, *.cpa)"
+msgstr "Altium 회로도 및 PCB (*.PrjPcb) 가져오기"
 
 #: kicad/menubar.cpp:129
 msgid "CADSTAR Project..."
@@ -30440,14 +30386,12 @@ msgid "Waiting for Git operations to finish..."
 msgstr "Git 작업이 완료될 때까지 대기 중..."
 
 #: kicad/project_tree_pane.cpp:1673
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "선택한 디렉터리는 이미 git 프로젝트입니다."
+msgstr "선택한 디렉터리는 이미 Git 프로젝트입니다."
 
 #: kicad/project_tree_pane.cpp:1680
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "git 프로젝트 초기화에 실패했습니다."
+msgstr "Git 프로젝트 초기화 실패."
 
 #: kicad/project_tree_pane.cpp:1688
 msgid "Set default remote"
@@ -30472,9 +30416,8 @@ msgid "Failed to push project"
 msgstr "프로젝트 푸시 실패"
 
 #: kicad/project_tree_pane.cpp:1825
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "이 프로젝트에서 깃 추적을 제거하시겠습니까?"
+msgstr "이 프로젝트에서 Git 추적을 제거하시겠습니까?"
 
 #: kicad/project_tree_pane.cpp:1836
 #, fuzzy
@@ -30482,9 +30425,8 @@ msgid "Failed to remove VCS"
 msgstr "디렉토리 %s 삭제에 실패하였습니다"
 
 #: kicad/project_tree_pane.cpp:2080
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "선택한 디렉터리는 이미 git 프로젝트입니다."
+msgstr "선택한 디렉터리는 Git 프로젝트가 아닙니다."
 
 #: kicad/project_tree_pane.cpp:2167
 msgid "Discarding commit due to empty commit message."
@@ -33696,9 +33638,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:520
-#, fuzzy
 msgid "Modified items via API"
-msgstr "API를 통한 항목 추가"
+msgstr "API를 통해 수정된 항목"
 
 #: pcbnew/api/api_handler_pcb.cpp:735
 msgid "Deleted items via API"
@@ -36600,7 +36541,6 @@ msgid "New footprint library id:"
 msgstr "새 풋프린트 라이브러리 ID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
 msgstr "라이브러리 풋프린트에 없는 텍스트 항목 제거"
 
@@ -36660,7 +36600,6 @@ msgid "mfg"
 msgstr "mfg"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:244
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "IPC2581 파일을 생성하기 전에 보드를 저장해야 합니다."
 
@@ -36672,24 +36611,22 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않습니다."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:259
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "IPC-2581 파일 생성"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:281
 #: pcbnew/pcbnew_jobs_handler.cpp:2453
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"IPC2581 파일 '%s' 생성 오류.\n"
+"IPC2581 파일 '%s' 생성 중 오류.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "파일 생성 성공."
+msgstr "IPC-2581 파일이 성공적으로 생성됨."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -38133,9 +38070,8 @@ msgid "Footprint Report"
 msgstr "풋프린트 보고서"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "문자열 찾기"
+msgstr "일반 텍스트"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -38642,7 +38578,6 @@ msgid "Set Teardrops"
 msgstr "물방울모양 설정"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:129
-#, fuzzy
 msgid "Text items"
 msgstr "텍스트 항목"
 
