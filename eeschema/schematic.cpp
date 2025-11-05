@@ -1797,6 +1797,7 @@ void SCHEMATIC::CreateDefaultScreens()
 
     // Don't leave root page number empty
     SCH_SHEET_PATH rootSheetPath;
+    rootSheetPath.push_back( virtualRoot );
     rootSheetPath.push_back( rootSheet );
     rootSheetPath.SetPageNumber( wxT( "1" ) );
 
