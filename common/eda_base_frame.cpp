@@ -192,14 +192,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
 
     commonInit( aFrameType );
 
-    // Register project file saver. Ensures project file participates in
-    // autosave history commits without affecting dirty state.
-    Kiway().LocalHistory().RegisterSaver( &Prj(),
-        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
-        {
-            Prj().SaveToHistory( aProjectPath, aFiles );
-        } );
-
 }
 
 
@@ -378,9 +370,12 @@ bool EDA_BASE_FRAME::doAutoSave()
 {
     m_autoSaveRequired = false;
     m_autoSavePending = false;
+
     // Use registered saver callbacks to snapshot editor state into .history and only commit
     // if there are material changes.
-    Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
+    if( !Prj().IsReadOnly() )
+        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
+
     return true;
 }
 

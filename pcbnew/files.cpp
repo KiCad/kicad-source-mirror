@@ -1067,8 +1067,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     // Capture entire project state for PCB save events.
     Kiway().LocalHistory().CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
     Kiway().LocalHistory().TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+
     if( m_autoSaveTimer )
         m_autoSaveTimer->Stop();
+
     m_autoSavePending = false;
     m_autoSaveRequired = false;
     return true;

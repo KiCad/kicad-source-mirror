@@ -1157,6 +1157,14 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
         title += wxT( " \u2014 " ) + wxString( wxS( "KiCad " ) ) + GetMajorMinorVersion();
 
     SetTitle( title );
+
+    // Register project file saver. Ensures project file participates in
+    // autosave history commits without affecting dirty state.
+    Kiway().LocalHistory().RegisterSaver( &Prj(),
+        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+        {
+            Prj().SaveToHistory( aProjectPath, aFiles );
+        } );
 }
 
 

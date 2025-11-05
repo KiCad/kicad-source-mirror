@@ -98,6 +98,14 @@ void LOCAL_HISTORY::UnregisterSaver( const void* aSaverObject )
     }
 }
 
+
+void LOCAL_HISTORY::ClearAllSavers()
+{
+    m_savers.clear();
+    wxLogTrace( traceAutoSave, wxS("[history] Cleared all savers") );
+}
+
+
 bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle )
 {
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )

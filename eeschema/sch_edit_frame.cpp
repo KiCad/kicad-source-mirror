@@ -170,14 +170,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( &Prj() );
     m_schematic->SetSchematicHolder( this );
-
-    // Register schematic saver for autosave history
-    Kiway().LocalHistory().RegisterSaver( m_schematic,
-        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
-        {
-            m_schematic->SaveToHistory( aProjectPath, aFiles );
-        } );
-
     CreateDefaultScreens();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
@@ -1432,6 +1424,20 @@ void SCH_EDIT_FRAME::LoadProject()
             KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
             schface->PreloadLibraries( &Kiway() );
         } );
+}
+
+
+void SCH_EDIT_FRAME::ProjectChanged()
+{
+    SCH_BASE_FRAME::ProjectChanged();
+
+    // Register schematic saver for autosave history
+    Kiway().LocalHistory().RegisterSaver( m_schematic,
+        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+        {
+            m_schematic->SaveToHistory( aProjectPath, aFiles );
+        } );
+
 }
 
 

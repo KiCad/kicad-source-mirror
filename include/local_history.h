@@ -66,6 +66,9 @@ public:
      *  @param aSaverObject The object pointer that was used to register the saver */
     void UnregisterSaver( const void* aSaverObject );
 
+    /** Clear all registered savers. */
+    void ClearAllSavers();
+
     /** Run all registered savers and, if any staged changes differ from HEAD, create a commit. */
     bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );
 

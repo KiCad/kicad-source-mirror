@@ -451,6 +451,7 @@ public:
 
     void NewProject();
     void LoadProject();
+    void ProjectChanged() override;
 
     /**
      * Save the currently-open schematic (including its hierarchy) and associated project.

@@ -647,6 +647,8 @@ void KIWAY::ProjectChanged()
 {
     APP_MONITOR::AddNavigationBreadcrumb( "Changing project", "kiway.projectchanged" );
 
+    LocalHistory().ClearAllSavers();
+
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
     {
         // A dynamic_cast could be better, but creates link issues
