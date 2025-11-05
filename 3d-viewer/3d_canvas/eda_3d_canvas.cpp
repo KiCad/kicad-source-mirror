@@ -994,7 +994,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
             case PCB_FOOTPRINT_T:
             {
                 FOOTPRINT* footprint = static_cast<FOOTPRINT*>( rollOverItem );
-                msg += footprint->GetReference();
+                msg += footprint->GetReference() + wxT( "  " ) + footprint->GetValue();
                 break;
             }
 
