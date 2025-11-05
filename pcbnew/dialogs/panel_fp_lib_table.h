@@ -39,9 +39,10 @@ public:
     PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject );
     ~PANEL_FP_LIB_TABLE() override;
 
-private:
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
      *
@@ -92,7 +93,6 @@ private:
     wxArrayString               m_pluginChoices;
 
     WX_GRID*         m_cur_grid;      // changed based on tab choice
-    static size_t    m_pageNdx;       // Remember last notebook page selected during a session
 
     //< Transient (unsaved) last browsed folder when adding a project level library.
     wxString         m_lastProjectLibDir;

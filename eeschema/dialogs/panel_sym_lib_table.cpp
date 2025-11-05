@@ -306,8 +306,7 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
             else if( adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
             {
                 aGrid->SetCellValue( ii, COL_STATUS,
-                                     wxString::Format( _( "Library settings for %s..." ),
-                                                       tableRow.Nickname() ) );
+                                     wxString::Format( _( "Library settings for %s..." ), tableRow.Nickname() ) );
                 aGrid->SetCellRenderer( ii, COL_STATUS,
                                         new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
             }
@@ -456,7 +455,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     }
     else
     {
-        m_pageNdx = 0;
         m_notebook->DeletePage( 1 );
         m_project_grid = nullptr;
     }
@@ -465,10 +463,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
     populateEnvironReadOnlyTable();
-
-    // select the last selected page
-    m_notebook->SetSelection( m_pageNdx );
-    m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
@@ -495,6 +489,17 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
         m_project_grid->PopEventHandler( true );
 
     m_path_subs_grid->PopEventHandler( true );
+}
+
+
+bool PANEL_SYM_LIB_TABLE::TransferDataToWindow()
+{
+    m_cur_grid = ( m_notebook->GetSelection() == 0 ) ? m_global_grid : m_project_grid;
+
+    // for ALT+A handling, we want the initial focus to be on the first selected grid.
+    m_parent->SetInitialFocus( m_cur_grid );
+
+    return true;
 }
 
 
@@ -751,7 +756,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) )
+            if( m_notebook->GetSelection() == 0 && path.Contains( "${KIPRJMOD}" ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -930,9 +935,7 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
-
-    if( m_pageNdx == 0 )
+    if( m_notebook->GetSelection() == 0 )
     {
         m_cur_grid = m_global_grid;
         m_resetGlobal->Enable();
@@ -1189,13 +1192,9 @@ SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::cur_model() const
 }
 
 
-size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
-
-
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    auto symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( aKiway->Player( FRAME_SCH_SYMBOL_EDITOR,
-                                                                         false ) );
+    auto symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false ) );
     wxString msg;
 
     if( symbolEditor )
@@ -1233,23 +1232,23 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( dlg.m_GlobalTableChanged )
     {
-        std::optional<LIBRARY_TABLE*> optTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+        std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                                  LIBRARY_TABLE_SCOPE::GLOBAL );
         wxCHECK( optTable, /* void */ );
         LIBRARY_TABLE* globalTable = *optTable;
 
         globalTable->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
-            {
-                wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
-            } );
+                []( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
+                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
+                } );
 
         Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
     }
 
-    std::optional<LIBRARY_TABLE*> projectTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable && dlg.m_ProjectTableChanged )
     {

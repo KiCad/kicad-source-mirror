@@ -274,10 +274,6 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     aGrid->SetColAttr( COL_VISIBLE, attr );
-    // No visibility control for footprint libraries yet; this feature is primarily
-    // useful for database libraries and it's only implemented for schematic symbols
-    // at the moment.
-    aGrid->HideCol( COL_VISIBLE );
 
     // all but COL_OPTIONS, which is edited with Option Editor anyways.
     autoSizeCol( aGrid, COL_NICKNAME );
@@ -333,20 +329,12 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     }
     else
     {
-        m_pageNdx = 0;
         m_notebook->DeletePage( 1 );
         m_project_grid = nullptr;
     }
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
-
-    // select the last selected page
-    m_notebook->SetSelection( m_pageNdx );
-    m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
-
-    // for ALT+A handling, we want the initial focus to be on the first selected grid.
-    m_parent->SetInitialFocus( m_cur_grid );
 
     // Configure button logos
     m_append_button->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -428,6 +416,23 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
         m_project_grid->PopEventHandler( true );
 
     m_path_subs_grid->PopEventHandler( true );
+}
+
+
+bool PANEL_FP_LIB_TABLE::TransferDataToWindow()
+{
+    // No visibility control for footprint libraries yet; this feature is primarily
+    // useful for database libraries and it's only implemented for schematic symbols
+    // at the moment.
+    m_global_grid->HideCol( COL_VISIBLE );
+    m_project_grid->HideCol( COL_VISIBLE );
+
+    m_cur_grid = ( m_notebook->GetSelection() == 0 ) ? m_global_grid : m_project_grid;
+
+    // for ALT+A handling, we want the initial focus to be on the first selected grid.
+    m_parent->SetInitialFocus( m_cur_grid );
+
+    return true;
 }
 
 
@@ -914,7 +919,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_pageNdx == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
+            if( m_notebook->GetSelection() == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -990,9 +995,7 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
 
 void PANEL_FP_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
-
-    if( m_pageNdx == 0 )
+    if( m_notebook->GetSelection() == 0 )
     {
         m_cur_grid = m_global_grid;
         m_resetGlobal->Enable();
@@ -1109,9 +1112,6 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 
 
 
-size_t   PANEL_FP_LIB_TABLE::m_pageNdx = 0;
-
-
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 {
     wxString      msg;
@@ -1132,11 +1132,11 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
         LIBRARY_TABLE* globalTable = *optTable;
 
         globalTable->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
-            {
-                wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
-            } );
+                []( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
+                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
+                } );
 
         Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
     }

@@ -38,6 +38,9 @@ public:
     PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* m_project );
     virtual ~PANEL_SYM_LIB_TABLE();
 
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
 private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
@@ -60,8 +63,6 @@ private:
     void onReset( wxCommandEvent& event ) override;
 
     void setupGrid( WX_GRID* aGrid );
-
-    bool TransferDataFromWindow() override;
 
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.
@@ -87,7 +88,6 @@ private:
     wxArrayString               m_pluginChoices;
 
     WX_GRID*                    m_cur_grid;     ///< changed based on tab choice
-    static size_t               m_pageNdx;      ///< Remember the last notebook page selected
 
     /// Transient (unsaved) last browsed folder when adding a project level library.
     wxString                    m_lastProjectLibDir;
