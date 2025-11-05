@@ -117,7 +117,7 @@ public:
     { }
 
     FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid,
-            std::function<void( wxCommandEvent& )> aAddHandler ) :
+                    std::function<void( wxCommandEvent& )> aAddHandler ) :
             LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
             m_dialog( aParent )
     { }
@@ -247,8 +247,8 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 m_parent, aGrid, &cfg->m_LastFootprintLibDir, true, m_project->GetProjectPath(),
                 [this]( WX_GRID* grid, int row ) -> wxString
                 {
-                    auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
-                    LIBRARY_TABLE_ROW& tableRow = libTable->at( row );
+                    FP_LIB_TABLE_GRID*           libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
+                    LIBRARY_TABLE_ROW&           tableRow = libTable->at( row );
                     PCB_IO_MGR::PCB_FILE_T       fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
                     const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
 
@@ -367,19 +367,21 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
-    auto joinExts = []( const std::vector<std::string>& aExts )
-    {
-        wxString joined;
-        for( const std::string& ext : aExts )
-        {
-            if( !joined.empty() )
-                joined << wxS( ", " );
+    auto joinExts =
+            []( const std::vector<std::string>& aExts )
+            {
+                wxString joined;
 
-            joined << wxS( "*." ) << ext;
-        }
+                for( const std::string& ext : aExts )
+                {
+                    if( !joined.empty() )
+                        joined << wxS( ", " );
 
-        return joined;
-    };
+                    joined << wxS( "*." ) << ext;
+                }
+
+                return joined;
+            };
 
     for( auto& [type, desc] : m_supportedFpFiles )
     {
@@ -709,8 +711,8 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
 
     if( rowsToMigrate.size() <= 0 )
     {
-        wxMessageBox( wxString::Format( _( "Select one or more rows containing libraries "
-                                           "to save as current KiCad format." ) ) );
+        wxMessageBox( wxString::Format( _( "Select one or more rows containing libraries to save as "
+                                           "current KiCad format." ) ) );
         return;
     }
     else
@@ -817,6 +819,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         return;
     }
 
+    const ENV_VAR_MAP&           envVars = Pgm().GetLocalEnvVariables();
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
     PCBNEW_SETTINGS*             cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
@@ -865,13 +868,12 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( cfg && cfg->m_LastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
         cfg->m_LastFootprintLibDir = cfg->m_LastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
-    const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
-    bool               addDuplicates = false;
-    bool               applyToAll    = false;
-    wxString           warning       = _( "Warning: Duplicate Nicknames" );
-    wxString           msg           = _( "A library nicknamed '%s' already exists." );
-    wxString           detailedMsg   = _( "One of the nicknames will need to be changed after "
-                                          "adding this library." );
+
+    bool     addDuplicates = false;
+    bool     applyToAll    = false;
+    wxString warning       = _( "Warning: Duplicate Nicknames" );
+    wxString msg           = _( "A library nicknamed '%s' already exists." );
+    wxString detailedMsg   = _( "One of the nicknames will need to be changed after adding this library." );
 
     for( const wxString& filePath : files )
     {
@@ -953,9 +955,9 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
 
     // No need to prompt to preserve an empty table
-    if( m_global_grid->GetNumberRows() > 0 &&
-        !IsOK( this, wxString::Format( _( "This action will reset your global library table on "
-                                          "disk and cannot be undone." ) ) ) )
+    if( m_global_grid->GetNumberRows() > 0
+            && !IsOK( this, wxString::Format( _( "This action will reset your global library table on "
+                                                 "disk and cannot be undone." ) ) ) )
     {
         return;
     }
@@ -973,9 +975,8 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
     wxGridTableBase* table = m_global_grid->GetTable();
     m_global_grid->DestroyTable( table );
 
-    std::optional<LIBRARY_TABLE*> newTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                             LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> newTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( newTable );
 
     m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *newTable.value() ), true );
@@ -1012,8 +1013,8 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    std::optional<LIBRARY_TABLE*> optTable =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
     wxCHECK( optTable, false );
     LIBRARY_TABLE* globalTable = *optTable;
 
@@ -1023,8 +1024,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
         *globalTable = global_model()->Table();
     }
 
-    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                                LIBRARY_TABLE_SCOPE::PROJECT );
+    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( optTable && project_model() )
     {
@@ -1041,8 +1041,8 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
 }
 
 
-/// Populate the readonly environment variable table with names and values
-/// by examining all the full_uri columns.
+/// Populate the readonly environment variable table with names and values by examining all
+/// the full_uri columns.
 void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
 {
     wxRegEx re( ".*?(\\$\\{(.+?)\\})|(\\$\\((.+?)\\)).*?", wxRE_ADVANCED );
@@ -1079,9 +1079,8 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
         }
     }
 
-    // Make sure this special environment variable shows up even if it was
-    // not used yet.  It is automatically set by KiCad to the directory holding
-    // the current project.
+    // Make sure this special environment variable shows up even if it was not used yet.  It is
+    // automatically set by KiCad to the directory holding the current project.
     unique.insert( PROJECT_VAR_NAME );
     unique.insert( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ) );
 
@@ -1127,8 +1126,8 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 
     if( dlg.m_GlobalTableChanged )
     {
-        std::optional<LIBRARY_TABLE*> optTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL );
+        std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                                  LIBRARY_TABLE_SCOPE::GLOBAL );
         wxCHECK( optTable, /* void */ );
         LIBRARY_TABLE* globalTable = *optTable;
 
@@ -1142,8 +1141,8 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
         Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
     }
 
-    std::optional<LIBRARY_TABLE*> projectTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable && dlg.m_ProjectTableChanged )
     {
