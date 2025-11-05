@@ -337,8 +337,7 @@ void FONT_CHOICE::OnDrawItem( wxDC& aDc, const wxRect& aRect, int aItem, int aFl
     aDc.GetTextExtent( name, &sysW, &sysH, &sysDescent );
 
     // Draw the font name vertically centered
-    wxRect nameRect( aRect.x + 2, aRect.y, sysW, sysH );
-    nameRect.MakeCenteredIn( aRect, wxVERTICAL );
+    wxRect nameRect = wxRect( aRect.x + 2, aRect.y, sysW, sysH ).CenterIn( aRect, wxVERTICAL );
     aDc.DrawText( name, nameRect.GetTopLeft() );
 
     if( aItem >= m_systemFontCount )
