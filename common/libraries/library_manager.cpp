@@ -111,7 +111,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
                 {
                     if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                     {
-                        wxFileName file( row.URI() );
+                        wxFileName file( ExpandURI( row.URI(), Pgm().GetSettingsManager().Prj() ) );
 
                         // URI may be relative to parent
                         file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
