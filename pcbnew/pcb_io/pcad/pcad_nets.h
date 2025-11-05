@@ -35,6 +35,8 @@ class XNODE;
 
 namespace PCAD2KICAD {
 
+wxString ConvertNetName( const wxString& aName );
+
 class PCAD_NET_NODE : public wxObject
 {
 public:

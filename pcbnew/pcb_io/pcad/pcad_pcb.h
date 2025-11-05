@@ -74,7 +74,11 @@ private:
     void MapLayer( XNODE* aNode );
     int FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const;
     double GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const;
-    void GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
+    void   ExtractOutlinePointsFromEnhancedPolygon( const wxString& aActualConversion, XNODE* lNode );
+    void   GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
+    void   ExtractLayerStackup( wxXmlDocument* aXmlDoc );
+    void   CreatePolygonsForEmptyPowerPlanes();
+    void   ProcessLayerContentsObjects( wxStatusBar* aStatusBar, const wxString& aActualConversion, XNODE* aNode );
 
 public:
     PCAD_COMPONENTS_ARRAY   m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on

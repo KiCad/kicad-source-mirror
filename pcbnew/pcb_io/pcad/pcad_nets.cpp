@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "string_utils.h"
+
 #include <pcad/pcad_nets.h>
 
 #include <xnode.h>
@@ -30,6 +32,34 @@
 #include <wx/string.h>
 
 namespace PCAD2KICAD {
+
+wxString ConvertNetName( const wxString& aName )
+{
+    wxString retval;
+    bool     negate = false;
+
+    for( auto c = aName.begin(); c < aName.end(); c++ )
+    {
+        if( *c != '~' )
+        {
+            retval += *c;
+        }
+        else if( !negate )
+        {
+            retval += '~';
+            retval += '{';
+            negate = true;
+        }
+        else
+        {
+            retval += '}';
+            negate = false;
+        }
+    }
+
+    retval = EscapeString( retval, CTX_NETNAME );
+    return retval;
+}
 
 PCAD_NET_NODE::PCAD_NET_NODE()
 {
@@ -69,7 +99,7 @@ void PCAD_NET::Parse( XNODE* aNode )
     aNode->GetAttribute( wxT( "Name" ), &propValue );
     propValue.Trim( false );
     propValue.Trim( true );
-    m_Name = propValue;
+    m_Name = ConvertNetName( propValue );
 
     lNode = FindNode( aNode, wxT( "node" ) );
 

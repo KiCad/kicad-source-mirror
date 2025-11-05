@@ -206,6 +206,16 @@ XNODE* PCAD_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPa
     return result;
 }
 
+static bool HasLine( std::vector<PCAD_LINE*>& vector, PCAD_LINE* line )
+{
+    auto it = std::find_if( vector.begin(), vector.end(),
+                            [line]( PCAD_LINE* l2 )
+                            {
+                                return line->m_PositionX == l2->m_PositionX && line->m_PositionY == l2->m_PositionY
+                                       && line->m_ToX == l2->m_ToX && line->m_ToY == l2->m_ToY;
+                            } );
+    return it != vector.end();
+}
 
 void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFootprint,
                                              PCAD_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
@@ -223,16 +233,25 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
     PCAD_TEXT*        text = nullptr;
     XNODE*            lNode = nullptr;
     XNODE*            tNode = nullptr;
+    XNODE*                  pNode = nullptr;
     wxString          propValue;
     long long         i = 0;
     int               PCadLayer = 0;
     long              num = 0;
+    int                     width = 0;
+    int                     x = 0, y = 0;
+    int                     LastX = 0, LastY = 0;
+    int                     FirstX = 0, FirstY = 0;
+    bool                    IsFirstPoint = false;
+    bool                    IsBoardLayer = false;
+    std::vector<PCAD_LINE*> lines;
 
     // aStatusBar->SetStatusText( wxT( "Processing LAYER CONTENT OBJECTS " ) );
     if( FindNode( aNode, wxT( "layerNumRef" ) ) )
         FindNode( aNode, wxT( "layerNumRef" ) )->GetNodeContent().ToLong( &num );
 
     PCadLayer = (int) num;
+    IsBoardLayer = ( PCadLayer == 3 );
 
     if( m_callbacks->GetLayerType( PCadLayer ) == LAYER_TYPE_PLANE )
     {
@@ -255,7 +274,18 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
         {
             line = new PCAD_LINE( m_callbacks, m_board );
             line->Parse( lNode, PCadLayer, aDefaultMeasurementUnit, aActualConversion );
-            aList->Add( line );
+            if( IsBoardLayer )
+            {
+                if( !HasLine( lines, line ) )
+                {
+                    lines.push_back( line );
+                    aList->Add( line );
+                }
+            }
+            else
+            {
+                aList->Add( line );
+            }
         }
 
         if( lNode->GetName() == wxT( "text" ) )
@@ -351,6 +381,80 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
                 aList->Add( plane );
             else
                 delete plane;
+        }
+
+        if( lNode->GetName() == wxT( "boardOutlineObj" ) && IsBoardLayer )
+        {
+            LastX = 0;
+            LastY = 0;
+            FirstX = 0;
+            FirstY = 0;
+            IsFirstPoint = true;
+
+            pNode = FindNode( lNode, wxT( "width" ) );
+
+            if( pNode )
+            {
+                SetWidth( pNode->GetNodeContent(), aDefaultMeasurementUnit, &width, aActualConversion );
+
+                pNode = FindNode( lNode, wxT( "enhancedPolygon" ) );
+
+                if( pNode )
+                {
+                    pNode = pNode->GetChildren();
+
+                    while( pNode )
+                    {
+                        if( pNode->GetName() == wxT( "polyPoint" ) )
+                        {
+                            SetPosition( pNode->GetNodeContent(), aDefaultMeasurementUnit, &x, &y, aActualConversion );
+                            if( IsFirstPoint )
+                            {
+                                IsFirstPoint = false;
+                                FirstX = x;
+                                FirstY = y;
+                            }
+                            else
+                            {
+                                line = new PCAD_LINE( m_callbacks, m_board );
+                                line->m_PositionX = LastX;
+                                line->m_PositionY = LastY;
+                                line->m_ToX = x;
+                                line->m_ToY = y;
+                                line->m_Width = width;
+                                line->m_PCadLayer = PCadLayer;
+                                line->m_KiCadLayer = line->GetKiCadLayer();
+                                if( !HasLine( lines, line ) )
+                                {
+                                    lines.push_back( line );
+                                    aList->Add( line );
+                                }
+                            }
+                            LastX = x;
+                            LastY = y;
+                        }
+
+                        pNode = pNode->GetNext();
+                    }
+
+                    if( LastX != FirstX || LastY != FirstY )
+                    {
+                        line = new PCAD_LINE( m_callbacks, m_board );
+                        line->m_PositionX = LastX;
+                        line->m_PositionY = LastY;
+                        line->m_ToX = FirstX;
+                        line->m_ToY = FirstY;
+                        line->m_Width = width;
+                        line->m_PCadLayer = PCadLayer;
+                        line->m_KiCadLayer = line->GetKiCadLayer();
+                        if( !HasLine( lines, line ) )
+                        {
+                            lines.push_back( line );
+                            aList->Add( line );
+                        }
+                    }
+                }
+            }
         }
 
         lNode = lNode->GetNext();

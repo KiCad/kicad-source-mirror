@@ -42,6 +42,7 @@ struct TLAYER
     PCB_LAYER_ID  KiCadLayer;
     LAYER_TYPE_T  layerType = LAYER_TYPE_SIGNAL;
     wxString      netNameRef;
+    bool          hasContent;
 };
 
 namespace PCAD2KICAD

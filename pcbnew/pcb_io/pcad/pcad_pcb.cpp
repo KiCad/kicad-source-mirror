@@ -77,12 +77,14 @@ PCAD_PCB::PCAD_PCB( BOARD* aBoard ) : PCAD_FOOTPRINT( this, aBoard )
 {
     m_DefaultMeasurementUnit = wxT( "mil" );
 
-    for( size_t i = 0; i < 8; ++i )
+    // Fill layer map with PCAD defaults
+    for( size_t i = 1; i < 12; ++i )
     {
         TLAYER layer;
-        layer.KiCadLayer = F_Mask; // default
+        layer.KiCadLayer = User_1;               // default
         layer.layerType  = LAYER_TYPE_NONSIGNAL; // default
         layer.netNameRef = wxT( "" ); // default
+        layer.hasContent = false;
 
         m_LayersMap.insert( std::make_pair( i, layer ) );
     }
@@ -91,14 +93,28 @@ PCAD_PCB::PCAD_PCB( BOARD* aBoard ) : PCAD_FOOTPRINT( this, aBoard )
     m_SizeY = 0;
 
     m_LayersMap[1].KiCadLayer = F_Cu;
-    m_LayersMap[1].layerType  = LAYER_TYPE_SIGNAL;
+    m_LayersMap[1].layerType = LAYER_TYPE_SIGNAL;
 
     m_LayersMap[2].KiCadLayer = B_Cu;
-    m_LayersMap[2].layerType  = LAYER_TYPE_SIGNAL;
+    m_LayersMap[2].layerType = LAYER_TYPE_SIGNAL;
 
-    m_LayersMap[3].KiCadLayer  = Eco2_User;
+    m_LayersMap[3].KiCadLayer = Edge_Cuts;
+
+    m_LayersMap[4].KiCadLayer = F_Mask;
+
+    m_LayersMap[5].KiCadLayer = B_Mask;
+
     m_LayersMap[6].KiCadLayer  = F_SilkS;
+
     m_LayersMap[7].KiCadLayer  = B_SilkS;
+
+    m_LayersMap[8].KiCadLayer = F_Paste;
+
+    m_LayersMap[9].KiCadLayer = B_Paste;
+
+    m_LayersMap[10].KiCadLayer = F_Fab;
+
+    m_LayersMap[11].KiCadLayer = B_Fab;
 }
 
 
@@ -451,20 +467,33 @@ void PCAD_PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRe
 
 int PCAD_PCB::FindLayer( const wxString& aLayerName ) const
 {
+    int  layerIndex = -1;
+    long layerNum = -1;
+
     for( int i = 0; i < (int) m_layersStackup.size(); ++i )
     {
         if( m_layersStackup[i].first == aLayerName )
-            return i;
+        {
+            layerIndex = i;
+            layerNum = m_layersStackup[i].second;
+            break;
+        }
     }
 
-    return -1;
+    switch( layerNum )
+    {
+    case -1: return -1;
+    case 1: return F_Cu;
+    case 2: return B_Cu;
+    default: return ( layerIndex + 1 ) * 2;
+    }
 }
 
 
 void PCAD_PCB::MapLayer( XNODE* aNode )
 {
     wxString     lName, layerType;
-    PCB_LAYER_ID KiCadLayer;
+    PCB_LAYER_ID KiCadLayer = UNDEFINED_LAYER;
     long         num = 0;
 
     aNode->GetAttribute( wxT( "Name" ), &lName );
@@ -518,9 +547,7 @@ void PCAD_PCB::MapLayer( XNODE* aNode )
     {
         int layernum = FindLayer( lName );
 
-        if( layernum == -1 )
-            KiCadLayer = Dwgs_User;    // default
-        else
+        if( layernum != -1 )
             KiCadLayer = ToLAYER_ID( layernum );
     }
 
@@ -532,6 +559,12 @@ void PCAD_PCB::MapLayer( XNODE* aNode )
 
     TLAYER newlayer;
     newlayer.KiCadLayer = KiCadLayer;
+    newlayer.hasContent = false;
+
+    if( KiCadLayer == UNDEFINED_LAYER )
+    {
+        newlayer.KiCadLayer = Dwgs_User; // default
+    }
 
     if( FindNode( aNode, wxT( "layerType" ) ) )
     {
@@ -547,12 +580,23 @@ void PCAD_PCB::MapLayer( XNODE* aNode )
             newlayer.layerType = LAYER_TYPE_PLANE;
     }
 
-    m_LayersMap.insert( std::make_pair( num, newlayer ) );
+    if( auto [it, success] = m_LayersMap.insert( std::make_pair( num, newlayer ) ); !success )
+    {
+        // If we can't assign layer by name or stackup, but it has been already assigned by default pcad id in constructor, we don't want to change the assignment
+        if( KiCadLayer == UNDEFINED_LAYER )
+        {
+            newlayer.KiCadLayer = it->second.KiCadLayer;
+        }
+        it->second = newlayer;
+    }
 
     if( FindNode( aNode, wxT( "netNameRef" ) ) )
     {
         FindNode( aNode, wxT( "netNameRef" ) )->GetAttribute( wxT( "Name" ),
                                                               &m_LayersMap[(int) num].netNameRef );
+        m_LayersMap[(int) num].netNameRef.Trim( false );
+        m_LayersMap[(int) num].netNameRef.Trim( true );
+        m_LayersMap[(int) num].netNameRef = ConvertNetName( m_LayersMap[(int) num].netNameRef );
     }
 }
 
@@ -576,9 +620,36 @@ double PCAD_PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPo
                   ( aPoint1->y - aPoint2->y ) * ( aPoint1->y - aPoint2->y ) );
 }
 
+void PCAD_PCB::ExtractOutlinePointsFromEnhancedPolygon( const wxString& aActualConversion, XNODE* lNode )
+{
+    XNODE* epNode = nullptr;
+    int    x = 0;
+    int    y = 0;
+
+    epNode = FindNode( lNode, wxT( "enhancedPolygon" ) );
+
+    if( !epNode )
+        return;
+
+    epNode = epNode->GetChildren();
+
+    while( epNode )
+    {
+        if( epNode->GetName().IsSameAs( wxT( "polyPoint" ), false ) )
+        {
+            SetPosition( epNode->GetNodeContent(), m_DefaultMeasurementUnit, &x, &y, aActualConversion );
+
+            if( FindOutlinePoint( &m_BoardOutline, wxRealPoint( x, y ) ) == -1 )
+                m_BoardOutline.Add( new wxRealPoint( x, y ) );
+        }
+
+        epNode = epNode->GetNext();
+    }
+}
+
 void PCAD_PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
 {
-    XNODE*       iNode, *lNode, *pNode;
+    XNODE *      iNode, *lNode, *pNode, *epNode;
     long         PCadLayer = 0;
     int          x, y, i, j, targetInd;
     wxRealPoint* xchgPoint;
@@ -605,6 +676,11 @@ void PCAD_PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualC
 
                     while( lNode )
                     {
+                        if( lNode->GetName().IsSameAs( wxT( "boardOutlineObj" ), false ) )
+                        {
+                            ExtractOutlinePointsFromEnhancedPolygon( aActualConversion, lNode );
+                        }
+
                         if( lNode->GetName().IsSameAs( wxT( "line" ), false ) )
                         {
                             pNode = FindNode( lNode, wxT( "pt" ) );
@@ -670,37 +746,20 @@ void PCAD_PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualC
 }
 
 
-void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
-                      const wxString& aActualConversion )
+void PCAD_PCB::ExtractLayerStackup( wxXmlDocument* aXmlDoc )
 {
-    XNODE*          aNode;//, *aaNode;
-    PCAD_NET*        net;
-    PCAD_PCB_COMPONENT*  comp;
-    PCAD_FOOTPRINT*  footprint;
-    wxString        compRef, pinRef, layerName, layerType;
-    int             i, j, netCode;
+    XNODE*   rootNode;
+    XNODE*   aNode;
+    XNODE*   aaNode;
+    wxString layerName, layerType;
+    bool     isSignalLayer;
+    bool     stackupIncomplete = false;
 
-    // Default measurement units
-    aNode = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "asciiHeader" ) );
+    rootNode = FindNode( (XNODE*) aXmlDoc->GetRoot(), wxT( "pcbDesign" ) );
 
-    if( aNode )
+    if( rootNode )
     {
-        aNode = FindNode( aNode, wxT( "fileUnits" ) );
-
-        if( aNode )
-        {
-            m_DefaultMeasurementUnit = aNode->GetNodeContent().Lower();
-            m_DefaultMeasurementUnit.Trim( true );
-            m_DefaultMeasurementUnit.Trim( false );
-        }
-    }
-
-    // Determine layers stackup
-    aNode = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "pcbDesign" ) );
-
-    /*if( aNode )
-    {
-        aNode = FindNode( aNode, wxT( "layersStackup" ) );
+        aNode = FindNode( rootNode, wxT( "layersStackup" ) );
 
         if( aNode )
         {
@@ -715,18 +774,17 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                     if( aaNode ) {
                         aaNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
-                        m_layersStackup.Add( layerName );
+                        m_layersStackup.emplace_back( layerName,
+                                                      -1 ); // pcad layer numbers to be fixed later
                     }
                 }
 
                 aNode = aNode->GetNext();
             }
         }
-    }*/
 
-    if( aNode )
-    {
-        aNode = FindNode( aNode, wxT( "layerDef" ) );
+        // parse missing layers and numbers
+        aNode = FindNode( rootNode, wxT( "layerDef" ) );
 
         while( aNode )
         {
@@ -739,18 +797,43 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                     if( FindNode( aNode, wxT( "layerNum" ) ) )
                         FindNode( aNode, wxT( "layerNum" ) )->GetNodeContent().ToLong( &num );
 
-                    layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim(
-                            false );
+                    layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim( false );
+                    isSignalLayer =
+                            layerType.IsSameAs( wxT( "Signal" ), false ) || layerType.IsSameAs( wxT( "Plane" ), false );
 
-                    if( num > 0 && ( layerType.IsSameAs( wxT( "Signal" ), false )
-                            || layerType.IsSameAs( wxT( "Plane" ), false ) ) )
+                    if( num > 0 )
                     {
                         aNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
-                        m_layersStackup.emplace_back( layerName, num );
 
-                        if( m_layersStackup.size() > 32 )
-                            THROW_IO_ERROR( _( "KiCad only supports 32 signal layers." ) );
+                        auto compare = [&layerName]( const auto& el )
+                        {
+                            return layerName.IsSameAs( el.first, false );
+                        };
+
+                        if( auto el = std::find_if( m_layersStackup.begin(), m_layersStackup.end(), compare );
+                            el != m_layersStackup.end() )
+                        {
+                            if( isSignalLayer )
+                            {
+                                el->second = num;
+                            }
+                            else
+                            {
+                                // remove layer from stackup if it is not signal layer
+                                m_layersStackup.erase( el );
+                            }
+                        }
+                        else
+                        {
+                            if( isSignalLayer ) // ignore non signal layers
+                            {
+                                // Stackup defined inside pcad file is incomplete.
+                                // We will ignore it and sort layers later preserving original imported behavior
+                                stackupIncomplete = true;
+                                m_layersStackup.emplace_back( layerName, num );
+                            }
+                        }
                     }
                 }
             }
@@ -758,16 +841,85 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
             aNode = aNode->GetNext();
         }
 
-        // Ensure that the layers are properly mapped to their order with the bottom
-        // copper (layer 2 in PCAD) at the end
-        std::sort( m_layersStackup.begin(), m_layersStackup.end(),
-        [&]( const std::pair<wxString, long>& a, const std::pair<wxString, long>& b ) {
-            long lhs = a.second == 2 ? std::numeric_limits<long>::max() : a.second;
-            long rhs = b.second == 2 ? std::numeric_limits<long>::max() : b.second;
 
-            return lhs < rhs;
-        } );
+        if( stackupIncomplete )
+        {
+            // Stackup inside pcad file is incomplete, so we;ve added all missing signal layers at the end,
+            // so now ensure that the layers are properly mapped to their order with the bottom
+            // copper (layer 2 in PCAD) at the end
+            std::sort( m_layersStackup.begin(), m_layersStackup.end(),
+                       [&]( const std::pair<wxString, long>& a, const std::pair<wxString, long>& b )
+                       {
+                           long lhs = a.second == 2 ? std::numeric_limits<long>::max() : a.second;
+                           long rhs = b.second == 2 ? std::numeric_limits<long>::max() : b.second;
+
+                           return lhs < rhs;
+                       } );
+        }
+
+        if( m_layersStackup.size() > 32 )
+            THROW_IO_ERROR( _( "KiCad only supports 32 signal layers." ) );
     }
+}
+
+void PCAD_PCB::CreatePolygonsForEmptyPowerPlanes()
+{
+    PCAD_POLYGON* plane_layer = nullptr;
+
+    for( const auto& [nbr, layer] : m_LayersMap )
+    {
+        if( layer.layerType == LAYER_TYPE_PLANE && layer.hasContent == false )
+        {
+            // fill the polygon with the same contour as its outline is
+            plane_layer = new PCAD_POLYGON( m_callbacks, m_board, nbr );
+            plane_layer->AssignNet( layer.netNameRef );
+            plane_layer->SetOutline( &m_BoardOutline );
+            m_PcbComponents.Add( plane_layer );
+        }
+    }
+}
+
+void PCAD_PCB::ProcessLayerContentsObjects( wxStatusBar* aStatusBar, const wxString& aActualConversion, XNODE* aNode )
+{
+    long num = 0;
+
+    if( FindNode( aNode, wxT( "layerNumRef" ) ) )
+        FindNode( aNode, wxT( "layerNumRef" ) )->GetNodeContent().ToLong( &num );
+
+    if( num <= 0 )
+        return;
+
+    DoLayerContentsObjects( aNode, nullptr, &m_PcbComponents, aStatusBar, m_DefaultMeasurementUnit, aActualConversion );
+
+    m_LayersMap[num].hasContent = true;
+}
+
+void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
+{
+    XNODE*              aNode; //, *aaNode;
+    PCAD_NET*           net;
+    PCAD_PCB_COMPONENT* comp;
+    PCAD_FOOTPRINT*     footprint;
+    wxString            compRef, pinRef;
+    int                 i, j, netCode;
+
+    // Default measurement units
+    aNode = FindNode( (XNODE*) aXmlDoc->GetRoot(), wxT( "asciiHeader" ) );
+
+    if( aNode )
+    {
+        aNode = FindNode( aNode, wxT( "fileUnits" ) );
+
+        if( aNode )
+        {
+            m_DefaultMeasurementUnit = aNode->GetNodeContent().Lower();
+            m_DefaultMeasurementUnit.Trim( true );
+            m_DefaultMeasurementUnit.Trim( false );
+        }
+    }
+
+    // Determine layers stackup
+    ExtractLayerStackup( aXmlDoc );
 
     // Layers mapping
     aNode = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "pcbDesign" ) );
@@ -826,11 +978,12 @@ void PCAD_PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
             // objects
             if( aNode->GetName().IsSameAs( wxT( "layerContents" ), false ) )
-                DoLayerContentsObjects( aNode, nullptr, &m_PcbComponents, aStatusBar,
-                                        m_DefaultMeasurementUnit, aActualConversion );
+                ProcessLayerContentsObjects( aStatusBar, aActualConversion, aNode );
 
             aNode = aNode->GetNext();
         }
+
+        CreatePolygonsForEmptyPowerPlanes();
 
         // POSTPROCESS -- SET NETLIST REFERENCES
         // aStatusBar->SetStatusText( wxT( "Processing NETLIST " ) );
