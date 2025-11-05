@@ -51,8 +51,8 @@ public:
     wxString GetStringSelection() const override;
 
 protected:
-    wxCoord OnMeasureItem( size_t item ) const override;
-    void    OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const override;
+    wxCoord OnMeasureItem( size_t aItem ) const override;
+    void    OnDrawItem( wxDC& aDc, const wxRect& aRect, int aItem, int aFlags ) const override;
     void    OnKeyDown( wxKeyEvent& aEvent );
     void    OnCharHook( wxKeyEvent& aEvent );
     void    OnTextCtrl( wxCommandEvent& aEvent );

@@ -309,57 +309,55 @@ KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic, bool aFor
 }
 
 
-wxCoord FONT_CHOICE::OnMeasureItem( size_t item ) const
+wxCoord FONT_CHOICE::OnMeasureItem( size_t aItem ) const
 {
-    static const wxString c_sampleString = wxS( "AaBbCcDd123456" );
-
-    wxString name = GetString( item );
+    wxString name = GetString( aItem );
 
     // Get default font extent
     int sysW = 0, sysH = 0;
     GetTextExtent( name, &sysW, &sysH );
 
-    // Get sample font extent
-    int    sampleW = 0, sampleH = 0;
-    wxFont sampleFont( wxFontInfo( GetFont().GetPointSize() ).FaceName( name ) );
-    GetTextExtent( c_sampleString, &sampleW, &sampleH, nullptr, nullptr, &sampleFont );
-
-    return std::max( sysH, sampleH );
+    return sysH + FromDIP( 6 );
 }
 
 
-void FONT_CHOICE::OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
+void FONT_CHOICE::OnDrawItem( wxDC& aDc, const wxRect& aRect, int aItem, int aFlags ) const
 {
     static const wxString c_sampleString = wxS( "AaBbCcDd123456" );
 
-    if( item == wxNOT_FOUND )
+    if( aItem == wxNOT_FOUND )
         return;
 
-    wxString name = GetString( item );
+    wxString name = GetString( aItem );
 
-    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    aDc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     // Get default font extent
-    int sysW = 0, sysH = 0;
-    dc.GetTextExtent( name, &sysW, &sysH );
+    int sysW = 0, sysH = 0, sysDescent = 0;
+    aDc.GetTextExtent( name, &sysW, &sysH, &sysDescent );
 
     // Draw the font name vertically centered
-    dc.DrawLabel( name, wxRect( rect.x + 2, rect.y, wxDefaultCoord, rect.height ),
-                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL );
+    wxRect nameRect( aRect.x + 2, aRect.y, sysW, sysH );
+    nameRect.MakeCenteredIn( aRect, wxVERTICAL );
+    aDc.DrawText( name, nameRect.GetTopLeft() );
 
-    if( item >= m_systemFontCount )
+    if( aItem >= m_systemFontCount )
     {
-        wxFont sampleFont( wxFontInfo( dc.GetFont().GetPointSize() ).FaceName( name ) );
-        dc.SetFont( sampleFont );
+        wxFont sampleFont( wxFontInfo( aDc.GetFont().GetPointSize() ).FaceName( name ) );
+        aDc.SetFont( sampleFont );
 
-        if( flags & wxODCB_PAINTING_SELECTED )
-            dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
+        if( aFlags & wxODCB_PAINTING_SELECTED )
+            aDc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
         else
-            dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+            aDc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
-        // Draw the sample vertically centered
-        dc.DrawLabel( c_sampleString, wxRect( rect.x + sysW + 15, rect.y, wxDefaultCoord, rect.height ),
-                      wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL );
+        // Get sample font extent
+        int sampleW = 0, sampleH = 0, sampleDescent = 0;
+        aDc.GetTextExtent( name, &sampleW, &sampleH, &sampleDescent );
+
+        // Align the baselines vertically
+        aDc.DrawText( c_sampleString, nameRect.GetRight() + 15,
+                      nameRect.GetBottom() - sysDescent - sampleH + sampleDescent + 1 );
     }
 }
 
@@ -758,9 +756,7 @@ void FONT_CHOICE::FilterFontList( const wxString& aFilter )
     for( int i = 0; i < m_systemFontCount; i++ )
     {
         wxString fontName = m_fullFontList[i];
-
-        if( fontName.Lower().StartsWith( trimmedFilter.Lower() ) )
-            filteredList.Add( fontName );
+        filteredList.Add( fontName );
     }
 
     // Add matching fonts from the full list
