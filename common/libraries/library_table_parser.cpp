@@ -168,9 +168,8 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::Parse(
             if( !parse<LIB_TABLE_FILE, LIBRARY_TABLE_PARSER_ACTION>( in, state ) )
             {
                 wxLogTrace( traceLibraries, "Parsing failed without throwing" );
-                wxString msg =
-                    wxString::Format( _( "An unexpected error occurred while reading library table %s "),
-                                      aPath.string().c_str() );
+                wxString msg = wxString::Format( _( "An unexpected error occurred while reading library table %s "),
+                                                 aPath.string().c_str() );
                 return tl::unexpected( LIBRARY_PARSE_ERROR( { .description = msg } ) );
             }
         }
@@ -183,31 +182,28 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::Parse(
 
             wxLogTrace( traceLibraries, "%s", msg.c_str() );
 
-            wxString description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
-                                                     p.line, p.column );
-
             return tl::unexpected( LIBRARY_PARSE_ERROR( {
-                .description = description,
-                .line = p.line,
-                .column = p.column
-            } ) );
+                                       .description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
+                                                                        p.line, p.column ),
+                                       .line = p.line,
+                                       .column = p.column
+                                   } ) );
         }
 
         return state.model;
     }
     catch( std::filesystem::filesystem_error& e )
     {
-        wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse loading '%s' error: %s",
-                    aPath.string(), e.what() );
+        wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse loading '%s' error: %s", aPath.string(), e.what() );
+
         return tl::unexpected( LIBRARY_PARSE_ERROR( {
-            .description = e.what()
-        } ) );
+                                   .description = e.what()
+                               } ) );
     }
 }
 
 
-tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::ParseBuffer(
-        const std::string& aBuffer )
+tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::ParseBuffer( const std::string& aBuffer )
 {
     memory_input in( aBuffer, "" );
     LIBRARY_TABLE_PARSER_STATE state;
@@ -218,9 +214,10 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::ParseB
         if( !parse<LIB_TABLE_FILE, LIBRARY_TABLE_PARSER_ACTION>( in, state ) )
         {
             wxLogTrace( traceLibraries, "Parsing failed without throwing" );
-            wxString msg =
-                wxString::Format( _( "An unexpected error occurred while reading library table") );
-            return tl::unexpected( LIBRARY_PARSE_ERROR( { .description = msg } ) );
+
+            return tl::unexpected( LIBRARY_PARSE_ERROR( {
+                                       .description = _( "An unexpected error occurred while reading library table" )
+                                   } ) );
         }
     }
     catch( const parse_error& e )
@@ -232,14 +229,12 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::ParseB
 
         wxLogTrace( traceLibraries, "%s", msg.c_str() );
 
-        wxString description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
-                                                 p.line, p.column );
-
         return tl::unexpected( LIBRARY_PARSE_ERROR( {
-            .description = description,
-            .line = p.line,
-            .column = p.column
-        } ) );
+                                   .description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
+                                                                    p.line, p.column ),
+                                   .line = p.line,
+                                   .column = p.column
+                               } ) );
     }
 
     return state.model;

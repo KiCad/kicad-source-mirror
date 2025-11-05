@@ -121,11 +121,9 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 
                         if( seenTables.contains( src ) )
                         {
-                            wxLogTrace( traceLibraries, "Library table %s has already been loaded!",
-                                        src );
+                            wxLogTrace( traceLibraries, "Library table %s has already been loaded!", src );
                             row.SetOk( false );
-                            row.SetErrorDescription(
-                                _( "A reference to this library table already exists" ) );
+                            row.SetErrorDescription( _( "A reference to this library table already exists" ) );
                             continue;
                         }
 
