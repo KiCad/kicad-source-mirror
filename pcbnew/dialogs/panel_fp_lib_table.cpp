@@ -68,6 +68,7 @@
 #include <dialog_HTML_reporter_base.h>
 #include <libraries/library_manager.h>
 #include <widgets/wx_html_report_box.h>
+#include <widgets/grid_button.h>
 
 
 /**
@@ -111,19 +112,64 @@ public:
 class FP_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
-    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
+    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject ) :
             LIB_TABLE_GRID_TRICKS( aGrid ),
-            m_dialog( aParent )
-    { }
+            m_dialog( aParent ),
+            m_project( aProject )
+    {
+        SetTooltipEnable( COL_STATUS );
+    }
 
-    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid,
+    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject,
                     std::function<void( wxCommandEvent& )> aAddHandler ) :
             LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
-            m_dialog( aParent )
-    { }
+            m_dialog( aParent ),
+            m_project( aProject )
+    {
+        SetTooltipEnable( COL_STATUS );
+    }
 
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
+
+    void onGridCellLeftClick( wxGridEvent& aEvent ) override
+    {
+        if( aEvent.GetCol() == COL_STATUS )
+        {
+            // Status column button action depends on row:
+            // Normal rows should have no button, so they are a no-op
+            // Errored rows should have the warning button, so we show their error
+            // Configurable libraries will have the options button, so we launch the config
+            // Chained tables will have the open button, so we request the table be opened
+            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_project );
+
+            FP_LIB_TABLE_GRID*       libTable = static_cast<FP_LIB_TABLE_GRID*>( m_grid->GetTable() );
+            const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
+
+            wxString title = row.Type() == "Table"
+                                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
+                                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
+
+            if( !row.IsOk() )
+            {
+                DisplayErrorMessage( m_grid, title, row.ErrorDescription() );
+            }
+            else if( std::optional<LIBRARY_ERROR> e = adapter->LibraryError( row.Nickname() ) )
+            {
+                DisplayErrorMessage( m_grid, title, e->message );
+            }
+            else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
+            {
+                adapter->ShowConfigurationDialog( row.Nickname(), m_dialog );
+            }
+
+            aEvent.Skip();
+        }
+        else
+        {
+            GRID_TRICKS::onGridCellLeftClick( aEvent );
+        }
+    }
 
     void optionsEditor( int aRow ) override
     {
@@ -203,7 +249,6 @@ protected:
         m_grid->AutoSizeColumns( false );
     }
 
-
     bool toggleCell( int aRow, int aCol, bool aPreserveSelection ) override
     {
         if( aCol == COL_VISIBLE )
@@ -214,6 +259,9 @@ protected:
 
         return LIB_TABLE_GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
     }
+
+private:
+    PROJECT& m_project;
 };
 
 
@@ -229,7 +277,7 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
             };
 
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid,
+    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid, *m_project,
             [this]( wxCommandEvent& event )
             {
                 appendRowHandler( event );
@@ -238,6 +286,9 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     wxGridCellAttr* attr;
+
+    attr = new wxGridCellAttr;
+    aGrid->SetColAttr( COL_NICKNAME, attr );
 
     attr = new wxGridCellAttr;
 
@@ -266,6 +317,12 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     aGrid->SetColAttr( COL_TYPE, attr );
 
     attr = new wxGridCellAttr;
+    aGrid->SetColAttr( COL_OPTIONS, attr );
+
+    attr = new wxGridCellAttr;
+    aGrid->SetColAttr( COL_DESCR, attr );
+
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
     aGrid->SetColAttr( COL_ENABLED, attr );
@@ -274,6 +331,39 @@ void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     aGrid->SetColAttr( COL_VISIBLE, attr );
+
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
+
+    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
+    {
+        FP_LIB_TABLE_GRID* libTable = static_cast<FP_LIB_TABLE_GRID*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW& tableRow = libTable->at( ii );
+
+        if( tableRow.IsOk() )
+        {
+            if( std::optional<LIBRARY_ERROR> error = adapter->LibraryError( tableRow.Nickname() ) )
+            {
+                aGrid->SetCellValue( ii, COL_STATUS, error->message );
+                aGrid->SetCellRenderer( ii, COL_STATUS,
+                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
+            }
+            else if( adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
+            {
+                aGrid->SetCellValue( ii, COL_STATUS,
+                                     wxString::Format( _( "Library settings for %s..." ), tableRow.Nickname() ) );
+                aGrid->SetCellRenderer( ii, COL_STATUS,
+                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
+            }
+        }
+        else
+        {
+            aGrid->SetCellValue( ii, COL_STATUS, tableRow.ErrorDescription() );
+            aGrid->SetCellRenderer( ii, COL_STATUS,
+                                    new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
+        }
+
+        aGrid->SetReadOnly( ii, COL_STATUS );
+    }
 
     // all but COL_OPTIONS, which is edited with Option Editor anyways.
     autoSizeCol( aGrid, COL_NICKNAME );

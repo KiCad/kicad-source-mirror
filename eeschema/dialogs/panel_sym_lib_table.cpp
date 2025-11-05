@@ -146,6 +146,7 @@ public:
         m_dialog( aParent ),
         m_project( aProject )
     {
+        SetTooltipEnable( COL_STATUS );
     }
 
 protected:
@@ -162,12 +163,12 @@ protected:
             // Chained tables will have the open button, so we request the table be opened
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_project );
 
-            auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
+            SYMBOL_LIB_TABLE_GRID*   libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
             const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
 
             wxString title = row.Type() == "Table"
-                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
-                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
+                                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
+                                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
 
             if( !row.IsOk() )
             {
@@ -214,7 +215,6 @@ protected:
                 m_grid->Refresh();
             }
         }
-
     }
 
     /// handle specialized clipboard text, with leading "(sym_lib_table" or
@@ -293,9 +293,10 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 
     for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
     {
-        auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( aGrid->GetTable() );
+        SYMBOL_LIB_TABLE_GRID* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW&     tableRow = libTable->at( ii );
 
-        if( LIBRARY_TABLE_ROW& tableRow = libTable->at( ii ); tableRow.IsOk() )
+        if( tableRow.IsOk() )
         {
             if( std::optional<LIBRARY_ERROR> error = adapter->LibraryError( tableRow.Nickname() ) )
             {
