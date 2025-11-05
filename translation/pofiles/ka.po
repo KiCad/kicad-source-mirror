@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-12 06:14+0000\n"
+"PO-Revision-Date: 2025-11-06 05:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -2268,7 +2268,7 @@ msgstr "სიმბოლოები"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
 msgid "Footprints"
-msgstr ""
+msgstr "ნაკვალევები"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
@@ -4812,7 +4812,7 @@ msgstr "&გატანა..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
-msgstr ""
+msgstr "ნაკვალევები/პადები:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -5116,7 +5116,7 @@ msgstr "მასშტაბი:"
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 #: common/dialogs/panel_mouse_settings_base.cpp:283
 msgid "Reverse"
-msgstr "აღდგენა"
+msgstr "დაბრუნება"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:247
 msgid "Pan up/down:"
@@ -5862,7 +5862,7 @@ msgstr "სიმულატორი"
 #: common/tool/common_tools.cpp:614 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1112 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
-msgstr ""
+msgstr "ნაკვალევის რედაქტორი"
 
 #: common/eda_base_frame.cpp:1168 common/eda_base_frame.cpp:1181
 msgid "Origins & Axes"
@@ -5893,7 +5893,7 @@ msgstr "რეალური დროის რენდერერი"
 
 #: common/eda_base_frame.cpp:1192
 msgid "Raytracing Renderer"
-msgstr ""
+msgstr "სხივების ტრასირების რენდერერი"
 
 #: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:616 gerbview/gerbview_frame.cpp:652
@@ -6061,7 +6061,7 @@ msgstr "ეკრანი"
 #: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
-msgstr ""
+msgstr "ნაკვალევი"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pad.cpp:1327
@@ -7946,22 +7946,22 @@ msgstr ""
 
 #: common/layer_id.cpp:123
 msgid "Footprints front"
-msgstr ""
+msgstr "ნაკვალევის წინა"
 
 #: common/layer_id.cpp:124
 msgid "Footprints back"
-msgstr ""
+msgstr "ნაკვალევის უკანა"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Reference designators"
-msgstr ""
+msgstr "მიმართვის დამდგენი"
 
 #: common/layer_id.cpp:127
 msgid "Footprint text"
-msgstr ""
+msgstr "ნაკვალევის ტექსტი"
 
 #: common/layer_id.cpp:128
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -8446,7 +8446,7 @@ msgstr "წერტილმძიმეები"
 
 #: common/settings/color_settings.cpp:389
 msgid "(Footprints)"
-msgstr ""
+msgstr "(ნაკვალევები)"
 
 #: common/settings/color_settings.cpp:443
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:82
@@ -10271,11 +10271,11 @@ msgstr ""
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr ""
+msgstr "ნაკვალევების მინიჭება"
 
 #: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
-msgstr ""
+msgstr "ნაკვალევის ბიბლიოთეკა"
 
 #: cvpcb/cvpcb_mainframe.cpp:118
 msgid "Symbol : Footprint Assignments"
@@ -10283,7 +10283,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:121
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "გაფილტრული ნაკვალევები"
 
 #: cvpcb/cvpcb_mainframe.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:335
@@ -10430,7 +10430,7 @@ msgstr ""
 #: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "Footprint Viewer"
-msgstr ""
+msgstr "ნაკვალევის დამთვალიერებელი"
 
 #: cvpcb/display_footprints_frame.cpp:318
 #: pcbnew/toolbars_footprint_viewer.cpp:107
@@ -10460,7 +10460,7 @@ msgstr "ნაკვალევის ჩატვირთვის შეც�
 #: cvpcb/display_footprints_frame.cpp:514 pcbnew/footprint.cpp:1786
 #, c-format
 msgid "Footprint: %s"
-msgstr ""
+msgstr "ნაკვალევი: %s"
 
 #: cvpcb/display_footprints_frame.cpp:542
 #, c-format
@@ -10513,7 +10513,7 @@ msgstr "სქემა შენახულია"
 
 #: cvpcb/toolbars_cvpcb.cpp:70
 msgid "Footprint Filters:"
-msgstr ""
+msgstr "ნაკვალევის ფილტრები:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -12800,9 +12800,9 @@ msgid "No symbols found in library %s."
 msgstr "სიმბოლოები აღმოჩენილი არაა ბიბლიოთეკაში %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "ჩატვირთვის შეცდომა სიმბოლოსთვის %s: %s"
+msgstr "ჩატვირთვის შეცდომა სიმბოლოსთვის '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
@@ -13147,7 +13147,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:303
 msgid "Footprint filters:"
-msgstr ""
+msgstr "ნაკვალევის ფილტრები:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:305
 msgid ""
@@ -13170,7 +13170,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:343
 msgid "Footprint Filters"
-msgstr ""
+msgstr "ნაკვალევის ფილტრები"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Edit Simulation Model..."
@@ -13202,11 +13202,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_line_properties_base.h:66
 msgid "Line Properties"
-msgstr ""
+msgstr "ხაზის თვისებები"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:115
 msgid "Conflicting Labels"
-msgstr ""
+msgstr "კონფლიქტური ჭდეები"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:116
 msgid "New Label"
@@ -13234,11 +13234,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
 msgid "Accept Name"
-msgstr ""
+msgstr "სახელის მიღება"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr ""
+msgstr "სალტეების მიგრაცია"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
@@ -13294,11 +13294,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
-msgstr ""
+msgstr "საკო&ნტაქტო ღეროs სახელი:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "Pin num&ber:"
-msgstr ""
+msgstr "საკონტაქტო ღეროს ნ&ომერი:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -13306,15 +13306,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
-msgstr ""
+msgstr "მდებარეობის &X:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:69
 msgid "&Y position:"
-msgstr ""
+msgstr "მდებარეობის &Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
 msgid "&Pin length:"
-msgstr ""
+msgstr "საკონტა&ქტო ღეროს სიგრძე:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
 msgid "N&ame text size:"
@@ -13326,7 +13326,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
 msgid "Electrical type:"
-msgstr ""
+msgstr "ელექტრ. ტიპი:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 msgid "Used by the ERC."
@@ -13334,7 +13334,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:106
 msgid "Graphic style:"
-msgstr ""
+msgstr "გრაფიკის სტილი:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:220
@@ -13362,7 +13362,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
-msgstr ""
+msgstr "საკონტაქტო ღეროს თვისებები"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:80
 msgid "Plot All Pages"
@@ -13399,7 +13399,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:315
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 msgid "Schematic size"
-msgstr ""
+msgstr "სქემის ზომა"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:321
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:80
@@ -13479,7 +13479,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
 #: pcbnew/dialogs/dialog_plot_base.cpp:34
 msgid "Output directory:"
-msgstr ""
+msgstr "გამოტანის საქაღალდე:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
@@ -13537,7 +13537,7 @@ msgstr "შავთეთრი"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:20
 msgid "Color theme:"
-msgstr ""
+msgstr "ფერების თემა:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:91
 msgid "Select the color theme to use for plotting"
@@ -13647,16 +13647,16 @@ msgstr "დასტური"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:123
 msgid "Symbol Name"
-msgstr ""
+msgstr "სიმბოლოს სახელი"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:127
 msgid "Action Taken"
-msgstr ""
+msgstr "შესრულებული ქმედება"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
 #: eeschema/dialogs/dialog_rescue_each.cpp:301
 msgid "Rescue Symbols"
-msgstr ""
+msgstr "სიმბოლოების აღდგენა"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:152
 msgid "Skip Symbol Rescue"
@@ -13686,11 +13686,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:57
 msgid "Cached Symbol:"
-msgstr ""
+msgstr "დაკეშილი სიმბოლო:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:78
 msgid "Library Symbol:"
-msgstr ""
+msgstr "ბიბლიოთეკის სიმბოლო:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:102
 msgid "Never Show Again"
@@ -13706,7 +13706,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_import_settings.cpp:53
 #: pcbnew/dialogs/dialog_import_settings_base.h:70
 msgid "Import Settings"
-msgstr ""
+msgstr "პარამეტრების შემოტანა"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:61
 #: pcbnew/dialogs/dialog_import_settings.cpp:116
@@ -13734,7 +13734,7 @@ msgstr "შემოტანა:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
-msgstr ""
+msgstr "დაფორმატების პარამეტრები"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -13751,7 +13751,7 @@ msgstr "BOM ფორმატის პრესეტები"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
 msgid "Violation severities"
-msgstr ""
+msgstr "დარღვევის სიმძიმეები"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 msgid "Pin conflict map"
@@ -16698,7 +16698,7 @@ msgstr "ერთეულების შემოწმება..."
 #: eeschema/erc/erc.cpp:1857
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
-msgstr ""
+msgstr "ნაკვალევების შემოწმება..."
 
 #: eeschema/erc/erc.cpp:1871
 msgid "Checking pins..."
@@ -17775,7 +17775,7 @@ msgstr "არალოგიკური"
 
 #: eeschema/printing/dialog_print.cpp:356
 msgid "Print Schematic"
-msgstr ""
+msgstr "სქემის დაბეჭდვა"
 
 #: eeschema/printing/dialog_print.cpp:363
 msgid "An error occurred attempting to print the schematic."
@@ -23482,7 +23482,7 @@ msgstr ""
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
 msgid "Loading Design Block Libraries"
-msgstr ""
+msgstr "იტვირთება დიზაინის ბლოკის ბიბლიოთეკები"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:275
 msgid "Updating Design Block Libraries"
@@ -29087,7 +29087,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Stripline"
-msgstr ""
+msgstr "სასაზღვრო ხაზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Twisted Pair"
@@ -33208,7 +33208,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:49
 msgid "Footprint: "
-msgstr ""
+msgstr "ნაკვალევი: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
 msgid "Symbol:"
@@ -33712,9 +33712,8 @@ msgid "Footprint Report"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "შემდეგის ძებნა"
+msgstr "უბრალო ტექსტი"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -34397,7 +34396,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:33
 #: pcbnew/drc/drc_engine.cpp:1491
 msgid "footprint"
-msgstr ""
+msgstr "ნაკვალევი"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:62
 #, c-format
@@ -41068,7 +41067,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
 msgid "Footprint..."
-msgstr ""
+msgstr "ნაკვალევი..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
