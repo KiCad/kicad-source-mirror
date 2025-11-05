@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-04 10:51+0000\n"
+"PO-Revision-Date: 2025-11-06 05:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
@@ -44,7 +44,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -35694,50 +35694,44 @@ msgid "PCB text items"
 msgstr "PCB 텍스트 항목"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "기타 풋프린트 텍스트 항목"
+msgstr "기타 풋프린트 필드"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "참조 지정자 또는 값 필드가 아닌 풋프린트 필드"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:50
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "PCB 치수 항목"
+msgstr "PCB 치수"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Footprint graphic items"
 msgstr "풋프린트 그래픽 항목"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Footprint text items"
-msgstr "기타 풋프린트 텍스트 항목"
+msgstr "풋프린트 텍스트 항목"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Footprint text items not associated with a field"
 msgstr "필드와 연결되지 않은 풋프린트 텍스트 항목"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "풋프린트 치수 항목"
+msgstr "풋프린트 치수"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "By layer:"
-msgstr "이 레이어로:"
+msgstr "층별:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
 msgid "By parent reference designator:"
 msgstr "상위 참조 지시자별:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "새 풋프린트 라이브러리 ID:"
+msgstr "부모 풋프린트 라이브러리 링크:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -35745,9 +35739,8 @@ msgid "Set to specified values:"
 msgstr "지정된 값으로 설정:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:152
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "표시  (텍스트만)"
+msgstr "표시  (필드만)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:240
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -37158,9 +37151,8 @@ msgstr ""
 "잘 모르겠다면 4번을 선택하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "이미지를 클립보드에 복사하지 못함"
+msgstr "페이지를 보드에 맞추기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -37568,9 +37560,8 @@ msgid "x"
 msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "모양"
+msgstr "외관 사전 설정:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37625,16 +37616,14 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:258
-#, fuzzy
 msgid "Lights Intensity"
-msgstr "광원 강도"
+msgstr "조도"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
 msgid "Camera:"
 msgstr "카메라:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
-#, fuzzy
 msgid "Lights Position"
 msgstr "광원 위치"
 
@@ -38250,14 +38239,12 @@ msgid "Unused Pads"
 msgstr "미사용 패드"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
 msgstr "풋프린트 업데이트"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "네트리스트에 지정된 값으로 풋프린트 대체"
+msgstr "심볼로 지정된 풋프린트로 교체하십시오"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -38281,14 +38268,12 @@ msgstr ""
 "회로도 심볼에 연결되지 않고, 잠겨있지 않은 풋프린트를 기판에서 삭제합니다."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
-msgstr "잠금 무시"
+msgstr "잠금 해제"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 업데이트"
+msgstr "심볼의 풋프린트 필드 업데이트"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
 msgid "Remove footprint fields not found in symbols"
@@ -38784,6 +38769,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### 조항\n"
+"\n"
+"    (조건 \"<표현식>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -38793,6 +38783,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Notes\n"
+"\n"
+"Ctrl+/ t키를 사용하여 줄 주석을 달거나 주석을 해제합니다.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
