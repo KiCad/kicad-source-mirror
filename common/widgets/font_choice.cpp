@@ -309,24 +309,57 @@ KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic, bool aFor
 }
 
 
+wxCoord FONT_CHOICE::OnMeasureItem( size_t item ) const
+{
+    static const wxString c_sampleString = wxS( "AaBbCcDd123456" );
+
+    wxString name = GetString( item );
+
+    // Get default font extent
+    int sysW = 0, sysH = 0;
+    GetTextExtent( name, &sysW, &sysH );
+
+    // Get sample font extent
+    int    sampleW = 0, sampleH = 0;
+    wxFont sampleFont( wxFontInfo( GetFont().GetPointSize() ).FaceName( name ) );
+    GetTextExtent( c_sampleString, &sampleW, &sampleH, nullptr, nullptr, &sampleFont );
+
+    return std::max( sysH, sampleH );
+}
+
+
 void FONT_CHOICE::OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
 {
+    static const wxString c_sampleString = wxS( "AaBbCcDd123456" );
+
     if( item == wxNOT_FOUND )
         return;
 
     wxString name = GetString( item );
 
     dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
-    dc.DrawText( name, rect.x + 2, rect.y + 2 );
+
+    // Get default font extent
+    int sysW = 0, sysH = 0;
+    dc.GetTextExtent( name, &sysW, &sysH );
+
+    // Draw the font name vertically centered
+    dc.DrawLabel( name, wxRect( rect.x + 2, rect.y, wxDefaultCoord, rect.height ),
+                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL );
 
     if( item >= m_systemFontCount )
     {
-        wxCoord w, h;
-        dc.GetTextExtent( name, &w, &h );
         wxFont sampleFont( wxFontInfo( dc.GetFont().GetPointSize() ).FaceName( name ) );
         dc.SetFont( sampleFont );
-        dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-        dc.DrawText( wxS( "AaBbCcDd123456" ), rect.x + w + 15, rect.y + 2 );
+
+        if( flags & wxODCB_PAINTING_SELECTED )
+            dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
+        else
+            dc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
+        // Draw the sample vertically centered
+        dc.DrawLabel( c_sampleString, wxRect( rect.x + sysW + 15, rect.y, wxDefaultCoord, rect.height ),
+                      wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL );
     }
 }
 

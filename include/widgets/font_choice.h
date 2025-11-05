@@ -51,14 +51,15 @@ public:
     wxString GetStringSelection() const override;
 
 protected:
-    void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const override;
-    void OnKeyDown( wxKeyEvent& aEvent );
-    void OnCharHook( wxKeyEvent& aEvent );
-    void OnTextCtrl( wxCommandEvent& aEvent );
-    void OnDropDown( wxCommandEvent& aEvent );
-    void OnCloseUp( wxCommandEvent& aEvent );
-    void OnSetFocus( wxFocusEvent& aEvent );
-    void OnKillFocus( wxFocusEvent& aEvent );
+    wxCoord OnMeasureItem( size_t item ) const override;
+    void    OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const override;
+    void    OnKeyDown( wxKeyEvent& aEvent );
+    void    OnCharHook( wxKeyEvent& aEvent );
+    void    OnTextCtrl( wxCommandEvent& aEvent );
+    void    OnDropDown( wxCommandEvent& aEvent );
+    void    OnCloseUp( wxCommandEvent& aEvent );
+    void    OnSetFocus( wxFocusEvent& aEvent );
+    void    OnKillFocus( wxFocusEvent& aEvent );
 
 private:
     // Clear the wxOwnerDrawnComboBox list.
