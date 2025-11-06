@@ -575,7 +575,8 @@ protected:
                 if( !m_grid->CommitPendingChanges() )
                 {;} // shouldn't happen, but Coverity doesn't know that
 
-                *m_currentDir = relPath;
+                if( m_currentDir )
+                    *m_currentDir = relPath;
             }
         }
 

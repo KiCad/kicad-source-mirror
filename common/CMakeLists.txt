@@ -143,7 +143,6 @@ set( KICOMMON_SRCS
     libraries/library_manager.cpp
     libraries/library_table.cpp
     libraries/library_table_parser.cpp
-    libraries/lib_table_grid.cpp
 
     settings/app_settings.cpp
     settings/aui_settings.cpp
@@ -504,6 +503,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_text_variables_base.cpp
     dialogs/panel_toolbar_customization.cpp
     dialogs/panel_toolbar_customization_base.cpp
+
+    libraries/lib_table_grid_data_model.cpp
     )
 
 if( KICAD_USE_SENTRY )

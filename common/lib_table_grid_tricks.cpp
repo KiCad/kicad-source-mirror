@@ -18,7 +18,8 @@
  */
 
 #include "lib_table_grid_tricks.h"
-#include "lib_table_grid.h"
+#include "confirm.h"
+#include "lib_table_grid_data_model.h"
 #include <libraries/library_manager.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
@@ -31,20 +32,87 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) :
     m_grid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( LIB_TABLE_GRID_TRICKS::onCharHook ), nullptr, this );
 }
 
+
 LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid,
         std::function<void( wxCommandEvent& )> aAddHandler ) :
         GRID_TRICKS( aGrid, aAddHandler )
 {
+    auto autoSizeCol =
+            [&]( WX_GRID* aLocGrid, int aCol )
+            {
+                int prevWidth = aLocGrid->GetColSize( aCol );
+
+                aLocGrid->AutoSizeColumn( aCol, false );
+                aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
+            };
+
+    aGrid->DisableColResize( COL_STATUS );
+    aGrid->DisableColResize( COL_VISIBLE );
+    aGrid->DisableColResize( COL_ENABLED );
+
+    aGrid->AutoSizeColumn( COL_STATUS, true );
+    aGrid->AutoSizeColumn( COL_VISIBLE, true );
+    aGrid->AutoSizeColumn( COL_ENABLED, true );
+
+    // all but COL_OPTIONS, which is edited with Option Editor anyways.
+    autoSizeCol( aGrid, COL_NICKNAME );
+    autoSizeCol( aGrid, COL_TYPE );
+    autoSizeCol( aGrid, COL_URI );
+    autoSizeCol( aGrid, COL_DESCR );
+
     m_grid->Disconnect( wxEVT_CHAR_HOOK );
     m_grid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( LIB_TABLE_GRID_TRICKS::onCharHook ), nullptr, this );
+}
+
+
+void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
+{
+    if( aEvent.GetCol() == COL_STATUS )
+    {
+        // Status column button action depends on row:
+        // Normal rows should have no button, so they are a no-op
+        // Errored rows should have the warning button, so we show their error
+        // Configurable libraries will have the options button, so we launch the config
+        // Chained tables will have the open button, so we request the table be opened
+        LIB_TABLE_GRID_DATA_MODEL*          table = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+        const LIBRARY_TABLE_ROW& row = table->at( aEvent.GetRow() );
+        LIBRARY_MANAGER_ADAPTER* adapter = table->Adapter();
+
+        wxString title = row.Type() == "Table"
+                                ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
+                                : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
+
+        if( !row.IsOk() )
+        {
+            DisplayErrorMessage( m_grid, title, row.ErrorDescription() );
+        }
+        else if( std::optional<LIBRARY_ERROR> e = adapter->LibraryError( row.Nickname() ) )
+        {
+            DisplayErrorMessage( m_grid, title, e->message );
+        }
+        else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
+        {
+            adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) );
+        }
+        else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        {
+            // JEY TODO: open library table...
+        }
+
+        aEvent.Skip();
+    }
+    else
+    {
+        GRID_TRICKS::onGridCellLeftClick( aEvent );
+    }
 }
 
 
 void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR,
-                _( "Edit options..." ),
-                _( "Edit options for this library entry" ) );
+                 _( "Edit Options" ),
+                 _( "Edit options for this library entry" ) );
 
     menu.AppendSeparator();
 
@@ -52,7 +120,7 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     bool            showDeactivate = false;
     bool            showSetVisible = false;
     bool            showUnsetVisible = false;
-    LIB_TABLE_GRID* tbl = static_cast<LIB_TABLE_GRID*>( m_grid->GetTable() );
+    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
     // Ensure selection parameters are up to date
     getSelectedArea();
@@ -74,21 +142,22 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     }
 
     if( showActivate )
-        menu.Append( LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED, _( "Activate selected" ) );
+        menu.Append( LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED, _( "Activate Selected" ) );
 
     if( showDeactivate )
-        menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
+        menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate Selected" ) );
 
     if( supportsVisibilityColumn() )
     {
         if( showSetVisible )
-            menu.Append( LIB_TABLE_GRID_TRICKS_SET_VISIBLE, _( "Set visible flag" ) );
+            menu.Append( LIB_TABLE_GRID_TRICKS_SET_VISIBLE, _( "Set Visible Flag" ) );
 
         if( showUnsetVisible )
-            menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset visible flag" ) );
+            menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset Visible Flag" ) );
     }
 
     bool showSettings = false;
+    bool showOpen = false;
 
     if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
     {
@@ -97,12 +166,19 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
         {
             showSettings = true;
-            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
-                         wxString::Format( _( "Library settings for %s..." ), nickname ) );
+            menu.Append( LIB_TABLE_GRID_TRICKS_OPEN_TABLE, _( "Edit Settings" ) );
+        }
+
+        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( nickname );
+
+        if( row.has_value() && row.value()->Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        {
+            showOpen = true;
+            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS, _( "Open Library Table" ) );
         }
     }
 
-    if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings )
+    if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings || showOpen )
         menu.AppendSeparator();
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
@@ -112,7 +188,7 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     int menu_id = event.GetId();
-    LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
+    LIB_TABLE_GRID_DATA_MODEL* tbl = (LIB_TABLE_GRID_DATA_MODEL*) m_grid->GetTable();
 
     if( menu_id == LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR )
     {
@@ -149,11 +225,17 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         row->ShowSettingsDialog( m_grid->GetParent() );
 #endif
     }
+    else if( menu_id == LIB_TABLE_GRID_TRICKS_OPEN_TABLE )
+    {
+        // JEY TODO: open library table...
+    }
     else
     {
         GRID_TRICKS::doPopupSelection( event );
     }
 }
+
+
 void LIB_TABLE_GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 {
     if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' && m_grid->IsCellEditControlShown() )

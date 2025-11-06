@@ -34,7 +34,7 @@
 #include <widgets/wx_grid.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <lib_table_grid.h>
+#include <lib_table_grid_data_model.h>
 #include <wildcards_and_files_ext.h>
 #include <env_paths.h>
 #include <functional>
@@ -86,14 +86,16 @@ enum {
 
 // clang-format on
 
-class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID
+class SYMBOL_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
 {
     friend class PANEL_SYM_LIB_TABLE;
     friend class SYMBOL_GRID_TRICKS;
 
 public:
-    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit, SYMBOL_LIBRARY_ADAPTER* aAdapter ) :
-            LIB_TABLE_GRID( aTableToEdit, aAdapter )
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+                                      SYMBOL_LIBRARY_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
+                                      wxString* aMRUDirectory, const wxString& aProjectPath ) :
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath )
     {
     }
 
@@ -101,7 +103,7 @@ public:
     {
         wxCHECK( aRow < (int) size(), /* void */ );
 
-        LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
+        LIB_TABLE_GRID_DATA_MODEL::SetValue( aRow, aCol, aValue );
 
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
@@ -126,74 +128,55 @@ public:
             }
         }
     }
+
+protected:
+    wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
+    {
+        auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW& tableRow = libTable->at( aRow );
+        SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
+
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
+
+        if( pi )
+        {
+            const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
+
+            if( desc.m_IsFile )
+                return desc.FileFilter();
+        }
+        else if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        {
+            // TODO(JE) library tables - wxWidgets doesn't allow filtering on no-extension filenames
+            return wxString::Format( _( "Symbol Library Tables (%s)|*" ),
+                                     FILEEXT::SymbolLibraryTableFileName,
+                                     FILEEXT::SymbolLibraryTableFileName );
+        }
+
+        return wxEmptyString;
+    }
 };
 
 
 class SYMBOL_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
-    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject ) :
-        LIB_TABLE_GRID_TRICKS( aGrid ),
-        m_dialog( aParent ),
-        m_project( aProject )
+    SYMBOL_GRID_TRICKS( WX_GRID* aGrid ) :
+        LIB_TABLE_GRID_TRICKS( aGrid )
     {
         SetTooltipEnable( COL_STATUS );
     }
 
-    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject,
-                        std::function<void( wxCommandEvent& )> aAddHandler ) :
-        LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
-        m_dialog( aParent ),
-        m_project( aProject )
+    SYMBOL_GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
+        LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler )
     {
         SetTooltipEnable( COL_STATUS );
     }
 
 protected:
-    DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
-
-    void onGridCellLeftClick( wxGridEvent& aEvent ) override
-    {
-        if( aEvent.GetCol() == COL_STATUS )
-        {
-            // Status column button action depends on row:
-            // Normal rows should have no button, so they are a no-op
-            // Errored rows should have the warning button, so we show their error
-            // Configurable libraries will have the options button, so we launch the config
-            // Chained tables will have the open button, so we request the table be opened
-            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_project );
-
-            SYMBOL_LIB_TABLE_GRID*   libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
-            const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
-
-            wxString title = row.Type() == "Table"
-                                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
-                                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
-
-            if( !row.IsOk() )
-            {
-                DisplayErrorMessage( m_grid, title, row.ErrorDescription() );
-            }
-            else if( std::optional<LIBRARY_ERROR> e = adapter->LibraryError( row.Nickname() ) )
-            {
-                DisplayErrorMessage( m_grid, title, e->message );
-            }
-            else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
-            {
-                adapter->ShowConfigurationDialog( row.Nickname(), m_dialog );
-            }
-
-            aEvent.Skip();
-        }
-        else
-        {
-            GRID_TRICKS::onGridCellLeftClick( aEvent );
-        }
-    }
-
     void optionsEditor( int aRow ) override
     {
-        auto tbl = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
+        auto tbl = static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
         if( tbl->GetNumberRows() > aRow )
         {
@@ -206,7 +189,7 @@ protected:
             IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
-            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row.Nickname(), choices, options, &result );
+            DIALOG_PLUGIN_OPTIONS dlg( wxGetTopLevelParent( m_grid ), row.Nickname(), choices, options, &result );
             dlg.ShowModal();
 
             if( options != result )
@@ -221,7 +204,7 @@ protected:
     /// spreadsheet formatted text.
     void paste_text( const wxString& cb_text ) override
     {
-        SYMBOL_LIB_TABLE_GRID* tbl = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
+        SYMBOL_LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
         if( size_t ndx = cb_text.find( "(sym_lib_table" ); ndx != std::string::npos )
         {
@@ -241,7 +224,7 @@ protected:
             }
             else
             {
-                DisplayError( m_dialog, tempTable.ErrorDescription() );
+                DisplayError( wxGetTopLevelParent( m_grid ), tempTable.ErrorDescription() );
             }
         }
         else
@@ -272,132 +255,19 @@ protected:
     {
         return true;
     }
-
-private:
-    PROJECT& m_project;
 };
 
 
 void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
-    auto autoSizeCol =
-            [&]( WX_GRID* aCurrGrid, int aCol )
-            {
-                int prevWidth = aCurrGrid->GetColSize( aCol );
-
-                aCurrGrid->AutoSizeColumn( aCol, false );
-                aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
-            };
-
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
-
-    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
-    {
-        SYMBOL_LIB_TABLE_GRID* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( aGrid->GetTable() );
-        LIBRARY_TABLE_ROW&     tableRow = libTable->at( ii );
-
-        if( tableRow.IsOk() )
-        {
-            if( std::optional<LIBRARY_ERROR> error = adapter->LibraryError( tableRow.Nickname() ) )
-            {
-                aGrid->SetCellValue( ii, COL_STATUS, error->message );
-                aGrid->SetCellRenderer( ii, COL_STATUS,
-                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
-            }
-            else if( adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
-            {
-                aGrid->SetCellValue( ii, COL_STATUS,
-                                     wxString::Format( _( "Library settings for %s..." ), tableRow.Nickname() ) );
-                aGrid->SetCellRenderer( ii, COL_STATUS,
-                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
-            }
-        }
-        else
-        {
-            aGrid->SetCellValue( ii, COL_STATUS, tableRow.ErrorDescription() );
-            aGrid->SetCellRenderer( ii, COL_STATUS,
-                                    new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
-        }
-    }
-
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid, m_parent->Kiway().Prj(),
+    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( aGrid,
             [this]( wxCommandEvent& event )
             {
                 appendRowHandler( event );
             } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    // Set special attributes
-    wxGridCellAttr* attr = new wxGridCellAttr;
-
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-    {
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                m_parent, aGrid, &cfg->m_lastSymbolLibDir, true, m_project->GetProjectPath(),
-                []( WX_GRID* grid, int row ) -> wxString
-                {
-                    auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
-                    LIBRARY_TABLE_ROW& tableRow = libTable->at( row );
-                    SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
-
-                    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
-
-                    if( pi )
-                    {
-                        const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
-
-                        if( desc.m_IsFile )
-                            return desc.FileFilter();
-                    }
-                    else if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-                    {
-                        // TODO(JE) library tables - wxWidgets doesn't allow filtering on no-extension filenames
-                        return wxString::Format( _( "Symbol Library Tables (%s)|*" ),
-                                                 FILEEXT::SymbolLibraryTableFileName,
-                                                 FILEEXT::SymbolLibraryTableFileName );
-                    }
-
-                    return wxEmptyString;
-                } ) );
-    }
-
-    aGrid->SetColAttr( COL_URI, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new wxGridCellChoiceEditor( m_pluginChoices ) );
-    aGrid->SetColAttr( COL_TYPE, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-    aGrid->SetColAttr( COL_STATUS, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-    aGrid->SetColAttr( COL_ENABLED, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-    aGrid->SetColAttr( COL_VISIBLE, attr );
-
-    aGrid->DisableColResize( COL_STATUS );
-    aGrid->DisableColResize( COL_VISIBLE );
-    aGrid->DisableColResize( COL_ENABLED );
-
-    aGrid->AutoSizeColumn( COL_STATUS, true );
-    aGrid->AutoSizeColumn( COL_VISIBLE, true );
-    aGrid->AutoSizeColumn( COL_ENABLED, true );
-
-    // all but COL_OPTIONS, which is edited with Option Editor anyways.
-    autoSizeCol( aGrid, COL_NICKNAME );
-    autoSizeCol( aGrid, COL_TYPE );
-    autoSizeCol( aGrid, COL_URI );
-    autoSizeCol( aGrid, COL_DESCR );
 
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
@@ -411,15 +281,17 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
         m_project( aProject ),
         m_parent( aParent )
 {
-    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( table );
+    wxString* lastGlobalLibDir = nullptr;
 
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        if( cfg->m_lastSymbolLibDir.IsEmpty() )
+            cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
 
-    // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
-    // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *table.value(), adapter ) );
+        lastGlobalLibDir = &cfg->m_lastSymbolLibDir;
+    }
+
+    m_lastProjectLibDir = m_project->GetProjectPath();
 
     // TODO(JE) should use translated string here but type is stored as untranslated string
     // Maybe type storage needs to be enum?
@@ -436,13 +308,16 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
             m_pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
     }
 
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-    {
-        if( cfg->m_lastSymbolLibDir.IsEmpty() )
-            cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
-    }
+    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxASSERT( table );
 
-    m_lastProjectLibDir = m_project->GetProjectPath();
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
+
+    // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
+    // so make it a grid owned table.
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter, m_pluginChoices,
+                                                                   lastGlobalLibDir, wxEmptyString ) );
 
     setupGrid( m_global_grid );
 
@@ -451,7 +326,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *projectTable.value(), adapter ), true );
+        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(), adapter,
+                                                                        m_pluginChoices, &m_lastProjectLibDir,
+                                                                        m_project->GetProjectPath() ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -528,7 +405,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
     std::unique_ptr<wxBusyCursor> wait;
     wait.reset( new wxBusyCursor );
 
-    for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( SYMBOL_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -605,7 +482,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 else
                 {
                     wxString ltype = model->GetValue( r, COL_TYPE );
-                    model->LIB_TABLE_GRID::SetValue( r, COL_URI, uri );
+                    model->LIB_TABLE_GRID_DATA_MODEL::SetValue( r, COL_URI, uri );
                     model->SetValue( r, COL_TYPE, ltype );
                 }
             }
@@ -613,7 +490,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
     }
 
     // check for duplicate nickNames, separately in each table.
-    for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( SYMBOL_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -854,7 +731,7 @@ void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowUp(
             [&]( int row )
             {
-                SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+                SYMBOL_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
 
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
@@ -876,7 +753,7 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowDown(
             [&]( int row )
             {
-                SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+                SYMBOL_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
 
@@ -905,6 +782,16 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
+    wxString* lastGlobalLibDir = nullptr;
+
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        if( cfg->m_lastSymbolLibDir.IsEmpty() )
+            cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+
+        lastGlobalLibDir = &cfg->m_lastSymbolLibDir;
+    }
+
     LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE::SYMBOL, true );
 
     // Go ahead and reload here because this action takes place even if the dialog is canceled
@@ -918,14 +805,15 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
     wxGridTableBase* table = m_global_grid->GetTable();
     m_global_grid->DestroyTable( table );
 
-    std::optional<LIBRARY_TABLE*> newTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                             LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> newTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( newTable );
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_parent->Kiway().Prj() );
 
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value(), adapter ) );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *newTable.value(), adapter,
+                                                                   m_pluginChoices, lastGlobalLibDir,
+                                                                   wxEmptyString ) );
     m_global_grid->PopEventHandler( true );
     setupGrid( m_global_grid );
     m_parent->m_GlobalTableChanged = true;
@@ -1106,7 +994,7 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
     // clear the table
     m_path_subs_grid->ClearRows();
 
-    for( SYMBOL_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
+    for( SYMBOL_LIB_TABLE_GRID_DATA_MODEL* tbl : { global_model(), project_model() } )
     {
         if( !tbl )
             continue;
@@ -1175,21 +1063,21 @@ void PANEL_SYM_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 }
 
 
-SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::global_model() const
+SYMBOL_LIB_TABLE_GRID_DATA_MODEL* PANEL_SYM_LIB_TABLE::global_model() const
 {
-    return static_cast<SYMBOL_LIB_TABLE_GRID*>( m_global_grid->GetTable() );
+    return static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( m_global_grid->GetTable() );
 }
 
 
-SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::project_model() const
+SYMBOL_LIB_TABLE_GRID_DATA_MODEL* PANEL_SYM_LIB_TABLE::project_model() const
 {
-    return m_project_grid ? static_cast<SYMBOL_LIB_TABLE_GRID*>( m_project_grid->GetTable() ) : nullptr;
+    return m_project_grid ? static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( m_project_grid->GetTable() ) : nullptr;
 }
 
 
-SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::cur_model() const
+SYMBOL_LIB_TABLE_GRID_DATA_MODEL* PANEL_SYM_LIB_TABLE::cur_model() const
 {
-    return static_cast<SYMBOL_LIB_TABLE_GRID*>( m_cur_grid->GetTable() );
+    return static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( m_cur_grid->GetTable() );
 }
 
 

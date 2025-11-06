@@ -29,6 +29,7 @@ class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
         LIB_TABLE_GRID_TRICKS_SET_VISIBLE,
         LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE,
         LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
+        LIB_TABLE_GRID_TRICKS_OPEN_TABLE,
         LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR
     };
 
@@ -43,6 +44,8 @@ public:
 
 protected:
     virtual void optionsEditor( int aRow ) = 0;
+
+    void onGridCellLeftClick( wxGridEvent& aEvent ) override;
     bool handleDoubleClick( wxGridEvent& aEvent ) override;
 
     void onCharHook( wxKeyEvent& ev );

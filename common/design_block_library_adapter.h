@@ -144,7 +144,7 @@ public:
     DESIGN_BLOCK* DesignBlockLoadWithOptionalNickname( const LIB_ID& aDesignBlockId,
                                                        bool          aKeepUUID = false );
 
-    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
+    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const override;
 
 protected:
 

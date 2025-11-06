@@ -25,7 +25,7 @@
 #include <pcb_io/pcb_io_mgr.h>
 
 class FP_LIB_TABLE;
-class FP_LIB_TABLE_GRID;
+class FP_LIB_TABLE_GRID_DATA_MODEL;
 class PROJECT;
 
 
@@ -50,7 +50,6 @@ private:
      */
     bool verifyTables();
 
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void appendRowHandler( wxCommandEvent& event ) override;
     void browseLibrariesHandler( wxCommandEvent& event );
     void deleteRowHandler( wxCommandEvent& event ) override;
@@ -71,19 +70,19 @@ private:
     void populateEnvironReadOnlyTable();
     void populatePluginList();
 
-    FP_LIB_TABLE_GRID* global_model() const
+    FP_LIB_TABLE_GRID_DATA_MODEL* global_model() const
     {
-        return (FP_LIB_TABLE_GRID*) m_global_grid->GetTable();
+        return (FP_LIB_TABLE_GRID_DATA_MODEL*) m_global_grid->GetTable();
     }
 
-    FP_LIB_TABLE_GRID* project_model() const
+    FP_LIB_TABLE_GRID_DATA_MODEL* project_model() const
     {
-        return m_project_grid ? (FP_LIB_TABLE_GRID*) m_project_grid->GetTable() : nullptr;
+        return m_project_grid ? (FP_LIB_TABLE_GRID_DATA_MODEL*) m_project_grid->GetTable() : nullptr;
     }
 
-    FP_LIB_TABLE_GRID* cur_model() const
+    FP_LIB_TABLE_GRID_DATA_MODEL* cur_model() const
     {
-        return (FP_LIB_TABLE_GRID*) m_cur_grid->GetTable();
+        return (FP_LIB_TABLE_GRID_DATA_MODEL*) m_cur_grid->GetTable();
     }
 
     // caller's tables are modified only on OK button and successful verification.

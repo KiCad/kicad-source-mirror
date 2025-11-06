@@ -142,7 +142,7 @@ public:
      * @throw IO_ERROR if there is a problem saving the footprint.
      */
     SAVE_T SaveFootprint( const wxString& aNickname, const FOOTPRINT* aFootprint,
-                       bool aOverwrite = true );
+                          bool aOverwrite = true );
 
     /**
      * Deletes the @a aFootprintName from the library given by @a aNickname.
@@ -164,7 +164,7 @@ public:
      */
     bool IsFootprintLibWritable( const wxString& aNickname );
 
-    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
+    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const override;
 
 protected:
 

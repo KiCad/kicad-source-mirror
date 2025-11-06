@@ -46,7 +46,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <confirm.h>
-#include <lib_table_grid.h>
+#include <lib_table_grid_data_model.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
@@ -74,15 +74,18 @@
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
  */
-class FP_LIB_TABLE_GRID : public LIB_TABLE_GRID
+class FP_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
 {
     friend class PANEL_FP_LIB_TABLE;
     friend class FP_GRID_TRICKS;
 
 public:
-
-    FP_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-            LIB_TABLE_GRID( aTableToEdit )
+    FP_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+                                  FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
+                                  wxString* aMRUDirectory, const wxString& aProjectPath,
+                                  const std::map<PCB_IO_MGR::PCB_FILE_T, IO_BASE::IO_FILE_DESC>& aSupportedFiles ) :
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath ),
+            m_supportedFpFiles( aSupportedFiles )
     {
     }
 
@@ -90,7 +93,7 @@ public:
     {
         wxCHECK( aRow < (int) size(), /* void */ );
 
-        LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
+        LIB_TABLE_GRID_DATA_MODEL::SetValue( aRow, aCol, aValue );
 
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
@@ -105,6 +108,23 @@ public:
             SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
         }
     }
+
+protected:
+    wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
+    {
+        FP_LIB_TABLE_GRID_DATA_MODEL*           libTable = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW&           tableRow = libTable->at( aRow );
+        PCB_IO_MGR::PCB_FILE_T       fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
+        const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+
+        if( pluginDesc.m_IsFile )
+            return pluginDesc.FileFilter();
+        else
+            return wxEmptyString;
+    }
+
+private:
+    const std::map<PCB_IO_MGR::PCB_FILE_T, IO_BASE::IO_FILE_DESC>& m_supportedFpFiles;
 };
 
 
@@ -112,68 +132,22 @@ public:
 class FP_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
-    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject ) :
-            LIB_TABLE_GRID_TRICKS( aGrid ),
-            m_dialog( aParent ),
-            m_project( aProject )
+    FP_GRID_TRICKS( WX_GRID* aGrid ) :
+            LIB_TABLE_GRID_TRICKS( aGrid )
     {
         SetTooltipEnable( COL_STATUS );
     }
 
-    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject,
-                    std::function<void( wxCommandEvent& )> aAddHandler ) :
-            LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
-            m_dialog( aParent ),
-            m_project( aProject )
+    FP_GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
+            LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler )
     {
         SetTooltipEnable( COL_STATUS );
     }
 
 protected:
-    DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
-
-    void onGridCellLeftClick( wxGridEvent& aEvent ) override
-    {
-        if( aEvent.GetCol() == COL_STATUS )
-        {
-            // Status column button action depends on row:
-            // Normal rows should have no button, so they are a no-op
-            // Errored rows should have the warning button, so we show their error
-            // Configurable libraries will have the options button, so we launch the config
-            // Chained tables will have the open button, so we request the table be opened
-            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_project );
-
-            FP_LIB_TABLE_GRID*       libTable = static_cast<FP_LIB_TABLE_GRID*>( m_grid->GetTable() );
-            const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
-
-            wxString title = row.Type() == "Table"
-                                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
-                                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
-
-            if( !row.IsOk() )
-            {
-                DisplayErrorMessage( m_grid, title, row.ErrorDescription() );
-            }
-            else if( std::optional<LIBRARY_ERROR> e = adapter->LibraryError( row.Nickname() ) )
-            {
-                DisplayErrorMessage( m_grid, title, e->message );
-            }
-            else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
-            {
-                adapter->ShowConfigurationDialog( row.Nickname(), m_dialog );
-            }
-
-            aEvent.Skip();
-        }
-        else
-        {
-            GRID_TRICKS::onGridCellLeftClick( aEvent );
-        }
-    }
-
     void optionsEditor( int aRow ) override
     {
-        FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) m_grid->GetTable();
+        FP_LIB_TABLE_GRID_DATA_MODEL* tbl = (FP_LIB_TABLE_GRID_DATA_MODEL*) m_grid->GetTable();
 
         if( tbl->GetNumberRows() > aRow )
         {
@@ -186,7 +160,7 @@ protected:
             IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
-            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row.Nickname(), choices, options, &result );
+            DIALOG_PLUGIN_OPTIONS dlg( wxGetTopLevelParent( m_grid ), row.Nickname(), choices, options, &result );
             dlg.ShowModal();
 
             if( options != result )
@@ -202,7 +176,7 @@ protected:
     void paste_text( const wxString& cb_text ) override
     {
         // TODO(JE) library tables
-        FP_LIB_TABLE_GRID* tbl = static_cast<FP_LIB_TABLE_GRID*>( m_grid->GetTable() );
+        FP_LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
         if( size_t ndx = cb_text.find( "(fp_lib_table" ); ndx != std::string::npos )
         {
@@ -222,7 +196,7 @@ protected:
             }
             else
             {
-                DisplayError( m_dialog, tempTable.ErrorDescription() );
+                DisplayError( wxGetTopLevelParent( m_grid ), tempTable.ErrorDescription() );
             }
         }
         else
@@ -248,128 +222,19 @@ protected:
 
         m_grid->AutoSizeColumns( false );
     }
-
-    bool toggleCell( int aRow, int aCol, bool aPreserveSelection ) override
-    {
-        if( aCol == COL_VISIBLE )
-        {
-            m_dialog->ShowInfoBarError( _( "Hidden footprint libraries are not yet supported." ) );
-            return true;
-        }
-
-        return LIB_TABLE_GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
-    }
-
-private:
-    PROJECT& m_project;
 };
 
 
 void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 {
-    auto autoSizeCol =
-            [&]( WX_GRID* aLocGrid, int aCol )
-            {
-                int prevWidth = aLocGrid->GetColSize( aCol );
-
-                aLocGrid->AutoSizeColumn( aCol, false );
-                aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
-            };
-
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid, *m_project,
+    aGrid->PushEventHandler( new FP_GRID_TRICKS( aGrid,
             [this]( wxCommandEvent& event )
             {
                 appendRowHandler( event );
             } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    wxGridCellAttr* attr;
-
-    attr = new wxGridCellAttr;
-    aGrid->SetColAttr( COL_NICKNAME, attr );
-
-    attr = new wxGridCellAttr;
-
-    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-    {
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                m_parent, aGrid, &cfg->m_LastFootprintLibDir, true, m_project->GetProjectPath(),
-                [this]( WX_GRID* grid, int row ) -> wxString
-                {
-                    FP_LIB_TABLE_GRID*           libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
-                    LIBRARY_TABLE_ROW&           tableRow = libTable->at( row );
-                    PCB_IO_MGR::PCB_FILE_T       fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
-                    const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
-
-                    if( pluginDesc.m_IsFile )
-                        return pluginDesc.FileFilter();
-                    else
-                        return wxEmptyString;
-                } ) );
-    }
-
-    aGrid->SetColAttr( COL_URI, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new wxGridCellChoiceEditor( m_pluginChoices ) );
-    aGrid->SetColAttr( COL_TYPE, attr );
-
-    attr = new wxGridCellAttr;
-    aGrid->SetColAttr( COL_OPTIONS, attr );
-
-    attr = new wxGridCellAttr;
-    aGrid->SetColAttr( COL_DESCR, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
-    aGrid->SetColAttr( COL_ENABLED, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-    aGrid->SetColAttr( COL_VISIBLE, attr );
-
-    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
-
-    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
-    {
-        FP_LIB_TABLE_GRID* libTable = static_cast<FP_LIB_TABLE_GRID*>( aGrid->GetTable() );
-        LIBRARY_TABLE_ROW& tableRow = libTable->at( ii );
-
-        if( tableRow.IsOk() )
-        {
-            if( std::optional<LIBRARY_ERROR> error = adapter->LibraryError( tableRow.Nickname() ) )
-            {
-                aGrid->SetCellValue( ii, COL_STATUS, error->message );
-                aGrid->SetCellRenderer( ii, COL_STATUS,
-                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
-            }
-            else if( adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
-            {
-                aGrid->SetCellValue( ii, COL_STATUS,
-                                     wxString::Format( _( "Library settings for %s..." ), tableRow.Nickname() ) );
-                aGrid->SetCellRenderer( ii, COL_STATUS,
-                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
-            }
-        }
-        else
-        {
-            aGrid->SetCellValue( ii, COL_STATUS, tableRow.ErrorDescription() );
-            aGrid->SetCellRenderer( ii, COL_STATUS,
-                                    new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
-        }
-
-        aGrid->SetReadOnly( ii, COL_STATUS );
-    }
-
-    // all but COL_OPTIONS, which is edited with Option Editor anyways.
-    autoSizeCol( aGrid, COL_NICKNAME );
-    autoSizeCol( aGrid, COL_TYPE );
-    autoSizeCol( aGrid, COL_URI );
-    autoSizeCol( aGrid, COL_DESCR );
 
     // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
@@ -383,27 +248,35 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
         m_project( aProject ),
         m_parent( aParent )
 {
-    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( table );
+    wxString* lastGlobalLibDir = nullptr;
 
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *table.value() ), true );
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+    {
+        if( cfg->m_LastFootprintLibDir.IsEmpty() )
+            cfg->m_LastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
 
-    // add Cut, Copy, and Paste to wxGrids
-    m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
+        lastGlobalLibDir = &cfg->m_LastFootprintLibDir;
+    }
+
+    m_lastProjectLibDir = m_project->GetProjectPath();
 
     populatePluginList();
 
     for( auto& [fileType, desc] : m_supportedFpFiles )
         m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
-    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-    {
-        if( cfg->m_LastFootprintLibDir.IsEmpty() )
-            cfg->m_LastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
-    }
+    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxASSERT( table );
 
-    m_lastProjectLibDir = m_project->GetProjectPath();
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
+
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter, m_pluginChoices,
+                                                               lastGlobalLibDir, wxEmptyString, m_supportedFpFiles ),
+                             true /* take ownership */ );
+
+    // add Cut, Copy, and Paste to wxGrids
+    m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
     setupGrid( m_global_grid );
 
@@ -414,7 +287,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *projectTable.value() ), true );
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(), adapter,
+                                                                    m_pluginChoices, &m_lastProjectLibDir,
+                                                                    m_project->GetProjectPath(), m_supportedFpFiles ),
+                                  true /* take ownership */ );
         setupGrid( m_project_grid );
     }
     else
@@ -545,7 +421,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 {
     wxString msg;
 
-    for( FP_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( FP_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -617,7 +493,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
     }
 
     // check for duplicate nickNames, separately in each table.
-    for( FP_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( FP_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -654,11 +530,6 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
     }
 
     return true;
-}
-
-
-void PANEL_FP_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
-{
 }
 
 
@@ -744,7 +615,7 @@ void PANEL_FP_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowUp(
             [&]( int row )
             {
-                FP_LIB_TABLE_GRID* tbl = cur_model();
+                FP_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
 
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
@@ -766,7 +637,7 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowDown(
             [&]( int row )
             {
-                FP_LIB_TABLE_GRID* tbl = cur_model();
+                FP_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
 
@@ -1057,6 +928,16 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
+    wxString* lastGlobalLibDir = nullptr;
+
+    if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+    {
+        if( cfg->m_LastFootprintLibDir.IsEmpty() )
+            cfg->m_LastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
+
+        lastGlobalLibDir = &cfg->m_LastFootprintLibDir;
+    }
+
     LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE::FOOTPRINT, true );
 
     // Go ahead and reload here because this action takes place even if the dialog is canceled
@@ -1074,7 +955,11 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
                                                                               LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( newTable );
 
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *newTable.value() ), true );
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
+
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *newTable.value(), adapter, m_pluginChoices,
+                                                               lastGlobalLibDir, wxEmptyString, m_supportedFpFiles ),
+                             true /* take ownership */ );
     m_global_grid->PopEventHandler( true );
     setupGrid( m_global_grid );
     m_parent->m_GlobalTableChanged = true;
@@ -1146,7 +1031,7 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     // clear the table
     m_path_subs_grid->ClearRows();
 
-    for( FP_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
+    for( FP_LIB_TABLE_GRID_DATA_MODEL* tbl : { global_model(), project_model() } )
     {
         if( !tbl )
             continue;

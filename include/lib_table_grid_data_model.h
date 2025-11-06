@@ -21,8 +21,9 @@
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
-#include <wx/grid.h>
+#include <widgets/wx_grid.h>
 
+class DIALOG_SHIM;
 class LIB_TABLE_GRID_TRICKS;
 class LIBRARY_MANAGER_ADAPTER;
 
@@ -45,23 +46,24 @@ enum COL_ORDER
  * This abstract base class mixes any object derived from #LIB_TABLE into wxGridTableBase
  * so the result can be used as any type of library table within wxGrid.
  */
-class KICOMMON_API LIB_TABLE_GRID : public wxGridTableBase
+class KICOMMON_API LIB_TABLE_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
     friend class LIB_TABLE_GRID_TRICKS;
 
 public:
-    LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit, LIBRARY_MANAGER_ADAPTER* aAdapter = nullptr ) :
-            m_table( aTableToEdit ),
-            m_adapter( aAdapter )
-    {}
+    LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+                               LIBRARY_MANAGER_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
+                               wxString* aMRUDirectory, const wxString& aProjectPath );
+
+    ~LIB_TABLE_GRID_DATA_MODEL() override;
 
     //-----<wxGridTableBase overloads>-------------------------------------------
 
     int GetNumberRows() override { return (int) size(); }
-
     int GetNumberCols() override { return COL_COUNT; }
 
     wxString GetValue( int aRow, int aCol ) override;
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
 
@@ -96,6 +98,8 @@ public:
     LIBRARY_MANAGER_ADAPTER* Adapter() const { return m_adapter; }
 
 protected:
+    virtual wxString getFileTypes( WX_GRID* aGrid, int aRow ) = 0;
+
     virtual LIBRARY_TABLE_ROW& at( size_t aIndex );
 
     virtual size_t size() const;
@@ -113,6 +117,13 @@ protected:
 protected:
     /// Working copy of a table
     LIBRARY_TABLE m_table;
+
+    wxGridCellAttr* m_uriEditor;
+    wxGridCellAttr* m_typesEditor;
+    wxGridCellAttr* m_boolAttr;
+    wxGridCellAttr* m_warningAttr;
+    wxGridCellAttr* m_editSettingsAttr;
+    wxGridCellAttr* m_openTableAttr;
 
     /// Handle to the adapter for the type of table this grid represents (may be null)
     LIBRARY_MANAGER_ADAPTER* m_adapter;

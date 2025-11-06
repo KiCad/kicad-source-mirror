@@ -47,7 +47,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <confirm.h>
-#include <lib_table_grid.h>
+#include <lib_table_grid_data_model.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
 #include <env_paths.h>
@@ -144,14 +144,19 @@ private:
 /**
  * This class builds a wxGridTableBase by wrapping an #DESIGN_BLOCK_LIB_TABLE object.
  */
-class DESIGN_BLOCK_LIB_TABLE_GRID : public LIB_TABLE_GRID
+class DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
 {
     friend class PANEL_DESIGN_BLOCK_LIB_TABLE;
     friend class DESIGN_BLOCK_GRID_TRICKS;
 
 public:
-    DESIGN_BLOCK_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
-            LIB_TABLE_GRID( aTableToEdit )
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+                                            LIBRARY_MANAGER_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
+                                            wxString* aMRUDirectory, const wxString& aProjectPath,
+                                            const std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T,
+                                                           IO_BASE::IO_FILE_DESC>& aSupportedFiles ) :
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath ),
+            m_supportedDesignBlockFiles( aSupportedFiles )
     {
     }
 
@@ -159,7 +164,7 @@ public:
     {
         wxCHECK( aRow < (int) size(), /* void */ );
 
-        LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
+        LIB_TABLE_GRID_DATA_MODEL::SetValue( aRow, aCol, aValue );
 
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
@@ -176,6 +181,23 @@ public:
             SetValue( aRow, COL_TYPE, DESIGN_BLOCK_IO_MGR::ShowType( pluginType ) );
         }
     }
+
+protected:
+    wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
+    {
+        auto* libTable = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW& tableRow = libTable->at( aRow );
+        DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = DESIGN_BLOCK_IO_MGR::EnumFromStr( tableRow.Type() );
+        const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
+
+        if( pluginDesc.m_IsFile )
+            return pluginDesc.FileFilter();
+        else
+            return wxEmptyString;
+    }
+
+private:
+    const std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T, IO_BASE::IO_FILE_DESC>& m_supportedDesignBlockFiles;
 };
 
 
@@ -193,7 +215,7 @@ protected:
 
     void optionsEditor( int aRow ) override
     {
-        auto tbl = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID*>( m_grid->GetTable() );
+        auto tbl = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
         if( tbl->GetNumberRows() > aRow )
         {
@@ -221,7 +243,7 @@ protected:
     /// spreadsheet formatted text.
     void paste_text( const wxString& cb_text ) override
     {
-        auto tbl = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID*>( m_grid->GetTable() );
+        auto tbl = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
         size_t ndx = cb_text.find( "(design_block_lib_table" );
 
         if( ndx != std::string::npos )
@@ -263,40 +285,41 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
         m_project( aProject ),
         m_parent( aParent )
 {
+    wxString* lastGlobalLibDir = nullptr;
+
+    if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+    {
+        if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
+            cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
+
+        lastGlobalLibDir = &cfg->m_lastDesignBlockLibDir;
+    }
+
+    m_lastProjectLibDir = m_project->GetProjectPath();
+
+    populatePluginList();
+
+    wxArrayString pluginChoices;
+
+    for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
+        pluginChoices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
+
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
-    m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID( *table.value() ), true );
+    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_project->DesignBlockLibs();
+
+    m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter,
+                                                                         pluginChoices, lastGlobalLibDir,
+                                                                         wxEmptyString, m_supportedDesignBlockFiles ),
+                             true /* take ownership */ );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
-    populatePluginList();
-
-    wxArrayString choices;
-
     // There aren't (yet) any legacy DesignBlock libraries to migrate
     m_migrate_libs_button->Hide();
-
-    for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
-        choices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
-
-    KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
-
-    if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
-        cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
-
-    m_lastProjectLibDir = m_project->GetProjectPath();
-
-    auto autoSizeCol =
-            [&]( WX_GRID* aGrid, int aCol )
-            {
-                int prevWidth = aGrid->GetColSize( aCol );
-
-                aGrid->AutoSizeColumn( aCol, false );
-                aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
-            };
 
     auto setupGrid =
             [&]( WX_GRID* aGrid )
@@ -305,49 +328,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
                 aGrid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, aGrid ) );
 
                 aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-                wxGridCellAttr* attr = new wxGridCellAttr;
-
-                if( cfg )
-                {
-                    attr->SetEditor( new GRID_CELL_PATH_EDITOR(
-                            m_parent, aGrid, &cfg->m_lastDesignBlockLibDir, true, m_project->GetProjectPath(),
-                            [this]( WX_GRID* grid, int row ) -> wxString
-                            {
-                                auto* libTable = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID*>( grid->GetTable() );
-                                LIBRARY_TABLE_ROW& tableRow = libTable->at( row );
-                                DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType =
-                                        DESIGN_BLOCK_IO_MGR::EnumFromStr( tableRow.Type() );
-                                const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
-
-                                if( pluginDesc.m_IsFile )
-                                    return pluginDesc.FileFilter();
-                                else
-                                    return wxEmptyString;
-                            } ) );
-                }
-
-                aGrid->SetColAttr( COL_URI, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-                aGrid->SetColAttr( COL_TYPE, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-                attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
-                aGrid->SetColAttr( COL_ENABLED, attr );
-
-                // No visibility control for design block libraries yet; this feature is primarily
-                // useful for database libraries and it's only implemented for schematic symbols
-                // at the moment.
-                aGrid->HideCol( COL_VISIBLE );
-
-                // all but COL_OPTIONS, which is edited with Option Editor anyways.
-                autoSizeCol( aGrid, COL_NICKNAME );
-                autoSizeCol( aGrid, COL_TYPE );
-                autoSizeCol( aGrid, COL_URI );
-                autoSizeCol( aGrid, COL_DESCR );
 
                 // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
                 // a currentCell which is sometimes not highlighted.
@@ -364,12 +344,16 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID( *projectTable.value() ), true );
+        m_project_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(),
+                                                                              adapter, pluginChoices,
+                                                                              &m_lastProjectLibDir,
+                                                                              m_project->GetProjectPath(),
+                                                                              m_supportedDesignBlockFiles ),
+                                  true /* take ownership */ );
         setupGrid( m_project_grid );
     }
     else
     {
-        m_pageNdx = 0;
         m_notebook->DeletePage( 1 );
         m_project_grid = nullptr;
     }
@@ -377,9 +361,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
 
-    // select the last selected page
-    m_notebook->SetSelection( m_pageNdx );
-    m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
+    m_cur_grid = m_notebook->GetSelection() == 0 ? m_global_grid : m_project_grid;
 
     // for ALT+A handling, we want the initial focus to be on the first selected grid.
     m_parent->SetInitialFocus( m_cur_grid );
@@ -489,7 +471,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
 {
     wxString msg;
 
-    for( DESIGN_BLOCK_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -560,7 +542,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
     }
 
     // check for duplicate nickNames, separately in each table.
-    for( DESIGN_BLOCK_LIB_TABLE_GRID* model : { global_model(), project_model() } )
+    for( DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* model : { global_model(), project_model() } )
     {
         if( !model )
             continue;
@@ -597,13 +579,6 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
     }
 
     return true;
-}
-
-
-void PANEL_DESIGN_BLOCK_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
-{
-    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
-    m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
 }
 
 
@@ -689,7 +664,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowUp(
             [&]( int row )
             {
-                DESIGN_BLOCK_LIB_TABLE_GRID* tbl = cur_model();
+                DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
 
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
@@ -711,7 +686,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowDown(
             [&]( int row )
             {
-                DESIGN_BLOCK_LIB_TABLE_GRID* tbl = cur_model();
+                DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* tbl = cur_model();
                 int curRow = m_cur_grid->GetGridCursorRow();
                 std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
 
@@ -947,7 +922,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_pageNdx == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
+            if( m_notebook->GetSelection() == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -979,6 +954,15 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
     adjustPathSubsGridColumns( event.GetSize().GetX() );
 
     event.Skip();
+}
+
+
+void PANEL_DESIGN_BLOCK_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
+{
+    if( m_notebook->GetSelection() == 0 )
+        m_cur_grid = m_global_grid;
+    else
+        m_cur_grid = m_project_grid;
 }
 
 
@@ -1030,7 +1014,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
     // clear the table
     m_path_subs_grid->ClearRows();
 
-    for( DESIGN_BLOCK_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
+    for( DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* tbl : { global_model(), project_model() } )
     {
         if( !tbl )
             continue;
@@ -1083,9 +1067,6 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
 }
 
 //-----</event handlers>---------------------------------
-
-size_t PANEL_DESIGN_BLOCK_LIB_TABLE::m_pageNdx = 0;
-
 
 void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
 {

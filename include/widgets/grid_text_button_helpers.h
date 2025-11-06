@@ -32,6 +32,7 @@
 #include <wx/combo.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
+#include <search_stack.h>
 
 
 class wxGrid;

@@ -154,6 +154,8 @@ public:
 
     virtual void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const {};
 
+    virtual std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const { return std::nullopt; };
+
 protected:
     virtual std::map<wxString, LIB_DATA>& globalLibs() = 0;
     virtual std::map<wxString, LIB_DATA>& globalLibs() const = 0;

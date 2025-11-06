@@ -26,7 +26,7 @@
 #include <design_block_io.h>
 
 class DESIGN_BLOCK_LIB_TABLE;
-class DESIGN_BLOCK_LIB_TABLE_GRID;
+class DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL;
 class PROJECT;
 
 
@@ -49,7 +49,6 @@ private:
      */
     bool verifyTables();
 
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void appendRowHandler( wxCommandEvent& event ) override;
     void browseLibrariesHandler( wxCommandEvent& event );
     void deleteRowHandler( wxCommandEvent& event ) override;
@@ -58,6 +57,8 @@ private:
     void onMigrateLibraries( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
 
+    void onPageChange( wxBookCtrlEvent& event ) override;
+
     void adjustPathSubsGridColumns( int aWidth );
 
     /// Populate the readonly environment variable table with names and values
@@ -65,19 +66,19 @@ private:
     void populateEnvironReadOnlyTable();
     void populatePluginList();
 
-    DESIGN_BLOCK_LIB_TABLE_GRID* global_model() const
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* global_model() const
     {
-        return (DESIGN_BLOCK_LIB_TABLE_GRID*) m_global_grid->GetTable();
+        return (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_global_grid->GetTable();
     }
 
-    DESIGN_BLOCK_LIB_TABLE_GRID* project_model() const
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* project_model() const
     {
-        return m_project_grid ? (DESIGN_BLOCK_LIB_TABLE_GRID*) m_project_grid->GetTable() : nullptr;
+        return m_project_grid ? (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_project_grid->GetTable() : nullptr;
     }
 
-    DESIGN_BLOCK_LIB_TABLE_GRID* cur_model() const
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* cur_model() const
     {
-        return (DESIGN_BLOCK_LIB_TABLE_GRID*) m_cur_grid->GetTable();
+        return (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_cur_grid->GetTable();
     }
 
     PROJECT* m_project;

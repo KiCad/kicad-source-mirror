@@ -55,7 +55,6 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPageChange( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }

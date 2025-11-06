@@ -24,9 +24,9 @@
 #include <grid_tricks.h>
 #include <dialogs/dialog_edit_library_tables.h>
 #include <panel_sym_lib_table_base.h>
-#include <lib_table_grid.h>
+#include <lib_table_grid_data_model.h>
 
-class SYMBOL_LIB_TABLE_GRID;
+class SYMBOL_LIB_TABLE_GRID_DATA_MODEL;
 
 /**
  * Dialog to show and edit symbol library tables.
@@ -68,11 +68,11 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
-    SYMBOL_LIB_TABLE_GRID* global_model() const;
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* global_model() const;
 
-    SYMBOL_LIB_TABLE_GRID* project_model() const;
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* project_model() const;
 
-    SYMBOL_LIB_TABLE_GRID* cur_model() const;
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* cur_model() const;
 
     /**
      * @return true if the plugin type can be selected from the library path only
