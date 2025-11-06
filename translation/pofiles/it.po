@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 05:51+0000\n"
+"PO-Revision-Date: 2025-11-07 07:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -7632,9 +7632,9 @@ msgstr "Risposta API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Risposta API:  %s"
+msgstr "Risposta API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:360
 #, c-format
@@ -8048,7 +8048,7 @@ msgstr "Render %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 msgid "Render PCB Job Settings"
-msgstr "Impostazioni di Render C.S."
+msgstr "Impostazioni Render scheda"
 
 #: common/jobs/job_pcb_render.cpp:142
 msgid "PCB: Render"
@@ -9687,7 +9687,7 @@ msgstr "Esploratore librerie di impronte"
 
 #: common/tool/actions.cpp:1113
 msgid "Create, delete and edit board footprints"
-msgstr "Crea, cancella e modifica impronte di C.S."
+msgstr "Crea, cancella e modifica impronte di componenti"
 
 #: common/tool/actions.cpp:1122
 msgid "Show/hide the properties manager"
@@ -9717,7 +9717,7 @@ msgstr "Aggiorna lo schema dal C.S. ..."
 
 #: common/tool/actions.cpp:1147
 msgid "Update schematic with changes made to PCB"
-msgstr "Aggiorna lo schema con i cambiamenti effettuati sul C.S."
+msgstr "Aggiorna lo schema con i cambiamenti effettuati sulla scheda"
 
 #: common/tool/actions.cpp:1154
 msgid "Preferences..."
@@ -11088,7 +11088,7 @@ msgstr "Cancellare tutte le associazioni?"
 #: eeschema/annotate.cpp:82
 #, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Annotazione cancellata per %s (unità %s)"
+msgstr "Annotazione cancellata per %s (unità %s)."
 
 #: eeschema/annotate.cpp:88
 #, c-format
@@ -13054,9 +13054,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Inserire il testo da usare nello schema"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Strati multipli"
+msgstr "Ingresso etichette multiple"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13373,9 +13372,8 @@ msgid "Revert symbol"
 msgstr "Simbolo di potenza"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Ripristinare '%s' all'ultima versione salvata?"
+msgstr "Ripristina il simbolo all'ultima versione salvata"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
 #, fuzzy
