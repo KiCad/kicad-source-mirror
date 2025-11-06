@@ -927,7 +927,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         case SCH_BITMAP_T:
-            head->Rotate( rotPoint, !clockwise );
+            head->Rotate( rotPoint, clockwise );
 
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
