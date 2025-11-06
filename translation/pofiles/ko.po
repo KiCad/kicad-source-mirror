@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-05 12:37+0000\n"
+"PO-Revision-Date: 2025-11-06 19:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -6001,7 +6001,7 @@ msgstr "우"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr "Top main"
+msgstr "최상단"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
 #, fuzzy
@@ -9166,7 +9166,7 @@ msgstr "E 34x44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
-msgstr "사용자(사용자 정의)"
+msgstr "사용자(맞춤형)"
 
 #: common/page_info.cpp:64
 #, fuzzy
@@ -38698,7 +38698,7 @@ msgstr "풋프린트 치수"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "By layer:"
-msgstr "층별:"
+msgstr "레이어별:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 msgid "By parent footprint library link:"
@@ -45744,6 +45744,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"%s에 대한 3D 모델을 추가할 수 없음.\n"
+"파일을 찾을 수 없음: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:399
 #, c-format
@@ -45848,98 +45850,93 @@ msgstr "파일명 '%s'인 컴포넌트를 추가할 수 없습니다.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1432
 #, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr ""
+msgstr "OCC 예외 구조 형상 세그먼트: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1447
 #, c-format
 msgid "OCC exception building face: %s"
-msgstr ""
+msgstr "OCC 예외 생성 면: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1459
 #: pcbnew/exporters/step/step_pcb_model.cpp:1853
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "프리즘 모양을 만들지 못함\n"
+msgstr "프리즘 모양 생성 실패"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1531
 #, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr ""
+msgstr "세그먼트 경계 설정 실패 (%d %d) -> (%d %d), 건너뜀"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1543
 #, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr ""
+msgstr "세그먼트 경계 추가 실패 (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1579
 #, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
-msgstr ""
+msgstr "(%d %d)에서 아크 커브 추가 실패, arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1655
 #, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr ""
+msgstr "%d의 배선 닫기 실패, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1665
 #, c-format
 msgid "OCC exception creating wire: %s"
-msgstr ""
+msgstr "OCC 예외로 인해 생성된 배선: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1745
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
 "배선 미완료 (윤곽 점 %d): OCC 오류 %d\n"
-"z: %g; 경계 상자: %s\n"
+"z: %g; 경계 상자: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1759
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"와이어 자기 간섭 검사 실패\n"
-"z: %g; 경계 상자: %s\n"
+"배선 자기 간섭 검사 실패\n"
+"z: %g; 경계 상자: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1786
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "단순화되지 않은 다각형 사용.\n"
+msgstr "단순화되지 않은 다각형 사용."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1834
 #, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr ""
+msgstr "OCC 예외 생성 외곽선 %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1864
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** 얼굴 건너뛰기 **\n"
+msgstr "** 면이 생략됨 **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1954
 #: pcbnew/exporters/step/step_pcb_model.cpp:1971
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "주 윤곽선을 생성하는 중 OCC 오류가 발생하였습니다.\n"
+msgstr "메인 아웃라인 생성 중 OCC 오류 발생."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1980
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "주 윤곽선을 생성하는 중 OCC 오류가 발생하였습니다.\n"
+msgstr "메인 아웃라인에 구멍 생성 중 OCC 오류 발생."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2023
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "%s에 구멍 만들기\n"
+msgstr "%s에 구멍 제거"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2065
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** '%s'('%s' 넷) 자르는 중 문제 발생 **\n"
+msgstr "** %s 를 자르는 중에 문제가 발생 네트 '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2116
 msgid "shapes"
@@ -45958,9 +45955,9 @@ msgstr "비아"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2539
 #: pcbnew/exporters/step/step_pcb_model.cpp:3325
 #: pcbnew/exporters/step/step_pcb_model.cpp:3393
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "유효한 PCB 어셈블리가 없습니다. '%s' 출력 파일을 만들 수 없습니다.\n"
+msgstr "유효한 PCB 조립체가 없음; 출력 파일 '%s'를 생성할 수 없음."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2404
 #, fuzzy, c-format
@@ -45982,11 +45979,11 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2461
 msgid "Failed to set STEP product name, but will attempt to continue."
-msgstr ""
+msgstr "STEP 제품 이름 설정에 실패했으나 작업을 계속 시도하겠습니다."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2469
 msgid "Failed to set surface curve mode, but will attempt to continue."
-msgstr ""
+msgstr "표면 곡선 모드 설정에 실패했으나, 계속 시도합니다."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2521
 #: pcbnew/exporters/step/step_pcb_model.cpp:3302
@@ -49356,7 +49353,7 @@ msgstr "콘텐츠 섹션 생성"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:926
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "패드가 지원하는 형식이 아닙니다; 생략됨."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1178
 msgid "Generating history section"
@@ -49375,7 +49372,7 @@ msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'에서 찾을 수 없습�
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1277
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "컴포넌트 “%s”에 OEM 참조가 누락되었습니다; BOM 입력은 건너뜁니다."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1371
 msgid "Generating CAD data"
@@ -49390,7 +49387,7 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2642
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
+msgstr "중복된 풋프린트 포인터가 발견됨; IPC-2581 출력이 부정확할 수 있음."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2807
 #, c-format
@@ -49399,17 +49396,18 @@ msgstr "레이어 %s 내보내기, 네트 %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2843
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "Via가 지원되지 않는 패드스택을 사용함; 드릴링 데이터에서 생략됨."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2869
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
+msgstr "패드가 지원되지 않는 패드스택을 사용함; 드릴 데이터에서 홀이 제외됨."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3011
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr ""
+msgstr "IPC-2581 개정판 B에서는 티어드롭(teardrops)을 지원하지 않으며, 이들은 영역"
+"(zones)으로 보내짐."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3457
 msgid "Generating logistic section"
@@ -50357,9 +50355,8 @@ msgstr ""
 "임시 파일 '%s'의 이름을 변경하지 못함."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2532
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "성공적으로 genCAD 파일을 생성함\n"
+msgstr "IPC-D-356 파일을 성공적으로 생성함\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2537
 msgid "Failed to create IPC-D-356 file\n"
@@ -51472,11 +51469,11 @@ msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "%s에 '물리적 간격' 제약 조건이 적용되어 있지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1237
-#, fuzzy
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
-msgstr "정의된 '물리적 공간거리' 제약 조건이 없음."
+msgstr "항목들은 관련 레이어를 공유하지 않습니다. ‘physical_clearance’ 제약 조건은 적"
+"용되지 않습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
 #, fuzzy
@@ -54216,32 +54213,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP 간격 제약 조건: %s"
 
 #: pcbnew/tools/pcb_control.cpp:2204
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "해결된 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:2215
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "실제 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:2258
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "해결된 홀 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:2263
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "실제 홀 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:2298
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "해결된 모서리 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:2303
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "해결된 여유 공간거리"
 
@@ -54645,14 +54636,12 @@ msgid "Locked Item Shadow"
 msgstr "잠긴 항목 그림자"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show a shadow on locked items"
-msgstr "잠긴 항목에 그림자 마커 표시"
+msgstr "잠긴 항목에 그림자 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Colliding Courtyards"
-msgstr "부품자리"
+msgstr "충돌 부품자리"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Show colliding footprint courtyards"
@@ -55585,7 +55574,7 @@ msgstr "영역 %s %s, 우선순위 %d"
 #: pcbnew/zone.cpp:1207
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr ""
+msgstr "구역 '%s' %s %s, 우선순위 %d"
 
 #: pcbnew/zone.cpp:1912
 msgid "Keepout"
@@ -55621,9 +55610,8 @@ msgid "Source Name"
 msgstr "출처 이름"
 
 #: pcbnew/zone.cpp:1973
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "방향"
+msgstr "해치 방향"
 
 #: pcbnew/zone.cpp:1988
 msgid "Cannot be less than zone minimum width"
