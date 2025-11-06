@@ -73,7 +73,7 @@ private:
 
 
 STARTWIZARD_PROVIDER_PRIVACY::STARTWIZARD_PROVIDER_PRIVACY() :
-        STARTWIZARD_PROVIDER( wxT( "Updates && Privacy" ) )
+        STARTWIZARD_PROVIDER( _( "Updates && Privacy" ) )
 {
 }
 

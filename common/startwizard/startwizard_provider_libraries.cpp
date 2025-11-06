@@ -127,7 +127,7 @@ private:
 
 
 STARTWIZARD_PROVIDER_LIBRARIES::STARTWIZARD_PROVIDER_LIBRARIES() :
-        STARTWIZARD_PROVIDER( wxT( "Libraries" ) )
+        STARTWIZARD_PROVIDER( _( "Libraries" ) )
 {
 }
 

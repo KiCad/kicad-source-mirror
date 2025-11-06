@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 
 
 #include <dialogs/panel_startwizard_settings_base.h>
@@ -180,7 +180,7 @@ void PANEL_STARTWIZARD_SETTINGS::showPathError( bool aShow )
 
 
 STARTWIZARD_PROVIDER_SETTINGS::STARTWIZARD_PROVIDER_SETTINGS() :
-        STARTWIZARD_PROVIDER( wxT( "Configuration" ) )
+        STARTWIZARD_PROVIDER( _( "Configuration" ) )
 {
 }
 
