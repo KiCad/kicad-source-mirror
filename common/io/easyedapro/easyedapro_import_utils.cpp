@@ -72,7 +72,17 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
 
     std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = aProject.at( "schematics" );
     std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = aProject.at( "boards" );
-    std::map<wxString, wxString>                  prjPcbNames = aProject.at( "pcbs" );
+
+    std::map<wxString, wxString>       prjPcbNames;
+    std::map<wxString, nlohmann::json> prjPcbs = aProject.at( "pcbs" );
+
+    for( const auto& [pcbUuid, pcbJsonEntry] : prjPcbs )
+    {
+        if( pcbJsonEntry.is_string() )
+            prjPcbNames.emplace( pcbUuid, pcbJsonEntry );
+        else if( pcbJsonEntry.is_object() )
+            prjPcbNames.emplace( pcbUuid, pcbJsonEntry.at( "title" ) );
+    }
 
     for( const auto& [prjName, board] : prjBoards )
     {
