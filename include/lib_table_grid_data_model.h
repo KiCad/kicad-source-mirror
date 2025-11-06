@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <kicommon.h>
 #include <libraries/library_table.h>
 #include <widgets/wx_grid.h>
 
@@ -46,7 +45,7 @@ enum COL_ORDER
  * This abstract base class mixes any object derived from #LIB_TABLE into wxGridTableBase
  * so the result can be used as any type of library table within wxGrid.
  */
-class KICOMMON_API LIB_TABLE_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
+class LIB_TABLE_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
     friend class LIB_TABLE_GRID_TRICKS;
 
