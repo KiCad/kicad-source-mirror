@@ -163,13 +163,13 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
             return enhanceAttr( m_openTableAttr, aRow, aCol, aKind );
         }
 
-        return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case COL_NICKNAME:
     case COL_OPTIONS:
     case COL_DESCR:
     default:
-        return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
     }
 }
 

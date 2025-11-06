@@ -383,7 +383,7 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
         }
     }
 
-    return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
+    return enhanceAttr( nullptr, aRow, aCol, aKind );
 }
 
 
