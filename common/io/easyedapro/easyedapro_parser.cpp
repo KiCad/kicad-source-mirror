@@ -220,7 +220,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
     if( j.at( "type" ).is_number() )
         d.type = j.at( "type" );
 
-    if( j.at( "tags" ).is_object() )
+    if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
         d.tags = j.at( "tags" );
 
     if( j.find( "custom_tags" ) != j.end() && j.at( "custom_tags" ).is_object() )
@@ -249,7 +249,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& 
     if( j.at( "type" ).is_number() )
         d.type = j.at( "type" );
 
-    if( j.at( "tags" ).is_object() )
+    if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
         d.tags = j.at( "tags" );
 
     if( j.find( "custom_tags" ) != j.end() && j.at( "custom_tags" ).is_object() )
@@ -275,7 +275,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
     if( j.at( "version" ).is_string() )
         d.version = j.at( "version" ).get<wxString>();
 
-    if( j.at( "tags" ).is_object() )
+    if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
         d.tags = j.at( "tags" );
 
     if( j.find( "custom_tags" ) != j.end() && j.at( "custom_tags" ).is_object() )
