@@ -603,10 +603,9 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             {
                 // The cancel button adds the library to the table anyway
                 addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), _( "Warning: Duplicate Nickname" ),
-                                                  wxString::Format( _( "A library nicknamed '%s' already exists." ),
+                                                  wxString::Format( _( "An item nicknamed '%s' already exists." ),
                                                                     nickname ),
-                                                  _( "One of the nicknames will need to be changed after adding "
-                                                     "this library." ),
+                                                  _( "One of the nicknames will need to be changed." ),
                                                   _( "Skip" ), _( "Add Anyway" ),
                                                   &applyToAll ) == wxID_CANCEL;
             }
@@ -623,10 +622,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             // attempt to auto-detect the plugin type
             SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( filePath );
 
-            if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
-                pluginType = SCH_IO_MGR::SCH_KICAD;
-
-            m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
+            if( pluginType != SCH_IO_MGR::SCH_FILE_UNKNOWN )
+                m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );

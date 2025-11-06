@@ -40,6 +40,7 @@
 #include <wildcards_and_files_ext.h>
 #include <kiway_player.h>
 #include <string_utils.h>
+#include <libraries/library_table_parser.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
 #define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
@@ -98,8 +99,8 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_EASYEDAPRO:      return wxString( wxT( "EasyEDA (JLCEDA) Pro" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     case SCH_HTTP:            return wxString( wxT( "HTTP" ) );
-    default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
-                                                       aType );
+    case SCH_NESTED_TABLE:    return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
+    default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aType );
     }
 }
 
@@ -130,8 +131,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_LTSPICE;
     else if( aType == wxT( "HTTP" ) )
         return SCH_HTTP;
-
-    // wxASSERT( blow up here )
+    else if( aType == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        return SCH_NESTED_TABLE;
 
     return SCH_FILE_UNKNOWN;
 }
@@ -139,6 +140,11 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
 
 SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
+    LIBRARY_TABLE_PARSER parser;
+
+    if( parser.Parse( aLibPath.ToStdString() ).has_value() )
+        return SCH_NESTED_TABLE;
+
     for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
         bool isKiCad = fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY;

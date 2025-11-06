@@ -176,10 +176,8 @@ public:
             DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T pluginType =
                     DESIGN_BLOCK_IO_MGR::GuessPluginTypeFromLibPath( uri );
 
-            if( pluginType == DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE )
-                pluginType = DESIGN_BLOCK_IO_MGR::KICAD_SEXP;
-
-            SetValue( aRow, COL_TYPE, DESIGN_BLOCK_IO_MGR::ShowType( pluginType ) );
+            if( pluginType != DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE )
+                SetValue( aRow, COL_TYPE, DESIGN_BLOCK_IO_MGR::ShowType( pluginType ) );
         }
     }
 

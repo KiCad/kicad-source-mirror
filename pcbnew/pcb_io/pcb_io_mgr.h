@@ -74,7 +74,8 @@ public:
 
         // etc.
 
-        FILE_TYPE_NONE
+        FILE_TYPE_NONE,
+        NESTED_TABLE
     };
 
     /**

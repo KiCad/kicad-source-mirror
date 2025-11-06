@@ -28,6 +28,7 @@
 #include <config.h>
 #include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
+#include <libraries/library_table.h>
 #include <pcb_io/pcb_io_mgr.h>
 
 #include <pcb_io/eagle/pcb_io_eagle.h>
@@ -46,7 +47,7 @@
 #include <pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcb_io/odbpp/pcb_io_odbpp.h>
 #include <reporter.h>
-
+#include <libraries/library_table_parser.h>
 
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
@@ -76,14 +77,15 @@ PCB_IO* PCB_IO_MGR::FindPlugin( PCB_FILE_T aFileType )
 
 const wxString PCB_IO_MGR::ShowType( PCB_FILE_T aType )
 {
+    if( aType == PCB_IO_MGR::NESTED_TABLE )
+        return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
+
     const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
 
     for( const auto& plugin : plugins )
     {
         if ( plugin.m_type == aType )
-        {
             return plugin.m_name;
-        }
     }
 
     return wxString::Format( _( "UNKNOWN (%d)" ), aType );
@@ -92,14 +94,15 @@ const wxString PCB_IO_MGR::ShowType( PCB_FILE_T aType )
 
 PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
 {
+    if( aType == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        return PCB_IO_MGR::NESTED_TABLE;
+
     const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
 
     for( const auto& plugin : plugins )
     {
         if( plugin.m_name.CmpNoCase( aType ) == 0 )
-        {
             return plugin.m_type;
-        }
     }
 
     return PCB_IO_MGR::PCB_FILE_UNKNOWN;
@@ -134,6 +137,11 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::FindPluginTypeFromBoardPath( const wxString& 
 
 PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
+    LIBRARY_TABLE_PARSER parser;
+
+    if( parser.Parse( aLibPath.ToStdString() ).has_value() )
+        return NESTED_TABLE;
+
     const auto& plugins = PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
 
     for( const auto& plugin : plugins )

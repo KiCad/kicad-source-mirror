@@ -103,10 +103,8 @@ public:
             wxString uri = LIBRARY_MANAGER::ExpandURI( row.URI(), Pgm().GetSettingsManager().Prj() );
             PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::GuessPluginTypeFromLibPath( uri );
 
-            if( pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
-                pluginType = PCB_IO_MGR::KICAD_SEXP;
-
-            SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
+            if( pluginType != PCB_IO_MGR::FILE_TYPE_NONE )
+                SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
         }
     }
 
@@ -115,12 +113,8 @@ protected:
     {
         FP_LIB_TABLE_GRID_DATA_MODEL* table = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
         LIBRARY_TABLE_ROW&            tableRow = table->at( aRow );
-
-        if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxEmptyString;
-
-        PCB_IO_MGR::PCB_FILE_T       fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
-        const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+        PCB_IO_MGR::PCB_FILE_T        fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
+        const IO_BASE::IO_FILE_DESC&  pluginDesc = m_supportedFpFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
             return pluginDesc.FileFilter();
@@ -269,10 +263,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     for( auto& [fileType, desc] : m_supportedFpFiles )
         m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
-
-    // TODO(JE) should use translated string here but type is stored as untranslated string
-    // Maybe type storage needs to be enum?
-    m_pluginChoices.Add( wxT( "Table" ) );
 
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
@@ -424,6 +414,9 @@ void PANEL_FP_LIB_TABLE::populatePluginList()
         if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
             m_supportedFpFiles.emplace( plugin.m_type, desc );
     }
+
+    m_supportedFpFiles.emplace( PCB_IO_MGR::NESTED_TABLE,
+                                IO_BASE::IO_FILE_DESC( _( "Table (nested library table)" ), {} ) );
 }
 
 
@@ -799,9 +792,14 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
     PCBNEW_SETTINGS*             cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-    wxString  title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
+    wxString  title;
     wxString  dummy;
     wxString* lastDir;
+
+    if( fileType == PCB_IO_MGR::NESTED_TABLE )
+        title = _( "Select Library Table" );
+    else
+        title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
 
     if( m_cur_grid == m_project_grid )
         lastDir = &m_lastProjectLibDir;
@@ -848,8 +846,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     bool     addDuplicates = false;
     bool     applyToAll    = false;
     wxString warning       = _( "Warning: Duplicate Nicknames" );
-    wxString msg           = _( "A library nicknamed '%s' already exists." );
-    wxString detailedMsg   = _( "One of the nicknames will need to be changed after adding this library." );
+    wxString msg           = _( "An item nicknamed '%s' already exists." );
+    wxString detailedMsg   = _( "One of the nicknames will need to be changed." );
 
     for( const wxString& filePath : files )
     {

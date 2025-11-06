@@ -69,7 +69,8 @@ public:
         SCH_HTTP,             ///< KiCad HTTP library
 
         // Add your schematic type here.
-        SCH_FILE_UNKNOWN
+        SCH_FILE_UNKNOWN,
+        SCH_NESTED_TABLE
     } )
     // clang-format on
 
