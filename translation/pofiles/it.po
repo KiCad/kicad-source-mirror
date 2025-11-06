@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 22:51+0000\n"
+"PO-Revision-Date: 2025-11-06 19:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -4431,7 +4431,7 @@ msgstr "Fattore di attenuazione modalità alto contrasto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "Scaling"
-msgstr "Scala"
+msgstr "Scalatura"
 
 #: common/dialogs/panel_common_settings_base.cpp:314
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -7802,9 +7802,9 @@ msgid "Could not push to remote: %s"
 msgstr "Impossibile fare push su remoto: %s"
 
 #: common/git/libgit_backend.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Fallita inizializzazione progetto Git."
+msgstr "Fallita inizializzazione repository Git: %s"
 
 #: common/git/libgit_backend.cpp:595
 msgid "No repository available to set up remote"
@@ -7826,19 +7826,19 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Fallita ricerca diramazione '%s': %s"
 
 #: common/git/libgit_backend.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Fallita ricerca testa diramazione per '%s'"
+msgstr "Fallita ricerca testa diramazione per '%s': %s"
 
 #: common/git/libgit_backend.cpp:703
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Fallito passaggio a diramazione '%s'"
+msgstr "Fallito passaggio a diramazione '%s': %s"
 
 #: common/git/libgit_backend.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Fallito aggiornamento riferimento HEAD per la diramazione '%s'"
+msgstr "Fallito aggiornamento riferimento HEAD per la diramazione '%s': %s"
 
 #: common/git/libgit_backend.cpp:758
 #, c-format
@@ -7916,9 +7916,8 @@ msgid "Merge failed"
 msgstr "Lavoro fallito"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema ha fallito il caricamento."
+msgstr "Rebase non partito"
 
 #: common/git/libgit_backend.cpp:1079
 #, fuzzy
@@ -7997,9 +7996,9 @@ msgid "Select all cells"
 msgstr "Seleziona tutte le celle"
 
 #: common/history_lock.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile creare la cartella cronologia: %s"
 
 #: common/history_lock.cpp:156
 #, c-format
@@ -8108,9 +8107,9 @@ msgstr "Risposta API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Risposta API:  %s"
+msgstr "Risposta API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:391
 #, c-format
@@ -8259,9 +8258,9 @@ msgid "Invalid size %lld: too large"
 msgstr "Dimensione non valida %lld: troppo larga"
 
 #: common/io/eagle/eagle_parser.cpp:527
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "Arco non valido con raggio %f e angolo %f"
+msgstr "Arco non valido con raggio %0.2f e angolo %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -8562,7 +8561,7 @@ msgstr "Render %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 msgid "Render PCB Job Settings"
-msgstr "Impostazioni di Render C.S."
+msgstr "Impostazioni Render scheda"
 
 #: common/jobs/job_pcb_render.cpp:142
 msgid "PCB: Render"
@@ -8908,9 +8907,8 @@ msgstr "Via cieci/sepolti"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Via coperti/interni:"
+msgstr "Via sepolti"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
@@ -9128,9 +9126,8 @@ msgid "Show"
 msgstr "Mostra"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "La libreria con denominazione \"%s\" esiste già."
+msgstr "Un riferimento a questa tabella librerie esiste già"
 
 #: common/libraries/library_manager.cpp:386
 #, fuzzy
@@ -9138,19 +9135,21 @@ msgid "KiCad Default Libraries"
 msgstr "Predefinita KiCad"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Libreria \"%s\" non trovata."
+msgstr "Libreria %s non trovata"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "Il percorso dato non esiste"
+msgstr "Il percorso della tabella della libreria '%s' non esiste"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Errore nello scrivere il file vuoto tabella librerie impronte '%s'."
+msgstr ""
+"Si è verificato un errore imprevisto durante la lettura della tabella della "
+"libreria %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
@@ -9159,9 +9158,8 @@ msgid "Syntax error at line %zu, column %zu"
 msgstr "Errore di sintassi alla riga %zu, colonna %zu"
 
 #: common/libraries/library_table_parser.cpp:222
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "Errore nello scrivere il file vuoto tabella librerie impronte '%s'."
+msgstr "Errore inaspettato leggendo la tabella librerie"
 
 #: common/local_history.cpp:1369
 #, fuzzy
@@ -9657,9 +9655,9 @@ msgid "KiCad Classic"
 msgstr "Classica KiCad"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Benvenuto a KiCad %s!"
+msgstr "Benvenuti a KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9694,14 +9692,12 @@ msgstr ""
 "automaticamente le impostazioni predefinite."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:100
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Libreria di simboli non abilitata."
+msgstr "Tabella librerie di simboli"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:104
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Libreria impronte non abilitata."
+msgstr "Tabella librerie di impronte"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
 #, fuzzy
@@ -10717,7 +10713,7 @@ msgstr "Esploratore librerie di impronte"
 
 #: common/tool/actions.cpp:1309
 msgid "Create, delete and edit board footprints"
-msgstr "Crea, cancella e modifica impronte di C.S."
+msgstr "Crea, cancella e modifica impronte di componenti"
 
 #: common/tool/actions.cpp:1317 kicad/tools/kicad_manager_actions.cpp:168
 #: pcb_calculator/pcb_calculator_frame.cpp:63
@@ -10760,7 +10756,7 @@ msgstr "Aggiorna lo schema dal C.S. ..."
 
 #: common/tool/actions.cpp:1353
 msgid "Update schematic with changes made to PCB"
-msgstr "Aggiorna lo schema con i cambiamenti effettuati sul C.S."
+msgstr "Aggiorna lo schema con i cambiamenti effettuati sulla scheda"
 
 #: common/tool/actions.cpp:1360
 msgid "Preferences..."
@@ -10963,9 +10959,8 @@ msgid "Select &All\tA"
 msgstr "Selezion&a tutto\tA"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "Mostra sorgente..."
+msgstr "&Mostra più scelte...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -12139,7 +12134,7 @@ msgstr "Cancellare tutte le associazioni?"
 #: eeschema/annotate.cpp:82
 #, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Annotazione cancellata per %s (unità %s)"
+msgstr "Annotazione cancellata per %s (unità %s)."
 
 #: eeschema/annotate.cpp:88
 #, c-format
@@ -12267,9 +12262,8 @@ msgid "%s not found"
 msgstr "%s non trovato"
 
 #: eeschema/cross-probing.cpp:239
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "Collegamento evidenziato: %s"
+msgstr "Collegamento evidenziato:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
@@ -14327,9 +14321,8 @@ msgid "Revert symbol"
 msgstr "Simbolo di potenza"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Ripristinare '%s' all'ultima versione salvata?"
+msgstr "Ripristina il simbolo all'ultima versione salvata"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 #, fuzzy
@@ -14382,14 +14375,14 @@ msgid "Collapse left panel"
 msgstr "Compatta tutto"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Simboli relativi non trovati nella libreria '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Nessun simbolo trovato nella libreria '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:589
 #, fuzzy, c-format
