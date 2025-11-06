@@ -166,7 +166,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // We need here 2 fields: the extra fiels to display the project name, and another field
     // to display a info (specific to Windows) using the FIELD_OFFSET_BGJOB_TEXT id offset (=1)
     // So the extra field count is 1
-    CreateStatusBar( 1 );
+    CreateStatusBar( 2 );
     Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
