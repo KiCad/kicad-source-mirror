@@ -25,17 +25,16 @@
 #include <widgets/grid_text_button_helpers.h>
 
 
-LIB_TABLE_GRID_DATA_MODEL::LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aDialog, const LIBRARY_TABLE& aTableToEdit,
+LIB_TABLE_GRID_DATA_MODEL::LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aDialog, WX_GRID* aGrid,
+                                                      const LIBRARY_TABLE& aTableToEdit,
                                                       LIBRARY_MANAGER_ADAPTER* aAdapter,
                                                       const wxArrayString& aPluginChoices,
                                                       wxString* aMRUDirectory, const wxString& aProjectPath ) :
         m_table( aTableToEdit ),
         m_adapter( aAdapter )
 {
-    WX_GRID* grid = static_cast<WX_GRID*>( GetView() );
-
     m_uriEditor = new wxGridCellAttr;
-    m_uriEditor->SetEditor( new GRID_CELL_PATH_EDITOR( aDialog, grid, aMRUDirectory, !aProjectPath.IsEmpty(),
+    m_uriEditor->SetEditor( new GRID_CELL_PATH_EDITOR( aDialog, aGrid, aMRUDirectory, !aProjectPath.IsEmpty(),
                                                        aProjectPath,
                                                        [this]( WX_GRID* aGrid, int aRow ) -> wxString
                                                        {

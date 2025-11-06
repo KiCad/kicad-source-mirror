@@ -51,7 +51,7 @@ class KICOMMON_API LIB_TABLE_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
     friend class LIB_TABLE_GRID_TRICKS;
 
 public:
-    LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+    LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, WX_GRID* aGrid, const LIBRARY_TABLE& aTableToEdit,
                                LIBRARY_MANAGER_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
                                wxString* aMRUDirectory, const wxString& aProjectPath );
 

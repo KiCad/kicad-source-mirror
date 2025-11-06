@@ -92,10 +92,11 @@ class SYMBOL_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
     friend class SYMBOL_GRID_TRICKS;
 
 public:
-    SYMBOL_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, WX_GRID* aGrid, const LIBRARY_TABLE& aTableToEdit,
                                       SYMBOL_LIBRARY_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
                                       wxString* aMRUDirectory, const wxString& aProjectPath ) :
-            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath )
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aGrid, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory,
+                                       aProjectPath )
     {
     }
 
@@ -132,11 +133,14 @@ public:
 protected:
     wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
     {
-        auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-        LIBRARY_TABLE_ROW& tableRow = libTable->at( aRow );
-        SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
+        SYMBOL_LIB_TABLE_GRID_DATA_MODEL* table = static_cast<SYMBOL_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW&                tableRow = table->at( aRow );
 
-        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
+        if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+            return wxEmptyString;
+
+        SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
+        IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( pi_type ) );
 
         if( pi )
         {
@@ -316,8 +320,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter, m_pluginChoices,
-                                                                   lastGlobalLibDir, wxEmptyString ) );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *table.value(), adapter,
+                                                                   m_pluginChoices, lastGlobalLibDir, wxEmptyString ) );
 
     setupGrid( m_global_grid );
 
@@ -326,8 +330,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(), adapter,
-                                                                        m_pluginChoices, &m_lastProjectLibDir,
+        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_project_grid, *projectTable.value(),
+                                                                        adapter, m_pluginChoices, &m_lastProjectLibDir,
                                                                         m_project->GetProjectPath() ), true );
         setupGrid( m_project_grid );
     }
@@ -529,11 +533,6 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
     }
 
     return true;
-}
-
-
-void PANEL_SYM_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
-{
 }
 
 
@@ -811,9 +810,8 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_parent->Kiway().Prj() );
 
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, *newTable.value(), adapter,
-                                                                   m_pluginChoices, lastGlobalLibDir,
-                                                                   wxEmptyString ) );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *newTable.value(), adapter,
+                                                                   m_pluginChoices, lastGlobalLibDir, wxEmptyString ) );
     m_global_grid->PopEventHandler( true );
     setupGrid( m_global_grid );
     m_parent->m_GlobalTableChanged = true;

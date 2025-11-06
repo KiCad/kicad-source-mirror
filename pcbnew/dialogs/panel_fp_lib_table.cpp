@@ -80,11 +80,12 @@ class FP_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
     friend class FP_GRID_TRICKS;
 
 public:
-    FP_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+    FP_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, WX_GRID* aGrid, const LIBRARY_TABLE& aTableToEdit,
                                   FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
                                   wxString* aMRUDirectory, const wxString& aProjectPath,
                                   const std::map<PCB_IO_MGR::PCB_FILE_T, IO_BASE::IO_FILE_DESC>& aSupportedFiles ) :
-            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath ),
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aGrid, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory,
+                                       aProjectPath ),
             m_supportedFpFiles( aSupportedFiles )
     {
     }
@@ -112,15 +113,19 @@ public:
 protected:
     wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
     {
-        FP_LIB_TABLE_GRID_DATA_MODEL*           libTable = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-        LIBRARY_TABLE_ROW&           tableRow = libTable->at( aRow );
+        FP_LIB_TABLE_GRID_DATA_MODEL* table = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW&            tableRow = table->at( aRow );
+
+        if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+            return wxEmptyString;
+
         PCB_IO_MGR::PCB_FILE_T       fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
         const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
             return pluginDesc.FileFilter();
-        else
-            return wxEmptyString;
+
+        return wxEmptyString;
     }
 
 private:
@@ -265,14 +270,19 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     for( auto& [fileType, desc] : m_supportedFpFiles )
         m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
+    // TODO(JE) should use translated string here but type is stored as untranslated string
+    // Maybe type storage needs to be enum?
+    m_pluginChoices.Add( wxT( "Table" ) );
+
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table );
 
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
 
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter, m_pluginChoices,
-                                                               lastGlobalLibDir, wxEmptyString, m_supportedFpFiles ),
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *table.value(), adapter,
+                                                               m_pluginChoices, lastGlobalLibDir, wxEmptyString,
+                                                               m_supportedFpFiles ),
                              true /* take ownership */ );
 
     // add Cut, Copy, and Paste to wxGrids
@@ -287,8 +297,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(), adapter,
-                                                                    m_pluginChoices, &m_lastProjectLibDir,
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_project_grid, *projectTable.value(),
+                                                                    adapter, m_pluginChoices, &m_lastProjectLibDir,
                                                                     m_project->GetProjectPath(), m_supportedFpFiles ),
                                   true /* take ownership */ );
         setupGrid( m_project_grid );
@@ -957,8 +967,9 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
 
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
 
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, *newTable.value(), adapter, m_pluginChoices,
-                                                               lastGlobalLibDir, wxEmptyString, m_supportedFpFiles ),
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *newTable.value(), adapter,
+                                                               m_pluginChoices, lastGlobalLibDir, wxEmptyString,
+                                                               m_supportedFpFiles ),
                              true /* take ownership */ );
     m_global_grid->PopEventHandler( true );
     setupGrid( m_global_grid );

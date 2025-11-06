@@ -150,12 +150,13 @@ class DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
     friend class DESIGN_BLOCK_GRID_TRICKS;
 
 public:
-    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, const LIBRARY_TABLE& aTableToEdit,
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aParent, WX_GRID* aGrid, const LIBRARY_TABLE& aTableToEdit,
                                             LIBRARY_MANAGER_ADAPTER* aAdapter, const wxArrayString& aPluginChoices,
                                             wxString* aMRUDirectory, const wxString& aProjectPath,
                                             const std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T,
                                                            IO_BASE::IO_FILE_DESC>& aSupportedFiles ) :
-            LIB_TABLE_GRID_DATA_MODEL( aParent, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory, aProjectPath ),
+            LIB_TABLE_GRID_DATA_MODEL( aParent, aGrid, aTableToEdit, aAdapter, aPluginChoices, aMRUDirectory,
+                                       aProjectPath ),
             m_supportedDesignBlockFiles( aSupportedFiles )
     {
     }
@@ -185,15 +186,19 @@ public:
 protected:
     wxString getFileTypes( WX_GRID* aGrid, int aRow ) override
     {
-        auto* libTable = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-        LIBRARY_TABLE_ROW& tableRow = libTable->at( aRow );
+        auto*              table = static_cast<DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+        LIBRARY_TABLE_ROW& tableRow = table->at( aRow );
+
+        if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+            return wxEmptyString;
+
         DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = DESIGN_BLOCK_IO_MGR::EnumFromStr( tableRow.Type() );
         const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
             return pluginDesc.FileFilter();
-        else
-            return wxEmptyString;
+
+        return wxEmptyString;
     }
 
 private:
@@ -310,8 +315,8 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 
     DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_project->DesignBlockLibs();
 
-    m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, *table.value(), adapter,
-                                                                         pluginChoices, lastGlobalLibDir,
+    m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *table.value(),
+                                                                         adapter, pluginChoices, lastGlobalLibDir,
                                                                          wxEmptyString, m_supportedDesignBlockFiles ),
                              true /* take ownership */ );
 
@@ -344,9 +349,9 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
 
     if( projectTable )
     {
-        m_project_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, *projectTable.value(),
-                                                                              adapter, pluginChoices,
-                                                                              &m_lastProjectLibDir,
+        m_project_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_project_grid,
+                                                                              *projectTable.value(), adapter,
+                                                                              pluginChoices, &m_lastProjectLibDir,
                                                                               m_project->GetProjectPath(),
                                                                               m_supportedDesignBlockFiles ),
                                   true /* take ownership */ );
