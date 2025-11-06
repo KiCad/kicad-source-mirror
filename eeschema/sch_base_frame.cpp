@@ -750,7 +750,8 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
             libraryName = fn.GetName();
             Prj().SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
-            LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable() ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
+            LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable() ? LIBRARY_TABLE_SCOPE::GLOBAL
+                                                                         : LIBRARY_TABLE_SCOPE::PROJECT;
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
             if( adapter->HasLibrary( libraryName, false ) )
@@ -842,7 +843,7 @@ void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
     // Start the debounce timer (set to 1 second)
     if( !m_watcherDebounceTimer.StartOnce( 1000 ) )
     {
-    wxLogTrace( traceLibWatch, "Failed to start the debounce timer" );
+        wxLogTrace( traceLibWatch, "Failed to start the debounce timer" );
         return;
     }
 }
@@ -858,7 +859,7 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     if( m_inSymChangeTimerEvent )
     {
-    wxLogTrace( traceLibWatch, "Restarting debounce timer" );
+        wxLogTrace( traceLibWatch, "Restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 3000 );
     }
 
@@ -880,7 +881,7 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
       || IsOK( this, _( "The library containing the current symbol has changed.\n"
                         "Do you want to reload the library?" ) ) )
     {
-    wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
+        wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
         std::string libName = m_watcherFileName.GetFullPath().ToStdString();
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
