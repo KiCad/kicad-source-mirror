@@ -1233,6 +1233,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         int      m_count;
         int      m_pads;
         wxString m_type;
+        wxString m_description;
+
         std::vector<REFDES>* m_refdes;
         std::map<wxString, wxString>* m_props;
     };
@@ -1290,6 +1292,12 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         else
             entry->m_type = "ELECTRICAL";
 
+        // Use the footprint's Description field if it exists
+        const PCB_FIELD* descField = fp_it->GetField( FIELD_T::DESCRIPTION );
+
+        if( descField && !descField->GetText().IsEmpty() )
+            entry->m_description = descField->GetText();
+
         auto[ bom_iter, inserted ] = bom_entries.insert( std::move( entry ) );
 
         if( !inserted )
@@ -1307,8 +1315,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         // if we want to group footprints by their properties
         for( PCB_FIELD* prop : fp->GetFields() )
         {
-            // We don't need ref, footprint or datasheet in the BOM characteristics.  Just value
-            // and any additional fields the user has added.  Ref and footprint are captured above.
+            // We don't include Reference, Datasheet, or Description in BOM characteristics.
+            // Value and any user-defined fields are included.  Reference is captured above,
+            // and Description is used for the BomItem description attribute.
             if( prop->IsMandatory() && !prop->IsValue() )
                 continue;
 
@@ -1339,6 +1348,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         addAttribute( bomEntryNode,  "quantity", wxString::Format( "%d", entry->m_count ) );
         addAttribute( bomEntryNode,  "pinCount", wxString::Format( "%d", entry->m_pads ) );
         addAttribute( bomEntryNode,  "category", entry->m_type );
+
+        if( !entry->m_description.IsEmpty() )
+            addAttribute( bomEntryNode, "description", entry->m_description );
 
         for( const REFDES& refdes : *( entry->m_refdes ) )
         {
