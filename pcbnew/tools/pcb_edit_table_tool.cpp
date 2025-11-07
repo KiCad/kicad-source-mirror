@@ -47,8 +47,13 @@ bool PCB_EDIT_TABLE_TOOL::Init()
 
 PCB_TABLECELL* PCB_EDIT_TABLE_TOOL::copyCell( PCB_TABLECELL* aSource )
 {
-    PCB_TABLECELL* cell = new PCB_TABLECELL( aSource->GetParent() );
+    // Use copy constructor to copy all formatting properties (font, colors, borders, etc.)
+    PCB_TABLECELL* cell = new PCB_TABLECELL( *aSource );
 
+    // Clear text content - we only want the formatting, not the content
+    cell->SetText( wxEmptyString );
+
+    // Position will be set by the caller, but preserve size from source
     cell->SetStart( aSource->GetStart() );
     cell->SetEnd( aSource->GetEnd() );
 
@@ -58,7 +63,7 @@ PCB_TABLECELL* PCB_EDIT_TABLE_TOOL::copyCell( PCB_TABLECELL* aSource )
 
 const SELECTION& PCB_EDIT_TABLE_TOOL::getTableCellSelection()
 {
-    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     return selTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -66,8 +71,8 @@ const SELECTION& PCB_EDIT_TABLE_TOOL::getTableCellSelection()
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
-                    if( !dynamic_cast<PCB_TABLECELL*>( aCollector[ i ] ) )
-                        aCollector.Remove( aCollector[ i ] );
+                    if( !dynamic_cast<PCB_TABLECELL*>( aCollector[i] ) )
+                        aCollector.Remove( aCollector[i] );
                 }
             },
             false /* prompt user regarding locked items */ );
@@ -108,7 +113,7 @@ int PCB_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
     {
         DIALOG_TABLE_PROPERTIES dlg( frame(), parentTable );
 
-        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+        dlg.ShowQuasiModal(); // Scintilla's auto-complete requires quasiModal
     }
 
     if( clearSelection )
@@ -120,17 +125,17 @@ int PCB_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
 
 void PCB_EDIT_TABLE_TOOL::setTransitions()
 {
-    Go( &PCB_EDIT_TABLE_TOOL::AddRowAbove,        ACTIONS::addRowAbove.MakeEvent() );
-    Go( &PCB_EDIT_TABLE_TOOL::AddRowBelow,        ACTIONS::addRowBelow.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::AddRowAbove, ACTIONS::addRowAbove.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::AddRowBelow, ACTIONS::addRowBelow.MakeEvent() );
 
-    Go( &PCB_EDIT_TABLE_TOOL::AddColumnBefore,    ACTIONS::addColBefore.MakeEvent() );
-    Go( &PCB_EDIT_TABLE_TOOL::AddColumnAfter,     ACTIONS::addColAfter.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::AddColumnBefore, ACTIONS::addColBefore.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::AddColumnAfter, ACTIONS::addColAfter.MakeEvent() );
 
-    Go( &PCB_EDIT_TABLE_TOOL::DeleteRows,         ACTIONS::deleteRows.MakeEvent() );
-    Go( &PCB_EDIT_TABLE_TOOL::DeleteColumns,      ACTIONS::deleteColumns.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::DeleteRows, ACTIONS::deleteRows.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::DeleteColumns, ACTIONS::deleteColumns.MakeEvent() );
 
-    Go( &PCB_EDIT_TABLE_TOOL::MergeCells,         ACTIONS::mergeCells.MakeEvent() );
-    Go( &PCB_EDIT_TABLE_TOOL::UnmergeCells,       ACTIONS::unmergeCells.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::MergeCells, ACTIONS::mergeCells.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::UnmergeCells, ACTIONS::unmergeCells.MakeEvent() );
 
-    Go( &PCB_EDIT_TABLE_TOOL::EditTable,          ACTIONS::editTable.MakeEvent() );
+    Go( &PCB_EDIT_TABLE_TOOL::EditTable, ACTIONS::editTable.MakeEvent() );
 }

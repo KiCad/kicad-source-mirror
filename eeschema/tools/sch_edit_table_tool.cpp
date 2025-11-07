@@ -83,12 +83,15 @@ int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
 
 SCH_TABLECELL* SCH_EDIT_TABLE_TOOL::copyCell( SCH_TABLECELL* aSource )
 {
-    SCH_TABLECELL* cell = new SCH_TABLECELL();
+    // Use copy constructor to copy all formatting properties (font, colors, borders, etc.)
+    SCH_TABLECELL* cell = new SCH_TABLECELL( *aSource );
 
+    // Clear text content - we only want the formatting, not the content
+    cell->SetText( wxEmptyString );
+
+    // Position will be set by the caller, but preserve size from source
     cell->SetStart( aSource->GetStart() );
     cell->SetEnd( aSource->GetEnd() );
-    cell->SetFillMode( aSource->GetFillMode() );
-    cell->SetFillColor( aSource->GetFillColor() );
 
     return cell;
 }
@@ -102,17 +105,17 @@ const SELECTION& SCH_EDIT_TABLE_TOOL::getTableCellSelection()
 
 void SCH_EDIT_TABLE_TOOL::setTransitions()
 {
-    Go( &SCH_EDIT_TABLE_TOOL::AddRowAbove,        ACTIONS::addRowAbove.MakeEvent() );
-    Go( &SCH_EDIT_TABLE_TOOL::AddRowBelow,        ACTIONS::addRowBelow.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::AddRowAbove, ACTIONS::addRowAbove.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::AddRowBelow, ACTIONS::addRowBelow.MakeEvent() );
 
-    Go( &SCH_EDIT_TABLE_TOOL::AddColumnBefore,    ACTIONS::addColBefore.MakeEvent() );
-    Go( &SCH_EDIT_TABLE_TOOL::AddColumnAfter,     ACTIONS::addColAfter.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::AddColumnBefore, ACTIONS::addColBefore.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::AddColumnAfter, ACTIONS::addColAfter.MakeEvent() );
 
-    Go( &SCH_EDIT_TABLE_TOOL::DeleteRows,         ACTIONS::deleteRows.MakeEvent() );
-    Go( &SCH_EDIT_TABLE_TOOL::DeleteColumns,      ACTIONS::deleteColumns.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::DeleteRows, ACTIONS::deleteRows.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::DeleteColumns, ACTIONS::deleteColumns.MakeEvent() );
 
-    Go( &SCH_EDIT_TABLE_TOOL::MergeCells,         ACTIONS::mergeCells.MakeEvent() );
-    Go( &SCH_EDIT_TABLE_TOOL::UnmergeCells,       ACTIONS::unmergeCells.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::MergeCells, ACTIONS::mergeCells.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::UnmergeCells, ACTIONS::unmergeCells.MakeEvent() );
 
-    Go( &SCH_EDIT_TABLE_TOOL::EditTable,          ACTIONS::editTable.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::EditTable, ACTIONS::editTable.MakeEvent() );
 }
