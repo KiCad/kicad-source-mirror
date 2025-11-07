@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-04 10:51+0000\n"
+"PO-Revision-Date: 2025-11-08 11:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3108,7 +3108,7 @@ msgstr "Wie möchten Sie KiCad konfigurieren?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
-msgstr "Einstellungen importieren aus einer vorherigen Version unter:"
+msgstr "Einstellungen aus vorherigen Version importieren:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -9718,8 +9718,8 @@ msgstr "Designblock-Bibliotheken verwalten..."
 #: common/tool/actions.cpp:1184
 msgid "Edit the global and project design block library lists"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Designblock-"
-"Bibliothekstabellen"
+"Bearbeiten der globalen und der projektspezifischen Designblockbibliothek-"
+"Tabellen"
 
 #: common/tool/actions.cpp:1190
 msgid "Getting Started with KiCad"
