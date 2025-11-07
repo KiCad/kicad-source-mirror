@@ -250,7 +250,7 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
                          { SCH_PIN_T, SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
         {
             std::vector<VECTOR2I> connectionPoints = areaItem->GetConnectionPoints();
-            assert( connectionPoints.size() == 1 );
+            wxASSERT( connectionPoints.size() == 1 );
 
             if( GetPolyShape().Collide( connectionPoints[0] ) )
                 addContainedItem( areaItem );
@@ -271,6 +271,16 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
                     if( GetPolyShape().Collide( pin->GetPosition() ) )
                         addContainedItem( pin );
                 }
+            }
+        }
+        else if( areaItem->IsType( { SCH_SHEET_T } ) )
+        {
+            const BOX2I      sheetBb = areaItem->GetBoundingBox();
+            const SHAPE_RECT rect( sheetBb );
+
+            if( GetPolyShape().Collide( &rect ) )
+            {
+                addContainedItem( areaItem );
             }
         }
     }

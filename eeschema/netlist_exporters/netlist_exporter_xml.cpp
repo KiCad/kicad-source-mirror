@@ -37,6 +37,7 @@
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <json_common.h>
 #include <project_sch.h>
+#include <sch_rule_area.h>
 #include <trace_helpers.h>
 
 #include <set>
@@ -253,6 +254,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
     m_referencesAlreadyFound.Clear();
     m_libParts.clear();
+    getSheetComponentClasses();
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
@@ -572,21 +574,24 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
 std::vector<wxString> NETLIST_EXPORTER_XML::getComponentClassNamesForAllSymbolUnits(
         SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSymbolSheet, const SCH_SHEET_LIST& aSheetList )
 {
+    std::vector<SCH_SHEET_PATH> symbolSheets;
+    symbolSheets.push_back( aSymbolSheet );
+
     std::unordered_set<wxString> compClassNames = aSymbol->GetComponentClassNames( &aSymbolSheet );
     int                          primaryUnit = aSymbol->GetUnitSelection( &aSymbolSheet );
 
     if( aSymbol->GetUnitCount() > 1 )
     {
-        wxString ref = aSymbol->GetRef( &aSymbolSheet );
+        const wxString ref = aSymbol->GetRef( &aSymbolSheet );
 
         for( const SCH_SHEET_PATH& sheet : aSheetList )
         {
             for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
-                SCH_SYMBOL* symbol2 = static_cast<SCH_SYMBOL*>( item );
+                const SCH_SYMBOL* symbol2 = static_cast<SCH_SYMBOL*>( item );
 
-                wxString ref2 = symbol2->GetRef( &sheet );
-                int      otherUnit = symbol2->GetUnitSelection( &sheet );
+                wxString  ref2 = symbol2->GetRef( &sheet );
+                const int otherUnit = symbol2->GetUnitSelection( &sheet );
 
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
@@ -594,9 +599,23 @@ std::vector<wxString> NETLIST_EXPORTER_XML::getComponentClassNamesForAllSymbolUn
                 if( otherUnit == primaryUnit )
                     continue;
 
+                symbolSheets.push_back( sheet );
+
                 std::unordered_set<wxString> otherClassNames =
                         symbol2->GetComponentClassNames( &sheet );
                 compClassNames.insert( otherClassNames.begin(), otherClassNames.end() );
+            }
+        }
+    }
+
+    // Add sheet-level component classes
+    for( auto& [sheetPath, sheetCompClasses] : m_sheetComponentClasses )
+    {
+        for( SCH_SHEET_PATH& symbolSheetPath : symbolSheets )
+        {
+            if( symbolSheetPath.IsContainedWithin( sheetPath ) )
+            {
+                compClassNames.insert( sheetCompClasses.begin(), sheetCompClasses.end() );
             }
         }
     }
@@ -1099,4 +1118,52 @@ static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 )
 {
     // return "lhs < rhs"
     return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), true ) < 0;
+}
+void NETLIST_EXPORTER_XML::getSheetComponentClasses()
+{
+    m_sheetComponentClasses.clear();
+
+    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+
+    auto getComponentClassFields = [&]( const std::vector<SCH_FIELD>& fields, const SCH_SHEET_PATH* sheetPath )
+    {
+        std::unordered_set<wxString> componentClasses;
+
+        for( const SCH_FIELD& field : fields )
+        {
+            if( field.GetCanonicalName() == wxT( "Component Class" ) )
+            {
+                if( field.GetShownText( sheetPath, false ) != wxEmptyString )
+                    componentClasses.insert( field.GetShownText( sheetPath, false ) );
+            }
+        }
+
+        return componentClasses;
+    };
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET*                                sheetItem = static_cast<SCH_SHEET*>( item );
+            std::unordered_set<wxString>              sheetComponentClasses;
+            const std::unordered_set<SCH_RULE_AREA*>& sheetRuleAreas = sheetItem->GetRuleAreaCache();
+
+            for( const SCH_RULE_AREA* ruleArea : sheetRuleAreas )
+            {
+                for( const SCH_DIRECTIVE_LABEL* label : ruleArea->GetDirectives() )
+                {
+                    std::unordered_set<wxString> ruleAreaComponentClasses =
+                            getComponentClassFields( label->GetFields(), &sheet );
+                    sheetComponentClasses.insert( ruleAreaComponentClasses.begin(), ruleAreaComponentClasses.end() );
+                }
+            }
+
+            SCH_SHEET_PATH newPath = sheet;
+            newPath.push_back( sheetItem );
+            wxASSERT( !m_sheetComponentClasses.contains( newPath ) );
+
+            m_sheetComponentClasses[newPath] = sheetComponentClasses;
+        }
+    }
 }
