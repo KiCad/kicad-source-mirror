@@ -1489,6 +1489,7 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
                                                                         stackup_item->GetTypeName() ) );
                     break;
                 case BS_ITEM_TYPE_SOLDERMASK:
+                {
                     addAttribute( propertyNode,  "text", "SOLDERMASK" );
                     propertyNode = appendNode( generalNode, "Property" );
                     addAttribute( propertyNode,  "text", wxString::Format( "Color : %s",
@@ -1496,7 +1497,26 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
                     propertyNode = appendNode( generalNode, "Property" );
                     addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
                                                                         stackup_item->GetTypeName() ) );
+
+                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified)
+                    if( stackup_item->GetEpsilonR( sublayer_id ) > 1.0 )
+                    {
+                        wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
+                        addAttribute( dielectricNode, "type", "DIELECTRIC_CONSTANT" );
+                        propertyNode = appendNode( dielectricNode, "Property" );
+                        addAttribute( propertyNode, "value", floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
+                    }
+
+                    // Generate LossTangent if > 0.0 (value <= 0.0 means not specified)
+                    if( stackup_item->GetLossTangent( sublayer_id ) > 0.0 )
+                    {
+                        wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
+                        addAttribute( dielectricNode, "type", "LOSS_TANGENT" );
+                        propertyNode = appendNode( dielectricNode, "Property" );
+                        addAttribute( propertyNode, "value", floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
+                    }
                     break;
+                }
                 default:
                     break;
             }
