@@ -77,6 +77,13 @@ KICOMMON_API bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName
 KICOMMON_API wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtension );
 
 /**
+ * Join a list of file extensions for use in a file dialog.
+ * @param aExts
+ * @return
+ */
+KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
+
+/**
  * Replace any environment variable & text variable references with their values.
  *
  * @param aString a string containing (perhaps) references to env var

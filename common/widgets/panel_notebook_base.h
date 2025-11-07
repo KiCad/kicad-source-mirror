@@ -21,6 +21,8 @@
 
 #include <wx/dialog.h>
 #include <wx/panel.h>
+#include <widgets/wx_grid.h>
+
 
 class PANEL_NOTEBOOK_BASE : public wxPanel
 {
@@ -30,9 +32,7 @@ public:
                          const wxSize& size = wxSize( -1, -1 ), long style = wxTAB_TRAVERSAL,
                          const wxString& name = wxEmptyString ) :
             wxPanel( parent, id, pos, size, style, name )
-    {
-
-    }
+    { }
 
     virtual bool canWindowClose() { return true; }
     virtual void doWindowClose() { }
@@ -44,6 +44,26 @@ public:
     bool GetClosable() const { return m_closable; }
 
     virtual bool GetCanClose() { return true; }
+
+    WX_GRID* GetGrid()
+    {
+        std::function<WX_GRID*( wxWindow* )> findGrid =
+                [&]( wxWindow* win ) -> WX_GRID*
+                {
+                    if( WX_GRID* grid = dynamic_cast<WX_GRID*>( win ) )
+                        return grid;
+
+                    for( wxWindow* child : win->GetChildren() )
+                    {
+                        if( WX_GRID* grid = findGrid( child ) )
+                            return grid;
+                    }
+
+                    return nullptr;
+                };
+
+        return findGrid( this );
+    }
 
 private:
     bool m_closable = false;

@@ -455,6 +455,22 @@ wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtens
 }
 
 
+wxString JoinExtensions( const std::vector<std::string>& aExts )
+{
+    wxString joined;
+
+    for( const std::string& ext : aExts )
+    {
+        if( !joined.empty() )
+            joined << wxS( ", " );
+
+        joined << wxS( "*." ) << ext;
+    }
+
+    return joined;
+}
+
+
 /**
  * Performance enhancements to file and directory operations.
  *

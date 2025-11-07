@@ -10,7 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "dialogs/panel_notebook_base.h"
+#include "widgets/panel_notebook_base.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/scrolwin.h>

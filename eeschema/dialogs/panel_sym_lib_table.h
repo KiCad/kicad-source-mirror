@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_SYM_LIB_TABLE_H
-#define PANEL_SYM_LIB_TABLE_H
+#pragma once
 
 #include <grid_tricks.h>
 #include <dialogs/dialog_edit_library_tables.h>
@@ -67,33 +66,20 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
-    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* global_model() const;
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* get_model( int aPage ) const;
+    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* cur_model() const { return get_model( m_notebook->GetSelection() ); }
 
-    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* project_model() const;
+    WX_GRID* get_grid( int aPage ) const;
+    WX_GRID* cur_grid() const { return get_grid( m_notebook->GetSelection() ); }
 
-    SYMBOL_LIB_TABLE_GRID_DATA_MODEL* cur_model() const;
-
-    /**
-     * @return true if the plugin type can be selected from the library path only
-     * (i.e. only from its extension)
-     * if the type needs an access to the file itself, return false because
-     * the file can be not (at least temporary) available
-     */
-    bool allowAutomaticPluginTypeSelection( wxString& aLibraryPath );
-
+private:
     PROJECT*                    m_project;
-
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
     wxArrayString               m_pluginChoices;
 
-    WX_GRID*                    m_cur_grid;     ///< changed based on tab choice
-
-    /// Transient (unsaved) last browsed folder when adding a project level library.
-    wxString                    m_lastProjectLibDir;
+    wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
+                                                       // project level library.
 };
 
 
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent );
-
-
-#endif    // PANEL_SYM_LIB_TABLE_H

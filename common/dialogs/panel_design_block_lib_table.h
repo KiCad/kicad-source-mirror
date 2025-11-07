@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_DESIGN_BLOCK_LIB_TABLE_H
-#define PANEL_DESIGN_BLOCK_LIB_TABLE_H
+#pragma once
 
 #include <dialogs/dialog_edit_library_tables.h>
 #include <dialogs/panel_design_block_lib_table_base.h>
@@ -66,36 +65,21 @@ private:
     void populateEnvironReadOnlyTable();
     void populatePluginList();
 
-    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* global_model() const
-    {
-        return (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_global_grid->GetTable();
-    }
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* get_model( int aPage ) const;
+    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* cur_model() const { return get_model( m_notebook->GetSelection() ); }
 
-    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* project_model() const
-    {
-        return m_project_grid ? (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_project_grid->GetTable() : nullptr;
-    }
+    WX_GRID* get_grid( int aPage ) const;
+    WX_GRID* cur_grid() const { return get_grid( m_notebook->GetSelection() ); }
 
-    DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL* cur_model() const
-    {
-        return (DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL*) m_cur_grid->GetTable();
-    }
-
-    PROJECT* m_project;
-
+private:
+    PROJECT*                    m_project;
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
 
-    WX_GRID*      m_cur_grid; // changed based on tab choice
-    static size_t m_pageNdx;  // Remember last notebook page selected during a session
+    wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
+                                                       // project level library.
 
-    //< Transient (unsaved) last browsed folder when adding a project level library.
-    wxString m_lastProjectLibDir;
-
-    std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T, IO_BASE::IO_FILE_DESC>
-            m_supportedDesignBlockFiles;
+    std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T, IO_BASE::IO_FILE_DESC> m_supportedDesignBlockFiles;
 };
 
 
 void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent );
-
-#endif // PANEL_DESIGN_BLOCK_LIB_TABLE_H

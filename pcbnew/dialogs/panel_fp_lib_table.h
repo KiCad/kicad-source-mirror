@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_FP_LIB_TABLE_H
-#define PANEL_FP_LIB_TABLE_H
+#pragma once
 
 #include <panel_fp_lib_table_base.h>
 #include <widgets/wx_grid.h>
@@ -70,33 +69,19 @@ private:
     void populateEnvironReadOnlyTable();
     void populatePluginList();
 
-    FP_LIB_TABLE_GRID_DATA_MODEL* global_model() const
-    {
-        return (FP_LIB_TABLE_GRID_DATA_MODEL*) m_global_grid->GetTable();
-    }
+    FP_LIB_TABLE_GRID_DATA_MODEL* get_model( int aPage ) const;
+    FP_LIB_TABLE_GRID_DATA_MODEL* cur_model() const { return get_model( m_notebook->GetSelection() ); }
 
-    FP_LIB_TABLE_GRID_DATA_MODEL* project_model() const
-    {
-        return m_project_grid ? (FP_LIB_TABLE_GRID_DATA_MODEL*) m_project_grid->GetTable() : nullptr;
-    }
+    WX_GRID* get_grid( int aPage ) const;
+    WX_GRID* cur_grid() const { return get_grid( m_notebook->GetSelection() ); }
 
-    FP_LIB_TABLE_GRID_DATA_MODEL* cur_model() const
-    {
-        return (FP_LIB_TABLE_GRID_DATA_MODEL*) m_cur_grid->GetTable();
-    }
-
-    // caller's tables are modified only on OK button and successful verification.
-    PROJECT*         m_project;
-
+private:
+    PROJECT*                    m_project;
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
     wxArrayString               m_pluginChoices;
 
-    WX_GRID*         m_cur_grid;      // changed based on tab choice
-
-    //< Transient (unsaved) last browsed folder when adding a project level library.
-    wxString         m_lastProjectLibDir;
+    wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
+                                                       // project level library.
 
     std::map<PCB_IO_MGR::PCB_FILE_T, IO_BASE::IO_FILE_DESC> m_supportedFpFiles;
 };
-
-#endif    // PANEL_FP_LIB_TABLE_H

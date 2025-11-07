@@ -13,7 +13,7 @@
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
-#include "dialogs/panel_notebook_base.h"
+#include "widgets/panel_notebook_base.h"
 #include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>

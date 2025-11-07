@@ -23,6 +23,8 @@
 #include <libraries/library_manager.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <lib_id.h>
 
 
 LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) :
@@ -293,6 +295,59 @@ void LIB_TABLE_GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 }
 
 
+/*
+ * Handle specialized clipboard text, either s-expr syntax starting with a lib table preamble
+ * (such as "(fp_lib_table"), or spreadsheet formatted text.
+ */
+void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
+{
+    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+
+    if( size_t ndx = cb_text.find( getTablePreamble() ); ndx != std::string::npos )
+    {
+        // paste the LIB_TABLE_ROWs of s-expr, starting at column 0 regardless of current cursor column.
+
+        if( LIBRARY_TABLE tempTable( cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
+        {
+            std::ranges::copy( tempTable.Rows(),
+                               std::inserter( tbl->Table().Rows(), tbl->Table().Rows().begin() ) );
+
+            if( tbl->GetView() )
+            {
+                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, 0, 0 );
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+        }
+        else
+        {
+            DisplayError( wxGetTopLevelParent( m_grid ), tempTable.ErrorDescription() );
+        }
+    }
+    else
+    {
+        wxString text = cb_text;
+
+        if( !text.Contains( '\t' ) && text.Contains( ',' ) )
+            text.Replace( ',', '\t' );
+
+        if( text.Contains( '\t' ) )
+        {
+            int row = m_grid->GetGridCursorRow();
+            m_grid->ClearSelection();
+            m_grid->SelectRow( row );
+            m_grid->SetGridCursor( row, 0 );
+            getSelectedArea();
+        }
+
+        GRID_TRICKS::paste_text( text );
+
+        m_grid->AutoSizeColumns( false );
+    }
+
+    m_grid->AutoSizeColumns( false );
+}
+
+
 bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 {
     if( aEvent.GetCol() == COL_OPTIONS )
@@ -304,3 +359,212 @@ bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
     return false;
 }
 
+
+void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
+{
+    aGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                    aGrid->AppendRows( 1 );
+                return { aGrid->GetNumberRows() - 1, COL_NICKNAME };
+            } );
+}
+
+
+void LIB_TABLE_GRID_TRICKS::DeleteRowHandler( WX_GRID* aGrid )
+{
+    if( !aGrid->CommitPendingChanges() )
+        return;
+
+    wxGridUpdateLocker noUpdates( aGrid );
+
+    int curRow = aGrid->GetGridCursorRow();
+    int curCol = aGrid->GetGridCursorCol();
+
+    // In a wxGrid, collect rows that have a selected cell, or are selected
+    // It is not so easy: it depends on the way the selection was made.
+    // Here, we collect rows selected by clicking on a row label, and rows that contain
+    // previously-selected cells.
+    // If no candidate, just delete the row with the grid cursor.
+    wxArrayInt selectedRows	= aGrid->GetSelectedRows();
+    wxGridCellCoordsArray cells = aGrid->GetSelectedCells();
+    wxGridCellCoordsArray blockTopLeft = aGrid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray blockBotRight = aGrid->GetSelectionBlockBottomRight();
+
+    // Add all row having cell selected to list:
+    for( unsigned ii = 0; ii < cells.GetCount(); ii++ )
+        selectedRows.Add( cells[ii].GetRow() );
+
+    // Handle block selection
+    if( !blockTopLeft.IsEmpty() && !blockBotRight.IsEmpty() )
+    {
+        for( int i = blockTopLeft[0].GetRow(); i <= blockBotRight[0].GetRow(); ++i )
+            selectedRows.Add( i );
+    }
+
+    // Use the row having the grid cursor only if we have no candidate:
+    if( selectedRows.size() == 0 && aGrid->GetGridCursorRow() >= 0 )
+        selectedRows.Add( aGrid->GetGridCursorRow() );
+
+    if( selectedRows.size() == 0 )
+    {
+        wxBell();
+        return;
+    }
+
+    std::sort( selectedRows.begin(), selectedRows.end() );
+
+    // Remove selected rows (note: a row can be stored more than once in list)
+    int last_row = -1;
+
+    // Needed to avoid a wxWidgets alert if the row to delete is the last row
+    // at least on wxMSW 3.2
+    aGrid->ClearSelection();
+
+    for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
+    {
+        int row = selectedRows[ii];
+
+        if( row != last_row )
+        {
+            last_row = row;
+            aGrid->DeleteRows( row, 1 );
+        }
+    }
+
+    if( aGrid->GetNumberRows() > 0 && curRow >= 0 )
+        aGrid->SetGridCursor( std::min( curRow, aGrid->GetNumberRows() - 1 ), curCol );
+}
+
+
+void LIB_TABLE_GRID_TRICKS::MoveUpHandler( WX_GRID* aGrid )
+{
+    aGrid->OnMoveRowUp(
+            [&]( int row )
+            {
+                LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+                int curRow = aGrid->GetGridCursorRow();
+
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+
+                auto current = rows.begin() + curRow;
+                auto prev    = rows.begin() + curRow - 1;
+
+                std::iter_swap( current, prev );
+
+                // Update the wxGrid
+                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
+                tbl->GetView()->ProcessTableMessage( msg );
+            } );
+}
+
+
+void LIB_TABLE_GRID_TRICKS::MoveDownHandler( WX_GRID* aGrid )
+{
+    aGrid->OnMoveRowDown(
+            [&]( int row )
+            {
+                LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+                int curRow = aGrid->GetGridCursorRow();
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+
+                auto current = rows.begin() + curRow;
+                auto next    = rows.begin() + curRow + 1;
+
+                std::iter_swap( current, next );
+
+                // Update the wxGrid
+                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
+                tbl->GetView()->ProcessTableMessage( msg );
+            } );
+}
+
+
+bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int aRow, int aCol )> aErrorHandler )
+{
+    wxWindow*                  topLevelParent = wxGetTopLevelParent( aGrid );
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+    wxString                   msg;
+
+    for( int r = 0; r < model->GetNumberRows(); )
+    {
+        wxString nick = model->GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
+        wxString uri  = model->GetValue( r, COL_URI ).Trim( false ).Trim();
+        unsigned illegalCh = 0;
+
+        if( !nick || !uri )
+        {
+            if( !nick && !uri )
+                msg = _( "A library table row nickname and path cells are empty." );
+            else if( !nick )
+                msg = _( "A library table row nickname cell is empty." );
+            else
+                msg = _( "A library table row path cell is empty." );
+
+            wxMessageDialog badCellDlg( topLevelParent, msg, _( "Invalid Row Definition" ),
+                                        wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
+            badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
+                                              "invalid to be removed from the table." ) );
+            badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                                       wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
+
+            if( badCellDlg.ShowModal() == wxID_NO )
+                return false;
+
+            // Delete the "empty" row, where empty means missing nick or uri.
+            // This also updates the UI which could be slow, but there should only be a few
+            // rows to delete, unless the user fell asleep on the Add Row
+            // button.
+            model->DeleteRows( r, 1 );
+        }
+        else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
+        {
+            msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ),
+                                    illegalCh,
+                                    nick );
+
+            aErrorHandler( r, 1 );
+
+            wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
+            errdlg.ShowModal();
+            return false;
+        }
+        else
+        {
+            // set the trimmed values back into the table so they get saved to disk.
+            model->SetValue( r, COL_NICKNAME, nick );
+            model->SetValue( r, COL_URI, uri );
+
+            // Make sure to not save a hidden flag
+            model->SetValue( r, COL_VISIBLE, wxS( "1" ) );
+
+            ++r;        // this row was OK.
+        }
+    }
+
+    // check for duplicate nickNames
+    for( int r1 = 0; r1 < model->GetNumberRows() - 1; ++r1 )
+    {
+        wxString nick1 = model->GetValue( r1, COL_NICKNAME );
+
+        for( int r2 = r1 + 1; r2 < model->GetNumberRows(); ++r2 )
+        {
+            wxString nick2 = model->GetValue( r2, COL_NICKNAME );
+
+            if( nick1 == nick2 )
+            {
+                msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ),
+                                        nick1 );
+
+                // go to the lower of the two rows, it is technically the duplicate:
+                aErrorHandler( r2, 1 );
+
+                wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
+                errdlg.ShowModal();
+                return false;
+            }
+        }
+    }
+
+    return true;
+}

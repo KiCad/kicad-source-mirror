@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PANEL_NOTEBOOK_BASE;
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
@@ -40,9 +41,9 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 
 	protected:
 		wxNotebook* m_notebook;
-		wxPanel* m_global_panel;
+		PANEL_NOTEBOOK_BASE* m_global_panel;
 		WX_GRID* m_global_grid;
-		wxPanel* m_project_panel;
+		PANEL_NOTEBOOK_BASE* m_project_panel;
 		WX_GRID* m_project_grid;
 		STD_BITMAP_BUTTON* m_append_button;
 		STD_BITMAP_BUTTON* m_browse_button;

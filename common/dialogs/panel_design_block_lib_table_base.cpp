@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/panel_notebook_base.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
@@ -18,7 +19,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_global_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_global_panel = new PANEL_NOTEBOOK_BASE( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -67,7 +68,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	m_global_panel->Layout();
 	m_global_sizer->Fit( m_global_panel );
 	m_notebook->AddPage( m_global_panel, _("Global Libraries"), true );
-	m_project_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_project_panel = new PANEL_NOTEBOOK_BASE( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
 
