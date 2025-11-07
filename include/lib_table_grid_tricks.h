@@ -20,6 +20,8 @@
 #include "grid_tricks.h"
 #include <functional>
 
+class wxNotebook;
+
 class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
 {
     enum
@@ -49,6 +51,8 @@ public:
     static void MoveDownHandler( WX_GRID* aGrid );
 
     static bool VerifyTable( WX_GRID* aGrid, std::function<void( int aRow, int aCol )> aErrorHandler );
+
+    static void AddTable( wxNotebook* aNotebook, const wxString& aTitle );
 
 protected:
     virtual void optionsEditor( int aRow ) = 0;

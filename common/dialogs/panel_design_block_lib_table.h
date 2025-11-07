@@ -24,6 +24,8 @@
 #include <widgets/wx_grid.h>
 #include <design_block_io.h>
 
+
+class LIBRARY_TABLE;
 class DESIGN_BLOCK_LIB_TABLE;
 class DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL;
 class PROJECT;
@@ -58,6 +60,8 @@ private:
 
     void onPageChange( wxBookCtrlEvent& event ) override;
 
+    void addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal );
+
     void adjustPathSubsGridColumns( int aWidth );
 
     /// Populate the readonly environment variable table with names and values
@@ -74,6 +78,7 @@ private:
 private:
     PROJECT*                    m_project;
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
+    wxArrayString               m_pluginChoices;
 
     wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
                                                        // project level library.

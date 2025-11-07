@@ -23,6 +23,7 @@
 #include <widgets/wx_grid.h>
 #include <pcb_io/pcb_io_mgr.h>
 
+class LIBRARY_TABLE;
 class FP_LIB_TABLE;
 class FP_LIB_TABLE_GRID_DATA_MODEL;
 class PROJECT;
@@ -60,7 +61,7 @@ private:
     void onPageChange( wxBookCtrlEvent& event ) override;
     void onReset( wxCommandEvent& event ) override;
 
-    void setupGrid( WX_GRID* aGrid );
+    void addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal );
 
     void adjustPathSubsGridColumns( int aWidth );
 

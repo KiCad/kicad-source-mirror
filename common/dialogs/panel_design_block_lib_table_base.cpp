@@ -5,7 +5,6 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/panel_notebook_base.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
@@ -19,104 +18,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_global_panel = new PANEL_NOTEBOOK_BASE( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* m_global_sizer;
-	m_global_sizer = new wxBoxSizer( wxVERTICAL );
-
-	m_global_grid = new WX_GRID( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_global_grid->CreateGrid( 1, 7 );
-	m_global_grid->EnableEditing( true );
-	m_global_grid->EnableGridLines( true );
-	m_global_grid->EnableDragGridSize( false );
-	m_global_grid->SetMargins( 0, 0 );
-
-	// Columns
-	m_global_grid->SetColSize( 0, 48 );
-	m_global_grid->SetColSize( 1, 48 );
-	m_global_grid->SetColSize( 2, 100 );
-	m_global_grid->SetColSize( 3, 240 );
-	m_global_grid->SetColSize( 4, 100 );
-	m_global_grid->SetColSize( 5, 80 );
-	m_global_grid->SetColSize( 6, 240 );
-	m_global_grid->EnableDragColMove( false );
-	m_global_grid->EnableDragColSize( true );
-	m_global_grid->SetColLabelValue( 0, _("Active") );
-	m_global_grid->SetColLabelValue( 1, _("Visible") );
-	m_global_grid->SetColLabelValue( 2, _("Nickname") );
-	m_global_grid->SetColLabelValue( 3, _("Library Path") );
-	m_global_grid->SetColLabelValue( 4, _("Library Format") );
-	m_global_grid->SetColLabelValue( 5, _("Options") );
-	m_global_grid->SetColLabelValue( 6, _("Description") );
-	m_global_grid->SetColLabelSize( 22 );
-	m_global_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_global_grid->EnableDragRowSize( false );
-	m_global_grid->SetRowLabelSize( 0 );
-	m_global_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_global_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_global_sizer->Add( m_global_grid, 1, wxALL|wxEXPAND, 5 );
-
-
-	m_global_panel->SetSizer( m_global_sizer );
-	m_global_panel->Layout();
-	m_global_sizer->Fit( m_global_panel );
-	m_notebook->AddPage( m_global_panel, _("Global Libraries"), true );
-	m_project_panel = new PANEL_NOTEBOOK_BASE( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* m_project_sizer;
-	m_project_sizer = new wxBoxSizer( wxVERTICAL );
-
-	m_project_grid = new WX_GRID( m_project_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_project_grid->CreateGrid( 1, 7 );
-	m_project_grid->EnableEditing( true );
-	m_project_grid->EnableGridLines( true );
-	m_project_grid->EnableDragGridSize( false );
-	m_project_grid->SetMargins( 0, 0 );
-
-	// Columns
-	m_project_grid->SetColSize( 0, 48 );
-	m_project_grid->SetColSize( 1, 48 );
-	m_project_grid->SetColSize( 2, 100 );
-	m_project_grid->SetColSize( 3, 240 );
-	m_project_grid->SetColSize( 4, 100 );
-	m_project_grid->SetColSize( 5, 80 );
-	m_project_grid->SetColSize( 6, 240 );
-	m_project_grid->EnableDragColMove( false );
-	m_project_grid->EnableDragColSize( true );
-	m_project_grid->SetColLabelValue( 0, _("Active") );
-	m_project_grid->SetColLabelValue( 1, _("Visible") );
-	m_project_grid->SetColLabelValue( 2, _("Nickname") );
-	m_project_grid->SetColLabelValue( 3, _("Library Path") );
-	m_project_grid->SetColLabelValue( 4, _("Library Format") );
-	m_project_grid->SetColLabelValue( 5, _("Options") );
-	m_project_grid->SetColLabelValue( 6, _("Description") );
-	m_project_grid->SetColLabelSize( 22 );
-	m_project_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_project_grid->EnableDragRowSize( false );
-	m_project_grid->SetRowLabelSize( 0 );
-	m_project_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_project_sizer->Add( m_project_grid, 1, wxALL|wxEXPAND, 5 );
-
-
-	m_project_panel->SetSizer( m_project_sizer );
-	m_project_panel->Layout();
-	m_project_sizer->Fit( m_project_panel );
-	m_notebook->AddPage( m_project_panel, _("Project Specific Libraries"), false );
 
 	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 

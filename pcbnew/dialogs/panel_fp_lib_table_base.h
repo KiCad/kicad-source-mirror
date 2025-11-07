@@ -10,26 +10,25 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class PANEL_NOTEBOOK_BASE;
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
+#include <wx/gdicmn.h>
+#include <wx/notebook.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/font.h>
-#include <wx/grid.h>
-#include <wx/gdicmn.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/notebook.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <widgets/split_button.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/grid.h>
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -42,10 +41,6 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 
 	protected:
 		wxNotebook* m_notebook;
-		PANEL_NOTEBOOK_BASE* m_global_panel;
-		WX_GRID* m_global_grid;
-		PANEL_NOTEBOOK_BASE* m_project_panel;
-		WX_GRID* m_project_grid;
 		STD_BITMAP_BUTTON* m_append_button;
 		SPLIT_BUTTON* m_browseButton;
 		STD_BITMAP_BUTTON* m_move_up_button;

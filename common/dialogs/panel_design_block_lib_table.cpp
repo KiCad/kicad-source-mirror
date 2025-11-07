@@ -235,84 +235,94 @@ protected:
 };
 
 
+void PANEL_DESIGN_BLOCK_LIB_TABLE::addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal )
+{
+    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_project->DesignBlockLibs();
+
+    LIB_TABLE_GRID_TRICKS::AddTable( m_notebook, aTitle );
+
+    WX_GRID* grid = get_grid( (int) m_notebook->GetPageCount() - 1 );
+
+    if( aGlobal )
+    {
+        wxString* lastGlobalLibDir = nullptr;
+
+        if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+        {
+            if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
+                cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
+
+            lastGlobalLibDir = &cfg->m_lastDesignBlockLibDir;
+        }
+
+        grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
+                                                                    lastGlobalLibDir, wxEmptyString,
+                                                                    m_supportedDesignBlockFiles ),
+                        true /* take ownership */ );
+    }
+    else
+    {
+        grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
+                                                                    &m_lastProjectLibDir, m_project->GetProjectPath(),
+                                                                    m_supportedDesignBlockFiles ),
+                        true /* take ownership */ );
+    }
+
+    // add Cut, Copy, and Paste to wxGrids
+    grid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, grid ) );
+
+    auto autoSizeCol =
+            [&]( int aCol )
+            {
+                int prevWidth = grid->GetColSize( aCol );
+
+                grid->AutoSizeColumn( aCol, false );
+                grid->SetColSize( aCol, std::max( prevWidth, grid->GetColSize( aCol ) ) );
+            };
+
+    // all but COL_OPTIONS, which is edited with Option Editor anyways.
+    autoSizeCol( COL_NICKNAME );
+    autoSizeCol( COL_TYPE );
+    autoSizeCol( COL_URI );
+    autoSizeCol( COL_DESCR );
+
+    if( grid->GetNumberRows() > 0 )
+    {
+        grid->SetGridCursor( 0, COL_NICKNAME );
+        grid->SelectRow( 0 );
+    }
+}
+
+
 PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                                                             PROJECT* aProject ) :
         PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( aParent ),
         m_project( aProject ),
         m_parent( aParent )
 {
-    wxString* lastGlobalLibDir = nullptr;
-
-    if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
-    {
-        if( cfg->m_lastDesignBlockLibDir.IsEmpty() )
-            cfg->m_lastDesignBlockLibDir = PATHS::GetDefaultUserDesignBlocksPath();
-
-        lastGlobalLibDir = &cfg->m_lastDesignBlockLibDir;
-    }
-
     m_lastProjectLibDir = m_project->GetProjectPath();
 
     populatePluginList();
 
-    wxArrayString pluginChoices;
-
     for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
-        pluginChoices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
+        m_pluginChoices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
 
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( table );
+    wxASSERT( table.has_value() );
 
-    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_project->DesignBlockLibs();
-
-    m_global_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *table.value(),
-                                                                         adapter, pluginChoices, lastGlobalLibDir,
-                                                                         wxEmptyString, m_supportedDesignBlockFiles ),
-                             true /* take ownership */ );
-
-    // add Cut, Copy, and Paste to wxGrids
-    m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
-
-    // There aren't (yet) any legacy DesignBlock libraries to migrate
-    m_migrate_libs_button->Hide();
-
-    auto setupGrid =
-            [&]( WX_GRID* aGrid )
-            {
-                // add Cut, Copy, and Paste to wxGrids
-                aGrid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( m_parent, aGrid ) );
-
-                aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-                // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
-                // a currentCell which is sometimes not highlighted.
-                if( aGrid->GetNumberRows() > 0 )
-                    aGrid->SelectRow( 0 );
-            };
-
-    setupGrid( m_global_grid );
-
-    populateEnvironReadOnlyTable();
+    addTable( table.value(), _( "Global Libraries" ), true );
 
     std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
                                                                                   LIBRARY_TABLE_SCOPE::PROJECT );
 
-    if( projectTable )
-    {
-        m_project_grid->SetTable( new DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_project_grid,
-                                                                              *projectTable.value(), adapter,
-                                                                              pluginChoices, &m_lastProjectLibDir,
-                                                                              m_project->GetProjectPath(),
-                                                                              m_supportedDesignBlockFiles ),
-                                  true /* take ownership */ );
-        setupGrid( m_project_grid );
-    }
-    else
-    {
-        m_notebook->DeletePage( 1 );
-        m_project_grid = nullptr;
-    }
+    if( projectTable.has_value() )
+        addTable( projectTable.value(), _( "Project Specific Libraries" ), false );
+
+    // There aren't (yet) any legacy DesignBlock libraries to migrate
+    m_migrate_libs_button->Hide();
+
+    populateEnvironReadOnlyTable();
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
@@ -587,10 +597,10 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
     wxString  dummy;
     wxString* lastDir;
 
-    if( cur_grid() == m_project_grid )
-        lastDir = &m_lastProjectLibDir;
-    else
+    if( m_notebook->GetSelection() == 0 )
         lastDir = cfg ? &cfg->m_lastDesignBlockLibDir : &dummy;
+    else
+        lastDir = &m_lastProjectLibDir;
 
     wxArrayString files;
     wxWindow*     topLevelParent = wxGetTopLevelParent( this );
@@ -648,8 +658,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), warning,
-                                                  wxString::Format( msg, nickname ), detailedMsg,
+                addDuplicates = OKOrCancelDialog( m_parent, warning, wxString::Format( msg, nickname ), detailedMsg,
                                                   _( "Skip" ), _( "Add Anyway" ), &applyToAll ) == wxID_CANCEL;
             }
 

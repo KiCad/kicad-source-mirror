@@ -25,6 +25,8 @@
 #include <panel_sym_lib_table_base.h>
 #include <lib_table_grid_data_model.h>
 
+
+class LIBRARY_TABLE;
 class SYMBOL_LIB_TABLE_GRID_DATA_MODEL;
 
 /**
@@ -60,7 +62,7 @@ private:
     void onPageChange( wxBookCtrlEvent& event ) override;
     void onReset( wxCommandEvent& event ) override;
 
-    void setupGrid( WX_GRID* aGrid );
+    void addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal );
 
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.

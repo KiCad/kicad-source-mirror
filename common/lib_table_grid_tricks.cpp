@@ -24,6 +24,9 @@
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
+#include <wx/sizer.h>
+#include <wx/notebook.h>
+#include <widgets/panel_notebook_base.h>
 #include <lib_id.h>
 
 
@@ -39,29 +42,6 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid,
         std::function<void( wxCommandEvent& )> aAddHandler ) :
         GRID_TRICKS( aGrid, aAddHandler )
 {
-    auto autoSizeCol =
-            [&]( WX_GRID* aLocGrid, int aCol )
-            {
-                int prevWidth = aLocGrid->GetColSize( aCol );
-
-                aLocGrid->AutoSizeColumn( aCol, false );
-                aLocGrid->SetColSize( aCol, std::max( prevWidth, aLocGrid->GetColSize( aCol ) ) );
-            };
-
-    aGrid->DisableColResize( COL_STATUS );
-    aGrid->DisableColResize( COL_VISIBLE );
-    aGrid->DisableColResize( COL_ENABLED );
-
-    aGrid->AutoSizeColumn( COL_STATUS, true );
-    aGrid->AutoSizeColumn( COL_VISIBLE, true );
-    aGrid->AutoSizeColumn( COL_ENABLED, true );
-
-    // all but COL_OPTIONS, which is edited with Option Editor anyways.
-    autoSizeCol( aGrid, COL_NICKNAME );
-    autoSizeCol( aGrid, COL_TYPE );
-    autoSizeCol( aGrid, COL_URI );
-    autoSizeCol( aGrid, COL_DESCR );
-
     m_grid->Disconnect( wxEVT_CHAR_HOOK );
     m_grid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( LIB_TABLE_GRID_TRICKS::onCharHook ), nullptr, this );
 }
@@ -567,4 +547,52 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
     }
 
     return true;
+}
+
+
+void LIB_TABLE_GRID_TRICKS::AddTable( wxNotebook* aNotebook, const wxString& aTitle )
+{
+    wxPanel*    panel = new PANEL_NOTEBOOK_BASE( aNotebook, wxID_ANY );
+   	wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    WX_GRID*    grid = new WX_GRID( panel, wxID_ANY );
+   
+   	// Grid
+   	grid->CreateGrid( 1, 7 );
+   	grid->EnableGridLines( true );
+   	grid->SetMargins( 0, 0 );
+    grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+   	// Columns
+   	grid->SetColSize( 0, 30 );
+   	grid->SetColSize( 1, 48 );
+   	grid->SetColSize( 2, 48 );
+   	grid->SetColSize( 3, 240 );
+   	grid->SetColSize( 4, 100 );
+   	grid->SetColSize( 5, 80 );
+   	grid->SetColSize( 6, 240 );
+   	grid->SetColLabelSize( 22 );
+   	grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+   
+   	// Rows
+   	grid->EnableDragRowSize( false );
+   	grid->SetRowLabelSize( 0 );
+   	grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+   
+   	// Cell Defaults
+   	grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+
+    grid->DisableColResize( COL_STATUS );
+    grid->DisableColResize( COL_VISIBLE );
+    grid->DisableColResize( COL_ENABLED );
+
+    grid->AutoSizeColumn( COL_VISIBLE, true );
+    grid->AutoSizeColumn( COL_ENABLED, true );
+
+    sizer->Add( grid, 1, wxALL|wxEXPAND, 5 );
+
+    panel->SetSizer( sizer );
+   	panel->Layout();
+   	sizer->Fit( panel );
+
+   	aNotebook->AddPage( panel, aTitle, true );
 }

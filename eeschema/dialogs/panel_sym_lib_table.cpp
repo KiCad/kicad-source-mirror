@@ -189,22 +189,65 @@ protected:
 };
 
 
-void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
+void PANEL_SYM_LIB_TABLE::addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal )
 {
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
+
+    LIB_TABLE_GRID_TRICKS::AddTable( m_notebook, aTitle );
+
+    WX_GRID* grid = get_grid( (int) m_notebook->GetPageCount() - 1 );
+
+    if( aGlobal )
+    {
+        wxString* lastGlobalLibDir = nullptr;
+
+        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+        {
+            if( cfg->m_lastSymbolLibDir.IsEmpty() )
+                cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+
+            lastGlobalLibDir = &cfg->m_lastSymbolLibDir;
+        }
+
+        grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
+                                                              lastGlobalLibDir, wxEmptyString ),
+                        true /* take ownership */ );
+    }
+    else
+    {
+        grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
+                                                              &m_lastProjectLibDir, m_project->GetProjectPath() ),
+                        true /* take ownership */ );
+    }
+
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( aGrid,
+    grid->PushEventHandler( new SYMBOL_GRID_TRICKS( grid,
             [this]( wxCommandEvent& event )
             {
                 appendRowHandler( event );
             } ) );
 
-    aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    auto autoSizeCol =
+            [&]( int aCol )
+            {
+                int prevWidth = grid->GetColSize( aCol );
 
-    // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
-    // a currentCell which is sometimes not highlighted.
-    if( aGrid->GetNumberRows() > 0 )
-        aGrid->SelectRow( 0 );
-};
+                grid->AutoSizeColumn( aCol, false );
+                grid->SetColSize( aCol, std::max( prevWidth, grid->GetColSize( aCol ) ) );
+            };
+
+    // all but COL_OPTIONS, which is edited with Option Editor anyways.
+    autoSizeCol( COL_NICKNAME );
+    autoSizeCol( COL_TYPE );
+    autoSizeCol( COL_URI );
+    autoSizeCol( COL_DESCR );
+
+    if( grid->GetNumberRows() > 0 )
+    {
+        grid->SetGridCursor( 0, COL_NICKNAME );
+        grid->SelectRow( 0 );
+    }
+}
 
 
 PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject ) :
@@ -212,21 +255,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
         m_project( aProject ),
         m_parent( aParent )
 {
-    wxString* lastGlobalLibDir = nullptr;
-
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-    {
-        if( cfg->m_lastSymbolLibDir.IsEmpty() )
-            cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
-
-        lastGlobalLibDir = &cfg->m_lastSymbolLibDir;
-    }
-
     m_lastProjectLibDir = m_project->GetProjectPath();
-
-    // TODO(JE) should use translated string here but type is stored as untranslated string
-    // Maybe type storage needs to be enum?
-    m_pluginChoices.Add( wxT( "Table" ) );
 
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
@@ -241,32 +270,15 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( table );
+    wxASSERT( table.has_value() );
 
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
-
-    // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
-    // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *table.value(), adapter,
-                                                                   m_pluginChoices, lastGlobalLibDir, wxEmptyString ) );
-
-    setupGrid( m_global_grid );
+    addTable( table.value(), _( "Global Libraries" ), true );
 
     std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
                                                                                   LIBRARY_TABLE_SCOPE::PROJECT );
 
-    if( projectTable )
-    {
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_project_grid, *projectTable.value(),
-                                                                        adapter, m_pluginChoices, &m_lastProjectLibDir,
-                                                                        m_project->GetProjectPath() ), true );
-        setupGrid( m_project_grid );
-    }
-    else
-    {
-        m_notebook->DeletePage( 1 );
-        m_project_grid = nullptr;
-    }
+    if( projectTable.has_value() )
+        addTable( projectTable.value(), _( "Project Specific Libraries" ), false );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
@@ -382,10 +394,10 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     wxString           dummy;
     wxString*          lastDir;
 
-    if( cur_grid() == m_project_grid )
-        lastDir = &m_lastProjectLibDir;
-    else
+    if( m_notebook->GetSelection() == 0 )
         lastDir = cfg ? &cfg->m_lastSymbolLibDir : &dummy;
+    else
+        lastDir = &m_lastProjectLibDir;
 
     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
@@ -487,10 +499,11 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
     if( !cur_grid()->CommitPendingChanges() )
         return;
 
+    WX_GRID* grid = get_grid( 0 );
+
     // No need to prompt to preserve an empty table
-    if( m_global_grid->GetNumberRows() > 0 &&
-        !IsOK( this, wxString::Format( _( "This action will reset your global library table on "
-                                          "disk and cannot be undone." ) ) ) )
+    if( grid->GetNumberRows() > 0 && !IsOK( this, wxString::Format( _( "This action will reset your global library "
+                                                                       "table on disk and cannot be undone." ) ) ) )
     {
         return;
     }
@@ -513,10 +526,10 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
     if( KIFACE *schface = m_parent->Kiway().KiFACE( KIWAY::FACE_SCH ) )
         schface->PreloadLibraries( &m_parent->Kiway() );
 
-    m_global_grid->Freeze();
+    grid->Freeze();
 
-    wxGridTableBase* table = m_global_grid->GetTable();
-    m_global_grid->DestroyTable( table );
+    wxGridTableBase* table = grid->GetTable();
+    grid->DestroyTable( table );
 
     std::optional<LIBRARY_TABLE*> newTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
                                                                               LIBRARY_TABLE_SCOPE::GLOBAL );
@@ -524,13 +537,19 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_parent->Kiway().Prj() );
 
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, m_global_grid, *newTable.value(), adapter,
-                                                                   m_pluginChoices, lastGlobalLibDir, wxEmptyString ) );
-    m_global_grid->PopEventHandler( true );
-    setupGrid( m_global_grid );
+    grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *newTable.value(), adapter, m_pluginChoices,
+                                                          lastGlobalLibDir, wxEmptyString ),
+                    true /* take ownership */ );
+
     m_parent->m_GlobalTableChanged = true;
 
-    m_global_grid->Thaw();
+    grid->Thaw();
+
+    if( grid->GetNumberRows() > 0 )
+    {
+        grid->SetGridCursor( 0, COL_NICKNAME );
+        grid->SelectRow( 0 );
+    }
 }
 
 
@@ -621,11 +640,6 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(), m_project );
 
-            // Do not use the project path in the global library table.  This will almost
-            // assuredly be wrong for a different project.
-            if( cur_grid() == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) )
-                relPath = newLib.GetFullPath();
-
             cur_grid()->SetCellValue( row, COL_URI, relPath );
             cur_grid()->SetCellValue( row, COL_TYPE, kicadType );
             cur_grid()->SetCellValue( row, COL_OPTIONS, wxEmptyString );
@@ -647,8 +661,8 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    std::optional<LIBRARY_TABLE*> optTable =
-        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+    std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
     wxCHECK( optTable, false );
     LIBRARY_TABLE* globalTable = *optTable;
 
@@ -658,8 +672,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         *globalTable = get_model( 0 )->Table();
     }
 
-    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                LIBRARY_TABLE_SCOPE::PROJECT );
+    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( optTable && m_notebook->GetPageCount() > 1
             && !static_cast<PANEL_NOTEBOOK_BASE*>( m_notebook->GetPage( 1 ) )->GetClosable() )
