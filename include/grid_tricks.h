@@ -25,7 +25,7 @@
 #ifndef _GRID_TRICKS_H_
 #define _GRID_TRICKS_H_
 
-
+#include <kicommon.h>
 #include <bitset>
 #include <functional>
 
@@ -57,7 +57,7 @@ enum
 /**
  * Add mouse and command handling (such as cut, copy, and paste) to a #WX_GRID instance.
  */
-class GRID_TRICKS : public wxEvtHandler
+class KICOMMON_API GRID_TRICKS : public wxEvtHandler
 {
 public:
     explicit GRID_TRICKS( WX_GRID* aGrid );

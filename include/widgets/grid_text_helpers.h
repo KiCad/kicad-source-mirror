@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <kicommon.h>
 #include <functional>
 #include <memory>
 #include <wx/generic/gridctrl.h>
@@ -34,7 +35,7 @@ class SCINTILLA_TRICKS;
  * This class works around a bug in wxGrid where the first keystroke doesn't get sent through
  * the validator if the editor wasn't already open.
  */
-class GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
+class KICOMMON_API GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
 {
 public:
     GRID_CELL_TEXT_EDITOR();
@@ -53,7 +54,7 @@ protected:
  * A general-purpose text renderer for WX_GRIDs backed by WX_GRID_TABLE_BASE tables that can handle
  * drawing expand/collapse controls.
  */
-class GRID_CELL_TEXT_RENDERER : public wxGridCellStringRenderer
+class KICOMMON_API GRID_CELL_TEXT_RENDERER : public wxGridCellStringRenderer
 {
 public:
     GRID_CELL_TEXT_RENDERER();
@@ -69,7 +70,7 @@ public:
  * A text renderer that can unescape text for display
  * This is useful where it's desired to keep the underlying storage escaped.
  */
-class GRID_CELL_ESCAPED_TEXT_RENDERER : public wxGridCellStringRenderer
+class KICOMMON_API GRID_CELL_ESCAPED_TEXT_RENDERER : public wxGridCellStringRenderer
 {
 public:
     GRID_CELL_ESCAPED_TEXT_RENDERER();
@@ -81,7 +82,7 @@ public:
 };
 
 
-class GRID_CELL_STC_EDITOR : public wxGridCellEditor
+class KICOMMON_API GRID_CELL_STC_EDITOR : public wxGridCellEditor
 {
 public:
     GRID_CELL_STC_EDITOR( bool aIgnoreCase, bool aSingleLine,

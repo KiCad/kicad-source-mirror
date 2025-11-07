@@ -24,7 +24,7 @@
 #ifndef SCINTILLA_TRICKS_H
 #define SCINTILLA_TRICKS_H
 
-
+#include <kicommon.h>
 #include <wx/stc/stc.h>
 #include <functional>
 
@@ -32,7 +32,7 @@
  * Add cut/copy/paste, dark theme, autocomplete and brace highlighting to a wxStyleTextCtrl
  * instance.
  */
-class SCINTILLA_TRICKS : public wxEvtHandler
+class KICOMMON_API SCINTILLA_TRICKS : public wxEvtHandler
 {
 public:
 

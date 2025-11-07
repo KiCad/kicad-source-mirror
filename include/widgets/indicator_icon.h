@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <kicommon.h>
 #include <wx/statbmp.h>
 #include <wx/panel.h>
 
@@ -31,7 +32,7 @@ class wxStaticBitmap;
 /**
  * Represent a row indicator icon for use in places like the layer widget.
  */
-class INDICATOR_ICON : public wxPanel
+class KICOMMON_API INDICATOR_ICON : public wxPanel
 {
 public:
     /**
@@ -93,7 +94,7 @@ private:
 /**
  * Icon provider for the "standard" row indicators, for example in layer selection lists
  */
-class ROW_ICON_PROVIDER: public INDICATOR_ICON::ICON_PROVIDER
+class KICOMMON_API ROW_ICON_PROVIDER : public INDICATOR_ICON::ICON_PROVIDER
 {
 public:
 

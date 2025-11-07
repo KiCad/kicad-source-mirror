@@ -177,14 +177,18 @@ set( KICOMMON_SRCS
     dialogs/panel_startwizard_privacy_base.cpp
     dialogs/panel_startwizard_settings_base.cpp
 
-    widgets/bitmap_button.cpp
+    grid_tricks.cpp
     widgets/aui_json_serializer.cpp
+    widgets/bitmap_button.cpp
+    widgets/grid_text_helpers.cpp
     widgets/html_window.cpp
+    widgets/indicator_icon.cpp
     widgets/kistatusbar.cpp
     widgets/number_badge.cpp
     widgets/progress_reporter_base.cpp
     widgets/std_bitmap_button.cpp
     widgets/ui_common.cpp
+    widgets/wx_grid.cpp
     widgets/wx_html_report_panel.cpp
     widgets/wx_html_report_panel_base.cpp
 
@@ -239,6 +243,7 @@ set( KICOMMON_SRCS
     project.cpp
     reporter.cpp
     richio.cpp
+    scintilla_tricks.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
     string_utils.cpp
@@ -534,8 +539,6 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
-    widgets/grid_text_helpers.cpp
-    widgets/indicator_icon.cpp
     widgets/wx_infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/layer_presentation.cpp
@@ -562,7 +565,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_combobox.cpp
     widgets/wx_dataviewctrl.cpp
     widgets/wx_ellipsized_static_text.cpp
-    widgets/wx_grid.cpp
     widgets/wx_html_report_box.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp
@@ -699,7 +701,6 @@ set( COMMON_SRCS
     footprint_info.cpp
     gbr_metadata.cpp
     gr_basic.cpp
-    grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
     kiface_base.cpp
@@ -716,7 +717,6 @@ set( COMMON_SRCS
     refdes_utils.cpp
     reference_image.cpp
     render_settings.cpp
-    scintilla_tricks.cpp
     status_popup.cpp
     stroke_params.cpp
     template_fieldnames.cpp

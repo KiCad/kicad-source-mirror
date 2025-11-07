@@ -32,6 +32,7 @@
 #include <wx/grid.h>
 #include <wx/version.h>
 
+#include <kicommon.h>
 #include <libeval/numeric_evaluator.h>
 #include <units_provider.h>
 
@@ -39,7 +40,7 @@ class wxTextEntryBase;
 class ROW_ICON_PROVIDER;
 
 
-enum GROUP_TYPE
+enum KICOMMON_API GROUP_TYPE
 {
     GROUP_SINGLETON,
     GROUP_COLLAPSED,
@@ -49,7 +50,7 @@ enum GROUP_TYPE
 };
 
 
-class WX_GRID_TABLE_BASE : public wxGridTableBase
+class KICOMMON_API WX_GRID_TABLE_BASE : public wxGridTableBase
 {
 public:
     ~WX_GRID_TABLE_BASE() override
@@ -87,7 +88,7 @@ protected:
 };
 
 
-class WX_GRID : public wxGrid
+class KICOMMON_API WX_GRID : public wxGrid
 {
 public:
     // Constructor has to be wxFormBuilder-compatible
