@@ -1702,6 +1702,7 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
                 }
             }
 
+            wxString spec_name = genString( ly_name, "SPEC_LAYER" );
             ly_name = genString( ly_name, "LAYER" );
 
             addAttribute( stackupLayer,  "layerOrGroupRef", ly_name );
@@ -1711,7 +1712,7 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
             addAttribute( stackupLayer,  "sequence", wxString::Format( "%d", i ) );
 
             wxXmlNode* specLayerNode = appendNode( stackupLayer, "SpecRef" );
-            addAttribute( specLayerNode,  "id", wxString::Format( "SPEC_%s", ly_name ) );
+            addAttribute( specLayerNode, "id", spec_name );
         }
     }
 }
