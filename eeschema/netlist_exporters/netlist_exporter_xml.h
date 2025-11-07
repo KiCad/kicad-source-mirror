@@ -144,7 +144,12 @@ protected:
     bool                m_resolveTextVars;   // Export textVar references resolved
 
 private:
+    void getSheetComponentClasses();
+
     std::set<wxString>  m_libraries;         // Set of library nicknames.
+
+    /// Map of all sheets to component classes covering the whole sheet
+    std::map<SCH_SHEET_PATH, std::unordered_set<wxString>> m_sheetComponentClasses;
 };
 
 #endif
