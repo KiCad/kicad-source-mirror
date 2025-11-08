@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 05:51+0000\n"
+"PO-Revision-Date: 2025-11-08 11:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -579,11 +579,11 @@ msgstr "无论元件在 .pos 文件中是否存在, 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Show 3D Models marked DNP"
-msgstr "显示被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
+msgstr "显示标记为 'DNP (不作装配)' 的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "无论元件是否设置了 'DNP (不作装配)' 特性, 均显示其 3D 模型"
+msgstr "无论元件是否被标记为 'DNP (不作装配)', 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
@@ -23765,11 +23765,11 @@ msgstr "<空>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2955
 msgid "Slice Wire"
-msgstr "分割连线"
+msgstr "切割连线"
 
 #: eeschema/tools/sch_edit_tool.cpp:2955
 msgid "Break Wire"
-msgstr "打断连线"
+msgstr "断开连线"
 
 #: eeschema/tools/sch_edit_tool.cpp:2976
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -34757,9 +34757,8 @@ msgid "Footprint Report"
 msgstr "封装报告"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "查找文本"
+msgstr "纯文本"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -42348,11 +42347,11 @@ msgstr "间距重写"
 
 #: pcbnew/footprint.cpp:4244 pcbnew/pad.cpp:2905
 msgid "Solderpaste Margin Override"
-msgstr "锡膏边距重写"
+msgstr "锡膏外边距重写"
 
 #: pcbnew/footprint.cpp:4249 pcbnew/pad.cpp:2910
 msgid "Solderpaste Margin Ratio Override"
-msgstr "锡膏边距比例重写"
+msgstr "锡膏外边距比例重写"
 
 #: pcbnew/footprint.cpp:4255 pcbnew/pad.cpp:2916
 msgid "Zone Connection Style"
@@ -43868,7 +43867,7 @@ msgstr "制造属性"
 #: pcbnew/pad.cpp:2900 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
 #: pcbnew/pcb_textbox.cpp:816 pcbnew/pcb_track.cpp:2155
 msgid "Soldermask Margin Override"
-msgstr "阻焊边界重写"
+msgstr "阻焊外边距重写"
 
 #: pcbnew/pad.cpp:2922 pcbnew/zone.cpp:2144
 msgid "Thermal Relief Spoke Width"
@@ -49747,7 +49746,7 @@ msgstr "已解析边缘间距"
 
 #: pcbnew/tools/pcb_control.cpp:1873
 msgid "Resolved Margin Clearance"
-msgstr "已解析边界层间距"
+msgstr "已解析 Margin 层间距"
 
 #: pcbnew/tools/pcb_control.cpp:1885
 msgid "Selected Items"
@@ -49798,10 +49797,12 @@ msgid "Remove Polygon Corner"
 msgstr "移除多边形拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3045
+#, fuzzy
 msgid "Break Zone Corner"
-msgstr "打破填充区拐角"
+msgstr "打破填充区转角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3047
+#, fuzzy
 msgid "Break Polygon Corner"
 msgstr "打破多边形拐角"
 
