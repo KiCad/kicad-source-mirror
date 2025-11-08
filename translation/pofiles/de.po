@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-08 08:29+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7913,7 +7913,7 @@ msgstr "Kann das Historieverzeichnis \"%s\" nicht erstellen."
 #: common/history_lock.cpp:156
 #, fuzzy, c-format
 msgid "History repository is locked by %s@%s"
-msgstr "Historieverzeichnis ist durch %s@%s gesperrt"
+msgstr "Historie-Repository ist durch %s@%s gesperrt"
 
 #: common/history_lock.cpp:171
 #, fuzzy, c-format
