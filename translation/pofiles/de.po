@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-07 07:59+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-11-08 08:29+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -5960,8 +5960,8 @@ msgstr ""
 "Plugin- und Content-Manager oder anderen Quellen installieren.\n"
 "\n"
 "Bibliothekstabellen sind Konfigurationsdateien, in denen die zu ladenden "
-"Bibliotheken aufgelistet sind. Globale Bibliotheken sind in jedem Projekt "
-"verfügbar, und Sie können bei Bedarf auch projektspezifische Bibliotheken "
+"Bibliotheken definiert sind. Globale Bibliotheken sind in jedem Projekt "
+"verfügbar. Sie können bei Bedarf auch projektspezifische Bibliotheken "
 "hinzufügen."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
@@ -6057,7 +6057,7 @@ msgstr "Wie möchten Sie KiCad konfigurieren?"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:25
 msgid "Import settings from a previous version at:"
-msgstr "Einstellungen importieren aus einer vorherigen Version unter:"
+msgstr "Einstellungen aus vorherigen Version importieren:"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:38
 msgid "Choose a different path"
@@ -9581,7 +9581,7 @@ msgstr "Footprintbibliothek-Tabelle"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
 msgid "Design Block library table"
-msgstr "Designblock-Bibliothekstabelle"
+msgstr "Designblockbibliothek-Tabelle"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -10681,8 +10681,8 @@ msgstr "Designblock-Bibliotheken verwalten..."
 #: common/tool/actions.cpp:1390
 msgid "Edit the global and project design block library lists"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Designblock-"
-"Bibliothekstabellen"
+"Bearbeiten der globalen und der projektspezifischen Designblockbibliothek-"
+"Tabellen"
 
 #: common/tool/actions.cpp:1396
 msgid "Getting Started with KiCad"
@@ -26417,9 +26417,8 @@ msgid "Create a new top-level sheet"
 msgstr "Ein neues Top-Level Schaltplanblatt erstellen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
-#, fuzzy
 msgid "Enter name for new top-level sheet:"
-msgstr "Geben Sie einen Namen für das neue Top-Level Schaltplanblatt ein:"
+msgstr "Name des neuen Top-Level Schaltplanblatts:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
