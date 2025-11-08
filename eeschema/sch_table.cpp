@@ -79,8 +79,7 @@ SCH_TABLE::~SCH_TABLE()
 
 void SCH_TABLE::swapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( aItem != nullptr && aItem->Type() == SCH_TABLE_T,
-                 wxT( "Cannot swap data with invalid table." ) );
+    wxCHECK_RET( aItem != nullptr && aItem->Type() == SCH_TABLE_T, wxT( "Cannot swap data with invalid table." ) );
 
     SCH_TABLE* table = static_cast<SCH_TABLE*>( aItem );
 
@@ -152,11 +151,11 @@ void SCH_TABLE::Normalize()
     for( int row = 0; row < GetRowCount(); ++row )
     {
         int x = GetPosition().x;
-        int rowHeight = m_rowHeights[ row ];
+        int rowHeight = m_rowHeights[row];
 
         for( int col = 0; col < GetColCount(); ++col )
         {
-            int colWidth = m_colWidths[ col ];
+            int colWidth = m_colWidths[col];
 
             SCH_TABLECELL* cell = GetCell( row, col );
             VECTOR2I       pos( x, y );
@@ -256,14 +255,13 @@ const BOX2I SCH_TABLE::GetBoundingBox() const
     // Note: a table with no cells is not allowed
     BOX2I bbox = m_cells[0]->GetBoundingBox();
 
-    bbox.Merge( m_cells[ m_cells.size() - 1 ]->GetBoundingBox() );
+    bbox.Merge( m_cells[m_cells.size() - 1]->GetBoundingBox() );
 
     return bbox;
 }
 
 
-INSPECT_RESULT SCH_TABLE::Visit( INSPECTOR aInspector, void* aTestData,
-                                 const std::vector<KICAD_T>& aScanTypes )
+INSPECT_RESULT SCH_TABLE::Visit( INSPECTOR aInspector, void* aTestData, const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {
@@ -295,7 +293,7 @@ wxString SCH_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
 BITMAPS SCH_TABLE::GetMenuImage() const
 {
-    return BITMAPS::spreadsheet;    // JEY TODO
+    return BITMAPS::spreadsheet; // JEY TODO
 }
 
 
@@ -344,17 +342,19 @@ void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
     std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
     std::vector<VECTOR2I> bottomRight =
             GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
-    STROKE_PARAMS         stroke;
+    STROKE_PARAMS stroke;
 
     for( int col = 0; col < GetColCount() - 1; ++col )
     {
-        if( StrokeColumns() )
-            stroke = GetSeparatorsStroke();
-        else
-            continue;
-
         for( int row = 0; row < GetRowCount(); ++row )
         {
+            if( row == 0 && StrokeHeaderSeparator() )
+                stroke = GetBorderStroke();
+            else if( StrokeColumns() )
+                stroke = GetSeparatorsStroke();
+            else
+                continue;
+
             SCH_TABLECELL* cell = GetCell( row, col );
 
             if( cell->GetColSpan() == 0 )
@@ -406,8 +406,8 @@ void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
 }
 
 
-void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
-                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
+void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts, int aUnit, int aBodyStyle,
+                      const VECTOR2I& aOffset, bool aDimmed )
 {
     for( SCH_TABLECELL* cell : m_cells )
         cell->Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
@@ -514,55 +514,56 @@ static struct SCH_TABLE_DESC
         propMgr.AddTypeCast( new TYPE_CAST<SCH_TABLE, SCH_ITEM> );
         propMgr.InheritsAfter( TYPE_HASH( SCH_TABLE ), TYPE_HASH( SCH_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start X" ),
-                    &SCH_TABLE::SetPositionX, &SCH_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start Y" ),
-                    &SCH_TABLE::SetPositionY, &SCH_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start X" ), &SCH_TABLE::SetPositionX,
+                                                           &SCH_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
+                                                           ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start Y" ), &SCH_TABLE::SetPositionY,
+                                                           &SCH_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
+                                                           ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         const wxString tableProps = _( "Table Properties" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "External Border" ),
-                    &SCH_TABLE::SetStrokeExternal, &SCH_TABLE::StrokeExternal ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "External Border" ), &SCH_TABLE::SetStrokeExternal,
+                                                            &SCH_TABLE::StrokeExternal ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Header Border" ),
-                    &SCH_TABLE::SetStrokeHeaderSeparator, &SCH_TABLE::StrokeHeaderSeparator ),
-                    tableProps );
+                                                            &SCH_TABLE::SetStrokeHeaderSeparator,
+                                                            &SCH_TABLE::StrokeHeaderSeparator ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ),
-                    &SCH_TABLE::SetBorderWidth, &SCH_TABLE::GetBorderWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ), &SCH_TABLE::SetBorderWidth,
+                                                           &SCH_TABLE::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
-                    &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>(
+                                     _HKI( "Border Style" ), &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Border Color" ),
-                    &SCH_TABLE::SetBorderColor, &SCH_TABLE::GetBorderColor ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Border Color" ), &SCH_TABLE::SetBorderColor,
+                                                               &SCH_TABLE::GetBorderColor ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Row Separators" ),
-                    &SCH_TABLE::SetStrokeRows, &SCH_TABLE::StrokeRows ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Row Separators" ), &SCH_TABLE::SetStrokeRows,
+                                                            &SCH_TABLE::StrokeRows ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Cell Separators" ),
-                    &SCH_TABLE::SetStrokeColumns, &SCH_TABLE::StrokeColumns ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Cell Separators" ), &SCH_TABLE::SetStrokeColumns,
+                                                            &SCH_TABLE::StrokeColumns ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Separators Width" ),
-                    &SCH_TABLE::SetSeparatorsWidth, &SCH_TABLE::GetSeparatorsWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Separators Width" ), &SCH_TABLE::SetSeparatorsWidth,
+                                                           &SCH_TABLE::GetSeparatorsWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
-                    &SCH_TABLE::SetSeparatorsStyle, &SCH_TABLE::GetSeparatorsStyle ),
-                    tableProps );
+                                                                       &SCH_TABLE::SetSeparatorsStyle,
+                                                                       &SCH_TABLE::GetSeparatorsStyle ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Separators Color" ),
-                    &SCH_TABLE::SetSeparatorsColor, &SCH_TABLE::GetSeparatorsColor ),
-                    tableProps );
+                                                               &SCH_TABLE::SetSeparatorsColor,
+                                                               &SCH_TABLE::GetSeparatorsColor ),
+                             tableProps );
     }
 } _SCH_TABLE_DESC;

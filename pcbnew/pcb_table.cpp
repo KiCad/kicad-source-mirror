@@ -30,7 +30,7 @@
 #include <geometry/shape_compound.h>
 #include <geometry/geometry_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <pcb_painter.h>    // for PCB_RENDER_SETTINGS
+#include <pcb_painter.h> // for PCB_RENDER_SETTINGS
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -75,8 +75,7 @@ PCB_TABLE::~PCB_TABLE()
 
 void PCB_TABLE::swapData( BOARD_ITEM* aImage )
 {
-    wxCHECK_RET( aImage != nullptr && aImage->Type() == PCB_TABLE_T,
-                 wxT( "Cannot swap data with invalid table." ) );
+    wxCHECK_RET( aImage != nullptr && aImage->Type() == PCB_TABLE_T, wxT( "Cannot swap data with invalid table." ) );
 
     PCB_TABLE* table = static_cast<PCB_TABLE*>( aImage );
 
@@ -137,11 +136,11 @@ void PCB_TABLE::Normalize()
     for( int row = 0; row < GetRowCount(); ++row )
     {
         int x = GetPosition().x;
-        int rowHeight = m_rowHeights[ row ];
+        int rowHeight = m_rowHeights[row];
 
         for( int col = 0; col < GetColCount(); ++col )
         {
-            int colWidth = m_colWidths[ col ];
+            int colWidth = m_colWidths[col];
 
             PCB_TABLECELL* cell = GetCell( row, col );
             VECTOR2I       pos( x, y );
@@ -271,7 +270,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     for( int row = 0; row < GetRowCount(); ++row )
     {
         for( int col = 0; col < GetColCount(); ++col )
-            m_cells[ rowOffset + col ] = oldCells[ rowOffset + GetColCount() - 1 - col ];
+            m_cells[rowOffset + col] = oldCells[rowOffset + GetColCount() - 1 - col];
 
         rowOffset += GetColCount();
     }
@@ -317,7 +316,7 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
     // Note: a table with no cells is not allowed
     BOX2I bbox = m_cells[0]->GetBoundingBox();
 
-    bbox.Merge( m_cells[ m_cells.size() - 1 ]->GetBoundingBox() );
+    bbox.Merge( m_cells[m_cells.size() - 1]->GetBoundingBox() );
 
     return bbox;
 }
@@ -332,17 +331,19 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
     std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
     std::vector<VECTOR2I> bottomRight =
             GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
-    STROKE_PARAMS         stroke;
+    STROKE_PARAMS stroke;
 
     for( int col = 0; col < GetColCount() - 1; ++col )
     {
-        if( StrokeColumns() )
-            stroke = GetSeparatorsStroke();
-        else
-            continue;
-
         for( int row = 0; row < GetRowCount(); ++row )
         {
+            if( row == 0 && StrokeHeaderSeparator() )
+                stroke = GetBorderStroke();
+            else if( StrokeColumns() )
+                stroke = GetSeparatorsStroke();
+            else
+                continue;
+
             PCB_TABLECELL* cell = GetCell( row, col );
 
             if( cell->GetColSpan() == 0 )
@@ -398,9 +399,9 @@ std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 {
     EDA_ANGLE             angle = GetCell( 0, 0 )->GetDrawRotation();
     std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( angle );
-    std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount()-1, 0 )->GetCornersInSequence( angle );
-    std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount()-1 )->GetCornersInSequence( angle );
-    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount()-1, GetColCount()-1 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( angle );
+    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( angle );
 
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
@@ -423,9 +424,8 @@ std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 }
 
 
-void PCB_TABLE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                         int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
-                                         bool aIgnoreLineWidth ) const
+void PCB_TABLE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance, int aMaxError,
+                                         ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
     int gap = aClearance;
 
@@ -445,8 +445,8 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
 {
     // Convert graphic items (segments and texts) to a set of polygonal shapes
     DrawBorders(
-            [&aBuffer, aMaxError, aErrorLoc, aRenderSettings]
-                        ( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
+            [&aBuffer, aMaxError, aErrorLoc, aRenderSettings]( const VECTOR2I& ptA, const VECTOR2I& ptB,
+                                                               const STROKE_PARAMS& stroke )
             {
                 int        lineWidth = stroke.GetWidth();
                 LINE_STYLE lineStyle = stroke.GetLineStyle();
@@ -455,7 +455,7 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
                     TransformOvalToPolygon( aBuffer, ptA, ptB, lineWidth, aMaxError, aErrorLoc );
                 else
                 {
-                    SHAPE_SEGMENT seg( ptA, ptB );
+                    SHAPE_SEGMENT              seg( ptA, ptB );
                     KIGFX::PCB_RENDER_SETTINGS defaultRenderSettings;
 
                     KIGFX::RENDER_SETTINGS* currSettings = aRenderSettings;
@@ -463,13 +463,14 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
                     if( currSettings == nullptr )
                         currSettings = &defaultRenderSettings;
 
-                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, currSettings,
+                    STROKE_PARAMS::Stroke(
+                            &seg, lineStyle, lineWidth, currSettings,
                             [&]( VECTOR2I a, VECTOR2I b )
                             {
                                 if( a == b )
-                                    TransformCircleToPolygon( aBuffer, a, lineWidth/2, aMaxError, aErrorLoc );
+                                    TransformCircleToPolygon( aBuffer, a, lineWidth / 2, aMaxError, aErrorLoc );
                                 else
-                                    TransformOvalToPolygon( aBuffer, a+1, b, lineWidth, aMaxError, aErrorLoc );
+                                    TransformOvalToPolygon( aBuffer, a + 1, b, lineWidth, aMaxError, aErrorLoc );
                             } );
                 }
             } );
@@ -481,8 +482,7 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
 }
 
 
-INSPECT_RESULT PCB_TABLE::Visit( INSPECTOR aInspector, void* aTestData,
-                                 const std::vector<KICAD_T>& aScanTypes )
+INSPECT_RESULT PCB_TABLE::Visit( INSPECTOR aInspector, void* aTestData, const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {
@@ -696,11 +696,11 @@ static struct PCB_TABLE_DESC
 
         if( lineStyleEnum.Choices().GetCount() == 0 )
         {
-            lineStyleEnum.Map( LINE_STYLE::SOLID,      _HKI( "Solid" ) )
-                         .Map( LINE_STYLE::DASH,       _HKI( "Dashed" ) )
-                         .Map( LINE_STYLE::DOT,        _HKI( "Dotted" ) )
-                         .Map( LINE_STYLE::DASHDOT,    _HKI( "Dash-Dot" ) )
-                         .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            lineStyleEnum.Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                    .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                    .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                    .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                    .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -711,55 +711,56 @@ static struct PCB_TABLE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLE ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start X" ),
-                    &PCB_TABLE::SetPositionX, &PCB_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start Y" ),
-                    &PCB_TABLE::SetPositionY, &PCB_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start X" ), &PCB_TABLE::SetPositionX,
+                                                           &PCB_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
+                                                           ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start Y" ), &PCB_TABLE::SetPositionY,
+                                                           &PCB_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
+                                                           ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         const wxString tableProps = _( "Table Properties" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "External Border" ),
-                    &PCB_TABLE::SetStrokeExternal, &PCB_TABLE::StrokeExternal ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "External Border" ), &PCB_TABLE::SetStrokeExternal,
+                                                            &PCB_TABLE::StrokeExternal ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Header Border" ),
-                    &PCB_TABLE::SetStrokeHeaderSeparator, &PCB_TABLE::StrokeHeaderSeparator ),
-                    tableProps );
+                                                            &PCB_TABLE::SetStrokeHeaderSeparator,
+                                                            &PCB_TABLE::StrokeHeaderSeparator ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Border Width" ),
-                    &PCB_TABLE::SetBorderWidth, &PCB_TABLE::GetBorderWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Border Width" ), &PCB_TABLE::SetBorderWidth,
+                                                           &PCB_TABLE::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
-                    &PCB_TABLE::SetBorderStyle, &PCB_TABLE::GetBorderStyle ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>(
+                                     _HKI( "Border Style" ), &PCB_TABLE::SetBorderStyle, &PCB_TABLE::GetBorderStyle ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Border Color" ),
-                    &PCB_TABLE::SetBorderColor, &PCB_TABLE::GetBorderColor ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Border Color" ), &PCB_TABLE::SetBorderColor,
+                                                               &PCB_TABLE::GetBorderColor ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Row Separators" ),
-                    &PCB_TABLE::SetStrokeRows, &PCB_TABLE::StrokeRows ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Row Separators" ), &PCB_TABLE::SetStrokeRows,
+                                                            &PCB_TABLE::StrokeRows ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Cell Separators" ),
-                    &PCB_TABLE::SetStrokeColumns, &PCB_TABLE::StrokeColumns ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Cell Separators" ), &PCB_TABLE::SetStrokeColumns,
+                                                            &PCB_TABLE::StrokeColumns ),
+                             tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Separators Width" ),
-                    &PCB_TABLE::SetSeparatorsWidth, &PCB_TABLE::GetSeparatorsWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Separators Width" ), &PCB_TABLE::SetSeparatorsWidth,
+                                                           &PCB_TABLE::GetSeparatorsWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
-                    &PCB_TABLE::SetSeparatorsStyle, &PCB_TABLE::GetSeparatorsStyle ),
-                    tableProps );
+                                                                       &PCB_TABLE::SetSeparatorsStyle,
+                                                                       &PCB_TABLE::GetSeparatorsStyle ),
+                             tableProps );
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Separators Color" ),
-                    &PCB_TABLE::SetSeparatorsColor, &PCB_TABLE::GetSeparatorsColor ),
-                    tableProps );
+                                                               &PCB_TABLE::SetSeparatorsColor,
+                                                               &PCB_TABLE::GetSeparatorsColor ),
+                             tableProps );
     }
 } _PCB_TABLE_DESC;
