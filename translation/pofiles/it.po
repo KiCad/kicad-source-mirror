@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-08 08:30+0000\n"
+"PO-Revision-Date: 2025-11-09 09:19+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -1980,9 +1980,8 @@ msgid "Replace Loaded File?"
 msgstr "Rimpiazzare file caricato?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "Il file d'uscita '%s' esiste già. Sovrascriverlo?"
+msgstr "C'è già un file caricato. Rimpiazzarlo?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2181,9 +2180,8 @@ msgid "Background Jobs"
 msgstr "Lavori in background"
 
 #: common/common.cpp:147 pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "Impronte sbloccate"
+msgstr "impronta non annotata"
 
 #: common/common.cpp:317
 #, c-format
@@ -2434,9 +2432,8 @@ msgstr "Tipo libreria sconosciuto %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "Strati interni"
+msgstr "Errore interno"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -2978,9 +2975,8 @@ msgid "Design Block Properties"
 msgstr "Proprietà blocco progetto"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Generazione sezione contenuti"
+msgstr "Genera connessione database"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2992,9 +2988,8 @@ msgid "Custom"
 msgstr "Personalizzato"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Nome sorgente"
+msgstr "Nome sorgente dati"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -3006,9 +3001,8 @@ msgid "Password"
 msgstr "Password"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Tempo"
+msgstr "Scadenza"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 msgid "Connection String"
@@ -3021,14 +3015,12 @@ msgid "Test Connection"
 msgstr "Prova connessione"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Tabella"
+msgstr "Tabelle"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Nessuna connessione al database"
+msgstr "Impossibile connettersi al database"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Database Error"
@@ -3547,9 +3539,8 @@ msgid "Close"
 msgstr "Chiudi"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Attenzione: la scala non è un numero."
+msgstr "Attenzione: la scala personalizzata non è un numero."
 
 #: common/dialogs/dialog_print_generic.cpp:152
 #, c-format
@@ -4219,7 +4210,6 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Grafica accelerata in hardware (raccomandato)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
 msgstr "Grafica di ripiego"
 
@@ -4232,9 +4222,8 @@ msgstr ""
 "accelerazione hardware di KiCad)"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Anti-aliasing:"
+msgstr "Antialiasing:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
@@ -4320,9 +4309,8 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "Se abilitata, usa un colore diverso per ogni altra riga della tabella"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Disabilita macro aperture"
+msgstr "Disabilita puntatori personalizzati"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -4507,7 +4495,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4525,7 +4512,7 @@ msgid ""
 msgstr ""
 "KiCad può segnalare in modo anonimo arresti o eventi anomali agli "
 "sviluppatori, per aiutare a identificare difetti critici che possono "
-"verificarsi a tutta la base utenti, in modo più efficace e aiutare ad "
+"verificarsi a tutta la base utenti, in modo più efficace e aiutare a "
 "individuare profili di funzionalità per guidare i miglioramenti.\n"
 "\n"
 "Per collegare i rapporti automatici dalla stessa installazione di KiCad, "
@@ -4533,7 +4520,7 @@ msgstr ""
 "solo ai fini della segnalazione di arresti anomali. Nessuna informazione di "
 "identificazione personale (PII) incluso l'indirizzo IP viene memorizzata o "
 "collegata a questo identificatore. È possibile reimpostare questo ID in "
-"qualsiasi momento con il pulsante fornito.\n"
+"qualsiasi momento dalle preferenze nella parte dedicata alla raccolta dati.\n"
 "\n"
 "Se si sceglie di partecipare volontariamente, KiCad gestirà automaticamente "
 "l'invio di detti rapporti quando si verificano arresti o eventi anomali. I "
@@ -5078,9 +5065,8 @@ msgstr "Croce a pieno schermo"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "Croce a pieno schermo"
+msgstr "Crocino a 45 gradi"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
@@ -5312,23 +5298,20 @@ msgid "days"
 msgstr "giorni"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "Cancella file recenti"
+msgstr "Cancella la cronologia \"Apri recente\""
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
 msgstr "Reimposta le finestre \"Non mostrare più\""
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "Reimposta %s ai predefiniti"
+msgstr "Reimposta tutte le finestre ai predefiniti"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "Reimposta %s ai predefiniti"
+msgstr "Reimposta tutte le impostazioni ai predefiniti"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5888,9 +5871,8 @@ msgid "DP Gap"
 msgstr "Spazio CD"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Modalità regolazione"
+msgstr "Profilo regolazione"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5994,28 +5976,24 @@ msgstr ""
 "Ricaricarle?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "Pan e zoom"
+msgstr "Pan e rotazione"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Rotazione:"
+msgstr "Velocità rotazione:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
 msgid "Reverse rotation direction"
 msgstr "Inverti il senso di rotazione"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "Mantieni i capi o la direzione del punto di partenza"
+msgstr "Cambio direzione di rotazione"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "Velocità autopan:"
+msgstr "Velocità pan:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
@@ -6026,9 +6004,8 @@ msgid "Reverse horizontal pan direction"
 msgstr "Inverti direzione del pan orizzontale"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "Rimuovi dalla selezione"
+msgstr "Inverti direzione zoom"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
 msgid ""
@@ -6057,9 +6034,8 @@ msgid "<b>The following global library tables need to be created:</b>"
 msgstr "<b>È necessario creare le seguenti tabelle di librerie globali:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Vuoi configurare KiCad?"
+msgstr "Come si vuole che KiCad li crei?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
@@ -6080,9 +6056,8 @@ msgstr ""
 "create con le librerie KiCad predefinite."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Librerie di impronte"
+msgstr "Parti senza librerie"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -6098,9 +6073,8 @@ msgstr ""
 "disponibili."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Aggiorna"
+msgstr "Aggiornamenti"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
@@ -6212,9 +6186,8 @@ msgid "Top main"
 msgstr "Cima principale"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxiliary"
-msgstr "Cima ausiliario"
+msgstr "Ausiliario superiore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:143
 #: common/dialogs/panel_toolbar_customization_base.cpp:71
@@ -6387,7 +6360,6 @@ msgid "Text '%s'"
 msgstr "Testo '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
 msgstr "Forma importata"
 
@@ -6441,9 +6413,8 @@ msgid "need a number for '%s'"
 msgstr "serve un numero per '%s'"
 
 #: common/dsnlexer.cpp:733
-#, fuzzy
 msgid "Unterminated delimited string"
-msgstr "Stringa non ultimata"
+msgstr "Stringa delimitata non terminata"
 
 #: common/dsnlexer.cpp:755
 msgid "String delimiter must be a single character of ', \", or $"
@@ -6468,14 +6439,14 @@ msgid "Redo"
 msgstr "Rifà"
 
 #: common/eda_base_frame.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "Esegui %s > %s"
+msgstr "Esegui: %s > %s"
 
 #: common/eda_base_frame.cpp:705
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Regola: %s"
+msgstr "Esegui: %s"
 
 #: common/eda_base_frame.cpp:1238
 #, c-format
@@ -6619,9 +6590,8 @@ msgid "Packages and Updates"
 msgstr "Aggiornamento pacchetti"
 
 #: common/eda_base_frame.cpp:1497
-#, fuzzy
 msgid "Maintenance"
-msgstr "Manutentore"
+msgstr "Manutenzione"
 
 #: common/eda_base_frame.cpp:1581 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:486
@@ -6832,9 +6802,8 @@ msgid "Target"
 msgstr "Obiettivo"
 
 #: common/eda_item.cpp:437 pcbnew/pcb_point.cpp:140
-#, fuzzy
 msgid "Point"
-msgstr "Punti"
+msgstr "Punto"
 
 #: common/eda_item.cpp:438 pcbnew/tools/board_inspection_tool.cpp:791
 msgid "Zone"
@@ -7135,9 +7104,8 @@ msgstr "Y fine"
 #: common/eda_shape.cpp:2765 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
 #: pcbnew/pcb_textbox.cpp:852
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Raggio angolo %"
+msgstr "Raggio angolo"
 
 #: common/eda_shape.cpp:2796 common/stroke_params.cpp:297
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1303
@@ -7811,14 +7779,13 @@ msgid "No repository available to set up remote"
 msgstr "Nessun repository disponibile per configurare il remote"
 
 #: common/git/libgit_backend.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Fallita creazione commit: %s"
+msgstr "Fallita creazione remoto: %s"
 
 #: common/git/libgit_backend.cpp:675
-#, fuzzy
 msgid "No repository available"
-msgstr "Non connesso"
+msgstr "Nessun repository disponibile"
 
 #: common/git/libgit_backend.cpp:683
 #, c-format
@@ -7911,23 +7878,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "Impossibile trovare il commit '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "Lavoro fallito"
+msgstr "Fusione fallita"
 
 #: common/git/libgit_backend.cpp:1065
 msgid "Rebase failed to start"
 msgstr "Rebase non partito"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "Connessione database fallita: %s"
+msgstr "Rebase commit fallito"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Ultima esecuzione non riuscita"
+msgstr "Chiusura rebase fallita"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -8006,14 +7970,14 @@ msgid "History repository is locked by %s@%s"
 msgstr "Il repository della cronologia è bloccato da %s@%s"
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "La cartella sorgente non esiste: %s"
+msgstr "La cartella cronologia non esiste: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Fallito recupero indice repository: %s"
+msgstr "Fallita apertura repository git: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
@@ -8465,19 +8429,16 @@ msgid "PCB: Export Postscript"
 msgstr "C.S.: esporta Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Mostra statistiche scheda"
+msgstr "Esporta statistiche scheda"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Impostazioni lavoro Esporta netlist"
+msgstr "Impostazioni del lavoro di esportazione statistiche scheda"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Statistiche scheda"
+msgstr "C.S.: Statistiche esportazione"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8845,9 +8806,8 @@ msgid "Net color highlight"
 msgstr "Colore evidenziazione collegamento"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Evidenzia collisioni"
+msgstr "Collisioni trascinamento connessione"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8901,9 +8861,8 @@ msgstr "Via passanti"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "Via cieci/sepolti"
+msgstr "Via cieci"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
@@ -8951,9 +8910,8 @@ msgid "DRC errors"
 msgstr "Errori DRC"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "Forma 1 CRP"
+msgstr "Forme DRC"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -9049,9 +9007,8 @@ msgid "Already Placed"
 msgstr "Già piazzato"
 
 #: common/libeval_compiler/libeval_compiler.cpp:599
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Variabile testo non risolta"
+msgstr "Riferimento variabile testo non risolto"
 
 #: common/libeval_compiler/libeval_compiler.cpp:601
 #, c-format
@@ -9130,9 +9087,8 @@ msgid "A reference to this library table already exists"
 msgstr "Un riferimento a questa tabella librerie esiste già"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "Predefinita KiCad"
+msgstr "Librerie predefinite KiCad"
 
 #: common/libraries/library_manager.cpp:1038
 #, c-format
@@ -9162,12 +9118,11 @@ msgid "An unexpected error occurred while reading library table"
 msgstr "Errore inaspettato leggendo la tabella librerie"
 
 #: common/local_history.cpp:1369
-#, fuzzy
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"I file seguenti verranno sovrascritti:\n"
+"I file seguenti verranno cancellati quando si recupererà questo commit:\n"
 "\n"
 
 #: common/local_history.cpp:1380
@@ -9188,9 +9143,8 @@ msgid "Proceed"
 msgstr "Procedere"
 
 #: common/local_history.cpp:1386
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Tutti i file"
+msgstr "Mantieni tutti i file"
 
 #: common/local_history.cpp:1386 eeschema/files-io.cpp:533
 msgid "Abort"
@@ -9208,14 +9162,12 @@ msgstr ""
 "commit ripristinato."
 
 #: common/local_history.cpp:1806
-#, fuzzy
 msgid "Select snapshot"
-msgstr "Seleziona percorso"
+msgstr "Seleziona istantanea"
 
 #: common/local_history.cpp:1806 kicad/kicad_manager_frame.cpp:856
-#, fuzzy
 msgid "Restore"
-msgstr "Ripristina predefiniti"
+msgstr "Recupera"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1149 pcbnew/zone.cpp:914
@@ -9339,78 +9291,64 @@ msgid "There are no notifications available"
 msgstr "Non ci sono notifiche disponibili"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5x11in"
+msgstr "A 8.5 x 11in"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17in"
+msgstr "B 11 x 17in"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22in"
+msgstr "C 17 x 22in"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34in"
+msgstr "D 22 x 34in"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44in"
+msgstr "E 34 x 44in"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "Personalizzato"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5x11in"
+msgstr "USLetter 8.5 x 11in"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5x14in"
+msgstr "USLegal 8.5 x 14in"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11 x 17in"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
@@ -9437,9 +9375,8 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Il file KiCad di supporto per questa lingua non è installato."
 
 #: common/pgm_base.cpp:881 common/pgm_base.cpp:893
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Carica librerie blocchi progetto"
+msgstr "Caricamento librerie blocchi progetto"
 
 #: common/plotters/PDF_plotter.cpp:794 common/plotters/PDF_plotter.cpp:799
 #, c-format
@@ -9679,9 +9616,8 @@ msgid "For help, please visit "
 msgstr "Per assistenza, visitare "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Impostazione scheda"
+msgstr "Impostazioni KiCad"
 
 #: common/startwizard/startwizard.cpp:201
 msgid ""
@@ -9700,9 +9636,8 @@ msgid "Footprint library table"
 msgstr "Tabella librerie di impronte"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:108
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Librerie blocchi progetto"
+msgstr "Tabella librerie blocchi progetto"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9763,19 +9698,16 @@ msgid "Displays the current unit"
 msgstr "Mostra l'unità corrente"
 
 #: common/tool/action_toolbar.cpp:1065
-#, fuzzy
 msgid "Symbol body style selector"
-msgstr "Selezione unità simbolo"
+msgstr "Selezione stile corpo simbolo"
 
 #: common/tool/action_toolbar.cpp:1066
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "Mostra l'unità corrente"
+msgstr "Mostra l'unità lo stile corpo corrente"
 
 #: common/tool/action_toolbar.cpp:1069
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "Permetti la selezione di elementi bloccati"
+msgstr "Permetti lo spostamento di elementi bloccati con il mouse"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
