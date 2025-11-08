@@ -34,7 +34,6 @@
 #include <widgets/wx_grid.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
-#include <widgets/panel_notebook_base.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <lib_table_grid_data_model.h>
@@ -54,6 +53,7 @@
 #include <wx/msgdlg.h>
 #include <project_sch.h>
 #include <libraries/symbol_library_adapter.h>
+#include <lib_table_notebook_panel.h>
 
 
 /**
@@ -144,8 +144,10 @@ protected:
 class SYMBOL_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
-    SYMBOL_GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
-        LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler )
+    SYMBOL_GRID_TRICKS( PANEL_SYM_LIB_TABLE* aPanel, WX_GRID* aGrid,
+                        std::function<void( wxCommandEvent& )> aAddHandler ) :
+            LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
+            m_panel( aPanel )
     {
         SetTooltipEnable( COL_STATUS );
     }
@@ -177,6 +179,14 @@ protected:
         }
     }
 
+    void openTable( const LIBRARY_TABLE_ROW& aRow ) override
+    {
+        wxString uri = LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() );
+        auto     nestedTable = std::make_unique<LIBRARY_TABLE>( uri, LIBRARY_TABLE_SCOPE::GLOBAL );
+
+        m_panel->AddTable( nestedTable.get(), aRow.Nickname(), true );
+    }
+
     wxString getTablePreamble() override
     {
         return wxT( "(sym_lib_table" );
@@ -186,18 +196,28 @@ protected:
     {
         return true;
     }
+
+protected:
+    PANEL_SYM_LIB_TABLE* m_panel;
 };
 
 
-void PANEL_SYM_LIB_TABLE::addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal )
+void PANEL_SYM_LIB_TABLE::AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable )
 {
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( m_project );
+    wxString                projectPath = m_project->GetProjectPath();
 
-    LIB_TABLE_GRID_TRICKS::AddTable( m_notebook, aTitle );
+    LIB_TABLE_NOTEBOOK_PANEL::AddTable( m_notebook, aTitle, aClosable );
 
     WX_GRID* grid = get_grid( (int) m_notebook->GetPageCount() - 1 );
 
-    if( aGlobal )
+    if( table->Path().StartsWith( projectPath ) )
+    {
+        grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
+                                                              &m_lastProjectLibDir, projectPath ),
+                        true /* take ownership */ );
+    }
+    else
     {
         wxString* lastGlobalLibDir = nullptr;
 
@@ -213,15 +233,9 @@ void PANEL_SYM_LIB_TABLE::addTable( LIBRARY_TABLE* table, const wxString& aTitle
                                                               lastGlobalLibDir, wxEmptyString ),
                         true /* take ownership */ );
     }
-    else
-    {
-        grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *table, adapter, m_pluginChoices,
-                                                              &m_lastProjectLibDir, m_project->GetProjectPath() ),
-                        true /* take ownership */ );
-    }
 
     // add Cut, Copy, and Paste to wxGrids
-    grid->PushEventHandler( new SYMBOL_GRID_TRICKS( grid,
+    grid->PushEventHandler( new SYMBOL_GRID_TRICKS( this, grid,
             [this]( wxCommandEvent& event )
             {
                 appendRowHandler( event );
@@ -272,13 +286,13 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table.has_value() );
 
-    addTable( table.value(), _( "Global Libraries" ), true );
+    AddTable( table.value(), _( "Global Libraries" ), false /* closable */ );
 
     std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
                                                                                   LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable.has_value() )
-        addTable( projectTable.value(), _( "Project Specific Libraries" ), false );
+        AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
@@ -294,18 +308,16 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_move_up_button->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_move_down_button->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_browse_button->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
+    m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &PANEL_SYM_LIB_TABLE::onNotebookPageCloseRequest, this );
 }
 
 
 PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 {
     // Delete the GRID_TRICKS.
-    for( int page = 0 ; page < (int) m_notebook->GetPageCount(); ++page )
-    {
-        WX_GRID* grid = get_grid( page );
-        grid->PopEventHandler( true );
-    }
-
+    // (Notebook page GRID_TRICKS are deleted by LIB_TABLE_NOTEBOOK_PANEL.)
+    m_path_subs_grid->PopEventHandler( true );
     m_path_subs_grid->PopEventHandler( true );
 }
 
@@ -318,7 +330,7 @@ SYMBOL_LIB_TABLE_GRID_DATA_MODEL* PANEL_SYM_LIB_TABLE::get_model( int aPage ) co
 
 WX_GRID* PANEL_SYM_LIB_TABLE::get_grid( int aPage ) const
 {
-    return static_cast<PANEL_NOTEBOOK_BASE*>( m_notebook->GetPage( aPage ) )->GetGrid();
+    return static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( aPage ) )->GetGrid();
 }
 
 
@@ -553,9 +565,29 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 }
 
 
-void PANEL_SYM_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
+void PANEL_SYM_LIB_TABLE::onPageChange( wxAuiNotebookEvent& event )
 {
     m_resetGlobal->Enable( m_notebook->GetSelection() == 0 );
+}
+
+
+void PANEL_SYM_LIB_TABLE::onNotebookPageCloseRequest( wxAuiNotebookEvent& aEvent )
+{
+    wxAuiNotebook* notebook = (wxAuiNotebook*) aEvent.GetEventObject();
+    wxWindow*      page = notebook->GetPage( aEvent.GetSelection() );
+
+    if( LIB_TABLE_NOTEBOOK_PANEL* panel = dynamic_cast<LIB_TABLE_NOTEBOOK_PANEL*>( page ) )
+    {
+        if( panel->GetClosable() )
+        {
+            if( !panel->GetCanClose() )
+                aEvent.Veto();
+        }
+        else
+        {
+            aEvent.Veto();
+        }
+    }
 }
 
 
@@ -670,12 +702,18 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
     {
         m_parent->m_GlobalTableChanged = true;
         *globalTable = get_model( 0 )->Table();
+
+        globalTable->Save().map_error(
+                []( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageBox( _( "Error saving global library table:\n\n" ) + aError.message,
+                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
+                } );
     }
 
     optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
 
-    if( optTable && m_notebook->GetPageCount() > 1
-            && !static_cast<PANEL_NOTEBOOK_BASE*>( m_notebook->GetPage( 1 ) )->GetClosable() )
+    if( optTable.has_value() && get_model( 1 )->Table().Path() == optTable.value()->Path() )
     {
         LIBRARY_TABLE* projectTable = *optTable;
 
@@ -683,10 +721,27 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         {
             m_parent->m_ProjectTableChanged = true;
             *projectTable = get_model( 1 )->Table();
+
+            projectTable->Save().map_error(
+                    []( const LIBRARY_ERROR& aError )
+                    {
+                        wxMessageBox( _( "Error saving project-specific library table:\n\n" ) + aError.message,
+                                      _( "File Save Error" ), wxOK | wxICON_ERROR );
+                    } );
         }
     }
 
-    // JEY TODO: save any other open tables
+    for( int ii = 0; ii < (int) m_notebook->GetPageCount(); ++ii )
+    {
+        LIB_TABLE_NOTEBOOK_PANEL* panel = static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( ii ) );
+
+        if( panel->GetClosable() && panel->TableModified() )
+        {
+            panel->SaveTable();
+            m_parent->m_GlobalTableChanged = true;
+            m_parent->m_ProjectTableChanged = true;
+        }
+    }
 
     return true;
 }
@@ -809,35 +864,10 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     }
 
     if( dlg.m_GlobalTableChanged )
-    {
-        std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                                  LIBRARY_TABLE_SCOPE::GLOBAL );
-        wxCHECK( optTable, /* void */ );
-        LIBRARY_TABLE* globalTable = *optTable;
-
-        globalTable->Save().map_error(
-                []( const LIBRARY_ERROR& aError )
-                {
-                    wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
-                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
-                } );
-
         Pgm().GetLibraryManager().LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
-    }
 
-    std::optional<LIBRARY_TABLE*> projectTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
-
-    if( projectTable && dlg.m_ProjectTableChanged )
+    if( dlg.m_ProjectTableChanged )
     {
-        ( *projectTable )->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
-            {
-                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
-                                                aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
-            } );
-
         // Trigger a reload of the table and cancel an in-progress background load
         Pgm().GetLibraryManager().ProjectChanged();
     }

@@ -20,7 +20,9 @@
 #include "grid_tricks.h"
 #include <functional>
 
-class wxNotebook;
+
+class LIBRARY_TABLE_ROW;
+
 
 class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
 {
@@ -52,10 +54,9 @@ public:
 
     static bool VerifyTable( WX_GRID* aGrid, std::function<void( int aRow, int aCol )> aErrorHandler );
 
-    static void AddTable( wxNotebook* aNotebook, const wxString& aTitle );
-
 protected:
     virtual void optionsEditor( int aRow ) = 0;
+    virtual void openTable( const LIBRARY_TABLE_ROW& aRow ) = 0;
 
     void onGridCellLeftClick( wxGridEvent& aEvent ) override;
     bool handleDoubleClick( wxGridEvent& aEvent ) override;

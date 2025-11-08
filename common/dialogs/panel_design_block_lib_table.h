@@ -40,9 +40,11 @@ public:
     PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject );
     ~PANEL_DESIGN_BLOCK_LIB_TABLE() override;
 
-private:
     bool TransferDataFromWindow() override;
 
+    void AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable );
+
+private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
      *
@@ -58,9 +60,7 @@ private:
     void onMigrateLibraries( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
 
-    void onPageChange( wxBookCtrlEvent& event ) override;
-
-    void addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal );
+    void onNotebookPageCloseRequest( wxAuiNotebookEvent& aEvent );
 
     void adjustPathSubsGridColumns( int aWidth );
 

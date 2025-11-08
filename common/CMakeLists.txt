@@ -706,6 +706,7 @@ set( COMMON_SRCS
     kiface_base.cpp
     kiway_player.cpp
     lib_table_grid_tricks.cpp
+    lib_table_notebook_panel.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     design_block_tree_model_adapter.cpp

@@ -42,6 +42,8 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable );
+
 private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
@@ -58,10 +60,10 @@ private:
     void onMigrateLibraries( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
 
-    void onPageChange( wxBookCtrlEvent& event ) override;
+    void onPageChange( wxAuiNotebookEvent& event ) override;
     void onReset( wxCommandEvent& event ) override;
 
-    void addTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aGlobal );
+    void onNotebookPageCloseRequest( wxAuiNotebookEvent& aEvent );
 
     void adjustPathSubsGridColumns( int aWidth );
 

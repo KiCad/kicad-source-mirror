@@ -24,9 +24,6 @@
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
-#include <wx/sizer.h>
-#include <wx/notebook.h>
-#include <widgets/panel_notebook_base.h>
 #include <lib_id.h>
 
 
@@ -56,9 +53,9 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
         // Errored rows should have the warning button, so we show their error
         // Configurable libraries will have the options button, so we launch the config
         // Chained tables will have the open button, so we request the table be opened
-        LIB_TABLE_GRID_DATA_MODEL*          table = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
-        const LIBRARY_TABLE_ROW& row = table->at( aEvent.GetRow() );
-        LIBRARY_MANAGER_ADAPTER* adapter = table->Adapter();
+        LIB_TABLE_GRID_DATA_MODEL* table = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+        const LIBRARY_TABLE_ROW&   row = table->at( aEvent.GetRow() );
+        LIBRARY_MANAGER_ADAPTER*   adapter = table->Adapter();
 
         wxString title = row.Type() == "Table"
                                 ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
@@ -78,7 +75,7 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
         }
         else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         {
-            // JEY TODO: open library table...
+            openTable( row );
         }
 
         aEvent.Skip();
@@ -209,7 +206,7 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     }
     else if( menu_id == LIB_TABLE_GRID_TRICKS_OPEN_TABLE )
     {
-        // JEY TODO: open library table...
+        openTable( tbl->At( m_sel_row_start ) );
     }
     else
     {
@@ -533,8 +530,7 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
 
             if( nick1 == nick2 )
             {
-                msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ),
-                                        nick1 );
+                msg = wxString::Format( _( "Multiple libraries cannot share the same nickname ('%s')." ), nick1 );
 
                 // go to the lower of the two rows, it is technically the duplicate:
                 aErrorHandler( r2, 1 );
@@ -547,52 +543,4 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
     }
 
     return true;
-}
-
-
-void LIB_TABLE_GRID_TRICKS::AddTable( wxNotebook* aNotebook, const wxString& aTitle )
-{
-    wxPanel*    panel = new PANEL_NOTEBOOK_BASE( aNotebook, wxID_ANY );
-   	wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-    WX_GRID*    grid = new WX_GRID( panel, wxID_ANY );
-   
-   	// Grid
-   	grid->CreateGrid( 1, 7 );
-   	grid->EnableGridLines( true );
-   	grid->SetMargins( 0, 0 );
-    grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-   	// Columns
-   	grid->SetColSize( 0, 30 );
-   	grid->SetColSize( 1, 48 );
-   	grid->SetColSize( 2, 48 );
-   	grid->SetColSize( 3, 240 );
-   	grid->SetColSize( 4, 100 );
-   	grid->SetColSize( 5, 80 );
-   	grid->SetColSize( 6, 240 );
-   	grid->SetColLabelSize( 22 );
-   	grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-   
-   	// Rows
-   	grid->EnableDragRowSize( false );
-   	grid->SetRowLabelSize( 0 );
-   	grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-   
-   	// Cell Defaults
-   	grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-
-    grid->DisableColResize( COL_STATUS );
-    grid->DisableColResize( COL_VISIBLE );
-    grid->DisableColResize( COL_ENABLED );
-
-    grid->AutoSizeColumn( COL_VISIBLE, true );
-    grid->AutoSizeColumn( COL_ENABLED, true );
-
-    sizer->Add( grid, 1, wxALL|wxEXPAND, 5 );
-
-    panel->SetSizer( sizer );
-   	panel->Layout();
-   	sizer->Fit( panel );
-
-   	aNotebook->AddPage( panel, aTitle, true );
 }

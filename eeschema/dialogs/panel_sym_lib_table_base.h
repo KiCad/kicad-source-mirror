@@ -14,7 +14,7 @@ class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/gdicmn.h>
-#include <wx/notebook.h>
+#include <wx/aui/auibook.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -39,7 +39,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 	private:
 
 	protected:
-		wxNotebook* m_notebook;
+		wxAuiNotebook* m_notebook;
 		STD_BITMAP_BUTTON* m_append_button;
 		STD_BITMAP_BUTTON* m_browse_button;
 		STD_BITMAP_BUTTON* m_move_up_button;
@@ -50,7 +50,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onPageChange( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void onPageChange( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }

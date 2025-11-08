@@ -17,9 +17,9 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_DEFAULT_STYLE );
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -106,7 +106,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
@@ -118,7 +117,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::~PANEL_DESIGN_BLOCK_LIB_TABLE_BASE()
 {
 	// Disconnect Events
-	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
