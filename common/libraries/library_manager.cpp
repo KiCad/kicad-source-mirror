@@ -1068,11 +1068,6 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString&
                         return tl::unexpected( plugin.error() );
                     }
                 }
-                else
-                {
-                    wxLogTrace( traceLibraries, "Error: library %s (%s) not found in manager!",
-                                aNickname, magic_enum::enum_name( aScope ) );
-                }
 
                 return nullptr;
             }

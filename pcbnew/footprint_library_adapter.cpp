@@ -173,7 +173,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
                 }
 
                 ++m_loadCount;
-            } ) );
+            }, BS::pr::lowest ) );
     }
 
     wxLogTrace( traceLibraries, "FP: Started async load of %zu libraries", m_loadTotal );

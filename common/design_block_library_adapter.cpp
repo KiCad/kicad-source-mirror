@@ -218,7 +218,7 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
                 }
 
                 ++m_loadCount;
-            } ) );
+            }, BS::pr::lowest ) );
     }
 
     // Cleanup libraries that were removed from the table

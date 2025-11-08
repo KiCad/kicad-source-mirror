@@ -349,10 +349,11 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
                 }
 
                 ++m_loadCount;
-            } ) );
+            }, BS::pr::lowest ) );
     }
 
-    wxLogTrace( traceLibraries, "Sym: Started async load of %zu libraries", m_loadTotal );
+    if( m_loadTotal )
+        wxLogTrace( traceLibraries, "Sym: Started async load of %zu libraries", m_loadTotal );
 }
 
 

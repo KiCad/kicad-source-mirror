@@ -38,6 +38,6 @@ KICAD_SINGLETON::~KICAD_SINGLETON()
 void KICAD_SINGLETON::Init()
 {
     int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
-    m_ThreadPool = new BS::thread_pool( num_threads );
+    m_ThreadPool = new BS::priority_thread_pool( num_threads );
     m_GLContextManager = new GL_CONTEXT_MANAGER();
 }

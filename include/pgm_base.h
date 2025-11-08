@@ -31,6 +31,7 @@
 #ifndef  PGM_BASE_H_
 #define  PGM_BASE_H_
 
+#include <bs_thread_pool.hpp>
 #include <kicommon.h>
 #include <singleton.h>
 #include <exception>
@@ -113,7 +114,7 @@ public:
      */
     void BuildArgvUtf8();
 
-    BS::thread_pool<0>& GetThreadPool() { return *m_singleton.m_ThreadPool; }
+    BS::priority_thread_pool& GetThreadPool() { return *m_singleton.m_ThreadPool; }
 
     GL_CONTEXT_MANAGER* GetGLContextManager() { return m_singleton.m_GLContextManager; }
 
