@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 22:51+0000\n"
+"PO-Revision-Date: 2025-11-08 08:29+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -601,11 +601,11 @@ msgstr "无论元件在 .pos 文件中是否存在, 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:351
 msgid "Show 3D Models marked DNP"
-msgstr "显示被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
+msgstr "显示标记为 'DNP (不作装配)' 的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "无论元件是否设置了 'DNP (不作装配)' 特性, 均显示其 3D 模型"
+msgstr "无论元件是否被标记为 'DNP (不作装配)', 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
@@ -13060,9 +13060,8 @@ msgid "Show field name"
 msgstr "显示字段名称"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
-msgstr "显示字段名称及其值"
+msgstr "显示字段值及其名称"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
 msgid "Allow automatic placement"
@@ -16086,26 +16085,26 @@ msgid "Field name %s already exists."
 msgstr "名称为 %s 的字段已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:936
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "恢复符号"
+msgstr "包含 'DNP (不作装配)' 符号"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:937
 msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
-msgstr ""
+msgstr "在表中显示被标记为 'DNP (不作装配)' 的符号。此设置还控制是否在导出数据中包含 "
+"'DNP (不作装配)' 符号。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "显示 '从 BOM 中移除'"
+msgstr "包含 '从 BOM 中移除' 符号"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
 msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
-msgstr ""
+msgstr "在表中显示被标记为 '从 BOM 中移除' 的符号。标有 '从 BOM 中移除' 的符号永远不"
+"会在导出数据中包含。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
 msgid "Highlight on Cross-probe"
@@ -25426,11 +25425,11 @@ msgstr "按下 <ESC> 取消绘图。"
 
 #: eeschema/tools/sch_move_tool.cpp:493
 msgid "Break Wire"
-msgstr "打断连线"
+msgstr "断开连线"
 
 #: eeschema/tools/sch_move_tool.cpp:494
 msgid "Slice Wire"
-msgstr "分割连线"
+msgstr "切割连线"
 
 #: eeschema/tools/sch_move_tool.cpp:849
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
@@ -25442,14 +25441,12 @@ msgid "Press <ESC> to cancel drag."
 msgstr "按下 <ESC> 取消拖动。"
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "按下 <ESC> 取消拖动。"
+msgstr "按下 <ESC> 取消断开操作。"
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "按下 <ESC> 取消移动。"
+msgstr "按下 <ESC> 取消切割操作。"
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -25827,7 +25824,6 @@ msgid "Edit Properties"
 msgstr "编辑属性"
 
 #: eeschema/widgets/search_handlers.cpp:166
-#, fuzzy
 msgid "Excl. Sim"
 msgstr "不参与电路仿真"
 
@@ -25836,7 +25832,6 @@ msgid "Excl. BOM"
 msgstr "从 BOM 中移除"
 
 #: eeschema/widgets/search_handlers.cpp:168
-#, fuzzy
 msgid "Excl. Board"
 msgstr "不在 PCB 中进行绘制"
 
@@ -37407,9 +37402,8 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "排除具有通孔焊盘的所有封装"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "排除所有设置了 'DNP (不作装配)' 特性的封装"
+msgstr "排除所有被标记为 '从 BOM 中移除' 的封装"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 msgid "Include board edge layer"
@@ -45480,11 +45474,11 @@ msgstr "间距重写"
 
 #: pcbnew/footprint.cpp:4501 pcbnew/pad.cpp:2949
 msgid "Solderpaste Margin Override"
-msgstr "锡膏边距重写"
+msgstr "锡膏外边距重写"
 
 #: pcbnew/footprint.cpp:4505 pcbnew/pad.cpp:2953
 msgid "Solderpaste Margin Ratio Override"
-msgstr "锡膏边距比例重写"
+msgstr "锡膏外边距比例重写"
 
 #: pcbnew/footprint.cpp:4510 pcbnew/pad.cpp:2957
 msgid "Zone Connection Style"
@@ -45905,7 +45899,7 @@ msgstr "阻焊"
 #: pcbnew/pcb_shape.cpp:1112 pcbnew/pcb_tablecell.cpp:227
 #: pcbnew/pcb_textbox.cpp:857 pcbnew/pcb_track.cpp:2587
 msgid "Soldermask Margin Override"
-msgstr "阻焊边界重写"
+msgstr "阻焊外边距重写"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2551
 msgid "Pattern Properties"
@@ -53246,7 +53240,7 @@ msgstr "已解析边缘间距"
 
 #: pcbnew/tools/pcb_control.cpp:2303
 msgid "Resolved Margin Clearance"
-msgstr "已解析边界层间距"
+msgstr "已解析 Margin 层间距"
 
 #: pcbnew/tools/pcb_control.cpp:2315
 msgid "Selected Items"
@@ -53319,10 +53313,12 @@ msgid "Remove Polygon Corner"
 msgstr "移除多边形拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3249
+#, fuzzy
 msgid "Break Zone Corner"
-msgstr "打破填充区拐角"
+msgstr "打破填充区转角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3251
+#, fuzzy
 msgid "Break Polygon Corner"
 msgstr "打破多边形拐角"
 
