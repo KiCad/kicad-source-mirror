@@ -330,7 +330,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     if( projectTable.has_value() )
         AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
 
-    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART( m_notebook->GetArtProvider() ) );
 
     // There aren't (yet) any legacy DesignBlock libraries to migrate
     m_migrate_libs_button->Hide();

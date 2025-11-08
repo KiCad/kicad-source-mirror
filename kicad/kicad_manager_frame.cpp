@@ -248,7 +248,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                     wxAUI_NB_TOP | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE
                                             | wxAUI_NB_SCROLL_BUTTONS | wxNO_BORDER );
 
-    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART( m_notebook->GetArtProvider() ) );
 
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &KICAD_MANAGER_FRAME::onNotebookPageCloseRequest, this );
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSED, &KICAD_MANAGER_FRAME::onNotebookPageCountChanged, this );
