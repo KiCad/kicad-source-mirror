@@ -65,6 +65,7 @@
 #include <common.h>
 #include <dialog_HTML_reporter_base.h>
 #include <libraries/library_manager.h>
+#include <widgets/wx_aui_art_providers.h>
 
 
 /**
@@ -262,7 +263,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     if( projectTable.has_value() )
         AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
 
-    m_notebook->SetWindowStyleFlag( wxAUI_NB_CLOSE_ON_ALL_TABS );
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );

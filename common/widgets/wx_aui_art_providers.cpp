@@ -19,6 +19,7 @@
 
 #include <wx/aui/aui.h>
 #include <wx/aui/framemanager.h>
+#include <wx/aui/auibook.h>
 #include <wx/bitmap.h>
 #include <wx/dc.h>
 #include <wx/settings.h>
@@ -26,6 +27,7 @@
 #include <kiplatform/ui.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <widgets/panel_notebook_base.h>
 #include <widgets/wx_aui_art_providers.h>
 
 #if wxCHECK_VERSION( 3, 3, 0 )
@@ -188,7 +190,8 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
 }
 
 
-WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
+WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() :
+        wxAuiDefaultDockArt()
 {
 #if defined( _WIN32 )
     // Use normal control font, wx likes to use "small"
@@ -205,4 +208,18 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
 
     // Turn off the ridiculous looking gradient
     m_gradientType = wxAUI_GRADIENT_NONE;
+}
+
+
+void WX_AUI_TAB_ART::DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page, const wxRect& in_rect,
+                              int close_button_state, wxRect* out_tab_rect, wxRect* out_button_rect,
+                              int* x_extent )
+{
+    PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page.window );
+
+    if( panel && !panel->GetClosable() )
+        close_button_state = wxAUI_BUTTON_STATE_HIDDEN;
+
+    return wxAuiGenericTabArt::DrawTab( dc, wnd, page, in_rect, close_button_state, out_tab_rect,
+                                        out_button_rect, x_extent );
 }

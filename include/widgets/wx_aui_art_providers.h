@@ -17,8 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_WX_AUI_ART_PROVIDERS_H
-#define KICAD_WX_AUI_ART_PROVIDERS_H
+#pragma once
 
 #include <wx/aui/auibar.h>
 #include <wx/aui/dockart.h>
@@ -27,7 +26,9 @@
 class WX_AUI_TOOLBAR_ART : public wxAuiDefaultToolBarArt
 {
 public:
-    WX_AUI_TOOLBAR_ART() : wxAuiDefaultToolBarArt() {}
+    WX_AUI_TOOLBAR_ART() :
+            wxAuiDefaultToolBarArt()
+    {}
 
     virtual ~WX_AUI_TOOLBAR_ART() = default;
 
@@ -52,4 +53,19 @@ public:
 };
 
 
-#endif // KICAD_WX_AUI_ART_PROVIDERS_H
+class WX_AUI_TAB_ART : public wxAuiGenericTabArt
+{
+public:
+    WX_AUI_TAB_ART() :
+            wxAuiGenericTabArt()
+    {}
+
+    wxAuiTabArt* Clone() override
+    {
+        return new WX_AUI_TAB_ART();
+    }
+
+    void DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page, const wxRect& in_rect,
+                  int close_button_state, wxRect* out_tab_rect, wxRect* out_button_rect, int* x_extent ) override;
+};
+

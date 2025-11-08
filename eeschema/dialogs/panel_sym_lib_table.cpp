@@ -54,6 +54,7 @@
 #include <project_sch.h>
 #include <libraries/symbol_library_adapter.h>
 #include <lib_table_notebook_panel.h>
+#include <widgets/wx_aui_art_providers.h>
 
 
 /**
@@ -293,6 +294,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     if( projectTable.has_value() )
         AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
+
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );

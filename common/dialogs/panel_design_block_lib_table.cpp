@@ -55,6 +55,7 @@
 #include <macros.h>
 #include <libraries/library_manager.h>
 #include <lib_table_notebook_panel.h>
+#include <widgets/wx_aui_art_providers.h>
 
 /**
  * Container that describes file type info for the add a library options
@@ -329,8 +330,13 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     if( projectTable.has_value() )
         AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
 
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
+
     // There aren't (yet) any legacy DesignBlock libraries to migrate
     m_migrate_libs_button->Hide();
+
+    // add Cut, Copy, and Paste to wxGrids
+    m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
     populateEnvironReadOnlyTable();
 
@@ -398,7 +404,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::~PANEL_DESIGN_BLOCK_LIB_TABLE()
 
     // Delete the GRID_TRICKS.
     // (Notebook page GRID_TRICKS are deleted by LIB_TABLE_NOTEBOOK_PANEL.)
-    m_path_subs_grid->PopEventHandler( true );
     m_path_subs_grid->PopEventHandler( true );
 }
 
