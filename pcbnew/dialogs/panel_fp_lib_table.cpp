@@ -263,7 +263,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     if( projectTable.has_value() )
         AddTable( projectTable.value(), _( "Project Specific Libraries" ), false /* closable */ );
 
-    m_notebook->SetArtProvider( new WX_AUI_TAB_ART( m_notebook->GetArtProvider() ) );
+    m_notebook->SetArtProvider( new WX_AUI_TAB_ART() );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );

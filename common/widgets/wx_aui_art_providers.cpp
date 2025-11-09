@@ -209,3 +209,17 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() :
     // Turn off the ridiculous looking gradient
     m_gradientType = wxAUI_GRADIENT_NONE;
 }
+
+
+void WX_AUI_TAB_ART::DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page, const wxRect& in_rect,
+                              int close_button_state, wxRect* out_tab_rect, wxRect* out_button_rect,
+                              int* x_extent )
+{
+    PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page.window );
+
+    if( panel && !panel->GetClosable() )
+        close_button_state = wxAUI_BUTTON_STATE_HIDDEN;
+
+    return wxAuiGenericTabArt::DrawTab( dc, wnd, page, in_rect, close_button_state, out_tab_rect,
+                                        out_button_rect, x_extent );
+}
