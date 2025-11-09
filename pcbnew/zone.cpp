@@ -126,7 +126,7 @@ ZONE::~ZONE()
 }
 
 
-void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
+void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone, PCB_LAYER_ID aLayer )
 {
     // members are expected non initialize in this.
     // InitDataFromSrcInCopyCtor() is expected to be called only from a copy constructor.
@@ -147,7 +147,11 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_placementAreaEnabled    = aZone.m_placementAreaEnabled;
     m_placementAreaSourceType = aZone.m_placementAreaSourceType;
     m_placementAreaSource     = aZone.m_placementAreaSource;
-    SetLayerSet( aZone.GetLayerSet() );
+
+    if( aLayer == UNDEFINED_LAYER )
+        SetLayerSet( aZone.GetLayerSet() );
+    else
+        SetLayerSet( { aLayer } );
 
     m_doNotAllowZoneFills     = aZone.m_doNotAllowZoneFills;
     m_doNotAllowVias          = aZone.m_doNotAllowVias;
@@ -181,6 +185,9 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     aZone.GetLayerSet().RunOnLayers(
             [&]( PCB_LAYER_ID layer )
             {
+                if( aLayer != UNDEFINED_LAYER && aLayer != layer )
+                    return;
+
                 std::shared_ptr<SHAPE_POLY_SET> fill = aZone.m_FilledPolysList.at( layer );
 
                 if( fill )
@@ -209,6 +216,14 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
 EDA_ITEM* ZONE::Clone() const
 {
     return new ZONE( *this );
+}
+
+
+ZONE* ZONE::Clone( PCB_LAYER_ID aLayer ) const
+{
+    ZONE* clone = new ZONE( BOARD_ITEM::GetParent() );
+    clone->InitDataFromSrcInCopyCtor( *this, aLayer );
+    return clone;
 }
 
 

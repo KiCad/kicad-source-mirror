@@ -123,8 +123,7 @@ DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 
 void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
 {
-    if( ZONE_PREVIEW_CANVAS* canvas = m_zonePreviewNotebook->GetPreviewCanvas() )
-        canvas->ZoomFitScreen();
+    m_zonePreviewNotebook->FitCanvasToScreen();
 }
 
 
@@ -379,19 +378,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
 
-    if( ZONE_PREVIEW_CANVAS* gal = m_zonePreviewNotebook->GetPreviewCanvas() )
-    {
-        gal->RedrawRatsnest();
-        gal->GetView()->UpdateItems();
-        gal->Refresh();
-        int layer = gal->GetLayer();
-
-        // rebuild the currently displayed zone and refresh display
-        ZONE* curr_zone = gal->GetZone();
-        gal->ActivateSelectedZone( curr_zone );
-
-        gal->OnLayerSelected( layer );
-    }
+    m_zonePreviewNotebook->OnZoneSelectionChanged( m_panelZoneProperties->GetZone() );
 
     //NOTE - But the connectivity need to be rebuild, otherwise if cancelling, it may
     //       segfault.

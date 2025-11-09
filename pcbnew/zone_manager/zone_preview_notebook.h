@@ -22,21 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANE_ZONE_VIEWER_H
-#define PANE_ZONE_VIEWER_H
+#pragma once
 
-
-#include "zone_selection_change_notifier.h"
 #include <unordered_map>
 #include <wx/window.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
 
-class wxDataViewCtrl;
-class ZONE_PREVIEW_CANVAS;
 class PCB_BASE_FRAME;
-class ZONE_PREVIEW_NOTEBOOK_PAGE;
-class ROW_ICON_PROVIDER;
 
 
 class ZONE_PREVIEW_NOTEBOOK : public wxNotebook
@@ -49,15 +42,8 @@ public:
 
     void OnPageChanged( wxNotebookEvent& aEvent );
 
-    ZONE_PREVIEW_CANVAS* GetPreviewCanvas() const { return m_previewCanvas; }
+    void FitCanvasToScreen();
 
 private:
-    void changePage( int aPageIdx );
-
-private:
-    PCB_BASE_FRAME*                                      m_pcbFrame;
-    std::unordered_map<int, ZONE_PREVIEW_NOTEBOOK_PAGE*> m_zonePreviewPages;
-    ZONE_PREVIEW_CANVAS*                                 m_previewCanvas;
+    PCB_BASE_FRAME* m_pcbFrame;
 };
-
-#endif

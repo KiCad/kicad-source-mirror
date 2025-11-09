@@ -42,38 +42,30 @@
 class ZONE_PREVIEW_NOTEBOOK_PAGE : public wxPanel
 {
 public:
-    ZONE_PREVIEW_NOTEBOOK_PAGE( wxWindow* aParent, int aLayer ) :
+    ZONE_PREVIEW_NOTEBOOK_PAGE( wxWindow* aParent, BOARD* aBoard, ZONE* aZone, PCB_LAYER_ID aLayer,
+                                GAL_DISPLAY_OPTIONS_IMPL& aOpts ) :
             wxPanel( aParent ),
-            m_layer( aLayer )
+            m_layer( aLayer ),
+            m_canvas( nullptr )
     {
         SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
+
+        m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, aZone->Clone( aLayer ), aLayer, this, aOpts );
+        GetSizer()->Add( m_canvas, 1, wxEXPAND );
     }
 
     int  GetLayer() const { return m_layer; }
-
-    /**
-     * @brief Reuse the singleton zone preview canvas between different notebook pages
-     */
-    void AssignCanvas( ZONE_PREVIEW_CANVAS* aCanvas )
-    {
-        if( aCanvas->GetParent() )
-            aCanvas->GetParent()->GetSizer()->Detach( aCanvas );
-
-        aCanvas->Reparent( this );
-        GetSizer()->Add( aCanvas, 1, wxEXPAND );
-        Layout();
-        GetSizer()->Fit( this );
-    }
+    ZONE_PREVIEW_CANVAS* GetCanvas() const { return m_canvas; }
 
 private:
-    int m_layer;
+    int                  m_layer;
+    ZONE_PREVIEW_CANVAS* m_canvas;
 };
 
 
 ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame ) :
         wxNotebook( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
-        m_pcbFrame( aPcbFrame ),
-        m_previewCanvas( nullptr )
+        m_pcbFrame( aPcbFrame )
 {
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &ZONE_PREVIEW_NOTEBOOK::OnPageChanged, this );
 
@@ -101,63 +93,56 @@ ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME*
 
 void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
 {
+    int preferredLayer = UNDEFINED_LAYER;
+
+    if( GetSelection() >= 0 && GetSelection() < (int) GetPageCount() )
+        preferredLayer = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetCurrentPage() )->GetLayer();
+
     while( GetPageCount() )
         RemovePage( 0 );
 
     if( !aZone )
         return;
 
-    const PCB_LAYER_ID firstLayer = aZone->GetFirstLayer();
+    ZONE_PREVIEW_NOTEBOOK_PAGE* preferredPage = nullptr;
 
     for( PCB_LAYER_ID layer : aZone->GetLayerSet().UIOrder() )
     {
-        wxString layerName = m_pcbFrame->GetBoard()->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
+        BOARD*                      board = m_pcbFrame->GetBoard();
+        wxString                    layerName = board->GetLayerName( layer );
+        ZONE_PREVIEW_NOTEBOOK_PAGE* page = new ZONE_PREVIEW_NOTEBOOK_PAGE( this, board, aZone, layer,
+                                                                           m_pcbFrame->GetGalDisplayOptions() );
 
-        if( auto existingContainer = m_zonePreviewPages.find( layer ); existingContainer != m_zonePreviewPages.end() )
-        {
-            AddPage( existingContainer->second, layerName, false, layer );
-        }
-        else
-        {
-            ZONE_PREVIEW_NOTEBOOK_PAGE* page = new ZONE_PREVIEW_NOTEBOOK_PAGE( this, layer );
-            m_zonePreviewPages.try_emplace( layer, page );
-            AddPage( page, layerName, false, layer );
-        }
+        AddPage( page, layerName, false, layer );
+        page->Layout();
+        page->GetCanvas()->ZoomFitScreen();
+
+        if( layer == preferredLayer )
+            preferredPage = page;
     }
 
-    if( !m_previewCanvas )
-    {
-        m_previewCanvas = new ZONE_PREVIEW_CANVAS( m_pcbFrame->GetBoard(), m_zonePreviewPages[firstLayer],
-                                                   m_pcbFrame->GetGalDisplayOptions() );
-    }
+    if( !preferredPage )
+        preferredPage = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetPage( 0 ) );
 
-    m_previewCanvas->ActivateSelectedZone( aZone );
-
-    changePage( FindPage( m_zonePreviewPages[firstLayer] ) );
-}
-
-
-void ZONE_PREVIEW_NOTEBOOK::changePage( int aPageIdx )
-{
-    ZONE_PREVIEW_NOTEBOOK_PAGE* page = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetPage( aPageIdx ) );
-
-    page->AssignCanvas( m_previewCanvas );
-    m_previewCanvas->OnLayerSelected( page->GetLayer() );
-    SetSelection( aPageIdx );
+    SetSelection( FindPage( preferredPage ) );
 
     // Reinit canvas size parameters and display
     PostSizeEvent();
-
-    CallAfter(
-            [this]()
-            {
-                m_previewCanvas->ZoomFitScreen();
-            } );
 }
 
 
 void ZONE_PREVIEW_NOTEBOOK::OnPageChanged( wxNotebookEvent& aEvent )
 {
-    changePage( aEvent.GetSelection() );
+    SetSelection( aEvent.GetSelection() );
     aEvent.Skip();
+
+    // Reinit canvas size parameters and display
+    PostSizeEvent();
+}
+
+
+void ZONE_PREVIEW_NOTEBOOK::FitCanvasToScreen()
+{
+    for( int ii = 0; ii < (int) GetPageCount(); ++ii )
+        static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetPage( ii ) )->GetCanvas()->ZoomFitScreen();
 }

@@ -23,8 +23,7 @@
  */
 
 
-#ifndef PANEL_ZONE_GAL_H
-#define PANEL_ZONE_GAL_H
+#pragma once
 
 #include <board_item.h>
 #include <wx/gdicmn.h>
@@ -38,9 +37,10 @@
 class ZONE_PREVIEW_CANVAS : public PCB_DRAW_PANEL_GAL
 {
 public:
-    ZONE_PREVIEW_CANVAS( BOARD* aPcb, wxWindow* aParentWindow, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                         wxWindowID aWindowId = 0, const wxPoint& aPosition = wxDefaultPosition,
-                         const wxSize& aSize = wxDefaultSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+    ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID aLayer, wxWindow* aParentWindow,
+                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, wxWindowID aWindowId = 0,
+                         const wxPoint& aPosition = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
+                         GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~ZONE_PREVIEW_CANVAS() override = default;
 
     const wxSize GetPageSizeIU() const;
@@ -50,25 +50,8 @@ public:
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const;
 
-    /**
-     * @brief Show the zone painting on layer
-     *
-     * @param aLayer The expected layer
-     * @return return true if the GAL updated the display else falue
-     */
-    bool OnLayerSelected( int aLayer );
-
-    int GetLayer() const { return m_layer; }
-
-    void ActivateSelectedZone( ZONE* aZone );
-
-    ZONE* GetZone() const { return m_zone; }
-
 private:
     BOARD*                                     m_pcb;
     int                                        m_layer;
     std::unique_ptr<BOARD_EDGES_BOUNDING_ITEM> m_pcb_bounding_box;
-    ZONE*                                      m_zone;
 };
-
-#endif

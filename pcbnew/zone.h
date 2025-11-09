@@ -101,7 +101,7 @@ public:
     /**
      * Copy aZone data to me
      */
-    void InitDataFromSrcInCopyCtor( const ZONE& aZone );
+    void InitDataFromSrcInCopyCtor( const ZONE& aZone, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     /**
      * For rule areas which exclude footprints (and therefore participate in courtyard conflicts
@@ -668,6 +668,7 @@ public:
     BITMAPS GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
+    ZONE* Clone( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @return true if the zone is a teardrop area
