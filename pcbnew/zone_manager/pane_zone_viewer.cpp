@@ -180,4 +180,7 @@ void PANE_ZONE_VIEWER::OnNotebook( wxNotebookEvent& aEvent )
     m_zoneGAL->OnLayerSelected( container->GetLayer() );
     SetSelection( idx );
     aEvent.Skip();
+
+    // Reinit canvas size parameters and display
+    PostSizeEvent();
 }
