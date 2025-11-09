@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 22:51+0000\n"
+"PO-Revision-Date: 2025-11-10 08:13+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7729,14 +7729,12 @@ msgid "Failed to clean up repository state after fast-forward."
 msgstr "Kunde inte städa upp förvarets tillstånd efter framåtspolning."
 
 #: common/git/libgit_backend.cpp:998
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Lyckades inte initialisera Git-projekt."
+msgstr "Lyckades inte initialisera revisionshanterare."
 
 #: common/git/libgit_backend.cpp:1007
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Lyckades inte skicka ändringar till fjärrförvar."
+msgstr "Lyckades inte skicka referens till revisionshanterare."
 
 #: common/git/libgit_backend.cpp:1022
 #, c-format
@@ -14093,15 +14091,15 @@ msgstr "Återställ symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 msgid "Revert the symbol to its last saved state"
-msgstr "Återställ symbol till det senast sparade tillståndet"
+msgstr "Återställ symbolen till den senast sparade versionen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 msgid "Clear cell"
-msgstr "Rensa cell"
+msgstr "Töm cell"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 msgid "Clear the cell value"
-msgstr "Rensa värde i cell"
+msgstr "Radera cellens värde"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 msgid "Create Derived Symbol"
@@ -36712,7 +36710,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
 msgid "IPC-2581 file generated successfully."
-msgstr "IPC-2581-fil skapades framgångsrikt."
+msgstr "IPC-2581-fil skapades med lyckat resultat."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
