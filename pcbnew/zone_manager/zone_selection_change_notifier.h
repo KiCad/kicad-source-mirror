@@ -23,8 +23,7 @@
  */
 
 
-#ifndef ZONE_SELECTION_CHANGE_NOTIFIER_H
-#define ZONE_SELECTION_CHANGE_NOTIFIER_H
+#pragma once
 
 class ZONE;
 
@@ -47,6 +46,7 @@ public:
     {
         if( m_zone == aZone )
             return;
+
         m_zone = aZone;
         ActivateSelectedZone( m_zone );
     }
@@ -59,5 +59,3 @@ protected:
 private:
     ZONE* m_zone{};
 };
-
-#endif

@@ -71,7 +71,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, *m_zonesContainer );
-    m_sizerProperties->Add( m_panelZoneProperties, 1, wxTOP | wxEXPAND, 5 );
+    m_sizerProperties->Add( m_panelZoneProperties, 0, wxTOP | wxEXPAND, 5 );
 
     m_zoneViewer = new PANE_ZONE_VIEWER( m_zonePanel, aParent );
     m_rightColumn->Add( m_zoneViewer, 1, wxALL | wxEXPAND, 5 );

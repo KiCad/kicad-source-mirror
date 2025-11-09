@@ -63,7 +63,8 @@ PANEL_ZONE_GAL::PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow,
                                 const wxPoint& aPosition, const wxSize& aSize, GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, wxDefaultSize, aOptions,
                             aGalType ),
-        m_pcb( aPcb ), m_layer( UNDEFINED_LAYER ),
+        m_pcb( aPcb ),
+        m_layer( UNDEFINED_LAYER ),
         m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
         m_zone( nullptr )
 {
@@ -74,14 +75,14 @@ PANEL_ZONE_GAL::PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow,
     UpdateColors();
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     StartDrawing();
-    m_painter->GetSettings()->SetBackgroundColor(
-            ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor() );
+    m_painter->GetSettings()->SetBackgroundColor( ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor() );
 }
 
 
 PANEL_ZONE_GAL::~PANEL_ZONE_GAL()
 {
 }
+
 
 BOX2I PANEL_ZONE_GAL::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
@@ -97,6 +98,7 @@ BOX2I PANEL_ZONE_GAL::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
     return area;
 }
 
+
 const BOX2I PANEL_ZONE_GAL::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     if( aIncludeAllVisible || !m_pcb->IsLayerVisible( Edge_Cuts ) )
@@ -104,6 +106,7 @@ const BOX2I PANEL_ZONE_GAL::GetDocumentExtents( bool aIncludeAllVisible ) const
     else
         return GetBoardBoundingBox( true );
 }
+
 
 bool PANEL_ZONE_GAL::OnLayerSelected( int aLayer )
 {
@@ -141,11 +144,13 @@ void PANEL_ZONE_GAL::ActivateSelectedZone( ZONE* aZone )
     m_zone = aZone;
 }
 
+
 const wxSize PANEL_ZONE_GAL::GetPageSizeIU() const
 {
     const VECTOR2D sizeIU = m_pcb->GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS );
     return wxSize( sizeIU.x, sizeIU.y );
 }
+
 
 void PANEL_ZONE_GAL::ZoomFitScreen()
 {
@@ -154,9 +159,9 @@ void PANEL_ZONE_GAL::ZoomFitScreen()
 
     m_view->SetScale( 1.0 );
     const wxSize clientSize = GetSize();
-    VECTOR2D     screenSize = m_view->ToWorld(
-            VECTOR2D( static_cast<double>( clientSize.x ), static_cast<double>( clientSize.y ) ),
-            false );
+    VECTOR2D     screenSize = m_view->ToWorld( VECTOR2D( static_cast<double>( clientSize.x ),
+                                                         static_cast<double>( clientSize.y ) ),
+                                               false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
