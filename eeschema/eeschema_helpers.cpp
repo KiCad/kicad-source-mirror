@@ -148,18 +148,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFormat ) );
 
     SCHEMATIC* schematic = new SCHEMATIC( project );
-
-    SCH_SHEET* rootSheet = new SCH_SHEET( schematic );
-    schematic->SetRoot( rootSheet );
-
-    SCH_SCREEN* rootScreen = new SCH_SCREEN( schematic );
-    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
-    rootSheet->SetScreen( rootScreen );  // Set screen on the top-level sheet, not virtual root
-
-    schematic->RootScreen()->SetFileName( wxEmptyString );
-
-    // Don't leave root page number empty
-    schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
+    schematic->CreateDefaultScreens();
 
     wxFileName schFile = aFileName;
     schFile.MakeAbsolute();
