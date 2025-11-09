@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-08 13:26+0000\n"
+"PO-Revision-Date: 2025-11-10 08:13+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7174,14 +7174,12 @@ msgid "Failed to clean up repository state after fast-forward."
 msgstr "Kunde inte städa upp förvarets tillstånd efter framåtspolning."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Lyckades inte initialisera Git-projekt."
+msgstr "Lyckades inte initialisera revisionshanterare."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Lyckades inte skicka ändringar till fjärrförvar."
+msgstr "Lyckades inte skicka referens till revisionshanterare."
 
 #: common/git/git_pull_handler.cpp:358
 #, c-format
@@ -9332,9 +9330,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Behåll inte biblioteket högst upp på listan"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Bibliotekstabellfel"
+msgstr "Bibliotekstabell"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -13213,34 +13210,28 @@ msgid "Pin Table"
 msgstr "Stifttabell"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Konvertera symbol"
+msgstr "Återställ symbol"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Återställ '%s' till den senast sparade versionen?"
+msgstr "Återställ symbolen till den senast sparade versionen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Isolationsavstånd"
+msgstr "Töm cell"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Rensa senaste borrfiler"
+msgstr "Radera cellens värde"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Skapa ett nytt projekt"
+msgstr "Skapa härledd symbol"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Skapa en ny symbol, härledd från en befintlig symbol"
+msgstr "Skapa en ny symbol, härledd från den valda symbolen"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13261,9 +13252,9 @@ msgid "Show datasheet in browser"
 msgstr "Visa datablad i webbläsaren"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Symbolbibliotek"
+msgstr "Symbolbiblioteksfält: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13276,14 +13267,14 @@ msgid "Group By"
 msgstr "Gruppera efter"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Inga symboler hittades i bibliotek %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Fel vid inläsning av symboler:"
+msgstr "Fel vid inläsning av symbol '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
@@ -13319,9 +13310,9 @@ msgid "Rename Field"
 msgstr "Byt namn på fält"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:738
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Fältnamn %s finns redan."
+msgstr "Fältnamn '%s' finns redan."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13349,9 +13340,8 @@ msgid "Power Symbol"
 msgstr "Power-symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Biblioteksredigerare"
+msgstr "Biblioteksfältsredigerare"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -17878,9 +17868,10 @@ msgstr "Avbryt spara projekt"
 
 #: eeschema/files-io.cpp:1238 eeschema/files-io.cpp:1264 pcbnew/files.cpp:1217
 #: pcbnew/files.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "Det gick inte att skriva plotfiler till mappen '%s'."
+msgstr ""
+"Det gick inte att automatspara filer till den skrivskyddade mappen:  '%s'"
 
 #: eeschema/files-io.cpp:1330
 msgid "Importing Schematic"
@@ -24544,9 +24535,8 @@ msgid "SVG File Name"
 msgstr "SVG filnamn"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Bibliotek"
+msgstr "Biblioteksfält"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -26050,7 +26040,6 @@ msgid "Show import issues"
 msgstr "Visa problem med import"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
 msgstr "Bädda in fil"
 
@@ -34212,9 +34201,8 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Generera en IPC-2581-fil"
+msgstr "Generera IPC-2581-fil"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
@@ -34227,9 +34215,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Filen skapades."
+msgstr "IPC-2581-fil skapades med lyckat resultat."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -35501,9 +35488,8 @@ msgid "Footprint Report"
 msgstr "Fotavtrycksrapport"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Hitta text"
+msgstr "Klartext"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41916,9 +41902,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Kontrollerar frigång för koppargrafik..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Kontrollerar frigång för koppargrafik..."
+msgstr "Kontrollerar frigång för koppargrafik till hål..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -46300,11 +46285,10 @@ msgid "Generating CAD data"
 msgstr "Genererar CAD-data"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2117
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Mönsterkortets kontur saknas eller är felaktig. Kör designregelkontroll för "
-"en fullständig analys."
+"Mönsterkortets kontur är felaktig eller saknas.  Vänligen kör "
+"designregelkontroll."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2499
 msgid ""
@@ -48639,7 +48623,7 @@ msgstr "Samla fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "Vinkelfästhjälp: H, V, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
