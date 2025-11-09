@@ -30,6 +30,7 @@
 #include <wx/notebook.h>
 
 class PCB_BASE_FRAME;
+class ZONE;
 
 
 class ZONE_PREVIEW_NOTEBOOK : public wxNotebook
