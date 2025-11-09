@@ -31,12 +31,13 @@
 #include <wx/sizer.h>
 #include <wx/dcbuffer.h>
 #include <board.h>
+#include <zone.h>
 #include <gal/color4d.h>
-#include "zone_preview_canvas.h"
-#include "settings/color_settings.h"
-#include "zone_manager_preference.h"
+#include <widgets/color_swatch.h>
+#include <settings/color_settings.h>
+#include <zone_manager/zone_preview_canvas.h>
+#include <zone_manager/zone_manager_preference.h>
 #include <pcb_edit_frame.h>
-#include "widgets/color_swatch.h"
 
 
 class ZONE_PREVIEW_NOTEBOOK_PAGE : public wxPanel
