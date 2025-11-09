@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_zone_gal.h"
+#include "zone_preview_canvas.h"
 #include <pcb_track.h>
 #include <pcb_marker.h>
 #include <wx/event.h>
@@ -58,9 +58,9 @@ enum DRAW_ORDER
 };
 
 
-PANEL_ZONE_GAL::PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow,
-                                KIGFX::GAL_DISPLAY_OPTIONS& aOptions, wxWindowID aWindowId,
-                                const wxPoint& aPosition, const wxSize& aSize, GAL_TYPE aGalType ) :
+ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, wxWindow* aParentWindow,
+                                          KIGFX::GAL_DISPLAY_OPTIONS& aOptions, wxWindowID aWindowId,
+                                          const wxPoint& aPosition, const wxSize& aSize, GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, wxDefaultSize, aOptions,
                             aGalType ),
         m_pcb( aPcb ),
@@ -79,12 +79,7 @@ PANEL_ZONE_GAL::PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow,
 }
 
 
-PANEL_ZONE_GAL::~PANEL_ZONE_GAL()
-{
-}
-
-
-BOX2I PANEL_ZONE_GAL::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
+BOX2I ZONE_PREVIEW_CANVAS::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
     BOX2I area = aBoardEdgesOnly ? m_pcb->GetBoardEdgesBoundingBox() : m_pcb->GetBoundingBox();
 
@@ -99,7 +94,7 @@ BOX2I PANEL_ZONE_GAL::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-const BOX2I PANEL_ZONE_GAL::GetDocumentExtents( bool aIncludeAllVisible ) const
+const BOX2I ZONE_PREVIEW_CANVAS::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     if( aIncludeAllVisible || !m_pcb->IsLayerVisible( Edge_Cuts ) )
         return GetBoardBoundingBox( false );
@@ -108,7 +103,7 @@ const BOX2I PANEL_ZONE_GAL::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-bool PANEL_ZONE_GAL::OnLayerSelected( int aLayer )
+bool ZONE_PREVIEW_CANVAS::OnLayerSelected( int aLayer )
 {
     if( m_layer == aLayer )
         return false;
@@ -124,7 +119,7 @@ bool PANEL_ZONE_GAL::OnLayerSelected( int aLayer )
 }
 
 
-void PANEL_ZONE_GAL::ActivateSelectedZone( ZONE* aZone )
+void ZONE_PREVIEW_CANVAS::ActivateSelectedZone( ZONE* aZone )
 {
     if( m_zone )
         m_view->Remove( m_zone );
@@ -145,30 +140,27 @@ void PANEL_ZONE_GAL::ActivateSelectedZone( ZONE* aZone )
 }
 
 
-const wxSize PANEL_ZONE_GAL::GetPageSizeIU() const
+const wxSize ZONE_PREVIEW_CANVAS::GetPageSizeIU() const
 {
     const VECTOR2D sizeIU = m_pcb->GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS );
-    return wxSize( sizeIU.x, sizeIU.y );
+    return wxSize( KiROUND( sizeIU.x ), KiROUND( sizeIU.y ) );
 }
 
 
-void PANEL_ZONE_GAL::ZoomFitScreen()
+void ZONE_PREVIEW_CANVAS::ZoomFitScreen()
 {
     BOX2I bBox = GetDocumentExtents();
     BOX2I defaultBox = GetDefaultViewBBox();
 
     m_view->SetScale( 1.0 );
     const wxSize clientSize = GetSize();
-    VECTOR2D     screenSize = m_view->ToWorld( VECTOR2D( static_cast<double>( clientSize.x ),
-                                                         static_cast<double>( clientSize.y ) ),
-                                               false );
+    VECTOR2D     screenSize = m_view->ToWorld( VECTOR2D( (double) clientSize.x, (double) clientSize.y ), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
 
     VECTOR2D vsize = bBox.GetSize();
-    double   scale = m_view->GetScale()
-                   / std::max( fabs( vsize.x / screenSize.x ), fabs( vsize.y / screenSize.y ) );
+    double   scale = m_view->GetScale() / std::max( fabs( vsize.x / screenSize.x ), fabs( vsize.y / screenSize.y ) );
 
     if( !std::isfinite( scale ) )
     {

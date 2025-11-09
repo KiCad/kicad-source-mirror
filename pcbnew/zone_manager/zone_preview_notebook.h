@@ -33,28 +33,31 @@
 #include <wx/notebook.h>
 
 class wxDataViewCtrl;
-class PANEL_ZONE_GAL;
+class ZONE_PREVIEW_CANVAS;
 class PCB_BASE_FRAME;
-class PANEL_ZONE_GAL_CONTAINER;
+class ZONE_PREVIEW_NOTEBOOK_PAGE;
 class ROW_ICON_PROVIDER;
 
 
-class PANE_ZONE_VIEWER : public wxNotebook, public ZONE_SELECTION_CHANGE_NOTIFIER
+class ZONE_PREVIEW_NOTEBOOK : public wxNotebook
 {
 public:
-    PANE_ZONE_VIEWER( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame );
-    ~PANE_ZONE_VIEWER() override;
+    ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame );
+    ~ZONE_PREVIEW_NOTEBOOK() override = default;
 
-    void ActivateSelectedZone( ZONE* new_zone ) override;
+    void OnZoneSelectionChanged( ZONE* new_zone );
 
-    void OnNotebook( wxNotebookEvent& aEvent );
+    void OnPageChanged( wxNotebookEvent& aEvent );
 
-    PANEL_ZONE_GAL* GetZoneGAL() const { return m_zoneGAL; }
+    ZONE_PREVIEW_CANVAS* GetPreviewCanvas() const { return m_previewCanvas; }
 
 private:
-    PCB_BASE_FRAME*                                    m_pcbFrame;
-    std::unordered_map<int, PANEL_ZONE_GAL_CONTAINER*> m_zoneContainers;
-    PANEL_ZONE_GAL*                                    m_zoneGAL{};
+    void changePage( int aPageIdx );
+
+private:
+    PCB_BASE_FRAME*                                      m_pcbFrame;
+    std::unordered_map<int, ZONE_PREVIEW_NOTEBOOK_PAGE*> m_zonePreviewPages;
+    ZONE_PREVIEW_CANVAS*                                 m_previewCanvas;
 };
 
 #endif

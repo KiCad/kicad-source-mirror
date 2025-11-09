@@ -134,12 +134,12 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         auto pos = aItem->GetBoundingBox().Centre();
         auto label = conn->Name( true );
 
-        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
-        m_gal->SetStrokeColor( COLOR4D( LIGHTRED ) );
-        m_gal->SetLineWidth( Mils2ui( 2 ) );
-        m_gal->SetGlyphSize( VECTOR2D( Mils2ui( 20 ), Mils2ui( 20 ) ) );
-        m_gal->StrokeText( *m_gal, conn->Name( true ), pos, 0.0, 0 );
+        m_canvas->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_canvas->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+        m_canvas->SetStrokeColor( COLOR4D( LIGHTRED ) );
+        m_canvas->SetLineWidth( Mils2ui( 2 ) );
+        m_canvas->SetGlyphSize( VECTOR2D( Mils2ui( 20 ), Mils2ui( 20 ) ) );
+        m_canvas->StrokeText( *m_canvas, conn->Name( true ), pos, 0.0, 0 );
     }
 
 #endif
@@ -3495,7 +3495,7 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
             VECTOR2D bm_size( refImage.GetSize() );
 
             // bm_size is the actual image size in UI.
-            // but m_gal scale was previously set to img_scale
+            // but m_canvas scale was previously set to img_scale
             // so recalculate size relative to this image size.
             bm_size.x /= img_scale;
             bm_size.y /= img_scale;

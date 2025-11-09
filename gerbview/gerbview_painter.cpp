@@ -371,23 +371,23 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
                                arc_to_seg_error );
 
 #if 0   // Arc Debugging only
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( 5 );
-        m_gal->SetStrokeColor( COLOR4D( 0.1, 0.5, 0.0, 0.5 ) );
-        m_gal->DrawLine( center, aItem->GetABPosition( arcStart ) );
-        m_gal->SetStrokeColor( COLOR4D( 0.6, 0.1, 0.0, 0.5 ) );
-        m_gal->DrawLine( center, aItem->GetABPosition( arcEnd ) );
+        m_canvas->SetIsFill( false );
+        m_canvas->SetIsStroke( true );
+        m_canvas->SetLineWidth( 5 );
+        m_canvas->SetStrokeColor( COLOR4D( 0.1, 0.5, 0.0, 0.5 ) );
+        m_canvas->DrawLine( center, aItem->GetABPosition( arcStart ) );
+        m_canvas->SetStrokeColor( COLOR4D( 0.6, 0.1, 0.0, 0.5 ) );
+        m_canvas->DrawLine( center, aItem->GetABPosition( arcEnd ) );
 #endif
 
 #if 0   // Bbox arc Debugging only
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
+        m_canvas->SetIsFill( false );
+        m_canvas->SetIsStroke( true );
         BOX2I box = aItem->GetBoundingBox();
-        m_gal->SetLineWidth( 5 );
-        m_gal->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
+        m_canvas->SetLineWidth( 5 );
+        m_canvas->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
         // box coordinates are already in AB position.
-        m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+        m_canvas->DrawRectangle( box.GetOrigin(), box.GetEnd() );
 #endif
         break;
     }
@@ -443,12 +443,12 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     // Enable for bounding box debugging
     #if 0
     const BOX2I& bb = aItem->ViewBBox();
-    m_gal->SetIsStroke( true );
-    m_gal->SetIsFill( true );
-    m_gal->SetLineWidth( 3 );
-    m_gal->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
-    m_gal->SetFillColor( COLOR4D(0.9, 0.9, 0, 0.1) );
-    m_gal->DrawRectangle( bb.GetOrigin(), bb.GetEnd() );
+    m_canvas->SetIsStroke( true );
+    m_canvas->SetIsFill( true );
+    m_canvas->SetLineWidth( 3 );
+    m_canvas->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
+    m_canvas->SetFillColor( COLOR4D(0.9, 0.9, 0, 0.1) );
+    m_canvas->DrawRectangle( bb.GetOrigin(), bb.GetEnd() );
     #endif
 }
 

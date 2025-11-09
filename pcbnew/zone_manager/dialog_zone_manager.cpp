@@ -33,6 +33,7 @@
 #include <wx/string.h>
 #include <board_commit.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/wx_progress_reporters.h>
 #include <zone.h>
 #include <board.h>
 #include <bitmaps.h>
@@ -41,16 +42,11 @@
 
 #include "dialog_zone_manager_base.h"
 #include "model_zones_overview.h"
-#include "panel_zone_properties.h"
-#include "dialog_zone_manager.h"
-#include "widgets/wx_progress_reporters.h"
-#include "zone_management_base.h"
-#include "zone_manager/model_zones_overview.h"
-#include "zone_manager/panel_zone_gal.h"
-#include "zone_manager/zone_manager_preference.h"
+#include <zone_manager/panel_zone_properties.h>
+#include <zone_manager/dialog_zone_manager.h>
+#include <zone_manager/zone_preview_canvas.h>
 #include "zones_container.h"
-#include "pane_zone_viewer.h"
-#include "zone_manager_preference.h"
+#include <zone_manager/zone_preview_notebook.h>
 
 
 DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo ) :
@@ -73,8 +69,8 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, *m_zonesContainer );
     m_sizerProperties->Add( m_panelZoneProperties, 0, wxTOP | wxEXPAND, 5 );
 
-    m_zoneViewer = new PANE_ZONE_VIEWER( m_zonePanel, aParent );
-    m_rightColumn->Add( m_zoneViewer, 1, wxALL | wxEXPAND, 5 );
+    m_zonePreviewNotebook = new ZONE_PREVIEW_NOTEBOOK( m_zonePanel, aParent );
+    m_rightColumn->Add( m_zonePreviewNotebook, 1, wxALL | wxEXPAND, 5 );
 
     for( const auto& [k, v] : MODEL_ZONES_OVERVIEW::GetColumnNames() )
     {
@@ -108,7 +104,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
             {
                 Layout();
             },
-            m_zoneViewer->GetId() );
+            m_zonePreviewNotebook->GetId() );
 
     if( m_modelZonesOverview->GetCount() )
         SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
@@ -127,7 +123,7 @@ DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 
 void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
 {
-    if( PANEL_ZONE_GAL* canvas = m_zoneViewer->GetZoneGAL() )
+    if( ZONE_PREVIEW_CANVAS* canvas = m_zonePreviewNotebook->GetPreviewCanvas() )
         canvas->ZoomFitScreen();
 }
 
@@ -149,11 +145,11 @@ void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelChange( wxDataViewItem const& aI
             wxDataViewItem first_item = m_modelZonesOverview->GetItem( 0 );
             m_viewZonesOverview->Select( first_item );
             m_viewZonesOverview->EnsureVisible( first_item );
-            m_zoneViewer->ActivateSelectedZone( m_modelZonesOverview->GetZone( first_item ) );
+            m_zonePreviewNotebook->OnZoneSelectionChanged( m_modelZonesOverview->GetZone( first_item ) );
         }
         else
         {
-            m_zoneViewer->ActivateSelectedZone( nullptr );
+            m_zonePreviewNotebook->OnZoneSelectionChanged( nullptr );
         }
     }
 
@@ -212,7 +208,7 @@ void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
     wxWindowUpdateLocker updateLock( this );
 
     m_panelZoneProperties->OnZoneSelectionChanged( zone );
-    m_zoneViewer->OnZoneSelectionChanged( zone );
+    m_zonePreviewNotebook->OnZoneSelectionChanged( zone );
 
     Layout();
 }
@@ -383,7 +379,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
 
-    if( PANEL_ZONE_GAL* gal = m_zoneViewer->GetZoneGAL() )
+    if( ZONE_PREVIEW_CANVAS* gal = m_zonePreviewNotebook->GetPreviewCanvas() )
     {
         gal->RedrawRatsnest();
         gal->GetView()->UpdateItems();

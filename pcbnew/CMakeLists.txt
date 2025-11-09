@@ -316,12 +316,12 @@ set( ZONE_MANAGER_SRCS
     zone_manager/dialog_zone_manager.cpp
     zone_manager/dialog_zone_manager_base.cpp
     zone_manager/model_zones_overview.cpp
-    zone_manager/pane_zone_viewer.cpp
-    zone_manager/panel_zone_gal.cpp
     zone_manager/panel_zone_properties.cpp
     zone_manager/panel_zone_properties_base.cpp
     zone_manager/zone_manager_preference.cpp
     zone_manager/zone_painter.cpp
+    zone_manager/zone_preview_notebook.cpp
+    zone_manager/zone_preview_canvas.cpp
     zone_manager/zones_container.cpp
     )
 

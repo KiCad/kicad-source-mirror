@@ -57,7 +57,7 @@ private:
     VECTOR2I boxMtv( BOX2I b1, BOX2I b2 );
     void     recalculate();
 
-    KIGFX::GAL*        m_gal;
+    KIGFX::GAL*        m_canvas;
     int                m_textSize = 100000;
     std::vector<LABEL> m_labels;
 };

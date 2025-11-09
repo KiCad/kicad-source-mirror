@@ -33,16 +33,15 @@
 #include <wx/string.h>
 #include "board_edges_bounding_item.h"
 #include "pcb_draw_panel_gal.h"
-#include "zone_manager/zone_selection_change_notifier.h"
 
-class PANEL_ZONE_GAL : public PCB_DRAW_PANEL_GAL, public ZONE_SELECTION_CHANGE_NOTIFIER
+
+class ZONE_PREVIEW_CANVAS : public PCB_DRAW_PANEL_GAL
 {
 public:
-    PANEL_ZONE_GAL( BOARD* aPcb, wxWindow* aParentWindow, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                    wxWindowID aWindowId = 0, const wxPoint& aPosition = wxDefaultPosition,
-                    const wxSize& aSize = wxDefaultSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
-    ~PANEL_ZONE_GAL() override;
-
+    ZONE_PREVIEW_CANVAS( BOARD* aPcb, wxWindow* aParentWindow, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                         wxWindowID aWindowId = 0, const wxPoint& aPosition = wxDefaultPosition,
+                         const wxSize& aSize = wxDefaultSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+    ~ZONE_PREVIEW_CANVAS() override = default;
 
     const wxSize GetPageSizeIU() const;
 
@@ -61,7 +60,7 @@ public:
 
     int GetLayer() const { return m_layer; }
 
-    void ActivateSelectedZone( ZONE* aZone ) override;
+    void ActivateSelectedZone( ZONE* aZone );
 
     ZONE* GetZone() const { return m_zone; }
 

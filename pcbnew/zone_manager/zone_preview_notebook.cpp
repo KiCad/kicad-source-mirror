@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "pane_zone_viewer.h"
+#include "zone_preview_notebook.h"
 #include <wx/debug.h>
 #include <wx/imaglist.h>
 #include <wx/panel.h>
@@ -32,78 +32,50 @@
 #include <wx/dcbuffer.h>
 #include <board.h>
 #include <gal/color4d.h>
-#include "panel_zone_gal.h"
+#include "zone_preview_canvas.h"
 #include "settings/color_settings.h"
 #include "zone_manager_preference.h"
 #include <pcb_edit_frame.h>
 #include "widgets/color_swatch.h"
 
 
-class PANEL_ZONE_GAL_CONTAINER : public wxPanel
+class ZONE_PREVIEW_NOTEBOOK_PAGE : public wxPanel
 {
-    wxBoxSizer*     m_sizer;
-    PANEL_ZONE_GAL* m_gal{};
-    int             m_layer;
-
 public:
-    PANEL_ZONE_GAL_CONTAINER( wxWindow* aParent, int aLayer ) :
+    ZONE_PREVIEW_NOTEBOOK_PAGE( wxWindow* aParent, int aLayer ) :
             wxPanel( aParent ),
-            m_sizer( new wxBoxSizer( wxHORIZONTAL ) ),
             m_layer( aLayer )
     {
-        SetSizer( m_sizer );
+        SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     }
 
     int  GetLayer() const { return m_layer; }
 
-    void TakeGAL( PANEL_ZONE_GAL*& now )
-    {
-        if( !m_gal )
-            return;
-
-        m_sizer->Detach( m_gal );
-        now = m_gal;
-        m_gal = nullptr;
-    }
-
     /**
-     * @brief Initialize the gal , shall only be called once while the gal is first constructed
-     *
-     * @param aGal The zone gal
+     * @brief Reuse the singleton zone preview canvas between different notebook pages
      */
-    void InitZoneGAL( PANEL_ZONE_GAL* aGal )
+    void AssignCanvas( ZONE_PREVIEW_CANVAS* aCanvas )
     {
-        wxASSERT( !m_gal );
-        m_gal = aGal;
-        m_sizer->Add( m_gal, 1, wxEXPAND );
+        if( aCanvas->GetParent() )
+            aCanvas->GetParent()->GetSizer()->Detach( aCanvas );
+
+        aCanvas->Reparent( this );
+        GetSizer()->Add( aCanvas, 1, wxEXPAND );
         Layout();
-        m_sizer->Fit( this );
+        GetSizer()->Fit( this );
     }
 
-    /**
-     * @brief Reuse the only one zone gal between different container
-     *
-     * @param aGal The zone gal
-     */
-    void ResetZoneGAL( PANEL_ZONE_GAL* aGal )
-    {
-        if( aGal->GetParent() == this )
-            return;
-
-        static_cast<PANEL_ZONE_GAL_CONTAINER*>( aGal->GetParent() )->TakeGAL( m_gal );
-        m_gal->Reparent( this );
-        m_sizer->Add( m_gal, 1, wxEXPAND );
-        Layout();
-        m_sizer->Fit( this );
-    }
+private:
+    int m_layer;
 };
 
 
-PANE_ZONE_VIEWER::PANE_ZONE_VIEWER( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame ) :
+ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame ) :
         wxNotebook( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
-        m_pcbFrame( aPcbFrame )
+        m_pcbFrame( aPcbFrame ),
+        m_previewCanvas( nullptr )
 {
-    Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &PANE_ZONE_VIEWER::OnNotebook, this );
+    Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &ZONE_PREVIEW_NOTEBOOK::OnPageChanged, this );
 
     wxSize swatchSize( ZONE_MANAGER_PREFERENCE::LAYER_ICON_SIZE::WIDTH,
                        ZONE_MANAGER_PREFERENCE::LAYER_ICON_SIZE::HEIGHT );
@@ -127,10 +99,7 @@ PANE_ZONE_VIEWER::PANE_ZONE_VIEWER( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame
 }
 
 
-PANE_ZONE_VIEWER::~PANE_ZONE_VIEWER() = default;
-
-
-void PANE_ZONE_VIEWER::ActivateSelectedZone( ZONE* aZone )
+void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
 {
     while( GetPageCount() )
         RemovePage( 0 );
@@ -144,43 +113,51 @@ void PANE_ZONE_VIEWER::ActivateSelectedZone( ZONE* aZone )
     {
         wxString layerName = m_pcbFrame->GetBoard()->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
 
-        if( auto existingContainer = m_zoneContainers.find( layer ); existingContainer != m_zoneContainers.end() )
+        if( auto existingContainer = m_zonePreviewPages.find( layer ); existingContainer != m_zonePreviewPages.end() )
         {
             AddPage( existingContainer->second, layerName, false, layer );
         }
         else
         {
-            PANEL_ZONE_GAL_CONTAINER* container = new PANEL_ZONE_GAL_CONTAINER( this, layer );
-            m_zoneContainers.try_emplace( layer, container );
-            AddPage( container, layerName, false, layer );
+            ZONE_PREVIEW_NOTEBOOK_PAGE* page = new ZONE_PREVIEW_NOTEBOOK_PAGE( this, layer );
+            m_zonePreviewPages.try_emplace( layer, page );
+            AddPage( page, layerName, false, layer );
         }
     }
 
-    if( !m_zoneGAL )
+    if( !m_previewCanvas )
     {
-        m_zoneGAL = new PANEL_ZONE_GAL( m_pcbFrame->GetBoard(), m_zoneContainers[aZone->GetFirstLayer()],
-                                        m_pcbFrame->GetGalDisplayOptions() );
-        m_zoneContainers[firstLayer]->InitZoneGAL( m_zoneGAL );
-    }
-    else
-    {
-        m_zoneContainers[firstLayer]->ResetZoneGAL( m_zoneGAL );
+        m_previewCanvas = new ZONE_PREVIEW_CANVAS( m_pcbFrame->GetBoard(), m_zonePreviewPages[firstLayer],
+                                                   m_pcbFrame->GetGalDisplayOptions() );
     }
 
-    SetSelection( FindPage( m_zoneContainers[firstLayer] ) );
-    m_zoneGAL->ActivateSelectedZone( aZone );
+    m_previewCanvas->ActivateSelectedZone( aZone );
+
+    changePage( FindPage( m_zonePreviewPages[firstLayer] ) );
 }
 
 
-void PANE_ZONE_VIEWER::OnNotebook( wxNotebookEvent& aEvent )
+void ZONE_PREVIEW_NOTEBOOK::changePage( int aPageIdx )
 {
-    const int                 idx = aEvent.GetSelection();
-    PANEL_ZONE_GAL_CONTAINER* container = static_cast<PANEL_ZONE_GAL_CONTAINER*>( GetPage( idx ) );
-    container->ResetZoneGAL( m_zoneGAL );
-    m_zoneGAL->OnLayerSelected( container->GetLayer() );
-    SetSelection( idx );
-    aEvent.Skip();
+    ZONE_PREVIEW_NOTEBOOK_PAGE* page = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetPage( aPageIdx ) );
+
+    page->AssignCanvas( m_previewCanvas );
+    m_previewCanvas->OnLayerSelected( page->GetLayer() );
+    SetSelection( aPageIdx );
 
     // Reinit canvas size parameters and display
     PostSizeEvent();
+
+    CallAfter(
+            [this]()
+            {
+                m_previewCanvas->ZoomFitScreen();
+            } );
+}
+
+
+void ZONE_PREVIEW_NOTEBOOK::OnPageChanged( wxNotebookEvent& aEvent )
+{
+    changePage( aEvent.GetSelection() );
+    aEvent.Skip();
 }

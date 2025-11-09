@@ -51,8 +51,6 @@ public:
         ActivateSelectedZone( m_zone );
     }
 
-    ZONE* GetSelectedZone() const { return m_zone; }
-
 protected:
     virtual void ActivateSelectedZone( ZONE* new_zone ) = 0;
 

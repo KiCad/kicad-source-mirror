@@ -32,7 +32,7 @@ using KIGFX::GAL;
 using KIGFX::COLOR4D;
 using KIGFX::VIEW_OVERLAY;
 
-LABEL_MANAGER::LABEL_MANAGER( GAL* aGal ) : m_gal( aGal )
+LABEL_MANAGER::LABEL_MANAGER( GAL* aGal ) : m_canvas( aGal )
 {
 };
 
@@ -49,7 +49,7 @@ void LABEL_MANAGER::Add( VECTOR2I target, wxString msg, COLOR4D color )
     lbl.m_target = target;
     lbl.m_msg = msg;
     lbl.m_color = color;
-    m_gal->SetGlyphSize( VECTOR2D( m_textSize, m_textSize ) );
+    m_canvas->SetGlyphSize( VECTOR2D( m_textSize, m_textSize ) );
 
     KIFONT::FONT* strokeFont = KIFONT::FONT::GetFont( wxEmptyString );
     UTF8 text( msg );

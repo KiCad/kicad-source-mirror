@@ -50,10 +50,10 @@ class MODEL_ZONES_PRIORITY_LIST;
 class MODEL_ZONES_OVERVIEW;
 class MODEL_ZONE_LAYERS_LIST;
 class ZONES_CONTAINER;
-class PANE_ZONE_VIEWER;
+class ZONE_PREVIEW_NOTEBOOK;
 class ZONE_FILLER;
 class COMMIT;
-class PANEL_ZONE_GAL;
+class ZONE_PREVIEW_CANVAS;
 enum class ZONE_INDEX_MOVEMENT;
 
 class DIALOG_ZONE_MANAGER : public DIALOG_ZONE_MANAGER_BASE
@@ -120,7 +120,7 @@ private:
     std::unique_ptr<ZONES_CONTAINER>      m_zonesContainer;
     PANEL_ZONE_PROPERTIES*                m_panelZoneProperties;
     wxObjectDataPtr<MODEL_ZONES_OVERVIEW> m_modelZonesOverview;
-    PANE_ZONE_VIEWER*                     m_zoneViewer;
+    ZONE_PREVIEW_NOTEBOOK*                m_zonePreviewNotebook;
     std::optional<unsigned>               m_priorityDragIndex;
     std::unique_ptr<ZONE_FILLER>          m_filler;
     bool                                  m_needZoomGAL;
