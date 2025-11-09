@@ -24,6 +24,7 @@ class WX_INFOBAR;
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/stc/stc.h>
+#include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -45,61 +46,62 @@ class WX_INFOBAR;
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 {
-	private:
+private:
+protected:
+    WX_INFOBAR*             m_infoBar;
+    wxStaticText*           m_cellTextLabel;
+    wxStyledTextCtrl*       m_cellTextCtrl;
+    wxHyperlinkCtrl*        m_syntaxHelp;
+    BITMAP_BUTTON*          m_hAlignLeft;
+    BITMAP_BUTTON*          m_hAlignCenter;
+    BITMAP_BUTTON*          m_hAlignRight;
+    wxStaticText*           vAlignLabel;
+    BITMAP_BUTTON*          m_vAlignTop;
+    BITMAP_BUTTON*          m_vAlignCenter;
+    BITMAP_BUTTON*          m_vAlignBottom;
+    wxStaticText*           m_styleLabel;
+    wxCheckBox*             m_bold;
+    wxCheckBox*             m_italic;
+    wxStaticText*           m_fontLabel;
+    FONT_CHOICE*            m_fontCtrl;
+    wxStaticText*           m_textSizeLabel;
+    wxTextCtrl*             m_textSizeCtrl;
+    wxStaticText*           m_textSizeUnits;
+    wxStaticText*           m_textColorLabel;
+    wxSimplebook*           m_textColorBook;
+    wxChoice*               m_textColorPopup;
+    wxPanel*                textColorSwatchPanel;
+    wxPanel*                m_panelTextColor;
+    COLOR_SWATCH*           m_textColorSwatch;
+    wxStaticText*           m_fillColorLabel;
+    wxSimplebook*           m_fillColorBook;
+    wxChoice*               m_fillColorPopup;
+    wxPanel*                fillColorSwatchPanel;
+    wxPanel*                m_panelFillColor;
+    COLOR_SWATCH*           m_fillColorSwatch;
+    wxTextCtrl*             m_marginTopCtrl;
+    wxStaticText*           m_marginTopUnits;
+    wxTextCtrl*             m_marginLeftCtrl;
+    wxTextCtrl*             m_marginRightCtrl;
+    wxTextCtrl*             m_marginBottomCtrl;
+    wxButton*               m_editTable;
+    wxStdDialogButtonSizer* m_sdbSizer1;
+    wxButton*               m_sdbSizer1OK;
+    wxButton*               m_sdbSizer1Cancel;
 
-	protected:
-		WX_INFOBAR* m_infoBar;
-		wxStaticText* m_cellTextLabel;
-		wxStyledTextCtrl* m_cellTextCtrl;
-		BITMAP_BUTTON* m_hAlignLeft;
-		BITMAP_BUTTON* m_hAlignCenter;
-		BITMAP_BUTTON* m_hAlignRight;
-		wxStaticText* vAlignLabel;
-		BITMAP_BUTTON* m_vAlignTop;
-		BITMAP_BUTTON* m_vAlignCenter;
-		BITMAP_BUTTON* m_vAlignBottom;
-		wxStaticText* m_styleLabel;
-		wxCheckBox* m_bold;
-		wxCheckBox* m_italic;
-		wxStaticText* m_fontLabel;
-		FONT_CHOICE* m_fontCtrl;
-		wxStaticText* m_textSizeLabel;
-		wxTextCtrl* m_textSizeCtrl;
-		wxStaticText* m_textSizeUnits;
-		wxStaticText* m_textColorLabel;
-		wxSimplebook* m_textColorBook;
-		wxChoice* m_textColorPopup;
-		wxPanel* textColorSwatchPanel;
-		wxPanel* m_panelTextColor;
-		COLOR_SWATCH* m_textColorSwatch;
-		wxStaticText* m_fillColorLabel;
-		wxSimplebook* m_fillColorBook;
-		wxChoice* m_fillColorPopup;
-		wxPanel* fillColorSwatchPanel;
-		wxPanel* m_panelFillColor;
-		COLOR_SWATCH* m_fillColorSwatch;
-		wxTextCtrl* m_marginTopCtrl;
-		wxStaticText* m_marginTopUnits;
-		wxTextCtrl* m_marginLeftCtrl;
-		wxTextCtrl* m_marginRightCtrl;
-		wxTextCtrl* m_marginBottomCtrl;
-		wxButton* m_editTable;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void onTextColorPopup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onFillColorPopup( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
+    // Virtual event handlers, override them in your derived class
+    virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
+    virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
+    virtual void onTextColorPopup( wxCommandEvent& event ) { event.Skip(); }
+    virtual void onFillColorPopup( wxCommandEvent& event ) { event.Skip(); }
+    virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
 
 
-	public:
+public:
+    DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY,
+                                      const wxString& title = _( "Table Cell Properties" ),
+                                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1, -1 ),
+                                      long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
-		DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Table Cell Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-
-		~DIALOG_TABLECELL_PROPERTIES_BASE();
-
+    ~DIALOG_TABLECELL_PROPERTIES_BASE();
 };
-

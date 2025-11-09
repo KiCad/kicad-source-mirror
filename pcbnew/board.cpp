@@ -140,8 +140,7 @@ BOARD::BOARD() :
 
     // Initialize default netclass.
     bds.m_NetSettings->SetDefaultNetclass( std::make_shared<NETCLASS>( NETCLASS::Default ) );
-    bds.m_NetSettings->GetDefaultNetclass()->SetDescription(
-            _( "This is the default net class." ) );
+    bds.m_NetSettings->GetDefaultNetclass()->SetDescription( _( "This is the default net class." ) );
 
     bds.UseCustomTrackViaSize( false );
 
@@ -222,7 +221,7 @@ void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
         // want to transfer it over to the project netclasses list.
         if( m_LegacyNetclassesLoaded )
         {
-            std::shared_ptr<NET_SETTINGS>  legacySettings  = GetDesignSettings().m_NetSettings;
+            std::shared_ptr<NET_SETTINGS>  legacySettings = GetDesignSettings().m_NetSettings;
             std::shared_ptr<NET_SETTINGS>& projectSettings = project.NetSettings();
 
             projectSettings->SetDefaultNetclass( legacySettings->GetDefaultNetclass() );
@@ -263,16 +262,10 @@ void BOARD::IncrementTimeStamp()
 
     m_timeStamp++;
 
-    if( !m_IntersectsAreaCache.empty()
-        || !m_EnclosedByAreaCache.empty()
-        || !m_IntersectsCourtyardCache.empty()
-        || !m_IntersectsFCourtyardCache.empty()
-        || !m_IntersectsBCourtyardCache.empty()
-        || !m_LayerExpressionCache.empty()
-        || !m_ZoneBBoxCache.empty()
-        || m_CopperItemRTreeCache
-        || m_maxClearanceValue.has_value()
-        || !m_itemByIdCache.empty() )
+    if( !m_IntersectsAreaCache.empty() || !m_EnclosedByAreaCache.empty() || !m_IntersectsCourtyardCache.empty()
+        || !m_IntersectsFCourtyardCache.empty() || !m_IntersectsBCourtyardCache.empty()
+        || !m_LayerExpressionCache.empty() || !m_ZoneBBoxCache.empty() || m_CopperItemRTreeCache
+        || m_maxClearanceValue.has_value() || !m_itemByIdCache.empty() )
     {
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
@@ -318,8 +311,8 @@ void BOARD::UpdateRatsnestExclusions()
     GetConnectivity()->RunOnUnconnectedEdges(
             [&]( CN_EDGE& aEdge )
             {
-                if( aEdge.GetSourceNode() && aEdge.GetTargetNode()
-                    && !aEdge.GetSourceNode()->Dirty() && !aEdge.GetTargetNode()->Dirty() )
+                if( aEdge.GetSourceNode() && aEdge.GetTargetNode() && !aEdge.GetSourceNode()->Dirty()
+                    && !aEdge.GetTargetNode()->Dirty() )
                 {
                     std::pair<KIID, KIID> ids = { aEdge.GetSourceNode()->Parent()->m_Uuid,
                                                   aEdge.GetTargetNode()->Parent()->m_Uuid };
@@ -343,7 +336,7 @@ void BOARD::RecordDRCExclusions()
         {
             wxString serialized = marker->SerializeToString();
             m_designSettings->m_DrcExclusions.insert( serialized );
-            m_designSettings->m_DrcExclusionComments[ serialized ] = marker->GetComment();
+            m_designSettings->m_DrcExclusionComments[serialized] = marker->GetComment();
         }
     }
 
@@ -463,12 +456,12 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
             if( marker )
             {
-                marker->SetExcluded( true, comments[ serialized ] );
+                marker->SetExcluded( true, comments[serialized] );
                 newMarkers.push_back( marker );
 
                 // Exclusion still valid; store back to BOARD_DESIGN_SETTINGS
                 m_designSettings->m_DrcExclusions.insert( serialized );
-                m_designSettings->m_DrcExclusionComments[ serialized ] = comments[ serialized ];
+                m_designSettings->m_DrcExclusionComments[serialized] = comments[serialized];
             }
         }
     }
@@ -479,12 +472,11 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
 void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
 {
-    auto add =
-            [&]( const wxString& aVar )
-            {
-                if( !alg::contains( *aVars, aVar ) )
-                    aVars->push_back( aVar );
-            };
+    auto add = [&]( const wxString& aVar )
+    {
+        if( !alg::contains( *aVars, aVar ) )
+            aVars->push_back( aVar );
+    };
 
     add( wxT( "LAYER" ) );
     add( wxT( "FILENAME" ) );
@@ -507,8 +499,8 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )
     {
-        wxString      remainder;
-        wxString      ref = token->BeforeFirst( ':', &remainder );
+        wxString    remainder;
+        wxString    ref = token->BeforeFirst( ':', &remainder );
         BOARD_ITEM* refItem = ResolveItem( KIID( ref ), true );
 
         if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
@@ -520,6 +512,35 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
                 *token = std::move( remainder );
                 return true;
             }
+        }
+
+        // If UUID resolution failed, try to resolve by reference designator
+        // This handles typing ${U1:VALUE} directly without save/reload
+        if( !refItem )
+        {
+            for( const FOOTPRINT* footprint : Footprints() )
+            {
+                if( footprint->GetReference().CmpNoCase( ref ) == 0 )
+                {
+                    wxString remainderCopy = remainder;
+
+                    if( footprint->ResolveTextVar( &remainderCopy, aDepth + 1 ) )
+                    {
+                        *token = std::move( remainderCopy );
+                    }
+                    else
+                    {
+                        // Field/function not found on footprint
+                        *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ), footprint->GetReference(), remainder );
+                    }
+
+                    return true;
+                }
+            }
+
+            // Reference not found - show error message
+            *token = wxString::Format( wxT( "<Unknown reference: %s>" ), ref );
+            return true;
         }
     }
 
@@ -574,27 +595,26 @@ VECTOR2I BOARD::GetPosition() const
 
 void BOARD::SetPosition( const VECTOR2I& aPos )
 {
-    wxLogWarning( wxT( "This should not be called on the BOARD object") );
+    wxLogWarning( wxT( "This should not be called on the BOARD object" ) );
 }
 
 
 void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 {
-    INSPECTOR_FUNC inspector =
-            [&] ( EDA_ITEM* item, void* testData )
-            {
-                if( item->IsBOARD_ITEM() )
-                {
-                    BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+    INSPECTOR_FUNC inspector = [&]( EDA_ITEM* item, void* testData )
+    {
+        if( item->IsBOARD_ITEM() )
+        {
+            BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
 
-                    // aMoveVector was snapshotted, don't need "data".
-                    // Only move the top level group
-                    if( !board_item->GetParentGroup() && !board_item->GetParentFootprint() )
-                        board_item->Move( aMoveVector );
-                }
+            // aMoveVector was snapshotted, don't need "data".
+            // Only move the top level group
+            if( !board_item->GetParentGroup() && !board_item->GetParentFootprint() )
+                board_item->Move( aMoveVector );
+        }
 
-                return INSPECT_RESULT::CONTINUE;
-            };
+        return INSPECT_RESULT::CONTINUE;
+    };
 
     Visit( inspector, nullptr, GENERAL_COLLECTOR::BoardLevelItems );
 }
@@ -647,14 +667,14 @@ TRACKS BOARD::TracksInNet( int aNetCode )
     TRACKS ret;
 
     INSPECTOR_FUNC inspector = [aNetCode, &ret]( EDA_ITEM* item, void* testData )
-                               {
-                                   PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
+    {
+        PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
 
-                                   if( t->GetNetCode() == aNetCode )
-                                       ret.push_back( t );
+        if( t->GetNetCode() == aNetCode )
+            ret.push_back( t );
 
-                                   return INSPECT_RESULT::CONTINUE;
-                               };
+        return INSPECT_RESULT::CONTINUE;
+    };
 
     // visit this BOARD's PCB_TRACKs and PCB_VIAs with above TRACK INSPECTOR which
     // appends all in aNetCode to ret.
@@ -666,7 +686,7 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
-    m_layers[ aIndex ] = aLayer;
+    m_layers[aIndex] = aLayer;
     recalcOpposites();
     return true;
 }
@@ -675,7 +695,7 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
     // Check the BOARD physical layer names.
-    for( auto& [ layer_id, layer ] : m_layers )
+    for( auto& [layer_id, layer] : m_layers )
     {
         if( layer.m_name == aLayerName || layer.m_userName == aLayerName )
             return ToLAYER_ID( layer_id );
@@ -785,26 +805,34 @@ const char* LAYER::ShowType( LAYER_T aType )
     {
     default:
     case LT_SIGNAL: return "signal";
-    case LT_POWER:  return "power";
-    case LT_MIXED:  return "mixed";
+    case LT_POWER: return "power";
+    case LT_MIXED: return "mixed";
     case LT_JUMPER: return "jumper";
-    case LT_AUX:    return "auxiliary";
-    case LT_FRONT:  return "front";
-    case LT_BACK:   return "back";
+    case LT_AUX: return "auxiliary";
+    case LT_FRONT: return "front";
+    case LT_BACK: return "back";
     }
 }
 
 
 LAYER_T LAYER::ParseType( const char* aType )
 {
-    if(      strcmp( aType, "signal" ) == 0 )    return LT_SIGNAL;
-    else if( strcmp( aType, "power" ) == 0 )     return LT_POWER;
-    else if( strcmp( aType, "mixed" ) == 0 )     return LT_MIXED;
-    else if( strcmp( aType, "jumper" ) == 0 )    return LT_JUMPER;
-    else if( strcmp( aType, "auxiliary" ) == 0 ) return LT_AUX;
-    else if( strcmp( aType, "front" ) == 0 )     return LT_FRONT;
-    else if( strcmp( aType, "back" ) == 0 )      return LT_BACK;
-    else                                         return LT_UNDEFINED;
+    if( strcmp( aType, "signal" ) == 0 )
+        return LT_SIGNAL;
+    else if( strcmp( aType, "power" ) == 0 )
+        return LT_POWER;
+    else if( strcmp( aType, "mixed" ) == 0 )
+        return LT_MIXED;
+    else if( strcmp( aType, "jumper" ) == 0 )
+        return LT_JUMPER;
+    else if( strcmp( aType, "auxiliary" ) == 0 )
+        return LT_AUX;
+    else if( strcmp( aType, "front" ) == 0 )
+        return LT_FRONT;
+    else if( strcmp( aType, "back" ) == 0 )
+        return LT_BACK;
+    else
+        return LT_UNDEFINED;
 }
 
 
@@ -816,7 +844,7 @@ void BOARD::recalcOpposites()
     // Match up similary-named front/back user layers
     for( int layer = User_1; layer <= PCB_LAYER_ID_COUNT; layer += 2 )
     {
-        if( m_layers[layer].m_opposite != layer )   // already paired
+        if( m_layers[layer].m_opposite != layer ) // already paired
             continue;
 
         if( m_layers[layer].m_type != LT_FRONT && m_layers[layer].m_type != LT_BACK )
@@ -826,7 +854,7 @@ void BOARD::recalcOpposites()
 
         for( int ii = layer + 2; ii <= PCB_LAYER_ID_COUNT; ii += 2 )
         {
-            if( m_layers[ii].m_opposite != ii )    // already paired
+            if( m_layers[ii].m_opposite != ii ) // already paired
                 continue;
 
             if( m_layers[ii].m_type != LT_FRONT && m_layers[ii].m_type != LT_BACK )
@@ -859,8 +887,7 @@ void BOARD::recalcOpposites()
         if( m_layers[layer].m_type != LT_FRONT || m_layers[next].m_type != LT_BACK )
             continue;
 
-        if( m_layers[layer].m_userName != m_layers[layer].m_name
-                && m_layers[next].m_userName != m_layers[next].m_name )
+        if( m_layers[layer].m_userName != m_layers[layer].m_name && m_layers[next].m_userName != m_layers[next].m_name )
         {
             m_layers[layer].m_opposite = next;
             m_layers[next].m_opposite = layer;
@@ -904,11 +931,11 @@ PCB_LAYER_ID BOARD::GetCopperLayerStackMaxId() const
     int imax = GetCopperLayerCount();
 
     // layers IDs are F_Cu, B_Cu, and even IDs values (imax values)
-    if( imax <= 2 )     // at least 2 layers are expected
+    if( imax <= 2 ) // at least 2 layers are expected
         return B_Cu;
 
     // For a 4 layer, last ID is In2_Cu = 6 (IDs are 0, 2, 4, 6)
-    return static_cast<PCB_LAYER_ID>( (imax-1) * 2 );
+    return static_cast<PCB_LAYER_ID>( ( imax - 1 ) * 2 );
 }
 
 
@@ -1023,8 +1050,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
         break;
     }
 
-    default:
-        ;
+    default:;
     }
 }
 
@@ -1035,10 +1061,9 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
     {
     case F_Cu: return IsElementVisible( LAYER_FOOTPRINTS_FR );
     case B_Cu: return IsElementVisible( LAYER_FOOTPRINTS_BK );
-    default:   wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible(): bad layer" ) ); return true;
+    default: wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible(): bad layer" ) ); return true;
     }
 }
-
 
 
 BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
@@ -1098,27 +1123,30 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
     if( aReporter )
         aReporter->Report( _( "Tessellating copper zones..." ) );
 
-    thread_pool& tp = GetKiCadThreadPool();
+    thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
 
     returns.reserve( zones.size() );
 
-    auto cache_zones =
-            [aReporter]( ZONE* aZone ) -> size_t
-            {
-                if( aReporter && aReporter->IsCancelled() )
-                    return 0;
+    auto cache_zones = [aReporter]( ZONE* aZone ) -> size_t
+    {
+        if( aReporter && aReporter->IsCancelled() )
+            return 0;
 
-                aZone->CacheTriangulation();
+        aZone->CacheTriangulation();
 
-                if( aReporter )
-                    aReporter->AdvanceProgress();
+        if( aReporter )
+            aReporter->AdvanceProgress();
 
-                return 1;
-            };
+        return 1;
+    };
 
     for( ZONE* zone : zones )
-        returns.emplace_back( tp.submit_task( [cache_zones, zone] { return cache_zones( zone ); } ) );
+        returns.emplace_back( tp.submit_task(
+                [cache_zones, zone]
+                {
+                    return cache_zones( zone );
+                } ) );
 
     // Finalize the triangulation threads
     for( const std::future<size_t>& ret : returns )
@@ -1176,29 +1204,19 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
     switch( aBoardItem->Type() )
     {
-    case PCB_NETINFO_T:
-        m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
-        break;
+    case PCB_NETINFO_T: m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem ); break;
 
     // this one uses a vector
-    case PCB_MARKER_T:
-        m_markers.push_back( (PCB_MARKER*) aBoardItem );
-        break;
+    case PCB_MARKER_T: m_markers.push_back( (PCB_MARKER*) aBoardItem ); break;
 
     // this one uses a vector
-    case PCB_GROUP_T:
-        m_groups.push_back( (PCB_GROUP*) aBoardItem );
-        break;
+    case PCB_GROUP_T: m_groups.push_back( (PCB_GROUP*) aBoardItem ); break;
 
     // this one uses a vector
-    case PCB_GENERATOR_T:
-        m_generators.push_back( (PCB_GENERATOR*) aBoardItem );
-        break;
+    case PCB_GENERATOR_T: m_generators.push_back( (PCB_GENERATOR*) aBoardItem ); break;
 
     // this one uses a vector
-    case PCB_ZONE_T:
-        m_zones.push_back( (ZONE*) aBoardItem );
-        break;
+    case PCB_ZONE_T: m_zones.push_back( (ZONE*) aBoardItem ); break;
 
     case PCB_VIA_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
@@ -1236,11 +1254,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         else
             m_footprints.push_front( footprint );
 
-        footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
-                                  {
-                                      m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
-                                  },
-                                  RECURSE_MODE::NO_RECURSE );
+        footprint->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
+                },
+                RECURSE_MODE::NO_RECURSE );
         break;
     }
 
@@ -1267,11 +1286,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         {
             PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
 
-            table->RunOnChildren( [&]( BOARD_ITEM* aChild )
-                                  {
-                                      m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
-                                  },
-                                  RECURSE_MODE::NO_RECURSE );
+            table->RunOnChildren(
+                    [&]( BOARD_ITEM* aChild )
+                    {
+                        m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
 
         break;
@@ -1287,8 +1307,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Add() item type %s not handled" ),
-                                      aBoardItem->GetClass() ) );
+        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Add() item type %s not handled" ), aBoardItem->GetClass() ) );
         return;
     }
 
@@ -1356,45 +1375,34 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         break;
     }
 
-    case PCB_MARKER_T:
-        std::erase( m_markers, aBoardItem );
-        break;
+    case PCB_MARKER_T: std::erase( m_markers, aBoardItem ); break;
 
-    case PCB_GROUP_T:
-        std::erase( m_groups, aBoardItem );
-        break;
+    case PCB_GROUP_T: std::erase( m_groups, aBoardItem ); break;
 
-    case PCB_ZONE_T:
-        std::erase( m_zones, aBoardItem );
-        break;
+    case PCB_ZONE_T: std::erase( m_zones, aBoardItem ); break;
 
-    case PCB_POINT_T:
-        std::erase( m_points, aBoardItem );
-        break;
+    case PCB_POINT_T: std::erase( m_points, aBoardItem ); break;
 
-    case PCB_GENERATOR_T:
-        std::erase( m_generators, aBoardItem );
-        break;
+    case PCB_GENERATOR_T: std::erase( m_generators, aBoardItem ); break;
 
     case PCB_FOOTPRINT_T:
     {
         std::erase( m_footprints, aBoardItem );
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aBoardItem );
 
-        footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
-                                  {
-                                      m_itemByIdCache.erase( aChild->m_Uuid );
-                                  },
-                                  RECURSE_MODE::NO_RECURSE );
+        footprint->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    m_itemByIdCache.erase( aChild->m_Uuid );
+                },
+                RECURSE_MODE::NO_RECURSE );
 
         break;
     }
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
-    case PCB_VIA_T:
-        std::erase( m_tracks, aBoardItem );
-        break;
+    case PCB_VIA_T: std::erase( m_tracks, aBoardItem ); break;
 
     case PCB_BARCODE_T:
     case PCB_DIM_ALIGNED_T:
@@ -1416,11 +1424,12 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         {
             PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
 
-            table->RunOnChildren( [&]( BOARD_ITEM* aChild )
-                                  {
-                                      m_itemByIdCache.erase( aChild->m_Uuid );
-                                  },
-                                  RECURSE_MODE::NO_RECURSE );
+            table->RunOnChildren(
+                    [&]( BOARD_ITEM* aChild )
+                    {
+                        m_itemByIdCache.erase( aChild->m_Uuid );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
 
         break;
@@ -1432,8 +1441,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     // other types may use linked list
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Remove() item type %s not handled" ),
-                                      aBoardItem->GetClass() ) );
+        wxFAIL_MSG( wxString::Format( wxT( "BOARD::Remove() item type %s not handled" ), aBoardItem->GetClass() ) );
     }
 
     aBoardItem->SetFlags( STRUCT_DELETED );
@@ -1496,9 +1504,7 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
             break;
 
         case PCB_ARC_T:
-        case PCB_VIA_T:
-            wxFAIL_MSG( wxT( "Use PCB_TRACE_T to remove all tracks, arcs, and vias" ) );
-            break;
+        case PCB_VIA_T: wxFAIL_MSG( wxT( "Use PCB_TRACE_T to remove all tracks, arcs, and vias" ) ); break;
 
         case PCB_SHAPE_T:
             std::copy( m_drawings.begin(), m_drawings.end(), std::back_inserter( removed ) );
@@ -1516,12 +1522,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
         case PCB_TARGET_T:
-        case PCB_BARCODE_T:
-            wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) );
-            break;
+        case PCB_BARCODE_T: wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) ); break;
 
-        default:
-            wxFAIL_MSG( wxT( "BOARD::RemoveAll() needs more ::Type() support" ) );
+        default: wxFAIL_MSG( wxT( "BOARD::RemoveAll() needs more ::Type() support" ) );
         }
     }
 
@@ -1579,8 +1582,8 @@ bool BOARD::HasItemsOnLayer( PCB_LAYER_ID aLayer )
 
 bool BOARD::RemoveAllItemsOnLayer( PCB_LAYER_ID aLayer )
 {
-    bool modified = false;
-    bool removedItemLayers = false;
+    bool                modified = false;
+    bool                removedItemLayers = false;
     PCB_LAYER_COLLECTOR collector;
 
     collector.SetLayerId( aLayer );
@@ -1665,27 +1668,23 @@ wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull )
 
 void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
 {
-    INSPECTOR_FUNC inspector =
-            [&]( EDA_ITEM* descendant, void* aTestData )
-            {
-                PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
+    INSPECTOR_FUNC inspector = [&]( EDA_ITEM* descendant, void* aTestData )
+    {
+        PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( descendant );
 
-                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                {
-                    dimension->UpdateUnits();
+        if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+        {
+            dimension->UpdateUnits();
 
-                    if( aView )
-                        aView->Update( dimension );
-                }
+            if( aView )
+                aView->Update( dimension );
+        }
 
-                return INSPECT_RESULT::CONTINUE;
-            };
+        return INSPECT_RESULT::CONTINUE;
+    };
 
-    aItem->Visit( inspector, nullptr, { PCB_DIM_ALIGNED_T,
-                                        PCB_DIM_LEADER_T,
-                                        PCB_DIM_ORTHOGONAL_T,
-                                        PCB_DIM_CENTER_T,
-                                        PCB_DIM_RADIAL_T } );
+    aItem->Visit( inspector, nullptr,
+                  { PCB_DIM_ALIGNED_T, PCB_DIM_LEADER_T, PCB_DIM_ORTHOGONAL_T, PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T } );
 }
 
 
@@ -1707,7 +1706,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
     for( PCB_MARKER* marker : m_markers )
     {
         if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
-                || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
+            || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
             delete marker;
         }
@@ -1861,42 +1860,42 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 {
     // the board itself
-    aMap[ m_Uuid ] = this;
+    aMap[m_Uuid] = this;
 
     for( PCB_TRACK* track : Tracks() )
-        aMap[ track->m_Uuid ] = track;
+        aMap[track->m_Uuid] = track;
 
     for( FOOTPRINT* footprint : Footprints() )
     {
-        aMap[ footprint->m_Uuid ] = footprint;
+        aMap[footprint->m_Uuid] = footprint;
 
         for( PAD* pad : footprint->Pads() )
-            aMap[ pad->m_Uuid ] = pad;
+            aMap[pad->m_Uuid] = pad;
 
-        aMap[ footprint->Reference().m_Uuid ] = &footprint->Reference();
-        aMap[ footprint->Value().m_Uuid ] = &footprint->Value();
+        aMap[footprint->Reference().m_Uuid] = &footprint->Reference();
+        aMap[footprint->Value().m_Uuid] = &footprint->Value();
 
         for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
-            aMap[ drawing->m_Uuid ] = drawing;
+            aMap[drawing->m_Uuid] = drawing;
     }
 
     for( ZONE* zone : Zones() )
-        aMap[ zone->m_Uuid ] = zone;
+        aMap[zone->m_Uuid] = zone;
 
     for( BOARD_ITEM* drawing : Drawings() )
-        aMap[ drawing->m_Uuid ] = drawing;
+        aMap[drawing->m_Uuid] = drawing;
 
     for( PCB_MARKER* marker : m_markers )
-        aMap[ marker->m_Uuid ] = marker;
+        aMap[marker->m_Uuid] = marker;
 
     for( PCB_GROUP* group : m_groups )
-        aMap[ group->m_Uuid ] = group;
+        aMap[group->m_Uuid] = group;
 
     for( PCB_POINT* point : m_points )
-        aMap[ point->m_Uuid ] = point;
+        aMap[point->m_Uuid] = point;
 
     for( PCB_GENERATOR* generator : m_generators )
-        aMap[ generator->m_Uuid ] = generator;
+        aMap[generator->m_Uuid] = generator;
 }
 
 
@@ -1907,7 +1906,7 @@ wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource ) const
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i + 1] == '{' )
         {
             wxString token;
             bool     isCrossRef = false;
@@ -1961,7 +1960,7 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource ) const
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i + 1] == '{' )
         {
             wxString token;
             bool     isCrossRef = false;
@@ -1979,14 +1978,13 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource ) const
 
             if( isCrossRef )
             {
-                wxString      remainder;
-                wxString      ref = token.BeforeFirst( ':', &remainder );
-                BOARD_ITEM*   refItem = ResolveItem( KIID( ref ), true );
+                wxString    remainder;
+                wxString    ref = token.BeforeFirst( ':', &remainder );
+                BOARD_ITEM* refItem = ResolveItem( KIID( ref ), true );
 
                 if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
                 {
-                    token = static_cast<FOOTPRINT*>( refItem )->GetReference() + wxT( ":" )
-                                                                               + remainder;
+                    token = static_cast<FOOTPRINT*>( refItem )->GetReference() + wxT( ":" ) + remainder;
                 }
             }
 
@@ -2123,10 +2121,9 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 }
 
 
-INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
-                             const std::vector<KICAD_T>& scanTypes )
+INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vector<KICAD_T>& scanTypes )
 {
-#if 0 && defined(DEBUG)
+#if 0 && defined( DEBUG )
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
@@ -2144,7 +2141,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
-        /*
+            /*
          * Instances of the requested KICAD_T live in a list, either one that I manage, or one
          * that my footprints manage.  If it's a type managed by class FOOTPRINT, then simply
          * pass it on to each footprint's Visit() function via IterateForward( m_footprints, ... ).
@@ -2168,8 +2165,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_BARCODE_T:
             if( !footprintsScanned )
             {
-                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
-                        == INSPECT_RESULT::QUIT )
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
                 {
                     return INSPECT_RESULT::QUIT;
                 }
@@ -2179,8 +2175,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
 
             if( !drawingsScanned )
             {
-                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, scanTypes )
-                        == INSPECT_RESULT::QUIT )
+                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
                 {
                     return INSPECT_RESULT::QUIT;
                 }
@@ -2195,8 +2190,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_ARC_T:
             if( !tracksScanned )
             {
-                if( IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, scanTypes )
-                        == INSPECT_RESULT::QUIT )
+                if( IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
                 {
                     return INSPECT_RESULT::QUIT;
                 }
@@ -2227,8 +2221,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_ZONE_T:
             if( !footprintsScanned )
             {
-                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
-                        == INSPECT_RESULT::QUIT )
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
                 {
                     return INSPECT_RESULT::QUIT;
                 }
@@ -2236,7 +2229,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
                 footprintsScanned = true;
             }
 
-            for( ZONE* zone : m_zones)
+            for( ZONE* zone : m_zones )
             {
                 if( zone->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                     return INSPECT_RESULT::QUIT;
@@ -2247,8 +2240,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_GENERATOR_T:
             if( !footprintsScanned )
             {
-                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
-                    == INSPECT_RESULT::QUIT )
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
                 {
                     return INSPECT_RESULT::QUIT;
                 }
@@ -2265,16 +2257,14 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_GROUP_T:
-            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } )
-                    == INSPECT_RESULT::QUIT )
+            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
             }
 
             break;
 
-        default:
-            break;
+        default: break;
         }
     }
 
@@ -2329,7 +2319,7 @@ int BOARD::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet )
             aComplementNet = wxT( "P" );
             rv = -1;
         }
-        else if ( ch == 'P' )
+        else if( ch == 'P' )
         {
             aComplementNet = wxT( "N" );
             rv = 1;
@@ -2342,9 +2332,7 @@ int BOARD::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet )
 
     if( rv != 0 && count >= 1 )
     {
-        aComplementNet = aNetName.Left( aNetName.length() - count )
-                            + aComplementNet
-                            + aNetName.Right( count - 1 );
+        aComplementNet = aNetName.Left( aNetName.length() - count ) + aComplementNet + aNetName.Right( count - 1 );
     }
 
     return rv;
@@ -2422,7 +2410,7 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
     if( !m_project )
         return;
 
-    BOARD_DESIGN_SETTINGS&     bds = GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&           bds = GetDesignSettings();
     const std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->GetDefaultNetclass();
 
     bds.m_NetSettings->ClearAllCaches();
@@ -2449,12 +2437,10 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 
 bool BOARD::SynchronizeComponentClasses( const std::unordered_set<wxString>& aNewSheetPaths ) const
 {
-    std::shared_ptr<COMPONENT_CLASS_SETTINGS> settings =
-            GetProject()->GetProjectFile().ComponentClassSettings();
+    std::shared_ptr<COMPONENT_CLASS_SETTINGS> settings = GetProject()->GetProjectFile().ComponentClassSettings();
 
     return m_componentClassManager->SyncDynamicComponentClassAssignments(
-            settings->GetComponentClassAssignments(), settings->GetEnableSheetComponentClasses(),
-            aNewSheetPaths );
+            settings->GetComponentClassAssignments(), settings->GetEnableSheetComponentClasses(), aNewSheetPaths );
 }
 
 
@@ -2470,7 +2456,7 @@ int BOARD::SetAreasNetCodesFromNetNames()
             continue;
         }
 
-        if( zone->GetNetCode() != 0 )      // i.e. if this zone is connected to a net
+        if( zone->GetNetCode() != 0 ) // i.e. if this zone is connected to a net
         {
             const NETINFO_ITEM* net = zone->GetNet();
 
@@ -2527,20 +2513,20 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
 
     int delta = aPadList.size();
 
-    int idx = 0;        // Starting index is the beginning of list
+    int idx = 0; // Starting index is the beginning of list
 
     while( delta )
     {
         // Calculate half size of remaining interval to test.
         // Ensure the computed value is not truncated (too small)
-        if( (delta & 1) && ( delta > 1 ) )
+        if( ( delta & 1 ) && ( delta > 1 ) )
             delta++;
 
         delta /= 2;
 
         PAD* pad = aPadList[idx];
 
-        if( pad->GetPosition() == aPosition )       // candidate found
+        if( pad->GetPosition() == aPosition ) // candidate found
         {
             // The pad must match the layer mask:
             if( ( aLayerSet & pad->GetLayerSet() ).any() )
@@ -2550,7 +2536,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
             // search for a pad at aPosition that matched this mask
 
             // search next
-            for( int ii = idx+1; ii <= idxmax; ii++ )
+            for( int ii = idx + 1; ii <= idxmax; ii++ )
             {
                 pad = aPadList[ii];
 
@@ -2561,7 +2547,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
                     return pad;
             }
             // search previous
-            for( int ii = idx - 1 ;ii >=0; ii-- )
+            for( int ii = idx - 1; ii >= 0; ii-- )
             {
                 pad = aPadList[ii];
 
@@ -2576,9 +2562,9 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
             return nullptr;
         }
 
-        if( pad->GetPosition().x == aPosition.x )       // Must search considering Y coordinate
+        if( pad->GetPosition().x == aPosition.x ) // Must search considering Y coordinate
         {
-            if( pad->GetPosition().y < aPosition.y )    // Must search after this item
+            if( pad->GetPosition().y < aPosition.y ) // Must search after this item
             {
                 idx += delta;
 
@@ -2618,7 +2604,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
  *
  * This function is used to build ordered pads lists
  */
-bool sortPadsByXthenYCoord( PAD* const & aLH, PAD* const & aRH )
+bool sortPadsByXthenYCoord( PAD* const& aLH, PAD* const& aRH )
 {
     if( aLH->GetPosition().x == aRH->GetPosition().x )
         return aLH->GetPosition().y < aRH->GetPosition().y;
@@ -2631,7 +2617,7 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetC
 {
     for( FOOTPRINT* footprint : Footprints() )
     {
-        for( PAD* pad : footprint->Pads( ) )
+        for( PAD* pad : footprint->Pads() )
         {
             if( aNetCode < 0 || pad->GetNetCode() == aNetCode )
                 aVector.push_back( pad );
@@ -2678,13 +2664,13 @@ std::tuple<int, double, double, double, double> BOARD::GetTrackLength( const PCB
 }
 
 
-FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveLayer,
-                                bool aVisibleOnly, bool aIgnoreLocked ) const
+FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveLayer, bool aVisibleOnly,
+                                bool aIgnoreLocked ) const
 {
-    FOOTPRINT* footprint     = nullptr;
+    FOOTPRINT* footprint = nullptr;
     FOOTPRINT* alt_footprint = nullptr;
-    int        min_dim       = 0x7FFFFFFF;
-    int        alt_min_dim   = 0x7FFFFFFF;
+    int        min_dim = 0x7FFFFFFF;
+    int        alt_min_dim = 0x7FFFFFFF;
     bool       current_layer_back = IsBackLayer( aActiveLayer );
 
     for( FOOTPRINT* candidate : m_footprints )
@@ -2708,8 +2694,8 @@ FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveL
             int offy = bb.GetY() + bb.GetHeight() / 2;
 
             // off x & offy point to the middle of the box.
-            int dist = ( aPosition.x - offx ) * ( aPosition.x - offx ) +
-                       ( aPosition.y - offy ) * ( aPosition.y - offy );
+            int dist =
+                    ( aPosition.x - offx ) * ( aPosition.x - offx ) + ( aPosition.y - offy ) * ( aPosition.y - offy );
 
             if( current_layer_back == IsBackLayer( layer ) )
             {
@@ -2735,7 +2721,7 @@ FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveL
     if( footprint )
         return footprint;
 
-    if( alt_footprint)
+    if( alt_footprint )
         return alt_footprint;
 
     return nullptr;
@@ -2762,8 +2748,8 @@ std::list<ZONE*> BOARD::GetZoneList( bool aIncludeZonesInFootprints ) const
 }
 
 
-ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                      VECTOR2I aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )
+ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer, VECTOR2I aStartPointPosition,
+                      ZONE_BORDER_DISPLAY_STYLE aHatch )
 {
     ZONE* new_area = new ZONE( this );
 
@@ -2793,8 +2779,8 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, OUTLINE_ERROR_HA
     // max dist from one endPt to next startPt: use the current value
     int chainingEpsilon = GetOutlinesChainingEpsilon();
 
-    bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
-                                              chainingEpsilon, aErrorHandler, aAllowUseArcsInPolygons );
+    bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError, chainingEpsilon,
+                                              aErrorHandler, aAllowUseArcsInPolygons );
 
     // Now add NPTH oval holes as holes in outlines if required
     if( aIncludeNPTHAsOutlines )
@@ -2803,19 +2789,19 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, OUTLINE_ERROR_HA
         {
             for( PAD* pad : fp->Pads() )
             {
-                if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
+                if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                     continue;
 
                 SHAPE_POLY_SET hole;
                 pad->TransformHoleToPolygon( hole, 0, pad->GetMaxError(), ERROR_INSIDE );
 
-                if( hole.OutlineCount() > 0 )   // can be not the case for malformed NPTH holes
+                if( hole.OutlineCount() > 0 ) // can be not the case for malformed NPTH holes
                 {
                     // Add this pad hole to the main outline
                     // But we can have more than one main outline (i.e. more than one board), so
                     // search the right main outline i.e. the outline that contains the pad hole
                     SHAPE_LINE_CHAIN& pad_hole = hole.Outline( 0 );
-                    const VECTOR2I holePt = pad_hole.CPoint( 0 );
+                    const VECTOR2I    holePt = pad_hole.CPoint( 0 );
 
                     for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
                     {
@@ -2945,7 +2931,6 @@ void BOARD::MapNets( BOARD* aDestBoard )
             NETINFO_ITEM* newNet = new NETINFO_ITEM( aDestBoard, item->GetNetname() );
             aDestBoard->Add( newNet );
             item->SetNet( newNet );
-
         }
     }
 }
@@ -2953,7 +2938,7 @@ void BOARD::MapNets( BOARD* aDestBoard )
 
 void BOARD::SanitizeNetcodes()
 {
-    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
+    for( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
     {
         if( FindNet( item->GetNetCode() ) == nullptr )
             item->SetNetCode( NETINFO_LIST::ORPHANED );
@@ -2998,12 +2983,10 @@ void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
 }
 
 
-void BOARD::OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems,
-                                    std::vector<BOARD_ITEM*>& aRemovedItems,
+void BOARD::OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems, std::vector<BOARD_ITEM*>& aRemovedItems,
                                     std::vector<BOARD_ITEM*>& aChangedItems )
 {
-    InvokeListeners( &BOARD_LISTENER::OnBoardCompositeUpdate, *this, aAddedItems, aRemovedItems,
-                     aChangedItems );
+    InvokeListeners( &BOARD_LISTENER::OnBoardCompositeUpdate, *this, aAddedItems, aRemovedItems, aChangedItems );
 }
 
 
@@ -3050,7 +3033,8 @@ wxString BOARD::GroupsSanityCheck( bool repair )
     if( repair )
     {
         while( GroupsSanityCheckInternal( repair ) != wxEmptyString )
-        {};
+        {
+        };
 
         return wxEmptyString;
     }
@@ -3127,7 +3111,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
 }
 
 
-bool BOARD::cmp_items::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const
+bool BOARD::cmp_items::operator()( const BOARD_ITEM* a, const BOARD_ITEM* b ) const
 {
     if( a->Type() != b->Type() )
         return a->Type() < b->Type();
@@ -3141,15 +3125,14 @@ bool BOARD::cmp_items::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) c
     if( a->GetPosition().y != b->GetPosition().y )
         return a->GetPosition().y < b->GetPosition().y;
 
-    if( a->m_Uuid != b->m_Uuid )    // shopuld be always the case foer valid boards
+    if( a->m_Uuid != b->m_Uuid ) // shopuld be always the case foer valid boards
         return a->m_Uuid < b->m_Uuid;
 
     return a < b;
 }
 
 
-bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
-                                      const BOARD_ITEM* aSecond ) const
+bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
 {
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();
@@ -3195,8 +3178,7 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 }
 
 
-void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
-                                                SHAPE_POLY_SET& aOutlines,
+void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines,
                                                 KIGFX::RENDER_SETTINGS* aRenderSettings ) const
 {
     int maxError = GetDesignSettings().m_MaxError;
@@ -3215,9 +3197,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
     {
         footprint->TransformPadsToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
 
-        footprint->TransformFPShapesToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE,
-                                               true, /* include text */
-                                               true, /* include shapes */
+        footprint->TransformFPShapesToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE, true, /* include text */
+                                               true,                                               /* include shapes */
                                                false /* include private items */ );
 
         for( const ZONE* zone : footprint->Zones() )
@@ -3293,8 +3274,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             break;
         }
 
-        default:
-            break;
+        default: break;
         }
     }
 }
@@ -3441,8 +3421,8 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& 
     // Verify we're saving for the correct project
     if( !projPath.IsSameAs( aProjectPath ) )
     {
-        wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - project path mismatch: %s vs %s"),
-                   projPath, aProjectPath );
+        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver skipping - project path mismatch: %s vs %s" ), projPath,
+                    aProjectPath );
         return;
     }
 
@@ -3454,8 +3434,7 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& 
     // Derive relative path from project root.
     if( !boardPath.StartsWith( projPath ) )
     {
-        wxLogTrace( traceAutoSave, wxS("[history] pcb saver skipping - board not under project: %s"),
-                   boardPath );
+        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver skipping - board not under project: %s" ), boardPath );
         return; // not under project
     }
 
@@ -3479,11 +3458,10 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& 
         // Save directly to history mirror path.
         pi->SaveBoard( dst.GetFullPath(), this, nullptr );
         aFiles.push_back( dst.GetFullPath() );
-        wxLogTrace( traceAutoSave, wxS("[history] pcb saver exported '%s'"), dst.GetFullPath() );
+        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver exported '%s'" ), dst.GetFullPath() );
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogTrace( traceAutoSave, wxS("[history] pcb saver export failed: %s"),
-                   wxString::FromUTF8( ioe.What() ) );
+        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver export failed: %s" ), wxString::FromUTF8( ioe.What() ) );
     }
 }

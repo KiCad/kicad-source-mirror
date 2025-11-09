@@ -48,8 +48,7 @@
 #include <trigo.h>
 
 
-SCH_TEXT::SCH_TEXT( const VECTOR2I& aPos, const wxString& aText, SCH_LAYER_ID aLayer,
-                    KICAD_T aType ) :
+SCH_TEXT::SCH_TEXT( const VECTOR2I& aPos, const wxString& aText, SCH_LAYER_ID aLayer, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
         EDA_TEXT( schIUScale, aText )
 {
@@ -90,10 +89,10 @@ void SCH_TEXT::NormalizeJustification( bool inverse )
         if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
             delta.x = bbox.GetWidth() / 2;
         else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            delta.x = - bbox.GetWidth() / 2;
+            delta.x = -bbox.GetWidth() / 2;
 
         if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
-            delta.y = - bbox.GetHeight() / 2;
+            delta.y = -bbox.GetHeight() / 2;
         else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
             delta.y = bbox.GetHeight() / 2;
     }
@@ -102,12 +101,12 @@ void SCH_TEXT::NormalizeJustification( bool inverse )
         if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
             delta.y = bbox.GetWidth() / 2;
         else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            delta.y = - bbox.GetWidth() / 2;
+            delta.y = -bbox.GetWidth() / 2;
 
         if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
-            delta.x = + bbox.GetHeight() / 2;
+            delta.x = +bbox.GetHeight() / 2;
         else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
-            delta.x = - bbox.GetHeight() / 2;
+            delta.x = -bbox.GetHeight() / 2;
     }
 
     if( inverse )
@@ -209,8 +208,7 @@ void SCH_TEXT::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 void SCH_TEXT::Rotate90( bool aClockwise )
 {
-    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aClockwise )
-     || ( GetTextAngle() == ANGLE_VERTICAL && !aClockwise ) )
+    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aClockwise ) || ( GetTextAngle() == ANGLE_VERTICAL && !aClockwise ) )
     {
         FlipHJustify();
     }
@@ -221,8 +219,7 @@ void SCH_TEXT::Rotate90( bool aClockwise )
 
 void SCH_TEXT::MirrorSpinStyle( bool aLeftRight )
 {
-    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aLeftRight )
-     || ( GetTextAngle() == ANGLE_VERTICAL && !aLeftRight ) )
+    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aLeftRight ) || ( GetTextAngle() == ANGLE_VERTICAL && !aLeftRight ) )
     {
         FlipHJustify();
     }
@@ -270,7 +267,7 @@ int SCH_TEXT::GetTextOffset( const RENDER_SETTINGS* aSettings ) const
     else if( Schematic() )
         ratio = Schematic()->Settings().m_TextOffsetRatio;
     else
-        ratio = DEFAULT_TEXT_OFFSET_RATIO;   // For previews (such as in Preferences), etc.
+        ratio = DEFAULT_TEXT_OFFSET_RATIO; // For previews (such as in Preferences), etc.
 
     return KiROUND( ratio * GetTextSize().y );
 }
@@ -314,8 +311,7 @@ const BOX2I SCH_TEXT::GetBoundingBox() const
 }
 
 
-wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                                 int aDepth ) const
+wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
 {
     SCH_SHEET* sheet = nullptr;
 
@@ -324,39 +320,32 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
     else if( SCHEMATIC* schematic = Schematic() )
         sheet = schematic->CurrentSheet().Last();
 
-    std::function<bool( wxString* )> textResolver =
-            [&]( wxString* token ) -> bool
-            {
-                if( SCH_SYMBOL* sch_symbol = dynamic_cast<SCH_SYMBOL*>( m_parent ) )
-                {
-                    if( sch_symbol->ResolveTextVar( aPath, token, aDepth + 1 ) )
-                        return true;
-                }
-                else if( LIB_SYMBOL* lib_symbol = dynamic_cast<LIB_SYMBOL*>( m_parent ) )
-                {
-                    if( lib_symbol->ResolveTextVar( token, aDepth + 1 ) )
-                        return true;
-                }
+    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
+    {
+        if( SCH_SYMBOL* sch_symbol = dynamic_cast<SCH_SYMBOL*>( m_parent ) )
+        {
+            if( sch_symbol->ResolveTextVar( aPath, token, aDepth + 1 ) )
+                return true;
+        }
+        else if( LIB_SYMBOL* lib_symbol = dynamic_cast<LIB_SYMBOL*>( m_parent ) )
+        {
+            if( lib_symbol->ResolveTextVar( token, aDepth + 1 ) )
+                return true;
+        }
 
-                if( sheet )
-                {
-                    if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
-                        return true;
-                }
+        if( sheet )
+        {
+            if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
+                return true;
+        }
 
-                return false;
-            };
+        return false;
+    };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
-    {
-        if( aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
-            text = ExpandTextVars( text, &textResolver );
-    }
-
-    if( text.Contains( wxT( "@{" ) ) )
-        text = EvaluateText( text );
+        text = ResolveTextVars( text, &textResolver, aDepth );
 
     return text;
 }
@@ -364,8 +353,7 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
 
 void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 {
-    wxCHECK_MSG( IsHypertext(), /* void */,
-                 wxT( "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" ) );
+    wxCHECK_MSG( IsHypertext(), /* void */, wxT( "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" ) );
 
     SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
     navTool->HypertextCommand( m_hyperlink );
@@ -395,7 +383,7 @@ bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     BOX2I rect = aRect;
@@ -412,7 +400,7 @@ bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
 
 bool SCH_TEXT::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 {
-    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     return KIGEOM::BoxHitTest( aPoly, GetBoundingBox(), aContained );
@@ -440,8 +428,8 @@ std::vector<int> SCH_TEXT::ViewGetLayers() const
 }
 
 
-void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
-                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
+void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts, int aUnit, int aBodyStyle,
+                     const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground || IsPrivate() )
         return;
@@ -467,7 +455,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
 
     if( aDimmed )
     {
-        color.Desaturate( );
+        color.Desaturate();
         color = color.Mix( bg, 0.5f );
     }
 
@@ -505,8 +493,8 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         else
             attrs.m_Angle = ANGLE_VERTICAL;
 
-        aPlotter->PlotText( renderSettings->TransformCoordinate( txtpos ) + aOffset, color,
-                            GetText(), attrs, font, GetFontMetrics() );
+        aPlotter->PlotText( renderSettings->TransformCoordinate( txtpos ) + aOffset, color, GetText(), attrs, font,
+                            GetFontMetrics() );
     }
     else
     {
@@ -520,14 +508,14 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
             BOX2I    firstLineBBox = GetTextBox( renderSettings, 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
             int      adjust = KiROUND( sizeDiff * 0.4 );
-            VECTOR2I adjust_offset( 0, - adjust );
+            VECTOR2I adjust_offset( 0, -adjust );
 
             RotatePoint( adjust_offset, GetDrawRotation() );
             text_offset += adjust_offset;
         }
 
         std::vector<VECTOR2I> positions;
-        wxArrayString strings_list;
+        wxArrayString         strings_list;
         wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
         positions.reserve( strings_list.Count() );
 
@@ -563,16 +551,16 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     aList.emplace_back( _( "Font" ), GetFont() ? GetFont()->GetName() : _( "Default" ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
-    int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
+    int      style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
     aList.emplace_back( _( "Text Size" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
 
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:          msg = _( "Align left" );   break;
-    case GR_TEXT_H_ALIGN_CENTER:        msg = _( "Align center" ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:         msg = _( "Align right" );  break;
+    case GR_TEXT_H_ALIGN_LEFT: msg = _( "Align left" ); break;
+    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Align center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT: msg = _( "Align right" ); break;
     case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
@@ -580,11 +568,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     {
         aList.emplace_back( _( "H Justification" ), msg );
 
-        switch ( GetVertJustify() )
+        switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP:           msg = _( "Top" );          break;
-        case GR_TEXT_V_ALIGN_CENTER:        msg = _( "Center" );       break;
-        case GR_TEXT_V_ALIGN_BOTTOM:        msg = _( "Bottom" );       break;
+        case GR_TEXT_V_ALIGN_TOP: msg = _( "Top" ); break;
+        case GR_TEXT_V_ALIGN_CENTER: msg = _( "Center" ); break;
+        case GR_TEXT_V_ALIGN_BOTTOM: msg = _( "Bottom" ); break;
         case GR_TEXT_V_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
         }
 
@@ -670,18 +658,15 @@ int SCH_TEXT::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-#if defined(DEBUG)
+#if defined( DEBUG )
 
 void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-                                 << " layer=\"" << m_layer << '"'
-                                 << '>'
-                                 << TO_UTF8( GetText() )
-                                 << "</" << s.Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << " layer=\"" << m_layer << '"' << '>'
+                                 << TO_UTF8( GetText() ) << "</" << s.Lower().mb_str() << ">\n";
 }
 
 #endif
@@ -703,9 +688,9 @@ static struct SCH_TEXT_DESC
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TEXT, int>( _HKI( "Text Size" ),
-                &SCH_TEXT::SetSchTextSize, &SCH_TEXT::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                _HKI( "Text Properties" ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TEXT, int>( _HKI( "Text Size" ), &SCH_TEXT::SetSchTextSize,
+                                                          &SCH_TEXT::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                             _HKI( "Text Properties" ) );
 
         // Orientation is exposed differently in schematic; mask the base for now
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );

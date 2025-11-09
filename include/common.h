@@ -67,9 +67,8 @@ KICOMMON_API wxString SearchHelpFileFullPath( const wxString& aBaseName );
  * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
  * @return true if \a aOutputDir already exists or was successfully created.
  */
-KICOMMON_API bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
-                                             const wxString& aBaseFilename,
-                                             REPORTER*       aReporter = nullptr );
+KICOMMON_API bool EnsureFileDirectoryExists( wxFileName* aTargetFullFileName, const wxString& aBaseFilename,
+                                             REPORTER* aReporter = nullptr );
 
 /**
  * It's annoying to throw up nag dialogs when the extension isn't right.  Just fix it.
@@ -89,20 +88,37 @@ KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
  * @param aString a string containing (perhaps) references to env var
  * @return the expanded environment variable.
  */
-KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString,
-                                                       const PROJECT*  aProject );
+KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
 
 /**
  * Expand '${var-name}' templates in text.
  */
 #define FOR_ERC_DRC 1
 
-KICOMMON_API wxString ExpandTextVars( const wxString& aSource,
-                                      const std::function<bool( wxString* )>* aResolver,
-                                      int aFlags = 0 );
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
+                                      int aFlags = 0, int aDepth = 0 );
 
-KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject,
-                                      int aFlags = 0 );
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags = 0 );
+
+/**
+ * Multi-pass text variable expansion and math expression evaluation.
+ *
+ * Performs recursive resolution of both ${...} variable references and @{...} math expressions,
+ * then cleans up escape sequences (\${...} and \@{...}) to display literals.
+ *
+ * This helper encapsulates the common pattern used across schematic text components:
+ * - While text contains ${...} or @{...} and depth < max:
+ *   - Expand variables via ExpandTextVars()
+ *   - Evaluate math expressions via EXPRESSION_EVALUATOR
+ * - Convert escape markers back to literals
+ *
+ * @param aSource The source text containing variables and/or expressions
+ * @param aResolver Function to resolve variable references
+ * @param aDepth Current recursion depth (passed by reference, will be incremented)
+ * @return Fully expanded and evaluated text with escape sequences cleaned up
+ */
+KICOMMON_API wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
+                                       int& aDepth );
 
 /**
  * Returns any variables unexpanded, e.g. ${VAR} -> VAR
@@ -136,4 +152,4 @@ KICOMMON_API long long TimestampDir( const wxString& aDirPath, const wxString& a
 KICOMMON_API bool WarnUserIfOperatingSystemUnsupported();
 
 
-#endif  // INCLUDE__COMMON_H_
+#endif // INCLUDE__COMMON_H_

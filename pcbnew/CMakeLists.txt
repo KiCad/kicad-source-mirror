@@ -689,6 +689,29 @@ foreach(file ${markdownFiles})
         PROPERTIES OBJECT_DEPENDS "${existing_depends}${outputHeader}")
 endforeach()
 
+# Generate pcb_text_help_md.h from pcb_text_help.md for text variable syntax help
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help.md
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h
+        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
+    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help.md
+    COMMENT "creating pcb_text_help_md.h from pcb_text_help.md"
+)
+
+# Add pcb_text_help_md.h as a dependency for source files that will include it
+set_source_files_properties(pcb_text.cpp
+    PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+set_source_files_properties(dialogs/dialog_text_properties.cpp
+    PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+set_source_files_properties(dialogs/dialog_textbox_properties.cpp
+    PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+set_source_files_properties(dialogs/dialog_table_properties.cpp
+    PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+set_source_files_properties(dialogs/dialog_tablecell_properties.cpp
+    PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+
 if( APPLE )
     # setup bundle
     set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns fpedit.icns fpedit_doc.icns )

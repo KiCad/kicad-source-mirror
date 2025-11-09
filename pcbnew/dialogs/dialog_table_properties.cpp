@@ -23,10 +23,13 @@
 
 #include "dialog_table_properties.h"
 
+#include <wx/hyperlink.h>
+
 #include <kiplatform/ui.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
 #include <widgets/wx_grid.h>
+#include <dialogs/html_message_box.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <grid_tricks.h>
@@ -56,20 +59,20 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
 {
     m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-   	m_grid->CreateGrid( m_table->GetRowCount(), m_table->GetColCount() );
-   	m_grid->EnableEditing( true );
-   	m_grid->EnableGridLines( true );
-   	m_grid->EnableDragGridSize( false );
-   	m_grid->SetMargins( 0, 0 );
+    m_grid->CreateGrid( m_table->GetRowCount(), m_table->GetColCount() );
+    m_grid->EnableEditing( true );
+    m_grid->EnableGridLines( true );
+    m_grid->EnableDragGridSize( false );
+    m_grid->SetMargins( 0, 0 );
     m_grid->SetCellHighlightROPenWidth( 0 );
 
     m_grid->EnableDragColMove( false );
-   	m_grid->EnableDragColSize( false );
-   	m_grid->SetColLabelSize( 0 );
+    m_grid->EnableDragColSize( false );
+    m_grid->SetColLabelSize( 0 );
     m_grid->EnableDragRowMove( false );
-   	m_grid->EnableDragRowSize( false );
-   	m_grid->SetRowLabelSize( 0 );
-   	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+    m_grid->EnableDragRowSize( false );
+    m_grid->SetRowLabelSize( 0 );
+    m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 
     m_gridSizer->Add( m_grid, 1, wxEXPAND, 5 );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -88,7 +91,8 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
             }
             else
             {
-                attr->SetEditor( new GRID_CELL_STC_EDITOR( true, false,
+                attr->SetEditor( new GRID_CELL_STC_EDITOR(
+                        true, false,
                         [this, cell]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
                         {
                             aScintillaTricks->DoTextVarAutocomplete(
@@ -128,6 +132,16 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
     SetupStandardButtons();
     Layout();
 
+    // Add syntax help hyperlink
+    m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _( "Syntax help" ), wxEmptyString, wxDefaultPosition,
+                                        wxDefaultSize, wxHL_DEFAULT_STYLE );
+    m_syntaxHelp->SetToolTip( _( "Show syntax help window" ) );
+    m_gridSizer->Add( m_syntaxHelp, 0, wxTOP | wxBOTTOM | wxRIGHT | wxLEFT, 3 );
+
+    m_syntaxHelp->Bind( wxEVT_HYPERLINK, &DIALOG_TABLE_PROPERTIES::onSyntaxHelp, this );
+
+    m_helpWindow = nullptr;
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -137,6 +151,9 @@ DIALOG_TABLE_PROPERTIES::~DIALOG_TABLE_PROPERTIES()
 {
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -184,24 +201,25 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
         }
     }
 
-    CallAfter( [this]()
-               {
-                   for( int row = 0; row < m_table->GetRowCount(); ++row )
-                   {
-                       for( int col = 0; col < m_table->GetColCount(); ++col )
-                       {
-                           PCB_TABLECELL* tableCell = m_table->GetCell( row, col );
+    CallAfter(
+            [this]()
+            {
+                for( int row = 0; row < m_table->GetRowCount(); ++row )
+                {
+                    for( int col = 0; col < m_table->GetColCount(); ++col )
+                    {
+                        PCB_TABLECELL* tableCell = m_table->GetCell( row, col );
 
-                           if( tableCell->IsSelected() )
-                           {
-                               m_grid->SetGridCursor( row, col );
-                               m_grid->EnableCellEditControl();
-                               m_grid->ShowCellEditControl();
-                               return;
-                           }
-                       }
-                   }
-               } );
+                        if( tableCell->IsSelected() )
+                        {
+                            m_grid->SetGridCursor( row, col );
+                            m_grid->EnableCellEditControl();
+                            m_grid->ShowCellEditControl();
+                            return;
+                        }
+                    }
+                }
+            } );
 
     sizeGridToTable();
 
@@ -417,7 +435,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_TABLE_PROPERTIES::sizeGridToTable()
 {
-    Layout();   // Make sure we get the current client size for the grid
+    Layout(); // Make sure we get the current client size for the grid
 
     wxSize availableGridSize = m_grid->GetClientSize();
 
@@ -442,4 +460,10 @@ void DIALOG_TABLE_PROPERTIES::onSize( wxSizeEvent& aEvent )
         sizeGridToTable();
 
     aEvent.Skip();
+}
+
+
+void DIALOG_TABLE_PROPERTIES::onSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    m_helpWindow = PCB_TEXT::ShowSyntaxHelp( this );
 }

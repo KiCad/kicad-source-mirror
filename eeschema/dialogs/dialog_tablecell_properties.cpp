@@ -28,15 +28,19 @@
 #include <widgets/font_choice.h>
 #include <settings/color_settings.h>
 #include <sch_table.h>
+#include <sch_text.h>
 #include <sch_commit.h>
 #include <tool/tool_manager.h>
+#include <dialogs/html_message_box.h>
 #include <dialog_tablecell_properties.h>
 
-DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME*             aFrame,
-                                                          std::vector<SCH_TABLECELL*> aCells ) :
-        DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ), m_frame( aFrame ), m_table( nullptr ),
+DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame, std::vector<SCH_TABLECELL*> aCells ) :
+        DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ),
+        m_frame( aFrame ),
+        m_table( nullptr ),
         m_cells( std::move( aCells ) ),
         m_scintillaTricks( nullptr ),
+        m_helpWindow( nullptr ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
         m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
@@ -117,10 +121,12 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME*       
 DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
 {
     delete m_scintillaTricks;
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
-void DIALOG_TABLECELL_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
-                                                         wxArrayString*  aTokens )
+void DIALOG_TABLECELL_PROPERTIES::getContextualTextVars( const wxString& aCrossRef, wxArrayString* aTokens )
 {
     SCHEMATIC* schematic = m_table->Schematic();
 
@@ -212,8 +218,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
         else
         {
-            if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(),
-                                                                 cell->IsItalic() ) )
+            if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
                 m_fontCtrl->SetSelection( -1 );
 
             if( cell->GetTextWidth() != m_textSize.GetValue() )
@@ -267,18 +272,18 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
         switch( hAlign )
         {
-        case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
-        case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
-        case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
+        case GR_TEXT_H_ALIGN_LEFT: m_hAlignLeft->Check(); break;
+        case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT: m_hAlignRight->Check(); break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
         }
 
         switch( vAlign )
         {
-        case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
-        case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check(); break;
-        case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
-        case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
+        case GR_TEXT_V_ALIGN_TOP: m_vAlignTop->Check(); break;
+        case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
+        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE: break;
         }
     }
 
@@ -436,4 +441,17 @@ void DIALOG_TABLECELL_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
         m_scintillaTricks->CancelAutocomplete();
 
     event.Skip();
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
+{
+    if( m_helpWindow )
+    {
+        m_helpWindow->Raise();
+        m_helpWindow->Show( true );
+        return;
+    }
+
+    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
 }

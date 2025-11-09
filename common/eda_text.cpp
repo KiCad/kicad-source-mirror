@@ -22,27 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>          // for max
-#include <stddef.h>           // for NULL
-#include <type_traits>        // for swap
+#include <algorithm>   // for max
+#include <stddef.h>    // for NULL
+#include <type_traits> // for swap
 #include <vector>
 #include <mutex>
 
 #include <eda_item.h>
 #include <base_units.h>
 #include <callback_gal.h>
-#include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
-#include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
+#include <eda_text.h>    // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
+#include <gal/color4d.h> // for COLOR4D, COLOR4D::BLACK
 #include <font/glyph.h>
 #include <gr_text.h>
-#include <string_utils.h>     // for UnescapeString
+#include <string_utils.h> // for UnescapeString
 #include <text_eval/text_eval_wrapper.h>
-#include <math/util.h>        // for KiROUND
+#include <math/util.h> // for KiROUND
 #include <math/vector2d.h>
 #include <core/kicad_algo.h>
 #include <richio.h>
 #include <render_settings.h>
-#include <trigo.h>            // for RotatePoint
+#include <trigo.h> // for RotatePoint
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
@@ -55,9 +55,9 @@
 #include <api/api_utils.h>
 #include <api/common/types/base_types.pb.h>
 
-#include <wx/debug.h>           // for wxASSERT
+#include <wx/debug.h> // for wxASSERT
 #include <wx/string.h>
-#include <wx/url.h>             // for wxURL
+#include <wx/url.h> // for wxURL
 #include <io/kicad/kicad_io_utils.h>
 #include "font/kicad_font_name.h"
 #include "font/fontconfig.h"
@@ -117,7 +117,7 @@ EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
 
 
 EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
-    m_IuScale( aText.m_IuScale )
+        m_IuScale( aText.m_IuScale )
 {
     m_text = aText.m_text;
     m_shown_text = aText.m_shown_text;
@@ -195,7 +195,7 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 }
 
 
-void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
+void EDA_TEXT::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::common;
     types::Text text;
@@ -209,11 +209,9 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     if( GetFont() )
         attrs->set_font_name( GetFont()->GetName().ToStdString() );
 
-    attrs->set_horizontal_alignment(
-            ToProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( GetHorizJustify() ) );
+    attrs->set_horizontal_alignment( ToProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( GetHorizJustify() ) );
 
-    attrs->set_vertical_alignment(
-            ToProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( GetVertJustify() ) );
+    attrs->set_vertical_alignment( ToProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( GetVertJustify() ) );
 
     attrs->mutable_angle()->set_value_degrees( GetTextAngleDegrees() );
     attrs->set_line_spacing( GetLineSpacing() );
@@ -231,7 +229,7 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
 }
 
 
-bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
+bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer )
 {
     using namespace kiapi::common;
     types::Text text;
@@ -257,9 +255,8 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
 
         if( !text.attributes().font_name().empty() )
         {
-            attrs.m_Font = KIFONT::FONT::GetFont(
-                    wxString( text.attributes().font_name().c_str(), wxConvUTF8 ), attrs.m_Bold,
-                    attrs.m_Italic );
+            attrs.m_Font = KIFONT::FONT::GetFont( wxString( text.attributes().font_name().c_str(), wxConvUTF8 ),
+                                                  attrs.m_Bold, attrs.m_Italic );
         }
 
         attrs.m_Angle = EDA_ANGLE( text.attributes().angle().value_degrees(), DEGREES_T );
@@ -268,8 +265,8 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
         attrs.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>(
                 text.attributes().horizontal_alignment() );
 
-        attrs.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>(
-                text.attributes().vertical_alignment() );
+        attrs.m_Valign =
+                FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( text.attributes().vertical_alignment() );
 
         SetAttributes( attrs );
     }
@@ -519,8 +516,7 @@ bool EDA_TEXT::ResolveFont( const std::vector<wxString>* aEmbeddedFonts )
 {
     if( !m_unresolvedFontName.IsEmpty() )
     {
-        m_attributes.m_Font = KIFONT::FONT::GetFont( m_unresolvedFontName, IsBold(), IsItalic(),
-                                                     aEmbeddedFonts );
+        m_attributes.m_Font = KIFONT::FONT::GetFont( m_unresolvedFontName, IsBold(), IsItalic(), aEmbeddedFonts );
 
         if( !m_render_cache.empty() )
             m_render_cache_font = m_attributes.m_Font;
@@ -553,8 +549,7 @@ void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
         int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
         int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
-        aNewSize = VECTOR2I( std::clamp( aNewSize.x, min, max ),
-                             std::clamp( aNewSize.y, min, max ) );
+        aNewSize = VECTOR2I( std::clamp( aNewSize.x, min, max ), std::clamp( aNewSize.y, min, max ) );
     }
 
     m_attributes.m_Size = aNewSize;
@@ -641,7 +636,7 @@ void EDA_TEXT::cacheShownText()
     else
     {
         m_shown_text = UnescapeString( m_text );
-        m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) );
+        m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) ) || m_shown_text.Contains( wxT( "@{" ) );
     }
 
     ClearRenderCache();
@@ -693,18 +688,14 @@ void EDA_TEXT::ClearBoundingBoxCache()
 
 
 std::vector<std::unique_ptr<KIFONT::GLYPH>>*
-EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
-                          const VECTOR2I& aOffset ) const
+EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolvedText, const VECTOR2I& aOffset ) const
 {
     if( aFont->IsOutline() )
     {
         EDA_ANGLE resolvedAngle = GetDrawRotation();
 
-        if( m_render_cache.empty()
-                || m_render_cache_font != aFont
-                || m_render_cache_text != forResolvedText
-                || m_render_cache_angle != resolvedAngle
-                || m_render_cache_offset != aOffset )
+        if( m_render_cache.empty() || m_render_cache_font != aFont || m_render_cache_text != forResolvedText
+            || m_render_cache_angle != resolvedAngle || m_render_cache_offset != aOffset )
         {
             m_render_cache.clear();
 
@@ -713,8 +704,7 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
 
             attrs.m_Angle = resolvedAngle;
 
-            font->GetLinesAsGlyphs( &m_render_cache, forResolvedText, GetDrawPos() + aOffset,
-                                    attrs, getFontMetrics() );
+            font->GetLinesAsGlyphs( &m_render_cache, forResolvedText, GetDrawPos() + aOffset, attrs, getFontMetrics() );
             m_render_cache_font = aFont;
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
@@ -728,8 +718,8 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
 }
 
 
-void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const KIFONT::FONT* aFont,
-                                 const EDA_ANGLE& aAngle, const VECTOR2I& aOffset )
+void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const KIFONT::FONT* aFont, const EDA_ANGLE& aAngle,
+                                 const VECTOR2I& aOffset )
 {
     m_render_cache_text = aResolvedText;
     m_render_cache_font = aFont;
@@ -758,22 +748,22 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
     {
         std::lock_guard<std::mutex> bboxLock( m_bbox_cacheMutex );
-        auto cache_it = m_bbox_cache.find( aLine );
+        auto                        cache_it = m_bbox_cache.find( aLine );
 
         if( cache_it != m_bbox_cache.end() && cache_it->second.m_pos == drawPos )
             return cache_it->second.m_bbox;
     }
 
-    BOX2I          bbox;
-    wxArrayString  strings;
-    wxString       text = GetShownText( true );
-    int            thickness = GetEffectiveTextPenWidth();
+    BOX2I         bbox;
+    wxArrayString strings;
+    wxString      text = GetShownText( true );
+    int           thickness = GetEffectiveTextPenWidth();
 
     if( IsMultilineAllowed() )
     {
         wxStringSplit( text, strings, '\n' );
 
-        if( strings.GetCount() )     // GetCount() == 0 for void strings with multilines allowed
+        if( strings.GetCount() ) // GetCount() == 0 for void strings with multilines allowed
         {
             if( aLine >= 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
                 text = strings.Item( aLine );
@@ -840,45 +830,35 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
         break;
 
-    case GR_TEXT_H_ALIGN_CENTER:
-        bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 );
-        break;
+    case GR_TEXT_H_ALIGN_CENTER: bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 ); break;
 
     case GR_TEXT_H_ALIGN_RIGHT:
         if( !IsMirrored() )
             bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
         break;
 
-    case GR_TEXT_H_ALIGN_INDETERMINATE:
-        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-        break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
     }
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP:
-        bbox.Offset( 0, -fudgeFactor );
-        break;
+    case GR_TEXT_V_ALIGN_TOP: bbox.Offset( 0, -fudgeFactor ); break;
 
-    case GR_TEXT_V_ALIGN_CENTER:
-        bbox.SetY( bbox.GetY() - bbox.GetHeight() / 2 );
-        break;
+    case GR_TEXT_V_ALIGN_CENTER: bbox.SetY( bbox.GetY() - bbox.GetHeight() / 2 ); break;
 
     case GR_TEXT_V_ALIGN_BOTTOM:
         bbox.SetY( bbox.GetY() - bbox.GetHeight() );
         bbox.Offset( 0, fudgeFactor );
         break;
 
-    case GR_TEXT_V_ALIGN_INDETERMINATE:
-        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-        break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
     }
 
-    bbox.Normalize();       // Make h and v sizes always >= 0
+    bbox.Normalize(); // Make h and v sizes always >= 0
 
     {
         std::lock_guard<std::mutex> bboxLock( m_bbox_cacheMutex );
-        m_bbox_cache[ aLine ] = { drawPos, bbox };
+        m_bbox_cache[aLine] = { drawPos, bbox };
     }
 
     return bbox;
@@ -909,7 +889,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     if( IsMultilineAllowed() )
     {
         std::vector<VECTOR2I> positions;
-        wxArrayString  strings;
+        wxArrayString         strings;
         wxStringSplit( GetShownText( true ), strings, '\n' );
 
         positions.reserve( strings.Count() );
@@ -929,10 +909,10 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 void EDA_TEXT::GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPositions,
                                  int aLineCount ) const
 {
-    VECTOR2I pos = GetDrawPos();    // Position of first line of the multiline text according
-                                    // to the center of the multiline text block
+    VECTOR2I pos = GetDrawPos(); // Position of first line of the multiline text according
+                                 // to the center of the multiline text block
 
-    VECTOR2I offset;                // Offset to next line.
+    VECTOR2I offset; // Offset to next line.
 
     offset.y = GetInterline( aSettings );
 
@@ -940,20 +920,13 @@ void EDA_TEXT::GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<V
     {
         switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP:
-            break;
+        case GR_TEXT_V_ALIGN_TOP: break;
 
-        case GR_TEXT_V_ALIGN_CENTER:
-            pos.y -= ( aLineCount - 1 ) * offset.y / 2;
-            break;
+        case GR_TEXT_V_ALIGN_CENTER: pos.y -= ( aLineCount - 1 ) * offset.y / 2; break;
 
-        case GR_TEXT_V_ALIGN_BOTTOM:
-            pos.y -= ( aLineCount - 1 ) * offset.y;
-            break;
+        case GR_TEXT_V_ALIGN_BOTTOM: pos.y -= ( aLineCount - 1 ) * offset.y; break;
 
-        case GR_TEXT_V_ALIGN_INDETERMINATE:
-            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-            break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
     }
 
@@ -971,8 +944,8 @@ void EDA_TEXT::GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<V
 }
 
 
-void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                                   const COLOR4D& aColor, const wxString& aText, const VECTOR2I& aPos )
+void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor,
+                                   const wxString& aText, const VECTOR2I& aPos )
 {
     wxDC* DC = aSettings->GetPrintDC();
     int   penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
@@ -984,8 +957,8 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
 
     KIFONT::FONT* font = GetDrawFont( aSettings );
 
-    GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(),
-                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font, getFontMetrics() );
+    GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(), GetVertJustify(),
+                 penWidth, IsItalic(), IsBold(), font, getFontMetrics() );
 }
 
 
@@ -999,12 +972,7 @@ wxString EDA_TEXT::GetTextStyleName() const
     if( IsBold() )
         style += 2;
 
-    wxString stylemsg[4] = {
-        _("Normal"),
-        _("Italic"),
-        _("Bold"),
-        _("Bold+Italic")
-    };
+    wxString stylemsg[4] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold+Italic" ) };
 
     return stylemsg[style];
 }
@@ -1052,15 +1020,8 @@ void EDA_TEXT::SetFontProp( const wxString& aFontName )
 
 bool EDA_TEXT::IsDefaultFormatting() const
 {
-    return ( !IsMirrored()
-             && GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER
-             && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER
-             && GetAutoThickness()
-             && !IsItalic()
-             && !IsBold()
-             && !IsMultilineAllowed()
-             && GetFontName().IsEmpty()
-           );
+    return ( !IsMirrored() && GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER
+             && GetAutoThickness() && !IsItalic() && !IsBold() && !IsMultilineAllowed() && GetFontName().IsEmpty() );
 }
 
 
@@ -1074,20 +1035,18 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
         aFormatter->Print( "(face %s)", aFormatter->Quotew( GetFont()->NameAsToken() ).c_str() );
 
     // Text size
-    aFormatter->Print( "(size %s %s)",
-                       EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextHeight() ).c_str(),
+    aFormatter->Print( "(size %s %s)", EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextHeight() ).c_str(),
                        EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextWidth() ).c_str() );
 
     if( GetLineSpacing() != 1.0 )
     {
-        aFormatter->Print( "(line_spacing %s)",
-                           FormatDouble2Str( GetLineSpacing() ).c_str() );
+        aFormatter->Print( "(line_spacing %s)", FormatDouble2Str( GetLineSpacing() ).c_str() );
     }
 
     if( !GetAutoThickness() )
     {
         aFormatter->Print( "(thickness %s)",
-                EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
+                           EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
     }
 
     if( IsBold() )
@@ -1098,19 +1057,16 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
 
     if( !( aControlBits & CTL_OMIT_COLOR ) && GetTextColor() != COLOR4D::UNSPECIFIED )
     {
-        aFormatter->Print( "(color %d %d %d %s)",
-                           KiROUND( GetTextColor().r * 255.0 ),
-                           KiROUND( GetTextColor().g * 255.0 ),
-                           KiROUND( GetTextColor().b * 255.0 ),
+        aFormatter->Print( "(color %d %d %d %s)", KiROUND( GetTextColor().r * 255.0 ),
+                           KiROUND( GetTextColor().g * 255.0 ), KiROUND( GetTextColor().b * 255.0 ),
                            FormatDouble2Str( GetTextColor().a ).c_str() );
     }
 
-    aFormatter->Print( ")"); // (font
+    aFormatter->Print( ")" ); // (font
 
-    if( IsMirrored() || GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER
-                     || GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
+    if( IsMirrored() || GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER || GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
     {
-        aFormatter->Print( "(justify");
+        aFormatter->Print( "(justify" );
 
         if( GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER )
             aFormatter->Print( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT ? " left" : " right" );
@@ -1131,8 +1087,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
 }
 
 
-std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate,
-                                                                 const BOX2I& aBBox,
+std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate, const BOX2I& aBBox,
                                                                  const EDA_ANGLE& aAngle ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
@@ -1241,7 +1196,7 @@ bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
 
     wxURI uri;
 
-    return( uri.Create( aURL ) && uri.HasScheme() );
+    return ( uri.Create( aURL ) && uri.HasScheme() );
 }
 
 double EDA_TEXT::Levenshtein( const EDA_TEXT& aOther ) const
@@ -1257,7 +1212,7 @@ double EDA_TEXT::Levenshtein( const EDA_TEXT& aOther ) const
         return 0.0;
 
     // Create a matrix to store the distance values
-    std::vector<std::vector<int>> distance(m + 1, std::vector<int>(n + 1));
+    std::vector<std::vector<int>> distance( m + 1, std::vector<int>( n + 1 ) );
 
     // Initialize the matrix
     for( int i = 0; i <= m; i++ )
@@ -1276,8 +1231,7 @@ double EDA_TEXT::Levenshtein( const EDA_TEXT& aOther ) const
             }
             else
             {
-                distance[i][j] = std::min( { distance[i - 1][j], distance[i][j - 1],
-                                             distance[i - 1][j - 1] } ) + 1;
+                distance[i][j] = std::min( { distance[i - 1][j], distance[i][j - 1], distance[i - 1][j - 1] } ) + 1;
             }
         }
     }
@@ -1335,18 +1289,18 @@ static struct EDA_TEXT_DESC
         // places leads to duplicate symbols.
         auto& h_inst = ENUM_MAP<GR_TEXT_H_ALIGN_T>::Instance();
 
-        if( h_inst.Choices().GetCount() == 0)
+        if( h_inst.Choices().GetCount() == 0 )
         {
-            h_inst.Map( GR_TEXT_H_ALIGN_LEFT,   _HKI( "Left" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_LEFT, _HKI( "Left" ) );
             h_inst.Map( GR_TEXT_H_ALIGN_CENTER, _HKI( "Center" ) );
-            h_inst.Map( GR_TEXT_H_ALIGN_RIGHT,  _HKI( "Right" ) );
+            h_inst.Map( GR_TEXT_H_ALIGN_RIGHT, _HKI( "Right" ) );
         }
 
         auto& v_inst = ENUM_MAP<GR_TEXT_V_ALIGN_T>::Instance();
 
-        if( v_inst.Choices().GetCount() == 0)
+        if( v_inst.Choices().GetCount() == 0 )
         {
-            v_inst.Map( GR_TEXT_V_ALIGN_TOP,    _HKI( "Top" ) );
+            v_inst.Map( GR_TEXT_V_ALIGN_TOP, _HKI( "Top" ) );
             v_inst.Map( GR_TEXT_V_ALIGN_CENTER, _HKI( "Center" ) );
             v_inst.Map( GR_TEXT_V_ALIGN_BOTTOM, _HKI( "Bottom" ) );
         }
@@ -1354,97 +1308,93 @@ static struct EDA_TEXT_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_TEXT );
 
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, double>( _HKI( "Orientation" ),
-                &EDA_TEXT::SetTextAngleDegrees, &EDA_TEXT::GetTextAngleDegrees,
-                PROPERTY_DISPLAY::PT_DEGREE ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, double>( _HKI( "Orientation" ), &EDA_TEXT::SetTextAngleDegrees,
+                                                             &EDA_TEXT::GetTextAngleDegrees,
+                                                             PROPERTY_DISPLAY::PT_DEGREE ) );
 
         const wxString textProps = _HKI( "Text Properties" );
 
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),
-                &EDA_TEXT::SetText, &EDA_TEXT::GetText ),
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ), &EDA_TEXT::SetText, &EDA_TEXT::GetText ),
+                             textProps );
+
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Font" ), &EDA_TEXT::SetFontProp,
+                                                               &EDA_TEXT::GetFontProp ),
+                             textProps )
+                .SetIsHiddenFromRulesEditor()
+                .SetChoicesFunc(
+                        []( INSPECTABLE* aItem )
+                        {
+                            EDA_ITEM*                eda_item = static_cast<EDA_ITEM*>( aItem );
+                            wxPGChoices              fonts;
+                            std::vector<std::string> fontNames;
+
+                            Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ),
+                                                     eda_item->GetEmbeddedFonts() );
+
+                            if( IsEeschemaType( eda_item->Type() ) )
+                                fonts.Add( _( "Default Font" ) );
+
+                            fonts.Add( KICAD_FONT_NAME );
+
+                            for( const std::string& fontName : fontNames )
+                                fonts.Add( wxString( fontName ) );
+
+                            return fonts;
+                        } );
+
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Auto Thickness" ), &EDA_TEXT::SetAutoThickness,
+                                                           &EDA_TEXT::GetAutoThickness ),
+                             textProps );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ), &EDA_TEXT::SetTextThickness,
+                                                          &EDA_TEXT::GetTextThicknessProperty,
+                                                          PROPERTY_DISPLAY::PT_SIZE ),
+                             textProps );
+        propMgr.AddProperty(
+                new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ), &EDA_TEXT::SetItalic, &EDA_TEXT::IsItalic ),
+                textProps );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Bold" ), &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ),
+                             textProps );
+        propMgr.AddProperty(
+                new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ), &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
                 textProps );
 
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Font" ),
-                &EDA_TEXT::SetFontProp, &EDA_TEXT::GetFontProp ),
-                textProps )
-            .SetIsHiddenFromRulesEditor()
-            .SetChoicesFunc( []( INSPECTABLE* aItem )
-                             {
-                                 EDA_ITEM*                eda_item = static_cast<EDA_ITEM*>( aItem );
-                                 wxPGChoices              fonts;
-                                 std::vector<std::string> fontNames;
+        auto isField = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( aItem ) )
+                return item->Type() == SCH_FIELD_T || item->Type() == PCB_FIELD_T;
 
-                                 Fontconfig()->ListFonts( fontNames,
-                                                          std::string( Pgm().GetLanguageTag().utf8_str() ),
-                                                          eda_item->GetEmbeddedFonts() );
+            return false;
+        };
 
-                                 if( IsEeschemaType( eda_item->Type() ) )
-                                     fonts.Add( _( "Default Font" ) );
+        propMgr.AddProperty(
+                       new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ), &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
+                       textProps )
+                .SetAvailableFunc( isField );
 
-                                 fonts.Add( KICAD_FONT_NAME );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ), &EDA_TEXT::SetTextWidth,
+                                                          &EDA_TEXT::GetTextWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             textProps );
 
-                                 for( const std::string& fontName : fontNames )
-                                     fonts.Add( wxString( fontName ) );
-
-                                 return fonts;
-                             } );
-
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Auto Thickness" ),
-                &EDA_TEXT::SetAutoThickness, &EDA_TEXT::GetAutoThickness ),
-                textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
-                &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThicknessProperty,
-                PROPERTY_DISPLAY::PT_SIZE ),
-                textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
-                &EDA_TEXT::SetItalic,
-                &EDA_TEXT::IsItalic ),
-                textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Bold" ),
-                &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ),
-                textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
-                &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
-                textProps );
-
-        auto isField =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( aItem ) )
-                        return item->Type() == SCH_FIELD_T || item->Type() == PCB_FIELD_T;
-
-                    return false;
-                };
-
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
-                &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
-                textProps )
-            .SetAvailableFunc( isField );
-
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
-                &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth,
-                PROPERTY_DISPLAY::PT_SIZE ),
-                textProps );
-
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
-                &EDA_TEXT::SetTextHeight, &EDA_TEXT::GetTextHeight,
-                PROPERTY_DISPLAY::PT_SIZE ),
-                textProps );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ), &EDA_TEXT::SetTextHeight,
+                                                          &EDA_TEXT::GetTextHeight, PROPERTY_DISPLAY::PT_SIZE ),
+                             textProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
-                &EDA_TEXT::SetHorizJustify, &EDA_TEXT::GetHorizJustify ),
-                textProps );
+                                                                             &EDA_TEXT::SetHorizJustify,
+                                                                             &EDA_TEXT::GetHorizJustify ),
+                             textProps );
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
-                &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ),
+                                                                             &EDA_TEXT::SetVertJustify,
+                                                                             &EDA_TEXT::GetVertJustify ),
+                             textProps );
+
+        propMgr.AddProperty(
+                new PROPERTY<EDA_TEXT, COLOR4D>( _HKI( "Color" ), &EDA_TEXT::SetTextColor, &EDA_TEXT::GetTextColor ),
                 textProps );
 
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, COLOR4D>( _HKI( "Color" ),
-                &EDA_TEXT::SetTextColor, &EDA_TEXT::GetTextColor ),
-                textProps );
-
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
-                &EDA_TEXT::SetHyperlink, &EDA_TEXT::GetHyperlink ),
-                textProps );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ), &EDA_TEXT::SetHyperlink,
+                                                               &EDA_TEXT::GetHyperlink ),
+                             textProps );
     }
 } _EDA_TEXT_DESC;
 

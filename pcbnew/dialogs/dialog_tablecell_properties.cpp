@@ -21,8 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/hyperlink.h>
+
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <dialogs/html_message_box.h>
 #include <confirm.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -39,7 +42,7 @@
 #include <scintilla_tricks.h>
 #include "dialog_tablecell_properties.h"
 
-DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
+DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*        aFrame,
                                                           std::vector<PCB_TABLECELL*> aCells ) :
         DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ),
         m_frame( aFrame ),
@@ -63,10 +66,11 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.
     // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
-    m_cellText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+    m_cellText->SetTechnology( wxSTC_TECHNOLOGY_DIRECTWRITE );
 #endif
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_cellText, wxT( "{}" ), false,
+    m_scintillaTricks = new SCINTILLA_TRICKS(
+            m_cellText, wxT( "{}" ), false,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
@@ -121,8 +125,9 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     SetupStandardButtons();
     Layout();
 
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ),
-             nullptr, this );
+    m_helpWindow = nullptr;
+
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ), nullptr, this );
 
     m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_TABLECELL_PROPERTIES::onHAlignButton, this );
     m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_TABLECELL_PROPERTIES::onHAlignButton, this );
@@ -137,10 +142,12 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
 DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
 {
-    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ),
-                nullptr, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ), nullptr, this );
 
     delete m_scintillaTricks;
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -224,18 +231,18 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
         switch( hAlign )
         {
-        case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
-        case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
-        case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
+        case GR_TEXT_H_ALIGN_LEFT: m_hAlignLeft->Check(); break;
+        case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT: m_hAlignRight->Check(); break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
         }
 
         switch( vAlign )
         {
-        case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
-        case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check(); break;
-        case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
-        case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
+        case GR_TEXT_V_ALIGN_TOP: m_vAlignTop->Check(); break;
+        case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
+        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE: break;
         }
     }
 
@@ -424,4 +431,17 @@ void DIALOG_TABLECELL_PROPERTIES::onEditTable( wxCommandEvent& aEvent )
         m_returnValue = TABLECELL_PROPS_EDIT_TABLE;
         Close();
     }
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::onSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    if( m_helpWindow )
+    {
+        m_helpWindow->Raise();
+        m_helpWindow->Show( true );
+        return;
+    }
+
+    m_helpWindow = PCB_TEXT::ShowSyntaxHelp( this );
 }

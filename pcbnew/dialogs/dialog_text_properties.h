@@ -24,6 +24,7 @@
 #ifndef DIALOG_TEXT_PROPERTIES_H
 #define DIALOG_TEXT_PROPERTIES_H
 
+#include <wx/hyperlink.h>
 #include <widgets/unit_binder.h>
 #include <wx/valnum.h>
 
@@ -35,6 +36,8 @@ class BOARD_ITEM;
 class EDA_TEXT;
 class PCB_TEXT;
 class SCINTILLA_TRICKS;
+class HTML_MESSAGE_BOX;
+class wxHyperlinkCtrl;
 
 
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
@@ -51,30 +54,34 @@ public:
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
 private:
-    void onFontSelected( wxCommandEvent &aEvent ) override;
-    void onBoldToggle( wxCommandEvent &aEvent ) override;
-    void onAlignButton( wxCommandEvent &aEvent ) override;
-    void onValignButton( wxCommandEvent &aEvent ) override;
-    void onThickness( wxCommandEvent &aEvent ) override;
-    void onTextSize( wxCommandEvent &aEvent ) override;
-    void onAutoTextThickness( wxCommandEvent &aEvent ) override;
+    void onFontSelected( wxCommandEvent& aEvent ) override;
+    void onBoldToggle( wxCommandEvent& aEvent ) override;
+    void onAlignButton( wxCommandEvent& aEvent ) override;
+    void onValignButton( wxCommandEvent& aEvent ) override;
+    void onThickness( wxCommandEvent& aEvent ) override;
+    void onTextSize( wxCommandEvent& aEvent ) override;
+    void onAutoTextThickness( wxCommandEvent& aEvent ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
 
+    void onSyntaxHelp( wxHyperlinkEvent& aEvent );
+
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
     PCB_TEXT*            m_item;
 
-    UNIT_BINDER          m_textWidth;
-    UNIT_BINDER          m_textHeight;
-    UNIT_BINDER          m_thickness;
-    UNIT_BINDER          m_posX;
-    UNIT_BINDER          m_posY;
-    UNIT_BINDER          m_orientation;     // rotation in degrees
+    UNIT_BINDER m_textWidth;
+    UNIT_BINDER m_textHeight;
+    UNIT_BINDER m_thickness;
+    UNIT_BINDER m_posX;
+    UNIT_BINDER m_posY;
+    UNIT_BINDER m_orientation; // rotation in degrees
 
-    SCINTILLA_TRICKS*    m_scintillaTricks;
+    SCINTILLA_TRICKS* m_scintillaTricks;
+    wxHyperlinkCtrl*  m_syntaxHelp;
+    HTML_MESSAGE_BOX* m_helpWindow;
 };
 
 

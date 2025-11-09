@@ -42,7 +42,7 @@ namespace KI_EVAL
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
-}
+} // namespace KI_EVAL
 
 #include <wx/log.h>
 #include <algorithm>
@@ -79,374 +79,375 @@ enum class TextEvalToken : int
 };
 
 // UTF-8 <-> UTF-32 conversion utilities
-namespace utf8_utils {
+namespace utf8_utils
+{
 
-    // Concept for UTF-8 byte validation
-    template<typename T>
-    concept Utf8Byte = std::same_as<T, char> || std::same_as<T, unsigned char> || std::same_as<T, std::byte>;
+// Concept for UTF-8 byte validation
+template <typename T>
+concept Utf8Byte = std::same_as<T, char> || std::same_as<T, unsigned char> || std::same_as<T, std::byte>;
 
-    // UTF-8 validation and conversion
-    class UTF8_CONVERTER
+// UTF-8 validation and conversion
+class UTF8_CONVERTER
+{
+private:
+    // UTF-8 byte classification using bit operations
+    static constexpr bool is_ascii( std::byte b ) noexcept { return ( b & std::byte{ 0x80 } ) == std::byte{ 0x00 }; }
+
+    static constexpr bool is_continuation( std::byte b ) noexcept
     {
-    private:
-        // UTF-8 byte classification using bit operations
-        static constexpr bool is_ascii( std::byte b ) noexcept
+        return ( b & std::byte{ 0xC0 } ) == std::byte{ 0x80 };
+    }
+
+    static constexpr int sequence_length( std::byte first ) noexcept
+    {
+        if( is_ascii( first ) )
+            return 1;
+        if( ( first & std::byte{ 0xE0 } ) == std::byte{ 0xC0 } )
+            return 2;
+        if( ( first & std::byte{ 0xF0 } ) == std::byte{ 0xE0 } )
+            return 3;
+        if( ( first & std::byte{ 0xF8 } ) == std::byte{ 0xF0 } )
+            return 4;
+        return 0; // Invalid
+    }
+
+public:
+    // Convert UTF-8 string to UTF-32 codepoints using C++20 ranges
+    static std::u32string to_utf32( std::string_view utf8 )
+    {
+        std::u32string result;
+        result.reserve( utf8.size() ); // Conservative estimate
+
+        auto bytes = std::as_bytes( std::span{ utf8.data(), utf8.size() } );
+
+        for( size_t i = 0; i < bytes.size(); )
         {
-            return ( b & std::byte{ 0x80 } ) == std::byte{ 0x00 };
-        }
+            std::byte first = bytes[i];
+            int       len = sequence_length( first );
 
-        static constexpr bool is_continuation( std::byte b ) noexcept
-        {
-            return ( b & std::byte{ 0xC0 } ) == std::byte{ 0x80 };
-        }
-
-        static constexpr int sequence_length( std::byte first ) noexcept
-        {
-            if( is_ascii( first ) )
-                return 1;
-            if( ( first & std::byte{ 0xE0 } ) == std::byte{ 0xC0 } )
-                return 2;
-            if( ( first & std::byte{ 0xF0 } ) == std::byte{ 0xE0 } )
-                return 3;
-            if( ( first & std::byte{ 0xF8 } ) == std::byte{ 0xF0 } )
-                return 4;
-            return 0; // Invalid
-        }
-
-    public:
-        // Convert UTF-8 string to UTF-32 codepoints using C++20 ranges
-        static std::u32string to_utf32( std::string_view utf8 )
-        {
-            std::u32string result;
-            result.reserve( utf8.size() ); // Conservative estimate
-
-            auto bytes = std::as_bytes( std::span{ utf8.data(), utf8.size() } );
-
-            for( size_t i = 0; i < bytes.size(); )
+            if( len == 0 || i + len > bytes.size() )
             {
-                std::byte first = bytes[i];
-                int       len = sequence_length( first );
+                // Invalid sequence - insert replacement character
+                result.push_back( U'\uFFFD' );
+                i++;
+                continue;
+            }
 
-                if( len == 0 || i + len > bytes.size() )
+            char32_t codepoint = 0;
+
+            switch( len )
+            {
+            case 1: codepoint = std::to_integer<char32_t>( first ); break;
+
+            case 2:
+            {
+                if( !is_continuation( bytes[i + 1] ) )
                 {
-                    // Invalid sequence - insert replacement character
                     result.push_back( U'\uFFFD' );
                     i++;
                     continue;
                 }
+                codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x1F } ) << 6 )
+                            | std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } );
+                break;
+            }
 
-                char32_t codepoint = 0;
+            case 3:
+            {
+                if( !is_continuation( bytes[i + 1] ) || !is_continuation( bytes[i + 2] ) )
+                {
+                    result.push_back( U'\uFFFD' );
+                    i++;
+                    continue;
+                }
+                codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x0F } ) << 12 )
+                            | ( std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } ) << 6 )
+                            | std::to_integer<char32_t>( bytes[i + 2] & std::byte{ 0x3F } );
+                break;
+            }
 
-                switch( len )
+            case 4:
+            {
+                if( !is_continuation( bytes[i + 1] ) || !is_continuation( bytes[i + 2] )
+                    || !is_continuation( bytes[i + 3] ) )
                 {
-                case 1: codepoint = std::to_integer<char32_t>( first ); break;
+                    result.push_back( U'\uFFFD' );
+                    i++;
+                    continue;
+                }
+                codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x07 } ) << 18 )
+                            | ( std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } ) << 12 )
+                            | ( std::to_integer<char32_t>( bytes[i + 2] & std::byte{ 0x3F } ) << 6 )
+                            | std::to_integer<char32_t>( bytes[i + 3] & std::byte{ 0x3F } );
+                break;
+            }
+            }
 
-                case 2:
-                {
-                    if( !is_continuation( bytes[i + 1] ) )
-                    {
-                        result.push_back( U'\uFFFD' );
-                        i++;
-                        continue;
-                    }
-                    codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x1F } ) << 6 )
-                                | std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } );
-                    break;
-                }
+            // Validate codepoint range
+            if( codepoint > 0x10FFFF || ( codepoint >= 0xD800 && codepoint <= 0xDFFF ) )
+            {
+                result.push_back( U'\uFFFD' ); // Replacement character
+            }
+            else if( len == 2 && codepoint < 0x80 )
+            {
+                result.push_back( U'\uFFFD' ); // Overlong encoding
+            }
+            else if( len == 3 && codepoint < 0x800 )
+            {
+                result.push_back( U'\uFFFD' ); // Overlong encoding
+            }
+            else if( len == 4 && codepoint < 0x10000 )
+            {
+                result.push_back( U'\uFFFD' ); // Overlong encoding
+            }
+            else
+            {
+                result.push_back( codepoint );
+            }
 
-                case 3:
-                {
-                    if( !is_continuation( bytes[i + 1] ) || !is_continuation( bytes[i + 2] ) )
-                    {
-                        result.push_back( U'\uFFFD' );
-                        i++;
-                        continue;
-                    }
-                    codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x0F } ) << 12 )
-                                | ( std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } ) << 6 )
-                                | std::to_integer<char32_t>( bytes[i + 2] & std::byte{ 0x3F } );
-                    break;
-                }
+            i += len;
+        }
 
-                case 4:
-                {
-                    if( !is_continuation( bytes[i + 1] ) || !is_continuation( bytes[i + 2] )
-                        || !is_continuation( bytes[i + 3] ) )
-                    {
-                        result.push_back( U'\uFFFD' );
-                        i++;
-                        continue;
-                    }
-                    codepoint = ( std::to_integer<char32_t>( first & std::byte{ 0x07 } ) << 18 )
-                                | ( std::to_integer<char32_t>( bytes[i + 1] & std::byte{ 0x3F } ) << 12 )
-                                | ( std::to_integer<char32_t>( bytes[i + 2] & std::byte{ 0x3F } ) << 6 )
-                                | std::to_integer<char32_t>( bytes[i + 3] & std::byte{ 0x3F } );
-                    break;
-                }
-                }
+        return result;
+    }
 
-                // Validate codepoint range
-                if( codepoint > 0x10FFFF || ( codepoint >= 0xD800 && codepoint <= 0xDFFF ) )
+    // Convert UTF-32 to UTF-8
+    static std::string to_utf8( std::u32string_view utf32 )
+    {
+        std::string result;
+        result.reserve( utf32.size() * 4 ); // Maximum possible size
+
+        for( char32_t cp : utf32 )
+        {
+            if( cp <= 0x7F )
+            {
+                // 1-byte sequence
+                result.push_back( static_cast<char>( cp ) );
+            }
+            else if( cp <= 0x7FF )
+            {
+                // 2-byte sequence
+                result.push_back( static_cast<char>( 0xC0 | ( cp >> 6 ) ) );
+                result.push_back( static_cast<char>( 0x80 | ( cp & 0x3F ) ) );
+            }
+            else if( cp <= 0xFFFF )
+            {
+                // 3-byte sequence
+                if( cp >= 0xD800 && cp <= 0xDFFF )
                 {
-                    result.push_back( U'\uFFFD' ); // Replacement character
-                }
-                else if( len == 2 && codepoint < 0x80 )
-                {
-                    result.push_back( U'\uFFFD' ); // Overlong encoding
-                }
-                else if( len == 3 && codepoint < 0x800 )
-                {
-                    result.push_back( U'\uFFFD' ); // Overlong encoding
-                }
-                else if( len == 4 && codepoint < 0x10000 )
-                {
-                    result.push_back( U'\uFFFD' ); // Overlong encoding
+                    // Surrogate pair - invalid in UTF-32
+                    result.append( "\uFFFD" ); // Replacement character in UTF-8
                 }
                 else
                 {
-                    result.push_back( codepoint );
-                }
-
-                i += len;
-            }
-
-            return result;
-        }
-
-        // Convert UTF-32 to UTF-8
-        static std::string to_utf8( std::u32string_view utf32 )
-        {
-            std::string result;
-            result.reserve( utf32.size() * 4 ); // Maximum possible size
-
-            for( char32_t cp : utf32 )
-            {
-                if( cp <= 0x7F )
-                {
-                    // 1-byte sequence
-                    result.push_back( static_cast<char>( cp ) );
-                }
-                else if( cp <= 0x7FF )
-                {
-                    // 2-byte sequence
-                    result.push_back( static_cast<char>( 0xC0 | ( cp >> 6 ) ) );
-                    result.push_back( static_cast<char>( 0x80 | ( cp & 0x3F ) ) );
-                }
-                else if( cp <= 0xFFFF )
-                {
-                    // 3-byte sequence
-                    if( cp >= 0xD800 && cp <= 0xDFFF )
-                    {
-                        // Surrogate pair - invalid in UTF-32
-                        result.append( "\uFFFD" ); // Replacement character in UTF-8
-                    }
-                    else
-                    {
-                        result.push_back( static_cast<char>( 0xE0 | ( cp >> 12 ) ) );
-                        result.push_back( static_cast<char>( 0x80 | ( ( cp >> 6 ) & 0x3F ) ) );
-                        result.push_back( static_cast<char>( 0x80 | ( cp & 0x3F ) ) );
-                    }
-                }
-                else if( cp <= 0x10FFFF )
-                {
-                    // 4-byte sequence
-                    result.push_back( static_cast<char>( 0xF0 | ( cp >> 18 ) ) );
-                    result.push_back( static_cast<char>( 0x80 | ( ( cp >> 12 ) & 0x3F ) ) );
+                    result.push_back( static_cast<char>( 0xE0 | ( cp >> 12 ) ) );
                     result.push_back( static_cast<char>( 0x80 | ( ( cp >> 6 ) & 0x3F ) ) );
                     result.push_back( static_cast<char>( 0x80 | ( cp & 0x3F ) ) );
                 }
-                else
-                {
-                    // Invalid codepoint
-                    result.append( "\uFFFD" ); // Replacement character in UTF-8
-                }
             }
-
-            return result;
-        }
-    };
-
-    template<typename T>
-    concept UnicodeCodepoint = std::same_as<T, char32_t>;
-
-    struct CHARACTER_CLASSIFIER {
-        static constexpr bool is_whitespace(UnicodeCodepoint auto cp) noexcept {
-            // Unicode whitespace categories
-            return cp == U' ' || cp == U'\t' || cp == U'\r' || cp == U'\n' ||
-                   cp == U'\f' || cp == U'\v' || cp == U'\u00A0' || // Non-breaking space
-                   cp == U'\u2000' || cp == U'\u2001' || cp == U'\u2002' || cp == U'\u2003' ||
-                   cp == U'\u2004' || cp == U'\u2005' || cp == U'\u2006' || cp == U'\u2007' ||
-                   cp == U'\u2008' || cp == U'\u2009' || cp == U'\u200A' || cp == U'\u2028' ||
-                   cp == U'\u2029' || cp == U'\u202F' || cp == U'\u205F' || cp == U'\u3000';
+            else if( cp <= 0x10FFFF )
+            {
+                // 4-byte sequence
+                result.push_back( static_cast<char>( 0xF0 | ( cp >> 18 ) ) );
+                result.push_back( static_cast<char>( 0x80 | ( ( cp >> 12 ) & 0x3F ) ) );
+                result.push_back( static_cast<char>( 0x80 | ( ( cp >> 6 ) & 0x3F ) ) );
+                result.push_back( static_cast<char>( 0x80 | ( cp & 0x3F ) ) );
+            }
+            else
+            {
+                // Invalid codepoint
+                result.append( "\uFFFD" ); // Replacement character in UTF-8
+            }
         }
 
-        static constexpr bool is_digit(UnicodeCodepoint auto cp) noexcept {
-            return cp >= U'0' && cp <= U'9';
-        }
+        return result;
+    }
+};
 
-        static constexpr bool is_ascii_alpha(UnicodeCodepoint auto cp) noexcept {
-            return (cp >= U'a' && cp <= U'z') || (cp >= U'A' && cp <= U'Z');
-        }
+template <typename T>
+concept UnicodeCodepoint = std::same_as<T, char32_t>;
 
-        static constexpr bool is_alpha(UnicodeCodepoint auto cp) noexcept {
-            // Basic Latin + extended Unicode letter ranges
-            return is_ascii_alpha(cp) || (cp >= 0x80 && cp <= 0x10FFFF && cp != 0xFFFD);
-        }
-
-        static constexpr bool is_alnum(UnicodeCodepoint auto cp) noexcept {
-            return is_alpha(cp) || is_digit(cp);
-        }
-    };
-
-    struct SI_PREFIX_HANDLER
+struct CHARACTER_CLASSIFIER
+{
+    static constexpr bool is_whitespace( UnicodeCodepoint auto cp ) noexcept
     {
-        struct PREFIX
-        {
-            char32_t symbol;
-            double   multiplier;
-        };
+        // Unicode whitespace categories
+        return cp == U' ' || cp == U'\t' || cp == U'\r' || cp == U'\n' || cp == U'\f' || cp == U'\v' || cp == U'\u00A0'
+               || // Non-breaking space
+               cp == U'\u2000' || cp == U'\u2001' || cp == U'\u2002' || cp == U'\u2003' || cp == U'\u2004'
+               || cp == U'\u2005' || cp == U'\u2006' || cp == U'\u2007' || cp == U'\u2008' || cp == U'\u2009'
+               || cp == U'\u200A' || cp == U'\u2028' || cp == U'\u2029' || cp == U'\u202F' || cp == U'\u205F'
+               || cp == U'\u3000';
+    }
 
-        static constexpr std::array<PREFIX, 18> prefixes = { {
-            {U'a', 1e-18},
-            {U'f', 1e-15},
-            {U'p', 1e-12},
-            {U'n', 1e-9},
-            {U'u', 1e-6},  {U'µ', 1e-6},  {U'μ', 1e-6}, // Various micro symbols
-            {U'm', 1e-3},
-            {U'k', 1e3},   {U'K', 1e3},
-            {U'M', 1e6},
-            {U'G', 1e9},
-            {U'T', 1e12},
-            {U'P', 1e15},
-            {U'E', 1e18}
-        } };
+    static constexpr bool is_digit( UnicodeCodepoint auto cp ) noexcept { return cp >= U'0' && cp <= U'9'; }
 
-        static constexpr bool is_si_prefix( UnicodeCodepoint auto cp ) noexcept
-        {
-            return std::ranges::any_of( prefixes,
+    static constexpr bool is_ascii_alpha( UnicodeCodepoint auto cp ) noexcept
+    {
+        return ( cp >= U'a' && cp <= U'z' ) || ( cp >= U'A' && cp <= U'Z' );
+    }
+
+    static constexpr bool is_alpha( UnicodeCodepoint auto cp ) noexcept
+    {
+        // Basic Latin + extended Unicode letter ranges
+        return is_ascii_alpha( cp ) || ( cp >= 0x80 && cp <= 0x10FFFF && cp != 0xFFFD );
+    }
+
+    static constexpr bool is_alnum( UnicodeCodepoint auto cp ) noexcept { return is_alpha( cp ) || is_digit( cp ); }
+};
+
+struct SI_PREFIX_HANDLER
+{
+    struct PREFIX
+    {
+        char32_t symbol;
+        double   multiplier;
+    };
+
+    static constexpr std::array<PREFIX, 18> prefixes = { { { U'a', 1e-18 },
+                                                           { U'f', 1e-15 },
+                                                           { U'p', 1e-12 },
+                                                           { U'n', 1e-9 },
+                                                           { U'u', 1e-6 },
+                                                           { U'µ', 1e-6 },
+                                                           { U'μ', 1e-6 }, // Various micro symbols
+                                                           { U'm', 1e-3 },
+                                                           { U'k', 1e3 },
+                                                           { U'K', 1e3 },
+                                                           { U'M', 1e6 },
+                                                           { U'G', 1e9 },
+                                                           { U'T', 1e12 },
+                                                           { U'P', 1e15 },
+                                                           { U'E', 1e18 } } };
+
+    static constexpr bool is_si_prefix( UnicodeCodepoint auto cp ) noexcept
+    {
+        return std::ranges::any_of( prefixes,
+                                    [cp]( const PREFIX& p )
+                                    {
+                                        return p.symbol == cp;
+                                    } );
+    }
+
+    static constexpr double get_multiplier( UnicodeCodepoint auto cp ) noexcept
+    {
+        auto it = std::ranges::find_if( prefixes,
                                         [cp]( const PREFIX& p )
                                         {
                                             return p.symbol == cp;
                                         } );
-        }
-
-        static constexpr double get_multiplier( UnicodeCodepoint auto cp ) noexcept
-        {
-            auto it = std::ranges::find_if( prefixes,
-                                            [cp]( const PREFIX& p )
-                                            {
-                                                return p.symbol == cp;
-                                            } );
-            return it != prefixes.end() ? it->multiplier : 1.0;
-        }
-    };
-}
+        return it != prefixes.end() ? it->multiplier : 1.0;
+    }
+};
+} // namespace utf8_utils
 
 // Unit conversion utilities for the text evaluator
-namespace KIEVAL_UNIT_CONV {
+namespace KIEVAL_UNIT_CONV
+{
 
-    // Internal unit enum matching NUMERIC_EVALUATOR
-    enum class Unit {
-        Invalid,
-        UM,
-        MM,
-        CM,
-        Inch,
-        Mil,
-        Degrees,
-        SI,
-        Femtoseconds,
-        Picoseconds,
-        PsPerInch,
-        PsPerCm,
-        PsPerMm
-    };
+// Internal unit enum matching NUMERIC_EVALUATOR
+enum class Unit
+{
+    Invalid,
+    UM,
+    MM,
+    CM,
+    Inch,
+    Mil,
+    Degrees,
+    SI,
+    Femtoseconds,
+    Picoseconds,
+    PsPerInch,
+    PsPerCm,
+    PsPerMm
+};
 
-    // Convert EDA_UNITS to internal Unit enum
-    Unit edaUnitsToInternal( EDA_UNITS aUnits )
+// Convert EDA_UNITS to internal Unit enum
+Unit edaUnitsToInternal( EDA_UNITS aUnits )
+{
+    switch( aUnits )
     {
-        switch( aUnits )
-        {
-        case EDA_UNITS::MM:          return Unit::MM;
-        case EDA_UNITS::MILS:        return Unit::Mil;
-        case EDA_UNITS::INCH:        return Unit::Inch;
-        case EDA_UNITS::DEGREES:     return Unit::Degrees;
-        case EDA_UNITS::FS:          return Unit::Femtoseconds;
-        case EDA_UNITS::PS:          return Unit::Picoseconds;
-        case EDA_UNITS::PS_PER_INCH: return Unit::PsPerInch;
-        case EDA_UNITS::PS_PER_CM:   return Unit::PsPerCm;
-        case EDA_UNITS::PS_PER_MM:   return Unit::PsPerMm;
-        case EDA_UNITS::UM:          return Unit::UM;
-        case EDA_UNITS::CM:          return Unit::CM;
-        case EDA_UNITS::UNSCALED:    return Unit::SI;
-        default:                     return Unit::MM;
-        }
-    }
-
-    // Parse unit from string using centralized registry
-    Unit parseUnit( const std::string& aUnitStr )
-    {
-        auto evalUnit = text_eval_units::UnitRegistry::parseUnit( aUnitStr );
-
-        // Convert text_eval_units::Unit to KIEVAL_UNIT_CONV::Unit
-        switch( evalUnit )
-        {
-        case text_eval_units::Unit::MM:            return Unit::MM;
-        case text_eval_units::Unit::CM:            return Unit::CM;
-        case text_eval_units::Unit::INCH:          return Unit::Inch;
-        case text_eval_units::Unit::INCH_QUOTE:    return Unit::Inch;
-        case text_eval_units::Unit::MIL:           return Unit::Mil;
-        case text_eval_units::Unit::THOU:          return Unit::Mil;
-        case text_eval_units::Unit::UM:            return Unit::UM;
-        case text_eval_units::Unit::DEG:           return Unit::Degrees;
-        case text_eval_units::Unit::DEGREE_SYMBOL: return Unit::Degrees;
-        case text_eval_units::Unit::PS:            return Unit::Picoseconds;
-        case text_eval_units::Unit::FS:            return Unit::Femtoseconds;
-        case text_eval_units::Unit::PS_PER_IN:     return Unit::PsPerInch;
-        case text_eval_units::Unit::PS_PER_CM:     return Unit::PsPerCm;
-        case text_eval_units::Unit::PS_PER_MM:     return Unit::PsPerMm;
-        default:                                   return Unit::Invalid;
-        }
-    }
-
-    // Get conversion factor from one unit to another (based on numeric_evaluator logic)
-    double getConversionFactor( Unit aFromUnit, Unit aToUnit )
-    {
-        if( aFromUnit == aToUnit )
-            return 1.0;
-
-        // Convert to MM first, then to target unit
-        double toMM = 1.0;
-        switch( aFromUnit )
-        {
-        case Unit::Inch: toMM = 25.4;          break;
-        case Unit::Mil:  toMM = 25.4 / 1000.0; break;
-        case Unit::UM:   toMM = 1.0 / 1000.0;  break;
-        case Unit::MM:   toMM = 1.0;           break;
-        case Unit::CM:   toMM = 10.0;          break;
-        default: return 1.0; // No conversion for other units
-        }
-
-        double fromMM = 1.0;
-        switch( aToUnit )
-        {
-        case Unit::Inch: fromMM = 1.0 / 25.4;      break;
-        case Unit::Mil:  fromMM = 1000.0 / 25.4;   break;
-        case Unit::UM:   fromMM = 1000.0;          break;
-        case Unit::MM:   fromMM = 1.0;             break;
-        case Unit::CM:   fromMM = 1.0 / 10.0;      break;
-        default: return 1.0; // No conversion for other units
-        }
-
-        return toMM * fromMM;
-    }
-
-    // Convert a value with units to the default units using centralized registry
-    double convertToDefaultUnits( double aValue, const std::string& aUnitStr, EDA_UNITS aDefaultUnits )
-    {
-        return text_eval_units::UnitRegistry::convertToEdaUnits( aValue, aUnitStr, aDefaultUnits );
+    case EDA_UNITS::MM: return Unit::MM;
+    case EDA_UNITS::MILS: return Unit::Mil;
+    case EDA_UNITS::INCH: return Unit::Inch;
+    case EDA_UNITS::DEGREES: return Unit::Degrees;
+    case EDA_UNITS::FS: return Unit::Femtoseconds;
+    case EDA_UNITS::PS: return Unit::Picoseconds;
+    case EDA_UNITS::PS_PER_INCH: return Unit::PsPerInch;
+    case EDA_UNITS::PS_PER_CM: return Unit::PsPerCm;
+    case EDA_UNITS::PS_PER_MM: return Unit::PsPerMm;
+    case EDA_UNITS::UM: return Unit::UM;
+    case EDA_UNITS::CM: return Unit::CM;
+    case EDA_UNITS::UNSCALED: return Unit::SI;
+    default: return Unit::MM;
     }
 }
+
+// Parse unit from string using centralized registry
+Unit parseUnit( const std::string& aUnitStr )
+{
+    auto evalUnit = text_eval_units::UnitRegistry::parseUnit( aUnitStr );
+
+    // Convert text_eval_units::Unit to KIEVAL_UNIT_CONV::Unit
+    switch( evalUnit )
+    {
+    case text_eval_units::Unit::MM: return Unit::MM;
+    case text_eval_units::Unit::CM: return Unit::CM;
+    case text_eval_units::Unit::INCH: return Unit::Inch;
+    case text_eval_units::Unit::INCH_QUOTE: return Unit::Inch;
+    case text_eval_units::Unit::MIL: return Unit::Mil;
+    case text_eval_units::Unit::THOU: return Unit::Mil;
+    case text_eval_units::Unit::UM: return Unit::UM;
+    case text_eval_units::Unit::DEG: return Unit::Degrees;
+    case text_eval_units::Unit::DEGREE_SYMBOL: return Unit::Degrees;
+    case text_eval_units::Unit::PS: return Unit::Picoseconds;
+    case text_eval_units::Unit::FS: return Unit::Femtoseconds;
+    case text_eval_units::Unit::PS_PER_IN: return Unit::PsPerInch;
+    case text_eval_units::Unit::PS_PER_CM: return Unit::PsPerCm;
+    case text_eval_units::Unit::PS_PER_MM: return Unit::PsPerMm;
+    default: return Unit::Invalid;
+    }
+}
+
+// Get conversion factor from one unit to another (based on numeric_evaluator logic)
+double getConversionFactor( Unit aFromUnit, Unit aToUnit )
+{
+    if( aFromUnit == aToUnit )
+        return 1.0;
+
+    // Convert to MM first, then to target unit
+    double toMM = 1.0;
+    switch( aFromUnit )
+    {
+    case Unit::Inch: toMM = 25.4; break;
+    case Unit::Mil: toMM = 25.4 / 1000.0; break;
+    case Unit::UM: toMM = 1.0 / 1000.0; break;
+    case Unit::MM: toMM = 1.0; break;
+    case Unit::CM: toMM = 10.0; break;
+    default: return 1.0; // No conversion for other units
+    }
+
+    double fromMM = 1.0;
+    switch( aToUnit )
+    {
+    case Unit::Inch: fromMM = 1.0 / 25.4; break;
+    case Unit::Mil: fromMM = 1000.0 / 25.4; break;
+    case Unit::UM: fromMM = 1000.0; break;
+    case Unit::MM: fromMM = 1.0; break;
+    case Unit::CM: fromMM = 1.0 / 10.0; break;
+    default: return 1.0; // No conversion for other units
+    }
+
+    return toMM * fromMM;
+}
+
+// Convert a value with units to the default units using centralized registry
+double convertToDefaultUnits( double aValue, const std::string& aUnitStr, EDA_UNITS aDefaultUnits )
+{
+    return text_eval_units::UnitRegistry::convertToEdaUnits( aValue, aUnitStr, aDefaultUnits );
+}
+} // namespace KIEVAL_UNIT_CONV
 
 
 class KIEVAL_TEXT_TOKENIZER
@@ -458,22 +459,19 @@ private:
         EXPRESSION // Inside @{...} or ${...} - alphabetic should be IDENTIFIER tokens
     };
 
-    std::u32string               m_text;
-    size_t                       m_pos{ 0 };
-    size_t                       m_line{ 1 };
-    size_t                       m_column{ 1 };
-    TOKENIZER_CONTEXT            m_context{ TOKENIZER_CONTEXT::TEXT };
-    int                          m_braceNestingLevel{ 0 }; // Track nesting level of expressions
+    std::u32string                m_text;
+    size_t                        m_pos{ 0 };
+    size_t                        m_line{ 1 };
+    size_t                        m_column{ 1 };
+    TOKENIZER_CONTEXT             m_context{ TOKENIZER_CONTEXT::TEXT };
+    int                           m_braceNestingLevel{ 0 }; // Track nesting level of expressions
     calc_parser::ERROR_COLLECTOR* m_errorCollector{ nullptr };
-    EDA_UNITS                    m_defaultUnits{ EDA_UNITS::MM }; // Add default units for conversion
+    EDA_UNITS                     m_defaultUnits{ EDA_UNITS::MM }; // Add default units for conversion
 
     using CLASSIFIER = utf8_utils::CHARACTER_CLASSIFIER;
     using SI_HANDLER = utf8_utils::SI_PREFIX_HANDLER;
 
-    [[nodiscard]] char32_t current_char() const noexcept
-    {
-        return m_pos < m_text.size() ? m_text[m_pos] : U'\0';
-    }
+    [[nodiscard]] char32_t current_char() const noexcept { return m_pos < m_text.size() ? m_text[m_pos] : U'\0'; }
 
     [[nodiscard]] char32_t peek_char( size_t offset = 1 ) const noexcept
     {
@@ -549,13 +547,13 @@ private:
 
                 switch( escaped )
                 {
-                case U'n':  content.push_back( U'\n' ); break;
-                case U't':  content.push_back( U'\t' ); break;
-                case U'r':  content.push_back( U'\r' ); break;
+                case U'n': content.push_back( U'\n' ); break;
+                case U't': content.push_back( U'\t' ); break;
+                case U'r': content.push_back( U'\r' ); break;
                 case U'\\': content.push_back( U'\\' ); break;
-                case U'"':  content.push_back( U'"' ); break;
+                case U'"': content.push_back( U'"' ); break;
                 case U'\'': content.push_back( U'\'' ); break;
-                case U'0':  content.push_back( U'\0' ); break;
+                case U'0': content.push_back( U'\0' ); break;
                 case U'x':
                 {
                     // Hexadecimal escape \xHH
@@ -564,9 +562,8 @@ private:
                     for( int i = 0; i < 2 && m_pos < m_text.size(); ++i )
                     {
                         char32_t hex_char = current_char();
-                        if( ( hex_char >= U'0' && hex_char <= U'9' )
-                         || ( hex_char >= U'A' && hex_char <= U'F' )
-                         || ( hex_char >= U'a' && hex_char <= U'f' ) )
+                        if( ( hex_char >= U'0' && hex_char <= U'9' ) || ( hex_char >= U'A' && hex_char <= U'F' )
+                            || ( hex_char >= U'a' && hex_char <= U'f' ) )
                         {
                             hex.push_back( hex_char );
                             advance_position();
@@ -619,13 +616,16 @@ private:
             }
         }
 
-        if (m_pos < m_text.size() && current_char() == quote_char) {
+        if( m_pos < m_text.size() && current_char() == quote_char )
+        {
             advance_position(); // Skip closing quote
-        } else {
-            add_error("Missing closing quote in string literal");
+        }
+        else
+        {
+            add_error( "Missing closing quote in string literal" );
         }
 
-        return make_string_token(utf8_utils::UTF8_CONVERTER::to_utf8(content));
+        return make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( content ) );
     }
 
     [[nodiscard]] calc_parser::TOKEN_TYPE parse_number()
@@ -633,7 +633,6 @@ private:
         std::u32string number_text;
         number_text.reserve( 32 );
 
-        bool   has_decimal = false;
         double multiplier = 1.0;
 
         // Parse integer part
@@ -653,7 +652,6 @@ private:
             if( c == U'.' || ( c == U',' && m_context != TOKENIZER_CONTEXT::EXPRESSION ) )
             {
                 number_text.push_back( U'.' );
-                has_decimal = true;
                 advance_position();
             }
             else if( m_context == TOKENIZER_CONTEXT::EXPRESSION && CLASSIFIER::is_alpha( c ) )
@@ -681,7 +679,7 @@ private:
                 // Check if we have a valid unit
                 if( !potential_unit.empty() )
                 {
-                    std::string           unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
+                    std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
                     KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
                     if( parsed_unit != KIEVAL_UNIT_CONV::Unit::Invalid )
@@ -689,38 +687,131 @@ private:
                         // This is a valid unit - don't treat the first character as SI prefix
                         // The unit parsing will happen later
                     }
-                    else if( SI_HANDLER::is_si_prefix( c ) && !has_decimal )
+                    else if( SI_HANDLER::is_si_prefix( c ) )
                     {
                         // Not a valid unit, so treat as SI prefix
                         multiplier = SI_HANDLER::get_multiplier( c );
-                        number_text.push_back( U'.' );
-                        has_decimal = true;
                         advance_position();
                     }
                 }
-                else if( SI_HANDLER::is_si_prefix( c ) && !has_decimal )
+                else if( SI_HANDLER::is_si_prefix( c ) )
                 {
                     // No alphabetic characters following, so treat as SI prefix
                     multiplier = SI_HANDLER::get_multiplier( c );
-                    number_text.push_back( U'.' );
-                    has_decimal = true;
                     advance_position();
                 }
             }
-            else if( SI_HANDLER::is_si_prefix( c ) && !has_decimal )
+            else if( SI_HANDLER::is_si_prefix( c ) )
             {
                 // In text context, treat as SI prefix
                 multiplier = SI_HANDLER::get_multiplier( c );
-                number_text.push_back( U'.' );
-                has_decimal = true;
                 advance_position();
             }
         }
 
         // Parse fractional part
-        while (m_pos < m_text.size() && CLASSIFIER::is_digit(current_char())) {
-            number_text.push_back(current_char());
+        while( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
+        {
+            number_text.push_back( current_char() );
             advance_position();
+        }
+
+        // Check for scientific notation (e.g., 1e-3, 3.5E6)
+        if( m_pos < m_text.size() )
+        {
+            char32_t c = current_char();
+
+            if( c == U'e' || c == U'E' )
+            {
+                // Look ahead to see if this is scientific notation (followed by +, -, or digit)
+                size_t temp_pos = m_pos + 1;
+                bool   is_scientific = false;
+
+                if( temp_pos < m_text.size() )
+                {
+                    char32_t next = m_text[temp_pos];
+                    if( next == U'+' || next == U'-' || CLASSIFIER::is_digit( next ) )
+                    {
+                        is_scientific = true;
+                    }
+                }
+
+                if( is_scientific )
+                {
+                    // Parse scientific notation exponent
+                    number_text.push_back( c ); // Add 'e' or 'E'
+                    advance_position();
+
+                    // Optional sign
+                    if( m_pos < m_text.size() && ( current_char() == U'+' || current_char() == U'-' ) )
+                    {
+                        number_text.push_back( current_char() );
+                        advance_position();
+                    }
+
+                    // Exponent digits (required)
+                    if( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
+                    {
+                        while( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
+                        {
+                            number_text.push_back( current_char() );
+                            advance_position();
+                        }
+                    }
+                    else
+                    {
+                        // Invalid scientific notation - will fail in conversion
+                        add_error( "Invalid scientific notation: missing exponent digits" );
+                    }
+                }
+            }
+        }
+
+        // Check for SI prefix after fractional part (for numbers like 0.3M)
+        if( m_pos < m_text.size() && multiplier == 1.0 )
+        {
+            char32_t c = current_char();
+
+            if( m_context == TOKENIZER_CONTEXT::EXPRESSION && CLASSIFIER::is_alpha( c ) )
+            {
+                // Look ahead to check for unit vs SI prefix
+                std::u32string potential_unit;
+                size_t         temp_pos = m_pos;
+
+                while( temp_pos < m_text.size() )
+                {
+                    char32_t unit_char = m_text[temp_pos];
+
+                    if( CLASSIFIER::is_alpha( unit_char ) || unit_char == U'"' || unit_char == U'\'' )
+                    {
+                        potential_unit.push_back( unit_char );
+                        temp_pos++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if( !potential_unit.empty() )
+                {
+                    std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
+                    KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
+
+                    if( parsed_unit == KIEVAL_UNIT_CONV::Unit::Invalid && SI_HANDLER::is_si_prefix( c ) )
+                    {
+                        // Not a valid unit, so treat as SI prefix
+                        multiplier = SI_HANDLER::get_multiplier( c );
+                        advance_position();
+                    }
+                }
+            }
+            else if( SI_HANDLER::is_si_prefix( c ) )
+            {
+                // In text context, treat as SI prefix
+                multiplier = SI_HANDLER::get_multiplier( c );
+                advance_position();
+            }
         }
 
         // Convert to double safely
@@ -784,7 +875,7 @@ private:
             if( !unit_text.empty() )
             {
                 // Convert unit text to string and try to parse it
-                std::string           unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( unit_text );
+                std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( unit_text );
                 KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
                 if( parsed_unit != KIEVAL_UNIT_CONV::Unit::Invalid )
@@ -806,41 +897,44 @@ private:
             }
         }
 
-        return make_number_token(value);
+        return make_number_token( value );
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_identifier() {
+    [[nodiscard]] calc_parser::TOKEN_TYPE parse_identifier()
+    {
         std::u32string identifier;
-        identifier.reserve(64);
+        identifier.reserve( 64 );
 
-        while (m_pos < m_text.size() &&
-               (CLASSIFIER::is_alnum(current_char()) || current_char() == U'_')) {
-            identifier.push_back(current_char());
+        while( m_pos < m_text.size() && ( CLASSIFIER::is_alnum( current_char() ) || current_char() == U'_' ) )
+        {
+            identifier.push_back( current_char() );
             advance_position();
         }
 
-        return make_string_token(utf8_utils::UTF8_CONVERTER::to_utf8(identifier));
+        return make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( identifier ) );
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_text_content() {
+    [[nodiscard]] calc_parser::TOKEN_TYPE parse_text_content()
+    {
         std::u32string text;
-        text.reserve(256);
+        text.reserve( 256 );
 
-        while (m_pos < m_text.size()) {
+        while( m_pos < m_text.size() )
+        {
             char32_t current = current_char();
             char32_t next = peek_char();
 
             // Stop at special sequences
-            if ((current == U'@' && next == U'{') ||
-                (current == U'$' && next == U'{')) {
+            if( ( current == U'@' && next == U'{' ) || ( current == U'$' && next == U'{' ) )
+            {
                 break;
             }
 
-            text.push_back(current);
+            text.push_back( current );
             advance_position();
         }
 
-        return make_string_token(utf8_utils::UTF8_CONVERTER::to_utf8(text));
+        return make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( text ) );
     }
 
 public:
@@ -938,23 +1032,26 @@ public:
         // Single character tokens (only in expression context)
         if( m_context == TOKENIZER_CONTEXT::EXPRESSION )
         {
-            static constexpr std::array<std::pair<char32_t, TextEvalToken>, 11> single_char_tokens{{
-                {U'(', TextEvalToken::LPAREN},
-                {U')', TextEvalToken::RPAREN},
-                {U'+', TextEvalToken::PLUS},
-                {U'-', TextEvalToken::MINUS},
-                {U'*', TextEvalToken::MULTIPLY},
-                {U'/', TextEvalToken::DIVIDE},
-                {U'%', TextEvalToken::MODULO},
-                {U'^', TextEvalToken::POWER},
-                {U',', TextEvalToken::COMMA},
-                {U'<', TextEvalToken::LT},
-                {U'>', TextEvalToken::GT}
-            }};
+            static constexpr std::array<std::pair<char32_t, TextEvalToken>, 11> single_char_tokens{
+                { { U'(', TextEvalToken::LPAREN },
+                  { U')', TextEvalToken::RPAREN },
+                  { U'+', TextEvalToken::PLUS },
+                  { U'-', TextEvalToken::MINUS },
+                  { U'*', TextEvalToken::MULTIPLY },
+                  { U'/', TextEvalToken::DIVIDE },
+                  { U'%', TextEvalToken::MODULO },
+                  { U'^', TextEvalToken::POWER },
+                  { U',', TextEvalToken::COMMA },
+                  { U'<', TextEvalToken::LT },
+                  { U'>', TextEvalToken::GT } }
+            };
 
             if( auto it = std::ranges::find_if( single_char_tokens,
-                                                [current]( const auto& pair ) { return pair.first == current; } );
-                                                it != single_char_tokens.end() )
+                                                [current]( const auto& pair )
+                                                {
+                                                    return pair.first == current;
+                                                } );
+                it != single_char_tokens.end() )
             {
                 advance_position();
                 token_value = make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( std::u32string{ current } ) );
@@ -997,7 +1094,7 @@ public:
         return token_value.text[0] == U'\0' ? TextEvalToken::ENDS : TextEvalToken::TEXT;
     }
 
-    [[nodiscard]] bool has_more_tokens() const noexcept { return m_pos < m_text.size(); }
+    [[nodiscard]] bool             has_more_tokens() const noexcept { return m_pos < m_text.size(); }
     [[nodiscard]] constexpr size_t get_line() const noexcept { return m_line; }
     [[nodiscard]] constexpr size_t get_column() const noexcept { return m_column; }
 };
@@ -1005,17 +1102,16 @@ public:
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
         m_useCustomCallback( false ),
-        m_defaultUnits( EDA_UNITS::MM )  // Default to millimeters
+        m_defaultUnits( EDA_UNITS::MM ) // Default to millimeters
 {
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
 
-EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( VariableCallback aVariableCallback,
-                                         bool aClearVariablesOnEvaluate ) :
+EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( VariableCallback aVariableCallback, bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
         m_customCallback( std::move( aVariableCallback ) ),
         m_useCustomCallback( true ),
-        m_defaultUnits( EDA_UNITS::MM )  // Default to millimeters
+        m_defaultUnits( EDA_UNITS::MM ) // Default to millimeters
 {
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
@@ -1029,7 +1125,7 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, bool aClearVariabl
 }
 
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, VariableCallback aVariableCallback,
-                                         bool aClearVariablesOnEvaluate ) :
+                                            bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
         m_customCallback( std::move( aVariableCallback ) ),
         m_useCustomCallback( true ),
@@ -1165,7 +1261,7 @@ bool EXPRESSION_EVALUATOR::HasVariable( const wxString& aName ) const
 wxString EXPRESSION_EVALUATOR::GetVariable( const wxString& aName ) const
 {
     std::string name = wxStringToStdString( aName );
-    auto it = m_variables.find( name );
+    auto        it = m_variables.find( name );
     if( it != m_variables.end() )
     {
         if( std::holds_alternative<double>( it->second ) )
@@ -1210,21 +1306,21 @@ void EXPRESSION_EVALUATOR::SetVariables( const std::unordered_map<wxString, wxSt
 
 wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput )
 {
-    std::unordered_map<wxString, double> emptyNumVars;
+    std::unordered_map<wxString, double>   emptyNumVars;
     std::unordered_map<wxString, wxString> emptyStringVars;
     return Evaluate( aInput, emptyNumVars, emptyStringVars );
 }
 
-wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput,
-                                       const std::unordered_map<wxString, double>& aTempVariables )
+wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                             aInput,
+                                         const std::unordered_map<wxString, double>& aTempVariables )
 {
     std::unordered_map<wxString, wxString> emptyStringVars;
     return Evaluate( aInput, aTempVariables, emptyStringVars );
 }
 
-wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput,
-                                       const std::unordered_map<wxString, double>& aTempNumericVars,
-                                       const std::unordered_map<wxString, wxString>& aTempStringVars )
+wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                               aInput,
+                                         const std::unordered_map<wxString, double>&   aTempNumericVars,
+                                         const std::unordered_map<wxString, wxString>& aTempStringVars )
 {
     // Clear previous errors
     ClearErrors();
@@ -1233,8 +1329,8 @@ wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput,
     wxString processedInput = expandVariablesOutsideExpressions( aInput, aTempNumericVars, aTempStringVars );
 
     // Convert processed input to std::string
-    std::string input = wxStringToStdString( processedInput );    // Create combined callback for all variable sources
-    auto combinedCallback = createCombinedCallback( &aTempNumericVars, &aTempStringVars );
+    std::string input = wxStringToStdString( processedInput ); // Create combined callback for all variable sources
+    auto        combinedCallback = createCombinedCallback( &aTempNumericVars, &aTempStringVars );
 
     // Evaluate using parser
     auto [result, hadErrors] = evaluateWithParser( input, combinedCallback );
@@ -1332,8 +1428,8 @@ bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
         // Filter out "Test mode - no variables available" errors, look for syntax errors
         for( const auto& error : errors )
         {
-            if( error.find( "Syntax error" ) != std::string::npos ||
-                error.find( "Parser failed" ) != std::string::npos )
+            if( error.find( "Syntax error" ) != std::string::npos
+                || error.find( "Parser failed" ) != std::string::npos )
             {
                 return false; // Found syntax error
             }
@@ -1360,7 +1456,7 @@ size_t EXPRESSION_EVALUATOR::CountExpressions( const wxString& aInput ) const
 std::vector<wxString> EXPRESSION_EVALUATOR::ExtractExpressions( const wxString& aInput ) const
 {
     std::vector<wxString> expressions;
-    size_t pos = 0;
+    size_t                pos = 0;
 
     while( ( pos = aInput.find( "@{", pos ) ) != wxString::npos )
     {
@@ -1392,18 +1488,17 @@ wxString EXPRESSION_EVALUATOR::stdStringToWxString( const std::string& aStdStr )
 }
 
 wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
-    const wxString& aInput,
-    const std::unordered_map<wxString, double>& aTempNumericVars,
-    const std::unordered_map<wxString, wxString>& aTempStringVars ) const
+        const wxString& aInput, const std::unordered_map<wxString, double>& aTempNumericVars,
+        const std::unordered_map<wxString, wxString>& aTempStringVars ) const
 {
     wxString result = aInput;
-    size_t pos = 0;
+    size_t   pos = 0;
 
     // Track positions of @{} expressions to avoid substituting inside them
     std::vector<std::pair<size_t, size_t>> expressionRanges;
 
     // Find all @{} expression ranges
-    while( (pos = result.find( "@{", pos )) != std::string::npos )
+    while( ( pos = result.find( "@{", pos ) ) != std::string::npos )
     {
         size_t start = pos;
         size_t braceCount = 1;
@@ -1429,7 +1524,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
 
     // Now find and replace ${variable} patterns that are NOT inside @{} expressions
     pos = 0;
-    while( (pos = result.find( "${", pos )) != std::string::npos )
+    while( ( pos = result.find( "${", pos ) ) != std::string::npos )
     {
         // Check if this ${} is inside any @{} expression
         bool insideExpression = false;
@@ -1451,7 +1546,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
             {
                 // Check what comes after the closing brace
                 size_t afterBrace = closePos + 1;
-                bool followedByUnit = false;
+                bool   followedByUnit = false;
 
                 if( afterBrace < result.length() )
                 {
@@ -1459,8 +1554,8 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
                     const auto units = text_eval_units::UnitRegistry::getAllUnitStrings();
                     for( const auto& unit : units )
                     {
-                        if( afterBrace + unit.length() <= result.length() &&
-                            result.substr( afterBrace, unit.length() ) == unit )
+                        if( afterBrace + unit.length() <= result.length()
+                            && result.substr( afterBrace, unit.length() ) == unit )
                         {
                             followedByUnit = true;
                             break;
@@ -1493,7 +1588,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
         // Extract variable name
         wxString varName = result.substr( pos + 2, closePos - pos - 2 );
         wxString replacement;
-        bool found = false;
+        bool     found = false;
 
         // Check temporary string variables first
         auto stringIt = aTempStringVars.find( varName );
@@ -1515,7 +1610,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
             {
                 // Check instance variables
                 std::string stdVarName = wxStringToStdString( varName );
-                auto instIt = m_variables.find( stdVarName );
+                auto        instIt = m_variables.find( stdVarName );
                 if( instIt != m_variables.end() )
                 {
                     const calc_parser::Value& value = instIt->second;
@@ -1552,11 +1647,12 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
     return result;
 }
 
-EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallback(
-    const std::unordered_map<wxString, double>* aTempNumericVars,
-    const std::unordered_map<wxString, wxString>* aTempStringVars ) const
+EXPRESSION_EVALUATOR::VariableCallback
+EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString, double>*   aTempNumericVars,
+                                              const std::unordered_map<wxString, wxString>* aTempStringVars ) const
 {
-    return [this, aTempNumericVars, aTempStringVars]( const std::string& aVarName ) -> calc_parser::Result<calc_parser::Value>
+    return [this, aTempNumericVars,
+            aTempStringVars]( const std::string& aVarName ) -> calc_parser::Result<calc_parser::Value>
     {
         // Priority 1: Custom callback (if set)
         if( m_useCustomCallback && m_customCallback )
@@ -1604,29 +1700,27 @@ EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallb
             wxString testString = wxString::Format( "${%s}", varName );
 
             // Create a resolver that will return true if the variable was found
-            bool wasResolved = false;
-            std::function<bool( wxString* )> resolver =
-                [&wasResolved]( wxString* token ) -> bool
-                {
-                    // If we get here, ExpandTextVars found the variable and wants to resolve it
-                    // For our purposes, we just want to know if it exists, so return false
-                    // to keep the original ${varname} format, and set our flag
-                    wasResolved = true;
-                    return false; // Don't replace, just detect
-                };
+            bool                             wasResolved = false;
+            std::function<bool( wxString* )> resolver = [&wasResolved]( wxString* token ) -> bool
+            {
+                // If we get here, ExpandTextVars found the variable and wants to resolve it
+                // For our purposes, we just want to know if it exists, so return false
+                // to keep the original ${varname} format, and set our flag
+                wasResolved = true;
+                return false; // Don't replace, just detect
+            };
 
             wxString expandedResult = ExpandTextVars( testString, &resolver );
 
             if( wasResolved )
             {
                 // Variable exists in KiCad's system, now get its actual value
-                std::function<bool( wxString* )> valueResolver =
-                    []( wxString* token ) -> bool
-                    {
-                        // Let ExpandTextVars resolve this normally
-                        // We'll get the resolved value in token
-                        return false; // Use default resolution
-                    };
+                std::function<bool( wxString* )> valueResolver = []( wxString* token ) -> bool
+                {
+                    // Let ExpandTextVars resolve this normally
+                    // We'll get the resolved value in token
+                    return false; // Use default resolution
+                };
 
                 wxString resolvedValue = ExpandTextVars( testString, &valueResolver );
 
@@ -1639,7 +1733,8 @@ EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallb
                     try
                     {
                         double numValue;
-                        auto result = fast_float::from_chars( resolvedStd.data(), resolvedStd.data() + resolvedStd.size(), numValue );
+                        auto   result = fast_float::from_chars( resolvedStd.data(),
+                                                                resolvedStd.data() + resolvedStd.size(), numValue );
 
                         if( result.ec != std::errc() || result.ptr != resolvedStd.data() + resolvedStd.size() )
                             throw std::invalid_argument( fmt::format( "Cannot convert '{}' to number", resolvedStd ) );
@@ -1666,44 +1761,48 @@ EXPRESSION_EVALUATOR::VariableCallback EXPRESSION_EVALUATOR::createCombinedCallb
         }
 
         // No variable found anywhere
-        return calc_parser::MakeError<calc_parser::Value>(
-            fmt::format( "Undefined variable: {}", aVarName ) );
+        return calc_parser::MakeError<calc_parser::Value>( fmt::format( "Undefined variable: {}", aVarName ) );
     };
 }
 
-std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser(
-    const std::string& aInput,
-    VariableCallback aVariableCallback)
+std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser( const std::string& aInput,
+                                                                       VariableCallback   aVariableCallback )
 {
-    try {
+    try
+    {
         // Try partial error recovery first
-        auto [partialResult, partialHadErrors] = evaluateWithPartialErrorRecovery(aInput, aVariableCallback);
+        auto [partialResult, partialHadErrors] = evaluateWithPartialErrorRecovery( aInput, aVariableCallback );
 
         // If partial recovery made any progress (result differs from input), use it
-        if (partialResult != aInput) {
+        if( partialResult != aInput )
+        {
             // Partial recovery made progress - always report errors collected during partial recovery
-            return {std::move(partialResult), partialHadErrors};
+            return { std::move( partialResult ), partialHadErrors };
         }
 
         // If no progress was made, try original full parsing approach as fallback
-        return evaluateWithFullParser(aInput, std::move(aVariableCallback));
-
-    } catch (const std::bad_alloc&) {
-        if (m_lastErrors) {
-            m_lastErrors->AddError("Out of memory");
+        return evaluateWithFullParser( aInput, std::move( aVariableCallback ) );
+    }
+    catch( const std::bad_alloc& )
+    {
+        if( m_lastErrors )
+        {
+            m_lastErrors->AddError( "Out of memory" );
         }
-        return {aInput, true};
-    } catch (const std::exception& e) {
-        if (m_lastErrors) {
-            m_lastErrors->AddError(fmt::format("Exception: {}", e.what()));
+        return { aInput, true };
+    }
+    catch( const std::exception& e )
+    {
+        if( m_lastErrors )
+        {
+            m_lastErrors->AddError( fmt::format( "Exception: {}", e.what() ) );
         }
-        return {aInput, true};
+        return { aInput, true };
     }
 }
 
-std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery(
-    const std::string& aInput,
-    VariableCallback aVariableCallback)
+std::pair<std::string, bool>
+EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInput, VariableCallback aVariableCallback )
 {
     std::string result = aInput;
     bool        hadAnyErrors = false;
@@ -1911,8 +2010,9 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
     }
 }
 
-NUMERIC_EVALUATOR_COMPAT::NUMERIC_EVALUATOR_COMPAT( EDA_UNITS aUnits )
-    : m_evaluator( aUnits ), m_lastValid( false )
+NUMERIC_EVALUATOR_COMPAT::NUMERIC_EVALUATOR_COMPAT( EDA_UNITS aUnits ) :
+        m_evaluator( aUnits ),
+        m_lastValid( false )
 {
 }
 
@@ -1960,7 +2060,10 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
 
     // Sort variable names by length (longest first) to avoid partial replacements
     std::sort( varNames.begin(), varNames.end(),
-               []( const wxString& a, const wxString& b ) { return a.length() > b.length(); } );
+               []( const wxString& a, const wxString& b )
+               {
+                   return a.length() > b.length();
+               } );
 
     // Replace bare variable names with ${variable} syntax
     for( const auto& varName : varNames )

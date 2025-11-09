@@ -24,6 +24,8 @@
 #ifndef DIALOG_TABLE_PROPERTIES_H
 #define DIALOG_TABLE_PROPERTIES_H
 
+#include <wx/hyperlink.h>
+
 #include <widgets/unit_binder.h>
 #include <dialog_table_properties_base.h>
 
@@ -31,6 +33,8 @@
 class PCB_BASE_EDIT_FRAME;
 class PCB_TABLE;
 class WX_GRID;
+class HTML_MESSAGE_BOX;
+class wxHyperlinkCtrl;
 
 
 class DIALOG_TABLE_PROPERTIES : public DIALOG_TABLE_PROPERTIES_BASE
@@ -49,14 +53,19 @@ private:
     void onHeaderChecked( wxCommandEvent& aEvent ) override;
     void onSize( wxSizeEvent& aEvent ) override;
 
+    void onSyntaxHelp( wxHyperlinkEvent& aEvent );
+
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
     PCB_TABLE*           m_table;
 
-    WX_GRID*             m_grid;
+    WX_GRID* m_grid;
 
-    UNIT_BINDER          m_borderWidth;
-    UNIT_BINDER          m_separatorsWidth;
+    UNIT_BINDER m_borderWidth;
+    UNIT_BINDER m_separatorsWidth;
+
+    wxHyperlinkCtrl*  m_syntaxHelp;
+    HTML_MESSAGE_BOX* m_helpWindow;
 };
 
 

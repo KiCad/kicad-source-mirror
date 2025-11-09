@@ -23,8 +23,11 @@
 
 #include "dialog_textbox_properties.h"
 
+#include <wx/hyperlink.h>
+
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <dialogs/html_message_box.h>
 #include <confirm.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -38,8 +41,7 @@
 #include <string_utils.h>
 
 
-DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                      PCB_TEXTBOX* aTextBox ) :
+DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_TEXTBOX* aTextBox ) :
         DIALOG_TEXTBOX_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_textBox( aTextBox ),
@@ -55,10 +57,11 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.
     // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
-    m_MultiLineText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+    m_MultiLineText->SetTechnology( wxSTC_TECHNOLOGY_DIRECTWRITE );
 #endif
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ), false,
+    m_scintillaTricks = new SCINTILLA_TRICKS(
+            m_MultiLineText, wxT( "{}" ), false,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
@@ -71,7 +74,7 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
                         // getTokensFn
                         [this]( const wxString& xRef, wxArrayString* tokens )
                         {
-                            m_frame->GetContextualTextVars( m_textBox,  xRef, tokens );
+                            m_frame->GetContextualTextVars( m_textBox, xRef, tokens );
                         } );
             } );
 
@@ -79,6 +82,16 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
+
+    // Add syntax help hyperlink
+    m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _( "Syntax help" ), wxEmptyString, wxDefaultPosition,
+                                        wxDefaultSize, wxHL_DEFAULT_STYLE );
+    m_syntaxHelp->SetToolTip( _( "Show syntax help window" ) );
+    m_MultiLineSizer->Add( m_syntaxHelp, 0, wxBOTTOM | wxRIGHT | wxLEFT, 3 );
+
+    m_syntaxHelp->Bind( wxEVT_HYPERLINK, &DIALOG_TEXTBOX_PROPERTIES::onSyntaxHelp, this );
+
+    m_helpWindow = nullptr;
 
     if( m_textBox->GetParentFootprint() )
     {
@@ -142,28 +155,29 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
-    for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
+    for( const auto& [lineStyle, lineStyleDesc] : lineTypeNames )
         m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     SetupStandardButtons();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ),
-             nullptr, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ), nullptr, this );
 
     finishDialogSettings();
-	Layout();
-	bMainSizer->Fit( this );
+    Layout();
+    bMainSizer->Fit( this );
 }
 
 
 DIALOG_TEXTBOX_PROPERTIES::~DIALOG_TEXTBOX_PROPERTIES()
 {
-    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ),
-                nullptr, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ), nullptr, this );
 
     delete m_scintillaTricks;
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -259,7 +273,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onValignButton( wxCommandEvent& aEvent )
     }
 }
 
-void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
+void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent& aEvent )
 {
     if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
     {
@@ -269,7 +283,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
         int thickness = m_thickness.GetValue();
 
         m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                        < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+                       < abs( thickness - GetPenSizeForNormal( textSize ) ) );
     }
     else
     {
@@ -278,7 +292,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
 }
 
 
-void DIALOG_TEXTBOX_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
+void DIALOG_TEXTBOX_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
 {
     int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
 
@@ -307,7 +321,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onThickness( wxCommandEvent& event )
     int thickness = m_thickness.GetValue();
 
     m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                    < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+                   < abs( thickness - GetPenSizeForNormal( textSize ) ) );
 }
 
 
@@ -405,8 +419,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_textBox->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                          m_italic->IsChecked() ) );
+        m_textBox->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
     }
 
     m_textBox->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
@@ -482,4 +495,10 @@ void DIALOG_TEXTBOX_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
         m_scintillaTricks->CancelAutocomplete();
 
     event.Skip();
+}
+
+
+void DIALOG_TEXTBOX_PROPERTIES::onSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    m_helpWindow = PCB_TEXT::ShowSyntaxHelp( this );
 }

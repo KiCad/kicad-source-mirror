@@ -65,6 +65,222 @@
         <td><br></td>
     </tr>
     <tr>
+        <td>&nbsp;<br><samp>${ROW}</samp> (in tables)</td>
+        <td></td>
+        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${COL}</samp> (in tables)</td>
+        <td></td>
+        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${ADDR}</samp> (in tables)</td>
+        <td></td>
+        <td>&nbsp;<br><samp>A0, B1, C2...</samp> (0-based)</td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{expression}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>5</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>4</samp> (when ROW=3)</td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <th>String Comparison & Conditional Text</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{"text" == "text"}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>1</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{"text" != "other"}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>1</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Conditional text display</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{if("${LAYER}" == "F.Cu", "TOP", "BOTTOM")}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>TOP</samp> (on front layer) or <samp>BOTTOM</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>@{if(${ROW} > 5, "High", "Low")}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Numeric comparisons work too</samp></td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <th>Symbol Pin Functions</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:UNIT(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Unit designation for pin</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:UNIT(3)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>J1B</samp> (for multi-unit symbol)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:NET_NAME(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Net name connected to pin</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${R1:NET_NAME(1)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>VCC</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:PIN_NAME(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Pin name or selected alternate</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>USART1_TX</samp> (alternate) or <samp>PA9</samp> (base)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:PIN_BASE_NAME(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Base pin name (ignoring alternates)</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${U1:PIN_BASE_NAME(5)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>PA9</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>All available pin functions (base name + alternates)</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>PA9, USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Short net name or NC if unconnected</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>GND</samp> or <samp>NC</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Net class for pin</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Power</samp></td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <th>Escape Sequences</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>\${LITERAL}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>${LITERAL}</samp> (not expanded)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>Price: \$25.00</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Price: $25.00</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>\@{x+y}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>@{x+y}</samp> (not evaluated)</td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <th>Nested Variables</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:UNIT(@{${ROW}+2})}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>J1B</samp> (when ROW=0, pin 2 in unit B)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Dynamic net lookup in tables</samp></td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
+        <th>Table Cell References</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${CELL("A0")}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Evaluated value from cell A0</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${CELL(0, 1)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Value from row 0, column 1</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${CELL(${ADDR})}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Dynamic cell reference</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${CELL(${ROW}-1, ${COL})}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Value from cell above (if ROW > 0)</samp></td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    <tr>
         <td><br></td>
     </tr>
     <tr>
@@ -128,4 +344,14 @@
 <p></p>
 <p></p>
 <i>Note that markup has precedence over bus definitions.</i>
+<p></p>
+<p><b>Pin Functions:</b> Automatically find the correct unit placement. For multi-unit symbols, functions like <samp>NET_NAME(pin)</samp> work even if the pin is in a different unit than the one on the current sheet.</p>
+<p><b>Table Cell References:</b> The <samp>CELL()</samp> function works only in table cells. Use <samp>${CELL("A0")}</samp> or <samp>${CELL(row, col)}</samp> to reference other cells in the same table. Row and column numbers are 0-based (A0 is the first row, first column). CELL returns the evaluated/displayed value, not the raw cell text.</p>
+<p><b>Nested Variables:</b> Variables can contain other variables. Inner variables are expanded first. Maximum nesting depth: 6 levels.</p>
+<p><b>Error Messages:</b></p>
+<ul>
+<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Variable or function cannot be resolved</li>
+<li><samp>&lt;Unit X not placed&gt;</samp> - Pin is in a unit not placed on any sheet</li>
+<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - Cell address is out of table bounds</li>
+</ul>
 

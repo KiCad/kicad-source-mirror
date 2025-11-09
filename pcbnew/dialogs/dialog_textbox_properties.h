@@ -24,6 +24,7 @@
 #ifndef DIALOG_TEXTBOX_PROPERTIES_H
 #define DIALOG_TEXTBOX_PROPERTIES_H
 
+#include <wx/hyperlink.h>
 #include <widgets/unit_binder.h>
 #include <wx/valnum.h>
 
@@ -33,6 +34,8 @@
 class PCB_BASE_EDIT_FRAME;
 class PCB_TEXTBOX;
 class SCINTILLA_TRICKS;
+class HTML_MESSAGE_BOX;
+class wxHyperlinkCtrl;
 
 
 class DIALOG_TEXTBOX_PROPERTIES : public DIALOG_TEXTBOX_PROPERTIES_BASE
@@ -48,24 +51,28 @@ private:
     void onValignButton( wxCommandEvent& aEvent ) override;
     void onThickness( wxCommandEvent& aEvent ) override;
     void onBorderChecked( wxCommandEvent& event ) override;
-    void onTextSize( wxCommandEvent &aEvent ) override;
-    void onAutoTextThickness( wxCommandEvent &aEvent ) override;
+    void onTextSize( wxCommandEvent& aEvent ) override;
+    void onAutoTextThickness( wxCommandEvent& aEvent ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
 
+    void onSyntaxHelp( wxHyperlinkEvent& aEvent );
+
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
     PCB_TEXTBOX*         m_textBox;
 
-    UNIT_BINDER          m_textWidth;
-    UNIT_BINDER          m_textHeight;
-    UNIT_BINDER          m_thickness;
-    UNIT_BINDER          m_orientation;     // rotation in degrees
-    UNIT_BINDER          m_borderWidth;
+    UNIT_BINDER m_textWidth;
+    UNIT_BINDER m_textHeight;
+    UNIT_BINDER m_thickness;
+    UNIT_BINDER m_orientation; // rotation in degrees
+    UNIT_BINDER m_borderWidth;
 
-    SCINTILLA_TRICKS*    m_scintillaTricks;
+    SCINTILLA_TRICKS* m_scintillaTricks;
+    wxHyperlinkCtrl*  m_syntaxHelp;
+    HTML_MESSAGE_BOX* m_helpWindow;
 };
 
 

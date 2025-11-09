@@ -25,9 +25,11 @@
 #include "dialog_text_properties.h"
 
 #include <wx/valnum.h>
+#include <wx/hyperlink.h>
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <dialogs/html_message_box.h>
 #include <confirm.h>
 #include <board_commit.h>
 #include <board.h>
@@ -72,10 +74,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.
     // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
-    m_MultiLineText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+    m_MultiLineText->SetTechnology( wxSTC_TECHNOLOGY_DIRECTWRITE );
 #endif
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ), false,
+    m_scintillaTricks = new SCINTILLA_TRICKS(
+            m_MultiLineText, wxT( "{}" ), false,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
@@ -96,6 +99,16 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
+
+    // Add syntax help hyperlink
+    m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _( "Syntax help" ), wxEmptyString, wxDefaultPosition,
+                                        wxDefaultSize, wxHL_DEFAULT_STYLE );
+    m_syntaxHelp->SetToolTip( _( "Show syntax help window" ) );
+    m_MultiLineSizer->Add( m_syntaxHelp, 0, wxBOTTOM | wxRIGHT | wxLEFT, 3 );
+
+    m_syntaxHelp->Bind( wxEVT_HYPERLINK, &DIALOG_TEXT_PROPERTIES::onSyntaxHelp, this );
+
+    m_helpWindow = nullptr;
 
     if( m_item->GetParentFootprint() )
     {
@@ -135,21 +148,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
         // Do not allow locking items in the footprint editor
         m_cbLocked->Show( false );
 
-        m_tabOrder = {
-            m_SingleLineText,
-            m_LayerSelectionCtrl,
-            m_SizeXCtrl,
-            m_SizeYCtrl,
-            m_ThicknessCtrl,
-            m_Visible,
-            m_cbKnockout,
-            m_KeepUpright,
-            m_PositionXCtrl,
-            m_PositionYCtrl,
-            m_OrientCtrl,
-            m_sdbSizerOK,
-            m_sdbSizerCancel
-        };
+        m_tabOrder = { m_SingleLineText, m_LayerSelectionCtrl, m_SizeXCtrl,     m_SizeYCtrl,     m_ThicknessCtrl,
+                       m_Visible,        m_cbKnockout,         m_KeepUpright,   m_PositionXCtrl, m_PositionYCtrl,
+                       m_OrientCtrl,     m_sdbSizerOK,         m_sdbSizerCancel };
     }
     else
     {
@@ -162,20 +163,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
         m_KeepUpright->Show( false );
         m_statusLine->Show( false );
 
-        m_tabOrder = {
-            m_MultiLineText,
-            m_cbLocked,
-            m_LayerSelectionCtrl,
-            m_SizeXCtrl,
-            m_SizeYCtrl,
-            m_ThicknessCtrl,
-            m_cbKnockout,
-            m_PositionXCtrl,
-            m_PositionYCtrl,
-            m_OrientCtrl,
-            m_sdbSizerOK,
-            m_sdbSizerCancel
-        };
+        m_tabOrder = { m_MultiLineText, m_cbLocked,      m_LayerSelectionCtrl, m_SizeXCtrl,
+                       m_SizeYCtrl,     m_ThicknessCtrl, m_cbKnockout,         m_PositionXCtrl,
+                       m_PositionYCtrl, m_OrientCtrl,    m_sdbSizerOK,         m_sdbSizerCancel };
     }
 
     m_bold->SetIsCheckButton();
@@ -238,8 +228,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
-             nullptr, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), nullptr, this );
 
     finishDialogSettings();
 }
@@ -247,10 +236,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
 DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 {
-    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
-                nullptr, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), nullptr, this );
 
     delete m_scintillaTricks;
+
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 }
 
 
@@ -312,12 +303,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     if( parentFP )
     {
-        m_statusLine->SetLabel( wxString::Format( _( "Footprint %s (%s), %s, rotated %.1f deg"),
-                                                  parentFP->GetReference(),
-                                                  parentFP->GetValue(),
-                                                  parentFP->IsFlipped() ? _( "back side (mirrored)" )
-                                                                        : _( "front side" ),
-                                                  parentFP->GetOrientation().AsDegrees() ) );
+        m_statusLine->SetLabel( wxString::Format(
+                _( "Footprint %s (%s), %s, rotated %.1f deg" ), parentFP->GetReference(), parentFP->GetValue(),
+                parentFP->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
+                parentFP->GetOrientation().AsDegrees() ) );
     }
     else
     {
@@ -357,20 +346,20 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_bold->Check( m_item->IsBold() );
     m_italic->Check( m_item->IsItalic() );
 
-    switch ( m_item->GetHorizJustify() )
+    switch( m_item->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check( true );    break;
-    case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check( true );  break;
-    case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check( true );   break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE:                                break;
+    case GR_TEXT_H_ALIGN_LEFT: m_alignLeft->Check( true ); break;
+    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT: m_alignRight->Check( true ); break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: break;
     }
 
-    switch ( m_item->GetVertJustify() )
+    switch( m_item->GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_BOTTOM:        m_valignBottom->Check( true ); break;
-    case GR_TEXT_V_ALIGN_CENTER:        m_valignCenter->Check( true ); break;
-    case GR_TEXT_V_ALIGN_TOP:           m_valignTop->Check( true );    break;
-    case GR_TEXT_V_ALIGN_INDETERMINATE:                                break;
+    case GR_TEXT_V_ALIGN_BOTTOM: m_valignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_CENTER: m_valignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_TOP: m_valignTop->Check( true ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: break;
     }
 
     m_mirrored->Check( m_item->IsMirrored() );
@@ -382,7 +371,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
+void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent& aEvent )
 {
     if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
     {
@@ -393,7 +382,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
         int thickness = m_thickness.GetValue();
 
         m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                        < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+                       < abs( thickness - GetPenSizeForNormal( textSize ) ) );
     }
     else
     {
@@ -403,7 +392,7 @@ void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
 }
 
 
-void DIALOG_TEXT_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
+void DIALOG_TEXT_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
 {
     int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
 
@@ -442,7 +431,7 @@ void DIALOG_TEXT_PROPERTIES::onThickness( wxCommandEvent& event )
     int thickness = m_thickness.GetValue();
 
     m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                    < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+                   < abs( thickness - GetPenSizeForNormal( textSize ) ) );
 }
 
 
@@ -544,8 +533,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( m_fontCtrl->HaveFontSelection() )
     {
-        m_item->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                       m_italic->IsChecked() ) );
+        m_item->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
     }
 
     m_item->SetTextSize( VECTOR2I( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
@@ -589,7 +577,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_item->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
     if( m_valignBottom->IsChecked() )
-        m_item->SetVertJustify ( GR_TEXT_V_ALIGN_BOTTOM );
+        m_item->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
     else if( m_valignCenter->IsChecked() )
         m_item->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
     else
@@ -610,4 +598,10 @@ void DIALOG_TEXT_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
         m_scintillaTricks->CancelAutocomplete();
 
     event.Skip();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    m_helpWindow = PCB_TEXT::ShowSyntaxHelp( this );
 }
