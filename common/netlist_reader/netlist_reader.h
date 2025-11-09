@@ -25,7 +25,6 @@
 
 #include <macros.h>
 #include <lib_id.h>
-#include <netlist_reader/netlist.h>
 
 
 class LINE_READER;
