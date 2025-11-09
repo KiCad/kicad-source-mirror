@@ -94,6 +94,9 @@
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
+#include <thread_pool.h>
+
+
 KIFACE_BASE& Kiface()
 {
     // This function should never be called.  It is only referenced from
@@ -477,6 +480,10 @@ int PGM_KICAD::OnPgmRun()
 
 void PGM_KICAD::OnPgmExit()
 {
+    // Abort and wait on any background jobs
+    GetKiCadThreadPool().purge();
+    GetKiCadThreadPool().wait();
+
     Kiway.OnKiwayEnd();
 
     if( m_settings_manager && m_settings_manager->IsOK() )

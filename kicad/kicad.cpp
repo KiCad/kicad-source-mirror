@@ -46,6 +46,7 @@
 #include <settings/kicad_settings.h>
 #include <../include/startwizard/startwizard.h>
 #include <systemdirsappend.h>
+#include <thread_pool.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
@@ -66,6 +67,7 @@
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
+
 #include <libraries/library_manager.h>
 
 
@@ -398,6 +400,10 @@ int PGM_KICAD::OnPgmRun()
 
 void PGM_KICAD::OnPgmExit()
 {
+    // Abort and wait on any background jobs
+    GetKiCadThreadPool().purge();
+    GetKiCadThreadPool().wait();
+
     Kiway.OnKiwayEnd();
 
 #ifdef KICAD_IPC_API

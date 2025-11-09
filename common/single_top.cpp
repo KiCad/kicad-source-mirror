@@ -58,6 +58,8 @@
 #include <kiplatform/environment.h>
 
 #include <git2.h>
+#include <thread_pool.h>
+
 #include <libraries/library_manager.h>
 #include <startwizard/startwizard.h>
 
@@ -85,6 +87,9 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
 
     void OnPgmExit()
     {
+        // Abort and wait on any background jobs
+        GetKiCadThreadPool().purge();
+        GetKiCadThreadPool().wait();
 
         Kiway.OnKiwayEnd();
 
