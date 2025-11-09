@@ -36,9 +36,9 @@ LIB_TABLE_GRID_DATA_MODEL::LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aDialog, WX_G
     m_uriEditor = new wxGridCellAttr;
     m_uriEditor->SetEditor( new GRID_CELL_PATH_EDITOR( aDialog, aGrid, aMRUDirectory, !aProjectPath.IsEmpty(),
                                                        aProjectPath,
-                                                       [this]( WX_GRID* aGrid, int aRow ) -> wxString
+                                                       [this]( WX_GRID* aCurrGrid, int aRow ) -> wxString
                                                        {
-                                                           return getFileTypes( aGrid, aRow );
+                                                           return getFileTypes( aCurrGrid, aRow );
                                                        } ) );
 
     m_typesEditor = new wxGridCellAttr;
