@@ -205,8 +205,6 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     OnRemoveIslandsSelection( aEvent );
     onHatched( aEvent );
 
-    Fit();
-
     return true;
 }
 
