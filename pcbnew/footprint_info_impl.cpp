@@ -232,6 +232,9 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                []( std::unique_ptr<FOOTPRINT_INFO> const& lhs,
                    std::unique_ptr<FOOTPRINT_INFO> const& rhs ) -> bool
                {
+                   if( !lhs || !rhs )
+                       return false;
+
                    return *lhs < *rhs;
                } );
 }
