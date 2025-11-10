@@ -179,22 +179,28 @@ private:
     /// @returns -1 if not found
     static int getStackupLayerId( const std::vector<BOARD_STACKUP_ITEM*>& aLayerList, PCB_LAYER_ID aPcbLayerId );
 
+    struct DIELECTRIC_INFO
+    {
+        double Height{ 0.0 };
+        double E_r{ 0.0 };
+        double Loss_Tangent{ 0.0 };
+    };
+
     /**
      * Calculates the geometric average of the dielectric material properties. Note: This is a poor approximation as the
      * electric field distribution is not equal across the dielectrics. However, it will do as an approximation before
      * we have a field solver integrated.
      *
-     * @returns (E_r, LossTangent) pair
+     * @returns DIELECTRIC_INFO contining calculated values
      */
-    static std::pair<double, double>
+    static DIELECTRIC_INFO
     calculateAverageDielectricConstants( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
                                          const std::vector<int>&                 dielectricLayerStackupIds,
                                          const EDA_IU_SCALE&                     aIuScale );
 
-    /// Gets the dielectric layers and heights for dielectrics between the two given copper layer IDs
-    void getDielectricDetails( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList, int aSignalLayerId,
-                               int aReferenceLayerId, std::vector<int>& aDielectricLayerStackupIds,
-                               double& aDielectricLayerHeight );
+    /// Gets the dielectric layers for dielectrics between the two given copper layer IDs
+    void getDielectricLayers( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList, int aSignalLayerId,
+                              int aReferenceLayerId, std::vector<int>& aDielectricLayerStackupIds );
 
     /// Gets the target impedance for the profile
     double getTargetImpedance() const;

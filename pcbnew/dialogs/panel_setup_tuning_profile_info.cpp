@@ -653,39 +653,38 @@ double PANEL_SETUP_TUNING_PROFILE_INFO::getTargetImpedance() const
 }
 
 
-std::pair<double, double> PANEL_SETUP_TUNING_PROFILE_INFO::calculateAverageDielectricConstants(
+PANEL_SETUP_TUNING_PROFILE_INFO::DIELECTRIC_INFO PANEL_SETUP_TUNING_PROFILE_INFO::calculateAverageDielectricConstants(
         const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList, const std::vector<int>& dielectricLayerStackupIds,
         const EDA_IU_SCALE& aIuScale )
 {
+    double totalHeight = 0.0;
     double e_r = 0.0;
     double lossTangent = 0.0;
-    double totalHeight = 0.0;
 
     for( int i : dielectricLayerStackupIds )
     {
         const BOARD_STACKUP_ITEM* layer = aStackupLayerList.at( i );
-        totalHeight += aIuScale.IUTomm( layer->GetThickness() ) / 1000.0;
+
+        for( int subLayerIdx = 0; subLayerIdx < layer->GetSublayersCount(); ++subLayerIdx )
+        {
+            totalHeight += aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
+            e_r += layer->GetEpsilonR( subLayerIdx ) * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
+            lossTangent += layer->GetLossTangent( subLayerIdx ) * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
+        }
     }
 
-    for( int i : dielectricLayerStackupIds )
-    {
-        const BOARD_STACKUP_ITEM* layer = aStackupLayerList.at( i );
-        e_r += layer->GetEpsilonR() * aIuScale.IUTomm( layer->GetThickness() ) / ( 1000.0 * totalHeight );
-        lossTangent += layer->GetLossTangent() * aIuScale.IUTomm( layer->GetThickness() ) / ( 1000.0 * totalHeight );
-    }
+    e_r = e_r / totalHeight;
+    lossTangent = lossTangent / totalHeight;
+    totalHeight /= 1000.0; // Convert from mm to m
 
-    return { e_r, lossTangent };
+    return { totalHeight, e_r, lossTangent };
 }
 
 
-void PANEL_SETUP_TUNING_PROFILE_INFO::getDielectricDetails( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
-                                                            const int aSignalLayerId, const int aReferenceLayerId,
-                                                            std::vector<int>& aDielectricLayerStackupIds,
-                                                            double&           aDielectricLayerHeight )
+void PANEL_SETUP_TUNING_PROFILE_INFO::getDielectricLayers( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
+                                                           const int aSignalLayerId, const int aReferenceLayerId,
+                                                           std::vector<int>& aDielectricLayerStackupIds )
 {
-    const EDA_IU_SCALE& iuScale = m_parentPanel->m_unitsProvider->GetIuScale();
-    aDielectricLayerHeight = 0.0;
-
     for( int i = std::min( aSignalLayerId, aReferenceLayerId ) + 1; i < std::max( aSignalLayerId, aReferenceLayerId );
          ++i )
     {
@@ -698,7 +697,6 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::getDielectricDetails( const std::vector<BO
             continue;
 
         aDielectricLayerStackupIds.push_back( i );
-        aDielectricLayerHeight += iuScale.IUTomm( aStackupLayerList.at( i )->GetThickness() ) / 1000.0;
     }
 }
 
@@ -912,18 +910,17 @@ PANEL_SETUP_TUNING_PROFILE_INFO::getMicrostripBoardParameters( const int aRow, c
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> dielectricLayerStackupIds;
-    double           dielectricLayerHeight = 0;
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, referenceLayerStackupId, dielectricLayerStackupIds,
-                          dielectricLayerHeight );
-
-    if( dielectricLayerHeight <= 0.0 )
-        return { {}, CALCULATION_RESULT{ _( "Dielectric height must be greater than 0" ) } };
+    getDielectricLayers( stackupLayerList, signalLayerStackupId, referenceLayerStackupId, dielectricLayerStackupIds );
 
     // Calculate geometric average of the dielectric materials
-    const auto [e_r, tan_d] =
+    const DIELECTRIC_INFO dielectricInfo =
             calculateAverageDielectricConstants( stackupLayerList, dielectricLayerStackupIds, aScale );
 
-    CALCULATION_BOARD_PARAMETERS boardParameters{ e_r, dielectricLayerHeight, 0.0, signalLayerThickness, tan_d };
+    if( dielectricInfo.Height <= 0.0 )
+        return { {}, CALCULATION_RESULT{ _( "Dielectric height must be greater than 0" ) } };
+
+    CALCULATION_BOARD_PARAMETERS boardParameters{ dielectricInfo.E_r, dielectricInfo.Height, 0.0, signalLayerThickness,
+                                                  dielectricInfo.Loss_Tangent };
     CALCULATION_RESULT           result;
     result.OK = true;
 
@@ -982,26 +979,30 @@ PANEL_SETUP_TUNING_PROFILE_INFO::getStriplineBoardParameters( const int aRow, co
 
     // Get the dielectric layers between signal and reference layers
     std::vector<int> topDielectricLayerStackupIds, bottomDielectricLayerStackupIds;
-    double           topDielectricLayerHeight = 0.0;
-    double           bottomDielectricLayerHeight = 0.0;
 
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, topReferenceLayerStackupId,
-                          topDielectricLayerStackupIds, topDielectricLayerHeight );
-    getDielectricDetails( stackupLayerList, signalLayerStackupId, bottomReferenceLayerStackupId,
-                          bottomDielectricLayerStackupIds, bottomDielectricLayerHeight );
-
-    if( topDielectricLayerHeight <= 0.0 || bottomDielectricLayerHeight <= 0.0 )
-        return { {}, CALCULATION_RESULT{ _( "Dielectric heights must be greater than 0" ) } };
+    getDielectricLayers( stackupLayerList, signalLayerStackupId, topReferenceLayerStackupId,
+                         topDielectricLayerStackupIds );
+    getDielectricLayers( stackupLayerList, signalLayerStackupId, bottomReferenceLayerStackupId,
+                         bottomDielectricLayerStackupIds );
 
     // Calculate geometric average of the dielectric materials
     std::vector<int> allDielectricLayerStackupIds( topDielectricLayerStackupIds );
     allDielectricLayerStackupIds.insert( allDielectricLayerStackupIds.end(), bottomDielectricLayerStackupIds.begin(),
                                          bottomDielectricLayerStackupIds.end() );
-    const auto [e_r, tan_d] =
+
+    const DIELECTRIC_INFO topDielectricInfo =
+            calculateAverageDielectricConstants( stackupLayerList, topDielectricLayerStackupIds, aScale );
+    const DIELECTRIC_INFO bottomDielectricInfo =
+            calculateAverageDielectricConstants( stackupLayerList, bottomDielectricLayerStackupIds, aScale );
+    const DIELECTRIC_INFO allDielectricInfo =
             calculateAverageDielectricConstants( stackupLayerList, allDielectricLayerStackupIds, aScale );
 
-    CALCULATION_BOARD_PARAMETERS boardParameters{ e_r, topDielectricLayerHeight, bottomDielectricLayerHeight,
-                                                  signalLayerThickness, tan_d };
+    if( topDielectricInfo.Height <= 0.0 && bottomDielectricInfo.Height <= 0.0 )
+        return { {}, CALCULATION_RESULT{ _( "Dielectric heights must be greater than 0" ) } };
+
+    CALCULATION_BOARD_PARAMETERS boardParameters{ allDielectricInfo.E_r, topDielectricInfo.Height,
+                                                  bottomDielectricInfo.Height, signalLayerThickness,
+                                                  allDielectricInfo.Loss_Tangent };
     CALCULATION_RESULT           result;
     result.OK = true;
 
