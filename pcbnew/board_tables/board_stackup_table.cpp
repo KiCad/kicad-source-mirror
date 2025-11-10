@@ -98,24 +98,28 @@ PCB_TABLE* Build_Board_Stackup_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits )
         {
             // Layer names are empty until we close at least once the board setup dialog.
             // If the user did not open the dialog, then get the names from the board.
-            // But dielectric layer names will be missing.
-            // In this case, for dielectric, a dummy name will be used
-            if( stackup_item->GetLayerName().IsEmpty() )
-            {
-                wxString layerName;
+            // But dielectric layer names will be missing. And in stackup, the name is not very good
+            // So, for dielectric, a name will be used, similar to the name build in gerber job file
+            wxString layerName = stackup_item->GetLayerName();
 
+            if( layerName.IsEmpty() )
+            {
                 if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
                     layerName = aBoard->GetLayerName( stackup_item->GetBrdLayerId() );
-
-                if( layerName.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                    layerName = _( "Dielectric" );
-
-                addDataCell( layerName );
             }
-            else
+
+            if( stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
-                addDataCell( stackup_item->GetLayerName() );
+                layerName = _( "Dielectric" );
+
+                if( stackup_item->GetSublayersCount() < 2 )
+                    layerName <<  wxT( " " ) << stackup_item->GetDielectricLayerId();
+                else
+                    layerName << wxString::Format( _( " %d (%d/%d)" ), stackup_item->GetDielectricLayerId(),
+                                        sublayer_id + 1, stackup_item->GetSublayersCount() );
             }
+
+            addDataCell( layerName );
 
             addDataCell( InitialCaps( stackup_item->GetTypeName() ) );
             addDataCell( stackup_item->GetMaterial( sublayer_id ) );
