@@ -35,66 +35,99 @@
 #include <zone.h>
 #include <zone_settings_bag.h>
 #include <pad.h>
-#include <board.h>
 #include <grid_layer_box_helpers.h>
-
+#include <tool/tool_manager.h>
+#include <panel_zone_properties.h>
 #include <dialog_copper_zones_base.h>
-#include "panel_zone_properties.h"
+#include <tools/pcb_actions.h>
 
 
 class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE
 {
 public:
-    DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings, CONVERT_SETTINGS* aConvertSettings );
+    // The dialog can be closed for several reasons.
+    enum RETVAL
+    {
+        COPPER_ZONE_CANCEL,
+        COPPER_ZONE_OK,
+        COPPER_ZONE_OPEN_ZONE_MANAGER
+    };
+
+    DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE* aZone, ZONE_SETTINGS* aSettings,
+                        CONVERT_SETTINGS* aConvertSettings );
 
     ~DIALOG_COPPER_ZONE() override;
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    RETVAL GetReturnValue() { return m_returnValue; }
+
+private:
     void OnLayerSelection( wxDataViewEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& ) override;
+    void onZoneManager( wxCommandEvent& event ) override;
 
 private:
     PCB_BASE_FRAME*        m_Parent;
+    ZONE*                  m_zone;
     ZONE_SETTINGS*         m_ptr;
-
-    ZONE_SETTINGS_BAG      m_zoneSettingsBag;
-    PANEL_ZONE_PROPERTIES* m_panelZoneProperties;
-
-    wxStaticText*          m_gapLabel;
-    wxTextCtrl*            m_gapCtrl;
-    wxStaticText*          m_gapUnits;
-    UNIT_BINDER*           m_gap;
+    ZONE_SETTINGS_BAG      m_zoneSettingsBag;       // Local storage of settings
 
     CONVERT_SETTINGS*      m_convertSettings;
     wxRadioButton*         m_rbCenterline;
     wxRadioButton*         m_rbEnvelope;
+    wxStaticText*          m_gapLabel;
+    wxTextCtrl*            m_gapCtrl;
+    wxStaticText*          m_gapUnits;
+    UNIT_BINDER*           m_gap;
     wxCheckBox*            m_cbDeleteOriginals;
+    PANEL_ZONE_PROPERTIES* m_panelZoneProperties;
+
+    RETVAL                 m_returnValue;
 };
 
 
-int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings, CONVERT_SETTINGS* aConvertSettings )
+int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE* aZone, ZONE_SETTINGS* aSettings,
+                             CONVERT_SETTINGS* aConvertSettings )
 {
-    DIALOG_COPPER_ZONE dlg( aCaller, aSettings, aConvertSettings );
+    DIALOG_COPPER_ZONE dlg( aCaller, aZone, aSettings, aConvertSettings );
 
     // TODO: why does this need QuasiModal?
-    return dlg.ShowQuasiModal();
+    dlg.ShowQuasiModal();
+
+    switch( dlg.GetReturnValue() )
+    {
+    case DIALOG_COPPER_ZONE::COPPER_ZONE_OK:
+        return wxID_OK;
+
+    case DIALOG_COPPER_ZONE::COPPER_ZONE_OPEN_ZONE_MANAGER:
+        aCaller->CallAfter(
+                [aCaller]()
+                {
+                    aCaller->GetToolManager()->RunAction( PCB_ACTIONS::zonesManager );
+                } );
+        return wxID_OK;
+
+    default:
+    case DIALOG_COPPER_ZONE::COPPER_ZONE_CANCEL:
+        return wxID_CANCEL;
+    }
 }
 
 
-DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
+DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE* aZone, ZONE_SETTINGS* aSettings,
                                         CONVERT_SETTINGS* aConvertSettings ) :
         DIALOG_COPPER_ZONE_BASE( aParent ),
-        m_zoneSettingsBag( aSettings ),
+        m_Parent( aParent ),
+        m_zone( aZone ),
+        m_zoneSettingsBag( aZone, aSettings ),
         m_convertSettings( aConvertSettings ),
         m_rbCenterline( nullptr ),
         m_rbEnvelope( nullptr ),
-        m_cbDeleteOriginals( nullptr )
+        m_cbDeleteOriginals( nullptr ),
+        m_returnValue( COPPER_ZONE_CANCEL )
 {
-    m_Parent = aParent;
-
     m_ptr = aSettings;
     aSettings->SetupLayersList( m_layers, m_Parent, LSET::AllCuMask( aParent->GetBoard()->GetCopperLayerCount() ) );
 
@@ -141,8 +174,12 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
         m_gap = nullptr;
     }
 
+    // A zone still in creation (ie: not yet in the document) can't be edited by the Zone Manager
+    if( !aZone )
+        m_openZoneManager->Hide();
+
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( this, aParent, m_zoneSettingsBag );
-    m_panelZoneProperties->SetZone( nullptr );
+    m_panelZoneProperties->SetZone( m_zone );
     m_sizerRight->Add( m_panelZoneProperties, 1, wxEXPAND, 5 );
 
     SetupStandardButtons();
@@ -183,16 +220,7 @@ void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
 
 bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
 {
-    // Get the layer selection for this zone
-    int layers = 0;
-
-    for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
-    {
-        if( m_layers->GetToggleValue( (unsigned) ii, 0 ) )
-            layers++;
-    }
-
-    if( layers == 0 )
+    if( m_zoneSettingsBag.GetZoneSettings( m_zone )->m_Layers.empty() )
     {
         DisplayError( this, _( "No layer selected." ) );
         return false;
@@ -212,7 +240,8 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
         m_convertSettings->m_Gap = m_gap->GetIntValue();
     }
 
-    *m_ptr = *m_zoneSettingsBag.GetZoneSettings( nullptr );
+    *m_ptr = *m_zoneSettingsBag.GetZoneSettings( m_zone );
+    m_returnValue = COPPER_ZONE_OK;
     return true;
 }
 
@@ -229,5 +258,15 @@ void DIALOG_COPPER_ZONE::OnLayerSelection( wxDataViewEvent& event )
     wxVariant layerID;
     m_layers->GetValue( layerID, row, 2 );
 
-    m_zoneSettingsBag.GetZoneSettings( nullptr )->m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), checked );
+    m_zoneSettingsBag.GetZoneSettings( m_zone )->m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), checked );
+}
+
+
+void DIALOG_COPPER_ZONE::onZoneManager( wxCommandEvent& event )
+{
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = COPPER_ZONE_OPEN_ZONE_MANAGER;
+        Close();
+    }
 }

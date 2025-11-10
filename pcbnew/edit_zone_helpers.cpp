@@ -54,7 +54,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     {
         // edit a zone on a copper layer
         zoneInfo << *aZone;
-        dialogResult = InvokeCopperZonesEditor( this, &zoneInfo );
+        dialogResult = InvokeCopperZonesEditor( this, aZone, &zoneInfo );
     }
     else
     {

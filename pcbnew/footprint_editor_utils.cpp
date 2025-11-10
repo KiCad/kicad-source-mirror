@@ -229,17 +229,11 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         zoneSettings << *static_cast<ZONE*>( aItem );
 
         if( zone->GetIsRuleArea() )
-        {
             success = InvokeRuleAreaEditor( this, &zoneSettings ) == wxID_OK;
-        }
         else if( zone->IsOnCopperLayer() )
-        {
-            success = InvokeCopperZonesEditor( this, &zoneSettings ) == wxID_OK;
-        }
+            success = InvokeCopperZonesEditor( this, zone, &zoneSettings ) == wxID_OK;
         else
-        {
             success = InvokeNonCopperZonesEditor( this, &zoneSettings ) == wxID_OK;
-        }
 
         if( success )
         {

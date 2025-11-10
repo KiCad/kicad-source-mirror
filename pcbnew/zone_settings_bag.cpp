@@ -61,9 +61,9 @@ ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
 }
 
 
-ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( ZONE_SETTINGS* aSettings )
+ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( ZONE* aZone, ZONE_SETTINGS* aSettings )
 {
-    m_zoneSettings[nullptr] = std::make_shared<ZONE_SETTINGS>( *aSettings );
+    m_zoneSettings[aZone] = std::make_shared<ZONE_SETTINGS>( *aSettings );
 }
 
 

@@ -47,10 +47,9 @@
 #include "dialog_zone_manager.h"
 
 
-DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo ) :
+DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
         DIALOG_ZONE_MANAGER_BASE( aParent ),
         m_pcbFrame( aParent ),
-        m_zoneInfo( aZoneInfo ),
         m_zoneSettingsBag( aParent->GetBoard() ),
         m_priorityDragIndex( {} ),
         m_needZoomGAL( true ),
@@ -238,13 +237,6 @@ void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 {
     m_panelZoneProperties->TransferZoneSettingsFromWindow();
     m_zoneSettingsBag.OnUserConfirmChange();
-
-    if( m_zoneInfo )
-    {
-        if( std::shared_ptr<ZONE_SETTINGS> zone = m_panelZoneProperties->GetZoneSettings() )
-            m_zoneInfo->CopyFrom( *zone, false );
-    }
-
     aEvt.Skip();
 }
 

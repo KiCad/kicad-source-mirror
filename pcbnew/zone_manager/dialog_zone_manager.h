@@ -53,29 +53,21 @@ class COMMIT;
 class ZONE_PREVIEW_CANVAS;
 enum class ZONE_INDEX_MOVEMENT;
 
+
 class DIALOG_ZONE_MANAGER : public DIALOG_ZONE_MANAGER_BASE
 {
-    /*enum
-    {
-        ZONE_VIEWER = ID_DIALOG_COPPER_ZONE_BASE + 10,
-    };*/
-
 public:
-    DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo );
+    DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent );
     ~DIALOG_ZONE_MANAGER() override;
 
     bool GetRepourOnClose() { return m_checkRepour->GetValue(); }
 
 protected:
     void OnZoneSelectionChanged( ZONE* aZone );
-
     void OnDataViewCtrlSelectionChanged( wxDataViewEvent& event ) override;
-
     void SelectZoneTableItem( wxDataViewItem const& aItem );
-
     void OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent ) override;
 	void onDialogResize( wxSizeEvent& event ) override;
-
     void OnOk( wxCommandEvent& aEvt ) override;
 
 #if wxUSE_DRAG_AND_DROP
@@ -113,7 +105,6 @@ private:
 
 private:
     PCB_BASE_FRAME*                       m_pcbFrame;
-    ZONE_SETTINGS*                        m_zoneInfo;
     ZONE_SETTINGS_BAG                     m_zoneSettingsBag;
     PANEL_ZONE_PROPERTIES*                m_panelZoneProperties;
     wxObjectDataPtr<MODEL_ZONES_OVERVIEW> m_modelZonesOverview;

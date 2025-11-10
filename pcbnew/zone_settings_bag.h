@@ -39,7 +39,7 @@ class ZONE_SETTINGS_BAG
 {
 public:
     ZONE_SETTINGS_BAG( BOARD* aBoard );
-    ZONE_SETTINGS_BAG( ZONE_SETTINGS* aSettings );
+    ZONE_SETTINGS_BAG( ZONE* aZone, ZONE_SETTINGS* aSettings );
 
     ZONE_SETTINGS_BAG() = default;
 

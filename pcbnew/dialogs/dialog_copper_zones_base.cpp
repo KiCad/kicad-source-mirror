@@ -50,6 +50,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerbottom;
 	bSizerbottom = new wxBoxSizer( wxHORIZONTAL );
 
+	m_openZoneManager = new wxButton( this, wxID_ANY, _("Open Zone Manager..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerbottom->Add( m_openZoneManager, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -71,6 +74,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_openZoneManager->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::onZoneManager ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 }
 
@@ -80,6 +84,7 @@ DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_openZoneManager->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::onZoneManager ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 
 }

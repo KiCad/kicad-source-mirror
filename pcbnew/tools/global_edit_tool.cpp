@@ -244,8 +244,7 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
     for( ZONE* zone : board->Zones() )
         commit.Modify( zone );
 
-    ZONE_SETTINGS       zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
-    DIALOG_ZONE_MANAGER dlg( editFrame, &zoneInfo );
+    DIALOG_ZONE_MANAGER dlg( editFrame );
 
     int dialogResult = dlg.ShowQuasiModal();
 
@@ -266,9 +265,6 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
     for( ZONE* zone : board->Zones() )
         editFrame->GetCanvas()->GetView()->Update( zone );
 
-    zoneInfo.m_Netcode = NETINFO_LIST::ORPHANED;
-    board->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
-    commit.Push( _( "Modify zones properties with zone manager" ), SKIP_CONNECTIVITY );
     editFrame->OnModify();
 
     //rebuildConnectivity

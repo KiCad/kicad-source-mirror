@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ZONES_H_
-#define ZONES_H_
+#pragma once
 
 #include <wx/translation.h>
 
@@ -42,6 +41,7 @@ struct CONVERT_SETTINGS;
 
 
 #define ZONE_MANAGER_REPOUR 1005 //Reported if repour option is checked while clicking OK
+
 /// How pads are covered by copper in zone
 enum class ZONE_CONNECTION
 {
@@ -90,10 +90,11 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
  *
  * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
  *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
+ * @param aZone the zone being edited, or nullptr if a zone is being created.
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
+int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE* aZone, ZONE_SETTINGS* aSettings,
                              CONVERT_SETTINGS* aConvertSettings = nullptr );
 
 /**
@@ -107,5 +108,3 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
  */
 int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
                           BOARD* aBoard = nullptr, CONVERT_SETTINGS* aConvertSettings = nullptr );
-
-#endif  // ZONES_H_

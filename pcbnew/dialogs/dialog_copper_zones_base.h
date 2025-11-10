@@ -20,6 +20,9 @@
 #include <wx/dataview.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,6 +44,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextLayerSelection;
 		wxDataViewListCtrl* m_layers;
 		wxBoxSizer* m_sizerRight;
+		wxButton* m_openZoneManager;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -49,6 +53,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void onZoneManager( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -539,7 +539,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         else
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &m_userSettings );
+            ret = InvokeCopperZonesEditor( frame, nullptr, &zoneInfo, &m_userSettings );
         }
 
         if( ret == wxID_CANCEL )
