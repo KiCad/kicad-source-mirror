@@ -23,8 +23,6 @@
  */
 
 #include "zone_preview_canvas.h"
-#include <pcb_track.h>
-#include <pcb_marker.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
@@ -42,9 +40,11 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <board.h>
-#include "zone_manager_preference.h"
-#include "zone_painter.h"
-#include "zone_manager/board_edges_bounding_item.h"
+#include <pcb_track.h>
+#include <pcb_marker.h>
+#include <pcb_painter.h>
+#include <zone_manager/board_edges_bounding_item.h>
+#include <kiplatform/ui.h>
 
 
 enum DRAW_ORDER
@@ -52,6 +52,50 @@ enum DRAW_ORDER
     DRAW_ORDER_BOARD_BOUNDING,
     DRAW_ORDER_ZONE
 
+};
+
+
+wxColour getCanvasBackgroundColor()
+{
+    if( KIPLATFORM::UI::IsDarkTheme() )
+        return wxColour( 0, 0, 0, 30 );
+
+    return wxColour( 238, 243, 243 );
+}
+
+
+wxColour getBoundBoundingFillColor()
+{
+    if( KIPLATFORM::UI::IsDarkTheme() )
+        return wxColour( 238, 243, 243, 60 );
+
+    return wxColour( 84, 84, 84, 40 );
+}
+
+
+class ZONE_PAINTER : public KIGFX::PCB_PAINTER
+{
+public:
+    using KIGFX::PCB_PAINTER::PCB_PAINTER;
+
+    bool Draw( const KIGFX::VIEW_ITEM* aItem, int aLayer ) override
+    {
+        const BOARD_EDGES_BOUNDING_ITEM* item = dynamic_cast<const BOARD_EDGES_BOUNDING_ITEM*>( aItem );
+
+        if( item )
+        {
+            m_gal->Save();
+            m_gal->SetFillColor( getBoundBoundingFillColor() );
+            m_gal->SetLineWidth( 0 );
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->DrawRectangle( item->ViewBBox() );
+            m_gal->Restore();
+            return true;
+        }
+
+        return KIGFX::PCB_PAINTER::Draw( aItem, aLayer );
+    }
 };
 
 
@@ -71,7 +115,7 @@ ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID
         m_view->Add( aZone, DRAW_ORDER_ZONE );
 
     UpdateColors();
-    m_painter->GetSettings()->SetBackgroundColor( ZONE_MANAGER_PREFERENCE::GetCanvasBackgroundColor() );
+    m_painter->GetSettings()->SetBackgroundColor( getCanvasBackgroundColor() );
 
     // Load layer & elements visibility settings
     for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )

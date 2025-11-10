@@ -30,11 +30,12 @@
 #include <wx/dcmemory.h>
 #include <pcb_edit_frame.h>
 #include <wx/variant.h>
-#include "zone_manager_preference.h"
 #include "managed_zone.h"
 #include "model_zones_overview.h"
 
+
 wxDEFINE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
+
 
 void MODEL_ZONES_OVERVIEW::SortFilteredZones()
 {
@@ -126,14 +127,14 @@ void MODEL_ZONES_OVERVIEW::GetValueByRow( wxVariant& aVariant, unsigned aRow, un
     case LAYERS:
     {
         wxArrayString layers;
-        wxSize        bmSize( LAYER_BAR_WIDTH, ZONE_MANAGER_PREFERENCE::LAYER_ICON_SIZE::HEIGHT );
 
         for( PCB_LAYER_ID layer : cur.GetLayerSet().Seq() )
             layers.Add( m_pcb->GetLayerName( layer ) );
 
-        aVariant << wxDataViewIconText( wxJoin( layers, ',' ), MakeBitmapForLayers( cur.GetLayerSet().UIOrder(),
-                                                                                    *m_PCB_FRAME->GetColorSettings(),
-                                                                                    bmSize ) );
+        aVariant << wxDataViewIconText( wxJoin( layers, ',' ),
+                                        MakeBitmapForLayers( cur.GetLayerSet().UIOrder(),
+                                                             *m_PCB_FRAME->GetColorSettings(),
+                                                             wxSize( LAYER_BAR_WIDTH, LAYER_BAR_HEIGHT ) ) );
         break;
     }
 

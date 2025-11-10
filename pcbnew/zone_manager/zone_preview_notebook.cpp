@@ -36,8 +36,15 @@
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <zone_manager/zone_preview_canvas.h>
-#include <zone_manager/zone_manager_preference.h>
 #include <pcb_edit_frame.h>
+
+
+enum LAYER_ICON_SIZE
+{
+    WIDTH = 16,
+    HEIGHT = 16,
+
+};
 
 
 class ZONE_PREVIEW_NOTEBOOK_PAGE : public wxPanel
@@ -70,8 +77,7 @@ ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME*
 {
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &ZONE_PREVIEW_NOTEBOOK::OnPageChanged, this );
 
-    wxSize swatchSize( ZONE_MANAGER_PREFERENCE::LAYER_ICON_SIZE::WIDTH,
-                       ZONE_MANAGER_PREFERENCE::LAYER_ICON_SIZE::HEIGHT );
+    wxSize swatchSize( LAYER_ICON_SIZE::WIDTH, LAYER_ICON_SIZE::HEIGHT );
 
     wxImageList* imageList = new wxImageList( swatchSize.x, swatchSize.y );
 

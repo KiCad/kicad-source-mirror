@@ -211,6 +211,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_tuning_profile_info.cpp
     dialogs/panel_setup_zone_hatch_offsets.cpp
     dialogs/panel_setup_zone_hatch_offsets_base.cpp
+    dialogs/panel_zone_properties.cpp
+    dialogs/panel_zone_properties_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp
@@ -316,10 +318,6 @@ set( ZONE_MANAGER_SRCS
     zone_manager/dialog_zone_manager.cpp
     zone_manager/dialog_zone_manager_base.cpp
     zone_manager/model_zones_overview.cpp
-        dialogs/panel_zone_properties.cpp
-        dialogs/panel_zone_properties_base.cpp
-    zone_manager/zone_manager_preference.cpp
-    zone_manager/zone_painter.cpp
     zone_manager/zone_preview_notebook.cpp
     zone_manager/zone_preview_canvas.cpp
     )

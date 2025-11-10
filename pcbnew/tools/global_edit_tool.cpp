@@ -36,7 +36,6 @@
 #include <tools/global_edit_tool.h>
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <board_design_settings.h>
-#include <zone_manager/zone_manager_preference.h>
 
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
