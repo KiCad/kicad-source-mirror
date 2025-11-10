@@ -23,24 +23,25 @@
  */
 
 
-#ifndef ZONES_CONTAINER_H
-#define ZONES_CONTAINER_H
+#pragma once
+
 #include "board.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
 #include <zone.h>
-#include "zone_management_base.h"
-#include "zone_settings.h"
+#include <zone_settings.h>
 
 class MANAGED_ZONE;
 
 
-class ZONES_CONTAINER : public ZONE_MANAGEMENT_BASE
+class ZONE_SETTINGS_BAG
 {
 public:
-    ZONES_CONTAINER( BOARD* board );
-    ~ZONES_CONTAINER() override = default;
+    ZONE_SETTINGS_BAG( BOARD* aBoard );
+    ZONE_SETTINGS_BAG( ZONE_SETTINGS* aSettings );
+
+    ZONE_SETTINGS_BAG() = default;
 
     std::vector<std::shared_ptr<MANAGED_ZONE>> GetManagedZones() const
     {
@@ -48,23 +49,27 @@ public:
     }
 
     std::shared_ptr<ZONE_SETTINGS> GetZoneSettings( ZONE* zone );
+
     /**
      * @brief Adapter for the zone filler ,zones are actually managed the smart ptr
      *
      * @return std::vector<ZONE*>&
      */
     std::vector<ZONE*>& GetClonedZoneList() { return m_clonedZoneList; }
+
     /**
      * @brief Used for restoring the zones in the board after refilling
      *
      * @return std::vector<ZONE*>&
      */
     std::vector<ZONE*>& GetOriginalZoneList() { return m_originalZoneList; }
+
     /**
      * @brief Flush the zone settings change to the cloned ones
      *
      */
     void FlushZoneSettingsChange();
+
     /**
      * @brief Flush the priority change to the cloned ones
      *
@@ -72,7 +77,7 @@ public:
      */
     bool FlushPriorityChange();
 
-    void OnUserConfirmChange() override;
+    void OnUserConfirmChange();
 
 private:
     std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesCloneMap;
@@ -81,5 +86,3 @@ private:
     std::vector<ZONE*>                                        m_clonedZoneList;
     std::vector<ZONE*>                                        m_originalZoneList;
 };
-
-#endif

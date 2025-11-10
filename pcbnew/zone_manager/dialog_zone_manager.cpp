@@ -35,25 +35,23 @@
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_progress_reporters.h>
 #include <zone.h>
+#include <zone_settings_bag.h>
 #include <board.h>
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <zone_filler.h>
 
-#include "dialog_zone_manager_base.h"
-#include "model_zones_overview.h"
-#include <zone_manager/panel_zone_properties.h>
-#include <zone_manager/dialog_zone_manager.h>
-#include <zone_manager/zone_preview_canvas.h>
-#include "zones_container.h"
+#include <zone_manager/model_zones_overview.h>
+#include <dialogs/panel_zone_properties.h>
 #include <zone_manager/zone_preview_notebook.h>
+#include "dialog_zone_manager.h"
 
 
 DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aZoneInfo ) :
         DIALOG_ZONE_MANAGER_BASE( aParent ),
         m_pcbFrame( aParent ),
         m_zoneInfo( aZoneInfo ),
-        m_zonesContainer( std::make_unique<ZONES_CONTAINER>( aParent->GetBoard() ) ),
+        m_zoneSettingsBag( aParent->GetBoard() ),
         m_priorityDragIndex( {} ),
         m_needZoomGAL( true ),
         m_isFillingZones( false ),
@@ -66,11 +64,11 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
-    m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, *m_zonesContainer );
-    m_sizerProperties->Add( m_panelZoneProperties, 0, wxTOP | wxEXPAND, 5 );
+    m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, m_zoneSettingsBag );
+    m_sizerProperties->Add( m_panelZoneProperties, 0,  wxEXPAND, 5 );
 
     m_zonePreviewNotebook = new ZONE_PREVIEW_NOTEBOOK( m_zonePanel, aParent );
-    m_rightColumn->Add( m_zonePreviewNotebook, 1, wxALL | wxEXPAND, 5 );
+    m_sizerPreview->Add( m_zonePreviewNotebook, 1, wxALL | wxEXPAND, 5 );
 
     for( const auto& [k, v] : MODEL_ZONES_OVERVIEW::GetColumnNames() )
     {
@@ -80,7 +78,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
             m_viewZonesOverview->AppendTextColumn( v, k, wxDATAVIEW_CELL_INERT, 160 );
     }
 
-    m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( m_zonesContainer->GetManagedZones(), aParent->GetBoard(),
+    m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( m_zoneSettingsBag.GetManagedZones(), aParent->GetBoard(),
                                                      aParent, this );
     m_viewZonesOverview->AssociateModel( m_modelZonesOverview.get() );
 
@@ -206,7 +204,7 @@ void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 {
     wxWindowUpdateLocker updateLock( this );
 
-    m_panelZoneProperties->OnZoneSelectionChanged( zone );
+    m_panelZoneProperties->SetZone( zone );
     m_zonePreviewNotebook->OnZoneSelectionChanged( zone );
 
     Layout();
@@ -238,8 +236,8 @@ void DIALOG_ZONE_MANAGER::SelectZoneTableItem( wxDataViewItem const& aItem )
 
 void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 {
-    m_panelZoneProperties->OnUserConfirmChange();
-    m_zonesContainer->OnUserConfirmChange();
+    m_panelZoneProperties->TransferZoneSettingsFromWindow();
+    m_zoneSettingsBag.OnUserConfirmChange();
 
     if( m_zoneInfo )
     {
@@ -356,8 +354,8 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
     m_isFillingZones = true;
     m_panelZoneProperties->TransferZoneSettingsFromWindow();
-    m_zonesContainer->FlushZoneSettingsChange();
-    m_zonesContainer->FlushPriorityChange();
+    m_zoneSettingsBag.FlushZoneSettingsChange();
+    m_zoneSettingsBag.FlushPriorityChange();
 
     BOARD* board = m_pcbFrame->GetBoard();
     board->IncrementTimeStamp();
@@ -371,7 +369,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
     // container of the board.  This is relatively safe as-is because the original zones list is
     // swapped back in below, but still should be changed to avoid invalidating the board state
     // in case this code is refactored to be a non-modal dialog in the future.
-    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetClonedZoneList();
+    const_cast<ZONES&>( board->Zones() ) = m_zoneSettingsBag.GetClonedZoneList();
 
     //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by
     //       the pcb frame.
@@ -382,7 +380,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
     //NOTE - But the connectivity need to be rebuild, otherwise if cancelling, it may
     //       segfault.
-    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetOriginalZoneList();
+    const_cast<ZONES&>( board->Zones() ) = m_zoneSettingsBag.GetOriginalZoneList();
     board->BuildConnectivity();
 
     m_isFillingZones = false;

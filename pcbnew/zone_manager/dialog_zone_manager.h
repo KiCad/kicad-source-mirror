@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_ZONE_MANAGER_H
-#define DIALOG_ZONE_MANAGER_H
+#pragma once
 
 #include <memory>
 #include <optional>
@@ -35,6 +34,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <zones.h>
+#include <zone_settings_bag.h>
 #include <widgets/unit_binder.h>
 #include <zone.h>
 #include <pad.h>
@@ -46,10 +46,7 @@
 
 
 class PANEL_ZONE_PROPERTIES;
-class MODEL_ZONES_PRIORITY_LIST;
 class MODEL_ZONES_OVERVIEW;
-class MODEL_ZONE_LAYERS_LIST;
-class ZONES_CONTAINER;
 class ZONE_PREVIEW_NOTEBOOK;
 class ZONE_FILLER;
 class COMMIT;
@@ -117,7 +114,7 @@ private:
 private:
     PCB_BASE_FRAME*                       m_pcbFrame;
     ZONE_SETTINGS*                        m_zoneInfo;
-    std::unique_ptr<ZONES_CONTAINER>      m_zonesContainer;
+    ZONE_SETTINGS_BAG                     m_zoneSettingsBag;
     PANEL_ZONE_PROPERTIES*                m_panelZoneProperties;
     wxObjectDataPtr<MODEL_ZONES_OVERVIEW> m_modelZonesOverview;
     ZONE_PREVIEW_NOTEBOOK*                m_zonePreviewNotebook;
@@ -127,5 +124,3 @@ private:
     bool                                  m_isFillingZones;
     bool                                  m_zoneFillComplete;
 };
-
-#endif

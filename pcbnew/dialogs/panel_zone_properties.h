@@ -25,44 +25,36 @@
 
 #pragma once
 
-
-#include "widgets/unit_binder.h"
-#include "zone_manager/panel_zone_properties_base.h"
-#include "zone_management_base.h"
-
-#include "zone_manager/zone_selection_change_notifier.h"
+#include <widgets/unit_binder.h>
 #include <memory>
 #include <zone_settings.h>
+#include "panel_zone_properties_base.h"
 
 wxDECLARE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
 wxDECLARE_EVENT( EVT_ZONE_NET_UPDATE, wxCommandEvent );
 
 
 class PCB_BASE_FRAME;
-class ZONES_CONTAINER;
+class ZONE_SETTINGS_BAG;
 
 
-class PANEL_ZONE_PROPERTIES : public PANEL_ZONE_PROPERTIES_BASE,
-                              public ZONE_SELECTION_CHANGE_NOTIFIER,
-                              public ZONE_MANAGEMENT_BASE
+class PANEL_ZONE_PROPERTIES : public PANEL_ZONE_PROPERTIES_BASE
 {
 public:
-    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONES_CONTAINER& aZoneContainer );
+    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONE_SETTINGS_BAG& aZonesSettingsBag );
 
     ~PANEL_ZONE_PROPERTIES() override;
 
-    void ActivateSelectedZone( ZONE* new_zone ) override;
-
-    void OnUserConfirmChange() override;
+    void SetZone( ZONE* new_zone );
+    ZONE* GetZone() const { return m_zone; }
 
     std::shared_ptr<ZONE_SETTINGS> GetZoneSettings() const { return m_settings; }
 
     bool TransferZoneSettingsFromWindow();
+    bool TransferZoneSettingsToWindow();
 
 private:
     static constexpr int INVALID_NET_CODE{ 0 };
-
-    bool TransferZoneSettingsToWindow();
 
     /**
      * @param aUseExportableSetupOnly is true to use exportable parameters only (used to
@@ -79,25 +71,27 @@ private:
     void OnAddLayerItem( wxCommandEvent& event ) override;
     void OnDeleteLayerItem( wxCommandEvent& event ) override;
 
-private:
-    PCB_BASE_FRAME*                m_Parent;
+    void updateInfoBar();
 
-    ZONES_CONTAINER&               m_ZoneContainer;
+private:
+    PCB_BASE_FRAME*                m_frame;
+    ZONE_SETTINGS_BAG&             m_zonesSettingsBag;
+    ZONE*                          m_zone;
     std::shared_ptr<ZONE_SETTINGS> m_settings;
 
     LAYER_PROPERTIES_GRID_TABLE*   m_layerPropsTable;
 
-    UNIT_BINDER m_outlineHatchPitch;
+    UNIT_BINDER    m_outlineHatchPitch;
 
-    UNIT_BINDER m_cornerRadius;
-    UNIT_BINDER m_clearance;
-    UNIT_BINDER m_minThickness;
-    UNIT_BINDER m_antipadClearance;
-    UNIT_BINDER m_spokeWidth;
+    UNIT_BINDER    m_cornerRadius;
+    UNIT_BINDER    m_clearance;
+    UNIT_BINDER    m_minWidth;
+    UNIT_BINDER    m_antipadClearance;
+    UNIT_BINDER    m_spokeWidth;
 
-    UNIT_BINDER m_gridStyleRotation;
-    UNIT_BINDER m_gridStyleThickness;
-    UNIT_BINDER m_gridStyleGap;
-    UNIT_BINDER m_islandThreshold;
-    bool        m_isTeardrop;
+    UNIT_BINDER    m_gridStyleRotation;
+    UNIT_BINDER    m_gridStyleThickness;
+    UNIT_BINDER    m_gridStyleGap;
+    UNIT_BINDER    m_islandThreshold;
+    bool           m_isTeardrop;
 };

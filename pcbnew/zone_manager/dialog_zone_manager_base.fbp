@@ -67,7 +67,7 @@
         <property name="permission">protected</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxRIGHT</property>
+          <property name="flag">wxEXPAND</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -682,7 +682,7 @@
                       <property name="permission">none</property>
                       <object class="sizeritem" expanded="true">
                         <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxLEFT</property>
+                        <property name="flag">wxEXPAND</property>
                         <property name="proportion">1</property>
                         <object class="wxBoxSizer" expanded="true">
                           <property name="minimum_size"></property>
@@ -696,6 +696,17 @@
                             <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
                               <property name="name">m_sizerProperties</property>
+                              <property name="orient">wxVERTICAL</property>
+                              <property name="permission">protected</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="proportion">1</property>
+                            <object class="wxBoxSizer" expanded="true">
+                              <property name="minimum_size"></property>
+                              <property name="name">m_sizerPreview</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="permission">protected</property>
                             </object>

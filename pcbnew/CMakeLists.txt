@@ -316,13 +316,12 @@ set( ZONE_MANAGER_SRCS
     zone_manager/dialog_zone_manager.cpp
     zone_manager/dialog_zone_manager_base.cpp
     zone_manager/model_zones_overview.cpp
-    zone_manager/panel_zone_properties.cpp
-    zone_manager/panel_zone_properties_base.cpp
+        dialogs/panel_zone_properties.cpp
+        dialogs/panel_zone_properties_base.cpp
     zone_manager/zone_manager_preference.cpp
     zone_manager/zone_painter.cpp
     zone_manager/zone_preview_notebook.cpp
     zone_manager/zone_preview_canvas.cpp
-    zone_manager/zones_container.cpp
     )
 
 set( PCBNEW_CLASS_SRCS
@@ -386,7 +385,7 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp
-        pcb_fields_grid_table.cpp
+    pcb_fields_grid_table.cpp
     toolbars_footprint_editor.cpp
     toolbars_footprint_viewer.cpp
     toolbars_footprint_wizard.cpp
@@ -394,6 +393,7 @@ set( PCBNEW_CLASS_SRCS
     tracks_cleaner.cpp
     undo_redo.cpp
     zone_filler.cpp
+    zone_settings_bag.cpp
     edit_zone_helpers.cpp
 
     ratsnest/ratsnest.cpp

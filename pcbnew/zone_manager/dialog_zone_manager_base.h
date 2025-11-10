@@ -55,6 +55,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		wxPanel* m_zonePanel;
 		wxBoxSizer* m_rightColumn;
 		wxBoxSizer* m_sizerProperties;
+		wxBoxSizer* m_sizerPreview;
 		wxBoxSizer* m_sizerBottom;
 		wxCheckBox* m_checkRepour;
 		wxButton* m_updateDisplayedZones;

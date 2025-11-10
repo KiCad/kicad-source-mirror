@@ -24,14 +24,15 @@
  */
 
 #include "panel_zone_properties.h"
-#include "zone_manager/zones_container.h"
 
 #include <grid_tricks.h>
 #include <wx/radiobut.h>
 #include <kiface_base.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <dialog_shim.h>
 #include <pcbnew_settings.h>
+#include <zone_settings_bag.h>
 #include <wx/string.h>
 #include <widgets/unit_binder.h>
 #include <widgets/std_bitmap_button.h>
@@ -39,20 +40,19 @@
 #include <pad.h>
 #include <grid_layer_box_helpers.h>
 
-#include <dialog_copper_zones_base.h>
-
 
 wxDEFINE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
 wxDEFINE_EVENT( EVT_ZONE_NET_UPDATE, wxCommandEvent );
 
 PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                              ZONES_CONTAINER& aZoneContainer ) :
+                                              ZONE_SETTINGS_BAG& aZonesSettingsBag ) :
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
-        m_ZoneContainer( aZoneContainer ),
+        m_frame( aFrame ),
+        m_zonesSettingsBag( aZonesSettingsBag ),
         m_outlineHatchPitch( aFrame, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
         m_cornerRadius( aFrame, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
         m_clearance( aFrame, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
-        m_minThickness( aFrame, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
+        m_minWidth( aFrame, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
         m_antipadClearance( aFrame, m_antipadLabel, m_antipadCtrl, m_antipadUnits ),
         m_spokeWidth( aFrame, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
         m_gridStyleRotation( aFrame, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits ),
@@ -60,11 +60,9 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
         m_gridStyleGap( aFrame, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
         m_islandThreshold( aFrame, m_islandThresholdLabel, m_tcIslandThreshold, m_islandThresholdUnits )
 {
-    m_Parent = aFrame;
+    m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
 
-    m_netSelector->SetNetInfo( &m_Parent->GetBoard()->GetNetInfo() );
-
-    m_layerPropsTable = new LAYER_PROPERTIES_GRID_TABLE( m_Parent,
+    m_layerPropsTable = new LAYER_PROPERTIES_GRID_TABLE( m_frame,
             [&]() -> LSET
             {
                 return m_settings->m_Layers;
@@ -80,7 +78,7 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
 
     for( PCB_LAYER_ID copper : LSET::AllCuMask() )
     {
-        if( !m_Parent->GetBoard()->IsLayerEnabled( copper ) )
+        if( !m_frame->GetBoard()->IsLayerEnabled( copper ) )
             forbiddenLayers.set( copper );
     }
 
@@ -106,21 +104,16 @@ PANEL_ZONE_PROPERTIES::~PANEL_ZONE_PROPERTIES()
 }
 
 
-void PANEL_ZONE_PROPERTIES::ActivateSelectedZone( ZONE* aZone )
+void PANEL_ZONE_PROPERTIES::SetZone( ZONE* aZone )
 {
     if( m_settings )
         TransferZoneSettingsFromWindow();
 
-    m_settings = m_ZoneContainer.GetZoneSettings( aZone );
+    m_zone = aZone;
+    m_settings = m_zonesSettingsBag.GetZoneSettings( aZone );
     m_isTeardrop = m_settings->m_TeardropType != TEARDROP_TYPE::TD_NONE;
 
     TransferZoneSettingsToWindow();
-}
-
-
-void PANEL_ZONE_PROPERTIES::OnUserConfirmChange()
-{
-    TransferZoneSettingsFromWindow();
 }
 
 
@@ -153,7 +146,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     m_outlineHatchPitch.SetValue( m_settings->m_BorderHatchPitch );
 
     m_clearance.SetValue( m_settings->m_ZoneClearance );
-    m_minThickness.SetValue( m_settings->m_ZoneMinThickness );
+    m_minWidth.SetValue( m_settings->m_ZoneMinThickness );
 
     switch( m_settings->GetPadConnection() )
     {
@@ -270,7 +263,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     if( !m_clearance.Validate( 0, pcbIUScale.mmToIU( ZONE_CLEARANCE_MAX_VALUE_MM ) ) )
         return false;
 
-    if( !m_minThickness.Validate( pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM ), INT_MAX ) )
+    if( !m_minWidth.Validate( pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM ), INT_MAX ) )
         return false;
 
     if( !m_cornerRadius.Validate( 0, INT_MAX ) )
@@ -283,7 +276,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     if( m_settings->m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        int minThickness = m_minThickness.GetIntValue();
+        int minThickness = m_minWidth.GetIntValue();
 
         if( !m_gridStyleThickness.Validate( minThickness, INT_MAX ) )
             return false;
@@ -316,7 +309,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings->m_BorderHatchPitch = m_outlineHatchPitch.GetIntValue();
 
     m_settings->m_ZoneClearance = m_clearance.GetIntValue();
-    m_settings->m_ZoneMinThickness = m_minThickness.GetIntValue();
+    m_settings->m_ZoneMinThickness = m_minWidth.GetIntValue();
 
     m_settings->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
 
@@ -365,6 +358,8 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
 void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
 {
+    updateInfoBar();
+
     // Zones with no net never have islands removed
     if( m_netSelector->GetSelectedNetcode() == INVALID_NET_CODE )
     {
@@ -426,3 +421,14 @@ void PANEL_ZONE_PROPERTIES::OnDeleteLayerItem( wxCommandEvent& event )
 }
 
 
+void PANEL_ZONE_PROPERTIES::updateInfoBar()
+{
+    if( m_netSelector->GetSelectedNetcode() <= INVALID_NET_CODE && !m_copperZoneInfoBar->IsShown() )
+    {
+        m_copperZoneInfoBar->ShowMessage( _( "<no net> will result in an isolated copper island." ), wxICON_WARNING );
+    }
+    else if( m_copperZoneInfoBar->IsShown() )
+    {
+        m_copperZoneInfoBar->Dismiss();
+    }
+}

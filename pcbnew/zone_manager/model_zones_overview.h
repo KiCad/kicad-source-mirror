@@ -127,7 +127,7 @@ public:
     unsigned int GetAllZonesCount() const { return m_allZones.size(); }
 
 private:
-    void SortZoneContainers();
+    void SortFilteredZones();
 
     void OnRowCountChange();
 

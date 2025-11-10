@@ -36,7 +36,7 @@
 
 wxDEFINE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
 
-void MODEL_ZONES_OVERVIEW::SortZoneContainers()
+void MODEL_ZONES_OVERVIEW::SortFilteredZones()
 {
     std::sort( m_filteredZones.begin(), m_filteredZones.end(),
                []( std::shared_ptr<MANAGED_ZONE> const& l, std::shared_ptr<MANAGED_ZONE> const& r )
@@ -262,7 +262,7 @@ wxDataViewItem MODEL_ZONES_OVERVIEW::ApplyFilter( wxString const& aFilterText, w
         }
     }
 
-    SortZoneContainers();
+    SortFilteredZones();
     Reset( GetCount() );
     OnRowCountChange();
     return GetItemByZone( selected_zone );
@@ -276,7 +276,7 @@ wxDataViewItem MODEL_ZONES_OVERVIEW::ClearFilter( wxDataViewItem aSelection )
 
     ZONE* zone = GetZone( aSelection );
     m_filteredZones = m_allZones;
-    SortZoneContainers();
+    SortFilteredZones();
     Reset( GetCount() );
     OnRowCountChange();
     return GetItemByZone( zone );

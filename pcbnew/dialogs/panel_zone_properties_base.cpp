@@ -14,8 +14,16 @@
 
 PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* bRightCol;
-	bRightCol = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMainSizer;
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_copperZoneInfoBar = new wxInfoBar( this );
+	m_copperZoneInfoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_copperZoneInfoBar->SetEffectDuration( 500 );
+	bMainSizer->Add( m_copperZoneInfoBar, 0, wxBOTTOM|wxEXPAND, 5 );
+
+	wxBoxSizer* bPropertiesSizer;
+	bPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizer8;
 	gbSizer8 = new wxGridBagSizer( 3, 5 );
@@ -39,10 +47,10 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	gbSizer8->AddGrowableCol( 1 );
 
-	bRightCol->Add( gbSizer8, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( gbSizer8, 0, wxEXPAND|wxALL, 5 );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightCol->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearancesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -310,10 +318,10 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bHatchedFillSizer->Fit( m_hatchedFillPanel );
 	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), false );
 
-	bRightCol->Add( m_notebook, 1, wxEXPAND|wxALL, 5 );
+	bPropertiesSizer->Add( m_notebook, 1, wxEXPAND|wxALL, 5 );
 
 
-	bRightCol->Add( 0, 10, 0, wxEXPAND, 5 );
+	bPropertiesSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	gbSizerGeneralProps = new wxGridBagSizer( 10, 5 );
 	gbSizerGeneralProps->SetFlexibleDirection( wxHORIZONTAL );
@@ -366,12 +374,15 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bRightCol->Add( gbSizerGeneralProps, 0, wxEXPAND|wxTOP, 5 );
+	bPropertiesSizer->Add( gbSizerGeneralProps, 0, wxEXPAND|wxTOP, 5 );
 
 
-	this->SetSizer( bRightCol );
+	bMainSizer->Add( bPropertiesSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	this->SetSizer( bMainSizer );
 	this->Layout();
-	bRightCol->Fit( this );
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_tcZoneName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ZONE_PROPERTIES_BASE::OnZoneNameChanged ), NULL, this );

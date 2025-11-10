@@ -29,12 +29,12 @@
 #include <memory>
 #include <utility>
 #include <zone.h>
-#include "zone_management_base.h"
+
 /**
  * @brief Workaround to keep the original priorities if user didn't change any
  *
  */
-class MANAGED_ZONE : public ZONE_MANAGEMENT_BASE
+class MANAGED_ZONE
 {
     friend class MODEL_ZONES_OVERVIEW;
 
@@ -48,13 +48,13 @@ public:
 
     MANAGED_ZONE() = delete;
 
-    ~MANAGED_ZONE() override = default;
+    ~MANAGED_ZONE() = default;
 
     bool PriorityChanged() const { return m_initialPriority != m_currentPriority; }
 
     unsigned GetCurrentPriority() const { return m_currentPriority; }
 
-    void OnUserConfirmChange() override { m_zone->SetAssignedPriority( m_currentPriority ); }
+    void OnUserConfirmChange() { m_zone->SetAssignedPriority( m_currentPriority ); }
 
     ZONE const& GetZone() const { return *m_zone; }
 

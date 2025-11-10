@@ -22,16 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "zones_container.h"
-#include "managed_zone.h"
+#include "zone_settings_bag.h"
 
-#include <teardrop/teardrop_types.h>
+#include <zone_manager/managed_zone.h>
 #include <zone.h>
 #include <memory>
 #include <algorithm>
 
 
-ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->Zones() )
+ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
 {
     std::vector<std::shared_ptr<ZONE>> clonedZones;
 
@@ -62,7 +61,13 @@ ZONES_CONTAINER::ZONES_CONTAINER( BOARD* aBoard ) : m_originalZoneList( aBoard->
 }
 
 
-std::shared_ptr<ZONE_SETTINGS> ZONES_CONTAINER::GetZoneSettings( ZONE* aZone )
+ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( ZONE_SETTINGS* aSettings )
+{
+    m_zoneSettings[nullptr] = std::make_shared<ZONE_SETTINGS>( *aSettings );
+}
+
+
+std::shared_ptr<ZONE_SETTINGS> ZONE_SETTINGS_BAG::GetZoneSettings( ZONE* aZone )
 {
     if( auto ll = m_zoneSettings.find( aZone ); ll != m_zoneSettings.end() )
         return ll->second;
@@ -74,7 +79,7 @@ std::shared_ptr<ZONE_SETTINGS> ZONES_CONTAINER::GetZoneSettings( ZONE* aZone )
 }
 
 
-void ZONES_CONTAINER::OnUserConfirmChange()
+void ZONE_SETTINGS_BAG::OnUserConfirmChange()
 {
     FlushZoneSettingsChange();
     FlushPriorityChange();
@@ -100,7 +105,8 @@ void ZONES_CONTAINER::OnUserConfirmChange()
     }
 }
 
-void ZONES_CONTAINER::FlushZoneSettingsChange()
+
+void ZONE_SETTINGS_BAG::FlushZoneSettingsChange()
 {
     for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
     {
@@ -109,7 +115,8 @@ void ZONES_CONTAINER::FlushZoneSettingsChange()
     }
 }
 
-bool ZONES_CONTAINER::FlushPriorityChange()
+
+bool ZONE_SETTINGS_BAG::FlushPriorityChange()
 {
     bool priorityChanged = false;
 
