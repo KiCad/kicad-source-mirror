@@ -122,7 +122,10 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     newFootprint->SetParentGroup( nullptr );
     newFootprint->SetLink( aFootprint->m_Uuid );
 
+    // Clear flags not used in Fp editor
     newFootprint->ClearFlags();
+    newFootprint->SetLocked( false );
+
     recordAndUpdateUuid( newFootprint );
     newFootprint->RunOnChildren(
             [&]( BOARD_ITEM* aItem )
