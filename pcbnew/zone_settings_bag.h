@@ -32,8 +32,6 @@
 #include <zone.h>
 #include <zone_settings.h>
 
-class MANAGED_ZONE;
-
 
 class ZONE_SETTINGS_BAG
 {
@@ -43,12 +41,10 @@ public:
 
     ZONE_SETTINGS_BAG() = default;
 
-    std::vector<std::shared_ptr<MANAGED_ZONE>> GetManagedZones() const
-    {
-        return m_managedZones;
-    }
+    std::shared_ptr<ZONE_SETTINGS> GetZoneSettings( ZONE* aZone );
+    unsigned GetZonePriority( ZONE* aZone );
 
-    std::shared_ptr<ZONE_SETTINGS> GetZoneSettings( ZONE* zone );
+    void SwapPriority( ZONE* aZOne, ZONE* otherZone );
 
     /**
      * The cloned list is the working storage.
@@ -60,9 +56,9 @@ public:
     std::unordered_map<ZONE*, std::shared_ptr<ZONE>>& GetZonesCloneMap() { return m_zonesCloneMap; }
 
 private:
-    std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesCloneMap;
-    std::unordered_map<ZONE*, std::shared_ptr<ZONE_SETTINGS>> m_zoneSettings;
-    std::vector<std::shared_ptr<MANAGED_ZONE>>                m_managedZones;
+    std::unordered_map<ZONE*, std::shared_ptr<ZONE>>          m_zonesCloneMap;    // original : clone
+    std::unordered_map<ZONE*, std::shared_ptr<ZONE_SETTINGS>> m_zoneSettings;     // clone : current settings
+    std::unordered_map<ZONE*, std::pair<unsigned, unsigned>>  m_zonePriorities;   // clone : initial pri, current pri
     std::vector<ZONE*>                                        m_clonedZoneList;
     std::vector<ZONE*>                                        m_originalZoneList;
 };

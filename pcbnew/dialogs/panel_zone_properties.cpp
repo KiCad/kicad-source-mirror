@@ -130,7 +130,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     if( !m_settings )
         return false;
 
-    m_tcZoneName->SetValue( m_settings->m_Name );
+    m_tcZoneName->ChangeValue( m_settings->m_Name );
     m_netSelector->SetSelectedNetcode( std::max( 0, m_settings->m_Netcode ) );
     m_cbLocked->SetValue( m_settings->m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings->GetCornerSmoothingType() );
@@ -245,8 +245,47 @@ void PANEL_ZONE_PROPERTIES::OnCornerSmoothingSelection( wxCommandEvent& event )
 
 void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 {
+    // Propagate all the way out so that the MODEL_ZONES_OVERVIEW can pick it up
+    m_settings->m_Name = m_tcZoneName->GetValue();
+    m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Name = m_settings->m_Name;
+
+    if( m_zone )
+        m_zone->SetZoneName( m_settings->m_Name );
+
     wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NAME_UPDATE );
-    evt->SetString( m_tcZoneName->GetValue() );
+    wxQueueEvent( m_parent, evt );
+}
+
+
+void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
+{
+    updateInfoBar();
+
+    // Zones with no net never have islands removed
+    if( m_netSelector->GetSelectedNetcode() == INVALID_NET_CODE )
+    {
+        if( m_cbRemoveIslands->IsEnabled() )
+            m_settings->SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
+
+        m_cbRemoveIslands->SetSelection( 1 );
+        m_staticText40->Enable( false );
+        m_cbRemoveIslands->Enable( false );
+    }
+    else if( !m_cbRemoveIslands->IsEnabled() )
+    {
+        m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
+        m_staticText40->Enable( true );
+        m_cbRemoveIslands->Enable( true );
+    }
+
+    // Propagate all the way out so that the MODEL_ZONES_OVERVIEW can pick it up
+    m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
+    m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Netcode = m_settings->m_Netcode;
+
+    if( m_zone )
+        m_zone->SetNetCode( m_settings->m_Netcode, true );
+
+    wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NET_UPDATE );
     wxQueueEvent( m_parent, evt );
 }
 
@@ -367,33 +406,6 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
         m_settings->m_LayerProperties[layer] = props;
 
     return true;
-}
-
-
-void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
-{
-    updateInfoBar();
-
-    // Zones with no net never have islands removed
-    if( m_netSelector->GetSelectedNetcode() == INVALID_NET_CODE )
-    {
-        if( m_cbRemoveIslands->IsEnabled() )
-            m_settings->SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
-
-        m_cbRemoveIslands->SetSelection( 1 );
-        m_staticText40->Enable( false );
-        m_cbRemoveIslands->Enable( false );
-    }
-    else if( !m_cbRemoveIslands->IsEnabled() )
-    {
-        m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
-        m_staticText40->Enable( true );
-        m_cbRemoveIslands->Enable( true );
-    }
-
-    wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NET_UPDATE );
-    evt->SetId( m_netSelector->GetSelectedNetcode() );
-    wxQueueEvent( m_parent, evt );
 }
 
 

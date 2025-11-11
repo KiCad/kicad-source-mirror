@@ -77,8 +77,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
             m_viewZonesOverview->AppendTextColumn( v, k, wxDATAVIEW_CELL_INERT, 160 );
     }
 
-    m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( m_zoneSettingsBag.GetManagedZones(), aParent->GetBoard(),
-                                                     aParent, this );
+    m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( this, m_pcbFrame, m_zoneSettingsBag );
     m_viewZonesOverview->AssociateModel( m_modelZonesOverview.get() );
 
 #if wxUSE_DRAG_AND_DROP
@@ -103,9 +102,6 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
             },
             m_zonePreviewNotebook->GetId() );
 
-    if( m_modelZonesOverview->GetCount() )
-        SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
-
     Layout();
     m_MainBoxSizer->Fit( this );
     finishDialogSettings();
@@ -121,6 +117,17 @@ DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
 {
     m_zonePreviewNotebook->FitCanvasToScreen();
+}
+
+
+bool DIALOG_ZONE_MANAGER::TransferDataToWindow()
+{
+    m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(), m_viewZonesOverview->GetSelection() );
+
+    if( m_modelZonesOverview->GetCount() )
+        SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
+
+    return true;
 }
 
 
@@ -391,8 +398,8 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
     m_zonePreviewNotebook->OnZoneSelectionChanged( m_panelZoneProperties->GetZone() );
 
-    //NOTE - But the connectivity need to be rebuild, otherwise if cancelling, it may
-    //       segfault.
+    //NOTE - The connectivity MUST be rebuilt to remove stale pointers to cloned zones in case of
+    //       a cancel.
     const_cast<ZONES&>( board->Zones() ) = m_zoneSettingsBag.GetOriginalZoneList();
     board->BuildConnectivity();
 
@@ -403,20 +410,14 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 void DIALOG_ZONE_MANAGER::OnZoneNameUpdate( wxCommandEvent& aEvent )
 {
     if( ZONE* zone = m_panelZoneProperties->GetZone() )
-    {
-        zone->SetZoneName( aEvent.GetString() );
         m_modelZonesOverview->RowChanged( m_modelZonesOverview->GetRow( m_modelZonesOverview->GetItemByZone( zone ) ) );
-    }
 }
 
 
 void DIALOG_ZONE_MANAGER::OnZoneNetUpdate( wxCommandEvent& aEvent )
 {
     if( ZONE* zone = m_panelZoneProperties->GetZone() )
-    {
-        zone->SetNetCode( aEvent.GetId() );
         m_modelZonesOverview->RowChanged( m_modelZonesOverview->GetRow( m_modelZonesOverview->GetItemByZone( zone ) ) );
-    }
 }
 
 
@@ -425,7 +426,7 @@ void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
     unsigned count = aEvent.GetInt();
 
     for( STD_BITMAP_BUTTON* btn : { m_btnMoveDown, m_btnMoveUp } )
-        btn->Enable( count == m_modelZonesOverview->GetAllZonesCount() );
+        btn->Enable( count == m_zoneSettingsBag.GetClonedZoneList().size() );
 }
 
 

@@ -24,7 +24,6 @@
 
 #include "zone_settings_bag.h"
 
-#include <zone_manager/managed_zone.h>
 #include <zone.h>
 #include <memory>
 #include <algorithm>
@@ -32,8 +31,6 @@
 
 ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
 {
-    std::vector<std::shared_ptr<ZONE>> clonedZones;
-
     for( ZONE* zone : aBoard->Zones() )
     {
         if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() && zone->IsOnCopperLayer() )
@@ -41,21 +38,28 @@ ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
             auto zone_clone = std::shared_ptr<ZONE>( static_cast<ZONE*>( zone->Clone() ) );
             m_zonesCloneMap.try_emplace( zone, zone_clone );
             m_clonedZoneList.push_back( zone_clone.get() );
-            clonedZones.push_back( std::move( zone_clone ) );
         }
     }
 
-    std::sort( clonedZones.begin(), clonedZones.end(),
-               []( std::shared_ptr<ZONE> const& l, std::shared_ptr<ZONE> const& r )
+    for( ZONE* zone : m_clonedZoneList )
+    {
+        m_zoneSettings[zone] = std::make_shared<ZONE_SETTINGS>();
+        *m_zoneSettings[zone] << *zone;
+    }
+
+    std::vector<ZONE*> sortedClonedZones = m_clonedZoneList;
+
+    std::sort( sortedClonedZones.begin(), sortedClonedZones.end(),
+               []( ZONE* const& l, ZONE* const& r )
                {
                    return l->GetAssignedPriority() > r->GetAssignedPriority();
                } );
 
-    unsigned currentPriority = clonedZones.size() - 1;
+    unsigned currentPriority = sortedClonedZones.size() - 1;
 
-    for( const std::shared_ptr<ZONE>& zone : clonedZones )
+    for( ZONE* zone : sortedClonedZones )
     {
-        m_managedZones.push_back( std::make_shared<MANAGED_ZONE>( zone, currentPriority ) );
+        m_zonePriorities[zone] = std::make_pair<>( currentPriority, currentPriority );
         --currentPriority;
     }
 }
@@ -69,31 +73,37 @@ ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( ZONE* aZone, ZONE_SETTINGS* aSettings )
 
 std::shared_ptr<ZONE_SETTINGS> ZONE_SETTINGS_BAG::GetZoneSettings( ZONE* aZone )
 {
-    if( auto ll = m_zoneSettings.find( aZone ); ll != m_zoneSettings.end() )
-        return ll->second;
+    return m_zoneSettings[aZone];
+}
 
-    std::shared_ptr<ZONE_SETTINGS> zoneSetting = std::make_shared<ZONE_SETTINGS>();
-    *zoneSetting << *aZone;
-    m_zoneSettings.try_emplace( aZone, zoneSetting );
-    return zoneSetting;
+
+unsigned ZONE_SETTINGS_BAG::GetZonePriority( ZONE* aZone )
+{
+    return m_zonePriorities[aZone].second;
+}
+
+
+void ZONE_SETTINGS_BAG::SwapPriority( ZONE* aZone, ZONE* otherZone )
+{
+    std::swap( m_zonePriorities[aZone].second, m_zonePriorities[otherZone].second );
 }
 
 
 void ZONE_SETTINGS_BAG::UpdateClonedZones()
 {
-    for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
+    for( ZONE* zone : m_clonedZoneList )
     {
-        if( auto ll = m_zoneSettings.find( &zone->GetZone() ); ll != m_zoneSettings.end() )
-            ll->second->ExportSetting( zone->GetZone() );
+        if( m_zoneSettings.contains( zone ) )
+            m_zoneSettings[zone]->ExportSetting( *zone );
     }
 
-    // Prevent version-control churn by not updating sparse priorities if their order didn't
-    // change.
+    // Prevent version-control churn by not updating potentially sparse priorities if their
+    // order didn't change.
     bool priorityChanged = false;
 
-    for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
+    for( ZONE* zone : m_clonedZoneList )
     {
-        if( zone->PriorityChanged() )
+        if( m_zonePriorities[zone].first != m_zonePriorities[zone].second )
         {
             priorityChanged = true;
             break;
@@ -102,7 +112,7 @@ void ZONE_SETTINGS_BAG::UpdateClonedZones()
 
     if( priorityChanged )
     {
-        for( std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
-            zone->GetZone().SetAssignedPriority( zone->GetCurrentPriority() );
+        for( ZONE* zone : m_clonedZoneList )
+            zone->SetAssignedPriority( m_zonePriorities[zone].second );
     }
 }

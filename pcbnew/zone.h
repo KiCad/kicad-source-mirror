@@ -698,20 +698,15 @@ public:
     /**
      * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsRuleArea() const                        { return m_isRuleArea; }
-    void SetIsRuleArea( bool aEnable )                { m_isRuleArea = aEnable; }
+    bool GetIsRuleArea() const                    { return m_isRuleArea; }
+    void SetIsRuleArea( bool aEnable )            { m_isRuleArea = aEnable; }
     bool GetPlacementAreaEnabled() const          { return m_placementAreaEnabled; }
     void SetPlacementAreaEnabled( bool aEnabled ) { m_placementAreaEnabled = aEnabled; }
 
-    wxString GetPlacementAreaSource() const                { return m_placementAreaSource; }
-    void SetPlacementAreaSource( const wxString& aSource ) { m_placementAreaSource = aSource; }
-    PLACEMENT_SOURCE_T GetPlacementAreaSourceType() const
-    {
-        return m_placementAreaSourceType;
-    }
-    void SetPlacementAreaSourceType( PLACEMENT_SOURCE_T aType )
-    { m_placementAreaSourceType = aType;
-    }
+    wxString GetPlacementAreaSource() const                     { return m_placementAreaSource; }
+    void SetPlacementAreaSource( const wxString& aSource )      { m_placementAreaSource = aSource; }
+    PLACEMENT_SOURCE_T GetPlacementAreaSourceType() const       { return m_placementAreaSourceType; }
+    void SetPlacementAreaSourceType( PLACEMENT_SOURCE_T aType ) { m_placementAreaSourceType = aType; }
 
     bool GetDoNotAllowZoneFills() const  { return m_doNotAllowZoneFills; }
     bool GetDoNotAllowVias() const       { return m_doNotAllowVias; }

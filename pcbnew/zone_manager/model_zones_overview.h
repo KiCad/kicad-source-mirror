@@ -33,6 +33,7 @@
 #include <wx/string.h>
 #include <board.h>
 #include <zone.h>
+#include <zone_settings_bag.h>
 
 class PCB_BASE_FRAME;
 class PCB_BASE_FRAME;
@@ -74,8 +75,7 @@ public:
         return ColNames;
     }
 
-    MODEL_ZONES_OVERVIEW( std::vector<std::shared_ptr<MANAGED_ZONE>> aZones, BOARD* a_pcb,
-                                PCB_BASE_FRAME* aPCB_FRAME, wxWindow* a_dialog );
+    MODEL_ZONES_OVERVIEW( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONE_SETTINGS_BAG& aZoneSettingsBag );
 
     ~MODEL_ZONES_OVERVIEW() override = default;
 
@@ -125,19 +125,16 @@ public:
      */
     wxDataViewItem ClearFilter( wxDataViewItem aSelection );
 
-    unsigned int GetAllZonesCount() const { return m_allZones.size(); }
-
 private:
     void SortFilteredZones();
 
     void OnRowCountChange();
 
 private:
-    std::vector<std::shared_ptr<MANAGED_ZONE>> m_allZones;
-    std::vector<std::shared_ptr<MANAGED_ZONE>> m_filteredZones;
-    BOARD*                                     m_pcb;
-    PCB_BASE_FRAME*                            m_PCB_FRAME;
-    wxWindow*                                  m_dialog;
-    bool                                       m_sortByName;
-    bool                                       m_sortByNet;
+    wxWindow*          m_parent;
+    PCB_BASE_FRAME*    m_frame;
+    ZONE_SETTINGS_BAG& m_zoneSettingsBag;
+    std::vector<ZONE*> m_filteredZones;
+    bool               m_sortByName;
+    bool               m_sortByNet;
 };

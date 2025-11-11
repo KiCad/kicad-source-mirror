@@ -60,6 +60,8 @@ public:
     DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent );
     ~DIALOG_ZONE_MANAGER() override;
 
+    bool TransferDataToWindow() override;
+
     bool GetRepourOnClose() { return m_checkRepour->GetValue(); }
 
 protected:
