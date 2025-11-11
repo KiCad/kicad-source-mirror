@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PIN_NUMBERS_H
-#define PIN_NUMBERS_H
+#pragma once
 
 #include <wx/string.h>
 
@@ -83,5 +82,3 @@ private:
     container_type pins;
     std::set<wxString> duplicate_pins;
 };
-
-#endif

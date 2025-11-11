@@ -372,7 +372,6 @@ set( EESCHEMA_SRCS
     net_navigator.cpp
     picksymbol.cpp
     pin_layout_cache.cpp
-    pin_numbers.cpp
     pin_type.cpp
     project_sch.cpp
     project_rescue.cpp

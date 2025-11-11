@@ -26,6 +26,7 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dcclient.h>
+#include <wx/stattext.h>
 #include <pcb_shape.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_helpers.h>
@@ -35,6 +36,8 @@
 #include <board.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
+#include <grid_tricks.h>
+#include <pin_numbers.h>
 
 
 // Helper to map shape string to PAD_SHAPE
@@ -59,6 +62,39 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
+    wxBoxSizer* bSummarySizer;
+   	bSummarySizer = new wxBoxSizer( wxHORIZONTAL );
+
+   	m_staticTextPinNumbers = new wxStaticText( this, wxID_ANY, _( "Pad numbers:" ) );
+   	m_staticTextPinNumbers->Wrap( -1 );
+   	bSummarySizer->Add( m_staticTextPinNumbers, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+   	m_pin_numbers_summary = new wxStaticText( this, wxID_ANY, _( "0" ) );
+   	m_pin_numbers_summary->Wrap( -1 );
+   	bSummarySizer->Add( m_pin_numbers_summary, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+   	bSummarySizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+   	m_staticTextPinCount = new wxStaticText( this, wxID_ANY, _( "Pad count:" ) );
+   	m_staticTextPinCount->Wrap( -1 );
+   	bSummarySizer->Add( m_staticTextPinCount, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+
+   	m_pin_count = new wxStaticText( this, wxID_ANY, _( "0" ) );
+   	m_pin_count->Wrap( -1 );
+   	bSummarySizer->Add( m_pin_count, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+   	bSummarySizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+   	m_staticTextDuplicatePins = new wxStaticText( this, wxID_ANY, _(" Duplicate pads:" ) );
+   	m_staticTextDuplicatePins->Wrap( -1 );
+   	bSummarySizer->Add( m_staticTextDuplicatePins, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+
+   	m_duplicate_pins = new wxStaticText( this, wxID_ANY, _( "0" ) );
+   	m_duplicate_pins->Wrap( -1 );
+   	bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+    topSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
     m_grid = new WX_GRID( this, wxID_ANY );
     m_grid->CreateGrid( 0, 11 );
     m_grid->SetColLabelValue( COL_NUMBER, _( "Number" ) );
@@ -72,6 +108,7 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetColLabelValue( COL_DRILL_Y, _( "Drill Y" ) );
     m_grid->SetColLabelValue( COL_P2D_LENGTH, _( "Pad->Die Length" ) );
     m_grid->SetColLabelValue( COL_P2D_DELAY, _( "Pad->Die Delay" ) );
+    m_grid->SetColLabelSize( 24 );
     m_grid->EnableEditing( true );
 
     wxGridCellAttr* attr;
@@ -145,6 +182,9 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_DRILL_Y );
     m_grid->SetAutoEvalCols( { COL_POS_X, COL_POS_Y, COL_SIZE_X, COL_SIZE_Y, COL_DRILL_X, COL_DRILL_Y } );
 
+    // add Cut, Copy, and Paste to wxGrid
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
     topSizer->Add( m_grid, 1, wxEXPAND | wxALL, 5 );
 
     wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();
@@ -154,9 +194,11 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     topSizer->Add( buttons, 0, wxALIGN_RIGHT | wxALL, 5 );
 
     SetSizerAndFit( topSizer );
+    SetupStandardButtons();
 
     CaptureOriginalPadState();
     Populate();
+    updateSummary();
 
     // Bind cell change handlers for real-time updates
     m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged, this );
@@ -179,6 +221,9 @@ DIALOG_FP_EDIT_PAD_TABLE::~DIALOG_FP_EDIT_PAD_TABLE()
 {
     if( m_cancelled )
         RestoreOriginalPadState();
+
+    // destroy GRID_TRICKS before m_grid.
+    m_grid->PopEventHandler( true );
 }
 
 
@@ -200,10 +245,10 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
         switch( pad->GetAttribute() )
         {
         case PAD_ATTRIB::PTH:  attrStr = _( "Through-hole" ); break;
-        case PAD_ATTRIB::SMD:  attrStr = _( "SMD" ); break;
-        case PAD_ATTRIB::CONN: attrStr = _( "Connector" ); break;
-        case PAD_ATTRIB::NPTH: attrStr = _( "NPTH" ); break;
-        default: attrStr = _( "Through-hole" ); break;
+        case PAD_ATTRIB::SMD:  attrStr = _( "SMD" );          break;
+        case PAD_ATTRIB::CONN: attrStr = _( "Connector" );    break;
+        case PAD_ATTRIB::NPTH: attrStr = _( "NPTH" );         break;
+        default:               attrStr = _( "Through-hole" ); break;
         }
 
         VECTOR2I size = pad->GetSize( PADSTACK::ALL_LAYERS );
@@ -310,6 +355,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
 void DIALOG_FP_EDIT_PAD_TABLE::CaptureOriginalPadState()
 {
     m_originalPads.clear();
+
     if( !m_footprint )
         return;
 
@@ -363,6 +409,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
         canvas->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
         canvas->ForceRefresh();
     }
+
+    updateSummary();
 }
 
 
@@ -412,10 +460,15 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
         {
             int dx = m_grid->GetUnitValue( row, COL_DRILL_X );
             int dy = m_grid->GetUnitValue( row, COL_DRILL_Y );
+
             if( dx > 0 || dy > 0 )
             {
-                if( dx <= 0 ) dx = dy;
-                if( dy <= 0 ) dy = dx;
+                if( dx <= 0 )
+                    dx = dy;
+
+                if( dy <= 0 )
+                    dy = dx;
+
                 pad->SetDrillSize( { dx, dy } );
             }
         }
@@ -534,12 +587,18 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
 
     for( PAD* pad : m_footprint->Pads() )
     {
-        if( idx == row ) { target = pad; break; }
+        if( idx == row )
+        {
+            target = pad;
+            break;
+        }
+
         ++idx;
     }
 
     if( !target )
         return;
+
     bool needCanvasRefresh = false;
 
     switch( col )
@@ -625,12 +684,14 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
                 needCanvasRefresh = true;
             }
         }
+
         break;
     }
 
     case COL_P2D_LENGTH:
         if( !m_grid->GetCellValue( row, col ).IsEmpty() )
             target->SetPadToDieLength( m_grid->GetUnitValue( row, col ) );
+
         break;
 
     case COL_P2D_DELAY:
@@ -640,6 +701,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
 
         if( d.ToLong( &val ) )
             target->SetPadToDieDelay( (int) val );
+
         break;
     }
 
@@ -699,6 +761,22 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell( wxGridEvent& aEvent )
 
         ++idx;
     }
-
 }
 
+
+void DIALOG_FP_EDIT_PAD_TABLE::updateSummary()
+{
+    PIN_NUMBERS pinNumbers;
+
+    for( PAD* pad : m_footprint->Pads() )
+    {
+        if( pad->GetNumber().Length() )
+            pinNumbers.insert( pad->GetNumber() );
+    }
+
+    m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
+    m_pin_count->SetLabel( wxString::Format( wxT( "%u" ), (unsigned) m_footprint->Pads().size() ) );
+    m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
+
+    Layout();
+}

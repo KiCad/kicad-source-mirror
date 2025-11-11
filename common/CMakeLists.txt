@@ -712,6 +712,7 @@ set( COMMON_SRCS
     design_block_tree_model_adapter.cpp
     marker_base.cpp
     origin_transforms.cpp
+    pin_numbers.cpp
     printout.cpp
     ptree.cpp
     rc_item.cpp
