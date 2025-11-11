@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-09 09:19+0000\n"
+"PO-Revision-Date: 2025-11-12 01:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -11796,9 +11796,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Nessun simbolo corrispondente trovato ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** simbolo non trovato ***"
+msgstr "*** id lib simboli non trovato ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -13366,33 +13365,28 @@ msgid "Pin Table"
 msgstr "Tabella pin"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Simbolo di potenza"
+msgstr "Ripristina simbolo"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
 msgid "Revert the symbol to its last saved state"
 msgstr "Ripristina il simbolo all'ultima versione salvata"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Clearance"
+msgstr "Cancella cella"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Cancella file forature recenti"
+msgstr "Cancella il valore della cella"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Crea un nuovo simbolo"
+msgstr "Crea simbolo derivato"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Crea un nuovo simbolo, derivato da un simbolo esistente"
+msgstr "Crea un nuovo simbolo derivato dal simbolo selezionato"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13433,14 +13427,13 @@ msgid "No symbols found in library %s."
 msgstr "Simbolo %s non trovato nella libreria '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Errore nel caricamento simboli:"
+msgstr "Errore caricando il simbolo '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Aggiorna i simboli per includere qualunque cambiamento dalla libreria"
+msgstr "Impossibile caricare alcun simbolo dalla libreria."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
@@ -13472,9 +13465,9 @@ msgid "Rename Field"
 msgstr "Rinomina campo"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:738
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Il nome campo %s esiste già."
+msgstr "Il nome campo '%s' esiste già."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13483,9 +13476,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Sicuri di voler rimuovere il campo '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:917
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Escluso dalla DIBA"
+msgstr "Escludi dalla DIBA"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3048
@@ -13631,9 +13623,9 @@ msgid "Edit Symbol Properties"
 msgstr "Modifica proprietà simbolo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Questo file è già aperto."
+msgstr "Questo campo è ereditato da '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
