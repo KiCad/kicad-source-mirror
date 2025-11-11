@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-08 11:51+0000\n"
+"PO-Revision-Date: 2025-11-12 01:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -32277,7 +32277,7 @@ msgstr "使用中心线"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:151
 #: pcbnew/tools/convert_tool.cpp:98
 msgid "Create bounding hull"
-msgstr "创建边界哈氏槽"
+msgstr "创建外包轮廓"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:231
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:125
