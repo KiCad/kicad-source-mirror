@@ -111,7 +111,7 @@ PANEL_SETUP_DIMENSIONS_BASE::PANEL_SETUP_DIMENSIONS_BASE( wxWindow* parent, wxWi
 	gbSizer1->Add( m_dimensionExtensionOffsetUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
-	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( mainSizer );

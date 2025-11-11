@@ -26,7 +26,7 @@
 class PCB_EDIT_FRAME;
 class PANEL_SETUP_CONSTRAINTS;
 class PANEL_SETUP_LAYERS;
-class PANEL_SETUP_TEXT_AND_GRAPHICS;
+class PANEL_SETUP_DEFAULTS;
 class PANEL_SETUP_NETCLASSES;
 class PANEL_SETUP_RULES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
@@ -63,7 +63,7 @@ private:
     size_t m_layersPage;
     size_t m_physicalStackupPage;
     size_t m_boardFinishPage;
-    size_t m_textAndGraphicsPage;
+    size_t m_defaultsPage;
     size_t m_formattingPage;
     size_t m_maskAndPastePage;
     size_t m_zoneHatchOffsetsPage;

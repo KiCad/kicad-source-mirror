@@ -79,50 +79,21 @@ std::shared_ptr<ZONE_SETTINGS> ZONE_SETTINGS_BAG::GetZoneSettings( ZONE* aZone )
 }
 
 
-void ZONE_SETTINGS_BAG::OnUserConfirmChange()
-{
-    FlushZoneSettingsChange();
-    FlushPriorityChange();
-
-    for( const auto& [ zone, zoneClone ] : m_zonesCloneMap )
-    {
-        std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
-        ZONE* internal_zone = zone; // Duplicate the zone pointer to allow capture on older MacOS (13)
-
-        zone->GetLayerSet().RunOnLayers(
-                [&]( PCB_LAYER_ID layer )
-                {
-                    std::shared_ptr<SHAPE_POLY_SET> fill = internal_zone->GetFilledPolysList( layer );
-
-                    if( fill )
-                        filled_zone_to_restore[layer] = fill;
-                } );
-
-        *zone = *zoneClone;
-
-        for( const auto& [ layer, fill ] : filled_zone_to_restore )
-            zone->SetFilledPolysList( layer, *fill );
-    }
-}
-
-
-void ZONE_SETTINGS_BAG::FlushZoneSettingsChange()
+void ZONE_SETTINGS_BAG::UpdateClonedZones()
 {
     for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
     {
         if( auto ll = m_zoneSettings.find( &zone->GetZone() ); ll != m_zoneSettings.end() )
             ll->second->ExportSetting( zone->GetZone() );
     }
-}
 
-
-bool ZONE_SETTINGS_BAG::FlushPriorityChange()
-{
+    // Prevent version-control churn by not updating sparse priorities if their order didn't
+    // change.
     bool priorityChanged = false;
 
-    for( const std::shared_ptr<MANAGED_ZONE>& c : m_managedZones )
+    for( const std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
     {
-        if( c->PriorityChanged() )
+        if( zone->PriorityChanged() )
         {
             priorityChanged = true;
             break;
@@ -131,9 +102,7 @@ bool ZONE_SETTINGS_BAG::FlushPriorityChange()
 
     if( priorityChanged )
     {
-        for( std::shared_ptr<MANAGED_ZONE>& c : m_managedZones )
-            c->OnUserConfirmChange();
+        for( std::shared_ptr<MANAGED_ZONE>& zone : m_managedZones )
+            zone->GetZone().SetAssignedPriority( zone->GetCurrentPriority() );
     }
-
-    return priorityChanged;
 }

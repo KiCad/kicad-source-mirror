@@ -56,12 +56,11 @@ enum
 };
 
 
-PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow*       aParentWindow,
-                                                              PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
+                                                              BOARD_DESIGN_SETTINGS* aBrdSettings) :
         PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParentWindow ),
         m_Frame( aFrame ),
-        m_BrdSettings( &m_Frame->GetBoard()->GetDesignSettings() ),
-        m_dimensionsPanel( std::make_unique<PANEL_SETUP_DIMENSIONS>( this, *aFrame, *m_BrdSettings ) )
+        m_BrdSettings( aBrdSettings )
 {
     m_grid->SetUnitsProvider( m_Frame );
     m_grid->SetAutoEvalCols( { COL_LINE_THICKNESS,
@@ -94,9 +93,6 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow*       aP
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    GetSizer()->Add( m_dimensionsPanel.get(), 0, wxEXPAND, 5 );
-
-	Layout();
 	m_mainSizer->Fit( this );
 
     m_Frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
@@ -179,10 +175,6 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
         m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col ) );
 
     m_grid->SetRowLabelSize( m_grid->GetVisibleWidth( -1, true, true, true ) );
-
-    Layout();
-
-    m_dimensionsPanel->TransferDataToWindow();
 
     return true;
 }
@@ -284,27 +276,17 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
 
-    m_dimensionsPanel->TransferDataFromWindow();
-
     if( errorsMsg.IsEmpty() )
         return true;
 
-    KIDIALOG dlg( wxGetTopLevelParent( this ), errorsMsg, KIDIALOG::KD_ERROR, _( "Parameter error" ) );
+    KIDIALOG dlg( wxGetTopLevelParent( m_grid ), errorsMsg, KIDIALOG::KD_ERROR, _( "Parameter error" ) );
     dlg.ShowModal();
 
     return false;
 }
 
 
-void PANEL_SETUP_TEXT_AND_GRAPHICS::ImportSettingsFrom( BOARD* aBoard )
+bool PANEL_SETUP_TEXT_AND_GRAPHICS::CommitPendingChanges()
 {
-    if( !m_grid->CommitPendingChanges() )
-        return;
-
-    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
-
-    m_BrdSettings = &aBoard->GetDesignSettings();
-    TransferDataToWindow();
-
-    m_BrdSettings = savedSettings;
+    return m_grid->CommitPendingChanges();
 }

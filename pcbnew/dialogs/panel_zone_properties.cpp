@@ -45,7 +45,7 @@ wxDEFINE_EVENT( EVT_ZONE_NAME_UPDATE, wxCommandEvent );
 wxDEFINE_EVENT( EVT_ZONE_NET_UPDATE, wxCommandEvent );
 
 PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                              ZONE_SETTINGS_BAG& aZonesSettingsBag ) :
+                                              ZONE_SETTINGS_BAG& aZonesSettingsBag, bool allowNetSpec ) :
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
         m_frame( aFrame ),
         m_zonesSettingsBag( aZonesSettingsBag ),
@@ -60,7 +60,15 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
         m_gridStyleGap( aFrame, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
         m_islandThreshold( aFrame, m_islandThresholdLabel, m_tcIslandThreshold, m_islandThresholdUnits )
 {
-    m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
+    if( allowNetSpec )
+    {
+        m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
+    }
+    else
+    {
+        m_netLabel->Hide();
+        m_netSelector->Hide();
+    }
 
     m_layerPropsTable = new LAYER_PROPERTIES_GRID_TABLE( m_frame,
             [&]() -> LSET
@@ -245,7 +253,7 @@ void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 
 bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsFromWindow()
 {
-    if( !m_layerSpecificOverrides->CommitPendingChanges() )
+    if( !CommitPendingChanges() )
         return false;
 
     if( !m_settings )
@@ -255,6 +263,12 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsFromWindow()
         return false;
 
     return true;
+}
+
+
+bool PANEL_ZONE_PROPERTIES::CommitPendingChanges()
+{
+    return m_layerSpecificOverrides->CommitPendingChanges();
 }
 
 

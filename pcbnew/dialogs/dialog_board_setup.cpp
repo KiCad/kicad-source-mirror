@@ -18,7 +18,7 @@
  */
 #include <pcb_edit_frame.h>
 #include <panel_setup_layers.h>
-#include <panel_setup_text_and_graphics.h>
+#include <panel_setup_defaults.h>
 #include <panel_setup_constraints.h>
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
@@ -71,7 +71,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_layersPage( 0 ),
         m_physicalStackupPage( 0 ),
         m_boardFinishPage( 0 ),
-        m_textAndGraphicsPage( 0 ),
+        m_defaultsPage( 0 ),
         m_formattingPage( 0 ),
         m_maskAndPastePage( 0 ),
         m_zoneHatchOffsetsPage( 0 ),
@@ -139,11 +139,11 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Text & Graphics" ) );
 
-    m_textAndGraphicsPage = m_treebook->GetPageCount();
+    m_defaultsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_TEXT_AND_GRAPHICS( aParent, m_frame );
+                return new PANEL_SETUP_DEFAULTS( aParent, m_frame );
             }, _( "Defaults" ) );
 
     m_formattingPage = m_treebook->GetPageCount();
@@ -421,7 +421,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
-            RESOLVE_PAGE( PANEL_SETUP_TEXT_AND_GRAPHICS, m_textAndGraphicsPage )->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_DEFAULTS, m_defaultsPage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_FormattingOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_FORMATTING, m_formattingPage )->ImportSettingsFrom( otherBoard );

@@ -22,9 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef MANAGED_ZONE_H
-#define MANAGED_ZONE_H
+#pragma once
 
 #include <memory>
 #include <utility>
@@ -43,8 +41,7 @@ public:
             m_zone( std::move( aZone ) ),
             m_initialPriority( aInitialIndex ),
             m_currentPriority( aInitialIndex )
-    {
-    }
+    { }
 
     MANAGED_ZONE() = delete;
 
@@ -54,10 +51,7 @@ public:
 
     unsigned GetCurrentPriority() const { return m_currentPriority; }
 
-    void OnUserConfirmChange() { m_zone->SetAssignedPriority( m_currentPriority ); }
-
     ZONE const& GetZone() const { return *m_zone; }
-
     ZONE& GetZone() { return *m_zone; }
 
 private:
@@ -65,5 +59,3 @@ private:
     const unsigned        m_initialPriority;
     unsigned              m_currentPriority;
 };
-
-#endif

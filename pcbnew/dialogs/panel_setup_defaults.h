@@ -24,29 +24,33 @@
 #pragma once
 
 #include <memory>
-#include <panel_setup_text_and_graphics_base.h>
+#include <board.h>
+#include <panel_setup_defaults_base.h>
 
 
 class BOARD_DESIGN_SETTINGS;
+class PANEL_SETUP_TEXT_AND_GRAPHICS;
+class PANEL_SETUP_DIMENSIONS;
+class PANEL_SETUP_ZONES;
 class PCB_EDIT_FRAME;
 
 
-class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
+class PANEL_SETUP_DEFAULTS : public PANEL_SETUP_DEFAULTS_BASE
 {
 public:
-    PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
-                                   BOARD_DESIGN_SETTINGS* aBrdSettings );
-    ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
+    PANEL_SETUP_DEFAULTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
+    ~PANEL_SETUP_DEFAULTS( ) override = default;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    bool CommitPendingChanges();
+    void ImportSettingsFrom( BOARD* aBoard );
 
 private:
-    void onUnitsChanged( wxCommandEvent& aEvent );
+    PCB_EDIT_FRAME*                m_Frame;
+    BOARD_DESIGN_SETTINGS*         m_BrdSettings;
 
-private:
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    PANEL_SETUP_TEXT_AND_GRAPHICS* m_textAndGraphicsPanel;
+    PANEL_SETUP_DIMENSIONS*        m_dimensionsPanel;
+    PANEL_SETUP_ZONES*             m_zonesPanel;
 };

@@ -187,6 +187,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_assign_component_classes_base.cpp
     dialogs/panel_setup_constraints.cpp
     dialogs/panel_setup_constraints_base.cpp
+    dialogs/panel_setup_defaults.cpp
+    dialogs/panel_setup_defaults_base.cpp
     dialogs/panel_setup_dimensions.cpp
     dialogs/panel_setup_dimensions_base.cpp
     dialogs/panel_setup_formatting.cpp
@@ -209,6 +211,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_tuning_profiles.cpp
     dialogs/panel_setup_tuning_profile_info_base.cpp
     dialogs/panel_setup_tuning_profile_info.cpp
+    dialogs/panel_setup_zones.cpp
+    dialogs/panel_setup_zones_base.cpp
     dialogs/panel_setup_zone_hatch_offsets.cpp
     dialogs/panel_setup_zone_hatch_offsets_base.cpp
     dialogs/panel_zone_properties.cpp

@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #pragma once
 
 #include <board.h>
@@ -29,6 +28,7 @@
 #include <widgets/paged_dialog.h>
 
 #include <panel_setup_dimensions_base.h>
+
 
 class BOARD_DESIGN_SETTINGS;
 
@@ -44,6 +44,8 @@ public:
     bool TransferDataFromWindow() override;
 
     void LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings );
+
+    bool CommitPendingChanges() { return true; }
 
 private:
     void onUnitsChanged( wxCommandEvent& aEvent );

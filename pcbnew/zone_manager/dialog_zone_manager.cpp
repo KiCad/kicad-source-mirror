@@ -236,7 +236,29 @@ void DIALOG_ZONE_MANAGER::SelectZoneTableItem( wxDataViewItem const& aItem )
 void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
 {
     m_panelZoneProperties->TransferZoneSettingsFromWindow();
-    m_zoneSettingsBag.OnUserConfirmChange();
+
+    m_zoneSettingsBag.UpdateClonedZones();
+
+    for( const auto& [ zone, zoneClone ] : m_zoneSettingsBag.GetZonesCloneMap() )
+    {
+        std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> filled_zone_to_restore;
+        ZONE* internal_zone = zone; // Duplicate the zone pointer to allow capture on older MacOS (13)
+
+        zone->GetLayerSet().RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    std::shared_ptr<SHAPE_POLY_SET> fill = internal_zone->GetFilledPolysList( layer );
+
+                    if( fill )
+                        filled_zone_to_restore[layer] = fill;
+                } );
+
+        *zone = *zoneClone;
+
+        for( const auto& [ layer, fill ] : filled_zone_to_restore )
+            zone->SetFilledPolysList( layer, *fill );
+    }
+
     aEvt.Skip();
 }
 
@@ -346,8 +368,7 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
 
     m_isFillingZones = true;
     m_panelZoneProperties->TransferZoneSettingsFromWindow();
-    m_zoneSettingsBag.FlushZoneSettingsChange();
-    m_zoneSettingsBag.FlushPriorityChange();
+    m_zoneSettingsBag.UpdateClonedZones();
 
     BOARD* board = m_pcbFrame->GetBoard();
     board->IncrementTimeStamp();

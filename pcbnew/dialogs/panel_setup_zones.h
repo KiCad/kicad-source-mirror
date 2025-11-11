@@ -21,22 +21,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
 #pragma once
 
-#include <memory>
-#include <panel_setup_text_and_graphics_base.h>
+#include <board.h>
+#include <zone_settings_bag.h>
+#include <panel_setup_zones_base.h>
 
 
 class BOARD_DESIGN_SETTINGS;
-class PCB_EDIT_FRAME;
+class PANEL_ZONE_PROPERTIES;
 
 
-class PANEL_SETUP_TEXT_AND_GRAPHICS : public PANEL_SETUP_TEXT_AND_GRAPHICS_BASE
+class PANEL_SETUP_ZONES : public PANEL_SETUP_ZONES_BASE
 {
 public:
-    PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
-                                   BOARD_DESIGN_SETTINGS* aBrdSettings );
-    ~PANEL_SETUP_TEXT_AND_GRAPHICS( ) override;
+    PANEL_SETUP_ZONES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, BOARD_DESIGN_SETTINGS& aBrdSettings );
+    ~PANEL_SETUP_ZONES( ) override = default;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -44,9 +45,7 @@ public:
     bool CommitPendingChanges();
 
 private:
-    void onUnitsChanged( wxCommandEvent& aEvent );
-
-private:
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    BOARD_DESIGN_SETTINGS&  m_brdSettings;
+    ZONE_SETTINGS_BAG       m_zoneSettingsBag;
+    PANEL_ZONE_PROPERTIES*  m_panelZoneProperties;
 };

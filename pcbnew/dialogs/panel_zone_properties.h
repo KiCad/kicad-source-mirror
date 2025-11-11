@@ -41,7 +41,8 @@ class ZONE_SETTINGS_BAG;
 class PANEL_ZONE_PROPERTIES : public PANEL_ZONE_PROPERTIES_BASE
 {
 public:
-    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONE_SETTINGS_BAG& aZonesSettingsBag );
+    PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame, ZONE_SETTINGS_BAG& aZonesSettingsBag,
+                           bool allowNetSpec = true );
 
     ~PANEL_ZONE_PROPERTIES() override;
 
@@ -52,6 +53,8 @@ public:
 
     bool TransferZoneSettingsFromWindow();
     bool TransferZoneSettingsToWindow();
+
+    bool CommitPendingChanges();
 
 private:
     static constexpr int INVALID_NET_CODE{ 0 };

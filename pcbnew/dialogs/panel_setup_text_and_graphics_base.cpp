@@ -81,9 +81,6 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_gridSizer->Add( bMargins, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
 	m_mainSizer->Add( m_gridSizer, 0, wxEXPAND, 5 );
 
 
