@@ -16,7 +16,7 @@ PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE::PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE( wxWind
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextLabel = new wxStaticText( this, wxID_ANY, _("Default Zone Hatching Offsets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLabel = new wxStaticText( this, wxID_ANY, _("Zone Hatched Fill Offsets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLabel->Wrap( -1 );
 	mainSizer->Add( m_staticTextLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 

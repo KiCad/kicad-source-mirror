@@ -54,7 +54,7 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder mask/paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_MaskAndPasteOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_ZoneHatchingOffsetsOpt = new wxCheckBox( this, wxID_ANY, _("Zone hatching offsets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoneHatchingOffsetsOpt = new wxCheckBox( this, wxID_ANY, _("Zone hatched fill offsets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_ZoneHatchingOffsetsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_TextAndGraphicsOpt = new wxCheckBox( this, wxID_ANY, _("Text && graphics default properties"), wxDefaultPosition, wxDefaultSize, 0 );
