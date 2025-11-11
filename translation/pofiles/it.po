@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-09 09:19+0000\n"
+"PO-Revision-Date: 2025-11-12 01:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -9914,9 +9914,8 @@ msgid "Paste item(s) from clipboard"
 msgstr "Incolla gli elementi dagli appunti"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Disegna rettangolo selezione"
+msgstr "Imposta la modalità di selezione per utilizzare il rettangolo"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
@@ -10166,10 +10165,9 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "Mantieni raggio e centro arco, regola l'angolo"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
-"Commuta la modalità di modifica arco per mantenere il raggio quando i capi "
+"Passa alla modalità di modifica arco per mantenere il raggio quando i capi "
 "vengono spostati"
 
 #: common/tool/actions.cpp:601
@@ -10406,9 +10404,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Non mantenere più la libreria in cima all'elenco"
 
 #: common/tool/actions.cpp:959
-#, fuzzy
 msgid "Library Fields Table"
-msgstr "Tabella campi simbolo"
+msgstr "Tabella campi libreria"
 
 #: common/tool/actions.cpp:965
 msgid "Library Fields Table of Related Symbols"
@@ -10866,9 +10863,8 @@ msgstr ""
 "Per donazioni al progetto KiCad, visitare %s"
 
 #: common/tool/design_block_control.cpp:121
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "Librerie blocchi progetto"
+msgstr "Nuova libreria blocchi progetto"
 
 #: common/tool/group_tool.cpp:44
 msgid "Grouping"
@@ -11024,13 +11020,13 @@ msgstr "Descrizione libreria"
 #: common/widgets/design_block_pane.cpp:271
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1178
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Errore durante il salvataggio della tabella librerie globale:\n"
+"Errore nel salvataggio della tabella librerie:\n"
 "\n"
 "%s"
 
@@ -11957,9 +11953,8 @@ msgstr "Controlli filtri impronte"
 #: eeschema/toolbars_sch_editor.cpp:72 gerbview/toolbars_gerber.cpp:62
 #: pcbnew/toolbars_footprint_editor.cpp:58
 #: pcbnew/toolbars_footprint_viewer.cpp:85 pcbnew/toolbars_pcb_editor.cpp:144
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Altezza crossbar"
+msgstr "Modalità crocini"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 msgid "View Selected Footprint"
@@ -12150,12 +12145,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "Voce da filo a bus non connessa"
 
 #: eeschema/connection_graph.cpp:4252
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"L'etichetta gerarchica \"%s\" nel foglio radice non può essere connessa a un "
+"L'etichetta gerarchica '%s' nel foglio radice non può essere connessa a un "
 "foglio genitore non esistente"
 
 #: eeschema/connection_graph.cpp:4318
@@ -12666,9 +12661,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Nessun simbolo corrispondente trovato ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** simbolo non trovato ***"
+msgstr "*** id lib simboli non trovato ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -12971,9 +12965,10 @@ msgid "Cross-probe Selected Items"
 msgstr "Elementi selezionati"
 
 #: eeschema/dialogs/dialog_erc.cpp:223
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Evidenzia i simboli corrispondenti alle impronte selezionate"
+msgstr ""
+"Evidenzia gli elementi corrispondenti sul foglio di lavoro se selezionati "
+"nell'elenco ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:280
 #, fuzzy
@@ -13010,7 +13005,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d simboli richiedono annotazione.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:523
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC annullato dall'utente.<br><br>"
 
@@ -13421,7 +13415,6 @@ msgid "Show field name"
 msgstr "Mostra nome campo"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "Mostra il nome campo oltre al suo valore"
 
@@ -14248,33 +14241,28 @@ msgid "Pin Table"
 msgstr "Tabella pin"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Simbolo di potenza"
+msgstr "Ripristina simbolo"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
 msgid "Revert the symbol to its last saved state"
 msgstr "Ripristina il simbolo all'ultima versione salvata"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear cell"
-msgstr "Clearance"
+msgstr "Cancella cella"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Cancella file forature recenti"
+msgstr "Cancella il valore della cella"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Crea un nuovo simbolo"
+msgstr "Crea simbolo derivato"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Crea un nuovo simbolo, derivato da un simbolo esistente"
+msgstr "Crea un nuovo simbolo derivato dal simbolo selezionato"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
@@ -14296,15 +14284,13 @@ msgstr "Mostra datasheet nel browser"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:393
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:437
-#, fuzzy
 msgid "Expand left panel"
-msgstr "Espandi tutto"
+msgstr "Espandi pannello sinistro"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:398
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:442
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "Compatta tutto"
+msgstr "Compatta pannello sinistro"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:563
 #, c-format
@@ -14317,19 +14303,17 @@ msgid "No symbols found in library '%s'."
 msgstr "Nessun simbolo trovato nella libreria '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Errore nel caricamento della scheda. '%s': %s"
+msgstr "Errore caricando il simbolo '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "Aggiorna i simboli per includere qualunque cambiamento dalla libreria"
+msgstr "Impossibile caricare alcun simbolo correlato dalla libreria."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:599
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Aggiorna i simboli per includere qualunque cambiamento dalla libreria"
+msgstr "Impossibile caricare alcun simbolo dalla libreria."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:701
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:768
@@ -14367,15 +14351,15 @@ msgid "Rename Field"
 msgstr "Rinomina campo"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Il nome campo %s esiste già."
+msgstr "Il nome campo '%s' esiste già."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:825
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Library Fields Table (%s)"
-msgstr "Librerie (%d)"
+msgstr "Tabella campi libreria (%s)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -14383,9 +14367,8 @@ msgid "Symbol Name"
 msgstr "Nome simbolo"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Escluso dalla DIBA"
+msgstr "Escludi dalla DIBA"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1055
 #: eeschema/sch_sheet.cpp:1748 eeschema/sch_symbol.cpp:3446
@@ -14404,23 +14387,20 @@ msgid "Power Symbol"
 msgstr "Simbolo di potenza"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1059
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Simbolo di potenza"
+msgstr "Simbolo di potenza locale"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:48
 #: eeschema/fields_data_model.cpp:57
-#, fuzzy
 msgid "BOM Name"
-msgstr "Nome base"
+msgstr "Nome DIBA"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:49
 #: eeschema/fields_data_model.cpp:58
-#, fuzzy
 msgid "Include"
-msgstr "Includi:"
+msgstr "Includi"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:50
@@ -14429,14 +14409,12 @@ msgid "Group By"
 msgstr "Raggruppati per"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Whole Library"
-msgstr "Nuova libreria"
+msgstr "Intera libreria"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Related Symbols Only"
-msgstr "Rimappa simboli"
+msgstr "Solo simboli correlati"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:119
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:193
@@ -14569,14 +14547,12 @@ msgid "Delete extra units from symbol?"
 msgstr "Cancellare le unità ulteriori dal simbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:505
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Il simbolo deve avere un nome."
+msgstr "Il simbolo deve avere almeno 1 stile corpo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
-#, fuzzy
 msgid "Delete extra body styles from symbol?"
-msgstr "Cancellare le unità ulteriori dal simbolo?"
+msgstr "Eliminare gli stili corpo extra dal simbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:363
@@ -14596,9 +14572,9 @@ msgid "Edit Symbol Properties"
 msgstr "Modifica proprietà simbolo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Questo file è già aperto."
+msgstr "Questo campo è ereditato da '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:764
 #, c-format
@@ -14759,7 +14735,6 @@ msgid "Exclude from simulation"
 msgstr "Escludi dalla simulazione"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
-#, fuzzy
 msgid "Symbol Units"
 msgstr "Unità simbolo"
 
