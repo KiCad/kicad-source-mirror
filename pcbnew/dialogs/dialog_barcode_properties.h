@@ -81,4 +81,5 @@ private:
 
     /// Update the graphical barcode shown in the panel.
     void OnValuesChanged( wxCommandEvent& event ) override;
+    void OnTextValueChanged( wxKeyEvent& event ) override;
 };

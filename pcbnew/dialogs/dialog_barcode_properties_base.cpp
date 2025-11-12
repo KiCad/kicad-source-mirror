@@ -233,7 +233,7 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnUpdateUI ) );
-	m_textInput->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_textInput->Connect( wxEVT_KEY_UP, wxKeyEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnTextValueChanged ), NULL, this );
 	m_cbKnockout->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbShowText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
@@ -253,7 +253,7 @@ DIALOG_BARCODE_PROPERTIES_BASE::~DIALOG_BARCODE_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnUpdateUI ) );
-	m_textInput->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_textInput->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnTextValueChanged ), NULL, this );
 	m_cbKnockout->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbShowText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_BARCODE_PROPERTIES_BASE::OnValuesChanged ), NULL, this );

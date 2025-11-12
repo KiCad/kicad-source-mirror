@@ -88,6 +88,7 @@ class DIALOG_BARCODE_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnTextValueChanged( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 

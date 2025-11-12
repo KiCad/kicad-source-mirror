@@ -338,6 +338,16 @@ void DIALOG_BARCODE_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 }
 
 
+void DIALOG_BARCODE_PROPERTIES::OnTextValueChanged( wxKeyEvent& event )
+{
+    if( transferDataToBarcode( m_dummyBarcode ) )
+    {
+        refreshPreview();
+        OnModify();
+    }
+}
+
+
 void PCB_BASE_EDIT_FRAME::ShowBarcodePropertiesDialog( PCB_BARCODE* aBarcode )
 {
     DIALOG_BARCODE_PROPERTIES dlg( this, aBarcode );
