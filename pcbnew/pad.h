@@ -868,7 +868,13 @@ public:
     /**
      * @return the GUI-appropriate name of the shape.
      */
+    static wxString ShowPadShape( PAD_SHAPE aShape );
     wxString ShowPadShape( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * An older version still used by place file writer and SWIG interface.
+     */
+    wxString ShowLegacyPadShape( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @return the GUI-appropriate description of the pad type (attribute) : Std, SMD ...

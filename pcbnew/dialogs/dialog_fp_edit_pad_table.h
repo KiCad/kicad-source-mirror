@@ -49,20 +49,29 @@ private:
     void updateSummary();
 
 private:
+    PCB_BASE_FRAME*     m_frame;
+
     // Proportional resize support
     std::vector<double> m_colProportions;    // relative widths captured after init
     std::vector<int>    m_minColWidths;      // initial (minimum) widths
 
     struct PAD_SNAPSHOT
     {
+        PAD_SNAPSHOT( PAD* aPad ) :
+                padstack( aPad ),
+                attribute( PAD_ATTRIB::PTH ),
+                padToDieLength( 0 ),
+                padToDieDelay( 0 )
+        {}
+
         wxString   number;
         PAD_SHAPE  shape;
+        PADSTACK   padstack;
         VECTOR2I   position;
         VECTOR2I   size;
         PAD_ATTRIB attribute;
-        VECTOR2I   drillSize;
-        int        padToDieLength = 0;
-        int        padToDieDelay  = 0;
+        int        padToDieLength;
+        int        padToDieDelay;
     };
 
     std::vector<PAD_SNAPSHOT> m_originalPads; // original pad data for cancel rollback

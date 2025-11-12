@@ -401,7 +401,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             // TODO(JE) padstacks
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
             buffer += fmt::format( "Shape {} Layer {}\n",
-                      TO_UTF8( pad->ShowPadShape( PADSTACK::ALL_LAYERS ) ),
+                      TO_UTF8( pad->ShowLegacyPadShape( PADSTACK::ALL_LAYERS ) ),
                       layer_name[layer] );
 
             VECTOR2I padPos = pad->GetFPRelativePosition();

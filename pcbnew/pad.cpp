@@ -1617,7 +1617,29 @@ void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+wxString PAD::ShowPadShape( PAD_SHAPE aShape )
+{
+    switch( aShape )
+    {
+    case PAD_SHAPE::CIRCLE:         return _( "Circle" );
+    case PAD_SHAPE::OVAL:           return _( "Oval" );
+    case PAD_SHAPE::RECTANGLE:      return _( "Rectangle" );
+    case PAD_SHAPE::TRAPEZOID:      return _( "Trapezoid" );
+    case PAD_SHAPE::ROUNDRECT:      return _( "Rounded rectangle" );
+    case PAD_SHAPE::CHAMFERED_RECT: return _( "Chamfered rectangle" );
+    case PAD_SHAPE::CUSTOM:         return _( "Custom shape" );
+    default:                        return wxT( "???" );
+    }
+}
+
+
 wxString PAD::ShowPadShape( PCB_LAYER_ID aLayer ) const
+{
+    return ShowPadShape( GetShape( aLayer ) );
+}
+
+
+wxString PAD::ShowLegacyPadShape( PCB_LAYER_ID aLayer ) const
 {
     switch( GetShape( aLayer ) )
     {

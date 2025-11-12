@@ -38,6 +38,7 @@
 #include <footprint_edit_frame.h>
 #include <grid_tricks.h>
 #include <pin_numbers.h>
+#include <board_commit.h>
 
 
 // Helper to map shape string to PAD_SHAPE
@@ -57,6 +58,7 @@ static PAD_SHAPE ShapeFromString( const wxString& shape )
 DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOOTPRINT* aFootprint ) :
         DIALOG_SHIM( (wxWindow*)aParent, wxID_ANY, _( "Pad Table" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+        m_frame( aParent ),
         m_grid( nullptr ),
         m_footprint( aFootprint ),
         m_unitsProvider( std::make_unique<UNITS_PROVIDER>( pcbIUScale, GetUserUnits() ) ),
@@ -129,13 +131,13 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
 
     attr = new wxGridCellAttr;
     wxArrayString shapeNames;
-    shapeNames.push_back( _( "Circle" ) );
-    shapeNames.push_back( _( "Oval" ) );
-    shapeNames.push_back( _( "Rectangle" ) );
-    shapeNames.push_back( _( "Trapezoid" ) );
-    shapeNames.push_back( _( "Rounded rectangle" ) );
-    shapeNames.push_back( _( "Chamfered rectangle" ) );
-    shapeNames.push_back( _( "Custom shape" ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CIRCLE ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::OVAL ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::RECTANGLE ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::TRAPEZOID ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::ROUNDRECT ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CHAMFERED_RECT ) );
+    shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CUSTOM ) );
     attr->SetEditor( new GRID_CELL_COMBOBOX( shapeNames ) );
     m_grid->SetColAttr( COL_SHAPE, attr );
 
@@ -255,17 +257,34 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
         default:               attrStr = _( "Through-hole" ); break;
         }
 
-        VECTOR2I size = pad->GetSize( PADSTACK::ALL_LAYERS );
+        int      size_x = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
+        int      size_y = pad->GetSize( PADSTACK::ALL_LAYERS ).y;
+        wxString padShape = pad->ShowPadShape( PADSTACK::ALL_LAYERS );
+
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    if( pad->GetSize( aLayer ).x != size_x )
+                        size_x = -1;
+
+                    if( pad->GetSize( aLayer ).y != size_y )
+                        size_y = -1;
+
+                    if( pad->ShowPadShape( aLayer ) != padShape )
+                        padShape = INDETERMINATE_STATE;
+                } );
 
         if( pad->IsAperturePad() )
             attrStr = _( "Aperture" );
 
         m_grid->SetCellValue( row, COL_TYPE, attrStr );
-        m_grid->SetCellValue( row, COL_SHAPE, pad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
+        m_grid->SetCellValue( row, COL_SHAPE, padShape );
         m_grid->SetCellValue( row, COL_POS_X, m_unitsProvider->StringFromValue( pad->GetPosition().x, true ) );
         m_grid->SetCellValue( row, COL_POS_Y, m_unitsProvider->StringFromValue( pad->GetPosition().y, true ) );
-        m_grid->SetCellValue( row, COL_SIZE_X, m_unitsProvider->StringFromValue( size.x, true ) );
-        m_grid->SetCellValue( row, COL_SIZE_Y, m_unitsProvider->StringFromValue( size.y, true ) );
+        m_grid->SetCellValue( row, COL_SIZE_X, size_x >= 0 ? m_unitsProvider->StringFromValue( size_x, true )
+                                                           : INDETERMINATE_STATE );
+        m_grid->SetCellValue( row, COL_SIZE_Y, size_y >= 0 ? m_unitsProvider->StringFromValue( size_y, true )
+                                                           : INDETERMINATE_STATE );
 
         // Drill values (only meaningful for PTH or NPTH). Leave empty otherwise.
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
@@ -306,13 +325,13 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
         dc.SetFont( m_grid->GetFont() );
 
         wxArrayString shapeNames;
-        shapeNames.push_back( _( "Circle" ) );
-        shapeNames.push_back( _( "Oval" ) );
-        shapeNames.push_back( _( "Rectangle" ) );
-        shapeNames.push_back( _( "Trapezoid" ) );
-        shapeNames.push_back( _( "Rounded rectangle" ) );
-        shapeNames.push_back( _( "Chamfered rectangle" ) );
-        shapeNames.push_back( _( "Custom shape" ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CIRCLE ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::OVAL ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::RECTANGLE ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::TRAPEZOID ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::ROUNDRECT ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CHAMFERED_RECT ) );
+        shapeNames.push_back( PAD::ShowPadShape( PAD_SHAPE::CUSTOM ) );
 
         int maxWidth = 0;
 
@@ -364,13 +383,11 @@ void DIALOG_FP_EDIT_PAD_TABLE::CaptureOriginalPadState()
 
     for( PAD* pad : m_footprint->Pads() )
     {
-        PAD_SNAPSHOT snap;
+        PAD_SNAPSHOT snap( pad );
         snap.number        = pad->GetNumber();
-        snap.shape         = pad->GetShape( PADSTACK::ALL_LAYERS );
         snap.position      = pad->GetPosition();
-        snap.size          = pad->GetSize( PADSTACK::ALL_LAYERS );
+        snap.padstack      = pad->Padstack();
         snap.attribute     = pad->GetAttribute();
-        snap.drillSize     = pad->GetDrillSize();
         snap.padToDieLength= pad->GetPadToDieLength();
         snap.padToDieDelay = pad->GetPadToDieDelay();
         m_originalPads.push_back( snap );
@@ -394,11 +411,9 @@ void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
 
         const PAD_SNAPSHOT& snap = m_originalPads[idx++];
         pad->SetNumber( snap.number );
-        pad->SetShape( PADSTACK::ALL_LAYERS, snap.shape );
-        pad->SetAttribute( snap.attribute );
         pad->SetPosition( snap.position );
-        pad->SetSize( PADSTACK::ALL_LAYERS, snap.size );
-        pad->SetDrillSize( snap.drillSize );
+        pad->SetPadstack( snap.padstack );
+        pad->SetAttribute( snap.attribute );
         pad->SetPadToDieLength( snap.padToDieLength );
         pad->SetPadToDieDelay( snap.padToDieDelay );
         pad->ClearBrightened();
@@ -425,10 +440,14 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
     if( !m_footprint )
         return true;
 
+    RestoreOriginalPadState();
+    BOARD_COMMIT commit( m_frame );
+
     int row = 0;
 
     for( PAD* pad : m_footprint->Pads() )
     {
+        commit.Modify( pad );
         pad->SetNumber( m_grid->GetCellValue( row, COL_NUMBER ) );
 
         wxString typeStr = m_grid->GetCellValue( row, COL_TYPE );
@@ -443,36 +462,67 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
             pad->SetAttribute( PAD_ATTRIB::NPTH );
         // Aperture derived by copper-less layers; do not overwrite attribute here.
 
-        wxString  shape = m_grid->GetCellValue( row, COL_SHAPE );
-        PAD_SHAPE newShape = ShapeFromString( shape );
+        wxString shape = m_grid->GetCellValue( row, COL_SHAPE );
 
-        pad->SetShape( PADSTACK::ALL_LAYERS, newShape );
+        if( shape != INDETERMINATE_STATE )
+        {
+            PAD_SHAPE newShape = ShapeFromString( shape );
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        pad->SetShape( aLayer, newShape );
+                    } );
+        }
 
         VECTOR2I pos;
         pos.x = m_grid->GetUnitValue( row, COL_POS_X );
         pos.y = m_grid->GetUnitValue( row, COL_POS_Y );
         pad->SetPosition( pos );
 
-        VECTOR2I size;
-        size.x = m_grid->GetUnitValue( row, COL_SIZE_X );
-        size.y = m_grid->GetUnitValue( row, COL_SIZE_Y );
-        pad->SetSize( PADSTACK::ALL_LAYERS, size );
+        wxString size_x_value = m_grid->GetCellValue( row, COL_SIZE_X );
+
+        if( size_x_value != INDETERMINATE_STATE )
+        {
+            int size_x = m_grid->GetUnitValue( row, COL_SIZE_X );
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        VECTOR2I size( size_x, pad->GetSize( aLayer ).y );
+                        pad->SetSize( aLayer, size );
+                    } );
+        }
+
+        wxString size_y_value = m_grid->GetCellValue( row, COL_SIZE_Y );
+
+        if( size_y_value != INDETERMINATE_STATE )
+        {
+            int size_y = m_grid->GetUnitValue( row, COL_SIZE_Y );
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        VECTOR2I size( pad->GetSize( aLayer ).x, size_y );
+                        pad->SetSize( aLayer, size );
+                    } );
+        }
 
         // Drill sizes (only if attribute allows)
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            int dx = m_grid->GetUnitValue( row, COL_DRILL_X );
-            int dy = m_grid->GetUnitValue( row, COL_DRILL_Y );
+            int drill_x = m_grid->GetUnitValue( row, COL_DRILL_X );
+            int drill_y = m_grid->GetUnitValue( row, COL_DRILL_Y );
 
-            if( dx > 0 || dy > 0 )
+            if( drill_x > 0 || drill_y > 0 )
             {
-                if( dx <= 0 )
-                    dx = dy;
+                if( drill_x <= 0 )
+                    drill_x = drill_y;
 
-                if( dy <= 0 )
-                    dy = dx;
+                if( drill_y <= 0 )
+                    drill_y = drill_x;
 
-                pad->SetDrillSize( { dx, dy } );
+                pad->SetDrillSize( { drill_x, drill_y } );
             }
         }
 
@@ -499,6 +549,9 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
 
         row++;
     }
+
+    commit.Push( _( "Edit Pads" ) );
+    m_frame->Refresh();
 
     return true;
 }
