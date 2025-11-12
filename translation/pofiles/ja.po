@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-03 22:51+0000\n"
+"PO-Revision-Date: 2025-11-13 04:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4187,9 +4187,8 @@ msgstr "カスタム カーソルを無効にする"
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
-msgstr ""
-"有効にすると、KiCad はカスタムカーソルの代わりにデフォルトのシステム カーソル"
-"を使用します"
+msgstr "有効にすると、KiCad はカスタム カーソルの代わりにデフォルトのシステム カーソ"
+"ルを使用します"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -28767,7 +28766,7 @@ msgstr "テンプレート複製"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
 msgid "Could not open template directory."
-msgstr "テンプレート ディレクトリを開けませんでした。"
+msgstr "テンプレート ディレクトリ を開けませんでした。"
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
 msgid "No project file found in template directory."
@@ -30107,7 +30106,7 @@ msgstr "パッケージ %s をアンインストールしました"
 #: kicad/pcm/pcm_task_manager.cpp:661
 #, c-format
 msgid "%d out of %d operations failed."
-msgstr "%d 件(%d 件適用中)の操作が失敗しました。"
+msgstr "%d 件の操作が%d 件適用中に失敗しました。"
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 msgid "All operations completed successfully."
@@ -43657,39 +43656,31 @@ msgstr "信号レイヤーの厚さは0より大きくなければなりませ�
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:905
 msgid "Reference layer not found in stackup"
-msgstr "スタックアップにリファレンス レイヤーが見つかりません"
+msgstr "リファレンス面を指定してください"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:911
 msgid "Reference layer must be different to signal layer"
-msgstr "リファレンス レイヤーは信号レイヤーと異なる必要があります"
+msgstr "リファレンス面は信号レイヤーと異なる必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:920
 msgid "Dielectric height must be greater than 0"
 msgstr "誘電体の高さは0より大きくなければなりません"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:963
-#, fuzzy
 msgid "Top reference layer not found in stackup"
-msgstr "スタックアップ内にトップ リファレンス レイヤーが見つかりません"
+msgstr "表側リファレンス面を指定してください"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:969
-#, fuzzy
 msgid "Top reference layer must be above signal layer in board stackup"
-msgstr ""
-"基板スタックアップでは、トップ リファレンス レイヤーは信号 レイヤーの上にある"
-"必要があります"
+msgstr "表側リファレンス面は信号 レイヤーの上にある必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:975
-#, fuzzy
 msgid "Bottom reference layer not found in stackup"
-msgstr "スタックアップにボトム リファレンス レイヤーが見つかりません"
+msgstr "裏側リファレンス面を指定してください"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:981
-#, fuzzy
 msgid "Bottom reference layer must be below signal layer in board stackup"
-msgstr ""
-"基板スタックアップでは、ボトム リファレンス レイヤーは信号 レイヤーの下にある"
-"必要があります"
+msgstr "裏側リファレンス面は信号 レイヤーの下にある必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:994
 msgid "Dielectric heights must be greater than 0"
@@ -43767,11 +43758,11 @@ msgstr "信号レイヤー"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
 msgid "Top Reference"
-msgstr "トップ リファレンス"
+msgstr "表側リファレンス面"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
 msgid "Bottom Reference"
-msgstr "ボトム リファレンス"
+msgstr "裏側リファレンス面"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
 msgid "Diff Pair Gap"
@@ -44540,7 +44531,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
 msgid "Unresolved text variable."
-msgstr "未解決のテキスト変数。"
+msgstr "未解決の テキスト変数。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
