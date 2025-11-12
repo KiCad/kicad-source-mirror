@@ -73,7 +73,7 @@ public:
             return enhanceAttr( m_colAttrs[aCol], aRow, aCol, aKind );
         }
 
-        return nullptr;
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
     }
 
     virtual bool IsExpanderColumn( int aCol ) const { return false; }
