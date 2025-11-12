@@ -293,7 +293,7 @@ wxString SCH_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
 BITMAPS SCH_TABLE::GetMenuImage() const
 {
-    return BITMAPS::spreadsheet; // JEY TODO
+    return BITMAPS::spreadsheet;    // JEY TODO
 }
 
 
@@ -514,56 +514,55 @@ static struct SCH_TABLE_DESC
         propMgr.AddTypeCast( new TYPE_CAST<SCH_TABLE, SCH_ITEM> );
         propMgr.InheritsAfter( TYPE_HASH( SCH_TABLE ), TYPE_HASH( SCH_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start X" ), &SCH_TABLE::SetPositionX,
-                                                           &SCH_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start Y" ), &SCH_TABLE::SetPositionY,
-                                                           &SCH_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start X" ),
+                    &SCH_TABLE::SetPositionX, &SCH_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start Y" ),
+                    &SCH_TABLE::SetPositionY, &SCH_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         const wxString tableProps = _( "Table Properties" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "External Border" ), &SCH_TABLE::SetStrokeExternal,
-                                                            &SCH_TABLE::StrokeExternal ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "External Border" ),
+                    &SCH_TABLE::SetStrokeExternal, &SCH_TABLE::StrokeExternal ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Header Border" ),
-                                                            &SCH_TABLE::SetStrokeHeaderSeparator,
-                                                            &SCH_TABLE::StrokeHeaderSeparator ),
-                             tableProps );
+                    &SCH_TABLE::SetStrokeHeaderSeparator, &SCH_TABLE::StrokeHeaderSeparator ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ), &SCH_TABLE::SetBorderWidth,
-                                                           &SCH_TABLE::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ),
+                    &SCH_TABLE::SetBorderWidth, &SCH_TABLE::GetBorderWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>(
-                                     _HKI( "Border Style" ), &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
+                    &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Border Color" ), &SCH_TABLE::SetBorderColor,
-                                                               &SCH_TABLE::GetBorderColor ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Border Color" ),
+                    &SCH_TABLE::SetBorderColor, &SCH_TABLE::GetBorderColor ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Row Separators" ), &SCH_TABLE::SetStrokeRows,
-                                                            &SCH_TABLE::StrokeRows ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Row Separators" ),
+                    &SCH_TABLE::SetStrokeRows, &SCH_TABLE::StrokeRows ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Cell Separators" ), &SCH_TABLE::SetStrokeColumns,
-                                                            &SCH_TABLE::StrokeColumns ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Cell Separators" ),
+                    &SCH_TABLE::SetStrokeColumns, &SCH_TABLE::StrokeColumns ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Separators Width" ), &SCH_TABLE::SetSeparatorsWidth,
-                                                           &SCH_TABLE::GetSeparatorsWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Separators Width" ),
+                    &SCH_TABLE::SetSeparatorsWidth, &SCH_TABLE::GetSeparatorsWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
-                                                                       &SCH_TABLE::SetSeparatorsStyle,
-                                                                       &SCH_TABLE::GetSeparatorsStyle ),
-                             tableProps );
+                    &SCH_TABLE::SetSeparatorsStyle, &SCH_TABLE::GetSeparatorsStyle ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Separators Color" ),
-                                                               &SCH_TABLE::SetSeparatorsColor,
-                                                               &SCH_TABLE::GetSeparatorsColor ),
-                             tableProps );
+                    &SCH_TABLE::SetSeparatorsColor, &SCH_TABLE::GetSeparatorsColor ),
+                    tableProps );
     }
 } _SCH_TABLE_DESC;

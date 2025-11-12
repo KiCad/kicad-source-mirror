@@ -38,7 +38,7 @@ class BASE_SCREEN;
  */
 
 
-template <typename T_TABLE, typename T_TABLECELL, typename T_COMMIT>
+template<typename T_TABLE, typename T_TABLECELL, typename T_COMMIT>
 class EDIT_TABLE_TOOL_BASE
 {
 protected:
@@ -92,21 +92,21 @@ protected:
         // Add editing actions to the selection tool menu
         //
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::addRowAbove, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addRowBelow, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addColBefore, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
-        selToolMenu.AddItem( ACTIONS::addColAfter, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addRowAbove,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addRowBelow,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addColBefore,  cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::addColAfter,   cellSelection && SELECTION_CONDITIONS::Idle, 100 );
 
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::deleteRows, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::deleteRows,    cellSelection && SELECTION_CONDITIONS::Idle, 100 );
         selToolMenu.AddItem( ACTIONS::deleteColumns, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
 
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::mergeCells, cellSelection && cellBlockSelection, 100 );
-        selToolMenu.AddItem( ACTIONS::unmergeCells, cellSelection && mergedCellsSelection, 100 );
+        selToolMenu.AddItem( ACTIONS::mergeCells,    cellSelection && cellBlockSelection, 100 );
+        selToolMenu.AddItem( ACTIONS::unmergeCells,  cellSelection && mergedCellsSelection, 100 );
 
         selToolMenu.AddSeparator( 100 );
-        selToolMenu.AddItem( ACTIONS::editTable, cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+        selToolMenu.AddItem( ACTIONS::editTable,     cellSelection && SELECTION_CONDITIONS::Idle, 100 );
 
         selToolMenu.AddSeparator( 100 );
     }
@@ -648,7 +648,9 @@ public:
             }
 
             if( !table )
+            {
                 table = static_cast<T_TABLE*>( cell->GetParent() );
+            }
             else if( cell->GetParent() != table )
             {
                 aErrorMsg = _( "Selected cells are from different tables" );
@@ -729,9 +731,7 @@ public:
                 }
 
                 for( int afterRow = targetTable->GetRowCount() - 1; afterRow > insertRow; afterRow-- )
-                {
                     targetTable->SetRowHeight( afterRow, targetTable->GetRowHeight( afterRow - 1 ) );
-                }
 
                 targetTable->SetRowHeight( insertRow, aSourceTable->GetRowHeight( clipboardRow ) );
             }
@@ -758,9 +758,7 @@ public:
                 }
 
                 for( int afterCol = targetTable->GetColCount() - 1; afterCol > insertCol; afterCol-- )
-                {
                     targetTable->SetColWidth( afterCol, targetTable->GetColWidth( afterCol - 1 ) );
-                }
 
                 targetTable->SetColWidth( insertCol, aSourceTable->GetColWidth( clipboardCol ) );
             }
@@ -777,9 +775,7 @@ public:
                 int destCol = targetColMin + srcCol;
 
                 if( destRow >= targetTable->GetRowCount() || destCol >= targetTable->GetColCount() )
-                {
                     continue;
-                }
 
                 T_TABLECELL* sourceCell = aSourceTable->GetCell( srcRow, srcCol );
                 T_TABLECELL* targetCell = targetTable->GetCell( destRow, destCol );

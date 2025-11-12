@@ -193,8 +193,7 @@ int PCB_CONTROL::DdImportFootprint( const TOOL_EVENT& aEvent )
 int PCB_CONTROL::IterateFootprint( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
-        static_cast<FOOTPRINT_VIEWER_FRAME*>( m_frame )->SelectAndViewFootprint(
-                aEvent.Parameter<FPVIEWER_CONSTANTS>() );
+        static_cast<FOOTPRINT_VIEWER_FRAME*>( m_frame )->SelectAndViewFootprint( aEvent.Parameter<FPVIEWER_CONSTANTS>() );
 
     return 0;
 }
@@ -207,7 +206,7 @@ int PCB_CONTROL::Quit( const TOOL_EVENT& aEvent )
 }
 
 
-template <class T>
+template<class T>
 void Flip( T& aValue )
 {
     aValue = !aValue;
@@ -302,13 +301,12 @@ void PCB_CONTROL::unfilledZoneCheck()
         WX_INFOBAR*      infobar = m_frame->GetInfoBar();
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Don't show again" ), wxEmptyString );
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK,
-                      std::function<void( wxHyperlinkEvent & aEvent )>(
-                              [&]( wxHyperlinkEvent& aEvent )
-                              {
-                                  Pgm().GetCommonSettings()->m_DoNotShowAgain.zone_fill_warning = true;
-                                  m_frame->GetInfoBar()->Dismiss();
-                              } ) );
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    Pgm().GetCommonSettings()->m_DoNotShowAgain.zone_fill_warning = true;
+                    m_frame->GetInfoBar()->Dismiss();
+                } ) );
 
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
@@ -431,9 +429,9 @@ int PCB_CONTROL::NetColorModeCycle( const TOOL_EVENT& aEvent )
 
     switch( opts.m_NetColorMode )
     {
-    case NET_COLOR_MODE::ALL: opts.m_NetColorMode = NET_COLOR_MODE::RATSNEST; break;
-    case NET_COLOR_MODE::RATSNEST: opts.m_NetColorMode = NET_COLOR_MODE::OFF; break;
-    case NET_COLOR_MODE::OFF: opts.m_NetColorMode = NET_COLOR_MODE::ALL; break;
+    case NET_COLOR_MODE::ALL:      opts.m_NetColorMode = NET_COLOR_MODE::RATSNEST; break;
+    case NET_COLOR_MODE::RATSNEST: opts.m_NetColorMode = NET_COLOR_MODE::OFF;      break;
+    case NET_COLOR_MODE::OFF:      opts.m_NetColorMode = NET_COLOR_MODE::ALL;      break;
     }
 
     m_frame->SetDisplayOptions( opts );
@@ -481,8 +479,8 @@ int PCB_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
-    BOARD*       brd = board();
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+    BOARD*       brd        = board();
+    PCB_LAYER_ID layer      = m_frame->GetActiveLayer();
     bool         wraparound = false;
 
     if( !IsCopperLayer( layer ) )
@@ -516,7 +514,7 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
         if( brd->IsLayerVisible( layer ) )
             break;
 
-        if( jj == 0 ) // the end of list is reached. Try from the beginning
+        if( jj == 0 )   // the end of list is reached. Try from the beginning
         {
             if( wraparound )
             {
@@ -540,8 +538,8 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 {
-    BOARD*       brd = board();
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+    BOARD*       brd        = board();
+    PCB_LAYER_ID layer      = m_frame->GetActiveLayer();
     bool         wraparound = false;
 
     if( !IsCopperLayer( layer ) )
@@ -575,7 +573,7 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
         if( brd->IsLayerVisible( layer ) )
             break;
 
-        if( ii == 0 ) // the start of list is reached. Try from the last
+        if( ii == 0 )   // the start of list is reached. Try from the last
         {
             if( wraparound )
             {
@@ -783,7 +781,7 @@ int PCB_CONTROL::GridPlaceOrigin( const TOOL_EVENT& aEvent )
 
         PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
-        if( !picker ) // Happens in footprint wizard
+        if( !picker )   // Happens in footprint wizard
             return 0;
 
         // Deactivate other tools; particularly important if another PICKER is currently running
@@ -797,7 +795,7 @@ int PCB_CONTROL::GridPlaceOrigin( const TOOL_EVENT& aEvent )
                 {
                     m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
                     DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
-                    return false; // drill origin is a one-shot; don't continue with tool
+                    return false;   // drill origin is a one-shot; don't continue with tool
                 } );
 
         m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -1319,10 +1317,10 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             pruneItemLayers( pastedItems );
 
-            cancelled =
-                    !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS, false );
+            cancelled = !placeBoardItems( &commit, pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS,
+                                          false );
         }
-        else // isBoardEditor
+        else    // isBoardEditor
         {
             // Fixup footprint component classes
             for( FOOTPRINT* fp : clipBoard->Footprints() )
@@ -1370,7 +1368,9 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         break;
     }
 
-    default: m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) ); break;
+    default:
+        m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) );
+        break;
     }
 
     if( cancelled )
@@ -1416,8 +1416,8 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     DESIGN_BLOCK_PANE*            designBlockPane = editFrame->GetDesignBlockPane();
-    std::unique_ptr<DESIGN_BLOCK> designBlock(
-            designBlockPane->GetDesignBlock( designBlockPane->GetSelectedLibId(), true, true ) );
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( designBlockPane->GetSelectedLibId(),
+                                                                                true, true ) );
 
     if( !designBlock || designBlock->GetBoardFile().IsEmpty() )
         return 1;
@@ -1469,8 +1469,8 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
     // Get the associated design block
     DESIGN_BLOCK_PANE*            designBlockPane = editFrame->GetDesignBlockPane();
-    std::unique_ptr<DESIGN_BLOCK> designBlock(
-            designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(), true, true ) );
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -1510,25 +1510,26 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &skipMove ) )
     {
         // Lambda for the bounding box of all the components
-        auto generateBoundingBox = [&]( std::unordered_set<EDA_ITEM*> aItems )
-        {
-            std::vector<VECTOR2I> bbCorners;
-            bbCorners.reserve( aItems.size() * 4 );
+        auto generateBoundingBox =
+                [&]( std::unordered_set<EDA_ITEM*> aItems )
+                {
+                    std::vector<VECTOR2I> bbCorners;
+                    bbCorners.reserve( aItems.size() * 4 );
 
-            for( auto item : aItems )
-            {
-                const BOX2I bb = item->GetBoundingBox().GetInflated( 100000 );
-                KIGEOM::CollectBoxCorners( bb, bbCorners );
-            }
+                    for( auto item : aItems )
+                    {
+                        const BOX2I bb = item->GetBoundingBox().GetInflated( 100000 );
+                        KIGEOM::CollectBoxCorners( bb, bbCorners );
+                    }
 
-            std::vector<VECTOR2I> hullVertices;
-            BuildConvexHull( hullVertices, bbCorners );
+                    std::vector<VECTOR2I> hullVertices;
+                    BuildConvexHull( hullVertices, bbCorners );
 
-            SHAPE_LINE_CHAIN hull( hullVertices );
+                    SHAPE_LINE_CHAIN hull( hullVertices );
 
-            // Make the newly computed convex hull use only 90 degree segments
-            return KIGEOM::RectifyPolygon( hull );
-        };
+                    // Make the newly computed convex hull use only 90 degree segments
+                    return KIGEOM::RectifyPolygon( hull );
+                };
 
         // Build a rule area that contains all the components in the design block,
         // meaning all items without SKIP_STRUCT set.
@@ -1655,8 +1656,8 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
 
     // Get the associated design block
     DESIGN_BLOCK_PANE*            designBlockPane = editFrame->GetDesignBlockPane();
-    std::unique_ptr<DESIGN_BLOCK> designBlock(
-            designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(), true, true ) );
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -1711,8 +1712,8 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
 
     // Get the associated design block
     DESIGN_BLOCK_PANE*            designBlockPane = editFrame->GetDesignBlockPane();
-    std::unique_ptr<DESIGN_BLOCK> designBlock(
-            designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(), true, true ) );
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( group->GetDesignBlockLibId(),
+                                                                                true, true ) );
 
     if( !designBlock )
     {
@@ -1728,35 +1729,35 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-template <typename T>
+template<typename T>
 static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-                  [aIsNew]( T aItem )
-                  {
-                      bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
+            [aIsNew]( T aItem )
+            {
+                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
 
-                      aItem->ClearFlags( SKIP_STRUCT );
-                      aItem->SetFlags( aIsNew ? IS_NEW : 0 );
+                aItem->ClearFlags( SKIP_STRUCT );
+                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
 
-                      return doCopy;
-                  } );
+                return doCopy;
+            } );
 }
 
 
-template <typename T>
+template<typename T>
 static void moveUnflaggedItems( const std::vector<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-                  [aIsNew]( T aItem )
-                  {
-                      bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
+            [aIsNew]( T aItem )
+            {
+                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
 
-                      aItem->ClearFlags( SKIP_STRUCT );
-                      aItem->SetFlags( aIsNew ? IS_NEW : 0 );
+                aItem->ClearFlags( SKIP_STRUCT );
+                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
 
-                      return doCopy;
-                  } );
+                return doCopy;
+            } );
 }
 
 
@@ -2291,7 +2292,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
-                    msgItems.emplace_back( _( "Actual Clearance" ), m_frame->MessageTextFromValue( actual_clearance ) );
+                    msgItems.emplace_back( _( "Actual Clearance" ),
+                                           m_frame->MessageTextFromValue( actual_clearance ) );
                 }
             }
         }
@@ -2338,7 +2340,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                     if( actual > -1 && actual < std::numeric_limits<int>::max() )
                     {
-                        msgItems.emplace_back( _( "Actual Hole Clearance" ), m_frame->MessageTextFromValue( actual ) );
+                        msgItems.emplace_back( _( "Actual Hole Clearance" ),
+                                               m_frame->MessageTextFromValue( actual ) );
                     }
                 }
             }
@@ -2389,7 +2392,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     {
         if( msgItems.empty() )
         {
-            msgItems.emplace_back( _( "Selected Items" ), wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+            msgItems.emplace_back( _( "Selected Items" ),
+                                   wxString::Format( wxT( "%d" ), selection.GetSize() ) );
 
             if( m_isBoardEditor )
             {
@@ -2427,40 +2431,42 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             // Lambda to accumulate track length if item is a track or arc, otherwise mark invalid
             std::function<void( EDA_ITEM* )> accumulateTrackLength;
 
-            accumulateTrackLength = [&]( EDA_ITEM* aItem )
-            {
-                if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
-                {
-                    selectedLength += static_cast<PCB_TRACK*>( aItem )->GetLength();
-                }
-                else if( aItem->Type() == PCB_VIA_T )
-                {
-                    // zero 2D length
-                }
-                else if( aItem->Type() == PCB_SHAPE_T )
-                {
-                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+            accumulateTrackLength =
+                    [&]( EDA_ITEM* aItem )
+                    {
+                        if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
+                        {
+                            selectedLength += static_cast<PCB_TRACK*>( aItem )->GetLength();
+                        }
+                        else if( aItem->Type() == PCB_VIA_T )
+                        {
+                            // zero 2D length
+                        }
+                        else if( aItem->Type() == PCB_SHAPE_T )
+                        {
+                            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
 
-                    if( shape->GetShape() == SHAPE_T::SEGMENT || shape->GetShape() == SHAPE_T::ARC
-                        || shape->GetShape() == SHAPE_T::BEZIER )
-                    {
-                        selectedLength += shape->GetLength();
-                    }
-                    else
-                    {
-                        lengthValid = false;
-                    }
-                }
-                // Use dynamic_cast to include PCB_GENERATORs.
-                else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
-                {
-                    group->RunOnChildren( accumulateTrackLength, RECURSE_MODE::RECURSE );
-                }
-                else
-                {
-                    lengthValid = false;
-                }
-            };
+                            if( shape->GetShape() == SHAPE_T::SEGMENT
+                                    || shape->GetShape() == SHAPE_T::ARC
+                                    || shape->GetShape() == SHAPE_T::BEZIER )
+                            {
+                                selectedLength += shape->GetLength();
+                            }
+                            else
+                            {
+                                lengthValid = false;
+                            }
+                        }
+                        // Use dynamic_cast to include PCB_GENERATORs.
+                        else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+                        {
+                            group->RunOnChildren( accumulateTrackLength, RECURSE_MODE::RECURSE );
+                        }
+                        else
+                        {
+                            lengthValid = false;
+                        }
+                    };
 
             for( EDA_ITEM* item : selection )
             {
@@ -2470,7 +2476,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
             if( lengthValid )
             {
-                msgItems.emplace_back( _( "Selected 2D Length" ), m_frame->MessageTextFromValue( selectedLength ) );
+                msgItems.emplace_back( _( "Selected 2D Length" ),
+                                       m_frame->MessageTextFromValue( selectedLength ) );
             }
         }
 
@@ -2484,43 +2491,46 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
             std::function<void( EDA_ITEM* )> accumulateArea;
 
-            accumulateArea = [&]( EDA_ITEM* aItem )
-            {
-                if( aItem->Type() == PCB_FOOTPRINT_T || aItem->Type() == PCB_MARKER_T )
-                {
-                    areaValid = false;
-                    return;
-                }
-
-                if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
-                {
-                    group->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );
-                    return;
-                }
-
-                if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
-                {
-                    boardItem->RunOnChildren( accumulateArea, RECURSE_MODE::NO_RECURSE );
-
-                    for( PCB_LAYER_ID layer : LSET( boardItem->GetLayerSet() & enabledCopper ) )
+            accumulateArea =
+                    [&]( EDA_ITEM* aItem )
                     {
-                        boardItem->TransformShapeToPolySet( copperPolys[layer], layer, 0, ARC_LOW_DEF, ERROR_INSIDE );
-                    }
+                        if( aItem->Type() == PCB_FOOTPRINT_T || aItem->Type() == PCB_MARKER_T )
+                        {
+                            areaValid = false;
+                            return;
+                        }
 
-                    if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->HasHole() )
-                    {
-                        static_cast<PAD*>( aItem )->TransformHoleToPolygon( holes, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
-                    }
-                    else if( aItem->Type() == PCB_VIA_T )
-                    {
-                        PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-                        VECTOR2I center = via->GetPosition();
-                        int      R = via->GetDrillValue() / 2;
+                        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+                        {
+                            group->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );
+                            return;
+                        }
 
-                        TransformCircleToPolygon( holes, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
-                    }
-                }
-            };
+                        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+                        {
+                            boardItem->RunOnChildren( accumulateArea, RECURSE_MODE::NO_RECURSE );
+
+                            for( PCB_LAYER_ID layer : LSET( boardItem->GetLayerSet() & enabledCopper ) )
+                            {
+                                boardItem->TransformShapeToPolySet( copperPolys[layer], layer, 0,
+                                                                    ARC_LOW_DEF, ERROR_INSIDE );
+                            }
+
+                            if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->HasHole() )
+                            {
+                                static_cast<PAD*>( aItem )->TransformHoleToPolygon( holes, 0, ARC_LOW_DEF,
+                                                                                    ERROR_OUTSIDE );
+                            }
+                            else if( aItem->Type() == PCB_VIA_T )
+                            {
+                                PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+                                VECTOR2I center = via->GetPosition();
+                                int      R = via->GetDrillValue() / 2;
+
+                                TransformCircleToPolygon( holes, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
+                            }
+                        }
+                    };
 
             for( EDA_ITEM* item : selection )
             {
@@ -2554,8 +2564,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
     if( editFrame )
     {
-        BOARD_ITEM* selectedItem =
-                ( selection.GetSize() == 1 ) ? dynamic_cast<BOARD_ITEM*>( selection.Front() ) : nullptr;
+        BOARD_ITEM* selectedItem = ( selection.GetSize() == 1 ) ? dynamic_cast<BOARD_ITEM*>( selection.Front() )
+                                                                : nullptr;
         editFrame->UpdateVertexEditorSelection( selectedItem );
     }
 

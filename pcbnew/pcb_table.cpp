@@ -30,7 +30,7 @@
 #include <geometry/shape_compound.h>
 #include <geometry/geometry_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <pcb_painter.h> // for PCB_RENDER_SETTINGS
+#include <pcb_painter.h>    // for PCB_RENDER_SETTINGS
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -463,8 +463,7 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
                     if( currSettings == nullptr )
                         currSettings = &defaultRenderSettings;
 
-                    STROKE_PARAMS::Stroke(
-                            &seg, lineStyle, lineWidth, currSettings,
+                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, currSettings,
                             [&]( VECTOR2I a, VECTOR2I b )
                             {
                                 if( a == b )
@@ -696,11 +695,11 @@ static struct PCB_TABLE_DESC
 
         if( lineStyleEnum.Choices().GetCount() == 0 )
         {
-            lineStyleEnum.Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
-                    .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
-                    .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
-                    .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
-                    .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            lineStyleEnum.Map( LINE_STYLE::SOLID,      _HKI( "Solid" ) )
+                         .Map( LINE_STYLE::DASH,       _HKI( "Dashed" ) )
+                         .Map( LINE_STYLE::DOT,        _HKI( "Dotted" ) )
+                         .Map( LINE_STYLE::DASHDOT,    _HKI( "Dash-Dot" ) )
+                         .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -711,56 +710,55 @@ static struct PCB_TABLE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLE ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start X" ), &PCB_TABLE::SetPositionX,
-                                                           &PCB_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start Y" ), &PCB_TABLE::SetPositionY,
-                                                           &PCB_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start X" ),
+                    &PCB_TABLE::SetPositionX, &PCB_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Start Y" ),
+                    &PCB_TABLE::SetPositionY, &PCB_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         const wxString tableProps = _( "Table Properties" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "External Border" ), &PCB_TABLE::SetStrokeExternal,
-                                                            &PCB_TABLE::StrokeExternal ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "External Border" ),
+                    &PCB_TABLE::SetStrokeExternal, &PCB_TABLE::StrokeExternal ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Header Border" ),
-                                                            &PCB_TABLE::SetStrokeHeaderSeparator,
-                                                            &PCB_TABLE::StrokeHeaderSeparator ),
-                             tableProps );
+                    &PCB_TABLE::SetStrokeHeaderSeparator, &PCB_TABLE::StrokeHeaderSeparator ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Border Width" ), &PCB_TABLE::SetBorderWidth,
-                                                           &PCB_TABLE::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Border Width" ),
+                    &PCB_TABLE::SetBorderWidth, &PCB_TABLE::GetBorderWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>(
-                                     _HKI( "Border Style" ), &PCB_TABLE::SetBorderStyle, &PCB_TABLE::GetBorderStyle ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
+                    &PCB_TABLE::SetBorderStyle, &PCB_TABLE::GetBorderStyle ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Border Color" ), &PCB_TABLE::SetBorderColor,
-                                                               &PCB_TABLE::GetBorderColor ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Border Color" ),
+                    &PCB_TABLE::SetBorderColor, &PCB_TABLE::GetBorderColor ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Row Separators" ), &PCB_TABLE::SetStrokeRows,
-                                                            &PCB_TABLE::StrokeRows ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Row Separators" ),
+                    &PCB_TABLE::SetStrokeRows, &PCB_TABLE::StrokeRows ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Cell Separators" ), &PCB_TABLE::SetStrokeColumns,
-                                                            &PCB_TABLE::StrokeColumns ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Cell Separators" ),
+                    &PCB_TABLE::SetStrokeColumns, &PCB_TABLE::StrokeColumns ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Separators Width" ), &PCB_TABLE::SetSeparatorsWidth,
-                                                           &PCB_TABLE::GetSeparatorsWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Separators Width" ),
+                    &PCB_TABLE::SetSeparatorsWidth, &PCB_TABLE::GetSeparatorsWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
-                                                                       &PCB_TABLE::SetSeparatorsStyle,
-                                                                       &PCB_TABLE::GetSeparatorsStyle ),
-                             tableProps );
+                    &PCB_TABLE::SetSeparatorsStyle, &PCB_TABLE::GetSeparatorsStyle ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Separators Color" ),
-                                                               &PCB_TABLE::SetSeparatorsColor,
-                                                               &PCB_TABLE::GetSeparatorsColor ),
-                             tableProps );
+                    &PCB_TABLE::SetSeparatorsColor, &PCB_TABLE::GetSeparatorsColor ),
+                    tableProps );
     }
 } _PCB_TABLE_DESC;
