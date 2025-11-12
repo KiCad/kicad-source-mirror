@@ -43,12 +43,13 @@
 // Helper to map shape string to PAD_SHAPE
 static PAD_SHAPE ShapeFromString( const wxString& shape )
 {
-    if( shape == _( "Oval" ) ) return PAD_SHAPE::OVAL;
-    if( shape == _( "Rectangle" ) ) return PAD_SHAPE::RECTANGLE;
-    if( shape == _( "Trapezoid" ) ) return PAD_SHAPE::TRAPEZOID;
-    if( shape == _( "Rounded rectangle" ) ) return PAD_SHAPE::ROUNDRECT;
+    if( shape == _( "Oval" ) )                return PAD_SHAPE::OVAL;
+    if( shape == _( "Rectangle" ) )           return PAD_SHAPE::RECTANGLE;
+    if( shape == _( "Trapezoid" ) )           return PAD_SHAPE::TRAPEZOID;
+    if( shape == _( "Rounded rectangle" ) )   return PAD_SHAPE::ROUNDRECT;
     if( shape == _( "Chamfered rectangle" ) ) return PAD_SHAPE::CHAMFERED_RECT;
-    if( shape == _( "Custom shape" ) ) return PAD_SHAPE::CUSTOM;
+    if( shape == _( "Custom shape" ) )        return PAD_SHAPE::CUSTOM;
+
     return PAD_SHAPE::CIRCLE;
 }
 
@@ -58,7 +59,8 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_grid( nullptr ),
         m_footprint( aFootprint ),
-        m_unitsProvider( std::make_unique<UNITS_PROVIDER>( pcbIUScale, GetUserUnits() ) )
+        m_unitsProvider( std::make_unique<UNITS_PROVIDER>( pcbIUScale, GetUserUnits() ) ),
+        m_summaryDirty( true )
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -109,21 +111,20 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetColLabelValue( COL_P2D_LENGTH, _( "Pad->Die Length" ) );
     m_grid->SetColLabelValue( COL_P2D_DELAY, _( "Pad->Die Delay" ) );
     m_grid->SetColLabelSize( 24 );
+    m_grid->HideRowLabels();
     m_grid->EnableEditing( true );
 
     wxGridCellAttr* attr;
 
     // Type column editor (attribute)
     attr = new wxGridCellAttr;
-    {
-        wxArrayString typeNames;
-        typeNames.push_back( _( "Through-hole" ) ); // PTH
-        typeNames.push_back( _( "SMD" ) );          // SMD
-        typeNames.push_back( _( "Connector" ) );    // CONN SMD? (use CONN?)
-        typeNames.push_back( _( "NPTH" ) );         // NPTH
-        typeNames.push_back( _( "Aperture" ) );     // inferred copper-less
-        attr->SetEditor( new GRID_CELL_COMBOBOX( typeNames ) );
-    }
+    wxArrayString typeNames;
+    typeNames.push_back( _( "Through-hole" ) ); // PTH
+    typeNames.push_back( _( "SMD" ) );          // SMD
+    typeNames.push_back( _( "Connector" ) );    // CONN SMD? (use CONN?)
+    typeNames.push_back( _( "NPTH" ) );         // NPTH
+    typeNames.push_back( _( "Aperture" ) );     // inferred copper-less
+    attr->SetEditor( new GRID_CELL_COMBOBOX( typeNames ) );
     m_grid->SetColAttr( COL_TYPE, attr );
 
     attr = new wxGridCellAttr;
@@ -193,16 +194,15 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     buttons->Realize();
     topSizer->Add( buttons, 0, wxALIGN_RIGHT | wxALL, 5 );
 
-    SetSizerAndFit( topSizer );
+    SetSizer( topSizer );
     SetupStandardButtons();
 
     CaptureOriginalPadState();
-    Populate();
-    updateSummary();
 
     // Bind cell change handlers for real-time updates
     m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged, this );
     m_grid->Bind( wxEVT_GRID_SELECT_CELL, &DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell, this );
+    Bind( wxEVT_UPDATE_UI, &DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI, this );
 
     // Listen for cancel
     Bind( wxEVT_BUTTON,
@@ -224,13 +224,17 @@ DIALOG_FP_EDIT_PAD_TABLE::~DIALOG_FP_EDIT_PAD_TABLE()
 
     // destroy GRID_TRICKS before m_grid.
     m_grid->PopEventHandler( true );
+
+    m_grid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged, this );
+    m_grid->Unbind( wxEVT_GRID_SELECT_CELL, &DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell, this );
+    Unbind( wxEVT_UPDATE_UI, &DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI, this );
 }
 
 
-void DIALOG_FP_EDIT_PAD_TABLE::Populate()
+bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 {
     if( !m_footprint )
-        return;
+        return false;
 
     int row = 0;
 
@@ -291,9 +295,6 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
         row++;
     }
 
-    // Hide row labels per requirements
-    m_grid->HideRowLabels();
-
     // Auto size the data columns first to get reasonable initial widths
     m_grid->AutoSizeColumns();
 
@@ -349,6 +350,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::Populate()
         wxGridEvent ev( m_grid->GetId(), wxEVT_GRID_SELECT_CELL, m_grid, 0, 0, -1, -1, true );
         OnSelectCell( ev );
     }
+
+    return true;
 }
 
 
@@ -410,7 +413,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
         canvas->ForceRefresh();
     }
 
-    updateSummary();
+    m_summaryDirty = true;
 }
 
 
@@ -426,7 +429,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
 
     for( PAD* pad : m_footprint->Pads() )
     {
-    pad->SetNumber( m_grid->GetCellValue( row, COL_NUMBER ) );
+        pad->SetNumber( m_grid->GetCellValue( row, COL_NUMBER ) );
 
         wxString typeStr = m_grid->GetCellValue( row, COL_TYPE );
 
@@ -573,6 +576,15 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSize( wxSizeEvent& aEvent )
 }
 
 
+void DIALOG_FP_EDIT_PAD_TABLE::OnCharHook( wxKeyEvent& aEvent )
+{
+    if( m_grid->IsCellEditControlShown() && m_grid->GetGridCursorCol() == COL_NUMBER )
+        m_summaryDirty = true;
+
+    DIALOG_SHIM::OnCharHook( aEvent );
+}
+
+
 void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
@@ -605,6 +617,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
     {
     case COL_NUMBER:
         target->SetNumber( m_grid->GetCellValue( row, col ) );
+        needCanvasRefresh = true;
+        m_summaryDirty = true;
         break;
 
     case COL_TYPE:
@@ -760,6 +774,38 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell( wxGridEvent& aEvent )
         }
 
         ++idx;
+    }
+}
+
+
+void DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    if( m_summaryDirty )
+    {
+        if( m_grid->IsCellEditControlShown() && m_grid->GetGridCursorCol() == COL_NUMBER )
+        {
+            int  row = m_grid->GetGridCursorRow();
+            int  col = m_grid->GetGridCursorCol();
+            int  idx = 0;
+            PAD* target = nullptr;
+
+            for( PAD* pad : m_footprint->Pads() )
+            {
+                if( idx == row )
+                {
+                    target = pad;
+                    break;
+                }
+
+                ++idx;
+            }
+
+            if( target )
+                target->SetNumber( m_grid->GetCellEditor( row, col )->GetValue() );
+        }
+
+        updateSummary();
+        m_summaryDirty = false;
     }
 }
 

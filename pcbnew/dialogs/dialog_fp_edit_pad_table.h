@@ -32,16 +32,17 @@ public:
     DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOOTPRINT* aFootprint );
     ~DIALOG_FP_EDIT_PAD_TABLE() override;
 
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void CaptureOriginalPadState();
     void RestoreOriginalPadState();
 
 private:
-    void Populate();
-
     void OnSize( wxSizeEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvent ) override;
     void OnCellChanged( wxGridEvent& aEvent );
     void OnSelectCell( wxGridEvent& aEvent );
+    void OnUpdateUI( wxUpdateUIEvent& aEvent );
 
     void InitColumnProportions();
 
@@ -76,5 +77,6 @@ private:
     WX_GRID*                          m_grid;
     FOOTPRINT*                        m_footprint;
     std::unique_ptr<UNITS_PROVIDER>   m_unitsProvider;
+    bool                              m_summaryDirty;
 };
 
