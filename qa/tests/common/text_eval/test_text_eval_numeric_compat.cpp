@@ -695,4 +695,49 @@ BOOST_AUTO_TEST_CASE( NumericEvaluatorCompatibility )
     BOOST_CHECK_EQUAL( eval.Result(), "3.14" );
 }
 
+/**
+ * Test unit parsing priority - mil/mm/um should be recognized before SI prefixes
+ * This regression test verifies the fix for a bug where "40mil" was incorrectly
+ * parsed as "40m" (milli) + "il" = 0.04 instead of 40 thousandths of an inch = 1.016mm
+ */
+BOOST_AUTO_TEST_CASE( UnitParsingPriority )
+{
+    EXPRESSION_EVALUATOR evaluator_mm( EDA_UNITS::MM );
+    wxString result;
+
+    // Test "mil" unit (thousandths of an inch)
+    // 40mil should convert to 1.016mm (40 * 0.0254)
+    result = evaluator_mm.Evaluate( "@{40mil}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 1.016, 0.01 );  // Allow 0.01% tolerance
+
+    // Test "mm" unit (should not be affected by 'm' SI prefix)
+    result = evaluator_mm.Evaluate( "@{10mm}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 10.0, 0.01 );
+
+    // Test "um" unit (micrometers, should not be parsed as 'u' prefix + 'm')
+    // 1000um should equal 1mm
+    result = evaluator_mm.Evaluate( "@{1000um}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 1.0, 0.01 );
+
+    // Test combined expression with multiple unit types
+    // 1mm + 40mil should equal 2.016mm
+    result = evaluator_mm.Evaluate( "@{1mm + 40mil}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 2.016, 0.01 );
+
+    // Test that SI prefixes still work when not part of a unit
+    // 1k should equal 1000
+    result = evaluator_mm.Evaluate( "@{1k}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 1000.0, 0.01 );
+
+    // Test that 'm' SI prefix works when followed by non-unit characters
+    // 40m should equal 0.04 (40 milli)
+    result = evaluator_mm.Evaluate( "@{40m}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 0.04, 0.01 );
+
+    // Test "thou" unit (alternative name for mil)
+    // 100thou should equal 2.54mm
+    result = evaluator_mm.Evaluate( "@{100thou}" );
+    BOOST_CHECK_CLOSE( wxAtof( result ), 2.54, 0.01 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
