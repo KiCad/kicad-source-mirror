@@ -319,32 +319,27 @@ private:
     {
         switch( m_boolFormat )
         {
-        case BOOL_FORMAT::ZERO_ONE: return aValue ? wxT( "1" ) : wxT( "0" );
+        case BOOL_FORMAT::ZERO_ONE:
+            return aValue ? wxT( "1" ) : wxT( "0" );
         case BOOL_FORMAT::TRUE_FALSE:
             return wxGetTranslation( aValue ? BOOL_TRUE : BOOL_FALSE );
-            // no default
+        default:
+            wxFAIL_MSG( "Invalid BOOL_FORMAT" );
+            return wxEmptyString;
         }
-        wxCHECK_MSG( false, wxEmptyString, "Invalid BOOL_FORMAT" );
+
     }
 
     bool boolFromString( const wxString& aValue, REPORTER& aReporter ) const
     {
         if( aValue == wxS( "1" ) )
-        {
             return true;
-        }
         else if( aValue == wxS( "0" ) )
-        {
             return false;
-        }
         else if( MatchTranslationOrNative( aValue, BOOL_TRUE, false ) )
-        {
             return true;
-        }
         else if( MatchTranslationOrNative( aValue, BOOL_FALSE, false ) )
-        {
             return false;
-        }
 
         aReporter.Report( wxString::Format( _( "The value '%s' can't be converted to boolean correctly, "
                                                "it has been interpreted as 'False'" ),
@@ -446,8 +441,7 @@ public:
     {
         wxGrid*  grid = GetView();
 
-        if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
-                && grid->IsCellEditControlShown() )
+        if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol && grid->IsCellEditControlShown() )
         {
             auto it = m_evalOriginal.find( { m_rows[ aRow ], aCol } );
 
@@ -602,9 +596,7 @@ public:
         PIN_INFO_FORMATTER formatter( *m_frame, true, PIN_INFO_FORMATTER::BOOL_FORMAT::ZERO_ONE, reporter );
 
         for( SCH_PIN* pin : pins )
-        {
             formatter.UpdatePin( *pin, value, aCol, *m_symbol );
-        }
 
         m_edited = true;
     }
@@ -719,38 +711,34 @@ public:
             m_rows.emplace_back( std::vector<SCH_PIN*>() );
 
         std::set<wxString> selectedNumbers;
+
         for( SCH_PIN* pin : m_origSelectedPins )
-        {
             selectedNumbers.insert( pin->GetNumber() );
-        }
 
-        const auto pinIsInEditorSelection = [&]( SCH_PIN* pin )
-        {
-            // Quick check before we iterate the whole thing in N^2 time.
-            // (3000^2 = FPGAs causing issues down the road).
-            if( selectedNumbers.count( pin->GetNumber() ) == 0 )
-            {
-                return false;
-            }
-
-            for( SCH_PIN* selectedPin : m_origSelectedPins )
-            {
-                // The selected pin is in the editor, but the pins in the table
-                // are copies. We will mark the pin as selected if it's a match
-                // on the critical items.
-                if( selectedPin->GetNumber() == pin->GetNumber()
-                    && selectedPin->GetName() == pin->GetName()
-                    && selectedPin->GetUnit() == pin->GetUnit()
-                    && selectedPin->GetBodyStyle() == pin->GetBodyStyle()
-                )
+        const auto pinIsInEditorSelection =
+                [&]( SCH_PIN* pin )
                 {
-                    return true;
-                }
-            }
+                    // Quick check before we iterate the whole thing in N^2 time.
+                    // (3000^2 = FPGAs causing issues down the road).
+                    if( selectedNumbers.count( pin->GetNumber() ) == 0 )
+                        return false;
 
-            return false;
-        };
+                    for( SCH_PIN* selectedPin : m_origSelectedPins )
+                    {
+                        // The selected pin is in the editor, but the pins in the table
+                        // are copies. We will mark the pin as selected if it's a match
+                        // on the critical items.
+                        if( selectedPin->GetNumber() == pin->GetNumber()
+                            && selectedPin->GetName() == pin->GetName()
+                            && selectedPin->GetUnit() == pin->GetUnit()
+                            && selectedPin->GetBodyStyle() == pin->GetBodyStyle() )
+                        {
+                            return true;
+                        }
+                    }
 
+                    return false;
+                };
 
         for( SCH_PIN* pin : aPins )
         {
