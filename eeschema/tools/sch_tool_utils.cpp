@@ -37,7 +37,6 @@
 #include <kiid.h>
 
 #include <wx/arrstr.h>
-#include <wx/file.h>
 
 wxString GetSchItemAsText( const SCH_ITEM& aItem )
 {
@@ -67,41 +66,7 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
 
         // Call the correct GetShownText overload with nullptr for settings/path and aDepth=0
         // This ensures proper variable expansion and escape marker conversion
-        wxString shownText = textbox.GetShownText( nullptr, nullptr, true, 0 );
-
-        // DEBUG: Dump raw bytes to files
-        wxString rawText = textbox.GetText();
-
-        wxString inputPath = wxT("/tmp/copy_input.bin");
-        wxString outputPath = wxT("/tmp/copy_output.bin");
-
-        wxFile inputFile( inputPath, wxFile::write );
-        if( inputFile.IsOpened() )
-        {
-            wxCharBuffer buf = rawText.utf8_str();
-            inputFile.Write( buf.data(), buf.length() );
-            inputFile.Close();
-            wxFprintf( stderr, wxT("DEBUG: Wrote %zu bytes to %s\n"), buf.length(), inputPath.c_str() );
-        }
-        else
-        {
-            wxFprintf( stderr, wxT("DEBUG: Failed to open %s\n"), inputPath.c_str() );
-        }
-
-        wxFile outputFile( outputPath, wxFile::write );
-        if( outputFile.IsOpened() )
-        {
-            wxCharBuffer buf = shownText.utf8_str();
-            outputFile.Write( buf.data(), buf.length() );
-            outputFile.Close();
-            wxFprintf( stderr, wxT("DEBUG: Wrote %zu bytes to %s\n"), buf.length(), outputPath.c_str() );
-        }
-        else
-        {
-            wxFprintf( stderr, wxT("DEBUG: Failed to open %s\n"), outputPath.c_str() );
-        }
-
-        return shownText;
+        return textbox.GetShownText( nullptr, nullptr, true, 0 );
     }
     case SCH_PIN_T:
     {
