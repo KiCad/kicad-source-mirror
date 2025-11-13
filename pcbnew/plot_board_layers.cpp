@@ -428,6 +428,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                     // Round shape have always the same x,y margin
                     // so define a unique value for other shapes that do not support different values
                     int mask_clearance = margin.x;
+                    // When clearance is same for x and y pad axis, calculations are more easy
+                    bool sameXYClearance = margin.x == margin.y;
 
                     // Now offset the pad size by margin + width_adj
                     VECTOR2I padPlotsSize = pad->GetSize( aLayer ) + margin * 2 + VECTOR2I( width_adj, width_adj );
@@ -535,7 +537,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                     }
 
                     case PAD_SHAPE::CHAMFERED_RECT:
-                        if( mask_clearance == 0 )
+                        // for smaller/same rect size than initial shape (i.e. mask_clearance <= 0)
+                        // use the rect with size set to padPlotsSize. It gives a good shape
+                        if( mask_clearance <= 0 )
                         {
                             // the size can be slightly inflated by width_adj (PS/PDF only)
                             pad->SetSize( aLayer, padPlotsSize );
@@ -544,19 +548,27 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         else
                         {
                             // Due to the polygonal shape of a CHAMFERED_RECT pad, the best way is to
-                            // convert the pad shape to a full polygon, inflate/deflate the polygon
+                            // convert the pad shape to a full polygon and inflate it
                             // and use a dummy  CUSTOM pad to plot the final shape.
+                            // However one can inflate polygon only if X,Y has same inflate value
+                            // if not the case, just use a rectangle having the padPlotsSize new size
                             PAD dummy( *pad );
                             // Build the dummy pad outline with coordinates relative to the pad position
                             // pad offset and orientation 0. The actual pos, offset and rotation will be
                             // taken in account later by the plot function
                             dummy.SetPosition( VECTOR2I( 0, 0 ) );
                             dummy.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
+
+                            if( !sameXYClearance )
+                                dummy.SetSize( aLayer, padPlotsSize );
+
                             dummy.SetOrientation( ANGLE_0 );
                             SHAPE_POLY_SET outline;
                             dummy.TransformShapeToPolygon( outline, aLayer, 0, maxError, ERROR_INSIDE );
-                            outline.InflateWithLinkedHoles( mask_clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                                            maxError );
+
+                            if( sameXYClearance )
+                                outline.InflateWithLinkedHoles( mask_clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                                                maxError );
 
                             // Initialize the dummy pad shape:
                             dummy.SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
