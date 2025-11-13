@@ -262,8 +262,6 @@ public:
                                 // False (default): all pads are treated as locked for the purposes of
                                 // movement and any attempt to move them will move the footprint instead.
 
-    wxString  m_FootprintTextShownColumns;
-
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
     int       m_FootprintViewerLibListWidth;

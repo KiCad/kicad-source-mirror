@@ -38,10 +38,8 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
         APP_SETTINGS_BASE( "symbol_editor", libeditSchemaVersion ),
         m_Defaults(),
         m_Repeat(),
-        m_ImportGraphics(),
         m_ShowPinElectricalType( true ),
-        m_LibWidth(),
-        m_EditSymbolVisibleColumns()
+        m_LibWidth()
 {
     // Make Coverity happy
     m_UseEeschemaColorSettings = true;;
@@ -79,27 +77,6 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "repeat.pin_step",
             &m_Repeat.pin_step, 100 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
-            &m_ImportGraphics.interactive_placement, true ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
-            &m_ImportGraphics.dxf_line_width_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
-            &m_ImportGraphics.dxf_line_width, 0.2 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
-            &m_ImportGraphics.origin_units, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_x",
-            &m_ImportGraphics.origin_x, 0 ) );
-
-    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_y",
-            &m_ImportGraphics.origin_y, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
-            &m_ImportGraphics.dxf_units, 0 ) );
-
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
             &m_ShowPinElectricalType, true ) );
 
@@ -121,20 +98,11 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "library.sort_mode",
             &m_LibrarySortMode, 0 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "edit_symbol_visible_columns",
-            &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
-            &m_PinTableVisibleColumns, "0 1 2 3 4 5 9 10" ) );
-
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
             &m_UseEeschemaColorSettings, true ) );
 
     m_params.emplace_back( new PARAM_MAP<int>( "lib_field_editor.field_widths",
             &m_LibFieldEditor.field_widths, {} ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "lib_field_editor.view_controls_visible_columns",
-            &m_LibFieldEditor.view_controls_visible_columns, "0 2 3" ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_field_editor.sash_pos",
             &m_LibFieldEditor.sash_pos, 400 ) );
@@ -226,10 +194,6 @@ bool SYMBOL_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ret &= fromLegacy<int>(  aCfg, "LibeditLibWidth",              "lib_table_width" );
     ret &= fromLegacy<bool>( aCfg, "LibeditShowPinElectricalType", "show_pin_electrical_type" );
-
-    ret &= fromLegacyString( aCfg, "LibEditFieldsShownColumns",    "edit_symbol_visible_columns" );
-
-    ret &= fromLegacyString( aCfg, "PinTableShownColumns",         "pin_table_visible_columns" );
 
     return ret;
 }

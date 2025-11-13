@@ -55,12 +55,6 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 {
     COLOR_SETTINGS* colorSettings = m_Parent->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-    bool            multiLine = false;
-
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-        multiLine = cfg->m_Appearance.edit_label_multiple;
-
-    m_cbMultiLine->SetValue( multiLine );
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_currentLabel );
     m_delayedFocusRow = -1;
@@ -73,20 +67,6 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
         m_labelSingleLine->Show( false );
         m_valueSingleLine->Show( false );
-
-        if( multiLine && aNew )
-        {
-            m_activeTextEntry = m_valueMultiLine;
-            SetInitialFocus( m_valueMultiLine );
-            m_labelCombo->Show( false );
-            m_valueCombo->Show( false );
-        }
-        else
-        {
-            m_labelMultiLine->Show( false );
-            m_valueMultiLine->Show( false );
-            m_valueCombo->SetValidator( m_netNameValidator );
-        }
     }
     else if( m_currentLabel->Type() == SCH_HIER_LABEL_T )
     {
@@ -95,20 +75,6 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
         m_labelCombo->Show( false );
         m_valueCombo->Show( false );
-
-        if( multiLine && aNew )
-        {
-            m_activeTextEntry = m_valueMultiLine;
-            SetInitialFocus( m_valueMultiLine );
-            m_labelSingleLine->Show( false );
-            m_valueSingleLine->Show( false );
-        }
-        else
-        {
-            m_labelMultiLine->Show( false );
-            m_valueMultiLine->Show( false );
-            m_valueSingleLine->SetValidator( m_netNameValidator );
-        }
     }
     else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
@@ -148,13 +114,8 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
                                                           OnAddField( aEvent );
                                                       } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    // Show/hide columns according to user's preference
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_grid->ShowHideColumns( cfg->m_Appearance.edit_label_visible_columns );
-        m_shownColumns = m_grid->GetShownColumns();
-    }
+    m_grid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
+    m_shownColumns = m_grid->GetShownColumns();
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -249,25 +210,11 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        if( cfg->m_Appearance.edit_label_width > 0 && cfg->m_Appearance.edit_label_height > 0 )
-            SetSize( cfg->m_Appearance.edit_label_width, cfg->m_Appearance.edit_label_height );
-    }
 }
 
 
 DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        cfg->m_Appearance.edit_label_visible_columns = m_grid->GetShownColumnsAsString();
-        cfg->m_Appearance.edit_label_width = GetSize().x;
-        cfg->m_Appearance.edit_label_height = GetSize().y;
-        cfg->m_Appearance.edit_label_multiple = m_cbMultiLine->IsChecked();
-    }
-
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
@@ -283,6 +230,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
+
+    // Respond to previously-saved state of multilable checkbox
+    wxCommandEvent dummy;
+    onMultiLabelCheck( dummy );
 
     wxString text;
 

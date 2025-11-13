@@ -1068,13 +1068,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                            OnAddRow( aEvent );
                                                        } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    // Show/hide columns according to the user's preference
-    if( SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings() )
-    {
-        m_grid->ShowHideColumns( cfg->m_PinTableVisibleColumns );
-        m_columnsShown = m_grid->GetShownColumns();
-    }
+    m_grid->ShowHideColumns( "0 1 2 3 4 5 9 10" );
+    m_columnsShown = m_grid->GetShownColumns();
 
     // Set special attributes
     wxGridCellAttr* attr;
@@ -1210,9 +1205,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
-    if( SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings() )
-        cfg->m_PinTableVisibleColumns = m_grid->GetShownColumnsAsString();
-
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr,
                         this );

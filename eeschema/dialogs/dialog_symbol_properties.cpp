@@ -333,13 +333,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
                                                                 OnAddField( aEvent );
                                                             } ) );
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    // Show/hide columns according to user's preference
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_fieldsGrid->ShowHideColumns( cfg->m_Appearance.edit_symbol_visible_columns );
-        m_shownColumns = m_fieldsGrid->GetShownColumns();
-    }
+    m_fieldsGrid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
+    m_shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( m_part && m_part->IsMultiBodyStyle() )
     {
@@ -403,13 +398,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
 
 DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        cfg->m_Appearance.edit_symbol_visible_columns = m_fieldsGrid->GetShownColumnsAsString();
-        cfg->m_Appearance.edit_symbol_width = GetSize().x;
-        cfg->m_Appearance.edit_symbol_height = GetSize().y;
-    }
-
     // Prevents crash bug in wxGrid's d'tor
     m_fieldsGrid->DestroyTable( m_fields );
 
@@ -1106,11 +1094,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    if( cfg && cfg->m_Appearance.edit_symbol_width > 0 && cfg->m_Appearance.edit_symbol_height > 0 )
-        SetSize( cfg->m_Appearance.edit_symbol_width, cfg->m_Appearance.edit_symbol_height );
 }
 
 

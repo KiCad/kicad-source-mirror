@@ -287,9 +287,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "export_d356.doNotExportUnconnectedPads",
             &m_ExportD356.doNotExportUnconnectedPads, false ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
-            &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );
-
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json
             {
@@ -523,8 +520,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<double>( aCfg, "PlotYFineScaleAdj",        "plot.fine_scale_y" );
     ret &= fromLegacy<double>( aCfg, "PSPlotFineWidthAdj",       "plot.ps_fine_width_adjust" );
     ret &= fromLegacy<bool>(   aCfg, "CheckZonesBeforePlotting", "plot.check_zones_before_plotting" );
-
-    ret &= fromLegacyString( aCfg, "FootprintTextShownColumns", "window.footprint_text_shown_columns" );
 
     ret &= fromLegacy<int>( aCfg, "FpWizardListWidth",        "footprint_wizard_list.width" );
     ret &= fromLegacy<int>( aCfg, "FpWizardListHeight",       "footprint_wizard_list.height" );

@@ -82,8 +82,6 @@ public:
 
     wxString m_LastExportPath;
 
-    wxString m_FootprintTextShownColumns;
-
     PCB_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
     std::vector<LAYER_PRESET> m_LayerPresets;

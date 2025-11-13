@@ -341,16 +341,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
-    m_viewControlsGrid->ShowHideColumns( cfg.view_controls_visible_columns );
-    // Ensure at least one column is visible otherwise we cannot add columns
-    // because there is no area to right click to get the menu managing the show/hide columns
-    wxString visible_column = m_viewControlsGrid->GetShownColumnsAsString();;
-
-    if( visible_column.IsEmpty() )
-    {
-        visible_column = wxT( "0" );
-        m_viewControlsGrid->ShowHideColumns( visible_column );
-    }
+    m_viewControlsGrid->ShowHideColumns( "0 1 2 3" );
 
     CallAfter( [this, cfg]()
                {
@@ -397,8 +388,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
 
     EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
-
-    cfg.view_controls_visible_columns = m_viewControlsGrid->GetShownColumnsAsString();
 
     if( !cfg.sidebar_collapsed )
         cfg.sash_pos = m_splitterMainWindow->GetSashPosition();

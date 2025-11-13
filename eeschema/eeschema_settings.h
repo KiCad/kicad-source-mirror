@@ -60,14 +60,6 @@ class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 public:
     struct APPEARANCE
     {
-        wxString edit_symbol_visible_columns;
-        int edit_symbol_width;
-        int edit_symbol_height;
-        wxString edit_sheet_visible_columns;
-        wxString edit_label_visible_columns;
-        int edit_label_width;
-        int edit_label_height;
-        bool edit_label_multiple;
         bool footprint_preview;
         bool print_sheet_reference;
         wxString default_font;
@@ -237,7 +229,6 @@ public:
         std::map<std::string, int> field_widths;
         wxString                   export_filename;
         int                        selection_mode;
-        wxString                   view_controls_visible_columns;
         int                        sash_pos;
         bool                       sidebar_collapsed;
     };
@@ -275,18 +266,6 @@ public:
     {
         bool updateReferences;
         bool updateValues;
-    };
-
-    struct DIALOG_IMPORT_GRAPHICS
-    {
-        bool     interactive_placement;
-        wxString last_file;
-        double   dxf_line_width;
-        int      dxf_line_width_units;
-        int      origin_units;
-        double   origin_x;
-        double   origin_y;
-        int      dxf_units;
     };
 
     struct SIMULATOR
@@ -359,7 +338,6 @@ public:
 
     FIND_REPLACE_EXTRA        m_FindReplaceExtra;
     DIALOG_ERC                m_ERCDialog;
-    DIALOG_IMPORT_GRAPHICS    m_ImportGraphics;
     DIALOG_CHANGE_SYMBOLS     m_ChangeSymbols;
 
     SIMULATOR                 m_Simulator;

@@ -237,8 +237,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_jumperGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_customUserLayersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    // Show/hide columns according to the user's preference
-    m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
+    m_itemsGrid->ShowHideColumns( "0 1 2 3 4 5 7" );
 
     m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
 
@@ -288,8 +287,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
-    m_frame->GetSettings()->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
-
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_fields );
     m_privateLayersGrid->DestroyTable( m_privateLayers );

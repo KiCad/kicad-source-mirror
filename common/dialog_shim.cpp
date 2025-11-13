@@ -300,7 +300,7 @@ int DIALOG_SHIM::vertPixelsFromDU( int y ) const
 // our hashtable is an implementation secret, don't need or want it in a header file
 #include <hashtables.h>
 #include <typeinfo>
-
+#include <grid_tricks.h>
 
 
 void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
@@ -559,6 +559,10 @@ void DIALOG_SHIM::SaveControlState()
                         if( index >= 0 && index < (int) notebook->GetPageCount() )
                             dlgMap[ key ] = notebook->GetPageText( notebook->GetSelection() );
                     }
+                    else if( WX_GRID* grid = dynamic_cast<WX_GRID*>( win ) )
+                    {
+                        dlgMap[ key ] = grid->GetShownColumnsAsString();
+                    }
                 }
 
                 for( wxWindow* child : win->GetChildren() )
@@ -698,6 +702,11 @@ void DIALOG_SHIM::LoadControlState()
                                         notebook->SetSelection( page );
                                 }
                             }
+                        }
+                        else if( WX_GRID* grid = dynamic_cast<WX_GRID*>( win ) )
+                        {
+                            if( j.is_string() )
+                                grid->ShowHideColumns( wxString::FromUTF8( j.get<std::string>().c_str() ) );
                         }
                     }
                 }

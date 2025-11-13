@@ -92,9 +92,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
         addInheritedFields( parent );
 
-    // Show/hide columns according to the user's preference
-    SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
-    m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
+    m_grid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
 
@@ -188,9 +186,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
-
-    if( SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings() )
-        cfg->m_EditSymbolVisibleColumns = m_grid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

@@ -72,41 +72,10 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    auto initWidgetsFromSettings = [&]( const auto& aCfg )
-    {
-        m_placementInteractive = aCfg->m_ImportGraphics.interactive_placement;
-
-        m_xOrigin.SetValue( aCfg->m_ImportGraphics.origin_x * schIUScale.IU_PER_MM );
-        m_yOrigin.SetValue( aCfg->m_ImportGraphics.origin_y * schIUScale.IU_PER_MM );
-        m_defaultLineWidth.SetValue( aCfg->m_ImportGraphics.dxf_line_width * schIUScale.IU_PER_MM );
-
-        m_textCtrlFileName->SetValue( aCfg->m_ImportGraphics.last_file );
-        m_rbInteractivePlacement->SetValue( m_placementInteractive );
-        m_rbAbsolutePlacement->SetValue( !m_placementInteractive );
-
-        m_importScaleCtrl->SetValue( wxString::Format( wxT( "%f" ), m_importScale ) );
-
-        for( const std::pair<const DXF_IMPORT_UNITS, wxString>& unitEntry : dxfUnitsMap )
-            m_choiceDxfUnits->Append( unitEntry.second );
-
-        m_choiceDxfUnits->SetSelection( aCfg->m_ImportGraphics.dxf_units );
-    };
-
     if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( aParent ) )
-    {
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_LIB_SYMBOL>( symFrame->GetCurSymbol(),
-                                                                     symFrame->GetUnit() );
-
-        SYMBOL_EDITOR_SETTINGS* cfg = aParent->libeditconfig();
-        initWidgetsFromSettings( cfg );
-    }
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_LIB_SYMBOL>( symFrame->GetCurSymbol(), symFrame->GetUnit() );
     else if( dynamic_cast<SCH_EDIT_FRAME*>( aParent ) )
-    {
         m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>();
-
-        EESCHEMA_SETTINGS* cfg = aParent->eeconfig();
-        initWidgetsFromSettings( cfg );
-    }
 
     m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>();
 
@@ -121,39 +90,14 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
     Centre();
 
     m_textCtrlFileName->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-                                 wxCommandEventHandler( DIALOG_IMPORT_GFX_SCH::onFilename ),
-                                 nullptr, this );
+                                 wxCommandEventHandler( DIALOG_IMPORT_GFX_SCH::onFilename ), nullptr, this );
 }
 
 
 DIALOG_IMPORT_GFX_SCH::~DIALOG_IMPORT_GFX_SCH()
 {
-    auto saveToSettings = [&]( const auto& aCfg )
-    {
-        aCfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
-        aCfg->m_ImportGraphics.last_file = m_textCtrlFileName->GetValue();
-        aCfg->m_ImportGraphics.dxf_line_width = schIUScale.IUTomm( m_defaultLineWidth.GetValue() );
-        aCfg->m_ImportGraphics.origin_x = schIUScale.IUTomm( m_xOrigin.GetValue() );
-        aCfg->m_ImportGraphics.origin_y = schIUScale.IUTomm( m_yOrigin.GetValue() );
-        aCfg->m_ImportGraphics.dxf_units = m_choiceDxfUnits->GetSelection();
-
-        m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
-    };
-
-    if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_parent ) )
-    {
-        SYMBOL_EDITOR_SETTINGS* cfg = symFrame->libeditconfig();
-        saveToSettings( cfg );
-    }
-    else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parent ) )
-    {
-        EESCHEMA_SETTINGS* cfg = schFrame->eeconfig();
-        saveToSettings( cfg );
-    }
-
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-                                    wxCommandEventHandler( DIALOG_IMPORT_GFX_SCH::onFilename ),
-                                    nullptr, this );
+                                    wxCommandEventHandler( DIALOG_IMPORT_GFX_SCH::onFilename ), nullptr, this );
 }
 
 

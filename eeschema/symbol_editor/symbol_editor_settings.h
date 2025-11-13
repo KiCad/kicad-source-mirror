@@ -53,22 +53,9 @@ public:
         int pin_step;
     };
 
-    struct DIALOG_IMPORT_GRAPHICS
-    {
-        bool     interactive_placement;
-        wxString last_file;
-        double   dxf_line_width;
-        int      dxf_line_width_units;
-        int      origin_units;
-        double   origin_x;
-        double   origin_y;
-        int      dxf_units;
-    };
-
     struct PANEL_LIB_FIELDS_TABLE
     {
         std::map<std::string, int> field_widths;
-        wxString                   view_controls_visible_columns;
         int                        sash_pos;
         bool                       sidebar_collapsed;
     };
@@ -85,8 +72,6 @@ public:
 
     REPEAT m_Repeat;
 
-    DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
-
     bool m_ShowPinElectricalType;
     bool m_ShowHiddenPins;
     bool m_ShowHiddenFields;
@@ -98,10 +83,6 @@ public:
     int m_LibWidth;
 
     int m_LibrarySortMode;
-
-    wxString m_EditSymbolVisibleColumns;
-
-    wxString m_PinTableVisibleColumns;
 
     bool m_UseEeschemaColorSettings;
 

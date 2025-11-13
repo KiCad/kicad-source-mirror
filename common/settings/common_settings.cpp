@@ -55,7 +55,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Session(),
         m_System(),
         m_DoNotShowAgain(),
-        m_NetclassPanel(),
         m_PackageManager(),
         m_Api()
 {
@@ -375,15 +374,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "session.pinned_design_block_libs",
             &m_Session.pinned_design_block_libs, {} ) );
-
-    m_params.emplace_back( new PARAM<int>( "netclass_panel.sash_pos",
-            &m_NetclassPanel.sash_pos, 160 ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "netclass_panel.eeschema_shown_columns",
-            &m_NetclassPanel.eeschema_visible_columns, "0 11 12 13 14" ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "netclass_panel.pcbnew_shown_columns",
-            &m_NetclassPanel.pcbnew_visible_columns, "0 1 2 3 4 5 6 7 8 9 10" ) );
 
     m_params.emplace_back( new PARAM<int>( "package_manager.sash_pos",
             &m_PackageManager.sash_pos, 380 ) );

@@ -154,13 +154,6 @@ public:
         bool update_check_prompt;
     };
 
-    struct NETCLASS_PANEL
-    {
-        int sash_pos;
-        wxString eeschema_visible_columns;
-        wxString pcbnew_visible_columns;
-    };
-
     struct PACKAGE_MANAGER
     {
         int sash_pos;
@@ -233,7 +226,6 @@ public:
     SESSION           m_Session;
     SYSTEM            m_System;
     DO_NOT_SHOW_AGAIN m_DoNotShowAgain;
-    NETCLASS_PANEL    m_NetclassPanel;
     PACKAGE_MANAGER   m_PackageManager;
     GIT               m_Git;
     API               m_Api;

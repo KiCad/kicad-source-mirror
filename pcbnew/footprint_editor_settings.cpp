@@ -53,8 +53,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_AngleSnapMode( LEADER_MODE::DEG45 ),
         m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_LibWidth( 250 ),
-        m_LastExportPath(),
-        m_FootprintTextShownColumns()
+        m_LastExportPath()
 {
     m_MagneticItems.pads      = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
     m_MagneticItems.tracks    = MAGNETIC_OPTIONS::NO_EFFECT;
@@ -103,9 +102,6 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_numbers",
             &m_ViewersDisplay.m_DisplayPadNumbers, true ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
-            &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
             reinterpret_cast<int*>( &m_MagneticItems.pads ),
@@ -398,7 +394,6 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     //
     ret &= fromLegacy<int>(  aCfg, "ModeditLibWidth",              "window.lib_width" );
     ret &= fromLegacyString( aCfg, "import_last_path",             "system.last_import_export_path" );
-    ret &= fromLegacyString( aCfg, "LibFootprintTextShownColumns", "window.footprint_text_shown_columns" );
 
     ret &= fromLegacy<int>(  aCfg, "FpEditorMagneticPads",               "editing.magnetic_pads" );
     ret &= fromLegacy<bool>( aCfg, "FpEditorDisplayPolarCoords",         "editing.polar_coords" );

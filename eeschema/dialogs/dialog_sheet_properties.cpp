@@ -75,13 +75,8 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
                                                           OnAddField( aEvent );
                                                       } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    // Show/hide columns according to user's preference
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_grid->ShowHideColumns( cfg->m_Appearance.edit_sheet_visible_columns );
-        m_shownColumns = m_grid->GetShownColumns();
-    }
+    m_grid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
+    m_shownColumns = m_grid->GetShownColumns();
 
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
@@ -114,9 +109,6 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
 DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 {
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-        cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumnsAsString();
-
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
