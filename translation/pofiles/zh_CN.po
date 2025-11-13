@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-12 01:51+0000\n"
+"PO-Revision-Date: 2025-11-13 04:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -31443,7 +31443,7 @@ msgstr "移除两个短路网络的走线"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
-msgstr "移除短路两个网络的过孔"
+msgstr "移除短路了两个不同网络的过孔"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
@@ -40626,7 +40626,7 @@ msgstr "项目之间的连接缺失"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
-msgstr "短路两个网络的项目"
+msgstr "短路了两个不同网络的项目"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Items not allowed"
