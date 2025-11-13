@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-12 01:51+0000\n"
+"PO-Revision-Date: 2025-11-14 10:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -10563,7 +10563,7 @@ msgstr "Mostra il crocino anche quando non vengono disegnati oggetti"
 
 #: common/tool/actions.cpp:1189
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr "Utilizzare piccoli mirini allineati a 0 e 90 gradi"
+msgstr "Utilizzare piccoli crocini allineati a 0 e 90 gradi"
 
 #: common/tool/actions.cpp:1196
 msgid "Full-Window Crosshairs"
@@ -12477,89 +12477,88 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
-"# 1. Riepilogo\n"
-"\n"
+"# 1. Riepilogo \n"
+" \n"
 "Lo strumento Distinta di base crea un elenco di tutti i componenti del "
-"progetto.\n"
-"\n"
+"progetto. \n"
+" \n"
 "Lo strumento utilizza uno script esterno per generare l'elenco materiali nel "
 "formato desiderato. La scelta di uno script diverso modifica il modo in cui "
-"viene formattata la distinta.\n"
-"\n"
+"viene formattata la distinta. \n"
+" \n"
 "La generazione di una distinta di base è descritta in maggior dettaglio nel "
-"manuale dell'editor degli schemi.\n"
-"\n"
-"# 2. Modalità d'uso\n"
-"\n"
+"manuale dell'editor degli schemi. \n"
+" \n"
+"# 2. Modalità d'uso \n"
+" \n"
 "Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I "
 "dettagli per il generatore selezionato sono mostrati a destra della finestra "
-"di dialogo.\n"
-"\n"
+"di dialogo. \n"
+" \n"
 "Facendo clic sul pulsante **Genera** viene creato un file DIBA con il "
-"generatore selezionato.\n"
-"\n"
+"generatore selezionato. \n"
+" \n"
 "Le impostazioni predefinite presentano diverse opzioni per lo script "
 "generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad "
-"e possano essere aggiunti all'elenco con il pulsante **+**.\n"
-"\n"
-"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra "
-"console**. Quando questa opzione è deselezionata, i generatori DIBA vengono "
-"eseguiti in una finestra della console nascosta e qualsiasi output viene "
-"reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è "
-"selezionata, i generatori DIBA vengono eseguiti in una finestra della "
-"console visibile.\n"
-"\n"
-"# 3. Generatori personalizzati e righe di comando\n"
-"\n"
+"e possano essere aggiunti all'elenco con il pulsante **+**. \n"
+" \n"
+"**Nota:** su Windows esiste l'opzione aggiuntiva **Mostra finestra console**"
+". Se l'opzione è deselezionata, i generatori DIBA vengono eseguiti in una "
+"finestra console nascosta e qualsiasi messaggio in uscita viene "
+"reindirizzato lì. Se l'opzione è selezionata, i generatori DIBA vengono "
+"eseguiti in una finestra console visibile. \n"
+" \n"
+"# 3. Generatori personalizzati e righe di comando \n"
+" \n"
 "Internamente, KiCad crea un file netlist intermedio in formato XML che "
 "contiene informazioni su tutti i componenti del progetto. Uno script "
 "generatore DIBA converte il file netlist intermedio nel formato desiderato. "
 "KiCad esegue gli script del generatore DIBA in base alla riga di comando "
-"immessa nella parte inferiore della finestra di dialogo DIBA.\n"
-"\n"
+"immessa nella parte inferiore della finestra di dialogo DIBA. \n"
+" \n"
 "Il formato della riga di comando accetta parametri per i nomi di file. Ogni "
 "parametro di formattazione viene sostituito con un percorso o nome file "
-"specifico del progetto. I parametri di formattazione supportati sono:\n"
-"\n"
-"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è "
-"l'ingresso per il generatore DIBA\n"
-"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza "
-"estensione file)\n"
-"  * `%B`: nome file base del file DIBA in uscita (senza estensione file)\n"
-"  * `%P`: percorso assoluto della cartella del progetto, senza barra finale\n"
-"\n"
+"specifico del progetto. I parametri di formattazione supportati sono: \n"
+" \n"
+" * `%I`: percorso assoluto e nome file del file netlist intermedio, che è "
+"l'ingresso per il generatore DIBA \n"
+" * `%O`: percorso assoluto e nome file del file DIBA in uscita "
+"(senza estensione file) \n"
+" * `%B`: nome file base del file DIBA in uscita (senza estensione file) \n"
+" * `%P`: percorso assoluto della cartella del progetto, senza barra finale \n"
+" \n"
 "**Nota:** il parametro del file di uscita `%O` non include un'estensione "
 "file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata "
 "alla riga di comando, ma potrebbe essere necessario aggiungere manualmente "
-"un'estensione.\n"
-"\n"
+"un'estensione. \n"
+" \n"
 "Python è lo strumento consigliato per gli script del generatore DIBA, ma è "
-"possibile utilizzare anche altri strumenti.\n"
-"\n"
-"## Righe di comando di esempio per script Python\n"
-"\n"
-"Il formato della riga di comando per uno script Python è della forma:\n"
-"\n"
-"```\n"
-"python <nome file script> <nome file in ingresso> <nome file in uscita>\n"
-"```\n"
-"\n"
+"possibile utilizzare anche altri strumenti. \n"
+" \n"
+"## Righe di comando di esempio per script Python \n"
+" \n"
+"Il formato della riga di comando per uno script Python è della forma: \n"
+" \n"
+"``` \n"
+"python <nome file script> <nome file in ingresso> <nome file in uscita> \n"
+"``` \n"
+" \n"
 "Su Windows, se lo script del generatore desiderato per una distinta di base "
 "CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga di comando "
-"sarà:\n"
-"\n"
-"```\n"
-"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
-"```\n"
-"\n"
+"sarà: \n"
+" \n"
+"``` \n"
+"python.exe C:\\Users\\n"
+"omeutente\\kicad\\my_python_script.py \"%I\" \"%O.csv\" \n"
+"``` \n"
+" \n"
 "Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/"
-"username/kicad/my_python_script.py`, la riga di comando sarà:\n"
-"\n"
-"```\n"
-"python /home/nomeutente/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
-"```\n"
-"\n"
+"nomeutente/kicad/my_python_script.py`, la riga di comando sarà: \n"
+" \n"
+"``` \n"
+"python /home/nomeutente/kicad/my_python_script.py \"%I\" \"%O.csv\" \n"
+"``` \n"
+" \n"
 "Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso "
 "in cui i nomi dei file contengano spazi o caratteri speciali.\n"
 
@@ -12971,9 +12970,8 @@ msgstr ""
 "nell'elenco ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:227 pcbnew/dialogs/dialog_drc.cpp:280
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Centra sul puntatore"
+msgstr "Centra sul controllo incrociato"
 
 #: eeschema/dialogs/dialog_erc.cpp:228 pcbnew/dialogs/dialog_drc.cpp:281
 msgid "When cross-probing, scroll the canvas so that the item is visible"
@@ -14758,9 +14756,8 @@ msgstr ""
 "dovrebbe per un doppio triodo (dove l'unità C è il filamento)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:312
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "Inserire il nome mostrato per l'unità %s"
+msgstr "Nomi visualizzati delle unità (facoltativi):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
 #: eeschema/lib_symbol.cpp:2154
@@ -14778,9 +14775,8 @@ msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr "Stili corpi De Morgan \"standard\" e \"alternativo\""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "Comune a tutti gli stili del corpo"
+msgstr "Stili corpo personalizzati:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
 #, fuzzy
@@ -15084,9 +15080,9 @@ msgstr "Ricorso al percorso utente \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:398
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Impossibile normalizzare il percorso \"%s%s\"."
+msgstr "Impossibile normalizzare il percorso '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:404
 msgid "No project or path defined for the current schematic."
@@ -16514,9 +16510,8 @@ msgid "Highlight corresponding item on canvas when it is selected in the table"
 msgstr "Evidenzia i simboli corrispondenti alle impronte selezionate"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
-#, fuzzy
 msgid "Select on Cross-probe"
-msgstr "Seleziona sul C.S."
+msgstr "Seleziona sul controllo incrociato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
 #, fuzzy
@@ -16613,9 +16608,8 @@ msgid "Add a new field"
 msgstr "Aggiungi campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:76
-#, fuzzy
 msgid "Rename selected field"
-msgstr "Rinomina collegamento selezionato..."
+msgstr "Rinomina campo selezionato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:84
 #, fuzzy
@@ -16623,9 +16617,8 @@ msgid "Remove selected field"
 msgstr "Rimuovi file incorporato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:96
-#, fuzzy
 msgid "Variants:"
-msgstr "Autori librerie"
+msgstr "Varianti:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "View presets:"
@@ -16716,9 +16709,8 @@ msgid "Standard"
 msgstr "Standard"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
-#, fuzzy
 msgid "Body style:"
-msgstr "Stile corpo"
+msgstr "Stile corpo:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -17151,7 +17143,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1015
 msgid "Update Schematic from PCB"
-msgstr "Aggiorna lo schema dal C.S."
+msgstr "Aggiorna lo schema dallo stampato"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:222
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
@@ -17210,14 +17202,12 @@ msgid "Wire & Bus Properties"
 msgstr "Proprietà filo & bus"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Preimpostazioni distinta di base:"
+msgstr "Preimpostazioni distinta di base"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
-#, fuzzy
 msgid "Bill of Materials Formatting Presets"
-msgstr "Preimpostazioni formattazione distinta di base:"
+msgstr "Preimpostazioni formattazione distinta di base"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -17282,7 +17272,8 @@ msgstr "Analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Seleziona/Evidenzia gli oggetti corrispondenti alla selezione nel C.S."
+msgstr ""
+"Seleziona/evidenzia gli oggetti corrispondenti alla selezione nello stampato"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -17311,13 +17302,14 @@ msgstr "Evidenzia collegamenti sottoposti ad analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Evidenza collegamenti quando sono evidenziati nell'editor del C.S."
+msgstr ""
+"Evidenza collegamenti quando sono evidenziati nell'editor del circuito "
+"stampato"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:247
-#, fuzzy
 msgid "Flash cross-probed selection"
-msgstr "Azione analisi-incrociata:"
+msgstr "Lampeggia il controllo incrociato della selezione"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:248
@@ -17657,9 +17649,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Il nome alias/collegamento non può essere vuoto."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Definizioni bus:"
+msgstr "Definizioni bus"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -17670,9 +17661,9 @@ msgid "(source)"
 msgstr "(sorgente)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
-msgstr "Membri di '%s':"
+msgstr "Membri di '%s'"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
@@ -18053,19 +18044,19 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Pin attaccati quando si trascinano i bordi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Errore nel caricamento tabella librerie di simboli \"%s\"."
+msgstr "Errore nel caricamento tabella librerie '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "Errore nel caricamento della libreria di simboli '%s'."
+msgstr "Errore nel caricamento della libreria '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "Librerie di simboli"
+msgstr "Tabelle librerie di simboli (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:541
 #, fuzzy
