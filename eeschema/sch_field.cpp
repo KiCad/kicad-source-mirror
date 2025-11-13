@@ -282,6 +282,15 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
 
+    // Convert escape markers back to literals only at the top level (aDepth == 0)
+    // This prevents re-expansion when text is used in nested CELL() references
+    if( aDepth == 0 )
+    {
+        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
+        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
+        text.Replace( wxT( ">>>" ), wxT( "}" ) );
+    }
+
     return text;
 }
 

@@ -84,20 +84,21 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
     for( size_t i = 0; i < sourceLen; ++i )
     {
         // Handle escaped variable references: \${...} or \@{...}
-        // Use a temporary placeholder to prevent re-expansion in multi-pass loops
+        // Replace with escape markers that won't be expanded by multi-pass loops
+        // The markers will be converted back to ${...} or @{...} only at the final display stage
         if( aSource[i] == '\\' && i + 1 < sourceLen )
         {
             if( ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) && i + 2 < sourceLen && aSource[i + 2] == '{' )
             {
-                // Replace \${ with \x01ESC_DOLLAR{ and \@{ with \x01ESC_AT{
-                // Also escape any inner ${...} or @{...} to prevent partial evaluation
-                newbuf.append( wxT( "\x01ESC_" ) );
+                // Replace \${ with <<<ESCDOLLAR: and \@{ with <<<ESCAT:
+                // Using unique delimiters without braces to avoid confusing the expression evaluator
                 if( aSource[i + 1] == '$' )
-                    newbuf.append( wxT( "DOLLAR{" ) );
+                    newbuf.append( wxT( "<<<ESCDOLLAR:" ) );
                 else
-                    newbuf.append( wxT( "AT{" ) );
+                    newbuf.append( wxT( "<<<ESCAT:" ) );
                 i += 2;
 
+                // Copy everything until the matching closing brace, verbatim
                 int braceDepth = 1;
                 for( i = i + 1; i < sourceLen && braceDepth > 0; ++i )
                 {
@@ -106,22 +107,10 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                     else if( aSource[i] == '}' )
                         braceDepth--;
 
-                    // Escape any inner ${...} or @{...} sequences
-                    if( ( aSource[i] == '$' || aSource[i] == '@' ) && i + 1 < sourceLen && aSource[i + 1] == '{' )
-                    {
-                        newbuf.append( wxT( "\x01ESC_" ) );
-                        if( aSource[i] == '$' )
-                            newbuf.append( wxT( "DOLLAR{" ) );
-                        else
-                            newbuf.append( wxT( "AT{" ) );
-                        i++; // Skip the '{'
-                        braceDepth++; // Account for the '{' we just skipped
-                    }
-                    else
-                    {
+                    if( braceDepth > 0 )  // Don't append the final closing brace
                         newbuf.append( aSource[i] );
-                    }
                 }
+                newbuf.append( wxT( ">>>" ) );  // Append closing delimiter
                 i--; // Adjust because loop will increment
                 continue;
             }
@@ -209,8 +198,6 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
         }
     }
 
-    // Don't convert markers back yet - they need to survive multi-pass loops
-    // The conversion happens in GetShownText() after all expansion is done
     return newbuf;
 }
 
@@ -230,9 +217,9 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
         text = evaluator.Evaluate( text ); // Evaluate math expressions
     }
 
-    // Final pass: convert escaped variables back to literals
-    text.Replace( wxT( "\x01ESC_DOLLAR{" ), wxT( "${" ) );
-    text.Replace( wxT( "\x01ESC_AT{" ), wxT( "@{" ) );
+    // NOTE: We do NOT convert escape markers back to ${} and @{} here
+    // This allows escaped content to survive through nested CELL() references
+    // The markers will be converted in GetShownText() for final display
 
     return text;
 }

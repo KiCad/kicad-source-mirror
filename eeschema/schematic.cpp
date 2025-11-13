@@ -700,11 +700,6 @@ std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 
 bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 {
-    // Don't process cross-references if the token contains escape markers
-    // (from escaped variables like \${R1:VALUE})
-    if( token->Contains( wxT( "\x01ESC_" ) ) )
-        return false;
-
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );
     KIID_PATH      path( ref );

@@ -237,9 +237,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     if( !schematic )
         return false;
 
-    // Don't process cross-references if the token contains escape markers
-    // (from escaped variables like \${R1:VALUE})
-    if( token->Contains( ':' ) && !token->Contains( wxT( "\x01ESC_" ) ) )
+    if( token->Contains( ':' ) )
     {
         if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
             return true;

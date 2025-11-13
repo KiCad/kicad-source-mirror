@@ -168,6 +168,10 @@ int PCB_EDIT_TABLE_TOOL::ExportTableToCSV( const TOOL_EVENT& aEvent )
 
     wxString filePath = saveDialog.GetPath();
 
+    // Ensure .csv extension
+    if( !filePath.Lower().EndsWith( ".csv" ) )
+        filePath += ".csv";
+
     // Open file for writing
     std::ofstream outFile( filePath.ToStdString() );
 

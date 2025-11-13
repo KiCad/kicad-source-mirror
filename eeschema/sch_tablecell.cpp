@@ -283,6 +283,15 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
     GetDrawFont( aSettings )
             ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
 
+    // Convert escape markers back to literals only at the top level (aDepth == 0)
+    // This prevents re-expansion when text is used in nested CELL() references
+    if( aDepth == 0 )
+    {
+        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
+        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
+        text.Replace( wxT( ">>>" ), wxT( "}" ) );
+    }
+
     return text;
 }
 

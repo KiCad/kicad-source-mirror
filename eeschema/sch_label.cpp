@@ -813,9 +813,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         return true;
     }
 
-    // Don't process cross-references if the token contains escape markers
-    // (from escaped variables like \${R1:VALUE})
-    if( token->Contains( ':' ) && !token->Contains( wxT( "\x01ESC_" ) ) )
+    if( token->Contains( ':' ) )
     {
         if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
             return true;
@@ -975,6 +973,15 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
 
     if( HasTextVars() )
         text = ResolveTextVars( text, &textResolver, aDepth );
+
+    // Convert escape markers back to literals only at the top level (aDepth == 0)
+    // This prevents re-expansion when text is used in nested CELL() references
+    if( aDepth == 0 )
+    {
+        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
+        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
+        text.Replace( wxT( ">>>" ), wxT( "}" ) );
+    }
 
     return text;
 }
