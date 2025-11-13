@@ -38,12 +38,11 @@ static int DEFAULT_SINGLE_COL_WIDTH = 260;
 static int DEFAULT_COL_WIDTHS[] = { 200, 300 };
 
 
-EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
-                                  const wxArrayString& aItemHeaders,
-                                  const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aPreselectText, bool aSortList ) :
-    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
-    m_sortList( aSortList )
+EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
+                                  const std::vector<wxArrayString>& aItemList, const wxString& aPreselectText,
+                                  bool aSortList ) :
+        EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
+        m_sortList( aSortList )
 {
     // correct for wxfb not supporting FromDIP
     m_listBox->SetMinSize( FromDIP( m_listBox->GetMinSize() ) );
@@ -52,10 +51,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     initDialog( aItemHeaders, aItemList, aPreselectText );
 
     if( aItemList.size() > 16 )
-    {
-        m_listBox->SetMinSize( wxSize( m_listBox->GetMinWidth(),
-                                       KiROUND( m_listBox->GetMinHeight() * 1.66 ) ) );
-    }
+        m_listBox->SetMinSize( wxSize( m_listBox->GetMinWidth(), KiROUND( m_listBox->GetMinHeight() * 1.66 ) ) );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of
@@ -72,8 +68,8 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
 
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSortList ) :
-    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
-    m_sortList( aSortList )
+        EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
+        m_sortList( aSortList )
 {
     m_filterBox->SetHint( _( "Filter" ) );
 }
@@ -109,9 +105,8 @@ bool EDA_LIST_DIALOG::Show( bool show )
 }
 
 
-void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
-                                  const std::vector<wxArrayString>& aItemList,
-                                  const wxString&                   aPreselectText )
+void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const std::vector<wxArrayString>& aItemList,
+                                  const wxString&  aPreselectText )
 {
     if( aItemHeaders.Count() == 1 )
     {
@@ -138,6 +133,9 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
 
     if( !aPreselectText.IsEmpty() )
     {
+        // If a preselect is specified, disable loading of previously-saved state
+        OptOut( m_listBox );
+
         long sel = m_listBox->FindItem( -1, aPreselectText );
 
         if( sel != wxNOT_FOUND )
@@ -304,8 +302,7 @@ void EDA_LIST_DIALOG::onSize( wxSizeEvent& event )
 /*
  * Sort alphabetically, case insensitive.
  */
-static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
-                                         wxIntPtr WXUNUSED( aSortData ) )
+static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2, wxIntPtr WXUNUSED( aSortData ) )
 {
     wxString* component1Name = (wxString*) aItem1;
     wxString* component2Name = (wxString*) aItem2;

@@ -998,6 +998,10 @@ public:
 
         GetSizer()->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
 
+        // If a footprint name was specified, disable loading of previously-saved state
+        if( !aFootprintName.IsEmpty() )
+            OptOut( m_fpNameCtrl );
+
         Bind( wxEVT_BUTTON,
                 [this]( wxCommandEvent& )
                 {
@@ -1027,6 +1031,15 @@ public:
     }
 
 protected:
+    bool TransferDataToWindow() override
+    {
+        // Respond to any filter text loaded from previously-saved state
+        wxCommandEvent dummy;
+        textChangeInFilterBox( dummy );
+
+        return true;
+    }
+
     bool TransferDataFromWindow() override
     {
         return m_validator( GetTextSelection(), GetFPName() );
