@@ -1120,14 +1120,14 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             targetFP->SetPosition( refFP->GetPosition() );
             targetFP->Rotate( VECTOR2( 0, 0 ), rot );
             targetFP->Move( disp );
+
             for( PCB_FIELD* refField : refFP->GetFields() )
             {
-                if( !refField->IsVisible() )
-                    continue;
-
                 PCB_FIELD* targetField = targetFP->GetField( refField->GetName() );
                 wxCHECK2( targetField, continue );
 
+                targetField->SetLayerSet( refField->GetLayerSet() );
+                targetField->SetVisible( refField->IsVisible() );
                 targetField->SetAttributes( refField->GetAttributes() );
                 targetField->SetPosition( refField->GetPosition() );
                 targetField->Rotate( VECTOR2( 0, 0 ), rot );

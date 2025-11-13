@@ -1595,8 +1595,8 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         }
 
         destRA.m_zone = new ZONE( board() );
-        destRA.m_zone->SetZoneName(
-                wxString::Format( wxT( "design-block-dest-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
+        destRA.m_zone->SetZoneName( wxString::Format( wxT( "design-block-dest-%s" ),
+                                                      group->GetDesignBlockLibId().GetUniStringLibId() ) );
         destRA.m_zone->SetIsRuleArea( true );
         destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
         destRA.m_zone->SetPlacementAreaEnabled( true );
