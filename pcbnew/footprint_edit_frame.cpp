@@ -637,6 +637,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
                     [this, aFootprint]( wxHyperlinkEvent& aEvent )
                     {
                         SaveFootprintAs( aFootprint );
+                        SyncLibraryTree( true );
                     };
 
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
