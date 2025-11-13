@@ -1392,7 +1392,11 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 
 void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( int aIndex )
 {
-    m_trackWidthIndex = std::min( aIndex, (int) m_TrackWidthList.size() - 1 );
+    if( m_TrackWidthList.size() == 0 )
+        m_trackWidthIndex = 0;
+    else
+        m_trackWidthIndex = std::min( aIndex, (int) m_TrackWidthList.size() - 1 );
+
     m_useCustomTrackVia = false;
 }
 
