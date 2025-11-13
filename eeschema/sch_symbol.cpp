@@ -1516,6 +1516,8 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "NET_NAME(<pin_number>)" ) );
     aVars->push_back( wxT( "NET_CLASS(<pin_number>)" ) );
     aVars->push_back( wxT( "PIN_NAME(<pin_number>)" ) );
+    aVars->push_back( wxT( "REFERENCE(<pin_number>)" ) );
+    aVars->push_back( wxT( "SHORT_REFERENCE(<pin_number>)" ) );
     aVars->push_back( wxT( "UNIT(<pin_number>)" ) );
 }
 
@@ -1606,7 +1608,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         return true;
     }
 
-    if( token->Contains( ':' ) )
+    // Don't process cross-references if the token contains escape markers
+    // (from escaped variables like \${R1:VALUE})
+    if( token->Contains( ':' ) && !token->Contains( wxT( "\x01ESC_" ) ) )
     {
         if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
             return true;
@@ -1751,30 +1755,51 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     else if( token->StartsWith( wxT( "SHORT_NET_NAME(" ) ) || token->StartsWith( wxT( "NET_NAME(" ) )
              || token->StartsWith( wxT( "NET_CLASS(" ) ) || token->StartsWith( wxT( "PIN_NAME(" ) )
              || token->StartsWith( wxT( "PIN_BASE_NAME(" ) ) || token->StartsWith( wxT( "PIN_ALT_LIST(" ) )
+             || token->StartsWith( wxT( "REFERENCE(" ) ) || token->StartsWith( wxT( "SHORT_REFERENCE(" ) )
              || token->StartsWith( wxT( "UNIT(" ) ) )
     {
         wxString pinNumber = token->AfterFirst( '(' );
         pinNumber = pinNumber.BeforeLast( ')' );
 
+        bool isReferenceFunction = token->StartsWith( wxT( "REFERENCE(" ) );
+        bool isShortReferenceFunction = token->StartsWith( wxT( "SHORT_REFERENCE(" ) );
         bool isUnitFunction = token->StartsWith( wxT( "UNIT(" ) );
 
         // First, try to find the pin in the current unit (for backward compatibility)
-        // For UNIT(), always search all pins to find which unit the pin belongs to
-        std::vector<SCH_PIN*> pinsToSearch = isUnitFunction ? GetAllLibPins() : GetPins( aPath );
+        // For REFERENCE/SHORT_REFERENCE/UNIT functions, always search all pins to find which unit the pin belongs to
+        std::vector<SCH_PIN*> pinsToSearch = ( isReferenceFunction || isShortReferenceFunction || isUnitFunction )
+                                              ? GetAllLibPins() : GetPins( aPath );
 
         for( SCH_PIN* pin : pinsToSearch )
         {
             if( pin->GetNumber() == pinNumber )
             {
-                if( isUnitFunction )
+                if( isReferenceFunction || isShortReferenceFunction || isUnitFunction )
                 {
-                    // Return the full unit reference (e.g., "J601A")
                     int      pinUnit = pin->GetUnit();
                     wxString result;
-                    if( pinUnit > 0 )
-                        result = GetRef( aPath, false ) + SubReference( pinUnit, false );
-                    else
+
+                    if( isReferenceFunction )
+                    {
+                        // Return the full unit reference (e.g., "J601A")
+                        if( pinUnit > 0 )
+                            result = GetRef( aPath, false ) + SubReference( pinUnit, false );
+                        else
+                            result = GetRef( aPath, false );
+                    }
+                    else if( isShortReferenceFunction )
+                    {
+                        // Return the reference without unit (e.g., "J601")
                         result = GetRef( aPath, false );
+                    }
+                    else if( isUnitFunction )
+                    {
+                        // Return only the unit letter (e.g., "A")
+                        if( pinUnit > 0 )
+                            result = SubReference( pinUnit, false );
+                        else
+                            result = wxEmptyString;
+                    }
 
                     *token = result;
                     return true;
@@ -1791,13 +1816,14 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                 }
                 else if( token->StartsWith( wxT( "PIN_ALT_LIST" ) ) )
                 {
-                    // Build complete list: base name first, then all alternates
-                    wxString altList = pin->GetBaseName();
+                    // Build list of alternate names only (no base name)
+                    wxString altList;
 
                     const std::map<wxString, SCH_PIN::ALT>& alts = pin->GetAlternates();
                     for( const auto& [altName, altDef] : alts )
                     {
-                        altList += wxT( ", " );
+                        if( !altList.IsEmpty() )
+                            altList += wxT( ", " );
                         altList += altName;
                     }
 
@@ -1827,7 +1853,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         }
 
         // If pin not found in current unit, search all units (auto-resolution)
-        if( !isUnitFunction )
+        // Skip this for REFERENCE/SHORT_REFERENCE/UNIT functions as they already searched all units
+        if( !isReferenceFunction && !isShortReferenceFunction && !isUnitFunction )
         {
             for( SCH_PIN* pin : GetAllLibPins() )
             {
@@ -1841,13 +1868,14 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                     }
                     else if( token->StartsWith( wxT( "PIN_ALT_LIST" ) ) )
                     {
-                        // Build complete list: base name first, then all alternates
-                        wxString altList = pin->GetBaseName();
+                        // Build list of alternate names only (no base name)
+                        wxString altList;
 
                         const std::map<wxString, SCH_PIN::ALT>& alts = pin->GetAlternates();
                         for( const auto& [altName, altDef] : alts )
                         {
-                            altList += wxT( ", " );
+                            if( !altList.IsEmpty() )
+                                altList += wxT( ", " );
                             altList += altName;
                         }
 

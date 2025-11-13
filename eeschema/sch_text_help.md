@@ -139,14 +139,34 @@
         <th></th>
     </tr>
     <tr>
+        <td>&nbsp;<br><samp>${refdes:REFERENCE(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Full reference with unit for pin</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:REFERENCE(3)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>J1B</samp> (for multi-unit symbol)</td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(pin)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>Reference without unit letter for pin</samp></td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>
+        <td></td>
+        <td>&nbsp;<br><samp>J1</samp></td>
+    </tr>
+    <tr>
         <td>&nbsp;<br><samp>${refdes:UNIT(pin)}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>Unit designation for pin</samp></td>
+        <td>&nbsp;<br><samp>Unit letter only for pin</samp></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>${J1:UNIT(3)}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>J1B</samp> (for multi-unit symbol)</td>
+        <td>&nbsp;<br><samp>B</samp> (unit letter for pin 3)</td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>${refdes:NET_NAME(pin)}</samp></td>
@@ -181,12 +201,12 @@
     <tr>
         <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>All available pin functions (base name + alternates)</samp></td>
+        <td>&nbsp;<br><samp>All alternate pin functions (excludes base name)</samp></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>PA9, USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>
+        <td>&nbsp;<br><samp>USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pin)}</samp></td>
@@ -240,7 +260,7 @@
         <th></th>
     </tr>
     <tr>
-        <td>&nbsp;<br><samp>${J1:UNIT(@{${ROW}+2})}</samp></td>
+        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>
         <td></td>
         <td>&nbsp;<br><samp>J1B</samp> (when ROW=0, pin 2 in unit B)</td>
     </tr>

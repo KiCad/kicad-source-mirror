@@ -24,6 +24,9 @@
 #include <sch_actions.h>
 #include <tools/sch_edit_table_tool.h>
 #include <dialogs/dialog_table_properties.h>
+#include <wx/filedlg.h>
+#include <fstream>
+#include <sch_sheet_path.h>
 
 
 SCH_EDIT_TABLE_TOOL::SCH_EDIT_TABLE_TOOL() :
@@ -81,6 +84,111 @@ int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TABLE_TOOL::ExportTableToCSV( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
+    bool           clearSelection = selection.IsHover();
+    SCH_TABLE*     parentTable = nullptr;
+
+    // Find the table from the selection
+    for( EDA_ITEM* item : selection.Items() )
+    {
+        if( item->Type() != SCH_TABLECELL_T )
+            return 0;
+
+        SCH_TABLE* table = static_cast<SCH_TABLE*>( item->GetParent() );
+
+        if( !parentTable )
+        {
+            parentTable = table;
+        }
+        else if( parentTable != table )
+        {
+            parentTable = nullptr;
+            break;
+        }
+    }
+
+    if( !parentTable )
+        return 0;
+
+    // Get current sheet path for variable resolution
+    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
+
+    // Show file save dialog
+    wxFileDialog saveDialog( m_frame, _( "Export Table to CSV" ),
+                            wxEmptyString, wxEmptyString,
+                            _( "CSV files (*.csv)|*.csv" ),
+                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( saveDialog.ShowModal() == wxID_CANCEL )
+    {
+        if( clearSelection )
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
+        return 0;
+    }
+
+    wxString filePath = saveDialog.GetPath();
+
+    // Open file for writing
+    std::ofstream outFile( filePath.ToStdString() );
+
+    if( !outFile.is_open() )
+    {
+        wxMessageBox( wxString::Format( _( "Failed to open file:\n%s" ), filePath ),
+                     _( "Export Error" ), wxOK | wxICON_ERROR, m_frame );
+
+        if( clearSelection )
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
+        return 0;
+    }
+
+    // Helper function to escape CSV fields
+    auto escapeCSV = []( const wxString& field ) -> wxString
+    {
+        wxString escaped = field;
+
+        // If field contains comma, quote, or newline, wrap in quotes and escape quotes
+        if( escaped.Contains( ',' ) || escaped.Contains( '\"' ) || escaped.Contains( '\n' ) )
+        {
+            escaped.Replace( "\"", "\"\"" );  // Escape quotes by doubling them
+            escaped = "\"" + escaped + "\"";
+        }
+
+        return escaped;
+    };
+
+    // Export table data
+    for( int row = 0; row < parentTable->GetRowCount(); ++row )
+    {
+        for( int col = 0; col < parentTable->GetColCount(); ++col )
+        {
+            SCH_TABLECELL* cell = parentTable->GetCell( row, col );
+
+            // Get resolved text (with variables expanded)
+            wxString cellText = cell->GetShownText( nullptr, &currentSheet, false, 0 );
+
+            // Write escaped cell text
+            outFile << escapeCSV( cellText ).ToStdString();
+
+            // Add comma separator unless it's the last column
+            if( col < parentTable->GetColCount() - 1 )
+                outFile << ',';
+        }
+
+        // End of row
+        outFile << '\n';
+    }
+
+    outFile.close();
+
+    if( clearSelection )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    return 0;
+}
+
+
 SCH_TABLECELL* SCH_EDIT_TABLE_TOOL::copyCell( SCH_TABLECELL* aSource )
 {
     // Use copy constructor to copy all formatting properties (font, colors, borders, etc.)
@@ -118,4 +226,5 @@ void SCH_EDIT_TABLE_TOOL::setTransitions()
     Go( &SCH_EDIT_TABLE_TOOL::UnmergeCells, ACTIONS::unmergeCells.MakeEvent() );
 
     Go( &SCH_EDIT_TABLE_TOOL::EditTable, ACTIONS::editTable.MakeEvent() );
+    Go( &SCH_EDIT_TABLE_TOOL::ExportTableToCSV, ACTIONS::exportTableCSV.MakeEvent() );
 }

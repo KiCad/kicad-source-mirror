@@ -317,6 +317,172 @@ public:
     }
 };
 
+
+class ESERIES_UTILS
+{
+private:
+    // E24 series values in 100-999 decade (2 significant figures)
+    static constexpr std::array<uint16_t, 24> s_e24 = {
+        100, 110, 120, 130, 150, 160, 180, 200, 220, 240, 270, 300,
+        330, 360, 390, 430, 470, 510, 560, 620, 680, 750, 820, 910
+    };
+
+    // E192 series values in 100-999 decade (3 significant figures)
+    static constexpr std::array<uint16_t, 192> s_e192 = {
+        100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 123,
+        124, 126, 127, 129, 130, 132, 133, 135, 137, 138, 140, 142, 143, 145, 147, 149, 150, 152,
+        154, 156, 158, 160, 162, 164, 165, 167, 169, 172, 174, 176, 178, 180, 182, 184, 187, 189,
+        191, 193, 196, 198, 200, 203, 205, 208, 210, 213, 215, 218, 221, 223, 226, 229, 232, 234,
+        237, 240, 243, 246, 249, 252, 255, 258, 261, 264, 267, 271, 274, 277, 280, 284, 287, 291,
+        294, 298, 301, 305, 309, 312, 316, 320, 324, 328, 332, 336, 340, 344, 348, 352, 357, 361,
+        365, 370, 374, 379, 383, 388, 392, 397, 402, 407, 412, 417, 422, 427, 432, 437, 442, 448,
+        453, 459, 464, 470, 475, 481, 487, 493, 499, 505, 511, 517, 523, 530, 536, 542, 549, 556,
+        562, 569, 576, 583, 590, 597, 604, 612, 619, 626, 634, 642, 649, 657, 665, 673, 681, 690,
+        698, 706, 715, 723, 732, 741, 750, 759, 768, 777, 787, 796, 806, 816, 825, 835, 845, 856,
+        866, 876, 887, 898, 909, 920, 931, 942, 953, 965, 976, 988
+    };
+
+    static auto parseSeriesString( const std::string& aSeries ) -> int
+    {
+        if( aSeries == "E3" || aSeries == "e3" )
+            return 3;
+        else if( aSeries == "E6" || aSeries == "e6" )
+            return 6;
+        else if( aSeries == "E12" || aSeries == "e12" )
+            return 12;
+        else if( aSeries == "E24" || aSeries == "e24" )
+            return 24;
+        else if( aSeries == "E48" || aSeries == "e48" )
+            return 48;
+        else if( aSeries == "E96" || aSeries == "e96" )
+            return 96;
+        else if( aSeries == "E192" || aSeries == "e192" )
+            return 192;
+        else
+            return -1; // Invalid series
+    }
+
+    static auto getSeriesValue( int aSeries, size_t aIndex ) -> uint16_t
+    {
+        // E1, E3, E6, E12, E24 are derived from E24
+        if( aSeries <= 24 )
+        {
+            const size_t skipValue = 24 / aSeries;
+            return s_e24[aIndex * skipValue];
+        }
+        // E48, E96, E192 are derived from E192
+        else
+        {
+            const size_t skipValue = 192 / aSeries;
+            return s_e192[aIndex * skipValue];
+        }
+    }
+
+    static auto getSeriesSize( int aSeries ) -> size_t
+    {
+        return static_cast<size_t>( aSeries );
+    }
+
+public:
+    static auto FindNearest( double aValue, const std::string& aSeries ) -> std::optional<double>
+    {
+        const int series = parseSeriesString( aSeries );
+        if( series < 0 )
+            return std::nullopt;
+
+        if( aValue <= 0.0 )
+            return std::nullopt;
+
+        // Scale value to 100-999 decade
+        const double logValue = std::log10( aValue );
+        const int    decade = static_cast<int>( std::floor( logValue ) );
+        const double scaledValue = aValue / std::pow( 10.0, decade );
+        const double normalized = scaledValue * 100.0;
+
+        // Find nearest value in series
+        const size_t seriesSize = getSeriesSize( series );
+        double       minDiff = std::numeric_limits<double>::max();
+        uint16_t     nearest = 100;
+
+        for( size_t i = 0; i < seriesSize; ++i )
+        {
+            const uint16_t val = getSeriesValue( series, i );
+            const double   diff = std::abs( normalized - val );
+            if( diff < minDiff )
+            {
+                minDiff = diff;
+                nearest = val;
+            }
+        }
+
+        // Scale back to original decade
+        return ( nearest / 100.0 ) * std::pow( 10.0, decade );
+    }
+
+    static auto FindUp( double aValue, const std::string& aSeries ) -> std::optional<double>
+    {
+        const int series = parseSeriesString( aSeries );
+        if( series < 0 )
+            return std::nullopt;
+
+        if( aValue <= 0.0 )
+            return std::nullopt;
+
+        // Scale value to 100-999 decade
+        const double logValue = std::log10( aValue );
+        const int    decade = static_cast<int>( std::floor( logValue ) );
+        const double scaledValue = aValue / std::pow( 10.0, decade );
+        const double normalized = scaledValue * 100.0;
+
+        // Find next higher value in series
+        const size_t seriesSize = getSeriesSize( series );
+
+        // Check current decade
+        for( size_t i = 0; i < seriesSize; ++i )
+        {
+            const uint16_t val = getSeriesValue( series, i );
+            if( val > normalized )
+                return ( val / 100.0 ) * std::pow( 10.0, decade );
+        }
+
+        // Wrap to next decade
+        const uint16_t firstVal = getSeriesValue( series, 0 );
+        return ( firstVal / 100.0 ) * std::pow( 10.0, decade + 1 );
+    }
+
+    static auto FindDown( double aValue, const std::string& aSeries ) -> std::optional<double>
+    {
+        const int series = parseSeriesString( aSeries );
+        if( series < 0 )
+            return std::nullopt;
+
+        if( aValue <= 0.0 )
+            return std::nullopt;
+
+        // Scale value to 100-999 decade
+        const double logValue = std::log10( aValue );
+        const int    decade = static_cast<int>( std::floor( logValue ) );
+        const double scaledValue = aValue / std::pow( 10.0, decade );
+        const double normalized = scaledValue * 100.0;
+
+        // Find next lower value in series
+        const size_t seriesSize = getSeriesSize( series );
+
+        // Check current decade (search backwards)
+        for( int i = seriesSize - 1; i >= 0; --i )
+        {
+            const uint16_t val = getSeriesValue( series, i );
+            if( val < normalized )
+                return ( val / 100.0 ) * std::pow( 10.0, decade );
+        }
+
+        // Wrap to previous decade
+        const uint16_t lastVal = getSeriesValue( series, seriesSize - 1 );
+        return ( lastVal / 100.0 ) * std::pow( 10.0, decade - 1 );
+    }
+};
+
+
 EVAL_VISITOR::EVAL_VISITOR( VariableCallback aVariableCallback, ERROR_COLLECTOR& aErrorCollector ) :
         m_variableCallback( std::move( aVariableCallback ) ),
         m_errors( aErrorCollector ),
@@ -571,6 +737,30 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         return MakeValue<Value>( condition ? argValues[1] : argValues[2] );
     }
 
+    // E-series functions (handle value as number, series as string)
+    else if( ( name == "enearest" || name == "eup" || name == "edown" ) && argc >= 1 && argc <= 2 )
+    {
+        auto valueResult = VALUE_UTILS::ToDouble( argValues[0] );
+        if( !valueResult )
+            return MakeError<Value>( valueResult.GetError() );
+
+        const auto   value = valueResult.GetValue();
+        const auto   series = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "E24";
+        std::optional<double> result;
+
+        if( name == "enearest" )
+            result = ESERIES_UTILS::FindNearest( value, series );
+        else if( name == "eup" )
+            result = ESERIES_UTILS::FindUp( value, series );
+        else if( name == "edown" )
+            result = ESERIES_UTILS::FindDown( value, series );
+
+        if( !result )
+            return MakeError<Value>( fmt::format( "Invalid E-series: {}", series ) );
+
+        return MakeValue<Value>( result.value() );
+    }
+
     // Mathematical functions (return numbers) - convert args to doubles first
     std::vector<double> numArgs;
     for( const auto& val : argValues )
@@ -615,6 +805,45 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     {
         const auto sum = std::accumulate( numArgs.begin(), numArgs.end(), 0.0 );
         return MakeValue<Value>( sum / static_cast<double>( argc ) );
+    }
+    else if( name == "shunt" && argc == 2 )
+    {
+        const auto r1 = numArgs[0];
+        const auto r2 = numArgs[1];
+        const auto sum = r1 + r2;
+
+        // Calculate parallel resistance: (r1*r2)/(r1+r2)
+        // If sum is not positive, return 0.0 (handles edge cases like shunt(0,0))
+        if( sum > 0.0 )
+            return MakeValue<Value>( ( r1 * r2 ) / sum );
+        else
+            return MakeValue<Value>( 0.0 );
+    }
+    else if( name == "db" && argc == 1 )
+    {
+        // Power ratio to dB: 10*log10(ratio)
+        if( numArgs[0] <= 0.0 )
+            return MakeError<Value>( "db() argument must be positive" );
+
+        return MakeValue<Value>( 10.0 * std::log10( numArgs[0] ) );
+    }
+    else if( name == "dbv" && argc == 1 )
+    {
+        // Voltage/current ratio to dB: 20*log10(ratio)
+        if( numArgs[0] <= 0.0 )
+            return MakeError<Value>( "dbv() argument must be positive" );
+
+        return MakeValue<Value>( 20.0 * std::log10( numArgs[0] ) );
+    }
+    else if( name == "fromdb" && argc == 1 )
+    {
+        // dB to power ratio: 10^(dB/10)
+        return MakeValue<Value>( std::pow( 10.0, numArgs[0] / 10.0 ) );
+    }
+    else if( name == "fromdbv" && argc == 1 )
+    {
+        // dB to voltage/current ratio: 10^(dB/20)
+        return MakeValue<Value>( std::pow( 10.0, numArgs[0] / 20.0 ) );
     }
 
     return MakeError<Value>( fmt::format( "Unknown function: {} with {} arguments", name, argc ) );

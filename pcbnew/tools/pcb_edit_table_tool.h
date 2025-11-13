@@ -52,6 +52,7 @@ public:
     int UnmergeCells( const TOOL_EVENT& aEvent )    { return doUnmergeCells( aEvent ); }
 
     int EditTable( const TOOL_EVENT& aEvent );
+    int ExportTableToCSV( const TOOL_EVENT& aEvent );
 
 private:
     ///< Set up handlers for various events.

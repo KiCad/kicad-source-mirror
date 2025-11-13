@@ -568,6 +568,13 @@ TOOL_ACTION ACTIONS::editTable( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Edit Table..." ) )
         .Icon( BITMAPS::table_edit ) );
 
+TOOL_ACTION ACTIONS::exportTableCSV( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.exportTableCSV" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Table to CSV..." ) )
+        .Tooltip( _( "Export table contents to CSV file with resolved text variables" ) )
+        .Icon( BITMAPS::export_file ) );
+
 TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.activatePointEditor" )
         .ToolbarState( TOOLBAR_STATE::HIDDEN )

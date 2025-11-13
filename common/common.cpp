@@ -115,6 +115,7 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                         else
                             newbuf.append( wxT( "AT{" ) );
                         i++; // Skip the '{'
+                        braceDepth++; // Account for the '{' we just skipped
                     }
                     else
                     {

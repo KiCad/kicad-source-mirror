@@ -110,6 +110,7 @@ public:
     static TOOL_ACTION mergeCells;
     static TOOL_ACTION unmergeCells;
     static TOOL_ACTION editTable;
+    static TOOL_ACTION exportTableCSV;
 
     // Find and Replace
     static TOOL_ACTION showSearch;

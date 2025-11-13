@@ -64,6 +64,15 @@ Integration tests simulating real-world KiCad usage scenarios:
 - `max(...)` - Maximum of multiple values
 - `sum(...)` - Sum of multiple values
 - `avg(...)` - Average of multiple values
+- `shunt(r1, r2)` - Parallel resistance calculation: (r1×r2)/(r1+r2)
+- `db(ratio)` - Power ratio to decibels: 10×log₁₀(ratio)
+- `dbv(ratio)` - Voltage/current ratio to decibels: 20×log₁₀(ratio)
+- `fromdb(db)` - Decibels to power ratio: 10^(dB/10)
+- `fromdbv(db)` - Decibels to voltage/current ratio: 10^(dB/20)
+- `enearest(value, [series])` - Nearest E-series standard value (default: E24)
+- `eup(value, [series])` - Next higher E-series standard value (default: E24)
+- `edown(value, [series])` - Next lower E-series standard value (default: E24)
+  - Series options: "E3", "E6", "E12", "E24", "E48", "E96", "E192"
 
 ### String Functions
 - `upper(str)` - Convert to uppercase
