@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-12 01:51+0000\n"
+"PO-Revision-Date: 2025-11-14 12:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -16181,7 +16181,7 @@ msgstr "Aggiorna tutti gli altri campi nel simbolo dall'impronta"
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:579
 msgid "Update Schematic from PCB"
-msgstr "Aggiorna lo schema dal C.S."
+msgstr "Aggiorna lo schema dallo stampato"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:228
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
@@ -16279,7 +16279,8 @@ msgstr "Analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Seleziona/Evidenzia gli oggetti corrispondenti alla selezione nel C.S."
+msgstr ""
+"Seleziona/evidenzia gli oggetti corrispondenti alla selezione nello stampato"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -16308,7 +16309,9 @@ msgstr "Evidenzia collegamenti sottoposti ad analisi-incrociata"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Evidenza collegamenti quando sono evidenziati nell'editor del C.S."
+msgstr ""
+"Evidenza collegamenti quando sono evidenziati nell'editor del circuito "
+"stampato"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Default font:"
