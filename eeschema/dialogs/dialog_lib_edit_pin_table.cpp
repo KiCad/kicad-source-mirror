@@ -169,16 +169,28 @@ public:
             return stringFromBool( aPin.IsVisible() );
 
         case COL_UNIT:
+            if( const SYMBOL* parent = aPin.GetParentSymbol() )
+            {
+                if( !parent->IsMultiUnit() )
+                    return wxGetTranslation( UNITS_ALL );
+            }
+
             if( aPin.GetUnit() == 0 )
                 return wxGetTranslation( UNITS_ALL );
-
-            return aPin.GetUnitDisplayName( aPin.GetUnit(), true );
+            else
+                return aPin.GetUnitDisplayName( aPin.GetUnit(), true );
 
         case COL_BODY_STYLE:
+            if( const SYMBOL* parent = aPin.GetParentSymbol() )
+            {
+                if( !parent->IsMultiBodyStyle() )
+                    return wxGetTranslation( UNITS_ALL );
+            }
+
             if( aPin.GetBodyStyle() == 0 )
                 return wxGetTranslation( DEMORGAN_ALL );
-
-            return aPin.GetBodyStyleDescription( aPin.GetBodyStyle(), true );
+            else
+                return aPin.GetBodyStyleDescription( aPin.GetBodyStyle(), true );
 
         default:
             wxFAIL_MSG( wxString::Format( "Invalid field id %d", aFieldId ) );
@@ -247,6 +259,12 @@ public:
             break;
 
         case COL_UNIT:
+            if( const SYMBOL* parent = aPin.GetParentSymbol() )
+            {
+                if( !parent->IsMultiUnit() )
+                    break;
+            }
+
             if( MatchTranslationOrNative( aValue, UNITS_ALL, false ) )
             {
                 aPin.SetUnit( 0 );
@@ -266,6 +284,12 @@ public:
             break;
 
         case COL_BODY_STYLE:
+            if( const SYMBOL* parent = aPin.GetParentSymbol() )
+            {
+                if( !parent->IsMultiBodyStyle() )
+                    break;
+            }
+
             if( MatchTranslationOrNative( aValue, DEMORGAN_ALL, false ) )
             {
                 aPin.SetBodyStyle( 0 );
