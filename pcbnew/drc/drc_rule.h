@@ -99,6 +99,18 @@ enum DRC_DISALLOW_T
     DRC_DISALLOW_FOOTPRINTS   = (1 << 10)
 };
 
+
+enum class DRC_IMPLICIT_SOURCE
+{
+    NONE,
+    BOARD_SETUP_CONSTRAINT,
+    BARCODE_DEFAULTS,
+    KEEPOUT,
+    NET_CLASS,
+    TUNING_PROFILE
+};
+
+
 constexpr int DRC_DISALLOW_VIAS = DRC_DISALLOW_THROUGH_VIAS;
 constexpr int DRC_DISALLOW_BB_VIAS = DRC_DISALLOW_BLIND_VIAS | DRC_DISALLOW_BURIED_VIAS;
 
@@ -119,9 +131,14 @@ public:
     void AddConstraint( DRC_CONSTRAINT& aConstraint );
     std::optional<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_T aType );
 
+    bool IsImplicit() const { return m_implicitSource != DRC_IMPLICIT_SOURCE::NONE; }
+
+    void SetImplicitSource( const DRC_IMPLICIT_SOURCE aImplicitSource ) { m_implicitSource = aImplicitSource; }
+
+    DRC_IMPLICIT_SOURCE GetImplicitSource() const { return m_implicitSource; }
+
 public:
     bool                        m_Unary;
-    bool                        m_Implicit;
     KIID                        m_ImplicitItemId;
     wxString                    m_Name;
     wxString                    m_LayerSource;
@@ -129,6 +146,9 @@ public:
     DRC_RULE_CONDITION*         m_Condition;
     std::vector<DRC_CONSTRAINT> m_Constraints;
     SEVERITY                    m_Severity;
+
+private:
+    DRC_IMPLICIT_SOURCE m_implicitSource;
 };
 
 
@@ -175,7 +195,7 @@ public:
     {
         if( m_parentRule )
         {
-            if( m_parentRule->m_Implicit )
+            if( m_parentRule->IsImplicit() )
                 return m_parentRule->m_Name;
             else
                 return wxString::Format( _( "rule '%s'" ), m_parentRule->m_Name );

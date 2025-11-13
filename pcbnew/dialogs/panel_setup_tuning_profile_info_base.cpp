@@ -78,12 +78,9 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_enableDrcGeneration = new wxCheckBox( this, wxID_ANY, _("Generate Net Class DRC Rules"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_enableDrcGeneration->SetValue(true);
-	gbSizer1->Add( m_enableDrcGeneration, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-
 	m_enableDelayTuning = new wxCheckBox( this, wxID_ANY, _("Enable Time Domain Tuning"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_enableDelayTuning, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_enableDelayTuning->SetValue(true);
+	gbSizer1->Add( m_enableDelayTuning, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	gbSizer1->Add( m_staticline1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND | wxALL, 5 );

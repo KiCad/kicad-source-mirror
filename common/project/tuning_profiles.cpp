@@ -96,7 +96,6 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         const nlohmann::json item_json = { { "profile_name", item.m_ProfileName.ToUTF8() },
                                            { "type", static_cast<int>( item.m_Type ) },
                                            { "target_impedance", item.m_TargetImpedance },
-                                           { "generate_drc_rules", item.m_GenerateNetClassDRCRules },
                                            { "enable_time_domain_tuning", item.m_EnableTimeDomainTuning },
                                            { "layer_entries", layer_entries },
                                            { "via_prop_delay", item.m_ViaPropagationDelay },
@@ -107,12 +106,11 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
 
     auto readUserDefinedProfileConfigurationLine = [&readViaOverrideConfigurationLine]( const nlohmann::json& entry )
     {
-        const wxString                    profileName = entry["profile_name"];
+        const wxString                     profileName = entry["profile_name"];
         const TUNING_PROFILE::PROFILE_TYPE profileType = static_cast<TUNING_PROFILE::PROFILE_TYPE>( entry["type"] );
-        const double                      targetImpedance = entry["target_impedance"];
-        const bool                        generateDrcRules = entry["generate_drc_rules"];
-        const bool                        enableTimeDomainTuning = entry["enable_time_domain_tuning"];
-        const int                         viaPropDelay = entry["via_prop_delay"];
+        const double                       targetImpedance = entry["target_impedance"];
+        const bool                         enableTimeDomainTuning = entry["enable_time_domain_tuning"];
+        const int                          viaPropDelay = entry["via_prop_delay"];
         std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY>            trackEntries;
         std::map<PCB_LAYER_ID, DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> trackEntriesMap;
 
@@ -154,7 +152,6 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         TUNING_PROFILE item{ profileName,
                              profileType,
                              targetImpedance,
-                             generateDrcRules,
                              enableTimeDomainTuning,
                              std::move( trackEntries ),
                              viaPropDelay,

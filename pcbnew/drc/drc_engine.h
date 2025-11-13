@@ -246,7 +246,7 @@ private:
     };
 
     void loadImplicitRules();
-    std::shared_ptr<DRC_RULE> createImplicitRule( const wxString& name );
+    std::shared_ptr<DRC_RULE> createImplicitRule( const wxString& name, DRC_IMPLICIT_SOURCE aImplicitSource );
 
 protected:
     BOARD_DESIGN_SETTINGS*     m_designSettings;

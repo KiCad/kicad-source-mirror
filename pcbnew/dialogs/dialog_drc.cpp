@@ -725,7 +725,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         menu.Append( ID_EDIT_EXCLUSION_COMMENT,
                      _( "Edit exclusion comment..." ) );
 
-        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
+        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->IsImplicit() )
         {
             menu.Append( ID_REMOVE_EXCLUSION_ALL,
                          wxString::Format( _( "Remove all exclusions for violations of rule '%s'" ),
@@ -743,7 +743,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                      _( "Exclude with comment..." ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
 
-        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
+        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->IsImplicit() )
         {
             menu.Append( ID_ADD_EXCLUSION_ALL,
                          wxString::Format( _( "Exclude all violations of rule '%s'..." ),

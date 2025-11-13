@@ -52,7 +52,6 @@ class PANEL_SETUP_TUNING_PROFILE_INFO_BASE : public wxPanel
 		wxStaticText* m_targetImpedanceLabel;
 		wxTextCtrl* m_targetImpedance;
 		wxStaticText* m_ohmsLabel;
-		wxCheckBox* m_enableDrcGeneration;
 		wxCheckBox* m_enableDelayTuning;
 		wxStaticLine* m_staticline1;
 		wxSplitterWindow* m_splitter1;

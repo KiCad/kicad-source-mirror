@@ -298,8 +298,13 @@ DRC_ITEM DRC_ITEM::nonMirroredTextOnBackLayer( DRCE_NONMIRRORED_TEXT_ON_BACK_LAY
         _HKI( "Non-Mirrored text on back layer" ),
         wxT( "nonmirrored_text_on_back_layer" ) );
 
-DRC_ITEM DRC_ITEM::missingTuningProfile( DRCE_MISSING_TUNING_PROFILE, _HKI( "Missing tuning profile" ),
-                                         wxT( "missing_tuning_profile" ) );
+DRC_ITEM DRC_ITEM::missingTuningProfile( DRCE_MISSING_TUNING_PROFILE,
+        _HKI( "Missing tuning profile" ),
+        wxT( "missing_tuning_profile" ) );
+
+DRC_ITEM DRC_ITEM::tuningProfileImplicitRules( DRCE_TUNING_PROFILE_IMPLICIT_RULES,
+        _HKI( "Tuning profile track geometries" ),
+        wxT( "tuning_profile_track_geometries" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::heading_electrical,
@@ -329,6 +334,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::copperSliver,
         DRC_ITEM::solderMaskBridge,
         DRC_ITEM::connectionWidth,
+        DRC_ITEM::tuningProfileImplicitRules,
 
         DRC_ITEM::heading_schematic_parity,
         DRC_ITEM::duplicateFootprints,

@@ -110,9 +110,10 @@ enum PCB_DRC_CODE
     DRCE_MIRRORED_TEXT_ON_FRONT_LAYER,
     DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER,
 
-    DRCE_MISSING_TUNING_PROFILE, // Tuning profile used in net class is not defined
+    DRCE_MISSING_TUNING_PROFILE,        // Tuning profile used in net class is not defined
+    DRCE_TUNING_PROFILE_IMPLICIT_RULES, // Pseudo-code for setting severities
 
-    DRCE_LAST = DRCE_MISSING_TUNING_PROFILE
+    DRCE_LAST = DRCE_TUNING_PROFILE_IMPLICIT_RULES
 };
 
 
@@ -246,6 +247,7 @@ private:
     static DRC_ITEM mirroredTextOnFrontLayer;
     static DRC_ITEM nonMirroredTextOnBackLayer;
     static DRC_ITEM missingTuningProfile;
+    static DRC_ITEM tuningProfileImplicitRules;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

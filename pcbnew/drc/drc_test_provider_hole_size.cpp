@@ -163,7 +163,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 
         if( fail_min )
         {
-            if( constraint.GetParentRule() && constraint.GetParentRule()->m_Implicit )
+            if( constraint.GetParentRule() && constraint.GetParentRule()->IsImplicit() )
                 constraintName = _( "board setup constraints" );
 
             msg = formatMsg( _( "(%s min hole %s; actual %s)" ),

@@ -153,7 +153,6 @@ struct TUNING_PROFILE
     wxString                                           m_ProfileName;
     PROFILE_TYPE                                       m_Type;
     double                                             m_TargetImpedance;
-    bool                                               m_GenerateNetClassDRCRules;
     bool                                               m_EnableTimeDomainTuning;
     std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> m_TrackPropagationEntries;
     int                                                m_ViaPropagationDelay;
@@ -171,9 +170,6 @@ struct TUNING_PROFILE
             return false;
 
         if( m_TargetImpedance != aOther.m_TargetImpedance )
-            return false;
-
-        if( m_GenerateNetClassDRCRules != aOther.m_GenerateNetClassDRCRules )
             return false;
 
         if( m_EnableTimeDomainTuning != aOther.m_EnableTimeDomainTuning )

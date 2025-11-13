@@ -426,7 +426,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     if( hostConstraint.IsNull() )
         return false;
 
-    if( hostConstraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+    if( hostConstraint.GetSeverity() == RPT_SEVERITY_IGNORE
+        && ( !hostConstraint.GetParentRule()->IsImplicit()
+             || hostConstraint.GetParentRule()->GetImplicitSource() != DRC_IMPLICIT_SOURCE::TUNING_PROFILE ) )
     {
         aConstraint->m_Value.SetMin( -1 );
         aConstraint->m_RuleName = hostConstraint.GetName();

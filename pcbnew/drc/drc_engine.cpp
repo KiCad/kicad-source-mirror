@@ -141,12 +141,13 @@ static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
 }
 
 
-std::shared_ptr<DRC_RULE> DRC_ENGINE::createImplicitRule( const wxString& name )
+std::shared_ptr<DRC_RULE> DRC_ENGINE::createImplicitRule( const wxString&           name,
+                                                          const DRC_IMPLICIT_SOURCE aImplicitSource )
 {
     std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
 
     rule->m_Name = name;
-    rule->m_Implicit = true;
+    rule->SetImplicitSource( aImplicitSource );
 
     addRule( rule );
 
@@ -161,7 +162,8 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 1) global defaults
 
-    std::shared_ptr<DRC_RULE> rule = createImplicitRule( _( "board setup constraints" ) );
+    std::shared_ptr<DRC_RULE> rule =
+            createImplicitRule( _( "board setup constraints" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
 
     DRC_CONSTRAINT widthConstraint( TRACK_WIDTH_CONSTRAINT );
     widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
@@ -187,47 +189,51 @@ void DRC_ENGINE::loadImplicitRules()
     holeToHoleConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeToHoleConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints zone fill strategy" ) );
+    rule = createImplicitRule( _( "board setup constraints zone fill strategy" ),
+                               DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     DRC_CONSTRAINT thermalSpokeCountConstraint( MIN_RESOLVED_SPOKES_CONSTRAINT );
     thermalSpokeCountConstraint.Value().SetMin( bds.m_MinResolvedSpokes );
     rule->AddConstraint( thermalSpokeCountConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints silk" ) );
+    rule = createImplicitRule( _( "board setup constraints silk" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints silk text height" ) );
+    rule = createImplicitRule( _( "board setup constraints silk text height" ),
+                               DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkTextHeightConstraint( TEXT_HEIGHT_CONSTRAINT );
     silkTextHeightConstraint.Value().SetMin( bds.m_MinSilkTextHeight );
     rule->AddConstraint( silkTextHeightConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints silk text thickness" ) );
+    rule = createImplicitRule( _( "board setup constraints silk text thickness" ),
+                               DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
     DRC_CONSTRAINT silkTextThicknessConstraint( TEXT_THICKNESS_CONSTRAINT );
     silkTextThicknessConstraint.Value().SetMin( bds.m_MinSilkTextThickness );
     rule->AddConstraint( silkTextThicknessConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints hole" ) );
+    rule = createImplicitRule( _( "board setup constraints hole" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
     holeClearanceConstraint.Value().SetMin( bds.m_HoleClearance );
     rule->AddConstraint( holeClearanceConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints edge" ) );
+    rule = createImplicitRule( _( "board setup constraints edge" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     DRC_CONSTRAINT edgeClearanceConstraint( EDGE_CLEARANCE_CONSTRAINT );
     edgeClearanceConstraint.Value().SetMin( bds.m_CopperEdgeClearance );
     rule->AddConstraint( edgeClearanceConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints courtyard" ) );
+    rule = createImplicitRule( _( "board setup constraints courtyard" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     DRC_CONSTRAINT courtyardClearanceConstraint( COURTYARD_CLEARANCE_CONSTRAINT );
     holeToHoleConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
     // 2a) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
-    std::shared_ptr<DRC_RULE> uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
+    std::shared_ptr<DRC_RULE> uViaRule =
+            createImplicitRule( _( "board setup micro-via constraints" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
 
     uViaRule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Via_Type == 'Micro'" ) );
 
@@ -241,7 +247,8 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 2b) barcode-specific defaults
 
-    std::shared_ptr<DRC_RULE> barcodeRule = createImplicitRule( _( "barcode visual separation default" ) );
+    std::shared_ptr<DRC_RULE> barcodeRule =
+            createImplicitRule( _( "barcode visual separation default" ), DRC_IMPLICIT_SOURCE::BARCODE_DEFAULTS );
     DRC_CONSTRAINT barcodeSeparationConstraint( PHYSICAL_CLEARANCE_CONSTRAINT );
     barcodeSeparationConstraint.Value().SetMin( GetIuScale().mmToIU( 1.0 ) );
     barcodeRule->AddConstraint( barcodeSeparationConstraint );
@@ -263,7 +270,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ),
                                                              nc->GetClearanceParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -279,7 +286,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ),
                                                              nc->GetTrackWidthParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -296,7 +303,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                              nc->GetDiffPairWidthParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.inDiffPair('*')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -313,7 +320,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                              nc->GetDiffPairGapParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -330,7 +337,7 @@ void DRC_ENGINE::loadImplicitRules()
                         netclassRule = std::make_shared<DRC_RULE>();
                         netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                                  nc->GetDiffPairGapParent()->GetHumanReadableName() );
-                        netclassRule->m_Implicit = true;
+                        netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                         expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && AB.isCoupledDiffPair()" ), ncName );
                         netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -347,7 +354,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ),
                                                              nc->GetViaDiameterParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -364,7 +371,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ),
                                                              nc->GetViaDrillParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -381,7 +388,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ),
                                                              nc->GetuViaDiameterParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -398,7 +405,7 @@ void DRC_ENGINE::loadImplicitRules()
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ),
                                                              nc->GetuViaDrillParent()->GetHumanReadableName() );
-                    netclassRule->m_Implicit = true;
+                    netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
@@ -447,8 +454,9 @@ void DRC_ENGINE::loadImplicitRules()
                     return;
 
                 std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+                tuningRule->m_Severity = bds.m_DRCSeverities[DRCE_TUNING_PROFILE_IMPLICIT_RULES];
                 tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-                tuningRule->m_Implicit = true;
+                tuningRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                 expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s'" ),
                                          aNetclassName,
@@ -456,8 +464,9 @@ void DRC_ENGINE::loadImplicitRules()
                 tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
                 DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
-                constraint.Value().SetMin( bds.m_TrackMinWidth );
+                constraint.Value().SetMin( std::max( bds.m_TrackMinWidth, aLayerEntry.GetWidth() ) );
                 constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+                constraint.Value().SetMax( aLayerEntry.GetWidth() );
                 tuningRule->AddConstraint( constraint );
 
                 addRule( tuningRule );
@@ -471,8 +480,9 @@ void DRC_ENGINE::loadImplicitRules()
                     return;
 
                 std::shared_ptr<DRC_RULE> tuningRule = std::make_shared<DRC_RULE>();
+                tuningRule->m_Severity = bds.m_DRCSeverities[DRCE_TUNING_PROFILE_IMPLICIT_RULES];
                 tuningRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-                tuningRule->m_Implicit = true;
+                tuningRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                 expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
                                          aNetclass->GetName(),
@@ -480,15 +490,17 @@ void DRC_ENGINE::loadImplicitRules()
                 tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
                 DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
-                constraint.Value().SetMin( bds.m_TrackMinWidth );
+                constraint.Value().SetMin( std::max( bds.m_TrackMinWidth, aLayerEntry.GetWidth() ) );
                 constraint.Value().SetOpt( aLayerEntry.GetWidth() );
+                constraint.Value().SetMax( aLayerEntry.GetWidth() );
                 tuningRule->AddConstraint( constraint );
 
                 addRule( tuningRule );
 
                 std::shared_ptr<DRC_RULE> tuningRule2 = std::make_shared<DRC_RULE>();
+                tuningRule2->m_Severity = bds.m_DRCSeverities[DRCE_TUNING_PROFILE_IMPLICIT_RULES];
                 tuningRule2->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-                tuningRule2->m_Implicit = true;
+                tuningRule2->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                 expr2 = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
                                           aNetclass->GetName(),
@@ -496,8 +508,9 @@ void DRC_ENGINE::loadImplicitRules()
                 tuningRule2->m_Condition = new DRC_RULE_CONDITION( expr2 );
 
                 DRC_CONSTRAINT constraint2( DIFF_PAIR_GAP_CONSTRAINT );
-                constraint2.Value().SetMin( bds.m_TrackMinWidth );
+                constraint2.Value().SetMin( std::max( bds.m_MinClearance, aLayerEntry.GetDiffPairGap() ) );
                 constraint2.Value().SetOpt( aLayerEntry.GetDiffPairGap() );
+                constraint2.Value().SetMax( aLayerEntry.GetDiffPairGap() );
                 tuningRule2->AddConstraint( constraint2 );
 
                 addRule( tuningRule2 );
@@ -506,8 +519,9 @@ void DRC_ENGINE::loadImplicitRules()
                 if( aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
                 {
                     std::shared_ptr<DRC_RULE> diffPairClearanceRule = std::make_shared<DRC_RULE>();
+                    diffPairClearanceRule->m_Severity = bds.m_DRCSeverities[DRCE_TUNING_PROFILE_IMPLICIT_RULES];
                     diffPairClearanceRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
-                    diffPairClearanceRule->m_Implicit = true;
+                    diffPairClearanceRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
                                              aNetclass->GetName(),
@@ -533,9 +547,6 @@ void DRC_ENGINE::loadImplicitRules()
                     {
                         const wxString        delayProfileName = aNetclass->GetTuningProfile();
                         const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( delayProfileName );
-
-                        if( !profile.m_GenerateNetClassDRCRules )
-                            return;
 
                         for( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& entry : profile.m_TrackPropagationEntries )
                         {
@@ -569,12 +580,13 @@ void DRC_ENGINE::loadImplicitRules()
                 {
                     if( parentFP )
                     {
-                        rule = createImplicitRule( wxString::Format( _( "keepout area of %s" ),
-                                                                     DescribeRef( parentFP->GetReference() ) ) );
+                        rule = createImplicitRule(
+                                wxString::Format( _( "keepout area of %s" ), DescribeRef( parentFP->GetReference() ) ),
+                                DRC_IMPLICIT_SOURCE::KEEPOUT );
                     }
                     else
                     {
-                        rule = createImplicitRule( _( "keepout area" ) );
+                        rule = createImplicitRule( _( "keepout area" ), DRC_IMPLICIT_SOURCE::KEEPOUT );
                     }
 
                 }
@@ -582,13 +594,14 @@ void DRC_ENGINE::loadImplicitRules()
                 {
                     if( parentFP )
                     {
-                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s' of %s" ),
-                                                                     name,
-                                                                     DescribeRef( parentFP->GetReference() ) ) );
+                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s' of %s" ), name,
+                                                                     DescribeRef( parentFP->GetReference() ) ),
+                                                   DRC_IMPLICIT_SOURCE::KEEPOUT );
                     }
                     else
                     {
-                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
+                        rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ),
+                                                   DRC_IMPLICIT_SOURCE::KEEPOUT );
                     }
                 }
 
@@ -911,7 +924,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 if( c->constraint.m_Value.HasMin() )
                 {
-                    if( c->parentRule && c->parentRule->m_Implicit )
+                    if( c->parentRule && c->parentRule->IsImplicit() )
                         constraint.m_ImplicitMin = true;
 
                     constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
@@ -1202,424 +1215,398 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 }
             };
 
-    auto processConstraint =
-            [&]( const DRC_ENGINE_CONSTRAINT* c )
+    auto processConstraint = [&]( const DRC_ENGINE_CONSTRAINT* c )
+    {
+        bool implicit = c->parentRule && c->parentRule->IsImplicit();
+
+        REPORT( "" )
+
+        switch( c->constraint.m_Type )
+        {
+        case CLEARANCE_CONSTRAINT:
+        case COURTYARD_CLEARANCE_CONSTRAINT:
+        case SILK_CLEARANCE_CONSTRAINT:
+        case HOLE_CLEARANCE_CONSTRAINT:
+        case EDGE_CLEARANCE_CONSTRAINT:
+        case PHYSICAL_CLEARANCE_CONSTRAINT:
+        case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s clearance: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
+            break;
+        case CREEPAGE_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s creepage: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
+            break;
+        case MAX_UNCOUPLED_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
+                                      EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
+            break;
+
+        case SKEW_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s max skew: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
+            break;
+
+        case THERMAL_RELIEF_GAP_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s gap: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
+            break;
+
+        case THERMAL_SPOKE_WIDTH_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
+                                      EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+            break;
+
+        case SOLDER_MASK_EXPANSION_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s solder mask expansion: %s." ),
+                                      EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+            break;
+
+        case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s solder paste absolute clearance: %s." ),
+                                      EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+            break;
+
+        case SOLDER_PASTE_REL_MARGIN_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s solder paste relative clearance: %s." ),
+                                      EscapeHTML( c->constraint.GetName() ),
+                                      MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
+            break;
+
+        case MIN_RESOLVED_SPOKES_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s min spoke count: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
+                                                                                c->constraint.m_Value.Min() ) ) )
+            break;
+
+        case ZONE_CONNECTION_CONSTRAINT:
+            REPORT( wxString::Format( _( "Checking %s zone connection: %s." ), EscapeHTML( c->constraint.GetName() ),
+                                      EscapeHTML( PrintZoneConnection( c->constraint.m_ZoneConnection ) ) ) )
+            break;
+
+        case TRACK_WIDTH_CONSTRAINT:
+        case ANNULAR_WIDTH_CONSTRAINT:
+        case VIA_DIAMETER_CONSTRAINT:
+        case HOLE_SIZE_CONSTRAINT:
+        case TEXT_HEIGHT_CONSTRAINT:
+        case TEXT_THICKNESS_CONSTRAINT:
+        case DIFF_PAIR_GAP_CONSTRAINT:
+        case LENGTH_CONSTRAINT:
+        case CONNECTION_WIDTH_CONSTRAINT:
+        case HOLE_TO_HOLE_CONSTRAINT:
+        {
+            if( aReporter )
             {
-                bool implicit = c->parentRule && c->parentRule->m_Implicit;
+                wxString min = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+                wxString opt = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+                wxString max = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
 
-                REPORT( "" )
-
-                switch( c->constraint.m_Type )
+                if( implicit )
                 {
-                case CLEARANCE_CONSTRAINT:
-                case COURTYARD_CLEARANCE_CONSTRAINT:
-                case SILK_CLEARANCE_CONSTRAINT:
-                case HOLE_CLEARANCE_CONSTRAINT:
-                case EDGE_CLEARANCE_CONSTRAINT:
-                case PHYSICAL_CLEARANCE_CONSTRAINT:
-                case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
-                    break;
-                case CREEPAGE_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s creepage: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
-                    break;
-                case MAX_UNCOUPLED_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
-                    break;
+                    min = MessageTextFromValue( c->constraint.m_Value.Min() );
+                    opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
 
-                case SKEW_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s max skew: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
-                    break;
-
-                case THERMAL_RELIEF_GAP_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s gap: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
-                    break;
-
-                case THERMAL_SPOKE_WIDTH_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
-                    break;
-
-                case SOLDER_MASK_EXPANSION_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s solder mask expansion: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
-                    break;
-
-                case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s solder paste absolute clearance: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
-                    break;
-
-                case SOLDER_PASTE_REL_MARGIN_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s solder paste relative clearance: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
-                    break;
-
-                case MIN_RESOLVED_SPOKES_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s min spoke count: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
-                                                                                        c->constraint.m_Value.Min() ) ) )
-                    break;
-
-                case ZONE_CONNECTION_CONSTRAINT:
-                    REPORT( wxString::Format( _( "Checking %s zone connection: %s." ),
-                                              EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( PrintZoneConnection( c->constraint.m_ZoneConnection ) ) ) )
-                    break;
-
-                case TRACK_WIDTH_CONSTRAINT:
-                case ANNULAR_WIDTH_CONSTRAINT:
-                case VIA_DIAMETER_CONSTRAINT:
-                case HOLE_SIZE_CONSTRAINT:
-                case TEXT_HEIGHT_CONSTRAINT:
-                case TEXT_THICKNESS_CONSTRAINT:
-                case DIFF_PAIR_GAP_CONSTRAINT:
-                case LENGTH_CONSTRAINT:
-                case CONNECTION_WIDTH_CONSTRAINT:
-                case HOLE_TO_HOLE_CONSTRAINT:
-                {
-                    if( aReporter )
+                    switch( c->constraint.m_Type )
                     {
-                        wxString min = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-                        wxString opt = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-                        wxString max = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-
-                        if( implicit )
+                    case TRACK_WIDTH_CONSTRAINT:
+                        if( c->constraint.m_Value.HasOpt() )
                         {
-                            min = MessageTextFromValue( c->constraint.m_Value.Min() );
-                            opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
-
-                            switch( c->constraint.m_Type )
-                            {
-                            case TRACK_WIDTH_CONSTRAINT:
-                                if( c->constraint.m_Value.HasOpt() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s track width: opt %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              opt ) )
-                                }
-                                else if( c->constraint.m_Value.HasMin() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s track width: min %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              min ) )
-                                }
-
-                                break;
-
-                            case ANNULAR_WIDTH_CONSTRAINT:
-                                REPORT( wxString::Format( _( "Checking %s annular width: min %s." ),
-                                                          EscapeHTML( c->constraint.GetName() ),
-                                                          opt ) )
-                                break;
-
-                            case VIA_DIAMETER_CONSTRAINT:
-                                if( c->constraint.m_Value.HasOpt() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s via diameter: opt %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              opt ) )
-                                }
-                                else if( c->constraint.m_Value.HasMin() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s via diameter: min %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              min ) )
-                                }
-                                break;
-
-                            case HOLE_SIZE_CONSTRAINT:
-                                if( c->constraint.m_Value.HasOpt() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s hole size: opt %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              opt ) )
-                                }
-                                else if( c->constraint.m_Value.HasMin() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s hole size: min %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              min ) )
-                                }
-
-                                break;
-
-                            case TEXT_HEIGHT_CONSTRAINT:
-                            case TEXT_THICKNESS_CONSTRAINT:
-                            case CONNECTION_WIDTH_CONSTRAINT:
-                                REPORT( wxString::Format( _( "Checking %s: min %s." ),
-                                                          EscapeHTML( c->constraint.GetName() ),
-                                                          min ) )
-                                break;
-
-                            case DIFF_PAIR_GAP_CONSTRAINT:
-                                if( c->constraint.m_Value.HasOpt() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s diff pair gap: opt %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              opt ) )
-                                }
-                                else if( c->constraint.m_Value.HasMin() )
-                                {
-                                    REPORT( wxString::Format( _( "Checking %s clearance: min %s." ),
-                                                              EscapeHTML( c->constraint.GetName() ),
-                                                              min ) )
-                                }
-
-                                break;
-
-                            case HOLE_TO_HOLE_CONSTRAINT:
-                                REPORT( wxString::Format( _( "Checking %s hole to hole: min %s." ),
-                                                          EscapeHTML( c->constraint.GetName() ),
-                                                          min ) )
-                                break;
-
-                            default:
-                                REPORT( wxString::Format( _( "Checking %s." ),
-                                                          EscapeHTML( c->constraint.GetName() ) ) )
-                            }
+                            REPORT( wxString::Format( _( "Checking %s track width: opt %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), opt ) )
                         }
-                        else
+                        else if( c->constraint.m_Value.HasMin() )
                         {
-                            if( c->constraint.m_Value.HasMin() )
-                                min = MessageTextFromValue( c->constraint.m_Value.Min() );
-
-                            if( c->constraint.m_Value.HasOpt() )
-                                opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
-
-                            if( c->constraint.m_Value.HasMax() )
-                                max = MessageTextFromValue( c->constraint.m_Value.Max() );
-
-                            REPORT( wxString::Format( _( "Checking %s: min %s; opt %s; max %s." ),
-                                                      EscapeHTML( c->constraint.GetName() ),
-                                                      min,
-                                                      opt,
-                                                      max ) )
-                        }
-                    }
-                    break;
-                }
-
-                default:
-                    REPORT( wxString::Format( _( "Checking %s." ),
-                                              EscapeHTML( c->constraint.GetName() ) ) )
-                }
-
-                if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
-                {
-                    if( a_is_non_copper || b_is_non_copper )
-                    {
-                        if( implicit )
-                        {
-                            REPORT( _( "Netclass clearances apply only between copper items." ) )
-                        }
-                        else if( a_is_non_copper )
-                        {
-                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( a->GetItemDescription( this, true ) ) ) )
-                        }
-                        else if( b_is_non_copper )
-                        {
-                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( b->GetItemDescription( this, true ) ) ) )
+                            REPORT( wxString::Format( _( "Checking %s track width: min %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), min ) )
                         }
 
-                        return;
-                    }
-                }
-                else if( c->constraint.m_Type == DISALLOW_CONSTRAINT )
-                {
-                    int mask;
+                        break;
 
-                    if( a->GetFlags() & HOLE_PROXY )
-                    {
-                        mask = DRC_DISALLOW_HOLES;
-                    }
-                    else if( a->Type() == PCB_VIA_T )
-                    {
-                        const PCB_VIA* via = static_cast<const PCB_VIA*>( a );
+                    case ANNULAR_WIDTH_CONSTRAINT:
+                        REPORT( wxString::Format( _( "Checking %s annular width: min %s." ),
+                                                  EscapeHTML( c->constraint.GetName() ), opt ) )
+                        break;
 
-                        if( via->IsMicroVia() )
-                            mask = DRC_DISALLOW_MICRO_VIAS;
-                        else if( via->IsBlindVia() )
-                            mask = DRC_DISALLOW_BLIND_VIAS;
-                        else if( via->IsBuriedVia() )
-                            mask = DRC_DISALLOW_BURIED_VIAS;
-                        else
-                            mask = DRC_DISALLOW_THROUGH_VIAS;
-                    }
-                    else
-                    {
-                        switch( a->Type() )
+                    case VIA_DIAMETER_CONSTRAINT:
+                        if( c->constraint.m_Value.HasOpt() )
                         {
-                        case PCB_TRACE_T:        mask = DRC_DISALLOW_TRACKS;     break;
-                        case PCB_ARC_T:          mask = DRC_DISALLOW_TRACKS;     break;
-                        case PCB_PAD_T:          mask = DRC_DISALLOW_PADS;       break;
-                        case PCB_FOOTPRINT_T:    mask = DRC_DISALLOW_FOOTPRINTS; break;
-                        case PCB_SHAPE_T:        mask = DRC_DISALLOW_GRAPHICS;   break;
-                        case PCB_BARCODE_T:      mask = DRC_DISALLOW_GRAPHICS;   break;
-                        case PCB_FIELD_T:        mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_TEXTBOX_T:      mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_TABLE_T:        mask = DRC_DISALLOW_TEXTS;      break;
-
-                        case PCB_ZONE_T:
-                            // Treat teardrop areas as tracks for DRC purposes
-                            if( static_cast<const ZONE*>( a )->IsTeardropArea() )
-                                mask = DRC_DISALLOW_TRACKS;
-                            else
-                                mask = DRC_DISALLOW_ZONES;
-
-                            break;
-
-                        case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
-                        default:                 mask = 0;                       break;
+                            REPORT( wxString::Format( _( "Checking %s via diameter: opt %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), opt ) )
                         }
-                    }
-
-                    if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
-                    {
-                        if( implicit )
-                            REPORT( _( "Keepout constraint not met." ) )
-                        else
-                            REPORT( _( "Disallow constraint not met." ) )
-
-                        return;
-                    }
-
-                    LSET itemLayers = a->GetLayerSet();
-
-                    if( a->Type() == PCB_FOOTPRINT_T )
-                    {
-                        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
-
-                        if( !footprint->GetCourtyard( F_CrtYd ).IsEmpty() )
-                            itemLayers |= LSET::FrontMask();
-
-                        if( !footprint->GetCourtyard( B_CrtYd ).IsEmpty() )
-                            itemLayers |= LSET::BackMask();
-                    }
-
-                    if( !( c->layerTest & itemLayers ).any() )
-                    {
-                        if( implicit )
+                        else if( c->constraint.m_Value.HasMin() )
                         {
-                            REPORT( _( "Keepout layer(s) not matched." ) )
+                            REPORT( wxString::Format( _( "Checking %s via diameter: min %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), min ) )
                         }
-                        else if( c->parentRule )
+                        break;
+
+                    case HOLE_SIZE_CONSTRAINT:
+                        if( c->constraint.m_Value.HasOpt() )
                         {
-                            REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
-                                                      EscapeHTML( c->parentRule->m_LayerSource ) ) )
+                            REPORT( wxString::Format( _( "Checking %s hole size: opt %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), opt ) )
                         }
-                        else
+                        else if( c->constraint.m_Value.HasMin() )
                         {
-                            REPORT( _( "Rule layer not matched; rule ignored." ) )
+                            REPORT( wxString::Format( _( "Checking %s hole size: min %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), min ) )
                         }
 
-                        return;
-                    }
-                }
+                        break;
 
-                if( ( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
-                        || ( m_board->GetEnabledLayers() & c->layerTest ).count() == 0 )
-                {
-                    if( implicit )
-                    {
-                        REPORT( _( "Constraint layer not matched." ) )
-                    }
-                    else if( c->parentRule )
-                    {
-                        REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
-                                                  EscapeHTML( c->parentRule->m_LayerSource ) ) )
-                    }
-                    else
-                    {
-                        REPORT( _( "Rule layer not matched; rule ignored." ) )
-                    }
-                }
-                else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
-                        && ( !a->HasDrilledHole() && !b->HasDrilledHole() ) )
-                {
-                    // Report non-drilled-holes as an implicit condition
-                    REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
-                                              a->GetItemDescription( this, true ) ) )
-                }
-                else if( !c->condition || c->condition->GetExpression().IsEmpty() )
-                {
-                    if( aReporter )
-                    {
-                        if( implicit )
-                        {
-                            REPORT( _( "Unconditional constraint applied." ) )
-                        }
-                        else if( constraint.m_Type == ASSERTION_CONSTRAINT )
-                        {
-                            REPORT( _( "Unconditional rule applied." ) )
-                            testAssertion( c );
-                        }
-                        else
-                        {
-                            REPORT( _( "Unconditional rule applied; overrides previous constraints." ) )
-                        }
-                    }
+                    case TEXT_HEIGHT_CONSTRAINT:
+                    case TEXT_THICKNESS_CONSTRAINT:
+                    case CONNECTION_WIDTH_CONSTRAINT:
+                        REPORT( wxString::Format( _( "Checking %s: min %s." ), EscapeHTML( c->constraint.GetName() ),
+                                                  min ) )
+                        break;
 
-                    applyConstraint( c );
+                    case DIFF_PAIR_GAP_CONSTRAINT:
+                        if( c->constraint.m_Value.HasOpt() )
+                        {
+                            REPORT( wxString::Format( _( "Checking %s diff pair gap: opt %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), opt ) )
+                        }
+                        else if( c->constraint.m_Value.HasMin() )
+                        {
+                            REPORT( wxString::Format( _( "Checking %s clearance: min %s." ),
+                                                      EscapeHTML( c->constraint.GetName() ), min ) )
+                        }
+
+                        break;
+
+                    case HOLE_TO_HOLE_CONSTRAINT:
+                        REPORT( wxString::Format( _( "Checking %s hole to hole: min %s." ),
+                                                  EscapeHTML( c->constraint.GetName() ), min ) )
+                        break;
+
+                    default: REPORT( wxString::Format( _( "Checking %s." ), EscapeHTML( c->constraint.GetName() ) ) )
+                    }
                 }
                 else
                 {
+                    if( c->constraint.m_Value.HasMin() )
+                        min = MessageTextFromValue( c->constraint.m_Value.Min() );
+
+                    if( c->constraint.m_Value.HasOpt() )
+                        opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
+
+                    if( c->constraint.m_Value.HasMax() )
+                        max = MessageTextFromValue( c->constraint.m_Value.Max() );
+
+                    REPORT( wxString::Format( _( "Checking %s: min %s; opt %s; max %s." ),
+                                              EscapeHTML( c->constraint.GetName() ), min, opt, max ) )
+                }
+            }
+            break;
+        }
+
+        default: REPORT( wxString::Format( _( "Checking %s." ), EscapeHTML( c->constraint.GetName() ) ) )
+        }
+
+        if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
+        {
+            if( a_is_non_copper || b_is_non_copper )
+            {
+                if( implicit )
+                {
+                    REPORT( _( "Netclass clearances apply only between copper items." ) )
+                }
+                else if( a_is_non_copper )
+                {
+                    REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
+                                              EscapeHTML( a->GetItemDescription( this, true ) ) ) )
+                }
+                else if( b_is_non_copper )
+                {
+                    REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
+                                              EscapeHTML( b->GetItemDescription( this, true ) ) ) )
+                }
+
+                return;
+            }
+        }
+        else if( c->constraint.m_Type == DISALLOW_CONSTRAINT )
+        {
+            int mask;
+
+            if( a->GetFlags() & HOLE_PROXY )
+            {
+                mask = DRC_DISALLOW_HOLES;
+            }
+            else if( a->Type() == PCB_VIA_T )
+            {
+                const PCB_VIA* via = static_cast<const PCB_VIA*>( a );
+
+                if( via->IsMicroVia() )
+                    mask = DRC_DISALLOW_MICRO_VIAS;
+                else if( via->IsBlindVia() )
+                    mask = DRC_DISALLOW_BLIND_VIAS;
+                else if( via->IsBuriedVia() )
+                    mask = DRC_DISALLOW_BURIED_VIAS;
+                else
+                    mask = DRC_DISALLOW_THROUGH_VIAS;
+            }
+            else
+            {
+                switch( a->Type() )
+                {
+                case PCB_TRACE_T: mask = DRC_DISALLOW_TRACKS; break;
+                case PCB_ARC_T: mask = DRC_DISALLOW_TRACKS; break;
+                case PCB_PAD_T: mask = DRC_DISALLOW_PADS; break;
+                case PCB_FOOTPRINT_T: mask = DRC_DISALLOW_FOOTPRINTS; break;
+                case PCB_SHAPE_T: mask = DRC_DISALLOW_GRAPHICS; break;
+                case PCB_BARCODE_T: mask = DRC_DISALLOW_GRAPHICS; break;
+                case PCB_FIELD_T: mask = DRC_DISALLOW_TEXTS; break;
+                case PCB_TEXT_T: mask = DRC_DISALLOW_TEXTS; break;
+                case PCB_TEXTBOX_T: mask = DRC_DISALLOW_TEXTS; break;
+                case PCB_TABLE_T: mask = DRC_DISALLOW_TEXTS; break;
+
+                case PCB_ZONE_T:
+                    // Treat teardrop areas as tracks for DRC purposes
+                    if( static_cast<const ZONE*>( a )->IsTeardropArea() )
+                        mask = DRC_DISALLOW_TRACKS;
+                    else
+                        mask = DRC_DISALLOW_ZONES;
+
+                    break;
+
+                case PCB_LOCATE_HOLE_T: mask = DRC_DISALLOW_HOLES; break;
+                default: mask = 0; break;
+                }
+            }
+
+            if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
+            {
+                if( implicit )
+                    REPORT( _( "Keepout constraint not met." ) )
+                else
+                    REPORT( _( "Disallow constraint not met." ) )
+
+                return;
+            }
+
+            LSET itemLayers = a->GetLayerSet();
+
+            if( a->Type() == PCB_FOOTPRINT_T )
+            {
+                const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
+
+                if( !footprint->GetCourtyard( F_CrtYd ).IsEmpty() )
+                    itemLayers |= LSET::FrontMask();
+
+                if( !footprint->GetCourtyard( B_CrtYd ).IsEmpty() )
+                    itemLayers |= LSET::BackMask();
+            }
+
+            if( !( c->layerTest & itemLayers ).any() )
+            {
+                if( implicit )
+                {
+                    REPORT( _( "Keepout layer(s) not matched." ) )
+                }
+                else if( c->parentRule )
+                {
+                    REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
+                                              EscapeHTML( c->parentRule->m_LayerSource ) ) )
+                }
+                else
+                {
+                    REPORT( _( "Rule layer not matched; rule ignored." ) )
+                }
+
+                return;
+            }
+        }
+
+        if( ( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
+            || ( m_board->GetEnabledLayers() & c->layerTest ).count() == 0 )
+        {
+            if( implicit )
+            {
+                REPORT( _( "Constraint layer not matched." ) )
+            }
+            else if( c->parentRule )
+            {
+                REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
+                                          EscapeHTML( c->parentRule->m_LayerSource ) ) )
+            }
+            else
+            {
+                REPORT( _( "Rule layer not matched; rule ignored." ) )
+            }
+        }
+        else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT && ( !a->HasDrilledHole() && !b->HasDrilledHole() ) )
+        {
+            // Report non-drilled-holes as an implicit condition
+            REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
+                                      a->GetItemDescription( this, true ) ) )
+        }
+        else if( !c->condition || c->condition->GetExpression().IsEmpty() )
+        {
+            if( aReporter )
+            {
+                if( implicit )
+                {
+                    REPORT( _( "Unconditional constraint applied." ) )
+                }
+                else if( constraint.m_Type == ASSERTION_CONSTRAINT )
+                {
+                    REPORT( _( "Unconditional rule applied." ) )
+                    testAssertion( c );
+                }
+                else
+                {
+                    REPORT( _( "Unconditional rule applied; overrides previous constraints." ) )
+                }
+            }
+
+            applyConstraint( c );
+        }
+        else
+        {
+            if( implicit )
+            {
+                // Don't report on implicit rule conditions; they're synthetic.
+            }
+            else
+            {
+                REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
+                                          EscapeHTML( c->condition->GetExpression() ) ) )
+            }
+
+            if( c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, aReporter ) )
+            {
+                if( aReporter )
+                {
                     if( implicit )
                     {
-                        // Don't report on implicit rule conditions; they're synthetic.
+                        REPORT( _( "Constraint applied." ) )
+                    }
+                    else if( constraint.m_Type == ASSERTION_CONSTRAINT )
+                    {
+                        REPORT( _( "Rule applied." ) )
+                        testAssertion( c );
                     }
                     else
                     {
-                        REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
-                                                  EscapeHTML( c->condition->GetExpression() ) ) )
-                    }
-
-                    if( c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, aReporter ) )
-                    {
-                        if( aReporter )
-                        {
-                            if( implicit )
-                            {
-                                REPORT( _( "Constraint applied." ) )
-                            }
-                            else if( constraint.m_Type == ASSERTION_CONSTRAINT )
-                            {
-                                REPORT( _( "Rule applied." ) )
-                                testAssertion( c );
-                            }
-                            else
-                            {
-                                REPORT( _( "Rule applied; overrides previous constraints." ) )
-                            }
-                        }
-
-                        applyConstraint( c );
-                    }
-                    else
-                    {
-                        REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
-                                         : _( "Condition not satisfied; rule ignored." ) )
+                        REPORT( _( "Rule applied; overrides previous constraints." ) )
                     }
                 }
-            };
+
+                applyConstraint( c );
+            }
+            else
+            {
+                REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
+                                 : _( "Condition not satisfied; rule ignored." ) )
+            }
+        }
+    };
 
     if( m_constraintMap.count( aConstraintType ) )
     {
@@ -1629,7 +1616,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             processConstraint( rule );
     }
 
-    if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
+    if( constraint.GetParentRule() && !constraint.GetParentRule()->IsImplicit() )
         return constraint;
 
     // Special case for properties which can be inherited from parent footprints.  We've already
@@ -1658,7 +1645,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             for( DRC_ENGINE_CONSTRAINT* rule : *ruleset )
                 processConstraint( rule );
 
-            if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
+            if( constraint.GetParentRule() && !constraint.GetParentRule()->IsImplicit() )
                 return constraint;
         }
 

@@ -238,7 +238,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     wxString                  msg;
 
                     // Implicit rules reported in checkAntiTrackKeepout
-                    if( constraint.GetParentRule()->m_Implicit )
+                    if( constraint.GetParentRule()->IsImplicit() )
                         return;
 
                     msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );

@@ -163,7 +163,6 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
     m_type->SetSelection( static_cast<int>( aProfile.m_Type ) );
     onChangeProfileType( aProfile.m_Type );
     m_targetImpedance->SetValue( wxString::FromDouble( aProfile.m_TargetImpedance ) );
-    m_enableDrcGeneration->SetValue( aProfile.m_GenerateNetClassDRCRules );
     m_enableDelayTuning->SetValue( aProfile.m_EnableTimeDomainTuning );
     m_viaPropagationUnits.SetValue( aProfile.m_ViaPropagationDelay );
 
@@ -213,7 +212,6 @@ TUNING_PROFILE PANEL_SETUP_TUNING_PROFILE_INFO::GetProfile() const
     TUNING_PROFILE profile;
     profile.m_ProfileName = m_name->GetValue();
     profile.m_Type = static_cast<TUNING_PROFILE::PROFILE_TYPE>( m_type->GetSelection() );
-    profile.m_GenerateNetClassDRCRules = m_enableDrcGeneration->GetValue();
     profile.m_EnableTimeDomainTuning = m_enableDelayTuning->GetValue();
     profile.m_ViaPropagationDelay = m_viaPropagationUnits.GetIntValue();
 
