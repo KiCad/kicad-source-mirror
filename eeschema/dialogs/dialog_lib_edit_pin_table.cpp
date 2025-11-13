@@ -1245,16 +1245,6 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
-    if( m_symbol->IsMultiUnit() )
-        m_grid->ShowCol( COL_UNIT );
-    else
-        m_grid->HideCol( COL_UNIT );
-
-    if( m_symbol->IsMultiBodyStyle() )
-        m_grid->ShowCol( COL_BODY_STYLE );
-    else
-        m_grid->HideCol( COL_BODY_STYLE );
-
     updateSummary();
 
     return true;
