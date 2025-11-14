@@ -323,6 +323,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     {
                         wxLogTrace( tracePathsAndFiles,
                                    wxS( "Loaded multi-root schematic with no top-level sheets!" ) );
+                        newSchematic->CreateDefaultScreens();
                     }
                 }
                 else
