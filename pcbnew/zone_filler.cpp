@@ -2288,27 +2288,43 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 [&]( const BOX2I& box, EDA_ANGLE angle )
                 {
                     VECTOR2I center = box.GetCenter();
-                    VECTOR2I half_size( box.GetWidth() / 2, box.GetHeight() / 2 );
+                    VECTOR2I half_size = KiROUND( box.GetWidth() / 2.0, box.GetHeight() / 2.0 );
 
                     // Function to find intersection of line with box edge
-                    auto intersectLineBox =
-                            [&](const VECTOR2D& direction) -> VECTOR2I
+                    auto intersectBBox =
+                            [&]( const EDA_ANGLE& spokeAngle, VECTOR2I* spoke_side ) -> VECTOR2I
                             {
-                                double dx = direction.x;
-                                double dy = direction.y;
+                                double dx = spokeAngle.Cos();
+                                double dy = spokeAngle.Sin();
 
                                 // Short-circuit the axis cases because they will be degenerate in the
                                 // intersection test
-                                if( direction.x == 0 )
-                                    return VECTOR2I( 0, dy * half_size.y );
-                                else if( direction.y == 0 )
-                                    return VECTOR2I( dx * half_size.x, 0 );
+                                if( dx == 0 )
+                                {
+                                    *spoke_side = VECTOR2I( spoke_half_w, 0 );
+                                    return KiROUND( 0.0, dy * half_size.y );
+                                }
+                                else if( dy == 0 )
+                                {
+                                    *spoke_side = VECTOR2I( 0, spoke_half_w );
+                                    return KiROUND( dx * half_size.x, 0.0 );
+                                }
 
                                 // We are going to intersect with one side or the other.  Whichever
                                 // we hit first is the fraction of the spoke length we keep
-                                double tx = std::min( half_size.x / std::abs( dx ),
-                                                      half_size.y / std::abs( dy ) );
-                                return VECTOR2I( dx * tx, dy * tx );
+                                double dist_x = half_size.x / std::abs( dx );
+                                double dist_y = half_size.y / std::abs( dy );
+
+                                if( dist_x < dist_y )
+                                {
+                                    *spoke_side = KiROUND( 0.0, spoke_half_w / ( ANGLE_90 - spokeAngle ).Sin() );
+                                    return KiROUND( dx * dist_x, dy * dist_x );
+                                }
+                                else
+                                {
+                                    *spoke_side = KiROUND( spoke_half_w / spokeAngle.Sin(), 0.0 );
+                                    return KiROUND( dx * dist_y, dy * dist_y );
+                                }
                             };
 
                     // Precalculate angles for four cardinal directions
@@ -2322,11 +2338,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     // Generate four spokes in cardinal directions
                     for( const EDA_ANGLE& spokeAngle : angles )
                     {
-                        VECTOR2D direction( spokeAngle.Cos(), spokeAngle.Sin() );
-                        VECTOR2D perpendicular = direction.Perpendicular();
-
-                        VECTOR2I intersection = intersectLineBox( direction );
-                        VECTOR2I spoke_side = perpendicular.Resize( spoke_half_w );
+                        VECTOR2I spoke_side;
+                        VECTOR2I intersection = intersectBBox( spokeAngle, &spoke_side );
 
                         SHAPE_LINE_CHAIN spoke;
                         spoke.Append( center + spoke_side );
@@ -2344,8 +2357,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET   thermalPoly;
             SHAPE_LINE_CHAIN thermalOutline;
 
-            pad->TransformShapeToPolygon( thermalPoly, aLayer, thermalReliefGap + epsilon,
-                                          m_maxError, ERROR_OUTSIDE );
+            pad->TransformShapeToPolygon( thermalPoly, aLayer, thermalReliefGap + epsilon, m_maxError, ERROR_OUTSIDE );
 
             if( thermalPoly.OutlineCount() )
                 thermalOutline = thermalPoly.Outline( 0 );
@@ -2464,21 +2476,20 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 position = via->GetPosition();
             }
 
-            // Add the half width of the zone mininum width to the inflate amount to account for
-            // the fact that the deflation procedure will shrink the results by half the half the
-            // zone min width
+            // Add half the zone mininum width to the inflate amount to account for the fact that
+            // the deflation procedure will shrink the results by half the half the zone min width.
             spokesBox.Inflate( thermalReliefGap + epsilon + zone_half_width );
 
-            // This is a touchy case because the bounding box for circles overshoots the mark
-            // when rotated at 45 degrees.  So we just build spokes at 0 degrees and rotate
-            // them later.
+            // Yet another wrinkle: the bounding box for circles will overshoot the mark considerably
+            // when the spokes are near a 45 degree increment.  So we build the spokes at 0 degrees
+            // and then rotate them to the correct position.
             if( circular )
             {
                 buildSpokesFromOrigin( spokesBox, ANGLE_0 );
 
                 if( thermalSpokeAngle != ANGLE_0 )
                 {
-                    //Rotate the last four elements of aspokeslist
+                    // Rotate the last four elements of aspokeslist
                     for( auto it = aSpokesList.rbegin(); it != aSpokesList.rbegin() + 4; ++it )
                         it->Rotate( thermalSpokeAngle );
                 }

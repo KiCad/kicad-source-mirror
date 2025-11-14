@@ -701,6 +701,11 @@ inline constexpr VECTOR2I KiROUND( const VECTOR2D& vec )
     return VECTOR2I( KiROUND( vec.x ), KiROUND( vec.y ) );
 }
 
+inline constexpr VECTOR2I KiROUND( double x, double y )
+{
+    return VECTOR2I( KiROUND( x ), KiROUND( y ) );
+}
+
 /* STL specializations */
 namespace std
 {
