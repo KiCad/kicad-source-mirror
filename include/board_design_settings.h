@@ -300,18 +300,12 @@ public:
     /**
      * Return true if netclass values should be used to obtain appropriate track width.
      */
-    inline bool UseNetClassTrack() const
-    {
-        return ( m_trackWidthIndex == 0 && !m_useCustomTrackVia );
-    }
+    inline bool UseNetClassTrack() const { return ( m_trackWidthIndex <= 0 && !m_useCustomTrackVia ); }
 
     /**
      * Return true if netclass values should be used to obtain appropriate via size.
      */
-    inline bool UseNetClassVia() const
-    {
-        return ( m_viaSizeIndex == 0 && !m_useCustomTrackVia );
-    }
+    inline bool UseNetClassVia() const { return ( m_viaSizeIndex <= 0 && !m_useCustomTrackVia ); }
 
     /**
      * Return true if netclass values should be used to obtain appropriate diff pair dimensions.
