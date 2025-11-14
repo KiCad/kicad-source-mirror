@@ -307,7 +307,7 @@ std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aP
                         candidate.x, candidate.y );
         }
 
-        VECTOR2I candidateInt( KiROUND( candidate.x ), KiROUND( candidate.y ) );
+        VECTOR2I candidateInt = KiROUND( candidate );
 
         if( candidateInt == m_skipPoint )
         {

@@ -169,7 +169,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     TEXT_ATTRIBUTES           textAttrs;
 
     int      glyphWidth = textDims.GlyphSize.x;
-    VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth ) );
+    VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), glyphWidth );
     VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
     VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
 

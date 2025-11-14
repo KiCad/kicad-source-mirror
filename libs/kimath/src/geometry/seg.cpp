@@ -504,10 +504,7 @@ bool SEG::IntersectsLine( double aSlope, double aOffset, VECTOR2I& aIntersection
     // Check if intersection is within segment bounds
     if( t >= 0.0 && t <= 1.0 )
     {
-        const double intersect_x = segA.x + t * segDir.x;
-        const double intersect_y = segA.y + t * segDir.y;
-
-        aIntersection = VECTOR2I( KiROUND( intersect_x ), KiROUND( intersect_y ) );
+        aIntersection = KiROUND( segA.x + t * segDir.x, segA.y + t * segDir.y );
         return true;
     }
 

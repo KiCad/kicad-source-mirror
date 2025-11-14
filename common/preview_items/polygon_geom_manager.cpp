@@ -223,7 +223,7 @@ static SHAPE_LINE_CHAIN build45DegLeader( const VECTOR2I& aEndPoint, const SHAPE
         }
     }
 
-    const VECTOR2I midInt = { KiROUND( mid.x ), KiROUND( mid.y ) };
+    const VECTOR2I midInt = KiROUND( mid.x, mid.y );
 
     return SHAPE_LINE_CHAIN( std::vector<VECTOR2I>{ lastPt, midInt, aEndPoint } );
 }

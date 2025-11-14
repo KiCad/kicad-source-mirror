@@ -70,7 +70,7 @@ void ROUTER_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                           GRTextWidth( m_hint, font, hintDims.GlyphSize, hintDims.StrokeWidth,
                                        false, false, fontMetrics ) );
 
-    VECTOR2I margin( KiROUND( textDims.GlyphSize.x * 0.4 ), KiROUND( textDims.GlyphSize.y * 0.6 ) );
+    VECTOR2I margin = KiROUND( textDims.GlyphSize.x * 0.4, textDims.GlyphSize.y * 0.6 );
     VECTOR2I size( textWidth + margin.x, KiROUND( textDims.GlyphSize.y * 1.7 ) );
     VECTOR2I offset( margin.x * 5, -( size.y + margin.y * 5 ) );
 

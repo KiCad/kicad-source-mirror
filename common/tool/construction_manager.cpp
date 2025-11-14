@@ -725,7 +725,7 @@ OPT_VECTOR2I SNAP_LINE_MANAGER::GetNearestSnapLinePoint( const VECTOR2I&    aCur
         if( perpDistance < bestPerpDistance )
         {
             bestPerpDistance = perpDistance;
-            bestSnapPoint = VECTOR2I( KiROUND( snapPoint.x ), KiROUND( snapPoint.y ) );
+            bestSnapPoint = KiROUND( snapPoint );
             wxLogTrace( traceSnap, "      NEW BEST: perpDist=%.1f, snapPoint=(%d, %d)",
                         bestPerpDistance, bestSnapPoint->x, bestSnapPoint->y );
         }

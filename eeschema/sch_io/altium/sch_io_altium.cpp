@@ -2506,10 +2506,8 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
     VECTOR2I  center = elem.m_Center;
     EDA_ANGLE startAngle( elem.m_EndAngle, DEGREES_T );
     EDA_ANGLE endAngle( elem.m_StartAngle, DEGREES_T );
-    VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                           -KiROUND( arc_radius * startAngle.Sin() ) );
-    VECTOR2I  endOffset( KiROUND( arc_radius * endAngle.Cos() ),
-                         -KiROUND( arc_radius * endAngle.Sin() ) );
+    VECTOR2I  startOffset = KiROUND( arc_radius * startAngle.Cos(), -( arc_radius * startAngle.Sin() ) );
+    VECTOR2I  endOffset = KiROUND( arc_radius * endAngle.Cos(), -( arc_radius * endAngle.Sin() ) );
 
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
@@ -2715,10 +2713,8 @@ void SCH_IO_ALTIUM::ParsePieChart( const std::map<wxString, wxString>& aProperti
     VECTOR2I  center = elem.m_Center;
     EDA_ANGLE startAngle( elem.m_EndAngle, DEGREES_T );
     EDA_ANGLE endAngle( elem.m_StartAngle, DEGREES_T );
-    VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                           -KiROUND( arc_radius * startAngle.Sin() ) );
-    VECTOR2I  endOffset( KiROUND( arc_radius * endAngle.Cos() ),
-                         -KiROUND( arc_radius * endAngle.Sin() ) );
+    VECTOR2I  startOffset = KiROUND( arc_radius * startAngle.Cos(), -( arc_radius * startAngle.Sin() ) );
+    VECTOR2I  endOffset = KiROUND( arc_radius * endAngle.Cos(), -( arc_radius * endAngle.Sin() ) );
 
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {

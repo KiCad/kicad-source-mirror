@@ -102,11 +102,11 @@ void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
 
             double  startradiant   = DEG2RAD( vertex.startangle );
             double  endradiant     = DEG2RAD( vertex.endangle );
-            VECTOR2I arcStartOffset = VECTOR2I( KiROUND( std::cos( startradiant ) * vertex.radius ),
-                                             -KiROUND( std::sin( startradiant ) * vertex.radius ) );
+            VECTOR2I arcStartOffset = KiROUND( std::cos( startradiant ) * vertex.radius,
+                                               -std::sin( startradiant ) * vertex.radius );
 
-            VECTOR2I arcEndOffset = VECTOR2I( KiROUND( std::cos( endradiant ) * vertex.radius ),
-                                           -KiROUND( std::sin( endradiant ) * vertex.radius ) );
+            VECTOR2I arcEndOffset = KiROUND( std::cos( endradiant ) * vertex.radius,
+                                             -std::sin( endradiant ) * vertex.radius );
 
             VECTOR2I arcStart = vertex.center + arcStartOffset;
             VECTOR2I arcEnd   = vertex.center + arcEndOffset;
@@ -1822,7 +1822,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
             if( dirVec.x != 0 || dirVec.y != 0 )
             {
                 double   scaling = (double) dirVec.EuclideanNorm() / aElem.arrowsize;
-                VECTOR2I arrVec = VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
+                VECTOR2I arrVec = KiROUND( dirVec.x / scaling, dirVec.y / scaling );
                 RotatePoint( arrVec, EDA_ANGLE( 20.0, DEGREES_T ) );
 
                 {

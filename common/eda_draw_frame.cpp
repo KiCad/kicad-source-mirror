@@ -1025,7 +1025,7 @@ VECTOR2I EDA_DRAW_FRAME::GetNearestGridPosition( const VECTOR2I& aPosition ) con
     double yOffset = fmod( gridOrigin.y, gridSize.y );
     int    y = KiROUND( (aPosition.y - yOffset) / gridSize.y );
 
-    return VECTOR2I( KiROUND( x * gridSize.x + xOffset ), KiROUND( y * gridSize.y + yOffset ) );
+    return KiROUND( x * gridSize.x + xOffset, y * gridSize.y + yOffset );
 }
 
 
@@ -1039,7 +1039,7 @@ VECTOR2I EDA_DRAW_FRAME::GetNearestHalfGridPosition( const VECTOR2I& aPosition )
     double yOffset = fmod( gridOrigin.y, gridSize.y );
     int    y = KiROUND( (aPosition.y - yOffset) / gridSize.y );
 
-    return VECTOR2I( KiROUND( x * gridSize.x + xOffset ), KiROUND( y * gridSize.y + yOffset ) );
+    return KiROUND( x * gridSize.x + xOffset, y * gridSize.y + yOffset );
 }
 
 

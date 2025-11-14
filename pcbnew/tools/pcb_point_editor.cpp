@@ -1861,7 +1861,7 @@ static VECTOR2I snapCorner( const VECTOR2I& aPrev, const VECTOR2I& aNext, const 
 
                 v = v.Resize( 1 );
                 VECTOR2D p = center + v * radius;
-                return VECTOR2I( KiROUND( p.x ), KiROUND( p.y ) );
+                return KiROUND( p );
             };
 
     VECTOR2I p1 = project( center1 );

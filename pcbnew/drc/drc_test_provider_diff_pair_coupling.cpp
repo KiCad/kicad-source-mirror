@@ -177,27 +177,23 @@ static bool commonParallelProjection( const PCB_ARC& p, const PCB_ARC& n, SHAPE_
 
     if( p_is_ccw )
     {
-        p_clip_point = p_center + VECTOR2I( KiROUND( p_radius * clip_start_angle.Cos() ),
-                                            KiROUND( p_radius * clip_start_angle.Sin() ) );
+        p_clip_point = p_center + KiROUND( p_radius * clip_start_angle.Cos(), p_radius * clip_start_angle.Sin() );
         pClip = SHAPE_ARC( p_center, p_clip_point, clip_total_angle );
     }
     else
     {
-        p_clip_point = p_center + VECTOR2I( KiROUND( p_radius * clip_end_angle.Cos() ),
-                                            KiROUND( p_radius * clip_end_angle.Sin() ) );
+        p_clip_point = p_center + KiROUND( p_radius * clip_end_angle.Cos(), p_radius * clip_end_angle.Sin() );
         pClip = SHAPE_ARC( p_center, p_clip_point, -clip_total_angle );
     }
 
     if( n_is_ccw )
     {
-        n_clip_point = n_center + VECTOR2I( KiROUND( n_radius * clip_start_angle.Cos() ),
-                                            KiROUND( n_radius * clip_start_angle.Sin() ) );
+        n_clip_point = n_center + KiROUND( n_radius * clip_start_angle.Cos(), n_radius * clip_start_angle.Sin() );
         nClip = SHAPE_ARC( n_center, n_clip_point, clip_total_angle );
     }
     else
     {
-        n_clip_point = n_center + VECTOR2I( KiROUND( n_radius * clip_end_angle.Cos() ),
-                                            KiROUND( n_radius * clip_end_angle.Sin() ) );
+        n_clip_point = n_center + KiROUND( n_radius * clip_end_angle.Cos(), n_radius * clip_end_angle.Sin() );
         nClip = SHAPE_ARC( n_center, n_clip_point, -clip_total_angle );
     }
 

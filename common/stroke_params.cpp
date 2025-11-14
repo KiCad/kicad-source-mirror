@@ -143,7 +143,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
         VECTOR2D start = line->GetSeg().A;
         VECTOR2D end = line->GetSeg().B;
-        BOX2I    clip( start, VECTOR2I( KiROUND( end.x - start.x ), KiROUND( end.y - start.y ) ) );
+        BOX2I    clip( start, KiROUND( end.x - start.x, end.y - start.y ) );
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );
@@ -156,8 +156,8 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
                            start.y + strokes[ i % wrapAround ] * sin( theta ) );
 
             // Drawing each segment can be done rounded to ints.
-            VECTOR2I a( KiROUND( start.x ), KiROUND( start.y ) );
-            VECTOR2I b( KiROUND( next.x ), KiROUND( next.y ) );
+            VECTOR2I a = KiROUND( start );
+            VECTOR2I b = KiROUND( next );
 
             if( ClipLine( &clip, a.x, a.y, b.x, b.y ) )
                 break;

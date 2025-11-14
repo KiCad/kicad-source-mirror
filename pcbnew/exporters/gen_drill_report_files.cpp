@@ -316,7 +316,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     TEXT_ATTRIBUTES attrs;
     attrs.m_StrokeWidth = TextWidth;
     attrs.m_Angle = ANGLE_HORIZONTAL;
-    attrs.m_Size = VECTOR2I( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) );
+    attrs.m_Size = KiROUND( charSize * charScale, charSize * charScale );
     attrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
     attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
     attrs.m_Multiline = false;

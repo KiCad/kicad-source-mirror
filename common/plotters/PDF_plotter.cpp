@@ -2507,8 +2507,8 @@ void PDF_PLOTTER::drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, cons
         endPt.x -= dir.x * barTrim - offVec.x; // subtract trim, then apply same vertical offset
         endPt.y -= dir.y * barTrim - offVec.y;
 
-        VECTOR2I iStart( KiROUND( startPt.x ), KiROUND( startPt.y ) );
-        VECTOR2I iEnd( KiROUND( endPt.x ), KiROUND( endPt.y ) );
+        VECTOR2I iStart = KiROUND( startPt.x, startPt.y );
+        VECTOR2I iEnd = KiROUND( endPt.x, endPt.y );
 
         MoveTo( iStart );
         LineTo( iEnd );

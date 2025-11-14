@@ -48,7 +48,7 @@ VECTOR2I GRAPHICS_IMPORTER_PCBNEW::MapCoordinate( const VECTOR2D& aCoordinate )
     coord += GetImportOffsetMM();
     coord *= GetMillimeterToIuFactor();
 
-    return VECTOR2I( KiROUND( coord.x ), KiROUND( coord.y ) );
+    return KiROUND( coord.x, coord.y );
 }
 
 

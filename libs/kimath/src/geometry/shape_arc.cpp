@@ -56,8 +56,8 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
     RotatePoint( mid, center, -aCenterAngle / 2.0 );
     RotatePoint( end, center, -aCenterAngle );
 
-    m_mid = VECTOR2I( KiROUND( mid.x ), KiROUND( mid.y ) );
-    m_end = VECTOR2I( KiROUND( end.x ), KiROUND( end.y ) );
+    m_mid = KiROUND( mid );
+    m_end = KiROUND( end );
 
     update_values();
 }

@@ -296,8 +296,7 @@ const VECTOR2D DS_DATA_ITEM::GetStartPos( int ii ) const
 
 const VECTOR2I DS_DATA_ITEM::GetStartPosIU( int ii ) const
 {
-    VECTOR2D pos = GetStartPos( ii ) * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
-    return VECTOR2I( KiROUND( pos.x ), KiROUND( pos.y ) );
+    return KiROUND( GetStartPos( ii ) * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
 }
 
 

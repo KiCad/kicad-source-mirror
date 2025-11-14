@@ -1166,8 +1166,8 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processCircle( const GRAPHIC_DATA& aData, dou
         KiROUND( readDouble( aData.graphic_data1 ) * aScale ),
         -KiROUND( readDouble( aData.graphic_data2 ) * aScale ),
     };
-    const VECTOR2I size{ KiROUND( readDouble( aData.graphic_data3 ) * aScale ),
-                         KiROUND( readDouble( aData.graphic_data4 ) * aScale ) };
+    const VECTOR2I size = KiROUND( readDouble( aData.graphic_data3 ) * aScale,
+                                   readDouble( aData.graphic_data4 ) * aScale );
 
     if( size.x != size.y )
     {

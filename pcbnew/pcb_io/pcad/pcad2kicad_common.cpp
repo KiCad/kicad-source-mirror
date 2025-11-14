@@ -543,15 +543,13 @@ void CorrectTextPosition( TTEXTVALUE* aValue )
 
 void SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText, int aTextHeight )
 {
-    aText->SetTextSize( VECTOR2I( KiROUND( aTextHeight * STROKE_WIDTH_TO_SIZE ),
-                                  KiROUND( aTextHeight * STROKE_HEIGHT_TO_SIZE ) ) );
+    aText->SetTextSize( KiROUND( aTextHeight * STROKE_WIDTH_TO_SIZE, aTextHeight * STROKE_HEIGHT_TO_SIZE ) );
 }
 
 
 void SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight )
 {
-    aText->SetTextSize( VECTOR2I( KiROUND( aTextHeight * TRUETYPE_WIDTH_TO_SIZE ),
-                                  KiROUND( aTextHeight * TRUETYPE_HEIGHT_TO_SIZE ) ) );
+    aText->SetTextSize( KiROUND( aTextHeight * TRUETYPE_WIDTH_TO_SIZE, aTextHeight * TRUETYPE_HEIGHT_TO_SIZE ) );
 }
 
 

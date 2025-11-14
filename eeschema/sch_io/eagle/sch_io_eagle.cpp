@@ -1621,8 +1621,7 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
     bool                            global = m_netCounts[aNetName] > 1;
     std::unique_ptr<SCH_LABEL_BASE> label;
 
-    VECTOR2I textSize = VECTOR2I( KiROUND( aLabel->size.ToSchUnits() * 0.7 ),
-                                  KiROUND( aLabel->size.ToSchUnits() * 0.7 ) );
+    VECTOR2I textSize = KiROUND( aLabel->size.ToSchUnits() * 0.7, aLabel->size.ToSchUnits() * 0.7 );
 
     if( m_modules.size() )
     {

@@ -208,7 +208,7 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
         t = 0.0;
 
     VECTOR2D newCenterD = VECTOR2D( m_convergencePoint ) + VECTOR2D( m_midVector ) * t;
-    VECTOR2I newCenter( KiROUND( newCenterD.x ), KiROUND( newCenterD.y ) );
+    VECTOR2I newCenter = KiROUND( newCenterD );
     aHandle.SetPosition( newCenter );
 
     // The dragged segment endpoints

@@ -2043,7 +2043,7 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
         annulus = eagleClamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
         int diameter = KiROUND( drillz + 2 * annulus );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( KiROUND( diameter ), KiROUND( diameter ) ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
     }
 
     if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL )

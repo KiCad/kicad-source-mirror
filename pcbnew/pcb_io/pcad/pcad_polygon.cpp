@@ -188,8 +188,7 @@ void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
             // add outline
             for( int i = 0; i < (int) m_Outline.GetCount(); i++ )
             {
-                zone->AppendCorner( VECTOR2I( KiROUND( m_Outline[i]->x ),
-                                              KiROUND( m_Outline[i]->y ) ), -1 );
+                zone->AppendCorner( KiROUND( m_Outline[i]->x, m_Outline[i]->y ), -1 );
             }
 
             zone->SetLocalClearance( m_Width );

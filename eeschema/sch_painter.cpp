@@ -3585,8 +3585,8 @@ void SCH_PAINTER::draw( const SCH_GROUP* aGroup, int aLayer )
 
         // Scale by zoom a bit, but not too much
         int      textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;
-        VECTOR2I textOffset = VECTOR2I( width.x / 2, -KiROUND( textSize * 0.5 ) );
-        VECTOR2I titleHeight = VECTOR2I( 0, KiROUND( textSize * 2.0 ) );
+        VECTOR2I textOffset = KiROUND( width.x / 2.0, -textSize * 0.5 );
+        VECTOR2I titleHeight = KiROUND( 0.0, textSize * 2.0 );
 
         if( PrintableCharCount( name ) * textSize < bbox.GetWidth() )
         {
