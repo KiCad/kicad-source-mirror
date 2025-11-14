@@ -83,6 +83,51 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
+        // Skip over existing escape markers without processing their contents
+        // This prevents expanding ${} or @{} that are inside escaped expressions
+        if( i + 14 <= sourceLen && aSource.Mid( i, 14 ) == wxT( "<<<ESC_DOLLAR:" ) )
+        {
+            // Copy the entire escape marker including contents until matching closing }
+            newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
+            i += 14;
+
+            // Count braces to find the matching closing }
+            int braceCount = 1;
+            while( i < sourceLen && braceCount > 0 )
+            {
+                if( aSource[i] == '{' )
+                    braceCount++;
+                else if( aSource[i] == '}' )
+                    braceCount--;
+
+                newbuf.append( aSource[i] );
+                i++;
+            }
+            i--; // Back up one since the for loop will increment
+            continue;
+        }
+        else if( i + 10 <= sourceLen && aSource.Mid( i, 10 ) == wxT( "<<<ESC_AT:" ) )
+        {
+            // Copy the entire escape marker including contents until matching closing }
+            newbuf.append( wxT( "<<<ESC_AT:" ) );
+            i += 10;
+
+            // Count braces to find the matching closing }
+            int braceCount = 1;
+            while( i < sourceLen && braceCount > 0 )
+            {
+                if( aSource[i] == '{' )
+                    braceCount++;
+                else if( aSource[i] == '}' )
+                    braceCount--;
+
+                newbuf.append( aSource[i] );
+                i++;
+            }
+            i--; // Back up one since the for loop will increment
+            continue;
+        }
+
         // Handle escaped variable references: \${...} or \@{...}
         // Replace with escape markers that won't be expanded by multi-pass loops
         // The markers will be converted back to ${...} or @{...} only at the final display stage
@@ -90,15 +135,15 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
         {
             if( ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) && i + 2 < sourceLen && aSource[i + 2] == '{' )
             {
-                // Replace \${ with <<<ESCDOLLAR: and \@{ with <<<ESCAT:
+                // Replace \${ with <<<ESC_DOLLAR: and \@{ with <<<ESC_AT:
                 // Using unique delimiters without braces to avoid confusing the expression evaluator
                 if( aSource[i + 1] == '$' )
-                    newbuf.append( wxT( "<<<ESCDOLLAR:" ) );
+                    newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
                 else
-                    newbuf.append( wxT( "<<<ESCAT:" ) );
+                    newbuf.append( wxT( "<<<ESC_AT:" ) );
                 i += 2;
 
-                // Copy everything until the matching closing brace, verbatim
+                // Copy everything until the matching closing brace, including the brace
                 int braceDepth = 1;
                 for( i = i + 1; i < sourceLen && braceDepth > 0; ++i )
                 {
@@ -107,10 +152,8 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                     else if( aSource[i] == '}' )
                         braceDepth--;
 
-                    if( braceDepth > 0 )  // Don't append the final closing brace
-                        newbuf.append( aSource[i] );
+                    newbuf.append( aSource[i] );
                 }
-                newbuf.append( wxT( ">>>" ) );  // Append closing delimiter
                 i--; // Adjust because loop will increment
                 continue;
             }
@@ -213,13 +256,19 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
 
     while( ( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) ) && ++aDepth <= maxDepth )
     {
-        text = ExpandTextVars( text, aResolver );
-        text = evaluator.Evaluate( text ); // Evaluate math expressions
+        // Only expand vars if there are ${} expressions present
+        // Don't expand if the only remaining $ are in escape markers like <<<ESC_DOLLAR:
+        if( text.Contains( wxT( "${" ) ) )
+            text = ExpandTextVars( text, aResolver );
+
+        // Only evaluate if there are @{} expressions present
+        // Don't evaluate if the only remaining @ are in escape markers like <<<ESC_AT:
+        if( text.Contains( wxT( "@{" ) ) )
+            text = evaluator.Evaluate( text ); // Evaluate math expressions
     }
 
-    // NOTE: We do NOT convert escape markers back to ${} and @{} here
-    // This allows escaped content to survive through nested CELL() references
-    // The markers will be converted in GetShownText() for final display
+    // NOTE: We do NOT unescape here because this function can be called recursively
+    // (e.g., in nested CELL() references). Unescaping will be done in GetShownText() for final display.
 
     return text;
 }

@@ -190,16 +190,19 @@ wxString SCH_FIELD::GetShownName() const
 
 wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
 {
+    // Use local depth counter so each text element starts fresh
+    int depth = 0;
+
     std::function<bool( wxString* )> libSymbolResolver = [&]( wxString* token ) -> bool
     {
         LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( token, aDepth + 1 );
+        return symbol->ResolveTextVar( token, depth + 1 );
     };
 
     std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( aPath, token, aDepth + 1 );
+        return symbol->ResolveTextVar( aPath, token, depth + 1 );
     };
 
     std::function<bool( wxString* )> schematicResolver = [&]( wxString* token ) -> bool
@@ -208,7 +211,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
             return false;
 
         if( SCHEMATIC* schematic = Schematic() )
-            return schematic->ResolveTextVar( aPath, token, aDepth + 1 );
+            return schematic->ResolveTextVar( aPath, token, depth + 1 );
 
         return false;
     };
@@ -224,10 +227,10 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
         SCH_SHEET_PATH path = *aPath;
         path.push_back( sheet );
 
-        bool retval = sheet->ResolveTextVar( &path, token, aDepth + 1 );
+        bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
 
         if( schematic )
-            retval |= schematic->ResolveTextVar( &path, token, aDepth + 1 );
+            retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
 
         return retval;
     };
@@ -238,7 +241,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
             return false;
 
         SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-        return label->ResolveTextVar( aPath, token, aDepth + 1 );
+        return label->ResolveTextVar( aPath, token, depth + 1 );
     };
 
     wxString variantName;
@@ -276,20 +279,15 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
             return resolved;
         };
 
-        text = ResolveTextVars( text, &fieldResolver, aDepth );
+        text = ResolveTextVars( text, &fieldResolver, depth );
     }
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
 
-    // Convert escape markers back to literals only at the top level (aDepth == 0)
-    // This prevents re-expansion when text is used in nested CELL() references
-    if( aDepth == 0 )
-    {
-        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
-        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
-        text.Replace( wxT( ">>>" ), wxT( "}" ) );
-    }
+    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }

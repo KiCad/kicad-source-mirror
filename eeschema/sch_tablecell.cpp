@@ -152,6 +152,9 @@ static bool parseCellAddress( const wxString& aAddr, int& aRow, int& aCol )
 wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath,
                                       bool aAllowExtraText, int aDepth ) const
 {
+    // Use local depth counter so each text element starts fresh
+    int depth = 0;
+
     SCH_SHEET* sheet = nullptr;
 
     if( aPath )
@@ -247,7 +250,7 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
             {
                 // Return the evaluated/displayed value, not raw text
                 // This ensures formulas in the target cell are evaluated
-                *token = targetCell->GetShownText( aSettings, aPath, false, aDepth + 1 );
+                *token = targetCell->GetShownText( aSettings, aPath, false, depth + 1 );
                 return true;
             }
             else
@@ -260,17 +263,17 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
         // Fall back to sheet variables
         if( sheet )
         {
-            if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
+            if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
                 return true;
         }
 
         return false;
     };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
     if( HasTextVars() )
-        text = ResolveTextVars( text, &tableCellResolver, aDepth );
+        text = ResolveTextVars( text, &tableCellResolver, depth );
 
     VECTOR2I size = GetEnd() - GetStart();
     int      colWidth;
@@ -283,14 +286,9 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
     GetDrawFont( aSettings )
             ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
 
-    // Convert escape markers back to literals only at the top level (aDepth == 0)
-    // This prevents re-expansion when text is used in nested CELL() references
-    if( aDepth == 0 )
-    {
-        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
-        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
-        text.Replace( wxT( ">>>" ), wxT( "}" ) );
-    }
+    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }

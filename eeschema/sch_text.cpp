@@ -313,6 +313,9 @@ const BOX2I SCH_TEXT::GetBoundingBox() const
 
 wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
 {
+    // Use local depth counter so each text element starts fresh
+    int depth = 0;
+
     SCH_SHEET* sheet = nullptr;
 
     if( aPath )
@@ -324,37 +327,32 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
     {
         if( SCH_SYMBOL* sch_symbol = dynamic_cast<SCH_SYMBOL*>( m_parent ) )
         {
-            if( sch_symbol->ResolveTextVar( aPath, token, aDepth + 1 ) )
+            if( sch_symbol->ResolveTextVar( aPath, token, depth + 1 ) )
                 return true;
         }
         else if( LIB_SYMBOL* lib_symbol = dynamic_cast<LIB_SYMBOL*>( m_parent ) )
         {
-            if( lib_symbol->ResolveTextVar( token, aDepth + 1 ) )
+            if( lib_symbol->ResolveTextVar( token, depth + 1 ) )
                 return true;
         }
 
         if( sheet )
         {
-            if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
+            if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
                 return true;
         }
 
         return false;
     };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
     if( HasTextVars() )
-        text = ResolveTextVars( text, &textResolver, aDepth );
+        text = ResolveTextVars( text, &textResolver, depth );
 
-    // Convert escape markers back to literals only at the top level (aDepth == 0)
-    // This prevents re-expansion when text is used in nested CELL() references
-    if( aDepth == 0 )
-    {
-        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
-        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
-        text.Replace( wxT( ">>>" ), wxT( "}" ) );
-    }
+    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }

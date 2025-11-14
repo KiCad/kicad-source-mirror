@@ -964,24 +964,22 @@ void SCH_LABEL_BASE::cacheShownText()
 
 wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
 {
+    // Use local depth counter so each text element starts fresh
+    int depth = 0;
+
     std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
     {
-        return ResolveTextVar( aPath, token, aDepth + 1 );
+        return ResolveTextVar( aPath, token, depth + 1 );
     };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
     if( HasTextVars() )
-        text = ResolveTextVars( text, &textResolver, aDepth );
+        text = ResolveTextVars( text, &textResolver, depth );
 
-    // Convert escape markers back to literals only at the top level (aDepth == 0)
-    // This prevents re-expansion when text is used in nested CELL() references
-    if( aDepth == 0 )
-    {
-        text.Replace( wxT( "<<<ESCDOLLAR:" ), wxT( "${" ) );
-        text.Replace( wxT( "<<<ESCAT:" ), wxT( "@{" ) );
-        text.Replace( wxT( ">>>" ), wxT( "}" ) );
-    }
+    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }
