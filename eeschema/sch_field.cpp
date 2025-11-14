@@ -285,9 +285,8 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
 
-    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+    // Convert escape markers back to literals for final display
+    text = UnprotectEscapes( text );
 
     return text;
 }

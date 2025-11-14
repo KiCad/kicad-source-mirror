@@ -977,9 +977,8 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
     if( HasTextVars() )
         text = ResolveTextVars( text, &textResolver, depth );
 
-    // Convert escape markers back to literals (safety fallback - already done in ResolveTextVars)
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+    // Convert escape markers back to literals for final display
+    text = UnprotectEscapes( text );
 
     return text;
 }
