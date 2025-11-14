@@ -963,6 +963,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         newPin->SetType( last->GetType() );
         newPin->SetShape( last->GetShape() );
         newPin->SetUnit( last->GetUnit() );
+        newPin->SetBodyStyle( last->GetBodyStyle() );
 
         VECTOR2I pos = last->GetPosition();
 
