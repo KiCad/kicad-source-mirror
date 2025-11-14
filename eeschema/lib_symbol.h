@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef LIB_SYMBOL_H
-#define LIB_SYMBOL_H
+#pragma once
 
 #include <base_units.h>
 #include <embedded_files.h>
@@ -42,7 +41,6 @@ class OUTPUTFORMATTER;
 class REPORTER;
 class LEGACY_SYMBOL_LIB;
 class LIB_SYMBOL;
-class OUTLINE_FONT;
 class TEST_LIB_SYMBOL_FIXTURE;
 
 namespace KIFONT
@@ -237,8 +235,7 @@ public:
      * @param aIgnoreLabelsOnInvisiblePins default true, ignores pin number and pin name
      * of invisible pins
      **/
-    const BOX2I GetUnitBoundingBox( int aUnit, int aBodyStyle,
-                                    bool aIgnoreHiddenFields = true,
+    const BOX2I GetUnitBoundingBox( int aUnit, int aBodyStyle, bool aIgnoreHiddenFields = true,
                                     bool aIgnoreLabelsOnInvisiblePins = true ) const;
 
     const BOX2I GetBoundingBox() const override
@@ -359,8 +356,7 @@ public:
         return GetReferenceField().GetText();
     }
 
-    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                             bool aAllowExtraText ) const override
+    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath, bool aAllowExtraText ) const override
     {
         return GetValueField().GetText();
     }
@@ -785,8 +781,7 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0,
-                 REPORTER* aReporter = nullptr ) const;
+    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0, REPORTER* aReporter = nullptr ) const;
 
     const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
 
@@ -843,8 +838,7 @@ private:
      *
      *   - The result of #SCH_ITEM::compare()
      */
-    int compare( const SCH_ITEM& aOther,
-                 int aCompareFlags = SCH_ITEM::COMPARE_FLAGS::EQUALITY ) const override;
+    int compare( const SCH_ITEM& aOther, int aCompareFlags = SCH_ITEM::COMPARE_FLAGS::EQUALITY ) const override;
 
     void deleteAllFields();
 
@@ -887,5 +881,3 @@ private:
     std::map<int, wxString> m_unitDisplayNames;
     std::vector<wxString>   m_bodyStyleNames;
 };
-
-#endif  //  CLASS_LIBENTRY_H
