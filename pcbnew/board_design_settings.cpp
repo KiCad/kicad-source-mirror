@@ -1359,7 +1359,11 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 
 void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( int aIndex )
 {
-    m_viaSizeIndex = std::min( aIndex, (int) m_ViasDimensionsList.size() - 1 );
+    if( m_ViasDimensionsList.size() == 0 )
+        m_viaSizeIndex = 0;
+    else
+        m_viaSizeIndex = std::min( aIndex, (int) m_ViasDimensionsList.size() - 1 );
+
     m_useCustomTrackVia = false;
 }
 
