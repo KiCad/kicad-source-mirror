@@ -263,15 +263,14 @@ void SCH_LINE::SetLength( double aLength )
 
     if( currentLength <= 0.0 )
     {
-        end = VECTOR2I( start.x + KiROUND( aLength ), start.y );
+        end = start + KiROUND( aLength, 0.0 );
     }
     else
     {
         VECTOR2I delta = GetEndPoint() - start;
         double   scale = aLength / currentLength;
 
-        end = VECTOR2I( start.x + KiROUND( delta.x * scale ),
-                        start.y + KiROUND( delta.y * scale ) );
+        end = start + KiROUND( delta * scale );
     }
 
     SetEndPoint( end );
@@ -1164,7 +1163,7 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
                    } );
 
         VECTOR2I currentStart = GetStartPoint();
-        double   arcRadius = aArcRadius;
+        double   R = aArcRadius;
 
         for( const VECTOR2I& hopMid : intersections )
         {
@@ -1191,16 +1190,12 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
             double endAngleRad = endAngle * ( M_PI / 180.0f );
 
             VECTOR2I arcMidPoint = {
-                hopMid.x + static_cast<int>( arcRadius
-                                            * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
-                hopMid.y - static_cast<int>( arcRadius
-                                            * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
+                hopMid.x + static_cast<int>( R * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
+                hopMid.y - static_cast<int>( R * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
             };
 
-            VECTOR2I beforeHop = hopMid - VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                                    arcRadius * std::sin( lineAngle ) );
-            VECTOR2I afterHop = hopMid + VECTOR2I( arcRadius * std::cos( lineAngle ),
-                                                   arcRadius * std::sin( lineAngle ) );
+            VECTOR2I beforeHop = hopMid - KiROUND( R * std::cos( lineAngle ), R * std::sin( lineAngle ) );
+            VECTOR2I afterHop = hopMid + KiROUND( R * std::cos( lineAngle ), R * std::sin( lineAngle ) );
 
             // Draw the line from the current start point to the before-hop point
             wire_shape.emplace_back( currentStart.x, currentStart.y, 0 );

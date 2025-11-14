@@ -570,7 +570,7 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 {
     // Search for an existing path and remove it if found
     // (search from back to avoid invalidating iterator on remove)
-    for( int ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
+    for( int ii = (int) m_instanceReferences.size() - 1; ii >= 0; --ii )
     {
         if( m_instanceReferences[ii].m_Path == aInstancePath )
         {
@@ -603,25 +603,23 @@ void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance 
 {
     RemoveInstance( aInstance.m_Path );
 
-    SCH_SYMBOL_INSTANCE instance = aInstance;
-
     wxLogTrace( traceSchSheetPaths, wxS( "Adding symbol '%s' instance:\n"
                                          "    sheet path '%s'\n"
                                          "    reference '%s'\n"
                                          "    unit %d\n" ),
                 m_Uuid.AsString(),
-                instance.m_Path.AsString(),
-                instance.m_Reference,
-                instance.m_Unit );
+                aInstance.m_Path.AsString(),
+                aInstance.m_Reference,
+                aInstance.m_Unit );
 
-    m_instanceReferences.push_back( instance );
+    m_instanceReferences.push_back( aInstance );
 
     // This should set the default instance to the first saved instance data for each symbol
     // when importing sheets.
     if( m_instanceReferences.size() == 1 )
     {
-        GetField( FIELD_T::REFERENCE )->SetText( instance.m_Reference );
-        m_unit = instance.m_Unit;
+        GetField( FIELD_T::REFERENCE )->SetText( aInstance.m_Reference );
+        m_unit = aInstance.m_Unit;
     }
 }
 
@@ -2928,10 +2926,14 @@ static void plotLocalPowerIcon( PLOTTER* aPlotter,
         FILL_T filled = shape.GetFillMode() == FILL_T::NO_FILL ? FILL_T::NO_FILL : FILL_T::FILLED_SHAPE;
 
         if( shape.GetShape() == SHAPE_T::BEZIER )
+        {
              aPlotter->BezierCurve( shape.GetStart(), shape.GetBezierC1(), shape.GetBezierC2(), shape.GetEnd(),
                                    tolerance, lineWidth );
+        }
         else if( shape.GetShape() == SHAPE_T::CIRCLE )
+        {
             aPlotter->Circle( shape.getCenter(), shape.GetRadius() * 2, filled, lineWidth );
+        }
     }
 }
 
@@ -2961,14 +2963,12 @@ void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
 
     if( rotated )
     {
-        pos = VECTOR2D( bbox.GetRight() - bbox.GetWidth() / 6.0,
-                        bbox.GetBottom() + bbox.GetWidth() / 2.0 );
+        pos = VECTOR2D( bbox.GetRight() - bbox.GetWidth() / 6.0, bbox.GetBottom() + bbox.GetWidth() / 2.0 );
         size = bbox.GetWidth() / 1.5;
     }
     else
     {
-        pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0,
-                        bbox.GetBottom() - bbox.GetHeight() / 6.0 );
+        pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0, bbox.GetBottom() - bbox.GetHeight() / 6.0 );
     }
 
     // TODO: build and plot icon shape
@@ -2985,11 +2985,11 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
         TRANSFORM            savedTransform = renderSettings->m_Transform;
         renderSettings->m_Transform = GetTransform();
 
-    std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source to stay const
         LIB_SYMBOL            tempSymbol( *m_part );
-    std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
         SCH_PLOT_OPTS         plotOpts;
 
         // Copy the pin info from the symbol to the temp pins

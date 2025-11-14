@@ -60,8 +60,7 @@ static void DrawSnapNode( GAL& aGal, const VECTOR2I& aPosition, int aNodeRadius 
 static void DrawCornerIcon( GAL& aGal, const VECTOR2I& aPosition, int aSize )
 {
     const int      nodeRad = aSize / 8;
-    const VECTOR2I corner =
-            aPosition - VECTOR2I( aSize / 2, aSize / 2 ) + VECTOR2I( nodeRad, nodeRad );
+    const VECTOR2I corner = aPosition - VECTOR2I( aSize / 2, aSize / 2 ) + VECTOR2I( nodeRad, nodeRad );
     aGal.DrawLine( corner, corner + VECTOR2I( aSize - nodeRad, 0 ) );
     aGal.DrawLine( corner, corner + VECTOR2I( 0, aSize - nodeRad ) );
 

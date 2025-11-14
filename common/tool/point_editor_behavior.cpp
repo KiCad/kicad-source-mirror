@@ -477,8 +477,8 @@ static void editArcEndpointKeepCenter( EDA_SHAPE& aArc, const VECTOR2I& aCenter,
     if( radius < minRadius )
         radius = minRadius;
 
-    p1 = aCenter + p1.Resize( radius );
-    p2 = aCenter + p2.Resize( radius );
+    p1 = aCenter + p1.Resize( KiROUND( radius ) );
+    p2 = aCenter + p2.Resize( KiROUND( radius ) );
 
     aArc.SetCenter( aCenter );
 
@@ -538,8 +538,6 @@ static void editArcMidKeepCenter( EDA_SHAPE& aArc, const VECTOR2I& aCenter, cons
 {
     int minRadius = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
 
-    SEG chord( aStart, aEnd );
-
     // Now, update the edit point position
     // Express the point in a circle-centered coordinate system.
     VECTOR2I start = aStart - aCenter;
@@ -550,8 +548,8 @@ static void editArcMidKeepCenter( EDA_SHAPE& aArc, const VECTOR2I& aCenter, cons
     if( radius < minRadius )
         radius = minRadius;
 
-    start = start.Resize( radius );
-    end = end.Resize( radius );
+    start = start.Resize( KiROUND( radius ) );
+    end = end.Resize( KiROUND( radius ) );
 
     start = start + aCenter;
     end = end + aCenter;
@@ -636,7 +634,7 @@ void EDA_ARC_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint, ED
         case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
         {
             // Both these modes just move the arc
-            VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - m_arc.getCenter();
+            VECTOR2I moveVector = center - m_arc.getCenter();
 
             m_arc.SetArcGeometry( m_arc.GetStart() + moveVector, m_arc.GetArcMid() + moveVector,
                                   m_arc.GetEnd() + moveVector );

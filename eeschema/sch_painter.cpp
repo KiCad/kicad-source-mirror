@@ -509,10 +509,7 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows,
         EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
         if( eeschemaCfg )
-        {
-            colorHighlightWidth = schIUScale.MilsToIU(
-                    eeschemaCfg->m_Selection.highlight_netclass_colors_thickness );
-        }
+            colorHighlightWidth = schIUScale.MilsToIU( eeschemaCfg->m_Selection.highlight_netclass_colors_thickness );
 
         width += colorHighlightWidth;
     }
@@ -582,24 +579,23 @@ static bool isFieldsLayer( int aLayer )
 static BOX2I GetTextExtents( const wxString& aText, const VECTOR2D& aPosition, KIFONT::FONT& aFont,
                              const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
-    const VECTOR2I extents =
-            aFont.StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth, aAttrs.m_Bold,
-                                        aAttrs.m_Italic, aFontMetrics );
+    const VECTOR2I extents = aFont.StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
+                                                         aAttrs.m_Bold, aAttrs.m_Italic, aFontMetrics );
     BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
 
     switch( aAttrs.m_Halign )
     {
-    case GR_TEXT_H_ALIGN_LEFT: break;
-    case GR_TEXT_H_ALIGN_CENTER: box.SetX( box.GetX() - box.GetWidth() / 2 ); break;
-    case GR_TEXT_H_ALIGN_RIGHT: box.SetX( box.GetX() - box.GetWidth() ); break;
+    case GR_TEXT_H_ALIGN_LEFT:                                                        break;
+    case GR_TEXT_H_ALIGN_CENTER:        box.SetX( box.GetX() - box.GetWidth() / 2 );  break;
+    case GR_TEXT_H_ALIGN_RIGHT:         box.SetX( box.GetX() - box.GetWidth() );      break;
     case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
     }
 
     switch( aAttrs.m_Valign )
     {
-    case GR_TEXT_V_ALIGN_TOP: break;
-    case GR_TEXT_V_ALIGN_CENTER: box.SetY( box.GetY() - box.GetHeight() / 2 ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: box.SetY( box.GetY() - box.GetHeight() ); break;
+    case GR_TEXT_V_ALIGN_TOP:                                                         break;
+    case GR_TEXT_V_ALIGN_CENTER:        box.SetY( box.GetY() - box.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        box.SetY( box.GetY() - box.GetHeight() );     break;
     case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
     }
 
@@ -616,10 +612,7 @@ static void strokeText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D&
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
-    {
-        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
-                                      aAttrs.m_Italic );
-    }
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold, aAttrs.m_Italic );
 
     aGal.SetIsFill( font->IsOutline() );
     aGal.SetIsStroke( font->IsStroke() );
@@ -695,10 +688,7 @@ static void boxText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aP
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
-    {
-        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
-                                      aAttrs.m_Italic );
-    }
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold, aAttrs.m_Italic );
 
     BOX2I box = GetTextExtents( aText, aPosition, *font, aAttrs, aFontMetrics );
 
@@ -854,7 +844,7 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
 
     aGal.SetIsFill( false );
     aGal.SetIsStroke( true );
-    aGal.SetLineWidth( KiROUND( aSize / 10.0 + aExtraLineWidth ) );
+    aGal.SetLineWidth( aSize / 10.0 + aExtraLineWidth );
     aGal.SetStrokeColor( aColor );
 
     /*
@@ -1151,8 +1141,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     }
 
     PIN_LAYOUT_CACHE& cache = aPin->GetLayoutCache();
-    cache.SetRenderParameters( nameStrokeWidth, numStrokeWidth,
-                               m_schSettings.m_ShowPinsElectricalType,
+    cache.SetRenderParameters( nameStrokeWidth, numStrokeWidth, m_schSettings.m_ShowPinsElectricalType,
                                m_schSettings.m_ShowPinAltIcons );
 
     const auto textRendersAsBitmap =
@@ -1250,7 +1239,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 if( aAttrs.m_Angle == ANGLE_VERTICAL )
                 {
                     // For vertical text, lines are spaced horizontally and braces are horizontal
-                    braceEnd.x += ( aLines.size() - 1 ) * aLineSpacing;
+                    braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
                     // Extend braces horizontally to encompass all lines plus extra space
                     braceStart.x -= 2 * extraHeight;
@@ -1277,7 +1266,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 else
                 {
                     // For horizontal text, lines are spaced vertically and braces are vertical
-                    braceEnd.y += ( aLines.size() - 1 ) * aLineSpacing;
+                    braceEnd.y += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
                     // Extend braces vertically to encompass all lines plus extra space
                     braceStart.y -= 2 * extraHeight;
@@ -1327,28 +1316,28 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 if( aAttrs.m_Angle == ANGLE_VERTICAL )
                 {
                     // For vertical text, lines are spaced horizontally
-                    braceEnd.x += ( aLines.size() - 1 ) * aLineSpacing;
+                    braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
                     VECTOR2D leftStart = braceStart;
-                    leftStart.y -= maxLineWidth / 2 + braceWidth / 2;
+                    leftStart.y -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     VECTOR2D leftEnd = braceEnd;
-                    leftEnd.y -= maxLineWidth / 2 + braceWidth / 2;
+                    leftEnd.y -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     drawBrace( aGal, leftStart, leftEnd, braceWidth, true, aAttrs );
 
                     VECTOR2D rightStart = braceStart;
-                    rightStart.y += maxLineWidth / 2 + braceWidth / 2;
+                    rightStart.y += maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     VECTOR2D rightEnd = braceEnd;
-                    rightEnd.y += maxLineWidth / 2 + braceWidth / 2;
+                    rightEnd.y += maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     drawBrace( aGal, rightStart, rightEnd, braceWidth, false, aAttrs );
                 }
                 else
                 {
                     // For horizontal text, lines are spaced vertically
-                    braceEnd.y += ( aLines.size() - 1 ) * aLineSpacing;
+                    braceEnd.y += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
                     VECTOR2D braceTop = braceStart;
                     braceTop.y -= textHalfHeight;
@@ -1357,18 +1346,18 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     braceBottom.y += textHalfHeight;
 
                     VECTOR2D leftTop = braceTop;
-                    leftTop.x -= maxLineWidth / 2 + braceWidth / 2;
+                    leftTop.x -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     VECTOR2D leftBottom = braceBottom;
-                    leftBottom.x -= maxLineWidth / 2 + braceWidth / 2;
+                    leftBottom.x -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs );
 
                     VECTOR2D rightTop = braceTop;
-                    rightTop.x += maxLineWidth / 2 + braceWidth / 2;
+                    rightTop.x += maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     VECTOR2D rightBottom = braceBottom;
-                    rightBottom.x += maxLineWidth / 2 + braceWidth / 2;
+                    rightBottom.x += maxLineWidth / 2.0 + braceWidth / 2.0;
 
                     drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs );
                 }
@@ -1401,13 +1390,13 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // Adjust start position based on horizontal alignment
                             if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.x -= totalWidth;
                             }
                             else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth / 2;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2.0;
                             }
 
                             // Draw each line
@@ -1428,20 +1417,20 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // Adjust start position based on vertical alignment
                             if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.y -= totalHeight;
                             }
                             else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight / 2;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2.0;
                             }
 
                             // Draw each line
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.y += i * lineSpacing;
+                                linePos.y += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
@@ -1481,19 +1470,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // For vertical text, lines are spaced horizontally
                             if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.x -= totalWidth;
                             }
                             else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth / 2;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2.0;
                             }
 
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.x += i * lineSpacing;
+                                linePos.x += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
@@ -1506,19 +1495,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // For horizontal text, lines are spaced vertically
                             if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.y -= totalHeight;
                             }
                             else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight / 2;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2.0;
                             }
 
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.y += i * lineSpacing;
+                                linePos.y += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
@@ -1556,19 +1545,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // For vertical text, lines are spaced horizontally
                             if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.x -= totalWidth;
                             }
                             else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
                             {
-                                int totalWidth = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth / 2;
+                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.x -= totalWidth / 2.0;
                             }
 
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.x += i * lineSpacing;
+                                linePos.x += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
@@ -1581,19 +1570,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             // For horizontal text, lines are spaced vertically
                             if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
                                 startPos.y -= totalHeight;
                             }
                             else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
                             {
-                                int totalHeight = ( lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight / 2;
+                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
+                                startPos.y -= totalHeight / 2.0;
                             }
 
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.y += i * lineSpacing;
+                                linePos.y += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
@@ -1669,9 +1658,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     // Request text layout info and draw it
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
-    {
         drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
-    }
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfo = cache.GetPinNameInfo( shadowWidth ) )
     {
@@ -1687,11 +1674,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         }
     }
 
-    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo =
-                cache.GetPinElectricalTypeInfo( shadowWidth ) )
-    {
+    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo = cache.GetPinElectricalTypeInfo( shadowWidth ) )
         drawTextInfo( *elecTypeInfo, getColorForLayer( LAYER_PRIVATE_NOTES ) );
-    }
 }
 
 

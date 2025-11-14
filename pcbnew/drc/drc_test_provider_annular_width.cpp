@@ -205,11 +205,10 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         for( const PAD* sameNumPad : sameNumPads )
                         {
                             // Construct the full pad with outline and hole.
-                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline, aLayer, 0,
-                                                                 pad->GetMaxError(), ERROR_OUTSIDE );
+                            sameNumPad->TransformShapeToPolygon( aggregatePadOutline, aLayer, 0, pad->GetMaxError(),
+                                                                 ERROR_OUTSIDE );
 
-                            sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, pad->GetMaxError(),
-                                                                ERROR_INSIDE );
+                            sameNumPad->TransformHoleToPolygon( otherPadHoles, 0, pad->GetMaxError(), ERROR_INSIDE );
                         }
 
                         aggregatePadOutline.BooleanSubtract( otherPadHoles );
