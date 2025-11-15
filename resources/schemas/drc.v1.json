@@ -86,6 +86,10 @@
         "excluded": {
           "type": "boolean",
           "default": false
+        },
+        "comment": {
+          "type": "string",
+          "description": "Comment added when excluding the violation"
         }
       },
       "required": [

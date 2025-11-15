@@ -174,6 +174,9 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     aViolation.type = GetSettingsKey();
     aViolation.excluded = ( m_parent && m_parent->IsExcluded() );
 
+    if( m_parent && m_parent->IsExcluded() && !m_parent->GetComment().IsEmpty() )
+        aViolation.comment = m_parent->GetComment();
+
     EDA_ITEM* mainItem = nullptr;
     EDA_ITEM* auxItem = nullptr;
 
