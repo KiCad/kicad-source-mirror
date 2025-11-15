@@ -56,6 +56,7 @@ struct VIOLATION
     wxString                   severity;
     std::vector<AFFECTED_ITEM> items;
     bool                       excluded;
+    wxString                   comment;
 };
 
 inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
@@ -66,7 +67,10 @@ inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
     aJson["items"] = aViolation.items;
 
     if( aViolation.excluded )
+    {
         aJson["excluded"] = aViolation.excluded;
+        aJson["comment"] = aViolation.comment;
+    }
 }
 inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
 {
@@ -75,6 +79,7 @@ inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
     aJson.at( "severity" ).get_to( aViolation.severity );
     aJson.at( "items" ).get_to( aViolation.items );
     aJson.at( "excluded" ).get_to( aViolation.excluded );
+    aJson.at( "comment" ).get_to( aViolation.comment );
 }
 
 struct REPORT_BASE
