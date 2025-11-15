@@ -45,6 +45,7 @@
     },
     "icu",
     "ngspice",
+    "wxpython-33",
     {
       "name": "libgit2",
       "features": [ "ssh", "winhttp" ]
