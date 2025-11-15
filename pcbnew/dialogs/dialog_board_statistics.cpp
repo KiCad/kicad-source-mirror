@@ -57,6 +57,10 @@
 #define ROW_MIN_TRACK_WIDTH 5
 #define ROW_MIN_DRILL_DIAMETER 6
 #define ROW_BOARD_THICKNESS 7
+#define ROW_FOOTPRINT_COURTYARD_FRONT_AREA 8
+#define ROW_FRONT_COMPONENT_DENSITY 9
+#define ROW_FOOTPRINT_COURTYARD_BACK_AREA 10
+#define ROW_BACK_COMPONENT_DENSITY 11
 
 
 /**
@@ -125,7 +129,10 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE,     COL_LABEL, _( "Min track clearance:" ) );
     m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH,   COL_LABEL, _( "Min track width:" ) );
     m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER,COL_LABEL, _( "Min drill diameter:" ) );
-    m_gridBoard->SetCellValue( ROW_BOARD_THICKNESS,   COL_LABEL, _( "Board stackup thickness:" ) );
+    m_gridBoard->SetCellValue( ROW_FOOTPRINT_COURTYARD_FRONT_AREA, COL_LABEL, _( "Front footprint area:" ) );
+    m_gridBoard->SetCellValue( ROW_FRONT_COMPONENT_DENSITY, COL_LABEL, _( "Front footprint density:" ) );
+    m_gridBoard->SetCellValue( ROW_FOOTPRINT_COURTYARD_BACK_AREA, COL_LABEL, _( "Back footprint area:" ) );
+    m_gridBoard->SetCellValue( ROW_BACK_COMPONENT_DENSITY, COL_LABEL, _( "Back footprint density:" ) );
 
     for( wxGrid* grid : { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard } )
     {
@@ -299,12 +306,26 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
                                                      m_frame->MessageTextFromValue( m_statsData.boardHeight, true ) ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
                                    m_frame->MessageTextFromValue( m_statsData.boardArea, true, EDA_DATA_TYPE::AREA ) );
+
+        m_gridBoard->SetCellValue( ROW_FRONT_COMPONENT_DENSITY, COL_AMOUNT,
+                                   wxString::Format( "%.2f %%", m_statsData.frontFootprintDensity ) );
+
+        m_gridBoard->SetCellValue( ROW_BACK_COMPONENT_DENSITY, COL_AMOUNT,
+                                   wxString::Format( "%.2f %%", m_statsData.backFootprintDensity ) );
     }
     else
     {
         m_gridBoard->SetCellValue( ROW_BOARD_DIMS, COL_AMOUNT, _( "unknown" ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT, _( "unknown" ) );
     }
+
+    m_gridBoard->SetCellValue(
+            ROW_FOOTPRINT_COURTYARD_FRONT_AREA, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.frontFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA ) );
+
+    m_gridBoard->SetCellValue(
+            ROW_FOOTPRINT_COURTYARD_BACK_AREA, COL_AMOUNT,
+            m_frame->MessageTextFromValue( m_statsData.backFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA ) );
 
     m_gridBoard->SetCellValue(
             ROW_FRONT_COPPER_AREA, COL_AMOUNT,

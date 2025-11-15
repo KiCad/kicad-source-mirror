@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -117,7 +117,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerBrdSize;
 	bSizerBrdSize = new wxBoxSizer( wxVERTICAL );
 
-	m_boardLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Board Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_boardLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_boardLabel->Wrap( -1 );
 	bSizerBrdSize->Add( m_boardLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -127,7 +127,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridBoard = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
-	m_gridBoard->CreateGrid( 8, 2 );
+	m_gridBoard->CreateGrid( 12, 2 );
 	m_gridBoard->EnableEditing( false );
 	m_gridBoard->EnableGridLines( false );
 	m_gridBoard->EnableDragGridSize( false );

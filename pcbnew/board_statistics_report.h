@@ -77,6 +77,10 @@ struct BOARD_STATISTICS_DATA
     double boardArea;
     double frontCopperArea;
     double backCopperArea;
+    double frontFootprintCourtyardArea;
+    double backFootprintCourtyardArea;
+    double frontFootprintDensity;
+    double backFootprintDensity;
     int    minClearanceTrackToTrack;
     int    minTrackWidth;
     int    minDrillSize;

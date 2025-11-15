@@ -65,6 +65,8 @@ void BOARD_STATISTICS_DATA::ResetCounts()
     boardArea = 0.0;
     frontCopperArea = 0.0;
     backCopperArea = 0.0;
+    frontFootprintCourtyardArea = 0.0;
+    backFootprintCourtyardArea = 0.0;
     minClearanceTrackToTrack = std::numeric_limits<int>::max();
     minTrackWidth = std::numeric_limits<int>::max();
     minDrillSize = std::numeric_limits<int>::max();
@@ -294,6 +296,38 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
 
         aData.boardWidth = static_cast<int>( bbox.GetWidth() );
         aData.boardHeight = static_cast<int>( bbox.GetHeight() );
+
+    }
+
+    // Now determine the courtyard areas which reflects how much space is occupied by components
+    // This will always assume all components are populated as its intended for
+    // layout purposes and arguing with people saying theres not enough space.
+    SHAPE_POLY_SET frontCy;
+    SHAPE_POLY_SET backCy;
+    for( FOOTPRINT* fpMain : aBoard->Footprints() )
+    {
+        const SHAPE_POLY_SET& frontA = fpMain->GetCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backA = fpMain->GetCourtyard( B_CrtYd );
+
+        if( frontA.OutlineCount() != 0 )
+            frontCy.Append( frontA );
+
+        if( backA.OutlineCount() != 0 )
+            backCy.Append( backA );
+    }
+
+    // deal with overlapping courtyards (if people are ignoring DRC or something) 
+    // and such through simplify
+    frontCy.Simplify();
+    backCy.Simplify();
+
+    aData.frontFootprintCourtyardArea = frontCy.Area();
+    aData.backFootprintCourtyardArea = backCy.Area();
+
+    if( aData.hasOutline )
+    {
+        aData.frontFootprintDensity = aData.frontFootprintCourtyardArea * 100 / aData.boardArea;
+        aData.backFootprintDensity = aData.backFootprintCourtyardArea * 100 / aData.boardArea;
     }
 
     SHAPE_POLY_SET frontCopper;
@@ -510,6 +544,33 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
            << aUnitsProvider.MessageTextFromValue( aData.boardThickness, true, EDA_DATA_TYPE::DISTANCE )
            << wxS( "\n\n" );
 
+    report << wxS( "- " ) << _( "Front footprint area" ) << wxS( ": " )
+           << aUnitsProvider.MessageTextFromValue( aData.frontFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA ) << wxS( "\n" );
+    report << wxS( "- " ) << _( "Back footprint area" ) << wxS( ": " )
+           << aUnitsProvider.MessageTextFromValue( aData.backFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA ) << wxS( "\n" );
+
+    report << wxS( "- " ) << _( "Front component density" ) << wxS( ": " );
+    if( aData.hasOutline )
+    {
+        report << wxString::Format( "%.2f %", aData.frontFootprintDensity );
+    }
+    else
+    {
+        report << _( "unknown" );
+    }
+    report << wxS( "\n" );
+
+    report << wxS( "- " ) << _( "Back component density" ) << wxS( ": " );
+    if( aData.hasOutline )
+    {
+        report << wxString::Format( "%.2f %", aData.backFootprintDensity );
+    }
+    else
+    {
+        report << _( "unknown" );
+    }
+    report << wxS( "\n" );
+
     report << _( "Pads" ) << wxS( "\n----\n" );
 
     for( const BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>& padEntry : aData.padEntries )
@@ -645,12 +706,16 @@ wxString FormatBoardStatisticsJson( const BOARD_STATISTICS_DATA& aData, BOARD* a
         board["width"] = aUnitsProvider.MessageTextFromValue( aData.boardWidth );
         board["height"] = aUnitsProvider.MessageTextFromValue( aData.boardHeight );
         board["area"] = aUnitsProvider.MessageTextFromValue( aData.boardArea, true, EDA_DATA_TYPE::AREA );
+        board["front_component_density"] = wxString::Format( "%.2f", aData.frontFootprintDensity );
+        board["back_component_density"] = wxString::Format( "%.2f", aData.backFootprintDensity );
     }
     else
     {
         board["width"] = nlohmann::json();
         board["height"] = nlohmann::json();
         board["area"] = nlohmann::json();
+        board["front_component_density"] = nlohmann::json();
+        board["back_component_density"] = nlohmann::json();
     }
 
     board["front_copper_area"] =
@@ -660,6 +725,22 @@ wxString FormatBoardStatisticsJson( const BOARD_STATISTICS_DATA& aData, BOARD* a
     board["min_track_width"] = aUnitsProvider.MessageTextFromValue( aData.minTrackWidth );
     board["min_drill_diameter"] = aUnitsProvider.MessageTextFromValue( aData.minDrillSize );
     board["board_thickness"] = aUnitsProvider.MessageTextFromValue( aData.boardThickness );
+    board["front_footprint_area"] =
+            aUnitsProvider.MessageTextFromValue( aData.frontFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA );
+    board["back_footprint_area"] =
+            aUnitsProvider.MessageTextFromValue( aData.backFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA );
+
+    if( aData.hasOutline )
+    {
+        board["front_footprint_density"] = wxString::Format( "%.2f", aData.frontFootprintDensity );
+        board["back_footprint_density"] = wxString::Format( "%.2f", aData.backFootprintDensity );
+    }
+    else
+    {
+        board["front_footprint_density"] = nlohmann::json();
+        board["back_footprint_density"] = nlohmann::json();
+    }
+
     root["board"] = board;
 
     // The UI strings end in colons, often have a suffix like "via", and need
