@@ -320,9 +320,17 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
     else
     {
         wxString line( text );
-        auto endpos = line.find_first_not_of( "0123456789.-+eE" );
         line.Trim( false );
         line.ToCDouble( &ret );
+
+        // Find the end of the float number. The float number contains only chars
+        // "0123456789." but can start by a '+' or '-' char.
+        // others chars (usually '+' '-' '$' ',' ) are separators between operands and are not members
+        // of the current float number
+        if( line[0] == '+' || line[0] == '-' )
+            line[0] = '0';
+
+        auto endpos = line.find_first_not_of( "0123456789." );
 
         if( endpos != wxString::npos )
         {
