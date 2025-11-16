@@ -128,7 +128,8 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA,  COL_LABEL, _( "Back copper area:" ) );
     m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE,     COL_LABEL, _( "Min track clearance:" ) );
     m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH,   COL_LABEL, _( "Min track width:" ) );
-    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER,COL_LABEL, _( "Min drill diameter:" ) );
+    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER, COL_LABEL, _( "Min drill diameter:" ) );
+    m_gridBoard->SetCellValue( ROW_BOARD_THICKNESS, COL_LABEL, _( "Board stackup thickness:" ) );
     m_gridBoard->SetCellValue( ROW_FOOTPRINT_COURTYARD_FRONT_AREA, COL_LABEL, _( "Front footprint area:" ) );
     m_gridBoard->SetCellValue( ROW_FRONT_COMPONENT_DENSITY, COL_LABEL, _( "Front footprint density:" ) );
     m_gridBoard->SetCellValue( ROW_FOOTPRINT_COURTYARD_BACK_AREA, COL_LABEL, _( "Back footprint area:" ) );
