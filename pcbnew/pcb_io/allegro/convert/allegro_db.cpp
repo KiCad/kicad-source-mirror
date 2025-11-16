@@ -119,6 +119,8 @@ bool DB_REF_CHAIN::Resolve( const DB_OBJ_RESOLVER& aResolver )
 
     while( n != nullptr )
     {
+        m_Chain.push_back( n );
+
         uint32_t nextKey = m_NextKeyGetter( *n );
 
         if( nextKey == m_Tail )
@@ -290,6 +292,15 @@ bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
+static bool CheckTypeIs( const DB_REF& aRef, DB_OBJ::TYPE aType, bool aCanBeNull )
+{
+    if( aRef.m_Target == nullptr )
+        return aCanBeNull;
+
+    const DB_OBJ::TYPE objType = aRef.m_Target->GetType();
+    return objType == aType;
+}
+
 static bool CheckTypeIsOneOf( const DB_REF& aRef, const std::vector<DB_OBJ::TYPE>& aTypes, bool aCanBeNull )
 {
     if( aRef.m_Target == nullptr )
@@ -337,7 +348,9 @@ bool FOOTPRINT_DEF::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     // Follow the chain of 0x2Ds until we get back here
     ok &= m_Instances.Resolve( aResolver );
 
-    ok &= CheckTypeIsOneOf( m_Next, { DB_OBJ::TYPE::FP_DEF }, true );
+    ok &= CheckTypeIs( m_Next, DB_OBJ::TYPE::FP_DEF, true );
+
+
 
     return ok;
 }

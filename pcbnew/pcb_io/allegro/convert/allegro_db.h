@@ -64,6 +64,9 @@ struct DB_REF : public RESOLVABLE
 
 static constexpr DB_REF DB_NULLREF = {};
 
+/**
+ * Chain of DB references that lead from the head to the tail
+ */
 struct DB_REF_CHAIN : public RESOLVABLE
 {
     DB_REF_CHAIN( uint32_t aHead, uint32_t aTail ) :
@@ -82,6 +85,9 @@ struct DB_REF_CHAIN : public RESOLVABLE
     std::function<uint32_t( const DB_OBJ& )> m_NextKeyGetter;
     uint32_t                                 m_Head;
     uint32_t                                 m_Tail;
+
+    // The objects in the chain
+    std::vector<DB_OBJ*> m_Chain;
 };
 
 

@@ -21,35 +21,4 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "utils/extract/allegro_ascii.h"
-
-
-using namespace ALLEGRO;
-
-
-void FormatFootprintInstance( const BRD_DB& aBrd )
-{
-}
-
-
-void ASCII_EXTRACTOR::extractSymbolInstances( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter )
-{
-    aFormatter.Print( "Symbols:\n" );
-
-    // aBrd.VisitSymbols( [&]( const SYMBOL& aSym )
-    // {
-    //     aFormatter.Print( "  Symbol: {}\n", *aSym.m_Name.m_String );
-    // } );
-}
-
-
-void ASCII_EXTRACTOR::Extract( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter )
-{
-    // const auto fpDefFunc = [&]( const FOOTPRINT_DEF& aFpDef )
-    // {
-    //     aFormatter.Print( *aFpDef.m_FpStr.m_String );
-    //     aFormatter.Print( "\n" );
-    // };
-
-    // aBrd.VisitFootprintDefs( fpDefFunc );
-}
+#include "utils/extract/bat_parser.h"

@@ -39,6 +39,14 @@ public:
     ASCII_EXTRACTOR() {}
 
     void Extract( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter );
+
+private:
+    /**
+     * Extract symbol instances from an Allegro database.
+     *
+     * This corresponds to SYMBOL ASCII commands.
+     */
+    void extractSymbolInstances( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter );
 };
 
 } // namespace ALLEGRO
