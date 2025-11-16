@@ -62,7 +62,7 @@ static wxString ProtectAllPatterns( const wxString& aSource );
 
 // Recursively protect escaped expressions (\${...} and \@{...}) by converting them to escape markers
 // This must be done BEFORE any variable expansion to prevent variables inside escaped expressions from being expanded
-static wxString ProtectEscapes( const wxString& aSource )
+wxString ProtectEscapes( const wxString& aSource )
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();

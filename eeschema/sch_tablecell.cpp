@@ -248,9 +248,14 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
             SCH_TABLECELL* targetCell = table->GetCell( targetRow, targetCol );
             if( targetCell )
             {
-                // Return the evaluated/displayed value, not raw text
-                // This ensures formulas in the target cell are evaluated
-                *token = targetCell->GetShownText( aSettings, aPath, false, depth + 1 );
+                // Get the RAW text from the target cell (unevaluated)
+                wxString rawText = targetCell->GetText();
+
+                // Consume one level of escaping: \@{${ROW}-10} becomes @{${ROW}-10}
+                // First protect: \@{...} → <<<ESC_AT:...> (converts backslash to marker)
+                // Then unprotect: <<<ESC_AT:...> → @{...} (removes marker, consuming escape)
+                // Return the unescaped text and let the outer ResolveTextVars handle evaluation
+                *token = UnprotectEscapes( ProtectEscapes( rawText ) );
                 return true;
             }
             else
@@ -287,7 +292,9 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
             ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
 
     // Convert escape markers back to literals for final display
-    text = UnprotectEscapes( text );
+    // Only unescape at the top level to avoid premature unescaping in nested CELL() calls
+    if( aDepth == 0 )
+        text = UnprotectEscapes( text );
 
     return text;
 }
