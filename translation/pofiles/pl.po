@@ -13,22 +13,23 @@
 # "j.Kolod" <jmkolod05@gmail.com>, 2024.
 # Marek <fotelpl@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# Czam Ciał <lamaforge@proton.me>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-20 04:51+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2025-11-18 06:32+0000\n"
+"Last-Translator: Czam Ciał <lamaforge@proton.me>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -124,7 +125,7 @@ msgstr "Czas ostatniego renderowania %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "Błąd OpenGL podczas renderowania poza ekranem: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:963
 #, c-format
@@ -233,15 +234,13 @@ msgstr "Trójwymiarowa siatka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Obrót"
+msgstr "Obróć płytkę"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Przesuń płytkę w górę"
+msgstr "Przesuń płytkę"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -398,14 +397,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Kopiuj obecny obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Eksportuj..."
+msgstr "Eksportuj obraz..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Eksportuj bieżący widok jako obraz PNG"
+msgstr "Eksportuj bieżący widok jako plik graficzny"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -623,12 +620,11 @@ msgstr "Pokaż ciało płytki"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 #, fuzzy
 msgid "Plated Barrels"
-msgstr "Otwory powlekane"
+msgstr "Otwory metalizowane"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Pokaż pola lutownicze z otworem na wylot"
+msgstr "Pokaż tuleje metalizowanych - otworów i przelotek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -1131,9 +1127,8 @@ msgid "(unsaved)"
 msgstr "(nie zapisany)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Eksportuj model 3D"
+msgstr "Eksportuj widok 3D"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
 msgid "Image Size"
@@ -1354,9 +1349,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Pin"
+msgstr "Cal"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1371,29 +1365,25 @@ msgid "Resolution"
 msgstr "Rozdzielczość"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Rozwiązanie 3xR:"
+msgstr "Rozdzielczość X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "piksele"
+msgstr "piksele/cal"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "piksele"
+msgstr "piksele/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Rozwiązanie 3xR:"
+msgstr "Rozdzielczość Y:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pikseli"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2081,9 +2071,8 @@ msgid "Background Jobs"
 msgstr "Zadania w tle"
 
 #: common/common.cpp:147 pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "Odblokowane footprinty"
+msgstr "niezanotowany footprint"
 
 #: common/common.cpp:317
 #, c-format
@@ -2337,15 +2326,14 @@ msgstr "Folder '%s' przeznaczony na bloki projektowe nie może zostać usunięty
 
 #: common/design_block_library_adapter.cpp:71
 #: eeschema/libraries/symbol_library_adapter.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "nieznany typ przelotki %d"
+msgstr "Nieznany typ biblioteki %s "
 
 #: common/design_block_library_adapter.cpp:76
 #: eeschema/libraries/symbol_library_adapter.cpp:110
-#, fuzzy
 msgid "Internal error"
-msgstr "Wewnętrzne warstwy"
+msgstr "Błąd wewnętrzny"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:789
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1051
@@ -2886,9 +2874,8 @@ msgid "Design Block Properties"
 msgstr "Właściwości bloków projektowych"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Połączenia pomiędzy etykietami"
+msgstr "Generuj połączenie z bazą danych"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2900,9 +2887,8 @@ msgid "Custom"
 msgstr "Własny"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Nazwa źródła"
+msgstr "Nazwa źródła danych"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2914,9 +2900,8 @@ msgid "Password"
 msgstr "Hasło"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Czas"
+msgstr "Przekroczono limit czasu"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 msgid "Connection String"
@@ -2929,14 +2914,12 @@ msgid "Test Connection"
 msgstr "Testuj połączenie"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Tabela"
+msgstr "Tabele"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Brak połączenia z bazą danych"
+msgstr "Nie można połączyć z bazą danych"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Database Error"
@@ -3455,26 +3438,25 @@ msgid "Close"
 msgstr "Zamknij"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Ostrzeżenie: wartość skali nie jest liczbą."
+msgstr "Ostrzeżenie: niestandardowa skala nie jest liczbą."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość.\n"
-"Zostanie zredukowana do %f."
+"Ostrzeżenie: niestandardowa skala jest zbyt duża.\n"
+"Zostanie ograniczona do %f."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"Ostrzeżenie: Skala została ustawiona na bardzo małą wartość.\n"
+"Ostrzeżenie: niestandardowa skala jest zbyt mała.\n"
 "Zostanie rozszerzona do %f."
 
 #: common/dialogs/dialog_print_generic.cpp:227
@@ -4125,9 +4107,8 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Grafika ze sprzętową akceleracją (zalecane)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
-msgstr "Grafika emulowana"
+msgstr "Tryb awaryjny grafiki"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid ""
@@ -4138,9 +4119,8 @@ msgstr ""
 "programu KiCad co do przyspieszenia grafiki)"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Anty-aliasing:"
+msgstr "Wygładzanie krawędzi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
@@ -4227,14 +4207,15 @@ msgstr ""
 "poszczególnych rzędów"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Wyłącz makra apertur"
+msgstr "Wyłącz niestandardowe kursory"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Po włączeniu, KiCad będzie używał domyślnych kursorów systemowych zamiast "
+"własnych."
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4333,9 +4314,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Współczynnik ściemnienia w trybie wysokiego kontrastu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
-#, fuzzy
 msgid "Scaling"
-msgstr "Skala:"
+msgstr "Skalowanie"
 
 #: common/dialogs/panel_common_settings_base.cpp:314
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4411,7 +4391,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4427,22 +4406,21 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"Program KiCad może anonimowo zgłaszać awarie i dane o zdarzeniach "
-"programistom, aby skuteczniej identyfikować krytyczne błędy u użytkowników i "
-"pomagać w usprawnianiu funkcji.\n"
+"KiCad może anonimowo zgłaszać awarie oraz dane o specjalnych zdarzeniach do "
+"deweloperów, aby skuteczniej identyfikować krytyczne błędy wśród "
+"użytkowników i pomagać w profilowaniu funkcjonalności pod kątem ulepszeń.\n"
 "\n"
-"Aby połączyć automatyczne raporty pochodzące z tej samej instalacji programu "
-"KiCad, generowany jest unikalny identyfikator, który jest całkowicie losowy "
-"i używany jest tylko do celów raportowania o awariach. Żadne informacje "
-"umożliwiające identyfikację osoby (PII), w tym adres IP, nie są "
-"przechowywane ani łączone z tym identyfikatorem. Można zresetować ten "
-"identyfikator w dowolnym momencie za pomocą dostarczonego przycisku "
-"funkcyjnego.\n"
+"Aby powiązać automatyczne raporty z tą samą instalacją KiCada, generowany "
+"jest unikalny identyfikator, który jest całkowicie losowy i używany "
+"wyłącznie do raportowania awarii. Żadne dane osobowe (PII), w tym adres IP, "
+"nie są przechowywane ani łączone z tym identyfikatorem. Możesz zresetować "
+"ten identyfikator w dowolnym momencie na stronie Preferencji w sekcji "
+"Zbieranie danych.\n"
 "\n"
-"Jeśli użytkownik zdecyduj się na dobrowolny udział, KiCad automatycznie "
-"będzie wysyłał wspomniane raporty w przypadku awarii lub zdarzeń. Pliki "
-"projektowe użytkownika, takie jak schemat lub PCB, nie będą nigdy "
-"udostępniane podczas tego procesu."
+"Jeśli zdecydujesz się dobrowolnie uczestniczyć, KiCad będzie automatycznie "
+"wysyłał takie raporty, gdy wystąpią awarie lub specjalne zdarzenia. Twoje "
+"pliki projektowe, takie jak schematy lub PCB, nigdy nie są udostępniane w "
+"tym procesie."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4986,7 +4964,7 @@ msgstr "Krzyżyki pełnoekranowe"
 #: common/widgets/gal_options_panel_base.cpp:108
 #, fuzzy
 msgid "45 degree crosshairs"
-msgstr "Kąt 45 stopni"
+msgstr "Celownik 45-stopniowy"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
@@ -5106,9 +5084,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Akcja | Domyślny klawisz skrótu | Opis"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "Początek musi być wartością dodatnią."
+msgstr "Skala musi być liczbą dodatnią."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5218,23 +5195,20 @@ msgid "days"
 msgstr "dni"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "Wyczyść ostatnio używane pliki"
+msgstr "Wyczyść historię ‘Ostatnio otwierane’"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "Zresetuj okna dialogowe ‘Nie pokazuj ponownie’"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "Resetuj %s do domyślnych"
+msgstr "Przywróć wszystkie okna dialogowe do ustawień domyślnych"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "Przywróć wszystkie do domyślnych"
+msgstr "Przywróć wszystkie ustawienia programu do wartości domyślnych"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5377,8 +5351,9 @@ msgid "Right button drag:"
 msgstr "Przeciąganie prawym klawiszem myszy:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
+#, fuzzy
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Przesuwaj widok z ruchem myszy z wciśniętym klawiszem:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5791,9 +5766,8 @@ msgid "DP Gap"
 msgstr "Dystans DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Tryb dostrajania"
+msgstr "Dostrajanie profilu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5896,43 +5870,41 @@ msgstr ""
 "Czy chcesz je ponownie załadować?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "Panoramowanie i przybliżanie"
+msgstr "Przesuwanie i obracanie"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Szybkość animacji:"
+msgstr "Szybkość obracania:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
 msgid "Reverse rotation direction"
 msgstr "Odwróć kierunek rotacji"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
-#, fuzzy
 msgid "Swap the direction of rotation"
-msgstr "Zachowaj punkty końcowe lub kierunek z punktu początkowego"
+msgstr "Zamień kierunek obrotu"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "Prędkość automatycznego panoramowania:"
+msgstr "Prędkość przesuwania:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
+#, fuzzy
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Odwróć wertykalnie kierunek przesuwania"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
+#, fuzzy
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Odwróć horyzontalnie kierunek przesuwania"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "Usuń z zaznaczenia"
+msgstr "Odwróć kierunek przybliżania"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
+#, fuzzy
 msgid ""
 "KiCad comes with a large set of symbol and footprint libraries maintained by "
 "the KiCad librarian team.  You may also create your own libraries, and "
@@ -5943,25 +5915,33 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad zawiera duży zestaw bibliotek symboli i footprintów utrzymywanych "
+"przez zespół bibliotekarzy KiCada. Możesz także tworzyć własne biblioteki "
+"oraz instalować biblioteki firm trzecich z poziomu Menedżera Wtyczek i "
+"Zasobów lub z innych źródeł.\n"
+"\n"
+"Tabele bibliotek to pliki konfiguracyjne określające, które biblioteki mają "
+"zostać załadowane. Biblioteki globalne są dostępne we wszystkich projektach, "
+"a w razie potrzeby możesz dodać również biblioteki specyficzne dla danego "
+"projektu."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>Następujące globalne tabele bibliotek muszą zostać utworzone:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "W jaki sposób chciałbyś skonfigurować program KiCad?"
+msgstr "W jaki sposób KiCad ma je utworzyć?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
+#, fuzzy
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Rozpocznij z wbudowanymi bibliotekami KiCad'a (zalecane)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Importuj ustawienia z jednej z poprzednich wersji:"
+msgstr "Zaimportuj tabele z poprzedniej wersji"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -5969,11 +5949,13 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Tabele bibliotek zostaną zaimportowane z wersji wybranej w poprzednim kroku. "
+"Tabele, których nie da się zaimportować, zostaną utworzone z domyślnymi "
+"bibliotekami KiCada."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Biblioteki footprintów"
+msgstr "Rozpocznij bez bibliotek"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -5982,17 +5964,22 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Nie znaleziono wbudowanych tabel bibliotek w oczekiwanej lokalizacji. Zwykle "
+"oznacza to, że zainstalowano oprogramowanie KiCad bez bibliotek. Możesz "
+"kontynuować konfigurację, ale aby biblioteki były dostępne, musisz "
+"zainstalować je osobno."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Uaktualnienie"
+msgstr "Aktualizacje"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Zezwolić na łączenie z Internetem w celu sprawdzania nowszych wersji KiCada "
+"oraz pakietów zainstalowanych poprzez Menedżera wtyczek i zasobów?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1338
