@@ -152,17 +152,8 @@ wxXmlNode* PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, const wxString& aName
 }
 
 
-wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) const
+wxString PCB_IO_IPC2581::sanitizeId( const wxString& aStr ) const
 {
-    // Build a key using the prefix and original string so that repeated calls for the same
-    // element return the same generated name.
-    wxString key = aPrefix ? wxString( aPrefix ) + wxT( ":" ) + aStr : aStr;
-
-    auto it = m_generated_names.find( key );
-
-    if( it != m_generated_names.end() )
-        return it->second;
-
     wxString str;
 
     if( m_version == 'C' )
@@ -180,6 +171,23 @@ wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) 
                 str.Append( *iter );
         }
     }
+
+    return str;
+}
+
+
+wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) const
+{
+    // Build a key using the prefix and original string so that repeated calls for the same
+    // element return the same generated name.
+    wxString key = aPrefix ? wxString( aPrefix ) + wxT( ":" ) + aStr : aStr;
+
+    auto it = m_generated_names.find( key );
+
+    if( it != m_generated_names.end() )
+        return it->second;
+
+    wxString str = sanitizeId( aStr );
 
     wxString base = str;
     wxString name = base;
@@ -233,7 +241,9 @@ wxString PCB_IO_IPC2581::pinName( const PAD* aPad ) const
     else if( name.empty() )
         name = wxString::Format( "PAD%zu", ii );
 
-    return genString( name, "PIN" );
+    // Pins are scoped per-package, so we only sanitize; uniqueness is handled by
+    // the per-package pin_nodes map in addPackage().
+    return sanitizeId( name );
 }
 
 

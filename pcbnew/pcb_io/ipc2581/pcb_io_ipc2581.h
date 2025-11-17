@@ -256,6 +256,7 @@ private:
 
     size_t shapeHash( const PCB_SHAPE& aShape );
 
+    wxString sanitizeId( const wxString& aStr ) const;
     wxString genString( const wxString& aStr, const char* aPrefix = nullptr ) const;
     wxString genLayerString( PCB_LAYER_ID aLayer, const char* aPrefix ) const;
     wxString genLayersString( PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom, const char* aPrefix ) const;
