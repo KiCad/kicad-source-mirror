@@ -39,6 +39,8 @@ public:
     {
         m_bmpWarning->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
         m_sizerWarning->Layout();
+
+        InitTableListMsg();
     }
 
     bool TransferDataFromWindow() override
@@ -86,13 +88,20 @@ public:
             }
         }
 
+        m_sizerWarning->Hide( !m_showWarning );
+
+        return true;
+    }
+
+    void InitTableListMsg()
+    {
         wxString missingTablesText;
-        bool showWarning = false;
+        m_showWarning = false;
 
         for( const LIBRARY_TABLE_TYPE& type : m_model->missing_tables )
         {
             if( !LIBRARY_MANAGER::IsTableValid( LIBRARY_MANAGER::DefaultGlobalTablePath( type ) ) )
-                showWarning = true;
+                m_showWarning = true;
 
             switch( type )
             {
@@ -114,15 +123,12 @@ public:
         }
 
         m_stRequiredTables->SetLabel( missingTablesText.BeforeLast( '\n' ) );
-
-        m_sizerWarning->Hide( !showWarning );
-
-        return true;
     }
 
 private:
     std::shared_ptr<STARTWIZARD_PROVIDER_LIBRARIES_MODEL> m_model;
     STARTWIZARD* m_wizard;
+    bool m_showWarning;
 };
 
 

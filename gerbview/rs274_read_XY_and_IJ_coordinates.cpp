@@ -324,8 +324,9 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
         line.Trim( false );
 
         // Warning: in locales using ',' as separator, wxString::ToCDouble accept both '.' and ','
-        // as separator (wxWidgets bug?). So because ',' is used also to separe 2 operands in
-        // Gerber strings, remove the first ',' that is a operand separator, not a float separator
+        // as separator (wxWidgets 3.2.6 bug?, look fixed in 3.2.8). So because ',' is used also
+        // to separe 2 operands in Gerber strings, remove the first ',' that is a operand separator,
+        // not a float separator
         line.Replace(","," ", false);
         line.ToCDouble( &ret );
         // Find the end of the float number. The float number contains only chars
