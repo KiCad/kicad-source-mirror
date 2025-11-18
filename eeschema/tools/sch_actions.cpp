@@ -587,16 +587,16 @@ TOOL_ACTION SCH_ACTIONS::autoplaceAllSheetPins( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::syncSheetPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Sync Sheet Pins..." ) )
-        .Tooltip( _( "Synchronize sheet pins and hierarchical labels" ) )
+        .FriendlyName( _( "Sync Current Sheet Pins..." ) )
+        .Tooltip( _( "Synchronize current sheet pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION SCH_ACTIONS::syncAllSheetsPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncAllSheetsPins" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Sync Sheet Pins..." ) )
-        .Tooltip( _( "Synchronize sheet pins and hierarchical labels" ) )
+        .FriendlyName( _( "Sync All Sheets Pins..." ) )
+        .Tooltip( _( "Synchronize all sheets pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
 
