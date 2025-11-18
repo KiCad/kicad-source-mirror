@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-13 04:51+0000\n"
+"PO-Revision-Date: 2025-11-18 06:32+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -25254,9 +25254,8 @@ msgid "All selected nets must be labeled to assign a netclass."
 msgstr "网络必须标记才能分配网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:1077
-#, fuzzy
 msgid "No connected net selected."
-msgstr "未选择任何网络。"
+msgstr "未选择任何已连接网络。"
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1125
 msgid ""
@@ -41625,8 +41624,8 @@ msgid ""
 "value."
 msgstr ""
 "焊盘和锡膏之间的全局绝对间距。\n"
-"负间距表示锡膏区小于焊盘区 (实际设计中的常用设置）。\n"
-"该值可以被封装或焊盘中设置的局部值覆盖。\n"
+"负值表示锡膏面积小于焊盘面积 (实际设计中常用）。\n"
+"该值可以被封装或焊盘中的局部设置值覆盖。\n"
 "最终间距值为该值与相对间距值之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:167
@@ -49082,9 +49081,8 @@ msgid "Segment Delay"
 msgstr "走线段延迟"
 
 #: pcbnew/pcb_track.cpp:1960
-#, fuzzy
 msgid "Copper Area"
-msgstr "覆铜区"
+msgstr "铜箔面积"
 
 #: pcbnew/pcb_track.cpp:1975
 #, c-format
@@ -53251,9 +53249,8 @@ msgid "Selected 2D Length"
 msgstr "选中的二维长度"
 
 #: pcbnew/tools/pcb_control.cpp:2471
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "选择铜层对"
+msgstr "选中二维铜箔面积"
 
 #: pcbnew/tools/pcb_control.cpp:2527
 msgid "Place Board Characteristics"
