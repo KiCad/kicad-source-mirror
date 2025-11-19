@@ -1006,15 +1006,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( aCommit->GetStatus( item ) != 0 )
                 continue;
 
-            if( item->Type() != PCB_ZONE_T )
-            {
-                if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
-                {
-                    aCompatData.m_affectedItems.insert( item );
-                    aCommit->Remove( item );
-                }
-            }
-            else
+            if( item->Type() == PCB_ZONE_T )
             {
                 ZONE* zone = static_cast<ZONE*>( item );
 
@@ -1034,6 +1026,14 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                     aCommit->Remove( zone );
                 }
             }
+            else
+            {
+                if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                {
+                    aCompatData.m_affectedItems.insert( item );
+                    aCommit->Remove( item );
+                }
+            }
         }
 
         for( BOARD_ITEM* item : sourceItems )
@@ -1046,17 +1046,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             BOARD_ITEM* copied = nullptr;
 
-            if( item->Type() != PCB_ZONE_T )
-            {
-                if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
-                    continue;
-
-                if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
-                    continue;
-
-                copied = static_cast<BOARD_ITEM*>( item->Clone() );
-            }
-            else
+            if( item->Type() == PCB_ZONE_T )
             {
                 ZONE* zone = static_cast<ZONE*>( item );
 
@@ -1080,6 +1070,16 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 fixupNet( zone, targetZone, aCompatData.m_matchingComponents );
 
                 copied = targetZone;
+            }
+            else
+            {
+                if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                    continue;
+
+                if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                    continue;
+
+                copied = static_cast<BOARD_ITEM*>( item->Clone() );
             }
 
             if( copied )
