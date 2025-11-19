@@ -963,9 +963,9 @@ static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 wxString sheetName = fp->GetSheetname();
                 wxString refName = arg->AsString();
 
-                if( sheetName.EndsWith( wxT("/") ) )
+                if( sheetName.EndsWith( wxT( "/" ) ) )
                     sheetName.RemoveLast();
-                if( refName.EndsWith( wxT("/") ) )
+                if( refName.EndsWith( wxT( "/" ) ) )
                     refName.RemoveLast();
 
                 if( sheetName.Matches( refName ) )
@@ -1093,11 +1093,8 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->IsMicroVia() )
-    {
+    if( item && item->Type() == PCB_VIA_T && static_cast<PCB_VIA*>( item )->IsMicroVia() )
         result->Set( 1.0 );
-    }
 }
 
 static void isBlindVia( LIBEVAL::CONTEXT* aCtx, void* self )
@@ -1109,11 +1106,8 @@ static void isBlindVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->IsBlindVia() )
-    {
+    if( item && item->Type() == PCB_VIA_T && static_cast<PCB_VIA*>( item )->IsBlindVia() )
         result->Set( 1.0 );
-    }
 }
 
 static void isBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
@@ -1125,11 +1119,8 @@ static void isBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->IsBuriedVia() )
-    {
+    if( item && item->Type() == PCB_VIA_T && static_cast<PCB_VIA*>( item )->IsBuriedVia() )
         result->Set( 1.0 );
-    }
 }
 
 static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
@@ -1381,8 +1372,7 @@ static void hasComponentClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
-            aCtx->ReportError(
-                    _( "Missing component class name argument to hasComponentClass()" ) );
+            aCtx->ReportError( _( "Missing component class name argument to hasComponentClass()" ) );
 
         return;
     }

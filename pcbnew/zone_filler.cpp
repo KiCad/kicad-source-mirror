@@ -616,7 +616,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     thread_pool& tp = GetKiCadThreadPool();
 
     for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
-        returns.emplace_back( std::make_pair( tp.submit_task( [&, fillItem]() { return fill_lambda( fillItem ); } ), 0 ) );
+    {
+        returns.emplace_back( std::make_pair( tp.submit_task(
+                [&, fillItem]()
+                {
+                    return fill_lambda( fillItem );
+                } ), 0 ) );
+    }
 
     while( !cancelled && finished != 2 * toFill.size() )
     {
@@ -641,9 +647,21 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 {
                     // Queue the next step (will re-queue the existing step if it didn't complete)
                     if( ret.second == 0 )
-                        returns[ii].first = tp.submit_task( [&, idx = ii]() { return fill_lambda( toFill[idx] ); } );
+                    {
+                        returns[ii].first = tp.submit_task(
+                                [&, idx = ii]()
+                                {
+                                    return fill_lambda( toFill[idx] );
+                                } );
+                    }
                     else if( ret.second == 1 )
-                        returns[ii].first = tp.submit_task( [&, idx = ii]() { return tesselate_lambda( toFill[idx] ); } );
+                    {
+                        returns[ii].first = tp.submit_task(
+                                [&, idx = ii]()
+                                {
+                                    return tesselate_lambda( toFill[idx] );
+                                } );
+                    }
                 }
             }
         }
@@ -1375,8 +1393,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         {
                             int radius = via->GetDrillValue() / 2;
 
-                            TransformCircleToPolygon( aHoles, via->GetPosition(),
-                                                      radius + gap + extra_margin,
+                            TransformCircleToPolygon( aHoles, via->GetPosition(), radius + gap + extra_margin,
                                                       m_maxError, ERROR_OUTSIDE );
                         }
                     }
