@@ -201,14 +201,14 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
             if( item->Type() == PCB_FOOTPRINT_T )
                 continue;
 
-            if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-                continue;
-
-            if( item->IsBOARD_ITEM() )
-                aItems.insert( static_cast<BOARD_ITEM*>( item ) );
+            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+            {
+                if( !boardItem->IsConnected() )
+                    aItems.insert( boardItem );
+            }
         }
 
-        return (int) aItems.size();
+        return aItems.size() > 0;
     }
 
     std::vector<BOARD_ITEM*> result;
@@ -264,29 +264,9 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
     }
 
     for( BOARD_ITEM* drawing : board()->Drawings() )
-        testAndAdd( drawing );
-
-    for( PCB_GROUP* group : board()->Groups() )
     {
-        // A group is cloned in its entirety if *all* children are contained
-        bool addGroup = true;
-
-        group->RunOnChildren(
-                [&]( BOARD_ITEM* aItem )
-                {
-                    if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_BARCODE_T, PCB_DIMENSION_T } ) )
-                    {
-                        ctx.SetItems( aItem, aItem );
-                        LIBEVAL::VALUE* val = ucode.Run( &ctx );
-
-                        if( val->AsDouble() == 0.0 )
-                            addGroup = false;
-                    }
-                },
-                RECURSE_MODE::RECURSE );
-
-        if( addGroup )
-            aItems.insert( group );
+        if( !drawing->IsConnected() )
+            testAndAdd( drawing );
     }
 
     if( restoreBlankName )
@@ -776,7 +756,10 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
                 continue;
 
             if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-                aOutput.insert( bci );
+            {
+                if( bci->IsConnected() )
+                    aOutput.insert( bci );
+            }
         }
 
         return (int) aOutput.size();
@@ -786,10 +769,11 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
 
-    auto reportError = [&]( const wxString& aMessage, int aOffset )
-    {
-        wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s" ), aMessage );
-    };
+    auto reportError =
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                wxLogTrace( traceMultichannelTool, wxT( "ERROR: %s" ), aMessage );
+            };
 
     ctx.SetErrorCallback( reportError );
     preflightCtx.SetErrorCallback( reportError );
@@ -825,6 +809,12 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
     {
         for( PCB_TRACK* track : board()->Tracks() )
             testAndAdd( track );
+
+        for( BOARD_ITEM* drawing : board()->Drawings() )
+        {
+            if( drawing->IsConnected() )
+                testAndAdd( static_cast<BOARD_CONNECTED_ITEM*>( drawing ) );
+        }
     }
 
     if( restoreBlankName )
@@ -878,7 +868,23 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
     targetPoly.AddOutline( newTargetOutline );
     targetPoly.CacheTriangulation( false );
 
-    auto connectivity = board()->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
+    std::map<EDA_GROUP*, EDA_GROUP*>   groupMap;
+
+    auto fixupParentGroup =
+            [&]( BOARD_ITEM* sourceItem, BOARD_ITEM* destItem )
+            {
+                if( EDA_GROUP* parentGroup = sourceItem->GetParentGroup() )
+                {
+                    if( !groupMap.contains( parentGroup ) )
+                    {
+                        BOARD_ITEM* newGroup = static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false );
+                        groupMap[parentGroup] = static_cast<PCB_GROUP*>( newGroup );
+                    }
+
+                    destItem->SetParentGroup( groupMap[parentGroup] );
+                }
+            };
 
     // Only stage changes for a target Rule Area zone if it actually belongs to the board.
     // In some workflows (e.g. ApplyDesignBlockLayout), the target area is a temporary zone
@@ -971,6 +977,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Duplicate( false ) );
 
             fixupNet( item, copied, aCompatData.m_matchingComponents );
+            fixupParentGroup( item, copied );
 
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
@@ -1047,10 +1054,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                     continue;
 
-                if( item->Type() == PCB_GROUP_T )
-                    copied = static_cast<PCB_GROUP*>( item )->DeepClone();
-                else
-                    copied = static_cast<BOARD_ITEM*>( item->Clone() );
+                copied = static_cast<BOARD_ITEM*>( item->Clone() );
             }
             else
             {
@@ -1080,6 +1084,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             if( copied )
             {
+                fixupParentGroup( item, copied );
+
                 copied->ClearFlags();
                 copied->Rotate( VECTOR2( 0, 0 ), rot );
                 copied->Move( disp );
