@@ -880,6 +880,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                     {
                         BOARD_ITEM* newGroup = static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false );
                         groupMap[parentGroup] = static_cast<PCB_GROUP*>( newGroup );
+                        aCommit->Add( newGroup );
                     }
 
                     destItem->SetParentGroup( groupMap[parentGroup] );
