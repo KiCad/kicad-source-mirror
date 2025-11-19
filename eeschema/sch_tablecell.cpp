@@ -152,7 +152,7 @@ static bool parseCellAddress( const wxString& aAddr, int& aRow, int& aCol )
 wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath,
                                       bool aAllowExtraText, int aDepth ) const
 {
-    // Use local depth counter so each text element starts fresh
+    // Local depth counter for ResolveTextVars iteration tracking (separate from cross-cell aDepth)
     int depth = 0;
 
     SCH_SHEET* sheet = nullptr;
@@ -160,6 +160,11 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
     if( aPath )
         sheet = aPath->Last();
 
+    // Text variable resolver supporting:
+    // - ${ROW}, ${COL}, ${ADDR} - cell position variables
+    // - @{expression} - math expression evaluation
+    // - ${CELL("A1")} or ${CELL(row,col)} - reference to another cell's evaluated text
+    // - \${...} and \@{...} - escape sequences for literal display
     std::function<bool( wxString* )> tableCellResolver = [&]( wxString* token ) -> bool
     {
         if( token->IsSameAs( wxT( "ROW" ) ) )
@@ -248,14 +253,11 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
             SCH_TABLECELL* targetCell = table->GetCell( targetRow, targetCol );
             if( targetCell )
             {
-                // Get the RAW text from the target cell (unevaluated)
-                wxString rawText = targetCell->GetText();
-
-                // Consume one level of escaping: \@{${ROW}-10} becomes @{${ROW}-10}
-                // First protect: \@{...} → <<<ESC_AT:...> (converts backslash to marker)
-                // Then unprotect: <<<ESC_AT:...> → @{...} (removes marker, consuming escape)
-                // Return the unescaped text and let the outer ResolveTextVars handle evaluation
-                *token = UnprotectEscapes( ProtectEscapes( rawText ) );
+                // Return the fully evaluated/displayed text from the target cell
+                // Variables and expressions are evaluated in the target cell's context
+                // (e.g., ${ROW} in the target cell refers to the target's row, not the referencing cell's row)
+                // Increment aDepth to prevent infinite recursion in circular references
+                *token = targetCell->GetShownText( aSettings, aPath, aAllowExtraText, aDepth + 1 );
                 return true;
             }
             else
@@ -291,10 +293,13 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
     GetDrawFont( aSettings )
             ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
 
-    // Convert escape markers back to literals for final display
-    // Only unescape at the top level to avoid premature unescaping in nested CELL() calls
+    // Convert escape markers back to literal ${} and @{} for final display
+    // Only do this at the top level (aDepth == 0) to avoid premature unescaping in nested CELL() calls
     if( aDepth == 0 )
-        text = UnprotectEscapes( text );
+    {
+        text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+        text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+    }
 
     return text;
 }

@@ -57,236 +57,6 @@ enum Bracket
 #endif
     Bracket_Max
 };
-// Forward declaration
-static wxString ProtectAllPatterns( const wxString& aSource );
-
-// Recursively protect escaped expressions (\${...} and \@{...}) by converting them to escape markers
-// This must be done BEFORE any variable expansion to prevent variables inside escaped expressions from being expanded
-wxString ProtectEscapes( const wxString& aSource )
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    newbuf.Alloc( sourceLen );
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        // Check for \${ or \@{
-        if( aSource[i] == '\\' && i + 2 < sourceLen && aSource[i + 2] == '{' &&
-            ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) )
-        {
-            wxChar escapeChar = aSource[i + 1];
-
-            // Find the matching closing brace
-            int braceDepth = 1;
-            size_t contentStart = i + 3;
-            size_t j = contentStart;
-
-            while( j < sourceLen && braceDepth > 0 )
-            {
-                if( aSource[j] == '{' )
-                    braceDepth++;
-                else if( aSource[j] == '}' )
-                    braceDepth--;
-                j++;
-            }
-
-            // Extract the contents and protect ALL patterns inside (not just escaped ones)
-            // This ensures that ${VAR} inside \@{...} won't be expanded
-            wxString content = aSource.Mid( contentStart, j - contentStart - 1 );
-            wxString protectedContent = ProtectAllPatterns( content );  // Protect ALL patterns
-
-            // Add the escape marker
-            if( escapeChar == '$' )
-                newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
-            else
-                newbuf.append( wxT( "<<<ESC_AT:" ) );
-
-            newbuf.append( protectedContent );
-            newbuf.append( '}' );
-
-            i = j - 1;  // Skip past the entire escaped expression
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
-// Recursively protect ALL ${...} and @{...} patterns (both escaped and unescaped)
-// Used when processing the contents of escaped expressions to prevent any expansion
-static wxString ProtectAllPatterns( const wxString& aSource )
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    newbuf.Alloc( sourceLen );
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        // Check for \${ or \@{ (escaped patterns)
-        if( aSource[i] == '\\' && i + 2 < sourceLen && aSource[i + 2] == '{' &&
-            ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) )
-        {
-            wxChar escapeChar = aSource[i + 1];
-
-            // Find the matching closing brace
-            int braceDepth = 1;
-            size_t contentStart = i + 3;
-            size_t j = contentStart;
-
-            while( j < sourceLen && braceDepth > 0 )
-            {
-                if( aSource[j] == '{' )
-                    braceDepth++;
-                else if( aSource[j] == '}' )
-                    braceDepth--;
-                j++;
-            }
-
-            // Extract and recursively protect the contents
-            wxString content = aSource.Mid( contentStart, j - contentStart - 1 );
-            wxString protectedContent = ProtectAllPatterns( content );
-
-            // Add the escape marker
-            if( escapeChar == '$' )
-                newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
-            else
-                newbuf.append( wxT( "<<<ESC_AT:" ) );
-
-            newbuf.append( protectedContent );
-            newbuf.append( '}' );
-
-            i = j - 1;
-        }
-        // Check for ${ or @{ (unescaped patterns - also protect these)
-        else if( ( aSource[i] == '$' || aSource[i] == '@' ) && i + 1 < sourceLen && aSource[i + 1] == '{' )
-        {
-            wxChar marker = aSource[i];
-
-            // Find the matching closing brace
-            int braceDepth = 1;
-            size_t contentStart = i + 2;
-            size_t j = contentStart;
-
-            while( j < sourceLen && braceDepth > 0 )
-            {
-                if( aSource[j] == '{' )
-                    braceDepth++;
-                else if( aSource[j] == '}' )
-                    braceDepth--;
-                j++;
-            }
-
-            // Extract and recursively protect the contents
-            wxString content = aSource.Mid( contentStart, j - contentStart - 1 );
-            wxString protectedContent = ProtectAllPatterns( content );
-
-            // Add the escape marker
-            if( marker == '$' )
-                newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
-            else
-                newbuf.append( wxT( "<<<ESC_AT:" ) );
-
-            newbuf.append( protectedContent );
-            newbuf.append( '}' );
-
-            i = j - 1;
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
-// Recursively convert escape markers back to ${...} and @{...}
-// This should only be done at the very end, after all variable expansion and expression evaluation
-wxString UnprotectEscapes( const wxString& aSource )
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    newbuf.Alloc( sourceLen );
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        // Check for <<<ESC_DOLLAR:
-        if( i + 14 <= sourceLen && aSource.Mid( i, 14 ) == wxT( "<<<ESC_DOLLAR:" ) )
-        {
-            newbuf.append( wxT( "${" ) );
-            i += 14;
-
-            // Find the matching closing brace and recursively unescape the contents
-            int braceCount = 1;
-            size_t contentStart = i;
-            size_t j = i;
-
-            while( j < sourceLen && braceCount > 0 )
-            {
-                if( aSource[j] == '{' )
-                    braceCount++;
-                else if( aSource[j] == '}' )
-                    braceCount--;
-                if( braceCount > 0 )
-                    j++;
-            }
-
-            // Extract and recursively unescape the contents
-            wxString content = aSource.Mid( contentStart, j - contentStart );
-            wxString unprotectedContent = UnprotectEscapes( content );  // Recursive call
-
-            newbuf.append( unprotectedContent );
-            newbuf.append( '}' );
-
-            i = j;  // Skip past the closing brace
-        }
-        // Check for <<<ESC_AT:
-        else if( i + 10 <= sourceLen && aSource.Mid( i, 10 ) == wxT( "<<<ESC_AT:" ) )
-        {
-            newbuf.append( wxT( "@{" ) );
-            i += 10;
-
-            // Find the matching closing brace and recursively unescape the contents
-            int braceCount = 1;
-            size_t contentStart = i;
-            size_t j = i;
-
-            while( j < sourceLen && braceCount > 0 )
-            {
-                if( aSource[j] == '{' )
-                    braceCount++;
-                else if( aSource[j] == '}' )
-                    braceCount--;
-                if( braceCount > 0 )
-                    j++;
-            }
-
-            // Extract and recursively unescape the contents
-            wxString content = aSource.Mid( contentStart, j - contentStart );
-            wxString unprotectedContent = UnprotectEscapes( content );  // Recursive call
-
-            newbuf.append( unprotectedContent );
-            newbuf.append( '}' );
-
-            i = j;  // Skip past the closing brace
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
 
 wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags )
 {
@@ -357,8 +127,36 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
             continue;
         }
 
-        // NOTE: Escape handling (\${...} and \@{...}) is now done by ProtectEscapes()
-        // which is called at the start of ResolveTextVars(), before ExpandTextVars()
+        // Handle escaped variable references: \${...} or \@{...}
+        // Replace with escape markers that won't be expanded by multi-pass loops
+        // The markers will be converted back to ${...} or @{...} only at the final display stage
+        if( aSource[i] == '\\' && i + 1 < sourceLen )
+        {
+            if( ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) && i + 2 < sourceLen && aSource[i + 2] == '{' )
+            {
+                // Replace \${ with <<<ESC_DOLLAR: and \@{ with <<<ESC_AT:
+                // Using unique delimiters without braces to avoid confusing the expression evaluator
+                if( aSource[i + 1] == '$' )
+                    newbuf.append( wxT( "<<<ESC_DOLLAR:" ) );
+                else
+                    newbuf.append( wxT( "<<<ESC_AT:" ) );
+                i += 2;
+
+                // Copy everything until the matching closing brace, including the brace
+                int braceDepth = 1;
+                for( i = i + 1; i < sourceLen && braceDepth > 0; ++i )
+                {
+                    if( aSource[i] == '{' )
+                        braceDepth++;
+                    else if( aSource[i] == '}' )
+                        braceDepth--;
+
+                    newbuf.append( aSource[i] );
+                }
+                i--; // Adjust because loop will increment
+                continue;
+            }
+        }
 
         if( ( aSource[i] == '$' || aSource[i] == '@' ) && i + 1 < sourceLen && aSource[i + 1] == '{' )
         {
@@ -450,10 +248,7 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
 {
     // Multi-pass resolution to handle nested variables like ${J601:UNIT(${ROW})}
     // and math expressions like @{${ROW}-1}
-
-    // FIRST: Protect any escaped expressions (\${...} or \@{...}) BEFORE expansion
-    // This prevents variables inside escaped expressions from being expanded
-    wxString  text = ProtectEscapes( aSource );
+    wxString  text = aSource;
     const int maxDepth = ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth;
 
     static EXPRESSION_EVALUATOR evaluator;
@@ -470,9 +265,6 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
         if( text.Contains( wxT( "@{" ) ) )
             text = evaluator.Evaluate( text ); // Evaluate math expressions
     }
-
-    // NOTE: We do NOT unescape here because this function can be called recursively
-    // (e.g., in nested CELL() references). Unescaping will be done in GetShownText() for final display.
 
     return text;
 }

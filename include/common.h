@@ -121,29 +121,6 @@ KICOMMON_API wxString ResolveTextVars( const wxString& aSource, const std::funct
                                        int& aDepth );
 
 /**
- * Recursively protect escaped expressions (\${...} and \@{...}) by converting them to escape markers.
- *
- * This must be done BEFORE any variable expansion to prevent variables inside escaped expressions
- * from being expanded. The function recursively protects all patterns inside escaped expressions.
- *
- * @param aSource The text containing escaped expressions (\${...} and \@{...})
- * @return Text with escaped expressions converted to markers (<<<ESC_DOLLAR:...} and <<<ESC_AT:...})
- */
-KICOMMON_API wxString ProtectEscapes( const wxString& aSource );
-
-/**
- * Recursively convert escape markers back to ${...} and @{...} for final display.
- *
- * This function unescapes protected expressions that were marked during ProtectEscapes().
- * It should only be called at the very end, in GetShownText() functions, after all
- * variable expansion and expression evaluation is complete.
- *
- * @param aSource The text containing escape markers (<<<ESC_DOLLAR:...} and <<<ESC_AT:...})
- * @return Text with escape markers converted back to ${...} and @{...}
- */
-KICOMMON_API wxString UnprotectEscapes( const wxString& aSource );
-
-/**
  * Returns any variables unexpanded, e.g. ${VAR} -> VAR
  */
 KICOMMON_API wxString GetGeneratedFieldDisplayName( const wxString& aSource );
