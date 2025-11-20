@@ -792,16 +792,29 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
                 pin->SetName( ksymbol->GetName() );
                 //pin->SetVisible( false );
             }
-            else if( auto pinNameAttr = get_opt( pinAttributes, "NAME" ) )
+            else
             {
-                pin->SetName( pinNameAttr->value );
-                pinInfo.name = pinNameAttr->value;
+                auto pinNameAttr = get_opt( pinAttributes, "Pin Name" ); // JLCEDA V3
 
-                if( !pinNameAttr->valVisible )
-                    pin->SetNameTextSize( schIUScale.MilsToIU( 1 ) );
+                if( !pinNameAttr )
+                    pinNameAttr = get_opt( pinAttributes, "NAME" ); // EasyEDA V2
+
+                if( pinNameAttr )
+                {
+                    pin->SetName( pinNameAttr->value );
+                    pinInfo.name = pinNameAttr->value;
+
+                    if( !pinNameAttr->valVisible )
+                        pin->SetNameTextSize( schIUScale.MilsToIU( 1 ) );
+                }
             }
 
-            if( auto pinNumAttr = get_opt( pinAttributes, "NUMBER" ) )
+            auto pinNumAttr = get_opt( pinAttributes, "Pin Number" ); // JLCEDA V3
+
+            if( !pinNumAttr )
+                pinNumAttr = get_opt( pinAttributes, "NUMBER" ); // EasyEDA V2
+
+            if( pinNumAttr )
             {
                 pin->SetNumber( pinNumAttr->value );
                 pinInfo.number = pinNumAttr->value;
