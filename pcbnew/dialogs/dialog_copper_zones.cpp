@@ -179,7 +179,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE* aZone, ZO
         m_openZoneManager->Hide();
 
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( this, aParent, m_zoneSettingsBag );
-    m_panelZoneProperties->SetZone( m_zone );
     m_sizerRight->Add( m_panelZoneProperties, 1, wxEXPAND, 5 );
 
     SetupStandardButtons();
@@ -207,7 +206,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
         m_gap->Enable( m_rbEnvelope->GetValue() );
     }
 
-    return m_panelZoneProperties->TransferZoneSettingsToWindow();
+    m_panelZoneProperties->SetZone( m_zone );
+    return true;
 }
 
 

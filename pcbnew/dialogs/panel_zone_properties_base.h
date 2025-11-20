@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 class WX_GRID;
+class WX_INFOBAR;
 
 #include <wx/infobar.h>
 #include <wx/gdicmn.h>
@@ -57,7 +58,7 @@ class PANEL_ZONE_PROPERTIES_BASE : public wxPanel
 			ID_CORNER_SMOOTHING,
 		};
 
-		wxInfoBar* m_copperZoneInfoBar;
+		WX_INFOBAR* m_copperZoneInfoBar;
 		wxStaticText* m_zoneNameLabel;
 		wxTextCtrl* m_tcZoneName;
 		wxStaticText* m_netLabel;

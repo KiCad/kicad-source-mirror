@@ -455,7 +455,7 @@ void LAYER_PROPERTIES_GRID_TABLE::AddItem( PCB_LAYER_ID aLayer, const ZONE_LAYER
 
 bool LAYER_PROPERTIES_GRID_TABLE::AppendRows( size_t aNumRows )
 {
-    PCB_LAYER_ID next = F_Cu;
+    PCB_LAYER_ID next = UNDEFINED_LAYER;
 
     auto contains =
             [&]( PCB_LAYER_ID candidate )
@@ -469,7 +469,7 @@ bool LAYER_PROPERTIES_GRID_TABLE::AppendRows( size_t aNumRows )
                 return false;
             };
 
-    for( PCB_LAYER_ID layer : m_getLayersFunc() )
+    for( PCB_LAYER_ID layer : m_getLayersFunc().UIOrder() )
     {
         if( !contains( layer ) )
         {
@@ -478,8 +478,10 @@ bool LAYER_PROPERTIES_GRID_TABLE::AppendRows( size_t aNumRows )
         }
     }
 
-    for( int jj = 0; jj < (int) aNumRows; ++jj )
-        AddItem( next, ZONE_LAYER_PROPERTIES() );
+    if( next == UNDEFINED_LAYER )
+        return false;
+
+    AddItem( next, ZONE_LAYER_PROPERTIES( { VECTOR2I( 0, 0 ) } ) );
 
     return true;
 }

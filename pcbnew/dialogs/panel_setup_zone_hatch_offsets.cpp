@@ -68,7 +68,7 @@ bool PANEL_SETUP_ZONE_HATCH_OFFSETS::TransferDataToWindow()
 
 void PANEL_SETUP_ZONE_HATCH_OFFSETS::LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings )
 {
-    for( PCB_LAYER_ID layer : LSET::AllCuMask() )
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().UIOrder() )
     {
         if( aBrdSettings.IsLayerEnabled( layer ) )
         {
@@ -104,8 +104,8 @@ void PANEL_SETUP_ZONE_HATCH_OFFSETS::SyncCopperLayers( int aCopperLayerCount )
                 m_layerPropsTable->AddItem( layer, ZONE_LAYER_PROPERTIES() );
         }
 
-        if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
-            dlg->Layout();
+        Layout();
+
     }
 }
 

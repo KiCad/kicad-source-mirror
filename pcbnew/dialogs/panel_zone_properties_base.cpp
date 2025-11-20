@@ -7,6 +7,7 @@
 
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
+#include "widgets/wx_infobar.h"
 
 #include "panel_zone_properties_base.h"
 
@@ -17,7 +18,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_copperZoneInfoBar = new wxInfoBar( this );
+	m_copperZoneInfoBar = new WX_INFOBAR( this );
 	m_copperZoneInfoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
 	m_copperZoneInfoBar->SetEffectDuration( 500 );
 	bMainSizer->Add( m_copperZoneInfoBar, 0, wxBOTTOM|wxEXPAND, 5 );

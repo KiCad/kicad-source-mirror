@@ -193,10 +193,17 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     m_spinCtrlSmoothLevel->SetValue( m_settings->m_HatchSmoothingLevel );
     m_spinCtrlSmoothValue->SetValue( m_settings->m_HatchSmoothingValue );
 
-    for( const auto& [layer, props] : m_settings->m_LayerProperties )
+    m_layerPropsTable->Clear();
+
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().UIOrder() )
     {
-        if( props.hatching_offset.has_value() )
-            m_layerPropsTable->AddItem( layer, props );
+        if( m_settings->m_LayerProperties.contains( layer ) )
+        {
+            ZONE_LAYER_PROPERTIES& props = m_settings->m_LayerProperties[layer];
+
+            if( props.hatching_offset.has_value() )
+                m_layerPropsTable->AddItem( layer, props );
+        }
     }
 
     // Enable/Disable some widgets
@@ -431,7 +438,12 @@ void PANEL_ZONE_PROPERTIES::OnAddLayerItem( wxCommandEvent& event )
     m_layerSpecificOverrides->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                m_layerSpecificOverrides->GetTable()->AppendRows( 1 );
+                if( !m_layerSpecificOverrides->GetTable()->AppendRows( 1 ) )
+                {
+                    m_copperZoneInfoBar->ShowMessageFor( _( "All zone layers already overridden." ), 8000,
+                                                         wxICON_WARNING );
+                }
+
                 return { m_layerSpecificOverrides->GetNumberRows() - 1, -1 };
             } );
 }
