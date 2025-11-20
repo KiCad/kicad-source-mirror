@@ -135,7 +135,8 @@ void SCH_EASYEDAPRO_PARSER::ApplyFontStyle( const std::map<wxString, nlohmann::j
     {
         wxString fontname = ( style.at( 4 ) );
 
-        if( !fontname.IsSameAs( wxS( "default" ), false ) )
+        // JLCEDA Pro V3 export to format version V1 specifies Arial explicitly instead of null for default font
+        if( fontname != wxS( "Arial" ) && !fontname.IsSameAs( wxS( "default" ), false ) )
             text->SetFont( KIFONT::FONT::GetFont( fontname ) );
     }
 
