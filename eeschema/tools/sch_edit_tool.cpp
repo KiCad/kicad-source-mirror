@@ -298,12 +298,6 @@ bool SCH_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
-    auto hasElements =
-            [this]( const SELECTION& aSel )
-            {
-                return !m_frame->GetScreen()->Items().empty();
-            };
-
     auto sheetHasUndefinedPins =
             []( const SELECTION& aSel )
             {
@@ -314,50 +308,51 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto attribDNPCond =
-        [] ( const SELECTION& aSel )
-        {
-            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
-                                []( const EDA_ITEM* item )
-                                {
-                                    return !item->IsType( { SCH_SYMBOL_T } )
-                                        || static_cast<const SCH_SYMBOL*>( item )->GetDNP();
-                                } );
-        };
+            [] ( const SELECTION& aSel )
+            {
+                return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                    []( const EDA_ITEM* item )
+                                    {
+                                        return !item->IsType( { SCH_SYMBOL_T } )
+                                            || static_cast<const SCH_SYMBOL*>( item )->GetDNP();
+                                    } );
+            };
 
     auto attribExcludeFromSimCond =
-        [] ( const SELECTION& aSel )
-        {
-            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
-                                []( const EDA_ITEM* item )
-                                {
-                                    return !item->IsType( { SCH_SYMBOL_T } )
-                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromSim();
-                                } );
-        };
+            [] ( const SELECTION& aSel )
+            {
+                return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                    []( const EDA_ITEM* item )
+                                    {
+                                        return !item->IsType( { SCH_SYMBOL_T } )
+                                            || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromSim();
+                                    } );
+            };
 
     auto attribExcludeFromBOMCond =
-        [] ( const SELECTION& aSel )
-        {
-            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
-                                []( const EDA_ITEM* item )
-                                {
-                                    return !item->IsType( { SCH_SYMBOL_T } )
-                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBOM();
-                                } );
-        };
+            [] ( const SELECTION& aSel )
+            {
+                return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                    []( const EDA_ITEM* item )
+                                    {
+                                        return !item->IsType( { SCH_SYMBOL_T } )
+                                            || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBOM();
+                                    } );
+            };
 
 
     auto attribExcludeFromBoardCond =
-        [] ( const SELECTION& aSel )
-        {
-            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
-                                []( const EDA_ITEM* item )
-                                {
-                                    return !item->IsType( { SCH_SYMBOL_T } )
-                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBoard();
-                                } );
-        };
+            [] ( const SELECTION& aSel )
+            {
+                return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                    []( const EDA_ITEM* item )
+                                    {
+                                        return !item->IsType( { SCH_SYMBOL_T } )
+                                            || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBoard();
+                                    } );
+            };
 
+    static const std::vector<KICAD_T> attribTypes = { SCH_SYMBOL_T, SCH_SHEET_T };
     static const std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };
 
     auto sheetSelection = S_C::Count( 1 ) && S_C::OnlyTypes( sheetTypes );
@@ -652,7 +647,7 @@ bool SCH_EDIT_TOOL::Init()
                 menu->SetIcon( BITMAPS::right );
 
                 menu->AddItem( SCH_ACTIONS::toLabel,    toLabelCondition );
-                menu->AddItem(SCH_ACTIONS::toDLabel, toCLabelCondition );
+                menu->AddItem(SCH_ACTIONS::toDLabel,    toCLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toHLabel,   toHLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toGLabel,   toGLabelCondition );
                 menu->AddItem( SCH_ACTIONS::toText,     toTextCondition );
@@ -685,7 +680,7 @@ bool SCH_EDIT_TOOL::Init()
     moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  S_C::SingleMultiBodyStyleSymbol, 1 );
 
     moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
-    moveMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
+    moveMenu.AddMenu( makeAttributesMenu(),           S_C::HasTypes( attribTypes ), 200 );
     moveMenu.AddItem( SCH_ACTIONS::swap,              swapSelectionCondition, 200 );
     moveMenu.AddItem( SCH_ACTIONS::properties,        propertiesCondition, 200 );
     moveMenu.AddMenu( makeEditFieldsMenu(),           S_C::SingleSymbol, 200 );
@@ -702,17 +697,17 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddItem( SCH_ACTIONS::clearHighlight,    haveHighlight && SCH_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                            haveHighlight && SCH_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( SCH_ACTIONS::clearHighlight,    haveHighlight && S_C::Idle, 1 );
+    drawMenu.AddSeparator(                            haveHighlight && S_C::Idle, 1 );
 
-    drawMenu.AddItem( SCH_ACTIONS::enterSheet,        sheetSelection && SCH_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                            sheetSelection && SCH_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( SCH_ACTIONS::enterSheet,        sheetSelection && S_C::Idle, 1 );
+    drawMenu.AddSeparator(                            sheetSelection && S_C::Idle, 1 );
 
     drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), S_C::SingleMultiUnitSymbol, 1 );
     drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  S_C::SingleMultiBodyStyleSymbol, 1 );
 
     drawMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
-    drawMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
+    drawMenu.AddMenu( makeAttributesMenu(),           S_C::HasTypes( attribTypes ), 200 );
     drawMenu.AddItem( SCH_ACTIONS::properties,        propertiesCondition, 200 );
     drawMenu.AddMenu( makeEditFieldsMenu(),           S_C::SingleSymbol, 200 );
     drawMenu.AddItem( SCH_ACTIONS::autoplaceFields,   autoplaceCondition, 200 );
@@ -736,7 +731,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   S_C::AllPinsOrSheetPins, 1 );
 
     selToolMenu.AddMenu( makeTransformMenu(),          orientCondition, 200 );
-    selToolMenu.AddMenu( makeAttributesMenu(),         S_C::HasType( SCH_SYMBOL_T ), 200 );
+    selToolMenu.AddMenu( makeAttributesMenu(),         S_C::HasTypes( attribTypes ), 200 );
     selToolMenu.AddItem( SCH_ACTIONS::swap,            swapSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
     selToolMenu.AddMenu( makeEditFieldsMenu(),         S_C::SingleSymbol, 200 );
@@ -761,8 +756,8 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
 
     selToolMenu.AddSeparator( 400 );
-    selToolMenu.AddItem( ACTIONS::selectAll,           hasElements, 400 );
-    selToolMenu.AddItem( ACTIONS::unselectAll,         hasElements, 400 );
+    selToolMenu.AddItem( ACTIONS::selectAll,           S_C::ShowAlways, 400 );
+    selToolMenu.AddItem( ACTIONS::unselectAll,         S_C::ShowAlways, 400 );
 
     ACTION_MANAGER* mgr = m_toolMgr->GetActionManager();
     // clang-format off
