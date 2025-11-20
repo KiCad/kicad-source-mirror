@@ -617,13 +617,12 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
     pad->SetPosition( ScalePos( center ) );
     pad->SetOrientationDegrees( orientation );
 
-    if( !padHole.is_null() )
+    // Check if this pad has a real drill hole
+    // JLCEDA may use ["ROUND",0,0] to indicate SMD pads
+    bool hasHole = false;
+    
+    if( !padHole.is_null() && !padHole.empty() )
     {
-        double drill_dir = 0;
-
-        if( line.at( 14 ).is_number() )
-            drill_dir = line.at( 14 );
-
         wxString holeShape = padHole.at( 0 );
 
         if( holeShape == wxS( "ROUND" ) || holeShape == wxS( "SLOT" ) )
@@ -632,22 +631,35 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
             drill.x = padHole.at( 1 );
             drill.y = padHole.at( 2 );
 
-            double deg = EDA_ANGLE( drill_dir, DEGREES_T ).Normalize90().AsDegrees();
-
-            if( std::abs( deg ) >= 45 )
-                std::swap( drill.x, drill.y ); // KiCad doesn't support arbitrary hole direction
-
-            if( holeShape == wxS( "SLOT" ) )
+            // Only treat as PTH if hole size is non-zero
+            if( drill.x > 0 || drill.y > 0 )
             {
-                pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
-            }
+                hasHole = true;
 
-            pad->SetDrillSize( ScaleSize( drill ) );
-            pad->SetLayerSet( PAD::PTHMask() );
-            pad->SetAttribute( PAD_ATTRIB::PTH );
+                double drill_dir = 0;
+
+                if( line.at( 14 ).is_number() )
+                    drill_dir = line.at( 14 );
+
+                double deg = EDA_ANGLE( drill_dir, DEGREES_T ).Normalize90().AsDegrees();
+
+                if( std::abs( deg ) >= 45 )
+                    std::swap( drill.x, drill.y ); // KiCad doesn't support arbitrary hole direction
+
+                if( holeShape == wxS( "SLOT" ) )
+                {
+                    pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
+                }
+
+                pad->SetDrillSize( ScaleSize( drill ) );
+                pad->SetLayerSet( PAD::PTHMask() );
+                pad->SetAttribute( PAD_ATTRIB::PTH );
+            }
         }
     }
-    else
+    
+    // If no valid hole, this is an SMD pad
+    if( !hasHole )
     {
         if( klayer == F_Cu )
         {
