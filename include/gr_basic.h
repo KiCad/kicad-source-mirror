@@ -32,7 +32,8 @@ using KIGFX::COLOR4D;
 
 
 /// Drawmode. Compositing mode plus a flag or two
-enum GR_DRAWMODE {
+enum GR_DRAWMODE : unsigned int
+{
     GR_OR                 = 0x01000000,
     GR_XOR                = 0x02000000,
     GR_AND                = 0x04000000,
@@ -41,7 +42,6 @@ enum GR_DRAWMODE {
     GR_ALLOW_HIGHCONTRAST = 0x20000000,
     GR_COPY               = 0x40000000,
     GR_HIGHLIGHT          = 0x80000000,
-    UNSPECIFIED_DRAWMODE  = -1
 };
 
 inline GR_DRAWMODE operator~( const GR_DRAWMODE& a )

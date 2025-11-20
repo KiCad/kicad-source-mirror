@@ -49,7 +49,7 @@ class TOOLS_HOLDER;
 /**
  * Internal (GUI-independent) event definitions.
  */
-enum TOOL_EVENT_CATEGORY
+enum TOOL_EVENT_CATEGORY : unsigned int
 {
     TC_NONE     = 0x00,
     TC_MOUSE    = 0x01,
@@ -60,7 +60,7 @@ enum TOOL_EVENT_CATEGORY
     TC_ANY      = 0xffffffff
 };
 
-enum TOOL_ACTIONS
+enum TOOL_ACTIONS : unsigned int
 {
     // UI input events
     TA_NONE                 = 0x0000,
@@ -126,7 +126,7 @@ enum TOOL_ACTIONS
     TA_ANY = 0xffffffff
 };
 
-enum TOOL_MOUSE_BUTTONS
+enum TOOL_MOUSE_BUTTONS : unsigned int
 {
     BUT_NONE         = 0x0,
     BUT_LEFT         = 0x1,
@@ -138,7 +138,7 @@ enum TOOL_MOUSE_BUTTONS
     BUT_ANY          = 0xffffffff
 };
 
-enum TOOL_MODIFIERS
+enum TOOL_MODIFIERS : unsigned int
 {
     MD_SHIFT        = 0x1000,
     MD_CTRL         = 0x2000,
