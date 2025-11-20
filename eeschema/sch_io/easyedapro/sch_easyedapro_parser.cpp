@@ -1194,19 +1194,35 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             if( esymInfo.head.symbolType == EASYEDAPRO::SYMBOL_TYPE::POWER_PORT )
             {
-                if( auto globalNetAttr = get_opt( attributes, "Global Net Name" ) )
-                {
-                    ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ), *globalNetAttr,
-                                      false, true, compAttrs, schSym.get() );
+                SCH_FIELD* valueField = schSym->GetField( VALUE_FIELD );
 
-                    for( SCH_PIN* pin : schSym->GetAllLibPins() )
-                        pin->SetName( globalNetAttr->value );
+                auto     globalNetNameAttr = get_opt( attributes, "Global Net Name" );
+                wxString globalNetNameFromProject = get_def( compAttrs, "Global Net Name", wxEmptyString );
+                wxString globalNetName;
+
+                // 1. Pick from schematic attr
+                // 2. Pick from project.json
+                // 3. Pick from symbol
+                if( globalNetNameAttr && !globalNetNameAttr->value.IsEmpty() )
+                {
+                    globalNetName = globalNetNameAttr->value;
+
+                    ApplyAttrToField( fontStyles, valueField, *globalNetNameAttr, false, true,
+                                      compAttrs, schSym.get() );
+                }
+                else if( !globalNetNameFromProject.IsEmpty() )
+                {
+                    globalNetName = globalNetNameFromProject;
+
+                    valueField->SetText( ResolveFieldVariables( globalNetName, compAttrs ) );
                 }
                 else
                 {
-                    schSym->GetField( VALUE_FIELD )
-                            ->SetText( newLibSymbol.GetValueField().GetText() );
+                    valueField->SetText( newLibSymbol.GetValueField().GetText() );
                 }
+
+                for( SCH_PIN* pin : schSym->GetAllLibPins() )
+                    pin->SetName( globalNetName );
 
                 schSym->SetRef( &aSchematic->CurrentSheet(), wxS( "#PWR?" ) );
                 schSym->GetField( REFERENCE_FIELD )->SetVisible( false );
