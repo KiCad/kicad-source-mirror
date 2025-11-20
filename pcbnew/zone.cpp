@@ -932,36 +932,48 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     if( !m_zoneName.empty() )
         aList.emplace_back( _( "Name" ), m_zoneName );
 
-    switch( m_fillMode )
+    if( !GetIsRuleArea() )      // Show fill mode only for not rule areas
     {
-    case ZONE_FILL_MODE::POLYGONS:      msg = _( "Solid" ); break;
-    case ZONE_FILL_MODE::HATCH_PATTERN: msg = _( "Hatched" ); break;
-    default:                            msg = _( "Unknown" ); break;
+        switch( m_fillMode )
+        {
+        case ZONE_FILL_MODE::POLYGONS:      msg = _( "Solid" ); break;
+        case ZONE_FILL_MODE::HATCH_PATTERN: msg = _( "Hatched" ); break;
+        default:                            msg = _( "Unknown" ); break;
+        }
+
+        aList.emplace_back( _( "Fill Mode" ), msg );
+
+        aList.emplace_back( _( "Filled Area" ),
+                            aFrame->MessageTextFromValue( m_area, true, EDA_DATA_TYPE::AREA ) );
+
+        wxString source;
+        int      clearance = GetOwnClearance( UNDEFINED_LAYER, &source );
+
+        if( !source.IsEmpty() )
+        {
+            aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ), aFrame->MessageTextFromValue( clearance ) ),
+                                wxString::Format( _( "(from %s)" ), source ) );
+        }
     }
 
-    aList.emplace_back( _( "Fill Mode" ), msg );
+    int count = 0;
 
-    aList.emplace_back( _( "Filled Area" ),
-                        aFrame->MessageTextFromValue( m_area, true, EDA_DATA_TYPE::AREA ) );
-
-    wxString source;
-    int      clearance = GetOwnClearance( UNDEFINED_LAYER, &source );
-
-    if( !source.IsEmpty() )
+    if( GetIsRuleArea() )
     {
-        aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ), aFrame->MessageTextFromValue( clearance ) ),
-                            wxString::Format( _( "(from %s)" ), source ) );
+        double outline_area = CalculateOutlineArea();
+        aList.emplace_back( _( "Outline Area" ),
+                            aFrame->MessageTextFromValue( outline_area, true, EDA_DATA_TYPE::AREA ) );
+
+        const SHAPE_POLY_SET* area_outline = Outline();
+        count = area_outline->FullPointCount();
     }
-
-    if( !m_FilledPolysList.empty() )
+    else if( !m_FilledPolysList.empty() )
     {
-        int count = 0;
-
         for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& ii: m_FilledPolysList )
             count += ii.second->TotalVertices();
-
-        aList.emplace_back( _( "Corner Count" ), wxString::Format( wxT( "%d" ), count ) );
     }
+
+    aList.emplace_back( _( "Corner Count" ), wxString::Format( wxT( "%d" ), count ) );
 }
 
 
