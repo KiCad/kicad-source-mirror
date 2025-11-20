@@ -86,20 +86,20 @@ enum PCB_DRC_CODE
     DRCE_FOOTPRINT,               // error in footprint definition
 
     DRCE_UNRESOLVED_VARIABLE,
-    DRCE_ASSERTION_FAILURE, // user-defined (custom rule) assertion
-    DRCE_GENERIC_WARNING,   // generic warning
-    DRCE_GENERIC_ERROR,     // generic error
+    DRCE_ASSERTION_FAILURE,       // user-defined (custom rule) assertion
+    DRCE_GENERIC_WARNING,         // generic warning
+    DRCE_GENERIC_ERROR,           // generic error
 
     DRCE_COPPER_SLIVER,
-    DRCE_SOLDERMASK_BRIDGE, // failure to maintain min soldermask web thickness
-                            //   between copper items with different nets
+    DRCE_SOLDERMASK_BRIDGE,       // failure to maintain min soldermask web thickness
+                                  //   between copper items with different nets
 
-    DRCE_SILK_MASK_CLEARANCE, // silkscreen clipped by mask (potentially leaving it
-                              //   over pads, exposed copper, etc.)
+    DRCE_SILK_MASK_CLEARANCE,     // silkscreen clipped by mask (potentially leaving it
+                                  //   over pads, exposed copper, etc.)
     DRCE_SILK_EDGE_CLEARANCE,
+    DRCE_SILK_CLEARANCE,          // silk-to-silk or silk-to-other clearance error
     DRCE_TEXT_HEIGHT,
     DRCE_TEXT_THICKNESS,
-    DRCE_OVERLAPPING_SILK, // silk-to-silk or silk-to-other clearance error
 
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_SKEW_OUT_OF_RANGE,
@@ -233,7 +233,7 @@ private:
     static DRC_ITEM silkMaskClearance;
     static DRC_ITEM silkEdgeClearance;
     static DRC_ITEM solderMaskBridge;
-    static DRC_ITEM silkOverlaps;
+    static DRC_ITEM silkClearance;
     static DRC_ITEM textHeightOutOfRange;
     static DRC_ITEM textThicknessOutOfRange;
     static DRC_ITEM lengthOutOfRange;

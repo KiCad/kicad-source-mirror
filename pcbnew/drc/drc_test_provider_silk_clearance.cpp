@@ -36,7 +36,7 @@
 /*
     Silk to silk clearance test. Check all silkscreen features against each other.
     Errors generated:
-    - DRCE_OVERLAPPING_SILK
+    - DRCE_SILK_CLEARANCE
 
 */
 
@@ -73,7 +73,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     // associated exclusions), so we only use that when soldermask min width is > 0.
     bool checkIndividualMaskItems = m_board->GetDesignSettings().m_SolderMaskMinWidth <= 0;
 
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK )
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE) )
     {
         return true;    // continue with other tests
@@ -172,7 +172,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 std::shared_ptr<SHAPE> hole;
 
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE )
                         && m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                 {
                     return false;
@@ -194,7 +194,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     }
                 }
 
-                int            errorCode = DRCE_OVERLAPPING_SILK;
+                int            errorCode = DRCE_SILK_CLEARANCE;
                 DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
                                                                     refItem, testItem, aLayers.second );
                 int            minClearance = -1;
