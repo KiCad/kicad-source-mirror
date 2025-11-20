@@ -304,12 +304,9 @@ void SCH_EASYEDAPRO_PARSER::ApplyAttrToField( const std::map<wxString, nlohmann:
     EDA_TEXT* text = static_cast<EDA_TEXT*>( field );
 
     text->SetText( ResolveFieldVariables( aAttr.value, aDeviceAttributes ) );
+    text->SetVisible( aAttr.keyVisible || aAttr.valVisible );
 
-    if( aIsSym )
-    {
-        text->SetVisible( aAttr.keyVisible || aAttr.valVisible );
-        field->SetNameShown( aAttr.keyVisible );
-    }
+    field->SetNameShown( aAttr.keyVisible );
 
     if( aAttr.position )
     {
@@ -317,8 +314,7 @@ void SCH_EASYEDAPRO_PARSER::ApplyAttrToField( const std::map<wxString, nlohmann:
                                     : ScalePosSym( *aAttr.position ) );
     }
 
-    if( aIsSym )
-        ApplyFontStyle( fontStyles, text, aAttr.fontStyle );
+    ApplyFontStyle( fontStyles, text, aAttr.fontStyle );
 
     auto parent = aParent;
     if( parent && parent->Type() == SCH_SYMBOL_T )
@@ -1205,14 +1201,6 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     for( SCH_PIN* pin : schSym->GetAllLibPins() )
                         pin->SetName( globalNetAttr->value );
-                }
-                else if( auto nameAttr = get_opt( attributes, "Name" ) )
-                {
-                    ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ),
-                                      *nameAttr, false, true, compAttrs, schSym.get() );
-
-                    for( SCH_PIN* pin : schSym->GetAllLibPins() )
-                        pin->SetName( nameAttr->value );
                 }
                 else
                 {
