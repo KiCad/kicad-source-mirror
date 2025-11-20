@@ -155,6 +155,10 @@ wxString PCB_TABLECELL::GetShownText( bool aAllowExtraText, int aDepth ) const
 
     font->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
 
+    // Convert escape markers back to literal ${} and @{} for final display
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+
     return text;
 }
 

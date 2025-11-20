@@ -255,12 +255,13 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
 
     while( ( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) ) && ++aDepth <= maxDepth )
     {
-        // Only expand vars if there are ${} expressions present
-        // Don't expand if the only remaining $ are in escape markers like <<<ESC_DOLLAR:
-        if( text.Contains( wxT( "${" ) ) )
+        // Always expand when ${} or @{} present to handle escape sequences (\${} and \@{})
+        // ExpandTextVars converts escapes to markers and expands ${} variables
+        // Don't expand if the only remaining $ or @ are in escape markers like <<<ESC_DOLLAR: or <<<ESC_AT:
+        if( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) )
             text = ExpandTextVars( text, aResolver );
 
-        // Only evaluate if there are @{} expressions present
+        // Only evaluate if there are @{} expressions present (not escape markers)
         // Don't evaluate if the only remaining @ are in escape markers like <<<ESC_AT:
         if( text.Contains( wxT( "@{" ) ) )
             text = evaluator.Evaluate( text ); // Evaluate math expressions

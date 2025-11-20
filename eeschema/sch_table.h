@@ -184,7 +184,12 @@ public:
         std::erase_if( m_cells,
                 []( SCH_TABLECELL* cell )
                 {
-                    return ( cell->GetFlags() & STRUCT_DELETED ) > 0;
+                    if( cell->GetFlags() & STRUCT_DELETED )
+                    {
+                        delete cell;
+                        return true;
+                    }
+                    return false;
                 } );
     }
 

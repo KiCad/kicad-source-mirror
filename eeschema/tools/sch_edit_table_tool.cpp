@@ -198,6 +198,9 @@ SCH_TABLECELL* SCH_EDIT_TABLE_TOOL::copyCell( SCH_TABLECELL* aSource )
     // Use copy constructor to copy all formatting properties (font, colors, borders, etc.)
     SCH_TABLECELL* cell = new SCH_TABLECELL( *aSource );
 
+    // Generate a new UUID to avoid duplicates (copy constructor preserves the old UUID)
+    const_cast<KIID&>( cell->m_Uuid ) = KIID();
+
     // Clear text content - we only want the formatting, not the content
     cell->SetText( wxEmptyString );
 

@@ -112,6 +112,9 @@ void SCH_TABLE::SetPosition( const VECTOR2I& aPos )
 
 VECTOR2I SCH_TABLE::GetPosition() const
 {
+    if( m_cells.empty() )
+        return VECTOR2I( 0, 0 );  // Return origin if table has no cells
+
     return m_cells[0]->GetPosition();
 }
 
@@ -158,6 +161,10 @@ void SCH_TABLE::Normalize()
             int colWidth = m_colWidths[col];
 
             SCH_TABLECELL* cell = GetCell( row, col );
+
+            if( !cell )
+                continue;  // Skip if cell doesn't exist (shouldn't happen, but be defensive)
+
             VECTOR2I       pos( x, y );
 
             RotatePoint( pos, GetPosition(), cell->GetTextAngle() );

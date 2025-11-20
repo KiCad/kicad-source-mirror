@@ -164,6 +164,10 @@ wxString PCB_TEXT::GetShownText( bool aAllowExtraText, int aDepth ) const
     if( HasTextVars() )
         text = ResolveTextVars( text, &resolver, aDepth );
 
+    // Convert escape markers back to literal ${} and @{} for final display
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+
     return text;
 }
 

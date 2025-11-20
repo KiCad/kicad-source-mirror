@@ -369,15 +369,15 @@ protected:
 
             for( int row = 0; row < table->GetRowCount(); ++row )
             {
-                int offset = 0;
+                int old_row = row;
 
                 for( int deletedRow : deleted )
                 {
-                    if( deletedRow >= row )
-                        offset++;
+                    if( deletedRow <= old_row )
+                        old_row++;
                 }
 
-                table->SetRowHeight( row, table->GetRowHeight( row + offset ) );
+                table->SetRowHeight( row, table->GetRowHeight( old_row ) );
             }
 
             table->SetPosition( pos );
@@ -447,15 +447,15 @@ protected:
 
             for( int col = 0; col < table->GetColCount(); ++col )
             {
-                int offset = 0;
+                int old_col = col;
 
                 for( int deletedCol : deleted )
                 {
-                    if( deletedCol >= col )
-                        offset++;
+                    if( deletedCol <= old_col )
+                        old_col++;
                 }
 
-                table->SetColWidth( col, table->GetColWidth( col + offset ) );
+                table->SetColWidth( col, table->GetColWidth( old_col ) );
             }
 
             table->SetPosition( pos );
