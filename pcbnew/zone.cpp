@@ -1253,16 +1253,19 @@ void ZONE::HatchBorder()
         return;
     }
 
-    // Calculate spacing between 2 hatch lines
-    int spacing;
-
-    if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE )
-        spacing = m_borderHatchPitch;
-    else
-        spacing = m_borderHatchPitch * 2;
-
     // set the "length" of hatch lines (the length on horizontal axis)
-    int  hatch_line_len = m_borderHatchPitch;
+    int  hatch_line_len = m_borderHatchPitch;   // OK for DIAGONAL_EDGE style
+
+    // Calculate spacing between 2 hatch lines
+    int spacing = m_borderHatchPitch;           // OK for DIAGONAL_EDGE style
+
+    if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL )
+    {
+        // The spacing is twice the spacing for DIAGONAL_EDGE because one
+        // full diagonal replaces 2 edge diagonal hatch segments in code
+        spacing = m_borderHatchPitch * 2;
+        hatch_line_len = -1;    // Use full diagonal hatch line
+    }
 
     // To have a better look, give a slope depending on the layer
     int                 layer = GetFirstLayer();
