@@ -142,7 +142,7 @@ void SCH_EASYEDAPRO_PARSER::ApplyFontStyle( const std::map<wxString, nlohmann::j
 
     if( style.at( 5 ).is_number() )
     {
-        double size = style.at( 5 ).get<double>() * 0.5;
+        double size = style.at( 5 ).get<double>() * 0.62;
         text->SetTextSize( VECTOR2I( ScaleSize( size ), ScaleSize( size ) ) );
     }
 
@@ -1290,7 +1290,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     if( !style.is_null() && style.at( 5 ).is_number() )
                     {
-                        double size = style.at( 5 ).get<double>() * 0.5;
+                        double size = style.at( 5 ).get<double>() * 0.62;
                         label->SetTextSize( VECTOR2I( ScaleSize( size ), ScaleSize( size ) ) );
                     }
                 }
