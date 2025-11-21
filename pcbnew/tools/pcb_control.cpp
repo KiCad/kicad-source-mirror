@@ -55,6 +55,7 @@
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
+#include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_generator.h>
 #include <tools/pcb_edit_table_tool.h>

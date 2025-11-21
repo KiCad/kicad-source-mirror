@@ -61,6 +61,7 @@
 #include <sch_painter.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_commit.h>
 #include <sim/simulator_frame.h>
 #include <symbol_library_manager.h>
@@ -1702,17 +1703,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
     catch( IO_ERROR& )
     {
-        // If it wasn't content, then paste as a text object.
-        if( content.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
+        // If it wasn't schematic content, paste as a text object
         {
-            int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
-                                           "Do you want to continue?" ) );
-            if( !result )
-                return 0;
-        }
+            if( content.size() > static_cast<size_t>( ADVANCED_CFG::GetCfg().m_MaxPastedTextLength ) )
+            {
+                int result = IsOK( m_frame, _( "Pasting a long text text string may be very slow.  "
+                                               "Do you want to continue?" ) );
+                if( !result )
+                    return 0;
+            }
 
-        SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
-        tempScreen->Append( text_item );
+            SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
+            tempScreen->Append( text_item );
+        }
     }
 
     SELECTION& currentSelection = selTool->GetSelection();
