@@ -1906,6 +1906,32 @@ wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource ) const
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
+        // Check for escaped expressions: \${ or \@{
+        // These should be copied verbatim without any ref→KIID conversion
+        if( aSource[i] == '\\' && i + 2 < sourceLen && aSource[i + 2] == '{' &&
+            ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) )
+        {
+            // Copy the escape sequence and the entire escaped expression
+            newbuf.append( aSource[i] );     // backslash
+            newbuf.append( aSource[i + 1] ); // $ or @
+            newbuf.append( aSource[i + 2] ); // {
+            i += 2;
+
+            // Find and copy everything until the matching closing brace
+            int braceDepth = 1;
+            for( i = i + 1; i < sourceLen && braceDepth > 0; ++i )
+            {
+                if( aSource[i] == '{' )
+                    braceDepth++;
+                else if( aSource[i] == '}' )
+                    braceDepth--;
+
+                newbuf.append( aSource[i] );
+            }
+            i--; // Back up one since the for loop will increment
+            continue;
+        }
+
         if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i + 1] == '{' )
         {
             wxString token;
@@ -1960,6 +1986,32 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource ) const
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
+        // Check for escaped expressions: \${ or \@{
+        // These should be copied verbatim without any KIID→ref conversion
+        if( aSource[i] == '\\' && i + 2 < sourceLen && aSource[i + 2] == '{' &&
+            ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) )
+        {
+            // Copy the escape sequence and the entire escaped expression
+            newbuf.append( aSource[i] );     // backslash
+            newbuf.append( aSource[i + 1] ); // $ or @
+            newbuf.append( aSource[i + 2] ); // {
+            i += 2;
+
+            // Find and copy everything until the matching closing brace
+            int braceDepth = 1;
+            for( i = i + 1; i < sourceLen && braceDepth > 0; ++i )
+            {
+                if( aSource[i] == '{' )
+                    braceDepth++;
+                else if( aSource[i] == '}' )
+                    braceDepth--;
+
+                newbuf.append( aSource[i] );
+            }
+            i--; // Back up one since the for loop will increment
+            continue;
+        }
+
         if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i + 1] == '{' )
         {
             wxString token;

@@ -195,7 +195,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
             wxString text = tableCell->GetText();
 
             // show text variable cross-references in a human-readable format
-            text = board->ConvertKIIDsToCrossReferences( UnescapeString( text ) );
+            text = board->ConvertKIIDsToCrossReferences( text );
 
             m_grid->SetCellValue( row, col, text );
         }
