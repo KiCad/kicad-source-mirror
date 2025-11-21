@@ -387,7 +387,7 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
                     if( titleStart != wxNOT_FOUND && titleEnd != wxNOT_FOUND && titleEnd > titleStart )
                     {
                         wxString before = line.Left( titleStart + 7 );  // Include "<title>"
-                        wxString after = line.Mid( titleEnd );           // Include "</title>" onwards
+                        wxString after = line.Mid( titleEnd );          // Include "</title>" onwards
                         line = before + newTemplateName + after;
                         htmlFile[i] = line;
                         modified = true;
@@ -402,9 +402,8 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
         }
     }
 
-    DisplayInfoMessage( m_dialog,
-                       wxString::Format( _( "Template duplicated successfully to '%s'." ),
-                                       newTemplatePath ) );
+    DisplayInfoMessage( m_dialog, wxString::Format( _( "Template duplicated successfully to '%s'." ),
+                                                    newTemplatePath ) );
 
     // Refresh the widget list to show the new template
     m_dialog->replaceCurrentPage();
@@ -445,12 +444,10 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 }
 
 
-DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos,
-                                                    const wxSize&                  aSize,
+DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                                                     std::vector<std::pair<wxString, wxFileName>> aTitleDirList,
-                                                    const wxFileName&             aDefaultTemplate ) :
-        DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _( "Project Template Selector" ), aPos,
-                                       aSize )
+                                                    const wxFileName& aDefaultTemplate ) :
+        DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _( "Project Template Selector" ), aPos, aSize )
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
@@ -503,27 +500,28 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
         m_defaultWidget->Select();
 
     // Set welcome HTML after dialog is fully constructed
-    CallAfter( [this]()
-    {
-        #if defined (_WIN32)
-        wxSafeYield();
-        m_tcTemplatePath->SelectNone();
-        #endif
+    CallAfter(
+            [this]()
+            {
+                #if defined (_WIN32)
+                wxSafeYield();
+                m_tcTemplatePath->SelectNone();
+                #endif
 
-        if( m_selectedWidget )
-        {
-            wxFileName htmlFile = m_selectedWidget->GetTemplate()->GetHtmlFile();
+                if( m_selectedWidget )
+                {
+                    wxFileName htmlFile = m_selectedWidget->GetTemplate()->GetHtmlFile();
 
-            if( htmlFile.FileExists() && htmlFile.IsFileReadable() && htmlFile.GetSize() > 100 /* Basic HTML */ )
-                m_webviewPanel->LoadURL( wxFileName::FileNameToURL( htmlFile ) );
-            else
-                m_webviewPanel->SetPage( GetWelcomeHtml() );
-        }
-        else
-        {
-            m_webviewPanel->SetPage( GetWelcomeHtml() );
-        }
-    });
+                    if( htmlFile.FileExists() && htmlFile.IsFileReadable() && htmlFile.GetSize() > 100 /* Basic HTML */ )
+                        m_webviewPanel->LoadURL( wxFileName::FileNameToURL( htmlFile ) );
+                    else
+                        m_webviewPanel->SetPage( GetWelcomeHtml() );
+                }
+                else
+                {
+                    m_webviewPanel->SetPage( GetWelcomeHtml() );
+                }
+            } );
 
     // When all widgets have the size fixed, call finishDialogSettings to update sizers
     finishDialogSettings();
@@ -539,13 +537,9 @@ void DIALOG_TEMPLATE_SELECTOR::SetWidget( TEMPLATE_WIDGET* aWidget )
     wxFileName htmlFile = aWidget->GetTemplate()->GetHtmlFile();
 
     if( htmlFile.FileExists() && htmlFile.IsFileReadable() )
-    {
         m_webviewPanel->LoadURL( wxFileName::FileNameToURL( htmlFile ) );
-    }
     else
-    {
-    m_webviewPanel->SetPage( GetTemplateInfoHtml( *aWidget->GetTemplate()->GetTitle() ) );
-    }
+        m_webviewPanel->SetPage( GetTemplateInfoHtml( *aWidget->GetTemplate()->GetTitle() ) );
 }
 
 
@@ -717,6 +711,7 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
 
     // Save the user template flag before deleting
     bool wasUserTemplates = false;
+
     if( (unsigned)page < m_panels.size() )
         wasUserTemplates = m_panels[page]->IsUserTemplates();
 
