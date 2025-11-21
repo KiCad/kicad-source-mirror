@@ -60,11 +60,9 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
         m_gridStyleGap( aFrame, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
         m_islandThreshold( aFrame, m_islandThresholdLabel, m_tcIslandThreshold, m_islandThresholdUnits )
 {
-    if( allowNetSpec )
-    {
-        m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
-    }
-    else
+    m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
+
+    if( !allowNetSpec )
     {
         m_netLabel->Hide();
         m_netSelector->Hide();
@@ -131,7 +129,10 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
         return false;
 
     m_tcZoneName->ChangeValue( m_settings->m_Name );
-    m_netSelector->SetSelectedNetcode( std::max( 0, m_settings->m_Netcode ) );
+
+    if( m_netSelector->IsShown() )
+        m_netSelector->SetSelectedNetcode( std::max( 0, m_settings->m_Netcode ) );
+
     m_cbLocked->SetValue( m_settings->m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings->GetCornerSmoothingType() );
     m_cornerRadius.SetValue( m_settings->GetCornerRadius() );
@@ -266,6 +267,9 @@ void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 
 void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
 {
+    if( !m_netSelector->IsShown() )
+        return;
+
     updateInfoBar();
 
     // Zones with no net never have islands removed
@@ -396,7 +400,9 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     if( aUseExportableSetupOnly )
         return true;
 
-    m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
+    if( m_netSelector->IsShown() )
+        m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
+
     m_settings->m_Name = m_tcZoneName->GetValue();
 
     m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN : ZONE_FILL_MODE::POLYGONS;

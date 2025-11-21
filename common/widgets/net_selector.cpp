@@ -43,7 +43,7 @@ public:
 
     wxString GetStringValue() const override
     {
-        if( m_selectedNetcode == -1 )
+        if( !m_netinfoList || ( m_selectedNetcode == -1 ) )
             return m_indeterminateLabel;
 
         NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( m_selectedNetcode );
@@ -111,7 +111,7 @@ public:
             m_selectedNetcode = 0;
             GetComboCtrl()->SetValue( NO_NET );
         }
-        else if( escapedNetName.StartsWith( CREATE_NET, &remainingName ) && !remainingName.IsEmpty() )
+        else if( m_netinfoList && escapedNetName.StartsWith( CREATE_NET, &remainingName ) && !remainingName.IsEmpty() )
         {
             // Remove the first character ':' and all whitespace
             remainingName = remainingName.Mid( 1 ).Trim().Trim( false );
@@ -137,7 +137,7 @@ public:
                 }
             }
         }
-        else
+        else if( m_netinfoList )
         {
             NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( escapedNetName );
 
@@ -160,6 +160,9 @@ public:
 protected:
     void getListContent( wxArrayString& aNetnames ) override
     {
+        if( !m_netinfoList )
+            return;
+
         wxString      netstring = getFilterValue();
         wxString      filter = netstring.Lower();
 
