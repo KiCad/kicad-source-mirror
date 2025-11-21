@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-05 12:37+0000\n"
+"PO-Revision-Date: 2025-11-21 13:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ka/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:349
@@ -14615,7 +14615,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
-msgstr ""
+msgstr "&ძებნა:"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
@@ -14750,7 +14750,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
 msgid "Net classes"
-msgstr ""
+msgstr "ქსელის კლასები"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
 msgid "Bus alias definitions"
@@ -14762,7 +14762,7 @@ msgstr "ტექსტური ცვლადები"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:45
 msgid "Schematic Setup"
-msgstr ""
+msgstr "სქემის მორგება"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:46
 msgid "Import Settings from Another Project..."
@@ -14779,7 +14779,7 @@ msgstr "BOM პრესეტები"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
 msgid "Electrical Rules"
-msgstr ""
+msgstr "ელექტრული წესები"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:108
 #: pcbnew/board_statistics_report.cpp:472
@@ -14795,7 +14795,7 @@ msgstr "პროექტი"
 #: pcbnew/widgets/search_handlers.cpp:486
 #: pcbnew/widgets/search_handlers.cpp:574
 msgid "Net Classes"
-msgstr ""
+msgstr "ქსელის კლასები"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:125
 msgid "Bus Alias Definitions"
@@ -14804,7 +14804,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_schematic_setup.cpp:132
 #: pcbnew/dialogs/dialog_board_setup.cpp:148
 msgid "Text Variables"
-msgstr ""
+msgstr "ტექსტური ცვლადები"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:135
 msgid "Schematic Data"
@@ -14952,7 +14952,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:362
 msgid "Untitled Sheet"
-msgstr ""
+msgstr "უსახელო ფურცელი"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:403
 msgid "Note: item colors are overridden in the current color theme."
@@ -15028,7 +15028,7 @@ msgstr "სტილი"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:253
 msgid "Hierarchical path:"
-msgstr ""
+msgstr "იერარქიული ბილიკი:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:257
 #: kicad/dialogs/panel_jobset_base.cpp:190
@@ -15037,7 +15037,7 @@ msgstr "ბილიკი"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:89
 msgid "Sheet Properties"
-msgstr ""
+msgstr "ფურცლის თვისებები"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:273
 msgid "A DC source must be specified."
@@ -15109,7 +15109,7 @@ msgstr "ხაზოვანი"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:404
 #: eeschema/dialogs/dialog_sim_command_base.cpp:474
 msgid "Frequency scale"
-msgstr ""
+msgstr "სიხშირის მასშტაბი"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:60
 #: eeschema/dialogs/dialog_sim_command_base.cpp:415
@@ -15121,7 +15121,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_command_base.cpp:427
 #: eeschema/dialogs/dialog_sim_command_base.cpp:497
 msgid "Start frequency:"
-msgstr ""
+msgstr "საწყისი სიხშირე:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:79
 #: eeschema/dialogs/dialog_sim_command_base.cpp:90
@@ -15137,11 +15137,11 @@ msgstr "ჰც"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:440
 #: eeschema/dialogs/dialog_sim_command_base.cpp:510
 msgid "Stop frequency:"
-msgstr ""
+msgstr "გაჩერების სიხშირე:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:111
 msgid "Source 2"
-msgstr ""
+msgstr "წყარო 2"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
@@ -15186,15 +15186,15 @@ msgstr "წყარო:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:132
 msgid "Sweep type:"
-msgstr ""
+msgstr "მომრგვალების ტიპი:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:136
 msgid "Source 1"
-msgstr ""
+msgstr "წყარო 1"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:152
 msgid "Starting value:"
-msgstr ""
+msgstr "საწყისი მნიშვნელობა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:176
 msgid "Final value:"
@@ -15202,15 +15202,15 @@ msgstr "საბოლოო მნიშვნელობა:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:196
 msgid "Increment step:"
-msgstr ""
+msgstr "ზრდის ბიჯი:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:222
 msgid "Swap sources"
-msgstr ""
+msgstr "წყაროების შეცვლა"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:251
 msgid "Time step:"
-msgstr ""
+msgstr "დროის ნაბიჯი:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:260
 #: eeschema/dialogs/dialog_sim_command_base.cpp:271
@@ -16215,7 +16215,7 @@ msgstr "ფერის დაყენება..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:270
 msgid "Background fill:"
-msgstr ""
+msgstr "ფონის შევსება:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:326
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:222
