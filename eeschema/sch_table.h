@@ -186,7 +186,10 @@ public:
                 {
                     if( cell->GetFlags() & STRUCT_DELETED )
                     {
-                        delete cell;
+                        fprintf( stderr, "DELETE_ROW: Removing cell UUID=%s from table (commit system will delete)\n",
+                                 cell->m_Uuid.AsString().c_str().AsChar() );
+                        // Don't delete here! The commit system handles deletion.
+                        // delete cell;
                         return true;
                     }
                     return false;
