@@ -89,7 +89,7 @@
         },
         "comment": {
           "type": "string",
-          "description": "Comment added when excluding the violation"
+          "description": "Optional comment for an excluded violation"
         }
       },
       "required": [

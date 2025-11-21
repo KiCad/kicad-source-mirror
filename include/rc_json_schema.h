@@ -38,7 +38,9 @@ struct COORDINATE
     double x;
     double y;
 };
+
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( COORDINATE, x, y )
+
 
 struct AFFECTED_ITEM
 {
@@ -49,6 +51,7 @@ struct AFFECTED_ITEM
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( AFFECTED_ITEM, uuid, description, pos )
 
+
 struct VIOLATION
 {
     wxString                   type;
@@ -56,7 +59,7 @@ struct VIOLATION
     wxString                   severity;
     std::vector<AFFECTED_ITEM> items;
     bool                       excluded;
-    wxString                   comment;
+    wxString                   comment;     // exclusion comment; if any
 };
 
 inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
@@ -72,6 +75,7 @@ inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
         aJson["comment"] = aViolation.comment;
     }
 }
+
 inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
 {
     aJson.at( "type" ).get_to( aViolation.type );
@@ -82,6 +86,7 @@ inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
     aJson.at( "comment" ).get_to( aViolation.comment );
 }
 
+
 struct REPORT_BASE
 {
     wxString $schema;
@@ -91,6 +96,7 @@ struct REPORT_BASE
     wxString type;
     wxString coordinate_units;
 };
+
 
 struct DRC_REPORT : REPORT_BASE
 {
@@ -104,6 +110,7 @@ struct DRC_REPORT : REPORT_BASE
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, $schema, source, date, kicad_version, violations,
                                     unconnected_items, schematic_parity, coordinate_units )
 
+
 struct ERC_SHEET
 {
     wxString               uuid_path;
@@ -112,6 +119,7 @@ struct ERC_SHEET
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_SHEET, uuid_path, path, violations )
+
 
 struct ERC_REPORT : REPORT_BASE
 {
