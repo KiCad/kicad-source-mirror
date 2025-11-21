@@ -635,7 +635,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
     float linewidth3DU = TO_3DU( linewidth );
 
-    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE || isSolidFill )
     {
         switch( aShape->GetShape() )
         {
@@ -646,7 +646,14 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             float   outerR3DU = TO_3DU( aShape->GetRadius() ) + linewidth3DU / 2.0;
 
             if( isSolidFill || innerR3DU <= 0.0 )
-                addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
+            {
+                // For a filled circle with a line style not a simple line, ignore line width
+                // the outline will be drawn later
+                if( lineStyle > LINE_STYLE::FIRST_TYPE )
+                    addFILLED_CIRCLE_2D( aContainer, center3DU, TO_3DU( aShape->GetRadius() ), *aOwner );
+                else
+                    addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
+            }
             else
                 addRING_2D( aContainer, center3DU, innerR3DU, outerR3DU, *aOwner );
 
@@ -658,8 +665,12 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
-                                                 ERROR_INSIDE );
+                // For a filled rect with a line style not a simple line, ignore line width
+                // the outline will be drawn later
+                bool ignoreLineWidth = lineStyle > LINE_STYLE::FIRST_TYPE;
+
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
+                                                 ERROR_INSIDE, ignoreLineWidth );
 
                 polyList.Simplify();
 
@@ -756,8 +767,12 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
+                // For a filled poly with a line style not a simple line, ignore line width
+                // the outline will be drawn later
+                bool ignoreLineWidth = lineStyle > LINE_STYLE::FIRST_TYPE;
+
                 aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
-                                                 ERROR_INSIDE );
+                                                 ERROR_INSIDE, ignoreLineWidth );
 
                 // Some polygons can be a bit complex (especially when coming from a
                 // picture of a text converted to a polygon
@@ -799,7 +814,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             break;
         }
     }
-    else
+
+    if( lineStyle > LINE_STYLE::FIRST_TYPE )
     {
         std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
         SFVEC2F             a3DU;
