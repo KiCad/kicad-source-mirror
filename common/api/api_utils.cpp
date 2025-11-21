@@ -242,4 +242,14 @@ KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aIn
         aOutput.add_path()->set_value( entry.AsStdString() );
 }
 
+KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput )
+{
+    KIID_PATH output;
+
+    for( const types::KIID& sheet : aInput.path() )
+        output.push_back( KIID( sheet.value() ) );
+
+    return output;
+}
+
 } // namespace kiapi::common

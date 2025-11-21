@@ -983,4 +983,16 @@ message FootprintInstance
 
   // The sheet path to the associated symbol for this footprint instance, if one exists
   kiapi.common.types.SheetPath symbol_path = 13;
+
+  // The name of the hierarchical sheet the associated symbol for this footprint exists on,
+  // or the empty string if there is no associated symbol
+  string symbol_sheet_name = 14;
+
+  // The filename of the hierarchical sheet the associated symbol for this footprint exists on,
+  // or the empty string if there is no associated symbol
+  string symbol_sheet_filename = 15;
+
+  // The the footprint filters given by the symbol this footprint is associated with,
+  // or the empty string if there is no associated symbol
+  string symbol_footprint_filters = 16;
 }
