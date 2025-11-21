@@ -3,7 +3,6 @@ add_compile_definitions( PCBNEW )
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
     ../pcbnew
     3d_canvas
     3d_cache
