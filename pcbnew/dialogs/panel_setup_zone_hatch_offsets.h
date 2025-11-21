@@ -38,13 +38,12 @@ class PANEL_SETUP_ZONE_HATCH_OFFSETS : public PANEL_SETUP_ZONE_HATCH_OFFSETS_BAS
 {
 public:
     PANEL_SETUP_ZONE_HATCH_OFFSETS( wxWindow* aParentWindow, PCB_BASE_FRAME* aFrame,
-                            BOARD_DESIGN_SETTINGS& aBrdSettings );
+                                    BOARD_DESIGN_SETTINGS& aBrdSettings );
     ~PANEL_SETUP_ZONE_HATCH_OFFSETS( ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings );
     void SyncCopperLayers( int aCopperLayerCount );
 
     void ImportSettingsFrom( BOARD* aBoard );

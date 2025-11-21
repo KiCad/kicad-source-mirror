@@ -61,23 +61,20 @@ PANEL_SETUP_ZONE_HATCH_OFFSETS::~PANEL_SETUP_ZONE_HATCH_OFFSETS()
 
 bool PANEL_SETUP_ZONE_HATCH_OFFSETS::TransferDataToWindow()
 {
-    LoadFromSettings( *m_brdSettings );
-    return true;
-}
-
-
-void PANEL_SETUP_ZONE_HATCH_OFFSETS::LoadFromSettings( const BOARD_DESIGN_SETTINGS& aBrdSettings )
-{
     for( PCB_LAYER_ID layer : LSET::AllCuMask().UIOrder() )
     {
-        if( aBrdSettings.IsLayerEnabled( layer ) )
+        if( m_brdSettings->IsLayerEnabled( layer ) )
         {
-            if( aBrdSettings.m_ZoneLayerProperties.contains( layer ) )
-                m_layerPropsTable->AddItem( layer, aBrdSettings.m_ZoneLayerProperties.at( layer ) );
+            if( m_brdSettings->m_ZoneLayerProperties.contains( layer ) )
+                m_layerPropsTable->AddItem( layer, m_brdSettings->m_ZoneLayerProperties.at( layer ) );
             else
                 m_layerPropsTable->AddItem( layer, ZONE_LAYER_PROPERTIES() );
         }
     }
+
+    Layout();
+
+    return true;
 }
 
 
@@ -105,7 +102,6 @@ void PANEL_SETUP_ZONE_HATCH_OFFSETS::SyncCopperLayers( int aCopperLayerCount )
         }
 
         Layout();
-
     }
 }
 
