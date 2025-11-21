@@ -152,15 +152,44 @@ void PAD::CopyFrom( const BOARD_ITEM* aOther )
 }
 
 
+// This should probably move elsewhere once it is needed elsewhere
+std::optional<std::pair<ELECTRICAL_PINTYPE, bool>> parsePinType( const wxString& aPinTypeString )
+{
+    // The netlister formats the pin type as "<canonical_name>[+no_connect]"
+    static std::map<wxString, ELECTRICAL_PINTYPE> map = {
+        { wxT( "input" ), ELECTRICAL_PINTYPE::PT_INPUT },
+        { wxT( "output" ), ELECTRICAL_PINTYPE::PT_OUTPUT },
+        { wxT( "bidirectional" ), ELECTRICAL_PINTYPE::PT_BIDI },
+        { wxT( "tri_state" ), ELECTRICAL_PINTYPE::PT_TRISTATE },
+        { wxT( "passive" ), ELECTRICAL_PINTYPE::PT_PASSIVE },
+        { wxT( "free" ), ELECTRICAL_PINTYPE::PT_NIC },
+        { wxT( "unspecified" ), ELECTRICAL_PINTYPE::PT_UNSPECIFIED },
+        { wxT( "power_in" ), ELECTRICAL_PINTYPE::PT_POWER_IN },
+        { wxT( "power_out" ), ELECTRICAL_PINTYPE::PT_POWER_OUT },
+        { wxT( "open_collector" ), ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR },
+        { wxT( "open_emitter" ), ELECTRICAL_PINTYPE::PT_OPENEMITTER },
+        { wxT( "no_connect" ), ELECTRICAL_PINTYPE::PT_NC }
+    };
+
+    bool hasNoConnect = aPinTypeString.EndsWith( wxT( "+no_connect" ) );
+
+    if( auto it = map.find( aPinTypeString.BeforeFirst( '+' ) ); it != map.end() )
+        return std::make_pair( it->second, hasNoConnect );
+
+    return std::nullopt;
+}
+
+
 void PAD::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
     Pad pad;
 
     pad.mutable_id()->set_value( m_Uuid.AsStdString() );
     kiapi::common::PackVector2( *pad.mutable_position(), GetPosition() );
-    pad.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
-                               : kiapi::common::types::LockedState::LS_UNLOCKED );
+    pad.set_locked( IsLocked() ? LockedState::LS_LOCKED
+                               : LockedState::LS_UNLOCKED );
     PackNet( pad.mutable_net() );
     pad.set_number( GetNumber().ToUTF8() );
     pad.set_type( ToProtoEnum<PAD_ATTRIB, PadType>( GetAttribute() ) );
@@ -173,6 +202,14 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
 
     if( GetLocalClearance().has_value() )
         pad.mutable_copper_clearance_override()->set_value_nm( *GetLocalClearance() );
+
+    pad.mutable_symbol_pin()->set_name( m_pinFunction.ToUTF8() );
+
+    if( std::optional<std::pair<ELECTRICAL_PINTYPE, bool>> pt = parsePinType( m_pinType ) )
+    {
+        pad.mutable_symbol_pin()->set_type( ToProtoEnum<ELECTRICAL_PINTYPE, ElectricalPinType>( pt->first ) );
+        pad.mutable_symbol_pin()->set_no_connect( pt->second );
+    }
 
     aContainer.PackFrom( pad );
 }
@@ -204,6 +241,17 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
         SetLocalClearance( pad.copper_clearance_override().value_nm() );
     else
         SetLocalClearance( std::nullopt );
+
+    m_pinFunction = wxString::FromUTF8( pad.symbol_pin().name() );
+
+    if( pad.symbol_pin().type() != kiapi::common::types::EPT_UNKNOWN )
+    {
+        ELECTRICAL_PINTYPE type = FromProtoEnum<ELECTRICAL_PINTYPE>( pad.symbol_pin().type() );
+        m_pinType = GetCanonicalElectricalTypeName( type );
+
+        if( pad.symbol_pin().no_connect() )
+            m_pinType += wxT( "+no_connect" );
+    }
 
     return true;
 }

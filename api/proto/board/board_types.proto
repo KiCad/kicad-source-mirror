@@ -513,6 +513,18 @@ message ThermalSpokeSettings
   kiapi.common.types.Distance gap = 3;
 }
 
+message SymbolPinInfo
+{
+  // The pin name for the associated symbol pin, if one exists
+  string name = 1;
+
+  // The electrical type of the associated symbol pin, if one exists (EPT_UNKNOWN if not)
+  kiapi.common.types.ElectricalPinType type = 2;
+
+  // True if the pin is attached to a no-connect marker in the schematic
+  bool no_connect = 3;
+}
+
 message Pad
 {
   kiapi.common.types.KIID id = 1;
@@ -531,8 +543,12 @@ message Pad
   // Since: 9.0.4
   kiapi.common.types.Distance pad_to_die_length = 9;
 
+  // Information about the associated symbol pin, if one exists
+  // Since: 9.0.7
+  SymbolPinInfo symbol_pin = 10;
+
   // Since: 10.0.0
-  kiapi.common.types.Time pad_to_die_delay = 10;
+  kiapi.common.types.Time pad_to_die_delay = 11;
 }
 
 enum ZoneType
@@ -986,13 +1002,16 @@ message FootprintInstance
 
   // The name of the hierarchical sheet the associated symbol for this footprint exists on,
   // or the empty string if there is no associated symbol
+  // Since: 9.0.7
   string symbol_sheet_name = 14;
 
   // The filename of the hierarchical sheet the associated symbol for this footprint exists on,
   // or the empty string if there is no associated symbol
+  // Since: 9.0.7
   string symbol_sheet_filename = 15;
 
   // The the footprint filters given by the symbol this footprint is associated with,
   // or the empty string if there is no associated symbol
+  // Since: 9.0.7
   string symbol_footprint_filters = 16;
 }

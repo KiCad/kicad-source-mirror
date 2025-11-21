@@ -458,3 +458,25 @@ enum MapMergeMode
   // The existing map will be cleared and replaced with the incoming map
   MMM_REPLACE = 2;
 }
+
+enum ElectricalPinType
+{
+  EPT_UNKNOWN = 0;
+  EPT_INPUT = 1;
+  EPT_OUTPUT = 2;
+  EPT_BIDIRECTIONAL = 3;
+  EPT_TRISTATE = 4;
+  EPT_PASSIVE = 5;
+
+  // A free pin is not internally connected and may connect to any net (route-through)
+  EPT_FREE = 6;
+
+  EPT_UNSPECIFIED = 7;
+  EPT_POWER_INPUT = 8;
+  EPT_POWER_OUTPUT = 9;
+  EPT_OPEN_COLLECTOR = 10;
+  EPT_OPEN_EMITTER = 11;
+
+  // A no-connect pin should not be connected to any net
+  EPT_NO_CONNECT = 12;
+}
