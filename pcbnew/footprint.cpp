@@ -394,9 +394,11 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         modelMsg.set_opacity( model.m_Opacity );
         itemMsg->PackFrom( modelMsg );
     }
-
-    // Serialized only (can't modify this from the API to change the symbol mapping)
     kiapi::common::PackSheetPath( *footprint.mutable_symbol_path(), m_path );
+
+    footprint.set_symbol_sheet_name( m_sheetname.ToUTF8() );
+    footprint.set_symbol_sheet_filename( m_sheetfile.ToUTF8() );
+    footprint.set_symbol_footprint_filters( m_filters.ToUTF8() );
 
     aContainer.PackFrom( footprint );
 }
@@ -528,6 +530,11 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     }
 
     SetPrivateLayers( privateLayers );
+
+    m_path = kiapi::common::UnpackSheetPath( footprint.symbol_path() );
+    m_sheetname = wxString::FromUTF8( footprint.symbol_sheet_name() );
+    m_sheetfile = wxString::FromUTF8( footprint.symbol_sheet_filename() );
+    m_filters = wxString::FromUTF8( footprint.symbol_footprint_filters() );
 
     // Footprint items
     for( PCB_FIELD* field : m_fields )

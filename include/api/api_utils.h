@@ -80,6 +80,8 @@ KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput );
 
 KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aInput );
 
+KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput );
+
 } // namespace kiapi::common
 
 #endif //KICAD_API_UTILS_H
