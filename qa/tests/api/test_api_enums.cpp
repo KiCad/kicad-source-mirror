@@ -29,6 +29,7 @@
 #include <core/typeinfo.h>
 #include <font/text_attributes.h>
 #include <layer_ids.h>
+#include <pin_type.h>
 #include <stroke_params.h>
 
 // Board-specific
@@ -149,6 +150,11 @@ BOOST_AUTO_TEST_CASE( StrokeLineStyle )
 BOOST_AUTO_TEST_CASE( KiCadObjectType )
 {
     testEnums<KICAD_T, types::KiCadObjectType>( true );
+}
+
+BOOST_AUTO_TEST_CASE( ElectricalPinType )
+{
+    testEnums<ELECTRICAL_PINTYPE, types::ElectricalPinType>( true );
 }
 
 BOOST_AUTO_TEST_CASE( BoardLayer )
