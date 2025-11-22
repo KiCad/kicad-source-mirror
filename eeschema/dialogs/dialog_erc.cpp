@@ -1119,7 +1119,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
         fn.MakeAbsolute( prj_path );
     }
 
-    ERC_REPORT reportWriter( &m_parent->Schematic(), m_parent->GetUserUnits() );
+    ERC_REPORT reportWriter( &m_parent->Schematic(), m_parent->GetUserUnits(), m_markerProvider );
 
     bool success = false;
     if( fn.GetExt() == FILEEXT::JsonFileExtension )
