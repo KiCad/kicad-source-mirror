@@ -375,7 +375,9 @@ bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
                 continue;
 
             // Check that file is not binary (non-printing chars)
-            for( size_t i = 0; i < strlen( line ); i++ )
+            size_t len = strlen( line );
+
+            for( size_t i = 0; i < len; i++ )
             {
                 if( !isascii( line[i] ) )
                     return false;
