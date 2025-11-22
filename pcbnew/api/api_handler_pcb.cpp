@@ -492,7 +492,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
                         []( BOARD_ITEM* aChild )
                         {
                             const_cast<KIID&>( aChild->m_Uuid ) = KIID();
-                        } );
+                        },
+                        RECURSE );
             }
 
             item->Serialize( newItem );
