@@ -1072,6 +1072,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             std::unique_ptr<PCB_TEXT> item = std::make_unique<PCB_TEXT>( m_frame->GetModel() );
             item->SetText( clipText );
+            item->SetLayer( m_frame->GetActiveLayer() );
 
             newItems.push_back( item.release() );
         }
