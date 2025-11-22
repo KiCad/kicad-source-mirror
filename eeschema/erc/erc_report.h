@@ -30,7 +30,8 @@ class RC_ITEMS_PROVIDER;
 class ERC_REPORT
 {
 public:
-    ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits );
+    ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits,
+                std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider = nullptr );
 
     /**
      * Returns the ERC report in "text" (human readable) format
@@ -56,6 +57,7 @@ public:
 private:
     SCHEMATIC*                         m_sch;
     EDA_UNITS                          m_reportUnits;
+    std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
 };
 
 

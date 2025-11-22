@@ -34,10 +34,19 @@
 #include <rc_json_schema.h>
 
 
-ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits ) :
+ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits,
+                        std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider ) :
         m_sch( aSchematic ),
-        m_reportUnits( aReportUnits )
+        m_reportUnits( aReportUnits ),
+        m_markersProvider( std::move( aMarkersProvider ) )
 {
+    if( !m_markersProvider )
+    {
+        // When no provider is supplied, fall back to creating one with default severities.
+        // This allows test code to get a basic report without needing to set up a provider.
+        m_markersProvider = std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( m_sch );
+        m_markersProvider->SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+    }
 }
 
 
@@ -59,14 +68,11 @@ wxString ERC_REPORT::GetTextReport()
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
-    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
-    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
-
     std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
 
-    for( int i = 0; i < errors.GetCount(); ++i )
+    for( int i = 0; i < m_markersProvider->GetCount(); ++i )
     {
-        if( auto item = dynamic_cast<ERC_ITEM*>( errors.GetItem( i ).get() ) )
+        if( auto item = dynamic_cast<ERC_ITEM*>( m_markersProvider->GetItem( i ).get() ) )
         {
             if( item->MainItemHasSheetPath() )
                 orderedItems[item->GetMainItemSheetPath()].emplace_back( item );
@@ -137,14 +143,11 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
-    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
-    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
-
     std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
 
-    for( int i = 0; i < errors.GetCount(); ++i )
+    for( int i = 0; i < m_markersProvider->GetCount(); ++i )
     {
-        if( auto item = dynamic_cast<ERC_ITEM*>( errors.GetItem( i ).get() ) )
+        if( auto item = dynamic_cast<ERC_ITEM*>( m_markersProvider->GetItem( i ).get() ) )
         {
             if( item->MainItemHasSheetPath() )
                 orderedItems[item->GetMainItemSheetPath()].emplace_back( item );

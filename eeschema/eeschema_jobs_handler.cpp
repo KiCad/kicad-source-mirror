@@ -1197,7 +1197,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
                                           markersProvider->GetCount() ),
                         RPT_SEVERITY_INFO );
 
-    ERC_REPORT reportWriter( sch, units );
+    ERC_REPORT reportWriter( sch, units, markersProvider );
 
     bool wroteReport = false;
 
