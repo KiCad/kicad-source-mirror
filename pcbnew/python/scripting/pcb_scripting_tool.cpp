@@ -57,6 +57,29 @@ void SCRIPTING_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+/* Legacy init based on https://peps.python.org/pep-0489/ */
+static PyObject* module_legacy_init( PyModuleDef* def )
+{
+    PyModuleDef_Slot* slots = def->m_slots;
+    def->m_slots = NULL;
+    PyObject* mod = PyModule_Create( def );
+    while( mod && slots->slot )
+    {
+        if( slots->slot == Py_mod_exec )
+        {
+            int ( *mod_exec )( PyObject* ) = (int ( * )( PyObject* )) slots->value;
+            if( mod_exec( mod ) != 0 )
+            {
+                Py_DECREF( mod );
+                mod = NULL;
+            }
+        }
+        ++slots;
+    }
+    return mod;
+}
+
+
 bool SCRIPTING_TOOL::Init()
 {
     PyLOCK    lock;
@@ -66,8 +89,38 @@ bool SCRIPTING_TOOL::Init()
     {
         KIFACE* kiface = frame()->Kiway().KiFACE( KIWAY::FACE_PCB );
         initfunc pcbnew_init = reinterpret_cast<initfunc>( kiface->IfaceOrAddress( KIFACE_SCRIPTING_LEGACY ) );
-        PyImport_AddModule( pymodule.c_str() );
-        PyObject* mod = pcbnew_init();
+
+        // swig-4.4.0 implements PEP-489 multi-phase initialization.
+        // Handle both old single-phase and new multi-phase initialization.
+        // Modules that use multi-phase initialization will return a PyModuleDef, so then we force a legacy single-phase initialization.
+        PyObject* module_or_module_def = pcbnew_init();
+        if( !module_or_module_def )
+        {
+            wxMessageBox(
+                    wxString::Format( _( "Failed first phase initializing Python module '%s', through Python C API." ),
+                                      pymodule.c_str() ),
+                    _( "Scripting init" ), wxOK | wxICON_ERROR );
+            return false;
+        }
+
+        PyObject* mod = NULL;
+        if( PyObject_TypeCheck( module_or_module_def, &PyModuleDef_Type ) )
+        {
+            mod = module_legacy_init( (PyModuleDef*) module_or_module_def );
+            if( !mod )
+            {
+                wxMessageBox( wxString::Format(
+                                      _( "Failed second phase initializing Python module '%s', through Python C API." ),
+                                      pymodule.c_str() ),
+                              _( "Scripting init" ), wxOK | wxICON_ERROR );
+                return false;
+            }
+        }
+        else
+        {
+            mod = module_or_module_def;
+        }
+
         PyObject* sys_mod = PyImport_GetModuleDict();
         PyDict_SetItemString( sys_mod, "_pcbnew", mod );
         Py_DECREF( mod );
