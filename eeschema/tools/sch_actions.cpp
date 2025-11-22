@@ -587,8 +587,8 @@ TOOL_ACTION SCH_ACTIONS::autoplaceAllSheetPins( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::syncSheetPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Sync Current Sheet Pins..." ) )
-        .Tooltip( _( "Synchronize current sheet pins and hierarchical labels" ) )
+        .FriendlyName( _( "Sync Selected Sheet Pins..." ) )
+        .Tooltip( _( "Synchronize selected sheet pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
 
