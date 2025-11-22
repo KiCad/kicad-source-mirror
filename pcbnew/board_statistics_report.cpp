@@ -21,6 +21,7 @@
 #include "build_version.h"
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -302,27 +303,43 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
     // Now determine the courtyard areas which reflects how much space is occupied by components
     // This will always assume all components are populated as its intended for
     // layout purposes and arguing with people saying theres not enough space.
-    SHAPE_POLY_SET frontCy;
-    SHAPE_POLY_SET backCy;
-    for( FOOTPRINT* fpMain : aBoard->Footprints() )
+    SHAPE_POLY_SET frontShapesForArea;
+    SHAPE_POLY_SET backShapesForArea;
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+    int                            minPadClearanceOuter = netSettings->GetDefaultNetclass()->GetClearance();
+    for( FOOTPRINT* fp : aBoard->Footprints() )
     {
-        const SHAPE_POLY_SET& frontA = fpMain->GetCourtyard( F_CrtYd );
-        const SHAPE_POLY_SET& backA = fpMain->GetCourtyard( B_CrtYd );
+        const SHAPE_POLY_SET& frontA = fp->GetCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backA = fp->GetCourtyard( B_CrtYd );
 
         if( frontA.OutlineCount() != 0 )
-            frontCy.Append( frontA );
+            frontShapesForArea.Append( frontA );
 
         if( backA.OutlineCount() != 0 )
-            backCy.Append( backA );
+            backShapesForArea.Append( backA );
+
+        for( PAD* pad : fp->Pads() )
+        {
+            if( !pad->HasHole() )
+                continue;
+            
+            pad->TransformShapeToPolygon( frontShapesForArea, F_Cu,
+                                          std::min( minPadClearanceOuter, pad->GetOwnClearance( F_Cu ) ), ARC_LOW_DEF,
+                                          ERROR_INSIDE );
+            pad->TransformShapeToPolygon( backShapesForArea, B_Cu,
+                                          std::min( minPadClearanceOuter, pad->GetOwnClearance( B_Cu ) ), ARC_LOW_DEF,
+                                          ERROR_INSIDE );
+        }
     }
 
     // deal with overlapping courtyards (if people are ignoring DRC or something) 
     // and such through simplify
-    frontCy.Simplify();
-    backCy.Simplify();
+    frontShapesForArea.Simplify();
+    backShapesForArea.Simplify();
 
-    aData.frontFootprintCourtyardArea = frontCy.Area();
-    aData.backFootprintCourtyardArea = backCy.Area();
+    aData.frontFootprintCourtyardArea = frontShapesForArea.Area();
+    aData.backFootprintCourtyardArea = backShapesForArea.Area();
 
     if( aData.hasOutline )
     {
