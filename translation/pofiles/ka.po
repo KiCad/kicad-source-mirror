@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-21 13:51+0000\n"
+"PO-Revision-Date: 2025-11-23 09:07+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ka/>\n"
@@ -10217,7 +10217,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:120
 #: eeschema/fields_grid_table.cpp:1212
 msgid "Show Datasheet"
-msgstr ""
+msgstr "დოკუმენტაციის ჩვენება"
 
 #: common/tool/actions.cpp:1337
 msgid "Open the datasheet in a browser"
@@ -13621,7 +13621,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
 #: eeschema/fields_grid_table.cpp:1204
 msgid "Select Footprint..."
-msgstr ""
+msgstr "აირჩიეთ ნაკვალევი..."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:115
@@ -13759,7 +13759,7 @@ msgstr "ჩასმა"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:50
 #: eeschema/fields_data_model.cpp:59
 msgid "Group By"
-msgstr ""
+msgstr "დაჯგუფების პირობა"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
 msgid "Whole Library"
@@ -13772,7 +13772,7 @@ msgstr "მხოლოდ დაკავშირებული სიმბ�
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:119
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:193
 msgid "Group symbols"
-msgstr ""
+msgstr "სიმბოლოების დაჯგუფება"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:121
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:195
@@ -15221,11 +15221,11 @@ msgstr "წამი"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:264
 msgid "Final time:"
-msgstr ""
+msgstr "საბოლოო დრო:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:275
 msgid "Initial time:"
-msgstr ""
+msgstr "საწყისი დრო:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:286
 msgid "(optional; default 0)"
@@ -15330,11 +15330,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:662
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "თავსებადობის რეჟიმი:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "User configuration"
-msgstr ""
+msgstr "მომხმარებლის კონფიგურაცია"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "Spice"
@@ -15529,7 +15529,7 @@ msgstr "P"
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
 #, c-format
 msgid "Format %s"
-msgstr ""
+msgstr "ფორმატი %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:220
 msgid "<unknown>"
@@ -15586,7 +15586,7 @@ msgstr "ტიპი"
 #: eeschema/dialogs/dialog_sim_model.cpp:743
 #: eeschema/dialogs/dialog_sim_model.cpp:780
 msgid "Not Connected"
-msgstr ""
+msgstr "დაკავშირებული არაა"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:876
 #, c-format
@@ -15595,7 +15595,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1259
 msgid "Browse Models"
-msgstr ""
+msgstr "მოდელების დათვალიერება"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1400
 #, c-format
@@ -15671,15 +15671,15 @@ msgstr "მოდელი"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:258
 msgid "Symbol Pin"
-msgstr ""
+msgstr "სიმბოლოს საკონტაქტო ღერო"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:259
 msgid "Model Pin"
-msgstr ""
+msgstr "მოდელის საკონტაქტო ღერო"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:320
 msgid "Pin Assignments"
-msgstr ""
+msgstr "საკონტაქტო ღეროს მინიჭებები"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:131
 msgid "Simulation Model Editor"
@@ -15791,7 +15791,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1427
 msgid "Unsaved data"
-msgstr ""
+msgstr "შეუნახავი მონაცემები"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1428
 msgid "Changes have not yet been saved. Export unsaved data?"
@@ -15937,7 +15937,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:149
 msgid "Base Name"
-msgstr ""
+msgstr "საბაზისო სახელი"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:150
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:285
