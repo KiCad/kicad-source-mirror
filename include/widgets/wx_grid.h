@@ -92,9 +92,9 @@ class KICOMMON_API WX_GRID : public wxGrid
 {
 public:
     // Constructor has to be wxFormBuilder-compatible
-    WX_GRID( wxWindow *parent, wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             long style = wxWANTS_CHARS, const wxString& name = wxGridNameStr );
+    WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = wxWANTS_CHARS,
+             const wxString& name = wxGridNameStr );
 
     ~WX_GRID() override;
 
@@ -204,7 +204,6 @@ public:
      * @return the value held by the cell in internal units.
      */
     int GetUnitValue( int aRow, int aCol );
-
 
     /**
      * Apply standard KiCad unit and eval services to a numeric cell.

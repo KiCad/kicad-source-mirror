@@ -126,8 +126,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 }
 
 
-LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
-                                                const wxString& aPinnedKey,
+LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey,
                                                 APP_SETTINGS_BASE::LIB_TREE& aSettingsStruct ) :
         m_widget( nullptr ),
         m_lazyLoadHandler( nullptr ),

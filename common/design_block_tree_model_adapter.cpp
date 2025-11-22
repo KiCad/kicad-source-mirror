@@ -34,17 +34,17 @@
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
 DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
-                                         APP_SETTINGS_BASE::LIB_TREE& aSettings,
-                                         TOOL_INTERACTIVE* aContextMenuTool )
+                                         APP_SETTINGS_BASE::LIB_TREE& aSettings, TOOL_INTERACTIVE* aContextMenuTool )
 {
     auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings, aContextMenuTool );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
+                                                                  DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
                                                                   APP_SETTINGS_BASE::LIB_TREE& aSettings,
-                                                                  TOOL_INTERACTIVE*            aContextMenuTool ) :
+                                                                  TOOL_INTERACTIVE* aContextMenuTool ) :
         LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
                                 Kiface().KifaceSettings()->m_DesignBlockChooserPanel.tree ),
         m_libs( aLibs ),
