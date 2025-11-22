@@ -6207,6 +6207,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                 THROW_IO_ERROR( error );
             }
 
+            // Reset layer properties to default that are omitted when default in the formatter
+            aPad->SetOffset( curLayer, VECTOR2I( 0, 0 ) );
+            aPad->SetDelta( curLayer, VECTOR2I( 0, 0 ) );
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
