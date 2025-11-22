@@ -8,7 +8,7 @@ add_subdirectory(router)
 add_dependencies( pnsrouter pcbcommon )
 
 
-file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/swig )
+file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/swig )
 
 # Infrequently needed headers go at end of search paths, append to INC_AFTER
 set( INC_AFTER ${INC_AFTER} python/scripting )
@@ -545,30 +545,30 @@ endforeach()
 # Avoid threading in SWIG (breaks threads in pcbnew)
 set( SWIG_OPTS -python -c++ -nothreads -fastdispatch -fvirtual )
 
-set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
+set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/ ${SWIG_FLAGS} )
 
 # Avoid "nothing known about base class" warning output
 set( SWIG_OPTS ${SWIG_OPTS} -w401 -w402 )
 
-if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )
+if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/doxygen-xml )
     set( SWIG_OPTS ${SWIG_OPTS} -DENABLE_DOCSTRINGS_FROM_DOXYGEN )
-    set( SWIG_OPTS ${SWIG_OPTS} -I${CMAKE_CURRENT_BINARY_DIR}/docstrings )
+    set( SWIG_OPTS ${SWIG_OPTS} -I${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/docstrings )
 endif()
 
-add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
-                    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew_wrap.cxx
+                    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew.py
 
     DEPENDS python/swig/pcbnew.i
 
-    DEPFILE ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.d
+    DEPFILE ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew_wrap.d
 
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/docstrings
 
     # Make docstrings.i available if it doesn't exist
-    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/docstrings/docstrings.i
 
     COMMAND ${SWIG_EXECUTABLE}
-        ${SWIG_OPTS} -MMD -MF ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.d -MT pcbnew/pcbnew_wrap.cxx -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
+        ${SWIG_OPTS} -MMD -MF ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew_wrap.d -MT pcbnew/pcbnew_wrap.cxx -o ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
     # was needed only with SWIG version < 4 to disable a python section "def swig_import_helper()"
     # found in pcbnew.py but not existing in SWIG version >= 4
@@ -593,7 +593,7 @@ if( DOXYGEN_FOUND )
     add_custom_target( doxygen-python-xml
         ${CMAKE_COMMAND} -E remove_directory doxygen-python-xml
         COMMAND SOURCES_DIR=${CMAKE_SOURCE_DIR} ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_xml
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/
         DEPENDS Doxyfile_xml
         COMMENT "building doxygen docs into directory doxygen-python/html"
         )
@@ -607,7 +607,7 @@ if( DOXYGEN_FOUND )
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/build/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
         COMMAND ${CMAKE_COMMAND} -E remove pcbnew.py # force removal so it will be recreated later with the new docstrings
         COMMENT "building docstring files"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/
         DEPENDS pcbnew.py
         )
 
@@ -615,9 +615,9 @@ if( DOXYGEN_FOUND )
 
     # The sources to give to the Python Doxygen target
     set( DOXYGEN_PYTHON_SOURCES
-        ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-        ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/FootprintWizardBase.py
-        ${CMAKE_CURRENT_SOURCE_DIR}/python/plugins/PadArray.py )
+        ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/${KICMAKE_CFG_INTDIR}/python/plugins/FootprintWizardBase.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/${KICMAKE_CFG_INTDIR}/python/plugins/PadArray.py )
 
     # The Doxyfile expects a space-separated list in the env var
     string(REPLACE ";" " " DOXYGEN_PYTHON_SOURCES_STR "${DOXYGEN_PYTHON_SOURCES}")
@@ -629,7 +629,7 @@ if( DOXYGEN_FOUND )
             PYTHON_SOURCES_TO_DOC=${DOXYGEN_PYTHON_SOURCES_STR}
             CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}
             ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile_python
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/
         DEPENDS Doxyfile_python
         DEPENDS ${DOXYGEN_PYTHON_SOURCES}
         COMMENT "building doxygen docs into directory doxygen-python/html"
@@ -912,8 +912,8 @@ if( NOT APPLE )
 else()
     # put into bundle at build time, it is relocated at install
     add_custom_target( ScriptingPcbnewPyCopy ALL
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}/"
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}/"
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/pcbnew.py
         COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
         )
     add_dependencies( ScriptingPcbnewPyCopy ScriptingPythonDirectoryCreation )
@@ -935,7 +935,7 @@ if( WIN32 )
 elseif( APPLE )
      # put everything into bundle at build time, it is relocated at install
     add_custom_target( ScriptingModulesPcbnewSoCopy ALL
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}/"
+        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/${KICMAKE_CFG_INTDIR}//pcbnew/_pcbnew.so" "${PYTHON_DEST}/"
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.so
         COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
         )
@@ -945,31 +945,31 @@ else()
     # Linux is the remaining platform, and all that has to be installed is the created symlink.
     set( PYMOD_EXT "so" )
 
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/python/_pcbnew.${PYMOD_EXT} DESTINATION ${PYTHON_DEST} )
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/python/_pcbnew.${PYMOD_EXT} DESTINATION ${PYTHON_DEST} )
 endif()
 
 if( APPLE )
-     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
         COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
         COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
         )
 
-     set( PYTHON_FILES ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT} )
+     set( PYTHON_FILES ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT} )
 elseif( WIN32 )
     # For phase 1, copy _pcbnew.kiface to the python module.
-    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
         COMMAND ${CMAKE_COMMAND} -E copy _pcbnew${KIFACE_SUFFIX} _pcbnew.${PYMOD_EXT}
         COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
         )
 
-    set( PYTHON_FILES ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT} )
+    set( PYTHON_FILES ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT} )
 else()
     # For linux, just create a symlink in the build directory to ensure the unit tests can find the library
     # We don't actually do anything with this symlink though, since we create the proper one for the install
     # later.
-    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
         COMMAND ${CMAKE_COMMAND} -E create_symlink _pcbnew${KIFACE_SUFFIX} _pcbnew.${PYMOD_EXT}
         COMMENT "Symlinking _pcbnew.${PYMOD_EXT} to _pcbnew${KIFACE_SUFFIX}."
@@ -984,15 +984,15 @@ else()
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python )
 
     # This is the symlink we use in the installation directory, so it will not resolve in the build directory.
-    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/python/_pcbnew.${PYMOD_EXT}
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/python/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
-        COMMAND ln -sf "${PCBNEW_PYTHON_SYMLINK}" "${CMAKE_CURRENT_BINARY_DIR}/python/_pcbnew.${PYMOD_EXT}"
+        COMMAND ln -sf "${PCBNEW_PYTHON_SYMLINK}" "${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/python/_pcbnew.${PYMOD_EXT}"
         COMMENT "Creating install symlink from _pcbnew.${PYMOD_EXT} to _pcbnew${KIFACE_SUFFIX}."
         )
 
     set( PYTHON_FILES
-         ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-         ${CMAKE_CURRENT_BINARY_DIR}/python/_pcbnew.${PYMOD_EXT}
+         ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/_pcbnew.${PYMOD_EXT}
+         ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/python/_pcbnew.${PYMOD_EXT}
         )
 endif()
 

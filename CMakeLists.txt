@@ -301,6 +301,20 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Check if the current generator is multi-config (Ninja Multi-Config, Visual Studio, Xcode)
+get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+# Set KICMAKE_CFG_INTDIR to the appropriate configuration directory
+# This is meant to emulate CMAKE_CFG_INTDIR which is deprecated
+# but it's functionality to default to "." for single-config generators is important
+# and not available with $<CONFIG>
+if(IS_MULTI_CONFIG)
+    set(KICMAKE_CFG_INTDIR "$<CONFIG>")
+else()
+    # For single-config generators (Ninja, Makefiles), default to "." 
+    set(KICMAKE_CFG_INTDIR ".")
+endif()
+
 # Pass defines into KiCad code based on the build options set
 add_compile_definitions( $<$<BOOL:${KICAD_SCRIPTING_WXPYTHON}>:KICAD_SCRIPTING_WXPYTHON> )
 add_compile_definitions( $<$<BOOL:${KICAD_SIGNAL_INTEGRITY}>:KICAD_SIGNAL_INTEGRITY> )

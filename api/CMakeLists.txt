@@ -38,7 +38,7 @@ set( KIAPI_PROTO_SRCS
     )
 
 # Generated C++ code must be in the build dir; it is dependent on the version of protoc installed
-set( KIAPI_CPP_BASEPATH ${CMAKE_CURRENT_BINARY_DIR}/cpp/api )
+set( KIAPI_CPP_BASEPATH ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/cpp/api )
 
 foreach( PROTO_SRC ${KIAPI_PROTO_SRCS} )
     string( REGEX REPLACE "\.proto$" ".pb.cc" CPP_SRC ${PROTO_SRC} )
@@ -116,7 +116,7 @@ target_include_directories( kiapi SYSTEM PUBLIC ${Protobuf_INCLUDE_DIRS} )
 target_link_libraries( kiapi protobuf::libprotobuf )
 
 target_include_directories( kiapi INTERFACE
-    ${CMAKE_CURRENT_BINARY_DIR}/cpp     # Leaving off the /api/ to make #include statments less ambiguous
+    ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/cpp     # Leaving off the /api/ to make #include statments less ambiguous
     )
 
 # Because when building internally, the generated files do not include the "api" base path
