@@ -477,6 +477,17 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
 
         if( aCreate )
         {
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                // Ensure children have unique identifiers; in case the API client created this new
+                // footprint by cloning an existing one and only changing the parent UUID.
+                item->RunOnChildren(
+                        []( BOARD_ITEM* aChild )
+                        {
+                            const_cast<KIID&>( aChild->m_Uuid ) = KIID();
+                        } );
+            }
+
             item->Serialize( newItem );
             commit->Add( item.release() );
         }
