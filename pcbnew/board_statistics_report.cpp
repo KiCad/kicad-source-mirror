@@ -319,17 +319,27 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
         if( backA.OutlineCount() != 0 )
             backShapesForArea.Append( backA );
 
+        // PTH/NPTH holes in footprints can be outside the main courtyard and also
+        // consume space on the other side of the board but without a courtyard
         for( PAD* pad : fp->Pads() )
         {
             if( !pad->HasHole() )
                 continue;
-            
-            pad->TransformShapeToPolygon( frontShapesForArea, F_Cu,
-                                          std::min( minPadClearanceOuter, pad->GetOwnClearance( F_Cu ) ), ARC_LOW_DEF,
-                                          ERROR_INSIDE );
-            pad->TransformShapeToPolygon( backShapesForArea, B_Cu,
-                                          std::min( minPadClearanceOuter, pad->GetOwnClearance( B_Cu ) ), ARC_LOW_DEF,
-                                          ERROR_INSIDE );
+
+            if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
+            {
+                pad->TransformShapeToPolygon( frontShapesForArea, F_Cu,
+                                              std::min( minPadClearanceOuter, pad->GetOwnClearance( F_Cu ) ),
+                                              ARC_LOW_DEF, ERROR_INSIDE );
+                pad->TransformShapeToPolygon( backShapesForArea, B_Cu,
+                                              std::min( minPadClearanceOuter, pad->GetOwnClearance( B_Cu ) ),
+                                              ARC_LOW_DEF, ERROR_INSIDE );
+            }
+            else
+            {
+                pad->TransformHoleToPolygon( frontShapesForArea, 0, ARC_LOW_DEF, ERROR_INSIDE );
+                pad->TransformHoleToPolygon( backShapesForArea, 0, ARC_LOW_DEF, ERROR_INSIDE );
+            }
         }
     }
 
