@@ -35,6 +35,7 @@
 
 #include <Python.h>
 #include <wx/string.h>
+#include <wx/msgdlg.h> 
 #include <launch_ext.h>
 
 #ifdef KICAD_IPC_API
