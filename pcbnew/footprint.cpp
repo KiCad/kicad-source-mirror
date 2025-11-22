@@ -309,6 +309,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_exclude_from_bill_of_materials( IsExcludedFromBOM() );
     attrs->set_exempt_from_courtyard_requirement( AllowMissingCourtyard() );
     attrs->set_do_not_populate( IsDNP() );
+    attrs->set_allow_soldermask_bridges( GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
 
     if( m_attributes & FP_THROUGH_HOLE )
         attrs->set_mounting_style( types::FootprintMountingStyle::FMS_THROUGH_HOLE );
@@ -326,7 +327,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     // TODO: serialize library mandatory fields
 
-    types::FootprintDesignRuleOverrides* overrides = def->mutable_overrides();
+    types::FootprintDesignRuleOverrides* overrides = footprint.mutable_overrides();
 
     if( GetLocalClearance().has_value() )
         overrides->mutable_copper_clearance()->set_value_nm( *GetLocalClearance() );
@@ -394,6 +395,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         modelMsg.set_opacity( model.m_Opacity );
         itemMsg->PackFrom( modelMsg );
     }
+
     kiapi::common::PackSheetPath( *footprint.mutable_symbol_path(), m_path );
 
     footprint.set_symbol_sheet_name( m_sheetname.ToUTF8() );
@@ -474,6 +476,9 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetExcludedFromPosFiles( footprint.attributes().exclude_from_position_files() );
     SetAllowMissingCourtyard( footprint.attributes().exempt_from_courtyard_requirement() );
     SetDNP( footprint.attributes().do_not_populate() );
+
+    if( footprint.attributes().allow_soldermask_bridges() )
+        m_attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
 
     // Definition
     SetFPID( kiapi::common::LibIdFromProto( footprint.definition().id() ) );

@@ -846,6 +846,9 @@ message FootprintAttributes
   bool exempt_from_courtyard_requirement = 6;
   bool do_not_populate = 7;
   FootprintMountingStyle mounting_style = 8;
+
+  // Since: 9.0.7
+  bool allow_soldermask_bridges = 9;
 }
 
 message NetTieDefinition
