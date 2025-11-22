@@ -327,7 +327,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_exclude_from_bill_of_materials( IsExcludedFromBOM() );
     attrs->set_exempt_from_courtyard_requirement( AllowMissingCourtyard() );
     attrs->set_do_not_populate( IsDNP() );
-    attrs->set_allow_soldermask_bridges( GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
+    attrs->set_allow_soldermask_bridges( AllowSolderMaskBridges() );
 
     if( m_attributes & FP_THROUGH_HOLE )
         attrs->set_mounting_style( types::FootprintMountingStyle::FMS_THROUGH_HOLE );
@@ -494,9 +494,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetExcludedFromPosFiles( footprint.attributes().exclude_from_position_files() );
     SetAllowMissingCourtyard( footprint.attributes().exempt_from_courtyard_requirement() );
     SetDNP( footprint.attributes().do_not_populate() );
-
-    if( footprint.attributes().allow_soldermask_bridges() )
-        m_attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
+    SetAllowSolderMaskBridges( footprint.attributes().allow_soldermask_bridges() );
 
     // Definition
     SetFPID( kiapi::common::LibIdFromProto( footprint.definition().id() ) );
