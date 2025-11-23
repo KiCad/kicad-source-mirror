@@ -67,8 +67,7 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
     if( type == DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_UNKNOWN )
     {
         wxLogTrace( traceLibraries, "Sym: Plugin type %s is unknown!", row->Type() );
-        wxString msg =
-            wxString::Format( _( "Unknown library type %s " ), row->Type() );
+        wxString msg = wxString::Format( _( "Unknown library type %s " ), row->Type() );
         return tl::unexpected( LIBRARY_ERROR( msg ) );
     }
 
@@ -82,6 +81,32 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
 IO_BASE* DESIGN_BLOCK_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
 {
     return dbplugin( aRow );
+}
+
+
+/// Loads or reloads the given library, if it exists
+std::optional<LIB_STATUS> DESIGN_BLOCK_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
+{
+    wxArrayString dummyList;
+    std::lock_guard lock ( aLib->mutex );
+    aLib->status.load_status = LOAD_STATUS::LOADING;
+
+    std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
+
+    try
+    {
+        dbplugin( aLib )->DesignBlockEnumerate( dummyList, getUri( aLib->row ), false, &options );
+        wxLogTrace( traceLibraries, "DB: %s: library enumerated %zu items", aLib->row->Nickname(), dummyList.size() );
+        aLib->status.load_status = LOAD_STATUS::LOADED;
+    }
+    catch( IO_ERROR& e )
+    {
+        aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+        aLib->status.error = LIBRARY_ERROR( { e.What() } );
+        wxLogTrace( traceLibraries, "DB: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );
+    }
+
+    return aLib->status;
 }
 
 
@@ -116,20 +141,20 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
     thread_pool& tp = GetKiCadThreadPool();
 
     auto check =
-        []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
-        {
-            std::lock_guard lock( aMutex );
-
-            if( aMap.contains( aLib ) )
+            []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
             {
-                if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
-                    return true;
+                std::lock_guard lock( aMutex );
 
-                aMap.erase( aLib );
-            }
+                if( aMap.contains( aLib ) )
+                {
+                    if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
+                        return true;
 
-            return false;
-        };
+                    aMap.erase( aLib );
+                }
+
+                return false;
+            };
 
     std::set<wxString> libNamesCurrentlyValid;
 
@@ -154,71 +179,53 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
         }
 
         m_futures.emplace_back( tp.submit_task(
-            [this, nickname, scope]()
-            {
-                if( m_abort.load() )
-                    return;
-
-                LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
-
-                if( result.has_value() )
+                [this, nickname, scope]()
                 {
-                    LIB_DATA* lib = *result;
-                    wxArrayString dummyList;
-                    std::lock_guard lock ( lib->mutex );
-                    lib->status.load_status = LOAD_STATUS::LOADING;
+                    if( m_abort.load() )
+                        return;
 
-                    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+                    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
 
-                    try
+                    if( result.has_value() )
                     {
-                        dbplugin( lib )->DesignBlockEnumerate( dummyList, getUri( lib->row ), false, &options );
-                        wxLogTrace( traceLibraries, "DB: %s: library enumerated %zu items", nickname, dummyList.size() );
-                        lib->status.load_status = LOAD_STATUS::LOADED;
+                        LoadOne( *result );
                     }
-                    catch( IO_ERROR& e )
+                    else
                     {
-                        lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-                        lib->status.error = LIBRARY_ERROR( { e.What() } );
-                        wxLogTrace( traceLibraries, "DB: %s: plugin threw exception: %s", nickname, e.What() );
-                    }
-                }
-                else
-                {
-                    switch( scope )
-                    {
-                    case LIBRARY_TABLE_SCOPE::GLOBAL:
-                    {
-                        std::lock_guard lock( GlobalLibraryMutex );
+                        switch( scope )
+                        {
+                        case LIBRARY_TABLE_SCOPE::GLOBAL:
+                        {
+                            std::lock_guard lock( GlobalLibraryMutex );
 
-                        GlobalLibraries[nickname].status = LIB_STATUS( {
-                            .load_status = LOAD_STATUS::LOAD_ERROR,
-                            .error = result.error()
-                        } );
+                            GlobalLibraries[nickname].status = LIB_STATUS( {
+                                .load_status = LOAD_STATUS::LOAD_ERROR,
+                                .error = result.error()
+                            } );
 
-                        break;
-                    }
+                            break;
+                        }
 
-                    case LIBRARY_TABLE_SCOPE::PROJECT:
-                    {
-                        wxLogTrace( traceLibraries, "DB: project library error: %s: %s", nickname, result.error().message );
-                        std::lock_guard lock( m_libraries_mutex );
+                        case LIBRARY_TABLE_SCOPE::PROJECT:
+                        {
+                            wxLogTrace( traceLibraries, "DB: project library error: %s: %s", nickname, result.error().message );
+                            std::lock_guard lock( m_libraries_mutex );
 
-                        m_libraries[nickname].status = LIB_STATUS( {
-                            .load_status = LOAD_STATUS::LOAD_ERROR,
-                            .error = result.error()
-                        } );
+                            m_libraries[nickname].status = LIB_STATUS( {
+                                .load_status = LOAD_STATUS::LOAD_ERROR,
+                                .error = result.error()
+                            } );
 
-                        break;
+                            break;
+                        }
+
+                        default:
+                            wxFAIL_MSG( "Unexpected library table scope" );
+                        }
                     }
 
-                    default:
-                        wxFAIL_MSG( "Unexpected library table scope" );
-                    }
-                }
-
-                ++m_loadCount;
-            }, BS::pr::lowest ) );
+                    ++m_loadCount;
+                }, BS::pr::lowest ) );
     }
 
     // Cleanup libraries that were removed from the table
@@ -262,8 +269,7 @@ std::vector<DESIGN_BLOCK*> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlocks( const 
     }
     catch( IO_ERROR& e )
     {
-        wxLogTrace( traceLibraries, "DB: Exception enumerating library %s: %s",
-                    lib->row->Nickname(), e.What() );
+        wxLogTrace( traceLibraries, "DB: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
     }
 
     for( const wxString& blockName : blockNames )
@@ -304,7 +310,7 @@ std::vector<wxString> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlockNames( const w
 
 
 DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::LoadDesignBlock( const wxString& aNickname,
-        const wxString& aDesignBlockName, bool aKeepUUID )
+                                                             const wxString& aDesignBlockName, bool aKeepUUID )
 {
     if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
     {
@@ -350,7 +356,8 @@ const DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::GetEnumeratedDesignBlock( cons
 
 
 DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_T DESIGN_BLOCK_LIBRARY_ADAPTER::SaveDesignBlock( const wxString& aNickname,
-        const DESIGN_BLOCK* aDesignBlock, bool aOverwrite )
+                                                                                    const DESIGN_BLOCK* aDesignBlock,
+                                                                                    bool aOverwrite )
 {
     if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
     {

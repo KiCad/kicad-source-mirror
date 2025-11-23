@@ -54,6 +54,10 @@ LIB_TABLE_GRID_DATA_MODEL::LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aDialog, WX_G
     m_warningAttr->SetReadOnly();
     m_warningAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
+    m_noStatusAttr = new wxGridCellAttr;
+    m_noStatusAttr->SetReadOnly();
+    m_noStatusAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
     m_editSettingsAttr = new wxGridCellAttr;
     m_editSettingsAttr->SetRenderer( new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
     m_editSettingsAttr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
@@ -72,55 +76,66 @@ LIB_TABLE_GRID_DATA_MODEL::~LIB_TABLE_GRID_DATA_MODEL()
     m_typesEditor->DecRef();
     m_boolAttr->DecRef();
     m_warningAttr->DecRef();
+    m_noStatusAttr->DecRef();
     m_editSettingsAttr->DecRef();
     m_openTableAttr->DecRef();
 }
 
 
+bool LIB_TABLE_GRID_DATA_MODEL::badCoords( int aRow, int aCol )
+{
+    if( aRow < 0 || aRow >= (int) size() )
+        return true;
+
+    if( aCol < 0 || aCol >= GetNumberCols() )
+        return true;
+
+    return false;
+}
+
+
 wxString LIB_TABLE_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
-    wxCHECK( aRow >= 0, wxEmptyString );
-    size_t row = static_cast<size_t>( aRow );
+    if( badCoords( aRow, aCol ) )
+        return wxEmptyString;
 
-    if( row < size() )
+    const LIBRARY_TABLE_ROW& r = at( aRow );
+
+    switch( aCol )
     {
-        const LIBRARY_TABLE_ROW& r = at( row );
+    case COL_NICKNAME: return UnescapeString( r.Nickname() );
+    case COL_URI:      return r.URI();
+    case COL_TYPE:     return r.Type();
+    case COL_OPTIONS:  return r.Options();
+    case COL_DESCR:    return r.Description();
+    case COL_ENABLED:  return r.Disabled() ? wxT( "0" ) : wxT( "1" );
+    case COL_VISIBLE:  return r.Hidden() ? wxT( "0" ) : wxT( "1" );
 
-        switch( aCol )
-        {
-        case COL_NICKNAME: return UnescapeString( r.Nickname() );
-        case COL_URI:      return r.URI();
-        case COL_TYPE:     return r.Type();
-        case COL_OPTIONS:  return r.Options();
-        case COL_DESCR:    return r.Description();
-        case COL_ENABLED:  return r.Disabled() ? wxT( "0" ) : wxT( "1" );
-        case COL_VISIBLE:  return r.Hidden() ? wxT( "0" ) : wxT( "1" );
+    case COL_STATUS:
+        if( !r.IsOk() )
+            return r.ErrorDescription();
 
-        case COL_STATUS:
-            if( !r.IsOk() )
-                return r.ErrorDescription();
+        if( std::optional<LIBRARY_ERROR> error = m_adapter->LibraryError( r.Nickname() ) )
+            return error->message;
 
-            if( std::optional<LIBRARY_ERROR> error = m_adapter->LibraryError( r.Nickname() ) )
-                return error->message;
+        if( m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
+            return _( "Edit settings" );
+        else if( r.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+            return _( "Open library table" );
 
-            if( m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
-                return _( "Edit settings" );
-            else if( r.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-                return _( "Open library table" );
+        return wxEmptyString;
 
-            return wxEmptyString;
-
-        default:
-            return wxEmptyString;
-        }
+    default:
+        return wxEmptyString;
     }
-
-    return wxEmptyString;
 }
 
 
 wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
+    if( badCoords( aRow, aCol ) )
+        return enhanceAttr( nullptr, aRow, aCol, aKind );
+
     LIBRARY_TABLE_ROW& tableRow = at( aRow );
 
     switch( aCol )
@@ -162,7 +177,8 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
             return enhanceAttr( m_openTableAttr, aRow, aCol, aKind );
         }
 
-        return enhanceAttr( nullptr, aRow, aCol, aKind );
+        m_noStatusAttr->IncRef();
+        return enhanceAttr( m_noStatusAttr, aRow, aCol, aKind );
 
     case COL_NICKNAME:
     case COL_OPTIONS:
@@ -175,32 +191,30 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
 
 bool LIB_TABLE_GRID_DATA_MODEL::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
-    if( aRow < static_cast<int>( size() ) )
+    if( badCoords( aRow, aCol ) )
+        return false;
+
+    switch( aCol )
     {
-        switch( aCol )
-        {
-        case COL_ENABLED:
-        case COL_VISIBLE:
-            return aTypeName == wxGRID_VALUE_BOOL;
+    case COL_ENABLED:
+    case COL_VISIBLE:
+        return aTypeName == wxGRID_VALUE_BOOL;
 
-        default:
-            return aTypeName == wxGRID_VALUE_STRING;
-        }
+    default:
+        return aTypeName == wxGRID_VALUE_STRING;
     }
-
-    return false;
 }
 
 
 bool LIB_TABLE_GRID_DATA_MODEL::GetValueAsBool( int aRow, int aCol )
 {
-    wxCHECK( aRow >= 0, false );
-    size_t row = static_cast<size_t>( aRow );
+    if( badCoords( aRow, aCol ) )
+        return false;
 
-    if( row < size() && aCol == COL_ENABLED )
-        return !at( row ).Disabled();
-    else if( row < size() && aCol == COL_VISIBLE )
-        return !at( row ).Hidden();
+    if( aCol == COL_ENABLED )
+        return !at( aRow ).Disabled();
+    else if( aCol == COL_VISIBLE )
+        return !at( aRow ).Hidden();
     else
         return false;
 }
@@ -208,36 +222,50 @@ bool LIB_TABLE_GRID_DATA_MODEL::GetValueAsBool( int aRow, int aCol )
 
 void LIB_TABLE_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
-    wxCHECK( aRow >= 0, /* void */ );
-    size_t row = static_cast<size_t>( aRow );
+    if( badCoords( aRow, aCol ) )
+        return;
 
-    if( row < size() )
+    LIBRARY_TABLE_ROW& r = at( aRow );
+
+    switch( aCol )
     {
-        LIBRARY_TABLE_ROW& r = at( row );
+    case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
+    case COL_URI:      r.SetURI( aValue );                                  break;
+    case COL_TYPE:     r.SetType( aValue );                                 break;
+    case COL_OPTIONS:  r.SetOptions( aValue );                              break;
+    case COL_DESCR:    r.SetDescription( aValue );                          break;
+    case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
+    case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
+    case COL_STATUS:                                                        break;
+    }
 
-        switch( aCol )
-        {
-        case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
-        case COL_URI:      r.SetURI( aValue );                                  break;
-        case COL_TYPE:     r.SetType( aValue );                                 break;
-        case COL_OPTIONS:  r.SetOptions( aValue );                              break;
-        case COL_DESCR:    r.SetDescription( aValue );                          break;
-        case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
-        case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
-        case COL_STATUS:                                                        break;
-        }
+    if( aCol == COL_URI || aCol == COL_TYPE || aCol == COL_OPTIONS )
+    {
+        GetView()->CallAfter(
+                [this, aRow, aCol]()
+                {
+                    if( badCoords( aRow, aCol ) )
+                        return;
+
+                    LIBRARY_TABLE_ROW& r = at( aRow );
+
+                    m_adapter->CheckTableRow( r );
+
+                    GetView()->RefreshBlock( aRow, COL_STATUS, aRow, COL_STATUS );
+                } );
     }
 }
 
+
 void LIB_TABLE_GRID_DATA_MODEL::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
-    wxCHECK( aRow >= 0, /* void */ );
-    size_t row = static_cast<size_t>( aRow );
+    if( badCoords( aRow, aCol ) )
+        return;
 
-    if( row < size() && aCol == COL_ENABLED )
-        at( row ).SetDisabled( !aValue );
-    else if( row < size() && aCol == COL_VISIBLE )
-        at( row ).SetHidden( !aValue );
+    if( aCol == COL_ENABLED )
+        at( aRow ).SetDisabled( !aValue );
+    else if( aCol == COL_VISIBLE )
+        at( aRow ).SetHidden( !aValue );
 }
 
 
@@ -357,7 +385,8 @@ LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID_DATA_MODEL::begin()
 }
 
 
-LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID_DATA_MODEL::insert( LIBRARY_TABLE_ROWS_ITER aIterator, const LIBRARY_TABLE_ROW& aRow )
+LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID_DATA_MODEL::insert( LIBRARY_TABLE_ROWS_ITER aIterator,
+                                                           const LIBRARY_TABLE_ROW& aRow )
 {
     return m_table.Rows().insert( aIterator, aRow );
 }
@@ -369,7 +398,8 @@ void LIB_TABLE_GRID_DATA_MODEL::push_back( const LIBRARY_TABLE_ROW& aRow )
 }
 
 
-LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID_DATA_MODEL::erase( LIBRARY_TABLE_ROWS_ITER aFirst, LIBRARY_TABLE_ROWS_ITER aLast )
+LIBRARY_TABLE_ROWS_ITER LIB_TABLE_GRID_DATA_MODEL::erase( LIBRARY_TABLE_ROWS_ITER aFirst,
+                                                          LIBRARY_TABLE_ROWS_ITER aLast )
 {
     return m_table.Rows().erase( aFirst, aLast );
 }

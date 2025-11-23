@@ -97,6 +97,8 @@ public:
     LIBRARY_MANAGER_ADAPTER* Adapter() const { return m_adapter; }
 
 protected:
+    bool badCoords( int aRow, int aCol );
+
     virtual wxString getFileTypes( WX_GRID* aGrid, int aRow ) = 0;
 
     virtual LIBRARY_TABLE_ROW& at( size_t aIndex );
@@ -121,6 +123,7 @@ protected:
     wxGridCellAttr* m_typesEditor;
     wxGridCellAttr* m_boolAttr;
     wxGridCellAttr* m_warningAttr;
+    wxGridCellAttr* m_noStatusAttr;
     wxGridCellAttr* m_editSettingsAttr;
     wxGridCellAttr* m_openTableAttr;
 

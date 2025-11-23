@@ -780,6 +780,36 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
         globalLibs().clear();
     }
 }
+
+
+void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
+{
+    abortLoad();
+
+    LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( &aRow );
+
+    if( plugin.has_value() )
+    {
+        LIB_DATA lib;
+        lib.row = &aRow;
+        lib.plugin.reset( *plugin );
+
+        std::optional<LIB_STATUS> status = LoadOne( &lib );
+
+        if( status.has_value() )
+        {
+            aRow.SetOk( status.value().load_status == LOAD_STATUS::LOADED );
+
+            if( status.value().error.has_value() )
+                aRow.SetErrorDescription( status.value().error.value().message );
+        }
+    }
+    else
+    {
+        aRow.SetOk( false );
+        aRow.SetErrorDescription( plugin.error().message );
+    }
+}
     
 
 
@@ -1035,48 +1065,48 @@ std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
 {
     auto tryLoadFromScope =
-        [&]( LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget,
-             std::mutex& aMutex ) -> LIBRARY_RESULT<LIB_DATA*>
-        {
-            bool present = false;
-
+            [&]( LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget,
+                 std::mutex& aMutex ) -> LIBRARY_RESULT<LIB_DATA*>
             {
-                std::lock_guard lock( aMutex );
-                present = aTarget.contains( aNickname ) && aTarget.at( aNickname ).plugin;
-            }
+                bool present = false;
 
-            if( !present )
-            {
-                if( auto result = m_manager.GetRow( Type(), aNickname, aScope ) )
                 {
-                    const LIBRARY_TABLE_ROW* row = *result;
-                    wxLogTrace( traceLibraries, "Library %s (%s) not yet loaded, will attempt...",
-                                aNickname, magic_enum::enum_name( aScope ) );
-
-                    if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
-                    {
-                        std::lock_guard lock( aMutex );
-
-                        aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
-                        aTarget[ row->Nickname() ].row = row;
-                        aTarget[ row->Nickname() ].plugin.reset( *plugin );
-
-                        return &aTarget.at( aNickname );
-                    }
-                    else
-                    {
-                        return tl::unexpected( plugin.error() );
-                    }
+                    std::lock_guard lock( aMutex );
+                    present = aTarget.contains( aNickname ) && aTarget.at( aNickname ).plugin;
                 }
 
-                return nullptr;
-            }
+                if( !present )
+                {
+                    if( auto result = m_manager.GetRow( Type(), aNickname, aScope ) )
+                    {
+                        const LIBRARY_TABLE_ROW* row = *result;
+                        wxLogTrace( traceLibraries, "Library %s (%s) not yet loaded, will attempt...",
+                                    aNickname, magic_enum::enum_name( aScope ) );
 
-            return &aTarget.at( aNickname );
-        };
+                        if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
+                        {
+                            std::lock_guard lock( aMutex );
 
-    LIBRARY_RESULT<LIB_DATA*> result =
-            tryLoadFromScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
+                            aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
+                            aTarget[ row->Nickname() ].row = row;
+                            aTarget[ row->Nickname() ].plugin.reset( *plugin );
+
+                            return &aTarget.at( aNickname );
+                        }
+                        else
+                        {
+                            return tl::unexpected( plugin.error() );
+                        }
+                    }
+
+                    return nullptr;
+                }
+
+                return &aTarget.at( aNickname );
+            };
+
+    LIBRARY_RESULT<LIB_DATA*> result = tryLoadFromScope( LIBRARY_TABLE_SCOPE::PROJECT, m_libraries,
+                                                         m_libraries_mutex );
 
     if( !result.has_value() || *result )
         return result;

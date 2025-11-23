@@ -469,38 +469,19 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
         wxString uri  = model->GetValue( r, COL_URI ).Trim( false ).Trim();
         unsigned illegalCh = 0;
 
-        if( !nick || !uri )
+        if( !uri )
         {
-            if( !nick && !uri )
-                msg = _( "A library table row nickname and path cells are empty." );
-            else if( !nick )
-                msg = _( "A library table row nickname cell is empty." );
-            else
-                msg = _( "A library table row path cell is empty." );
-
-            wxMessageDialog badCellDlg( topLevelParent, msg, _( "Invalid Row Definition" ),
-                                        wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
-            badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
-                                              "invalid to be removed from the table." ) );
-            badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
-                                       wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
-
-            if( badCellDlg.ShowModal() == wxID_NO )
-                return false;
-
-            // Delete the "empty" row, where empty means missing nick or uri.
-            // This also updates the UI which could be slow, but there should only be a few
-            // rows to delete, unless the user fell asleep on the Add Row
-            // button.
+            // Silently nuke rows that have no libraray URI
             model->DeleteRows( r, 1 );
         }
-        else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
+        else if( !nick || ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
         {
-            msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ),
-                                    illegalCh,
-                                    nick );
+            if( !nick )
+                msg = _( "Library must have a nickname." );
+            else
+                msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ), illegalCh, nick );
 
-            aErrorHandler( r, 1 );
+            aErrorHandler( r, COL_NICKNAME );
 
             wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
             errdlg.ShowModal();

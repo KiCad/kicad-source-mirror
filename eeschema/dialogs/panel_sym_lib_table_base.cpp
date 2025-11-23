@@ -19,7 +19,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_DEFAULT_STYLE );
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -65,7 +65,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bButtonsSizer->Add( m_convertLegacy, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 3 );
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 3 );
 
 
 	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );

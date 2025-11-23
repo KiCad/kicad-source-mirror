@@ -42,6 +42,8 @@ public:
 
     void AsyncLoad() override;
 
+    std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override;
+
     // Currently unused for design blocks
     std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const override { return std::nullopt; }
 

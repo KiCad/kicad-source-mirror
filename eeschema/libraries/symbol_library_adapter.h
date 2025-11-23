@@ -62,6 +62,9 @@ public:
     void AsyncLoad() override;
 
     /// Loads or reloads the given library, if it exists
+    std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override;
+
+    /// Loads or reloads the given library, if it exists
     std::optional<LIB_STATUS> LoadOne( const wxString& aNickname );
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)

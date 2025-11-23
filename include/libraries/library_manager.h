@@ -128,8 +128,12 @@ public:
     /// Notify the adapter that the global library tables have changed
     void GlobalTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables = {} );
 
+    void CheckTableRow( LIBRARY_TABLE_ROW& aRow );
+
     /// Loads all available libraries for this adapter type in the background
     virtual void AsyncLoad() = 0;
+
+    virtual std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) = 0;
 
     /// Returns async load progress between 0.0 and 1.0, or nullopt if load is not in progress
     std::optional<float> AsyncLoadProgress() const;

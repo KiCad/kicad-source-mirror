@@ -19,7 +19,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 
 	m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_DEFAULT_STYLE );
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -59,7 +59,7 @@ PANEL_DESIGN_BLOCK_LIB_TABLE_BASE::PANEL_DESIGN_BLOCK_LIB_TABLE_BASE( wxWindow* 
 	bButtonsSizer->Add( m_migrate_libs_button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 8 );
+	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 8 );
 
 	wxStaticText* stPathsLabel;
 	stPathsLabel = new wxStaticText( this, wxID_ANY, _("Available path substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );

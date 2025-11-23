@@ -180,34 +180,43 @@ void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
 }
 
 
-std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( const wxString& aNickname )
+/// Loads or reloads the given library, if it exists
+std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 {
-    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
+    std::lock_guard lock ( aLib->mutex );
+    aLib->status.load_status = LOAD_STATUS::LOADING;
+
+    std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
+
+    try
     {
-        LIB_DATA*       lib = *result;
-        std::lock_guard lock ( lib->mutex );
-        lib->status.load_status = LOAD_STATUS::LOADING;
-
-        std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-
-        try
-        {
-            wxArrayString dummyList;
-            pcbplugin( lib )->FootprintEnumerate( dummyList, getUri( lib->row ), true, &options );
-            wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aNickname, dummyList.size() );
-            lib->status.load_status = LOAD_STATUS::LOADED;
-        }
-        catch( IO_ERROR& e )
-        {
-            lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-            lib->status.error = LIBRARY_ERROR( { e.What() } );
-            wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aNickname, e.What() );
-        }
-
-        return lib->status;
+        wxArrayString dummyList;
+        pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
+        wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aLib->row->Nickname(), dummyList.size() );
+        aLib->status.load_status = LOAD_STATUS::LOADED;
+    }
+    catch( IO_ERROR& e )
+    {
+        aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+        aLib->status.error = LIBRARY_ERROR( { e.What() } );
+        wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );
     }
 
-    return std::nullopt;
+    return aLib->status;
+}
+
+
+std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( const wxString& nickname )
+{
+    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
+
+    if( result.has_value() )
+        return LoadOne( *result );
+
+    return LIB_STATUS{
+        .load_status = LOAD_STATUS::LOAD_ERROR,
+        .error = LIBRARY_ERROR( { result.error() } )
+    };
 }
 
 
