@@ -79,6 +79,12 @@ public:
     virtual bool IsExpanderColumn( int aCol ) const { return false; }
     virtual GROUP_TYPE GetGroupType( int aRow ) const { return GROUP_SINGLETON; }
 
+    void Clear() override
+    {
+        if( GetNumberRows() )
+            DeleteRows( 0, GetNumberRows() );
+    }
+
 protected:
     wxGridCellAttr* enhanceAttr( wxGridCellAttr* aInputAttr, int aRow, int aCol,
                                  wxGridCellAttr::wxAttrKind aKind  );
