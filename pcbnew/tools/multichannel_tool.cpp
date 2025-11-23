@@ -332,8 +332,7 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& 
 }
 
 
-const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& aFootprints,
-                                                          int                   aMargin )
+const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin )
 {
     std::vector<VECTOR2I> bbCorners;
     bbCorners.reserve( aFootprints.size() * 4 );
@@ -497,17 +496,17 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection() )
     {
-        if( auto zone = isSelectedItemAnRA( item ) )
+        if( ZONE* zone = isSelectedItemAnRA( item ) )
         {
-            refRAs.push_back(zone);
+            refRAs.push_back( zone );
         }
-        else if ( item->Type() == PCB_GROUP_T )
+        else if( item->Type() == PCB_GROUP_T )
         {
             PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
 
             for( EDA_ITEM* grpItem : group->GetItems() )
             {
-                if( auto grpZone = isSelectedItemAnRA( grpItem ) )
+                if( ZONE* grpZone = isSelectedItemAnRA( grpItem ) )
                     refRAs.push_back( grpZone );
             }
         }
@@ -591,9 +590,10 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     {
         if( Pgm().IsGUI() )
         {
-                wxString summary = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
-                ShowTopologyMismatchReasons( frame(), summary, compat.m_mismatchReasons );
+            wxString summary = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
+            ShowTopologyMismatchReasons( frame(), summary, compat.m_mismatchReasons );
         }
+
         return -1;
     }
 
@@ -602,14 +602,13 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, m_areas.m_options, compat ) )
     {
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                                        m_areas.m_refRA->m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
+                                        m_areas.m_refRA->m_zone->GetZoneName(),
+                                        aTargetArea.m_zone->GetZoneName() );
 
         commit.Revert();
 
         if( Pgm().IsGUI() )
-        {
             frame()->ShowInfoBarError( errMsg, true );
-        }
 
         return -1;
     }
@@ -621,9 +620,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
             commit.Revert();
 
             if( Pgm().IsGUI() )
-            {
                 frame()->ShowInfoBarError( _( "Target group does not have a group." ), true );
-            }
 
             return -1;
         }
@@ -650,24 +647,24 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
     int totalCopied = 0;
 
     BOARD_COMMIT commit( GetManager(), true, false );
-    for( auto& targetArea : m_areas.m_compatMap )
+
+    for( auto& [targetArea, compatData] : m_areas.m_compatMap )
     {
-        if( !targetArea.second.m_doCopy )
+        if( !compatData.m_doCopy )
         {
             wxLogTrace( traceMultichannelTool, wxT( "skipping copy to RA '%s' (disabled in dialog)\n" ),
-                        targetArea.first->m_ruleName );
+                        targetArea->m_ruleName );
             continue;
         }
 
-        if( !targetArea.second.m_isOk )
+        if( !compatData.m_isOk )
             continue;
 
-        if( !copyRuleAreaContents( m_areas.m_refRA, targetArea.first, &commit, m_areas.m_options, targetArea.second ) )
+        if( !copyRuleAreaContents( m_areas.m_refRA, targetArea, &commit, m_areas.m_options, compatData ) )
         {
-            auto errMsg = wxString::Format(
-                    _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                    m_areas.m_refRA->m_zone->GetZoneName(),
-                    targetArea.first->m_zone->GetZoneName() );
+            auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
+                                            m_areas.m_refRA->m_zone->GetZoneName(),
+                                            targetArea->m_zone->GetZoneName() );
 
             commit.Revert();
 
@@ -676,6 +673,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
             return -1;
         }
+
         totalCopied++;
         wxSafeYield();
     }
