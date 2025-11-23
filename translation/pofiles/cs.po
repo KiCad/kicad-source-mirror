@@ -23,16 +23,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-10-07 08:02+0000\n"
-"Last-Translator: Michal Kundrát <DreitTheDragon@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2025-11-23 09:07+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -14188,9 +14188,8 @@ msgid "Revert symbol"
 msgstr "Převést symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Vrátit '%s' na poslední uloženou verzi?"
+msgstr "Vrátit symbol do posledního uloženého stavu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
 #, fuzzy
@@ -25940,9 +25939,8 @@ msgid "Export symbols to library:"
 msgstr "Exportovat symboly do knihovny..."
 
 #: eeschema/tools/sch_editor_control.cpp:351
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Aktualizovat symboly ve schématu, aby odkazovaly na novou knihovnu?"
+msgstr "Zahrnout do exportu symboly napájení"
 
 #: eeschema/tools/sch_editor_control.cpp:352
 msgid "Update schematic symbols to link to exported symbols"
@@ -27957,9 +27955,8 @@ msgid "Embed file"
 msgstr "Vložit soubor"
 
 #: include/widgets/filedlg_hook_new_library.h:42
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Přidat knihovnu do globální tabulky knihoven?"
+msgstr "Přidat novou knihovnu do globální tabulky knihoven"
 
 #: include/widgets/filedlg_hook_new_library.h:43
 #, fuzzy
@@ -39636,9 +39633,8 @@ msgid "Copy footprint placement"
 msgstr "Umístění"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:99
-#, fuzzy
 msgid "Copy routing"
-msgstr "Přerušit propojování?"
+msgstr "Kopírovat propojování"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:102
 msgid "Restrict to routing connected within the area"
