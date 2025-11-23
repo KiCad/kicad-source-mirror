@@ -321,7 +321,6 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
     // Delete the GRID_TRICKS.
     // (Notebook page GRID_TRICKS are deleted by LIB_TABLE_NOTEBOOK_PANEL.)
     m_path_subs_grid->PopEventHandler( true );
-    m_path_subs_grid->PopEventHandler( true );
 }
 
 
