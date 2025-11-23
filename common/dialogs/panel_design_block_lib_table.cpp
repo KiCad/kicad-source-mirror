@@ -176,7 +176,13 @@ protected:
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
             return wxEmptyString;
 
+        if( tableRow.Type().IsEmpty() )
+            return wxEmptyString;
+
         DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = DESIGN_BLOCK_IO_MGR::EnumFromStr( tableRow.Type() );
+        if( fileType == DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_UNKNOWN )
+            return wxEmptyString;
+        
         const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
