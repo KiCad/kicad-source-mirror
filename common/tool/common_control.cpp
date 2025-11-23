@@ -208,7 +208,7 @@ int COMMON_CONTROL::Execute( const wxString& aExecutible, const wxString& aParam
 {
     TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( aExecutible );
 
-    long pid = ExecuteFile( aExecutible, aParam, callback );
+    long pid = ExecuteFile( aExecutible, aParam, callback, false );
 
     if( pid > 0 )
     {
