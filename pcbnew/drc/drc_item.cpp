@@ -521,6 +521,12 @@ void DRC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 }
 
 
+int DRC_ITEMS_PROVIDER::GetSeverities() const
+{
+    return m_severities;
+}
+
+
 int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
 {
     if( aSeverity < 0 )

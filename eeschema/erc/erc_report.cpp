@@ -32,13 +32,15 @@
 #include <macros.h>
 #include <json_common.h>
 #include <rc_json_schema.h>
+#include <widgets/report_severity.h>
 
 
 ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits,
                         std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider ) :
         m_sch( aSchematic ),
         m_reportUnits( aReportUnits ),
-        m_markersProvider( std::move( aMarkersProvider ) )
+        m_markersProvider( std::move( aMarkersProvider ) ),
+        m_reportedSeverities( 0 )
 {
     if( !m_markersProvider )
     {
@@ -47,6 +49,8 @@ ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits,
         m_markersProvider = std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( m_sch );
         m_markersProvider->SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
     }
+
+    m_reportedSeverities = m_markersProvider->GetSeverities();
 }
 
 
@@ -56,6 +60,9 @@ wxString ERC_REPORT::GetTextReport()
 
     wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ),
                                      GetISO8601CurrentDateTime() );
+
+    msg += wxString::Format( _( "Report includes: %s\n" ),
+                             formatSeverities( m_reportedSeverities ) );
 
     std::map<KIID, EDA_ITEM*> itemMap;
 
@@ -137,6 +144,16 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );
+
+    // Document which severities are included in this report
+    if( m_reportedSeverities & RPT_SEVERITY_ERROR )
+        reportHead.included_severities.push_back( wxS( "error" ) );
+
+    if( m_reportedSeverities & RPT_SEVERITY_WARNING )
+        reportHead.included_severities.push_back( wxS( "warning" ) );
+
+    if( m_reportedSeverities & RPT_SEVERITY_EXCLUSION )
+        reportHead.included_severities.push_back( wxS( "exclusion" ) );
 
     SCH_SHEET_LIST sheetList = m_sch->Hierarchy();
     sheetList.FillItemMap( itemMap );

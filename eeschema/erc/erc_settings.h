@@ -256,6 +256,8 @@ public:
 
     void SetSeverities( int aSeverities ) override;
 
+    int GetSeverities() const override;
+
     int GetCount( int aSeverity = -1 ) const override;
 
     std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override;

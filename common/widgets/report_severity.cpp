@@ -17,31 +17,37 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <widgets/report_severity.h>
+#include <wx/intl.h>
+#include <i18n_utility.h>
+#include <vector>
 
-#ifndef REPORT_SEVERITY_H
-#define REPORT_SEVERITY_H
 
-#include <kicommon.h>
-#include <wx/string.h>
+wxString formatSeverities( int aSeverities )
+{
+    wxString result;
+    std::vector<wxString> items;
 
-// Note: On windows, SEVERITY_ERROR collides with a system declaration,
-// so we used RPT_SEVERITY_xxx instead of SEVERITY_xxx
-enum SEVERITY {
-    RPT_SEVERITY_UNDEFINED = 0x01,
-    RPT_SEVERITY_INFO      = 0x02,
-    RPT_SEVERITY_EXCLUSION = 0x04,
-    RPT_SEVERITY_ACTION    = 0x08,
-    RPT_SEVERITY_WARNING   = 0x10,
-    RPT_SEVERITY_ERROR     = 0x20,
-    RPT_SEVERITY_IGNORE    = 0x40,
-    RPT_SEVERITY_DEBUG     = 0x80,
-};
+    if( aSeverities & RPT_SEVERITY_ERROR )
+        items.push_back( _( "Errors" ) );
 
-/**
- * Convert a severity mask to a human-readable comma-separated string.
- * @param aSeverities A bitmask of SEVERITY values
- * @return A translated string like "Errors, Warnings"
- */
-KICOMMON_API wxString formatSeverities( int aSeverities );
+    if( aSeverities & RPT_SEVERITY_WARNING )
+        items.push_back( _( "Warnings" ) );
 
-#endif // REPORT_SEVERITY_H
+    if( aSeverities & RPT_SEVERITY_EXCLUSION )
+        items.push_back( _( "Exclusions" ) );
+
+    if( items.empty() )
+        return _( "None" );
+
+    for( size_t i = 0; i < items.size(); i++ )
+    {
+        result += items[i];
+
+        if( i < items.size() - 1 )
+            result += wxS( ", " );
+    }
+
+    return result;
+}
+

@@ -53,6 +53,8 @@ class RC_ITEMS_PROVIDER
 public:
     virtual void SetSeverities( int aSeverities ) = 0;
 
+    virtual int GetSeverities() const = 0;
+
     virtual int GetCount( int aSeverity = -1 ) const = 0;
 
     /**

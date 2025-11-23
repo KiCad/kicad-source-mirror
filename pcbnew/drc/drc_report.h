@@ -45,6 +45,7 @@ private:
     std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_ratsnestProvider;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_fpWarningsProvider;
+    int                                m_reportedSeverities;
 };
 
 

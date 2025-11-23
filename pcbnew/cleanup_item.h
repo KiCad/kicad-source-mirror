@@ -78,6 +78,11 @@ public:
     {
     }
 
+    int GetSeverities() const override
+    {
+        return 0;
+    }
+
     int  GetCount( int aSeverity = -1 ) const override
     {
         return m_sourceVector->size();

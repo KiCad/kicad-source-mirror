@@ -58,6 +58,7 @@ private:
     SCHEMATIC*                         m_sch;
     EDA_UNITS                          m_reportUnits;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
+    int                                m_reportedSeverities;
 };
 
 

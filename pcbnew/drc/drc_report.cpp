@@ -28,6 +28,8 @@
 #include <macros.h>
 #include <json_common.h>
 #include <rc_json_schema.h>
+#include <string_utils.h>
+#include <widgets/report_severity.h>
 
 
 DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
@@ -38,9 +40,11 @@ DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
         m_reportUnits( aReportUnits ),
         m_markersProvider( std::move( aMarkersProvider ) ),
         m_ratsnestProvider( std::move( aRatsnestProvider ) ),
-        m_fpWarningsProvider( std::move( aFpWarningsProvider ) )
+        m_fpWarningsProvider( std::move( aFpWarningsProvider ) ),
+        m_reportedSeverities( 0 )
 {
-
+    if( m_markersProvider )
+        m_reportedSeverities = m_markersProvider->GetSeverities();
 }
 
 
@@ -62,6 +66,8 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
     fprintf( fp, "** Drc report for %s **\n", TO_UTF8( fn.GetFullName() ) );
 
     fprintf( fp, "** Created on %s **\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
+
+    fprintf( fp, "** Report includes: %s **\n", TO_UTF8( formatSeverities( m_reportedSeverities ) ) );
 
     count = m_markersProvider->GetCount();
 
@@ -128,6 +134,16 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );
+
+    // Document which severities are included in this report
+    if( m_reportedSeverities & RPT_SEVERITY_ERROR )
+        reportHead.included_severities.push_back( wxS( "error" ) );
+
+    if( m_reportedSeverities & RPT_SEVERITY_WARNING )
+        reportHead.included_severities.push_back( wxS( "warning" ) );
+
+    if( m_reportedSeverities & RPT_SEVERITY_EXCLUSION )
+        reportHead.included_severities.push_back( wxS( "exclusion" ) );
 
     for( int i = 0; i < m_markersProvider->GetCount(); ++i )
     {
