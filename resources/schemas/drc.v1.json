@@ -50,6 +50,18 @@
         "mils",
         "in"
       ]
+    },
+    "included_severities": {
+      "type": "array",
+      "description": "List of severities included in this report (e.g., error, warning, exclusion)",
+      "items": {
+        "type": "string",
+        "enum": [
+          "error",
+          "warning",
+          "exclusion"
+        ]
+      }
     }
   },
   "required": [

@@ -186,6 +186,7 @@ set( KICOMMON_SRCS
     widgets/kistatusbar.cpp
     widgets/number_badge.cpp
     widgets/progress_reporter_base.cpp
+    widgets/report_severity.cpp
     widgets/std_bitmap_button.cpp
     widgets/ui_common.cpp
     widgets/wx_grid.cpp

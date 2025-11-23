@@ -105,10 +105,12 @@ struct DRC_REPORT : REPORT_BASE
     std::vector<VIOLATION>                 violations;
     std::vector<VIOLATION>                 unconnected_items;
     std::vector<VIOLATION>                 schematic_parity;
+    std::vector<wxString>                  included_severities;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, $schema, source, date, kicad_version, violations,
-                                    unconnected_items, schematic_parity, coordinate_units )
+                                    unconnected_items, schematic_parity, coordinate_units,
+                                    included_severities )
 
 
 struct ERC_SHEET
@@ -126,10 +128,11 @@ struct ERC_REPORT : REPORT_BASE
     ERC_REPORT() { type = wxS( "erc" ); }
 
     std::vector<ERC_SHEET> sheets;
+    std::vector<wxString>  included_severities;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_REPORT, $schema, source, date, kicad_version, sheets,
-                                    coordinate_units )
+                                    coordinate_units, included_severities )
 
 } // namespace RC_JSON
 
