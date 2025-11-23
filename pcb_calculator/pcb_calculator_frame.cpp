@@ -312,13 +312,11 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         PANEL_RF_ATTENUATORS*     attenPanel       = GetCalculator<PANEL_RF_ATTENUATORS>();
         PANEL_VIA_SIZE*           viaSizePanel     = GetCalculator<PANEL_VIA_SIZE>();
         PANEL_REGULATOR*          regulPanel       = GetCalculator<PANEL_REGULATOR>();
-        PANEL_ELECTRICAL_SPACING* elecSpacingPanel = GetCalculator<PANEL_ELECTRICAL_SPACING>();
 
         wxASSERT( translinePanel );
         wxASSERT( attenPanel );
         wxASSERT( viaSizePanel );
         wxASSERT( regulPanel );
-        wxASSERT( elecSpacingPanel );
 
         {
             wxCommandEvent event2( wxEVT_RADIOBUTTON );

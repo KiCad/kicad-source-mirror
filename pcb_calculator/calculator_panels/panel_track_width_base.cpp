@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerTW_Prms;
-	sbSizerTW_Prms = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Parameters") ), wxVERTICAL );
+	sbSizerTW_Prms = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Parameters") ), wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizerTWprms;
 	fgSizerTWprms = new wxFlexGridSizer( 4, 3, 0, 0 );

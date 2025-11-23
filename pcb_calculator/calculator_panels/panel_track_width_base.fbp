@@ -78,7 +78,7 @@
                 <property name="label">Parameters</property>
                 <property name="minimum_size"></property>
                 <property name="name">sbSizerTW_Prms</property>
-                <property name="orient">wxVERTICAL</property>
+                <property name="orient">wxHORIZONTAL</property>
                 <property name="parent">1</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
