@@ -39,6 +39,7 @@
 #include <wx/log.h>
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
+#include <libeval/numeric_evaluator.h>
 #include "locale_io.h"
 
 
@@ -974,7 +975,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 bool ApplyModifier( double& value, const wxString& aString )
 {
     /// Although the two 'μ's look the same, they are U+03BC and U+00B5
-    static const wxString modifiers( wxT( "pnuµμmkKM" ) );
+    static const wxString modifiers( wxT( "afpnuµμmkKMGTPE" ) );
 
     if( !aString.length() )
         return false;
@@ -1004,6 +1005,10 @@ bool ApplyModifier( double& value, const wxString& aString )
         return false;
     }
 
+    if( modifier == 'a' )
+        value *= 1.0e-18;
+    else if( modifier == 'f' )
+        value *= 1.0e-15;
     if( modifier == 'p' )
         value *= 1.0e-12;
     if( modifier == 'n' )
@@ -1018,6 +1023,12 @@ bool ApplyModifier( double& value, const wxString& aString )
         value *= 1.0e6;
     else if( modifier == 'G' )
         value *= 1.0e9;
+    else if( modifier == 'T' )
+        value *= 1.0e12;
+    else if( modifier == 'P' )
+        value *= 1.0e15;
+    else if( modifier == 'E' )
+        value *= 1.0e18;
 
     return true;
 }
@@ -1203,6 +1214,7 @@ int SplitString( const wxString& strToSplit,
                  wxString* strEnd )
 {
     static const wxString separators( wxT( ".," ) );
+    wxUniChar             infix = 0;
 
     // Clear all the return strings
     strBeginning->Empty();
@@ -1237,8 +1249,26 @@ int SplitString( const wxString& strToSplit,
 
         for( ; ii >= 0; ii-- )
         {
-            if( !wxIsdigit( strToSplit[ii] ) && separators.Find( strToSplit[ii] ) < 0 )
+            double    dummy;
+            wxUniChar c = strToSplit[ii];
+
+            if( wxIsdigit( c ) )
+            {
+                continue;
+            }
+            if( infix == 0 && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &dummy ) )
+            {
+                infix = c;
+                continue;
+            }
+            else if( separators.Find( strToSplit[ii] ) >= 0 )
+            {
+                continue;
+            }
+            else
+            {
                 break;
+            }
         }
 
         // If all that was left was digits, then just set the digits string
@@ -1251,6 +1281,12 @@ int SplitString( const wxString& strToSplit,
         {
             *strDigits    = strToSplit.substr( ii + 1, position - ii - 1 );
             *strBeginning = strToSplit.substr( 0, ii + 1 );
+        }
+
+        if( infix > 0 )
+        {
+            strDigits->Replace( infix, '.' );
+            *strEnd = infix + *strEnd;
         }
     }
 

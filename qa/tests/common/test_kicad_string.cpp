@@ -116,6 +116,30 @@ BOOST_AUTO_TEST_CASE( NaturalNumberCompare )
 }
 
 
+BOOST_AUTO_TEST_CASE( ValueCompare )
+{
+    using CASE = std::pair<std::pair<wxString, wxString>, int>;
+
+    const std::vector<CASE> cases = {
+            { { "100", "10" }, 1 },
+            { { "10K", "1K" }, 1 },
+            { { "10K", "1K5" }, 1 },
+            { { "10K", "10,000" }, 0 },
+            { { "1K5", "1.5K" }, 0 },
+            { { "1K5", "1,5K" }, 0 },
+            { { "K5", "1K" }, -1 },
+            { { "1K5", "K55" }, 1 },
+            { { "1u5F", "1.5uF" }, 0 },
+    };
+
+    for( const auto& c : cases )
+    {
+        BOOST_CHECK_MESSAGE( ValueStringCompare( c.first.first, c.first.second ) == c.second,
+                             c.first.first + " AND " + c.first.second + " failed" );
+    }
+}
+
+
 /**
  * Test the #GetTrailingInt method.
  */

@@ -192,11 +192,55 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
 }
 
 
+// Support for old school decimal separators (ie: "2K2")
+bool NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( char ch, double* siScaler )
+{
+    switch( ch )
+    {
+    case 'a': *siScaler = 1.0e-18; return true;
+    case 'f': *siScaler = 1.0e-15; return true;
+    case 'p': *siScaler = 1.0e-12; return true;
+    case 'n': *siScaler = 1.0e-9;  return true;
+    case 'u': *siScaler = 1.0e-6;  return true;
+    case 'm': *siScaler = 1.0e-3;  return true;
+    case 'k':
+    case 'K': *siScaler = 1.0e3;   return true;
+    case 'M': *siScaler = 1.0e6;   return true;
+    case 'G': *siScaler = 1.0e9;   return true;
+    case 'T': *siScaler = 1.0e12;  return true;
+    case 'P': *siScaler = 1.0e15;  return true;
+    case 'E': *siScaler = 1.0e18;  return true;
+    default:                       return false;
+    }
+};
+
+
+bool NUMERIC_EVALUATOR::IsDecimalSeparator( char ch, char localeSeparator, bool allowInfixNotation )
+{
+    double dummy;
+
+    if( ch == localeSeparator || ch == '.' || ch == ',' )
+        return true;
+
+    if( allowInfixNotation && IsOldSchoolDecimalSeparator( ch, &dummy ) )
+        return true;
+
+    return false;
+};
+
+
+bool NUMERIC_EVALUATOR::IsDigit( char ch )
+{
+    // the below static cast is to avoid partial unicode chars triggering an assert in isdigit on msvc
+    return isdigit( static_cast<unsigned char>( ch ) );
+}
+
+
 NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
 {
-    Token retval;
-    size_t idx;
+    bool allowInfix = m_defaultUnits == Unit::SI;
 
+    Token retval;
     retval.token = ENDS;
     retval.value.dValue = 0;
     retval.value.valid = false;
@@ -211,43 +255,6 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     if( m_token.pos >= m_token.inputLen )
         return retval;
 
-    // Support for old school decimal separators (ie: "2K2")
-    auto isOldSchoolDecimalSeparator =
-            []( char ch, double* siScaler ) -> bool
-            {
-                switch( ch )
-                {
-                case 'a': *siScaler = 1.0e-18; return true;
-                case 'f': *siScaler = 1.0e-15; return true;
-                case 'p': *siScaler = 1.0e-12; return true;
-                case 'n': *siScaler = 1.0e-9;  return true;
-                case 'u': *siScaler = 1.0e-6;  return true;
-                case 'm': *siScaler = 1.0e-3;  return true;
-                case 'k':
-                case 'K': *siScaler = 1.0e3;   return true;
-                case 'M': *siScaler = 1.0e6;   return true;
-                case 'G': *siScaler = 1.0e9;   return true;
-                case 'T': *siScaler = 1.0e12;  return true;
-                case 'P': *siScaler = 1.0e15;  return true;
-                case 'E': *siScaler = 1.0e18;  return true;
-                default:                       return false;
-                }
-            };
-
-    auto isDecimalSeparator =
-            [&]( char ch ) -> bool
-            {
-                double dummy;
-
-                if( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' )
-                    return true;
-
-                if( m_defaultUnits == Unit::SI && isOldSchoolDecimalSeparator( ch, &dummy ) )
-                    return true;
-
-                return false;
-            };
-
     // Lambda: get value as string, store into clToken.token and update current index.
     auto extractNumber =
             [&]( double* aScaler )
@@ -256,18 +263,18 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                 double siScaler = 1.0;
                 char   ch = m_token.input[ m_token.pos ];
 
-                idx = 0;
+                size_t idx = 0;
 
                 do
                 {
-                    if( isDecimalSeparator( ch ) )
+                    if( IsDecimalSeparator( ch, m_localeDecimalSeparator, allowInfix ) )
                     {
                         if( haveSeparator )
                             break;
                         else
                             haveSeparator = true;
 
-                        if( isOldSchoolDecimalSeparator( ch, &siScaler ) )
+                        if( IsOldSchoolDecimalSeparator( ch, &siScaler ) )
                             *aScaler = siScaler;
 
                         m_token.token[ idx++ ] = m_localeDecimalSeparator;
@@ -279,9 +286,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
 
                     ch = m_token.input[++m_token.pos];
 
-                    // the below static cast is to avoid partial unicode chars triggering an
-                    // assert in isdigit on msvc
-                } while( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) );
+                } while( IsDigit( ch ) || IsDecimalSeparator( ch, m_localeDecimalSeparator, allowInfix ) );
 
                 m_token.token[ idx ] = 0;
             };
@@ -385,8 +390,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                     return Unit::Mil;
                 }
 
-                if( m_defaultUnits == Unit::SI && sizeLeft >= 1
-                        && isOldSchoolDecimalSeparator( ch, siScaler ) )
+                if( allowInfix && sizeLeft >= 1 && IsOldSchoolDecimalSeparator( ch, siScaler ) )
                 {
                     m_token.pos++;
                     return Unit::SI;
@@ -415,10 +419,8 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     {
         /* End of input */
     }
-    else if( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) )
+    else if( IsDigit( ch ) || IsDecimalSeparator( ch, m_localeDecimalSeparator, allowInfix ) )
     {
-        // the above static cast is to avoid partial unicode chars triggering an assert in
-        // isdigit on msvc
         // VALUE
         extractNumber( &siScaler );
         retval.token = VALUE;
