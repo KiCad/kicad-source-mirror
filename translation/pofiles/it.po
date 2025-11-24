@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-14 12:51+0000\n"
+"PO-Revision-Date: 2025-11-25 08:27+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -17000,19 +17000,16 @@ msgid "Nickname and path cannot be empty."
 msgstr "Il nome pin non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Il denominatore non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Il testo non può essere vuoto."
+msgstr "Il percorso non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Errore denominazione libreria"
+msgstr "Errore tabella librerie"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:478
 #, c-format
@@ -17255,9 +17252,9 @@ msgstr "Nessun simbolo selezionato da salvare."
 
 #: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1149
 #: pcbnew/pcbnew_jobs_handler.cpp:1791
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Era atteso %s"
+msgstr "Esportazione %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1059 pcbnew/pcbnew_jobs_handler.cpp:1671
 msgid "Output path must not conflict with existing path\n"
