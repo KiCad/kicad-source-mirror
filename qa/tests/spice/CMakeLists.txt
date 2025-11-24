@@ -86,7 +86,6 @@ target_link_libraries( qa_spice
 PRIVATE
     eeschema_kiface_objects
     common
-    pcbcommon
     scripting
     kimath
     qa_utils
