@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-14 10:51+0000\n"
+"PO-Revision-Date: 2025-11-25 08:27+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -12502,11 +12502,12 @@ msgstr ""
 "generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad "
 "e possano essere aggiunti all'elenco con il pulsante **+**. \n"
 " \n"
-"**Nota:** su Windows esiste l'opzione aggiuntiva **Mostra finestra console**"
-". Se l'opzione è deselezionata, i generatori DIBA vengono eseguiti in una "
-"finestra console nascosta e qualsiasi messaggio in uscita viene "
-"reindirizzato lì. Se l'opzione è selezionata, i generatori DIBA vengono "
-"eseguiti in una finestra console visibile. \n"
+"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra "
+"console**. Quando questa opzione è deselezionata, i generatori DIBA vengono "
+"eseguiti in una finestra console nascosta e qualsiasi messaggio in uscita "
+"viene reindirizzato nella finestra di dialogo. Quando questa opzione è "
+"selezionata, i generatori DIBA vengono eseguiti in una finestra console "
+"visibile. \n"
 " \n"
 "# 3. Generatori personalizzati e righe di comando \n"
 " \n"
@@ -12959,9 +12960,8 @@ msgstr ""
 "Lo schema non è completamente annotato. I risultati ERC saranno incompleti."
 
 #: eeschema/dialogs/dialog_erc.cpp:222 pcbnew/dialogs/dialog_drc.cpp:275
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Elementi selezionati"
+msgstr "Elementi selezionati controllo incrociato"
 
 #: eeschema/dialogs/dialog_erc.cpp:223
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
@@ -14761,14 +14761,12 @@ msgstr "Nomi visualizzati delle unità (facoltativi):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:348
 #: eeschema/lib_symbol.cpp:2154
-#, fuzzy
 msgid "Body Styles"
-msgstr "Stile corpo"
+msgstr "Stili corpo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:350
-#, fuzzy
 msgid "Single body style"
-msgstr "Comune a tutti gli stili del corpo"
+msgstr "Stile corpo singolo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
@@ -14779,9 +14777,8 @@ msgid "Custom body styles:"
 msgstr "Stili corpo personalizzati:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:433
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "Stile corpo"
+msgstr "Unità e stili corpo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:441
 msgid "Footprint filters:"
@@ -14814,9 +14811,8 @@ msgid "Footprint Filters"
 msgstr "Filtri impronte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:489
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "Le piazzole con numeri duplicati sono ponticelli"
+msgstr "Tutti i pin con numeri duplicati sono ponticelli"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:511
@@ -14830,9 +14826,8 @@ msgstr ""
 "tra loro internamente."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
-#, fuzzy
 msgid "Explicit jumper pin groups:"
-msgstr "Gruppi di piazzole ponticelli espliciti:"
+msgstr "Gruppi di pin ponticelli espliciti:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:552
 msgid "Pin Connections"
@@ -14918,11 +14913,12 @@ msgstr "Nome pin alternativo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:225
 #: eeschema/dialogs/dialog_symbol_properties.cpp:350
-#, fuzzy
 msgid ""
 "Alternate pin assignments are not available for symbols with multiple body "
 "styles."
-msgstr "Assegnazioni pin alternative non disponibili per i simboli De Morgan."
+msgstr ""
+"Assegnazioni pin alternative non disponibili per i simboli con stili di "
+"corpo multipli."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:303
 msgid "Exit sync pins mode"
@@ -15025,9 +15021,8 @@ msgstr "Comune a tutte le &unità nel simbolo"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "Comune a tutti gli stili del corpo"
+msgstr "Comune a tutti gli &stili di corpo"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -15434,9 +15429,8 @@ msgid "Formatting preferences"
 msgstr "Preferenze formattazione"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Annotation preferences"
-msgstr "Preferenze formattazione"
+msgstr "Preferenze annotazione"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
@@ -16462,9 +16456,9 @@ msgid "#"
 msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "I primi %d campi sono obbligatori."
+msgstr "I primi %d campi sono obbligatori e i nomi non possono essere cambiati."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:857
 #, c-format
@@ -16472,9 +16466,8 @@ msgid "Field name %s already exists."
 msgstr "Il nome campo %s esiste già."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:936
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "Recupera simboli"
+msgstr "Includi simboli 'DNP'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:937
 msgid ""
@@ -16486,9 +16479,8 @@ msgstr ""
 "nell'esportazione."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:942
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "Mostra 'Escluso dalla DIBA'"
+msgstr "Includi i simboli 'Esclusi dalla DIBA'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
 msgid ""
@@ -16500,23 +16492,24 @@ msgstr ""
 "nell'esportazione."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:950
-#, fuzzy
 msgid "Highlight on Cross-probe"
-msgstr "Evidenzia collegamenti sottoposti ad analisi-incrociata"
+msgstr "Evidenzia sulle analisi-incrociate"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:951
-#, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "Evidenzia i simboli corrispondenti alle impronte selezionate"
+msgstr ""
+"Evidenzia gli elementi corrispondenti sulla scheda se selezionati nella "
+"tabella"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
 msgid "Select on Cross-probe"
 msgstr "Seleziona sul controllo incrociato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
-#, fuzzy
 msgid "Select corresponding item on canvas when it is selected in the table"
-msgstr "Seleziona gli elementi corrispondenti nell'editor dello schema"
+msgstr ""
+"Seleziona gli elementi corrispondenti nell'area di lavoro se selezionati "
+"nella tabella"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1142
 msgid "The Quantity column cannot be grouped by."
@@ -16592,29 +16585,25 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2610
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2669
-#, fuzzy
 msgid "Add new variant name:"
-msgstr "Inserire nome impronta:"
+msgstr "Aggiungi nuovo nome variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2610
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2669
-#, fuzzy
 msgid "New Variant"
-msgstr "Nuova impronta"
+msgstr "Nuova variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:71
-#, fuzzy
 msgid "Add a new field"
-msgstr "Aggiungi campo"
+msgstr "Aggiungi nuovo campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:76
 msgid "Rename selected field"
 msgstr "Rinomina campo selezionato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:84
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Rimuovi file incorporato"
+msgstr "Rimuovi campo selezionato"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:96
 msgid "Variants:"
@@ -16625,19 +16614,16 @@ msgid "View presets:"
 msgstr "Visualizza preimpostazioni:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Entire Project"
-msgstr "Intero progetto"
+msgstr "Progetto intero"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Current Sheet Only"
 msgstr "Solo foglio corrente"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:184
-#, fuzzy
 msgid "Current Sheet and Down"
-msgstr "Solo foglio corrente"
+msgstr "Foglio corrente e sottostanti"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
 msgid "Edit"
@@ -17238,9 +17224,8 @@ msgid "_1"
 msgstr "_1"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:113
-#, fuzzy
 msgid "Allow reference reuse"
-msgstr "Preferenze finestra"
+msgstr "Permetti riuso riferimento"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:147
 msgid ""
@@ -17333,7 +17318,6 @@ msgid "Show hidden fields"
 msgstr "Mostra i campi nascosti"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
-#, fuzzy
 msgid "Show directive labels"
 msgstr "Mostra etichette direttive"
 
@@ -17392,9 +17376,8 @@ msgstr ""
 "(il colore di evidenziazione può essere modificato nella pagina \"Colori\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:192
-#, fuzzy
 msgid "Net collision marker width:"
-msgstr "Larghezza linea predefinita:"
+msgstr "Larghezza marcatore collisione collegamento:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:200
 msgid "Highlight thickness:"
@@ -18064,19 +18047,16 @@ msgid "Nickname and path cannot be empty."
 msgstr "Il nome pin non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:546
-#, fuzzy
 msgid "Nickname cannot be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Il denominatore non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:551
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Il testo non può essere vuoto."
+msgstr "Il percorso non può essere vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:564
-#, fuzzy
 msgid "Library Table Error"
-msgstr "Errore denominazione libreria"
+msgstr "Errore tabella librerie"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:572
 #, c-format
@@ -18313,9 +18293,9 @@ msgstr "Impossibile creare la cartella risultati '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:1021 pcbnew/pcbnew_jobs_handler.cpp:1358
 #: pcbnew/pcbnew_jobs_handler.cpp:2085
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Importazione %s"
+msgstr "Esportazione %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1051 pcbnew/pcbnew_jobs_handler.cpp:1962
 msgid "Output path must not conflict with existing path\n"
