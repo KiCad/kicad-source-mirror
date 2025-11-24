@@ -208,7 +208,16 @@ int COMMON_CONTROL::Execute( const wxString& aExecutible, const wxString& aParam
 {
     TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( aExecutible );
 
-    long pid = ExecuteFile( aExecutible, aParam, callback, false );
+    bool isKicadBinary = false;
+
+    if( aExecutible == GERBVIEW_EXE || aExecutible == BITMAPCONVERTER_EXE
+        || aExecutible == PCB_CALCULATOR_EXE || aExecutible == PL_EDITOR_EXE
+        || aExecutible == EESCHEMA_EXE || aExecutible == PCBNEW_EXE )
+    {
+        isKicadBinary = true;
+    }
+
+    long pid = ExecuteFile( aExecutible, aParam, callback, isKicadBinary );
 
     if( pid > 0 )
     {
