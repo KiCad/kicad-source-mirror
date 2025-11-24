@@ -885,11 +885,11 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
     VECTOR2I   pos;
     wxString   value = aValue;
 
-    switch( aCol )
+    if( aCol != FDC_VALUE )
+        value.Trim( true ).Trim( false );
+
+    if( aCol == FDC_TEXT_SIZE || aCol == FDC_POSX || aCol == FDC_POSY )
     {
-    case FDC_TEXT_SIZE:
-    case FDC_POSX:
-    case FDC_POSY:
         m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
 
         if( m_eval->Process( value ) )
@@ -897,11 +897,6 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
             m_evalOriginal[ { aRow, aCol } ] = value;
             value = m_eval->Result();
         }
-
-        break;
-
-    default:
-        break;
     }
 
     switch( aCol )
@@ -911,7 +906,6 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case FDC_VALUE:
-    {
         if( m_parentType == SCH_SHEET_T && field.GetId() == FIELD_T::SHEET_FILENAME )
         {
             value = EnsureFileExtension( value, FILEEXT::KiCadSchematicFileExtension );
@@ -923,7 +917,6 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
         field.SetText( UnescapeString( value ) );
         break;
-    }
 
     case FDC_SHOWN:
         field.SetVisible( BoolFromString( value ) );
@@ -986,8 +979,7 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( VECTOR2I( m_frame->ValueFromString( value ),
-                                     m_frame->ValueFromString( value ) ) );
+        field.SetTextSize( VECTOR2I( m_frame->ValueFromString( value ), m_frame->ValueFromString( value ) ) );
         break;
 
     case FDC_ORIENTATION:

@@ -345,13 +345,15 @@ void PCB_FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue
     VECTOR2I  pos;
     wxString  value = aValue;
 
-    switch( aCol )
+    if( aCol != PFC_VALUE )
+        value.Trim( true ).Trim( false );
+
+    if( aCol == PFC_WIDTH
+     || aCol == PFC_HEIGHT
+     || aCol == PFC_THICKNESS
+     || aCol == PFC_XOFFSET
+     || aCol == PFC_YOFFSET )
     {
-    case PFC_WIDTH:
-    case PFC_HEIGHT:
-    case PFC_THICKNESS:
-    case PFC_XOFFSET:
-    case PFC_YOFFSET:
         m_eval->SetDefaultUnits( m_frame->GetUserUnits() );
 
         if( m_eval->Process( value ) )
@@ -359,11 +361,6 @@ void PCB_FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue
             m_evalOriginal[ { aRow, aCol } ] = value;
             value = m_eval->Result();
         }
-
-        break;
-
-    default:
-        break;
     }
 
     switch( aCol )
