@@ -62,10 +62,10 @@ wxString ERC_REPORT::GetTextReport()
     LOCALE_IO      locale;
     UNITS_PROVIDER unitsProvider( schIUScale, m_reportUnits );
 
-    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ),
+    wxString msg = wxString::Format( wxT( "ERC report (%s, Encoding UTF8)\n" ),
                                      GetISO8601CurrentDateTime() );
 
-    msg += wxString::Format( _( "Report includes: %s\n" ),
+    msg += wxString::Format( wxT( "Report includes: %s\n" ),
                              formatSeverities( m_reportedSeverities ) );
 
     std::map<KIID, EDA_ITEM*> itemMap;
@@ -94,7 +94,7 @@ wxString ERC_REPORT::GetTextReport()
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
+        msg << wxString::Format( wxT( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
 
         for( ERC_ITEM* item : orderedItems[sheetList[i]] )
         {
@@ -113,7 +113,7 @@ wxString ERC_REPORT::GetTextReport()
         }
     }
 
-    msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ), total_count,
+    msg << wxString::Format( wxT( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ), total_count,
                              err_count, warn_count );
 
     return msg;
