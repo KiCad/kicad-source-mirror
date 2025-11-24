@@ -50,6 +50,24 @@
           "exclusion"
         ]
       }
+    },
+    "ignored_checks": {
+      "type": "array",
+      "description": "List of checks that are ignored (severity set to ignore)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Machine-readable settings key for the ignored check"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the ignored check"
+          }
+        },
+        "required": ["key", "description"]
+      }
     }
   },
   "required": [

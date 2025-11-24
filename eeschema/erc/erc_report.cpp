@@ -116,6 +116,24 @@ wxString ERC_REPORT::GetTextReport()
     msg << wxString::Format( wxT( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ), total_count,
                              err_count, warn_count );
 
+    msg << _( "\n ** Ignored checks:\n" );
+
+    bool hasIgnored = false;
+
+    for( const RC_ITEM& item : ERC_ITEM::GetItemsWithSeverities() )
+    {
+        int code = item.GetErrorCode();
+
+        if( code > 0 && settings.GetSeverity( code ) == RPT_SEVERITY_IGNORE )
+        {
+            msg << wxString::Format( wxT( "    - %s\n" ), item.GetErrorMessage() );
+            hasIgnored = true;
+        }
+    }
+
+    if( !hasIgnored )
+        msg << wxT( "    - " ) << _( "None" ) << wxT( "\n" );
+
     return msg;
 }
 
@@ -194,6 +212,19 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         }
 
         reportHead.sheets.push_back( jsonSheet );
+    }
+
+    for( const RC_ITEM& item : ERC_ITEM::GetItemsWithSeverities() )
+    {
+        int code = item.GetErrorCode();
+
+        if( code > 0 && settings.GetSeverity( code ) == RPT_SEVERITY_IGNORE )
+        {
+            RC_JSON::IGNORED_CHECK ignoredCheck;
+            ignoredCheck.key = item.GetSettingsKey();
+            ignoredCheck.description = item.GetErrorMessage();
+            reportHead.ignored_checks.push_back( ignoredCheck );
+        }
     }
 
     nlohmann::json saveJson = nlohmann::json( reportHead );

@@ -114,6 +114,23 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
+    fprintf( fp, "\n** Ignored checks **\n" );
+
+    bool hasIgnored = false;
+
+    for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
+    {
+        int code = item.GetErrorCode();
+
+        if( code > 0 && bds.Ignore( code ) )
+        {
+            fprintf( fp, "    - %s\n", TO_UTF8( item.GetErrorMessage() ) );
+            hasIgnored = true;
+        }
+    }
+
+    if( !hasIgnored )
+        fprintf( fp, "    - %s\n", TO_UTF8( _( "None" ) ) );
 
     fprintf( fp, "\n** End of Report **\n" );
 
@@ -188,6 +205,18 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         reportHead.schematic_parity.push_back( violation );
     }
 
+    for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
+    {
+        int code = item.GetErrorCode();
+
+        if( code > 0 && bds.Ignore( code ) )
+        {
+            RC_JSON::IGNORED_CHECK ignoredCheck;
+            ignoredCheck.key = item.GetSettingsKey();
+            ignoredCheck.description = item.GetErrorMessage();
+            reportHead.ignored_checks.push_back( ignoredCheck );
+        }
+    }
 
     nlohmann::json saveJson = nlohmann::json( reportHead );
     jsonFileStream << std::setw( 4 ) << saveJson << std::endl;

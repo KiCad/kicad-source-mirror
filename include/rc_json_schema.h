@@ -87,6 +87,15 @@ inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
 }
 
 
+struct IGNORED_CHECK
+{
+    wxString key;
+    wxString description;
+};
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( IGNORED_CHECK, key, description )
+
+
 struct REPORT_BASE
 {
     wxString $schema;
@@ -106,11 +115,12 @@ struct DRC_REPORT : REPORT_BASE
     std::vector<VIOLATION>                 unconnected_items;
     std::vector<VIOLATION>                 schematic_parity;
     std::vector<wxString>                  included_severities;
+    std::vector<IGNORED_CHECK>             ignored_checks;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, $schema, source, date, kicad_version, violations,
                                     unconnected_items, schematic_parity, coordinate_units,
-                                    included_severities )
+                                    included_severities, ignored_checks )
 
 
 struct ERC_SHEET
@@ -127,12 +137,13 @@ struct ERC_REPORT : REPORT_BASE
 {
     ERC_REPORT() { type = wxS( "erc" ); }
 
-    std::vector<ERC_SHEET> sheets;
-    std::vector<wxString>  included_severities;
+    std::vector<ERC_SHEET>     sheets;
+    std::vector<wxString>      included_severities;
+    std::vector<IGNORED_CHECK> ignored_checks;
 };
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_REPORT, $schema, source, date, kicad_version, sheets,
-                                    coordinate_units, included_severities )
+                                    coordinate_units, included_severities, ignored_checks )
 
 } // namespace RC_JSON
 
