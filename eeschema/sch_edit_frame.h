@@ -67,6 +67,7 @@ class DIALOG_SCHEMATIC_SETUP;
 class PROGRESS_REPORTER;
 class wxSearchCtrl;
 class BITMAP_BUTTON;
+class AI_ASSISTANT_PANEL;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -1061,6 +1062,7 @@ private:
 
     std::vector<LIB_ID>         m_designBlockHistoryList;
     SCH_DESIGN_BLOCK_PANE*      m_designBlocksPane;
+    AI_ASSISTANT_PANEL*         m_aiAssistantPanel;
 
     wxChoice*                   m_currentVariantCtrl;
 

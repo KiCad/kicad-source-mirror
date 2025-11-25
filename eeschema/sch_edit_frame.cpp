@@ -33,6 +33,7 @@
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <widgets/sch_design_block_pane.h>
+#include <widgets/ai_assistant_panel.h>
 #include <wx/srchctrl.h>
 #include <mail_type.h>
 #include <wx/clntdata.h>
@@ -165,7 +166,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_netNavigatorFilterValue(),
         m_netNavigatorMenuNetName(),
         m_highlightedConnChanged( false ),
-        m_designBlocksPane( nullptr )
+        m_designBlocksPane( nullptr ),
+        m_aiAssistantPanel( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( &Prj() );
@@ -231,6 +233,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_selectionFilterPanel = new PANEL_SCH_SELECTION_FILTER( this );
     m_designBlocksPane = new SCH_DESIGN_BLOCK_PANE( this, nullptr, m_designBlockHistoryList );
+    m_aiAssistantPanel = new AI_ASSISTANT_PANEL( this, this );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -265,6 +268,19 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
 
     m_auimgr.AddPane( m_designBlocksPane, defaultDesignBlocksPaneInfo( this ) );
+
+    m_auimgr.AddPane( m_aiAssistantPanel, EDA_PANE().Name( wxS( "AiAssistant" ) )
+                      .Right().Layer( 6 )
+                      .Caption( _( "AI Assistant" ) )
+                      .CaptionVisible( true )
+                      .PaneBorder( true )
+                      .TopDockable( false )
+                      .BottomDockable( false )
+                      .CloseButton( true )
+                      .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 300, 200 ) ) )
+                      .FloatingSize( FromDIP( wxSize( 800, 600 ) ) )
+                      .Show( true ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 

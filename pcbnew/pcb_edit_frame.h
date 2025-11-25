@@ -61,6 +61,7 @@ class ACTION_MENU;
 class TOOL_ACTION;
 class DIALOG_BOARD_SETUP;
 class PCB_DESIGN_BLOCK_PANE;
+class AI_ASSISTANT_PANEL;
 
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
@@ -856,6 +857,7 @@ private:
 
     std::vector<LIB_ID>    m_designBlockHistoryList;
     PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
+    AI_ASSISTANT_PANEL*    m_aiAssistantPanel;
 
     const std::map<std::string, UTF8>* m_importProperties; // Properties used for non-KiCad import.
 

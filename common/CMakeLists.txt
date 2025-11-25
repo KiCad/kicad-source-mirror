@@ -140,6 +140,8 @@ set( KICOMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
+    claude/claude_api_client.cpp
+
     libraries/library_manager.cpp
     libraries/library_table.cpp
     libraries/library_table_parser.cpp
@@ -520,6 +522,7 @@ if( KICAD_USE_SENTRY )
 endif()
 
 set( COMMON_WIDGET_SRCS
+    widgets/ai_assistant_panel.cpp
     widgets/app_progress_dialog.cpp
     widgets/wx_bitmap_combobox.cpp
     widgets/bitmap_toggle.cpp

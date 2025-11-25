@@ -115,6 +115,7 @@
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/pcb_net_inspector_panel.h>
+#include <widgets/ai_assistant_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
@@ -198,6 +199,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_footprintDiffDlg( nullptr ),
     m_boardSetupDlg( nullptr ),
     m_designBlocksPane( nullptr ),
+    m_aiAssistantPanel( nullptr ),
     m_importProperties( nullptr ),
     m_eventCounterTimer( nullptr )
 {
@@ -289,6 +291,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_searchPane = new PCB_SEARCH_PANE( this );
     m_netInspectorPanel = new PCB_NET_INSPECTOR_PANEL( this, this );
     m_designBlocksPane = new PCB_DESIGN_BLOCK_PANE( this, nullptr, m_designBlockHistoryList );
+    m_aiAssistantPanel = new AI_ASSISTANT_PANEL( this, this );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -341,6 +344,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_designBlocksPane, EDA_PANE().Name( DesignBlocksPaneName() )
                       .Right().Layer( 5 )
                       .Caption( _( "Design Blocks" ) )
+                      .CaptionVisible( true )
+                      .PaneBorder( true )
+                      .TopDockable( false )
+                      .BottomDockable( false ) );
+
+    m_auimgr.AddPane( m_aiAssistantPanel, EDA_PANE().Name( wxS( "AiAssistant" ) )
+                      .Right().Layer( 6 )
+                      .Caption( _( "AI Assistant" ) )
                       .CaptionVisible( true )
                       .PaneBorder( true )
                       .TopDockable( false )
