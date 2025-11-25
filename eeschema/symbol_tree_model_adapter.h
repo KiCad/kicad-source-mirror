@@ -62,14 +62,11 @@ protected:
      */
     SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, SYMBOL_LIBRARY_ADAPTER* aManager );
 
+    void loadColumnConfig() override;
+
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
 private:
-    /**
-     * Flag to only show the symbol library table load progress dialog the first time.
-     */
-    static bool        m_show_progress;
-
     SYMBOL_LIBRARY_ADAPTER*  m_adapter;
 
     std::set<wxString> m_pending_load_libraries;

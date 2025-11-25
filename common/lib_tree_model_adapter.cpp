@@ -128,10 +128,10 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey,
                                                 APP_SETTINGS_BASE::LIB_TREE& aSettingsStruct ) :
-        m_widget( nullptr ),
-        m_lazyLoadHandler( nullptr ),
         m_parent( aParent ),
         m_cfg( aSettingsStruct ),
+        m_widget( nullptr ),
+        m_lazyLoadHandler( nullptr ),
         m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
@@ -144,6 +144,16 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const w
 
     m_availableColumns = { _HKI( "Item" ), _HKI( "Description" ) };
 
+    loadColumnConfig();
+}
+
+
+LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
+{}
+
+
+void LIB_TREE_MODEL_ADAPTER::loadColumnConfig()
+{
     for( const std::pair<const wxString, int>& pair : m_cfg.column_widths )
         m_colWidths[pair.first] = pair.second;
 
@@ -155,10 +165,6 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const w
     if( m_shownColumns[0] != _HKI( "Item" ) )
         m_shownColumns.insert( m_shownColumns.begin(), _HKI( "Item" ) );
 }
-
-
-LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
-{}
 
 
 std::vector<wxString> LIB_TREE_MODEL_ADAPTER::GetOpenLibs() const

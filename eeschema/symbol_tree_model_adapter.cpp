@@ -36,33 +36,28 @@
 #include <trace_helpers.h>
 #include <libraries/symbol_library_adapter.h>
 
-bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
-
 #define PROGRESS_INTERVAL_MILLIS 33      // 30 FPS refresh rate
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent,
-                                   SYMBOL_LIBRARY_ADAPTER* aManager )
+SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent, SYMBOL_LIBRARY_ADAPTER* aManager )
 {
     auto* adapter = new SYMBOL_TREE_MODEL_ADAPTER( aParent, aManager );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent,
-                                                      SYMBOL_LIBRARY_ADAPTER* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs",
-                                aParent->GetViewerSettingsBase()->m_LibTree ),
+SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, SYMBOL_LIBRARY_ADAPTER* aLibs ) :
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs", aParent->GetViewerSettingsBase()->m_LibTree ),
         m_adapter( aLibs ),
         m_check_pending_libraries_timer( nullptr )
 {
+    m_colWidths[ GetDefaultFieldName( FIELD_T::VALUE, false ) ] = 300;
+    m_colWidths[ GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) ] = 600;
+    m_colWidths[ GetDefaultFieldName( FIELD_T::DATASHEET, false ) ] = 600;
+
     m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::VALUE, false ) );
     m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) );
-
-    // Description is always shown
-    //m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::DESCRIPTION, false ) );
-
     // Datasheet probably isn't useful, but better to leave that decision to the user:
     m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::DATASHEET, false ) );
 }
@@ -70,6 +65,21 @@ SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent,
 
 SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 {}
+
+
+void SYMBOL_TREE_MODEL_ADAPTER::loadColumnConfig()
+{
+    for( const std::pair<const wxString, int>& pair : m_cfg.column_widths )
+        m_colWidths[pair.first] = pair.second;
+
+    m_shownColumns = m_cfg.columns;
+
+    if( m_shownColumns.empty() )
+        m_shownColumns = {  _HKI( "Item" ), _HKI( "Description" ), GetDefaultFieldName( FIELD_T::VALUE, false ) };
+
+    if( m_shownColumns[0] != _HKI( "Item" ) )
+        m_shownColumns.insert( m_shownColumns.begin(), _HKI( "Item" ) );
+}
 
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )

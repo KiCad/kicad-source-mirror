@@ -353,6 +353,8 @@ protected:
     LIB_TREE_NODE_LIBRARY& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
                                              bool pinned );
 
+    virtual void loadColumnConfig();
+
     /**
      * Check whether a container has columns too
      */
@@ -426,18 +428,19 @@ protected:
     void recreateColumns();
     void createMissingColumns();
 
-    LIB_TREE_NODE_ROOT           m_tree;
-    std::map<unsigned, wxString> m_colIdxMap;
-    std::vector<wxString>        m_availableColumns;
-
-    wxDataViewCtrl*              m_widget;
-    std::vector<wxString>        m_shownColumns;   // Stored in display order
-    std::function<void()>        m_lazyLoadHandler;
-
-private:
+protected:
     EDA_BASE_FRAME*              m_parent;
     APP_SETTINGS_BASE::LIB_TREE& m_cfg;
 
+    LIB_TREE_NODE_ROOT           m_tree;
+    std::map<unsigned, wxString> m_colIdxMap;
+    std::vector<wxString>        m_availableColumns;
+    std::map<wxString, int>      m_colWidths;
+    std::vector<wxString>        m_shownColumns;   // Stored in display order
+    wxDataViewCtrl*              m_widget;
+    std::function<void()>        m_lazyLoadHandler;
+
+private:
     SORT_MODE                    m_sort_mode;
     bool                         m_show_units;
     LIB_ID                       m_preselect_lib_id;
@@ -448,7 +451,6 @@ private:
 
     std::vector<wxDataViewColumn*>               m_columns;
     std::map<wxString, wxDataViewColumn*>        m_colNameMap;
-    std::map<wxString, int>                      m_colWidths;
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

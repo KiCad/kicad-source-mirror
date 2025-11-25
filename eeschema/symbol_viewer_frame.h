@@ -171,7 +171,6 @@ private:
 
     static int          m_unit;
     static int          m_bodyStyle;
-    static bool         m_show_progress;
 
     /**
      * Updated to `true` if a list rewrite on GUI activation resulted in the symbol

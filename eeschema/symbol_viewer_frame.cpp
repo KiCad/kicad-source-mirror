@@ -75,7 +75,6 @@ LIB_ID SYMBOL_VIEWER_FRAME::m_currentSymbol;
 
 int SYMBOL_VIEWER_FRAME::m_unit = 1;
 int SYMBOL_VIEWER_FRAME::m_bodyStyle = 1;
-bool SYMBOL_VIEWER_FRAME::m_show_progress = true;
 
 
 BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
