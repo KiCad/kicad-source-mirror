@@ -360,9 +360,7 @@ protected:
         }
         else
         {
-            // Don't call commit.Modify(table) - we're removing individual cells
-            // The table structure changes when cells are removed, which confuses the commit system
-            // commit.Modify( table, getScreen() );
+            commit.Modify( table, getScreen() );
 
             VECTOR2I pos = table->GetPosition();
 
@@ -371,26 +369,8 @@ protected:
             for( int row = 0; row < table->GetRowCount(); ++row )
                 oldRowHeights[row] = table->GetRowHeight( row );
 
-            fprintf( stderr, "DELETE_ROW: Before DeleteMarkedCells: rows=%d, cells=%zu\n",
-                     table->GetRowCount(), table->GetCells().size() );
-
-            // Tell commit system about each cell being removed BEFORE deleting them
-            for( T_TABLECELL* cell : table->GetCells() )
-            {
-                if( cell->GetFlags() & STRUCT_DELETED )
-                {
-                    fprintf( stderr, "DELETE_ROW: Calling commit.Remove() for cell UUID=%s\n",
-                             cell->m_Uuid.AsString().c_str().AsChar() );
-                    // commit.Remove() should handle removing from view
-                    commit.Remove( cell, this->getScreen() );
-                }
-            }
-
             clearSelection();
             table->DeleteMarkedCells();
-
-            fprintf( stderr, "DELETE_ROW: After DeleteMarkedCells: rows=%d, cells=%zu\n",
-                     table->GetRowCount(), table->GetCells().size() );
 
             for( int row = 0; row < table->GetRowCount(); ++row )
             {
@@ -402,29 +382,21 @@ protected:
                         old_row++;
                 }
 
-                fprintf( stderr, "DELETE_ROW: Remapping row %d -> old_row %d (rowCount=%d)\n",
-                         row, old_row, table->GetRowCount() );
                 // Use saved old heights instead of querying the modified table
                 int height = ( oldRowHeights.count( old_row ) ) ? oldRowHeights[old_row] : 0;
                 table->SetRowHeight( row, height );
             }
 
-            fprintf( stderr, "DELETE_ROW: Before Normalize\n" );
             table->SetPosition( pos );
             table->Normalize();
-            fprintf( stderr, "DELETE_ROW: After Normalize\n" );
 
-            fprintf( stderr, "DELETE_ROW: Before PostEvent\n" );
             getToolMgr()->PostEvent( EVENTS::SelectedEvent );
-            fprintf( stderr, "DELETE_ROW: After PostEvent\n" );
         }
 
-        fprintf( stderr, "DELETE_ROW: Before commit.Push()\n" );
         if( deleted.size() > 1 )
             commit.Push( _( "Delete Rows" ) );
         else
             commit.Push( _( "Delete Row" ) );
-        fprintf( stderr, "DELETE_ROW: After commit.Push()\n" );
 
         return 0;
     }

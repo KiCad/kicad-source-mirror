@@ -253,10 +253,14 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
             SCH_TABLECELL* targetCell = table->GetCell( targetRow, targetCol );
             if( targetCell )
             {
-                // Return the fully evaluated/displayed text from the target cell
-                // Variables and expressions are evaluated in the target cell's context
-                // (e.g., ${ROW} in the target cell refers to the target's row, not the referencing cell's row)
-                // Increment aDepth to prevent infinite recursion in circular references
+                // Check for excessive recursion depth (circular references)
+                const int maxDepth = ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth;
+                if( aDepth >= maxDepth )
+                {
+                    *token = wxT( "<Circular reference>" );
+                    return true;
+                }
+
                 *token = targetCell->GetShownText( aSettings, aPath, aAllowExtraText, aDepth + 1 );
                 return true;
             }

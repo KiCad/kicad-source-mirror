@@ -1746,21 +1746,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         if( clipboardTable )
         {
-            // Regenerate UUIDs for the clipboard table and all its cells to avoid duplicates
-            wxLogDebug( "Regenerating UUIDs for clipboard table %s", clipboardTable->m_Uuid.AsString() );
-            const_cast<KIID&>( clipboardTable->m_Uuid ) = KIID();
-            wxLogDebug( "  New table UUID: %s", clipboardTable->m_Uuid.AsString() );
-
-            clipboardTable->RunOnChildren(
-                    []( SCH_ITEM* aChild )
-                    {
-                        KIID oldUuid = aChild->m_Uuid;
-                        const_cast<KIID&>( aChild->m_Uuid ) = KIID();
-                        wxLogDebug( "  Cell UUID changed from %s to %s",
-                                    oldUuid.AsString(), aChild->m_Uuid.AsString() );
-                    },
-                    RECURSE_MODE::RECURSE );
-
             SCH_EDIT_TABLE_TOOL* tableEditTool = m_toolMgr->GetTool<SCH_EDIT_TABLE_TOOL>();
 
             if( tableEditTool )
@@ -1867,18 +1852,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : tempScreen->Items() )
     {
-        fprintf( stderr, "PASTE: Item from clipboard: type=%s, UUID=%s\n",
-                 item->GetTypeDesc().c_str().AsChar(), item->m_Uuid.AsString().c_str().AsChar() );
-
         if( item->Type() == SCH_SHEET_T )
             sortedLoadedItems.push_back( item );
         else
-        {
             loadedItems.push_back( item );
-
-            if( item->Type() == SCH_TABLE_T )
-                fprintf( stderr, "PASTE:   -> TABLE added to loadedItems\n" );
-        }
     }
 
     sort( sortedLoadedItems.begin(), sortedLoadedItems.end(),
@@ -1921,9 +1898,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : loadedItems )
     {
-        fprintf( stderr, "PASTE: Processing loadedItem: type=%s, UUID=%s\n",
-                 item->GetTypeDesc().c_str().AsChar(), item->m_Uuid.AsString().c_str().AsChar() );
-
         KIID_PATH clipPath( wxT( "/" ) ); // clipboard is at root
 
         SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
@@ -1935,7 +1909,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_SYMBOL_T )
         {
-            wxLogDebug( "  -> Taking SYMBOL path" );
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             // The library symbol gets set from the cached library symbols in the current
@@ -2019,7 +1992,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            wxLogDebug( "  -> Taking SHEET path" );
             SCH_SHEET* sheet = (SCH_SHEET*) item;
             SCH_FIELD* nameField = sheet->GetField( FIELD_T::SHEET_NAME );
             wxString   baseName = nameField->GetText();
@@ -2104,28 +2076,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
         else
         {
-            fprintf( stderr, "PASTE:   -> Taking ELSE path (should be tables, labels, etc.)\n" );
             SCH_ITEM* srcItem = dynamic_cast<SCH_ITEM*>( itemMap[item->m_Uuid] );
             SCH_ITEM* destItem = dynamic_cast<SCH_ITEM*>( item );
 
             // Everything gets a new KIID
-            KIID oldUuid = item->m_Uuid;
             const_cast<KIID&>( item->m_Uuid ) = KIID();
-            fprintf( stderr, "PASTE: Changed UUID from %s to %s for %s\n",
-                     oldUuid.AsString().c_str().AsChar(), item->m_Uuid.AsString().c_str().AsChar(),
-                     item->GetTypeDesc().c_str().AsChar() );
-
-            destItem->RunOnChildren(
-                    []( SCH_ITEM* aChild )
-                    {
-                        KIID oldChildUuid = aChild->m_Uuid;
-                        const_cast<KIID&>( aChild->m_Uuid ) = KIID();
-                        fprintf( stderr, "PASTE:   Child: Changed UUID from %s to %s for %s\n",
-                                 oldChildUuid.AsString().c_str().AsChar(),
-                                 aChild->m_Uuid.AsString().c_str().AsChar(),
-                                 aChild->GetTypeDesc().c_str().AsChar() );
-                    },
-                    RECURSE_MODE::RECURSE );
 
             if( srcItem && destItem )
             {
