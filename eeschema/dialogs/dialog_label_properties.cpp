@@ -97,6 +97,9 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     if( !aNew )
         m_cbMultiLine->Show( false );
 
+    // multiline set of labels can be used only to create new labels
+    m_multilineAllowed = aNew && m_cbMultiLine->IsShown();
+
     switch( m_currentLabel->Type() )
     {
     case SCH_GLOBAL_LABEL_T:    SetTitle( _( "Global Label Properties" ) );           break;
@@ -809,14 +812,16 @@ void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_LABEL_PROPERTIES::onMultiLabelCheck( wxCommandEvent& event )
 {
+    bool multiLine = m_multilineAllowed && m_cbMultiLine->IsChecked();
+
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_LABEL_T )
     {
-        m_labelCombo->Show( !m_cbMultiLine->IsChecked() );
-        m_valueCombo->Show( !m_cbMultiLine->IsChecked() );
-        m_labelMultiLine->Show( m_cbMultiLine->IsChecked() );
-        m_valueMultiLine->Show( m_cbMultiLine->IsChecked() );
+        m_labelCombo->Show( !multiLine );
+        m_valueCombo->Show( !multiLine );
+        m_labelMultiLine->Show( multiLine );
+        m_valueMultiLine->Show( multiLine );
 
-        if( m_cbMultiLine->IsChecked() )
+        if( multiLine )
         {
             m_valueMultiLine->SetValue( m_valueCombo->GetValue() );
             m_activeTextEntry = m_valueMultiLine;
@@ -832,12 +837,12 @@ void DIALOG_LABEL_PROPERTIES::onMultiLabelCheck( wxCommandEvent& event )
     }
     else if( m_currentLabel->Type() == SCH_HIER_LABEL_T )
     {
-        m_labelSingleLine->Show( !m_cbMultiLine->IsChecked() );
-        m_valueSingleLine->Show( !m_cbMultiLine->IsChecked() );
-        m_labelMultiLine->Show( m_cbMultiLine->IsChecked() );
-        m_valueMultiLine->Show( m_cbMultiLine->IsChecked() );
+        m_labelSingleLine->Show( !multiLine );
+        m_valueSingleLine->Show( !multiLine );
+        m_labelMultiLine->Show( multiLine );
+        m_valueMultiLine->Show( multiLine );
 
-        if( m_cbMultiLine->IsChecked() )
+        if( multiLine )
         {
             m_valueMultiLine->SetValue( m_valueSingleLine->GetValue() );
             m_activeTextEntry = m_valueMultiLine;

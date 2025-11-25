@@ -88,4 +88,6 @@ private:
     wxString              m_previousLabelText;
 
     std::list<std::unique_ptr<SCH_LABEL_BASE>>* m_labelList;
+
+    bool m_multilineAllowed;    // set to true when a multine set of labels is in edit
 };
