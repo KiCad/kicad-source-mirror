@@ -192,24 +192,44 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
 }
 
 
-// Support for old school decimal separators (ie: "2K2")
-bool NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( char ch, double* siScaler )
+// Support for old school decimal separators (ie: "2K2") according to IEC 60062
+bool NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( wxUniChar ch, double* siScaler )
+{
+    if(      ch == 'p' )           { *siScaler = 1.0e-12; return true; }
+    else if( ch == 'n' )           { *siScaler = 1.0e-9;  return true; }
+    else if( ch == wxT( "µ" )[0] ) { *siScaler = 1.0e-6;  return true; }
+    else if( ch == wxT( "μ" )[0] ) { *siScaler = 1.0e-6;  return true; }
+    else if( ch == 'u' )           { *siScaler = 1.0e-6;  return true; }
+    else if( ch == 'm' )           { *siScaler = 1.0e-3;  return true; }
+    else if( ch == 'L' )           { *siScaler = 1.0e-3;  return true; }
+    else if( ch == 'R' )           { *siScaler = 1.0;     return true; }
+    else if( ch == 'F' )           { *siScaler = 1.0;     return true; }
+    else if( ch == 'k' )           { *siScaler = 1.0e3;   return true; }
+    else if( ch == 'K' )           { *siScaler = 1.0e3;   return true; }
+    else if( ch == 'M' )           { *siScaler = 1.0e6;   return true; }
+    else if( ch == 'G' )           { *siScaler = 1.0e9;   return true; }
+    else if( ch == 'T' )           { *siScaler = 1.0e12;  return true; }
+    else return false;
+};
+
+
+// Limited version of above for 8-bit chars
+bool NUMERIC_EVALUATOR::isOldSchoolDecimalSeparator( char ch, double* siScaler )
 {
     switch( ch )
     {
-    case 'a': *siScaler = 1.0e-18; return true;
-    case 'f': *siScaler = 1.0e-15; return true;
     case 'p': *siScaler = 1.0e-12; return true;
     case 'n': *siScaler = 1.0e-9;  return true;
     case 'u': *siScaler = 1.0e-6;  return true;
     case 'm': *siScaler = 1.0e-3;  return true;
-    case 'k':
+    case 'L': *siScaler = 1.0e-3;  return true;
+    case 'R': *siScaler = 1.0;     return true;
+    case 'F': *siScaler = 1.0;     return true;
+    case 'k': *siScaler = 1.0e3;   return true;
     case 'K': *siScaler = 1.0e3;   return true;
     case 'M': *siScaler = 1.0e6;   return true;
     case 'G': *siScaler = 1.0e9;   return true;
     case 'T': *siScaler = 1.0e12;  return true;
-    case 'P': *siScaler = 1.0e15;  return true;
-    case 'E': *siScaler = 1.0e18;  return true;
     default:                       return false;
     }
 };

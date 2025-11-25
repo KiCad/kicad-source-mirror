@@ -121,15 +121,17 @@ BOOST_AUTO_TEST_CASE( ValueCompare )
     using CASE = std::pair<std::pair<wxString, wxString>, int>;
 
     const std::vector<CASE> cases = {
-            { { "100", "10" }, 1 },
-            { { "10K", "1K" }, 1 },
-            { { "10K", "1K5" }, 1 },
-            { { "10K", "10,000" }, 0 },
-            { { "1K5", "1.5K" }, 0 },
-            { { "1K5", "1,5K" }, 0 },
-            { { "K5", "1K" }, -1 },
-            { { "1K5", "K55" }, 1 },
-            { { "1u5F", "1.5uF" }, 0 },
+            { { wxT( "100" ),  wxT( "10" ) },     1 },
+            { { wxT( "10K" ),  wxT( "1K" ) },     1 },
+            { { wxT( "10K" ),  wxT( "1K5" ) },    1 },
+            { { wxT( "10K" ),  wxT( "10,000" ) }, 0 },
+            { { wxT( "1K5" ),  wxT( "1.5K" ) },   0 },
+            { { wxT( "1K5" ),  wxT( "1,5K" ) },   0 },
+            { { wxT( "K5" ),   wxT( "1K" ) },    -1 },
+            { { wxT( "1K5" ),  wxT( "K55" ) },    1 },
+            { { wxT( "1R5" ),  wxT( "1.5" ) },    0 },
+            { { wxT( "1u5F" ), wxT( "1.5uF" ) },  0 },
+            { { wxT( "1µ5" ),  wxT( "1u5" ) },    0 },
     };
 
     for( const auto& c : cases )

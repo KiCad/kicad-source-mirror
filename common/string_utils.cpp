@@ -975,7 +975,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 bool ApplyModifier( double& value, const wxString& aString )
 {
     /// Although the two 'μ's look the same, they are U+03BC and U+00B5
-    static const wxString modifiers( wxT( "afpnuµμmkKMGTPE" ) );
+    static const wxString modifiers( wxT( "afpnuµμmLRFkKMGTPE" ) );
 
     if( !aString.length() )
         return false;
@@ -1005,6 +1005,7 @@ bool ApplyModifier( double& value, const wxString& aString )
         return false;
     }
 
+    // Note: most of these are SI, but some (L, R, F) are IEC 60062.
     if( modifier == 'a' )
         value *= 1.0e-18;
     else if( modifier == 'f' )
@@ -1015,8 +1016,10 @@ bool ApplyModifier( double& value, const wxString& aString )
         value *= 1.0e-9;
     else if( modifier == 'u' || modifier == wxS( "µ" )[0] || modifier == wxS( "μ" )[0] )
         value *= 1.0e-6;
-    else if( modifier == 'm' )
+    else if( modifier == 'm' || modifier == 'L' )
         value *= 1.0e-3;
+    else if( modifier == 'R' || modifier == 'F' )
+        ; // unity scalar
     else if( modifier == 'k' || modifier == 'K' )
         value *= 1.0e3;
     else if( modifier == 'M' )
@@ -1249,14 +1252,14 @@ int SplitString( const wxString& strToSplit,
 
         for( ; ii >= 0; ii-- )
         {
-            double    dummy;
+            double    scale;
             wxUniChar c = strToSplit[ii];
 
             if( wxIsdigit( c ) )
             {
                 continue;
             }
-            if( infix == 0 && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &dummy ) )
+            if( infix == 0 && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &scale ) )
             {
                 infix = c;
                 continue;
@@ -1273,10 +1276,10 @@ int SplitString( const wxString& strToSplit,
 
         // If all that was left was digits, then just set the digits string
         if( ii < 0 )
+        {
             *strDigits = strToSplit.substr( 0, position );
-
-        /* We were only looking for the last set of digits everything else is
-         * part of the preamble */
+        }
+        // Otherwise everything else is part of the preamble
         else
         {
             *strDigits    = strToSplit.substr( ii + 1, position - ii - 1 );

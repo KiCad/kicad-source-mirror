@@ -156,7 +156,8 @@ public:
     /* Remove all variables */
     void ClearVar() { m_varMap.clear(); }
 
-    static bool IsOldSchoolDecimalSeparator( char ch, double* siScaler );
+    static bool IsOldSchoolDecimalSeparator( wxUniChar ch, double* siScaler );
+    static bool isOldSchoolDecimalSeparator( char ch, double* siScaler );
     static bool IsDecimalSeparator( char ch, char localeSeparator, bool allowInfixNotation );
     static bool IsDigit( char ch );
 
