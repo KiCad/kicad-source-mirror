@@ -376,10 +376,6 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
-        // Don't process glyphs that were already included in a previous cluster
-        if( i > 0 && glyphInfo[i].cluster == glyphInfo[i-1].cluster )
-            continue;
-
         if( aGlyphs )
         {
             GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaleFactor, m_forDrawingSheet,
