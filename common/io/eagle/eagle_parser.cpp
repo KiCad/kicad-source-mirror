@@ -327,7 +327,8 @@ bool EURN::IsValid() const
         "footprint",
         "library",
         "package",
-        "symbol"
+        "symbol",
+        "fs.file"
     };
 
     if( validAssetTypes.count( assetType ) == 0 )
