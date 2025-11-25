@@ -153,4 +153,5 @@ _HKI( "### More Examples\n"
 "    (rule guard_ring_bridging\n"
 "        (constraint bridged_mask)\n"
 "        (condition \"A.intersectsArea('guard_ring')\")\n"
-"        (severity ignore))" );
+"        (severity ignore))\n"
+"" );
