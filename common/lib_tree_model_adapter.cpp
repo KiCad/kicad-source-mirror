@@ -316,7 +316,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         Thaw();
     }
 
-    const LIB_TREE_NODE* firstMatch = ShowResults();
+    const LIB_TREE_NODE* firstMatch = showResults();
 
 #ifdef __WXGTK__
     // Ensure the control is repainted with the updated data.  Without an explicit
@@ -766,7 +766,7 @@ void recursiveDescent( LIB_TREE_NODE& aNode, const std::function<int( const LIB_
 }
 
 
-const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
+const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::showResults()
 {
     const LIB_TREE_NODE* firstMatch = nullptr;
 

@@ -193,7 +193,7 @@ public:
     std::vector<wxString> GetShownColumns() const { return m_shownColumns; }
 
     std::vector<wxString> GetOpenLibs() const;
-    void                  OpenLibs( const std::vector<wxString>& aLibs );
+    void OpenLibs( const std::vector<wxString>& aLibs );
 
     /// Registers a function to be called whenever new lazy-loaded library content is available
     void RegisterLazyLoadHandler( std::function<void()>&& aHandler )
@@ -291,7 +291,7 @@ public:
      */
     virtual int GetLibrariesCount() const
     {
-        return m_tree.m_Children.size();
+        return (int) m_tree.m_Children.size();
     }
 
     /**
@@ -309,8 +309,7 @@ public:
      *
      * @return number of children
      */
-    unsigned int GetChildren( const wxDataViewItem& aItem,
-                              wxDataViewItemArray& aChildren ) const override;
+    unsigned int GetChildren( const wxDataViewItem& aItem, wxDataViewItemArray& aChildren ) const override;
 
     // Freezing/Thawing.  Used when updating the table model so that we don't try and fetch
     // values during updating.  Primarily a problem on OSX which doesn't pay attention to the
@@ -386,17 +385,15 @@ protected:
      * @param aItem     item whose data will be placed into aVariant
      * @param aCol      column number of the data
      */
-    void GetValue( wxVariant&              aVariant,
-                   const wxDataViewItem&   aItem,
-                   unsigned int            aCol ) const override;
+    void GetValue( wxVariant& aVariant, const wxDataViewItem& aItem, unsigned int aCol ) const override;
 
     /**
-     * Set the value of an item. Does nothing - this model doesn't support
-     * editing.
+     * Set the value of an item. Does nothing - this model doesn't support editing.
      */
-    bool SetValue( const wxVariant&        aVariant,
-                   const wxDataViewItem&   aItem,
-                   unsigned int            aCol ) override { return false; }
+    bool SetValue( const wxVariant& aVariant, const wxDataViewItem& aItem, unsigned int aCol ) override
+    {
+        return false;
+    }
 
     /**
      * Get any formatting for an item.
@@ -406,9 +403,7 @@ protected:
      * @param aAttr     receiver for attributes
      * @return          true if the item has non-default attributes
      */
-    bool GetAttr( const wxDataViewItem&   aItem,
-                  unsigned int            aCol,
-                  wxDataViewItemAttr&     aAttr ) const override;
+    bool GetAttr( const wxDataViewItem& aItem, unsigned int aCol, wxDataViewItemAttr& aAttr ) const override;
 
     virtual PROJECT::LIB_TYPE_T getLibType() = 0;
 
@@ -418,7 +413,7 @@ private:
     /**
      * Find and expand successful search results.  Return the best match (if any).
      */
-    const LIB_TREE_NODE* ShowResults();
+    const LIB_TREE_NODE* showResults();
 
     wxDataViewColumn* doAddColumn( const wxString& aHeader, bool aTranslate = true );
 
