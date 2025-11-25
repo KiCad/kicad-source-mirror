@@ -75,35 +75,35 @@ enum class VIATYPE : int
 
 enum class TENTING_MODE
 {
-    FROM_RULES = 0,
+    FROM_BOARD = 0,
     TENTED = 1,
     NOT_TENTED = 2
 };
 
 enum class COVERING_MODE
 {
-    FROM_RULES = 0,
+    FROM_BOARD = 0,
     COVERED = 1,
     NOT_COVERED = 2
 };
 
 enum class PLUGGING_MODE
 {
-    FROM_RULES = 0,
+    FROM_BOARD = 0,
     PLUGGED = 1,
     NOT_PLUGGED = 2
 };
 
 enum class CAPPING_MODE
 {
-    FROM_RULES = 0,
+    FROM_BOARD = 0,
     CAPPED = 1,
     NOT_CAPPED = 2
 };
 
 enum class FILLING_MODE
 {
-    FROM_RULES = 0,
+    FROM_BOARD = 0,
     FILLED = 1,
     NOT_FILLED = 2
 };

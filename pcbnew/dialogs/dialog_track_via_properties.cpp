@@ -166,10 +166,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                 switch( via->Padstack().UnconnectedLayerMode() )
                 {
                 default:
-                case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL: return 0;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:                    return 0;
                 case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
-                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL: return 2;
-                case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY: return 3;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:                  return 2;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:              return 3;
                 }
             };
 

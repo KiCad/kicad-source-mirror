@@ -916,7 +916,7 @@ void PCB_VIA::SetFrontTentingMode( TENTING_MODE aMode )
 {
     switch( aMode )
     {
-    case TENTING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_solder_mask.reset();  break;
+    case TENTING_MODE::FROM_BOARD: m_padStack.FrontOuterLayers().has_solder_mask.reset();  break;
     case TENTING_MODE::TENTED:     m_padStack.FrontOuterLayers().has_solder_mask = true;   break;
     case TENTING_MODE::NOT_TENTED: m_padStack.FrontOuterLayers().has_solder_mask = false;  break;
     }
@@ -927,11 +927,11 @@ TENTING_MODE PCB_VIA::GetFrontTentingMode() const
 {
     if( m_padStack.FrontOuterLayers().has_solder_mask.has_value() )
     {
-        return *m_padStack.FrontOuterLayers().has_solder_mask ?
-                TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+        return *m_padStack.FrontOuterLayers().has_solder_mask ? TENTING_MODE::TENTED
+                                                              : TENTING_MODE::NOT_TENTED;
     }
 
-    return TENTING_MODE::FROM_RULES;
+    return TENTING_MODE::FROM_BOARD;
 }
 
 
@@ -939,7 +939,7 @@ void PCB_VIA::SetBackTentingMode( TENTING_MODE aMode )
 {
     switch( aMode )
     {
-    case TENTING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_solder_mask.reset();  break;
+    case TENTING_MODE::FROM_BOARD: m_padStack.BackOuterLayers().has_solder_mask.reset();  break;
     case TENTING_MODE::TENTED:     m_padStack.BackOuterLayers().has_solder_mask = true;   break;
     case TENTING_MODE::NOT_TENTED: m_padStack.BackOuterLayers().has_solder_mask = false;  break;
     }
@@ -950,11 +950,11 @@ TENTING_MODE PCB_VIA::GetBackTentingMode() const
 {
     if( m_padStack.BackOuterLayers().has_solder_mask.has_value() )
     {
-        return *m_padStack.BackOuterLayers().has_solder_mask ?
-                TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+        return *m_padStack.BackOuterLayers().has_solder_mask ? TENTING_MODE::TENTED
+                                                             : TENTING_MODE::NOT_TENTED;
     }
 
-    return TENTING_MODE::FROM_RULES;
+    return TENTING_MODE::FROM_BOARD;
 }
 
 
@@ -962,7 +962,7 @@ void PCB_VIA::SetFrontCoveringMode( COVERING_MODE aMode )
 {
     switch( aMode )
     {
-    case COVERING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_covering.reset();  break;
+    case COVERING_MODE::FROM_BOARD:  m_padStack.FrontOuterLayers().has_covering.reset();  break;
     case COVERING_MODE::COVERED:     m_padStack.FrontOuterLayers().has_covering = true;   break;
     case COVERING_MODE::NOT_COVERED: m_padStack.FrontOuterLayers().has_covering = false;  break;
     }
@@ -973,11 +973,11 @@ COVERING_MODE PCB_VIA::GetFrontCoveringMode() const
 {
     if( m_padStack.FrontOuterLayers().has_covering.has_value() )
     {
-        return *m_padStack.FrontOuterLayers().has_covering ?
-                COVERING_MODE::COVERED : COVERING_MODE::NOT_COVERED;
+        return *m_padStack.FrontOuterLayers().has_covering ? COVERING_MODE::COVERED
+                                                           : COVERING_MODE::NOT_COVERED;
     }
 
-    return COVERING_MODE::FROM_RULES;
+    return COVERING_MODE::FROM_BOARD;
 }
 
 
@@ -985,7 +985,7 @@ void PCB_VIA::SetBackCoveringMode( COVERING_MODE aMode )
 {
     switch( aMode )
     {
-    case COVERING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_covering.reset();  break;
+    case COVERING_MODE::FROM_BOARD:  m_padStack.BackOuterLayers().has_covering.reset();  break;
     case COVERING_MODE::COVERED:     m_padStack.BackOuterLayers().has_covering = true;   break;
     case COVERING_MODE::NOT_COVERED: m_padStack.BackOuterLayers().has_covering = false;  break;
     }
@@ -996,11 +996,11 @@ COVERING_MODE PCB_VIA::GetBackCoveringMode() const
 {
     if( m_padStack.BackOuterLayers().has_covering.has_value() )
     {
-        return *m_padStack.BackOuterLayers().has_covering ?
-                COVERING_MODE::COVERED : COVERING_MODE::NOT_COVERED;
+        return *m_padStack.BackOuterLayers().has_covering ? COVERING_MODE::COVERED
+                                                          : COVERING_MODE::NOT_COVERED;
     }
 
-    return COVERING_MODE::FROM_RULES;
+    return COVERING_MODE::FROM_BOARD;
 }
 
 
@@ -1008,7 +1008,7 @@ void PCB_VIA::SetFrontPluggingMode( PLUGGING_MODE aMode )
 {
     switch( aMode )
     {
-    case PLUGGING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_plugging.reset();  break;
+    case PLUGGING_MODE::FROM_BOARD:  m_padStack.FrontOuterLayers().has_plugging.reset();  break;
     case PLUGGING_MODE::PLUGGED:     m_padStack.FrontOuterLayers().has_plugging = true;   break;
     case PLUGGING_MODE::NOT_PLUGGED: m_padStack.FrontOuterLayers().has_plugging = false;  break;
     }
@@ -1019,11 +1019,11 @@ PLUGGING_MODE PCB_VIA::GetFrontPluggingMode() const
 {
     if( m_padStack.FrontOuterLayers().has_plugging.has_value() )
     {
-        return *m_padStack.FrontOuterLayers().has_plugging ?
-                PLUGGING_MODE::PLUGGED : PLUGGING_MODE::NOT_PLUGGED;
+        return *m_padStack.FrontOuterLayers().has_plugging ? PLUGGING_MODE::PLUGGED
+                                                           : PLUGGING_MODE::NOT_PLUGGED;
     }
 
-    return PLUGGING_MODE::FROM_RULES;
+    return PLUGGING_MODE::FROM_BOARD;
 }
 
 
@@ -1031,7 +1031,7 @@ void PCB_VIA::SetBackPluggingMode( PLUGGING_MODE aMode )
 {
     switch( aMode )
     {
-    case PLUGGING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_plugging.reset();  break;
+    case PLUGGING_MODE::FROM_BOARD:  m_padStack.BackOuterLayers().has_plugging.reset();  break;
     case PLUGGING_MODE::PLUGGED:     m_padStack.BackOuterLayers().has_plugging = true;   break;
     case PLUGGING_MODE::NOT_PLUGGED: m_padStack.BackOuterLayers().has_plugging = false;  break;
     }
@@ -1042,11 +1042,11 @@ PLUGGING_MODE PCB_VIA::GetBackPluggingMode() const
 {
     if( m_padStack.BackOuterLayers().has_plugging.has_value() )
     {
-        return *m_padStack.BackOuterLayers().has_plugging ?
-                PLUGGING_MODE::PLUGGED : PLUGGING_MODE::NOT_PLUGGED;
+        return *m_padStack.BackOuterLayers().has_plugging ? PLUGGING_MODE::PLUGGED
+                                                          : PLUGGING_MODE::NOT_PLUGGED;
     }
 
-    return PLUGGING_MODE::FROM_RULES;
+    return PLUGGING_MODE::FROM_BOARD;
 }
 
 
@@ -1054,7 +1054,7 @@ void PCB_VIA::SetCappingMode( CAPPING_MODE aMode )
 {
     switch( aMode )
     {
-    case CAPPING_MODE::FROM_RULES: m_padStack.Drill().is_capped.reset();  break;
+    case CAPPING_MODE::FROM_BOARD: m_padStack.Drill().is_capped.reset();  break;
     case CAPPING_MODE::CAPPED:     m_padStack.Drill().is_capped = true;   break;
     case CAPPING_MODE::NOT_CAPPED: m_padStack.Drill().is_capped = false;  break;
     }
@@ -1065,11 +1065,11 @@ CAPPING_MODE PCB_VIA::GetCappingMode() const
 {
     if( m_padStack.Drill().is_capped.has_value() )
     {
-        return *m_padStack.Drill().is_capped ?
-                CAPPING_MODE::CAPPED : CAPPING_MODE::NOT_CAPPED;
+        return *m_padStack.Drill().is_capped ? CAPPING_MODE::CAPPED
+                                             : CAPPING_MODE::NOT_CAPPED;
     }
 
-    return CAPPING_MODE::FROM_RULES;
+    return CAPPING_MODE::FROM_BOARD;
 }
 
 
@@ -1077,7 +1077,7 @@ void PCB_VIA::SetFillingMode( FILLING_MODE aMode )
 {
     switch( aMode )
     {
-    case FILLING_MODE::FROM_RULES: m_padStack.Drill().is_filled.reset();  break;
+    case FILLING_MODE::FROM_BOARD: m_padStack.Drill().is_filled.reset();  break;
     case FILLING_MODE::FILLED:     m_padStack.Drill().is_filled = true;   break;
     case FILLING_MODE::NOT_FILLED: m_padStack.Drill().is_filled = false;  break;
     }
@@ -1088,11 +1088,11 @@ FILLING_MODE PCB_VIA::GetFillingMode() const
 {
     if( m_padStack.Drill().is_filled.has_value() )
     {
-        return *m_padStack.Drill().is_filled ?
-                FILLING_MODE::FILLED : FILLING_MODE::NOT_FILLED;
+        return *m_padStack.Drill().is_filled ? FILLING_MODE::FILLED
+                                             : FILLING_MODE::NOT_FILLED;
     }
 
-    return FILLING_MODE::FROM_RULES;
+    return FILLING_MODE::FROM_BOARD;
 }
 // clang-format on: the suggestion is slightly less readable
 
@@ -2407,32 +2407,32 @@ static struct TRACK_VIA_DESC
                 .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
 
         ENUM_MAP<TENTING_MODE>::Instance()
-                .Undefined( TENTING_MODE::FROM_RULES )
-                .Map( TENTING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Undefined( TENTING_MODE::FROM_BOARD )
+                .Map( TENTING_MODE::FROM_BOARD, _HKI( "From board stackup" ) )
                 .Map( TENTING_MODE::TENTED,     _HKI( "Tented" ) )
                 .Map( TENTING_MODE::NOT_TENTED, _HKI( "Not tented" ) );
 
         ENUM_MAP<COVERING_MODE>::Instance()
-                .Undefined( COVERING_MODE::FROM_RULES )
-                .Map( COVERING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Undefined( COVERING_MODE::FROM_BOARD )
+                .Map( COVERING_MODE::FROM_BOARD, _HKI( "From board stackup" ) )
                 .Map( COVERING_MODE::COVERED,     _HKI( "Covered" ) )
                 .Map( COVERING_MODE::NOT_COVERED, _HKI( "Not covered" ) );
 
         ENUM_MAP<PLUGGING_MODE>::Instance()
-                .Undefined( PLUGGING_MODE::FROM_RULES )
-                .Map( PLUGGING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Undefined( PLUGGING_MODE::FROM_BOARD )
+                .Map( PLUGGING_MODE::FROM_BOARD, _HKI( "From board stackup" ) )
                 .Map( PLUGGING_MODE::PLUGGED,     _HKI( "Plugged" ) )
                 .Map( PLUGGING_MODE::NOT_PLUGGED, _HKI( "Not plugged" ) );
 
         ENUM_MAP<CAPPING_MODE>::Instance()
-                .Undefined( CAPPING_MODE::FROM_RULES )
-                .Map( CAPPING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Undefined( CAPPING_MODE::FROM_BOARD )
+                .Map( CAPPING_MODE::FROM_BOARD, _HKI( "From board stackup" ) )
                 .Map( CAPPING_MODE::CAPPED,     _HKI( "Capped" ) )
                 .Map( CAPPING_MODE::NOT_CAPPED, _HKI( "Not capped" ) );
 
         ENUM_MAP<FILLING_MODE>::Instance()
-                .Undefined( FILLING_MODE::FROM_RULES )
-                .Map( FILLING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Undefined( FILLING_MODE::FROM_BOARD )
+                .Map( FILLING_MODE::FROM_BOARD, _HKI( "From board stackup" ) )
                 .Map( FILLING_MODE::FILLED,     _HKI( "Filled" ) )
                 .Map( FILLING_MODE::NOT_FILLED, _HKI( "Not filled" ) );
         // clang-format on: the suggestion is less readable
