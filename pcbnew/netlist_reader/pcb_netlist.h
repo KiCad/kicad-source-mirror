@@ -379,6 +379,22 @@ public:
         return it != m_netSignals.end() ? it->second : wxString();
     }
 
+    void SetSignalNetClass( const wxString& aSignal, const wxString& aNetClass )
+    {
+        m_signalNetClasses[aSignal] = aNetClass;
+    }
+
+    wxString GetSignalNetClass( const wxString& aSignal ) const
+    {
+        auto it = m_signalNetClasses.find( aSignal );
+        return it != m_signalNetClasses.end() ? it->second : wxString();
+    }
+
+    const std::map<wxString, wxString>& GetSignalNetClasses() const
+    {
+        return m_signalNetClasses;
+    }
+
     /**
      * @brief Return a #NETLIST_GROUP by \a aUuid.
      *
@@ -515,6 +531,7 @@ private:
     NETLIST_GROUPS m_groups;          // Groups found in the netlist.
     std::map<wxString, wxString> m_netSignals;
     std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_signalTerminals;
+    std::map<wxString, wxString> m_signalNetClasses;
 
     std::vector<wxString>            m_variantNames;         // Variant names in order.
     std::map<wxString, wxString>     m_variantDescriptions;  // Variant descriptions.

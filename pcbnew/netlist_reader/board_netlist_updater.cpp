@@ -32,6 +32,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <component_classes/component_class.h>
 #include <component_classes/component_class_manager.h>
 #include <netinfo.h>
@@ -2440,6 +2441,33 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             net->SetSignal( aNetlist.GetNetSignal( net->GetNetname() ) );
+
+        // Net chains may specify a netclass that applies to every member net.
+        // Push that assignment into the board's netclass map before resyncing.
+        const std::map<wxString, wxString>& chainClasses = aNetlist.GetSignalNetClasses();
+
+        if( !chainClasses.empty() )
+        {
+            std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+            for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+            {
+                const wxString& chainName = net->GetSignal();
+
+                if( chainName.IsEmpty() )
+                    continue;
+
+                auto it = chainClasses.find( chainName );
+
+                if( it == chainClasses.end() || it->second.IsEmpty() )
+                    continue;
+
+                if( netSettings->HasNetclass( it->second ) )
+                    netSettings->SetNetclassPatternAssignment( net->GetNetname(), it->second );
+            }
+
+            m_board->SynchronizeNetsAndNetClasses( true );
+        }
 
         for( const auto& sig : aNetlist.GetSignalTerminalPins() )
         {

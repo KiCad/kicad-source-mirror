@@ -107,6 +107,7 @@ mid
 minor_radius
 mirror
 name
+net_class
 netclass_flag
 no
 no_connect

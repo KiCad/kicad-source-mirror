@@ -249,6 +249,34 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             {} ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_chain_classes",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const auto& [chain, className] : m_netChainClasses )
+                    ret[ std::string( chain.ToUTF8() ) ] = std::string( className.ToUTF8() );
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_netChainClasses.clear();
+
+                for( const auto& pair : aJson.items() )
+                {
+                    wxString chain( pair.key().c_str(), wxConvUTF8 );
+                    wxString className = pair.value().get<wxString>();
+
+                    if( !className.IsEmpty() )
+                        m_netChainClasses[ std::move( chain ) ] = std::move( className );
+                }
+            },
+            {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_assignments",
             [&]() -> nlohmann::json
             {

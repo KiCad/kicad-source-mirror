@@ -5451,7 +5451,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
 
 void SCH_IO_KICAD_SEXPR_PARSER::parseSchSignal()
 {
-    // (signal "name" (uuid "...") (uuid "..."))
+    // (net_chain "name" (uuid "...") (uuid "...") [(net_class "classname")])
     NeedSYMBOL();
     wxString name = FromUTF8();
 

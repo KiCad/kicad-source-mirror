@@ -338,6 +338,7 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
     parser.ParseSchematic( aSheet );
 
     if( m_schematic && m_schematic->ConnectionGraph() )
+    {
         m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
         m_schematic->ConnectionGraph()->SetSignalNetClassOverrides( parser.GetSignalNetClasses() );
         m_schematic->ConnectionGraph()->SetSignalColorOverrides( parser.GetSignalColors() );
@@ -354,6 +355,7 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
     parser.ParseSchematic( aSheet, true, aFileVersion );
 
     if( m_schematic && m_schematic->ConnectionGraph() )
+    {
         m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
         m_schematic->ConnectionGraph()->SetSignalNetClassOverrides( parser.GetSignalNetClasses() );
         m_schematic->ConnectionGraph()->SetSignalColorOverrides( parser.GetSignalColors() );
@@ -545,16 +547,6 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         if( !sig.GetNetClass().IsEmpty() )
             m_out->Print( " (net_class %s)", m_out->Quotew( sig.GetNetClass() ).c_str() );
-
-        if( sig.GetColor() != KIGFX::COLOR4D::UNSPECIFIED )
-        {
-            const KIGFX::COLOR4D& c = sig.GetColor();
-            m_out->Print( " (color %d %d %d %.4f)",
-                          KiROUND( c.r * 255.0 ),
-                          KiROUND( c.g * 255.0 ),
-                          KiROUND( c.b * 255.0 ),
-                          c.a );
-        }
 
         m_out->Print( ")" );
     }

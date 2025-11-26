@@ -33,6 +33,7 @@ net
 nets
 net_chain
 net_chains
+net_class
 signal
 signals
 node

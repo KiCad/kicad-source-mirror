@@ -363,6 +363,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
 
         DRC_ITEM::heading_signal_integrity,
         DRC_ITEM::lengthOutOfRange,
+        DRC_ITEM::netChainStubTooLong,
         DRC_ITEM::skewOutOfRange,
         DRC_ITEM::viaCountOutOfRange,
         DRC_ITEM::diffPairGapOutOfRange,

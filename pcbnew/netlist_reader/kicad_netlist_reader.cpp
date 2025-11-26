@@ -1011,6 +1011,7 @@ void KICAD_NETLIST_PARSER::parseVariant()
 void KICAD_NETLIST_PARSER::parseSignal()
 {
     wxString                                   name;
+    wxString                                   netClass;
     std::vector<wxString>                      members;
     std::vector<std::pair<wxString, wxString>> terminals;
 
@@ -1026,6 +1027,12 @@ void KICAD_NETLIST_PARSER::parseSignal()
         case T_name:
             NeedSYMBOLorNUMBER();
             name = From_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_net_class:
+            NeedSYMBOLorNUMBER();
+            netClass = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
@@ -1108,6 +1115,9 @@ void KICAD_NETLIST_PARSER::parseSignal()
 
     for( const auto& term : terminals )
         m_netlist->AddSignalTerminalPin( name, term.first, term.second );
+
+    if( !netClass.IsEmpty() )
+        m_netlist->SetSignalNetClass( name, netClass );
 }
 
 

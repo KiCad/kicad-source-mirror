@@ -135,6 +135,27 @@ public:
     /// Calling user is responsible for resetting the effective netclass calculation caches
     void ClearNetColorAssignments();
 
+    /// @brief Assign a net chain to a named class (used by inNetChainClass() DRC scope).
+    void SetNetChainClass( const wxString& aChain, const wxString& aClass )
+    {
+        if( aClass.IsEmpty() )
+            m_netChainClasses.erase( aChain );
+        else
+            m_netChainClasses[aChain] = aClass;
+    }
+
+    /// @brief Look up the class assigned to a chain.  Empty string means "no class".
+    wxString GetNetChainClass( const wxString& aChain ) const
+    {
+        auto it = m_netChainClasses.find( aChain );
+        return it != m_netChainClasses.end() ? it->second : wxString();
+    }
+
+    const std::map<wxString, wxString>& GetNetChainClasses() const
+    {
+        return m_netChainClasses;
+    }
+
     /// @brief Determines if an effective netclass for the given net name has been cached
     bool HasEffectiveNetClass( const wxString& aNetName ) const;
 
@@ -259,6 +280,14 @@ private:
      * Nets that no longer exist will be deleted during a netlist read in Pcbnew.
      */
     std::map<wxString, KIGFX::COLOR4D> m_netColorAssignments;
+
+    /**
+     * Map of net-chain name -> chain-class name.  Used by the inNetChainClass()
+     * PCBEXPR scope function and by rule authors who want to group multiple
+     * chains under a shared label (e.g. all DDR_DQ_* chains under "DDR_DQ").
+     * Serialised under "net_chain_classes" in the net_settings JSON.
+     */
+    std::map<wxString, wxString> m_netChainClasses;
 
     // TODO: Add diff pairs, bus information, etc.
 };

@@ -89,7 +89,7 @@ public:
 private:
     wxString                       m_name;
     std::set<wxString>             m_nets;
-    std::set<class SCH_SYMBOL*>    m_symbols; // owning symbol pointers (non-owning, symbols live elsewhere)
+    std::set<class SCH_SYMBOL*>    m_symbols;
     KIID                           m_terminalPins[2];
     wxString                       m_netClass;
     KIGFX::COLOR4D                 m_color = KIGFX::COLOR4D::UNSPECIFIED;
