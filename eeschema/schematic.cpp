@@ -809,6 +809,10 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 
             return true;
         }
+
+        // Symbol not found - set unresolved error
+        *token = wxString::Format( wxT( "<Unresolved: %s>" ), ref );
+        return true;
     }
 
     // Reference not found - show error message

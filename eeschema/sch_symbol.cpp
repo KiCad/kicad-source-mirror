@@ -1966,6 +1966,10 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                 }
             }
         }
+
+        // If we got here, no pin was found - report unresolved
+        *token = wxString::Format( wxT( "<Unresolved: pin %s>" ), pinNumber );
+        return true;
     }
 
     // See if parent can resolve it (this will recurse to ancestors)
