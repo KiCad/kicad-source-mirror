@@ -1,7 +1,25 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2025-09-12T21:52:37-0700",
+    "date": "2025-11-26T19:00:17+0000",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
     "kicad_version": "9.99.0",
     "sheets": [
         {
@@ -39,7 +57,7 @@
                     "type": "power_pin_not_driven"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
+                    "description": "The current configuration does not include the footprint library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J1 [Conn_01x01_Pin]",
@@ -69,7 +87,7 @@
                     "type": "lib_symbol_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
+                    "description": "The current configuration does not include the footprint library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J2 [Conn_01x01_Pin]",
@@ -114,7 +132,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
+                    "description": "The current configuration does not include the footprint library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J4 [Conn_01x01_Pin]",
@@ -144,7 +162,7 @@
                     "type": "lib_symbol_issues"
                 },
                 {
-                    "description": "Footprint 'C_1206_3216Metric' not found in library 'Capacitor_SMD'",
+                    "description": "The current configuration does not include the footprint library 'Capacitor_SMD'",
                     "items": [
                         {
                             "description": "Symbol C1 [C_Small]",
@@ -174,7 +192,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'SOT-23-5' not found in library 'Package_TO_SOT_SMD'",
+                    "description": "The current configuration does not include the footprint library 'Package_TO_SOT_SMD'",
                     "items": [
                         {
                             "description": "Symbol U1 [TLV2371DBV]",
@@ -219,7 +237,7 @@
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "Footprint 'TestPoint_Pad_3.0x3.0mm' not found in library 'TestPoint'",
+                    "description": "The current configuration does not include the footprint library 'TestPoint'",
                     "items": [
                         {
                             "description": "Symbol J3 [Conn_01x01_Pin]",
