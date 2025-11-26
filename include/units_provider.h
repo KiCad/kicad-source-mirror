@@ -138,6 +138,13 @@ public:
                                                          EDA_DATA_TYPE::DISTANCE );
     }
 
+    wxString MessageTextFromUnscaledValue( double aValue, bool aAddUnitLabel = true,
+                                           EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
+    {
+        return EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
+                                                         aValue, aAddUnitLabel, aType );
+    }
+
     wxString MessageTextFromMinOptMax( const MINOPTMAX<int>& aValue,
                                        EDA_DATA_TYPE         aType = EDA_DATA_TYPE::DISTANCE ) const
     {
