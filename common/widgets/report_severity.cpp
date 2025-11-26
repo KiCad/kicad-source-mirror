@@ -20,6 +20,7 @@
 #include <widgets/report_severity.h>
 #include <i18n_utility.h>
 #include <vector>
+#include <wx/translation.h>
 
 
 wxString formatSeverities( int aSeverities )
