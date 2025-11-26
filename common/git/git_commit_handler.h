@@ -32,6 +32,7 @@
 
 #include <string>
 #include <vector>
+#include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 #include <wx/string.h>
 
 class LIBGIT_BACKEND;

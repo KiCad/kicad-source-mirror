@@ -21,6 +21,7 @@
 #include <i18n_utility.h>
 #include <vector>
 #include <wx/translation.h>
+#include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 
 
 wxString formatSeverities( int aSeverities )
