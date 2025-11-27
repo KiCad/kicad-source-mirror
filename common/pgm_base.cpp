@@ -930,8 +930,8 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             m_libraryPreloadInProgress.store( false );
 
             std::string payload = "";
-            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
-            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload );
+            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
+            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
         };
 
     thread_pool& tp = GetKiCadThreadPool();
