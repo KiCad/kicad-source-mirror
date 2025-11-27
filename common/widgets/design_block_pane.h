@@ -62,6 +62,8 @@ public:
 
     void RefreshLibs();
 
+    virtual void ProjectChanged() {}
+
     /**
      * Creates a new design block library.
      *

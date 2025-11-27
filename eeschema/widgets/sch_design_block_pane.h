@@ -45,6 +45,8 @@ public:
     void OnCheckBox( wxCommandEvent& aEvent );
     void UpdateCheckboxes();
 
+    void ProjectChanged() override;
+
 protected:
     void setLabelsAndTooltips() override;
 

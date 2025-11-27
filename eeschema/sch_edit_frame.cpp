@@ -1438,6 +1438,7 @@ void SCH_EDIT_FRAME::ProjectChanged()
             m_schematic->SaveToHistory( aProjectPath, aFiles );
         } );
 
+    m_designBlocksPane->ProjectChanged();
 }
 
 

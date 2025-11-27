@@ -60,7 +60,10 @@ public:
     void OnChar( wxKeyEvent& aEvent );
 
     wxPanel* GetDetailsPanel() { return m_detailsPanel; }
+
     void     SetPreviewWidget( DESIGN_BLOCK_PREVIEW_WIDGET* aPreview );
+    DESIGN_BLOCK_PREVIEW_WIDGET* GetPreviewWidget() const { return m_preview; }
+
     void     FinishSetup();
 
     void SetPreselect( const LIB_ID& aPreselect );

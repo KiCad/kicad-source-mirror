@@ -153,6 +153,13 @@ void SCH_DESIGN_BLOCK_PANE::UpdateCheckboxes()
 }
 
 
+void SCH_DESIGN_BLOCK_PANE::ProjectChanged()
+{
+    // Project change will blow up the default project; re-create any active preview canvas
+    m_chooserPanel->GetPreviewWidget()->DisplayDesignBlock( GetSelectedDesignBlock( true, true ) );
+}
+
+
 FILEDLG_IMPORT_SHEET_CONTENTS::FILEDLG_IMPORT_SHEET_CONTENTS( EESCHEMA_SETTINGS* aSettings ) :
         m_cbRepeatedPlacement( nullptr ), m_cbPlaceAsGroup( nullptr ), m_cbPlaceAsSheet( nullptr ),
         m_cbKeepAnnotations( nullptr )
