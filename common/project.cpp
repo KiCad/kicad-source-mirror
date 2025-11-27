@@ -469,8 +469,12 @@ void PROJECT::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>
 
     wxFileName projectFn( projectFile );
     wxFileName requestedFn( aProjectPath );
+    // wxPATH_NORM_ALL is now deprecated.
+    // So define a similar option
+    int norm_opt = wxPATH_NORM_ENV_VARS|wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_ABSOLUTE
+                   |wxPATH_NORM_LONG|wxPATH_NORM_SHORTCUT;
 
-    if( !projectFn.Normalize( wxPATH_NORM_ALL ) || !requestedFn.Normalize( wxPATH_NORM_ALL ) )
+    if( !projectFn.Normalize( norm_opt ) || !requestedFn.Normalize( norm_opt ) )
         return;
 
     if( projectFn.GetFullPath() != requestedFn.GetFullPath() )
