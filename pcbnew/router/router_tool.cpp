@@ -193,34 +193,34 @@ static const TOOL_ACTION ACT_SwitchPosture( TOOL_ACTION_ARGS()
         .Tooltip( _( "Switches posture of the currently routed track." ) )
         .Icon( BITMAPS::change_entry_orient ) );
 
-#if 0   // Old track corner command replaced by a submenu
-static const TOOL_ACTION ACT_SwitchCornerMode( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveRouter.SwitchRounding" )
+        // This old command ( track corner switch mode) is now moved to a submenu with other corner mode options
+static const TOOL_ACTION ACT_SwitchCornerModeToNext( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SwitchRoundingToNext" )
         .Scope( AS_CONTEXT )
         .DefaultHotkey( MD_CTRL + '/' )
-        .FriendlyName( _( "Track Corner Mode" ) )
+        .FriendlyName( _( "Track Corner Mode Switch" ) )
         .Tooltip( _( "Switches between sharp/rounded and 45°/90° corners when routing tracks." ) )
         .Icon( BITMAPS::switch_corner_rounding_shape ) );
-#endif
 
+// hotkeys W and Shift+W  are used to switch to track width changes
 static const TOOL_ACTION ACT_SwitchCornerMode45( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SwitchRounding45" )
         .Scope( AS_CONTEXT )
-        .DefaultHotkey( 'W' )
+        .DefaultHotkey( MD_CTRL + 'W' )
         .FriendlyName( _( "Track Corner Mode 45" ) )
         .Tooltip( _( "Switch to 45° corner when routing tracks." ) ) );
 
 static const TOOL_ACTION ACT_SwitchCornerMode90( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SwitchRounding90" )
         .Scope( AS_CONTEXT )
-        .DefaultHotkey( MD_SHIFT + 'W' )
+        .DefaultHotkey(  MD_CTRL + MD_ALT + 'W' )
         .FriendlyName( _( "Track Corner Mode 90" ) )
         .Tooltip( _( "Switch to 90° corner when routing tracks." ) ) );
 
 static const TOOL_ACTION ACT_SwitchCornerModeArc45( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SwitchRoundingArc45" )
         .Scope( AS_CONTEXT )
-        .DefaultHotkey( MD_CTRL + 'W' )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'W' )
         .FriendlyName( _( "Track Corner Mode Arc 45" ) )
         .Tooltip( _( "Switch to arc 45° corner when routing tracks." ) ) );
 
@@ -579,6 +579,8 @@ bool ROUTER_TOOL::Init()
     submenuCornerMode->SetTitle( _( "Track Corner Mode" ) );
     submenuCornerMode->SetIcon( BITMAPS::switch_corner_rounding_shape );
 
+    submenuCornerMode->AddItem( ACT_SwitchCornerModeToNext, SELECTION_CONDITIONS::ShowAlways );
+    submenuCornerMode->AddSeparator( 1 );
     submenuCornerMode->AddCheckItem( ACT_SwitchCornerMode45, SELECTION_CONDITIONS::ShowAlways );
     submenuCornerMode->AddCheckItem( ACT_SwitchCornerModeArc45, SELECTION_CONDITIONS::ShowAlways );
     submenuCornerMode->AddCheckItem( ACT_SwitchCornerMode90, SELECTION_CONDITIONS::ShowAlways );
@@ -759,7 +761,22 @@ int ROUTER_TOOL::handlePnSCornerModeChange( const TOOL_EVENT& aEvent )
 {
     bool asChanged = false;
 
-    if( aEvent.IsAction( &ACT_SwitchCornerMode45 ) )
+    if( aEvent.IsAction( &ACT_SwitchCornerModeToNext ) )
+    {
+        DIRECTION_45::CORNER_MODE curr_mode = m_router->Settings().GetCornerMode();
+
+        if( curr_mode == DIRECTION_45::CORNER_MODE::MITERED_45 )
+            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_45 );
+        else if( curr_mode == DIRECTION_45::CORNER_MODE::ROUNDED_45 )
+            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_90 );
+        else if( curr_mode == DIRECTION_45::CORNER_MODE::MITERED_90 )
+            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_90 );
+        else if( curr_mode == DIRECTION_45::CORNER_MODE::ROUNDED_90 )
+            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_45 );
+
+        asChanged = true;
+    }
+    else if( aEvent.IsAction( &ACT_SwitchCornerMode45 ) )
     {
         m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_45 );
         asChanged = true;
@@ -3016,6 +3033,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
 
+    Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerModeToNext.MakeEvent() );
     Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerMode45.MakeEvent() );
     Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerMode90.MakeEvent() );
     Go( &ROUTER_TOOL::handlePnSCornerModeChange, ACT_SwitchCornerModeArc45.MakeEvent() );
