@@ -38,6 +38,10 @@
 #include <convert/allegro_parser.h>
 #include <convert/allegro_db.h>
 #include <utils/extract/allegro_ascii.h>
+#include <utils/extract/extract_spec_parser.h>
+
+
+static const char* traceAllegroExtract = "ALLEGRO_EXTRACT";
 
 
 int main( int argc, char** argv )
@@ -51,8 +55,9 @@ int main( int argc, char** argv )
         .help( "Verbose output" )
         .flag();
 
-    argParser.add_argument( "file" )
+    argParser.add_argument( "-b", "--board" )
         .help( "Allegro .brd file" )
+        .nargs( 1 )
         .metavar( "BRD_FILE" )
         .required();
 
@@ -60,9 +65,10 @@ int main( int argc, char** argv )
         .help( "Print a summary of the file" )
         .flag();
 
-    argParser.add_argument( "-e", "--extract" )
-        .help( "Produce an approximate ASCII extract of the file " )
-        .flag();
+    argParser.add_argument( "-v", "--views" )
+        .nargs( argparse::nargs_pattern::at_least_one )
+        .help( "List of view files to extract" )
+        .metavar( "VIEWS" );
 
     // clang-format on
 
@@ -78,12 +84,53 @@ int main( int argc, char** argv )
         return 1;
     }
 
-    std::string   filename = argParser.get<std::string>( "file" );
+    std::string   filename = argParser.get<std::string>( "board" );
     std::ifstream fin( filename, std::ios::binary );
 
-    // kaitai::kstream ks( &fin );
-    ALLEGRO::FILE_STREAM allegroStream( fin );
+    // Find out the view are all available
+    std::vector<std::string> viewFiles;
 
+    // We're going to munge all the extracted blocks from the view files into
+    // a single list for extraction
+    std::vector<ALLEGRO::EXTRACT_SPEC_PARSER::IR::BLOCK> extractedBlocks;
+
+    if( argParser.is_used( "views" ) )
+    {
+        viewFiles = argParser.get<std::vector<std::string>>( "views" );
+
+        for( const auto& viewFile : viewFiles )
+        {
+            std::ifstream vfin( viewFile );
+            if( !vfin.is_open() )
+            {
+                fmt::print( "View file '{}' could not be opened\n", viewFile );
+                return 1;
+            }
+
+            ALLEGRO::EXTRACT_SPEC_PARSER::PARSER specParser;
+
+            std::string viewFileContents( ( std::istreambuf_iterator<char>( vfin ) ),
+                                          std::istreambuf_iterator<char>() );
+
+            auto specOrError = specParser.ParseBuffer( viewFileContents );
+            if( !specOrError )
+            {
+                const auto& err = specOrError.error();
+                fmt::print( "Error parsing view file '{}': {} at line {}\n", viewFile, err.description, err.line );
+                return 1;
+            }
+
+            // Add all the blocks from this spec to our list
+            const auto& spec = specOrError.value();
+            extractedBlocks.insert( extractedBlocks.end(), spec.Blocks.begin(), spec.Blocks.end() );
+        }
+
+        wxLogTrace( traceAllegroExtract, "Loaded %zu views from %zu files", extractedBlocks.size(), viewFiles.size() );
+    }
+
+    // Now we're happy with the arguments, proceed to parse the file
+
+    ALLEGRO::FILE_STREAM allegroStream( fin );
 
     ALLEGRO::PARSER parser( allegroStream, nullptr );
     parser.EndAtUnknownBlock( true );
@@ -115,10 +162,10 @@ int main( int argc, char** argv )
 
         // dumpObjectCounts( std::cout, boardContent );
 
-        fmt::print( "  String map: {} entries", board->m_StringTable.size() );
+        fmt::print( "  String map:      {} entries", board->m_StringTable.size() );
     }
 
-    if( argParser.get<bool>( "extract" ) )
+    if( extractedBlocks.size() > 0 )
     {
         ALLEGRO::ASCII_EXTRACTOR extractor;
 

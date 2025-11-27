@@ -1,0 +1,16 @@
+#
+# This is a file that contains all the known views of the Allegro extraction tool
+
+# Symbol instance
+SYMBOL
+    SYM_TYPE
+    SYM_NAME
+    REFDES
+    SYM_X
+    SYM_Y
+    SYM_CENTER_X
+    SYM_CENTER_Y
+    SYM_MIRROR
+    SYM_ROTATE
+    SYM_LIBRARY_PATH
+END
