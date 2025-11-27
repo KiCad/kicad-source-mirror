@@ -963,6 +963,22 @@ bool LIBRARY_MANAGER_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
 }
 
 
+std::optional<LIBRARY_ERROR> LIBRARY_MANAGER_ADAPTER::LibraryError( const wxString& aNickname ) const
+{
+    if( m_libraries.contains( aNickname ) )
+    {
+        return m_libraries.at( aNickname ).status.error;
+    }
+
+    if( globalLibs().contains( aNickname ) )
+    {
+        return globalLibs().at( aNickname ).status.error;
+    }
+
+    return std::nullopt;
+}
+
+
 std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibraryStatuses() const
 {
     std::vector<std::pair<wxString, LIB_STATUS>> ret;

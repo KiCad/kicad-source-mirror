@@ -188,7 +188,30 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
 
                     if( result.has_value() )
                     {
-                        LoadOne( *result );
+                        std::optional<LIB_STATUS> loadResult = LoadOne( *result );
+
+                        // for design blocks, LoadOne should always return something
+                        wxCHECK2( loadResult, ++m_loadCount; return );
+
+                        switch( scope )
+                        {
+                        case LIBRARY_TABLE_SCOPE::GLOBAL:
+                        {
+                            std::lock_guard lock( GlobalLibraryMutex );
+                            GlobalLibraries[nickname].status = *loadResult;
+                            break;
+                        }
+
+                        case LIBRARY_TABLE_SCOPE::PROJECT:
+                        {
+                            std::lock_guard lock( m_libraries_mutex );
+                            m_libraries[nickname].status = *loadResult;
+                            break;
+                        }
+
+                        default:
+                            wxFAIL_MSG( "Unexpected library table scope" );
+                        }
                     }
                     else
                     {
@@ -419,9 +442,3 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::DesignBlockLoadWithOptionalNickname(
     return nullptr;
 }
 
-
-std::optional<LIBRARY_ERROR> DESIGN_BLOCK_LIBRARY_ADAPTER::LibraryError( const wxString& aNickname ) const
-{
-    // TODO(JE) library tables
-    return std::nullopt;
-}

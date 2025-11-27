@@ -481,22 +481,6 @@ bool FOOTPRINT_LIBRARY_ADAPTER::IsFootprintLibWritable( const wxString& aLib )
 }
 
 
-std::optional<LIBRARY_ERROR> FOOTPRINT_LIBRARY_ADAPTER::LibraryError( const wxString& aNickname ) const
-{
-    if( m_libraries.contains( aNickname ) )
-    {
-        return m_libraries.at( aNickname ).status.error;
-    }
-
-    if( GlobalLibraries.contains( aNickname ) )
-    {
-        return GlobalLibraries.at( aNickname ).status.error;
-    }
-
-    return std::nullopt;
-}
-
-
 LIBRARY_RESULT<IO_BASE*> FOOTPRINT_LIBRARY_ADAPTER::createPlugin( const LIBRARY_TABLE_ROW* row )
 {
     PCB_IO_MGR::PCB_FILE_T type = PCB_IO_MGR::EnumFromStr( row->Type() );

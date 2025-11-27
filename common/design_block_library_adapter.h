@@ -146,8 +146,6 @@ public:
     DESIGN_BLOCK* DesignBlockLoadWithOptionalNickname( const LIB_ID& aDesignBlockId,
                                                        bool          aKeepUUID = false );
 
-    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const override;
-
 protected:
 
     std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }

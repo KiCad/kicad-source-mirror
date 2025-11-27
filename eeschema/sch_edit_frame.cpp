@@ -1423,6 +1423,8 @@ void SCH_EDIT_FRAME::LoadProject()
         {
             KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
             schface->PreloadLibraries( &Kiway() );
+
+            Pgm().PreloadDesignBlockLibraries( &Kiway() );
         } );
 }
 

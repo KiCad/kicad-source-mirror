@@ -366,23 +366,6 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 }
 
 
-std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_ADAPTER::LibraryError(
-        const wxString& aNickname ) const
-{
-    if( m_libraries.contains( aNickname ) )
-    {
-        return m_libraries.at( aNickname ).status.error;
-    }
-
-    if( GlobalLibraries.contains( aNickname ) )
-    {
-        return GlobalLibraries.at( aNickname ).status.error;
-    }
-
-    return std::nullopt;
-}
-
-
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
 {
     if( m_libraries.contains( aNickname ) )

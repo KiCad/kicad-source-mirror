@@ -156,8 +156,6 @@ public:
      */
     bool IsSymbolLibWritable( const wxString& aNickname );
 
-    std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const override;
-
     int GetModifyHash() const;
 
 protected:
