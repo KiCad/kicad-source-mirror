@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-18 06:32+0000\n"
-"Last-Translator: Czam Ciał <lamaforge@proton.me>\n"
+"PO-Revision-Date: 2025-11-28 09:00+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -618,9 +618,8 @@ msgid "Show board body"
 msgstr "Pokaż ciało płytki"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Otwory metalizowane"
+msgstr "Metalizowane tuleje"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show barrels of plated through-holes and vias"
@@ -4962,14 +4961,13 @@ msgstr "Krzyżyki pełnoekranowe"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "Celownik 45-stopniowy"
+msgstr "Kursor pod kątem 45 stopni"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
 msgid "Always show crosshairs"
-msgstr "Zawsze pokazuj nitki celownicze"
+msgstr "Kursor zawsze widoczny"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
@@ -5351,7 +5349,6 @@ msgid "Right button drag:"
 msgstr "Przeciąganie prawym klawiszem myszy:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "Pan on mouse movement with key:"
 msgstr "Przesuwaj widok z ruchem myszy z wciśniętym klawiszem:"
 
@@ -5890,12 +5887,10 @@ msgid "Pan speed:"
 msgstr "Prędkość przesuwania:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
-#, fuzzy
 msgid "Reverse vertical pan direction"
 msgstr "Odwróć wertykalnie kierunek przesuwania"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
-#, fuzzy
 msgid "Reverse horizontal pan direction"
 msgstr "Odwróć horyzontalnie kierunek przesuwania"
 
@@ -5904,7 +5899,6 @@ msgid "Reverse zoom direction"
 msgstr "Odwróć kierunek przybliżania"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad comes with a large set of symbol and footprint libraries maintained by "
 "the KiCad librarian team.  You may also create your own libraries, and "
@@ -5916,9 +5910,9 @@ msgid ""
 "add project-specific libraries if desired."
 msgstr ""
 "KiCad zawiera duży zestaw bibliotek symboli i footprintów utrzymywanych "
-"przez zespół bibliotekarzy KiCada. Możesz także tworzyć własne biblioteki "
-"oraz instalować biblioteki firm trzecich z poziomu Menedżera Wtyczek i "
-"Zasobów lub z innych źródeł.\n"
+"przez zespół bibliotekarzy KiCada.  Możesz także tworzyć własne biblioteki "
+"oraz instalować biblioteki firm trzecich z poziomu Wtyczek, Menedżera "
+"zasobów lub z innych źródeł.\n"
 "\n"
 "Tabele bibliotek to pliki konfiguracyjne określające, które biblioteki mają "
 "zostać załadowane. Biblioteki globalne są dostępne we wszystkich projektach, "
@@ -5935,7 +5929,6 @@ msgid "How would you like KiCad to create them?"
 msgstr "W jaki sposób KiCad ma je utworzyć?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries (recommended)"
 msgstr "Rozpocznij z wbudowanymi bibliotekami KiCad'a (zalecane)"
 
@@ -5998,10 +5991,20 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad może anonimowo zgłaszać dane o awariach i innych zdarzeniach zespołowi "
+"programistów, aby pomóc w identyfikacji i naprawie błędów oraz poprawie "
+"wydajności.\n"
+"\n"
+"Po włączeniu gromadzenia danych, KiCad automatycznie wysyła raporty w "
+"przypadku wystąpienia awarii lub innych istotnych zdarzeń. Raporty te "
+"zawierają szczegółowe informacje techniczne o stanie oprogramowania KiCad w "
+"momencie zgłoszenia. Nie są gromadzone żadne dane osobowe (PII), a pliki "
+"projektowe takie jak schematy, płytki PCB i biblioteki, nigdy nie są "
+"udostępniane w ramach tego procesu."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Włącz anonimowe zbieranie dancyh"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6071,7 +6074,6 @@ msgid "Top main"
 msgstr "Pasek główny"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxiliary"
 msgstr "Pasek dodatkowy"
 
@@ -6246,7 +6248,6 @@ msgid "Text '%s'"
 msgstr "Tekst '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
 msgstr "Zaimportowany kształt"
 
@@ -6300,7 +6301,6 @@ msgid "need a number for '%s'"
 msgstr "wymagana liczba dla '%s'"
 
 #: common/dsnlexer.cpp:733
-#, fuzzy
 msgid "Unterminated delimited string"
 msgstr "Niezakończony separator tekstu"
 
@@ -6327,14 +6327,14 @@ msgid "Redo"
 msgstr "Ponów"
 
 #: common/eda_base_frame.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "Uruchom %s > %s"
+msgstr "Uruchom: %s > %s"
 
 #: common/eda_base_frame.cpp:705
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Reguła: %s"
+msgstr "Uruchom: %s"
 
 #: common/eda_base_frame.cpp:1238
 #, c-format
@@ -6356,7 +6356,7 @@ msgstr "Mysz i płytka dotykowa"
 
 #: common/eda_base_frame.cpp:1323
 msgid "SpaceMouse"
-msgstr ""
+msgstr "Manipulator 3D"
 
 #: common/eda_base_frame.cpp:1325
 msgid "Hotkeys"
@@ -6478,9 +6478,8 @@ msgid "Packages and Updates"
 msgstr "Pakiety i aktualizacje"
 
 #: common/eda_base_frame.cpp:1497
-#, fuzzy
 msgid "Maintenance"
-msgstr "Os. zarządzająca"
+msgstr "Konserwacja"
 
 #: common/eda_base_frame.cpp:1581 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:486
@@ -6691,9 +6690,8 @@ msgid "Target"
 msgstr "Cel"
 
 #: common/eda_item.cpp:437 pcbnew/pcb_point.cpp:140
-#, fuzzy
 msgid "Point"
-msgstr "Punkty"
+msgstr "Punkt"
 
 #: common/eda_item.cpp:438 pcbnew/tools/board_inspection_tool.cpp:791
 msgid "Zone"
@@ -6709,7 +6707,7 @@ msgstr "Informacja o sieci"
 
 #: common/eda_item.cpp:442 pcbnew/pcb_barcode.cpp:374
 msgid "Barcode"
-msgstr ""
+msgstr "Kod kreskowy"
 
 #: common/eda_item.cpp:445 eeschema/sch_junction.cpp:297
 #: eeschema/sch_junction.h:102
@@ -6994,9 +6992,8 @@ msgstr "Koniec Y"
 #: common/eda_shape.cpp:2765 eeschema/sch_tablecell.cpp:227
 #: eeschema/sch_textbox.cpp:616 pcbnew/pcb_tablecell.cpp:228
 #: pcbnew/pcb_textbox.cpp:852
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Procent promienia narożnika"
+msgstr "Promień narożnika"
 
 #: common/eda_shape.cpp:2796 common/stroke_params.cpp:297
 #: eeschema/sch_bus_entry.cpp:649 eeschema/sch_line.cpp:1303
@@ -7669,17 +7666,16 @@ msgstr "Nie udało się zainicjować projektu Git: %s"
 
 #: common/git/libgit_backend.cpp:595
 msgid "No repository available to set up remote"
-msgstr ""
+msgstr "Brak dostępnego repozytorium do skonfigurowania go zdalnie"
 
 #: common/git/libgit_backend.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Nie można było utworzyć bloku zmian: %s"
+msgstr "Nie można było utworzyć zdalnie: %s"
 
 #: common/git/libgit_backend.cpp:675
-#, fuzzy
 msgid "No repository available"
-msgstr "Nie ma dostępnych elementów wyjściowych"
+msgstr "Brak dostępnego repozytorium"
 
 #: common/git/libgit_backend.cpp:683
 #, c-format
@@ -7773,24 +7769,20 @@ msgid "Could not lookup commit '%s'"
 msgstr "Nie można zablokować zmian '%s'"
 
 #: common/git/libgit_backend.cpp:1047
-#, fuzzy
 msgid "Merge failed"
-msgstr "Zadanie ukończone niepowodzeniem"
+msgstr "Scalenie nie powiodło się"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema nie może załadować."
+msgstr "Nie udało się uruchomić rebase"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "Niepowodzenie przy połączeniu z bazą danych: %s"
+msgstr "Nie udało się zatwierdzić rebase"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Ostatnie uruchomienie nie powiodło się"
+msgstr "Nie udało się ukończyć rebase"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:237
@@ -7858,33 +7850,33 @@ msgid "Select all cells"
 msgstr "Zaznacz wszystkie komórki"
 
 #: common/history_lock.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć historii folderu: %s"
 
 #: common/history_lock.cpp:156
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "Historia repozytorium zablokowana przez %s@%s"
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "Folder źródłowy nie istnieje: %s"
+msgstr "Historia repozytorium nie istnieje: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Nie udało się pobrać indeksu repozyrium: %s"
+msgstr "Nie udało się otworzyć repozytorium git: %s"
 
 #: common/history_lock.cpp:196
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "Nie można zablokować indeksu: repozytorium nie jest otwarte"
 
 #: common/history_lock.cpp:207
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
-msgstr ""
+msgstr "Błąd podczas zablokowania indeksu git (inna operacja w trakcie?): %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -8327,19 +8319,16 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: Eksport Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Pokazuje okno ze danymi statystycznymi płytki"
+msgstr "Eksportuj statystyki płytki"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Ustawienia zadania eksportu danych listy sieci"
+msgstr "Ustawienia zadania eksportu statystyki płytki"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "Statystyka płytki"
+msgstr "PCB: Eksport statystyk płytki"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:162
@@ -8708,9 +8697,8 @@ msgid "Net color highlight"
 msgstr "Kolor podświetlenia sieci"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Podświetl miejsca kolizji"
+msgstr "Kolizje przeciąganych sieci"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8764,15 +8752,13 @@ msgstr "Przelotki na wylot"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "Przelotki ślepe/zagrzebane"
+msgstr "Przelotki ślepe"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Przelotek zagrzebanych:"
+msgstr "Przelotki zagrzebane"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
@@ -8815,9 +8801,8 @@ msgid "DRC errors"
 msgstr "Błędy DRC"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC kształt 1"
+msgstr "Kształty DRC"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -8989,19 +8974,17 @@ msgid "Show"
 msgstr "Pokaż"
 
 #: common/libraries/library_manager.cpp:128
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Biblioteka o nazwie skrótowej '%s' już istnieje."
+msgstr "Odnośnik do tej tabeli bibliotek już istnieje"
 
 #: common/libraries/library_manager.cpp:386
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "Domyślny programu KiCad"
+msgstr "Domyślne biblioteki programu KiCad"
 
 #: common/libraries/library_manager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Biblioteka '%s' nie została znaleziona."
+msgstr "Biblioteka %s nie została znaleziona"
 
 #: common/libraries/library_table.cpp:67
 #, fuzzy, c-format
@@ -9009,9 +8992,9 @@ msgid "The library table path '%s' does not exist"
 msgstr "ścieżka do biblioteki footprintu \"%s\" nie istnieje"
 
 #: common/libraries/library_table_parser.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Wystąpił błąd podczas zapisu pustej tabeli bibliotek footprintów '%s'."
+msgstr "Wystąpił nieoczekiwany błąd podczas odczytywania tabeli bibliotek %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:235
@@ -9502,9 +9485,9 @@ msgid "KiCad Classic"
 msgstr "Klasyczny programu KiCad"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Witamy w programie KiCad %s!"
+msgstr "Witamy w programie KiCad %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -14226,9 +14209,9 @@ msgid "No symbols found in library '%s'."
 msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Błąd podczas odczytywania płytki '%s':%s"
+msgstr "Błąd podczas odczytywania symbolu '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:597
 #, fuzzy
@@ -20504,12 +20487,13 @@ msgstr ""
 "pliki w formacie Eagle XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Nieprawidłowa warstwa stosu '%s' w pliku '%s' w linii %d, przesunięcie %d."
+"Nie można odczytać pliku '%s':\n"
+"'%s' w linii %d, kolumna %d, przesunięcie %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1005
 #, c-format
@@ -20590,9 +20574,9 @@ msgid "HTTP library settings file %s missing or invalid."
 msgstr "Brak pliku ustawień biblioteki HTTP %s lub jest on nieprawidłowy"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "W pliku ustawień biblioteki HTTP %s brakuje numeru wersji API!"
+msgstr "W pliku ustawień biblioteki HTTP %s brakuje numeru wersji API."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:224
 #, fuzzy, c-format
@@ -20604,9 +20588,9 @@ msgstr ""
 "wersji %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "W pliku ustawień biblioteki HTTP %s brakuje głównego adresu URL!"
+msgstr "W pliku ustawień biblioteki HTTP %s brakuje głównego adresu URL."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:241
 #, fuzzy, c-format
@@ -26250,9 +26234,8 @@ msgid "Failed to flatten symbol"
 msgstr "Nie można zapisać %s."
 
 #: eeschema/tools/symbol_editor_control.cpp:858
-#, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "Nie można utworzyć pliku bibliotek symboli "
+msgstr "Nie można zaktualizować biblioteki za pomocą spłaszczonego symbolu"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 msgid "Place Pin"
@@ -26294,9 +26277,8 @@ msgid "Select a single pin with stacked notation to explode"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1054
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Wybrana ścieżka nie prowadzi do prawidłowych ustawień programu KiCad!"
+msgstr "Wybrany pin nie ma prawidłowej organizacji stosu"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1118
 msgid "Symbol is not derived from another symbol."
@@ -38441,9 +38423,8 @@ msgid "Footprint Report"
 msgstr "Raport ilościowy footprintów"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Wyszukaj tekst"
+msgstr "Zwykły tekst"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -45323,9 +45304,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Sprawdzam prześwity grafik na warstwach sygnałowych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Sprawdzam prześwity grafik na warstwach sygnałowych..."
+msgstr "Sprawdzam prześwit grafiki otworów na warstwach sygnałowych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
@@ -46511,10 +46491,11 @@ msgstr "Nie udało się przenieść danych o modelu z pliku '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3443
 #: pcbnew/exporters/step/step_pcb_model.cpp:3490
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr ""
 "Nieprawidłowe dane o montażu PCB; nie można utworzyć pliku wyjściowego '%s'."
+"\n"
 
 #: pcbnew/files.cpp:155
 msgid "All KiCad Board Files"
@@ -50807,9 +50788,9 @@ msgid "Successfully created genCAD file\n"
 msgstr "Plik genCAD wygenerowany poprawnie\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "Błąd podczas zapisywania pliku '%s'."
+msgstr "Błąd podczas zapisywania pliku '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
 #, fuzzy, c-format
@@ -50953,9 +50934,9 @@ msgid "Plugin Directory"
 msgstr "Otwórz Folder Wtyczek"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "Folder '%s' nie istnieje."
+msgstr "Folder z wtyczkami '%s' nie istnieje.  Utworzyć nowy?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:189
 #, fuzzy, c-format
