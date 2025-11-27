@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-28 09:00+0000\n"
-"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -10051,7 +10051,7 @@ msgstr "Kursor pełnoekranowy"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
-msgstr "Zawsze pokazuj nitki celownicze"
+msgstr "Kursor zawsze widoczny"
 
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "Open file"
@@ -13328,9 +13328,9 @@ msgid "No symbols found in library %s."
 msgstr "Nie znaleziono żądnych symboli w bibliotece %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Błąd podczas odczytywania symbolu %s: %s"
+msgstr "Błąd podczas odczytywania symbolu '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
@@ -35624,9 +35624,8 @@ msgid "Footprint Report"
 msgstr "Raport ilościowy footprintów"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Wyszukaj tekst"
+msgstr "Zwykły tekst"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -42090,9 +42089,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Sprawdzam prześwity grafik na warstwach sygnałowych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Sprawdzam prześwity grafik na warstwach sygnałowych..."
+msgstr "Sprawdzam prześwit grafiki otworów na warstwach sygnałowych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -48876,7 +48874,7 @@ msgstr "Pakowanie footprintów"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "Wspomaganie przyciągania pod kątem: pionowo, poziomo, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
