@@ -175,6 +175,10 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
         aViolation.excluded = true;
         aViolation.comment = m_parent->GetComment();
     }
+    else
+    {
+        aViolation.excluded = false;
+    }
 
     EDA_ITEM* mainItem = nullptr;
     EDA_ITEM* auxItem = nullptr;
