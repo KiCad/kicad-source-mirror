@@ -332,6 +332,16 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
                                         },
                                         RECURSE_MODE::RECURSE );
         }
+        else if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* clonedSymbol = static_cast<SCH_SYMBOL*>( item->Clone() );
+            tempScreen->Append( clonedSymbol );
+        }
+        else if( item->Type() == SCH_PIN_T || item->Type() == SCH_FIELD_T )
+        {
+            // Handled as symbol children
+            continue;
+        }
         else
         {
             EDA_ITEM* copy = item->Clone();
