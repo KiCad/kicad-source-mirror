@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <board.h>
+#include <pcb_board_outline.h>
 #include <pcb_track.h>
 #include <geometry/shape_segment.h>
 #include <geometry/seg.h>
@@ -192,6 +193,15 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     {
                         return true;
                     }
+                }
+
+                if( PCB_BOARD_OUTLINE* boardOutline = m_board->BoardOutline() )
+                {
+                    if( !testItem->GetBoundingBox().Intersects( boardOutline->GetOutline().BBoxFromCaches() ) )
+                        return true;
+
+                    if( !testShape->Collide( &boardOutline->GetOutline() ) )
+                        return true;
                 }
 
                 int            errorCode = DRCE_SILK_CLEARANCE;

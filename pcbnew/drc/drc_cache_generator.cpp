@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <board_design_settings.h>
+#include <pcb_board_outline.h>
 #include <footprint.h>
 #include <thread_pool.h>
 #include <zone.h>
@@ -260,6 +261,9 @@ bool DRC_CACHE_GENERATOR::Run()
                     } );
         }
     }
+
+    if( m_board->BoardOutline() )
+        m_board->BoardOutline()->GetOutline().BuildBBoxCaches();
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
