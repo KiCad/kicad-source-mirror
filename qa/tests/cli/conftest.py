@@ -24,6 +24,20 @@ import pytest
 import os
 from pathlib import Path
 
+def pytest_report_header(config):
+    """Print key environment vars."""
+    path_val = os.environ.get("PATH", "")
+    pythonpath_val = os.environ.get("PYTHONPATH", "")
+    kibuildpaths_val = os.environ.get("KICAD_BUILD_PATHS", "")
+
+    message = "Environment:\n"
+    message += f"PATH={path_val}\n"
+    message += f"PYTHONPATH={pythonpath_val}\n"
+    message += f"KICAD_BUILD_PATHS={kibuildpaths_val}\n"
+
+    return message
+
+
 class KiTestFixture:
     junit: bool = False
     _output_path: Path = None
@@ -89,3 +103,9 @@ class KiTestFixture:
 def kitest( pytestconfig ):
     kitesthelper = KiTestFixture( pytestconfig )
     yield kitesthelper
+
+
+# We need this Windows when executing from ctest
+for p in os.environ[ 'KICAD_BUILD_PATHS' ].split( ':' ):
+    if os.path.isdir( p ):
+        os.add_dll_directory( p )

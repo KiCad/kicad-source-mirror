@@ -48,9 +48,24 @@ macro(setup_qa_env target_name)
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/pcbnew/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/eeschema/"
       "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/cvpcb/" )
+
     set_tests_properties( ${target_name}
         PROPERTIES
             ENVIRONMENT_MODIFICATION "${PATH_MODIFICATION}"
+    )
+
+    get_test_property( ${target_name} ENVIRONMENT current_env )
+
+    # We now add another variable that holds the same paths as above but explicitly so that python tests
+    # can configure python using its os.add_dll_directory() function. because python wont read from PATH anymore.
+    set( KICAD_BUILD_PATHS
+    "KICAD_BUILD_PATHS=${CMAKE_BINARY_DIR}/kicad:${CMAKE_BINARY_DIR}/common:${CMAKE_BINARY_DIR}/api:${CMAKE_BINARY_DIR}/common/gal:${CMAKE_BINARY_DIR}/pcbnew:${CMAKE_BINARY_DIR}/eeschema:${CMAKE_BINARY_DIR}/cvpcb"
+    )
+
+    set( new_env "${current_env};${KICAD_BUILD_PATHS}" )
+    set_tests_properties( ${target_name}
+        PROPERTIES
+            ENVIRONMENT "${new_env}"
     )
 endmacro()
 
