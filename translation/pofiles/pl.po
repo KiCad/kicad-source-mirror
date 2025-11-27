@@ -1,7 +1,7 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020, 2023.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024, 2025.
 # Pomian <kontakt@rapiddev.pl>, 2021.
-# Krzysztof Kawa <christophorus72@gmail.com>, 2022.
+# Krzysztof Kawa <christophorus72@gmail.com>, 2022, 2025.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
 # Grzegorz Szymaszek <gszymaszek@short.pl>, 2022, 2024.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
 "PO-Revision-Date: 2025-11-28 09:00+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -4952,12 +4952,12 @@ msgstr "Kursor"
 #: common/dialogs/panel_gal_options_base.cpp:102 common/tool/actions.cpp:1188
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Small crosshairs"
-msgstr "Małe krzyżyki"
+msgstr "Mały kursor"
 
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
 msgid "Full window crosshairs"
-msgstr "Krzyżyki pełnoekranowe"
+msgstr "Kursor pełnoekranowy"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
