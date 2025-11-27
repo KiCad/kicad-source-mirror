@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-25 08:27+0000\n"
+"PO-Revision-Date: 2025-11-28 09:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -16995,9 +16995,8 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Pin attaccati quando si trascinano i bordi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Identificativo e percorso non possono essere vuoti."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:452
 msgid "Nickname cannot be empty."
@@ -18557,9 +18556,8 @@ msgid "&Duplicate '%s'"
 msgstr "&Duplica '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Unità"
+msgstr "Scambia unità"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -19830,15 +19828,13 @@ msgstr "Valore SCH_FILE_T sconosciuto: %d"
 
 #: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
 #: eeschema/sch_item.cpp:641
-#, fuzzy
 msgid "All units"
-msgstr "Tutti gli elementi"
+msgstr "Tutte le unità"
 
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
 #: eeschema/sch_item.cpp:663
-#, fuzzy
 msgid "All body styles"
-msgstr "Comune a tutti gli stili del corpo"
+msgstr "Tutti gli stili corpo"
 
 #: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3027 eeschema/tools/sch_edit_tool.cpp:138
@@ -20358,29 +20354,24 @@ msgid "Cell Height"
 msgstr "Altezza cella"
 
 #: eeschema/sch_tablecell.cpp:246 pcbnew/pcb_tablecell.cpp:247
-#, fuzzy
 msgid "Column Width"
-msgstr "Larghezza cella"
+msgstr "Larghezza colonna"
 
 #: eeschema/sch_tablecell.cpp:251 pcbnew/pcb_tablecell.cpp:252
-#, fuzzy
 msgid "Row Height"
-msgstr "Altezza riquadro"
+msgstr "Altezza riga"
 
 #: eeschema/sch_tablecell.cpp:256
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Proprietà etichetta"
+msgstr "Proprietà cella"
 
 #: eeschema/sch_tablecell.cpp:258
-#, fuzzy
 msgid "Background Fill"
 msgstr "Riempimento sfondo"
 
 #: eeschema/sch_tablecell.cpp:262
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Colore sfondo"
+msgstr "Colore riempimento sfondo"
 
 #: eeschema/sch_text.cpp:467
 #, c-format
