@@ -10,8 +10,9 @@
     "show_scrollbars": false,
     "text_editor_zoom": 0,
     "toolbar_icon_size": 24,
+    "use_custom_cursors": true,
     "use_icons_in_menus": false,
-    "zoom_correction_factor": 1
+    "zoom_correction_factor": 1.0
   },
   "auto_backup": {
     "backup_on_autosave": false,
@@ -56,6 +57,7 @@
     "horizontal_pan": false,
     "hotkey_feedback": true,
     "immediate_actions": true,
+    "motion_pan_modifier": 0,
     "mouse_left": -1,
     "mouse_middle": 2,
     "mouse_right": 2,
@@ -87,15 +89,25 @@
     "pinned_symbol_libs": [],
     "remember_open_files": false
   },
+  "spacemouse": {
+    "pan_speed": 5,
+    "reverse_pan_x": false,
+    "reverse_pan_y": false,
+    "reverse_rotate": false,
+    "reverse_zoom": false,
+    "rotate_speed": 5
+  },
   "system": {
     "autosave_interval": 600,
     "clear_3d_cache_interval": 30,
     "file_explorer": "",
     "file_history_size": 9,
     "language": "Default",
+    "local_history_debounce": 5,
+    "local_history_enabled": true,
     "pdf_viewer_name": "",
     "text_editor": "/usr/bin/open -e",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/seth/code/kicad/kicad-master/qa/tests"
+    "working_dir": "E:\\kicad\\kicad\\qa\\tests"
   }
 }

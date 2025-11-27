@@ -1,4 +1,8 @@
 {
+  "ERC": {
+    "crossprobe": true,
+    "scroll_on_crossprobe": true
+  },
   "annotation": {
     "automatic": true,
     "messages_filter": -1,
@@ -61,6 +65,7 @@
       "height": 200,
       "width": 200
     },
+    "net_nav_search_mode_wildcard": true,
     "properties_panel_width": -1,
     "properties_splitter_proportion": 0.5,
     "schematic_hierarchy_float": false,
@@ -97,12 +102,17 @@
     ],
     "selected_plugin": ""
   },
+  "change_symbols": {
+    "update_references": false,
+    "update_values": false
+  },
   "color_picker": {
     "default_tab": 0
   },
   "cross_probing": {
     "auto_highlight": true,
     "center_on_items": true,
+    "flash_selection": false,
     "on_selection": true,
     "zoom_to_fit": true
   },
@@ -112,6 +122,7 @@
     "lib_tree": {
       "column_widths": null
     },
+    "place_as_group": true,
     "place_as_sheet": false,
     "repeated_placement": false,
     "sash_pos_h": -1,
@@ -155,8 +166,10 @@
     "field_widths": {},
     "height": 0,
     "page": 0,
+    "sash_pos": 400,
     "scope": 0,
     "selection_mode": 0,
+    "sidebar_collapsed": false,
     "width": 0
   },
   "find_replace": {
@@ -187,9 +200,9 @@
     "origin_y": 0.0
   },
   "input": {
+    "allow_unconstrained_pin_swaps": false,
     "drag_is_move": false,
-    "esc_clears_net_highlight": true,
-    "allow_unconstrained_pin_swaps": false
+    "esc_clears_net_highlight": true
   },
   "lib_tree": {
     "column_widths": null,
@@ -201,6 +214,7 @@
     "lib_list_width": 150,
     "show_pin_electrical_type": true,
     "window": {
+      "aui_state": null,
       "cursor": {
         "always_show_cursor": true,
         "cross_hair_mode": 0
@@ -338,6 +352,7 @@
     "selection_zoom": 1
   },
   "selection": {
+    "drag_net_collision_width": 4,
     "draw_selected_children": true,
     "fill_shapes": false,
     "highlight_netclass_colors": false,
@@ -361,6 +376,7 @@
     "signal_panel_height": 0,
     "white_background": false,
     "window": {
+      "aui_state": null,
       "cursor": {
         "always_show_cursor": true,
         "cross_hair_mode": 0
@@ -465,6 +481,7 @@
     "units": 5
   },
   "window": {
+    "aui_state": null,
     "cursor": {
       "always_show_cursor": true,
       "cross_hair_mode": 0
