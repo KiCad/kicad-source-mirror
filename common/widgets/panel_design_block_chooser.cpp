@@ -240,6 +240,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
 {
     // Unselect before syncing to avoid null reference in the adapter
     // if a selected item is removed during the sync
+    LIB_ID savedSelection = GetSelectedLibId();
     m_tree->Unselect();
 
     DESIGN_BLOCK_TREE_MODEL_ADAPTER* adapter = static_cast<DESIGN_BLOCK_TREE_MODEL_ADAPTER*>( m_adapter.get() );
@@ -255,6 +256,10 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
     adapter->AddLibraries( m_frame );
 
     m_tree->Regenerate( true );
+
+    if( savedSelection.IsValid() )
+        SelectLibId( savedSelection );
+
     Refresh();
 }
 
