@@ -131,10 +131,6 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
     if( m_loadTotal == 0 )
     {
         wxLogTrace( traceLibraries, "DB: AsyncLoad: no libraries left to load; exiting" );
-        std::lock_guard lock( GlobalLibraryMutex );
-        std::lock_guard projectLock( m_libraries_mutex );
-        GlobalLibraries.clear();
-        m_libraries.clear();
         return;
     }
 
@@ -256,7 +252,7 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
         std::lock_guard lock( GlobalLibraryMutex );
         std::erase_if( GlobalLibraries, [&]( const auto& pair )
                 {
-                    return libNamesCurrentlyValid.contains( pair.first );
+                    return !libNamesCurrentlyValid.contains( pair.first );
                 } );
     }
 
@@ -264,7 +260,7 @@ void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
         std::lock_guard lock( m_libraries_mutex );
         std::erase_if( m_libraries, [&]( const auto& pair )
                 {
-                    return libNamesCurrentlyValid.contains( pair.first );
+                    return !libNamesCurrentlyValid.contains( pair.first );
                 } );
     }
 
