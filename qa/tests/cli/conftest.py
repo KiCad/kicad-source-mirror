@@ -105,7 +105,8 @@ def kitest( pytestconfig ):
     yield kitesthelper
 
 
-# We need this Windows when executing from ctest
-for p in os.environ[ 'KICAD_BUILD_PATHS' ].split( ':' ):
-    if os.path.isdir( p ):
-        os.add_dll_directory( p )
+# We need this on Windows when executing from ctest
+if os.name == 'nt':
+    for p in os.environ[ 'KICAD_BUILD_PATHS' ].split( ':' ):
+        if os.path.isdir( p ):
+            os.add_dll_directory( p )

@@ -35,8 +35,9 @@ def pytest_report_header(config):
     message += f"KICAD_BUILD_PATHS={kibuildpaths_val}\n"
 
     return message
-
-# We need this namely for windows executing from ctest
-for p in os.environ[ 'KICAD_BUILD_PATHS' ].split( ':' ):
-    if os.path.isdir( p ):
-        os.add_dll_directory( p )
+    
+# We need this on Windows when executing from ctest
+if os.name == 'nt':
+    for p in os.environ[ 'KICAD_BUILD_PATHS' ].split( ':' ):
+        if os.path.isdir( p ):
+            os.add_dll_directory( p )
