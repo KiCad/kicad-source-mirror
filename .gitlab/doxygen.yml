@@ -1,7 +1,7 @@
 build_doxygen_docker:
-  image: docker:stable
+  image: docker:24.0.5-cli
   services:
-    - docker:dind
+    - docker:24.0.5-dind
   stage: build
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB_NAME == "doxygen"
