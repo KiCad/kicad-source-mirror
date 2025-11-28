@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-28 09:01+0000\n"
+"PO-Revision-Date: 2025-11-29 10:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -24209,14 +24209,12 @@ msgid "All units of this symbol are already placed."
 msgstr "Tutte le unità di questo simbolo già piazzate."
 
 #: eeschema/tools/sch_drawing_tools.cpp:779
-#, fuzzy
 msgid "Add Design Block"
 msgstr "Aggiungi blocco progetto"
 
 #: eeschema/tools/sch_drawing_tools.cpp:780
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Importa i contenuti del foglio schema..."
+msgstr "Importa i contenuti del foglio schema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:814
 msgid "Choose Schematic"
@@ -24685,9 +24683,9 @@ msgstr "Nessuna libreria simboli selezionata."
 #: eeschema/tools/symbol_editor_control.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:470
 #: eeschema/tools/symbol_editor_control.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Libreria \"%s\" non trovata."
+msgstr "Libreria simboli '%s' non trovata."
 
 #: eeschema/tools/symbol_editor_control.cpp:406
 #: pcbnew/tools/footprint_editor_control.cpp:650
@@ -26244,7 +26242,6 @@ msgid "Show import issues"
 msgstr "Mostra problemi importazione"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
 msgstr "Incorpora file"
 
