@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-28 09:00+0000\n"
+"PO-Revision-Date: 2025-11-29 10:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -22913,7 +22913,7 @@ msgstr "打开引脚属性表以批量编辑引脚"
 
 #: eeschema/tools/sch_actions.cpp:913
 msgid "Break"
-msgstr "断开"
+msgstr "拆分"
 
 #: eeschema/tools/sch_actions.cpp:914
 msgid "Divide into connected segments"
@@ -23769,7 +23769,7 @@ msgstr "切割连线"
 
 #: eeschema/tools/sch_edit_tool.cpp:2955
 msgid "Break Wire"
-msgstr "断开连线"
+msgstr "拆分连线"
 
 #: eeschema/tools/sch_edit_tool.cpp:2976
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -46530,7 +46530,7 @@ msgstr "走线违反 DRC。"
 
 #: pcbnew/router/router_tool.cpp:2640 pcbnew/tools/pcb_actions.cpp:2415
 msgid "Break Track"
-msgstr "分割走线"
+msgstr "拆分走线"
 
 #: pcbnew/router/router_tool.cpp:2721
 #, c-format
@@ -49797,14 +49797,12 @@ msgid "Remove Polygon Corner"
 msgstr "移除多边形拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3045
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "打破填充区转角"
+msgstr "拆分填充区转角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3047
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "打破多边形拐角"
+msgstr "拆分多边形拐角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1449
 msgid "Select/Expand Connection..."
