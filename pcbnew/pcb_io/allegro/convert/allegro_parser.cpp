@@ -611,23 +611,35 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0C( FILE_STREAM& aStream, FMT_VE
 
     auto& data = block->GetData();
 
-    aStream.Skip( 3 );
+    data.m_T = aStream.ReadU8();
+    data.m_Layer = ParseLayerInfo( aStream );
 
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
 
-    ReadCond( aStream, aVer, data.m_Unknown1 );
-    ReadCond( aStream, aVer, data.m_Unknown2 );
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
 
-    data.m_Unknown3 = aStream.ReadU32();
+    // Older packed format
+    ReadCond( aStream, aVer, data.m_Shape );
+    ReadCond( aStream, aVer, data.m_DrillChar );
+    ReadCond( aStream, aVer, data.m_UnknownPadding );
+
+    // V17.2+
+    ReadCond( aStream, aVer, data.m_Shape16x );
+    ReadCond( aStream, aVer, data.m_DrillChars );
+    ReadCond( aStream, aVer, data.m_Unknown_16x );
+
     data.m_Unknown4 = aStream.ReadU32();
-    data.m_KeyInd = aStream.ReadU32();
-
-    data.m_Unknown5 = aStream.ReadU32();
 
     for( size_t i = 0; i < data.m_Coords.size(); ++i )
     {
         data.m_Coords[i] = aStream.ReadS32();
+    }
+
+    for( size_t i = 0; i < data.m_Size.size(); ++i )
+    {
+        data.m_Size[i] = aStream.ReadS32();
     }
 
     for( size_t i = 0; i < data.m_UnknownArray.size(); ++i )
@@ -1366,7 +1378,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER
     data.m_UnknownPtr3 = stream.ReadU32();
     data.m_UnknownPtr4 = stream.ReadU32();
     data.m_UnknownPtr5 = stream.ReadU32();
-    data.m_StrPtr = stream.ReadU32();
+    data.m_SymLibPathPtr = stream.ReadU32();
     data.m_UnknownPtr6 = stream.ReadU32();
     data.m_UnknownPtr7 = stream.ReadU32();
     data.m_UnknownPtr8 = stream.ReadU32();

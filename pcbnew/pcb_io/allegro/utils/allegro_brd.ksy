@@ -222,6 +222,13 @@ types:
         type: u4
 
   layer_info:
+    doc: |
+      Layer information structure used in many board objects.
+
+      Consists of a layer class and subclass, which together identify
+      a specific layer in the board.
+
+      These seem to be contiguous and in the order listed here: https://www.artwork.com/all2dxf/alleggeo.htm
     seq:
       - id: lclass
         type: u1
@@ -251,7 +258,25 @@ types:
         0xfd: assembly_top
 
       enum_board_geom:
-        0xf1: unknown
+        0xeb: constraint_area
+        0xec: off_grid_area
+        0xed: soldermask_bottom
+        0xee: soldermask_top
+        0xef: assembly_detail
+        0xf0: silkscreen_bottom
+        0xf1: silkscreen_top
+        0xf2: switch_area_bottom
+        0xf3: switch_area_top
+        0xf4: both_rooms
+        0xf5: bottom_room
+        0xf6: top_room
+        0xf7: place_grid_bottom
+        0xf8: place_grid_top
+        0xf9: dimension
+        0xfa: tooling_corners
+        0xfb: assembly_notes
+        0xfc: plating_bar
+        0xfd: outline
 
       enum_manufacturing:
         0xf0: unknown
@@ -378,7 +403,7 @@ types:
             0x29: type_29
             0x2a: type_2a
             0x2b: type_2b
-            0x2c: type_2c_table
+            0x2c: type_2c_group
             0x2d: type_2d
             0x2e: type_2e
             0x2f: type_2f
@@ -484,10 +509,10 @@ types:
             0x6D: string_aligned(size)
             0x6E: string_aligned(size)
             0x6F: string_aligned(size)
-            0x68: string_aligned(size)
+            0x68: string_aligned(size)  # SYM_LIBRARY_PATH, ?...
             0x6B: string_aligned(size)
             0x71: string_aligned(size)
-            0x73: string_aligned(size)
+            0x73: string_aligned(size)  # size-delimited, but not string data
             0x78: string_aligned(size)
             0x70: x70_x74
             0x74: x70_x74
@@ -811,30 +836,74 @@ types:
         if: _root.ver >= 0x00140900
 
   type_0c:
+    doc: |
+      Object that seems to represent a FIGURE in Allegro.
+
+      For example, drill table marks, origin marks
     seq:
       - type: u1
-      - type: u2
+      - id: layer
+        type: layer_info
       - id: key
         type: u4
       - id: next
         type: u4
+
       - type: u4
+        id: unknown_1
+      - type: u4
+        id: unknown_2
+
+      # In earlier versions, these fields are packed into a U4
+      - id: shape
+        type: u1
+        if: _root.ver < 0x00140400
+        doc: |
+          Shape type.
+
+          Seen values:
+            0x02: circle
+            0x04: cross
+            0x05: square/rect?
+            0x07: diamond
+            0x0b: oval (horizontal?)
+            0x0f: hex (horizontal?)
+            0x12: triangle (point up)
+      - id: drill_char
+        type: u1
+        doc: An ASCII(?) character representing the drill mark
+        if: _root.ver < 0x00140400
+      - id: padding # or more drill chars?
+        type: u2
+        if: _root.ver < 0x00140400
+
+      # In later versions, these fields are separate
+
+      - type: u4
+        id: shape_16x
         if: _root.ver >= 0x00140400
       - type: u4
+        id: drill_chars
+        doc: 0 or more drill characters packed into a u4
         if: _root.ver >= 0x00140400
       - type: u4
+        id: unknown_3
+        if: _root.ver >= 0x00140400
+
       - type: u4
-      - id: keyind
-        type: u4
-      - type: u4
+        id: unknown_4
       - id: coords
-        type: s4
-        repeat: expr
-        repeat-expr: 4
+        type: coords
+      - id: size
+        type: coords
       - type: u4
-        repeat: expr
-        repeat-expr: 3
+        id: unknown_5
       - type: u4
+        id: unknown_6
+      - type: u4
+        id: unknown_7
+      - type: u4
+        id: unknown_8
         if: _root.ver >= 0x00140900
 
   type_0d_pad:
@@ -1515,6 +1584,8 @@ types:
         repeat-until: _io.pos == _root.x27_end_offset - 1
 
   type_26:
+    doc: |
+      Could be some kind of table/grouping assignment
     seq:
       - type: u1
       - type: u2
@@ -1522,11 +1593,19 @@ types:
         type: u4
       - id: member_ptr
         type: u4
+        doc: |
+          Points to some graphic object like 0x28 (rect), 0x14 (seg), 0x30 (str_wrapper), ...
       - id: un
         type: u4
         if: _root.ver >= 0x00140400
+        doc: |
+          Does not appear to be a pointer.
+
+          Some values from BeagleBone-AI: 0x23605, 0x20a88, 0x216c6
       - id: group_ptr
         type: u4
+        doc: |
+          Points to an 0x2c (table)
       - id: const_ptr
         type: u4
       - id: un1
@@ -1701,7 +1780,13 @@ types:
   type_2b:
     seq:
       - type: u1
-      - type: u2
+      - id: subtype
+        type: u2
+        doc: |
+          E.g.
+          - 0x0001 for normal symbols
+          - 0x0005 for dimensions
+          - 0x0007 for the AB00 symbol in PreAmp
       - id: key
         type: u4
       - id: fp_str_ref
@@ -1728,15 +1813,21 @@ types:
       - id: ptr_3
         type: u4
         doc: |
-          Points to a 0x32 (pad?)
+          Points to a 0x24, (or 0x32 (pad?)?)
       - id: ptr_4
         type: u4
         doc: |
           Points to a 0x14 (segment - list of graphics?)
-      - id: str_ptr1
+      - id: lib_path
         type: u4
         doc: |
-          Points to a 0x03
+          Points to a 0x03 subtype 0x68.
+          Can be null, e.g. for dimensions.
+
+          For a normal symbol, this is the library path.
+          E.g. C:/OrCAD/OrCAD_16.6_Lite/share/pcb/pcb_lib/symbols/capc2008x126n_0805.psm
+
+          For the AB00 symbol in PreAmp, this is: "0.000000 MILS"
       - id: ptr_5
         type: u4
         doc: |
@@ -1757,7 +1848,12 @@ types:
         type: u4
         if: _root.ver >= 0x0140400
 
-  type_2c_table:
+  type_2c_group:
+    doc: |
+      Seems to be some kind of group.
+
+      All tables have one of thes, but there appear to be others too,
+      some to do with dimensions.
     seq:
       - type: u1
       - type: u2
@@ -1821,11 +1917,15 @@ types:
       - id: unknown_2
         type: u2
         doc:
-          E.g. 0x0020
+          E.g.
+            0x0000 (for LINEAR_DIMENSION, TP100 on PreAmp)
+            0x0020 (for others on PreAmp)
       - id: unknown_3
         type: u2
         doc: |
-          E.g. 0x2000
+          E.g.
+            0x0000 (for LINEAR_DIMENSION, TP100 on PreAmp)
+            0x2000 (for others on PreAmp)
       - id: unknown_4
         type: u4
         if: _root.ver >= 0x0140400
@@ -2310,6 +2410,9 @@ types:
             repeat-expr: 108
 
   type_37:
+    doc: |
+      Seems to be the object that collects entries for a group
+      (e.g. table or xsection charts have one of these)
     seq:
       - id: t
         type: u1
@@ -2317,10 +2420,10 @@ types:
         type: u2
       - id: key
         type: u4
-      - id: ptr_1
+      - id: group_ptr
         type: u4
         doc: |
-          Points back to 0x2c (table)
+          Points back to 0x2c (group)
       - id: unknown_1
         type: u4
       - id: capacity
@@ -2435,6 +2538,8 @@ types:
         type: string_aligned(len)
 
   type_3c:
+    doc: |
+      Looks like a binding from a dimension to the dimensioned object.
     seq:
       - id: t
         type: u1
@@ -2456,4 +2561,4 @@ types:
             - null
             - 0x32
             - 0x1b
-            - 0x24
+            - 0x24 (RECT)

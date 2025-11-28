@@ -301,7 +301,10 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type37(KaitaiStruct):
-        SEQ_FIELDS = ["t", "t2", "key", "ptr_1", "unknown_1", "capacity", "count", "unknown_2", "ptrs", "unknown_3"]
+        """Seems to be the object that collects entries for a group
+        (e.g. table or xsection charts have one of these)
+        """
+        SEQ_FIELDS = ["t", "t2", "key", "group_ptr", "unknown_1", "capacity", "count", "unknown_2", "ptrs", "unknown_3"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -319,9 +322,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
-            self._debug['ptr_1']['start'] = self._io.pos()
-            self.ptr_1 = self._io.read_u4le()
-            self._debug['ptr_1']['end'] = self._io.pos()
+            self._debug['group_ptr']['start'] = self._io.pos()
+            self.group_ptr = self._io.read_u4le()
+            self._debug['group_ptr']['end'] = self._io.pos()
             self._debug['unknown_1']['start'] = self._io.pos()
             self.unknown_1 = self._io.read_u4le()
             self._debug['unknown_1']['end'] = self._io.pos()
@@ -691,6 +694,70 @@ class AllegroBrd(KaitaiStruct):
 
 
 
+    class Type2cGroup(KaitaiStruct):
+        """Seems to be some kind of group.
+        
+        All tables have one of thes, but there appear to be others too,
+        some to do with dimensions.
+        """
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_1", "unknown_2", "unknown_3", "subclass_str", "unknown_4", "ptr_1", "ptr_2", "ptr_3", "flags"]
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._debug = collections.defaultdict(dict)
+            self._read()
+
+        def _read(self):
+            self._debug['_unnamed0']['start'] = self._io.pos()
+            self._unnamed0 = self._io.read_u1()
+            self._debug['_unnamed0']['end'] = self._io.pos()
+            self._debug['_unnamed1']['start'] = self._io.pos()
+            self._unnamed1 = self._io.read_u2le()
+            self._debug['_unnamed1']['end'] = self._io.pos()
+            self._debug['key']['start'] = self._io.pos()
+            self.key = self._io.read_u4le()
+            self._debug['key']['end'] = self._io.pos()
+            self._debug['next']['start'] = self._io.pos()
+            self.next = self._io.read_u4le()
+            self._debug['next']['end'] = self._io.pos()
+            if self._root.ver >= 1311744:
+                self._debug['unknown_1']['start'] = self._io.pos()
+                self.unknown_1 = self._io.read_u4le()
+                self._debug['unknown_1']['end'] = self._io.pos()
+
+            if self._root.ver >= 1311744:
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u4le()
+                self._debug['unknown_2']['end'] = self._io.pos()
+
+            if self._root.ver >= 1311744:
+                self._debug['unknown_3']['start'] = self._io.pos()
+                self.unknown_3 = self._io.read_u4le()
+                self._debug['unknown_3']['end'] = self._io.pos()
+
+            self._debug['subclass_str']['start'] = self._io.pos()
+            self.subclass_str = self._io.read_u4le()
+            self._debug['subclass_str']['end'] = self._io.pos()
+            if self._root.ver < 1311744:
+                self._debug['unknown_4']['start'] = self._io.pos()
+                self.unknown_4 = self._io.read_u4le()
+                self._debug['unknown_4']['end'] = self._io.pos()
+
+            self._debug['ptr_1']['start'] = self._io.pos()
+            self.ptr_1 = self._io.read_u4le()
+            self._debug['ptr_1']['end'] = self._io.pos()
+            self._debug['ptr_2']['start'] = self._io.pos()
+            self.ptr_2 = self._io.read_u4le()
+            self._debug['ptr_2']['end'] = self._io.pos()
+            self._debug['ptr_3']['start'] = self._io.pos()
+            self.ptr_3 = self._io.read_u4le()
+            self._debug['ptr_3']['end'] = self._io.pos()
+            self._debug['flags']['start'] = self._io.pos()
+            self.flags = self._io.read_bits_int_be(32)
+            self._debug['flags']['end'] = self._io.pos()
+
+
     class CadenceFp(KaitaiStruct):
         SEQ_FIELDS = ["a", "b"]
         def __init__(self, _io, _parent=None, _root=None):
@@ -949,6 +1016,8 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type3c(KaitaiStruct):
+        """Looks like a binding from a dimension to the dimensioned object.
+        """
         SEQ_FIELDS = ["t", "t2", "key", "unknown_1", "num_entries", "entries"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -1045,7 +1114,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type2b(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "fp_str_ref", "unknown_1", "coords0", "coords1", "next", "first_inst_ptr", "ptr_2", "ptr_3", "ptr_4", "str_ptr1", "ptr_5", "ptr_6", "ptr_7", "unknown_2", "unknown_3"]
+        SEQ_FIELDS = ["_unnamed0", "subtype", "key", "fp_str_ref", "unknown_1", "coords0", "coords1", "next", "first_inst_ptr", "ptr_2", "ptr_3", "ptr_4", "lib_path", "ptr_5", "ptr_6", "ptr_7", "unknown_2", "unknown_3"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1057,9 +1126,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['_unnamed0']['start'] = self._io.pos()
             self._unnamed0 = self._io.read_u1()
             self._debug['_unnamed0']['end'] = self._io.pos()
-            self._debug['_unnamed1']['start'] = self._io.pos()
-            self._unnamed1 = self._io.read_u2le()
-            self._debug['_unnamed1']['end'] = self._io.pos()
+            self._debug['subtype']['start'] = self._io.pos()
+            self.subtype = self._io.read_u2le()
+            self._debug['subtype']['end'] = self._io.pos()
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
@@ -1090,9 +1159,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr_4']['start'] = self._io.pos()
             self.ptr_4 = self._io.read_u4le()
             self._debug['ptr_4']['end'] = self._io.pos()
-            self._debug['str_ptr1']['start'] = self._io.pos()
-            self.str_ptr1 = self._io.read_u4le()
-            self._debug['str_ptr1']['end'] = self._io.pos()
+            self._debug['lib_path']['start'] = self._io.pos()
+            self.lib_path = self._io.read_u4le()
+            self._debug['lib_path']['end'] = self._io.pos()
             self._debug['ptr_5']['start'] = self._io.pos()
             self.ptr_5 = self._io.read_u4le()
             self._debug['ptr_5']['end'] = self._io.pos()
@@ -1442,6 +1511,13 @@ class AllegroBrd(KaitaiStruct):
 
 
     class LayerInfo(KaitaiStruct):
+        """Layer information structure used in many board objects.
+        
+        Consists of a layer class and subclass, which together identify
+        a specific layer in the board.
+        
+        These seem to be contiguous and in the order listed here: https://www.artwork.com/all2dxf/alleggeo.htm
+        """
 
         class LayerClass(Enum):
             board_geometry = 1
@@ -1458,7 +1534,25 @@ class AllegroBrd(KaitaiStruct):
             assembly_top = 253
 
         class EnumBoardGeom(Enum):
-            unknown = 241
+            constraint_area = 235
+            off_grid_area = 236
+            soldermask_bottom = 237
+            soldermask_top = 238
+            assembly_detail = 239
+            silkscreen_bottom = 240
+            silkscreen_top = 241
+            switch_area_bottom = 242
+            switch_area_top = 243
+            both_rooms = 244
+            bottom_room = 245
+            top_room = 246
+            place_grid_bottom = 247
+            place_grid_top = 248
+            dimension = 249
+            tooling_corners = 250
+            assembly_notes = 251
+            plating_bar = 252
+            outline = 253
 
         class EnumManufacturing(Enum):
             unknown = 240
@@ -1758,7 +1852,11 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type0c(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "_unnamed4", "_unnamed5", "_unnamed6", "_unnamed7", "keyind", "_unnamed9", "coords", "_unnamed11", "_unnamed12"]
+        """Object that seems to represent a FIGURE in Allegro.
+        
+        For example, drill table marks, origin marks
+        """
+        SEQ_FIELDS = ["_unnamed0", "layer", "key", "next", "unknown_1", "unknown_2", "shape", "drill_char", "padding", "shape_16x", "drill_chars", "unknown_3", "unknown_4x", "coords", "size", "unknown_5", "unknown_6", "unknown_7", "unknown_8"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1770,61 +1868,73 @@ class AllegroBrd(KaitaiStruct):
             self._debug['_unnamed0']['start'] = self._io.pos()
             self._unnamed0 = self._io.read_u1()
             self._debug['_unnamed0']['end'] = self._io.pos()
-            self._debug['_unnamed1']['start'] = self._io.pos()
-            self._unnamed1 = self._io.read_u2le()
-            self._debug['_unnamed1']['end'] = self._io.pos()
+            self._debug['layer']['start'] = self._io.pos()
+            self.layer = AllegroBrd.LayerInfo(self._io, self, self._root)
+            self._debug['layer']['end'] = self._io.pos()
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
             self._debug['next']['start'] = self._io.pos()
             self.next = self._io.read_u4le()
             self._debug['next']['end'] = self._io.pos()
-            if self._root.ver >= 1311744:
-                self._debug['_unnamed4']['start'] = self._io.pos()
-                self._unnamed4 = self._io.read_u4le()
-                self._debug['_unnamed4']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
+            self._debug['unknown_2']['start'] = self._io.pos()
+            self.unknown_2 = self._io.read_u4le()
+            self._debug['unknown_2']['end'] = self._io.pos()
+            if self._root.ver < 1311744:
+                self._debug['shape']['start'] = self._io.pos()
+                self.shape = self._io.read_u1()
+                self._debug['shape']['end'] = self._io.pos()
+
+            if self._root.ver < 1311744:
+                self._debug['drill_char']['start'] = self._io.pos()
+                self.drill_char = self._io.read_u1()
+                self._debug['drill_char']['end'] = self._io.pos()
+
+            if self._root.ver < 1311744:
+                self._debug['padding']['start'] = self._io.pos()
+                self.padding = self._io.read_u2le()
+                self._debug['padding']['end'] = self._io.pos()
 
             if self._root.ver >= 1311744:
-                self._debug['_unnamed5']['start'] = self._io.pos()
-                self._unnamed5 = self._io.read_u4le()
-                self._debug['_unnamed5']['end'] = self._io.pos()
+                self._debug['shape_16x']['start'] = self._io.pos()
+                self.shape_16x = self._io.read_u4le()
+                self._debug['shape_16x']['end'] = self._io.pos()
 
-            self._debug['_unnamed6']['start'] = self._io.pos()
-            self._unnamed6 = self._io.read_u4le()
-            self._debug['_unnamed6']['end'] = self._io.pos()
-            self._debug['_unnamed7']['start'] = self._io.pos()
-            self._unnamed7 = self._io.read_u4le()
-            self._debug['_unnamed7']['end'] = self._io.pos()
-            self._debug['keyind']['start'] = self._io.pos()
-            self.keyind = self._io.read_u4le()
-            self._debug['keyind']['end'] = self._io.pos()
-            self._debug['_unnamed9']['start'] = self._io.pos()
-            self._unnamed9 = self._io.read_u4le()
-            self._debug['_unnamed9']['end'] = self._io.pos()
+            if self._root.ver >= 1311744:
+                self._debug['drill_chars']['start'] = self._io.pos()
+                self.drill_chars = self._io.read_u4le()
+                self._debug['drill_chars']['end'] = self._io.pos()
+
+            if self._root.ver >= 1311744:
+                self._debug['unknown_3']['start'] = self._io.pos()
+                self.unknown_3 = self._io.read_u4le()
+                self._debug['unknown_3']['end'] = self._io.pos()
+
+            self._debug['unknown_4x']['start'] = self._io.pos()
+            self.unknown_4x = self._io.read_u4le()
+            self._debug['unknown_4x']['end'] = self._io.pos()
             self._debug['coords']['start'] = self._io.pos()
-            self.coords = []
-            for i in range(4):
-                if not 'arr' in self._debug['coords']:
-                    self._debug['coords']['arr'] = []
-                self._debug['coords']['arr'].append({'start': self._io.pos()})
-                self.coords.append(self._io.read_s4le())
-                self._debug['coords']['arr'][i]['end'] = self._io.pos()
-
+            self.coords = AllegroBrd.Coords(self._io, self, self._root)
             self._debug['coords']['end'] = self._io.pos()
-            self._debug['_unnamed11']['start'] = self._io.pos()
-            self._unnamed11 = []
-            for i in range(3):
-                if not 'arr' in self._debug['_unnamed11']:
-                    self._debug['_unnamed11']['arr'] = []
-                self._debug['_unnamed11']['arr'].append({'start': self._io.pos()})
-                self._unnamed11.append(self._io.read_u4le())
-                self._debug['_unnamed11']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['_unnamed11']['end'] = self._io.pos()
+            self._debug['size']['start'] = self._io.pos()
+            self.size = AllegroBrd.Coords(self._io, self, self._root)
+            self._debug['size']['end'] = self._io.pos()
+            self._debug['unknown_5']['start'] = self._io.pos()
+            self.unknown_5 = self._io.read_u4le()
+            self._debug['unknown_5']['end'] = self._io.pos()
+            self._debug['unknown_6']['start'] = self._io.pos()
+            self.unknown_6 = self._io.read_u4le()
+            self._debug['unknown_6']['end'] = self._io.pos()
+            self._debug['unknown_7']['start'] = self._io.pos()
+            self.unknown_7 = self._io.read_u4le()
+            self._debug['unknown_7']['end'] = self._io.pos()
             if self._root.ver >= 1313024:
-                self._debug['_unnamed12']['start'] = self._io.pos()
-                self._unnamed12 = self._io.read_u4le()
-                self._debug['_unnamed12']['end'] = self._io.pos()
+                self._debug['unknown_8']['start'] = self._io.pos()
+                self.unknown_8 = self._io.read_u4le()
+                self._debug['unknown_8']['end'] = self._io.pos()
 
 
 
@@ -1935,6 +2045,8 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type26(KaitaiStruct):
+        """Could be some kind of table/grouping assignment
+        """
         SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "member_ptr", "un", "group_ptr", "const_ptr", "un1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -2166,7 +2278,7 @@ class AllegroBrd(KaitaiStruct):
             elif _on == 40:
                 self.data = AllegroBrd.Type28Shape(self._io, self, self._root)
             elif _on == 44:
-                self.data = AllegroBrd.Type2cTable(self._io, self, self._root)
+                self.data = AllegroBrd.Type2cGroup(self._io, self, self._root)
             elif _on == 57:
                 self.data = AllegroBrd.Type39FilmLayerList(self._io, self, self._root)
             elif _on == 9:
@@ -3929,65 +4041,6 @@ class AllegroBrd(KaitaiStruct):
                 self._debug['x']['arr'][i]['end'] = self._io.pos()
 
             self._debug['x']['end'] = self._io.pos()
-
-
-    class Type2cTable(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_1", "unknown_2", "unknown_3", "subclass_str", "unknown_4", "ptr_1", "ptr_2", "ptr_3", "flags"]
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self._debug = collections.defaultdict(dict)
-            self._read()
-
-        def _read(self):
-            self._debug['_unnamed0']['start'] = self._io.pos()
-            self._unnamed0 = self._io.read_u1()
-            self._debug['_unnamed0']['end'] = self._io.pos()
-            self._debug['_unnamed1']['start'] = self._io.pos()
-            self._unnamed1 = self._io.read_u2le()
-            self._debug['_unnamed1']['end'] = self._io.pos()
-            self._debug['key']['start'] = self._io.pos()
-            self.key = self._io.read_u4le()
-            self._debug['key']['end'] = self._io.pos()
-            self._debug['next']['start'] = self._io.pos()
-            self.next = self._io.read_u4le()
-            self._debug['next']['end'] = self._io.pos()
-            if self._root.ver >= 1311744:
-                self._debug['unknown_1']['start'] = self._io.pos()
-                self.unknown_1 = self._io.read_u4le()
-                self._debug['unknown_1']['end'] = self._io.pos()
-
-            if self._root.ver >= 1311744:
-                self._debug['unknown_2']['start'] = self._io.pos()
-                self.unknown_2 = self._io.read_u4le()
-                self._debug['unknown_2']['end'] = self._io.pos()
-
-            if self._root.ver >= 1311744:
-                self._debug['unknown_3']['start'] = self._io.pos()
-                self.unknown_3 = self._io.read_u4le()
-                self._debug['unknown_3']['end'] = self._io.pos()
-
-            self._debug['subclass_str']['start'] = self._io.pos()
-            self.subclass_str = self._io.read_u4le()
-            self._debug['subclass_str']['end'] = self._io.pos()
-            if self._root.ver < 1311744:
-                self._debug['unknown_4']['start'] = self._io.pos()
-                self.unknown_4 = self._io.read_u4le()
-                self._debug['unknown_4']['end'] = self._io.pos()
-
-            self._debug['ptr_1']['start'] = self._io.pos()
-            self.ptr_1 = self._io.read_u4le()
-            self._debug['ptr_1']['end'] = self._io.pos()
-            self._debug['ptr_2']['start'] = self._io.pos()
-            self.ptr_2 = self._io.read_u4le()
-            self._debug['ptr_2']['end'] = self._io.pos()
-            self._debug['ptr_3']['start'] = self._io.pos()
-            self.ptr_3 = self._io.read_u4le()
-            self._debug['ptr_3']['end'] = self._io.pos()
-            self._debug['flags']['start'] = self._io.pos()
-            self.flags = self._io.read_bits_int_be(32)
-            self._debug['flags']['end'] = self._io.pos()
 
 
     class StringAligned(KaitaiStruct):

@@ -620,18 +620,26 @@ struct BLK_0x0A_DRC
  */
 struct BLK_0x0C
 {
+    uint8_t    m_T;
+    LAYER_INFO m_Layer;
     uint32_t m_Key;
     uint32_t m_Next;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
 
-    uint32_t m_Unknown3;
+    COND_LT<FMT_VER::V_172, uint8_t> m_Shape;
+    COND_LT<FMT_VER::V_172, uint8_t> m_DrillChar;
+    COND_LT<FMT_VER::V_172, uint16_t> m_UnknownPadding; // or drill char?
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Shape16x;
+    COND_GE<FMT_VER::V_172, uint32_t> m_DrillChars;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown_16x;
+
     uint32_t m_Unknown4;
-    uint32_t m_KeyInd;
 
-    uint32_t               m_Unknown5;
-    std::array<int32_t, 4> m_Coords;
+    std::array<int32_t, 2> m_Coords;
+    std::array<int32_t, 2> m_Size;
 
     std::array<uint32_t, 3> m_UnknownArray;
 
@@ -1321,7 +1329,7 @@ struct BLK_0x2B
     uint32_t m_UnknownPtr3;
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
-    uint32_t m_StrPtr;
+    uint32_t m_SymLibPathPtr;
     uint32_t m_UnknownPtr6;
     uint32_t m_UnknownPtr7;
     uint32_t m_UnknownPtr8;

@@ -162,15 +162,29 @@ int main( int argc, char** argv )
 
         // dumpObjectCounts( std::cout, boardContent );
 
-        fmt::print( "  String map:      {} entries", board->m_StringTable.size() );
+        fmt::print( "  String map:      {} entries\n", board->m_StringTable.size() );
     }
 
     if( extractedBlocks.size() > 0 )
     {
-        ALLEGRO::ASCII_EXTRACTOR extractor;
-
         STRING_FORMATTER formatter;
-        extractor.Extract( *board, formatter );
+        ALLEGRO::ASCII_EXTRACTOR extractor( *board, formatter );
+
+        for( const ALLEGRO::EXTRACT_SPEC_PARSER::IR::BLOCK& block : extractedBlocks )
+        {
+            wxLogTrace( traceAllegroExtract, "Extracting block of type %d with %zu fields",
+                        static_cast<int>( block.Type ), block.Fields.size() );
+
+            try
+            {
+                extractor.Extract( block );
+            }
+            catch( const IO_ERROR& e )
+            {
+                fmt::print( "Error during extraction: {}\n", e.What() );
+                return 1;
+            }
+        }
 
         fmt::print( "{}", formatter.GetString() );
     }

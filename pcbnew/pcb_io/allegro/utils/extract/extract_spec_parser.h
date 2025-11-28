@@ -57,7 +57,7 @@ namespace EXTRACT_SPEC_PARSER
             // We could be super-typesafe here with a variant for the fields, based on the
             // block type, but this is probably sufficient for now and the parser is handling
             // the expected fields.
-            std::vector<std::string> Fields;
+            std::vector<wxString> Fields;
         };
 
         struct SPEC

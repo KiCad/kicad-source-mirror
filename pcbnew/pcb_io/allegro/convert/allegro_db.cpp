@@ -23,6 +23,8 @@
 
 #include "convert/allegro_db.h"
 
+#include <wx/log.h>
+
 #include <ki_exception.h>
 
 #include <convert/allegro_pcb_structs.h>
@@ -97,14 +99,35 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 
 bool DB_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 {
+    if( m_TargetKey == m_EndKey )
+    {
+        // Null reference
+        m_Target = nullptr;
+        return true;
+    }
+
     // No conditions
     m_Target = aResolver.Resolve( m_TargetKey );
+
+
+    if(!m_Target)
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_REF target key %#010x for %s", m_TargetKey, m_DebugName ? m_DebugName : "<unknown>" );
+    }
+
     return m_Target != nullptr;
 }
 
 
 bool DB_STR_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 {
+    if( m_StringKey == 0 )
+    {
+        // Null string reference
+        m_String = nullptr;
+        return true;
+    }
+
     m_String = aResolver.ResolveString( m_StringKey );
     return m_String != nullptr;
 }
@@ -113,7 +136,15 @@ bool DB_STR_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 bool DB_REF_CHAIN::Resolve( const DB_OBJ_RESOLVER& aResolver )
 {
     if( m_Head == m_Tail )
+    {
         return true;
+    }
+
+    if( m_Head == 0 )
+    {
+        // Empty chain
+        return true;
+    }
 
     DB_OBJ* n = aResolver.Resolve( m_Head );
 
@@ -124,13 +155,33 @@ bool DB_REF_CHAIN::Resolve( const DB_OBJ_RESOLVER& aResolver )
         uint32_t nextKey = m_NextKeyGetter( *n );
 
         if( nextKey == m_Tail )
+        {
             return true;
+        }
 
         n = aResolver.Resolve( nextKey );
     }
 
     // Ended before the tail
     return false;
+}
+
+
+void DB_REF_CHAIN::Visit( std::function<void ( const DB_OBJ& aObj )> aVisitor ) const
+{
+    for( const DB_OBJ* node : m_Chain )
+    {
+        aVisitor( *node );
+    }
+}
+
+
+void DB_REF_CHAIN::Visit( std::function<void ( DB_OBJ& aObj )> aVisitor )
+{
+    for( DB_OBJ* node : m_Chain )
+    {
+        aVisitor( *node );
+    }
 }
 
 
@@ -152,6 +203,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
 {
     const std::optional<uint32_t> blkKey = GetBlockKey( aBlock );
 
+    // Cannot add un-keyed objects
     if( !blkKey.has_value() )
         return nullptr;
 
@@ -169,7 +221,31 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
 
         arc->m_Parent = DB_REF( arcBlk.m_Parent );
 
-        obj = std::move( arc );
+        // obj = std::move( arc );
+        break;
+    }
+    case 0x03:
+    {
+        const BLK_0x03& blk03 = BLK_DATA( aBlock, BLK_0x03 );
+
+        switch( blk03.m_SubType )
+        {
+        case 0x68: // SYM_LIBRARY_PATH, ?...
+            obj = std::make_unique<x03_TEXT>( blk03 );
+            wxLogTrace( "ALLEGRO_EXTRACT", "Created x03_TEXT object for key %#010x", *blkKey );
+            break;
+        default:
+            // Unknown subtype
+            wxLogTrace( "ALLEGRO_EXTRACT", "Unknown BLK_0x03 subtype: 0x%02x", blk03.m_SubType );
+            break;
+        }
+
+        break;
+    }
+    case 0x07:
+    {
+        const BLK_0x07& strBlk = BLK_DATA( aBlock, BLK_0x07 );
+        obj = std::make_unique<TEXT>( strBlk );
         break;
     }
     case 0x15:
@@ -184,7 +260,13 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x2b: // Footprint
     {
         const BLK_0x2B& fpBlk = BLK_DATA( aBlock, BLK_0x2B );
-        obj = std::make_unique<FOOTPRINT_DEF>( fpBlk );
+        obj = std::make_unique<FOOTPRINT_DEF>( *this, fpBlk );
+        break;
+    }
+    case 0x2d: // Footprint instance
+    {
+        const BLK_0x2D& fpInstBlk = BLK_DATA( aBlock, BLK_0x2D );
+        obj = std::make_unique<FOOTPRINT_INSTANCE>( fpInstBlk );
         break;
     }
     default:
@@ -247,9 +329,18 @@ const wxString* DB::ResolveString( uint32_t aKey ) const
 
 void DB::ResolveObjectLinks()
 {
+    wxLogTrace( "ALLEGRO_EXTRACT", "Resolving %zu object references", m_Objects.size() );
+
     for( auto& [key, obj] : m_Objects )
     {
         obj->m_Valid = obj->ResolveRefs( *this );
+
+        if( !obj->m_Valid )
+        {
+            // If we can't resolve the references, the DB is invalid and we cannot easily continue
+            // as any references could explode later.
+            THROW_IO_ERROR( wxString::Format( "Failed to resolve references for object key %#010x", key ) );
+        }
     }
 }
 
@@ -288,6 +379,9 @@ bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 
     ok &= m_Parent.Resolve( aResolver );
 
+    if(!ok)
+        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve ARC key %#010x", GetKey() );
+
     return ok;
 }
 
@@ -320,10 +414,35 @@ static bool CheckTypeIsOneOf( const DB_REF& aRef, const std::vector<DB_OBJ::TYPE
 //     }
 // }
 
-
-FOOTPRINT_DEF::FOOTPRINT_DEF( const BLK_0x2B& aBlk )
+TEXT::TEXT( const BLK_0x07& aBlk )
 {
+    m_TextStr.m_StringKey = aBlk.m_RefDesRef;
+}
+
+
+bool TEXT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_TextStr.Resolve( aResolver );
+
+    return ok;
+}
+
+
+x03_TEXT::x03_TEXT( const BLK_0x03& aBlk )
+{
+    // wxASSERT( aBlk.m_Substruct.is<std::string>() );
+    m_TextStr = std::get<std::string>( aBlk.m_Substruct );
+}
+
+
+FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk )
+{
+    // 0x2Bs are linked together in a list from the board header
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_0x2B.m_Tail;
     m_Next.m_TargetKey = aBlk.m_Next;
+
     m_FpStr.m_StringKey = aBlk.m_FpStrRef;
 
     m_Instances.m_NextKeyGetter = []( const DB_OBJ& aObj )
@@ -335,6 +454,9 @@ FOOTPRINT_DEF::FOOTPRINT_DEF( const BLK_0x2B& aBlk )
     };
     m_Instances.m_Head = aBlk.m_FirstInstPtr;
     m_Instances.m_Tail = aBlk.m_Key;
+
+    m_SymLibPath.m_TargetKey = aBlk.m_SymLibPathPtr;
+    m_SymLibPath.m_DebugName = "FOOTPRINT_DEF::m_SymLibPath";
 }
 
 
@@ -348,11 +470,30 @@ bool FOOTPRINT_DEF::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     // Follow the chain of 0x2Ds until we get back here
     ok &= m_Instances.Resolve( aResolver );
 
+    // Set backlink from instances to parent
+    m_Instances.Visit( [&]( DB_OBJ& aObj )
+    {
+        FOOTPRINT_INSTANCE& fpInst = static_cast<FOOTPRINT_INSTANCE&>( aObj );
+        fpInst.m_Parent = this;
+    } );
+
+    wxLogTrace( "ALLEGRO_EXTRACT", "Resolved %zu footprint instances for footprint def key %#010x", m_Instances.m_Chain.size(), GetKey() );
+
+    ok &= m_SymLibPath.Resolve( aResolver );
+
     ok &= CheckTypeIs( m_Next, DB_OBJ::TYPE::FP_DEF, true );
 
-
-
     return ok;
+}
+
+
+const wxString* FOOTPRINT_DEF::GetLibPath() const
+{
+    if( m_SymLibPath.m_Target == nullptr )
+        return nullptr;
+
+    const x03_TEXT& symLibPath = static_cast<const x03_TEXT&>( *m_SymLibPath.m_Target );
+    return &symLibPath.m_TextStr;
 }
 
 
@@ -360,7 +501,16 @@ FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
 
-    // m_RefDes.m_TargetKey = aBlk.m_InstRef;
+    // This can be in one of two fields
+    m_RefDes.m_TargetKey = aBlk.m_InstRef16x.value_or( aBlk.m_InstRef.value() );
+
+    // This will be filled in by the 0x2B resolution
+    m_Parent = nullptr;
+
+    m_X = aBlk.m_CoordX;
+    m_Y = aBlk.m_CoordY;
+    m_Rotation = aBlk.m_Rotation;
+    m_Mirrored = false; //aBlk.m_Flags & ??? //;
 }
 
 
@@ -369,8 +519,33 @@ bool FOOTPRINT_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
+    ok &= m_RefDes.Resolve( aResolver );
+
+    ok &= CheckTypeIs( m_RefDes, DB_OBJ::TYPE::TEXT, true );
 
     return ok;
+}
+
+
+const wxString* FOOTPRINT_INSTANCE::GetRefDes() const
+{
+    // The ref des is found in the 0x07 string ref
+    // But it can be null (e.g. for dimensions)
+    if( m_RefDes.m_Target == nullptr )
+        return nullptr;
+
+    TEXT& textObj = static_cast<TEXT&>( *m_RefDes.m_Target );
+    return textObj.m_TextStr.m_String;
+}
+
+
+
+const wxString* FOOTPRINT_INSTANCE::GetName() const
+{
+    if( m_Parent == nullptr )
+        return nullptr;
+
+    return m_Parent->m_FpStr.m_String;
 }
 
 
@@ -405,4 +580,26 @@ void BRD_DB::VisitFootprintDefs( std::function<void(const FOOTPRINT_DEF& aFpDef)
     };
 
     visitLinkedList( m_Header->m_LL_0x2B, fpDefNextFunc );
+}
+
+
+void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, BRD_DB::FP_INST_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting footprint instances for footprint def key %#010x", aFpDef.GetKey() );
+
+    const auto fpInstNextFunc = [&]( const DB_OBJ& aObj )
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT", "Visiting footprint instance key %#010x", aObj.GetKey() );
+        if( aObj.GetType() != DB_OBJ::TYPE::FP_INST )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "  Not a footprint instance, skipping key %#010x", aObj.GetKey() );
+            return;
+        }
+
+        const FOOTPRINT_INSTANCE& fpInst = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+
+        aVisitor( fpInst );
+    };
+
+    aFpDef.m_Instances.Visit( fpInstNextFunc );
 }

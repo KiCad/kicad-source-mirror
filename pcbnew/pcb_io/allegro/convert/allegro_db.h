@@ -40,6 +40,8 @@ class DB_OBJ_RESOLVER;
 struct RESOLVABLE
 {
     virtual bool Resolve( const DB_OBJ_RESOLVER& aResolver ) = 0;
+
+    const char* m_DebugName = nullptr;
 };
 
 
@@ -47,6 +49,7 @@ struct DB_REF : public RESOLVABLE
 {
     explicit constexpr DB_REF( uint32_t aTargetKey ) :
             m_TargetKey( aTargetKey ),
+            m_EndKey( 0 ),
             m_Target( nullptr )
     {
     }
@@ -59,6 +62,11 @@ struct DB_REF : public RESOLVABLE
     bool Resolve( const DB_OBJ_RESOLVER& aResolver ) override;
 
     uint32_t m_TargetKey;
+    // If the ref points to the next item, eventually this will be equal to EndKey
+    // which may not be a resolvable object (e.g. a header LinkedList tail pointer, which is
+    // an artificial value).
+    // This is not a resolution failure, but it also means the reference is null.
+    uint32_t m_EndKey;
     DB_OBJ*  m_Target;
 };
 
@@ -81,6 +89,12 @@ struct DB_REF_CHAIN : public RESOLVABLE
     }
 
     bool Resolve( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    /**
+     * Visit all objects in the chain
+     */
+    void Visit( std::function<void( const DB_OBJ& aObj )> aVisitor ) const;
+    void Visit( std::function<void( DB_OBJ& aObj )> aVisitor );
 
     std::function<uint32_t( const DB_OBJ& )> m_NextKeyGetter;
     uint32_t                                 m_Head;
@@ -137,6 +151,8 @@ struct DB_OBJ
     enum class TYPE
     {
         ARC,
+        x03_TEXT,   // 0x03 subtype 0x68...
+        TEXT,       // 0x07
         SEGMENT,
         FP_DEF,
         FP_INST,
@@ -239,34 +255,90 @@ struct ARC : public DB_OBJ
 };
 
 
-struct FOOTPRINT_INSTANCE;
-
 /**
- *
+ * 0x38 subtype 0x68
  */
-struct FOOTPRINT_DEF : public DB_OBJ
+struct x03_TEXT : public DB_OBJ
 {
-    FOOTPRINT_DEF( const BLK_0x2B& aBlk );
+    x03_TEXT( const BLK_0x03& aBlk );
 
-    DB_REF     m_Next;
-    DB_STR_REF m_FpStr;
+    TYPE GetType() const override { return TYPE::x03_TEXT; };
 
-    DB_REF_CHAIN m_Instances;
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override { return true; }
 
-    TYPE GetType() const { return TYPE::FP_DEF; };
-
-    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+    wxString m_TextStr;
 };
 
 
+/**
+ * 0x07 objects
+ */
+struct TEXT : public DB_OBJ
+{
+    TEXT( const BLK_0x07& aBlk );
+
+    TYPE GetType() const override { return TYPE::TEXT; };
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_STR_REF m_TextStr;
+};
+
+
+struct FOOTPRINT_INSTANCE;
+struct BRD_DB;
+
+/**
+ * 0x2B objects
+ */
+struct FOOTPRINT_DEF : public DB_OBJ
+{
+    FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk );
+
+    DB_REF     m_Next;
+    DB_STR_REF m_FpStr;
+    DB_REF     m_SymLibPath;
+
+    DB_REF_CHAIN m_Instances;
+
+    TYPE GetType() const override { return TYPE::FP_DEF; };
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    /**
+     * Get the library path for this footprint definition
+     *
+     * For example: C:/OrCAD/OrCAD_16.6_Lite/share/pcb/pcb_lib/symbols/res2012x50n_0805.psm
+     *
+     * This can be empty, for example for DRAFTING type footprints like dimensions.
+     */
+    const wxString* GetLibPath() const;
+};
+
+
+/**
+ * 0x2D objects
+ */
 struct FOOTPRINT_INSTANCE : public DB_OBJ
 {
     FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk );
+
+    TYPE GetType() const override { return TYPE::FP_INST; };
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
     DB_REF m_RefDes;
+    double m_X;
+    double m_Y;
+    double m_Rotation;
+    bool   m_Mirrored;
+
+    // Backlink to the parent footprint definition
+    FOOTPRINT_DEF* m_Parent;
+
+    const wxString* GetRefDes() const;
+    const wxString* GetName() const;
 };
 
 
@@ -291,12 +363,22 @@ public:
      */
     bool ResolveAndValidate();
 
+    using FP_DEF_VISITOR = std::function<void( const FOOTPRINT_DEF& aFpDef )>;
+    using FP_INST_VISITOR = std::function<void( const FOOTPRINT_INSTANCE& aFp )>;
+
     /**
      * Access the footprint defs in the database.
      *
      * This iterates the 0x2B linked list.
      */
-    void VisitFootprintDefs( std::function<void( const FOOTPRINT_DEF& aFpDef )> aVisitor ) const;
+    void VisitFootprintDefs( FP_DEF_VISITOR aVisitor ) const;
+
+    /**
+     * Access the footprint instances in the database.
+     *
+     * This iterates the 0x2D linked list for a given footprint def.
+     */
+    void VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, FP_INST_VISITOR aVisitor ) const;
 
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,

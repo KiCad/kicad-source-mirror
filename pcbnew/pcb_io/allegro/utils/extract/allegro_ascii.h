@@ -24,6 +24,7 @@
 #pragma once
 
 #include <convert/allegro_db.h>
+#include <utils/extract/extract_spec_parser.h>
 
 #include <richio.h>
 
@@ -36,9 +37,16 @@ namespace ALLEGRO
 class ASCII_EXTRACTOR
 {
 public:
-    ASCII_EXTRACTOR() {}
+    ASCII_EXTRACTOR( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter ) :
+            m_Brd( aBrd ),
+            m_Formatter( aFormatter )
+    {
+    }
 
-    void Extract( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter );
+    /**
+     * Extract according to a single block specification.
+     */
+    void Extract( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
 
 private:
     /**
@@ -46,7 +54,10 @@ private:
      *
      * This corresponds to SYMBOL ASCII commands.
      */
-    void extractSymbolInstances( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter );
+    void extractSymbolInstances( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
+    const BRD_DB&    m_Brd;
+    OUTPUTFORMATTER& m_Formatter;
 };
 
 } // namespace ALLEGRO
