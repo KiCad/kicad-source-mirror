@@ -20,7 +20,6 @@
 #include <widgets/report_severity.h>
 #include <i18n_utility.h>
 #include <vector>
-#include <wx/translation.h>
 #include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 
 
@@ -30,16 +29,16 @@ wxString formatSeverities( int aSeverities )
     std::vector<wxString> items;
 
     if( aSeverities & RPT_SEVERITY_ERROR )
-        items.push_back( _( "Errors" ) );
+        items.push_back( wxS( "Errors" ) );
 
     if( aSeverities & RPT_SEVERITY_WARNING )
-        items.push_back( _( "Warnings" ) );
+        items.push_back( wxS( "Warnings" ) );
 
     if( aSeverities & RPT_SEVERITY_EXCLUSION )
-        items.push_back( _( "Exclusions" ) );
+        items.push_back( wxS( "Exclusions" ) );
 
     if( items.empty() )
-        return _( "None" );
+        return wxS( "None" );
 
     for( size_t i = 0; i < items.size(); i++ )
     {
