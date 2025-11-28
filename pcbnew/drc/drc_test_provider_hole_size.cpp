@@ -159,27 +159,25 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILL_OUT_OF_RANGE );
         wxString constraintName = constraint.GetName();
-        wxString msg;
 
         if( fail_min )
         {
             if( constraint.GetParentRule() && constraint.GetParentRule()->IsImplicit() )
                 constraintName = _( "board setup constraints" );
 
-            msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
-                             constraintName,
-                             constraintValue,
-                             holeMinor );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s min hole %s; actual %s)" ),
+                                                constraintName,
+                                                constraintValue,
+                                                holeMinor ) );
         }
         else
         {
-            msg = formatMsg( _( "(%s max hole %s; actual %s)" ),
-                             constraintName,
-                             constraintValue,
-                             holeMajor );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s max hole %s; actual %s)" ),
+                                                constraintName,
+                                                constraintValue,
+                                                holeMajor ) );
         }
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
         reportTwoPointGeometry( drcItem, ptA, ptA, ptB, UNDEFINED_LAYER );
@@ -232,27 +230,25 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
         wxString constraintName = constraint.GetName();
-        wxString msg;
 
         if( fail_min )
         {
             if( constraint.m_ImplicitMin )
                 constraintName = _( "board setup constraints" );
 
-            msg = formatMsg( _( "(%s min hole %s; actual %s)" ),
-                             constraintName,
-                             constraintValue,
-                             drill );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s min hole %s; actual %s)" ),
+                                                constraintName,
+                                                constraintValue,
+                                                drill ) );
         }
         else
         {
-            msg = formatMsg( _( "(%s max hole %s; actual %s)" ),
-                             constraintName,
-                             constraintValue,
-                             drill );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s max hole %s; actual %s)" ),
+                                                constraintName,
+                                                constraintValue,
+                                                drill ) );
         }
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 

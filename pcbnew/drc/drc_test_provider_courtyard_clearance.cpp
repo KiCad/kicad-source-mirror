@@ -102,7 +102,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
                     [&]( const wxString& msg, BOARD_ITEM*, BOARD_ITEM*, const VECTOR2I& pt )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                        drcItem->SetErrorDetail( msg );
                         drcItem->SetItems( footprint );
                         reportViolation( drcItem, pt, UNDEFINED_LAYER );
                     };
@@ -231,12 +231,10 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                         if( clearance > 0 )
                         {
-                            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                      constraint.GetName(),
-                                                      clearance,
-                                                      actual );
-
-                            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                                constraint.GetName(),
+                                                                clearance,
+                                                                actual ) );
                         }
 
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
@@ -263,12 +261,10 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                         if( clearance > 0 )
                         {
-                            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                      constraint.GetName(),
-                                                      clearance,
-                                                      actual );
-
-                            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                                constraint.GetName(),
+                                                                clearance,
+                                                                actual ) );
                         }
 
                         drcItem->SetViolatingRule( constraint.GetParentRule() );

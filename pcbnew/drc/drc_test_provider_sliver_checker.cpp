@@ -256,7 +256,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 if( cos_ang > cosangleTol && 2.0 - cos_ang > std::numeric_limits<float>::epsilon() && opp > squared_width )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_COPPER_SLIVER );
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + layerDesc( layer ) );
+                    drce->SetErrorDetail( layerDesc( layer ) );
                     reportViolation( drce, pt, layer );
                 }
             }

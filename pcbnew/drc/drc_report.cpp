@@ -124,7 +124,7 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
 
         if( code > 0 && bds.Ignore( code ) )
         {
-            fprintf( fp, "    - %s\n", TO_UTF8( item.GetErrorMessage() ) );
+            fprintf( fp, "    - %s\n", TO_UTF8( item.GetErrorMessage( false ) ) );
             hasIgnored = true;
         }
     }
@@ -213,7 +213,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         {
             RC_JSON::IGNORED_CHECK ignoredCheck;
             ignoredCheck.key = item.GetSettingsKey();
-            ignoredCheck.description = item.GetErrorMessage();
+            ignoredCheck.description = item.GetErrorMessage( false );
             reportHead.ignored_checks.push_back( ignoredCheck );
         }
     }

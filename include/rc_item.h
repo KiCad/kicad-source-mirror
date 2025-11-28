@@ -102,6 +102,8 @@ public:
 
     void SetErrorMessage( const wxString& aMessage ) { m_errorMessage = aMessage; }
 
+    void SetErrorDetail( const wxString& aMsg ) { SetErrorMessage( GetErrorText( true ) + wxS( " " ) + aMsg ); }
+
     void SetItems( const KIIDS& aIds ) { m_ids = aIds; }
 
     void AddItem( EDA_ITEM* aItem );
@@ -160,15 +162,18 @@ public:
      * @return the error message describing the specific details of a RC_ITEM.  For instance,
      * "Clearance violation (netclass '100ohm' clearance 0.4000mm; actual 0.3200mm)"
      */
-    virtual wxString GetErrorMessage() const;
+    virtual wxString GetErrorMessage( bool aTranslate ) const;
 
     /**
      * @return the error text for the class of error of this RC_ITEM represents.  For instance,
      * "Clearance violation".
      */
-    wxString GetErrorText() const
+    wxString GetErrorText( bool aTranslate ) const
     {
-        return wxGetTranslation( m_errorTitle );
+        if( aTranslate )
+            return wxGetTranslation( m_errorTitle );
+        else
+            return m_errorTitle;
     }
 
     wxString GetSettingsKey() const
@@ -176,7 +181,7 @@ public:
         return m_settingsKey;
     }
 
-    virtual wxString GetViolatingRuleDesc() const
+    virtual wxString GetViolatingRuleDesc( bool aTranslate ) const
     {
         return wxEmptyString;
     }

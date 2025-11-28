@@ -105,7 +105,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
                 if( !aMsg.IsEmpty() )
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                    drcItem->SetErrorDetail( aMsg );
 
                 drcItem->SetItems( aItemA, aItemB, aItemC );
 

@@ -345,7 +345,7 @@ BOOST_FIXTURE_TEST_CASE( ERCGroundPinErrorMessage, ERC_GROUND_PIN_TEST_FIXTURE )
         if( errors.GetItem( i )->GetErrorCode() == ERCE_GROUND_PIN_NOT_GROUND )
         {
             foundGroundPinError = true;
-            errorMessage = errors.GetItem( i )->GetErrorMessage();
+            errorMessage = errors.GetItem( i )->GetErrorMessage( false );
 
             // Verify the error message contains expected content
             BOOST_CHECK_MESSAGE( errorMessage.Contains( "Pin" ),

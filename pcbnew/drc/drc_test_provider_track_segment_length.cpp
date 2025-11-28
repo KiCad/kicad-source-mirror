@@ -120,27 +120,25 @@ bool DRC_TEST_PROVIDER_TRACK_SEGMENT_LENGTH::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_SEGMENT_LENGTH );
                     wxString constraintName = constraint.GetName();
-                    wxString msg;
 
                     if( fail_min )
                     {
                         if( constraint.m_ImplicitMin )
                             constraintName = _( "board setup constraints" );
 
-                        msg = formatMsg( _( "(%s min length %s; actual %s)" ),
-                                         constraintName,
-                                         constraintLength,
-                                         actual );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s min length %s; actual %s)" ),
+                                                            constraintName,
+                                                            constraintLength,
+                                                            actual ) );
                     }
                     else
                     {
-                        msg = formatMsg( _( "(%s max length %s; actual %s)" ),
-                                         constraintName,
-                                         constraintLength,
-                                         actual );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s max length %s; actual %s)" ),
+                                                            constraintName,
+                                                            constraintLength,
+                                                            actual ) );
                     }
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

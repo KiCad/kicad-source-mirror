@@ -67,7 +67,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
                 if( !aMsg.IsEmpty() )
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                    drcItem->SetErrorDetail( aMsg );
 
                 drcItem->SetItems( aItemA, aItemB, aItemC );
                 reportViolation( drcItem, aPt, aLayer );

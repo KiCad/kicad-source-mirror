@@ -112,48 +112,27 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
         if( ( minViolation || maxViolation ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LENGTH_OUT_OF_RANGE );
-            wxString msg;
 
             if( minViolation )
             {
-                if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
-                {
-                    msg = formatMsg( _( "(%s min length %s; actual %s)" ),
-                                     aConstraint.GetName(),
-                                     minLen,
-                                     ent.totalDelay,
-                                     dataType );
-                }
-                else
-                {
-                    msg = formatMsg( _( "(%s min length %s; actual %s)" ),
-                                     aConstraint.GetName(),
-                                     minLen,
-                                     ent.total,
-                                     dataType );
-                }
+                drcItem->SetErrorDetail( formatMsg( _( "(%s min length %s; actual %s)" ),
+                                                    aConstraint.GetName(),
+                                                    minLen,
+                                                    aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN )
+                                                            ? ent.totalDelay
+                                                            : ent.total,
+                                                    dataType ) );
             }
             else if( maxViolation )
             {
-                if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
-                {
-                    msg = formatMsg( _( "(%s max length %s; actual %s)" ),
-                                     aConstraint.GetName(),
-                                     maxLen,
-                                     ent.totalDelay,
-                                     dataType );
-                }
-                else
-                {
-                    msg = formatMsg( _( "(%s max length %s; actual %s)" ),
-                                     aConstraint.GetName(),
-                                     maxLen,
-                                     ent.total,
-                                     dataType );
-                }
+                drcItem->SetErrorDetail( formatMsg( _( "(%s max length %s; actual %s)" ),
+                                                    aConstraint.GetName(),
+                                                    maxLen,
+                                                    aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN )
+                                                            ? ent.totalDelay
+                                                            : ent.total,
+                                                    dataType ) );
             }
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
 
             for( auto offendingTrack : ent.items )
                 drcItem->AddItem( offendingTrack );
@@ -221,8 +200,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 
                 if( fail_min )
                 {
-                    msg.Printf( _( "(%s min skew %s; actual %s; target net length %s (from %s); "
-                                   "actual %s)" ),
+                    msg.Printf( _( "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)" ),
                                 aConstraint.GetName(),
                                 MessageTextFromValue( aConstraint.GetValue().Min(), true, dataType ),
                                 MessageTextFromValue( skew, true, dataType ),
@@ -232,8 +210,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
                 }
                 else
                 {
-                    msg.Printf( _( "(%s max skew %s; actual %s; target net length %s (from %s); "
-                                   "actual %s)" ),
+                    msg.Printf( _( "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)" ),
                                 aConstraint.GetName(),
                                 MessageTextFromValue( aConstraint.GetValue().Max(), true, dataType ),
                                 MessageTextFromValue( skew, true, dataType ),
@@ -242,7 +219,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
                                 MessageTextFromValue( reportTotal, true, dataType ) );
                 }
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + msg );
+                drcItem->SetErrorDetail( msg );
 
                 for( BOARD_CONNECTED_ITEM* offendingTrack : ent.items )
                     drcItem->SetItems( offendingTrack );

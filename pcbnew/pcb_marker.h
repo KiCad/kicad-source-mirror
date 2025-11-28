@@ -111,7 +111,7 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
-        return BOARD_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
+        return BOARD_ITEM::Matches( m_rcItem->GetErrorMessage( true ), aSearchData );
     }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;

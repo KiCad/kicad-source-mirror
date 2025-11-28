@@ -383,7 +383,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         {
             wxListItem listItem;
             listItem.SetId( m_ignoredList->GetItemCount() );
-            listItem.SetText( wxT( " • " ) + item.get().GetErrorText() );
+            listItem.SetText( wxT( " • " ) + item.get().GetErrorText( true ) );
             listItem.SetData( item.get().GetErrorCode() );
 
             m_ignoredList->InsertItem( listItem );
@@ -772,19 +772,19 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         menu.Append( ID_SET_SEVERITY_TO_ERROR,
                      wxString::Format( _( "Change severity to Error for all '%s' violations" ),
-                                       rcItem->GetErrorText() ),
+                                       rcItem->GetErrorText( true ) ),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
     else
     {
         menu.Append( ID_SET_SEVERITY_TO_WARNING,
                      wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
-                                       rcItem->GetErrorText() ),
+                                       rcItem->GetErrorText( true ) ),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
 
     menu.Append( ID_SET_SEVERITY_TO_IGNORE,
-                 wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText() ),
+                 wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText( true ) ),
                  _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
@@ -969,7 +969,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         wxListItem listItem;
         listItem.SetId( m_ignoredList->GetItemCount() );
-        listItem.SetText( wxT( " • " ) + rcItem->GetErrorText() );
+        listItem.SetText( wxT( " • " ) + rcItem->GetErrorText( true ) );
         listItem.SetData( rcItem->GetErrorCode() );
 
         m_ignoredList->InsertItem( listItem );

@@ -235,15 +235,12 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
                     PCB_LAYER_ID              layer = item->GetLayerSet().ExtractLayer();
-                    wxString                  msg;
 
                     // Implicit rules reported in checkAntiTrackKeepout
                     if( constraint.GetParentRule()->IsImplicit() )
                         return;
 
-                    msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
-
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorDetail( wxString::Format( wxS( "(%s)" ), constraint.GetName() ) );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

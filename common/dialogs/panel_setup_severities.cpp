@@ -62,7 +62,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     for( const RC_ITEM& item : m_items )
     {
         int      errorCode = item.GetErrorCode();
-        wxString msg       = item.GetErrorText();
+        wxString msg       = item.GetErrorText( true );
 
         if( m_pinMapSpecialCase && errorCode == m_pinMapSpecialCase->GetErrorCode() )
             continue;
@@ -117,7 +117,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     {
         wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
         int      errorCode          = m_pinMapSpecialCase->GetErrorCode();
-        wxString msg                = m_pinMapSpecialCase->GetErrorText();
+        wxString msg                = m_pinMapSpecialCase->GetErrorText( true );
 
         wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
         gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 15  );

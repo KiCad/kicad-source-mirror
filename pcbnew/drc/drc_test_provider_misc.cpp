@@ -186,14 +186,18 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 }
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
-                wxString                  msg2;
 
                 if( itemA && itemB )
-                    msg2.Printf( _( "%s (gap %s)" ), msg, MessageTextFromValue( gap ) );
+                {
+                    drcItem->SetErrorDetail( wxString::Format( _( "%s (gap %s)" ),
+                                                               msg,
+                                                               MessageTextFromValue( gap ) ) );
+                }
                 else
-                    msg2 = msg;
+                {
+                    drcItem->SetErrorDetail( msg );
+                }
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg2 );
                 drcItem->SetItems( itemA, itemB );
 
                 reportViolation( drcItem, markerPos, Edge_Cuts );
@@ -212,11 +216,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
         else
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
-            wxString msg;
-
-            msg.Printf( _( "(Suspicious items found on Edge.Cuts layer)" ) );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorDetail( _( "(Suspicious items found on Edge.Cuts layer)" ) );
             drcItem->SetItems( m_board );
 
             reportViolation( drcItem, m_board->GetBoundingBox().Centre(), Edge_Cuts );
@@ -240,11 +240,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
         else
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
-            wxString msg;
-
-            msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorDetail( _( "(no edges found on Edge.Cuts layer)" ) );
             drcItem->SetItems( m_board );
 
             reportViolation( drcItem, m_board->GetBoundingBox().Centre(), Edge_Cuts );
@@ -325,12 +321,8 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
                 if( badLayer != UNDEFINED_LAYER )
                 {
-                    auto drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
-                    wxString msg;
-
-                    msg.Printf( _( "(layer %s)" ), LayerName( badLayer ) );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
+                    drcItem->SetErrorDetail( wxString::Format( _( "(layer %s)" ), LayerName( badLayer ) ) );
                     drcItem->SetItems( item );
 
                     reportViolation( drcItem, item->GetPosition(), UNDEFINED_LAYER );
@@ -368,9 +360,8 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                     m_drcEngine->ProcessAssertions( item,
                             [&]( const DRC_CONSTRAINT* c )
                             {
-                                auto drcItem = DRC_ITEM::Create( DRCE_ASSERTION_FAILURE );
-                                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " (" )
-                                                            + c->GetName() + wxS( ")" ) );
+                                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ASSERTION_FAILURE );
+                                drcItem->SetErrorDetail( wxString::Format( wxS( "(%s)" ), c->GetName() ) );
                                 drcItem->SetItems( item );
                                 drcItem->SetViolatingRule( c->GetParentRule() );
 
@@ -548,10 +539,10 @@ void DRC_TEST_PROVIDER_MISC::testMissingTuningProfiles()
 
         if( netclass->HasTuningProfile() && !profileNames.contains( profileName ) )
         {
-            auto     drcItem = DRC_ITEM::Create( DRCE_MISSING_TUNING_PROFILE );
-            wxString errMsg = wxString::Format( "%s (Net Class: %s, Tuning Profile: %s)", drcItem->GetErrorText(), name,
-                                                profileName );
-            drcItem->SetErrorMessage( errMsg );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_TUNING_PROFILE );
+            drcItem->SetErrorDetail( wxString::Format( "(Net Class: %s, Tuning Profile: %s)",
+                                                       name,
+                                                       profileName ) );
 
             reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
         }

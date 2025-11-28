@@ -166,24 +166,22 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_ANGLE );
                         wxString constraintName = constraint.GetName();
-                        wxString msg;
 
                         if( fail_min )
                         {
-                            msg = formatMsg( _( "(%s min angle %s; actual %s)" ),
-                                             constraintName,
-                                             constraintAngle,
-                                             actual );
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s min angle %s; actual %s)" ),
+                                                                constraintName,
+                                                                constraintAngle,
+                                                                actual ) );
                         }
                         else
                         {
-                            msg = formatMsg( _( "(%s max angle %s; actual %s)" ),
-                                             constraintName,
-                                             constraintAngle,
-                                             actual );
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s max angle %s; actual %s)" ),
+                                                                constraintName,
+                                                                constraintAngle,
+                                                                actual ) );
                         }
 
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( item , other );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 

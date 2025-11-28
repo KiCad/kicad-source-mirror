@@ -81,9 +81,7 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
 
                 if( layerMatch && text->IsMirrored() == isMirrored )
                 {
-                    auto drcItem = DRC_ITEM::Create( errorCode );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
                     drcItem->SetItems( item );
 
                     reportViolation( drcItem, item->GetPosition(), item->GetLayer() );

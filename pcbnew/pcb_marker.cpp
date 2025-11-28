@@ -223,7 +223,7 @@ PCB_MARKER* PCB_MARKER::DeserializeFromString( const wxString& data )
 void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ) );
-    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage( true ) );
 
     switch( GetSeverity() )
     {
@@ -293,8 +293,8 @@ void PCB_MARKER::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 
 wxString PCB_MARKER::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Marker (%s)" ), aFull ? m_rcItem->GetErrorMessage()
-                                                       : m_rcItem->GetErrorText() );
+    return wxString::Format( _( "Marker (%s)" ), aFull ? m_rcItem->GetErrorMessage( true )
+                                                       : m_rcItem->GetErrorText( true ) );
 }
 
 

@@ -276,13 +276,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             else if( actual == 0 && otherNet && testShorting )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-                wxString msg;
-
-                msg.Printf( _( "(nets %s and %s)" ),
-                            net ? net->GetNetname() : _( "<no net>" ),
-                            otherNet ? otherNet->GetNetname() : _( "<no net>" ) );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
+                                                           net ? net->GetNetname() : _( "<no net>" ),
+                                                           otherNet ? otherNet->GetNetname() : _( "<no net>" ) ) );
                 drcItem->SetItems( item, other );
                 reportTwoPointGeometry( drcItem, pos, pos, pos, layer );
                 has_error = true;
@@ -293,12 +289,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             else if( testClearance )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          clearance,
-                                          actual );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                    constraint.GetName(),
+                                                    clearance,
+                                                    actual ) );
                 drcItem->SetItems( item, other );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
                 reportTwoShapeGeometry( drcItem, pos, itemShape, otherShape, layer, actual );
@@ -352,13 +346,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
                                           &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg = formatMsg( clearance ? _( "(%s clearance %s; actual %s)" )
-                                                        : _( "(%s clearance %s; actual < 0)" ),
-                                              constraint.GetName(),
-                                              clearance,
-                                              actual );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( clearance ? _( "(%s clearance %s; actual %s)" )
+                                                                  : _( "(%s clearance %s; actual < 0)" ),
+                                                        constraint.GetName(),
+                                                        clearance,
+                                                        actual ) );
                     drcItem->SetItems( a[ii], b[ii] );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
                     reportTwoShapeGeometry( drcItem, pos, a_shape[ii], holeShape.get(), layer, actual );
@@ -469,12 +461,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                                       std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      clearance,
-                                      actual );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                constraint.GetName(),
+                                                clearance,
+                                                actual ) );
             drcItem->SetItems( aItem, aZone );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
             reportTwoItemGeometry( drcItem, pos, aItem, aZone, aLayer, actual );
@@ -507,12 +497,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                                               &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              clearance,
-                                              actual );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        clearance,
+                                                        actual ) );
                     drcItem->SetItems( aItem, aZone );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -580,25 +568,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
                                       std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem;
-            wxString                  msg;
 
             if( testShorts && actual == 0 && *aInheritedNet )
             {
                 drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-                msg.Printf( _( "(nets %s and %s)" ),
-                              ( *aInheritedNet )->GetNetname(),
-                              aZone->GetNetname() );
+                drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
+                                                           ( *aInheritedNet )->GetNetname(),
+                                                           aZone->GetNetname() ) );
             }
             else
             {
                 drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-                msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                 constraint.GetName(),
-                                 clearance,
-                                 actual );
+                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                   constraint.GetName(),
+                                                   clearance,
+                                                   actual ) );
             }
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
             drcItem->SetItems( aText, aZone );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
             reportTwoItemGeometry( drcItem, pos, aText, aZone, layer, actual );
@@ -851,13 +837,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             }
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-            wxString msg;
-
-            msg.Printf( _( "(nets %s and %s)" ),
-                        pad->GetNetname(),
-                        otherPad->GetNetname() );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
+                                                       pad->GetNetname(),
+                                                       otherPad->GetNetname() ) );
             drcItem->SetItems( pad, otherPad );
             reportViolation( drcItem, otherPad->GetPosition(), aLayer );
             has_error = true;
@@ -883,11 +865,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 else if( actual == 0 && padNet && otherNet && testShorting )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
-                    wxString msg = wxString::Format( _( "(nets %s and %s)" ),
-                                                     pad->GetNetname(),
-                                                     otherCItem->GetNetname() );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
+                                                               pad->GetNetname(),
+                                                               otherCItem->GetNetname() ) );
                     drcItem->SetItems( pad, other );
                     reportTwoPointGeometry( drcItem, pos, pos, pos, aLayer );
                     has_error = true;
@@ -896,12 +876,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 else if( testClearance )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              clearance,
-                                              actual );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        clearance,
+                                                        actual ) );
                     drcItem->SetItems( pad, other );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
                     reportTwoItemGeometry( drcItem, pos, pad, other, aLayer, actual );
@@ -918,12 +896,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 if( shape->Collide( aOtherShape, sub_e( aClearance ), &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              aClearance,
-                                              actual );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        aClearance,
+                                                        actual ) );
                     drcItem->SetItems( item, otherItem );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
                     reportTwoShapeGeometry( drcItem, pos, shape, aOtherShape, aLayer, actual );
@@ -1237,20 +1213,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 if( constraint.IsNull() )
                 {
                     drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                    wxString msg = _( "(intersecting zones must have distinct priorities)" );
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( _( "(intersecting zones must have distinct priorities)" ) );
                     drcItem->SetItems( zoneA, zoneB );
                     reportViolation( drcItem, pt, layer );
                 }
                 else
                 {
                     drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-                    wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              constraint.GetValue().Min(),
-                                              std::max( actual, 0 ) );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        constraint.GetValue().Min(),
+                                                        std::max( actual, 0 ) ) );
                     drcItem->SetItems( zoneA, zoneB );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
                     reportTwoItemGeometry( drcItem, pt, zoneA, zoneB, layer, actual );

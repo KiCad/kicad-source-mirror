@@ -67,7 +67,6 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
     BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
-    wxString                           msg;
 
     const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
     ISOLATED_ISLANDS                       isolatedIslands;
@@ -196,22 +195,21 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                     if( ignoredSpokes )
                     {
-                        msg = wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
-                                                board->GetLayerName( aLayer ),
-                                                ignoredSpokes );
+                        drce->SetErrorDetail( wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
+                                                                board->GetLayerName( aLayer ),
+                                                                ignoredSpokes ) );
                         pos = ignoredSpokePos;
                     }
                     else
                     {
-                        msg = wxString::Format( _( "(layer %s; %s custom spoke count %d; actual %d)" ),
-                                                board->GetLayerName( aLayer ),
-                                                constraint.GetName(),
-                                                customSpokes,
-                                                spokes );
+                        drce->SetErrorDetail( wxString::Format( _( "(layer %s; %s custom spoke count %d; actual %d)" ),
+                                                                board->GetLayerName( aLayer ),
+                                                                constraint.GetName(),
+                                                                customSpokes,
+                                                                spokes ) );
                         pos = pad->GetPosition();
                     }
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aZone, pad );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -265,22 +263,21 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                 if( ignoredSpokes )
                 {
-                    msg = wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
-                                            board->GetLayerName( aLayer ),
-                                            ignoredSpokes );
+                    drce->SetErrorDetail( wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
+                                                            board->GetLayerName( aLayer ),
+                                                            ignoredSpokes ) );
                     pos = ignoredSpokePos;
                 }
                 else
                 {
-                    msg = wxString::Format( _( "(layer %s; %s min spoke count %d; actual %d)" ),
-                                            board->GetLayerName( aLayer ),
-                                            constraint.GetName(),
-                                            minCount,
-                                            spokes );
+                    drce->SetErrorDetail( wxString::Format( _( "(layer %s; %s min spoke count %d; actual %d)" ),
+                                                            board->GetLayerName( aLayer ),
+                                                            constraint.GetName(),
+                                                            minCount,
+                                                            spokes ) );
                     pos = pad->GetPosition();
                 }
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aZone, pad );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 

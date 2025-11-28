@@ -124,7 +124,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                                          actual );
                     }
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

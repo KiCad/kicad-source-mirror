@@ -345,7 +345,7 @@ SEVERITY SCH_MARKER::GetSeverity() const
 
 bool SCH_MARKER::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
-    return SCH_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
+    return SCH_ITEM::Matches( m_rcItem->GetErrorMessage( true ), aSearchData );
 }
 
 
@@ -358,7 +358,7 @@ const BOX2I SCH_MARKER::GetBoundingBox() const
 void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ) );
-    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage( true ) );
 
     switch( GetSeverity() )
     {

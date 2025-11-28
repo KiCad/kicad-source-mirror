@@ -1950,7 +1950,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
     {
         wxString msg = wxString::Format( wxT( "Test '%s': %s (code %d)" ),
                                          aItem->GetViolatingTest()->GetName(),
-                                         aItem->GetErrorMessage(),
+                                         aItem->GetErrorMessage( false ),
                                          aItem->GetErrorCode() );
 
         DRC_RULE* rule = aItem->GetViolatingRule();

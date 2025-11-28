@@ -472,7 +472,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
         {
             wxListItem listItem;
             listItem.SetId( m_ignoredList->GetItemCount() );
-            listItem.SetText( wxT( " • " ) + item.get().GetErrorText() );
+            listItem.SetText( wxT( " • " ) + item.get().GetErrorText( true ) );
             listItem.SetData( item.get().GetErrorCode() );
 
             m_ignoredList->InsertItem( listItem );
@@ -755,20 +755,20 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     {
         menu.Append( ID_SET_SEVERITY_TO_ERROR,
                      wxString::Format( _( "Change severity to Error for all '%s' violations" ),
-                                       rcItem->GetErrorText() ),
+                                       rcItem->GetErrorText( true ) ),
                      _( "Violation severities can also be edited in the Schematic Setup... dialog" ) );
     }
     else
     {
         menu.Append( ID_SET_SEVERITY_TO_WARNING,
                      wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
-                                       rcItem->GetErrorText() ),
+                                       rcItem->GetErrorText( true ) ),
                      _( "Violation severities can also be edited in the Schematic Setup... "
                         "dialog" ) );
     }
 
     menu.Append( ID_SET_SEVERITY_TO_IGNORE,
-                 wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText() ),
+                 wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText( true ) ),
                  _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
@@ -802,8 +802,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     case ID_EDIT_EXCLUSION_COMMENT:
         if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
         {
-            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
-                                      marker->GetComment(), true );
+            WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), marker->GetComment(), true );
 
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
@@ -838,8 +837,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
             if( command == ID_ADD_EXCLUSION_WITH_COMMENT )
             {
-                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ),
-                                          wxEmptyString, true );
+                WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), wxEmptyString, true );
 
                 if( dlg.ShowModal() == wxID_CANCEL )
                     break;
@@ -911,7 +909,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         wxListItem listItem;
         listItem.SetId( m_ignoredList->GetItemCount() );
-        listItem.SetText( wxT( " • " ) + rcItem->GetErrorText() );
+        listItem.SetText( wxT( " • " ) + rcItem->GetErrorText( true ) );
         listItem.SetData( rcItem->GetErrorCode() );
 
         m_ignoredList->InsertItem( listItem );
@@ -926,8 +924,8 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
         modified = true;
-    }
         break;
+    }
 
     case ID_EDIT_PIN_CONFLICT_MAP:
         m_parent->ShowSchematicSetupDialog( _( "Pin Conflicts Map" ) );
@@ -1128,13 +1126,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
         success = reportWriter.WriteTextReport( fn.GetFullPath() );
 
     if( success )
-    {
-        m_messages->Report( wxString::Format( _( "Report file '%s' created." ),
-                                              fn.GetFullPath() ) );
-    }
+        m_messages->Report( wxString::Format( _( "Report file '%s' created." ), fn.GetFullPath() ) );
     else
-    {
-        DisplayErrorMessage( this, wxString::Format( _( "Failed to create file '%s'." ),
-                                                     fn.GetFullPath() ) );
-    }
+        DisplayErrorMessage( this, wxString::Format( _( "Failed to create file '%s'." ), fn.GetFullPath() ) );
 }

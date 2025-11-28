@@ -256,12 +256,10 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 
                         if( clearance > 0 )
                         {
-                            wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                      constraint.GetName(),
-                                                      clearance,
-                                                      actual );
-
-                            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                            drce->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                             constraint.GetName(),
+                                                             clearance,
+                                                             actual ) );
                         }
 
                         drce->SetItems( item );

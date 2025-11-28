@@ -183,7 +183,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 msg.Printf( _( "'%s' settings differ" ), _( "Do not populate" ) );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
-                drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
+                drcItem->SetErrorMessage( drcItem->GetErrorMessage( true ) + wxS( ": " ) + msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
@@ -196,7 +196,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 msg.Printf( _( "'%s' settings differ" ), _( "Exclude from bill of materials" ) );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
-                drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
+                drcItem->SetErrorMessage( drcItem->GetErrorMessage( true ) + wxS( ": " ) + msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }

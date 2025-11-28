@@ -94,12 +94,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.Value().HasMin() && actualHeight < constraint.Value().Min() )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
-                    wxString msg = formatMsg( _( "(%s min height %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              constraint.Value().Min(),
-                                              actualHeight );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s min height %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        constraint.Value().Min(),
+                                                        actualHeight ) );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -109,12 +107,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( constraint.Value().HasMax() && actualHeight > constraint.Value().Max() )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
-                    wxString msg = formatMsg( _( "(%s max height %s; actual %s)" ),
-                                              constraint.GetName(),
-                                              constraint.Value().Max(),
-                                              actualHeight );
-
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s max height %s; actual %s)" ),
+                                                        constraint.GetName(),
+                                                        constraint.Value().Max(),
+                                                        actualHeight ) );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -198,12 +194,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     if( collapsedStroke || collapsedArea )
                     {
-                        auto drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-                        wxString msg;
-
-                        msg = _( "(TrueType font characters with insufficient stroke weight)" );
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+                        drcItem->SetErrorDetail( _( "(TrueType font characters with insufficient stroke weight)" ) );
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -217,12 +209,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( constraint.Value().HasMin() && actualThickness < constraint.Value().Min() )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-                        wxString msg = formatMsg( _( "(%s min thickness %s; actual %s)" ),
-                                                  constraint.GetName(),
-                                                  constraint.Value().Min(),
-                                                  actualThickness );
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s min thickness %s; actual %s)" ),
+                                                            constraint.GetName(),
+                                                            constraint.Value().Min(),
+                                                            actualThickness ) );
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -232,12 +222,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( constraint.Value().HasMax() && actualThickness > constraint.Value().Max() )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-                        wxString msg = formatMsg( _( "(%s max thickness %s; actual %s)" ),
-                                                  constraint.GetName(),
-                                                  constraint.Value().Max(),
-                                                  actualThickness );
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s max thickness %s; actual %s)" ),
+                                                            constraint.GetName(),
+                                                            constraint.Value().Max(),
+                                                            actualThickness ) );
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 

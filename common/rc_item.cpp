@@ -36,10 +36,10 @@
 #define WX_DATAVIEW_WINDOW_PADDING 6
 
 
-wxString RC_ITEM::GetErrorMessage() const
+wxString RC_ITEM::GetErrorMessage( bool aTranslate ) const
 {
     if( m_errorMessage.IsEmpty() )
-        return GetErrorText();
+        return GetErrorText( aTranslate );
     else
         return m_errorMessage;
 }
@@ -129,8 +129,8 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     {
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ),
                     GetSettingsKey(),
-                    GetErrorMessage(),
-                    GetViolatingRuleDesc(),
+                    GetErrorMessage( false ),
+                    GetViolatingRuleDesc( false ),
                     severity,
                     showCoord( aUnitsProvider, mainItem->GetPosition()),
                     mainItem->GetItemDescription( aUnitsProvider, true ),
@@ -141,8 +141,8 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     {
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ),
                     GetSettingsKey(),
-                    GetErrorMessage(),
-                    GetViolatingRuleDesc(),
+                    GetErrorMessage( false ),
+                    GetViolatingRuleDesc( false ),
                     severity,
                     showCoord( aUnitsProvider, mainItem->GetPosition()),
                     mainItem->GetItemDescription( aUnitsProvider, true ) );
@@ -151,8 +151,8 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     {
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n" ),
                     GetSettingsKey(),
-                    GetErrorMessage(),
-                    GetViolatingRuleDesc(),
+                    GetErrorMessage( false ),
+                    GetViolatingRuleDesc( false ),
                     severity );
     }
 
@@ -167,7 +167,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
                                 SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     aViolation.severity = getSeverityString( aSeverity );
-    aViolation.description = GetErrorMessage();
+    aViolation.description = GetErrorMessage( false );
     aViolation.type = GetSettingsKey();
 
     if( m_parent && m_parent->IsExcluded() )
@@ -444,7 +444,7 @@ void RC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
             }
         }
 
-        msg += rcItem->GetErrorMessage();
+        msg += rcItem->GetErrorMessage( true );
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:

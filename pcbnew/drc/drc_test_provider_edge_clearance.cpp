@@ -145,12 +145,10 @@ void DRC_TEST_PROVIDER_EDGE_CLEARANCE::resolveSilkDisposition( BOARD_ITEM* aItem
             // Report clearance info if there is any, even though crossing is just a straight-up collision
             if( minClearance > 0 )
             {
-                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          minClearance,
-                                          0 );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                    constraint.GetName(),
+                                                    minClearance,
+                                                    0 ) );
             }
 
             drcItem->SetItems( nearestEdge->m_Uuid, aItem->m_Uuid );
@@ -211,12 +209,10 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             // Only report clearance info if there is any; otherwise it's just a straight collision
             if( minClearance > 0 )
             {
-                wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          minClearance,
-                                          actual );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                    constraint.GetName(),
+                                                    minClearance,
+                                                    actual ) );
             }
 
             drcItem->SetItems( edge->m_Uuid, item->m_Uuid );

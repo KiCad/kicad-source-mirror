@@ -104,19 +104,21 @@ wxString ERC_REPORT::GetTextReport()
 
             switch( severity )
             {
-            case RPT_SEVERITY_ERROR: err_count++; break;
+            case RPT_SEVERITY_ERROR:   err_count++;  break;
             case RPT_SEVERITY_WARNING: warn_count++; break;
-            default: break;
+            default:                                 break;
             }
 
             msg << item->ShowReport( &unitsProvider, severity, itemMap );
         }
     }
 
-    msg << wxString::Format( wxT( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ), total_count,
-                             err_count, warn_count );
+    msg << wxString::Format( wxT( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ),
+                             total_count,
+                             err_count,
+                             warn_count );
 
-    msg << _( "\n ** Ignored checks:\n" );
+    msg << wxT( "\n ** Ignored checks:\n" );
 
     bool hasIgnored = false;
 
@@ -126,13 +128,13 @@ wxString ERC_REPORT::GetTextReport()
 
         if( code > 0 && settings.GetSeverity( code ) == RPT_SEVERITY_IGNORE )
         {
-            msg << wxString::Format( wxT( "    - %s\n" ), item.GetErrorMessage() );
+            msg << wxString::Format( wxT( "    - %s\n" ), item.GetErrorMessage( false ) );
             hasIgnored = true;
         }
     }
 
     if( !hasIgnored )
-        msg << wxT( "    - " ) << _( "None" ) << wxT( "\n" );
+        msg << wxT( "    - " ) << wxT( "None" ) << wxT( "\n" );
 
     return msg;
 }
@@ -222,7 +224,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         {
             RC_JSON::IGNORED_CHECK ignoredCheck;
             ignoredCheck.key = item.GetSettingsKey();
-            ignoredCheck.description = item.GetErrorMessage();
+            ignoredCheck.description = item.GetErrorMessage( false );
             reportHead.ignored_checks.push_back( ignoredCheck );
         }
     }

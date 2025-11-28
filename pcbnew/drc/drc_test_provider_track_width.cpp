@@ -118,27 +118,25 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
                     wxString constraintName = constraint.GetName();
-                    wxString msg;
 
                     if( fail_min )
                     {
                         if( constraint.m_ImplicitMin )
                             constraintName = _( "board setup constraints" );
 
-                        msg = formatMsg( _( "(%s min width %s; actual %s)" ),
-                                         constraintName,
-                                         constraintWidth,
-                                         actual );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s min width %s; actual %s)" ),
+                                                            constraintName,
+                                                            constraintWidth,
+                                                            actual ) );
                     }
                     else
                     {
-                        msg = formatMsg( _( "(%s max width %s; actual %s)" ),
-                                         constraintName,
-                                         constraintWidth,
-                                         actual );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s max width %s; actual %s)" ),
+                                                            constraintName,
+                                                            constraintWidth,
+                                                            actual ) );
                     }
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

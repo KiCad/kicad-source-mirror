@@ -428,7 +428,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
             }
         }
 
-        msg += ercItem->GetErrorMessage();
+        msg += ercItem->GetErrorMessage( true );
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:

@@ -454,7 +454,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                                 msg += wxS( " " ) + layerDesc( aLayer );
 
-                                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                                drcItem->SetErrorDetail( msg );
                                 drcItem->SetViolatingRule( c.GetParentRule() );
 
                                 for( BOARD_ITEM* item : contributingItems )

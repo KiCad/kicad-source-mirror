@@ -661,13 +661,11 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             if( val.HasMax() && val.Max() >= 0 && totalUncoupled > val.Max() )
             {
-                auto     drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
-                wxString msg = formatMsg( _( "(%s maximum uncoupled length %s; actual %s)" ),
-                                          key.uncoupledRuleName,
-                                          val.Max(),
-                                          totalUncoupled );
-
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
+                drce->SetErrorDetail( formatMsg( _( "(%s maximum uncoupled length %s; actual %s)" ),
+                                                 key.uncoupledRuleName,
+                                                 val.Max(),
+                                                 totalUncoupled ) );
 
                 BOARD_CONNECTED_ITEM* item = nullptr;
                 auto                  p_it = itemSet.itemsP.begin();
@@ -726,24 +724,22 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         continue;
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
-                    wxString                  msg;
 
                     if( dp.couplingFailMin )
                     {
-                        msg = formatMsg( _( "(%s minimum gap %s; actual %s)" ),
-                                         key.gapRuleName,
-                                         val.Min(),
-                                         (double) dp.computedGap );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s minimum gap %s; actual %s)" ),
+                                                            key.gapRuleName,
+                                                            val.Min(),
+                                                            (double) dp.computedGap ) );
                     }
                     else if( dp.couplingFailMax )
                     {
-                        msg = formatMsg( _( "(%s maximum gap %s; actual %s)" ),
-                                         key.gapRuleName,
-                                         val.Max(),
-                                         (double) dp.computedGap );
+                        drcItem->SetErrorDetail( formatMsg( _( "(%s maximum gap %s; actual %s)" ),
+                                                            key.gapRuleName,
+                                                            val.Max(),
+                                                            (double) dp.computedGap ) );
                     }
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetViolatingRule( key.gapRule );
 
                     BOARD_CONNECTED_ITEM* item = nullptr;

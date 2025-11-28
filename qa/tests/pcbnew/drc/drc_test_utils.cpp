@@ -28,7 +28,7 @@ std::ostream& boost_test_print_type( std::ostream& os, const PCB_MARKER& aMarker
 {
     const auto& reporter = aMarker.GetRCItem();
     os << "PCB_MARKER[\n";
-    os << "    type=" << reporter->GetErrorCode() << " (" << reporter->GetErrorText() << ")"
+    os << "    type=" << reporter->GetErrorCode() << " (" << reporter->GetErrorText( false ) << ")"
        << "\n";
     os << "]";
     return os;

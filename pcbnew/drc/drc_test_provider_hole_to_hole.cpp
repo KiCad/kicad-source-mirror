@@ -307,16 +307,13 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
                 std::swap( aItem, aOther );
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
-            wxString msg = formatMsg( _( "(%s min %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      minClearance,
-                                      actual );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorDetail( formatMsg( _( "(%s min %s; actual %s)" ),
+                                                constraint.GetName(),
+                                                minClearance,
+                                                actual ) );
             drcItem->SetItems( aItem, aOther );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
-            reportTwoShapeGeometry( drcItem, aHole->GetCenter(), aHole, otherHole.get(), UNDEFINED_LAYER,
-                                    actual );
+            reportTwoShapeGeometry( drcItem, aHole->GetCenter(), aHole, otherHole.get(), UNDEFINED_LAYER, actual );
         }
     }
 
