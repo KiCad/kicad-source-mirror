@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-21 13:51+0000\n"
+"PO-Revision-Date: 2025-11-28 09:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -15966,7 +15966,7 @@ msgstr "引脚:"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:95
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
 msgid "Differential"
-msgstr "差异"
+msgstr "差分"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:98
 msgid "Pin model:"
@@ -18751,21 +18751,21 @@ msgstr "DNP (不作装配)"
 
 #: eeschema/lib_symbol.cpp:1626
 msgid "Power flag differs."
-msgstr "'Power flag' 差异。"
+msgstr "'Power flag' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1635
 msgid "Unit count differs."
-msgstr "'单元数量' 差异。"
+msgstr "'单元数量' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1674
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:866
 msgid "Graphic item count differs."
-msgstr "'图形项目数量' 差异。"
+msgstr "'图形项目数量' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1686
 #, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "'图形项目' 差异: %s; %s。"
+msgstr "'图形项目' 不一致: %s; %s。"
 
 #: eeschema/lib_symbol.cpp:1703
 #, c-format
@@ -18775,7 +18775,7 @@ msgstr "原理图符号中多余的引脚: %s。"
 #: eeschema/lib_symbol.cpp:1711
 #, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "'引脚 '%s'' 差异: %s; %s"
+msgstr "'引脚 '%s' 不一致: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1728
 #, c-format
@@ -18790,7 +18790,7 @@ msgstr "原理图符号多余的字段: %s。"
 #: eeschema/lib_symbol.cpp:1773
 #, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "'字段 '%s'' 差异: %s; %s。"
+msgstr "'字段 '%s'' 不一致: %s; %s。"
 
 #: eeschema/lib_symbol.cpp:1796
 #, c-format
@@ -18804,15 +18804,15 @@ msgstr "'封装筛选规则' 差异。"
 
 #: eeschema/lib_symbol.cpp:1818
 msgid "Footprint filters differ."
-msgstr "'封装筛选规则' 差异。"
+msgstr "'封装筛选规则' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1829
 msgid "Symbol keywords differ."
-msgstr "'封装关键字' 差异。"
+msgstr "'封装关键字' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1838
 msgid "Symbol pin name offsets differ."
-msgstr "'符号引脚与名称偏移量' 差异。"
+msgstr "'符号引脚与名称偏移量' 不一致。"
 
 #: eeschema/lib_symbol.cpp:1849
 msgid "Show pin names settings differ."
@@ -43770,7 +43770,7 @@ msgstr "在库中找不到封装"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint doesn't match copy in library"
-msgstr "封装与来源库中的封装存在差异"
+msgstr "封装与来源库中的封装存在不一致"
 
 #: pcbnew/drc/drc_item.cpp:221
 msgid "Assertion failure"
@@ -44242,13 +44242,13 @@ msgstr "%s 存在 '填充区挖空设置' 重写。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:277
 #, c-format
 msgid "%s pad to die length differs."
-msgstr "%s 个 'Pad->Die 的长度' 差异。"
+msgstr "%s 个 'Pad->Die 的长度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:279
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
 #, c-format
 msgid "%s position differs."
-msgstr "%s 个 '位置' 差异。"
+msgstr "%s 个 '位置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
 #, c-format
@@ -44259,232 +44259,232 @@ msgstr "%s 具有不同的编号。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:561
 #, c-format
 msgid "%s layers differ."
-msgstr "%s 个 '层' 差异。"
+msgstr "%s 个 '层' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:306
 #, c-format
 msgid "%s pad type differs."
-msgstr "%s 个 '焊盘类型' 差异。"
+msgstr "%s 个 '焊盘类型' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:308
 #, c-format
 msgid "%s fabrication property differs."
-msgstr "%s 个 '制造属性' 差异。"
+msgstr "%s 个 '制造属性' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:313
 #, c-format
 msgid "%s orientation differs."
-msgstr "%s 个 '方向' 差异。"
+msgstr "%s 个 '方向' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:324
 #, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "层 %2$s 上的 %1$s 个焊盘形状类型差异。"
+msgstr "层 %2$s 上的 %1$s 个焊盘形状类型不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:329
 #, c-format
 msgid "%s size differs on layer %s."
-msgstr "层 %2$s 上的 %1$s 个尺寸差异。"
+msgstr "层 %2$s 上的 %1$s 个尺寸不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:334
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "层 %2$s 上的 %1$s 个 trapezoid delta 差异。"
+msgstr "层 %2$s 上的 %1$s 个 trapezoid delta 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
 #, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "层 %2$s 上的 %1$s 个圆角差异。"
+msgstr "层 %2$s 上的 %1$s 个圆角不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:351
 #, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "层 %2$s 上的 %1$s 个倒角尺寸差异。"
+msgstr "层 %2$s 上的 %1$s 个倒角尺寸不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:357
 #, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "层 %2$s 上的 %1$s 个倒角差异。"
+msgstr "层 %2$s 上的 %1$s 个倒角不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:363
 #, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "层 %2$s 上的 %1$s 个形状与孔偏移差异。"
+msgstr "层 %2$s 上的 %1$s 个形状与孔偏移不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:369
 #, c-format
 msgid "%s drill shape differs."
-msgstr "%s 个 '钻孔形状' 差异。"
+msgstr "%s 个 '钻孔形状' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:371
 #, c-format
 msgid "%s drill size differs."
-msgstr "%s 个 '钻孔大小' 差异。"
+msgstr "%s 个 '钻孔大小' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:422
 #, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "层 %2$s 上的 %1$s 个形状原型差异。"
+msgstr "层 %2$s 上的 %1$s 个形状原型不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
 #, c-format
 msgid "%s text differs."
-msgstr "%s 个 '文本' 差异。"
+msgstr "%s 个 '文本' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:448
 #, c-format
 msgid "%s width differs."
-msgstr "%s 个 '宽度' 差异。"
+msgstr "%s 个 '宽度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
 #, c-format
 msgid "%s height differs."
-msgstr "%s 个 '高度' 差异。"
+msgstr "%s 个 '高度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
 #, c-format
 msgid "%s text size differs."
-msgstr "%s 个 '文本大小' 差异。"
+msgstr "%s 个 '文本大小' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
 #, c-format
 msgid "%s code differs."
-msgstr "%s 个 '条码' 差异。"
+msgstr "%s 个 '条码' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
 #, c-format
 msgid "%s error correction level differs."
-msgstr "%s 个 '容错等级' 差异。"
+msgstr "%s 个 '容错等级' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:539
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr "%s 个 '拐角平滑设置' 差异。"
+msgstr "%s 个 '拐角平滑设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:541
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr "%s 个 '拐角平滑半径' 差异。"
+msgstr "%s 个 '拐角平滑半径' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:543
 #, c-format
 msgid "%s name differs."
-msgstr "%s 个 '名称' 差异。"
+msgstr "%s 个 '名称' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:545
 #, c-format
 msgid "%s priority differs."
-msgstr "%s 个 '优先级' 差异。"
+msgstr "%s 个 '优先级' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:548
 #, c-format
 msgid "%s keep-out property differs."
-msgstr "%s 个 'keep-out 属性' 差异。"
+msgstr "%s 个 'keep-out 属性' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
-msgstr "%s 个 'keep out 覆铜填充设置' 差异。"
+msgstr "%s 个 'keep out 覆铜填充设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:552
 #, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "%s 个 '禁止放置封装设置' 差异。"
+msgstr "%s 个 '禁止放置封装设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:554
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr "%s 个 '禁止放置焊盘设置' 差异。"
+msgstr "%s 个 '禁止放置焊盘设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:556
 #, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "%s 个 '禁止放置走线设置' 差异。"
+msgstr "%s 个 '禁止放置走线设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:558
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr "%s 个 '禁止放置过孔设置' 差异。"
+msgstr "%s 个 '禁止放置过孔设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:564
 #, c-format
 msgid "%s pad connection property differs."
-msgstr "%s 个 '焊盘连接属性' 差异。"
+msgstr "%s 个 '焊盘连接属性' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:566
 #, c-format
 msgid "%s local clearance differs."
-msgstr "%s 个 '局部间距' 差异。"
+msgstr "%s 个 '局部间距' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:568
 #, c-format
 msgid "%s thermal relief gap differs."
-msgstr "%s 个 '散热间隙' 差异。"
+msgstr "%s 个 '散热间隙' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "%s 个 '缓释热焊盘 (花焊盘) 散热引线宽度' 差异。"
+msgstr "%s 个 '缓释热焊盘 (花焊盘) 散热引线宽度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
 #, c-format
 msgid "%s min thickness differs."
-msgstr "%s 个 '最小厚度' 差异。"
+msgstr "%s 个 '最小厚度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:576
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr "%s 个 '死铜移除设置' 差异。"
+msgstr "%s 个 '死铜移除设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:578
 #, c-format
 msgid "%s minimum island size setting differs."
-msgstr "%s 个 '最小死铜大小设置' 差异。"
+msgstr "%s 个 '最小死铜大小设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:581
 #, c-format
 msgid "%s fill type differs."
-msgstr "%s 个 '填充类型' 差异。"
+msgstr "%s 个 '填充类型' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:583
 #, c-format
 msgid "%s hatch width differs."
-msgstr "%s 个 '栅格宽度' 差异。"
+msgstr "%s 个 '栅格宽度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:585
 #, c-format
 msgid "%s hatch gap differs."
-msgstr "%s 个 '栅格间隙' 差异。"
+msgstr "%s 个 '栅格间隙' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 #, c-format
 msgid "%s hatch orientation differs."
-msgstr "%s 个 '栅格定向角度' 差异。"
+msgstr "%s 个 '栅格定向角度' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:589
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 个 '网格平滑等级' 差异。"
+msgstr "%s 个 '网格平滑等级' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:591
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr "%s 个 '栅格平滑数量' 差异。"
+msgstr "%s 个 '栅格平滑数量' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:593
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr "%s 个 '栅格孔设置' 差异。"
+msgstr "%s 个 '栅格孔设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:599
 #, c-format
 msgid "%s outline corner count differs."
-msgstr "%s 个 '外框拐角数量' 差异。"
+msgstr "%s 个 '外框拐角数量' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:614
 #, c-format
 msgid "%s corners differ."
-msgstr "%s 个 '拐角' 差异。"
+msgstr "%s 个 '拐角' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:630
 #, fuzzy
@@ -44492,9 +44492,8 @@ msgid "Footprint stackup mode differs."
 msgstr "'封装类型' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:636
-#, fuzzy
 msgid "Footprint layers differ."
-msgstr "'封装筛选规则' 差异。"
+msgstr "'封装筛选规则' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:668
 #, c-format
@@ -44508,7 +44507,7 @@ msgstr "电路板元件 %s 有一个不良的层编号"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:730
 msgid "Footprint types differ."
-msgstr "'封装类型' 差异。"
+msgstr "'封装类型' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:740
@@ -44520,9 +44519,8 @@ msgid "'%s' settings differ."
 msgstr "%s 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:762
-#, fuzzy
 msgid "Footprint stackup differs."
-msgstr "'封装类型' 差异。"
+msgstr "'封装类型' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:780
 msgid "Pad clearance overridden."
@@ -44547,25 +44545,25 @@ msgstr "'填充区连接' 重写。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:814
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:819
 msgid "Net tie pad groups differ."
-msgstr "'网络连接点焊盘组' 差异。"
+msgstr "'网络连接点焊盘组' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:880
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:920
 #, c-format
 msgid "%s differs."
-msgstr "%s 个差异。"
+msgstr "%s 个不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
 msgid "Barcode count differs."
-msgstr "'条码数量' 差异。"
+msgstr "'条码数量' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:933
 msgid "Pad count differs."
-msgstr "'焊盘数量' 差异。"
+msgstr "'焊盘数量' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:954
 msgid "Rule area count differs."
-msgstr "'规则域数量' 差异。"
+msgstr "'规则域数量' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:973
 msgid "No project loaded, skipping library parity tests."
