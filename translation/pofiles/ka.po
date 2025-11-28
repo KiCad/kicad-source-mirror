@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-23 15:55+0000\n"
+"PO-Revision-Date: 2025-11-28 09:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -4505,7 +4505,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:979
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:882
 msgid "Migrate Library"
-msgstr ""
+msgstr "ბიბლიოთეკის მიგრაცია"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:888
 #, c-format
@@ -4550,7 +4550,7 @@ msgstr "გამოტოვება"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:678
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 msgid "Add Anyway"
-msgstr ""
+msgstr "მაინც დამატება"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1173
 msgid "Design Block Libraries"
@@ -4636,20 +4636,20 @@ msgstr "მეტსახელი"
 #: include/lib_table_grid.h:211 pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:96
 msgid "Library Path"
-msgstr ""
+msgstr "ბიბლიოთეკის ბილიკი"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:214 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
 msgid "Library Format"
-msgstr ""
+msgstr "ბიბლიოთეკის ფორმატი"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:69
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:69
 msgid "Global Libraries"
-msgstr ""
+msgstr "გლობალური ბიბლიოთეკები"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
@@ -4686,7 +4686,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:165
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:162
 msgid "Migrate Libraries"
-msgstr ""
+msgstr "ბიბლიოთეკების მიგრაცია"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:163
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
@@ -9509,11 +9509,11 @@ msgstr ""
 
 #: common/validators.cpp:389
 msgid "carriage return"
-msgstr ""
+msgstr "კარეტის დაბრუნება"
 
 #: common/validators.cpp:391
 msgid "line feed"
-msgstr ""
+msgstr "ხაზის გადატანა"
 
 #: common/validators.cpp:393
 msgid "tab"
@@ -9529,7 +9529,7 @@ msgstr " ან "
 
 #: common/validators.cpp:416
 msgid ", or "
-msgstr ""
+msgstr ", ან "
 
 #: common/validators.cpp:428
 #, c-format
@@ -11427,7 +11427,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_design_block_properties.cpp:125
 #: eeschema/dialogs/panel_template_fieldnames.cpp:100
 msgid "Untitled Field"
-msgstr ""
+msgstr "უსახელო ველი"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:250
 msgid "Duplicate fields are not allowed."
@@ -12170,7 +12170,7 @@ msgstr "არა-კვების სიმბოლოები"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "კვების სიმბოლო"
+msgstr "კვების სიმბოლოები"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -15460,7 +15460,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
 #: eeschema/sch_label.cpp:2221 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
-msgstr ""
+msgstr "სინტაქსის დახმარება"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 msgid "User-defined Signals"
@@ -15965,17 +15965,17 @@ msgstr "]"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:247
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:20
 msgid "Dashed Lines"
-msgstr ""
+msgstr "დაშტრიხული ხაზები"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:254
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:32
 msgid "Dash length:"
-msgstr ""
+msgstr "შტრიხის სიგრძე:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:261
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:39
 msgid "Gap length:"
-msgstr ""
+msgstr "დაშორების სიგრზე:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:271
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
@@ -15984,7 +15984,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:279
 msgid "Operating-point Overlay"
-msgstr ""
+msgstr "მუშა წერტილის განლაგება"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
@@ -15992,7 +15992,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
 msgid "Range (voltages):"
-msgstr ""
+msgstr "შუალედი (ვოლტაჟები):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 msgid "fV"
@@ -16042,7 +16042,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
 msgid "Range (currents):"
-msgstr ""
+msgstr "შუალედი (დენები):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 msgid "fA"
@@ -16092,11 +16092,11 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:233
 msgid "Generate warning"
-msgstr ""
+msgstr "გაფრთხილების გენერაცია"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:238
 msgid "Generate error"
-msgstr ""
+msgstr "შეცდომის გენერაცია"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
@@ -16174,7 +16174,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:30
 msgid "Use theme:"
-msgstr ""
+msgstr "თემის გამოყენება:"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:41
 msgid "Show pin &electrical type"
@@ -16504,31 +16504,31 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
 msgid "Input Pin"
-msgstr ""
+msgstr "შეყვანის საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
 msgid "Output Pin"
-msgstr ""
+msgstr "გამოტანის საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:81 eeschema/erc/erc.cpp:98
 msgid "Bidirectional Pin"
-msgstr ""
+msgstr "ორმხრივი საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:82 eeschema/erc/erc.cpp:99
 msgid "Tri-State Pin"
-msgstr ""
+msgstr "სამმდგომარეობიანი საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:83 eeschema/erc/erc.cpp:100
 msgid "Passive Pin"
-msgstr ""
+msgstr "პასიური საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:84 eeschema/erc/erc.cpp:101
 msgid "Free Pin"
-msgstr ""
+msgstr "თავისუფალი საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:85 eeschema/erc/erc.cpp:102
 msgid "Unspecified Pin"
-msgstr ""
+msgstr "მიუთითებელი საკონტაქტო ღერო"
 
 #: eeschema/erc/erc.cpp:86 eeschema/erc/erc.cpp:103
 msgid "Power Input Pin"
@@ -16540,11 +16540,11 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:88 eeschema/erc/erc.cpp:105
 msgid "Open Collector"
-msgstr ""
+msgstr "ღია კოლექტორი"
 
 #: eeschema/erc/erc.cpp:89 eeschema/erc/erc.cpp:106
 msgid "Open Emitter"
-msgstr ""
+msgstr "ღია ემიტერი"
 
 #: eeschema/erc/erc.cpp:90 eeschema/erc/erc.cpp:107
 msgid "No Connection"
@@ -16955,7 +16955,7 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:296 eeschema/files-io.cpp:877
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
-msgstr ""
+msgstr "სქემის ფაილები"
 
 #: eeschema/fields_grid_table.cpp:327 eeschema/fields_grid_table.cpp:803
 #: eeschema/fields_grid_table.cpp:971
@@ -16971,7 +16971,7 @@ msgstr "ვერტიკალური"
 
 #: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1891
 msgid "Allow Autoplacement"
-msgstr ""
+msgstr "ავტომოთავსების დაშვება"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1930
 #: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
@@ -17106,7 +17106,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:663
 msgid "Import Schematic"
-msgstr ""
+msgstr "სქემის შემოტანა"
 
 #: eeschema/files-io.cpp:700
 #, c-format
@@ -17162,7 +17162,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1068
 msgid "Save Warning"
-msgstr ""
+msgstr "გაფრთხილების შენახვა"
 
 #: eeschema/files-io.cpp:1071
 msgid ""
@@ -17172,7 +17172,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1072
 msgid "Overwrite Files"
-msgstr ""
+msgstr "ფაილების თავზე გადაწერა"
 
 #: eeschema/files-io.cpp:1073
 msgid "Abort Project Save"
@@ -17238,7 +17238,7 @@ msgstr ""
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2056
 msgid "Derived from"
-msgstr ""
+msgstr "მიღებულია საიდან"
 
 #: eeschema/generate_alias_info.cpp:76 eeschema/sch_base_frame.cpp:84
 #: eeschema/symbol_editor/symbol_editor.cpp:170
@@ -17341,7 +17341,7 @@ msgstr ""
 #: eeschema/lib_symbol.cpp:310 eeschema/sch_symbol.cpp:470
 #, c-format
 msgid "Unit %s"
-msgstr ""
+msgstr "ერთეული %s"
 
 #: eeschema/lib_symbol.cpp:594 eeschema/sch_sheet.cpp:312
 #: eeschema/sch_symbol.cpp:1564
@@ -17469,7 +17469,7 @@ msgstr "შემოტანა"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
-msgstr ""
+msgstr "არა-KiCad-ის სქემა..."
 
 #: eeschema/menubar.cpp:104
 msgid ""
@@ -17478,7 +17478,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:108
 msgid "Footprint Assignments..."
-msgstr ""
+msgstr "ნაკვალევის მინიჭებები..."
 
 #: eeschema/menubar.cpp:109 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
@@ -17723,19 +17723,19 @@ msgstr "მიუთითებელი"
 
 #: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2080
 msgid "Power input"
-msgstr ""
+msgstr "კვების შეყვანა"
 
 #: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2081
 msgid "Power output"
-msgstr ""
+msgstr "კვების გამოყვანა"
 
 #: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2082
 msgid "Open collector"
-msgstr ""
+msgstr "ღია კოლექტორი"
 
 #: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2083
 msgid "Open emitter"
-msgstr ""
+msgstr "ღია ემიტერი"
 
 #: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2084
 msgid "Unconnected"
@@ -17751,19 +17751,19 @@ msgstr "საათი"
 
 #: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2094
 msgid "Inverted clock"
-msgstr ""
+msgstr "შებრუნებული საათი"
 
 #: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2095
 msgid "Input low"
-msgstr ""
+msgstr "შეყვანა დაბალია"
 
 #: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2096
 msgid "Clock low"
-msgstr ""
+msgstr "საათი დაბალია"
 
 #: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2097
 msgid "Output low"
-msgstr ""
+msgstr "გამოტანა დაბალია"
 
 #: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2098
 msgid "Falling edge clock"
@@ -17846,7 +17846,7 @@ msgstr ""
 
 #: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:157
 msgid "Not Found"
-msgstr ""
+msgstr "აღმოჩენილი არაა"
 
 #: eeschema/project_sch.cpp:115
 msgid "The following libraries were not found:"
@@ -17940,7 +17940,7 @@ msgstr ""
 #: pcbnew/pcb_track.cpp:1721 pcbnew/tools/pcb_control.cpp:1910
 #: pcbnew/zone.cpp:811
 msgid "Resolved Netclass"
-msgstr ""
+msgstr "ამოხსნილი ქსელის კლასი"
 
 #: eeschema/sch_connection.cpp:445
 msgid "Connection Name"
@@ -17958,7 +17958,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:1957
 msgid "Schematic Hierarchy"
-msgstr ""
+msgstr "სქემის იერარქია"
 
 #: eeschema/sch_edit_frame.cpp:420
 msgid "New schematic file is unsaved"
@@ -17983,7 +17983,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1358
 msgid "New Schematic"
-msgstr ""
+msgstr "ახალი სქემა"
 
 #: eeschema/sch_edit_frame.cpp:1370
 #, c-format
@@ -17992,7 +17992,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1395
 msgid "Open Schematic"
-msgstr ""
+msgstr "სქემის გახსნა"
 
 #: eeschema/sch_edit_frame.cpp:1463
 msgid "Assigning footprints requires a fully annotated schematic."
@@ -18006,7 +18006,7 @@ msgstr ""
 #: kicad/kicad_manager_frame.cpp:1069 pcbnew/footprint_edit_frame.cpp:1096
 #: pcbnew/pcb_edit_frame.cpp:1806
 msgid "[Read Only]"
-msgstr ""
+msgstr "[მხოლოდ-წაკითხვადი]"
 
 #: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:330
 #: pcbnew/footprint_edit_frame.cpp:1105 pcbnew/pcb_edit_frame.cpp:1809
@@ -18062,11 +18062,11 @@ msgstr "არა"
 
 #: eeschema/sch_field.cpp:1248 eeschema/sch_text.cpp:662
 msgid "H Justification"
-msgstr ""
+msgstr "ჰორიზ. სწორება"
 
 #: eeschema/sch_field.cpp:1258 eeschema/sch_text.cpp:672
 msgid "V Justification"
-msgstr ""
+msgstr "ვერტ. სწორება"
 
 #: eeschema/sch_field.cpp:1294
 #, c-format
@@ -18079,7 +18079,7 @@ msgstr ""
 
 #: eeschema/sch_field.cpp:1391 eeschema/sch_label.cpp:217
 msgid "Sheet References"
-msgstr ""
+msgstr "ფურცლის მიმართვები"
 
 #: eeschema/sch_field.cpp:1888
 msgid "Show Field Name"
@@ -18931,16 +18931,16 @@ msgstr "ქსელი"
 #: eeschema/sch_label.cpp:1389 eeschema/sch_line.cpp:897
 #: eeschema/sch_rule_area.cpp:395
 msgid "Resolved netclass"
-msgstr ""
+msgstr "ამოხსნილი ქსელის კლასი"
 
 #: eeschema/sch_label.cpp:1405
 msgid "Hierarchical Labels"
-msgstr ""
+msgstr "იერარქიული ჭდეები"
 
 #: eeschema/sch_label.cpp:1536
 #, c-format
 msgid "Label '%s'"
-msgstr ""
+msgstr "ჭდე '%s'"
 
 #: eeschema/sch_label.cpp:1814
 #, c-format
@@ -19016,11 +19016,11 @@ msgstr "გრაფიკული"
 
 #: eeschema/sch_line.cpp:934
 msgid "Line Type"
-msgstr ""
+msgstr "ხაზის ტიპი"
 
 #: eeschema/sch_line.cpp:939
 msgid "from netclass"
-msgstr ""
+msgstr "ქსელის კლასიდან"
 
 #: eeschema/sch_marker.cpp:368 pcbnew/pcb_marker.cpp:224
 msgid "Violation"
@@ -19039,19 +19039,19 @@ msgstr "გამორიცხული"
 
 #: eeschema/sch_marker.h:102
 msgid "ERC Marker"
-msgstr ""
+msgstr "ERC მარკერი"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:250
 msgid "No Connect"
-msgstr ""
+msgstr "დაკავშირებული არაა"
 
 #: eeschema/sch_pin.cpp:1585
 msgid "Pos X"
-msgstr ""
+msgstr "X პოზ"
 
 #: eeschema/sch_pin.cpp:1586
 msgid "Pos Y"
-msgstr ""
+msgstr "Y პოზ"
 
 #: eeschema/sch_pin.cpp:1843
 #, c-format
@@ -19206,11 +19206,11 @@ msgstr "ფურცლის სახელი"
 
 #: eeschema/sch_sheet.cpp:880
 msgid "Hierarchical Path"
-msgstr ""
+msgstr "იერარქიული ბილიკი"
 
 #: eeschema/sch_sheet.cpp:884
 msgid "File Name"
-msgstr ""
+msgstr "ფაილის სახელი"
 
 #: eeschema/sch_sheet.cpp:891 eeschema/sch_symbol.cpp:1998
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
@@ -19259,7 +19259,7 @@ msgstr "არ დააყენო"
 
 #: eeschema/sch_sheet_path.cpp:59 include/board_item.h:465
 msgid "(Deleted Item)"
-msgstr ""
+msgstr "(წაშლილი ელემენტი)"
 
 #: eeschema/sch_sheet_pin.cpp:339
 #, c-format
@@ -19268,7 +19268,7 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:2024
 msgid "Power symbol"
-msgstr ""
+msgstr "კვების სიმბოლო"
 
 #: eeschema/sch_symbol.cpp:2044
 msgid "flags"
@@ -19276,7 +19276,7 @@ msgstr "ალმები"
 
 #: eeschema/sch_symbol.cpp:2049
 msgid "Missing parent"
-msgstr ""
+msgstr "ნაკლული მშობელი"
 
 #: eeschema/sch_symbol.cpp:2064
 msgid "Undefined!!!"
@@ -19542,11 +19542,11 @@ msgstr ""
 
 #: eeschema/sch_textbox.cpp:547 pcbnew/pcb_textbox.cpp:485
 msgid "Box Width"
-msgstr ""
+msgstr "ბლოკის სიგანე"
 
 #: eeschema/sch_textbox.cpp:550 pcbnew/pcb_textbox.cpp:488
 msgid "Box Height"
-msgstr ""
+msgstr "ბლოკის სიმაღლე"
 
 #: eeschema/sch_textbox.cpp:687 pcbnew/pcb_textbox.cpp:836
 msgid "Margins"
@@ -19612,11 +19612,11 @@ msgstr ""
 
 #: eeschema/sheet.cpp:305
 msgid "Continue Load"
-msgstr ""
+msgstr "ჩატვირთვის გაგრძელება"
 
 #: eeschema/sheet.cpp:306
 msgid "Cancel Load"
-msgstr ""
+msgstr "ჩატვირთვის გაუქმება"
 
 #: eeschema/sheet.cpp:315
 msgid ""
@@ -19723,7 +19723,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
 msgid "Checking pin "
-msgstr ""
+msgstr "მოწმდება საკონტაქტო ღერო "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:201
 msgid "Pin name cannot be empty."
@@ -19751,7 +19751,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:260
 msgid "Checking component "
-msgstr ""
+msgstr "მოწმდება კომპონენტი "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:267
 msgid "Component: name cannot be empty."
@@ -19783,7 +19783,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
 msgid "Invalid R_load."
-msgstr ""
+msgstr "არასწორი R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:465
 msgid "Invalid falling dV/dt."
@@ -19799,7 +19799,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Checking model "
-msgstr ""
+msgstr "მოწმდება მოდელი "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:498
 msgid "Undefined model type."
@@ -19843,11 +19843,11 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:597
 msgid "Invalid pulldown."
-msgstr ""
+msgstr "არასწორი pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:603
 msgid "Invalid pullup."
-msgstr ""
+msgstr "არასწორი pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:609
 msgid "Invalid POWER clamp."
@@ -19859,11 +19859,11 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:624
 msgid "Invalid Ramp"
-msgstr ""
+msgstr "არასწორი Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:635
 msgid "Checking Header..."
-msgstr ""
+msgstr "თავსართის შემოწმება..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:642
 msgid "Missing [IBIS Ver]"
@@ -20042,7 +20042,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1969
 msgid "Unknown Model_type "
-msgstr ""
+msgstr "უცნობი Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1976
 msgid "Internal Error while reading model_type"
@@ -20050,7 +20050,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1991
 msgid "Unknown Enable: "
-msgstr ""
+msgstr "უცნობი Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1998
 #: eeschema/sim/kibis/ibis_parser.cpp:2020
@@ -20059,7 +20059,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2013
 msgid "Unknown polarity "
-msgstr ""
+msgstr "უცნობი პოლარობა "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2047
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -20111,7 +20111,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2606
 msgid "Missing keyword."
-msgstr ""
+msgstr "ნაკლული საკვანძო სიტყვა."
 
 #: eeschema/sim/kibis/kibis.cpp:449
 msgid "waveform has less than two points"
@@ -20349,7 +20349,7 @@ msgstr ""
 
 #: eeschema/sim/sim_model_ibis.cpp:338
 msgid "Power supply"
-msgstr ""
+msgstr "კვების ბლოკი"
 
 #: eeschema/sim/sim_model_ibis.cpp:348
 msgid "Parasitic pin resistance"
@@ -20365,15 +20365,15 @@ msgstr ""
 
 #: eeschema/sim/sim_model_ibis.cpp:412
 msgid "DC Value"
-msgstr ""
+msgstr "DC მნიშვნელობა"
 
 #: eeschema/sim/sim_model_ibis.cpp:430
 msgid "ON time"
-msgstr ""
+msgstr "ON დრო"
 
 #: eeschema/sim/sim_model_ibis.cpp:438
 msgid "OFF time"
-msgstr ""
+msgstr "OFF დრო"
 
 #: eeschema/sim/sim_model_ibis.cpp:446 eeschema/sim/sim_model_ibis.cpp:479
 msgid "Delay"
@@ -20505,23 +20505,23 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
 msgid "Measure Min"
-msgstr ""
+msgstr "წუთების გაზომვა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
 msgid "Measure Max"
-msgstr ""
+msgstr "მაქს გაზომვა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:150
 msgid "Measure Average"
-msgstr ""
+msgstr "საშუალოს გაზომვა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:151
 msgid "Measure RMS"
-msgstr ""
+msgstr "RMS-ის გაზომვა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:152
 msgid "Measure Peak-to-peak"
-msgstr ""
+msgstr "პიკიდან-პიკამდეს გაზომვა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:156
 msgid "Measure Frequency of Min"
@@ -20574,15 +20574,15 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:343
 #, c-format
 msgid "Format %s..."
-msgstr ""
+msgstr "ფორმატი %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:418
 msgid "Format Value..."
-msgstr ""
+msgstr "მნიშვნელობის ფორმატი..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:421
 msgid "Delete Measurement"
-msgstr ""
+msgstr "გაზომვის წაშლა"
 
 #: eeschema/sim/simulator_frame_ui.cpp:600
 #: eeschema/sim/simulator_frame_ui.cpp:1003
@@ -20651,6 +20651,10 @@ msgid ""
 "Simulation results:\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"სიმულაციის შედეგები:\n"
+"\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
 msgid "Measurement"
