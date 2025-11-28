@@ -89,7 +89,7 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
 
    	bSummarySizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-   	m_staticTextDuplicatePins = new wxStaticText( this, wxID_ANY, _(" Duplicate pads:" ) );
+   	m_staticTextDuplicatePins = new wxStaticText( this, wxID_ANY, _("Duplicate pads:" ) );
    	m_staticTextDuplicatePins->Wrap( -1 );
    	bSummarySizer->Add( m_staticTextDuplicatePins, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
