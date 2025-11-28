@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-25 08:27+0000\n"
+"PO-Revision-Date: 2025-11-28 09:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -17649,7 +17649,6 @@ msgid "Members of '%s'"
 msgstr "Membri di '%s'"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
-#, fuzzy
 msgid "Net or Nested Bus Name"
 msgstr "Nome connessione / bus annidato"
 
@@ -18042,9 +18041,8 @@ msgid "Symbol Library Tables (%s)|*"
 msgstr "Tabelle librerie di simboli (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:541
-#, fuzzy
 msgid "Nickname and path cannot be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Identificativo e percorso non possono essere vuoti."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:546
 msgid "Nickname cannot be empty."
@@ -18437,20 +18435,20 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "Il simbolo %s ha unità non piazzate %s"
 
 #: eeschema/erc/erc.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
 msgstr ""
-"Il simbolo %s ha piedini di potenza in ingresso nelle unità %s non piazzati."
+"Il simbolo %s ha piedini di potenza in ingresso nelle unità %s non piazzati"
 
 #: eeschema/erc/erc.cpp:620
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
-msgstr "Il simbolo %s ha piedini in ingresso in unità %s non piazzati."
+msgstr "Il simbolo %s ha piedini in ingresso in unità %s non piazzati"
 
 #: eeschema/erc/erc.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
-msgstr "Il simbolo %s ha piedini bidirezionali in unità %s non piazzati."
+msgstr "Il simbolo %s ha piedini bidirezionali in unità %s non piazzati"
 
 #: eeschema/erc/erc.cpp:649
 #, c-format
@@ -18482,9 +18480,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Il pin %s è connesso sia a %s che a %s"
 
 #: eeschema/erc/erc.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "Il pin %s è connesso sia a %s che a %s"
+msgstr "Pin %s non connesso al collegamento di massa"
 
 #: eeschema/erc/erc.cpp:1480
 #, c-format
@@ -18492,9 +18490,9 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "La configurazione corrente non include la libreria di simboli '%s'"
 
 #: eeschema/erc/erc.cpp:1498
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Libreria di simboli '%s' non trovata in '%s'."
+msgstr "Libreria di simboli '%s' non trovata in '%s'"
 
 #: eeschema/erc/erc.cpp:1517
 #, c-format
@@ -18512,33 +18510,32 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Il simbolo '%s' non corrisponde alla copia nella libreria '%s'"
 
 #: eeschema/erc/erc.cpp:1601
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "'%s' non è un identificatore impronta valido."
+msgstr "'%s' non è un identificatore impronta valido"
 
 #: eeschema/erc/erc.cpp:1615
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1025
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "La configurazione corrente non include la libreria di impronte '%s'."
+msgstr "La configurazione corrente non include la libreria impronte '%s'"
 
 #: eeschema/erc/erc.cpp:1624
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1039
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
-msgstr ""
-"La libreria impronte '%s' non è abilitata nella configurazione corrente."
+msgstr "La libreria impronte '%s' non è abilitata nella configurazione corrente"
 
 #: eeschema/erc/erc.cpp:1633
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Impronta '%s' non trovata nella libreria '%s'."
+msgstr "Impronta '%s' non trovata nella libreria '%s'"
 
 #: eeschema/erc/erc.cpp:1703
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "L'impronta assegnata (%s) non corrisponde ai filtri impronta (%s)."
+msgstr "L'impronta assegnata (%s) non corrisponde ai filtri impronta (%s)"
 
 #: eeschema/erc/erc.cpp:1868
 msgid "Checking sheet names..."
@@ -18668,14 +18665,12 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "Indicatore di \"non connesso\" sconnesso"
 
 #: eeschema/erc/erc_item.cpp:105
-#, fuzzy
 msgid "Label not connected"
-msgstr "Pin non connesso"
+msgstr "Etichetta non connessa"
 
 #: eeschema/erc/erc_item.cpp:109
-#, fuzzy
 msgid "Label connected to only one pin"
-msgstr "Etichetta non connessa a nulla"
+msgstr "Etichetta connessa solo a un pin"
 
 #: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
@@ -18735,9 +18730,8 @@ msgid "Invalid connection between bus and net items"
 msgstr "Connessione non valida tra gli elementi bus e connessione"
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "Impossibile connettersi ad un remote"
+msgstr "Pin di massa non connesso a collegamento di massa"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
@@ -19250,44 +19244,43 @@ msgid "Graphic item count differs."
 msgstr "Conteggio elementi grafici diverso."
 
 #: eeschema/lib_symbol.cpp:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "Conteggio elementi grafici diverso."
+msgstr "L'elemento grafico è diverso: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1703
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "Modifica simboli elettrici"
+msgstr "Pin extra nel simbolo dello schema: %s."
 
 #: eeschema/lib_symbol.cpp:1711
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "Pin %s diverso."
+msgstr "Il pin %s è diverso: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1728
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "Modifica simboli elettrici"
+msgstr "Pin mancante nel simbolo schematico: %s."
 
 #: eeschema/lib_symbol.cpp:1747
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "Modifica simboli elettrici"
+msgstr "Campo extra nel simbolo schematico: %s."
 
 #: eeschema/lib_symbol.cpp:1773
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "Conteggio campi diverso."
+msgstr "Il campo '%s' è diverso: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1796
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "Modifica simboli elettrici"
+msgstr "Campo mancante nel simbolo schematico: %s."
 
 #: eeschema/lib_symbol.cpp:1806
-#, fuzzy
 msgid "Footprint filter count differs."
-msgstr "Filtro impronte diverso."
+msgstr "Il conteggio dei filtri di impronta è diverso."
 
 #: eeschema/lib_symbol.cpp:1818
 msgid "Footprint filters differ."
@@ -19326,44 +19319,36 @@ msgid "Datasheet"
 msgstr "Specifiche"
 
 #: eeschema/lib_symbol.cpp:2099
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "Unità simbolo"
+msgstr "Definizione del simbolo"
 
 #: eeschema/lib_symbol.cpp:2101
-#, fuzzy
 msgid "Define as Power Symbol"
-msgstr "Imposta come simbolo di potenza"
+msgstr "Definisci come simbolo di potenza"
 
 #: eeschema/lib_symbol.cpp:2104
-#, fuzzy
 msgid "Define as Local Power Symbol"
 msgstr "Definisci come simbolo di potenza locale"
 
 #: eeschema/lib_symbol.cpp:2108
-#, fuzzy
 msgid "Pin Display"
-msgstr "Mostra griglia"
+msgstr "Visualizzazione pin"
 
 #: eeschema/lib_symbol.cpp:2110
-#, fuzzy
 msgid "Show Pin Number"
-msgstr "Mostra numeri pin"
+msgstr "Mostra numeri di pin"
 
 #: eeschema/lib_symbol.cpp:2113
-#, fuzzy
 msgid "Show Pin Name"
-msgstr "Mostra nome piedino"
+msgstr "Mostra nome dei pin"
 
 #: eeschema/lib_symbol.cpp:2116
-#, fuzzy
 msgid "Place Pin Names Inside"
-msgstr "Nome piedino interno"
+msgstr "Piazza i nomi pin internamente"
 
 #: eeschema/lib_symbol.cpp:2119
-#, fuzzy
 msgid "Pin Name Position Offset"
-msgstr "Scostamento posizione nome pin:"
+msgstr "Scostamento posizione nome pin"
 
 #: eeschema/lib_symbol.cpp:2126 eeschema/tools/sch_actions.cpp:1052
 msgid "Exclude from Simulation"
@@ -19378,19 +19363,16 @@ msgid "Exclude from Bill of Materials"
 msgstr "Escludi dalla distinta materiali"
 
 #: eeschema/lib_symbol.cpp:2136
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "Stile corpo"
+msgstr "Unità e stili corpo"
 
 #: eeschema/lib_symbol.cpp:2138
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "Numero di bit"
+msgstr "Numero di unità del simbolo"
 
 #: eeschema/lib_symbol.cpp:2141
-#, fuzzy
 msgid "Units are Interchangeable"
-msgstr "Tutte le parti sono intercambiabili"
+msgstr "Le unità sono intercambiabili"
 
 #: eeschema/libraries/legacy_symbol_library.cpp:583
 #, c-format
@@ -19403,9 +19385,8 @@ msgid "Error loading symbol library '%s'."
 msgstr "Errore nel caricamento della libreria di simboli '%s'."
 
 #: eeschema/libraries/symbol_library_adapter.cpp:425
-#, fuzzy
 msgid "Library not found in library table"
-msgstr "Libreria non trovata nella tabella librerie di simboli."
+msgstr "Libreria non trovata nella tabella librerie"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
@@ -19436,9 +19417,8 @@ msgid "Netlist..."
 msgstr "Netlist..."
 
 #: eeschema/menubar.cpp:120
-#, fuzzy
 msgid "Symbols..."
-msgstr "Simbolo..."
+msgstr "Simboli..."
 
 #: eeschema/menubar.cpp:180
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124 kicad/menubar.cpp:184
@@ -19447,9 +19427,8 @@ msgid "Panels"
 msgstr "Pannelli"
 
 #: eeschema/menubar.cpp:327
-#, fuzzy
 msgid "Variants"
-msgstr "Autori librerie"
+msgstr "Varianti"
 
 #: eeschema/menubar.cpp:356
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -19631,9 +19610,8 @@ msgid "&Duplicate '%s'"
 msgstr "&Duplica '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Unità"
+msgstr "Scambia unità"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -19793,9 +19771,8 @@ msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
 #: eeschema/sch_base_frame.cpp:744
-#, fuzzy
 msgid "Create New Library"
-msgstr "Crea nuova cartella"
+msgstr "Crea nuova libreria"
 
 #: eeschema/sch_base_frame.cpp:758
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1152
@@ -19847,14 +19824,12 @@ msgid "Transform Offset Y"
 msgstr "Trasforma scostamento Y"
 
 #: eeschema/sch_bus_entry.cpp:420
-#, fuzzy
 msgid "Bus to wire entry"
-msgstr "Elemento da bus a filo"
+msgstr "Voce da bus a filo"
 
 #: eeschema/sch_bus_entry.cpp:426
-#, fuzzy
 msgid "Bus to bus entry"
-msgstr "Elemento da bus a bus"
+msgstr "Voce da bus a bus"
 
 #: eeschema/sch_bus_entry.cpp:505 eeschema/sch_line.cpp:152
 #: eeschema/sch_line.cpp:951 eeschema/tools/sch_edit_tool.cpp:274
@@ -20017,39 +19992,33 @@ msgid "Filter nets"
 msgstr "Filtra collegamenti"
 
 #: eeschema/sch_edit_frame.cpp:2456
-#, fuzzy
 msgid "Wildcard Search"
-msgstr "Sottostringa car. jolly"
+msgstr "Ricerca sottostringa"
 
 #: eeschema/sch_edit_frame.cpp:2458
-#, fuzzy
 msgid "Regex Search"
-msgstr "Ricomincia la ricerca"
+msgstr "Ricerca esp. reg."
 
 #: eeschema/sch_edit_frame.cpp:2606
-#, fuzzy
 msgid "Find in Net Inspector"
-msgstr "Ispettore collegamenti"
+msgstr "Trova in ispettore collegamenti"
 
 #: eeschema/sch_edit_frame.cpp:2920
-#, fuzzy
 msgid "Enter new variant name"
-msgstr "Inserire nome impronta:"
+msgstr "Inserire nome nuova variante"
 
 #: eeschema/sch_edit_frame.cpp:2920 eeschema/sch_edit_frame.cpp:2958
-#, fuzzy
 msgid "Variant Name"
-msgstr "Nome variabile"
+msgstr "Nome variante"
 
 #: eeschema/sch_edit_frame.cpp:2958
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "Selezionare lo strato da rimuovere:"
+msgstr "Selezionare nome variante da rimuovere"
 
 #: eeschema/sch_field.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Campo di %s (%s)"
+msgstr "Campo %s (vuoto)"
 
 #: eeschema/sch_field.cpp:988
 #, c-format
@@ -20171,10 +20140,9 @@ msgid "Unknown or unexpected record id %d found in %s."
 msgstr "ID record sconosciuto o inatteso %d trovato in %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1460
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr ""
-"Simbolo \"%s\" in foglio \"%s\" indice %d rimpiazzato con simbolo \"%s\"."
+msgstr "Simbolo '%s' in foglio '%s' indice %d rimpiazzato con simbolo \"%s\"."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1630
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3691
@@ -20538,12 +20506,13 @@ msgstr ""
 "Eagle in formato XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Strato padstack '%s' non valido nel file '%s' alla riga %d, scostamento %d."
+"Impossibile leggere il file '%s'.\n"
+"'%s' alla riga %d, colonna %d, scostamento %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1005
 #, c-format
@@ -20619,37 +20588,37 @@ msgid "Failed to parse value: '%s'"
 msgstr "Fallita analisi valore: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "File impostazioni libreria HTTP %s mancante o non valido"
+msgstr "File impostazioni libreria HTTP %s mancante o non valido."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
 msgstr ""
 "Nel file impostazioni della libreria HTTP %s manca il numero di versione "
-"dell'API!"
+"dell'API."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
 "Il file delle impostazioni della libreria HTTP %s utilizza la versione API "
-"%s, ma KiCad richiede la versione %s"
+"%s, ma KiCad richiede la versione %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "Nel file delle impostazioni della libreria HTTP %s manca l'URL root!"
+msgstr "Nel file delle impostazioni della libreria HTTP %s manca l'URL radice."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
 msgstr ""
 "Il file delle impostazioni della libreria HTTP %s ha un tipo di libreria non "
-"valido"
+"valido."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:282
 #, c-format
@@ -20657,7 +20626,7 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "Impossibile connettersi a %s. Errori: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Errore nel recupero dati da libreria HTTP %s: %s"
 
@@ -20793,24 +20762,24 @@ msgid "Save Anyway"
 msgstr "Salva comunque"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
-msgstr "La libreria simboli %s esiste già."
+msgstr "Il file di libreria simboli '%s' esiste già."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library path '%s' already exists."
-msgstr "La libreria simboli %s esiste già."
+msgstr "Il percorso della libreria simboli '%s' esiste già."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' cannot be deleted."
-msgstr "La libreria simboli '%s' non può essere cancellata."
+msgstr "Il file di libreria simboli '%s' non può essere cancellato."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
-msgstr "La libreria simboli '%s' non può essere cancellata."
+msgstr "La cartella della libreria simboli '%s' non può essere cancellata."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:111
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:359
@@ -20820,14 +20789,14 @@ msgid "Unable to read file '%s'"
 msgstr "Impossibile leggere il file '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create symbol library path '%s'."
-msgstr "Impossibile creare il percorso tabella librerie globale '%s'."
+msgstr "Impossibile creare il percorso di libreria simboli '%s'."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Simbolo %s non trovato nella libreria '%s'."
+msgstr "Genitore per il simbolo esteso %s non trovato nella libreria '%s'."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
@@ -20872,9 +20841,9 @@ msgid "Invalid symbol unit number %s"
 msgstr "Numero unità simbolo %s non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol body style number %s"
-msgstr "Numero unità simbolo %s non valido"
+msgstr "Numero stile corpo del simbolo non valido %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:854
 #, c-format
@@ -21032,14 +21001,14 @@ msgid "LTspice schematic files"
 msgstr "File schemi elettrici LTspice"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "Il plugin \"%s\" non implementa la funzione \"%s\"."
+msgstr "Il plugin '%s' non implementa la funzione '%s'."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "Plugin tipo \"%s\" non trovato."
+msgstr "Plugin di tipo '%s' non trovato."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
 #, c-format
@@ -21048,15 +21017,13 @@ msgstr "Valore SCH_FILE_T sconosciuto: %d"
 
 #: eeschema/sch_item.cpp:171 eeschema/sch_item.cpp:191
 #: eeschema/sch_item.cpp:760
-#, fuzzy
 msgid "All units"
-msgstr "Tutti gli elementi"
+msgstr "Tutte le unità"
 
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:218
 #: eeschema/sch_item.cpp:782
-#, fuzzy
 msgid "All body styles"
-msgstr "Comune a tutti gli stili del corpo"
+msgstr "Tutti gli stili corpo"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -21123,9 +21090,9 @@ msgid "Label '%s'"
 msgstr "Etichetta \"%s\""
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Etichetta direttiva [%s %s]"
+msgstr "Etichetta direttiva [%s (vuota)]"
 
 #: eeschema/sch_label.cpp:1951
 #, c-format
@@ -21425,9 +21392,9 @@ msgid "Exclude from"
 msgstr "Escludi da"
 
 #: eeschema/sch_sheet.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "Foglio gerarchico %s"
+msgstr "Foglio gerarchico '%s'"
 
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:731 pcbnew/pcb_tablecell.cpp:234
@@ -21460,9 +21427,9 @@ msgid "(Deleted Item)"
 msgstr "(elemento cancellato)"
 
 #: eeschema/sch_sheet_pin.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "Punto di connessione gerarchico %s"
+msgstr "Pin foglio gerarchico '%s'"
 
 #: eeschema/sch_symbol.cpp:2206
 msgid "Power symbol"
@@ -21568,29 +21535,24 @@ msgid "Cell Height"
 msgstr "Altezza cella"
 
 #: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:253
-#, fuzzy
 msgid "Column Width"
-msgstr "Larghezza cella"
+msgstr "Larghezza colonna"
 
 #: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:258
-#, fuzzy
 msgid "Row Height"
-msgstr "Altezza riquadro"
+msgstr "Altezza riga"
 
 #: eeschema/sch_tablecell.cpp:249
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Proprietà etichetta"
+msgstr "Proprietà cella"
 
 #: eeschema/sch_tablecell.cpp:251
-#, fuzzy
 msgid "Background Fill"
 msgstr "Riempimento sfondo"
 
 #: eeschema/sch_tablecell.cpp:255
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Colore sfondo"
+msgstr "Colore riempimento sfondo"
 
 #: eeschema/sch_text.cpp:377
 #, c-format
@@ -21884,9 +21846,9 @@ msgstr ""
 "</i>\n"
 
 #: eeschema/sch_textbox.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
-msgstr "Testo '%s'"
+msgstr "Riquadro di testo '%s'"
 
 #: eeschema/sch_textbox.cpp:481 pcbnew/pcb_textbox.cpp:502
 msgid "Box Width"
@@ -22814,9 +22776,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "Esegui %s"
+msgstr "Esegui %d"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -23499,14 +23461,12 @@ msgid "Copy library"
 msgstr "Copia libreria"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
-#, fuzzy
 msgid "New Symbol Library"
-msgstr "Crea libreria di simboli"
+msgstr "Nuova libreria di simboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
-#, fuzzy
 msgid "Add Symbol Library"
-msgstr "Crea libreria di simboli"
+msgstr "Aggiungi libreria di simboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1160
 #, c-format
@@ -23614,9 +23574,8 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Il simbolo corrente è stato modificato. Salvare le modifiche?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:352
-#, fuzzy
 msgid "Create symbol in library:"
-msgstr "Crea libreria di simboli"
+msgstr "Crea simbolo nella libreria:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:371
 #: eeschema/symbol_editor/symbol_editor.cpp:1116
@@ -23758,9 +23717,8 @@ msgid " (base)\n"
 msgstr " (base)\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1273
-#, fuzzy
 msgid "Delete All Listed Symbols"
-msgstr "Elimina simbolo"
+msgstr "Elimina tutti i simboli elencati"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1415 pcbnew/files.cpp:304
 #: pcbnew/footprint_libraries_utils.cpp:1150
@@ -23816,9 +23774,8 @@ msgid "Import Symbol"
 msgstr "Importa simbolo"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:45
-#, fuzzy
 msgid "Import symbol to library:"
-msgstr "Importa un simbolo nella libreria corrente"
+msgstr "Importa simbolo nella libreria:"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:92
 #: pcbnew/load_select_footprint.cpp:353
@@ -23942,31 +23899,26 @@ msgstr ""
 "Associazione(i) di pin di interruzione foglio e di etichette gerarchiche"
 
 #: eeschema/toolbars_sch_editor.cpp:51
-#, fuzzy
 msgid "Current Variant"
-msgstr "Strato corrente:"
+msgstr "Variante corrente"
 
 #: eeschema/toolbars_sch_editor.cpp:52
-#, fuzzy
 msgid "Control to select the current schematic variant"
-msgstr "Controllo per selezionare la larghezza della pista"
+msgstr "Controllo per selezionare la variante dello schema corrente"
 
 #: eeschema/toolbars_sch_editor.cpp:81 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:150
-#, fuzzy
 msgid "Line modes"
-msgstr "Modello pin:"
+msgstr "Modalità linea"
 
 #: eeschema/toolbars_sch_editor.cpp:105 pcbnew/toolbars_footprint_editor.cpp:93
 #: pcbnew/toolbars_pcb_editor.cpp:196
-#, fuzzy
 msgid "Selection modes"
-msgstr "Selezione copiata"
+msgstr "Modalità selezione"
 
 #: eeschema/toolbars_sch_editor.cpp:238
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "Seleziona pagina per simulare le visualizzazioni elemento"
+msgstr "Seleziona la variante corrente da visualizzare e modificare."
 
 #: eeschema/toolbars_symbol_viewer.cpp:134
 msgid "Symbol Viewer"
@@ -24049,9 +24001,9 @@ msgid "Footprint re-linking canceled by user."
 msgstr "Ri-collegamento impronte annullato dall'utente."
 
 #: eeschema/tools/backannotate.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "Aggiungi campo %s '%s' con valore '%s'."
+msgstr "Scambia %s unità %s con unità %s."
 
 #: eeschema/tools/backannotate.cpp:804
 msgid "true"
