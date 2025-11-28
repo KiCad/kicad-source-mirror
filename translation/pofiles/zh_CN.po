@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-28 09:01+0000\n"
+"PO-Revision-Date: 2025-11-29 10:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -24220,7 +24220,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:983
 msgid "Break"
-msgstr "断开"
+msgstr "拆分"
 
 #: eeschema/tools/sch_actions.cpp:984
 msgid "Divide into connected segments"
@@ -25424,7 +25424,7 @@ msgstr "按下 <ESC> 取消绘图。"
 
 #: eeschema/tools/sch_move_tool.cpp:493
 msgid "Break Wire"
-msgstr "断开连线"
+msgstr "拆分连线"
 
 #: eeschema/tools/sch_move_tool.cpp:494
 msgid "Slice Wire"
@@ -25441,7 +25441,7 @@ msgstr "按下 <ESC> 取消拖动。"
 
 #: eeschema/tools/sch_move_tool.cpp:851
 msgid "Press <ESC> to cancel break."
-msgstr "按下 <ESC> 取消断开操作。"
+msgstr "按下 <ESC> 取消拆分操作。"
 
 #: eeschema/tools/sch_move_tool.cpp:852
 msgid "Press <ESC> to cancel slice."
@@ -49859,7 +49859,7 @@ msgstr "走线违反 DRC。"
 
 #: pcbnew/router/router_tool.cpp:2753 pcbnew/tools/pcb_actions.cpp:2669
 msgid "Break Track"
-msgstr "分割走线"
+msgstr "拆分走线"
 
 #: pcbnew/router/router_tool.cpp:2834
 #, c-format
@@ -53308,14 +53308,12 @@ msgid "Remove Polygon Corner"
 msgstr "移除多边形拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3249
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "打破填充区转角"
+msgstr "拆分填充区转角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3251
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "打破多边形拐角"
+msgstr "拆分多边形拐角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:81
 msgid "Select"
