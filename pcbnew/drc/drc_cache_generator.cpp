@@ -262,6 +262,8 @@ bool DRC_CACHE_GENERATOR::Run()
         }
     }
 
+    m_board->UpdateBoardOutline();
+
     if( m_board->BoardOutline() )
         m_board->BoardOutline()->GetOutline().BuildBBoxCaches();
 
