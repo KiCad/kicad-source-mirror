@@ -501,9 +501,9 @@ KIID DRC_ITEM::GetAuxItem3ID() const
 wxString DRC_ITEM::GetViolatingRuleDesc( bool aTranslate ) const
 {
     if( m_violatingRule )
-        return wxString::Format( aTranslate ? _( "Rule: %s" ) : wxT( "Rule: %s" ), m_violatingRule->m_Name );
+        return wxString::Format( aTranslate ? _( "Rule: %s" ) : wxString( wxT( "Rule: %s" ) ), m_violatingRule->m_Name );
     else
-        return aTranslate ? _( "Local override" ) : wxT( "Local override" );
+        return aTranslate ? _( "Local override" ) : wxString( wxT( "Local override" ) );
 }
 
 
