@@ -1309,6 +1309,8 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type14(KaitaiStruct):
+        """Defines a graphic object in a layer, such as a line or arc.
+        """
         SEQ_FIELDS = ["type", "layer", "key", "next", "parent_ptr", "unknown_1", "un3", "segment_ptr", "ptr_0x03", "ptr_0x26"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -1856,7 +1858,7 @@ class AllegroBrd(KaitaiStruct):
         
         For example, drill table marks, origin marks
         """
-        SEQ_FIELDS = ["_unnamed0", "layer", "key", "next", "unknown_1", "unknown_2", "shape", "drill_char", "padding", "shape_16x", "drill_chars", "unknown_3", "unknown_4x", "coords", "size", "unknown_5", "unknown_6", "unknown_7", "unknown_8"]
+        SEQ_FIELDS = ["_unnamed0", "layer", "key", "next", "unknown_1", "unknown_2", "shape", "drill_char", "padding", "shape_16x", "drill_chars", "unknown_3", "unknown_4", "coords", "size", "unknown_5", "unknown_6", "unknown_7", "unknown_8"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1913,9 +1915,9 @@ class AllegroBrd(KaitaiStruct):
                 self.unknown_3 = self._io.read_u4le()
                 self._debug['unknown_3']['end'] = self._io.pos()
 
-            self._debug['unknown_4x']['start'] = self._io.pos()
-            self.unknown_4x = self._io.read_u4le()
-            self._debug['unknown_4x']['end'] = self._io.pos()
+            self._debug['unknown_4']['start'] = self._io.pos()
+            self.unknown_4 = self._io.read_u4le()
+            self._debug['unknown_4']['end'] = self._io.pos()
             self._debug['coords']['start'] = self._io.pos()
             self.coords = AllegroBrd.Coords(self._io, self, self._root)
             self._debug['coords']['end'] = self._io.pos()
@@ -2844,7 +2846,9 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type151617Segment(KaitaiStruct):
-        """The difference between 15,16,17 seems to be:
+        """Defines a line segment with width and start/end coordinates.
+        
+        The difference between 15,16,17 seems to be:
         
         - 15: horizontal
         - 16: oblique

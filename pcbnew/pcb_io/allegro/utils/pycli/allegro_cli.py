@@ -97,9 +97,13 @@ class AllegroBoard:
         @staticmethod
         def obj_type(t) -> str | None:
             ts = {
+                0x01: "ARC",
                 0x0C: "FIGURE",
                 0x0D: "PAD",
-                0x14: "SEGMENT",
+                0x14: "GRAPHIC_SEGMENT",
+                0x15: "LINE",
+                0x16: "LINE",
+                0x17: "LINE",
                 0x1b: "NET",
                 0x24: "RECT",
                 0x2B: "FP_DEF",

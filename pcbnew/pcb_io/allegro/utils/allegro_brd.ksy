@@ -1100,6 +1100,8 @@ types:
         if: _root.ver >= 0x00140900
 
   type_14:
+    doc: |
+      Defines a graphic object in a layer, such as a line or arc.
     seq:
       - id: type
         type: u1
@@ -1141,6 +1143,8 @@ types:
 
   type_15_16_17_segment:
     doc: |
+      Defines a line segment with width and start/end coordinates.
+
       The difference between 15,16,17 seems to be:
 
       - 15: horizontal

@@ -437,6 +437,42 @@ x03_TEXT::x03_TEXT( const BLK_0x03& aBlk )
 }
 
 
+
+
+
+
+
+LINE::LINE( const BLK_0x15_16_17_SEGMENT& aBlk )
+{
+    m_Parent.m_TargetKey = aBlk.m_Parent;
+    m_Parent.m_DebugName = "SEGMENT::m_Parent";
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "SEGMENT::m_Next";
+
+    m_Start.x = aBlk.m_StartX;
+    m_Start.y = aBlk.m_StartY;
+    m_End.x = aBlk.m_EndX;
+    m_End.y = aBlk.m_EndY;
+
+    m_Width = aBlk.m_Width;
+}
+
+
+bool LINE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Parent.Resolve( aResolver );
+    ok &= m_Next.Resolve( aResolver );
+
+    if( !ok )
+        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve LINE key %#010x", GetKey() );
+
+    return ok;
+}
+
+
 FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk )
 {
     // 0x2Bs are linked together in a list from the board header

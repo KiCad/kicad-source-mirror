@@ -45,13 +45,25 @@ struct EXTRACT_SPEC_PARSER_ACTION : tao::pegtl::nothing<Rule>
 template <>
 struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::KEYWORDS::SYMBOL>
 {
-    static void apply0( PARSER_STATE& s ) { s.current_block.Type = IR::BLOCK_TYPE::SYMBOL; }
+    static void apply0( PARSER_STATE& s ) { s.CurrentBlock.Type = IR::BLOCK_TYPE::SYMBOL; }
+};
+
+
+template <>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::KEYWORDS::CONNECTIVITY>
+{
+    static void apply0( PARSER_STATE& s ) { s.CurrentBlock.Type = IR::BLOCK_TYPE::CONNECTIVITY; }
 };
 
 
 static const std::vector<std::string> k_symbol_field_names = {
     "SYM_TYPE",     "SYM_NAME",     "REFDES",     "SYM_X",      "SYM_Y",
     "SYM_CENTER_X", "SYM_CENTER_Y", "SYM_MIRROR", "SYM_ROTATE", "SYM_LIBRARY_PATH",
+};
+
+
+static const std::vector<std::string> k_connectivity_field_names = {
+    "NET_NAME", "PIN_NAME", "COMP_REF", "RAT_CONNECTED", "NET_NAME_SORT",
 };
 
 
@@ -63,9 +75,10 @@ static bool IsValidField( const std::string& field_name, const std::vector<std::
 
 static bool IsValidFieldForCurrentBlock( const std::string& field_name, const PARSER_STATE& state )
 {
-    switch( state.current_block.Type )
+    switch( state.CurrentBlock.Type )
     {
     case IR::BLOCK_TYPE::SYMBOL: return IsValidField( field_name, k_symbol_field_names );
+    case IR::BLOCK_TYPE::CONNECTIVITY: return IsValidField( field_name, k_connectivity_field_names );
     }
 
     return false;
@@ -87,11 +100,98 @@ struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::FIELD_NAME>
         if( !IsValidFieldForCurrentBlock( in.string(), s ) )
         {
             throw tao::pegtl::parse_error( fmt::format( "Invalid field '{}' for block type {}", in.string(),
-                                                        static_cast<int>( s.current_block.Type ) ),
+                                                        static_cast<int>( s.CurrentBlock.Type ) ),
                                            in.position() );
         }
 
-        s.current_block.Fields.emplace_back( in.string().c_str() );
+        s.CurrentField = in.string();
+    }
+};
+
+
+/**
+ * Store the parsed field value in the current block.
+ */
+template <>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::FIELD_VALUE>
+{
+    template <typename ActionInput>
+    static void apply( const ActionInput& in, PARSER_STATE& s )
+    {
+        wxString value = wxString::FromUTF8( in.string().c_str() );
+
+        // Strip quotes if present, which may result in empty string
+        if( value.StartsWith( "'" ) && value.EndsWith( "'" ) ||
+            value.StartsWith( "\"" ) && value.EndsWith( "\"" ) )
+        {
+            value = value.Mid( 1, value.Length() - 2 );
+        }
+
+        s.CurrentConditionValue = value;
+    }
+};
+
+template<>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::EQUALS>
+{
+    template<typename ActionInput>
+    static void apply(const ActionInput&, PARSER_STATE& st)
+    {
+        st.CurrentConditionEquals = true;
+    }
+};
+
+
+template<>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::NOT_EQUALS>
+{
+    template<typename ActionInput>
+    static void apply(const ActionInput&, PARSER_STATE& st)
+    {
+        st.CurrentConditionEquals = false;
+    }
+};
+
+
+/**
+ * When completing a simple field line, just store the field name.
+ */
+template <>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::FIELD_LINE>
+{
+    static void apply0( PARSER_STATE& s )
+    {
+        s.CurrentBlock.Fields.emplace_back( s.CurrentField );
+    }
+};
+
+
+template <>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::CONDITIONED_FIELD_LINE>
+{
+    static void apply0( PARSER_STATE& s )
+    {
+        IR::CONDITION cond{ s.CurrentField, s.CurrentConditionEquals, s.CurrentConditionValue };
+
+        // Start a new AND condition set if needed
+        if( s.CurrentBlock.OrConditions.empty() )
+        {
+            s.CurrentBlock.OrConditions.emplace_back();
+        }
+
+        s.CurrentBlock.OrConditions.back().emplace_back( std::move( cond ) );
+    }
+};
+
+/**
+ * When encountering an OR, start a new AND condition set.
+ */
+template <>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::OR_LINE>
+{
+    static void apply0( PARSER_STATE& s )
+    {
+        s.CurrentBlock.OrConditions.emplace_back();
     }
 };
 
@@ -104,9 +204,10 @@ struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::ANY_BLOCK>
 {
     static void apply0( PARSER_STATE& s )
     {
-        wxLogTrace( traceAllegroExtract, "Complete parsing block with %zu fields", s.current_block.Fields.size() );
-        s.model.Blocks.emplace_back( std::move( s.current_block ) );
-        s.current_block = IR::BLOCK();
+        wxLogTrace( traceAllegroExtract, "Complete parsing block with %zu fields and %zu OR conditions",
+                    s.CurrentBlock.Fields.size(), s.CurrentBlock.OrConditions.size() );
+        s.Model.Blocks.emplace_back( std::move( s.CurrentBlock ) );
+        s.CurrentBlock = IR::BLOCK();
     }
 };
 
@@ -143,5 +244,5 @@ tl::expected<IR::SPEC, PARSE_ERROR> PARSER::ParseBuffer( const std::string& aBuf
                   .column = p.column } ) );
     }
 
-    return state.model;
+    return state.Model;
 }

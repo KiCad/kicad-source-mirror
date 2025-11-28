@@ -112,96 +112,234 @@ private:
 };
 
 
-using FP_INST_FIELD_VISITOR = std::function<void ( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )>;
+/**
+ * Some funciton that extracts one field from a DB_OBJ.
+ */
+using FIELD_EXTRACTOR = std::function<wxString( const DB_OBJ& )>;
+
+std::map<wxString, FIELD_EXTRACTOR> g_FPInstFieldExtractors =
+{
+    {
+        "SYM_TYPE", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return "PACKAGE";
+        }
+    },
+    {
+        "REFDES", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            const wxString* refDes = fp.GetRefDes();
+            return refDes ? *refDes : "";
+        }
+    },
+    {
+        "SYM_NAME", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            const wxString* name = fp.GetName();
+            return name ? *name : "";
+        }
+    },
+    {
+        "SYM_X", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return wxString::Format( "%g", fp.m_X );
+        }
+    },
+    {
+        "SYM_Y", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return wxString::Format( "%g", fp.m_Y );
+        }
+    },
+    {
+        "SYM_CENTER_X", []( const DB_OBJ& aObj ) -> wxString
+        {
+            // HACK: this isactually done via TEXT position and falls back to PLACE_BOUND center
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return wxString::Format( "%g", fp.m_X );
+        }
+    },
+    {
+        "SYM_CENTER_Y", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return wxString::Format( "%g", fp.m_Y );
+        }
+    },
+    {
+        "SYM_ROTATE", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return wxString::Format( "%.3f", fp.m_Rotation / 1000.0 );
+        }
+    },
+    {
+        "SYM_MIRROR", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return fp.m_Mirrored ? "YES" : "NO";
+        }
+    },
+    {
+        "SYM_LIBRARY_PATH", []( const DB_OBJ& aObj ) -> wxString
+        {
+            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
+            return fp.m_Parent->GetLibPath() ? *fp.m_Parent->GetLibPath() : "";
+        }
+    }
+};
 
 
 void ASCII_EXTRACTOR::extractSymbolInstances( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock )
 {
     // First build the list of visitors for each symbol.
-    std::vector<FP_INST_FIELD_VISITOR> visitors;
+    std::vector<FIELD_EXTRACTOR> fieldVisitors;
 
     for( const wxString& field : aBlock.Fields )
     {
-        if( field == "SYM_TYPE" )
+        auto it = g_FPInstFieldExtractors.find( field );
+
+        if( it != g_FPInstFieldExtractors.end() )
         {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.Add( "PACKAGE" );
-            } );
-        }
-        else if( field == "SYM_NAME" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                // The symbol name is the parent footprint definition name
-                aLineFormatter.Add( aFp.GetName() );
-            } );
-        }
-        else if( field == "REFDES" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.Add( aFp.GetRefDes() );
-            } );
-        }
-        // this is a hack - CENTER_X/Y aren't always the same
-        else if( field == "SYM_X" || field == "SYM_CENTER_X" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.Add( aFp.m_X );
-            } );
-        }
-        else if( field == "SYM_Y" || field == "SYM_CENTER_Y" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.Add( aFp.m_Y );
-            } );
-        }
-        else if( field == "SYM_ROTATE" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.AddDegrees( aFp.m_Rotation );
-            } );
-        }
-        else if( field == "SYM_MIRROR" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.AddYesNo( aFp.m_Mirrored );
-            } );
-        }
-        else if( field == "SYM_LIBRARY_PATH" )
-        {
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
-            {
-                aLineFormatter.Add( aFp.m_Parent->GetLibPath() );
-            } );
+            const FIELD_EXTRACTOR& extractor = it->second;
+
+            wxLogTrace( "ALLEGRO_EXTRACT", "Adding extractor for field: %s", TO_UTF8( field ) );
+
+            fieldVisitors.push_back( extractor );
         }
         else
         {
             wxLogWarning( "Unsupported SYMBOL extract field: %s", TO_UTF8( field ) );
-            visitors.push_back( [&]( const FOOTPRINT_INSTANCE& aFp, LINE_FORMATTER& aLineFormatter )
+            fieldVisitors.push_back( [&]( const DB_OBJ& aFp )
             {
-                aLineFormatter.Add( "??" );
+                return wxString( "??" );
             } );
         }
     }
+
+    using CONDITION_TESTER = std::function<bool ( const DB_OBJ& aObj )>;
+
+    // ORed conditions, each of which is a set of ANDed conditions.
+    std::vector<std::vector<CONDITION_TESTER>> orConditionTesters;
+
+    /*
+     * Iterate over ORed conditions, each of which is a set of ANDed conditions,
+     * and build the testers.
+     */
+    for( const auto& andCondition : aBlock.OrConditions)
+    {
+        std::vector<CONDITION_TESTER> andConditionTesters;
+
+        for( const auto& condition : andCondition )
+        {
+            auto it = g_FPInstFieldExtractors.find( condition.FieldName );
+
+            if( it != g_FPInstFieldExtractors.end() )
+            {
+                const FIELD_EXTRACTOR& extractor = it->second;
+
+                wxLogTrace( "ALLEGRO_EXTRACT", "Adding condition tester for field: %s", TO_UTF8( condition.FieldName ) );
+
+                andConditionTesters.push_back( [=]( const DB_OBJ& aFp ) -> bool
+                {
+                    wxString value = extractor( aFp );
+
+                    if( condition.Value.IsEmpty() )
+                    {
+                        // And empty field just means "is set" or "is not set"
+                        if( condition.Equals )
+                        {
+                            return value.IsEmpty();
+                        }
+                        else
+                        {
+                            return !value.IsEmpty();
+                        }
+                    }
+
+                    // Otherwise do a straight string comparison
+                    if( condition.Equals )
+                    {
+                        return value == condition.Value;
+                    }
+                    else
+                    {
+                        return value != condition.Value;
+                    }
+                } );
+            }
+            else
+            {
+                wxLogWarning( "Unsupported SYMBOL extract condition field: %s", TO_UTF8( condition.FieldName ) );
+            }
+        }
+
+        orConditionTesters.push_back( andConditionTesters );
+    }
+
+
+    /**
+     * For each object, determine if it matches the conditions,
+     * then extract the fields if so.
+     */
+    const auto objectVisitor = [&]( const DB_OBJ& aFp )
+    {
+        bool include = true;
+
+        // No ORed conditions means always include
+        if( !orConditionTesters.empty() )
+        {
+            include = false;
+
+            for( const auto& andConditionTesters : orConditionTesters )
+            {
+                bool allAndTrue = true;
+
+                for( const auto& tester : andConditionTesters )
+                {
+                    // The first ANDed condition that fails resolves this AND group to false
+                    if( !tester( aFp ) )
+                    {
+                        allAndTrue = false;
+                        break;
+                    }
+                }
+
+                // The first ANDed condition that succeeds resolves the whole OR
+                // set to 'include'
+                if( allAndTrue )
+                {
+                    include = true;
+                    break;
+                }
+            }
+        }
+
+        // If not included, skip entirely
+        if( !include )
+            return;
+
+        // Every symbol instance is a new line
+        // And within that line, each field is extracted in order
+        LINE_FORMATTER lineFormatter( 'S', m_Formatter );
+
+        for( const auto& fieldVisitor : fieldVisitors )
+        {
+            lineFormatter.Add( fieldVisitor( aFp ) );
+        }
+    };
 
     // And now visit all the footprint instances, and then visit each field on each one
     m_Brd.VisitFootprintDefs( [&]( const FOOTPRINT_DEF& aFpDef )
     {
         m_Brd.VisitFootprintInstances( aFpDef, [&]( const FOOTPRINT_INSTANCE& aFp )
         {
-            // Every symbol instance is a new line
-            LINE_FORMATTER lineFormatter( 'S', m_Formatter );
-
-            for( const auto& visitor : visitors )
-            {
-                visitor( aFp, lineFormatter );
-            }
+            objectVisitor( aFp );
         } );
     } );
 }

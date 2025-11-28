@@ -40,9 +40,45 @@ namespace EXTRACT_SPEC_PARSER
     {
         enum class BLOCK_TYPE
         {
-            UNKNOWN, // Not read yet?
-            SYMBOL,  // Symbol instance
+            UNKNOWN,      // Not read yet?
+            SYMBOL,       // Symbol instance
+            CONNECTIVITY, // Connectivity information
         };
+
+        enum class FIELDS
+        {
+            // SYMBOL fields
+            SYM_TYPE,
+            SYM_NAME,
+            REFDES,
+            SYM_X,
+            SYM_Y,
+            SYM_ROTATE,
+            SYM_MIRROR,
+            SYM_CENTER_X,
+            SYM_CENTER_Y,
+            SYM_LIBRARY_PATH,
+
+            // CONNECTIVITY fields
+            NET_NAME,
+            NET_NAME_SORT,
+            PIN_NAME,
+            PIN_NUM,
+            COMP_REF,
+            RAT_CONNECTED,
+        };
+
+        struct CONDITION
+        {
+            wxString FieldName;
+            bool     Equals;
+            wxString Value;
+        };
+
+        /**
+         * A set of ANDed conditions.
+         */
+        using AND_CONDITIONS = std::vector<CONDITION>;
 
         // A single block in the extract spec is a type and a set of fields in order.
         class BLOCK
@@ -54,6 +90,8 @@ namespace EXTRACT_SPEC_PARSER
             }
 
             BLOCK_TYPE Type;
+            // A set of ORed conditions (each of which is a set of ANDed conditions).
+            std::vector<AND_CONDITIONS> OrConditions;
             // We could be super-typesafe here with a variant for the fields, based on the
             // block type, but this is probably sufficient for now and the parser is handling
             // the expected fields.
@@ -77,8 +115,15 @@ namespace EXTRACT_SPEC_PARSER
         }
 
         std::string* target_string;
-        IR::BLOCK    current_block;
-        IR::SPEC     model;
+
+        wxString CurrentField;
+        bool     CurrentConditionEquals;
+        wxString CurrentConditionValue;
+
+        // If we're in the middle of parsing a block, this is it.
+        IR::BLOCK CurrentBlock;
+
+        IR::SPEC Model;
     };
 
     struct PARSE_ERROR

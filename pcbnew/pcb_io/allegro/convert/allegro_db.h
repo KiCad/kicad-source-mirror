@@ -27,7 +27,10 @@
 #include <memory>
 #include <unordered_map>
 
+#include <math/vector2d.h>
+
 #include <convert/allegro_pcb_structs.h>
+
 
 namespace ALLEGRO
 {
@@ -151,9 +154,10 @@ struct DB_OBJ
     enum class TYPE
     {
         ARC,
-        x03_TEXT,   // 0x03 subtype 0x68...
-        TEXT,       // 0x07
-        SEGMENT,
+        x03_TEXT,    // 0x03 subtype 0x68...
+        TEXT,        // 0x07
+        GRAPHIC_SEG, // 0x14
+        LINE,        // 0x15, 0x16, 0x17
         FP_DEF,
         FP_INST,
     };
@@ -220,6 +224,10 @@ public:
      *
      * This has to be done after all the objects are read, as they are not
      * necessarily read in order.
+     *
+     * This is done once per DB after loading. We can just resolve everything
+     * on-demand (with or without caching), but resolving upfront means we can detect
+     * bad references earlier which is useful when the DB data is not fully known.
      */
     void ResolveObjectLinks();
 
@@ -256,7 +264,7 @@ struct ARC : public DB_OBJ
 
 
 /**
- * 0x38 subtype 0x68
+ * 0x03 subtype 0x68
  */
 struct x03_TEXT : public DB_OBJ
 {
@@ -282,6 +290,47 @@ struct TEXT : public DB_OBJ
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_STR_REF m_TextStr;
+};
+
+
+struct GRAPHIC_SEG: public DB_OBJ
+{
+    GRAPHIC_SEG( const BLK_0x14& aBlk );
+
+    TYPE GetType() const override { return TYPE::GRAPHIC_SEG; };
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_REF m_Parent;
+    DB_REF m_Segment; // ARC or LINE
+
+    // 0x03?
+    // 0x26?
+
+    // Duplicated in LINE?
+    VECTOR2I m_Start;
+    VECTOR2I m_End;
+};
+
+
+/**
+ * LINE objects
+ */
+struct LINE : public DB_OBJ
+{
+    LINE( const BLK_0x15_16_17_SEGMENT& aBlk );
+
+    TYPE GetType() const override { return TYPE::LINE; };
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Parent;
+    DB_REF m_Next;
+
+    VECTOR2I m_Start;
+    VECTOR2I m_End;
+    int m_Width;
 };
 
 

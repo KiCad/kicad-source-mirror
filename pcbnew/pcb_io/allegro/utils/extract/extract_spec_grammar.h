@@ -47,8 +47,10 @@ namespace EXTRACT_SPEC_PARSER
     namespace KEYWORDS
     {
         struct END :                TAO_PEGTL_STRING( "END" ) {};
+        struct OR :                 TAO_PEGTL_STRING( "OR" ) {};
 
         struct SYMBOL :             TAO_PEGTL_STRING( "SYMBOL" ) {};
+        struct CONNECTIVITY :       TAO_PEGTL_STRING( "CONNECTIVITY" ) {};
     }
 
     // All of "#"-style comments to end of line, including EOL
@@ -65,6 +67,42 @@ namespace EXTRACT_SPEC_PARSER
         TRAILING                    // Trailing comment or whitespace
     > {};
 
+    struct EQUALS :     TAO_PEGTL_STRING( "=" ) {};
+    struct NOT_EQUALS : TAO_PEGTL_STRING( "!=" ) {};
+
+    struct OPERATOR : sor<
+        EQUALS,
+        NOT_EQUALS
+    > {};
+
+    // Quoted field value (single or double quotes). Content cannot contain the
+    // matching quote character. Empty strings are allowed.
+    struct SINGLE_QUOTED : seq< one<'\''>, star< not_one<'\''> >, one<'\''> > {};
+    struct DOUBLE_QUOTED : seq< one<'"'>, star< not_one<'"'> >, one<'"'> > {};
+    struct FIELD_VALUE : sor< SINGLE_QUOTED, DOUBLE_QUOTED > {};
+
+
+    /**
+     * A field line with a condition, e.g.:
+     *  FIELD_NAME = 'value'   # comment
+     */
+    struct CONDITIONED_FIELD_LINE : seq<
+        star< blank >,              // Leading whitespace
+        not_at< KEYWORDS::END >,    // Not END (that ends a block)
+        FIELD_NAME,                 // one of the field keywords
+        star< blank >,
+        OPERATOR,
+        star< blank >,
+        FIELD_VALUE,
+        TRAILING                    // Trailing comment or whitespace
+    > {};
+
+    struct OR_LINE : seq<
+        star< blank >,              // Leading whitespace
+        not_at< KEYWORDS::END >,    // Not END (that ends a block)
+        KEYWORDS::OR,
+        TRAILING                    // Trailing comment or whitespace
+    > {};
 
     /*
     * Generic block structure:
@@ -78,9 +116,12 @@ namespace EXTRACT_SPEC_PARSER
     struct GENERIC_BLOCK : seq<
         Header, TRAILING,           // HEADER line
         star< sor<
+            OR_LINE,
+            CONDITIONED_FIELD_LINE,
             FIELD_LINE,
             TRAILING
         > >,
+        star< blank >,
         KEYWORDS::END, TRAILING     // END line
     > {};
 
@@ -88,9 +129,11 @@ namespace EXTRACT_SPEC_PARSER
     // with the appropriate header keyword
     // (we could list all suitable field keywords here if we wanted to be more strict)
     using SYMBOL_BLOCK = GENERIC_BLOCK<KEYWORDS::SYMBOL>;
+    using CONNECTIVITY_BLOCK = GENERIC_BLOCK<KEYWORDS::CONNECTIVITY>;
 
     struct ANY_BLOCK : sor<
-        SYMBOL_BLOCK
+        SYMBOL_BLOCK,
+        CONNECTIVITY_BLOCK
     > {};
 
     // The overall extract spec file consists of zero or more blocks
