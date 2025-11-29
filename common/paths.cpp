@@ -22,6 +22,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/utils.h>
+#include <wx/msgdlg.h>
 
 #include <kiplatform/environment.h>
 #include <paths.h>
@@ -502,6 +503,25 @@ void PATHS::EnsureUserPathsExist()
     EnsurePathExists( GetDefaultUserFootprintsPath() );
     EnsurePathExists( GetDefaultUser3DModelsPath() );
     EnsurePathExists( GetDefault3rdPartyPath() );
+
+#ifdef _WIN32
+    // Warn about Controlled folder access
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    if( !tmp.DirExists() )
+    {
+        wxString msg = wxString::Format(
+                _( "KiCad was unable to use '%s'.\n"
+                   "\n"
+                   "1. Disable 'Controlled folder access' in Windows settings or Group Policy\n"
+                   "2. Make sure no other antivirus software interferes with KiCad\n"
+                   "3. Make sure you have correct permissions set up" ),
+                tmp.GetPath() );
+
+        wxMessageBox( msg, _( "Warning" ), wxICON_WARNING );
+    }
+#endif
 }
 
 
