@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-28 09:01+0000\n"
+"PO-Revision-Date: 2025-11-29 10:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -24175,13 +24175,12 @@ msgid "Select/Expand Connection"
 msgstr "Selezione/Espansione collegamento"
 
 #: eeschema/tools/sch_actions.cpp:112
-#, fuzzy
 msgid ""
 "Selects a connection or expands an existing selection to pins, symbols, or "
 "entire connections"
 msgstr ""
-"Seleziona una connessione o espande una selezione corrente a giunzioni, "
-"piazzole, o intere connessioni"
+"Seleziona una connessione o espande una selezione esistente a pin, piazzole, "
+"o intere connessioni"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:508
 msgid "Show/hide design blocks library"
@@ -24233,9 +24232,8 @@ msgid "Properties..."
 msgstr "Proprietà..."
 
 #: eeschema/tools/sch_actions.cpp:166 pcbnew/tools/pcb_actions.cpp:550
-#, fuzzy
 msgid "Edit properties of design block"
-msgstr "Modifica le proprietà del blocco progetto"
+msgstr "Modifica proprietà blocco progetto"
 
 #: eeschema/tools/sch_actions.cpp:176
 msgid "Save Library As..."
@@ -24328,14 +24326,12 @@ msgstr ""
 "genitore"
 
 #: eeschema/tools/sch_actions.cpp:276
-#, fuzzy
 msgid "Flatten Symbol"
-msgstr "Incolla simbolo"
+msgstr "Appiattisci simbolo"
 
 #: eeschema/tools/sch_actions.cpp:277
-#, fuzzy
 msgid "Remove inheritance from symbol"
-msgstr "Rimuovi libreria dalla tabella"
+msgstr "Rimuovi ereditarietà dal simbolo"
 
 #: eeschema/tools/sch_actions.cpp:282
 msgid "Add Symbol to Schematic"
@@ -24546,15 +24542,14 @@ msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Copia blocco progetto nel progetto come foglio nel foglio corrente"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Place Pins from Sheet"
-msgstr "Piazza elementi dal foglio:"
+msgstr "Piazza pin dal foglio"
 
 #: eeschema/tools/sch_actions.cpp:576
-#, fuzzy
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Al pin foglio %s manca la corrispondente etichetta gerarchica nel foglio"
+"Aggiungi pin foglio dalle etichette gerarchiche esistenti trovate su quel "
+"foglio"
 
 #: eeschema/tools/sch_actions.cpp:584
 msgid "Autoplace All Sheet Pins"
@@ -24667,34 +24662,28 @@ msgid "Swap positions of selected items"
 msgstr "Scambia la posizione di elementi selezionati"
 
 #: eeschema/tools/sch_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:1675
-#, fuzzy
 msgid "Swap Pins"
-msgstr "Scambia strati"
+msgstr "Scambia pin"
 
 #: eeschema/tools/sch_actions.cpp:778
-#, fuzzy
 msgid "Swap the selected symbol pins' positions"
-msgstr "Scambia le posizioni degli elementi selezionati"
+msgstr "Scambia le posizioni dei pin dei simboli selezionati"
 
 #: eeschema/tools/sch_actions.cpp:784 eeschema/tools/sch_edit_tool.cpp:1778
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "Scambia strati"
+msgstr "Scambia etichette pin"
 
 #: eeschema/tools/sch_actions.cpp:785
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "Permetti la selezione di elementi bloccati"
+msgstr "Scambia le etichette associate ai pin selezionati"
 
 #: eeschema/tools/sch_actions.cpp:791 eeschema/tools/sch_edit_tool.cpp:1859
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Unità"
+msgstr "Scambia le etichette unità"
 
 #: eeschema/tools/sch_actions.cpp:792
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "Taglia gli spigoli tra le linee selezionate"
+msgstr "Scambia le etichette tra le unità selezionate"
 
 #: eeschema/tools/sch_actions.cpp:808
 msgid "Edit Reference Designator..."
@@ -24757,24 +24746,20 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Assegna una netclass ai collegamenti che corrispondono al modello"
 
 #: eeschema/tools/sch_actions.cpp:874
-#, fuzzy
 msgid "Find in Net Navigator"
-msgstr "Navigatore collegamenti"
+msgstr "Trova nel navigatore collegamenti"
 
 #: eeschema/tools/sch_actions.cpp:875
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Apre l'impronta selezionata nell'editor delle impronte"
+msgstr "Individua il collegamento selezionato nel navigatore collegamenti"
 
 #: eeschema/tools/sch_actions.cpp:880
-#, fuzzy
 msgid "Cycle Body Style"
-msgstr "Cambia stile corpo"
+msgstr "Scambia stile corpo"
 
 #: eeschema/tools/sch_actions.cpp:881
-#, fuzzy
 msgid "Switch between De Morgan (or other) representations"
-msgstr "Commuta tra rappresentazioni De Morgan"
+msgstr "Commuta tra De Morgan e altre rappresentazioni"
 
 #: eeschema/tools/sch_actions.cpp:887
 msgid "Change to Label"
@@ -24853,9 +24838,8 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Mostra la tabella pin per la modifica in blocco"
 
 #: eeschema/tools/sch_actions.cpp:969
-#, fuzzy
 msgid "Convert Stacked Pins"
-msgstr "Converti in poligono"
+msgstr "Converti pin impilati"
 
 #: eeschema/tools/sch_actions.cpp:970
 msgid ""
@@ -25114,17 +25098,15 @@ msgstr ""
 "generatore esterno"
 
 #: eeschema/tools/sch_actions.cpp:1215
-#, fuzzy
 msgid "Export Symbols..."
-msgstr "Esporta simbolo"
+msgstr "Esporta simboli..."
 
 #: eeschema/tools/sch_actions.cpp:1216
-#, fuzzy
 msgid ""
 "Add symbols from schematic to a new or an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Aggiunge i simboli usati in uno schema ad una libreria di simboli esistente\n"
+"Aggiunge i simboli usati in uno schema a una libreria di simboli esistente\n"
 "(senza rimuovere gli altri simboli presenti da questa libreria)"
 
 #: eeschema/tools/sch_actions.cpp:1223
@@ -25219,9 +25201,8 @@ msgstr ""
 "45 gradi"
 
 #: eeschema/tools/sch_actions.cpp:1327 pcbnew/tools/pcb_actions.cpp:1490
-#, fuzzy
 msgid "Switch to next angle snapping mode"
-msgstr "Passa alla modalità linea successiva"
+msgstr "Passa alla modalità di magnetismo angolare successiva"
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Annotate Automatically"
@@ -25586,24 +25567,20 @@ msgid "Show SPICE Netlist"
 msgstr "Mostra netlist SPICE"
 
 #: eeschema/tools/sch_actions.cpp:1742
-#, fuzzy
 msgid "Add Variant..."
-msgstr "Aggiungi collegamento..."
+msgstr "Aggiungi variante..."
 
 #: eeschema/tools/sch_actions.cpp:1743
-#, fuzzy
 msgid "Add new variant to the schematic."
-msgstr "Aggiungi simbolo corrente allo schema"
+msgstr "Aggiungi una nuova variante allo schema."
 
 #: eeschema/tools/sch_actions.cpp:1748
-#, fuzzy
 msgid "Remove Variant..."
-msgstr "Rinomina impronta..."
+msgstr "Rinomina variante..."
 
 #: eeschema/tools/sch_actions.cpp:1749
-#, fuzzy
 msgid "Remove an existing variant from the schematic."
-msgstr "Si è verificato un errore durante la stampa dello schema."
+msgstr "Rimuovi una variante esistente dallo schema."
 
 #: eeschema/tools/sch_align_tool.cpp:63
 msgid "Align"
@@ -25640,19 +25617,16 @@ msgid "All units of this symbol are already placed."
 msgstr "Tutte le unità di questo simbolo già piazzate."
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Unità già piazzata"
+msgstr "Unità richiesta già piazzata."
 
 #: eeschema/tools/sch_drawing_tools.cpp:870
-#, fuzzy
 msgid "Add Design Block"
 msgstr "Aggiungi blocco progetto"
 
 #: eeschema/tools/sch_drawing_tools.cpp:871
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Importa i contenuti del foglio schema..."
+msgstr "Importa i contenuti del foglio schema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:905
 msgid "Choose Schematic"
@@ -25782,9 +25756,9 @@ msgid " (already placed)"
 msgstr " (già piazzato)"
 
 #: eeschema/tools/sch_edit_tool.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "Piazza tutte le unità"
+msgstr "Posiziona unità %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:200
 msgid "Pin Function"
@@ -25920,14 +25894,12 @@ msgid "Toggle Attribute"
 msgstr "Commuta attributo"
 
 #: eeschema/tools/sch_edit_tool.cpp:3405
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "Modifica proprietà simbolo"
+msgstr "Modifica proprietà simbolo..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3422
-#, fuzzy
 msgid "Edit Netclasses..."
-msgstr "Caricamento netclass..."
+msgstr "Modifica netclass..."
 
 #: eeschema/tools/sch_editor_control.cpp:159
 #, c-format
@@ -25935,19 +25907,16 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Ripristinare '%s' (e tutti i sotto-fogli) all'ultima versione salvata?"
 
 #: eeschema/tools/sch_editor_control.cpp:350
-#, fuzzy
 msgid "Export Symbols"
-msgstr "Esporta simbolo"
+msgstr "Esporta simboli"
 
 #: eeschema/tools/sch_editor_control.cpp:350
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "Esporta i simboli alla libreria..."
+msgstr "Esporta simboli alla libreria:"
 
 #: eeschema/tools/sch_editor_control.cpp:351
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Includere i simboli di potenza nello schema nella libreria?"
+msgstr "Includi simboli di potenza nell'esportazione"
 
 #: eeschema/tools/sch_editor_control.cpp:352
 msgid "Update schematic symbols to link to exported symbols"
@@ -25958,19 +25927,18 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Errore: trovati nomi sub-fogli duplicati nel foglio corrente."
 
 #: eeschema/tools/sch_editor_control.cpp:887
-#, fuzzy
 msgid "No nets selected."
-msgstr "Nessuna net selezionata."
+msgstr "Nessun collegamento (net) selezionato."
 
 #: eeschema/tools/sch_editor_control.cpp:926
-#, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
-msgstr "Il collegamento deve essere etichettato per assegnare una netclass."
+msgstr ""
+"Tutti i collegamenti selezionati devono essere etichettati per assegnare una "
+"netclass."
 
 #: eeschema/tools/sch_editor_control.cpp:1077
-#, fuzzy
 msgid "No connected net selected."
-msgstr "Nessuna net selezionata."
+msgstr "Nessun collegamento (net) connesso selezionato."
 
 #: eeschema/tools/sch_editor_control.cpp:1710 pcbnew/tools/pcb_control.cpp:1125
 msgid ""
@@ -26032,9 +26000,8 @@ msgid "Design block %s does not have a schematic file."
 msgstr "Il blocco progetto %s non ha un file schema."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:348
-#, fuzzy
 msgid "Reached end of symbol."
-msgstr "Raggiunta la fine del foglio."
+msgstr "Raggiunta la fine del simbolo."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:350
 msgid "Reached end of schematic."
@@ -26161,14 +26128,12 @@ msgid "Press <ESC> to cancel drag."
 msgstr "Premere <ESC> per annullare il trascinamento."
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "Premere <ESC> per annullare il trascinamento."
+msgstr "Premere <ESC> per annullare l'interruzione."
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "Premere <ESC> per annullare lo spostamento."
+msgstr "Premere <ESC> per annullare la divisione."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -26220,9 +26185,9 @@ msgstr "Nessuna libreria simboli selezionata."
 #: eeschema/tools/symbol_editor_control.cpp:310
 #: eeschema/tools/symbol_editor_control.cpp:471
 #: eeschema/tools/symbol_editor_control.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Libreria \"%s\" non trovata."
+msgstr "Libreria simboli '%s' non trovata."
 
 #: eeschema/tools/symbol_editor_control.cpp:400
 #: pcbnew/tools/footprint_editor_control.cpp:657
@@ -26265,19 +26230,16 @@ msgid "SVG File Name"
 msgstr "Nome file SVG"
 
 #: eeschema/tools/symbol_editor_control.cpp:848
-#, fuzzy
 msgid "No symbol to flatten"
-msgstr "Nessun simbolo da esportare"
+msgstr "Nessun simbolo da appiattire"
 
 #: eeschema/tools/symbol_editor_control.cpp:854
-#, fuzzy
 msgid "Failed to flatten symbol"
-msgstr "Fallito salvataggio di %s."
+msgstr "Fallito appiattimento del simbolo"
 
 #: eeschema/tools/symbol_editor_control.cpp:858
-#, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "Fallita creazione file libreria simboli \"%s\"."
+msgstr "Fallito aggiornamento libreria con simbolo appiattito"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 msgid "Place Pin"
@@ -26310,18 +26272,17 @@ msgid "All pins must be at the same location"
 msgstr "Tutti i pin devono essere nella stessa posizione"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "Connetti %s pin %s a %s."
+msgstr "Converti %zu pin impilati in '%s'"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1042
 msgid "Select a single pin with stacked notation to explode"
 msgstr "Seleziona un singolo pin con notazione impilata da esplodere"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1054
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Il percorso selezionato non contiene impostazioni KiCad valide!"
+msgstr "Il pin selezionato non ha una notazione di impilamento valida"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1118
 msgid "Symbol is not derived from another symbol."
@@ -26356,19 +26317,16 @@ msgid "Create a new project for this schematic"
 msgstr "Crea nuovo progetto per questo schema"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Ricorsione nei sottofogli"
+msgstr "Non copiare sottofogli"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Solo foglio corrente"
+msgstr "Copia solo sottofogli interni"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Tutti i fogli"
+msgstr "Copia tutti i sottofogli"
 
 #: eeschema/widgets/hierarchy_pane.cpp:509
 msgid "Edit Page Number"
@@ -26385,9 +26343,8 @@ msgstr "Cambia nome di questo foglio"
 #: eeschema/widgets/hierarchy_pane.cpp:518
 #: eeschema/widgets/hierarchy_pane.cpp:596
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Elimina pin fogli"
+msgstr "Elimina foglio in cima"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
 msgid "Remove this top-level sheet from the project"
@@ -26395,14 +26352,12 @@ msgstr "Rimuovi questo foglio di livello superiore dal progetto"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
 #: eeschema/widgets/hierarchy_pane.cpp:542
-#, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Esci dal foglio"
+msgstr "Nuovo foglio in cima"
 
 #: eeschema/widgets/hierarchy_pane.cpp:527
-#, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Crea una nuova cartella per il progetto"
+msgstr "Crea un nuovo foglio in cima (top-level)"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 msgid "Enter name for new top-level sheet:"
@@ -26433,9 +26388,8 @@ msgid "Cannot delete the last top-level sheet."
 msgstr "Impossibile eliminare l'ultimo foglio di livello superiore."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
-#, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Elimina collegamento selezionato"
+msgstr "Elimina foglio in cima"
 
 #: eeschema/widgets/hierarchy_pane.cpp:627
 #, c-format
@@ -26621,9 +26575,8 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
-#, fuzzy
 msgid "Single Run"
-msgstr "Documento singolo"
+msgstr "Esecuzione singola"
 
 #: eeschema/widgets/tuner_slider.cpp:141
 #: eeschema/widgets/tuner_slider_base.cpp:39
@@ -26632,9 +26585,8 @@ msgstr "Esecuzione multipla"
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
-#, fuzzy
 msgid "Steps"
-msgstr "Passo X:"
+msgstr "Passi"
 
 #: eeschema/widgets/tuner_slider_base.cpp:62
 msgid "Limit to E24 series values."
@@ -26706,9 +26658,9 @@ msgid "Layers Settings"
 msgstr "Impostazioni strati"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "Strato %d"
+msgstr "Strato %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:169
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -27411,9 +27363,9 @@ msgid "(with X2 attributes)"
 msgstr "(con attributi X2)"
 
 #: gerbview/gerbview_frame.cpp:686
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
-msgstr "Nome immagine: \"%s\"  Nome strato: \"%s\""
+msgstr "Nome immagine: '%s'  Nome strato: '%s'"
 
 #: gerbview/gerbview_frame.cpp:702
 msgid "X2 attr"
@@ -27481,15 +27433,14 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "File Gerber non valido: comando arco G74 o G75 mancante"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr ""
-"RS274X: comando di formato GERBER \"%c\" non valido alla riga %d: \"%s\""
+msgstr "RS274X: comando di formato GERBER '%c' non valido alla riga %d: '%s'"
 
 #: gerbview/rs274x.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "GERBER file '%s' may not display as intended."
-msgstr "Il file GERBER \"%s\" potrebbe non apparire come dovrebbe."
+msgstr "Il file GERBER '%s' potrebbe non apparire come dovrebbe."
 
 #: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -27924,19 +27875,16 @@ msgid "Delete Column"
 msgstr "Cancella colonna"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
-#, fuzzy
 msgid "Embed file"
 msgstr "Incorpora file"
 
 #: include/widgets/filedlg_hook_new_library.h:42
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Aggiungere la libreria alla tabella librerie globale?"
+msgstr "Aggiungi nuova libreria alla tabella librerie globale"
 
 #: include/widgets/filedlg_hook_new_library.h:43
-#, fuzzy
 msgid "Add new library to project library table"
-msgstr "Aggiungi nuova tabella libreria di simboli"
+msgstr "Aggiungi nuova libreria alla tabella librerie del progetto"
 
 #: include/widgets/filedlg_import_non_kicad.h:39
 msgid "Show import issues"
@@ -28117,9 +28065,8 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "Restituisci un codice d'uscita non zero se esistono violazioni DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:95
-#, fuzzy
 msgid "Refill zones before running DRC"
-msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
+msgstr "Aggiorna riempimenti di tutte le zone prima di eseguire il DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
@@ -28144,12 +28091,12 @@ msgstr ""
 "Utilità di esportazione (Gerber, forature, file di posizionamento, ecc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
-#, fuzzy
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Formato file d'uscita, opzioni: step, brep, xao, glb (glTF binari), ply, stl"
+"Formato file d'uscita, opzioni: step, stepz, brep, xao, glb (glTF binari), "
+"ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -28686,22 +28633,18 @@ msgid "Force A4 paper size."
 msgstr "Forza dimensione foglio A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
-msgstr "Mostra statistiche scheda"
+msgstr "Genera rapporto statistico scheda"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
-#, fuzzy
 msgid "Report units; valid options: in, mm"
-msgstr "Unità rapporto; opzioni valide: in, mm, mils"
+msgstr "Unità rapporto; opzioni valide: in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
 msgstr "Escludi impronte senza piazzole"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
 msgstr "Sottrai fori dall'area scheda"
 
