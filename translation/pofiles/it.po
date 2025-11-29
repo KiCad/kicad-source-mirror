@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-29 10:00+0000\n"
+"PO-Revision-Date: 2025-11-30 11:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -28722,13 +28722,12 @@ msgstr ""
 "I colori definiti nello stackup della scheda sovrascrivono quelli predefiniti"
 
 #: kicad/cli/command_pcb_render.cpp:269
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"Abilita lo sfondo, le ombre e la post-elaborazione, anche se disabilitati "
-"nelle preimpostazioni della qualità"
+"Abilita il fondo, le ombre e la post-elaborazione, anche se disabilitati "
+"nelle impostazioni della qualità"
 
 #: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
@@ -28824,16 +28823,14 @@ msgid "Invalid image format\n"
 msgstr "Formato immagine non valido\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
-#, fuzzy
 msgid "Upgrade the board file's format to the latest one"
-msgstr "Importa un file scheda da altre applicazioni"
+msgstr "Aggiorna il formato file scheda all'ultima versione"
 
 #: kicad/cli/command_pcb_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the board file to be resaved regardless of versioning"
 msgstr ""
-"Forza l'ulteriore salvataggio della libreria di simboli indipendentemente "
-"dal controllo versioni"
+"Forza l'ulteriore salvataggio del file scheda indipendentemente dal "
+"versionamento"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -28963,11 +28960,10 @@ msgid "Upgrade the schematic file's format to the latest one"
 msgstr "Aggiorna il formato del file schema all'ultima versione"
 
 #: kicad/cli/command_sch_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the schematic file to be resaved regardless of versioning"
 msgstr ""
-"Forza l'ulteriore salvataggio della libreria di simboli indipendentemente "
-"dal controllo versioni"
+"Forza l'ulteriore salvataggio del file schema indipendentemente dal "
+"versionamento"
 
 #: kicad/cli/command_sym.h:31
 msgid "Symbol and Symbol Libraries"
@@ -29067,9 +29063,8 @@ msgid "Include jobs:"
 msgstr "Includi lavori:"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:145
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "Ricarica configurazione"
+msgstr "Modifica configurazione avanzata"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:154
 msgid "Key"
@@ -29080,7 +29075,6 @@ msgid "Extant"
 msgstr "Esistente"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:271
-#, fuzzy
 msgid "Reset to default"
 msgstr "Reimposta al predefinito"
 
@@ -29105,30 +29099,25 @@ msgid "Execute Command Job Settings"
 msgstr "Impostazioni lavoro Esegui comando"
 
 #: kicad/dialogs/dialog_template_selector.cpp:230
-#, fuzzy
 msgid "Edit Template"
-msgstr "Modelli personali"
+msgstr "Modifica modello"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
-#, fuzzy
 msgid "Duplicate Template"
-msgstr "Duplica parametri"
+msgstr "Duplica modello"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Impossibile aprire la cartella sorgente: %s"
+msgstr "Impossibile aprire la cartella dei modelli."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "Non sono stati trovati file nel repository."
+msgstr "Non sono stati trovati file progetto nella cartella dei modelli."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
-#, fuzzy
 msgid "Enter name for the new template:"
-msgstr "Inserire numero pagina per il percorso foglio%s"
+msgstr "Inserire il nome per il nuovo modello:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:301
 #: pcbnew/tools/footprint_editor_control.cpp:413
@@ -29136,29 +29125,26 @@ msgid "_copy"
 msgstr "_copia"
 
 #: kicad/dialogs/dialog_template_selector.cpp:310
-#, fuzzy
 msgid "Template name cannot be empty."
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il nome modello non può essere vuoto."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Impossibile creare la cartella '%s'"
+msgstr "Impossibile trovare la cartella modelli dell'utente."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Cartella d'uscita '%s' esiste già."
+msgstr "La cartella '%s' esiste già."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Impossibile creare la cartella '%s'"
+msgstr "Impossibile creare la cartella '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Impossibile aprire la cartella sorgente: %s"
+msgstr "Impossibile aprire la cartella dei modelli open source."
 
 #: kicad/dialogs/dialog_template_selector.cpp:406
 #, c-format
@@ -29268,14 +29254,13 @@ msgid "Last run failed"
 msgstr "Ultima esecuzione non riuscita"
 
 #: kicad/dialogs/panel_jobset.cpp:276 kicad/dialogs/panel_jobset.cpp:998
-#, fuzzy
 msgid "Running Jobs"
 msgstr "Lavori in esecuzione"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "Fallita apertura file '%s'."
+msgstr "Fallita apertura di '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:323
 msgid "Edit Destination Options..."
@@ -29290,9 +29275,8 @@ msgid "View Last Run Log..."
 msgstr "Mostra messaggi dell'ultima esecuzione..."
 
 #: kicad/dialogs/panel_jobset.cpp:328 kicad/dialogs/panel_jobset_base.cpp:209
-#, fuzzy
 msgid "Open Output"
-msgstr "Uscita"
+msgstr "Apri uscita"
 
 #: kicad/dialogs/panel_jobset.cpp:428
 msgid "Edit Job Description"
@@ -29355,9 +29339,8 @@ msgid "Generate All Destinations"
 msgstr "Genera tutte le destinazioni"
 
 #: kicad/dialogs/panel_jobset_base.cpp:211
-#, fuzzy
 msgid "Open the generated output"
-msgstr "Rinomina l'impronta selezionata"
+msgstr "Apri il risultato generato"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -29407,9 +29390,8 @@ msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr "Gestisce i pacchetti scaricabili da repository KiCad e di terze parti"
 
 #: kicad/dialogs/template_default_html.h:61
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "Selettore modelli di progetto"
+msgstr "Benvenuti alla selezione modelli!"
 
 #: kicad/dialogs/template_default_html.h:62
 msgid ""
@@ -29423,9 +29405,8 @@ msgstr ""
 "comuni."
 
 #: kicad/dialogs/template_default_html.h:66
-#, fuzzy
 msgid "Browse Templates"
-msgstr "Modelli personali"
+msgstr "Scorri i modelli"
 
 #: kicad/dialogs/template_default_html.h:67
 msgid ""
@@ -29438,18 +29419,16 @@ msgstr ""
 "tipologia o complessità."
 
 #: kicad/dialogs/template_default_html.h:70
-#, fuzzy
 msgid "Select a Template"
-msgstr "Seleziona un file"
+msgstr "Seleziona un modello"
 
 #: kicad/dialogs/template_default_html.h:71
 msgid "Click on any template in the list to "
 msgstr "Fare clic su qualsiasi modello nell'elenco per "
 
 #: kicad/dialogs/template_default_html.h:71
-#, fuzzy
 msgid "preview its details"
-msgstr "Visualizza dettagli"
+msgstr "anteprima dei suoi dettagli"
 
 #: kicad/dialogs/template_default_html.h:71
 msgid ""
@@ -29460,18 +29439,16 @@ msgstr ""
 "descrizioni, componenti inclusi e struttura del progetto."
 
 #: kicad/dialogs/template_default_html.h:74
-#, fuzzy
 msgid "Customize Path"
-msgstr "Personalizza barre strumenti"
+msgstr "Personalizza percorso"
 
 #: kicad/dialogs/template_default_html.h:75
 msgid "Use the "
 msgstr "Usare il "
 
 #: kicad/dialogs/template_default_html.h:75
-#, fuzzy
 msgid "folder path field"
-msgstr "cartella con %s file"
+msgstr "campo percorso cartella"
 
 #: kicad/dialogs/template_default_html.h:75
 msgid ""
@@ -29483,9 +29460,8 @@ msgstr ""
 "ricaricare i modelli."
 
 #: kicad/dialogs/template_default_html.h:78
-#, fuzzy
 msgid "Create Project"
-msgstr "Crea nuovo progetto"
+msgstr "Crea progetto"
 
 #: kicad/dialogs/template_default_html.h:79
 msgid "Once you've found the right template, click "
@@ -29504,9 +29480,8 @@ msgid "What You Get with Templates"
 msgstr "Cosa si ottiene assieme ai modelli"
 
 #: kicad/dialogs/template_default_html.h:85
-#, fuzzy
 msgid "Pre-configured libraries"
-msgstr "Migra librerie"
+msgstr "Librerie pre-configurate"
 
 #: kicad/dialogs/template_default_html.h:85
 #, fuzzy
