@@ -76,3 +76,7 @@ set_tests_properties( qa_cli
 )
 
 setup_qa_env( qa_cli )
+
+# Target to install python dependencies for QA via pip
+add_custom_target( qa_python_deps
+        COMMAND ${PYTHON_EXECUTABLE} -m pip install -r ${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt )
