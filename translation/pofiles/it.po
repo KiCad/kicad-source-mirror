@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-29 10:00+0000\n"
+"PO-Revision-Date: 2025-11-30 10:25+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -26986,13 +26986,12 @@ msgstr ""
 "I colori definiti nello stackup della scheda sovrascrivono quelli predefiniti"
 
 #: kicad/cli/command_pcb_render.cpp:269
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"Abilita lo sfondo, le ombre e la post-elaborazione, anche se disabilitati "
-"nelle preimpostazioni della qualità"
+"Abilita il fondo, le ombre e la post-elaborazione, anche se disabilitati "
+"nelle impostazioni della qualità"
 
 #: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
@@ -27442,7 +27441,6 @@ msgid "Last run failed"
 msgstr "Ultima esecuzione non riuscita"
 
 #: kicad/dialogs/panel_jobset.cpp:256 kicad/dialogs/panel_jobset.cpp:966
-#, fuzzy
 msgid "Running Jobs"
 msgstr "Lavori in esecuzione"
 
