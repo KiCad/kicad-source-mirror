@@ -4,7 +4,7 @@
     {
       "name": "msvc",
       "hidden": true,
-      "generator": "Ninja",
+      "generator": "Ninja", 
       "binaryDir": "${sourceDir}/build/${presetName}",
       "installDir": "${sourceDir}/build/install/${presetName}",
       "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
@@ -19,8 +19,7 @@
       "cacheVariables": {
         "KICAD_BUILD_QA_TESTS": "ON",
         "KICAD_SCRIPTING_WXPYTHON": "ON",
-        "KICAD_WIN32_DPI_AWARE": "ON",
-        "KICAD_BUILD_PNS_DEBUG_TOOL": "ON"
+        "KICAD_WIN32_DPI_AWARE": "ON"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -56,7 +55,8 @@
       "description": "Sets debug build type and x64 arch",
       "inherits": "msvc-win64",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "KICAD_BUILD_PNS_DEBUG_TOOL": "ON"
       }
     },
     {
@@ -85,6 +85,36 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
+    },
+    {
+      "name": "linux-base",
+      "generator": "Ninja", 
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/build/install/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "displayName": "Linux Debug",
+      "description": "Sets debug build type and x64 arch",
+        "inherits": "linux-base",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug"
+        }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "description": "Sets release build type",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
     }
   ],
   "buildPresets": [
@@ -107,17 +137,48 @@
       "name": "winarm64-release",
       "displayName": "arm64 Debug (Windows)",
       "configurePreset": "msvc-winarm64-release"
+    },
+    {
+      "name": "linux-debug",
+      "displayName": "Debug (Linux)",
+      "configurePreset": "linux-base"
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Release (Linux)",
+      "configurePreset": "linux-base"
     }
   ],
   "testPresets": [
     {
-      "name": "win64-release",
-      "configurePreset": "msvc-win64-release",
-      "output": { "outputOnFailure": true },
+      "name": "test-base",
+      "environment": {
+        "KICAD_RUN_FROM_BUILD_DIR": "1"
+      },
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
       }
+    },
+    {
+      "name": "win64-release",
+      "configurePreset": "msvc-win64-release",
+      "inherits": "test-base"
+    },
+    {
+      "name": "win64-debug",
+      "configurePreset": "msvc-win64-debug",
+      "inherits": "test-base"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "inherits": "test-base"
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "inherits": "test-base"
     }
   ]
 }
