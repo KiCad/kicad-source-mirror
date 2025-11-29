@@ -228,9 +228,9 @@ if( APPLE )
     set_target_properties( kicad PROPERTIES BUILD_RPATH ${PYTHON_FRAMEWORK} )
     set_target_properties( kicad PROPERTIES INSTALL_RPATH
             "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+    set_target_properties( kicad-cli PROPERTIES BUILD_RPATH ${PYTHON_FRAMEWORK} )
     set_target_properties( kicad-cli PROPERTIES INSTALL_RPATH
             "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
-    set_target_properties( kicad-cli PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
 
     install( CODE "
         set( KICAD_CMAKE_MODULE_PATH \"${KICAD_CMAKE_MODULE_PATH}\" )

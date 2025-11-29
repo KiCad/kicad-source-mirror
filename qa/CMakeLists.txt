@@ -24,7 +24,7 @@ include( KiCadQABuildUtils )
 macro(setup_qa_env target_name)
     set( MACOS_BIN "" )
     if( APPLE AND ${target_name} STREQUAL "qa_cli" )
-        set( MACOS_BIN "PATH=path_list_prepend:${CMAKE_INSTALL_PREFIX}/KiCad.app/Contents/MacOS" )
+        set( MACOS_BIN "PATH=path_list_prepend:${CMAKE_BINARY_DIR}/kicad/KiCad.app/Contents/MacOS" )
     endif()
 
     set( VCPKG_BIN "" )
