@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-28 09:00+0000\n"
+"PO-Revision-Date: 2025-11-29 10:00+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ka/>\n"
@@ -13737,7 +13737,7 @@ msgstr "დაფიდან ამოღება"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1058
 #: eeschema/symbol_editor/symbol_editor.cpp:1737
 msgid "Power Symbol"
-msgstr ""
+msgstr "კვების სიმბოლო"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1059
 msgid "Local Power Symbol"
@@ -21605,23 +21605,23 @@ msgstr "კვება"
 
 #: eeschema/sim/sim_plot_tab.cpp:918
 msgid "Voltage (swept)"
-msgstr ""
+msgstr "ძაბვა (სკანირება)"
 
 #: eeschema/sim/sim_plot_tab.cpp:929
 msgid "Current (swept)"
-msgstr ""
+msgstr "დენი (სკანირება)"
 
 #: eeschema/sim/sim_plot_tab.cpp:940
 msgid "Resistance (swept)"
-msgstr ""
+msgstr "წინაღობა (სკანირება)"
 
 #: eeschema/sim/sim_plot_tab.cpp:951
 msgid "Temperature (swept)"
-msgstr ""
+msgstr "ტემპერატურა (სკანირება)"
 
 #: eeschema/sim/sim_plot_tab.cpp:969
 msgid "Voltage (measured)"
-msgstr ""
+msgstr "ძაბვა (გაზომილი)"
 
 #: eeschema/sim/sim_plot_tab.h:152 eeschema/sim/simulator_frame_ui.cpp:245
 #: eeschema/sim/simulator_frame_ui.cpp:895
@@ -22123,7 +22123,7 @@ msgstr ""
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:88
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:114
 msgid "Library Editor"
-msgstr ""
+msgstr "ბიბლიოთეკის რედაქტორი"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:128
 msgid "KiCad Symbol Editor"
@@ -22249,7 +22249,7 @@ msgstr "ყველა"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
 msgid "[from schematic]"
-msgstr ""
+msgstr "[სქემიდან]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:76
 msgid "[Read Only Library]"
@@ -22474,7 +22474,7 @@ msgstr "კვების სიმბოლო (ლოკალური)"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:45
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:77
 msgid "Import Symbol"
-msgstr ""
+msgstr "სიმბოლოს შემოტანა"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:45
 msgid "Import symbol to library:"
@@ -22807,7 +22807,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:57
 msgid "Symbol Checker"
-msgstr ""
+msgstr "სიმბოლოს შემმოწმებელი"
 
 #: eeschema/tools/sch_actions.cpp:58
 msgid "Show the symbol checker window"
@@ -22827,12 +22827,12 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2287
 msgid "Create Corner"
-msgstr ""
+msgstr "კუთხის შექმნა"
 
 #: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1403
 #: pcbnew/tools/pcb_actions.cpp:2294
 msgid "Remove Corner"
-msgstr ""
+msgstr "კუთხის წაშლა"
 
 #: eeschema/tools/sch_actions.cpp:103
 msgid "Select Node"
@@ -22915,7 +22915,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:183
 msgid "New Symbol..."
-msgstr ""
+msgstr "ახალი სიმბოლო..."
 
 #: eeschema/tools/sch_actions.cpp:184
 msgid "Create a new symbol in an existing library"
@@ -22931,7 +22931,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:197
 msgid "Edit Symbol"
-msgstr ""
+msgstr "სიმბოლოს ჩასწორება"
 
 #: eeschema/tools/sch_actions.cpp:198
 msgid "Show selected symbol on editor canvas"
@@ -22939,11 +22939,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:204
 msgid "Duplicate Symbol"
-msgstr ""
+msgstr "სიმბოლოს დუბლირება"
 
 #: eeschema/tools/sch_actions.cpp:210
 msgid "Rename Symbol..."
-msgstr ""
+msgstr "სიმბოლოს სახელის გადარქმევა..."
 
 #: eeschema/tools/sch_actions.cpp:217
 msgid "Save the current symbol to a different library or name"
@@ -22967,11 +22967,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:249
 msgid "Paste Symbol"
-msgstr ""
+msgstr "სიმბოლოს ჩასმა"
 
 #: eeschema/tools/sch_actions.cpp:255
 msgid "Import Symbol..."
-msgstr ""
+msgstr "სიმბოლოს შემოტანა...."
 
 #: eeschema/tools/sch_actions.cpp:256
 msgid "Import a symbol to the current library"
@@ -23351,16 +23351,16 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:816
 msgid "Edit Value..."
-msgstr ""
+msgstr "მნიშვნელობის ჩასწორება..."
 
 #: eeschema/tools/sch_actions.cpp:824
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:230
 msgid "Edit Footprint..."
-msgstr ""
+msgstr "ნაკვალევის ჩასწორება..."
 
 #: eeschema/tools/sch_actions.cpp:832 eeschema/tools/sch_edit_tool.cpp:2276
 msgid "Autoplace Fields"
-msgstr ""
+msgstr "ველების ავტომოთავსება"
 
 #: eeschema/tools/sch_actions.cpp:833
 msgid ""
@@ -23369,7 +23369,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:839
 msgid "Change Symbols..."
-msgstr ""
+msgstr "სიმბოლოების შეცვლა..."
 
 #: eeschema/tools/sch_actions.cpp:840
 msgid "Assign different symbols from the library"
@@ -23389,7 +23389,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:860
 msgid "Update Symbol..."
-msgstr ""
+msgstr "სიმბოლოს განახლება..."
 
 #: eeschema/tools/sch_actions.cpp:861
 msgid "Update symbol to include any changes from the library"
@@ -23397,7 +23397,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:867 pcbnew/tools/pcb_actions.cpp:1403
 msgid "Assign Netclass..."
-msgstr ""
+msgstr "ქსელის კლასების მინიჭება..."
 
 #: eeschema/tools/sch_actions.cpp:868 pcbnew/tools/pcb_actions.cpp:1404
 msgid "Assign a netclass to nets matching a pattern"
@@ -23485,11 +23485,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:956
 msgid "Symbol Properties..."
-msgstr ""
+msgstr "სიმბოლოს თვისებები..."
 
 #: eeschema/tools/sch_actions.cpp:962
 msgid "Pin Table..."
-msgstr ""
+msgstr "საკონტაქტო ღეროების ცხრილი..."
 
 #: eeschema/tools/sch_actions.cpp:963
 msgid "Displays pin table for bulk editing of pins"
@@ -23545,7 +23545,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1022
 msgid "Highlight Nets"
-msgstr ""
+msgstr "ქსელების გამოკვეთა"
 
 #: eeschema/tools/sch_actions.cpp:1023
 msgid "Highlight wires and pins of a net"
@@ -23601,7 +23601,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1092
 msgid "Assign Footprints..."
-msgstr ""
+msgstr "ნაკვალევების მინიჭება...."
 
 #: eeschema/tools/sch_actions.cpp:1093
 msgid "Run footprint assignment tool"
@@ -23618,7 +23618,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1106
 msgid "Annotate Schematic..."
-msgstr ""
+msgstr "სქემის ანოტაცია..."
 
 #: eeschema/tools/sch_actions.cpp:1107
 msgid "Fill in schematic symbol reference designators"
@@ -23635,7 +23635,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1121
 msgid "Schematic Setup..."
-msgstr ""
+msgstr "სქემის მორგება..."
 
 #: eeschema/tools/sch_actions.cpp:1122
 msgid "Edit schematic setup including annotation styles and electrical rules"
@@ -23651,7 +23651,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1134
 msgid "Rescue Symbols..."
-msgstr ""
+msgstr "სიმბოლოების აღდგენა..."
 
 #: eeschema/tools/sch_actions.cpp:1135
 msgid "Find old symbols in project and rename/rescue them"
@@ -23709,7 +23709,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1186
 msgid "Export Netlist..."
-msgstr ""
+msgstr "ქსელების სიის გატანა..."
 
 #: eeschema/tools/sch_actions.cpp:1187
 msgid "Export file containing netlist in one of several formats"
@@ -23845,7 +23845,7 @@ msgstr "გადართვა შემდეგ კუთხის მიმ
 
 #: eeschema/tools/sch_actions.cpp:1337
 msgid "Annotate Automatically"
-msgstr ""
+msgstr "ავტომატური ანოტაცია"
 
 #: eeschema/tools/sch_actions.cpp:1338
 msgid "Toggle automatic annotation of new symbols"
@@ -23853,7 +23853,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1345
 msgid "Repair Schematic"
-msgstr ""
+msgstr "სქემის გასწორება"
 
 #: eeschema/tools/sch_actions.cpp:1346
 msgid "Run various diagnostics and attempt to repair schematic"
@@ -23877,7 +23877,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1368
 msgid "Change Sheet"
-msgstr ""
+msgstr "ფურცლის შეცვლა"
 
 #: eeschema/tools/sch_actions.cpp:1369
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -23885,7 +23885,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1375
 msgid "Enter Sheet"
-msgstr ""
+msgstr "ფურცელში შეცვლა"
 
 #: eeschema/tools/sch_actions.cpp:1376
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -23893,7 +23893,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1384
 msgid "Leave Sheet"
-msgstr ""
+msgstr "ფურცლიდან გასვლა"
 
 #: eeschema/tools/sch_actions.cpp:1385
 msgid "Display the parent sheet in the schematic editor"
@@ -23901,7 +23901,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1392
 msgid "Navigate Up"
-msgstr ""
+msgstr "ნავიგაცია ზემოთ"
 
 #: eeschema/tools/sch_actions.cpp:1393
 msgid "Navigate up one sheet in the hierarchy"
@@ -24077,7 +24077,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1616
 msgid "Open Workbook..."
-msgstr ""
+msgstr "სამუშაო წიგნის გახსნა..."
 
 #: eeschema/tools/sch_actions.cpp:1617
 msgid "Open a saved set of analysis tabs and settings"
@@ -24085,7 +24085,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1625
 msgid "Save Workbook"
-msgstr ""
+msgstr "სამუშაო წიგნის შენახვა"
 
 #: eeschema/tools/sch_actions.cpp:1626
 msgid "Save the current set of analysis tabs and settings"
@@ -24129,7 +24129,7 @@ msgstr "ახსნის ჩვენება"
 
 #: eeschema/tools/sch_actions.cpp:1681
 msgid "Dotted Current/Phase"
-msgstr ""
+msgstr "ძაბვა/ფაზა წერტილებით"
 
 #: eeschema/tools/sch_actions.cpp:1682
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
@@ -24157,11 +24157,11 @@ msgstr "სიმულაციის გაშვება"
 
 #: eeschema/tools/sch_actions.cpp:1707
 msgid "Stop Simulation"
-msgstr ""
+msgstr "სიმულაციის გაჩერება"
 
 #: eeschema/tools/sch_actions.cpp:1714
 msgid "Probe Schematic..."
-msgstr ""
+msgstr "სქემაზე გაზომვა..."
 
 #: eeschema/tools/sch_actions.cpp:1715
 msgid "Add a simulator probe"
@@ -24288,7 +24288,7 @@ msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1490
 msgid "Add Junction"
-msgstr ""
+msgstr "შეერთების დამატება"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1496
 msgid "Add Wire to Bus Entry"
@@ -24370,7 +24370,7 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:86
 msgid "Symbol Unit"
-msgstr ""
+msgstr "სიმბოლოს ერთეული"
 
 #: eeschema/tools/sch_edit_tool.cpp:115
 msgid " (already placed)"
@@ -24625,7 +24625,7 @@ msgstr ""
 
 #: eeschema/tools/sch_inspection_tool.cpp:296
 msgid "Symbol Warnings"
-msgstr ""
+msgstr "სიმბოლოს გაფრთხილებები"
 
 #: eeschema/tools/sch_inspection_tool.cpp:332
 msgid "Select a symbol to diff against its library equivalent."
@@ -24770,7 +24770,7 @@ msgstr ""
 
 #: eeschema/tools/simulator_control.cpp:538
 msgid "SPICE Netlist"
-msgstr ""
+msgstr "SPICE-ის ქსელების სია"
 
 #: eeschema/tools/symbol_editor_control.cpp:283
 #, c-format
@@ -24995,7 +24995,7 @@ msgstr ""
 #: eeschema/widgets/hierarchy_pane.cpp:806
 #, c-format
 msgid "(page %s)"
-msgstr ""
+msgstr "(გვერდი %s)"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -25149,7 +25149,7 @@ msgstr ""
 #: eeschema/widgets/tuner_slider.cpp:69 eeschema/widgets/tuner_slider.cpp:137
 #, c-format
 msgid "Tune %s"
-msgstr ""
+msgstr "%s-ის მორგება"
 
 #: eeschema/widgets/tuner_slider.cpp:91
 #, c-format
@@ -25274,7 +25274,7 @@ msgstr ""
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:393
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:120
 msgid "Hole data"
-msgstr ""
+msgstr "ნახვრეტის მონაცემები"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:438
 msgid ""
@@ -25284,7 +25284,7 @@ msgstr ""
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:25
 msgid "Layer selection:"
-msgstr ""
+msgstr "ფენის არჩევა:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:65
 msgid "Copper layers count:"
@@ -25293,71 +25293,71 @@ msgstr ""
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:69
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:70
 msgid "2 Layers"
-msgstr ""
+msgstr "2 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:71
 msgid "4 Layers"
-msgstr ""
+msgstr "4 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:72
 msgid "6 Layers"
-msgstr ""
+msgstr "6 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:73
 msgid "8 Layers"
-msgstr ""
+msgstr "8 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:74
 msgid "10 Layers"
-msgstr ""
+msgstr "10 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:75
 msgid "12 Layers"
-msgstr ""
+msgstr "12 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:76
 msgid "14 Layers"
-msgstr ""
+msgstr "14 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:77
 msgid "16 Layers"
-msgstr ""
+msgstr "16 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:78
 msgid "18 Layers"
-msgstr ""
+msgstr "18 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:79
 msgid "20 Layers"
-msgstr ""
+msgstr "20 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:80
 msgid "22 Layers"
-msgstr ""
+msgstr "22 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:81
 msgid "24 Layers"
-msgstr ""
+msgstr "24 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:82
 msgid "26 Layers"
-msgstr ""
+msgstr "26 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:83
 msgid "28 Layers"
-msgstr ""
+msgstr "28 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:84
 msgid "30 Layers"
-msgstr ""
+msgstr "30 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:85
 msgid "32 Layers"
-msgstr ""
+msgstr "32 ფენა"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:97
 msgid "Store Choice"
-msgstr ""
+msgstr "არჩევნის დამახსოვრება"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb_base.cpp:100
 msgid "Get Stored Choice"
@@ -25370,7 +25370,7 @@ msgstr "ფენის არჩევანი"
 #: gerbview/dialogs/dialog_print_gerbview.cpp:164
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 msgid "Print mirrored"
-msgstr ""
+msgstr "ანარეკლის დაბეჭდვა"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:60
@@ -25380,7 +25380,7 @@ msgstr ""
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:184
 msgid "Select all"
-msgstr ""
+msgstr "ყველაფრის მონიშვნა"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:185
 msgid "Deselect all"
@@ -25435,7 +25435,7 @@ msgstr "D-კოდები"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:93
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
 msgid "Negative Objects"
-msgstr ""
+msgstr "ნეგატიური ობიექტები"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:139
@@ -25463,7 +25463,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:50
 msgid "Drawing Mode"
-msgstr ""
+msgstr "ხაზვის რეჟიმი"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
@@ -25477,11 +25477,11 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
-msgstr ""
+msgstr "ესკიზის ხაზები"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:68
 msgid "Sketch polygons"
-msgstr ""
+msgstr "ესკიზის პოლიგონები"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
 msgid "Display polygon items in outline mode"
@@ -25505,27 +25505,27 @@ msgstr "სრული ზომა"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:112
 msgid "Size A4"
-msgstr ""
+msgstr "ზომა A4"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:115
 msgid "Size A3"
-msgstr ""
+msgstr "ზომა A3"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:118
 msgid "Size A2"
-msgstr ""
+msgstr "ზომა A2"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:121
 msgid "Size A"
-msgstr ""
+msgstr "ზომა A"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:124
 msgid "Size B"
-msgstr ""
+msgstr "ზომა B"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:127
 msgid "Size C"
-msgstr ""
+msgstr "ზომა C"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:17
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:46
@@ -25554,7 +25554,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:66
 msgid "Coordinates Format"
-msgstr ""
+msgstr "კოორდინატების ფორმატი"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:76
 msgid "The coordinates format is not specified in Excellon format."
@@ -25630,7 +25630,7 @@ msgstr ""
 
 #: gerbview/events_called_functions.cpp:160 gerbview/gerbview_frame.cpp:168
 msgid "Layers Manager"
-msgstr ""
+msgstr "ფენების მმართველი"
 
 #: gerbview/excellon_read_drill_file.cpp:271
 #, c-format
@@ -25685,15 +25685,15 @@ msgstr ""
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:231
 msgid "Gerber files"
-msgstr ""
+msgstr "Gerber-ის ფაილები"
 
 #: gerbview/files.cpp:95
 msgid "Zip files"
-msgstr ""
+msgstr "Zip ფაილები"
 
 #: gerbview/files.cpp:118
 msgid "Job files"
-msgstr ""
+msgstr "დავალების ფაილები"
 
 #: gerbview/files.cpp:211
 msgid "Open Autodetected File(s)"
@@ -25701,11 +25701,11 @@ msgstr ""
 
 #: gerbview/files.cpp:234
 msgid "Top layer"
-msgstr ""
+msgstr "ზედა ფენა"
 
 #: gerbview/files.cpp:235
 msgid "Bottom layer"
-msgstr ""
+msgstr "ქვედა ფენა"
 
 #: gerbview/files.cpp:236
 msgid "Bottom solder resist"
@@ -25717,27 +25717,27 @@ msgstr ""
 
 #: gerbview/files.cpp:238
 msgid "Bottom overlay"
-msgstr ""
+msgstr "ქვედა განლაგება"
 
 #: gerbview/files.cpp:239
 msgid "Top overlay"
-msgstr ""
+msgstr "ზედა განლაგება"
 
 #: gerbview/files.cpp:240
 msgid "Bottom paste"
-msgstr ""
+msgstr "პასტა ქვემოთ"
 
 #: gerbview/files.cpp:241
 msgid "Top paste"
-msgstr ""
+msgstr "ზედა პასტა"
 
 #: gerbview/files.cpp:242
 msgid "Keep-out layer"
-msgstr ""
+msgstr "Keep-out ფენა"
 
 #: gerbview/files.cpp:243
 msgid "Mechanical layers"
-msgstr ""
+msgstr "მექანიკური ფენები"
 
 #: gerbview/files.cpp:247
 msgid "Top Pad Master"
@@ -25815,7 +25815,7 @@ msgstr "ატრიბუტი"
 
 #: gerbview/gerber_draw_item.cpp:676 gerbview/gerber_draw_item.cpp:686
 msgid "No attribute"
-msgstr ""
+msgstr "ატრიბუტების გარეშე"
 
 #: gerbview/gerber_draw_item.cpp:682
 #, c-format
@@ -25824,7 +25824,7 @@ msgstr ""
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Graphic Layer"
-msgstr ""
+msgstr "გრაფიკული ფენა"
 
 #: gerbview/gerber_draw_item.cpp:706
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:240
@@ -25851,7 +25851,7 @@ msgstr "პოლარობა"
 
 #: gerbview/gerber_draw_item.cpp:735
 msgid "AB axis"
-msgstr ""
+msgstr "AB ღერძი"
 
 #: gerbview/gerber_draw_item.cpp:747 gerbview/toolbars_gerber.cpp:208
 #: gerbview/toolbars_gerber.cpp:211
@@ -25890,19 +25890,19 @@ msgstr "გამოსახულების სახელი"
 
 #: gerbview/gerber_file_image.cpp:363
 msgid "Graphic layer"
-msgstr ""
+msgstr "გრაფიკული ფენა"
 
 #: gerbview/gerber_file_image.cpp:367
 msgid "Img Rot."
-msgstr ""
+msgstr "გამ. ბრუნ."
 
 #: gerbview/gerber_file_image.cpp:375
 msgid "X Justify"
-msgstr ""
+msgstr "X-ზე სწორება"
 
 #: gerbview/gerber_file_image.cpp:378
 msgid "Y Justify"
-msgstr ""
+msgstr "Y-ზე სწორება"
 
 #: gerbview/gerber_file_image.cpp:384
 msgid "Image Justify Offset"
@@ -25948,7 +25948,7 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:702
 msgid "X2 attr"
-msgstr ""
+msgstr "X2 ატრიბ"
 
 #: gerbview/job_file_reader.cpp:153
 msgid "This job file uses an outdated format. Please recreate it."
@@ -26075,7 +26075,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:285
 msgid "<No selection>"
-msgstr ""
+msgstr "<მონიშნულის გარეშე>"
 
 #: gerbview/tools/gerbview_actions.cpp:41
 msgid "Open Autodetected File(s)..."
@@ -26123,7 +26123,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:83
 msgid "List DCodes..."
-msgstr ""
+msgstr "D-კოდების სია..."
 
 #: gerbview/tools/gerbview_actions.cpp:84
 msgid "List D-codes defined in Gerber files"
@@ -26131,7 +26131,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:90
 msgid "Show Source..."
-msgstr ""
+msgstr "წყაროს ჩვენება..."
 
 #: gerbview/tools/gerbview_actions.cpp:91
 msgid "Show source file for the current layer"
@@ -26164,23 +26164,23 @@ msgstr "გამოკვეთილის გასუფთავება"
 
 #: gerbview/tools/gerbview_actions.cpp:139
 msgid "Highlight Component"
-msgstr ""
+msgstr "კომპონენტის გამოკვეთა"
 
 #: gerbview/tools/gerbview_actions.cpp:145
 msgid "Highlight Attribute"
-msgstr ""
+msgstr "ატრიბუტის გამოკვეთა"
 
 #: gerbview/tools/gerbview_actions.cpp:151
 msgid "Highlight DCode"
-msgstr ""
+msgstr "D-კოდის გამოკვეთა"
 
 #: gerbview/tools/gerbview_actions.cpp:159
 msgid "Next Layer"
-msgstr ""
+msgstr "შემდეგი ფენა"
 
 #: gerbview/tools/gerbview_actions.cpp:166
 msgid "Previous Layer"
-msgstr ""
+msgstr "წინა ფენა"
 
 #: gerbview/tools/gerbview_actions.cpp:172
 msgid "Move Layer Up"
@@ -26192,7 +26192,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:187
 msgid "Sketch Lines"
-msgstr ""
+msgstr "ესკიზის ხაზები"
 
 #: gerbview/tools/gerbview_actions.cpp:188
 msgid "Show lines in outline mode"
@@ -26208,7 +26208,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:207
 msgid "Sketch Polygons"
-msgstr ""
+msgstr "ესკიზის პოლიგონები"
 
 #: gerbview/tools/gerbview_actions.cpp:208
 msgid "Show polygons in outline mode"
@@ -26224,7 +26224,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:226
 msgid "Show DCodes"
-msgstr ""
+msgstr "D-კოდების ჩვენება"
 
 #: gerbview/tools/gerbview_actions.cpp:227
 msgid "Show dcode numbers"
@@ -26264,7 +26264,7 @@ msgstr "KiCad-ის დაფის ფაილად გატანა"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:145
 msgid "D Codes"
-msgstr ""
+msgstr "D-კოდები"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:173
 #, c-format
@@ -26343,7 +26343,7 @@ msgstr ""
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
-msgstr ""
+msgstr "ნაბეჭდი დაფის ფონი"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:161
 #: pcbnew/widgets/appearance_controls.cpp:1916
@@ -26807,7 +26807,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_drill.cpp:82
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:66
 msgid "Minimal header"
-msgstr ""
+msgstr "მინიმალური თავსართი"
 
 #: kicad/cli/command_pcb_export_drill.cpp:86
 msgid "Generate independent files for NPTH and PTH holes"
@@ -27104,7 +27104,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_pos.cpp:130
 #: kicad/cli/command_sch_export_netlist.cpp:95 kicad/cli/command_version.cpp:71
 msgid "Invalid format\n"
-msgstr ""
+msgstr "არასწორი ფორმატი\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:156
 msgid "\"both\" not supported for Gerber format\n"
@@ -28107,7 +28107,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:62
 msgid "Unzip Project"
-msgstr ""
+msgstr "პროექტის გაშლა Zip-დან"
 
 #: kicad/files-io.cpp:68
 #, c-format
@@ -28115,10 +28115,12 @@ msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
+"\n"
+"'%s'-ის გახსნა\n"
 
 #: kicad/files-io.cpp:71
 msgid "Target Directory"
-msgstr ""
+msgstr "სამიზნე საქაღალდე"
 
 #: kicad/files-io.cpp:77
 #, c-format
@@ -28272,11 +28274,11 @@ msgstr ""
 #: kicad/kicad_manager_frame.cpp:1194
 #, c-format
 msgid "Project: %s"
-msgstr ""
+msgstr "პროექტი: %s"
 
 #: kicad/kicad_manager_frame.cpp:1230
 msgid "Restoring session"
-msgstr ""
+msgstr "სესიის აღდგენა"
 
 #: kicad/kicad_manager_frame.cpp:1242
 #, c-format
@@ -50197,7 +50199,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1604
 msgid "Scripting Console"
-msgstr ""
+msgstr "სკრიპტინგის კონსოლი"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
 msgid "Show the Python scripting console"
@@ -50613,7 +50615,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2295
 msgid "Remove corner"
-msgstr ""
+msgstr "კუთხის წაშლა"
 
 #: pcbnew/tools/pcb_actions.cpp:2301
 msgid "Chamfer Corner"
