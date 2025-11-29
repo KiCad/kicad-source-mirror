@@ -62,7 +62,8 @@ macro(setup_qa_env target_name)
     "KICAD_BUILD_PATHS=${CMAKE_BINARY_DIR}/kicad:${CMAKE_BINARY_DIR}/common:${CMAKE_BINARY_DIR}/api:${CMAKE_BINARY_DIR}/common/gal:${CMAKE_BINARY_DIR}/pcbnew:${CMAKE_BINARY_DIR}/eeschema:${CMAKE_BINARY_DIR}/cvpcb"
     )
 
-    set( new_env "${current_env};${KICAD_BUILD_PATHS}" )
+    # We also set KICAD_RUN_FROM_BUILD_DIR as its the only way all unit tests will run from the build directory
+    set( new_env "KICAD_RUN_FROM_BUILD_DIR=1;${current_env};${KICAD_BUILD_PATHS}" )
     set_tests_properties( ${target_name}
         PROPERTIES
             ENVIRONMENT "${new_env}"
