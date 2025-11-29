@@ -47,6 +47,7 @@
 #include <richio.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_textbox.h>
+#include <lib_symbol_library_manager.h>
 #include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
@@ -558,6 +559,21 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() || aEvent.IsAction( &SCH_ACTIONS::symbolProperties ) )
     {
+        // If called from tree context menu, edit properties without loading into canvas
+        if( aEvent.IsAction( &SCH_ACTIONS::symbolProperties ) )
+        {
+            LIB_ID treeLibId = m_frame->GetTreeLIBID();
+            
+            // Check if the selected symbol in tree is different from the currently loaded one
+            if( treeLibId.IsValid() && 
+                ( !m_frame->GetCurSymbol() || m_frame->GetCurSymbol()->GetLibId() != treeLibId ) )
+            {
+                // Edit properties directly from library buffer without loading to canvas
+                editSymbolPropertiesFromLibrary( treeLibId );
+                return 0;
+            }
+        }
+
         if( m_frame->GetCurSymbol() )
             editSymbolProperties();
     }
@@ -700,6 +716,45 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( SCH_FIELD* aField )
 
     m_frame->GetCanvas()->Refresh();
     m_frame->UpdateSymbolMsgPanelInfo();
+}
+
+
+void SYMBOL_EDITOR_EDIT_TOOL::editSymbolPropertiesFromLibrary( const LIB_ID& aLibId )
+{
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
+    wxString libName = aLibId.GetLibNickname();
+    wxString symbolName = aLibId.GetLibItemName();
+    
+    // Get the symbol from the library buffer (without loading it into the editor)
+    LIB_SYMBOL* bufferedSymbol = libMgr.GetBufferedSymbol( symbolName, libName );
+    
+    if( !bufferedSymbol )
+        return;
+    
+    // Create a copy to work with
+    LIB_SYMBOL tempSymbol( *bufferedSymbol );
+    
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    
+    DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, &tempSymbol );
+
+    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+    // frame. Therefore this dialog as a modal frame parent, MUST be run under
+    // quasimodal mode for the quasimodal frame support to work.  So don't use
+    // the QUASIMODAL macros here.
+    if( dlg.ShowQuasiModal() != wxID_OK )
+        return;
+    
+    // Update the buffered symbol with the changes
+    libMgr.UpdateSymbol( &tempSymbol, libName );
+    
+    // Mark the library as modified
+    libMgr.SetSymbolModified( symbolName, libName );
+    
+    // Update the tree view
+    wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( aLibId );
+    m_frame->UpdateLibraryTree( treeItem, &tempSymbol );
 }
 
 

@@ -50,6 +50,7 @@
 #include <footprint_library_adapter.h>
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <dialogs/dialog_footprint_checker.h>
+#include <dialogs/dialog_footprint_properties_fp_editor.h>
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
 #include <project_pcb.h>
@@ -141,6 +142,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::duplicateFootprint, fpSelectedCondition, 10 );
     ctxMenu.AddItem( PCB_ACTIONS::renameFootprint,    fpSelectedCondition, 10 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteFootprint,    fpSelectedCondition, 10 );
+    ctxMenu.AddItem( PCB_ACTIONS::footprintProperties, fpSelectedCondition, 10 );
 
     ctxMenu.AddSeparator( 100 );
     ctxMenu.AddItem( PCB_ACTIONS::importFootprint,    libInferredCondition, 100 );
@@ -763,6 +765,22 @@ int FOOTPRINT_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_CONTROL::Properties( const TOOL_EVENT& aEvent )
 {
+    // Check if called from tree context menu
+    if( aEvent.IsAction( &PCB_ACTIONS::footprintProperties ) )
+    {
+        LIB_ID treeLibId = m_frame->GetLibTree()->GetSelectedLibId();
+        
+        // Check if a different footprint is selected in the tree
+        if( treeLibId.IsValid() && 
+            ( !m_frame->GetBoard()->GetFirstFootprint() || 
+              m_frame->GetBoard()->GetFirstFootprint()->GetFPID() != treeLibId ) )
+        {
+            // Edit properties directly from library without loading to canvas
+            editFootprintPropertiesFromLibrary( treeLibId );
+            return 0;
+        }
+    }
+
     if( FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint() )
     {
         getEditFrame<FOOTPRINT_EDIT_FRAME>()->OnEditItemRequest( footprint );
@@ -770,6 +788,59 @@ int FOOTPRINT_EDITOR_CONTROL::Properties( const TOOL_EVENT& aEvent )
     }
 
     return 0;
+}
+
+
+void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID& aLibId )
+{
+    // Load the footprint from the library (without adding it to the canvas)
+    FOOTPRINT* libraryFootprint = m_frame->LoadFootprint( aLibId );
+    
+    if( !libraryFootprint )
+        return;
+    
+    // Create a temporary board to hold the footprint (required by the dialog)
+    std::unique_ptr<BOARD> tempBoard( new BOARD() );
+    
+    // Create a copy to work with and add it to the temporary board
+    FOOTPRINT* tempFootprint = static_cast<FOOTPRINT*>( libraryFootprint->Clone() );
+    delete libraryFootprint;
+    
+    tempBoard->Add( tempFootprint );
+    tempFootprint->SetParent( tempBoard.get() );
+    
+    LIB_ID oldFPID = tempFootprint->GetFPID();
+    
+    // Open the properties dialog
+    DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR dialog( m_frame, tempFootprint );
+    
+    if( dialog.ShowQuasiModal() != wxID_OK )
+        return;
+    
+    // Remove from temporary board before saving (to avoid double-delete)
+    tempBoard->Remove( tempFootprint );
+    
+    // Save the modified footprint back to the library
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() );
+    wxString libName = aLibId.GetLibNickname();
+    
+    try
+    {
+        adapter->SaveFootprint( libName, tempFootprint, &m_frame->Prj() );
+        
+        // Update the tree view
+        wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( oldFPID );
+        m_frame->UpdateLibraryTree( treeItem, tempFootprint );
+        m_frame->SyncLibraryTree( true );
+        
+        // Clean up
+        delete tempFootprint;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        delete tempFootprint;
+        DisplayError( m_frame, ioe.What() );
+    }
 }
 
 

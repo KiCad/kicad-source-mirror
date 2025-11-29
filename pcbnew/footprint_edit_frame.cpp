@@ -1291,6 +1291,13 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return !GetTargetFPID().GetLibItemName().empty();
             };
 
+    auto footprintSelectedInTreeCond =
+            [this]( const SELECTION& )
+            {
+                LIB_ID sel = GetLibTree()->GetSelectedLibId();
+                return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+            };
+
     const auto footprintFromBoardCond =
             [this]( const SELECTION& )
             {
@@ -1414,7 +1421,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::placeImportedGraphics, ENABLE( haveFootprintCond ) );
 
-    mgr->SetConditions( PCB_ACTIONS::footprintProperties,   ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::footprintProperties,   ENABLE( footprintSelectedInTreeCond || haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::padTable,            ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::editTextAndGraphics,   ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::checkFootprint,        ENABLE( haveFootprintCond ) );

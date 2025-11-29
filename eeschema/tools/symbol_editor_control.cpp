@@ -188,6 +188,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( SCH_ACTIONS::duplicateSymbol,    symbolSelectedCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::renameSymbol,       symbolSelectedCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::deleteSymbol,       symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::symbolProperties,   symbolSelectedCondition, 10 );
 
         ctxMenu.AddSeparator( 20 );
         ctxMenu.AddItem( SCH_ACTIONS::flattenSymbol,      derivedSymbolSelectedCondition, 20 );

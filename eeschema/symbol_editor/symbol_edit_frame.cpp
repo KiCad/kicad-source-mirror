@@ -460,6 +460,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
             };
 
+    auto symbolSelectedInTreeCondition =
+            [this]( const SELECTION& sel )
+            {
+                LIB_ID targetLibId = GetTargetLibId();
+                return !targetLibId.GetLibNickname().empty() && !targetLibId.GetLibItemName().empty();
+            };
+
     auto saveSymbolAsCondition =
             [this]( const SELECTION& aSel )
             {
@@ -579,7 +586,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             };
 
     mgr->SetConditions( ACTIONS::showDatasheet,        ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( SCH_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::symbolProperties, ENABLE( symbolSelectedInTreeCondition || ( canEditProperties && haveSymbolCond ) ) );
     mgr->SetConditions( SCH_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,   ENABLE( multiBodyStyleModeCond ) );

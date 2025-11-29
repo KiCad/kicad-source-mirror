@@ -73,6 +73,7 @@ private:
     void editTextBoxProperties( SCH_ITEM* aItem );
     void editFieldProperties( SCH_FIELD* aField );
     void editSymbolProperties();
+    void editSymbolPropertiesFromLibrary( const LIB_ID& aLibId );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
