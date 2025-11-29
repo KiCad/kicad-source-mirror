@@ -87,15 +87,15 @@ public:
     typedef std::unordered_map< wxString, KIID >            KIID_MAP;
 
     PCB_IO_KICAD_SEXPR_PARSER( LINE_READER* aReader, BOARD* aAppendToMe,
-                std::function<bool( wxString, int, wxString, wxString )> aQueryUserCallback,
-                PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
-        PCB_LEXER( aReader ),
-        m_board( aAppendToMe ),
-        m_appendToExisting( aAppendToMe != nullptr ),
-        m_progressReporter( aProgressReporter ),
-        m_lastProgressTime( std::chrono::steady_clock::now() ),
-        m_lineCount( aLineCount ),
-        m_queryUserCallback( std::move( aQueryUserCallback ) )
+                               std::function<bool( wxString, int, wxString, wxString )> aQueryUserCallback,
+                               PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
+            PCB_LEXER( aReader ),
+            m_board( aAppendToMe ),
+            m_appendToExisting( aAppendToMe != nullptr ),
+            m_progressReporter( aProgressReporter ),
+            m_lastProgressTime( std::chrono::steady_clock::now() ),
+            m_lineCount( aLineCount ),
+            m_queryUserCallback( std::move( aQueryUserCallback ) )
     {
         init();
     }
@@ -395,8 +395,7 @@ private:
      */
     bool parseMaybeAbsentBool( bool aDefaultValue );
 
-    std::pair<std::optional<bool>, std::optional<bool>>
-    parseFrontBackOptBool( bool aLegacy = false );
+    std::pair<std::optional<bool>, std::optional<bool>> parseFrontBackOptBool( bool aAllowLegacyFormat = false );
 
     void parseNet( BOARD_CONNECTED_ITEM* aItem );
 

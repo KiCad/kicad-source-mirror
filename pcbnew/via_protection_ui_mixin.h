@@ -32,7 +32,7 @@ class VIA_PROTECTION_UI_MIXIN
 protected:
     enum class IPC4761_SURFACE
     {
-        FROM_RULES = 0,
+        FROM_BOARD = 0,
         NONE = 1,
         FRONT = 2,
         BACK = 3,
@@ -42,14 +42,14 @@ protected:
 
     enum class IPC4761_DRILL
     {
-        FROM_RULES = 0,
+        FROM_BOARD = 0,
         NOT_SET = 1,
         SET = 2
     };
 
     enum class IPC4761_PRESET
     {
-        FROM_RULES = 0,
+        FROM_BOARD = 0,
         NONE = 1,
         IA = 2,
         IB = 3,
@@ -74,22 +74,22 @@ protected:
 
     struct IPC4761_CONFIGURATION
     {
-        IPC4761_SURFACE tent{ IPC4761_SURFACE::NONE };
-        IPC4761_SURFACE cover{ IPC4761_SURFACE::NONE };
-        IPC4761_SURFACE plug{ IPC4761_SURFACE::NONE };
-        IPC4761_DRILL   fill{ IPC4761_DRILL::NOT_SET };
-        IPC4761_DRILL   cap{ IPC4761_DRILL::NOT_SET };
+        IPC4761_SURFACE tent =  IPC4761_SURFACE::NONE;
+        IPC4761_SURFACE cover = IPC4761_SURFACE::NONE;
+        IPC4761_SURFACE plug =  IPC4761_SURFACE::NONE;
+        IPC4761_DRILL   fill =  IPC4761_DRILL::NOT_SET;
+        IPC4761_DRILL   cap =   IPC4761_DRILL::NOT_SET;
 
         bool operator==( const IPC4761_CONFIGURATION& other ) const;
     };
 
     const std::map<IPC4761_PRESET, IPC4761_CONFIGURATION> m_IPC4761Presets =
     {
-        { IPC4761_PRESET::FROM_RULES, { .tent = IPC4761_SURFACE::FROM_RULES,
-                                        .cover = IPC4761_SURFACE::FROM_RULES,
-                                        .plug = IPC4761_SURFACE::FROM_RULES,
-                                        .fill = IPC4761_DRILL::FROM_RULES,
-                                        .cap = IPC4761_DRILL::FROM_RULES } },
+        { IPC4761_PRESET::FROM_BOARD, { .tent =  IPC4761_SURFACE::FROM_BOARD,
+                                        .cover = IPC4761_SURFACE::FROM_BOARD,
+                                        .plug =  IPC4761_SURFACE::FROM_BOARD,
+                                        .fill =  IPC4761_DRILL::FROM_BOARD,
+                                        .cap =   IPC4761_DRILL::FROM_BOARD } },
         { IPC4761_PRESET::NONE, {} },
         { IPC4761_PRESET::IA, { .tent = IPC4761_SURFACE::FRONT } },
         { IPC4761_PRESET::IB, { .tent = IPC4761_SURFACE::BOTH } },
@@ -114,27 +114,27 @@ protected:
 
     const std::map<IPC4761_PRESET, wxString> m_IPC4761Names =
     {
-        { IPC4761_PRESET::FROM_RULES, _( "From rules" ) },
-        { IPC4761_PRESET::NONE, _( "None" ) },
-        { IPC4761_PRESET::IA, _( "Type I-a (tented top)" ) },
-        { IPC4761_PRESET::IB, _( "Type I-b (tented both sides)" ) },
-        { IPC4761_PRESET::IA_INVERTED, _( "Type I-a (tented bottom)" ) },
-        { IPC4761_PRESET::IIA, _( "Type II-a (covered and tented top)" ) },
-        { IPC4761_PRESET::IIB, _( "Type II-b (covered and tented both sides)" ) },
-        { IPC4761_PRESET::IIA_INVERTED, _( "Type II-a (covered and tented bottom)" ) },
-        { IPC4761_PRESET::IIIA, _( "Type III-a (plugged top)" ) },
-        { IPC4761_PRESET::IIIB, _( "Type III-b (plugged both sides)" ) },
+        { IPC4761_PRESET::FROM_BOARD,    _( "From rules" ) },
+        { IPC4761_PRESET::NONE,          _( "None" ) },
+        { IPC4761_PRESET::IA,            _( "Type I-a (tented top)" ) },
+        { IPC4761_PRESET::IB,            _( "Type I-b (tented both sides)" ) },
+        { IPC4761_PRESET::IA_INVERTED,   _( "Type I-a (tented bottom)" ) },
+        { IPC4761_PRESET::IIA,           _( "Type II-a (covered and tented top)" ) },
+        { IPC4761_PRESET::IIB,           _( "Type II-b (covered and tented both sides)" ) },
+        { IPC4761_PRESET::IIA_INVERTED,  _( "Type II-a (covered and tented bottom)" ) },
+        { IPC4761_PRESET::IIIA,          _( "Type III-a (plugged top)" ) },
+        { IPC4761_PRESET::IIIB,          _( "Type III-b (plugged both sides)" ) },
         { IPC4761_PRESET::IIIA_INVERTED, _( "Type III-a (plugged bottom)" ) },
-        { IPC4761_PRESET::IVA, _( "Type IV-a (plugged and tented top)" ) },
-        { IPC4761_PRESET::IVB, _( "Type IV-b (plugged and tented both sides)" ) },
-        { IPC4761_PRESET::IVA_INVERTED, _( "Type IV-a (plugged and tented bottom)" ) },
-        { IPC4761_PRESET::V, _( "Type V (filled )" ) },
-        { IPC4761_PRESET::VIA, _( "Type VI-a (filled and tented top)" ) },
-        { IPC4761_PRESET::VIB, _( "Type VI-b (filled and tented both sides)" ) },
-        { IPC4761_PRESET::VIA_INVERTED, _( "Type VI-a (filled and tented bottom)" ) },
-        { IPC4761_PRESET::VII, _( "Type VII (filled and capped)" ) },
-        { IPC4761_PRESET::CUSTOM, _( "Custom" ) },
-        { IPC4761_PRESET::END, _( "End" ) }
+        { IPC4761_PRESET::IVA,           _( "Type IV-a (plugged and tented top)" ) },
+        { IPC4761_PRESET::IVB,           _( "Type IV-b (plugged and tented both sides)" ) },
+        { IPC4761_PRESET::IVA_INVERTED,  _( "Type IV-a (plugged and tented bottom)" ) },
+        { IPC4761_PRESET::V,             _( "Type V (filled )" ) },
+        { IPC4761_PRESET::VIA,           _( "Type VI-a (filled and tented top)" ) },
+        { IPC4761_PRESET::VIB,           _( "Type VI-b (filled and tented both sides)" ) },
+        { IPC4761_PRESET::VIA_INVERTED,  _( "Type VI-a (filled and tented bottom)" ) },
+        { IPC4761_PRESET::VII,           _( "Type VII (filled and capped)" ) },
+        { IPC4761_PRESET::CUSTOM,        _( "Custom" ) },
+        { IPC4761_PRESET::END,           _( "End" ) }
     };
 
     IPC4761_SURFACE getProtectionSurface( const std::optional<bool>& front, const std::optional<bool>& back )
@@ -142,7 +142,7 @@ protected:
         IPC4761_SURFACE value = IPC4761_SURFACE::CUSTOM;
 
         if( !front.has_value() )
-            value = IPC4761_SURFACE::FROM_RULES;
+            value = IPC4761_SURFACE::FROM_BOARD;
         else if( front.value() )
             value = IPC4761_SURFACE::FRONT;
         else
@@ -150,8 +150,8 @@ protected:
 
         if( !back.has_value() )
         {
-            if( value == IPC4761_SURFACE::FROM_RULES )
-                return IPC4761_SURFACE::FROM_RULES;
+            if( value == IPC4761_SURFACE::FROM_BOARD )
+                return IPC4761_SURFACE::FROM_BOARD;
         }
         else if( back.value() )
         {
@@ -174,7 +174,7 @@ protected:
     IPC4761_DRILL getProtectionDrill( const std::optional<bool>& drill )
     {
         if( !drill.has_value() )
-            return IPC4761_DRILL::FROM_RULES;
+            return IPC4761_DRILL::FROM_BOARD;
         if( drill.value() )
             return IPC4761_DRILL::SET;
 
@@ -211,7 +211,7 @@ protected:
     {
         switch( aProtection )
         {
-        case IPC4761_SURFACE::FROM_RULES:
+        case IPC4761_SURFACE::FROM_BOARD:
             aFront.reset();
             aBack.reset();
             break;
@@ -240,7 +240,7 @@ protected:
     {
         switch( aProtection )
         {
-        case IPC4761_DRILL::FROM_RULES: aDrill.reset(); break;
+        case IPC4761_DRILL::FROM_BOARD: aDrill.reset(); break;
         case IPC4761_DRILL::NOT_SET:    aDrill = false; break;
         case IPC4761_DRILL::SET:        aDrill = true;  break;
         }

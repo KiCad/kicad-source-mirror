@@ -6289,8 +6289,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                 }
 
                 case T_roundrect_rratio:
-                    aPad->SetRoundRectRadiusRatio( curLayer,
-                                                   parseDouble( "roundrect radius ratio" ) );
+                    aPad->SetRoundRectRadiusRatio( curLayer, parseDouble( "roundrect radius ratio" ) );
                     NeedRIGHT();
                     break;
 
@@ -6351,8 +6350,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                 }
 
                 case T_thermal_bridge_width:
-                    padstack.ThermalSpokeWidth( curLayer ) =
-                            parseBoardUnits( "thermal relief spoke width" );
+                    padstack.ThermalSpokeWidth( curLayer ) = parseBoardUnits( "thermal relief spoke width" );
                     NeedRIGHT();
                     break;
 
@@ -6362,14 +6360,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     break;
 
                 case T_thermal_bridge_angle:
-                    padstack.SetThermalSpokeAngle(
-                            EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
+                    padstack.SetThermalSpokeAngle( EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
                     NeedRIGHT();
                     break;
 
                 case T_zone_connect:
-                    padstack.ZoneConnection( curLayer ) = magic_enum::enum_cast<ZONE_CONNECTION>(
-                            parseInt( "zone connection value" ) );
+                    padstack.ZoneConnection( curLayer ) =
+                            magic_enum::enum_cast<ZONE_CONNECTION>( parseInt( "zone connection value" ) );
                     NeedRIGHT();
                     break;
 
@@ -6593,10 +6590,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
             break;
 
         case T_members:
-        {
             parseGROUP_members( groupInfo );
             break;
-        }
 
         default:
             Expecting( "uuid, locked, lib_id, or members" );
@@ -6674,17 +6669,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
             switch( tok1 )
             {
             case T_yes:
-            {
                 genInfo.properties.emplace( pName, wxAny( true ) );
                 NeedRIGHT();
                 break;
-            }
+
             case T_no:
-            {
                 genInfo.properties.emplace( pName, wxAny( false ) );
                 NeedRIGHT();
                 break;
-            }
+
             case T_NUMBER:
             {
                 double pValue = parseDouble();
@@ -6692,6 +6685,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
                 NeedRIGHT();
                 break;
             }
+
             case T_STRING: // Quoted string
             {
                 wxString pValue = FromUTF8();
@@ -6699,6 +6693,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
                 NeedRIGHT();
                 break;
             }
+
             case T_LEFT:
             {
                 NeedSYMBOL();
@@ -6716,9 +6711,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
                     genInfo.properties.emplace( pName, wxAny( pt ) );
                     NeedRIGHT();
                     NeedRIGHT();
-
                     break;
                 }
+
                 case T_pts:
                 {
                     SHAPE_LINE_CHAIN chain;
@@ -6727,16 +6722,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
                         parseOutlinePoints( chain );
 
                     NeedRIGHT();
-
                     genInfo.properties.emplace( pName, wxAny( chain ) );
                     break;
                 }
-                default: Expecting( "xy or pts" );
+
+                default:
+                    Expecting( "xy or pts" );
                 }
 
                 break;
             }
-            default: Expecting( "a number, symbol, string or (" );
+
+            default:
+                Expecting( "a number, symbol, string or (" );
             }
 
             break;
@@ -6838,8 +6836,7 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
             break;
 
         default:
-            Expecting( "start, mid, end, width, layer, solder_mask_margin, net, tstamp, uuid, "
-                       "or status" );
+            Expecting( "start, mid, end, width, layer, solder_mask_margin, net, tstamp, uuid or status" );
         }
     }
 
@@ -6934,8 +6931,7 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
             break;
 
         default:
-            Expecting( "start, end, width, layer, solder_mask_margin, net, tstamp, uuid, "
-                       "or locked" );
+            Expecting( "start, end, width, layer, solder_mask_margin, net, tstamp, uuid or locked" );
         }
     }
 
@@ -6961,6 +6957,18 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
     // File format default is no-token == no-feature.
     via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+
+    // Versions before 10.0 had no protection features other than tenting, so those features must
+    // be interpreted as OFF in legacy boards, not as unspecified (aka: inherit from board stackup)
+    if( m_requiredVersion < 20250228 )
+    {
+        via->Padstack().FrontOuterLayers().has_covering = false;
+        via->Padstack().BackOuterLayers().has_covering = false;
+        via->Padstack().FrontOuterLayers().has_plugging = false;
+        via->Padstack().BackOuterLayers().has_plugging = false;
+        via->Padstack().Drill().is_filled = false;
+        via->Padstack().Drill().is_capped = false;
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -7027,26 +7035,22 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         case T_remove_unused_layers:
-        {
-            bool remove = parseMaybeAbsentBool( true );
-            via->SetRemoveUnconnected( remove );
+            if( parseMaybeAbsentBool( true ) )
+                via->SetRemoveUnconnected( true );
+
             break;
-        }
 
         case T_keep_end_layers:
-        {
-            bool keep = parseMaybeAbsentBool( true );
-            via->SetKeepStartEnd( keep );
+            if( parseMaybeAbsentBool( true ) )
+                via->SetKeepStartEnd( true );
+
             break;
-        }
 
         case T_start_end_only:
-        {
             if( parseMaybeAbsentBool( true ) )
                 via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
 
             break;
-        }
 
         case T_zone_layer_connections:
         {
@@ -7054,9 +7058,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             LSET cuLayers = via->GetLayerSet() & LSET::AllCuMask();
 
             for( PCB_LAYER_ID layer : cuLayers )
-            {
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
-            }
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
@@ -7067,8 +7069,9 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_FLASHED );
             }
-        }
+
             break;
+        }
 
         case T_padstack:
             parseViastack( via.get() );
@@ -7085,6 +7088,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             via->Padstack().BackOuterLayers().has_solder_mask = back;
             break;
         }
+
         case T_covering:
         {
             auto [front, back] = parseFrontBackOptBool();
@@ -7092,6 +7096,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             via->Padstack().BackOuterLayers().has_covering = back;
             break;
         }
+
         case T_plugging:
         {
             auto [front, back] = parseFrontBackOptBool();
@@ -7099,18 +7104,16 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             via->Padstack().BackOuterLayers().has_plugging = back;
             break;
         }
+
         case T_filling:
-        {
             via->Padstack().Drill().is_filled = parseOptBool();
             NeedRIGHT();
             break;
-        }
+
         case T_capping:
-        {
             via->Padstack().Drill().is_capped = parseOptBool();
             NeedRIGHT();
             break;
-        }
 
         case T_tstamp:
         case T_uuid:
@@ -7134,8 +7137,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, uuid, status or "
-                       "teardrops" );
+            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, uuid, status or teardrops" );
         }
     }
 
@@ -7144,43 +7146,40 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
 
 std::pair<std::optional<bool>, std::optional<bool>>
-PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aLegacy )
+PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
 {
     T token = NextTok();
 
     std::optional<bool> front( std::nullopt );
     std::optional<bool> back( std::nullopt );
 
-    if( token != T_LEFT && aLegacy )
+    if( token != T_LEFT && aAllowLegacyFormat )
     {
         // legacy format for tenting.
-        if( token == T_front || token == T_back || token == T_none )
+        while( token != T_RIGHT )
         {
-            while( token != T_RIGHT )
+            if( token == T_front )
             {
-                if( token == T_front )
-                {
-                    front = true;
-                }
-                else if( token == T_back )
-                {
-                    back = true;
-                }
-                else if( token == T_none )
-                {
-                    front.reset();
-                    back.reset();
-                }
-                else
-                {
-                    Expecting( "front, back or none" );
-                }
-
-                token = NextTok();
+                front = true;
+            }
+            else if( token == T_back )
+            {
+                back = true;
+            }
+            else if( token == T_none )
+            {
+                front.reset();
+                back.reset();
+            }
+            else
+            {
+                Expecting( "front, back or none" );
             }
 
-            return { front, back };
+            token = NextTok();
         }
+
+        return { front, back };
     }
 
     while( token != T_RIGHT )
