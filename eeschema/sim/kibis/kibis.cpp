@@ -233,6 +233,33 @@ KIBIS_PIN::KIBIS_PIN( KIBIS& aTopLevel, const IbisComponentPin& aPin,
 }
 
 
+KIBIS_SUBMODEL::KIBIS_SUBMODEL( KIBIS& aTopLevel, const IbisSubmodel& aSource, IBIS_SUBMODEL_MODE aMode ) :
+        KIBIS_BASE( &aTopLevel ),
+        m_GNDClamp( aTopLevel.m_Reporter ),
+        m_POWERClamp( aTopLevel.m_Reporter )
+{
+    m_name = aSource.m_name;
+    m_type = aSource.m_type;
+    m_mode = aMode;
+
+    m_GNDClamp = aSource.m_GNDClamp;
+    m_POWERClamp = aSource.m_POWERClamp;
+
+    m_valid = true;
+}
+
+bool KIBIS_SUBMODEL::HasGNDClamp() const
+{
+    return m_GNDClamp.m_entries.size() > 0;
+}
+
+
+bool KIBIS_SUBMODEL::HasPOWERClamp() const
+{
+    return m_POWERClamp.m_entries.size() > 0;
+}
+
+
 KIBIS_MODEL::KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser& aParser ) :
         KIBIS_BASE( &aTopLevel ),
         m_C_comp( aTopLevel.m_Reporter ),
@@ -286,7 +313,20 @@ KIBIS_MODEL::KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser
     m_POWERClamp = aSource.m_POWERClamp;
     m_POWERClampReference = aSource.m_POWERClampReference;
 
-    m_C_comp = aSource.m_C_comp;
+    if( aSource.m_C_comp.isNA() )
+    {
+        m_C_comp.value[IBIS_CORNER::TYP] = 0.0;
+        m_C_comp.value[IBIS_CORNER::MIN] = 0.0;
+        m_C_comp.value[IBIS_CORNER::MAX] = 0.0;
+        m_C_comp.Add( aSource.m_C_comp_pullup );
+        m_C_comp.Add( aSource.m_C_comp_pulldown );
+        m_C_comp.Add( aSource.m_C_comp_gnd_clamp );
+        m_C_comp.Add( aSource.m_C_comp_power_clamp );
+    }
+    else
+    {
+        m_C_comp = aSource.m_C_comp;
+    }
     m_voltageRange = aSource.m_voltageRange;
     m_temperatureRange = aSource.m_temperatureRange;
     m_pullupReference = aSource.m_pullupReference;
@@ -298,6 +338,26 @@ KIBIS_MODEL::KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser
     m_Cac = aSource.m_Cac;
     m_pullup = aSource.m_pullup;
     m_pulldown = aSource.m_pulldown;
+
+    for( const IbisSubmodelMode& submodel : aSource.m_submodels )
+    {
+        auto it = aParser.m_ibisFile.m_submodels.find( submodel.m_name );
+
+        if( it != aParser.m_ibisFile.m_submodels.end() )
+        {
+            const IbisSubmodel& submodelSource = it->second;
+
+            // For now, we only support static mode dynamic clamp submodels.
+            if( submodelSource.m_type != IBIS_SUBMODEL_TYPE::DYNAMIC_CLAMP
+                || !submodelSource.m_VtriggerR.isNA()
+                || !submodelSource.m_VtriggerF.isNA() )
+            {
+                break;
+            }
+
+            m_submodels.emplace_back( aTopLevel, submodelSource, submodel.m_mode );
+        }
+    }
 
     m_valid = status;
 }
@@ -365,7 +425,7 @@ std::vector<std::pair<IbisWaveform*, IbisWaveform*>> KIBIS_MODEL::waveformPairs(
 }
 
 
-std::string KIBIS_MODEL::SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex ) const
+std::string KIBIS_MODEL::SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex, bool aDriver ) const
 {
     std::string result;
 
@@ -407,32 +467,61 @@ std::string KIBIS_MODEL::SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex ) c
 
     if( HasGNDClamp() )
     {
-        result += m_GNDClamp.Spice( aIndex * 4 + 1, DIE, GC_GND, GC, supply );
-        result += "VmeasGC GND " + GC_GND + " 0\n";
+        result += m_GNDClamp.Spice( aIndex * 4 + 1, DIE, GC_GND, false, GC, supply );
+        result += "Vmeas" + GC + " GND " + GC_GND + " 0\n";
     }
 
     if( HasPOWERClamp() )
     {
-        result += m_POWERClamp.Spice( aIndex * 4 + 2, "POWER", DIE, PC, supply );
-        result += "VmeasPC POWER " + PC_PWR + " 0\n";
+        result += m_POWERClamp.Spice( aIndex * 4 + 2, PC_PWR, DIE, true, PC, supply );
+        result += "Vmeas" + PC + " POWER " + PC_PWR + " 0\n";
     }
 
-    if( HasPulldown() )
+    if( aDriver && HasPulldown() )
     {
-        result += m_pulldown.Spice( aIndex * 4 + 3, DIEBUFF, PD_GND, PD, supply );
+        result += m_pulldown.Spice( aIndex * 4 + 3, DIEBUFF, PD_GND, false, PD, supply );
         result += "VmeasPD GND " + PD_GND + " 0\n";
         result += "BKD GND " + DIE + " i=( i(VmeasPD) * v(KD) )\n";
     }
 
-    if( HasPullup() )
+    if( aDriver && HasPullup() )
     {
-        result += m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIEBUFF, PU, supply );
+        result += m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIEBUFF, true, PU, supply );
         result += "VmeasPU POWER " + PU_PWR + " 0\n";
         result += "BKU POWER " + DIE + " i=( -i(VmeasPU) * v(KU) )\n";
     }
 
-    if ( HasPullup() || HasPulldown() )
+    if( aDriver && ( HasPullup() || HasPulldown() ) )
         result += "BDIEBUFF " + DIEBUFF + " GND v=v(" + DIE + ")\n";
+
+    for( const KIBIS_SUBMODEL& submodel : m_submodels )
+    {
+        if( aDriver && ( submodel.m_mode == IBIS_SUBMODEL_MODE::NON_DRIVING ) )
+            continue;
+
+        if( !aDriver && ( submodel.m_mode == IBIS_SUBMODEL_MODE::DRIVING ) )
+            continue;
+
+        aIndex++;
+
+        GC_GND = "GC_GND" + std::to_string( aIndex );
+        PC_PWR = "PC_PWR" + std::to_string( aIndex );
+
+        GC = "GC" + std::to_string( aIndex );
+        PC = "PC" + std::to_string( aIndex );
+
+        if( submodel.HasGNDClamp() )
+        {
+            result += submodel.m_GNDClamp.Spice( aIndex * 4 + 1, DIE, GC_GND, false, GC, supply );
+            result += "Vmeas" + GC + " GND " + GC_GND + " 0\n";
+        }
+
+        if( submodel.HasPOWERClamp() )
+        {
+            result += submodel.m_POWERClamp.Spice( aIndex * 4 + 2, PC_PWR, DIE, true, PC, supply );
+            result += "Vmeas" + PC + " POWER " + PC_PWR + " 0\n";
+        }
+    }
 
     return result;
 }
@@ -628,16 +717,16 @@ std::string KIBIS_PIN::addDie( KIBIS_MODEL& aModel, const KIBIS_PARAMETER& aPara
     PD += std::to_string( aIndex );
 
     if( aModel.HasGNDClamp() )
-        simul += aModel.m_GNDClamp.Spice( aIndex * 4 + 1, DIE, GC_GND, GC, supply );
+        simul += aModel.m_GNDClamp.Spice( aIndex * 4 + 1, DIE, GC_GND, false, GC, supply );
 
     if( aModel.HasPOWERClamp() )
-        simul += aModel.m_POWERClamp.Spice( aIndex * 4 + 2, PC_PWR, DIE, PC, supply );
+        simul += aModel.m_POWERClamp.Spice( aIndex * 4 + 2, PC_PWR, DIE, true, PC, supply );
 
     if( aModel.HasPulldown() )
-        simul += aModel.m_pulldown.Spice( aIndex * 4 + 3, DIE, PD_GND, PD, supply );
+        simul += aModel.m_pulldown.Spice( aIndex * 4 + 3, DIE, PD_GND, false, PD, supply );
 
     if( aModel.HasPullup() )
-        simul += aModel.m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIE, PU, supply );
+        simul += aModel.m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIE, true, PU, supply );
 
     return simul;
 }
@@ -1227,7 +1316,7 @@ bool KIBIS_PIN::writeSpiceDriver( std::string& aDest, const std::string& aName, 
 
         result += ") \n";
 
-        result += aModel.SpiceDie( aParam, 0 );
+        result += aModel.SpiceDie( aParam, 0, true );
 
         result += "\n.ENDS DRIVER\n\n";
 
@@ -1276,13 +1365,9 @@ bool KIBIS_PIN::writeSpiceDevice( std::string& aDest, const std::string& aName, 
         result += doubleToString( m_Cpin.value[aParam.m_Cpin] );
         result += "\n";
 
+        result += aModel.SpiceDie( aParam, 0, false );
 
-        result += "Vku KU GND pwl ( 0 0 )\n";
-        result += "Vkd KD GND pwl ( 0 0 )\n";
-
-        result += aModel.SpiceDie( aParam, 0 );
-
-        result += "\n.ENDS DRIVER\n\n";
+        result += "\n.ENDS DEVICE\n\n";
 
         aDest = std::move( result );
         break;

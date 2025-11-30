@@ -45,6 +45,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
 #include <math.h>
 #include <cstring>
 
@@ -125,52 +126,9 @@ public:
 
     virtual ~IBIS_MATRIX(){};
 
-    IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::UNDEFINED;
-    int              m_dim = -5;
-    std::vector<double> m_data;
-};
-
-
-class IBIS_MATRIX_BANDED : public IBIS_MATRIX
-{
-public:
-    IBIS_MATRIX_BANDED( REPORTER* aReporter ) :
-            IBIS_MATRIX( aReporter )
-    {};
-
-    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::BANDED;
-    int                 m_dim = -2;
-    int                 m_bandwidth = 0;
-    std::vector<double> m_data;
-
-    bool Check() override;
-};
-
-
-class IBIS_MATRIX_SPARSE : public IBIS_MATRIX
-{
-public:
-    IBIS_MATRIX_SPARSE( REPORTER* aReporter ) :
-            IBIS_MATRIX( aReporter )
-    {};
-
-    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::BANDED;
-    int                 m_dim = -3;
-    std::vector<double> m_data;
-
-    bool Check() override;
-};
-
-
-class IBIS_MATRIX_FULL : public IBIS_MATRIX
-{
-public:
-    IBIS_MATRIX_FULL( REPORTER* aReporter ) :
-            IBIS_MATRIX( aReporter )
-    {};
-
-    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::FULL;
-    int                 m_dim = -4;
+    IBIS_MATRIX_TYPE    m_type = IBIS_MATRIX_TYPE::UNDEFINED;
+    int                 m_rows = -1;
+    int                 m_cols = -1;
     std::vector<double> m_data;
 
     bool Check() override;
@@ -213,9 +171,13 @@ public:
             IBIS_INPUT( aReporter )
     {};
 
-    double value[3] = { -1, -1, -1 };
+    double value[3] = { nan( NAN_NA ), nan( NAN_NA ), nan( NAN_NA ) };
+
+    bool isNA() const;
 
     bool Check() override;
+
+    void Add( const TypMinMaxValue& aValue );
 };
 
 
@@ -407,11 +369,12 @@ public:
      * @param aN Index of the 'a' device
      * @param aPort1 Spice node
      * @param aPort2 Spice node
-     * @param aPort2 Name of the generated model
+     * @param aNegateI Negate I values
+     * @param aModelName Name of the generated model
      * @param aCorner Power supply corner
      * @return Multline spice directives
      */
-    std::string Spice( int aN, const std::string& aPort1, const std::string& aPort2,
+    std::string Spice( int aN, const std::string& aPort1, const std::string& aPort2, bool aNegateI,
                        const std::string& aModelName, IBIS_CORNER aCorner ) const;
 
 private:
@@ -552,12 +515,37 @@ enum class IBIS_MODEL_POLARITY
 };
 
 
+enum class IBIS_SUBMODEL_MODE
+{
+    ALL,
+    DRIVING,
+    NON_DRIVING
+};
+
+
+class IbisSubmodelMode
+{
+public:
+    IbisSubmodelMode( std::string name, IBIS_SUBMODEL_MODE mode ) :
+            m_name( name ),
+            m_mode( mode )
+    {};
+
+    std::string        m_name;
+    IBIS_SUBMODEL_MODE m_mode;
+};
+
+
 class IbisModel : IBIS_INPUT
 {
 public:
     IbisModel( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             m_C_comp( aReporter ),
+            m_C_comp_gnd_clamp( aReporter ),
+            m_C_comp_power_clamp( aReporter ),
+            m_C_comp_pullup( aReporter ),
+            m_C_comp_pulldown( aReporter ),
             m_voltageRange( aReporter ),
             m_temperatureRange( aReporter ),
             m_pullupReference( aReporter ),
@@ -572,6 +560,9 @@ public:
             m_POWERClamp( aReporter ),
             m_pullup( aReporter ),
             m_pulldown( aReporter ),
+            m_ISSO_PU( aReporter ),
+            m_ISSO_PD( aReporter ),
+            m_compositeCurrent( aReporter ),
             m_ramp( aReporter )
     {};
 
@@ -593,6 +584,10 @@ public:
     // End of optional subparameters
 
     TypMinMaxValue             m_C_comp;
+    TypMinMaxValue             m_C_comp_gnd_clamp;
+    TypMinMaxValue             m_C_comp_power_clamp;
+    TypMinMaxValue             m_C_comp_pullup;
+    TypMinMaxValue             m_C_comp_pulldown;
     TypMinMaxValue             m_voltageRange;
     TypMinMaxValue             m_temperatureRange;
     TypMinMaxValue             m_pullupReference;
@@ -607,9 +602,62 @@ public:
     IVtable                    m_POWERClamp;
     IVtable                    m_pullup;
     IVtable                    m_pulldown;
+    IVtable                    m_ISSO_PU;
+    IVtable                    m_ISSO_PD;
+    IVtable                    m_compositeCurrent;
     std::vector<IbisWaveform*> m_risingWaveforms;
     std::vector<IbisWaveform*> m_fallingWaveforms;
     IbisRamp                   m_ramp;
+
+    std::vector<IbisSubmodelMode> m_submodels;
+
+    bool Check() override;
+};
+
+
+enum class IBIS_SUBMODEL_TYPE
+{
+    UNDEFINED,
+    DYNAMIC_CLAMP,
+    BUS_HOLD,
+    FALL_BACK
+};
+
+
+class IbisSubmodel : IBIS_INPUT
+{
+public:
+    IbisSubmodel( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_VtriggerR( aReporter ),
+            m_VtriggerF( aReporter ),
+            m_offDelay( aReporter ),
+            m_pullup( aReporter ),
+            m_pulldown( aReporter ),
+            m_GNDClamp( aReporter ),
+            m_POWERClamp( aReporter ),
+            m_GNDPulse( aReporter ),
+            m_POWERPulse( aReporter ),
+            m_ramp( aReporter )
+    {};
+
+    virtual ~IbisSubmodel()
+    {};
+
+    std::string                m_name;
+    IBIS_SUBMODEL_TYPE         m_type = IBIS_SUBMODEL_TYPE::UNDEFINED;
+    TypMinMaxValue             m_VtriggerR;
+    TypMinMaxValue             m_VtriggerF;
+    TypMinMaxValue             m_offDelay;
+    IVtable                    m_pullup;
+    IVtable                    m_pulldown;
+    IVtable                    m_GNDClamp;
+    IVtable                    m_POWERClamp;
+    IVtable                    m_GNDPulse;
+    IVtable                    m_POWERPulse;
+    IbisRamp                   m_ramp;
+    std::vector<IbisWaveform*> m_risingWaveforms;
+    std::vector<IbisWaveform*> m_fallingWaveforms;
 
     bool Check() override;
 };
@@ -625,12 +673,12 @@ public:
     virtual ~IbisPackageModel()
     {};
 
-    std::string              m_name;
-    std::string              m_manufacturer;
-    std::string              m_OEM;
-    std::string              m_description;
-    int                      m_numberOfPins = 0;
-    std::vector<std::string> m_pins;
+    std::string                m_name;
+    std::string                m_manufacturer;
+    std::string                m_OEM;
+    std::string                m_description;
+    int                        m_numberOfPins = 0;
+    std::map<std::string, int> m_pins;
 
     std::shared_ptr<IBIS_MATRIX> m_resistanceMatrix;
     std::shared_ptr<IBIS_MATRIX> m_capacitanceMatrix;
@@ -651,11 +699,12 @@ public:
     virtual ~IbisFile()
     {};
 
-    IbisHeader                      m_header;
-    std::vector<IbisComponent>      m_components;
-    std::vector<IbisModelSelector>  m_modelSelectors;
-    std::vector<IbisModel>          m_models;
-    std::vector<IbisPackageModel>   m_packageModels;
+    IbisHeader                          m_header;
+    std::vector<IbisComponent>          m_components;
+    std::vector<IbisModelSelector>      m_modelSelectors;
+    std::vector<IbisModel>              m_models;
+    std::vector<IbisPackageModel>       m_packageModels;
+    std::map<std::string, IbisSubmodel> m_submodels;
 };
 
 
@@ -672,6 +721,11 @@ enum class IBIS_PARSER_CONTINUE
     MODELSELECTOR,
     MODEL,
     MODEL_SPEC,
+    SUBMODEL,
+    SUBMODEL_SPEC,
+    RX_THRESHOLDS,
+    ALGORITHMIC_MODEL,
+    ADD_SUBMODEL,
     IV_TABLE,
     VT_TABLE,
     RAMP,
@@ -685,8 +739,10 @@ enum class IBIS_PARSER_CONTEXT
     COMPONENT,
     MODELSELECTOR,
     MODEL,
+    SUBMODEL,
     PACKAGEMODEL,
     PACKAGEMODEL_MODELDATA,
+    ALGORITHMIC_MODEL,
     END
 };
 
@@ -713,10 +769,11 @@ public:
     IbisComponent*     m_currentComponent = nullptr;
     IbisModelSelector* m_currentModelSelector = nullptr;
     IbisModel*         m_currentModel = nullptr;
+    IbisSubmodel*      m_currentSubmodel = nullptr;
     IbisPackageModel*  m_currentPackageModel = nullptr;
     std::shared_ptr<IBIS_MATRIX> m_currentMatrix = nullptr;
     int                m_currentMatrixRow = 0;
-    int                m_currentMatrixRowIndex = 0;
+    int                m_currentMatrixCol = 0;
     IVtable*           m_currentIVtable = nullptr;
     VTtable*           m_currentVTtable = nullptr;
     IbisWaveform*      m_currentWaveform = nullptr;
@@ -757,33 +814,47 @@ private:
      */
     bool parseComponent( std::string& aKeyword );
 
-    /** @brief Parse a single keyword in the component context
+    /** @brief Parse a single keyword in the model selector context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModelSelector( std::string& aKeyword );
 
-    /** @brief Parse a single keyword in the model selector context
+    /** @brief Parse a single keyword in the model context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
     bool parseModel( std::string& aKeyword );
 
-    /** @brief Parse a single keyword in the model context
+    /** @brief Parse a single keyword in the submodel context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
-    bool parsePackageModel( std::string& aKeyword );
+    bool parseSubmodel( std::string& aKeyword );
 
     /** @brief Parse a single keyword in the package model context
      *
      * @param aKeyword Keyword
      * @return True in case of success
      */
-    bool parsePackageModelModelData( std::string& );
+    bool parsePackageModel( std::string& aKeyword );
+
+    /** @brief Parse a single keyword in the package model model data context
+     *
+     * @param aKeyword Keyword
+     * @return True in case of success
+     */
+    bool parsePackageModelModelData( std::string& aKeyword );
+
+    /** @brief Parse a single keyword in the algorithmic model context
+     *
+     * @param aKeyword Keyword
+     * @return True in case of success
+     */
+    bool parseAlgorithmicModel( std::string& aKeyword );
 
     /** @brief Parse a double according to the ibis standard
      *
@@ -793,6 +864,14 @@ private:
      * @return True in case of success
      */
     bool parseDouble( double& aDest, std::string& aStr, bool aAllowModifiers = false );
+
+    /** @brief Parse a dV/dt value according to the ibis standard
+     *
+     * @param aDest Where the dV/dt value should be stored
+     * @param aStr The string to parse
+     * @return True in case of success
+     */
+    bool parseDvdt( dvdt& aDest, std::string& aStr );
 
     /** @brief Parse the current line
      *
@@ -817,14 +896,21 @@ private:
     bool readInt( int& aDest );
     bool readDouble( double& aDest );
     bool readWord( std::string& aDest );
-    bool readDvdt( std::string& aString, dvdt& aDest );
-    bool readMatrix( std::shared_ptr<IBIS_MATRIX> aDest );
-    bool readMatrixBanded( std::string, IBIS_MATRIX_BANDED& aDest );
-    bool readMatrixFull( std::string, IBIS_MATRIX_FULL& aDest );
-    bool readMatrixSparse( std::string, IBIS_MATRIX_SPARSE& aDest );
+    bool readDvdt( dvdt& aDest );
+    bool readMatrixPinIndex( int& aDest );
+    bool readMatrixType( std::shared_ptr<IBIS_MATRIX>& aDest );
+    bool readMatrixBandwidth();
+    bool readMatrixRow();
+    bool readMatrixBandedOrFull();
+    bool readMatrixSparse();
+    bool readMatrixData();
     bool readRampdvdt( dvdtTypMinMax& aDest );
     bool readRamp();
     bool readModelSpec();
+    bool readSubmodelSpec();
+    bool readReceiverThresholds();
+    bool readAlgorithmicModel();
+    bool readAddSubmodel();
     bool readWaveform( IbisWaveform* aDest, IBIS_WAVEFORM_TYPE aType );
     bool readString( std::string& aDest );
     bool storeString( std::string& aDest, bool aMultiline );
@@ -843,6 +929,7 @@ private:
     bool readDiffPin();
     bool readModelSelector();
     bool readModel();
+    bool readSubmodel();
     bool readPackageModelPins();
 
     /** @brief Ibis can change the character used for comments */

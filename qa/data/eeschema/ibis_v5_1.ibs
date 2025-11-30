@@ -1,0 +1,597 @@
+[IBIS Ver]      5.1
+[File Name]     ibis_v5_1.ibs
+[Date]          19/10/2025
+[File Rev]      1.0
+[Source]        Artificial data
+[Notes]         For kibis QA
+[Disclaimer]    This is NOT a valid component
+[Component]     Virtual
+[Manufacturer]  KiCad
+[Package Model] BGA_package
+
+[Package]
+|               typ         min         max
+|
+R_pkg           246m        165m        377m
+L_pkg           1.49nH      0.98nH      2.23nH
+C_pkg           0.40pF      0.29pF      0.56pF
+|
+[Pin]           signal_name model_name  R_pin   L_pin   C_pin
+|
+A1              VSS         GND
+A2              VDD         POWER
+B1              A0          AC          225m    1.18nH  0.39pF
+B2              DQ0         DQ          214m    1.05nH  0.39pF
+|
+[Pin Mapping]   pulldown_ref    pullup_ref      gnd_clamp_ref   power_clamp_ref
+|
+A1              VSS             NC
+A2              NC              VDD
+B1              VSS             VDD             VSS             VDD
+B2              VSS             VDD             VSS             VDD
+|
+[Model Selector] AC
+|
+AC40            Address/command output
+|
+[Model Selector] DQ
+|
+DQ40            Data I/O with no ODT
+DQ40_ODT40      Data I/O with 40ohm ODT
+|
+|***************************************************************************
+|
+[Model]     AC40
+Model_type  Output
+Polarity    Non-Inverting
+Enable      Active-High
+|
+Vmeas = 0.675
+Cref  = 5p
+Rref  = 50
+Vref  = 0.675
+|                   typ         min         max
+|
+C_comp_pullup       1.345e-12   1.325e-12   1.380e-12
+C_comp_pulldown     1.335e-12   1.315e-12   1.370e-12
+|
+|                   nom         slow        fast
+|
+[Voltage Range]     1.35        1.28        1.42
+[Temperature Range] 50C         100C        0C
+|
+[Algorithmic Model]
+|
+This should be ignored.
+|
+[End Algorithmic Model]
+|
+[GND Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35       -26.89m     -20.44m     -35.94m
+    0          -29.09n     -44.53n     -51.87n
+    1.35        0.518u      0           0.444u
+    2.7         0           0           0
+|
+[POWER Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35        55.06m      46.76m      74.09m
+    0           0           0.515u      74.94n
+    1.35        0           0           0
+    2.7         0           0           0
+|
+[ISSO_PD]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35        0.165       0.145       0.187
+    0           26.98m      23.48m      26.88m
+    1.35        0.344u      8.446u      0.361u
+|
+[Pullup]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35        18.04m      16.15m      17.46m
+    0           3.412n      0.527u      0.327u
+    1.35       -26.46m     -24.75m     -22.82m
+    2.7        -31.03m     -28.82m     -27.31m
+|
+[ISSO_PU]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35       -0.172      -0.138      -0.213
+    0          -26.46m     -24.40m     -23.12m
+    1.35       -8.887n     -1.359u     -23.32n
+|
+[Pulldown]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.35       -23.01m     -20.02m     -20.46m
+    0          -38.81n     -32.33n     -49.77n
+    1.35        26.98m      23.63m      26.60m
+    2.7         29.20m      25.40m      29.03m
+|
+[Ramp]
+R_load = 50
+|                   typ         min         max
+|
+dV/dt_r     0.462/0.131n    0.439/0.138n    0.462/0.158n
+dV/dt_f     0.465/0.116n    0.438/0.126n    0.468/0.117n
+|
+[Rising Waveform]
+R_fixture     = 50
+V_fixture     = 0
+V_fixture_min = 0
+V_fixture_max = 0
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0           1.383u      1.563u      2.105u
+    1.003n     -0.4518m    -0.586m     -6.054m
+    1.996n      0.768       0.684       0.770
+    2.55n       0.770       0.731       0.770
+    10n         0.771       0.733       0.771
+|
+[Composite Current]
+|
+|   Time        I(typ)      I(min)      I(max)
+|
+    0           0.211u      0.274u      0.205u
+    1.003n     -0.518u      0.274u      0.942m
+    1.996n      15.47m      15.19m      15.44m
+    2.55n       15.42m      14.68m      15.43m
+    10n         15.42m      14.66m      15.426m
+|
+[Rising Waveform]
+R_fixture     = 50
+V_fixture     = 1.35
+V_fixture_min = 1.28
+V_fixture_max = 1.42
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0           0.573       0.550       0.636
+    1.001n      0.574       0.551       0.906
+    2n          1.348       1.269       1.416
+    2.491n      1.349       1.280       1.416
+    10n         1.349       1.282       1.417
+|
+[Composite Current]
+|
+|   Time        I(typ)      I(min)      I(max)
+|
+    0           0.199u      0.256u      0.190u
+    1.001n      0.485u      0.256u     -2.314m
+    2n          1.758u      0.425m      4.180u
+    2.491n      1.758u      2.567u      4.180u
+    10n         1.758u      2.567u      4.180u
+|
+[Falling Waveform]
+R_fixture     = 50
+V_fixture     = 0
+V_fixture_min = 0
+V_fixture_max = 0
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0           0.771       0.733       0.771
+    1.009n      0.770       0.732       0.324
+    1.981n      1.569m      11.99m      0.941m
+    2.55n       0.855m      1.165m      0.324m
+    10n         2.060u      3.194u      7.381u
+|
+[Composite Current]
+|
+|   Time        I(typ)      I(min)      I(max)
+|
+    0           15.42m      14.66m      15.42m
+    1.009n      15.42m      14.66m      1.972m
+    1.981n      1.588u      51.33u      65.71n
+    2.55n      -58.49n      0.316u     -0.165u
+    10n        -10.85n      67.86n      54.40n
+|
+[Falling Waveform]
+R_fixture     = 50
+V_fixture     = 1.35
+V_fixture_min = 1.28
+V_fixture_max = 1.42
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0           1.349       1.282       1.417
+    1.02n       1.350       1.283       1.382
+    1.988n      0.576       0.606       0.638
+    2.51n       0.574       0.552       0.637
+    10n         0.573       0.550       0.636
+|
+[Composite Current]
+|
+|   Time        I(typ)      I(min)      I(max)
+|
+    0           0.6246u     1.087u      0.628u
+    1.02n       1.430u      1.087u      1.014m
+    1.988n      62.72n      0.570m      88.72n
+    2.51n       62.72n      0.112u      88.72n
+    10n         62.72n      0.112u      88.72n
+|
+|***************************************************************************
+|
+[Model]        DQ40
+Model_type     I/O
+|
+Vinl  = 515mV
+Vinh  = 835mV
+Vmeas = 675mV
+Vref  = 675mV
+Cref  = 0.0pF
+Rref  = 25.0Ohm
+|
+|               typ         min         max
+|
+C_comp          1.36pF      1.26pF      1.46pF
+|
+[Model Spec]
+|
+Vinl            0.515V      0.481V      0.552V
+Vinh            0.835V      0.801V      0.872V
+Vmeas           0.675V      0.641V      0.712V
+Vref            0.675V      0.641V      0.712V
+|
+[Receiver Thresholds]
+Vth      =  0.675V
+Vth_min  =  0.661V
+Vth_max  =  0.688V
+Vinh_ac  =  0.160V
+Vinh_dc  =  0.090V
+Vinl_ac  = -0.160V
+Vinl_dc  = -0.090V
+Tslew_ac =  5.00ns
+Threshold_sensitivity = 0.50
+Reference_supply Pullup_ref
+|
+|                   nom         slow        fast
+|
+[Voltage Range]     1.35V       1.28V       1.42V
+[Pullup Reference]  1.35V       1.28V       1.42V
+[Temperature Range] 50.0        100.0       0.0
+|
+[Pulldown]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0   -13.96E-3   -12.59E-3   -15.56E-3
+    0.000E+0   -3.893E-6   -4.109E-6   -1.483E-6
+    1.350E+0    26.08E-3    22.37E-3    30.44E-3
+    2.700E+0    30.20E-3    25.46E-3    36.99E-3
+|
+[GND Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0   -39.74E-3   -37.76E-3   -41.37E-3
+   -175.0E-3    NA          NA          0.000E+0
+    1.350E+0    0.000E+0    0.000E+0    0.000E+0
+    2.700E+0    0.000E+0    0.000E+0    0.000E+0
+|
+[Pullup]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0    7.027E-3    7.411E-3    8.620E-3
+    0.000E+0    31.17E-6    35.34E-6    10.66E-6
+    1.350E+0   -21.21E-3   -19.19E-3   -25.02E-3
+    2.700E+0   -25.77E-3   -23.32E-3   -30.53E-3
+|
+[POWER Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0    88.45E-3    79.46E-3    95.25E-3
+   -280.0E-3    NA          0.000E+0    NA
+    1.350E+0    0.000E+0    0.000E+0    0.000E+0
+    2.700E+0    0.000E+0    0.000E+0    0.000E+0
+|
+[Ramp]
+R_load = 50.0Ohm
+|               typ         min         max
+|
+dV/dt_r         451mV/134ps 424mV/184ps 495mV/103ps
+dV/dt_f         438mV/120ps 411mV/159ps 475mV/90ps
+|
+[Falling Waveform]
+V_fixture     = 1.35V
+V_fixture_min = 1.28V
+V_fixture_max = 1.42V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    1.349E+0    1.282E+0    1.424E+0
+    198.0E-12   1.270E+0    1.248E+0    1.203E+0
+    398.0E-12   681.5E-3    772.6E-3    655.1E-3
+    937.0E-12   617.9E-3    596.9E-3    632.5E-3
+|
+[Rising Waveform]
+V_fixture     = 1.35V
+V_fixture_min = 1.28V
+V_fixture_max = 1.42V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    617.9E-3    596.9E-3    632.5E-3
+    199.0E-12   946.5E-3    824.3E-3    1.143E+0
+    399.0E-12   1.340E+0    1.261E+0    1.420E+0
+    937.0E-12   1.349E+0    1.282E+0    1.424E+0
+|
+[Rising Waveform]
+V_fixture     = 0.00V
+V_fixture_min = 0.00V
+V_fixture_max = 0.00V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    57.55E-6    60.07E-6    6.665E-6
+    200.0E-12   66.92E-3    6.131E-3    212.3E-3
+    397.0E-12   647.8E-3    400.5E-3    794.4E-3
+    937.0E-12   752.3E-3    707.5E-3    825.5E-3
+|
+[Falling Waveform]
+V_fixture     = 0.00V
+V_fixture_min = 0.00V
+V_fixture_max = 0.00V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    752.3E-3    707.5E-3    825.5E-3
+    200.0E-12   353.4E-3    418.6E-3    239.7E-3
+    400.0E-12   9.560E-3    18.77E-3    5.657E-3
+    937.0E-12   57.55E-6    60.07E-6    6.665E-6
+|
+|***************************************************************************
+|
+[Model]        DQ40_ODT40
+Model_type     I/O
+|
+Vinl  = 515mV
+Vinh  = 835mV
+Vmeas = 675mV
+Vref  = 675mV
+Cref  = 0.0pF
+Rref  = 25.0Ohm
+|
+|               typ         min         max
+|
+C_comp          1.36pF      1.26pF      1.46pF
+|
+[Model Spec]
+|
+Vinl            0.515V      0.481V      0.552V
+Vinh            0.835V      0.801V      0.872V
+Vmeas           0.675V      0.641V      0.712V
+Vref            0.675V      0.641V      0.712V
+|
+[Receiver Thresholds]
+Vth      =  0.675V
+Vth_min  =  0.661V
+Vth_max  =  0.688V
+Vinh_ac  =  0.160V
+Vinh_dc  =  0.090V
+Vinl_ac  = -0.160V
+Vinl_dc  = -0.090V
+Tslew_ac =  5.00ns
+Threshold_sensitivity = 0.50
+Reference_supply Pullup_ref
+|
+|                   nom         slow        fast
+|
+[Voltage Range]     1.35V       1.28V       1.42V
+[Pullup Reference]  1.35V       1.28V       1.42V
+[Temperature Range] 50.0        100.0       0.0
+|
+[Add Submodel]
+| Submodel Name     Mode
+40ohm_ODT           Non-Driving
+|
+[Pulldown]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0   -13.96E-3   -12.59E-3   -15.56E-3
+    0.000E+0   -3.893E-6   -4.109E-6   -1.483E-6
+    1.350E+0    26.08E-3    22.37E-3    30.44E-3
+    2.700E+0    30.20E-3    25.46E-3    36.99E-3
+|
+[GND Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0   -39.74E-3   -37.76E-3   -41.37E-3
+   -175.0E-3    NA          NA          0.000E+0
+    1.350E+0    0.000E+0    0.000E+0    0.000E+0
+    2.700E+0    0.000E+0    0.000E+0    0.000E+0
+|
+[Pullup]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0    7.027E-3    7.411E-3    8.620E-3
+    0.000E+0    31.17E-6    35.34E-6    10.66E-6
+    1.350E+0   -21.21E-3   -19.19E-3   -25.02E-3
+    2.700E+0   -25.77E-3   -23.32E-3   -30.53E-3
+|
+[POWER Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0    88.45E-3    79.46E-3    95.25E-3
+   -280.0E-3    NA          0.000E+0    NA
+    1.350E+0    0.000E+0    0.000E+0    0.000E+0
+    2.700E+0    0.000E+0    0.000E+0    0.000E+0
+|
+[Ramp]
+R_load = 50.0Ohm
+|               typ         min         max
+|
+dV/dt_r         451mV/134ps 424mV/184ps 495mV/103ps
+dV/dt_f         438mV/120ps 411mV/159ps 475mV/90ps
+|
+[Falling Waveform]
+V_fixture     = 1.35V
+V_fixture_min = 1.28V
+V_fixture_max = 1.42V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    1.349E+0    1.282E+0    1.424E+0
+    198.0E-12   1.270E+0    1.248E+0    1.203E+0
+    398.0E-12   681.5E-3    772.6E-3    655.1E-3
+    937.0E-12   617.9E-3    596.9E-3    632.5E-3
+|
+[Rising Waveform]
+V_fixture     = 1.35V
+V_fixture_min = 1.28V
+V_fixture_max = 1.42V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    617.9E-3    596.9E-3    632.5E-3
+    199.0E-12   946.5E-3    824.3E-3    1.143E+0
+    399.0E-12   1.340E+0    1.261E+0    1.420E+0
+    937.0E-12   1.349E+0    1.282E+0    1.424E+0
+|
+[Rising Waveform]
+V_fixture     = 0.00V
+V_fixture_min = 0.00V
+V_fixture_max = 0.00V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    57.55E-6    60.07E-6    6.665E-6
+    200.0E-12   66.92E-3    6.131E-3    212.3E-3
+    397.0E-12   647.8E-3    400.5E-3    794.4E-3
+    937.0E-12   752.3E-3    707.5E-3    825.5E-3
+|
+[Falling Waveform]
+V_fixture     = 0.00V
+V_fixture_min = 0.00V
+V_fixture_max = 0.00V
+R_fixture     = 50.0Ohm
+|
+|   Time        V(typ)      V(min)      V(max)
+|
+    0.000E+0    752.3E-3    707.5E-3    825.5E-3
+    200.0E-12   353.4E-3    418.6E-3    239.7E-3
+    400.0E-12   9.560E-3    18.77E-3    5.657E-3
+    937.0E-12   57.55E-6    60.07E-6    6.665E-6
+|
+|***************************************************************************
+|
+[Submodel]     40ohm_ODT
+Submodel_type  Dynamic_clamp
+|
+[GND Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0   -6.975E-3   -6.287E-3   -7.776E-3
+    0.000E+0   -1.585E-6   -2.224E-6   -819.6E-9
+    1.350E+0    12.86E-3    11.10E-3    14.96E-3
+    2.700E+0    15.10E-3    12.73E-3    18.50E-3
+|
+[POWER Clamp]
+|
+|   Voltage     I(typ)      I(min)      I(max)
+|
+   -1.350E+0    3.515E-3    3.706E-3    4.312E-3
+    0.000E+0    13.01E-6    18.85E-6    5.723E-6
+    1.350E+0   -10.50E-3   -9.514E-3   -12.39E-3
+    2.700E+0   -12.88E-3   -11.66E-3   -15.26E-3
+|
+|***************************************************************************
+|
+[Define Package Model]  BGA_package
+[Manufacturer]          KiCad
+[OEM]                   KiCad
+[Description]           Dummy package
+[Number of Pins]        4
+[Pin Numbers]
+A1
+A2
+B1
+B2
+|
+[Model Data]
+[Inductance Matrix]     Sparse_Matrix
+|
+[Row]   A1
+A1      1.15E-09
+A2      1.07E-11
+B2     -6.90E-12
+B2      1.90E-12
+|
+[Row]   A2
+A2      1.83E-09
+B2      3.67E-12
+B2      2.13E-12
+|
+[Row]   B1
+B1      1.74E-09
+B2      6.98E-11
+|
+[Row]   B2
+B2      1.40E-09
+|
+[Capacitance Matrix]    Sparse_Matrix
+|
+[Row]   A1
+A1      1.05E-12
+A2     -2.69E-16
+B1     -7.31E-16
+B2     -1.23E-16
+|
+[Row]   A2
+A2      7.32E-13
+B1     -2.38E-16
+B2     -1.96E-15
+|
+[Row]   B1
+B1      7.25E-13
+B2     -1.37E-15
+|
+[Row]   B2
+B2      3.94E-13
+|
+[Resistance Matrix]     Sparse_Matrix
+|
+[Row]   A1
+A1      0.1800
+A2     -0.0002
+B1     -0.0006
+B2     -0.0002
+[Row]   A2
+A2      0.2900
+B1     -0.0004
+B2     -0.0003
+[Row]   B1
+B1      0.2560
+B2     -0.0019
+[Row]   B2
+B2      0.2250
+|
+[End Model Data]
+[End Package Model]
+|
+[End]

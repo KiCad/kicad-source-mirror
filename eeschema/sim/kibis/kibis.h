@@ -242,6 +242,25 @@ public:
     bool Init( const IbisParser& aParser );
 };
 
+class KIBIS_SUBMODEL : public KIBIS_BASE
+{
+public:
+    KIBIS_SUBMODEL( KIBIS& aTopLevel, const IbisSubmodel& aSource, IBIS_SUBMODEL_MODE aMode );
+
+    std::string        m_name;
+    IBIS_SUBMODEL_TYPE m_type = IBIS_SUBMODEL_TYPE::UNDEFINED;
+    IBIS_SUBMODEL_MODE m_mode = IBIS_SUBMODEL_MODE::ALL;
+
+    // Currently we only support static mode dynamic clamp submodels.
+    IVtable m_GNDClamp;
+    IVtable m_POWERClamp;
+
+    /** @brief Return true if the model has a clamp diode to the gnd net */
+    bool HasGNDClamp() const;
+    /** @brief Return true if the model has a clamp diode to the power net */
+    bool HasPOWERClamp() const;
+};
+
 class KIBIS_MODEL : public KIBIS_BASE
 {
 public:
@@ -262,24 +281,25 @@ public:
     IBIS_MODEL_POLARITY m_polarity = IBIS_MODEL_POLARITY::UNDEFINED;
     // End of optional subparameters
 
-    TypMinMaxValue             m_C_comp;
-    TypMinMaxValue             m_voltageRange;
-    TypMinMaxValue             m_temperatureRange;
-    TypMinMaxValue             m_pullupReference;
-    TypMinMaxValue             m_pulldownReference;
-    TypMinMaxValue             m_GNDClampReference;
-    TypMinMaxValue             m_POWERClampReference;
-    TypMinMaxValue             m_Rgnd;
-    TypMinMaxValue             m_Rpower;
-    TypMinMaxValue             m_Rac;
-    TypMinMaxValue             m_Cac;
-    IVtable                    m_GNDClamp;
-    IVtable                    m_POWERClamp;
-    IVtable                    m_pullup;
-    IVtable                    m_pulldown;
-    std::vector<IbisWaveform*> m_risingWaveforms;
-    std::vector<IbisWaveform*> m_fallingWaveforms;
-    IbisRamp                   m_ramp;
+    TypMinMaxValue              m_C_comp;
+    TypMinMaxValue              m_voltageRange;
+    TypMinMaxValue              m_temperatureRange;
+    TypMinMaxValue              m_pullupReference;
+    TypMinMaxValue              m_pulldownReference;
+    TypMinMaxValue              m_GNDClampReference;
+    TypMinMaxValue              m_POWERClampReference;
+    TypMinMaxValue              m_Rgnd;
+    TypMinMaxValue              m_Rpower;
+    TypMinMaxValue              m_Rac;
+    TypMinMaxValue              m_Cac;
+    IVtable                     m_GNDClamp;
+    IVtable                     m_POWERClamp;
+    IVtable                     m_pullup;
+    IVtable                     m_pulldown;
+    std::vector<IbisWaveform*>  m_risingWaveforms;
+    std::vector<IbisWaveform*>  m_fallingWaveforms;
+    IbisRamp                    m_ramp;
+    std::vector<KIBIS_SUBMODEL> m_submodels;
 
     /** @brief Return true if the model has a pulldown transistor */
     bool HasPulldown() const;
@@ -294,9 +314,10 @@ public:
      *
      *  @param aParam Parameters
      *  @param aIndex Index used to offset spice nodes / directives
+     *  @param aDriver Generate a driver model when true, a device model when false
      *  @return A multiline string with spice directives
      */
-    std::string SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex ) const;
+    std::string SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex, bool aDriver ) const;
 
     /** @brief Create waveform pairs
      *
