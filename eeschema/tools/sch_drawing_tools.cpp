@@ -924,12 +924,12 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     // to the canvas and run the move tool
     if( !cfg->m_DesignBlockChooserPanel.place_as_sheet )
     {
-            while( placeSheetContents() && cfg->m_DesignBlockChooserPanel.repeated_placement )
-            {}
+        while( placeSheetContents() && cfg->m_DesignBlockChooserPanel.repeated_placement )
+        {}
 
-            m_toolMgr->RunAction( ACTIONS::selectionClear );
-            m_view->ClearPreview();
-            return 0;
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+        m_view->ClearPreview();
+        return 0;
     }
 
     // We're placing a sheet as a sheet, we need to run a small tool loop to get the starting
@@ -945,9 +945,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     setCursor();
 
     if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
-    {
         m_toolMgr->PrimeTool( { 0, 0 } );
-    }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1154,9 +1152,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
-                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
-                                  wxFD_OPEN );
-                bool         cancelled;
+                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+
+                bool cancelled = false;
 
                 RunMainStack(
                         [&]()
