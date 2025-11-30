@@ -956,7 +956,7 @@ void DIALOG_LABEL_PROPERTIES::onMultiLabelCheck( wxCommandEvent& event )
             wxString multiText = m_valueMultiLine->GetValue();
             m_valueCombo->SetValue( multiText.BeforeFirst( '\n' ) );
             m_activeTextEntry = m_valueCombo;
-            SetInitialFocus( m_valueCombo );
+            SetInitialFocus( m_valueCombo->GetTextCtrl() );
         }
     }
     else if( m_currentLabel->Type() == SCH_HIER_LABEL_T )
