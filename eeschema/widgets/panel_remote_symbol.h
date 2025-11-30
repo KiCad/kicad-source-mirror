@@ -34,6 +34,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include <wx/filename.h>
 #include <wx/panel.h>
+#include <kiid.h>
 
 class BITMAP_BUTTON;
 class LIB_SYMBOL;

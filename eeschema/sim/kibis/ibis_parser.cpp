@@ -36,6 +36,7 @@
 #include <cstring> //for memcmp
 #include <iterator>
 #include <locale_io.h> // KiCad header
+#include <wx/log.h>
 
 // _() is used here to mark translatable strings in IBIS_REPORTER::Report()
 // However, currently non ASCII7 chars are nor correctly handled when printing messages
