@@ -512,17 +512,16 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                 || evt->IsAction( &ACTIONS::paste ) )
         {
             if( symbol )
             {
-                // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so we ignore the duplicate and just carry on.
                 wxBell();
                 continue;
             }
 
-            // Exit.  The duplicate will run in its own loop.
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
             m_frame->PopTool( aEvent );
             evt->SetPassEvent();
             break;
@@ -1139,7 +1138,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                 || evt->IsAction( &ACTIONS::paste ) )
         {
             if( image )
             {
@@ -1149,7 +1149,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            // Exit.  The duplicate will run in its own loop.
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
             m_frame->PopTool( aEvent );
             evt->SetPassEvent();
             break;
@@ -2206,17 +2206,16 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                                              evt->Parameter<ACTIONS::INCREMENT>() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+                || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                || evt->IsAction( &ACTIONS::paste ) )
         {
             if( item )
             {
-                // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so we ignore the duplicate and just carry on.
                 wxBell();
                 continue;
             }
 
-            // Exit.  The duplicate will run in its own loop.
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
             m_frame->PopTool( aEvent );
             evt->SetPassEvent();
             break;
@@ -2492,17 +2491,17 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_toolMgr->PostAction( ACTIONS::activatePointEditor );
             }
         }
-        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                || evt->IsAction( &ACTIONS::paste ) )
         {
             if( item )
             {
-                // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so we ignore the duplicate and just carry on.
                 wxBell();
                 continue;
             }
 
-            // Exit.  The duplicate will run in its own loop.
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
             m_frame->PopTool( aEvent );
             evt->SetPassEvent();
             break;
@@ -2705,6 +2704,21 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         else if( started && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                || evt->IsAction( &ACTIONS::paste ) )
+        {
+            if( started )
+            {
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
+            m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
+            break;
         }
         else
         {
@@ -2925,6 +2939,21 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                || evt->IsAction( &ACTIONS::paste ) )
+        {
+            if( table )
+            {
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
+            m_frame->PopTool( aEvent );
+            evt->SetPassEvent();
+            break;
         }
         else if( table && evt->IsAction( &ACTIONS::redo ) )
         {
@@ -3214,17 +3243,16 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = nullptr;
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
+                || evt->IsAction( &SCH_ACTIONS::repeatDrawItem )
+                || evt->IsAction( &ACTIONS::paste ) )
         {
             if( sheet )
             {
-                // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so we ignore the duplicate and just carry on.
                 wxBell();
                 continue;
             }
 
-            // Exit.  The duplicate will run in its own loop.
+            // Exit.  The duplicate/repeat/paste will run in its own loop.
             m_frame->PopTool( aEvent );
             evt->SetPassEvent();
             break;
