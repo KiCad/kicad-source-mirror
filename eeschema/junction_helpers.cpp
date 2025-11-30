@@ -56,31 +56,40 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
         if( item->GetEditFlags() & ( SKIP_STRUCT | STRUCT_DELETED ) )
             continue;
 
-        if( item->Type() == SCH_LINE_T )
+        switch( item->Type() )
+        {
+        case  SCH_LINE_T:
         {
             SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
             if( line->IsConnectable() )
-            {
                 mergedLines.emplace_back( new SCH_LINE( *line ) );
-                continue;
-            }
+
+            break;
         }
-        else if( item->Type() == SCH_JUNCTION_T )
-        {
+
+        case SCH_JUNCTION_T:
             if( item->HitTest( aPosition, -1 ) )
                 info.hasExplicitJunctionDot = true;
 
             filtered.insert( item );
-        }
-        else if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
-        {
+            break;
+
+        case SCH_BUS_WIRE_ENTRY_T:
             info.hasBusEntry = true;
             filtered.insert( item );
-        }
-        else if( item->Type() == SCH_SHEET_T || item->Type() == SCH_SYMBOL_T )
-        {
+            break;
+
+        case SCH_SHEET_T:
+        case SCH_SYMBOL_T:
+        case SCH_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
             filtered.insert( item );
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -184,7 +193,26 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
 
             break;
 
-        default: break;
+        case SCH_LABEL_T:
+            if( item->IsConnected( aPosition ) )
+            {
+                if( SCH_CONNECTION::IsBusLabel( static_cast<const SCH_LABEL*>( item )->GetText() ) )
+                    breakLines[BUSES] = true;
+                else
+                    breakLines[WIRES] = true;
+            }
+
+            break;
+
+        case SCH_HIER_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+            if( item->IsConnected( aPosition ) )
+                breakLines[WIRES] = true;
+
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -205,8 +233,7 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
         // The bus entry and one wire is 2 wires, and the one entry is exactly one bus
         // Any more wires must be multiple wires, but any more buses means a wire
         // crossing at the bus entry root.
-        info.hasBusEntryToMultipleWires =
-                exitAngles[WIRES].size() > 2 && exitAngles[BUSES].size() == 1;
+        info.hasBusEntryToMultipleWires = exitAngles[WIRES].size() > 2 && exitAngles[BUSES].size() == 1;
     }
 
     // Any three things of the same type is a junction of some sort
