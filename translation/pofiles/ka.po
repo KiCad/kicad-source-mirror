@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-29 10:00+0000\n"
+"PO-Revision-Date: 2025-11-30 11:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ka/>\n"
@@ -24,7 +24,7 @@ msgstr "ყველა ფაილი"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr ""
+msgstr "დაფის კონტურის აგება"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:566
 msgid "Create layers"
@@ -33,7 +33,7 @@ msgstr "ფენების შექმნა"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:995
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:97
 msgid "No footprint loaded."
-msgstr ""
+msgstr "ნაკვალევები ჩატვირთული არაა."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1010
 msgid ""
@@ -4537,7 +4537,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:131
 msgid "Add Existing"
-msgstr ""
+msgstr "არსებულის დამატება"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:149
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
@@ -10202,7 +10202,7 @@ msgstr ""
 #: pcb_calculator/pcb_calculator_frame.cpp:219
 #: pcb_calculator/pcb_calculator_frame.cpp:246
 msgid "Calculator Tools"
-msgstr ""
+msgstr "გამოთვლის ხელსაწყოები"
 
 #: common/tool/actions.cpp:1318 kicad/tools/kicad_manager_actions.cpp:169
 msgid "Run component calculations, track width calculations, etc."
@@ -27622,7 +27622,7 @@ msgstr ""
 #: kicad/dialogs/dialog_template_selector.cpp:470
 #: kicad/tools/kicad_manager_control.cpp:214
 msgid "User Templates"
-msgstr ""
+msgstr "მომხმარებლის შაბლონები"
 
 #: kicad/dialogs/dialog_template_selector.cpp:673
 msgid "Select Templates Directory"
@@ -28283,7 +28283,7 @@ msgstr "სესიის აღდგენა"
 #: kicad/kicad_manager_frame.cpp:1242
 #, c-format
 msgid "Restoring '%s'"
-msgstr ""
+msgstr "მიმდინარეობს '%s'-ის აღდგენა"
 
 #: kicad/local_history_pane.cpp:121
 msgid "Moments ago"
@@ -28321,7 +28321,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:129
 msgid "CADSTAR Project..."
-msgstr ""
+msgstr "CADSTAR-ის პროექტი..."
 
 #: kicad/menubar.cpp:130
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -28329,7 +28329,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:134
 msgid "EAGLE Project..."
-msgstr ""
+msgstr "EAGLE-ის პროექტი..."
 
 #: kicad/menubar.cpp:135
 msgid "Import EAGLE CAD XML schematic and board"
@@ -28381,7 +28381,7 @@ msgstr "საცავის დამატება"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
-msgstr ""
+msgstr "რეპოზიტორიის დამატება"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
 msgid "Remove repository"
@@ -28389,12 +28389,12 @@ msgstr "რეპოზიტორიის წაშლა"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
-msgstr ""
+msgstr "რეპოზიტორიების მართვა"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
 msgid "Plugins (%d)"
-msgstr ""
+msgstr "დამატებები (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -28404,7 +28404,7 @@ msgstr "დამზადების დამატებები (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:53
 #, c-format
 msgid "Libraries (%d)"
-msgstr ""
+msgstr "ბიბლიოთეკები (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
 #, c-format
@@ -28418,7 +28418,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:86
 msgid "Confirm update"
-msgstr ""
+msgstr "განახლების დადასტურება"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:107 kicad/pcm/dialogs/panel_package.cpp:111
 #: kicad/pcm/dialogs/panel_package.cpp:117
@@ -28440,7 +28440,7 @@ msgstr "წაშლა"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "რეპოზიტორია (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:167
 msgid "Apply Pending Changes"
@@ -28464,13 +28464,13 @@ msgstr "პაკეტის დაყენება"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "რიგში (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:444
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "დაყენებული (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 msgid "Manage..."
@@ -28486,7 +28486,7 @@ msgstr "საცავი"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
-msgstr ""
+msgstr "ქმედების მოცილება"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 msgid "Install from File..."
@@ -28531,7 +28531,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_package.cpp:71
 msgid "Pin package"
-msgstr ""
+msgstr "პაკეტის მიმაგრება"
 
 #: kicad/pcm/dialogs/panel_package.cpp:72
 msgid ""
@@ -28541,15 +28541,15 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
-msgstr ""
+msgstr "მომლოდინეების დაყენება"
 
 #: kicad/pcm/dialogs/panel_package.cpp:140
 msgid "Uninstall Pending"
-msgstr ""
+msgstr "მომლოდინეების წაშლა"
 
 #: kicad/pcm/dialogs/panel_package.cpp:173
 msgid "Update Pending"
-msgstr ""
+msgstr "დარჩენილების განახლება"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:228
 msgid "Metadata"
@@ -28557,7 +28557,7 @@ msgstr "მეტამონაცემები"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
 msgid "Package identifier: "
-msgstr ""
+msgstr "პაკეტის იდენტიფიკატორი: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
 msgid "License: "
@@ -28631,7 +28631,7 @@ msgstr "გადმოწერის ზომა"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:92
 msgid "Install Size"
-msgstr ""
+msgstr "დაყენების ზომა"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:93
 msgid "Compatible"
@@ -28661,7 +28661,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:257
 msgid "Fetching repository"
-msgstr ""
+msgstr "რეპოზიტორიის გამოთხოვა"
 
 #: kicad/pcm/pcm.cpp:276
 #, c-format
@@ -28705,7 +28705,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:499
 msgid "Downloading resources"
-msgstr ""
+msgstr "რესურსების გადმოწერა"
 
 #: kicad/pcm/pcm.cpp:519
 msgid ""
@@ -28904,7 +28904,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:903
 msgid "New Directory..."
-msgstr ""
+msgstr "ახალი საქაღალდე..."
 
 #: kicad/project_tree_pane.cpp:904
 msgid "Create a New Directory"
@@ -28956,7 +28956,7 @@ msgstr "დავალებების გაშვება"
 
 #: kicad/project_tree_pane.cpp:955
 msgid "Rename File..."
-msgstr ""
+msgstr "ფაილის სახელის გადარქმევა..."
 
 #: kicad/project_tree_pane.cpp:956
 msgid "Rename file"
@@ -28964,11 +28964,11 @@ msgstr "ფაილის გადარქმევა"
 
 #: kicad/project_tree_pane.cpp:960
 msgid "Rename Files..."
-msgstr ""
+msgstr "ფაილების სახელის გადარქმევა..."
 
 #: kicad/project_tree_pane.cpp:961
 msgid "Rename files"
-msgstr ""
+msgstr "ფაილების სახელის გადარქმევა"
 
 #: kicad/project_tree_pane.cpp:971
 msgid "Delete the file and its content"
@@ -29049,7 +29049,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:1105
 msgid "Change filename"
-msgstr ""
+msgstr "ფაილის სახელის შეცვლა"
 
 #: kicad/project_tree_pane.cpp:1460
 msgid "Network path: not monitoring folder changes"
@@ -29123,7 +29123,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
-msgstr ""
+msgstr "ახალი პროექტი..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
 msgid "Create a new project based on an existing project"
@@ -29243,7 +29243,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:223
 msgid "System Templates"
-msgstr ""
+msgstr "სისტემური შაბლონები"
 
 #: kicad/tools/kicad_manager_control.cpp:256
 msgid "No project template was selected.  Cannot generate new project."
@@ -29261,7 +29261,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:320
 msgid "Overwriting files:"
-msgstr ""
+msgstr "ფაილების თავზე გადაწერა:"
 
 #: kicad/tools/kicad_manager_control.cpp:325
 msgid "Similar files already exist in the destination folder."
@@ -29388,15 +29388,15 @@ msgstr "განლაგება"
 #: pagelayout_editor/dialogs/design_inspector.cpp:233
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "ზომა: %.1fx%.1fმმ"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
-msgstr ""
+msgstr "დასაწყისის Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:44
 msgid "X start:"
-msgstr ""
+msgstr "დასაწყისის X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
@@ -29408,14 +29408,14 @@ msgstr "საწყისი"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:275
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:328
 msgid "Upper Right"
-msgstr ""
+msgstr "ზედა მარჯვენა"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:276
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:329
 msgid "Upper Left"
-msgstr ""
+msgstr "ზედა მარცხენა"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -29423,7 +29423,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:330
 msgid "Lower Right"
-msgstr ""
+msgstr "ქვედა მარჯვენა"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -29431,15 +29431,15 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:327
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:331
 msgid "Lower Left"
-msgstr ""
+msgstr "ქვედა მარცხენა"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
-msgstr ""
+msgstr "დასასრულის X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:104
 msgid "Y end:"
-msgstr ""
+msgstr "დასასრულის Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:69
 msgid "New Item"
@@ -29459,7 +29459,7 @@ msgstr "დაბეჭდვა"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:678
 msgid "Predefined Keywords"
-msgstr ""
+msgstr "წინასწარ აღწერილი საკვანძო სიტყვები"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:681
 msgid "Texts can include keywords."
@@ -29479,15 +29479,15 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "(sheet number)"
-msgstr ""
+msgstr "(ფურცლის ნომერი)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "(sheet count)"
-msgstr ""
+msgstr "(ფურცლების რაოდენობა)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:695
 msgid "(paper size)"
-msgstr ""
+msgstr "(ქაღალდის ზომა)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 msgid "Item Type"
@@ -29511,7 +29511,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:151
 msgid "Text width:"
-msgstr ""
+msgstr "ტექსტის სიგანე:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:172
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:483
@@ -29519,7 +29519,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:181
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:167
 msgid "Text height:"
-msgstr ""
+msgstr "ტექსტის სიმაღლე:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 msgid "Maximum width:"
@@ -29559,11 +29559,11 @@ msgstr "შემობრუნება:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:372
 msgid "Bitmap DPI:"
-msgstr ""
+msgstr "რასტრული გამოსახულების DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat Parameters"
-msgstr ""
+msgstr "გამეორების პარამეტრები"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:396
 msgid "Count:"
@@ -29571,7 +29571,7 @@ msgstr "რაოდენობა:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:406
 msgid "Step text:"
-msgstr ""
+msgstr "ნაბიჯის ტექსტი:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:411
 msgid "Number of characters or digits to step text by for each repeat."
@@ -29579,7 +29579,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:418
 msgid "Step X:"
-msgstr ""
+msgstr "ნაბიჯი X-ზე:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:423
 msgid "Distance on the X axis to step for each repeat."
@@ -29587,7 +29587,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:431
 msgid "Step Y:"
-msgstr ""
+msgstr "ნაბიჯი Y-ზე:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:436
 msgid "Distance to step on Y axis for each repeat."
@@ -29610,7 +29610,7 @@ msgstr "ხაზის სისქე:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:511
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:244
 msgid "Text thickness:"
-msgstr ""
+msgstr "ტექსტის სისქე:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:531
 msgid "Set to Default"
@@ -29618,7 +29618,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:538
 msgid "Page Margins"
-msgstr ""
+msgstr "გვერდის საზღვრები"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:612
 #: pcbnew/dialogs/dialog_plot_base.cpp:74
@@ -29697,11 +29697,11 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:956
 msgid "Page Width"
-msgstr ""
+msgstr "გვერდის სიგანე"
 
 #: pagelayout_editor/pl_editor_frame.cpp:957
 msgid "Page Height"
-msgstr ""
+msgstr "გვერდის სიმაღლე"
 
 #: pagelayout_editor/pl_editor_frame.h:285
 msgid "Left Top paper corner"
@@ -29729,11 +29729,11 @@ msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:140
 msgid "Page 1"
-msgstr ""
+msgstr "გვერდი 1"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:141
 msgid "Other pages"
-msgstr ""
+msgstr "სხვა გვერდები"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:150
 msgid ""
@@ -29863,31 +29863,31 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
-msgstr ""
+msgstr "კლასი 1"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:58
 msgid "Class 2"
-msgstr ""
+msgstr "კლასი 2"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:59
 msgid "Class 3"
-msgstr ""
+msgstr "კლასი 3"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:60
 msgid "Class 4"
-msgstr ""
+msgstr "კლასი 4"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:61
 msgid "Class 5"
-msgstr ""
+msgstr "კლასი 5"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:62
 msgid "Class 6"
-msgstr ""
+msgstr "კლასი 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr ""
+msgstr "ხაზების სიგანე"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
@@ -30047,15 +30047,15 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:268
 msgid "Temperature coefficient"
-msgstr ""
+msgstr "ტემპერატურის კოეფიციენტი"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
-msgstr ""
+msgstr "მავთულის თვისებები"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 msgid "Standard Size:"
-msgstr ""
+msgstr "სტანდარტული ზომა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:122
@@ -30068,7 +30068,7 @@ msgstr "მმ²"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 msgid "Conductor resistivity:"
-msgstr ""
+msgstr "გამტარის წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
 msgid "Specific resistance in Ohm*m at 20 deg C"
@@ -30095,7 +30095,7 @@ msgstr "ომმეტრი"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Temperature Coefficient:"
-msgstr ""
+msgstr "ტემპერატურის კოეფიციენტი:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:95
 msgid "Thermal coefficient at 20 deg C"
@@ -30103,7 +30103,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:114
 msgid "Linear resistance:"
-msgstr ""
+msgstr "წრფივი წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
@@ -30128,7 +30128,7 @@ msgstr "აპლიკაცია"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:175
 msgid "Cable temperature:"
-msgstr ""
+msgstr "კაბელის ტემპერატურა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:177
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
@@ -30140,7 +30140,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:49
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:176
 msgid "deg C"
-msgstr ""
+msgstr "°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:92
@@ -30157,7 +30157,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:215
 msgid "Resistance DC:"
-msgstr ""
+msgstr "DC წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:217
 msgid "DC Resistance of the conductor"
@@ -30176,11 +30176,11 @@ msgstr "ომი"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:258
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:238
 msgid "Voltage drop:"
-msgstr ""
+msgstr "ძაბვის ვარდნა:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:240
 msgid "Dissipated power:"
-msgstr ""
+msgstr "სიმძლავრის დისიპაცია:"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -30188,7 +30188,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
@@ -30197,19 +30197,19 @@ msgstr "დაშვება"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
-msgstr ""
+msgstr "პირველი ზოლი"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:38
 msgid "2nd Band"
-msgstr ""
+msgstr "მეორე ზოლი"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:42
 msgid "3rd Band"
-msgstr ""
+msgstr "მესამე ზოლი"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:46
 msgid "4th Band"
-msgstr ""
+msgstr "მეოთხე ზოლი"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:50
 msgid "Multiplier"
@@ -30472,7 +30472,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:43
 msgid "Update Values"
-msgstr ""
+msgstr "მნიშვნელობების განახლება"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:51
 msgid "Note: Values are minimal values (from IPC 2221)"
@@ -30573,22 +30573,22 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
-msgstr ""
+msgstr "გარემოს ტემპერატურა:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:48
 msgid "Melting point:"
-msgstr ""
+msgstr "დნობის ტემპერატურა:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:62
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:178
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:134
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr ""
+msgstr "ტრეკის სიგანე:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
 msgid "Track thickness:"
-msgstr ""
+msgstr "ტრეკის სისქე:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
@@ -30721,11 +30721,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:197
 msgid "Cast iron"
-msgstr ""
+msgstr "თუჯი"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:201
 msgid "Carbon steel"
-msgstr ""
+msgstr "ნახშირბადიანი ფოლადი"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
 msgid "Aluminium, chromated"
@@ -30766,11 +30766,11 @@ msgstr "მაგნიუმი"
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:33
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:38
 msgid "Copper (Cu)"
-msgstr ""
+msgstr "სპილენძი (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:64
 msgid "Threshold voltage:"
-msgstr ""
+msgstr "ზღვრული ძაბვა:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
 msgid "Material names:"
@@ -30804,7 +30804,7 @@ msgstr "შეყვანები"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:29
 msgid "Required resistance:"
-msgstr ""
+msgstr "საჭირო წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:36
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:47
@@ -30846,7 +30846,7 @@ msgstr "გადაწყვეტები"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:102
 msgid "Simple solution:"
-msgstr ""
+msgstr "მარტივი გადაწყვეტა:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:111
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
@@ -30856,11 +30856,11 @@ msgstr "მიახლოებითი სიზუსტე:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
-msgstr ""
+msgstr "3R გადაწყვეტა:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:142
 msgid "4R solution:"
-msgstr ""
+msgstr "4R გადაწყვეტა:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:190
 msgid "PCB Calculator data file"
@@ -30886,7 +30886,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:289
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:117
 msgid "Remove Regulator"
-msgstr ""
+msgstr "სტაბილიზატორის წაშლა"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:401
 msgid "Vout must be greater than Vref"
@@ -30925,7 +30925,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:64
 msgid "Standard Type"
-msgstr ""
+msgstr "სტანდარტული ტიპი"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:64
@@ -30955,7 +30955,7 @@ msgstr "დათვალიერება"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:107
 msgid "Edit Regulator"
-msgstr ""
+msgstr "სტაბილიზატორის ჩასწორება"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:108
 msgid "Edit the current selected regulator."
@@ -30963,7 +30963,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:112
 msgid "Add Regulator"
-msgstr ""
+msgstr "სტაბილიზატორის დამატება"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
@@ -31058,11 +31058,11 @@ msgstr "სამკაპა"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Bridged tee"
-msgstr ""
+msgstr "ხიდისებრი სამკაპა"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Resistive splitter"
-msgstr ""
+msgstr "რეზისტული გამყოფი"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:26
 msgid "Attenuators"
@@ -31070,7 +31070,7 @@ msgstr "ატენიუატორები"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:51
 msgid "Attenuation (a):"
-msgstr ""
+msgstr "მილევა (ა):"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:60
 msgid "dB"
@@ -31098,25 +31098,25 @@ msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
-msgstr ""
+msgstr "ტემპერატურის ზრდა"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 msgid "Current (I):"
-msgstr ""
+msgstr "დენი (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
 msgid "Temperature rise:"
-msgstr ""
+msgstr "ტემპერატურის ზრდა:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:53
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:54
 msgid "Conductor length:"
-msgstr ""
+msgstr "გამტარის სიგრძე:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:66
 msgid "Copper resistivity:"
-msgstr ""
+msgstr "სპილენძის წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
 msgid "External Layer Tracks"
@@ -31135,7 +31135,7 @@ msgstr "ბილიკის სისქე (H):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
 msgid "Cross-section area:"
-msgstr ""
+msgstr "განივი კვეთის ფართობი:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:144
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:242
@@ -31152,7 +31152,7 @@ msgstr "წინაღობა:"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:270
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:250
 msgid "Power loss:"
-msgstr ""
+msgstr "სიმძლავრის კარგვა:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:180
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:278
@@ -31167,7 +31167,7 @@ msgstr "შიდა ფენის ბილიკები"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
-msgstr ""
+msgstr "მიკროზოლის ხაზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Coupled Microstrip Line"
@@ -31191,15 +31191,15 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:29
 msgid "Rectangular Waveguide"
-msgstr ""
+msgstr "მართკუთხედი ტალღგამტარი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:30
 msgid "Coaxial Line"
-msgstr ""
+msgstr "კოაქსიალური ხაზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:31
 msgid "Twisted Pair"
-msgstr ""
+msgstr "ხვეული წყვილი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:33
 msgid "Transmission Line Type"
@@ -31207,7 +31207,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Substrate Parameters"
-msgstr ""
+msgstr "სუბსტრატის პარამეტრები"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:58
 msgid "Er:"
@@ -31215,7 +31215,7 @@ msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:77
 msgid "Tan delta:"
-msgstr ""
+msgstr "ტრაპეციის ფუძის სხვაობა:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:96
 msgid "Rho:"
@@ -31244,15 +31244,15 @@ msgstr "სიუხეშე:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:166
 msgid "Insulator mu:"
-msgstr ""
+msgstr "დიელექტრიკის mu:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:178
 msgid "Conductor mu:"
-msgstr ""
+msgstr "გამტარის mu:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:197
 msgid "Component Parameters"
-msgstr ""
+msgstr "კომპონენტის პარამეტრები"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:205
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
@@ -31261,7 +31261,7 @@ msgstr "სიხშირე:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:242
 msgid "Physical Parameters"
-msgstr ""
+msgstr "ფიზიკური პარამეტრები"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:307
 msgid "Analyze"
@@ -31273,7 +31273,7 @@ msgstr "სინთეზი"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:329
 msgid "Electrical Parameters"
-msgstr ""
+msgstr "ელექტრული პარამეტრები"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:380
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:218
@@ -31300,7 +31300,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr ""
+msgstr "გამტარი ნახვრეტის სიგრძე:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
@@ -31332,11 +31332,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr ""
+msgstr "მოდებული დენი:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
-msgstr ""
+msgstr "გალვანური დაფარვის წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
@@ -31376,7 +31376,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
-msgstr ""
+msgstr "თერმული წინაღობა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
@@ -31384,7 +31384,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
-msgstr ""
+msgstr "°C/ვტ"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Estimated ampacity:"
