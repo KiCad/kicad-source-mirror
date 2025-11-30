@@ -790,8 +790,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( hasElements ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( SCH_ACTIONS::alignLeft,       ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
