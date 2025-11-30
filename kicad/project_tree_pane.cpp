@@ -33,6 +33,7 @@
 #include <wx/textdlg.h>
 #include <wx/timer.h>
 #include <wx/wupdlock.h>
+#include <wx/log.h>
 
 #include <advanced_config.h>
 #include <bitmaps.h>
@@ -1475,8 +1476,47 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     }
     else
     {
+        // Create a wxWidgets log handler to catch errors during watcher creation
+        // We need to to this because we cannot get error codes from the wxFileSystemWatcher
+        // constructor.  On Linux, if inotify cannot be initialized (usually due to resource limits),
+        // wxWidgets will throw a system error and then, we throw another error below, trying to
+        // add paths to a null watcher.  We skip this by installing a temporary log handler that
+        // catches errors during watcher creation and aborts if any error is detected.
+        class WatcherLogHandler : public wxLog
+        {
+        public:
+            explicit WatcherLogHandler( bool* err ) :
+                    m_err( err )
+            {
+                if( m_err )
+                    *m_err = false;
+            }
+
+        protected:
+            void DoLogTextAtLevel( wxLogLevel level, const wxString& text ) override
+            {
+                if( m_err && ( level == wxLOG_Error || level == wxLOG_FatalError ) )
+                    *m_err = true;
+            }
+
+        private:
+            bool* m_err;
+        };
+
+        bool watcherHasError = false;
+        WatcherLogHandler tmpLog( &watcherHasError );
+        wxLog* oldLog = wxLog::SetActiveTarget( &tmpLog );
+
         m_watcher = new wxFileSystemWatcher();
         m_watcher->SetOwner( this );
+
+        // Restore previous log handler
+        wxLog::SetActiveTarget( oldLog );
+
+        if( watcherHasError )
+        {
+            return;
+        }
     }
 
     // We can see wxString under a debugger, not a wxFileName
