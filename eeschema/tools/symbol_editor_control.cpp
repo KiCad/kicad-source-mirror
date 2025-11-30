@@ -117,6 +117,28 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     return false;
                 };
 
+        auto relatedSymbolSelectedCondition =
+                [this]( const SELECTION& aSel )
+                {
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        LIB_ID sel = editFrame->GetTargetLibId();
+
+                        if( sel.GetLibNickname().empty() || sel.GetLibItemName().empty() )
+                            return false;
+
+                        LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+                        const LIB_SYMBOL* sym = libMgr.GetSymbol( sel.GetLibItemName(), sel.GetLibNickname() );
+                        wxArrayString     derived;
+
+                        libMgr.GetDerivedSymbolNames( sel.GetLibItemName(), sel.GetLibNickname(), derived );
+
+                        return ( sym && sym->IsDerived() ) || !derived.IsEmpty();
+                    }
+
+                    return false;
+                };
+
         auto multiSymbolSelectedCondition =
                 [this]( const SELECTION& aSel )
                 {
@@ -175,43 +197,40 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( SCH_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition, 10 );
 
         ctxMenu.AddSeparator( 10 );
-        ctxMenu.AddItem( ACTIONS::save,                   symbolSelectedCondition || libInferredCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAs,      libSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolAs,       symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolCopyAs,   symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( ACTIONS::revert,                 symbolSelectedCondition || libInferredCondition, 10 );
-
-        ctxMenu.AddSeparator( 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::cutSymbol,          symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::copySymbol,         symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::pasteSymbol,        libInferredCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::duplicateSymbol,    symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::renameSymbol,       symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::deleteSymbol,       symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
-        ctxMenu.AddItem( SCH_ACTIONS::symbolProperties,   symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( ACTIONS::save,                         symbolSelectedCondition || libInferredCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAs,            libSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolAs,             symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolCopyAs,         symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( ACTIONS::revert,                       symbolSelectedCondition || libInferredCondition, 10 );
 
         ctxMenu.AddSeparator( 20 );
-        ctxMenu.AddItem( SCH_ACTIONS::flattenSymbol,      derivedSymbolSelectedCondition, 20 );
+        ctxMenu.AddItem( SCH_ACTIONS::importSymbol,             libInferredCondition, 20 );
+        ctxMenu.AddItem( SCH_ACTIONS::exportSymbol,             symbolSelectedCondition, 20 );
 
         ctxMenu.AddSeparator( 100 );
-        ctxMenu.AddItem( SCH_ACTIONS::importSymbol,       libInferredCondition, 100 );
-        ctxMenu.AddItem( SCH_ACTIONS::exportSymbol,       symbolSelectedCondition );
+        ctxMenu.AddItem( SCH_ACTIONS::cutSymbol,                 symbolSelectedCondition || multiSymbolSelectedCondition, 100 );
+        ctxMenu.AddItem( SCH_ACTIONS::copySymbol,                symbolSelectedCondition || multiSymbolSelectedCondition, 100 );
+        ctxMenu.AddItem( SCH_ACTIONS::pasteSymbol,               libInferredCondition, 100 );
+        ctxMenu.AddItem( SCH_ACTIONS::duplicateSymbol,           symbolSelectedCondition, 100 );
+        ctxMenu.AddItem( SCH_ACTIONS::deleteSymbol,              symbolSelectedCondition || multiSymbolSelectedCondition, 100 );
 
+        ctxMenu.AddSeparator( 120 );
+        ctxMenu.AddItem( SCH_ACTIONS::renameSymbol,              symbolSelectedCondition, 120 );
+        ctxMenu.AddItem( SCH_ACTIONS::symbolProperties,          symbolSelectedCondition, 120 );
+        ctxMenu.AddItem( SCH_ACTIONS::flattenSymbol,             derivedSymbolSelectedCondition, 120 );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableLibWithText || ADVANCED_CFG::GetCfg().m_EnableLibDir )
+            ctxMenu.AddSeparator( 200 );
 
         if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
-        {
-            ctxMenu.AddSeparator( 200 );
-            ctxMenu.AddItem( ACTIONS::openWithTextEditor, canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
-        }
+            ctxMenu.AddItem( ACTIONS::openWithTextEditor,        canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
 
         if( ADVANCED_CFG::GetCfg().m_EnableLibDir )
-        {
-            ctxMenu.AddSeparator( 200 );
-            ctxMenu.AddItem( ACTIONS::openDirectory,      canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
-        }
+            ctxMenu.AddItem( ACTIONS::openDirectory,             canOpenExternally && ( symbolSelectedCondition || libSelectedCondition ), 200 );
 
-        ctxMenu.AddItem( ACTIONS::showLibraryFieldsTable,        libInferredCondition, 300 );
-        ctxMenu.AddItem( ACTIONS::showRelatedLibraryFieldsTable, symbolSelectedCondition,  300 );
+        ctxMenu.AddSeparator( 300 );
+        ctxMenu.AddItem( SCH_ACTIONS::showLibFieldsTable,        libInferredCondition, 300 );
+        ctxMenu.AddItem( SCH_ACTIONS::showRelatedLibFieldsTable, relatedSymbolSelectedCondition,  300 );
 
         libraryTreeTool->AddContextMenuItems( &ctxMenu );
     }
@@ -956,7 +975,7 @@ int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
     DIALOG_LIB_FIELDS_TABLE::SCOPE scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_LIBRARY;
 
-    if( aEvent.IsAction( &ACTIONS::showRelatedLibraryFieldsTable ) )
+    if( aEvent.IsAction( &SCH_ACTIONS::showRelatedLibFieldsTable ) )
         scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_RELATED_SYMBOLS;
 
     DIALOG_LIB_FIELDS_TABLE dlg( getEditFrame<SYMBOL_EDIT_FRAME>(), scope );
@@ -1012,8 +1031,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    SCH_ACTIONS::showHiddenFields.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     SCH_ACTIONS::togglePinAltIcons.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showLibraryFieldsTable.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      ACTIONS::showRelatedLibraryFieldsTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      SCH_ACTIONS::showLibFieldsTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      SCH_ACTIONS::showRelatedLibFieldsTable.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

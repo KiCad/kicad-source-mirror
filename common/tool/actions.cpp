@@ -953,19 +953,6 @@ TOOL_ACTION ACTIONS::unpinLibrary( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Unpin Library" ) )
         .Tooltip( _( "No longer keep the library at the top of the list" ) ) );
 
-TOOL_ACTION ACTIONS::showLibraryFieldsTable( TOOL_ACTION_ARGS()
-        .Name( "common.Control.showLibraryFieldsTable" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Library Fields Table" ) )
-        .Icon( BITMAPS::table ) );
-
-TOOL_ACTION ACTIONS::showRelatedLibraryFieldsTable( TOOL_ACTION_ARGS()
-        .Name( "common.Control.showRelatedLibraryFieldsTable" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Library Fields Table of Related Symbols" ) )
-        .Tooltip( _( "Edit a table of fields of all symbols related to the selected symbol" ) )
-        .Icon( BITMAPS::table ) );
-
 TOOL_ACTION ACTIONS::showLibraryTree( TOOL_ACTION_ARGS()
         .Name( "common.Control.showLibraryTree" )
         .Scope( AS_GLOBAL )

@@ -585,13 +585,14 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol && !m_symbol->GetDatasheetField().GetText().IsEmpty();
             };
 
-    mgr->SetConditions( ACTIONS::showDatasheet,        ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( SCH_ACTIONS::symbolProperties, ENABLE( symbolSelectedInTreeCondition || ( canEditProperties && haveSymbolCond ) ) );
-    mgr->SetConditions( SCH_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( SCH_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
-    mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,   ENABLE( multiBodyStyleModeCond ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,            ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( SCH_ACTIONS::symbolProperties,     ENABLE( symbolSelectedInTreeCondition || ( canEditProperties && haveSymbolCond ) ) );
+    mgr->SetConditions( SCH_ACTIONS::runERC,               ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::pinTable,             ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::updateSymbolFields,   ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,       ENABLE( multiBodyStyleModeCond ) );
 
-    mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode,  ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode, ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
 
 // Only enable a tool if the symbol is edtable
 #define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )

@@ -811,7 +811,7 @@ void DIALOG_LIB_FIELDS_TABLE::setScope( SCOPE aScope )
     wxString                    targetSymbol = m_parent->GetTargetLibId().GetLibItemName();
     wxArrayString               symbolNames;
 
-    SetTitle( wxString::Format( _( "Library Fields Table (%s)" ), targetLib ) );
+    SetTitle( wxString::Format( _( "Symbol Fields Table ('%s' Library)" ), targetLib ) );
 
     m_scope = aScope;
 

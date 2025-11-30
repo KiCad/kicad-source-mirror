@@ -283,6 +283,20 @@ TOOL_ACTION SCH_ACTIONS::flattenSymbol( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Flatten Symbol" ) )
         .Tooltip( _( "Remove inheritance from symbol" ) ) );
 
+TOOL_ACTION SCH_ACTIONS::showLibFieldsTable( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showLibraryFieldsTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Bulk Edit Symbol Fields..." ) )
+        .Tooltip( _( "Edit a table of fields from all symbols in the library" ) )
+        .Icon( BITMAPS::table ) );
+
+TOOL_ACTION SCH_ACTIONS::showRelatedLibFieldsTable( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showRelatedLibraryFieldsTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Bulk Edit Related Symbol Fields..." ) )
+        .Tooltip( _( "Edit a table of fields from all symbols related to the selected symbol" ) )
+        .Icon( BITMAPS::table ) );
+
 TOOL_ACTION SCH_ACTIONS::addSymbolToSchematic( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.addSymbolToSchematic" )
         .Scope( AS_GLOBAL )
@@ -1082,15 +1096,15 @@ TOOL_ACTION SCH_ACTIONS::editLibSymbolWithLibEdit( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::editSymbolFields( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.editSymbolFields" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Edit Symbol Fields..." ) )
-        .Tooltip( _( "Bulk-edit fields of all symbols in schematic" ) )
+        .FriendlyName( _( "Bulk Edit Symbol Fields..." ) )
+        .Tooltip( _( "Edit a table of fields from all symbols in the schematic" ) )
         .Icon( BITMAPS::spreadsheet ) );
 
 TOOL_ACTION SCH_ACTIONS::editSymbolLibraryLinks( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.editSymbolLibraryLinks" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Edit Symbol Library Links..." ) )
-        .Tooltip( _( "Edit links between schematic and library symbols" ) )
+        .FriendlyName( _( "Bulk Edit Symbol Library Links..." ) )
+        .Tooltip( _( "Edit a table of links between schematic and library symbols" ) )
         .Icon( BITMAPS::edit_cmp_symb_links ) );
 
 TOOL_ACTION SCH_ACTIONS::assignFootprints( TOOL_ACTION_ARGS()
