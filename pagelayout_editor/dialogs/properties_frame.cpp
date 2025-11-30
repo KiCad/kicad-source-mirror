@@ -227,6 +227,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     if( !aItem )
     {
         m_SizerItemProperties->Show( false );
+        m_propertiesDirty = false;
         return;
     }
 
