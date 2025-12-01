@@ -194,7 +194,6 @@ public:
          */
         VECTOR2I offset; ///< Offset of the shape center from the pad center
 
-        double round_rect_corner_radius;
         double round_rect_radius_ratio;
         double chamfered_rect_ratio;    ///< Size of chamfer: ratio of smallest of X,Y size
         int chamfered_rect_positions;   ///< @see RECT_CHAMFER_POSITIONS

@@ -949,13 +949,18 @@ void PADSTACK::SetRoundRectRadiusRatio( double aRatio, PCB_LAYER_ID aLayer )
 
 int PADSTACK::RoundRectRadius( PCB_LAYER_ID aLayer ) const
 {
-    return CopperLayer( aLayer ).shape.round_rect_corner_radius;
+    const VECTOR2I& size = Size( aLayer );
+    return KiROUND( std::min( size.x, size.y ) * RoundRectRadiusRatio( aLayer ) );
 }
 
 
 void PADSTACK::SetRoundRectRadius( double aRadius, PCB_LAYER_ID aLayer )
 {
-    CopperLayer( aLayer ).shape.round_rect_corner_radius = aRadius;
+    const VECTOR2I& size = Size( aLayer );
+    int min_r = std::min( size.x, size.y );
+
+    if( min_r > 0 )
+        SetRoundRectRadiusRatio( aRadius / min_r, aLayer );
 }
 
 
@@ -1380,7 +1385,6 @@ PADSTACK::SHAPE_PROPS::SHAPE_PROPS() :
     anchor_shape( PAD_SHAPE::RECTANGLE ),
     size( 0, 0 ),
     offset( 0, 0 ),
-    round_rect_corner_radius( 0 ),
     round_rect_radius_ratio( 0.0 ),
     chamfered_rect_ratio( 0.0 ),
     chamfered_rect_positions( 0 ),
@@ -1395,7 +1399,6 @@ bool PADSTACK::SHAPE_PROPS::operator==( const SHAPE_PROPS& aOther ) const
            anchor_shape == aOther.anchor_shape &&
            size == aOther.size &&
            offset == aOther.offset &&
-           round_rect_corner_radius == aOther.round_rect_corner_radius &&
            round_rect_radius_ratio == aOther.round_rect_radius_ratio &&
            chamfered_rect_ratio == aOther.chamfered_rect_ratio &&
            chamfered_rect_positions == aOther.chamfered_rect_positions &&
