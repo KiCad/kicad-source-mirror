@@ -460,11 +460,16 @@ BOOST_AUTO_TEST_CASE( PCBViaBackdrillCloneRetainsData )
     PCB_VIA via( &board );
 
     via.SetPrimaryDrillStartLayer( F_Cu );
-    via.SetPrimaryDrillEndLayer( In3_Cu );
+    via.SetPrimaryDrillEndLayer( B_Cu );
     via.SetFrontPostMachining( std::optional<PAD_DRILL_POST_MACHINING_MODE>( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK ) );
     via.SetSecondaryDrillSize( std::optional<int>( 15000 ) );
-    via.SetSecondaryDrillStartLayer( In1_Cu );
+    via.SetSecondaryDrillStartLayer( F_Cu );
     via.SetSecondaryDrillEndLayer( In2_Cu );
+
+    via.SetBackPostMachining( std::optional<PAD_DRILL_POST_MACHINING_MODE>( PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE ) );
+    via.SetTertiaryDrillSize( std::optional<int>( 8000 ) );
+    via.SetTertiaryDrillStartLayer( B_Cu );
+    via.SetTertiaryDrillEndLayer( In4_Cu );
 
     PCB_VIA viaCopy( via );
     std::unique_ptr<PCB_VIA> viaClone( static_cast<PCB_VIA*>( via.Clone() ) );
@@ -483,12 +488,17 @@ BOOST_AUTO_TEST_CASE( PCBViaBackdrillCloneRetainsData )
                            via.GetSecondaryDrillStartLayer() );
         BOOST_CHECK_EQUAL( candidate.GetSecondaryDrillEndLayer(),
                            via.GetSecondaryDrillEndLayer() );
-        BOOST_CHECK( candidate.GetBackPostMachining().has_value() );
 
-        // run this BOOST_CHECK only if possible to avoid crash
-        if( candidate.GetBackPostMachining().has_value() )
-            BOOST_CHECK_EQUAL( static_cast<int>( candidate.GetBackPostMachining().value() ),
-                               static_cast<int>( via.GetBackPostMachining().value() ) );
+        BOOST_CHECK( candidate.GetBackPostMachining().has_value() );
+        BOOST_CHECK_EQUAL( static_cast<int>( candidate.GetBackPostMachining().value() ),
+                           static_cast<int>( via.GetBackPostMachining().value() ) );
+        BOOST_CHECK( candidate.GetTertiaryDrillSize().has_value() );
+        BOOST_CHECK_EQUAL( candidate.GetTertiaryDrillSize().value(),
+                           via.GetTertiaryDrillSize().value() );
+        BOOST_CHECK_EQUAL( candidate.GetTertiaryDrillStartLayer(),
+                           via.GetTertiaryDrillStartLayer() );
+        BOOST_CHECK_EQUAL( candidate.GetTertiaryDrillEndLayer(),
+                           via.GetTertiaryDrillEndLayer() );
     };
 
     checkVia( viaCopy );
