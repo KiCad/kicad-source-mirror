@@ -136,7 +136,7 @@ public:
     /// Resolve the netclass of this rule area from connected directive labels.
     ///
     /// @return The resolved netclass (if any), and the SCH_ITEM providing the declaration.
-    const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses() const;
+    const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const;
 
     /// Get the message panel info for the rule area.
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

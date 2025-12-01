@@ -454,13 +454,13 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem ) const
     // Get netclasses on attached rule areas
     for( SCH_RULE_AREA* ruleArea : ruleAreaCache )
     {
-        const std::vector<std::pair<wxString, SCH_ITEM*>> ruleNetclasses =
-                ruleArea->GetResolvedNetclasses();
+        const std::vector<std::pair<wxString, SCH_ITEM*>> ruleAreaNetclasses =
+                ruleArea->GetResolvedNetclasses( &m_sheet );
 
-        if( ruleNetclasses.size() > 0 )
+        if( ruleAreaNetclasses.size() > 0 )
         {
-            foundNetclasses.insert( foundNetclasses.end(), ruleNetclasses.begin(),
-                                    ruleNetclasses.end() );
+            foundNetclasses.insert( foundNetclasses.end(), ruleAreaNetclasses.begin(),
+                                    ruleAreaNetclasses.end() );
         }
     }
 
