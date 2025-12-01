@@ -3245,7 +3245,7 @@ static struct TRACK_VIA_DESC
                 return false;
             } );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Bottom Backdrill Layer" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Bottom Backdrill Must-Cut" ),
             &PCB_VIA::SetBottomBackdrillLayer, &PCB_VIA::GetBottomBackdrillLayer ), groupBackdrill )
             .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
             {
@@ -3269,7 +3269,7 @@ static struct TRACK_VIA_DESC
                 return false;
             } );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Top Backdrill Layer" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Top Backdrill Must-Cut" ),
             &PCB_VIA::SetTopBackdrillLayer, &PCB_VIA::GetTopBackdrillLayer ), groupBackdrill )
             .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
             {

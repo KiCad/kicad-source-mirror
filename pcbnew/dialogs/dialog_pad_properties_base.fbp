@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wxFormBuilder_Project>
-  <FileVersion major="1" minor="19"/>
+  <FileVersion major="1" minor="18"/>
   <object class="Project" expanded="true">
     <property name="code_generation">C++</property>
     <property name="cpp_class_decoration">; </property>
@@ -574,12 +574,10 @@
                                   <property name="center_pane">0</property>
                                   <property name="class">NET_SELECTOR</property>
                                   <property name="close_button">1</property>
+                                  <property name="construction"></property>
                                   <property name="context_help"></property>
                                   <property name="context_menu">1</property>
-                                  <property name="cpp_construction"></property>
-                                  <property name="cpp_declaration"></property>
-                                  <property name="cpp_include">#include &lt;widgets/net_selector.h&gt;</property>
-                                  <property name="cpp_settings"></property>
+                                  <property name="declaration"></property>
                                   <property name="default_pane">0</property>
                                   <property name="dock">Dock</property>
                                   <property name="dock_fixed">0</property>
@@ -592,9 +590,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="lua_construction"></property>
-                                  <property name="lua_require">#include &lt;widgets/net_selector.h&gt;</property>
-                                  <property name="lua_settings"></property>
+                                  <property name="include"></property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
                                   <property name="maximum_size"></property>
@@ -607,15 +603,10 @@
                                   <property name="pane_position"></property>
                                   <property name="pane_size"></property>
                                   <property name="permission">protected</property>
-                                  <property name="php_construction"></property>
-                                  <property name="php_require">#include &lt;widgets/net_selector.h&gt;</property>
-                                  <property name="php_settings"></property>
                                   <property name="pin_button">1</property>
                                   <property name="pos"></property>
-                                  <property name="python_construction"></property>
-                                  <property name="python_import">#include &lt;widgets/net_selector.h&gt;</property>
-                                  <property name="python_settings"></property>
                                   <property name="resize">Resizable</property>
+                                  <property name="settings"></property>
                                   <property name="show">1</property>
                                   <property name="size"></property>
                                   <property name="subclass">; forward_declare</property>
@@ -6269,13 +6260,13 @@
                             <property name="flag">wxEXPAND|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="false">
+                              <property name="id">wxID_ANY</property>
                               <property name="label"></property>
                               <property name="minimum_size">-1,-1</property>
                               <property name="name">m_LayersSizer</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <property name="staticbox"></property>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">10</property>
                                 <property name="flag">wxEXPAND|wxBOTTOM</property>
@@ -7613,13 +7604,13 @@
                             <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="false">
+                              <property name="id">wxID_ANY</property>
                               <property name="label">Teardrops</property>
                               <property name="minimum_size"></property>
                               <property name="name">bSizerTeardrops</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <property name="staticbox"></property>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND|wxBOTTOM</property>
@@ -9811,13 +9802,13 @@
                                 <property name="flag">wxALL|wxEXPAND</property>
                                 <property name="proportion">1</property>
                                 <object class="wxStaticBoxSizer" expanded="false">
+                                  <property name="id">wxID_ANY</property>
                                   <property name="label">Connection to Copper Zones</property>
                                   <property name="minimum_size"></property>
                                   <property name="name">m_sbSizerZonesSettings</property>
                                   <property name="orient">wxVERTICAL</property>
                                   <property name="parent">1</property>
                                   <property name="permission">protected</property>
-                                  <property name="staticbox"></property>
                                   <object class="sizeritem" expanded="false">
                                     <property name="border">5</property>
                                     <property name="flag"></property>
@@ -10099,13 +10090,13 @@
                                 <property name="flag">wxEXPAND|wxALL</property>
                                 <property name="proportion">1</property>
                                 <object class="wxStaticBoxSizer" expanded="false">
+                                  <property name="id">wxID_ANY</property>
                                   <property name="label">Thermal Relief Overrides</property>
                                   <property name="minimum_size"></property>
                                   <property name="name">sbSizerThermalReliefs</property>
                                   <property name="orient">wxVERTICAL</property>
                                   <property name="parent">1</property>
                                   <property name="permission">none</property>
-                                  <property name="staticbox"></property>
                                   <object class="sizeritem" expanded="false">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxEXPAND</property>
@@ -10778,13 +10769,13 @@
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="false">
+                              <property name="id">wxID_ANY</property>
                               <property name="label">Clearance Overrides</property>
                               <property name="minimum_size"></property>
                               <property name="name">sbClearancesSizer</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <property name="staticbox"></property>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
                                 <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
@@ -12261,13 +12252,13 @@
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="true">
+                              <property name="id">wxID_ANY</property>
                               <property name="label">Hole post machining</property>
                               <property name="minimum_size"></property>
                               <property name="name">sbSizer6</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <property name="staticbox"></property>
                               <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
@@ -13364,13 +13355,13 @@
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="true">
+                              <property name="id">wxID_ANY</property>
                               <property name="label">Backdrill</property>
                               <property name="minimum_size"></property>
                               <property name="name">sbSizer7</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <property name="staticbox"></property>
                               <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
@@ -13513,7 +13504,7 @@
                                           <property name="gripper">0</property>
                                           <property name="hidden">0</property>
                                           <property name="id">wxID_ANY</property>
-                                          <property name="label">Top ending layer:</property>
+                                          <property name="label">Top backdrill must-cut:</property>
                                           <property name="markup">0</property>
                                           <property name="max_size"></property>
                                           <property name="maximize_button">0</property>
@@ -13535,7 +13526,7 @@
                                           <property name="style"></property>
                                           <property name="subclass">; ; forward_declare</property>
                                           <property name="toolbar_pane">0</property>
-                                          <property name="tooltip">Backdrill will start at the pad&apos;s start layer and end at this layer</property>
+                                          <property name="tooltip">The backdrill must pass through this layer</property>
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
@@ -13597,7 +13588,7 @@
                                           <property name="style"></property>
                                           <property name="subclass">; ; forward_declare</property>
                                           <property name="toolbar_pane">0</property>
-                                          <property name="tooltip">Backdrill will start at the pad&apos;s start layer and end at this layer</property>
+                                          <property name="tooltip">The backdrill must pass through this layer</property>
                                           <property name="validator_data_type"></property>
                                           <property name="validator_style">wxFILTER_NONE</property>
                                           <property name="validator_type">wxDefaultValidator</property>
@@ -13858,7 +13849,7 @@
                                           <property name="gripper">0</property>
                                           <property name="hidden">0</property>
                                           <property name="id">wxID_ANY</property>
-                                          <property name="label">Bottom ending layer:</property>
+                                          <property name="label">Bottom backdrill must-cut:</property>
                                           <property name="markup">0</property>
                                           <property name="max_size"></property>
                                           <property name="maximize_button">0</property>
@@ -13880,7 +13871,7 @@
                                           <property name="style"></property>
                                           <property name="subclass">; ; forward_declare</property>
                                           <property name="toolbar_pane">0</property>
-                                          <property name="tooltip"></property>
+                                          <property name="tooltip">The backdrill must pass through this layer</property>
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style"></property>
@@ -13942,7 +13933,7 @@
                                           <property name="style"></property>
                                           <property name="subclass">; ; forward_declare</property>
                                           <property name="toolbar_pane">0</property>
-                                          <property name="tooltip">Backdrill will start at the pad&apos;s end layer and end at this layer</property>
+                                          <property name="tooltip">The backdrill must pass through this layer</property>
                                           <property name="validator_data_type"></property>
                                           <property name="validator_style">wxFILTER_NONE</property>
                                           <property name="validator_type">wxDefaultValidator</property>

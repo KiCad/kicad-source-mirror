@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,7 +17,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_sbCommonSizer = new wxStaticBoxSizer( wxVERTICAL, this, _("Common") );
+	m_sbCommonSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Common") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerNetWidgets;
 	bSizerNetWidgets = new wxBoxSizer( wxHORIZONTAL );
@@ -61,7 +61,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 10 );
 
-	m_sbTrackSizer = new wxStaticBoxSizer( wxHORIZONTAL, this, _("Tracks") );
+	m_sbTrackSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks") ), wxHORIZONTAL );
 
 	wxBoxSizer* bSizerTracksLeftCol;
 	bSizerTracksLeftCol = new wxBoxSizer( wxVERTICAL );
@@ -228,7 +228,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	m_sbViaSizer = new wxStaticBoxSizer( wxVERTICAL, this, _("Vias") );
+	m_sbViaSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerViaCols;
 	bSizerViaCols = new wxBoxSizer( wxHORIZONTAL );
@@ -441,7 +441,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizer7->SetFlexibleDirection( wxBOTH );
 	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillFrontLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Backdrill front ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillFrontLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Top backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillFrontLayerLabel->Wrap( -1 );
 	fgSizer7->Add( m_backDrillFrontLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -456,11 +456,13 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizer8->SetFlexibleDirection( wxBOTH );
 	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillBackLayer = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Backdrill bottom ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillBackLayer = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Bottom backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillBackLayer->Wrap( -1 );
 	fgSizer8->Add( m_backDrillBackLayer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_ViaStartLayer11 = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_ViaStartLayer11->SetToolTip( _("The backdrill must pass through this layer") );
+
 	fgSizer8->Add( m_ViaStartLayer11, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 

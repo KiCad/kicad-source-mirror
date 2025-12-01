@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -530,7 +530,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_middleBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* m_LayersSizer;
-	m_LayersSizer = new wxStaticBoxSizer( wxVERTICAL, m_panelGeneral, wxEmptyString );
+	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGeneral, wxID_ANY, wxEmptyString ), wxVERTICAL );
 
 	m_FlippedWarningSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -635,7 +635,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerConnectionsMargins = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* bSizerTeardrops;
-	bSizerTeardrops = new wxStaticBoxSizer( wxVERTICAL, m_connectionsPanel, _("Teardrops") );
+	bSizerTeardrops = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Teardrops") ), wxVERTICAL );
 
 	m_legacyTeardropsWarning = new wxBoxSizer( wxHORIZONTAL );
 
@@ -872,7 +872,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerConnectionsLower;
 	bSizerConnectionsLower = new wxBoxSizer( wxHORIZONTAL );
 
-	m_sbSizerZonesSettings = new wxStaticBoxSizer( wxVERTICAL, m_connectionsPanel, _("Connection to Copper Zones") );
+	m_sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Connection to Copper Zones") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerCopperZonesOpts;
 	fgSizerCopperZonesOpts = new wxFlexGridSizer( 0, 2, 5, 0 );
@@ -907,7 +907,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerConnectionsLower->Add( m_sbSizerZonesSettings, 1, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerThermalReliefs;
-	sbSizerThermalReliefs = new wxStaticBoxSizer( wxVERTICAL, m_connectionsPanel, _("Thermal Relief Overrides") );
+	sbSizerThermalReliefs = new wxStaticBoxSizer( new wxStaticBox( m_connectionsPanel, wxID_ANY, _("Thermal Relief Overrides") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerThermalReliefs;
 	fgSizerThermalReliefs = new wxFlexGridSizer( 0, 3, 3, 0 );
@@ -973,7 +973,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerClearance = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbClearancesSizer;
-	sbClearancesSizer = new wxStaticBoxSizer( wxVERTICAL, m_localSettingsPanel, _("Clearance Overrides") );
+	sbClearancesSizer = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Clearance Overrides") ), wxVERTICAL );
 
 	wxStaticText* m_staticTextHint;
 	m_staticTextHint = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Leave values blank to use parent footprint or netclass values."), wxDefaultPosition, wxDefaultSize, 0 );
@@ -1110,7 +1110,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizer46 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer6;
-	sbSizer6 = new wxStaticBoxSizer( wxVERTICAL, m_backDrillPanel, _("Hole post machining") );
+	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( m_backDrillPanel, wxID_ANY, _("Hole post machining") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer47;
 	bSizer47 = new wxBoxSizer( wxHORIZONTAL );
@@ -1213,7 +1213,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizer46->Add( sbSizer6, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer7;
-	sbSizer7 = new wxStaticBoxSizer( wxVERTICAL, m_backDrillPanel, _("Backdrill") );
+	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_backDrillPanel, wxID_ANY, _("Backdrill") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer48;
 	bSizer48 = new wxBoxSizer( wxHORIZONTAL );
@@ -1237,14 +1237,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer14->SetFlexibleDirection( wxBOTH );
 	fgSizer14->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillTopLayerLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Top ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillTopLayerLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Top backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillTopLayerLabel->Wrap( -1 );
-	m_backDrillTopLayerLabel->SetToolTip( _("Backdrill will start at the pad's start layer and end at this layer") );
+	m_backDrillTopLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
 
 	fgSizer14->Add( m_backDrillTopLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_backDrillTopLayer = new wxBitmapComboBox( sbSizer7->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_backDrillTopLayer->SetToolTip( _("Backdrill will start at the pad's start layer and end at this layer") );
+	m_backDrillTopLayer->SetToolTip( _("The backdrill must pass through this layer") );
 
 	fgSizer14->Add( m_backDrillTopLayer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
@@ -1270,12 +1270,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer15->SetFlexibleDirection( wxBOTH );
 	fgSizer15->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillBottomLayerLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Bottom ending layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillBottomLayerLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Bottom backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillBottomLayerLabel->Wrap( -1 );
+	m_backDrillBottomLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
+
 	fgSizer15->Add( m_backDrillBottomLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_backDrillBottomLayer = new wxBitmapComboBox( sbSizer7->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_backDrillBottomLayer->SetToolTip( _("Backdrill will start at the pad's end layer and end at this layer") );
+	m_backDrillBottomLayer->SetToolTip( _("The backdrill must pass through this layer") );
 
 	fgSizer15->Add( m_backDrillBottomLayer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
