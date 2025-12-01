@@ -129,6 +129,12 @@ bool DB_STR_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
     }
 
     m_String = aResolver.ResolveString( m_StringKey );
+
+    if( !m_String )
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_STR_REF string key %#010x for %s", m_StringKey, m_DebugName ? m_DebugName : "<unknown>" );
+    }
+
     return m_String != nullptr;
 }
 
@@ -201,12 +207,6 @@ void BRD_DB::InsertBlock( const BLOCK_BASE& aBlock )
 
 std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
 {
-    const std::optional<uint32_t> blkKey = GetBlockKey( aBlock );
-
-    // Cannot add un-keyed objects
-    if( !blkKey.has_value() )
-        return nullptr;
-
     std::unique_ptr<DB_OBJ> obj;
 
     switch( aBlock.GetBlockType() )
@@ -214,14 +214,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x01:
     {
         const BLK_0x01_ARC& arcBlk = BLK_DATA( aBlock, BLK_0x01_ARC );
-
-        // std::cout << "Arc" << std::endl;
-
-        auto arc = std::make_unique<ARC>();
-
-        arc->m_Parent = DB_REF( arcBlk.m_Parent );
-
-        // obj = std::move( arc );
+        obj = std::make_unique<ARC>( arcBlk );
         break;
     }
     case 0x03:
@@ -232,7 +225,6 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
         {
         case 0x68: // SYM_LIBRARY_PATH, ?...
             obj = std::make_unique<x03_TEXT>( blk03 );
-            wxLogTrace( "ALLEGRO_EXTRACT", "Created x03_TEXT object for key %#010x", *blkKey );
             break;
         default:
             // Unknown subtype
@@ -242,10 +234,64 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
 
         break;
     }
+    case 0x04:
+    {
+        const BLK_0x04_NET_ASSIGNMENT& netBlk = BLK_DATA( aBlock, BLK_0x04_NET_ASSIGNMENT );
+        obj = std::make_unique<NET_ASSIGN>( *this, netBlk );
+        break;
+    }
+    case 0x05:
+    {
+        const BLK_0x05_TRACK& trackBlk = BLK_DATA( aBlock, BLK_0x05_TRACK );
+        obj = std::make_unique<TRACK>( *this, trackBlk );
+        break;
+    }
+    case 0x06:
+    {
+        const BLK_0x06& compBlk = BLK_DATA( aBlock, BLK_0x06 );
+        obj = std::make_unique<x06_OBJECT>( *this, compBlk );
+        break;
+    }
     case 0x07:
     {
         const BLK_0x07& strBlk = BLK_DATA( aBlock, BLK_0x07 );
-        obj = std::make_unique<TEXT>( strBlk );
+        obj = std::make_unique<REFDES>( strBlk );
+        break;
+    }
+    case 0x08:
+    {
+        const BLK_0x08& symbolBlk = BLK_DATA( aBlock, BLK_0x08 );
+        obj = std::make_unique<PIN_NUMBER>( symbolBlk );
+        break;
+    }
+    case 0x0E:
+    {
+        const BLK_0x0E& pinBlk = BLK_DATA( aBlock, BLK_0x0E );
+        obj = std::make_unique<X0E>( *this, pinBlk );
+        break;
+    }
+    case 0x0F:
+    {
+        const BLK_0x0F& funcSlotBlk = BLK_DATA( aBlock, BLK_0x0F );
+        obj = std::make_unique<FUNCTION_SLOT>( funcSlotBlk );
+        break;
+    }
+    case 0x10:
+    {
+        const BLK_0x10& funcInstBlk = BLK_DATA( aBlock, BLK_0x10 );
+        obj = std::make_unique<FUNCTION_INSTANCE>( funcInstBlk );
+        break;
+    }
+    case 0x11:
+    {
+        const BLK_0x11& pinNameBlk = BLK_DATA( aBlock, BLK_0x11 );
+        obj = std::make_unique<PIN_NAME>( pinNameBlk );
+        break;
+    }
+    case 0x14:
+    {
+        const BLK_0x14& lineBlk = BLK_DATA( aBlock, BLK_0x14 );
+        obj = std::make_unique<GRAPHIC_SEG>( *this, lineBlk );
         break;
     }
     case 0x15:
@@ -253,8 +299,20 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x17:
     {
         const BLK_0x15_16_17_SEGMENT& seg = BLK_DATA( aBlock, BLK_0x15_16_17_SEGMENT );
-
+        obj = std::make_unique<LINE>( seg );
         // std::cout << "Seg" << std::endl;
+        break;
+    }
+    case 0x1b:
+    {
+        const BLK_0x1B_NET& netBlk = BLK_DATA( aBlock, BLK_0x1B_NET );
+        obj = std::make_unique<NET>( *this, netBlk );
+        break;
+    }
+    case 0x28:
+    {
+        const BLK_0x28_SHAPE& shapeBlk = BLK_DATA( aBlock, BLK_0x28_SHAPE );
+        obj = std::make_unique<SHAPE>( *this, shapeBlk );
         break;
     }
     case 0x2b: // Footprint
@@ -263,10 +321,28 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
         obj = std::make_unique<FOOTPRINT_DEF>( *this, fpBlk );
         break;
     }
-    case 0x2d: // Footprint instance
+    case 0x2d:
     {
         const BLK_0x2D& fpInstBlk = BLK_DATA( aBlock, BLK_0x2D );
         obj = std::make_unique<FOOTPRINT_INSTANCE>( fpInstBlk );
+        break;
+    }
+    case 0x2e:
+    {
+        const BLK_0x2E& padBlk = BLK_DATA( aBlock, BLK_0x2E );
+        obj = std::make_unique<X2E>( *this, padBlk );
+        break;
+    }
+    case 0x32:
+    {
+        const BLK_0x32_PLACED_PAD& placedPadBlk = BLK_DATA( aBlock, BLK_0x32_PLACED_PAD );
+        obj =  std::make_unique<PLACED_PAD>( *this, placedPadBlk );
+        break;
+    }
+    case 0x33:
+    {
+        const BLK_0x33_VIA& viaBlk = BLK_DATA( aBlock, BLK_0x33_VIA );
+        obj =  std::make_unique<VIA>( *this, viaBlk );
         break;
     }
     default:
@@ -275,7 +351,6 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
 
     if( obj )
     {
-        obj->m_Key = *blkKey;
         obj->m_Loc = DB_OBJ::FILE_LOC{ aBlock.GetOffset(), aBlock.GetBlockType() };
     }
 
@@ -373,19 +448,6 @@ void DB::visitLinkedList( const FILE_HEADER::LINKED_LIST            aLList,
 }
 
 
-bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
-{
-    bool ok = true;
-
-    ok &= m_Parent.Resolve( aResolver );
-
-    if(!ok)
-        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve ARC key %#010x", GetKey() );
-
-    return ok;
-}
-
-
 static bool CheckTypeIs( const DB_REF& aRef, DB_OBJ::TYPE aType, bool aCanBeNull )
 {
     if( aRef.m_Target == nullptr )
@@ -414,35 +476,325 @@ static bool CheckTypeIsOneOf( const DB_REF& aRef, const std::vector<DB_OBJ::TYPE
 //     }
 // }
 
-TEXT::TEXT( const BLK_0x07& aBlk )
+
+ARC::ARC( const BLK_0x01_ARC& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::ARC, aBlk.m_Key )
 {
-    m_TextStr.m_StringKey = aBlk.m_RefDesRef;
+    m_Parent.m_TargetKey = aBlk.m_Parent;
+    m_Parent.m_DebugName = "ARC::m_Parent";
 }
 
 
-bool TEXT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
-    ok &= m_TextStr.Resolve( aResolver );
+    ok &= m_Parent.Resolve( aResolver );
 
     return ok;
 }
 
 
-x03_TEXT::x03_TEXT( const BLK_0x03& aBlk )
+NET_ASSIGN::NET_ASSIGN( const BRD_DB& aBrd, const BLK_0x04_NET_ASSIGNMENT& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::NET_ASSIGN, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x04.m_Tail;
+    m_Next.m_DebugName = "NET_ASSIGN::m_Next";
+
+    m_Net.m_TargetKey = aBlk.m_Net;
+    m_Net.m_DebugName = "NET_ASSIGN::m_Net";
+
+    m_ConnItem.m_TargetKey = aBlk.m_ConnItem;
+    m_ConnItem.m_DebugName = "NET_ASSIGN::m_ConnItem";
+}
+
+
+bool NET_ASSIGN::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    // ok &= m_Net.Resolve( aResolver );
+    ok &= m_ConnItem.Resolve( aResolver );
+
+    return ok;
+}
+
+
+TRACK::TRACK( const BRD_DB& aBrd, const BLK_0x05_TRACK& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::TRACK, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x05.m_Tail;
+    m_Next.m_DebugName = "TRACK::m_Next";
+}
+
+
+bool TRACK::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+
+    return ok;
+}
+
+
+x03_TEXT::x03_TEXT( const BLK_0x03& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::x03_TEXT, aBlk.m_Key )
 {
     // wxASSERT( aBlk.m_Substruct.is<std::string>() );
     m_TextStr = std::get<std::string>( aBlk.m_Substruct );
 }
 
 
+x06_OBJECT::x06_OBJECT( const BRD_DB& aBrd, const BLK_0x06& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::x06, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_0x06.m_Tail;
+    m_Next.m_DebugName = "x06_OBJECT::m_Next";
+
+    m_CompDeviceType.m_StringKey = aBlk.m_CompDeviceType;
+    m_CompDeviceType.m_DebugName = "x06_OBJECT::m_CompDeviceType";
+
+    m_SymbolName.m_StringKey = aBlk.m_SymbolName;
+    m_SymbolName.m_DebugName = "x06_OBJECT::m_SymbolName";
+
+    m_PtrRefDes.m_TargetKey = aBlk.m_PtrRefDes;
+    m_PtrRefDes.m_DebugName = "x06_OBJECT::m_PtrRefDes";
+
+    m_PtrFunctionSlot.m_TargetKey = aBlk.m_PtrFunctionSlot;
+    m_PtrFunctionSlot.m_DebugName = "x06_OBJECT::m_PtrFunctionSlot";
+
+    m_PtrPinNumber.m_TargetKey = aBlk.m_PtrPinNumber;
+    m_PtrPinNumber.m_DebugName = "x06_OBJECT::m_PtrPinNumber";
+
+    m_Fields.m_TargetKey = aBlk.m_Fields;
+    m_Fields.m_DebugName = "x06_OBJECT::m_Fields";
+}
 
 
+bool x06_OBJECT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_CompDeviceType.Resolve( aResolver );
+    ok &= m_SymbolName.Resolve( aResolver );
+    ok &= m_PtrRefDes.Resolve( aResolver );
+    ok &= m_PtrFunctionSlot.Resolve( aResolver );
+    ok &= m_PtrPinNumber.Resolve( aResolver );
+    ok &= m_Fields.Resolve( aResolver );
+
+    ok &= CheckTypeIs( m_PtrRefDes, DB_OBJ::TYPE::REFDES, true );
+    ok &= CheckTypeIs( m_PtrFunctionSlot, DB_OBJ::TYPE::FUNCTION_SLOT, true );
+
+    // Bind the REFDES back to this component
+    if( m_PtrRefDes.m_Target )
+    {
+        wxASSERT( m_PtrRefDes.m_Target->GetType() == DB_OBJ::TYPE::REFDES );
+        REFDES& refDes = static_cast<REFDES&>( *m_PtrRefDes.m_Target );
+        refDes.m_ParentComponent = this;
+    }
+
+    return ok;
+}
 
 
+const REFDES& x06_OBJECT::GetRefDes() const
+{
+    if( m_PtrRefDes.m_Target == nullptr )
+    {
+        THROW_IO_ERROR( "x06_OBJECT::GetRefDes: Null reference to REFDES" );
+    }
 
-LINE::LINE( const BLK_0x15_16_17_SEGMENT& aBlk )
+    return static_cast<const REFDES&>( *m_PtrRefDes.m_Target );
+}
+
+
+const wxString* x06_OBJECT::GetComponentDeviceType() const
+{
+    return m_CompDeviceType.m_String;
+}
+
+
+REFDES::REFDES( const BLK_0x07& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::REFDES, aBlk.m_Key )
+{
+    m_TextStr.m_StringKey = aBlk.m_RefDesStrPtr;
+    m_TextStr.m_DebugName = "REFDES::m_TextStr";
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "REFDES::m_Next";
+
+    m_FunctionInst.m_TargetKey = aBlk.m_FunctionInstPtr;
+    m_FunctionInst.m_DebugName = "REFDES::m_FunctionInst";
+
+    m_FirstPad.m_TargetKey = aBlk.m_FirstPadPtr;
+    m_FirstPad.m_DebugName = "REFDES::m_FirstPad";
+}
+
+
+bool REFDES::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_TextStr.Resolve( aResolver );
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_FunctionInst.Resolve( aResolver );
+    ok &= m_FirstPad.Resolve( aResolver );
+
+    return ok;
+}
+
+
+const wxString* REFDES::GetRefDesStr() const
+{
+    return m_TextStr.m_String;
+}
+
+
+const FUNCTION_INSTANCE& REFDES::GetFunctionInstance() const
+{
+    if( m_FunctionInst.m_Target == nullptr )
+    {
+        THROW_IO_ERROR( "REFDES::GetFunctionInstance: Null reference to FUNCTION_INSTANCE" );
+    }
+
+    return static_cast<const FUNCTION_INSTANCE&>( *m_FunctionInst.m_Target );
+}
+
+
+const REFDES* REFDES::GetNextRefDes() const
+{
+    wxCHECK2_MSG( m_Next.m_Target, nullptr, "REFDES::GetNextRefDes: Null m_Next reference" );
+
+    // If the next is not a REFDES, it's the end of the list
+    if( m_Next.m_Target->GetType() != DB_OBJ::TYPE::REFDES )
+    {
+        return nullptr;
+    }
+
+    return static_cast<const REFDES*>( m_Next.m_Target );
+}
+
+
+PIN_NUMBER::PIN_NUMBER( const BLK_0x08& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::PIN_NUMBER, aBlk.m_Key )
+{
+    m_PinName.m_TargetKey = aBlk.m_PinNamePtr;
+    m_PinName.m_DebugName = "PIN_NUMBER::m_PinName";
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "PIN_NUMBER::m_Next";
+
+    // This can be in one of two fields depending on version
+    if( aBlk.m_StrPtr.has_value() )
+        m_PinNumberStr.m_StringKey = aBlk.m_StrPtr.value();
+    else
+        m_PinNumberStr.m_StringKey = aBlk.m_StrPtr16x.value();
+
+    m_PinNumberStr.m_DebugName = "PIN_NUMBER::m_PinNumberStr";
+}
+
+
+bool PIN_NUMBER::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_PinNumberStr.Resolve( aResolver );
+    ok &= m_PinName.Resolve( aResolver );
+
+    ok &= CheckTypeIs( m_PinName, DB_OBJ::TYPE::PIN_NAME, true );
+
+    return ok;
+}
+
+
+X0E::X0E( const BRD_DB& aBrd, const BLK_0x0E& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::x0e, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_Shapes.m_Tail;
+    m_Next.m_DebugName = "X0E::m_Next";
+}
+
+
+bool X0E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+
+    return ok;
+}
+
+
+PIN_NAME::PIN_NAME( const BLK_0x11& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::PIN_NAME, aBlk.m_Key )
+{
+    m_PinNameStr.m_StringKey = aBlk.m_PinNameStrPtr;
+    m_PinNameStr.m_DebugName = "PIN_NAME::m_PinNameStr";
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "PIN_NAME::m_Next";
+
+    m_PinNumber.m_TargetKey = aBlk.m_PinNumberPtr;
+    m_PinNumber.m_DebugName = "PIN_NAME::m_PinNumber";
+}
+
+bool PIN_NAME::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_PinNameStr.Resolve( aResolver );
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_PinNumber.Resolve( aResolver );
+
+    return ok;
+}
+
+
+GRAPHIC_SEG::GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::GRAPHIC_SEG, aBlk.m_Key )
+{
+    m_Parent.m_TargetKey = aBlk.m_Parent;
+    m_Parent.m_EndKey = aBrd.m_Header->m_LL_0x14.m_Tail;
+    m_Parent.m_DebugName = "GRAPHIC_SEG::m_Parent";
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_0x14.m_Tail;
+    m_Next.m_DebugName = "GRAPHIC_SEG::m_Next";
+
+    m_Segment.m_TargetKey = aBlk.m_SegmentPtr;
+    m_Segment.m_DebugName = "GRAPHIC_SEG::m_Segment";
+}
+
+
+bool GRAPHIC_SEG::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Parent.Resolve( aResolver );
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_Segment.Resolve( aResolver );
+
+    ok &= CheckTypeIsOneOf( m_Segment,
+        {
+            DB_OBJ::TYPE::LINE,
+            DB_OBJ::TYPE::ARC,
+        },
+        false );
+
+    return ok;
+}
+
+
+LINE::LINE( const BLK_0x15_16_17_SEGMENT& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::LINE, aBlk.m_Key )
 {
     m_Parent.m_TargetKey = aBlk.m_Parent;
     m_Parent.m_DebugName = "SEGMENT::m_Parent";
@@ -463,17 +815,15 @@ bool LINE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
-    ok &= m_Parent.Resolve( aResolver );
+    // ok &= m_Parent.Resolve( aResolver );
     ok &= m_Next.Resolve( aResolver );
-
-    if( !ok )
-        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve LINE key %#010x", GetKey() );
 
     return ok;
 }
 
 
-FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk )
+FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::FP_DEF, aBlk.m_Key )
 {
     // 0x2Bs are linked together in a list from the board header
     m_Next.m_EndKey = aBrd.m_Header->m_LL_0x2B.m_Tail;
@@ -533,7 +883,8 @@ const wxString* FOOTPRINT_DEF::GetLibPath() const
 }
 
 
-FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk )
+FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::FP_INST, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
 
@@ -557,7 +908,7 @@ bool FOOTPRINT_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     ok &= m_Next.Resolve( aResolver );
     ok &= m_RefDes.Resolve( aResolver );
 
-    ok &= CheckTypeIs( m_RefDes, DB_OBJ::TYPE::TEXT, true );
+    ok &= CheckTypeIs( m_RefDes, DB_OBJ::TYPE::REFDES, true );
 
     return ok;
 }
@@ -570,8 +921,8 @@ const wxString* FOOTPRINT_INSTANCE::GetRefDes() const
     if( m_RefDes.m_Target == nullptr )
         return nullptr;
 
-    TEXT& textObj = static_cast<TEXT&>( *m_RefDes.m_Target );
-    return textObj.m_TextStr.m_String;
+    REFDES& refdesObj = static_cast<REFDES&>( *m_RefDes.m_Target );
+    return refdesObj.m_TextStr.m_String;
 }
 
 
@@ -582,6 +933,211 @@ const wxString* FOOTPRINT_INSTANCE::GetName() const
         return nullptr;
 
     return m_Parent->m_FpStr.m_String;
+}
+
+
+FUNCTION_SLOT::FUNCTION_SLOT( const BLK_0x0F& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::FUNCTION_SLOT, aBlk.m_Key )
+{
+    m_SlotName.m_StringKey = aBlk.m_SlotName;
+    m_SlotName.m_DebugName = "FUNCTION_SLOT::m_SlotName";
+
+    m_CompDeviceType = wxString::FromUTF8( aBlk.m_CompDeviceType.data() );
+
+    m_Ptr0x06.m_TargetKey = aBlk.m_Ptr0x06;
+    m_Ptr0x06.m_DebugName = "FUNCTION_SLOT::m_Ptr0x06";
+
+    m_Ptr0x11.m_TargetKey = aBlk.m_Ptr0x11;
+    m_Ptr0x11.m_DebugName = "FUNCTION_SLOT::m_Ptr0x11";
+}
+
+
+bool FUNCTION_SLOT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_SlotName.Resolve( aResolver );
+    ok &= m_Ptr0x06.Resolve( aResolver );
+    ok &= m_Ptr0x11.Resolve( aResolver );
+
+    return ok;
+}
+
+
+const wxString* FUNCTION_SLOT::GetName() const
+{
+    return m_SlotName.m_String;
+}
+
+
+FUNCTION_INSTANCE::FUNCTION_INSTANCE( const BLK_0x10& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::FUNCTION_INST, aBlk.m_Key )
+{
+    m_Slot.m_TargetKey = aBlk.m_Slots;
+    m_Slot.m_DebugName = "FUNCTION_INSTANCE::m_Slots";
+
+    m_Fields.m_TargetKey = aBlk.m_Fields;
+    m_Fields.m_DebugName = "FUNCTION_INSTANCE::m_Fields";
+
+    m_FunctionName.m_StringKey = aBlk.m_FunctionName;
+    m_FunctionName.m_DebugName = "FUNCTION_INSTANCE::m_FunctionName";
+
+    m_RefDes.m_TargetKey = aBlk.m_RefDesPtr;
+    m_RefDes.m_DebugName = "FUNCTION_INSTANCE::m_RefDes";
+}
+
+
+bool FUNCTION_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Slot.Resolve( aResolver );
+    ok &= m_Fields.Resolve( aResolver );
+    ok &= m_FunctionName.Resolve( aResolver );
+    ok &= m_RefDes.Resolve( aResolver );
+
+    return ok;
+}
+
+
+const wxString* FUNCTION_INSTANCE::GetName() const
+{
+    return m_FunctionName.m_String;
+}
+
+
+const REFDES& FUNCTION_INSTANCE::GetRefDes() const
+{
+    return static_cast<const REFDES&>( *m_RefDes.m_Target );
+}
+
+
+const FUNCTION_SLOT& FUNCTION_INSTANCE::GetFunctionSlot() const
+{
+    if( m_Slot.m_Target == nullptr )
+    {
+        THROW_IO_ERROR( "FUNCTION_INSTANCE::GetFunctionSlot: Null reference to FUNCTION_SLOT" );
+    }
+
+    return static_cast<const FUNCTION_SLOT&>( *m_Slot.m_Target );
+}
+
+
+NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::NET, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_0x1B_Nets.m_Tail;
+    m_Next.m_DebugName = "NET::m_Next";
+
+    m_NetNameStr.m_StringKey = aBlk.m_NetName;
+    m_NetNameStr.m_DebugName = "NET::m_NetNameStr";
+}
+
+
+bool NET::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_NetNameStr.Resolve( aResolver );
+
+    return ok;
+}
+
+
+SHAPE::SHAPE( const BRD_DB& aBrd, const BLK_0x28_SHAPE& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::SHAPE, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x28.m_Tail;
+    m_Next.m_DebugName = "SHAPE::m_Next";
+
+    m_Segments.m_TargetKey = aBlk.m_FirstSegmentPtr;
+    m_Segments.m_DebugName = "SHAPE::m_Segments";
+}
+
+
+bool SHAPE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_Segments.Resolve( aResolver );
+
+    return ok;
+}
+
+
+X2E::X2E( const BRD_DB& aBrd, const BLK_0x2E& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::x2e, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x2E.m_Tail;
+    m_Next.m_DebugName = "X2E::m_Next";
+
+    m_NetAssign.m_TargetKey = aBlk.m_NetAssignment;
+    m_NetAssign.m_DebugName = "X2E::m_NetAssign";
+
+    m_Connection.m_TargetKey = aBlk.m_Connection;
+    m_Connection.m_DebugName = "X2E::m_Connection";
+
+    m_Position.x = aBlk.m_CoordX;
+    m_Position.y = aBlk.m_CoordY;
+}
+
+
+bool X2E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_NetAssign.Resolve( aResolver );
+    ok &= m_Connection.Resolve( aResolver );
+
+    return ok;
+}
+
+
+PLACED_PAD::PLACED_PAD( const BRD_DB& aBrd, const BLK_0x32_PLACED_PAD& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::PLACED_PAD, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x32.m_Tail;
+    m_Next.m_DebugName = "PLACED_PAD::m_Next";
+
+    // m_Padstack.m_TargetKey = aBlk.m_PadstackPtr;
+    // m_Padstack.m_DebugName = "PLACED_PAD::m_Padstack";
+}
+
+
+bool PLACED_PAD::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    // ok &= m_Padstack.Resolve( aResolver );
+
+    return ok;
+}
+
+
+VIA::VIA( const BRD_DB& aBrd, const BLK_0x33_VIA& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::VIA, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x33.m_Tail;
+    m_Next.m_DebugName = "VIA::m_Next";
+}
+
+
+bool VIA::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+
+    return ok;
 }
 
 
@@ -638,4 +1194,39 @@ void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, BRD_DB::FP_IN
     };
 
     aFpDef.m_Instances.Visit( fpInstNextFunc );
+}
+
+
+void BRD_DB::VisitFunctionInstances( BRD_DB::FUNCTION_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting function instances" );
+
+    const auto x06NextFunc = [&]( const DB_OBJ& aObj ) -> const DB_REF&
+    {
+        if( aObj.GetType() != DB_OBJ::TYPE::x06 )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "  Not an x06 object, skipping key %#010x", aObj.GetKey() );
+            return DB_NULLREF;
+        }
+
+        const x06_OBJECT& x06 = static_cast<const x06_OBJECT&>( aObj );
+
+        // Iterate all the refdes linked to this x06 object because each 0x06 can have
+        // multiple refdes instances
+
+        const REFDES* refdes = &x06.GetRefDes();
+
+        while( refdes )
+        {
+            const FUNCTION_INSTANCE& funcInst = refdes->GetFunctionInstance();
+
+            aVisitor( x06, funcInst );
+
+            refdes = refdes->GetNextRefDes();
+        }
+
+        return x06.m_Next;
+    };
+
+    visitLinkedList( m_Header->m_LL_0x06, x06NextFunc );
 }

@@ -506,21 +506,21 @@ struct BLK_0x06
 
     // Pointer to the next BLK_0x06
     uint32_t m_Next;
+    // Pointer to COMP_DEVICE_TYPE string
+    uint32_t m_CompDeviceType;
+    // Pointer to SYM_NAME string
+    uint32_t m_SymbolName;
+    // Points to 0x07, refdes
+    uint32_t m_PtrRefDes;
+    // Points to 0x0F, function slot
+    uint32_t m_PtrFunctionSlot;
+    // Points to 0x08, pin number
+    uint32_t m_PtrPinNumber;
 
-    uint32_t m_PtrStr;
+    // Points to 0x03, first 'field'
+    uint32_t m_Fields;
 
-    uint32_t m_UnknownPtr;
-
-    uint32_t m_PtrInstance;
-
-    uint32_t m_PtrFootprint;
-
-    uint32_t m_Ptr0x08;
-
-    // Points to 0x03, schematic symbol
-    uint32_t m_PtrSymbol;
-
-    COND_GE<FMT_VER::V_172, uint32_t> m_UnknownPtr2;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 };
 
 
@@ -531,26 +531,26 @@ struct BLK_0x07
 {
     uint32_t m_Key;
 
-    uint32_t m_Unknown1;
+    uint32_t m_Next;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_UnknownPtr1;
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
 
-    uint32_t m_Ptr0x2D;
+    uint32_t m_FpInstPtr;
 
     COND_LT<FMT_VER::V_172, uint32_t> m_Unknown4;
 
-    uint32_t m_RefDesRef;
-    uint32_t m_UnknownPtr2;
-    uint32_t m_UnknownPtr3; // 0x03 or null
+    uint32_t m_RefDesStrPtr;
+    uint32_t m_FunctionInstPtr;
+    uint32_t m_X03Ptr; // 0x03 or null
     uint32_t m_Unknown5;
-    uint32_t m_UnknownPtr4; // 0x32 or null
+    uint32_t m_FirstPadPtr; // 0x32 or null
 };
 
 
 /**
- * 0x08 objects.
+ * 0x08 objects (PIN_NUMBER)
  */
 struct BLK_0x08
 {
@@ -558,14 +558,15 @@ struct BLK_0x08
     uint16_t m_R;
     uint32_t m_Key;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Ptr1;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Previous;
     COND_LT<FMT_VER::V_172, uint32_t> m_StrPtr16x;
 
-    uint32_t m_Ptr2;
+    uint32_t m_Next;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_StrPtr;
 
-    uint32_t m_Ptr3;
+    ///< Pointer to 0x11 PIN_NAME object
+    uint32_t m_PinNamePtr;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
@@ -628,8 +629,8 @@ struct BLK_0x0C
     uint32_t m_Unknown1;
     uint32_t m_Unknown2;
 
-    COND_LT<FMT_VER::V_172, uint8_t> m_Shape;
-    COND_LT<FMT_VER::V_172, uint8_t> m_DrillChar;
+    COND_LT<FMT_VER::V_172, uint8_t>  m_Shape;
+    COND_LT<FMT_VER::V_172, uint8_t>  m_DrillChar;
     COND_LT<FMT_VER::V_172, uint16_t> m_UnknownPadding; // or drill char?
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Shape16x;
@@ -696,19 +697,17 @@ struct BLK_0x0E
 
 
 /**
- * 0x0F objects.
- *
- * Exact purpose not clear yet.
- *
- * Number of 0x0F objects in a file seems to match 0x06 objects.
+ * 0x0F objects: FUNCTION SLOT
  */
 struct BLK_0x0F
 {
     uint32_t m_Key;
 
-    uint32_t m_Ptr;
+    uint32_t m_SlotName;
 
-    std::array<char, 32> m_Name;
+    std::array<char, 32> m_CompDeviceType;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_NextSlot;
 
     uint32_t m_Ptr0x06;
     uint32_t m_Ptr0x11;
@@ -716,14 +715,11 @@ struct BLK_0x0F
     uint32_t m_Unknown1;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 };
 
 
 /**
- * 0x10 objects.
- *
- * Use unclear for now.
+ * 0x10 objects: FUNCTION INSTANCE
  *
  * Number of 0x10 objects in a file seems to match 0x07 objects.
  */
@@ -731,31 +727,34 @@ struct BLK_0x10
 {
     uint32_t m_Key;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_UnknownPtr1;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
-    uint32_t m_UnknownPtr2;
+    uint32_t m_RefDesPtr;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
 
-    uint32_t m_UnknownPtr3;
-    uint32_t m_Unknown2;
-    uint32_t m_UnknownPtr4;
-    uint32_t m_UnknownPtr5; // 0x0F?
-    uint32_t m_PathStr;     // Presumably a pointer to a string
+    uint32_t m_PtrX12;
+    uint32_t m_Unknown3;
+    uint32_t m_FunctionName;
+    uint32_t m_Slots; // 0x0F?
+    uint32_t m_Fields;     // Presumably a pointer to a string
 };
 
 
 /**
- * 0x11 objects.
+ * 0x11 objects: PIN_NAME mapping
  */
 struct BLK_0x11
 {
     uint8_t  m_Type;
     uint16_t m_R;
     uint32_t m_Key;
-    uint32_t m_Ptr1;
-    uint32_t m_Ptr2;
-    uint32_t m_Ptr3;
+    ///< Pointer to pin name string
+    uint32_t m_PinNameStrPtr;
+    ///< Pointer to next 0x11 PIN_NAME object or 0x0F REFDES
+    uint32_t m_Next;
+    ///< Pointer to 0x11 PIN_NUMBER object
+    uint32_t m_PinNumberPtr;
     uint32_t m_Unknown1;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
@@ -1171,7 +1170,7 @@ struct BLK_0x24_RECT
     LAYER_INFO m_Layer;
     uint32_t   m_Key;
     uint32_t   m_Next;
-    uint32_t   m_Ptr1;
+    uint32_t   m_Parent;
     uint32_t   m_Unknown1;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
@@ -1413,10 +1412,14 @@ struct BLK_0x2E
     uint16_t m_T2;
     uint32_t m_Key;
     uint32_t m_Next;
+    uint32_t m_NetAssignment;
+    uint32_t m_Unknown1;
+    int32_t m_CoordX;
+    int32_t m_CoordY;
+    uint32_t m_Connection;
+    uint32_t m_Unknown2;
 
-    std::array<uint32_t, 6> m_UnknownArray;
-
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
 };
 
 

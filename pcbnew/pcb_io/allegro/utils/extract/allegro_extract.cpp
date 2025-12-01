@@ -168,12 +168,14 @@ int main( int argc, char** argv )
     if( extractedBlocks.size() > 0 )
     {
         STRING_FORMATTER formatter;
-        ALLEGRO::ASCII_EXTRACTOR extractor( *board, formatter );
+        WX_STRING_REPORTER reporter;
+
+        ALLEGRO::ASCII_EXTRACTOR extractor( *board, formatter, reporter );
 
         for( const ALLEGRO::EXTRACT_SPEC_PARSER::IR::BLOCK& block : extractedBlocks )
         {
             wxLogTrace( traceAllegroExtract, "Extracting block of type %d with %zu fields",
-                        static_cast<int>( block.Type ), block.Fields.size() );
+                        static_cast<int>( block.ViewType ), block.Fields.size() );
 
             try
             {

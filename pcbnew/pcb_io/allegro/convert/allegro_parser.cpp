@@ -480,14 +480,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER
 
     data.m_Key = stream.ReadU32();
     data.m_Next = stream.ReadU32();
-    data.m_PtrStr = stream.ReadU32();
-    data.m_UnknownPtr = stream.ReadU32();
-    data.m_PtrInstance = stream.ReadU32();
-    data.m_PtrFootprint = stream.ReadU32();
-    data.m_Ptr0x08 = stream.ReadU32();
-    data.m_PtrSymbol = stream.ReadU32();
+    data.m_CompDeviceType = stream.ReadU32();
+    data.m_SymbolName = stream.ReadU32();
+    data.m_PtrRefDes = stream.ReadU32();
+    data.m_PtrFunctionSlot = stream.ReadU32();
+    data.m_PtrPinNumber = stream.ReadU32();
+    data.m_Fields = stream.ReadU32();
 
-    ReadCond( stream, aVer, data.m_UnknownPtr2 );
+    ReadCond( stream, aVer, data.m_Unknown1 );
 
     return block;
 }
@@ -502,20 +502,21 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x07( FILE_STREAM& stream, FMT_VER
     stream.Skip( 3 );
 
     data.m_Key = stream.ReadU32();
-    data.m_Unknown1 = stream.ReadU32();
+    data.m_Next = stream.ReadU32();
+
     ReadCond( stream, aVer, data.m_UnknownPtr1 );
     ReadCond( stream, aVer, data.m_Unknown2 );
     ReadCond( stream, aVer, data.m_Unknown3 );
 
-    data.m_Ptr0x2D = stream.ReadU32();
+    data.m_FpInstPtr = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_Unknown4 );
 
-    data.m_RefDesRef = stream.ReadU32();
-    data.m_UnknownPtr2 = stream.ReadU32();
-    data.m_UnknownPtr3 = stream.ReadU32();
+    data.m_RefDesStrPtr = stream.ReadU32();
+    data.m_FunctionInstPtr = stream.ReadU32();
+    data.m_X03Ptr = stream.ReadU32();
     data.m_Unknown5 = stream.ReadU32();
-    data.m_UnknownPtr4 = stream.ReadU32();
+    data.m_FirstPadPtr = stream.ReadU32();
 
     return block;
 }
@@ -531,14 +532,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x08( FILE_STREAM& aStream, FMT_VE
     data.m_R = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
 
-    ReadCond( aStream, aVer, data.m_Ptr1 );
+    ReadCond( aStream, aVer, data.m_Previous );
     ReadCond( aStream, aVer, data.m_StrPtr16x );
 
-    data.m_Ptr2 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_StrPtr );
 
-    data.m_Ptr3 = aStream.ReadU32();
+    data.m_PinNamePtr = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown1 );
 
@@ -724,14 +725,16 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
     stream.Skip( 3 );
 
     data.m_Key = stream.ReadU32();
-    data.m_Ptr = stream.ReadU32();
-    stream.ReadBytes( data.m_Name.data(), data.m_Name.size() );
+    data.m_SlotName = stream.ReadU32();
+    stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
+
+    ReadCond( stream, aVer, data.m_NextSlot );
+
     data.m_Ptr0x06 = stream.ReadU32();
     data.m_Ptr0x11 = stream.ReadU32();
     data.m_Unknown1 = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_Unknown2 );
-    ReadCond( stream, aVer, data.m_Unknown3 );
 
     return block;
 }
@@ -747,14 +750,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
 
     data.m_Key = stream.ReadU32();
 
-    ReadCond( stream, aVer, data.m_UnknownPtr1 );
-    data.m_UnknownPtr2 = stream.ReadU32();
     ReadCond( stream, aVer, data.m_Unknown1 );
-    data.m_UnknownPtr3 = stream.ReadU32();
-    data.m_Unknown2 = stream.ReadU32();
-    data.m_UnknownPtr4 = stream.ReadU32();
-    data.m_UnknownPtr5 = stream.ReadU32();
-    data.m_PathStr = stream.ReadU32();
+    data.m_RefDesPtr = stream.ReadU32();
+    ReadCond( stream, aVer, data.m_Unknown2 );
+    data.m_PtrX12 = stream.ReadU32();
+    data.m_Unknown3 = stream.ReadU32();
+    data.m_FunctionName = stream.ReadU32();
+    data.m_Slots = stream.ReadU32();
+    data.m_Fields = stream.ReadU32();
 
     return block;
 }
@@ -769,9 +772,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x11( FILE_STREAM& aStream, FMT_VE
     data.m_Type = aStream.ReadU8();
     data.m_R = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
-    data.m_Ptr1 = aStream.ReadU32();
-    data.m_Ptr2 = aStream.ReadU32();
-    data.m_Ptr3 = aStream.ReadU32();
+    data.m_PinNameStrPtr = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_PinNumberPtr = aStream.ReadU32();
     data.m_Unknown1 = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
@@ -1189,7 +1192,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x24_RECT( FILE_STREAM& aStream, F
     data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
-    data.m_Ptr1 = aStream.ReadU32();
+    data.m_Parent = aStream.ReadU32();
     data.m_Unknown1 = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
@@ -1468,10 +1471,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2E( FILE_STREAM& aStream, FMT_VE
     data.m_T2 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
+    data.m_NetAssignment = aStream.ReadU32();
+    data.m_Unknown1 = aStream.ReadU32();
+    data.m_CoordX = aStream.ReadU32();
+    data.m_CoordY = aStream.ReadU32();
+    data.m_Connection = aStream.ReadU32();
+    data.m_Unknown2 = aStream.ReadU32();
 
-    ReadArrayU32( aStream, data.m_UnknownArray );
-
-    ReadCond( aStream, aVer, data.m_Unknown1 );
+    ReadCond( aStream, aVer, data.m_Unknown3 );
 
     return block;
 }

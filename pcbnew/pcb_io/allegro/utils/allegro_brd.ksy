@@ -379,9 +379,9 @@ types:
             0x0c: type_0c
             0x0d: type_0d_pad
             0x0e: type_0e
-            0x0f: type_0f
-            0x10: type_10
-            0x11: type_11
+            0x0f: type_0f_slot
+            0x10: type_10_function
+            0x11: type_11_pin_name
             0x12: type_12
             0x14: type_14
             0x15: type_15_16_17_segment
@@ -474,9 +474,56 @@ types:
         repeat-expr: 4
 
   type_03:
+    doc: |
+      Some kind of generic data block.
+
+      - Subtype 0x68 (text):
+
+          - Footprint: Source Package (hdr1 = 0xc4)
+
+              Looks like the "Source Package" from the schematic/netlist.
+
+              E.g. R, CON1, CON2, LED_0, CAP POL_0, etc.
+
+              Found at the start of the COMP_DEVICE_TYPE string.
+
+          - Footprint: Value (hdr1 = 0x02)
+
+              E.g. 510
+
+          - FUNC_LOGICAL_PATH hdr1 = 0x37, hdr2 = 0x4
+
+              @preampl_schem.schematic1(sch_1):ins14593@connector.\\con1.normal\(chips)
+
+              Pointed to by 0x10 FUNCTIONs
+
+          - ??? hdr1 = 0x19c, hdr2 = 0x4
+
+              @preampl_schem.schematic1(sch_1):page1_ins22948@connector.\\con1.normal\(chips)
+
+              Also found in 0x10 FUNCTION lists.
+
+          - ??? hdr1 = 0x3e82, hdr2 = 0x4
+              "" (empty string)
+
+              Also found in 0x10 FUNCTION lists.
+
+          - ??? hdr1 = 0xea, hdr2 = 0x4
+              .\pstchip.dat (one of the netlist files)
+              Also found in 0x10 FUNCTION lists.
+
+          - Library path in 0x2B FP_DEF, hdr1 = 0x4d, hdr2 = 0x00
+              C:/OrCAD/OrCAD_16.6_Lite/share/pcb/pcb_lib/symbols/capc2008x126n_0805.psm
+
+          - Manufacturer in 0x2D FP_INSTANCE, hdr1 = 0x3e81, hdr2 = 0x00
+              Fujicon
+
+          - Description in 0x2D FP_INSTANCE, hdr1 = 0x3e80, hdr2 = 0x00
+              Capacitor,Aluminum Electrolytic;6.60mm L X 6.60mm W X 7.70mm H
     seq:
       - type: u1
-      - type: u2
+      - id: unknown_hdr1
+        type: u2
       - id: key
         type: u4
       - id: next
@@ -486,7 +533,7 @@ types:
         if: _root.ver >= 0x00140400
       - id: subtype
         type: u1
-      - id: unknown_hdr
+      - id: unknown_hdr2
         type: u1
       - id: size
         type: u2
@@ -638,37 +685,40 @@ types:
         doc: |
           Pointer to the next object in the 'x06' linked list that starts in
           the header.
-      - id: str
+      - id: comp_dev_type
         type: u4
         doc: |
-          String ID
+          String - COMPONENT_DEVICE_TYPE
 
           Examples:
-            PreAmp: R_RES2012X50N_0805_510
+            PreAmp: R_RES2012X50N_0805_510, C_CAPC2008X126N_0805_4.7U
 
-      - id: str_2
+      - id: sym_name
         type: u4
         doc: |
-          String ID
+          String - SYM_NAME
 
           Examples:
             PreAmp: RES2012X50N_0805
-      - id: ptr_instance
+      - id: ptr_refdes
         type: u4
         doc: |
-          Points to an 0x07
-      - id: ptr_fp
+          Points to an 0x07 REFDES
+      - id: ptr_slot
         type: u4
         doc: |
-          Points to a 0x0F
-      - id: ptr_x08
+          Points to a 0x0F FUNCTION_SLOT
+      - id: ptr_pin_num
         type: u4
         doc: |
           Points to a 0x08. Reverse of the 0x06/0x08 pointer in 0x08, if it's an 0x06.
-      - id: ptr_x03_symbol
+      - id: ptr_fields
         type: u4
         doc: |
-          Points to a 0x03
+          Points to a chain of 0x03s and then back here.
+
+          These look like field values.
+
       - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140000
@@ -680,6 +730,9 @@ types:
       - id: key
         type: u4
       - type: u4
+        id: next
+        doc: |
+          Points to the next 0x07 or 0x06 at the end of the linked list.
       - id: ptr_1
         type: u4
         if: _root.ver >= 0x00140400
@@ -695,10 +748,10 @@ types:
         if: _root.ver >= 0x00140400
         doc: |
           Null?
-      - id: ptr_0x2d
+      - id: ptr_fp_inst
         type: u4
         doc: |
-          Points to a 0x2D
+          Points to a 0x2D (FP_INSTANCE)
       - id: unknown_3
         type: u4
         if: _root.ver < 0x00140400
@@ -708,7 +761,7 @@ types:
           String ID of a reference designator.
 
           Examples: 'R1', 'TP3'
-      - id: ptr_2
+      - id: ptr_function
         type: u4
         doc: |
           Points to a 0x10.
@@ -717,17 +770,19 @@ types:
         type: u4
         doc: |
           Points to a 0x03 or null.
-      - id: un3
+      - id: unknown_4
         type: u4
         doc: |
           Null so far.
-      - id: ptr_4
+      - id: ptr_first_pad
         type: u4
         doc: |
           Points to a 0x32 or null.
 
   type_08:
     doc: |
+      Maps a PIN_NUMBER (e.g. '1' or 'C', etc) to an 0x11.
+
       Seems to be a counterpart to 0x11 - the counts are the same and they have 1:1
       pointers to each other.
 
@@ -763,9 +818,7 @@ types:
         if: _root.ver >= 0x00140400
         doc: |
           String ID
-
-          Same ID as the 0x11 counterpart.
-      - id: ptr3
+      - id: ptr_pin_name
         type: u4
         doc: |
           Points to 0x11. Seems to be the reverse of the 0x08 pointer in 0x11.
@@ -907,12 +960,23 @@ types:
         if: _root.ver >= 0x00140900
 
   type_0d_pad:
+    doc: |
+      Represents a pad. Each one of these binds an instance of a padstack (0x1C) to
+      a specific location and rotation in the symbol.
+
+      Every 0x2B (FP_DEF) points to a chain of these.
+
+      Every 0x32 (PLACED_PAD) points to one of these in that chain.
+
+      There's also a pointer to the pin number (not the name) string, which is the same as in the chain:
+      0x2D (FP_INST) -> 0x07 (REFDES) -> 0x10 (FUNCTION) -> 0x0F (SLOT) -> 0x11 (PIN_NAME) -> 0x08 (PIN_NUMBER)
+
     seq:
       - type: u1
       - type: u2
       - id: key
         type: u4
-      - id: str_ptr
+      - id: ptr_pad_num
         type: u4
       - id: next
         type: u4
@@ -963,16 +1027,17 @@ types:
         repeat: expr
         repeat-expr: 4
 
-  type_0f:
+  type_0f_slot:
     seq:
       - type: u1
       - type: u2
       - id: key
         type: u4
-      - id: str_unk
+      - id: slot_name
         type: u4
         doc: |
-          String ID.
+          Slot name string ID (FUNC_SLOT_NAME)
+
           Seems to always be 'Gn': G1, G7, etc.
       - id: s
         type: str
@@ -982,6 +1047,13 @@ types:
           Footprint name and value together. In the .alg, this is COMP_DEVICE_TYPE.
           E.g.:
           PreAmp: R_RES2012X50N_0805_510, R_RES2012X50N_0805_1K
+      - id: ptr_x0f_x06
+        type: u4
+        if: _root.ver >= 0x00140400
+        doc: |
+          Points to the next 0x0F SLOT in the function, only if there are multiple SLOTs for this component.
+
+          The last 0x0F in a function points to the same 0x06 as ptr_x06.
       - id: ptr_x06
         type: u4
         doc:
@@ -996,47 +1068,55 @@ types:
           Null?
       - id: unknown_2
         type: u4
-        if: _root.ver >= 0x00140400
-      - id: unknown_3
-        type: u4
         if: _root.ver >= 0x00140900
 
-  type_10:
+  type_10_function:
+    doc: |
+      Represents a FUNCTION.
+
+      There appears to be one or more of these per component instance.
+
+      Most components have only one function, but some have more.
+      For example BB-AI U4 has 29 functions.
+
+      The function is pointed to by the 0x07 object and points back to it.
     seq:
       - type: u1
       - type: u2
       - id: key
         type: u4
       - type: u4
+        id: unknown_1
         if: _root.ver >= 0x00140400
-      - id: ptr1
+      - id: ptr_x07
         type: u4
         doc: |
-          Points to 0x07
+          Points to 0x07 (REFDES?)
       - type: u4
+        id: unknown_2
         if: _root.ver >= 0x00140900
-      - id: ptr2
+      - id: ptr_x12
         type: u4
         doc: |
           Points to 0x12.
-      - id: un1
+      - id: unknown_3
         type: u4
-      - id: str
+      - id: name
         type: u4
         doc: |
-          String id. Always seems to be Fn, where n is a number, which can be from 0
+          String id. Usually seems to be Fn, where n is a number, which can be from 0
           to several hundred.
 
           Examples:
             PreAmp: F0, F1, ...
             CutiePi: F3, F4, ...
-            BeagleBone-AI: F57, F55, ...
+            BeagleBone-AI: F57, F55, ..., TF-9088
 
-          These strings seem not to be in the .alg export
-      - id: ptr4
+          If the function is like "TF-xxxx", the FUNC_SPARE_FLAG appears to be YES, NO otherwise.
+      - id: ptr_slots
         type: u4
         doc: |
-          Points to 0x0F
+          Points to the first 0x0F
       - id: path_str
         type: u4
         doc: |
@@ -1044,7 +1124,11 @@ types:
 
           PreAmp: k=0xf7900e0 -> 0x03/0x68 @preampl_schem.schematic1(sch_1):page1_ins20635@discrete.\r.normal\(chips)
 
-  type_11:
+  type_11_pin_name:
+    doc: |
+      Seems to link an 0x08 PIN_NUMBER object key to a PIN_NAME string (e.g. '1', or 'CATHODE')
+
+      Has a reverse link to the matching 0x08 PIN_NUMBER object.
     seq:
       - type: u1
       - type: u2
@@ -1059,17 +1143,17 @@ types:
             PreAmp: CATHODE, ANODE, 1, 2
 
           Could be a pin name.
-      - id: ptr1
+      - id: next
         type: u4
         doc: |
           Points to other 0x11s or 0x0F.
 
           In a "Group" (e.g. 1/2, C/A, B/C/E), one of them points to 0x0F and the others
           form a list ending in that one. So far the first in the file seems to be the 0x0F one.
-      - id: ptr2
+      - id: ptr_pin_num
         type: u4
         doc: |
-          Points to 0x08
+          Points to 0x08 (PIN_NUMBER)
       - id: unknown_1
         type: u4
         doc: |
@@ -1079,6 +1163,8 @@ types:
         if: _root.ver >= 0x00140900
 
   type_12:
+    doc: |
+      Seems to link a 0x11 to an 0x32 PLACED_PAD.
     seq:
       - type: u1
       - type: u2
@@ -1559,11 +1645,13 @@ types:
         type: u4
       - id: next
         type: u4
-      - id: ptr1
+      - id: ptr_parent
         type: u4
         doc: |
-          In PreAmp, all rectangles set this to 0x09a272d4, which is the tail of the x24_x28
-          linked list.
+          This can be:
+            - 0x2B FP_DEF
+            - 0x2D FP_INST
+            - the tail of the ll_x24 linked list for top level items
       - id: unknown_1
         type: u4
       - id: unknown_2
@@ -1822,7 +1910,7 @@ types:
         type: u4
         doc: |
           Points to a 0x14 (segment - list of graphics?)
-      - id: lib_path
+      - id: fields
         type: u4
         doc: |
           Points to a 0x03 subtype 0x68.
@@ -1917,7 +2005,7 @@ types:
         type: u4
         if: _root.ver < 0x0140400
         doc: |
-          Points to a 0x07
+          Points to a 0x07 REFDES
       - id: unknown_2
         type: u2
         doc:
@@ -2156,10 +2244,10 @@ types:
       - id: ratline
         type: u4
         doc: 0x23
-      - id: ptr5
+      - id: pin_num
         type: u4
         doc: Points to 0x08
-      - id: fp_inst
+      - id: fp_refdes
         type: u4
         doc: Points to 0x07 or null
       - id: unknown_1

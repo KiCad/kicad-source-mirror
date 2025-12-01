@@ -38,11 +38,22 @@ namespace EXTRACT_SPEC_PARSER
      */
     namespace IR
     {
-        enum class BLOCK_TYPE
+        enum class VIEW_TYPE
         {
             UNKNOWN,      // Not read yet?
-            SYMBOL,       // Symbol instance
-            CONNECTIVITY, // Connectivity information
+            COMPONENT,
+            COMPONENT_PIN,
+            FUNCTION,
+            LOGICAL_PIN,
+            NET,
+            COMPOSITE_PAD,
+            GEOMETRY,
+            FULL_GEOMETRY,
+            SYMBOL,
+            BOARD,
+            CONNECTIVITY,
+            LAYER,
+            RAT_PIN,
         };
 
         enum class FIELDS
@@ -85,11 +96,11 @@ namespace EXTRACT_SPEC_PARSER
         {
         public:
             BLOCK() :
-                    Type( BLOCK_TYPE::UNKNOWN )
+                    ViewType( VIEW_TYPE::UNKNOWN )
             {
             }
 
-            BLOCK_TYPE Type;
+            VIEW_TYPE ViewType;
             // A set of ORed conditions (each of which is a set of ANDed conditions).
             std::vector<AND_CONDITIONS> OrConditions;
             // We could be super-typesafe here with a variant for the fields, based on the

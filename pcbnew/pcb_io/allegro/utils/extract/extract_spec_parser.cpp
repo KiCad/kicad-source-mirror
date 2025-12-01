@@ -23,6 +23,9 @@
 
 #include "utils/extract/extract_spec_parser.h"
 #include "utils/extract/extract_spec_grammar.h"
+#include "utils/extract/data_dictionary.h"
+
+#include <set>
 
 #include <fmt/format.h>
 
@@ -43,53 +46,49 @@ struct EXTRACT_SPEC_PARSER_ACTION : tao::pegtl::nothing<Rule>
 
 
 template <>
-struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::KEYWORDS::SYMBOL>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::HEADER_KEYWORD>
 {
-    static void apply0( PARSER_STATE& s ) { s.CurrentBlock.Type = IR::BLOCK_TYPE::SYMBOL; }
-};
-
-
-template <>
-struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::KEYWORDS::CONNECTIVITY>
-{
-    static void apply0( PARSER_STATE& s ) { s.CurrentBlock.Type = IR::BLOCK_TYPE::CONNECTIVITY; }
-};
-
-
-static const std::vector<std::string> k_symbol_field_names = {
-    "SYM_TYPE",     "SYM_NAME",     "REFDES",     "SYM_X",      "SYM_Y",
-    "SYM_CENTER_X", "SYM_CENTER_Y", "SYM_MIRROR", "SYM_ROTATE", "SYM_LIBRARY_PATH",
-};
-
-
-static const std::vector<std::string> k_connectivity_field_names = {
-    "NET_NAME", "PIN_NAME", "COMP_REF", "RAT_CONNECTED", "NET_NAME_SORT",
-};
-
-
-static bool IsValidField( const std::string& field_name, const std::vector<std::string>& valid_field_names )
-{
-    return std::find( valid_field_names.begin(), valid_field_names.end(), field_name ) != valid_field_names.end();
-}
-
-
-static bool IsValidFieldForCurrentBlock( const std::string& field_name, const PARSER_STATE& state )
-{
-    switch( state.CurrentBlock.Type )
+    template <typename ActionInput>
+    static void apply( const ActionInput& in, PARSER_STATE& s )
     {
-    case IR::BLOCK_TYPE::SYMBOL: return IsValidField( field_name, k_symbol_field_names );
-    case IR::BLOCK_TYPE::CONNECTIVITY: return IsValidField( field_name, k_connectivity_field_names );
-    }
+        wxLogTrace( traceAllegroExtract, "Parsing header keyword: '%s'", in.string().c_str() );
 
-    return false;
-}
+        // clang-format off
+        static const std::unordered_map<std::string, IR::VIEW_TYPE> k_keyword_to_view_type = {
+            { "SYMBOL",         IR::VIEW_TYPE::SYMBOL },
+            { "CONNECTIVITY",   IR::VIEW_TYPE::CONNECTIVITY },
+            { "COMPONENT_PIN",  IR::VIEW_TYPE::COMPONENT_PIN },
+            { "COMPONENT",      IR::VIEW_TYPE::COMPONENT },
+            { "FUNCTION",       IR::VIEW_TYPE::FUNCTION },
+            { "LOGICAL_PIN",    IR::VIEW_TYPE::LOGICAL_PIN },
+            { "NET",            IR::VIEW_TYPE::NET },
+            { "COMPOSITE_PAD",  IR::VIEW_TYPE::COMPOSITE_PAD },
+            { "GEOMETRY",       IR::VIEW_TYPE::GEOMETRY },
+            { "FULL_GEOMETRY",  IR::VIEW_TYPE::FULL_GEOMETRY },
+            { "BOARD",          IR::VIEW_TYPE::BOARD },
+            { "LAYER",          IR::VIEW_TYPE::LAYER },
+            { "RAT_PIN",        IR::VIEW_TYPE::RAT_PIN },
+        };
+        // clang-format on
+
+        auto it = k_keyword_to_view_type.find( in.string() );
+        if( it == k_keyword_to_view_type.end() )
+        {
+            throw tao::pegtl::parse_error(
+                fmt::format( "Unknown header keyword '{}'", in.string() ), in.position() );
+        }
+        s.CurrentBlock.ViewType = it->second;
+        s.CurrentBlock.Fields.clear();
+        s.CurrentBlock.OrConditions.clear();
+    }
+};
 
 
 /*
  * Check and store a parsed field name in the current block.
  *
- * We do it this way to avoid dozens of nearly identical specializations
- * for each field, but we could deal with this in the grammar if needed.
+ * We do it this way to avoid hundreds of keywords and complex logic
+ * in the grammar.
  */
 template <>
 struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::FIELD_NAME>
@@ -97,12 +96,16 @@ struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::FIELD_NAME>
     template <typename ActionInput>
     static void apply( const ActionInput& in, PARSER_STATE& s )
     {
-        if( !IsValidFieldForCurrentBlock( in.string(), s ) )
-        {
-            throw tao::pegtl::parse_error( fmt::format( "Invalid field '{}' for block type {}", in.string(),
-                                                        static_cast<int>( s.CurrentBlock.Type ) ),
-                                           in.position() );
-        }
+        // It's not clear to me that we can easily detect valid/invalid fields
+        // for the current view here, as there are hundreds of fields, and also
+        // prefixes and maybe also properties.
+
+        // if( !ALLEGRO::IsValidFieldForView( in.string(), s.CurrentBlock.ViewType ) )
+        // {
+        //     throw tao::pegtl::parse_error( fmt::format( "Invalid field '{}' for block type {}", in.string(),
+        //                                                 static_cast<int>( s.CurrentBlock.ViewType ) ),
+        //                                    in.position() );
+        // }
 
         s.CurrentField = in.string();
     }
@@ -200,7 +203,7 @@ struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::OR_LINE>
  * When completing a block, store it in the spec model and reset the current block.
  */
 template <>
-struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::ANY_BLOCK>
+struct EXTRACT_SPEC_PARSER_ACTION<GRAMMAR::VIEW_BLOCK>
 {
     static void apply0( PARSER_STATE& s )
     {

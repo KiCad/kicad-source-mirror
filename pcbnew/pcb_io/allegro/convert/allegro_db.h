@@ -28,6 +28,7 @@
 #include <unordered_map>
 
 #include <math/vector2d.h>
+#include <math/box2.h>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -155,12 +156,33 @@ struct DB_OBJ
     {
         ARC,
         x03_TEXT,    // 0x03 subtype 0x68...
-        TEXT,        // 0x07
-        GRAPHIC_SEG, // 0x14
-        LINE,        // 0x15, 0x16, 0x17
-        FP_DEF,
-        FP_INST,
-    };
+        TRACK,       // 0x05
+        NET_ASSIGN,  // 0x04
+        x06,         // 0x06 ?? component?
+        REFDES,      // 0x07
+        PIN_NUMBER,     // 0x08
+        x0e,            // 0x0E
+        FUNCTION_SLOT,  // 0x0F
+        FUNCTION_INST,  // 0x10
+        PIN_NAME,       // 0x11
+        GRAPHIC_SEG,    // 0x14
+        LINE,           // 0x15, 0x16, 0x17
+        NET,            // 0x1B
+        SHAPE,          // 0x28
+        FP_DEF,         // 0x2B
+        FP_INST,        // 0x2D
+        x2e,            // 0x2E
+        PLACED_PAD,     // 0x32
+        VIA,            // 0x33
+        KEEPOUT,        // 0x34
+        x35,
+        x36,
+        x37,
+        FILM_LAYER_LIST, // 0x39
+        FILM,            // 0x3a
+        x3b,
+        x3c,
+};
 
     // Where this block was in the file (for debugging)
     struct FILE_LOC
@@ -169,10 +191,16 @@ struct DB_OBJ
         uint8_t m_BlockType;
     };
 
-    DB_OBJ() :
+    DB_OBJ( TYPE aType, uint32_t aKey ) :
             m_Valid( false ),
-            m_Key( 0 ),
+            m_Type( aType ),
+            m_Key( aKey ),
             m_Loc( 0, 0 )
+    {
+    }
+
+    DB_OBJ() :
+            DB_OBJ( TYPE::ARC, 0 )
     {
     }
 
@@ -191,12 +219,17 @@ struct DB_OBJ
      */
     virtual bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) = 0;
 
-    virtual TYPE GetType() const = 0;
+    TYPE GetType() const { return m_Type; }
 
     uint32_t GetKey() const { return m_Key; }
 
+    // Set to true when the object is fully resolved and valid
     bool     m_Valid;
+    // The type of this object
+    TYPE     m_Type;
+    // The unique key of this object in the DB
     uint32_t m_Key;
+    // Location in the file (for debugging)
     FILE_LOC m_Loc;
 };
 
@@ -253,12 +286,21 @@ public:
 };
 
 
+struct BRD_DB;
+struct FOOTPRINT_INSTANCE;
+struct FUNCTION_INSTANCE;
+struct PLACED_PAD;
+struct REFDES;
+
+/**
+ * 0x01 ARC objects
+ */
 struct ARC : public DB_OBJ
 {
+    ARC( const BLK_0x01_ARC& aBlk );
+
     DB_REF m_Parent;
 
-    TYPE GetType() const { return TYPE::ARC; };
-    ;
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 };
 
@@ -270,8 +312,6 @@ struct x03_TEXT : public DB_OBJ
 {
     x03_TEXT( const BLK_0x03& aBlk );
 
-    TYPE GetType() const override { return TYPE::x03_TEXT; };
-
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override { return true; }
 
     wxString m_TextStr;
@@ -279,25 +319,173 @@ struct x03_TEXT : public DB_OBJ
 
 
 /**
- * 0x07 objects
+ * 0x04 NET_ASSIGN objects
  */
-struct TEXT : public DB_OBJ
+struct NET_ASSIGN : public DB_OBJ
 {
-    TEXT( const BLK_0x07& aBlk );
-
-    TYPE GetType() const override { return TYPE::TEXT; };
+    NET_ASSIGN( const BRD_DB& aBrd, const BLK_0x04_NET_ASSIGNMENT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
-    DB_STR_REF m_TextStr;
+    DB_REF m_Next;
+    ///< Reference to an 0x1B NET object
+    DB_REF m_Net;
+    ///< Reference to an 0x05 TRACK or 0x32 PLACED_PAD object
+    DB_REF m_ConnItem;
 };
 
 
+/**
+ * 0x05 TRACK
+ */
+struct TRACK : public DB_OBJ
+{
+    TRACK( const BRD_DB& aBrd, const BLK_0x05_TRACK& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+};
+
+
+/**
+ * 0x06 objects.
+ */
+struct x06_OBJECT : public DB_OBJ
+{
+    x06_OBJECT( const BRD_DB& aBrd, const BLK_0x06& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_STR_REF m_CompDeviceType;
+    DB_STR_REF m_SymbolName;
+    DB_REF m_PtrRefDes;
+    DB_REF m_PtrFunctionSlot;
+    DB_REF m_PtrPinNumber;
+    DB_REF m_Fields;
+
+    const REFDES& GetRefDes() const;
+    const wxString* GetComponentDeviceType() const;
+};
+
+
+/**
+ * 0x07 objects
+ */
+struct REFDES : public DB_OBJ
+{
+    REFDES( const BLK_0x07& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF     m_Next;
+    DB_STR_REF m_TextStr;
+    DB_REF     m_FunctionInst;
+    DB_REF     m_X03Chain;
+    DB_REF     m_FirstPad;
+
+    x06_OBJECT* m_ParentComponent = nullptr;
+
+    const x06_OBJECT* GetParentComponent() const { return m_ParentComponent; }
+
+    const wxString* GetRefDesStr() const;
+    const REFDES* GetNextRefDes() const;
+    const FUNCTION_INSTANCE& GetFunctionInstance() const;
+    const PLACED_PAD& GetFirstPad() const;
+};
+
+
+/**
+ * 0x08 objects.
+ */
+struct PIN_NUMBER : public DB_OBJ
+{
+    PIN_NUMBER( const BLK_0x08& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_STR_REF m_PinNumberStr;
+    DB_REF     m_PinName;
+    DB_REF     m_Next;
+};
+
+
+/**
+ * 0x0E objects: ??
+ */
+struct X0E : public DB_OBJ
+{
+    X0E( const BRD_DB& aBrd, const BLK_0x0E& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+};
+
+
+/**
+ * A FUNCTION_SLOT (0x0F) object represents a single function slot within a symbol.
+ */
+struct FUNCTION_SLOT : public DB_OBJ
+{
+    FUNCTION_SLOT( const BLK_0x0F& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_STR_REF m_SlotName;
+    wxString m_CompDeviceType;
+
+    DB_REF m_NextSlot;
+    DB_REF m_Ptr0x06;
+    DB_REF m_Ptr0x11;
+
+    const wxString* GetName() const;
+};
+
+
+/**
+ * A FUNCTION (0x10) object represents a logical function, which is an
+ * _instance_ of a single function slot within a symbol.
+ */
+struct FUNCTION_INSTANCE : public DB_OBJ
+{
+    FUNCTION_INSTANCE( const BLK_0x10& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Slot;
+    DB_REF m_Fields;
+    DB_STR_REF m_FunctionName;
+    DB_REF m_RefDes;
+
+    const wxString* GetName() const;
+    const REFDES& GetRefDes() const;
+    const FUNCTION_SLOT& GetFunctionSlot() const;
+};
+
+
+/**
+ * 0x11 objects.
+ */
+struct PIN_NAME: public DB_OBJ
+{
+    PIN_NAME( const BLK_0x11& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF     m_Next;
+    DB_STR_REF m_PinNameStr;
+    DB_REF     m_PinNumber;
+};
+
+
+/**
+ * 0x14 objects (a line or arc graphic segment)
+ */
 struct GRAPHIC_SEG: public DB_OBJ
 {
-    GRAPHIC_SEG( const BLK_0x14& aBlk );
-
-    TYPE GetType() const override { return TYPE::GRAPHIC_SEG; };
+    GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -306,22 +494,17 @@ struct GRAPHIC_SEG: public DB_OBJ
     DB_REF m_Segment; // ARC or LINE
 
     // 0x03?
+    // DB_REF m_Ptr0x03;
     // 0x26?
-
-    // Duplicated in LINE?
-    VECTOR2I m_Start;
-    VECTOR2I m_End;
 };
 
 
 /**
- * LINE objects
+ * LINE objects (0x15, 0x16, 0x17)
  */
 struct LINE : public DB_OBJ
 {
     LINE( const BLK_0x15_16_17_SEGMENT& aBlk );
-
-    TYPE GetType() const override { return TYPE::LINE; };
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -334,8 +517,35 @@ struct LINE : public DB_OBJ
 };
 
 
-struct FOOTPRINT_INSTANCE;
-struct BRD_DB;
+/**
+ * 0x1B NET objects
+ */
+struct NET : public DB_OBJ
+{
+    NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_STR_REF m_NetNameStr;
+};
+
+
+/**
+ * 0x28 SHAPE objects
+ */
+class SHAPE : public DB_OBJ
+{
+public:
+    SHAPE( const BRD_DB& aBrd, const BLK_0x28_SHAPE& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_REF m_Parent;
+    DB_REF m_Segments;
+};
+
 
 /**
  * 0x2B objects
@@ -349,8 +559,6 @@ struct FOOTPRINT_DEF : public DB_OBJ
     DB_REF     m_SymLibPath;
 
     DB_REF_CHAIN m_Instances;
-
-    TYPE GetType() const override { return TYPE::FP_DEF; };
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -372,8 +580,6 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
 {
     FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk );
 
-    TYPE GetType() const override { return TYPE::FP_INST; };
-
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
@@ -388,6 +594,54 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
 
     const wxString* GetRefDes() const;
     const wxString* GetName() const;
+};
+
+
+/**
+ * 0x2E objects.
+ */
+struct X2E : public DB_OBJ
+{
+    X2E( const BRD_DB& aBrd, const BLK_0x2E& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_REF m_NetAssign;
+    DB_REF m_Connection;
+    VECTOR2I m_Position;
+
+};
+
+
+/**
+ * 0x32 Placed Pad objects.
+ */
+struct PLACED_PAD : public DB_OBJ
+{
+    PLACED_PAD( const BRD_DB& aBrd, const BLK_0x32_PLACED_PAD& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    // DB_REF m_Ratline; // 0x23;
+    uint32_t m_Flags;
+    BOX2I m_Bounds;
+};
+
+
+/**
+ * 0x33 VIA objects.
+ */
+struct VIA: public DB_OBJ
+{
+    VIA( const BRD_DB& aBrd, const BLK_0x33_VIA& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
+    DB_REF m_NetAssign;
+    BOX2I m_Bounds;
 };
 
 
@@ -414,6 +668,7 @@ public:
 
     using FP_DEF_VISITOR = std::function<void( const FOOTPRINT_DEF& aFpDef )>;
     using FP_INST_VISITOR = std::function<void( const FOOTPRINT_INSTANCE& aFp )>;
+    using FUNCTION_VISITOR = std::function<void( const x06_OBJECT& aComponent, const FUNCTION_INSTANCE& aFunction )>;
 
     /**
      * Access the footprint defs in the database.
@@ -429,6 +684,13 @@ public:
      */
     void VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, FP_INST_VISITOR aVisitor ) const;
 
+    /**
+     * Access the function instances in the database.
+     *
+     * This iterates the 0x06 linked list and finds the functions.
+     */
+    void VisitFunctionInstances( FUNCTION_VISITOR aVisitor ) const;
+
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,
     // for example) is very board-related.
@@ -437,7 +699,34 @@ public:
     std::unique_ptr<FILE_HEADER> m_Header;
 
 private:
+
+    /**
+     * Convert a block of "raw" binary-ish data into a DB_OBJ of the appropriate type to be
+     * stored in the DB.
+     *
+     * As constructed, the objects may have dangling references to other object that will
+     * need to be resolved only after all objects are inserted into the DB.
+     */
     std::unique_ptr<DB_OBJ> createObject( const BLOCK_BASE& aBlock );
+};
+
+
+/**
+ * When processing a view, some objects are available and some are not.
+ *
+ * Every item in a view will produce one of these, which will contain the
+ * relevant objects for that row.
+ */
+class VIEW_OBJS
+{
+    // All views
+    const BRD_DB* m_Board;
+    // COMPONENT, COMPONENT_PIN, SYMBOL, FUNCTION
+    const x06_OBJECT* m_Component;
+    // FUNCTION
+    const FUNCTION_INSTANCE* m_Function;
+    //
+    const FOOTPRINT_INSTANCE* m_FootprintInstance;
 };
 
 

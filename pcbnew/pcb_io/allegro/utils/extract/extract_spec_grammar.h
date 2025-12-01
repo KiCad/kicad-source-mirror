@@ -49,8 +49,19 @@ namespace EXTRACT_SPEC_PARSER
         struct END :                TAO_PEGTL_STRING( "END" ) {};
         struct OR :                 TAO_PEGTL_STRING( "OR" ) {};
 
-        struct SYMBOL :             TAO_PEGTL_STRING( "SYMBOL" ) {};
+        struct BOARD :              TAO_PEGTL_STRING( "BOARD" ) {};
+        struct COMPONENT :          TAO_PEGTL_STRING( "COMPONENT" ) {};
+        struct COMPONENT_PIN :      TAO_PEGTL_STRING( "COMPONENT_PIN" ) {};
+        struct COMPOSITE_PAD :      TAO_PEGTL_STRING( "COMPOSITE_PAD" ) {};
         struct CONNECTIVITY :       TAO_PEGTL_STRING( "CONNECTIVITY" ) {};
+        struct FULL_GEOMETRY :      TAO_PEGTL_STRING( "FULL_GEOMETRY" ) {};
+        struct FUNCTION :           TAO_PEGTL_STRING( "FUNCTION" ) {};
+        struct GEOMETRY :           TAO_PEGTL_STRING( "GEOMETRY" ) {};
+        struct LAYER :              TAO_PEGTL_STRING( "LAYER" ) {};
+        struct LOGICAL_PIN :        TAO_PEGTL_STRING( "LOGICAL_PIN" ) {};
+        struct NET :                TAO_PEGTL_STRING( "NET" ) {};
+        struct RAT_PIN :            TAO_PEGTL_STRING( "RAT_PIN" ) {};
+        struct SYMBOL :             TAO_PEGTL_STRING( "SYMBOL" ) {};
     }
 
     // All of "#"-style comments to end of line, including EOL
@@ -104,6 +115,22 @@ namespace EXTRACT_SPEC_PARSER
         TRAILING                    // Trailing comment or whitespace
     > {};
 
+    struct HEADER_KEYWORD : sor<
+        KEYWORDS::BOARD,
+        KEYWORDS::COMPONENT_PIN,
+        KEYWORDS::COMPONENT,
+        KEYWORDS::COMPOSITE_PAD,
+        KEYWORDS::CONNECTIVITY,
+        KEYWORDS::FULL_GEOMETRY,
+        KEYWORDS::FUNCTION,
+        KEYWORDS::GEOMETRY,
+        KEYWORDS::LAYER,
+        KEYWORDS::LOGICAL_PIN,
+        KEYWORDS::NET,
+        KEYWORDS::RAT_PIN,
+        KEYWORDS::SYMBOL
+    > {};
+
     /*
     * Generic block structure:
     * <HEADER>
@@ -112,9 +139,8 @@ namespace EXTRACT_SPEC_PARSER
     *    ...
     * END
     */
-    template<typename Header>
-    struct GENERIC_BLOCK : seq<
-        Header, TRAILING,           // HEADER line
+    struct VIEW_BLOCK : seq<
+        HEADER_KEYWORD, TRAILING,           // HEADER line
         star< sor<
             OR_LINE,
             CONDITIONED_FIELD_LINE,
@@ -125,22 +151,11 @@ namespace EXTRACT_SPEC_PARSER
         KEYWORDS::END, TRAILING     // END line
     > {};
 
-    // Individual blocks are defined as specializations of GENERIC_BLOCK
-    // with the appropriate header keyword
-    // (we could list all suitable field keywords here if we wanted to be more strict)
-    using SYMBOL_BLOCK = GENERIC_BLOCK<KEYWORDS::SYMBOL>;
-    using CONNECTIVITY_BLOCK = GENERIC_BLOCK<KEYWORDS::CONNECTIVITY>;
-
-    struct ANY_BLOCK : sor<
-        SYMBOL_BLOCK,
-        CONNECTIVITY_BLOCK
-    > {};
-
     // The overall extract spec file consists of zero or more blocks
     // separated by blank/comment lines, ending with EOF
     struct EXTRACT_SPEC : seq<
         star< sor<
-            ANY_BLOCK,
+            VIEW_BLOCK,
             TRAILING
         > >,
         eof

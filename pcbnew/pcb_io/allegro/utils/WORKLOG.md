@@ -408,3 +408,51 @@ S!ETCH!TOP!307 4!LINE!257!928!581!959!550!20!!!!!CONNECT!!!!!!!!N13829!!!!!
     * ARC = 256
     * LINE = 257
     * RECTANGLE = 259
+
+
+## 2025-11-29
+
+* Figured out a few more areas:
+* 0x0C is something to do with FIGUREs, for example the origin cross and drill symbols
+* Get a PEGTL based parser working for the ASCII export format, which can use to cross-check the board reader
+
+* Preamp: looking at the schematic name (BOARD_SCHEMATIC_NAME), we see it occurs twice:
+    *  Offset 0x0a568 - an 0x21 object with data size 1043, contains 00 00 00 00 00 00 01 01, the string and the rest 00s
+    *  Offset 0x43168 - an 0x03 object subtype 0x68 (string-y) ID 0xf7d1d10
+       * This is only pointed as "next" by 0x03 subtype 0x68 0xf7d28a8, which contains null string
+       * So it seems to be an orphaned object, unless the other fields in the 0x03 give it special meaning
+
+* A lot of 0x30/68 objects have content like  @preampl_schem.schematic1(sch_1):page1_ins20635@discrete.\r.normal\(chips)
+  * These are presumably schematic references to instances
+  * They all have 0x4 in the hdr2 field
+  * hdr1 is the same for similar-ish strings
+
+* On 0x03.68  k=0xf7d10d0 'raddu' (author?) is also an orphaned object, unless special meaning to hdr1 = 9x2db
+
+## 2025-11-30
+
+* Looking at COMPONENT_PIN view
+* The iteratiohn doesn't seem to be in the same order as SYMBOL. Probably not important to emulate the order exactly,
+  but would be nice to know exactly what is being iterated here.
+  * SYMBOL seems to iterate by 0x2B then each 0x2D chain
+  * ALso not ordered by NET
+* In PreAmp for COMPONENT_PIN view, first 3 lines:
+
+  S!N13116!J4!1!1!!!
+  S!N13105!C1!1!1!!!
+  S!N13116!C1!2!2!!!
+
+* N13116 is in the string map, key 0x09a34ddd
+* This is NOT the first in the 0x1B linked list
+  * Only pointed to by 0x1B NET key 0xf790de8
+    * Which has a 0x04 ptr to 0xf790de8
+      * Which has next = net ptr back to 0x1B
+      * And conn_item 0x05 0x0f7cac38 TRACK, which them points to 0x32 PLACED_PAD...
+
+
+* BeagleBone U4: 0x0000136f
+
+* 0x08 and 0x11 seems to be pin number and pin name respectively
+* 0x10 is FUNCTION and 0x0F is SLOT
+
+* 0x24 ptr1 is actually the parent pointer

@@ -26,6 +26,7 @@
 #include <convert/allegro_db.h>
 #include <utils/extract/extract_spec_parser.h>
 
+#include <reporter.h>
 #include <richio.h>
 
 namespace ALLEGRO
@@ -37,9 +38,10 @@ namespace ALLEGRO
 class ASCII_EXTRACTOR
 {
 public:
-    ASCII_EXTRACTOR( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter ) :
+    ASCII_EXTRACTOR( const BRD_DB& aBrd, OUTPUTFORMATTER& aFormatter, REPORTER& aReporter ) :
             m_Brd( aBrd ),
-            m_Formatter( aFormatter )
+            m_Formatter( aFormatter ),
+            m_Reporter( aReporter )
     {
     }
 
@@ -49,6 +51,22 @@ public:
     void Extract( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
 
 private:
+
+    using OBJECT_VISITOR = std::function<bool ( const DB_OBJ&, std::vector<wxString>& )>;
+
+    /**
+     * Create an object visitor for a given block.
+     *
+     * This is a function the returns a functor that visits objects,
+     * according to the block specification (view tpye and field list) and filters.
+     */
+    OBJECT_VISITOR createObjectVisitor( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
+    /**
+     * USe the given visitor to visit an object and produce a line of output.
+     */
+    void visitForLine( const DB_OBJ& aObj, char aLinePrefix, OBJECT_VISITOR& aVisitor );
+
     /**
      * Extract symbol instances from an Allegro database.
      *
@@ -56,8 +74,28 @@ private:
      */
     void extractSymbolInstances( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
 
+
+    /**
+     * Extract board-level information from an Allegro database.
+     *
+     * This is always added as a 'J' line prefix, though it could also be a view
+     * as well with the BOARD view.
+     */
+    void extractBoardInfo();
+
+    /**
+     * Extract board-level information according to a block spec.
+     */
+    void extractBoardInfo( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock, char aLinePrefix );
+
+    void extractComponentPins( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
+    void extractFunctions( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
     const BRD_DB&    m_Brd;
     OUTPUTFORMATTER& m_Formatter;
+
+    REPORTER& m_Reporter;
 };
 
 } // namespace ALLEGRO

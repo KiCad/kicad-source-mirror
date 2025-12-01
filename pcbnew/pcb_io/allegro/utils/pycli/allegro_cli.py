@@ -34,6 +34,14 @@ from kaitaistruct import KaitaiStream
 import allegro_brd
 
 
+class Coords:
+    """
+    Same interface as coords data
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 class AllegroBoard:
 
     def __init__(self, kt_brd: allegro_brd.AllegroBrd):
@@ -98,18 +106,28 @@ class AllegroBoard:
         def obj_type(t) -> str | None:
             ts = {
                 0x01: "ARC",
+                0x03: "DATA_ITEM?",
+                0x04: "NET_ASSIGNMENT?",
+                0x05: "TRACK",
+                0x07: "REFDES?", # or some kind of instance
+                0x08: "PIN_NUMBER?",
                 0x0C: "FIGURE",
                 0x0D: "PAD",
+                0x0F: "SLOT",
+                0x10: "FUNCTION",
+                0x11: "PIN_NAME?",
                 0x14: "GRAPHIC_SEGMENT",
                 0x15: "LINE",
                 0x16: "LINE",
                 0x17: "LINE",
                 0x1b: "NET",
+                0x23: "RATLNE",
                 0x24: "RECT",
                 0x2B: "FP_DEF",
                 0x2C: "GROUP",
                 0x2D: "FP_INST",
                 0x30: "STR_GRAPHIC",
+                0x32: "PLACED_PAD",
                 0x37: "GROUP_ENTRIES",
             }
 
@@ -118,8 +136,8 @@ class AllegroBoard:
             return None
 
         @staticmethod
-        def string_aligned_to_str(sa):
-            bs = bytearray(sa.chars)
+        def string_aligned_to_str(sa) -> str:
+            bs = bytearray(sa.chars[:-1]) # remove null terminator
             value = bs.decode("utf-8", errors="ignore")
             return value
 
@@ -135,6 +153,71 @@ class AllegroBoard:
 
             return value
 
+        def get_obj_peek_data(self, key_val) -> str:
+            """
+            Get a short string representation of the object pointed to by key_val.
+            """
+            obj = self.board.object(key_val)
+
+            if obj_type := self.obj_type(obj.type):
+                type_str = f"{obj.type:#04x}: {obj_type}"
+            else:
+                type_str = f"{obj.type:#04x}"
+
+            value_detail = None
+
+            if obj.type == 0x03:
+                if obj.data.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x78]:
+                    value_detail = f"'{self.string_aligned_to_str(obj.data.data)}'"
+                elif obj.data.subtype in [0x64, 0x66, 0x67, 0x6A]:
+                    # U32 data?
+                    value_detail = f"{obj.data.data.val:#010x}"
+                else:
+                    value_detail = "<unknown>"
+
+                type_str = f"{type_str}, subtype: {obj.data.subtype:#04x}, hdr1: {obj.data.unknown_hdr1:#04x}, hdr2: {obj.data.unknown_hdr2:#04x}"
+
+            elif obj.type == 0x07:
+                value_detail = f"'{self.board.string(obj.data.ref_des_ref)}'"
+            elif obj.type == 0x08:
+                value_detail = f"'{self.board.string(obj.data.str_ptr_16x)}'"
+            elif obj.type == 0x0D:
+                value_detail = f"'{self.board.string(obj.data.ptr_pad_num)}'"
+            elif obj.type == 0x0F:  # Slot
+                value_detail = f"'{self.board.string(obj.data.slot_name)}'"
+            elif obj.type == 0x11:
+                value_detail = f"'{self.board.string(obj.data.name)}'"
+            elif obj.type == 0x2d:
+                refdes_key = obj.data.inst_ref_16x if hasattr(obj.data, "inst_ref_16x") else obj.data.inst_ref
+
+                if refdes_key == 0:
+                    value_detail = "'*'"
+                else:
+                    refdes = self.board.object(refdes_key)
+                    value_detail = f"'{self.board.string(refdes.data.ref_des_ref)}'"
+
+            elif obj.type == 0x30:
+                str_graph = self.board.object(obj.data.str_graphic_ptr)
+
+                value_detail = self.string_aligned_to_str(str_graph.data.value)
+
+            val = ""
+            if value_detail is not None:
+                val += "=> " + value_detail + " "
+
+            val += f"({type_str})"
+            return val
+
+        def print_x03_chain(self, start_key: int, end_key: int):
+            """
+            Print the 0x03 chain starting at start_key and ending at end_key (exclusive).
+            """
+            next_key = start_key
+            while next_key != end_key:
+                next_obj = self.board.object(next_key)
+                self.prnt(f"  {next_key:#010x} {self.get_obj_peek_data(next_key)}")
+                next_key = next_obj.data.next
+
         def print_ptr(self, name, struct_or_key: int | kaitaistruct.KaitaiStruct, attr_name: str | None = None):
 
             attr_name = attr_name or name
@@ -146,27 +229,10 @@ class AllegroBoard:
                 return
 
             try:
-                obj = self.board.object(key_val)
-
                 val = f"{key_val:#010x}"
-                if obj_type := self.obj_type(obj.type):
-                    type_str = f"{obj.type:#04x}: {obj_type}"
-                else:
-                    type_str = f"{obj.type:#04x}"
 
-                if obj.type == 0x03:
-                    if obj.data.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x78]:
-                        val += f" => {self.string_aligned_to_str(obj.data.data)}"
-                    elif obj.data.subtype in [0x64, 0x66, 0x67, 0x6A]:
-                        # U32 data?
-                        val += f" => {obj.data.data.val:#010x}"
-                    else:
-                        val += " <unknown>"
-
-                    val += f" ({type_str}, subtype: {obj.data.subtype:#04x})"
-                else:
-                    # Everything else
-                    val += f" ({type_str})"
+                peek_data = self.get_obj_peek_data(key_val)
+                val += " " + peek_data
 
                 self.prnt(f"{name:16}: {val}")
             except KeyError:
@@ -294,9 +360,11 @@ class AllegroBoard:
 
         elif t == 0x03:
             prntr.print_v("subtype", d)
-            prntr.print_v("unknown_hdr", d)
+            prntr.print_v("unknown_hdr1", d)
+            prntr.print_v("unknown_hdr2", d)
             prntr.print_v("size", d)
 
+            prntr.print_ptr("next", d)
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
 
@@ -334,27 +402,32 @@ class AllegroBoard:
 
 
         elif t == 0x06:
-            prntr.print_s("String", d.str)
-            prntr.print_s("Ptr 1", d.str_2),
-            prntr.print_ptr("Ptr instance", d.ptr_instance)
-            prntr.print_ptr("Ptr FP", d.ptr_fp)
-            prntr.print_ptr("Ptr x08", d.ptr_x08)
-            prntr.print_ptr("Ptr x03", d.ptr_x03_symbol)
+            prntr.print_ptr("next", d)
+            prntr.print_s("Comp dev type", d.comp_dev_type)
+            prntr.print_s("Symbol name", d.sym_name),
+            prntr.print_ptr("Ptr refdes", d.ptr_refdes)
+            prntr.print_ptr("Ptr Slot", d.ptr_slot)
+            prntr.print_ptr("Pin Number", d.ptr_pin_num)
+            prntr.print_ptr("Fields", d.ptr_fields)
 
             prntr.print_v("unknown_1", d)
 
+            # Follow the 0x03 chain back to here
+            prntr.print_x03_chain(d.ptr_fields, d.key)
+
         elif t == 0x07:
+            prntr.print_ptr("next", d)
+            prntr.print_s("ref_des_ref", d)
+            prntr.print_ptr("ptr_fp_inst", d)
+            prntr.print_ptr("ptr_function", d)
+            prntr.print_ptr("ptr_first_pad", d)
             prntr.print_ptr("ptr_1", d)
-            prntr.print_ptr("ptr_2", d)
             prntr.print_ptr("ptr_3", d)
-            prntr.print_ptr("ptr_4", d)
-            prntr.print_ptr("ptr_0x2d", d)
 
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
             prntr.print_v("unknown_3", d)
-
-            prntr.print_s("ref_des_ref", d)
+            prntr.print_v("unknown_4", d)
 
         elif t == 0x08:
 
@@ -363,7 +436,7 @@ class AllegroBoard:
 
             prntr.print_ptr("Prev", d, "prev_ptr")
             prntr.print_ptr("Next", d, "next_ptr")
-            prntr.print_ptr("Ptr 3", d, "ptr3")
+            prntr.print_ptr("Pin name", d, "ptr_pin_name")
             prntr.print_ptr("Ptr 4", d, "ptr4")
 
             prntr.print_ptr("unknown_1", d)
@@ -394,10 +467,10 @@ class AllegroBoard:
 
         elif t == 0x0d:
             prntr.print_ptr("next", d)
-            prntr.print_s("str_ptr", d)
+            prntr.print_s("ptr_pad_num", d)
             prntr.print_ptr("flags", d)
+            prntr.print_ptr("padstack_ptr", d)
             prntr.print_v("rotation", d.rotation / 1000.)
-            prntr.print_ptr("pad_ptr", d)
 
             prntr.print_coords("coords", d.coords)
 
@@ -406,26 +479,32 @@ class AllegroBoard:
             prntr.print_v("unknown_3", d)
 
         elif t == 0x0f:
-            prntr.print_s("str_unk", d.str_unk)
+            prntr.print_s("slot_name", d.slot_name)
             prntr.print_v("s", d.s)
+            prntr.print_ptr("ptr_x0f_x06", d)
             prntr.print_ptr("Ptr x06", d.ptr_x06)
             prntr.print_ptr("Ptr x11", d.ptr_x11)
 
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
-            prntr.print_v("unknown_3", d)
 
         elif t == 0x10:
-            prntr.print_ptr("Ptr 1", d.ptr1)
-            prntr.print_ptr("Ptr 2", d.ptr2)
-            prntr.print_s("String", d.str)
-            prntr.print_ptr("Ptr 4", d.ptr4)
-            prntr.print_ptr("Path str", d.path_str)
+            prntr.print_ptr("Ptr refdes", d.ptr_x07)
+            prntr.print_ptr("Ptr x12", d.ptr_x12)
+            prntr.print_s("String", d.name)
+            prntr.print_ptr("First slot", d.ptr_slots)
+            prntr.print_ptr("Fields", d.path_str)
+
+            prntr.print_x03_chain(d.path_str, d.key)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
 
         elif t == 0x11:
             prntr.print_s("Name", d.name)
-            prntr.print_ptr("Ptr 1", d.ptr1)
-            prntr.print_ptr("Ptr 2", d.ptr2)
+            prntr.print_ptr("Next", d.next)
+            prntr.print_ptr("Pin number", d.ptr_pin_num)
 
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
@@ -522,6 +601,11 @@ class AllegroBoard:
                 prntr.print_v(f"  x4", pc.x4, as_hex=False)
                 prntr.print_ptr("  str_ptr", pc.str_ptr)
 
+        elif t == 0x21:
+            prntr.print_v("t", d)
+            prntr.print_v("r", d)
+            prntr.print_v("size", d)
+
         elif t == 0x23:
             prntr.print_ptr("next", d)
             prntr.print_layer(d.layer)
@@ -543,7 +627,9 @@ class AllegroBoard:
             prntr.print_layer(d.layer)
             prntr.print_coords("pt0", d.coords_0)
             prntr.print_coords("pt1", d.coords_1)
-            prntr.print_ptr("ptr1", d.ptr1)
+            prntr.print_coords("(size)", Coords(d.coords_1.x - d.coords_0.x, d.coords_1.y - d.coords_0.y))
+            prntr.print_coords("(centre)", Coords((d.coords_0.x + d.coords_1.x) // 2, (d.coords_0.y + d.coords_1.y) // 2))
+            prntr.print_ptr("ptr_parent", d.ptr_parent)
 
             prntr.print_v("unknown_1", d)
             prntr.print_v("unknown_2", d)
@@ -600,16 +686,21 @@ class AllegroBoard:
             prntr.print_s("fp_str", d.fp_str_ref)
 
             prntr.print_ptr("first_inst_ptr", d.first_inst_ptr)
-            prntr.print_ptr("ptr_2", d.ptr_2)
-            prntr.print_ptr("ptr_3", d.ptr_3)
-            prntr.print_ptr("ptr_4", d.ptr_4)
-            prntr.print_ptr("lib_path", d.lib_path)
-            prntr.print_ptr("ptr_5", d.ptr_5)
-            prntr.print_ptr("ptr_6", d.ptr_6)
-            prntr.print_ptr("ptr_7", d.ptr_7)
 
             prntr.print_coords("coords0", d.coords0)
             prntr.print_coords("coords1", d.coords1)
+
+            prntr.print_ptr("fields", d.fields)
+
+            if d.fields != 0:
+                prntr.print_x03_chain(d.fields, d.key)
+
+            prntr.print_ptr("ptr_2", d.ptr_2)
+            prntr.print_ptr("ptr_3", d.ptr_3)
+            prntr.print_ptr("ptr_4", d.ptr_4)
+            prntr.print_ptr("ptr_5", d.ptr_5)
+            prntr.print_ptr("ptr_6", d.ptr_6)
+            prntr.print_ptr("ptr_7", d.ptr_7)
 
             prntr.print_v("unknown_1", d.unknown_1)
 
@@ -645,11 +736,6 @@ class AllegroBoard:
 
             ref = d.inst_ref if hasattr(d, "inst_ref") else d.inst_ref_16x
             prntr.print_ptr("inst_ref", ref)
-
-            # Ref can be 0
-            if ref:
-                # Deref the reference for convenience to see which FP this is
-                prntr.print_s("ref>refdes", brd.object(ref).data.ref_des_ref)
 
         elif t == 0x2E:
             prntr.print_ptr("next", d.next)
@@ -703,7 +789,7 @@ class AllegroBoard:
             prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("net_ptr", d)
             prntr.print_ptr("pad_ptr", d)
-            prntr.print_ptr("fp_inst", d)
+            prntr.print_ptr("fp_refdes", d)
             prntr.print_ptr("pad_name", d)
             prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("track", d)
@@ -716,7 +802,6 @@ class AllegroBoard:
             prntr.print_coords("bbox_1", d.bbox_1)
 
             prntr.print_ptr("ptr4", d)
-            prntr.print_ptr("ptr5", d)
 
             prntr.print_ptr("ptr7", d)
 
@@ -908,6 +993,10 @@ if __name__ == "__main__":
                         nargs="+",
                         help="Print the object with the given key")
 
+    parser.add_argument("-a", "--address", type=IntIsh,
+                        nargs="+",
+                        help="Print the objects containing the given file address")
+
     parser.add_argument("--oc", "--object-count", action="store_true",
                         help="Print the object counts of the Allegro board file")
 
@@ -1003,26 +1092,53 @@ if __name__ == "__main__":
             if args.string_match in s:
                 print(f"String key {k:#010x}: {s}")
 
+    def print_obj_info(obj):
+        start = obj._debug["type"]["start"]
+        end = obj._debug["data"]["end"]
+
+        # index of object in the list of objects
+        index = kt_brd_struct.objects.index(obj)
+
+        print(f"Key:           {obj.data.key:#010x}")
+        print(f"Object type:   {obj.type:#04x}")
+        print(f"Object extent: {start:#010x} - {end:#010x}")
+        print(f"Object size:   {end - start:#010x}")
+            # Good for looking up in the Kaitai Web IDE, for example
+        print(f"Object index:  {index} (of {len(kt_brd_struct.objects)})")
+        print("")
+
     if args.key:
 
         for key in args.key:
             obj = brd.object(int(key))
 
-            start = obj._debug["type"]["start"]
-            end = obj._debug["data"]["end"]
-
-            # index of object in the list of objects
-            index = kt_brd_struct.objects.index(obj)
-
-            print(f"Key:           {int(key):#010x}")
-            print(f"Object type:   {obj.type:#04x}")
-            print(f"Object extent: {start:#010x} - {end:#010x}")
-            print(f"Object size:   {end - start:#010x}")
-            # Good for looking up in the Kaitai Web IDE, for example
-            print(f"Object index:  {index} (of {len(kt_brd_struct.objects)})")
+            print_obj_info(obj)
             print("")
             brd.print_obj(obj)
             print("")
+
+    if args.address:
+
+        for address in args.address:
+            addr = int(address)
+
+            found = False
+
+            for obj in kt_brd_struct.objects:
+                start = obj._debug["type"]["start"]
+                end = obj._debug["data"]["end"]
+
+                if start <= addr < end:
+                    print_obj_info(obj)
+                    print("")
+                    brd.print_obj(obj)
+                    print("")
+
+                    found = True
+                    break
+
+            if not found:
+                print(f"Address {addr:#010x} not found in any object")
 
     if args.dump_by_type is not None:
         # Dump all the objects of the given type.
