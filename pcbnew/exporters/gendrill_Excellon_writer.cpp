@@ -264,21 +264,22 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, const DRILL_SPAN& aSpan,
                 {
                     double stubMM = pcbIUScale.IUTomm( aStubLength );
                     double stubInches = stubMM / 25.4;
-                    return wxString::Format( wxT( "%.3fmm (%.4f\")" ), stubMM, stubInches );
-                };
+                    wxString tmp = fmt::format( "{:.3f}mm ({:.4f}\")", stubMM, stubInches );
+                    return tmp;
+               };
 
                 wxString comment = wxT( "; Backdrill" );
 
                 if( tool_descr.m_MinStubLength.has_value() )
                 {
                     comment += wxT( " stub " );
-                    comment += formatStub( *tool_descr.m_MinStubLength );
+                    comment += formatStub( *tool_descr.m_MinStubLength );;
 
                     if( tool_descr.m_MaxStubLength.has_value()
                             && tool_descr.m_MaxStubLength != tool_descr.m_MinStubLength )
                     {
                         comment += wxT( " to " );
-                        comment += formatStub( *tool_descr.m_MaxStubLength );
+                        comment += formatStub( *tool_descr.m_MaxStubLength );;
                     }
                 }
 
@@ -760,9 +761,9 @@ void EXCELLON_WRITER::writePostMachiningComment( PAD_DRILL_POST_MACHINING_MODE a
         wxString  angleStr;
 
         if( ( aAngleDeciDegree % 10 ) == 0 )
-            angleStr.Printf( wxT( "%.0fdeg" ), angle );
+            angleStr = fmt::format( "{:.0f}deg", angle );
         else
-            angleStr.Printf( wxT( "%.1fdeg" ), angle );
+            angleStr = fmt::format( "{:.1f}deg", angle );
 
         comment << wxT( " angle " ) << angleStr;
     }
@@ -779,7 +780,7 @@ wxString EXCELLON_WRITER::formatLinearValue( int aValueIU ) const
 
     double converted = aValueIU * m_conversionUnits;
     wxString value;
-    value.Printf( wxT( "%.*f" ), m_mantissaLenght, converted );
+    value = fmt::format( "{:.{}f}", converted, m_mantissaLenght );
     value << ( m_unitsMetric ? wxT( "mm" ) : wxT( "in" ) );
 
     return value;
