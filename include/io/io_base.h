@@ -17,9 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef IO_BASE_H_
-#define IO_BASE_H_
+#pragma once
 
 #include <map>
 #include <vector>
@@ -79,6 +77,11 @@ public:
      * Return a brief hard coded name for this IO interface.
      */
     const wxString& GetName() const { return m_name; }
+
+    /**
+     * Work-around for lack of dynamic_cast across compile units on Mac
+     */
+    virtual bool IsPCB_IO() const { return false; }
 
     /**
      * Set an optional reporter for warnings/errors.
@@ -213,21 +216,20 @@ public:
 
     virtual void AdvanceProgressPhase();
 
-protected:
     // Delete the zero-argument base constructor to force proper construction
     IO_BASE() = delete;
 
+protected:
     /**
      * @param aName is the user-visible name for the IO loader
      */
     IO_BASE( const wxString& aName ) :
-        m_name( aName ),
-        m_reporter( nullptr ),
-        m_progressReporter( nullptr )
-    {
-    }
+            m_name( aName ),
+            m_reporter( nullptr ),
+            m_progressReporter( nullptr )
+    {}
 
-
+protected:
     /// Name of the IO loader
     wxString m_name;
 
@@ -238,4 +240,3 @@ protected:
     PROGRESS_REPORTER* m_progressReporter;
 };
 
-#endif // IO_BASE_H_

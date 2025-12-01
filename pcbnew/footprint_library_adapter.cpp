@@ -334,8 +334,9 @@ long long FOOTPRINT_LIBRARY_ADAPTER::GenerateTimestamp( const wxString* aNicknam
     {
         if( std::optional<const LIB_DATA*> r = fetchIfLoaded( nickname ); r.has_value() )
         {
-            PCB_IO* plugin = dynamic_cast<PCB_IO*>( ( *r )->plugin.get() );
-            wxCHECK2( plugin, continue );
+            // Note: can't use dynamic_cast across compile units on Mac
+            wxCHECK2( ( *r )->plugin->IsPCB_IO(), continue );
+            PCB_IO* plugin = static_cast<PCB_IO*>( ( *r )->plugin.get() );
             hash += plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) ) +
                     wxHashTable::MakeKey( nickname );
         }
@@ -504,7 +505,8 @@ LIBRARY_RESULT<IO_BASE*> FOOTPRINT_LIBRARY_ADAPTER::createPlugin( const LIBRARY_
 
 PCB_IO* FOOTPRINT_LIBRARY_ADAPTER::pcbplugin( const LIB_DATA* aRow )
 {
-    PCB_IO* ret = dynamic_cast<PCB_IO*>( aRow->plugin.get() );
-    wxCHECK( aRow->plugin && ret, nullptr );
+    // Note: can't use dynamic_cast across compile units on Mac
+    wxCHECK( aRow->plugin->IsPCB_IO(), nullptr );
+    PCB_IO* ret = static_cast<PCB_IO*>( aRow->plugin.get() );
     return ret;
 }

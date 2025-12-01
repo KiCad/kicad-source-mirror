@@ -22,8 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_IO_H_
-#define PCB_IO_H_
+#pragma once
 
 #include <io/io_base.h>
 #include <pcb_io/pcb_io_mgr.h>
@@ -78,6 +77,10 @@ public:
         return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
     }
 
+    /**
+     * Work-around for lack of dynamic_cast across compile units on Mac
+     */
+    bool IsPCB_IO() const override { return true; }
 
     /**
      * Checks if this PCB_IO can read the specified board file.
@@ -227,8 +230,7 @@ public:
      * @throw   IO_ERROR if the library cannot be found or read.  No exception is thrown in
      *                   the case where \a aFootprintName cannot be found.
      */
-    virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath,
-                                      const wxString& aFootprintName,
+    virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                       bool  aKeepUUID = false,
                                       const std::map<std::string, UTF8>* aProperties = nullptr );
 
@@ -236,8 +238,7 @@ public:
      * A version of FootprintLoad() for use after FootprintEnumerate() for more efficient
      * cache management.
      */
-    virtual const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                                     const wxString& aFootprintName,
+    virtual const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
                                                      const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
@@ -315,9 +316,10 @@ public:
     {};
 
 protected:
-    PCB_IO( const wxString& aName ) : IO_BASE( aName ),
-        m_board( nullptr ),
-        m_props( nullptr )
+    PCB_IO( const wxString& aName ) :
+            IO_BASE( aName ),
+            m_board( nullptr ),
+            m_props( nullptr )
     {}
 
     /// The board BOARD being worked on, no ownership here
@@ -326,5 +328,3 @@ protected:
     /// Properties passed via Save() or Load(), no ownership, may be NULL.
     const std::map<std::string, UTF8>* m_props;
 };
-
-#endif // PCB_IO_H_

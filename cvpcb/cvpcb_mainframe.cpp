@@ -142,7 +142,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     fgSizerStatus->Add( m_statusLine2, 0, 0, 5 );
 
     m_statusLine3 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    fgSizerStatus->Add( m_statusLine3, 0, wxBOTTOM, 3 );
+    fgSizerStatus->Add( m_statusLine3, 0, 0, 5 );
 
     panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 2 );
 
@@ -154,8 +154,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
     auto sdbSizer = new wxStdDialogButtonSizer();
 
-    m_saveAndContinue = new wxButton( bottomPanel, wxID_ANY,
-                                      _( "Apply, Save Schematic && Continue" ) );
+    m_saveAndContinue = new wxButton( bottomPanel, wxID_ANY, _( "Apply, Save Schematic && Continue" ) );
     buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 
     auto sdbSizerOK = new wxButton( bottomPanel, wxID_OK );
@@ -887,8 +886,6 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
     if( std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( lib ); optRow )
         msg = wxString::Format( _( "Library location: %s" ), LIBRARY_MANAGER::GetFullURI( *optRow ) );
-    else
-        msg = wxString::Format( _( "Library location: unknown" ) );
 
     SetStatusText( msg, 2 );
 }
