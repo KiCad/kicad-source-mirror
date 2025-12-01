@@ -31216,6 +31216,7 @@ msgid "Er:"
 msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:77
+#, fuzzy
 msgid "Tan delta:"
 msgstr "ტრაპეციის ფუძის სხვაობა:"
 
