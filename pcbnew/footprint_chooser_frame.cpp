@@ -289,6 +289,7 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 
     Disconnect( FP_SELECTION_EVENT,
                 wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
+
     // clang-format on
 
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -469,8 +470,7 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
     case MAIL_SYMBOL_NETLIST:
     {
-    wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "MAIL_SYMBOL_NETLIST received: size=%zu" ),
-            payload.size() );
+        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "MAIL_SYMBOL_NETLIST received: size=%zu" ), payload.size() );
         wxSizer*  filtersSizer = m_chooserPanel->GetFiltersSizer();
         wxWindow* filtersWindow = filtersSizer->GetContainingWindow();
         wxString  msg;
@@ -498,10 +498,12 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             m_pinCount = (int) pinNames.size();
 
             wxString pinList;
+
             for( const auto& kv : pinNames )
             {
                 if( !pinList.IsEmpty() )
                     pinList << wxS( "," );
+
                 pinList << kv.first;
             }
 
@@ -574,9 +576,8 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 m_filterByPinCount->Hide();
         }
 
-    m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
-    wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "SetPinFunctions called with %zu entries" ),
-            pinNames.size() );
+        m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
+        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "SetPinFunctions called with %zu entries" ), pinNames.size() );
 
         // Save the wxFormBuilder size of the dialog...
         if( s_dialogRect.GetSize().x == 0 || s_dialogRect.GetSize().y == 0 )
@@ -771,6 +772,7 @@ void FOOTPRINT_CHOOSER_FRAME::toggleBottomSplit( wxCommandEvent& event )
     m_chooserPanel->Refresh();
 }
 
+
 void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
 {
     if( m_show3DMode == true )
@@ -792,6 +794,7 @@ void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
         {
             // Close 3D viewer frame, if it is still enabled
             EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+
             if( viewer3D )
                 viewer3D->Close( true );
         }
@@ -841,6 +844,7 @@ void FOOTPRINT_CHOOSER_FRAME::updateViews()
     m_chooserPanel->m_RightPanel->Layout();
     m_chooserPanel->m_RightPanel->Refresh();
 }
+
 
 void FOOTPRINT_CHOOSER_FRAME::updatePanelsVisibility()
 {

@@ -48,7 +48,7 @@
 
 // When a new footprint is selected, a custom event is sent, for instance to update
 // 3D viewer. So define a FP_SELECTION_EVENT event
-wxDEFINE_EVENT(FP_SELECTION_EVENT, wxCommandEvent);
+wxDEFINE_EVENT( FP_SELECTION_EVENT, wxCommandEvent );
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                                                   const wxArrayString& aFootprintHistoryList,
@@ -117,7 +117,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                         wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
-    //Avoid the splitter window being assigned as the Parent to additional windows
+    // Avoid the splitter window being assigned as the Parent to additional windows
     m_vsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
     m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
@@ -131,6 +131,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     detailsSizer->Fit( m_detailsPanel );
 
     m_vsplitter->SetSashGravity( 0.5 );
+
     // Ensure splitted areas are always shown (i.e. 0 size not allowed) when m_detailsPanel is shown
     m_vsplitter->SetMinimumPaneSize( 80 );  // arbitrary value but reasonable min size
     m_vsplitter->SplitHorizontally( m_hsplitter, m_detailsPanel );
@@ -330,7 +331,9 @@ void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     }
 }
 
+
 #include <footprint_preview_panel.h>
+
 void PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 {
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -355,7 +358,7 @@ void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
         m_preview_ctrl->DisplayFootprint( lib_id );
     }
 
-    m_CurrFootprint = static_cast<FOOTPRINT_PREVIEW_PANEL*>(m_preview_ctrl->GetPreviewPanel())->GetCurrentFootprint();
+    m_CurrFootprint = static_cast<FOOTPRINT_PREVIEW_PANEL*>( m_preview_ctrl->GetPreviewPanel() )->GetCurrentFootprint();
 
     // Send a FP_SELECTION_EVENT event after a footprint change
     wxCommandEvent event( FP_SELECTION_EVENT, GetId() );
