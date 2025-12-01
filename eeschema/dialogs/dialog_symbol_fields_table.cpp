@@ -1131,7 +1131,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent 
             DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
 
             value = false;
-            m_viewControlsDataModel->SetValueAsBool( value, row, GROUP_BY_COLUMN );
+            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
             break;
         }
 
@@ -1140,7 +1140,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent 
             DisplayError( this, _( "The Item Number column cannot be grouped by." ) );
 
             value = false;
-            m_viewControlsDataModel->SetValueAsBool( value, row, GROUP_BY_COLUMN );
+            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
             break;
         }
 
