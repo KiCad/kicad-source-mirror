@@ -212,21 +212,33 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons->Add( 0, 20, 0, wxEXPAND, 5 );
 
 	m_bpvLeft = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvLeft->SetToolTip( _("View Left") );
+
 	bSizer3DButtons->Add( m_bpvLeft, 0, wxBOTTOM, 5 );
 
 	m_bpvRight = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvRight->SetToolTip( _("View Right") );
+
 	bSizer3DButtons->Add( m_bpvRight, 0, wxBOTTOM, 5 );
 
 	m_bpvFront = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvFront->SetToolTip( _("View Front") );
+
 	bSizer3DButtons->Add( m_bpvFront, 0, wxBOTTOM, 5 );
 
 	m_bpvBack = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBack->SetToolTip( _("View Back") );
+
 	bSizer3DButtons->Add( m_bpvBack, 0, wxBOTTOM, 5 );
 
 	m_bpvTop = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvTop->SetToolTip( _("View Top") );
+
 	bSizer3DButtons->Add( m_bpvTop, 0, wxBOTTOM, 5 );
 
 	m_bpvBottom = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBottom->SetToolTip( _("View Bottom") );
+
 	bSizer3DButtons->Add( m_bpvBottom, 0, 0, 5 );
 
 
