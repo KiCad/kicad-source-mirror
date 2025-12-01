@@ -31102,6 +31102,7 @@ msgid "Temperature rise"
 msgstr "ტემპერატურის ზრდა"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
+#, fuzzy
 msgid "Current (I):"
 msgstr "დენი (I):"
 
