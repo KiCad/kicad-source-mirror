@@ -3932,7 +3932,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                         shape->TransformShapeToPolygon( poly, shape->GetLayer(), 0, ARC_LOW_DEF, ERROR_INSIDE );
                         double shapeArea = poly.Area();
 
-                        int    R = via->GetWidth() / 2;
+                        int    R = via->GetWidth( shape->GetLayer() ) / 2;
                         double viaArea = M_PI * R * R;
 
                         if( viaArea * 4 > shapeArea )
