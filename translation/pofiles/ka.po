@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-30 10:25+0000\n"
+"PO-Revision-Date: 2025-12-02 11:00+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -29375,7 +29375,7 @@ msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
-msgstr ""
+msgstr "ფარდობითი შეღწევადობა"
 
 #: pcb_calculator/datafile_read_write.cpp:77
 msgid "Data file error."
@@ -29395,7 +29395,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
-msgstr ""
+msgstr "სტაბილიზატორის პარამეტრები"
 
 #: pcb_calculator/eseries_display_help.h:2
 msgid ""
@@ -29489,15 +29489,15 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:175
 msgid "Electrical Spacing"
-msgstr ""
+msgstr "ელექტრული დაშორება"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:178
 msgid "Fusing Current"
-msgstr ""
+msgstr "დამცავის დენი"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:179
 msgid "Cable Size"
-msgstr ""
+msgstr "კაბელის ზომა"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:181
 msgid "High Speed"
@@ -29509,11 +29509,11 @@ msgstr "ტალღის სიგრძე"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:184
 msgid "RF Attenuators"
-msgstr ""
+msgstr "რს ატენიუატორები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:185
 msgid "Transmission Lines"
-msgstr ""
+msgstr "გადაცემის ხაზები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:187
 msgid "Memo"
@@ -29525,15 +29525,15 @@ msgstr "E-სერიები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:190
 msgid "Color Code"
-msgstr ""
+msgstr "ფერთა კოდი"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:191
 msgid "Board Classes"
-msgstr ""
+msgstr "დაფის კლასები"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:192
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "გალვანური კოროზია"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:365
 msgid "Write Data Failed"
@@ -29602,7 +29602,7 @@ msgstr ""
 
 #: pcb_calculator/transline_dlg_funct.cpp:79
 msgid "Specific Resistance"
-msgstr ""
+msgstr "სპეფიციკური წინაღობა"
 
 #: pcb_calculator/transline_ident.cpp:93
 msgid "Substrate relative permittivity (dielectric constant)"
@@ -29631,7 +29631,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:391
 #, c-format
 msgid "Effective %s:"
-msgstr ""
+msgstr "მიმდინარე %s:"
 
 #: pcb_calculator/transline_ident.cpp:120
 #: pcb_calculator/transline_ident.cpp:163
@@ -29648,7 +29648,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:358
 #: pcb_calculator/transline_ident.cpp:392
 msgid "Conductor losses:"
-msgstr ""
+msgstr "გამტარის კარგვები:"
 
 #: pcb_calculator/transline_ident.cpp:122
 #: pcb_calculator/transline_ident.cpp:165
@@ -29658,7 +29658,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:359
 #: pcb_calculator/transline_ident.cpp:393
 msgid "Dielectric losses:"
-msgstr ""
+msgstr "დიელექტრული კარგვები:"
 
 #: pcb_calculator/transline_ident.cpp:123
 #: pcb_calculator/transline_ident.cpp:166
@@ -29667,7 +29667,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:360
 #: pcb_calculator/transline_ident.cpp:394
 msgid "Skin depth:"
-msgstr ""
+msgstr "კანის სიღრმე:"
 
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:169
@@ -29688,7 +29688,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:322
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Strip thickness"
-msgstr ""
+msgstr "ზოლის სისქე"
 
 #: pcb_calculator/transline_ident.cpp:133
 #: pcb_calculator/transline_ident.cpp:324
@@ -29698,7 +29698,7 @@ msgstr "სიუხეშე"
 #: pcb_calculator/transline_ident.cpp:134
 #: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor roughness"
-msgstr ""
+msgstr "გამტარის სიუხეშე"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "substrate"
@@ -29745,7 +29745,7 @@ msgstr "ხაზის სიგანე"
 #: pcb_calculator/transline_ident.cpp:337
 #: pcb_calculator/transline_ident.cpp:377
 msgid "Line length"
-msgstr ""
+msgstr "ხაზის სიგრძე"
 
 #: pcb_calculator/transline_ident.cpp:151
 #: pcb_calculator/transline_ident.cpp:186
@@ -29755,7 +29755,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:380
 #: pcb_calculator/transline_ident.cpp:419
 msgid "Characteristic impedance"
-msgstr ""
+msgstr "ტალღური წინაღობა"
 
 #: pcb_calculator/transline_ident.cpp:154
 #: pcb_calculator/transline_ident.cpp:189
@@ -29766,13 +29766,13 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:383
 #: pcb_calculator/transline_ident.cpp:422
 msgid "Electrical length"
-msgstr ""
+msgstr "ელექტრული სიგრძე"
 
 #: pcb_calculator/transline_ident.cpp:181
 #: pcb_calculator/transline_ident.cpp:216
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Gap width"
-msgstr ""
+msgstr "დაშორების სიგანე"
 
 #: pcb_calculator/transline_ident.cpp:233
 msgid "ZF(H10) = Ey / Hx:"
@@ -29808,7 +29808,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:255
 msgid "Waveguide length"
-msgstr ""
+msgstr "ტალღგამტარის სიგრძე"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:410
@@ -29906,7 +29906,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:416
 msgid "Cable length"
-msgstr ""
+msgstr "კაბელის სიგრძე"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -29983,12 +29983,12 @@ msgstr "ჩანაწერები წაიშალა API-ით"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:882
 msgid "Autoplacing components..."
-msgstr ""
+msgstr "კომპონენტების ავტომოთავსება..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:898
 #, c-format
 msgid "Autoplacing %s"
-msgstr ""
+msgstr "%s-ის ავტომოთავსება"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
@@ -30031,7 +30031,7 @@ msgstr "გამტარი ნახვრეტები"
 
 #: pcbnew/board.cpp:2063 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
-msgstr ""
+msgstr "ტრეკის სეგმენტები"
 
 #: pcbnew/board.cpp:2065 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
@@ -30095,16 +30095,16 @@ msgstr ""
 
 #: pcbnew/board_item.cpp:194
 msgid "and others"
-msgstr ""
+msgstr "და სხვები"
 
 #: pcbnew/board_item.cpp:202
 msgid "no layers"
-msgstr ""
+msgstr "ფენების გარეშე"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:344
 #, c-format
 msgid "Dielectric %d"
-msgstr ""
+msgstr "დიელექტრიკი %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:652
 msgid "Top Silk Screen"
@@ -30148,24 +30148,24 @@ msgstr "მასალა"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:102
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
 msgid "Epsilon R"
-msgstr ""
+msgstr "εR"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:106
 msgid "Loss Tan"
-msgstr ""
+msgstr "კარგვის ტანგენსი"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr ""
+msgstr "εR:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tan:"
-msgstr ""
+msgstr "კარგვის ტანგენსი:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
-msgstr ""
+msgstr "საერთო მასალები:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:56
 msgid "Dielectric Material Characteristics"
@@ -30181,7 +30181,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr ""
+msgstr "სპილენძით დაფარვა:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
