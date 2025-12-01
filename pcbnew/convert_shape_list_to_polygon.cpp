@@ -1077,9 +1077,6 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         aOutlines.Append( corner );
     }
 
-#if 0
-    // This version can't handle colliding (or even concentric) holes when arcs are being kept.
-
     if( aAllowUseArcsInPolygons )
     {
         for( int ii = 0; ii < fpHoles.OutlineCount(); ++ii )
@@ -1100,31 +1097,6 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     {
         aOutlines.BooleanSubtract( fpHoles );
     }
-#else
-    // This version handles colliding & concentric holes, but flattens all interior arcs
-
-    SHAPE_POLY_SET outerContours;
-
-    if( aAllowUseArcsInPolygons )
-        outerContours = aOutlines.CloneDropTriangulation();
-
-    aOutlines.BooleanSubtract( fpHoles );
-
-    if( aAllowUseArcsInPolygons && outerContours.OutlineCount() == aOutlines.OutlineCount() )
-    {
-        SHAPE_POLY_SET result;
-
-        for( int ii = 0; ii < outerContours.OutlineCount(); ++ii )
-        {
-            result.AddOutline( outerContours.Outline( ii ) );
-
-            for( int jj = 0; jj < aOutlines.HoleCount( ii ); ++jj )
-                result.AddHole( aOutlines.Hole( ii, jj ) );
-        }
-
-        aOutlines = std::move( result );
-    }
-#endif
 
     return success;
 }
