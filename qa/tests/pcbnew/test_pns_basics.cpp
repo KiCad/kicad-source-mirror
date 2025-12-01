@@ -443,7 +443,10 @@ BOOST_FIXTURE_TEST_CASE( PNSViaBackdrillRetention, PNS_TEST_FIXTURE )
         BOOST_CHECK_EQUAL( candidate.SecondaryHoleLayers()->End(),
                            via.SecondaryHoleLayers()->End() );
         BOOST_CHECK( candidate.SecondaryHolePostMachining().has_value() );
-        BOOST_CHECK( candidate.SecondaryHolePostMachining().value() == via.SecondaryHolePostMachining().value() );
+
+        // run this BOOST_CHECK only if possible to avoid crash
+        if( candidate.SecondaryHolePostMachining().has_value() )
+            BOOST_CHECK( candidate.SecondaryHolePostMachining().value() == via.SecondaryHolePostMachining().value() );
     };
 
     checkVia( viaCopy );
@@ -481,8 +484,11 @@ BOOST_AUTO_TEST_CASE( PCBViaBackdrillCloneRetainsData )
         BOOST_CHECK_EQUAL( candidate.GetSecondaryDrillEndLayer(),
                            via.GetSecondaryDrillEndLayer() );
         BOOST_CHECK( candidate.GetBackPostMachining().has_value() );
-        BOOST_CHECK_EQUAL( static_cast<int>( candidate.GetBackPostMachining().value() ),
-                           static_cast<int>( via.GetBackPostMachining().value() ) );
+
+        // run this BOOST_CHECK only if possible to avoid crash
+        if( candidate.GetBackPostMachining().has_value() )
+            BOOST_CHECK_EQUAL( static_cast<int>( candidate.GetBackPostMachining().value() ),
+                               static_cast<int>( via.GetBackPostMachining().value() ) );
     };
 
     checkVia( viaCopy );
