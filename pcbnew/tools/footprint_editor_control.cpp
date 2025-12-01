@@ -771,9 +771,9 @@ int FOOTPRINT_EDITOR_CONTROL::Properties( const TOOL_EVENT& aEvent )
         LIB_ID treeLibId = m_frame->GetLibTree()->GetSelectedLibId();
         
         // Check if a different footprint is selected in the tree
-        if( treeLibId.IsValid() && 
-            ( !m_frame->GetBoard()->GetFirstFootprint() || 
-              m_frame->GetBoard()->GetFirstFootprint()->GetFPID() != treeLibId ) )
+        if( treeLibId.IsValid()
+                && (  !m_frame->GetBoard()->GetFirstFootprint()
+                    || m_frame->GetBoard()->GetFirstFootprint()->GetFPID() != treeLibId ) )
         {
             // Edit properties directly from library without loading to canvas
             editFootprintPropertiesFromLibrary( treeLibId );

@@ -72,7 +72,6 @@ std::vector<SHAPE*> SCH_RULE_AREA::MakeEffectiveShapes( bool aEdgeOnly ) const
     switch( m_shape )
     {
     case SHAPE_T::POLY:
-    {
         if( GetPolyShape().OutlineCount() == 0 ) // malformed/empty polygon
             break;
 
@@ -91,8 +90,8 @@ std::vector<SHAPE*> SCH_RULE_AREA::MakeEffectiveShapes( bool aEdgeOnly ) const
                     effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.CSegment( jj ), width ) );
             }
         }
-    }
-    break;
+
+        break;
 
     default:
         return SCH_SHAPE::MakeEffectiveShapes( aEdgeOnly );
@@ -121,9 +120,7 @@ void SCH_RULE_AREA::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OP
     const std::vector<VECTOR2I>& polyPoints = m_poly.Outline( 0 ).CPoints();
 
     for( const VECTOR2I& pt : polyPoints )
-    {
         ptList.push_back( pt );
-    }
 
     ptList.push_back( polyPoints[0] );
 
@@ -246,8 +243,7 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
             if( GetPolyShape().Collide( &lineSeg ) )
                 addContainedItem( areaItem );
         }
-        else if( areaItem->IsType(
-                         { SCH_PIN_T, SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
+        else if( areaItem->IsType( { SCH_PIN_T, SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
         {
             std::vector<VECTOR2I> connectionPoints = areaItem->GetConnectionPoints();
             wxASSERT( connectionPoints.size() == 1 );
@@ -288,8 +284,7 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
 
 
 std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>
-SCH_RULE_AREA::UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screens,
-                                         KIGFX::SCH_VIEW*                 view )
+SCH_RULE_AREA::UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screens, KIGFX::SCH_VIEW* view )
 {
     std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>> forceUpdateRuleAreas;
 
