@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-30 11:01+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
-"master-source/ka/>\n"
+"PO-Revision-Date: 2025-12-02 11:00+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
+"source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29518,6 +29518,7 @@ msgstr "ტექსტის სიგანე:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:181
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:167
+#, fuzzy
 msgid "Text height:"
 msgstr "ტექსტის სიმაღლე:"
 
