@@ -1,0 +1,1405 @@
+#compdef kicad-cli
+
+_kicad_cli_commands() {
+    local -a commands
+    commands=(
+        'fp:Footprint and Footprint Libraries'
+        'jobset:Jobset'
+        'pcb:PCB'
+        'sch:Schematics'
+        'sym:Symbol and Symbol Libraries'
+        'version:Reports the version info in various formats'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--version -v)'{--version,-v}'[prints version information and exits]' \
+        '1: :_kicad_cli_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (fp)
+                    _kicad_cli_fp
+                    ;;
+                (jobset)
+                    _kicad_cli_jobset
+                    ;;
+                (pcb)
+                    _kicad_cli_pcb
+                    ;;
+                (sch)
+                    _kicad_cli_sch
+                    ;;
+                (sym)
+                    _kicad_cli_sym
+                    ;;
+                (version)
+                    _kicad_cli_version
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_fp_commands() {
+    local -a commands
+    commands=(
+        'export:Export utilities (svg)'
+        'upgrade:Upgrades the footprint library to the current kicad version format'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_fp() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_fp_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (export)
+                    _kicad_cli_fp_export
+                    ;;
+                (upgrade)
+                    _kicad_cli_fp_upgrade
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_fp_export_commands() {
+    local -a commands
+    commands=(
+        'svg:Exports the footprint or entire footprint library to SVG'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_fp_export() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_fp_export_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (svg)
+                    _kicad_cli_fp_export_svg
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_fp_export_svg() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--black-and-white[Black and white only]' \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '(--footprint --fp)'{--footprint,--fp}'[Specific footprint to export within the library \[nargs=0..1\] \[default: ""\]]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to footprint editor settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_fp_upgrade() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--force[Forces the footprint library to be resaved regardless of versioning]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_jobset_commands() {
+    local -a commands
+    commands=(
+        'run:Runs a jobset file'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_jobset() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_jobset_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (run)
+                    _kicad_cli_jobset_run
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_jobset_run() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--file -f)'{--file,-f}'[Jobset file to be run \[nargs=0..1\] \[default: ""\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--output[Jobset file output to generate, leave blank for all outputs defined in the jobset \[nargs=0..1\] \[default: ""\]]' \
+        '--stop-on-error[Stops processing jobs as they are executed sequentially on the first failure of a job]' \
+        && return 0
+}
+
+_kicad_cli_pcb_commands() {
+    local -a commands
+    commands=(
+        'drc:Runs the Design Rules Check (DRC) on the PCB and creates a report'
+        'export:Export utilities (Gerbers, drill, position files, etc)'
+        'render:Renders the PCB in 3D view to PNG or JPEG image'
+        'upgrade:Upgrade the board file'\''s format to the latest one'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_pcb() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_pcb_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (drc)
+                    _kicad_cli_pcb_drc
+                    ;;
+                (export)
+                    _kicad_cli_pcb_export
+                    ;;
+                (render)
+                    _kicad_cli_pcb_render
+                    ;;
+                (upgrade)
+                    _kicad_cli_pcb_upgrade
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_pcb_drc() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--all-track-errors[Report all errors for each track]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--exit-code-violations[Return a nonzero exit code if DRC violations exist]' \
+        '--format[Output file format, options: json, report \[nargs=0..1\] \[default: "report"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--refill-zones[Refill zones before running DRC]' \
+        '--save-board[Save the board after DRC, must be used with --refill-zones]' \
+        '--schematic-parity[Test for parity between PCB and schematic]' \
+        '--severity-all[Report all DRC violations, this is equivalent to including all the other severity arguments]' \
+        '--severity-error[Report all DRC error level violations, this can be combined with the other severity arguments]' \
+        '--severity-exclusions[Report all excluded DRC violations, this can be combined with the other severity arguments]' \
+        '--severity-warning[Report all DRC warning level violations, this can be combined with the other severity arguments]' \
+        '--units[Report units; valid options: in, mm, mils \[nargs=0..1\] \[default: "mm"\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_commands() {
+    local -a commands
+    commands=(
+        '3dpdf:Export PDF'
+        'brep:Export BREP'
+        'drill:Generate Drill Files'
+        'dxf:Generate a DXF from a list of layers'
+        'gencad:Export the PCB in Gencad format'
+        'gerber:Plot given layers to a single Gerber file'
+        'gerbers:Plot multiple Gerbers for a PCB, including the ability to use stored board plot settings'
+        'glb:Export GLB (binary GLTF)'
+        'hpgl:No longer supported as of KiCad 10.0.'
+        'ipc2581:Export the PCB in IPC-2581 format'
+        'ipcd356:Generate IPC-D-356 netlist file'
+        'odb:Export the PCB in ODB++ format'
+        'pdf:Generate PDF from a list of layers'
+        'ply:Export PLY'
+        'pos:Generate Position File'
+        'ps:Generate Postscript from a list of layers'
+        'stats:Generate a board statistics report'
+        'step:Export STEP'
+        'stl:Export STL'
+        'stpz:Export STEPZ'
+        'svg:Generate SVG outputs of a given layer list'
+        'u3d:Export U3D'
+        'vrml:Export VRML'
+        'xao:Export XAO'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_pcb_export() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_pcb_export_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (3dpdf)
+                    _kicad_cli_pcb_export_3dpdf
+                    ;;
+                (brep)
+                    _kicad_cli_pcb_export_brep
+                    ;;
+                (drill)
+                    _kicad_cli_pcb_export_drill
+                    ;;
+                (dxf)
+                    _kicad_cli_pcb_export_dxf
+                    ;;
+                (gencad)
+                    _kicad_cli_pcb_export_gencad
+                    ;;
+                (gerber)
+                    _kicad_cli_pcb_export_gerber
+                    ;;
+                (gerbers)
+                    _kicad_cli_pcb_export_gerbers
+                    ;;
+                (glb)
+                    _kicad_cli_pcb_export_glb
+                    ;;
+                (hpgl)
+                    _kicad_cli_pcb_export_hpgl
+                    ;;
+                (ipc2581)
+                    _kicad_cli_pcb_export_ipc2581
+                    ;;
+                (ipcd356)
+                    _kicad_cli_pcb_export_ipcd356
+                    ;;
+                (odb)
+                    _kicad_cli_pcb_export_odb
+                    ;;
+                (pdf)
+                    _kicad_cli_pcb_export_pdf
+                    ;;
+                (ply)
+                    _kicad_cli_pcb_export_ply
+                    ;;
+                (pos)
+                    _kicad_cli_pcb_export_pos
+                    ;;
+                (ps)
+                    _kicad_cli_pcb_export_ps
+                    ;;
+                (stats)
+                    _kicad_cli_pcb_export_stats
+                    ;;
+                (step)
+                    _kicad_cli_pcb_export_step
+                    ;;
+                (stl)
+                    _kicad_cli_pcb_export_stl
+                    ;;
+                (stpz)
+                    _kicad_cli_pcb_export_stpz
+                    ;;
+                (svg)
+                    _kicad_cli_pcb_export_svg
+                    ;;
+                (u3d)
+                    _kicad_cli_pcb_export_u3d
+                    ;;
+                (vrml)
+                    _kicad_cli_pcb_export_vrml
+                    ;;
+                (xao)
+                    _kicad_cli_pcb_export_xao
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_pcb_export_3dpdf() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_brep() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_drill() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--drill-origin[Valid options are: absolute,plot \[nargs=0..1\] \[default: "absolute"\]]' \
+        '--excellon-min-header[Minimal header]' \
+        '--excellon-mirror-y[Mirror Y axis]' \
+        '--excellon-oval-format[Valid options are: route,alternate. \[nargs=0..1\] \[default: "alternate"\]]' \
+        '--excellon-separate-th[Generate independent files for NPTH and PTH holes]' \
+        '(--excellon-units -u)'{--excellon-units,-u}'[Output units, valid options:in,mm \[nargs=0..1\] \[default: "mm"\]]' \
+        '--excellon-zeros-format[Valid options are: decimal,suppressleading,suppresstrailing,keep. \[nargs=0..1\] \[default: "decimal"\]]' \
+        '--format[Valid options excellon, gerber. \[nargs=0..1\] \[default: "excellon"\]]' \
+        '--generate-map[Generate map / summary of drill hits]' \
+        '--generate-tenting[Generate a file specifically for tenting]' \
+        '--gerber-precision[Precision of Gerber coordinates (5 or 6) \[nargs=0..1\] \[default: 6\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--map-format[Valid options: pdf,gerberx2,ps,dxf,svg \[nargs=0..1\] \[default: "pdf"\]]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_dxf() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '--drill-shape-opt[Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape) \[nargs=0..1\] \[default: 2\]]' \
+        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
+        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '--mode-multi[Generates one or more files with behavior similar to the KiCad GUI plotting. The given output path specifies a directory in which files may be output.]' \
+        '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
+        '(--ou --output-units)'{--ou,--output-units}'[Output units, valid options: mm, in \[nargs=0..1\] \[default: "in"\]]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--plot-invisible-text[Deprecated.  Has no effect.]' \
+        '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '(--uc --use-contours)'{--uc,--use-contours}'[Plot graphic items using their contours]' \
+        '(--udo --use-drill-origin)'{--udo,--use-drill-origin}'[Plot using the drill/place file origin]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_gencad() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '(--flip-bottom-pads -f)'{--flip-bottom-pads,-f}'[Flip bottom footprint padstacks]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--store-origin-coord[Save the origin coordinates in the file]' \
+        '--unique-footprints[Generate a new shape for each footprint instance (do not reuse shapes)]' \
+        '--unique-pins[Generate unique pin names]' \
+        '--use-drill-origin[Use drill/place file origin as origin]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_gerber() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--disable-aperture-macros[Disable aperture macros]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
+        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '--no-netlist[Do not generate netlist attributes]' \
+        '--no-protel-ext[Use KiCad Gerber file extension]' \
+        '--no-x2[Do not use the extended X2 format]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--plot-invisible-text[Deprecated.  Has no effect.]' \
+        '--precision[Precision of Gerber coordinates, valid options: 5 or 6 \[nargs=0..1\] \[default: 6\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '--use-drill-file-origin[Use drill/place file origin]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_gerbers() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-plot-params[Use the Gerber plot settings already configured in the board file]' \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--disable-aperture-macros[Disable aperture macros]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
+        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '--no-netlist[Do not generate netlist attributes]' \
+        '--no-protel-ext[Use KiCad Gerber file extension]' \
+        '--no-x2[Do not use the extended X2 format]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--plot-invisible-text[Deprecated.  Has no effect.]' \
+        '--precision[Precision of Gerber coordinates, valid options: 5 or 6 \[nargs=0..1\] \[default: 6\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '--use-drill-file-origin[Use drill/place file origin]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_glb() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_hpgl() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_ipc2581() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--bom-col-dist[Name to insert into Bill of Material Distributor Column \[nargs=0..1\] \[default: ""\]]' \
+        '--bom-col-dist-pn[Name of the part field to use for the Bill of Material Distributor Part Number Column \[nargs=0..1\] \[default: ""\]]' \
+        '--bom-col-int-id[Name of the part field to use for the Bill of Material Internal Id Column \[nargs=0..1\] \[default: ""\]]' \
+        '--bom-col-mfg[Name of the part field to use for the Bill of Material Manufacturer Column \[nargs=0..1\] \[default: ""\]]' \
+        '--bom-col-mfg-pn[Name of the part field to use for the Bill of Material Manufacturer Part Number Column \[nargs=0..1\] \[default: ""\]]' \
+        '--compress[Compress the output]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--precision[Precision \[nargs=0..1\] \[default: 6\]]' \
+        '--units[Units \[nargs=0..1\] \[default: "mm"\]]' \
+        '--version[IPC-2581 standard version \[nargs=0..1\] \[default: "C"\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_ipcd356() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_odb() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--compression[Compression mode \[nargs=0..1\] \[default: "zip"\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--precision[Precision \[nargs=0..1\] \[default: 2\]]' \
+        '--units[Units \[nargs=0..1\] \[default: "mm"\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_pdf() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--bg-color[Background color, can be in hex #rrggbb, #rrggbbaa; or css rgb(r,g,b), rgba(r,g,b,a) format \[nargs=0..1\] \[default: ""\]]' \
+        '--black-and-white[Black and white only]' \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '--drill-shape-opt[Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape) \[nargs=0..1\] \[default: 2\]]' \
+        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
+        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--mirror -m)'{--mirror,-m}'[Mirror the board (useful for trying to show bottom layers)]' \
+        '--mode-multipage[Plot the layers to a single PDF file with multiple pages]' \
+        '--mode-separate[Plot the layers to individual PDF files]' \
+        '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
+        '(--negative -n)'{--negative,-n}'[Plot as negative (useful for directly etching from the export)]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--plot-invisible-text[Deprecated.  Has no effect.]' \
+        '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to PCB Editor settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_ply() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_pos() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--bottom-negate-x[Use negative X coordinates for footprints on bottom layer (ascii or csv formats only)]' \
+        '--exclude-dnp[Exclude all footprints with the Do Not Populate flag set]' \
+        '--exclude-fp-th[Exclude all footprints with through-hole pads (ascii or csv only)]' \
+        '--format[Valid options: ascii,csv,gerber \[nargs=0..1\] \[default: "ascii"\]]' \
+        '--gerber-board-edge[Include board edge layer (Gerber only)]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--side[Valid options: front,back,both. Gerber format only supports "front" or "back". \[nargs=0..1\] \[default: "both"\]]' \
+        '--smd-only[Include only SMD footprints (ascii or csv only)]' \
+        '--units[Output units; ascii or csv format only; valid options: in,mm \[nargs=0..1\] \[default: "in"\]]' \
+        '--use-drill-file-origin[Use drill/place file origin (ascii or csv only)]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_ps() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--black-and-white[Black and white only]' \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '--drill-shape-opt[Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape) \[nargs=0..1\] \[default: 2\]]' \
+        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
+        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
+        '(--force-a4 -A)'{--force-a4,-A}'[Force A4 paper size.]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--mirror -m)'{--mirror,-m}'[Mirror the board (useful for trying to show bottom layers)]' \
+        '--mode-multi[Generates one or more files with behavior similar to the KiCad GUI plotting. The given output path specifies a directory in which files may be output.]' \
+        '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
+        '(--negative -n)'{--negative,-n}'[Plot as negative (useful for directly etching from the export)]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to PCB Editor settings) \[nargs=0..1\] \[default: ""\]]' \
+        '(--track-width-correction -C)'{--track-width-correction,-C}'[Track width correction \[mm\]. Used to compensate errors in track widths, pad and via sizes. \[nargs=0..1\] \[default: 0\]]' \
+        '(--x-scale-factor -X)'{--x-scale-factor,-X}'[X scale adjust for exact scale. \[nargs=0..1\] \[default: 1\]]' \
+        '(--y-scale-factor -Y)'{--y-scale-factor,-Y}'[Y scale adjust for exact scale. \[nargs=0..1\] \[default: 1\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_stats() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--exclude-footprints-without-pads[Exclude footprints without pads]' \
+        '--format[Output file format, options: json, report \[nargs=0..1\] \[default: "report"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subtract-holes-from-board[Subtract holes from the board area]' \
+        '--subtract-holes-from-copper[Subtract holes from copper areas]' \
+        '--units[Report units; valid options: in, mm \[nargs=0..1\] \[default: "mm"\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_step() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-optimize-step[Do not optimize STEP file (enables writing parametric curves)]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_stl() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_stpz() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-optimize-step[Do not optimize STEP file (enables writing parametric curves)]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_svg() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--black-and-white[Black and white only]' \
+        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
+        '--check-zones[Check and refill zones if required]' \
+        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '--drill-shape-opt[Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual shape) \[nargs=0..1\] \[default: 2\]]' \
+        '--exclude-drawing-sheet[No drawing sheet]' \
+        '--fit-page-to-board[Fit the page to the board]' \
+        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
+        '(--mirror -m)'{--mirror,-m}'[Mirror the board (useful for trying to show bottom layers)]' \
+        '--mode-multi[Generates one or more files with behavior similar to the KiCad GUI plotting. The given output path specifies a directory in which files may be output.]' \
+        '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
+        '(--negative -n)'{--negative,-n}'[Plot as negative (useful for directly etching from the export)]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--page-size-mode[Set page sizing mode (0 = page with frame and title block, 1 = current page size, 2 = board area only) \[nargs=0..1\] \[default: 0\]]' \
+        '--plot-invisible-text[Deprecated.  Has no effect.]' \
+        '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
+        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
+        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
+        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to PCB editor settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_u3d() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_vrml() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--models-dir[Name of folder to create and store 3d models in, if not specified or empty, the models will be embedded in main exported VRML file \[nargs=0..1\] \[default: ""\]]' \
+        '--models-relative[Used with --models-dir to output relative paths in the resulting file]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--units[Output units; valid options: mm, m, in, tenths \[nargs=0..1\] \[default: "in"\]]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_xao() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--board-only[Only generate a board with no components]' \
+        '--component-filter[Only include component 3D models matching this list of reference designators (comma-separated, wildcards supported) \[nargs=0..1\] \[default: ""\]]' \
+        '--cut-vias-in-body[Cut via holes in board body even if conductor layers are not exported.]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--drill-origin[Use Drill Origin for output origin]' \
+        '--fill-all-vias[Don'\''t cut via holes in conductor layers.]' \
+        '(--force -f)'{--force,-f}'[Overwrite output file]' \
+        '--fuse-shapes[Fuse overlapping geometry together]' \
+        '--grid-origin[Use Grid Origin for output origin]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-inner-copper[Export elements on inner copper layers]' \
+        '--include-pads[Export pads]' \
+        '--include-silkscreen[Export silkscreen graphics as a set of flat faces]' \
+        '--include-soldermask[Export soldermask layers as a set of flat faces]' \
+        '--include-tracks[Export tracks and vias]' \
+        '--include-zones[Export zones]' \
+        '--min-distance[Minimum distance between points to treat them as separate ones \[nargs=0..1\] \[default: "0.01mm"\]]' \
+        '--net-filter[Only include copper items belonging to nets matching this wildcard \[nargs=0..1\] \[default: ""\]]' \
+        '--no-board-body[Exclude board body]' \
+        '--no-components[Exclude 3D models for components]' \
+        '--no-dnp[Exclude 3D models for components with '\''Do not populate'\'' attribute]' \
+        '--no-unspecified[Exclude 3D models for components with '\''Unspecified'\'' footprint type]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--subst-models[Substitute STEP or IGS models with the same name in place of VRML models]' \
+        '--user-origin[User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_render() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--background[Image background. Options: default, transparent, opaque. Default: transparent for PNG, opaque for JPEG \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--floor[Enables floor, shadows and post-processing, even if disabled in quality setting]' \
+        '(--height -h)'{--height,-h}'[Image height \[nargs=0..1\] \[default: 900\]]' \
+        '--help[Shows help message and exits]' \
+        '--light-bottom[Bottom light intensity, format '\''R,G,B'\'' or a single number, range: 0-1 \[nargs=0..1\] \[default: ""\]]' \
+        '--light-camera[Camera light intensity, format '\''R,G,B'\'' or a single number, range: 0-1 \[nargs=0..1\] \[default: ""\]]' \
+        '--light-side[Side lights intensity, format '\''R,G,B'\'' or a single number, range: 0-1 \[nargs=0..1\] \[default: ""\]]' \
+        '--light-side-elevation[Side lights elevation angle in degrees, range: 0-90 \[nargs=0..1\] \[default: 60\]]' \
+        '--light-top[Top light intensity, format '\''R,G,B'\'' or a single number, range: 0-1 \[nargs=0..1\] \[default: ""\]]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--pan[Pan camera, format '\''X,Y,Z'\'' e.g.: '\''3,0,0'\'' \[nargs=0..1\] \[default: ""\]]' \
+        '--perspective[Use perspective projection instead of orthogonal]' \
+        '--pivot[Set pivot point relative to the board center in centimeters, format '\''X,Y,Z'\'' e.g.: '\''-10,2,0'\'' \[nargs=0..1\] \[default: ""\]]' \
+        '--preset[Appearance preset. Options: follow_pcb_editor, follow_plot_settings, or user-defined preset name \[nargs=0..1\] \[default: "follow_plot_settings"\]]' \
+        '--quality[Render quality. Options: basic, high, user, job_settings \[nargs=0..1\] \[default: "basic"\]]' \
+        '--rotate[Rotate board, format '\''X,Y,Z'\'' e.g.: '\''-45,0,45'\'' for isometric view \[nargs=0..1\] \[default: ""\]]' \
+        '--side[Render from side. Options: top, bottom, left, right, front, back \[nargs=0..1\] \[default: "top"\]]' \
+        '--use-board-stackup-colors[Colors defined in board stackup override those in preset \[nargs=0..1\] \[default: true\]]' \
+        '(--width -w)'{--width,-w}'[Image width \[nargs=0..1\] \[default: 1600\]]' \
+        '--zoom[Camera zoom \[nargs=0..1\] \[default: 1\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_upgrade() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--force[Forces the board file to be resaved regardless of versioning]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        && return 0
+}
+
+_kicad_cli_sch_commands() {
+    local -a commands
+    commands=(
+        'erc:Runs the Electrical Rules Check (ERC) on the schematic and creates a report'
+        'export:Export utilities (netlist, pdf, bom, etc)'
+        'upgrade:Upgrade the schematic file'\''s format to the latest one'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_sch() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_sch_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (erc)
+                    _kicad_cli_sch_erc
+                    ;;
+                (export)
+                    _kicad_cli_sch_export
+                    ;;
+                (upgrade)
+                    _kicad_cli_sch_upgrade
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_sch_erc() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--exit-code-violations[Return a nonzero exit code if ERC violations exist]' \
+        '--format[Output file format, options: json, report \[nargs=0..1\] \[default: "report"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--severity-all[Report all ERC violations, this is equivalent to including all the other severity arguments]' \
+        '--severity-error[Report all ERC error level violations, this can be combined with the other severity arguments]' \
+        '--severity-exclusions[Report all excluded ERC violations, this can be combined with the other severity arguments]' \
+        '--severity-warning[Report all ERC warning level violations, this can be combined with the other severity arguments]' \
+        '--units[Report units; valid options: in, mm, mils \[nargs=0..1\] \[default: "mm"\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_commands() {
+    local -a commands
+    commands=(
+        'bom:Generate a Bill of Materials (BOM)'
+        'dxf:Export DXF'
+        'hpgl:Export HPGL'
+        'netlist:Export a netlist'
+        'pdf:Export PDF'
+        'ps:Export PS'
+        'python-bom:Export the legacy BOM XML format used in the schematic editor with Python scripts'
+        'svg:Export SVG'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_sch_export() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_sch_export_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (bom)
+                    _kicad_cli_sch_export_bom
+                    ;;
+                (dxf)
+                    _kicad_cli_sch_export_dxf
+                    ;;
+                (hpgl)
+                    _kicad_cli_sch_export_hpgl
+                    ;;
+                (netlist)
+                    _kicad_cli_sch_export_netlist
+                    ;;
+                (pdf)
+                    _kicad_cli_sch_export_pdf
+                    ;;
+                (ps)
+                    _kicad_cli_sch_export_ps
+                    ;;
+                (python-bom)
+                    _kicad_cli_sch_export_python_bom
+                    ;;
+                (svg)
+                    _kicad_cli_sch_export_svg
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_sch_export_bom() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--exclude-dnp[Exclude symbols marked Do-Not-Populate.]' \
+        '--field-delimiter[Separator between output fields/columns. \[nargs=0..1\] \[default: ","\]]' \
+        '--fields[An ordered list of fields to export. See documentation for special substitutions. \[nargs=0..1\] \[default: "Reference,Value,Footprint,${QUANTITY},${DNP}"\]]' \
+        '--filter[Filter string to remove output lines. \[nargs=0..1\] \[default: ""\]]' \
+        '--format-preset[Use a named BOM format preset setting from the schematic, e.g. CSV. \[nargs=0..1\] \[default: ""\]]' \
+        '--group-by[Fields to group references by when field values match. \[nargs=0..1\] \[default: ""\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-excluded-from-bom[Deprecated.  Has no effect.]' \
+        '--keep-line-breaks[Keep line break characters from input fields. Stripped by default.]' \
+        '--keep-tabs[Keep tab characters from input fields. Stripped by default.]' \
+        '--labels[An ordered list of labels to apply the exported fields. \[nargs=0..1\] \[default: "Refs,Value,Footprint,Qty,DNP"\]]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--preset[Use a named BOM preset setting from the schematic, e.g. "Grouped By Value". \[nargs=0..1\] \[default: ""\]]' \
+        '--ref-delimiter[Character to place between individual references. \[nargs=0..1\] \[default: ","\]]' \
+        '--ref-range-delimiter[Character to place in ranges of references. Leave blank for no ranges. \[nargs=0..1\] \[default: "-"\]]' \
+        '--sort-asc[Sort ascending (true) or descending (false). \[nargs=0..1\] \[default: true\]]' \
+        '--sort-field[Field name to sort by. \[nargs=0..1\] \[default: "Reference"\]]' \
+        '--string-delimiter[Character to surround fields with. \[nargs=0..1\] \[default: """\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_dxf() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--black-and-white -b)'{--black-and-white,-b}'[Black and white only]' \
+        '--default-font[Default font name \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--draw-hop-over[Draw hop over at wire crossings]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--exclude-drawing-sheet -e)'{--exclude-drawing-sheet,-e}'[No drawing sheet]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--pages[List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages \[nargs=0..1\] \[default: ""\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to schematic settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_hpgl() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--black-and-white -b)'{--black-and-white,-b}'[Black and white only]' \
+        '--default-font[Default font name \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--draw-hop-over[Draw hop over at wire crossings]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--exclude-drawing-sheet -e)'{--exclude-drawing-sheet,-e}'[No drawing sheet]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--origin -r)'{--origin,-r}'[Deprecated.  Has no effect. \[nargs=0..1\] \[default: 1\]]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--pages[List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages \[nargs=0..1\] \[default: ""\]]' \
+        '(--pen-size -p)'{--pen-size,-p}'[Deprecated.  Has no effect. \[nargs=0..1\] \[default: 0.5\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to schematic settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_netlist() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--format[Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel, pads, allegro \[nargs=0..1\] \[default: "kicadsexpr"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_pdf() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--black-and-white -b)'{--black-and-white,-b}'[Black and white only]' \
+        '--default-font[Default font name \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--draw-hop-over[Draw hop over at wire crossings]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--exclude-drawing-sheet -e)'{--exclude-drawing-sheet,-e}'[No drawing sheet]' \
+        '--exclude-pdf-hierarchical-links[Do not generate clickable links for hierarchical elements in PDF]' \
+        '--exclude-pdf-metadata[Do not generate PDF metadata from AUTHOR and SUBJECT variables]' \
+        '--exclude-pdf-property-popups[Do not generate property popups in PDF]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--no-background-color -n)'{--no-background-color,-n}'[Avoid setting a background color (regardless of theme)]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--pages[List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages \[nargs=0..1\] \[default: ""\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to schematic settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_ps() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--black-and-white -b)'{--black-and-white,-b}'[Black and white only]' \
+        '--default-font[Default font name \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--draw-hop-over[Draw hop over at wire crossings]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--exclude-drawing-sheet -e)'{--exclude-drawing-sheet,-e}'[No drawing sheet]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--no-background-color -n)'{--no-background-color,-n}'[Avoid setting a background color (regardless of theme)]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--pages[List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages \[nargs=0..1\] \[default: ""\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to schematic settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_python_bom() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_export_svg() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--black-and-white -b)'{--black-and-white,-b}'[Black and white only]' \
+        '--default-font[Default font name \[nargs=0..1\] \[default: ""\]]' \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '--draw-hop-over[Draw hop over at wire crossings]' \
+        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
+        '(--exclude-drawing-sheet -e)'{--exclude-drawing-sheet,-e}'[No drawing sheet]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--no-background-color -n)'{--no-background-color,-n}'[Avoid setting a background color (regardless of theme)]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '--pages[List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages \[nargs=0..1\] \[default: ""\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to schematic settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sch_upgrade() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--force[Forces the schematic file to be resaved regardless of versioning]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        && return 0
+}
+
+_kicad_cli_sym_commands() {
+    local -a commands
+    commands=(
+        'export:Export utilities (svg)'
+        'upgrade:Upgrades the symbol library to the current kicad version format'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_sym() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_sym_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (export)
+                    _kicad_cli_sym_export
+                    ;;
+                (upgrade)
+                    _kicad_cli_sym_upgrade
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_sym_export_commands() {
+    local -a commands
+    commands=(
+        'svg:Exports the symbol or entire symbol library to SVG'
+    )
+    _describe -t commands 'command' commands
+}
+_kicad_cli_sym_export() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '1: :_kicad_cli_sym_export_commands' \
+        '*:: :->args' \
+        && return 0
+
+    case $state in
+        (args)
+            case $words[1] in
+                (svg)
+                    _kicad_cli_sym_export_svg
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_kicad_cli_sym_export_svg() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--black-and-white[Black and white only]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-hidden-fields[Include hidden fields]' \
+        '--include-hidden-pins[Include hidden pins]' \
+        '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        '(--symbol -s)'{--symbol,-s}'[Specific symbol to export within the library \[nargs=0..1\] \[default: ""\]]' \
+        '(--theme -t)'{--theme,-t}'[Color theme to use (will default to symbol editor settings) \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_sym_upgrade() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--force[Forces the symbol library to be resaved regardless of versioning]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_version() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--format[version info format (plain, commit, about) \[nargs=0..1\] \[default: "plain"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        && return 0
+}
+
+
+if type compdef >/dev/null 2>&1; then
+    compdef _kicad_cli kicad-cli
+fi

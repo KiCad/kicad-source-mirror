@@ -193,6 +193,19 @@ elseif( UNIX )
              PATTERN "*metainfo.xml"
              PATTERN "*.in" EXCLUDE
              )
+
+    # Install bash completion
+    install( FILES ${PROJECT_SOURCE_DIR}/resources/linux/autocomplete/kicad-cli-completion.bash
+             DESTINATION ${CMAKE_INSTALL_DATADIR}/bash-completion/completions
+             RENAME kicad-cli
+             COMPONENT resources
+             )
+
+    # Install zsh completion
+    install( FILES ${PROJECT_SOURCE_DIR}/resources/linux/autocomplete/_kicad-cli
+             DESTINATION ${CMAKE_INSTALL_DATADIR}/zsh/site-functions
+             COMPONENT resources
+             )
 endif()
 
 add_subdirectory(bitmaps_png)
