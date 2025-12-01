@@ -95,7 +95,7 @@ public:
     /// Resolve the netclass of this rule area from connected directive labels.
     ///
     /// @return The resolved netclass (if any), and the SCH_ITEM providing the declaration.
-    const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses() const;
+    const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const;
 
     /// Clear and resets items and directives attached to this rule area.
     void ResetDirectivesAndItems( KIGFX::SCH_VIEW* view );

@@ -342,7 +342,8 @@ const std::unordered_set<SCH_DIRECTIVE_LABEL*>& SCH_RULE_AREA::GetDirectives() c
 }
 
 
-const std::vector<std::pair<wxString, SCH_ITEM*>> SCH_RULE_AREA::GetResolvedNetclasses() const
+const std::vector<std::pair<wxString, SCH_ITEM*>>
+SCH_RULE_AREA::GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const
 {
     std::vector<std::pair<wxString, SCH_ITEM*>> resolvedNetclasses;
 
@@ -357,7 +358,7 @@ const std::vector<std::pair<wxString, SCH_ITEM*>> SCH_RULE_AREA::GetResolvedNetc
 
                         if( field->GetCanonicalName() == wxT( "Netclass" ) )
                         {
-                            wxString netclass = field->GetText();
+                            wxString netclass = field->GetShownText( aSheetPath, false );
 
                             if( netclass != wxEmptyString )
                                 resolvedNetclasses.push_back( { netclass, directive } );
@@ -395,8 +396,7 @@ void SCH_RULE_AREA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PAN
 
     m_stroke.GetMsgPanelInfo( aFrame, aList );
 
-    const std::vector<std::pair<wxString, SCH_ITEM*>> netclasses =
-            SCH_RULE_AREA::GetResolvedNetclasses();
+    const std::vector<std::pair<wxString, SCH_ITEM*>> netclasses = SCH_RULE_AREA::GetResolvedNetclasses( nullptr );
     wxString resolvedNetclass = _( "<None>" );
 
     if( netclasses.size() > 0 )
