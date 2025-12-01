@@ -4007,7 +4007,7 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
             return textA.IsBold() < textB.IsBold();
 
         if( textA.IsItalic() != textB.IsItalic() )
-            return textA.IsItalic() < (int) textB.IsItalic();
+            return textA.IsItalic() < textB.IsItalic();
 
         if( textA.IsMirrored() != textB.IsMirrored() )
             return textA.IsMirrored() < textB.IsMirrored();
