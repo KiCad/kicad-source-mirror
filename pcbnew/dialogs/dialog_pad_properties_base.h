@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,6 +21,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <widgets/net_selector.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/sizer.h>

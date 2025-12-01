@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -626,7 +626,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->SetSizer( bGeneralSizer );
 	m_panelGeneral->Layout();
 	bGeneralSizer->Fit( m_panelGeneral );
-	m_notebook->AddPage( m_panelGeneral, _("General"), false );
+	m_notebook->AddPage( m_panelGeneral, _("General"), true );
 	m_connectionsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelConnections;
 	bSizerPanelConnections = new wxBoxSizer( wxVERTICAL );
@@ -1311,7 +1311,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_backDrillPanel->SetSizer( bSizer45 );
 	m_backDrillPanel->Layout();
 	bSizer45->Fit( m_backDrillPanel );
-	m_notebook->AddPage( m_backDrillPanel, _("Backdrill"), true );
+	m_notebook->AddPage( m_backDrillPanel, _("Backdrill"), false );
 
 	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
