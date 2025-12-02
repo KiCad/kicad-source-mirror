@@ -116,6 +116,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_colors                     = m_default_colors.get();
 
     m_blackAndWhite              = true;
+
+    m_DXFExportAsMultiLayeredFile = false;
 }
 
 
@@ -338,6 +340,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
+        return false;
+
+    if( m_DXFExportAsMultiLayeredFile != aPcbPlotParams.m_DXFExportAsMultiLayeredFile )
         return false;
 
     return true;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -304,17 +304,18 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot graphic items using their contours"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true);
 	m_DXF_plotModeOpt->SetToolTip( _("Uncheck to plot graphic items using their center lines") );
+	m_DXF_plotModeOpt->SetMinSize( wxSize( 300,-1 ) );
 
 	gbSizer5->Add( m_DXF_plotModeOpt, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	DXF_exportUnitsLabel = new wxStaticText( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	DXF_exportUnitsLabel->Wrap( -1 );
-	gbSizer5->Add( DXF_exportUnitsLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
+	gbSizer5->Add( DXF_exportUnitsLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
 	m_DXF_plotUnits = new wxChoice( m_SizerDXF_options->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DXF_plotUnitsNChoices, m_DXF_plotUnitsChoices, 0 );
-	m_DXF_plotUnits->SetSelection( 0 );
+	m_DXF_plotUnits->SetSelection( 1 );
 	m_DXF_plotUnits->SetToolTip( _("The units to use for the exported DXF file") );
 
 	gbSizer5->Add( m_DXF_plotUnits, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
@@ -323,6 +324,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
 
 	gbSizer5->Add( m_DXF_plotTextStrokeFontOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_DXF_exportAsMultiLayeredFile = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Single document"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_exportAsMultiLayeredFile->SetToolTip( _("Export selected layers into a single DXF") );
+
+	gbSizer5->Add( m_DXF_exportAsMultiLayeredFile, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	m_SizerDXF_options->Add( gbSizer5, 1, wxEXPAND|wxBOTTOM, 5 );

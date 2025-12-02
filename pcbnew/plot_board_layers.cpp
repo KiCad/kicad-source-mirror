@@ -337,7 +337,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
     bool onBackFab  = ( LSET( { B_Fab } ) & aLayerMask ).any();
     bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();
 
-     // Plot edge layer and graphic items
+    // Plot edge layer and graphic items
     for( const BOARD_ITEM* item : aBoard->Drawings() )
         itemplotter.PlotBoardGraphicItem( item );
 
@@ -1240,6 +1240,9 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         DXF_plotter->SetUnits( aPlotOpts->GetDXFPlotUnits() );
 
         plotter = DXF_plotter;
+
+        if( !aPlotOpts->GetLayersToExport().empty() )
+            plotter->SetLayersToExport( aPlotOpts->GetLayersToExport() );
         break;
 
     case PLOT_FORMAT::POST:

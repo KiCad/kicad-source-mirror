@@ -76,10 +76,11 @@ enum EDA_COLOR_T
     ORANGE,
     LIGHTORANGE,
     PUREORANGE,
-    NBCOLORS,                    ///< Number of colors
-    HIGHLIGHT_FLAG =  ( 1<<19 ),
-    MASKCOLOR      =    31       ///< mask for color index into colorRefs()[]
+    NBCOLORS,                     ///< Number of colors
+    HIGHLIGHT_FLAG = ( 1 << 19 ),
+    MASKCOLOR      =   31         ///< mask for color index into colorRefs()[]
 };
+
 
 struct KICOMMON_API StructColors
 {

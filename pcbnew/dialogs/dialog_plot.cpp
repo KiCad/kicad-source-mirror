@@ -207,28 +207,28 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXP
         m_plotAllLayersList->SetClientObject( list_idx, new PCB_LAYER_ID_CLIENT_DATA( layer_id ) );
     }
 
-	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND | wxFIXED_MINSIZE, 3 );
+    sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND | wxFIXED_MINSIZE, 3 );
 
-	wxBoxSizer* bButtonSizer;
-	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* bButtonSizer;
+    bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpMoveUp = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+    m_bpMoveUp = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                         wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
-	m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
+    m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
 
-	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 3 );
+    bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 3 );
 
-	m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+    m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                           wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
-	m_bpMoveDown->SetToolTip( _( "Move current selection down" ) );
+    m_bpMoveDown->SetToolTip( _( "Move current selection down" ) );
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
-	bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+    bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
     sbSizer->Add( bButtonSizer, 0, wxALL | wxEXPAND, 3 );
 
-	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 5 );
+    bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 5 );
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_openDirButton->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
@@ -450,7 +450,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
                                                                              : JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetDXFPlotMode() == DXF_OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
-        dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
+        dxfJob->m_genMode = m_plotOpts.GetDXFMultiLayeredExportOption() ? JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE
+                                                                        : JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST )
@@ -1004,6 +1005,8 @@ void DIALOG_PLOT::applyPlotSettings()
     else
         tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT :
                                                                            PLOT_TEXT_MODE::NATIVE );
+
+    tempOptions.SetDXFMultiLayeredExportOption( m_DXF_exportAsMultiLayeredFile->GetValue() );
 
     if( getPlotFormat() == PLOT_FORMAT::SVG )
     {

@@ -112,6 +112,21 @@ public:
 
 
 /**
+ * @enum DXF_LAYER_OUTPUT_MODE
+ * @brief Specifies the output mode for the DXF layer.
+ *
+ * This enumeration is used to define the mode of output for the DXF layer.
+ * It allows the user to choose between retrieving the layer name or the color name.
+ */
+enum class DXF_LAYER_OUTPUT_MODE
+{
+    Layer_Name,
+    Layer_Color_Name,
+    Current_Layer_Name,
+    Current_Layer_Color_Name
+};
+
+/**
  * Base plotter engine class. General rule: all the interface with the caller
  * is done in IU, the IU size is specified with SetViewport. Internal and
  * output processing is usually done in decimils (or whatever unit the
@@ -207,7 +222,38 @@ public:
                               double aScale, bool aMirror ) = 0;
 
     /**
+     * Sets the list of layers to export to the specified vector.
+     *
+     * This function updates the member variable m_layersToExport with the
+     * vector provided in aLayersToExport.
+     *
+     * @param aLayersToExport The vector containing the names of layers to export.
+     *                        This updates the internal list of layers that will
+     *                        be processed for export.
+     */
+    void SetLayersToExport( const std::vector<std::pair<PCB_LAYER_ID, wxString>>& aLayersToExport ) { m_layersToExport = aLayersToExport; }
+
+    /**
+     * @brief Gets the ID of the current layer.
+     *
+     * This function returns the ID of the layer that the current item is on.
+     *
+     * @return PCB_LAYER_ID The ID of the current layer.
+     */
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
+
+    /**
+     * @brief Sets the ID of the current layer.
+     *
+     * This function sets the ID of the layer for the current item.
+     *
+     * @param aLayer The ID of the layer to be set.
+     */
+    void SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+
+    /**
      * Open or create the plot file \a aFullFilename.
+     * .
      *
      * @param aFullFilename is the full file name of the file to create.
      * @return true if success, false if the file cannot be created/opened.
@@ -646,7 +692,7 @@ protected:      // variables used in most of plotters:
      * because in Eeschema there are 0.1 IUs in a decimil (Eeschema
      * always works in mils internally) while PcbNew can work in decimil
      * or nanometers, so this value would be >= 1 */
-    double           m_IUsPerDecimil;
+     double           m_IUsPerDecimil;
 
     double           m_iuPerDeviceUnit;     // Device scale (from IUs to plotter device units;
                                             // usually decimils)
@@ -679,6 +725,9 @@ protected:      // variables used in most of plotters:
     RENDER_SETTINGS* m_renderSettings;
 
     const PROJECT*   m_project;
+    std::vector<std::pair<PCB_LAYER_ID, wxString>> m_layersToExport;
+
+    PCB_LAYER_ID m_layer;
 };
 
 

@@ -184,6 +184,18 @@ public:
     void        SetDashedLineGapRatio( double aVal ) { m_dashedLineGapRatio = aVal; }
     double      GetDashedLineGapRatio() const { return m_dashedLineGapRatio; }
 
+    void        SetDXFMultiLayeredExportOption( bool aFlag ) { m_DXFExportAsMultiLayeredFile = aFlag; }
+    bool        GetDXFMultiLayeredExportOption() const { return m_DXFExportAsMultiLayeredFile; }
+
+    void        SetLayersToExport( std::vector<std::pair<PCB_LAYER_ID, wxString>> & aVal ) { m_layersToExport = aVal; }
+    std::vector<std::pair<PCB_LAYER_ID, wxString>> GetLayersToExport() const { return m_layersToExport; }
+
+    /**
+     * Return the layer this item is on.
+     */
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
+    void         SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+
     void        SetPDFBackgroundColor( const COLOR4D& aColor ) { m_PDFBackgroundColor = aColor; }
     COLOR4D     GetPDFBackgroundColor() const { return m_PDFBackgroundColor; }
 
@@ -291,6 +303,12 @@ private:
 
     /// Dummy colors object that can be created if there is no Pgm context
     std::shared_ptr<COLOR_SETTINGS> m_default_colors;
+
+    bool m_DXFExportAsMultiLayeredFile;
+
+    std::vector<std::pair<PCB_LAYER_ID, wxString>> m_layersToExport;
+
+    PCB_LAYER_ID m_layer;
 };
 
 

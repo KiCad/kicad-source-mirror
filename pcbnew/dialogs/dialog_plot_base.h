@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -106,6 +106,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* DXF_exportUnitsLabel;
 		wxChoice* m_DXF_plotUnits;
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
+		wxCheckBox* m_DXF_exportAsMultiLayeredFile;
 		wxStaticBoxSizer* m_svgOptionsSizer;
 		wxStaticText* svgPrecisionLabel;
 		wxSpinCtrl* m_svgPrecsision;
