@@ -1476,20 +1476,27 @@ types:
       - type: u2
       - id: key
         type: u4
-      - type: u4
-        repeat: expr
-        repeat-expr: 3
+      - id: unknown_1
+        type: u4
+        doc: Points to 0x1F
+      - id: unknown_2
+        type: u4
+      - id: unknown_3
+        type: u4
       - id: size_a
         type: u2
       - id: size_b
         type: u2
-      - type: u1
+      - id: array_a
+        type: u1
         repeat: expr
         repeat-expr: size_b * 56
-      - type: u1
+      - id: array_b
+        type: u1
         repeat: expr
         repeat-expr: size_a * 256
-      - type: u4
+      - id: unknown_4
+        type: u4
         if: _root.ver >= 0x00140400
 
   type_1e:
@@ -1498,12 +1505,12 @@ types:
       - type: u2
       - id: key
         type: u4
-      - id: un1
+      - id: unknown_1
         type: u4
-      - id: un2
+      - id: unknown_2
         type: u2
         if: _root.ver >= 0x00130C00 # unsure, but in Kinoma, not in Preamp
-      - id: un3
+      - id: unknown_3
         type: u2
         if: _root.ver >= 0x00130C00 # unsure, but in Kinoma, not in Preamp
       - id: str_ptr
@@ -1512,7 +1519,8 @@ types:
         type: u4
       - id: str
         type: string_aligned(size)
-      - type: u4
+      - id: unknown_4
+        type: u4
         if: _root.ver >= 0x00140400
 
   type_1f:
@@ -1521,10 +1529,15 @@ types:
       - type: u2
       - id: key
         type: u4
-      - type: u4
-        repeat: expr
-        repeat-expr: 4
-      - id: un1
+      - id: next
+        type: u4
+      - id: unknown_2
+        type: u4
+      - id: unknown_3
+        type: u4
+      - id: unknown_4
+        type: u4
+      - id: unknown_5
         type: u2
       - id: size
         type: u2

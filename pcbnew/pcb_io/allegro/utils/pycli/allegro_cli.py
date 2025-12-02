@@ -110,12 +110,12 @@ class AllegroBoard:
                 0x04: "NET_ASSIGNMENT?",
                 0x05: "TRACK",
                 0x07: "COMPONENT_INST",
-                0x08: "PIN_NUMBER?",
+                0x08: "PIN_NUMBER",
                 0x0C: "FIGURE",
                 0x0D: "PAD",
                 0x0F: "SLOT",
                 0x10: "FUNCTION",
-                0x11: "PIN_NAME?",
+                0x11: "PIN_NAME",
                 0x14: "GRAPHIC_SEGMENT",
                 0x15: "LINE",
                 0x16: "LINE",
@@ -129,6 +129,10 @@ class AllegroBoard:
                 0x30: "STR_GRAPHIC",
                 0x32: "PLACED_PAD",
                 0x37: "GROUP_ENTRIES",
+                0x38: "FILM",
+                0x39: "FILM_LAYER_LIST",
+                0x3A: "FILM_LAYER",
+                0x3C: "DIMENSION_LINK?",
             }
 
             if t in ts:
@@ -601,6 +605,39 @@ class AllegroBoard:
                 prntr.print_v(f"  x3", pc.x3, as_hex=False)
                 prntr.print_v(f"  x4", pc.x4, as_hex=False)
                 prntr.print_ptr("  str_ptr", pc.str_ptr)
+
+        elif t == 0x1d:
+            prntr.print_ptr("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+
+            prntr.print_v("size_a", d)
+            prntr.print_v("size_b", d)
+
+            # A and B arrays...
+            prntr.print_bytes("A array", d.array_a)
+            prntr.print_bytes("B array", d.array_b)
+
+        elif t == 0x1e:
+            # prntr.print_ptr("next", d)
+            prntr.print_v("size", d)
+            prntr.print_s("str_ptr", d)
+            prntr.print_v("str", d.str)
+
+            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+
+        elif t == 0x1f:
+            prntr.print_ptr("next", d)
+            prntr.print_v("unknown_2", d)
+            prntr.print_v("unknown_3", d)
+            prntr.print_v("unknown_4", d)
+            prntr.print_v("size", d)
+
+            # Arrays
 
         elif t == 0x21:
             prntr.print_v("t", d)

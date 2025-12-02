@@ -239,7 +239,7 @@ class AllegroBrd(KaitaiStruct):
         self._debug['objects']['end'] = self._io.pos()
 
     class Type1d(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "_unnamed3", "size_a", "size_b", "_unnamed6", "_unnamed7", "_unnamed8"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "unknown_1", "unknown_2", "unknown_3", "size_a", "size_b", "array_a", "array_b", "unknown_4"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -257,46 +257,45 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
-            self._debug['_unnamed3']['start'] = self._io.pos()
-            self._unnamed3 = []
-            for i in range(3):
-                if not 'arr' in self._debug['_unnamed3']:
-                    self._debug['_unnamed3']['arr'] = []
-                self._debug['_unnamed3']['arr'].append({'start': self._io.pos()})
-                self._unnamed3.append(self._io.read_u4le())
-                self._debug['_unnamed3']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['_unnamed3']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
+            self._debug['unknown_2']['start'] = self._io.pos()
+            self.unknown_2 = self._io.read_u4le()
+            self._debug['unknown_2']['end'] = self._io.pos()
+            self._debug['unknown_3']['start'] = self._io.pos()
+            self.unknown_3 = self._io.read_u4le()
+            self._debug['unknown_3']['end'] = self._io.pos()
             self._debug['size_a']['start'] = self._io.pos()
             self.size_a = self._io.read_u2le()
             self._debug['size_a']['end'] = self._io.pos()
             self._debug['size_b']['start'] = self._io.pos()
             self.size_b = self._io.read_u2le()
             self._debug['size_b']['end'] = self._io.pos()
-            self._debug['_unnamed6']['start'] = self._io.pos()
-            self._unnamed6 = []
+            self._debug['array_a']['start'] = self._io.pos()
+            self.array_a = []
             for i in range((self.size_b * 56)):
-                if not 'arr' in self._debug['_unnamed6']:
-                    self._debug['_unnamed6']['arr'] = []
-                self._debug['_unnamed6']['arr'].append({'start': self._io.pos()})
-                self._unnamed6.append(self._io.read_u1())
-                self._debug['_unnamed6']['arr'][i]['end'] = self._io.pos()
+                if not 'arr' in self._debug['array_a']:
+                    self._debug['array_a']['arr'] = []
+                self._debug['array_a']['arr'].append({'start': self._io.pos()})
+                self.array_a.append(self._io.read_u1())
+                self._debug['array_a']['arr'][i]['end'] = self._io.pos()
 
-            self._debug['_unnamed6']['end'] = self._io.pos()
-            self._debug['_unnamed7']['start'] = self._io.pos()
-            self._unnamed7 = []
+            self._debug['array_a']['end'] = self._io.pos()
+            self._debug['array_b']['start'] = self._io.pos()
+            self.array_b = []
             for i in range((self.size_a * 256)):
-                if not 'arr' in self._debug['_unnamed7']:
-                    self._debug['_unnamed7']['arr'] = []
-                self._debug['_unnamed7']['arr'].append({'start': self._io.pos()})
-                self._unnamed7.append(self._io.read_u1())
-                self._debug['_unnamed7']['arr'][i]['end'] = self._io.pos()
+                if not 'arr' in self._debug['array_b']:
+                    self._debug['array_b']['arr'] = []
+                self._debug['array_b']['arr'].append({'start': self._io.pos()})
+                self.array_b.append(self._io.read_u1())
+                self._debug['array_b']['arr'][i]['end'] = self._io.pos()
 
-            self._debug['_unnamed7']['end'] = self._io.pos()
+            self._debug['array_b']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['_unnamed8']['start'] = self._io.pos()
-                self._unnamed8 = self._io.read_u4le()
-                self._debug['_unnamed8']['end'] = self._io.pos()
+                self._debug['unknown_4']['start'] = self._io.pos()
+                self.unknown_4 = self._io.read_u4le()
+                self._debug['unknown_4']['end'] = self._io.pos()
 
 
 
@@ -3549,7 +3548,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type1e(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "un1", "un2", "un3", "str_ptr", "size", "str", "_unnamed9"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "unknown_1", "unknown_2", "unknown_3", "str_ptr", "size", "str", "unknown_4"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -3567,18 +3566,18 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
-            self._debug['un1']['start'] = self._io.pos()
-            self.un1 = self._io.read_u4le()
-            self._debug['un1']['end'] = self._io.pos()
+            self._debug['unknown_1']['start'] = self._io.pos()
+            self.unknown_1 = self._io.read_u4le()
+            self._debug['unknown_1']['end'] = self._io.pos()
             if self._root.ver >= 1248256:
-                self._debug['un2']['start'] = self._io.pos()
-                self.un2 = self._io.read_u2le()
-                self._debug['un2']['end'] = self._io.pos()
+                self._debug['unknown_2']['start'] = self._io.pos()
+                self.unknown_2 = self._io.read_u2le()
+                self._debug['unknown_2']['end'] = self._io.pos()
 
             if self._root.ver >= 1248256:
-                self._debug['un3']['start'] = self._io.pos()
-                self.un3 = self._io.read_u2le()
-                self._debug['un3']['end'] = self._io.pos()
+                self._debug['unknown_3']['start'] = self._io.pos()
+                self.unknown_3 = self._io.read_u2le()
+                self._debug['unknown_3']['end'] = self._io.pos()
 
             self._debug['str_ptr']['start'] = self._io.pos()
             self.str_ptr = self._io.read_u4le()
@@ -3590,9 +3589,9 @@ class AllegroBrd(KaitaiStruct):
             self.str = AllegroBrd.StringAligned(self.size, self._io, self, self._root)
             self._debug['str']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['_unnamed9']['start'] = self._io.pos()
-                self._unnamed9 = self._io.read_u4le()
-                self._debug['_unnamed9']['end'] = self._io.pos()
+                self._debug['unknown_4']['start'] = self._io.pos()
+                self.unknown_4 = self._io.read_u4le()
+                self._debug['unknown_4']['end'] = self._io.pos()
 
 
 
@@ -4160,7 +4159,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type1f(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "_unnamed3", "un1", "size", "_unnamed6", "_unnamed7", "_unnamed8", "_unnamed9"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_2", "unknown_3", "unknown_4", "unknown_5", "size", "_unnamed9", "_unnamed10", "_unnamed11", "_unnamed12"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -4178,62 +4177,28 @@ class AllegroBrd(KaitaiStruct):
             self._debug['key']['start'] = self._io.pos()
             self.key = self._io.read_u4le()
             self._debug['key']['end'] = self._io.pos()
-            self._debug['_unnamed3']['start'] = self._io.pos()
-            self._unnamed3 = []
-            for i in range(4):
-                if not 'arr' in self._debug['_unnamed3']:
-                    self._debug['_unnamed3']['arr'] = []
-                self._debug['_unnamed3']['arr'].append({'start': self._io.pos()})
-                self._unnamed3.append(self._io.read_u4le())
-                self._debug['_unnamed3']['arr'][i]['end'] = self._io.pos()
-
-            self._debug['_unnamed3']['end'] = self._io.pos()
-            self._debug['un1']['start'] = self._io.pos()
-            self.un1 = self._io.read_u2le()
-            self._debug['un1']['end'] = self._io.pos()
+            self._debug['next']['start'] = self._io.pos()
+            self.next = self._io.read_u4le()
+            self._debug['next']['end'] = self._io.pos()
+            self._debug['unknown_2']['start'] = self._io.pos()
+            self.unknown_2 = self._io.read_u4le()
+            self._debug['unknown_2']['end'] = self._io.pos()
+            self._debug['unknown_3']['start'] = self._io.pos()
+            self.unknown_3 = self._io.read_u4le()
+            self._debug['unknown_3']['end'] = self._io.pos()
+            self._debug['unknown_4']['start'] = self._io.pos()
+            self.unknown_4 = self._io.read_u4le()
+            self._debug['unknown_4']['end'] = self._io.pos()
+            self._debug['unknown_5']['start'] = self._io.pos()
+            self.unknown_5 = self._io.read_u2le()
+            self._debug['unknown_5']['end'] = self._io.pos()
             self._debug['size']['start'] = self._io.pos()
             self.size = self._io.read_u2le()
             self._debug['size']['end'] = self._io.pos()
             if self._root.ver >= 1316096:
-                self._debug['_unnamed6']['start'] = self._io.pos()
-                self._unnamed6 = []
-                for i in range(((self.size * 384) + 8)):
-                    if not 'arr' in self._debug['_unnamed6']:
-                        self._debug['_unnamed6']['arr'] = []
-                    self._debug['_unnamed6']['arr'].append({'start': self._io.pos()})
-                    self._unnamed6.append(self._io.read_u1())
-                    self._debug['_unnamed6']['arr'][i]['end'] = self._io.pos()
-
-                self._debug['_unnamed6']['end'] = self._io.pos()
-
-            if  ((self._root.ver >= 1311744) and (self._root.ver < 1316096)) :
-                self._debug['_unnamed7']['start'] = self._io.pos()
-                self._unnamed7 = []
-                for i in range(((self.size * 280) + 8)):
-                    if not 'arr' in self._debug['_unnamed7']:
-                        self._debug['_unnamed7']['arr'] = []
-                    self._debug['_unnamed7']['arr'].append({'start': self._io.pos()})
-                    self._unnamed7.append(self._io.read_u1())
-                    self._debug['_unnamed7']['arr'][i]['end'] = self._io.pos()
-
-                self._debug['_unnamed7']['end'] = self._io.pos()
-
-            if  ((self._root.ver >= 1246208) and (self._root.ver < 1311744)) :
-                self._debug['_unnamed8']['start'] = self._io.pos()
-                self._unnamed8 = []
-                for i in range(((self.size * 280) + 4)):
-                    if not 'arr' in self._debug['_unnamed8']:
-                        self._debug['_unnamed8']['arr'] = []
-                    self._debug['_unnamed8']['arr'].append({'start': self._io.pos()})
-                    self._unnamed8.append(self._io.read_u1())
-                    self._debug['_unnamed8']['arr'][i]['end'] = self._io.pos()
-
-                self._debug['_unnamed8']['end'] = self._io.pos()
-
-            if self._root.ver < 1246208:
                 self._debug['_unnamed9']['start'] = self._io.pos()
                 self._unnamed9 = []
-                for i in range(((self.size * 240) + 4)):
+                for i in range(((self.size * 384) + 8)):
                     if not 'arr' in self._debug['_unnamed9']:
                         self._debug['_unnamed9']['arr'] = []
                     self._debug['_unnamed9']['arr'].append({'start': self._io.pos()})
@@ -4241,6 +4206,42 @@ class AllegroBrd(KaitaiStruct):
                     self._debug['_unnamed9']['arr'][i]['end'] = self._io.pos()
 
                 self._debug['_unnamed9']['end'] = self._io.pos()
+
+            if  ((self._root.ver >= 1311744) and (self._root.ver < 1316096)) :
+                self._debug['_unnamed10']['start'] = self._io.pos()
+                self._unnamed10 = []
+                for i in range(((self.size * 280) + 8)):
+                    if not 'arr' in self._debug['_unnamed10']:
+                        self._debug['_unnamed10']['arr'] = []
+                    self._debug['_unnamed10']['arr'].append({'start': self._io.pos()})
+                    self._unnamed10.append(self._io.read_u1())
+                    self._debug['_unnamed10']['arr'][i]['end'] = self._io.pos()
+
+                self._debug['_unnamed10']['end'] = self._io.pos()
+
+            if  ((self._root.ver >= 1246208) and (self._root.ver < 1311744)) :
+                self._debug['_unnamed11']['start'] = self._io.pos()
+                self._unnamed11 = []
+                for i in range(((self.size * 280) + 4)):
+                    if not 'arr' in self._debug['_unnamed11']:
+                        self._debug['_unnamed11']['arr'] = []
+                    self._debug['_unnamed11']['arr'].append({'start': self._io.pos()})
+                    self._unnamed11.append(self._io.read_u1())
+                    self._debug['_unnamed11']['arr'][i]['end'] = self._io.pos()
+
+                self._debug['_unnamed11']['end'] = self._io.pos()
+
+            if self._root.ver < 1246208:
+                self._debug['_unnamed12']['start'] = self._io.pos()
+                self._unnamed12 = []
+                for i in range(((self.size * 240) + 4)):
+                    if not 'arr' in self._debug['_unnamed12']:
+                        self._debug['_unnamed12']['arr'] = []
+                    self._debug['_unnamed12']['arr'].append({'start': self._io.pos()})
+                    self._unnamed12.append(self._io.read_u1())
+                    self._debug['_unnamed12']['arr'][i]['end'] = self._io.pos()
+
+                self._debug['_unnamed12']['end'] = self._io.pos()
 
 
 
