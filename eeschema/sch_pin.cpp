@@ -942,13 +942,12 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             };
 
     auto plotMultiLineWithBraces =
-            [&]( int anchorX, int anchorY, bool vertical, bool /*numberBlock*/ )
+            [&]( int anchorX, int anchorY, EDA_ANGLE angle, GR_TEXT_V_ALIGN_T vAlign, bool /*numberBlock*/ )
             {
                 // If not multi-line formatted, just plot single line centered.
                 if( !number.StartsWith( "[" ) || !number.EndsWith( "]" ) || !number.Contains( "\n" ) )
                 {
-                    plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, number,
+                    plotSimpleText( anchorX, anchorY, angle, GR_TEXT_H_ALIGN_CENTER, vAlign, number,
                                     GetNumberTextSize(), numPenWidth, numColor );
                     return;
                 }
@@ -959,8 +958,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
 
                 if( lines.size() <= 1 )
                 {
-                    plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, content,
+                    plotSimpleText( anchorX, anchorY, angle, GR_TEXT_H_ALIGN_CENTER, vAlign, content,
                                     GetNumberTextSize(), numPenWidth, numColor );
                     return;
                 }
@@ -984,7 +982,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 int startX = anchorX;
                 int startY = anchorY;
 
-                if( vertical )
+                if( angle == ANGLE_VERTICAL )
                 {
                     int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
                     startX -= totalWidth;
@@ -998,11 +996,9 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 for( size_t i = 0; i < lines.size(); ++i )
                 {
                     wxString l = lines[i]; l.Trim( true ).Trim( false );
-                    int lx = startX + ( vertical ? (int) i * lineSpacing : 0 );
-                    int ly = startY + ( vertical ? 0 : (int) i * lineSpacing );
-                    plotSimpleText( lx, ly, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, l,
-                                    textSize, numPenWidth, numColor );
+                    int lx = startX + ( angle == ANGLE_VERTICAL ? (int) i * lineSpacing : 0 );
+                    int ly = startY + ( angle == ANGLE_VERTICAL ? 0 : (int) i * lineSpacing );
+                    plotSimpleText( lx, ly, angle, GR_TEXT_H_ALIGN_CENTER, vAlign, l, textSize, numPenWidth, numColor );
                 }
 
                 // Now draw braces emulating SCH_PAINTER brace geometry
@@ -1045,7 +1041,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 int braceWidth = textSize / 3;
                 int extraHeight = textSize / 3; // extend beyond text block
 
-                if( vertical )
+                if( angle == ANGLE_VERTICAL )
                 {
                     // Lines spaced horizontally, braces horizontal (above & below)
                     int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
@@ -1099,7 +1095,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             }
 
             if( aDrawPinNum )
-                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 - num_offset, false, true );
+            {
+                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 - num_offset, ANGLE_HORIZONTAL,
+                                         GR_TEXT_V_ALIGN_BOTTOM, true );
+            }
         }
         else
         {
@@ -1112,7 +1111,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 }
 
                 if( aDrawPinNum )
-                    plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, true, true );
+                {
+                    plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
+                                             GR_TEXT_V_ALIGN_BOTTOM, true );
+                }
             }
             else // PIN_UP
             {
@@ -1123,7 +1125,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 }
 
                 if( aDrawPinNum )
-                    plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, true, true );
+                {
+                    plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
+                                             GR_TEXT_V_ALIGN_BOTTOM, true );
+                }
             }
         }
     }
@@ -1136,7 +1141,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 plotSimpleText( ( x1 + aPinPos.x ) / 2, y1 - name_offset, ANGLE_HORIZONTAL,
                                 GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, name,
                                 GetNameTextSize(), namePenWidth, nameColor );
-                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 + num_offset, false, true );
+                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 + num_offset, ANGLE_HORIZONTAL,
+                                         GR_TEXT_V_ALIGN_TOP, true );
             }
             else if( aDrawPinName )
             {
@@ -1146,7 +1152,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             }
             else if( aDrawPinNum )
             {
-                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 - name_offset, false, true );
+                plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 - name_offset, ANGLE_HORIZONTAL,
+                                         GR_TEXT_V_ALIGN_BOTTOM, true );
             }
         }
         else
@@ -1156,7 +1163,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 plotSimpleText( x1 - name_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
                                 GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, name,
                                 GetNameTextSize(), namePenWidth, nameColor );
-                plotMultiLineWithBraces( x1 + num_offset, ( y1 + aPinPos.y ) / 2, true, true );
+                plotMultiLineWithBraces( x1 + num_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
+                                         GR_TEXT_V_ALIGN_TOP, true );
             }
             else if( aDrawPinName )
             {
@@ -1166,7 +1174,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             }
             else if( aDrawPinNum )
             {
-                plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, true, true );
+                plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
+                                         GR_TEXT_V_ALIGN_BOTTOM, true );
             }
         }
     }
