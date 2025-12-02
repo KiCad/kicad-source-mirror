@@ -121,6 +121,7 @@ class AllegroBoard:
                 0x16: "LINE",
                 0x17: "LINE",
                 0x1b: "NET",
+                0x1c: "PADSTACK",
                 0x23: "RATLNE",
                 0x24: "RECT",
                 0x2B: "FP_DEF",
@@ -192,6 +193,8 @@ class AllegroBoard:
                 value_detail = f"'{self.board.string(obj.data.slot_name)}'"
             elif obj.type == 0x11:
                 value_detail = f"'{self.board.string(obj.data.name)}'"
+            elif obj.type == 0x1B:
+                value_detail = f"'{self.board.string(obj.data.net_name)}'"
             elif obj.type == 0x2d:
                 refdes_key = obj.data.inst_ref_16x if hasattr(obj.data, "inst_ref_16x") else obj.data.inst_ref
 
@@ -569,7 +572,7 @@ class AllegroBoard:
             prntr.print_v("Type", d.type)
 
             prntr.print_v("unknown_1", d)
-            prntr.print_v("unknown_1", d)
+            prntr.print_v("unknown_2", d)
             prntr.print_v("unknown_3", d)
             prntr.print_v("unknown_4", d)
 
@@ -1241,7 +1244,7 @@ if __name__ == "__main__":
         print(f"  Tail: {tail:#010x}")
 
         for index, key, obj in walk_list(brd, head, tail):
-            print(f"   Entry {index}, Key: {key:#01x}")
+            prntr.print_ptr(f"    Entry {index}", key)
 
             objs.append(obj)
 
@@ -1258,8 +1261,8 @@ if __name__ == "__main__":
         for list in lists.keys():
             ll = lists[list]
             print(f"List: {list}")
-            print(f"  Head: {ll.head:#010x}")
-            print(f"  Tail: {ll.tail:#010x}")
+            prntr.print_ptr("  Head", ll.head)
+            prntr.print_ptr("  Tail", ll.tail)
 
     if args.footprints is not None:
 

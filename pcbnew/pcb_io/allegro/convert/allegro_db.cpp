@@ -1039,6 +1039,15 @@ NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
 
     m_NetNameStr.m_StringKey = aBlk.m_NetName;
     m_NetNameStr.m_DebugName = "NET::m_NetNameStr";
+
+    m_NetAssignments.m_Head = aBlk.m_Assignment;
+    m_NetAssignments.m_Tail = aBlk.m_Key;
+    m_NetAssignments.m_NextKeyGetter = []( const DB_OBJ& aObj )
+    {
+        const NET_ASSIGN& netAssign = static_cast<const NET_ASSIGN&>( aObj );
+        return netAssign.m_Next.m_TargetKey;
+    };
+    m_NetAssignments.m_DebugName = "NET::m_NetAssignments";
 }
 
 
@@ -1048,8 +1057,15 @@ bool NET::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 
     ok &= m_Next.Resolve( aResolver );
     ok &= m_NetNameStr.Resolve( aResolver );
+    ok &= m_NetAssignments.Resolve( aResolver );
 
     return ok;
+}
+
+
+const wxString* NET::GetName() const
+{
+    return m_NetNameStr.m_String;
 }
 
 
@@ -1335,4 +1351,59 @@ void BRD_DB::VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const
     };
 
     VisitComponents( componentVisitor );
+}
+
+
+void BRD_DB::VisitNets( VIEW_OBJS_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting nets" );
+
+    VIEW_OBJS viewObjs;
+    viewObjs.m_Board = this;
+
+    const auto netNextFunc = [&]( const DB_OBJ& aObj ) -> const DB_REF&
+    {
+        if( aObj.GetType() != DB_OBJ::TYPE::NET )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "  Not a net object, skipping key %#010x", aObj.GetKey() );
+            return DB_NULLREF;
+        }
+
+        const NET& net = static_cast<const NET&>( aObj );
+
+        viewObjs.m_Net = &net;
+
+        aVisitor( viewObjs );
+
+        return net.m_Next;
+    };
+
+    visitLinkedList( m_Header->m_LL_0x1B_Nets, netNextFunc );
+}
+
+
+void BRD_DB::VisitConnectedGeometry( VIEW_OBJS_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting connected geometry" );
+
+    VIEW_OBJS viewObjs;
+    viewObjs.m_Board = this;
+
+    const auto netVisitor = [&]( const VIEW_OBJS& aViewObjs )
+    {
+        const NET& net = *aViewObjs.m_Net;
+
+        // const NET_ASSIGN* netAssign = net.GetAssignment();
+
+        // if( netAssign == nullptr )
+        // {
+        //     wxLogTrace( "ALLEGRO_EXTRACT", "  Net %#010x has no assignment, skipping", net.GetKey() );
+        //     return;
+        // }
+
+
+
+    };
+
+    VisitNets( netVisitor );
 }

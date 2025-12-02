@@ -324,6 +324,21 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     { VTYPE::FUNCTION },
             },
     },
+    {
+            "NET_NAME",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const NET* net = aObj.m_Net;
+
+                        wxCHECK2( net, "" );
+
+                        const wxString* name = net->GetName();
+                        return name ? *name : "";
+                    },
+                    { VTYPE::NET },
+            },
+    }
 };
 
 
@@ -641,7 +656,34 @@ void ASCII_EXTRACTOR::extractFunctions( const EXTRACT_SPEC_PARSER::IR::BLOCK& aB
     m_Brd.VisitFunctionInstances(
             [&]( const VIEW_OBJS& aObjs )
             {
-                visitForLine( aObjs, 'F', objectVisitor );
+                visitForLine( aObjs, 'S', objectVisitor );
+            } );
+}
+
+
+void ASCII_EXTRACTOR::extractNets( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock )
+{
+    OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
+
+    // Visit all nets
+    m_Brd.VisitNets(
+            [&]( const VIEW_OBJS& aObjs )
+            {
+                visitForLine( aObjs, 'S', objectVisitor );
+            } );
+}
+
+
+void ASCII_EXTRACTOR::extractFullGeometry( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock )
+{
+    // This is a bit of a hassle, because I can't find a single list that traverses these items
+    OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
+
+    // Visit connects first
+    m_Brd.VisitConnectedGeometry(
+            [&]( const VIEW_OBJS& aObjs )
+            {
+                visitForLine( aObjs, 'S', objectVisitor );
             } );
 }
 
@@ -675,6 +717,14 @@ void ASCII_EXTRACTOR::Extract( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock )
 
         case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::FUNCTION:
             extractFunctions( aBlock );
+            break;
+
+        case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::NET:
+            extractNets( aBlock );
+            break;
+
+        case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::FULL_GEOMETRY:
+            extractFullGeometry( aBlock );
             break;
 
         default:

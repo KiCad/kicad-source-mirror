@@ -91,6 +91,10 @@ private:
 
     void extractFunctions( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
 
+    void extractNets( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
+    void extractFullGeometry( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
+
     const BRD_DB&    m_Brd;
     OUTPUTFORMATTER& m_Formatter;
 

@@ -532,6 +532,10 @@ struct NET : public DB_OBJ
 
     DB_REF m_Next;
     DB_STR_REF m_NetNameStr;
+    // Not clear if this is ever not 1 entry, but 0x04s have a next field
+    DB_REF_CHAIN m_NetAssignments;
+
+    const wxString* GetName() const;
 };
 
 
@@ -683,6 +687,8 @@ struct VIEW_OBJS
 
     // COMPONENT_PIN, LOGICAL_PIN have these
     const PLACED_PAD* m_Pad;
+
+    const NET* m_Net;
 };
 
 
@@ -740,6 +746,10 @@ public:
      * Visit all component pins in the database.
      */
     void VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const;
+
+    void VisitNets( VIEW_OBJS_VISITOR aVisitor ) const;
+
+    void VisitConnectedGeometry( VIEW_OBJS_VISITOR aVisitor ) const;
 
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,
