@@ -415,10 +415,11 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     if( aFill == FILL_T::NO_FILL )
         fputs( "S\n", m_workFile );
     else if( aWidth == 0 )
-        fputs( "f\n", m_workFile );
+        fmt::println( m_workFile, "h f" );
     else
-        fputs( "b\n", m_workFile );
+        fmt::println( m_workFile, "b" );
 }
+
 
 
 void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
