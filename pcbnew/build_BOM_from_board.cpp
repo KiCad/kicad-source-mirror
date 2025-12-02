@@ -58,14 +58,11 @@
 class BOM_ENTRY
 {
 public:
-    wxString m_Ref;
-    wxString m_Val;
-    LIB_ID   m_FPID;
-    int      m_Id;
-    int      m_Count;
+    std::vector<wxString> m_Refs;
+    wxString              m_Val;
+    LIB_ID                m_FPID;
+    int                   m_Count;
 };
-
-using BOM_ENTRY_LIST = std::vector<BOM_ENTRY>;
 
 
 int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
@@ -113,8 +110,7 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
     fprintf( fp_bom, "%s", TO_UTF8( msg ) );
 
     // Build list
-    BOM_ENTRY_LIST list;
-    int            i = 1;
+    std::vector<BOM_ENTRY> list;
 
     for( FOOTPRINT* footprint : board->Footprints() )
     {
@@ -128,8 +124,7 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         {
             if( curEntry.m_Val == footprint->GetValue() && curEntry.m_FPID == footprint->GetFPID() )
             {
-                curEntry.m_Ref.Append( wxT( ", " ), 1 );
-                curEntry.m_Ref.Append( footprint->Reference().GetShownText( false ) );
+                curEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( false ) );
                 curEntry.m_Count++;
 
                 valExist = true;
@@ -142,21 +137,44 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         {
             list.emplace_back();
             BOM_ENTRY& newEntry = list.back();
-            newEntry.m_Id = i++;
             newEntry.m_Val = footprint->Value().GetShownText( false );
-            newEntry.m_Ref = footprint->Reference().GetShownText( false );
+            newEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( false ) );
             newEntry.m_FPID = footprint->GetFPID();
             newEntry.m_Count = 1;
         }
     }
 
+    for( BOM_ENTRY& curEntry : list )
+    {
+        std::sort( curEntry.m_Refs.begin(), curEntry.m_Refs.end(),
+                []( const wxString& lhs, const wxString& rhs )
+                {
+                    return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                } );
+    }
+
+    std::sort( list.begin(), list.end(),
+            []( const BOM_ENTRY& lhs, const BOM_ENTRY& rhs )
+            {
+                return StrNumCmp( lhs.m_Refs[0], rhs.m_Refs[0], true /* ignore case */ ) < 0;
+            } );
+
     // Print list.
+    int id = 1;
+
     for( const BOM_ENTRY& curEntry : list )
     {
         msg.Empty();
 
-        msg << curEntry.m_Id << wxT( ";\"" );
-        msg << curEntry.m_Ref << wxT( "\";\"" );
+        msg << id++ << wxT( ";\"" );
+
+        msg << curEntry.m_Refs[0];
+
+        for( int ii = 1; ii < (int) curEntry.m_Refs.size(); ++ii )
+            msg << wxT( ", " ) << curEntry.m_Refs[ii];
+
+        msg << wxT( "\";\"" );
+
         msg << From_UTF8( curEntry.m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
         msg << curEntry.m_Count << wxT( ";\"" );
         msg << curEntry.m_Val << wxT( "\";;;\n" );
