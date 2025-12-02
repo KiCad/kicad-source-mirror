@@ -592,7 +592,7 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
     // Backlink to the parent footprint definition
     FOOTPRINT_DEF* m_Parent;
 
-    const wxString* GetRefDes() const;
+    const REFDES*   GetRefDes() const;
     const wxString* GetName() const;
 };
 
@@ -646,6 +646,36 @@ struct VIA: public DB_OBJ
 
 
 /**
+ * When processing a view, some objects are available and some are not.
+ *
+ * Every item in a view will produce one of these, which will contain the
+ * relevant objects for that row.
+ */
+struct VIEW_OBJS
+{
+    VIEW_OBJS() :
+            m_Board( nullptr ),
+            m_Component( nullptr ),
+            m_Function( nullptr ),
+            m_FootprintInstance( nullptr )
+    {
+    }
+
+    // All views
+    const BRD_DB* m_Board;
+    // COMPONENT, COMPONENT_PIN, SYMBOL, FUNCTION
+    const x06_OBJECT* m_Component;
+    // FUNCTION
+    const FUNCTION_INSTANCE* m_Function;
+    //
+    const FOOTPRINT_INSTANCE* m_FootprintInstance;
+};
+
+
+using VIEW_OBJS_VISITOR = std::function<void( const VIEW_OBJS& aViewObjs )>;
+
+
+/**
  * An Allegro database that represents a .brd file (amd presumably .dra)
  */
 class BRD_DB : public DB
@@ -667,29 +697,27 @@ public:
     bool ResolveAndValidate();
 
     using FP_DEF_VISITOR = std::function<void( const FOOTPRINT_DEF& aFpDef )>;
-    using FP_INST_VISITOR = std::function<void( const FOOTPRINT_INSTANCE& aFp )>;
-    using FUNCTION_VISITOR = std::function<void( const x06_OBJECT& aComponent, const FUNCTION_INSTANCE& aFunction )>;
 
     /**
      * Access the footprint defs in the database.
      *
      * This iterates the 0x2B linked list.
      */
-    void VisitFootprintDefs( FP_DEF_VISITOR aVisitor ) const;
+    void VisitFootprintDefs( FP_DEF_VISITOR aFpDef ) const;
 
     /**
      * Access the footprint instances in the database.
      *
      * This iterates the 0x2D linked list for a given footprint def.
      */
-    void VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, FP_INST_VISITOR aVisitor ) const;
+    void VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const;
 
     /**
      * Access the function instances in the database.
      *
      * This iterates the 0x06 linked list and finds the functions.
      */
-    void VisitFunctionInstances( FUNCTION_VISITOR aVisitor ) const;
+    void VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const;
 
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,
@@ -699,7 +727,6 @@ public:
     std::unique_ptr<FILE_HEADER> m_Header;
 
 private:
-
     /**
      * Convert a block of "raw" binary-ish data into a DB_OBJ of the appropriate type to be
      * stored in the DB.
@@ -709,25 +736,5 @@ private:
      */
     std::unique_ptr<DB_OBJ> createObject( const BLOCK_BASE& aBlock );
 };
-
-
-/**
- * When processing a view, some objects are available and some are not.
- *
- * Every item in a view will produce one of these, which will contain the
- * relevant objects for that row.
- */
-class VIEW_OBJS
-{
-    // All views
-    const BRD_DB* m_Board;
-    // COMPONENT, COMPONENT_PIN, SYMBOL, FUNCTION
-    const x06_OBJECT* m_Component;
-    // FUNCTION
-    const FUNCTION_INSTANCE* m_Function;
-    //
-    const FOOTPRINT_INSTANCE* m_FootprintInstance;
-};
-
 
 } // namespace ALLEGRO

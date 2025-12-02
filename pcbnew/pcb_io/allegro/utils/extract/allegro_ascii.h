@@ -51,8 +51,7 @@ public:
     void Extract( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock );
 
 private:
-
-    using OBJECT_VISITOR = std::function<bool ( const DB_OBJ&, std::vector<wxString>& )>;
+    using OBJECT_VISITOR = std::function<bool( const VIEW_OBJS&, std::vector<wxString>& )>;
 
     /**
      * Create an object visitor for a given block.
@@ -65,7 +64,7 @@ private:
     /**
      * USe the given visitor to visit an object and produce a line of output.
      */
-    void visitForLine( const DB_OBJ& aObj, char aLinePrefix, OBJECT_VISITOR& aVisitor );
+    void visitForLine( const VIEW_OBJS& aObj, char aLinePrefix, OBJECT_VISITOR& aVisitor );
 
     /**
      * Extract symbol instances from an Allegro database.

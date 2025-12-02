@@ -23,11 +23,12 @@
 
 #include "utils/extract/allegro_ascii.h"
 
-#include <string_utils.h>
+#include <set>
 
 #include <wx/datetime.h>
 #include <wx/log.h>
 
+#include <string_utils.h>
 
 using namespace ALLEGRO;
 
@@ -112,222 +113,234 @@ private:
 };
 
 
+using VTYPE = ALLEGRO::EXTRACT_SPEC_PARSER::IR::VIEW_TYPE;
 /**
- * Some funciton that extracts one field from a DB_OBJ.
+ * Some function that extracts one field from a VIEW_OBJS in the context of a given view type.
  */
-using FIELD_EXTRACTOR = std::function<wxString( const DB_OBJ& )>;
+using FIELD_EXTRACTOR = std::function<wxString( const VIEW_OBJS& aViewObjs, VTYPE aViewType )>;
 
-std::unordered_map<wxString, FIELD_EXTRACTOR> g_FPInstFieldExtractors =
+
+struct FIELD_EXTRACTOR_DEF
 {
-    {
-        "SYM_TYPE", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return "PACKAGE";
-        }
-    },
-    {
-        "REFDES", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            const wxString* refDes = fp.GetRefDes();
-            return refDes ? *refDes : "";
-        }
-    },
-    {
-        "SYM_NAME", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            const wxString* name = fp.GetName();
-            return name ? *name : "";
-        }
-    },
-    {
-        "SYM_X", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return wxString::Format( "%g", fp.m_X );
-        }
-    },
-    {
-        "SYM_Y", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return wxString::Format( "%g", fp.m_Y );
-        }
-    },
-    {
-        "SYM_CENTER_X", []( const DB_OBJ& aObj ) -> wxString
-        {
-            // HACK: this isactually done via TEXT position and falls back to PLACE_BOUND center
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return wxString::Format( "%g", fp.m_X );
-        }
-    },
-    {
-        "SYM_CENTER_Y", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return wxString::Format( "%g", fp.m_Y );
-        }
-    },
-    {
-        "SYM_ROTATE", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return wxString::Format( "%.3f", fp.m_Rotation / 1000.0 );
-        }
-    },
-    {
-        "SYM_MIRROR", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return fp.m_Mirrored ? "YES" : "NO";
-        }
-    },
-    {
-        "SYM_LIBRARY_PATH", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FOOTPRINT_INSTANCE& fp = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
-            return fp.m_Parent->GetLibPath() ? *fp.m_Parent->GetLibPath() : "";
-        }
-    }
+    FIELD_EXTRACTOR m_Extractor;
+    std::set<VTYPE> m_SupportedViewTypes;
 };
 
 
-/*
-    NET_NAME
-    REFDES
-    PIN_NUMBER
-    PIN_NAME
-    PIN_GROUND
-    PIN_POWER*/
-std::unordered_map<wxString, FIELD_EXTRACTOR> g_ComponentPinFieldExtractors =
-{
+std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
     {
-        "NET_NAME", []( const DB_OBJ& aObj ) -> wxString
-        {
-            return "??";
-        }
+            "SYM_TYPE",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        return "PACKAGE";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
     },
     {
-        "REFDES", []( const DB_OBJ& aObj ) -> wxString
-        {
-            return "??";
-        }
+            "REFDES",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        wxCHECK2( aObj.m_FootprintInstance, "" );
+
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        const REFDES*             refDes = fp.GetRefDes();
+
+                        if( !refDes )
+                            return "";
+
+                        const wxString* refDesStr = refDes->GetRefDesStr();
+                        return refDesStr ? *refDesStr : "";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
     },
     {
-        "PIN_NUMBER", []( const DB_OBJ& aObj ) -> wxString
-        {
-            return "??";
-        }
+            "SYM_NAME",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        const wxString*           name = fp.GetName();
+                        return name ? *name : "";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
     },
     {
-        "PIN_NAME", []( const DB_OBJ& aObj ) -> wxString
-        {
-            return "??";
-        }
+            "SYM_X",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return wxString::Format( "%g", fp.m_X );
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
     },
     {
-        "PIN_GROUND", []( const DB_OBJ& aObj ) -> wxString
-        {
-            // Not sure what this is is, All_Preamp and BB-AI have blank values here
-            return "";
-        }
+            "SYM_Y",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return wxString::Format( "%g", fp.m_Y );
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
     },
     {
-        "PIN_POWER", []( const DB_OBJ& aObj ) -> wxString
-        {
-            // As for PIN_GROUND
-            return "";
-        }
-    }
+            "SYM_CENTER_X",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        // HACK: this is actually done via TEXT position and falls back to PLACE_BOUND center
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return wxString::Format( "%g", fp.m_X );
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "SYM_CENTER_Y",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return wxString::Format( "%g", fp.m_Y );
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "SYM_ROTATE",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return wxString::Format( "%.3f", fp.m_Rotation / 1000.0 );
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "SYM_MIRROR",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return fp.m_Mirrored ? "YES" : "NO";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "SYM_LIBRARY_PATH",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                        return fp.m_Parent->GetLibPath() ? *fp.m_Parent->GetLibPath() : "";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "COMP_VALUE",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const x06_OBJECT* component = aObj.m_Component;
+
+                        if( !component )
+                            return "";
+
+                        // if( component )
+                        // {
+                        //     const wxString* value = component->GetComponentValue();
+                        //     return value ? *value : "";
+                        // }
+                        return "??";
+                    },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+            },
+    },
+    {
+            "COMP_DEVICE_TYPE",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const x06_OBJECT* component = aObj.m_Component;
+
+                        if( !component )
+                            return "";
+
+                        const wxString* deviceType = component->GetComponentDeviceType();
+                        return deviceType ? *deviceType : "";
+                    },
+                    { VTYPE::FUNCTION },
+            },
+    },
+    {
+            "FUNC_DES",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FUNCTION_INSTANCE* func = aObj.m_Function;
+
+                        wxCHECK2( func, "" );
+
+                        const wxString* name = func->GetName();
+                        return name ? *name : "";
+                    },
+                    { VTYPE::FUNCTION },
+            },
+    },
+    {
+            "FUNC_SLOT_NAME",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const FUNCTION_INSTANCE* func = aObj.m_Function;
+
+                        wxCHECK2( func, "" );
+
+                        const FUNCTION_SLOT& slot = func->GetFunctionSlot();
+                        const wxString*      name = slot.GetName();
+                        return name ? *name : "";
+                    },
+                    { VTYPE::FUNCTION },
+            },
+    },
 };
 
 
-// using FUNCTION_EXTRACTOR = std::function<wxString( const FUNCTION_)
-
-
-std::unordered_map<wxString, FIELD_EXTRACTOR> g_FunctionFieldExtractors = {
-    {
-        "FUNC_DES", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FUNCTION_INSTANCE& func = static_cast<const FUNCTION_INSTANCE&>( aObj );
-            const wxString* name = func.GetName();
-            return name ? *name : "";
-        },
-    },
-    {    "REFDES", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FUNCTION_INSTANCE& func = static_cast<const FUNCTION_INSTANCE&>( aObj );
-            const REFDES& refDes = func.GetRefDes();
-            const wxString* refDesStr = refDes.GetRefDesStr();
-            return refDesStr ? *refDesStr : "";
-        },
-    },
-    {
-        "COMP_DEVICE_TYPE", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FUNCTION_INSTANCE& func = static_cast<const FUNCTION_INSTANCE&>( aObj );
-            const REFDES& refDes = func.GetRefDes();
-            const x06_OBJECT* component = refDes.GetParentComponent();
-            if( component )
-            {
-                const wxString* deviceType = component->GetComponentDeviceType();
-                return deviceType ? *deviceType : "";
-            }
-            return "";
-        },
-    },
-    {
-        "FUNC_SLOT_NAME", []( const DB_OBJ& aObj ) -> wxString
-        {
-            const FUNCTION_INSTANCE& func = static_cast<const FUNCTION_INSTANCE&>( aObj );
-            const FUNCTION_SLOT& slot = func.GetFunctionSlot();
-            const wxString* name = slot.GetName();
-            return name ? *name : "";
-        },
-    }
-};
-
-
-FIELD_EXTRACTOR GetFieldExtractor( const wxString& aFieldName, EXTRACT_SPEC_PARSER::IR::VIEW_TYPE aViewType )
+FIELD_EXTRACTOR GetFieldExtractor( const wxString& aFieldName )
 {
-    switch( aViewType )
+    auto it = g_Extractors.find( aFieldName );
+
+    if( it == g_Extractors.end() )
     {
-        case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::SYMBOL:
-        {
-            auto it = g_FPInstFieldExtractors.find( aFieldName );
-
-            if( it != g_FPInstFieldExtractors.end() )
-            {
-                return it->second;
-            }
-            break;
-        }
-        case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::COMPONENT_PIN:
-        {
-            auto it = g_ComponentPinFieldExtractors.find( aFieldName );
-
-            if( it != g_ComponentPinFieldExtractors.end() )
-            {
-                return it->second;
-            }
-            break;
-        }
-        case EXTRACT_SPEC_PARSER::IR::VIEW_TYPE::FUNCTION:
-        {
-            auto it = g_FunctionFieldExtractors.find( aFieldName );
-
-            if( it != g_FunctionFieldExtractors.end() )
-            {
-                return it->second;
-            }
-            break;
-        }
+        return nullptr;
     }
 
-    return nullptr;
+    // Wrap the core field extractors in common checks
+    const auto extractor = [extractorDef = it->second, aFieldName]( const VIEW_OBJS& aViewObjs,
+                                                                    VTYPE            aViewType ) -> wxString
+    {
+        // Check that the view type is supported
+        if( extractorDef.m_SupportedViewTypes.find( aViewType ) == extractorDef.m_SupportedViewTypes.end() )
+        {
+            wxLogWarning( "Field %s not supported for view type %d", aFieldName, static_cast<int>( aViewType ) );
+            return "";
+        }
+
+        return extractorDef.m_Extractor( aViewObjs, aViewType );
+    };
+
+    return extractor;
 }
 
 
@@ -338,12 +351,13 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
 
     for( const wxString& field : aBlock.Fields )
     {
-        FIELD_EXTRACTOR fieldVisitor = GetFieldExtractor( field, aBlock.ViewType );
+        FIELD_EXTRACTOR fieldVisitor = GetFieldExtractor( field );
 
         if( !fieldVisitor )
         {
-            wxLogWarning( "Unsupported extract field: %s for view type %d", TO_UTF8( field ), static_cast<int>( aBlock.ViewType ) );
-            fieldVisitor = [&]( const DB_OBJ& aFp )
+            wxLogWarning( "Unsupported extract field: %s for view type %d", TO_UTF8( field ),
+                          static_cast<int>( aBlock.ViewType ) );
+            fieldVisitor = [&]( const VIEW_OBJS& aObj, VTYPE aViewType )
             {
                 return wxString( "??" );
             };
@@ -352,7 +366,7 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
         fieldVisitors.push_back( fieldVisitor );
     }
 
-    using CONDITION_TESTER = std::function<bool ( const DB_OBJ& aObj )>;
+    using CONDITION_TESTER = std::function<bool( const VIEW_OBJS& aObj )>;
 
     // ORed conditions, each of which is a set of ANDed conditions.
     std::vector<std::vector<CONDITION_TESTER>> orConditionTesters;
@@ -367,39 +381,41 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
 
         for( const auto& condition : andCondition )
         {
-            FIELD_EXTRACTOR extractor = GetFieldExtractor( condition.FieldName, aBlock.ViewType );
+            FIELD_EXTRACTOR extractor = GetFieldExtractor( condition.FieldName );
 
             if( extractor )
             {
-                wxLogTrace( "ALLEGRO_EXTRACT", "Adding condition tester for field: %s", TO_UTF8( condition.FieldName ) );
+                wxLogTrace( "ALLEGRO_EXTRACT", "Adding condition tester for field: %s",
+                            TO_UTF8( condition.FieldName ) );
 
-                andConditionTesters.push_back( [=]( const DB_OBJ& aFp ) -> bool
-                {
-                    wxString value = extractor( aFp );
-
-                    if( condition.Value.IsEmpty() )
-                    {
-                        // And empty field just means "is set" or "is not set"
-                        if( condition.Equals )
+                andConditionTesters.push_back(
+                        [=]( const VIEW_OBJS& aViewObjs ) -> bool
                         {
-                            return value.IsEmpty();
-                        }
-                        else
-                        {
-                            return !value.IsEmpty();
-                        }
-                    }
+                            wxString value = extractor( aViewObjs, aBlock.ViewType );
 
-                    // Otherwise do a straight string comparison
-                    if( condition.Equals )
-                    {
-                        return value == condition.Value;
-                    }
-                    else
-                    {
-                        return value != condition.Value;
-                    }
-                } );
+                            if( condition.Value.IsEmpty() )
+                            {
+                                // And empty field just means "is set" or "is not set"
+                                if( condition.Equals )
+                                {
+                                    return value.IsEmpty();
+                                }
+                                else
+                                {
+                                    return !value.IsEmpty();
+                                }
+                            }
+
+                            // Otherwise do a straight string comparison
+                            if( condition.Equals )
+                            {
+                                return value == condition.Value;
+                            }
+                            else
+                            {
+                                return value != condition.Value;
+                            }
+                        } );
             }
             else
             {
@@ -415,8 +431,8 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
      * For each object, determine if it matches the conditions,
      * then extract the fields if so.
      */
-    const auto objectVisitor = [orConditionTesters, fieldVisitors]( const DB_OBJ&          aFp,
-                                                                    std::vector<wxString>& aFieldValues ) -> bool
+    const auto objectVisitor = [orConditionTesters, fieldVisitors, viewType = aBlock.ViewType](
+                                       const VIEW_OBJS& aViewObjs, std::vector<wxString>& aFieldValues ) -> bool
     {
         bool include = true;
 
@@ -436,7 +452,7 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
                 for( const auto& tester : andConditionTesters )
                 {
                     // The first ANDed condition that fails resolves this AND group to false
-                    if( !tester( aFp ) )
+                    if( !tester( aViewObjs ) )
                     {
                         allAndTrue = false;
                         break;
@@ -463,7 +479,7 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
 
         for( const auto& fieldVisitor : fieldVisitors )
         {
-            aFieldValues.emplace_back( fieldVisitor( aFp ) );
+            aFieldValues.emplace_back( fieldVisitor( aViewObjs, viewType ) );
         }
 
         return true;
@@ -473,7 +489,7 @@ ASCII_EXTRACTOR::OBJECT_VISITOR ASCII_EXTRACTOR::createObjectVisitor( const EXTR
 }
 
 
-void ASCII_EXTRACTOR::visitForLine( const DB_OBJ& aObj, char aPrefix, OBJECT_VISITOR& aVisitor )
+void ASCII_EXTRACTOR::visitForLine( const VIEW_OBJS& aObj, char aPrefix, OBJECT_VISITOR& aVisitor )
 {
     LINE_FORMATTER lineFormatter( aPrefix, m_Formatter );
     std::vector<wxString> fieldValues;
@@ -579,18 +595,23 @@ void ASCII_EXTRACTOR::extractBoardInfo()
     extractBoardInfo( boardBlock, 'J' );
 }
 
+
 void ASCII_EXTRACTOR::extractSymbolInstances( const EXTRACT_SPEC_PARSER::IR::BLOCK& aBlock )
 {
     OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
 
     // And now visit all the footprint instances, and then visit each field on each one
-    m_Brd.VisitFootprintDefs( [&]( const FOOTPRINT_DEF& aFpDef )
-    {
-        m_Brd.VisitFootprintInstances( aFpDef, [&]( const FOOTPRINT_INSTANCE& aFp )
-        {
-            visitForLine( aFp, 'S', objectVisitor );
-        } );
-    } );
+    m_Brd.VisitFootprintDefs(
+            [&]( const FOOTPRINT_DEF& aFpDef )
+            {
+                const auto fpInstVisitor = [&]( const VIEW_OBJS& aFpInstObjs )
+                {
+                    visitForLine( aFpInstObjs, 'S', objectVisitor );
+                };
+
+
+                m_Brd.VisitFootprintInstances( aFpDef, fpInstVisitor );
+            } );
 }
 
 
@@ -599,9 +620,9 @@ void ASCII_EXTRACTOR::extractComponentPins( const EXTRACT_SPEC_PARSER::IR::BLOCK
     OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
 
     // Visit all component pins
-    // m_Brd.VisitComponentDefs( [&]( const COMPONENT_DEF& aCompDef )
+    // m_Brd.VisitComponentDefs( [&]( const VIEW_OBJS& aCompDef )
     // {
-    //     m_Brd.VisitComponentPins( aCompDef, [&]( const COMPONENT_PIN& aPin )
+    //     m_Brd.VisitComponentPins( aCompDef, [&]( const VIEW_OBJS& aPin )
     //     {
     //         visitForLine( aPin, 'P', objectVisitor );
     //     } );
@@ -614,10 +635,11 @@ void ASCII_EXTRACTOR::extractFunctions( const EXTRACT_SPEC_PARSER::IR::BLOCK& aB
     OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
 
     // Visit all function instances
-    m_Brd.VisitFunctionInstances( [&]( const x06_OBJECT& aComponent, const FUNCTION_INSTANCE& aFuncInst )
-    {
-        visitForLine( aFuncInst, 'F', objectVisitor );
-    } );
+    m_Brd.VisitFunctionInstances(
+            [&]( const VIEW_OBJS& aObjs )
+            {
+                visitForLine( aObjs, 'F', objectVisitor );
+            } );
 }
 
 

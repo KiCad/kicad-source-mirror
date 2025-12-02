@@ -889,7 +889,7 @@ FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk ):
     m_Next.m_TargetKey = aBlk.m_Next;
 
     // This can be in one of two fields
-    m_RefDes.m_TargetKey = aBlk.m_InstRef16x.value_or( aBlk.m_InstRef.value() );
+    m_RefDes.m_TargetKey = aBlk.m_InstRef16x.value_or( aBlk.m_InstRef.value_or( 0 ) );
 
     // This will be filled in by the 0x2B resolution
     m_Parent = nullptr;
@@ -914,15 +914,15 @@ bool FOOTPRINT_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-const wxString* FOOTPRINT_INSTANCE::GetRefDes() const
+const REFDES* FOOTPRINT_INSTANCE::GetRefDes() const
 {
     // The ref des is found in the 0x07 string ref
     // But it can be null (e.g. for dimensions)
     if( m_RefDes.m_Target == nullptr )
         return nullptr;
 
-    REFDES& refdesObj = static_cast<REFDES&>( *m_RefDes.m_Target );
-    return refdesObj.m_TextStr.m_String;
+    const REFDES* refdesObj = static_cast<const REFDES*>( m_RefDes.m_Target );
+    return refdesObj;
 }
 
 
@@ -1157,7 +1157,7 @@ bool BRD_DB::ResolveAndValidate()
 }
 
 
-void BRD_DB::VisitFootprintDefs( std::function<void(const FOOTPRINT_DEF& aFpDef)> aVisitor ) const
+void BRD_DB::VisitFootprintDefs( BRD_DB::FP_DEF_VISITOR aVisitor ) const
 {
     const auto fpDefNextFunc = [&]( const DB_OBJ& aObj ) -> const DB_REF&
     {
@@ -1175,9 +1175,12 @@ void BRD_DB::VisitFootprintDefs( std::function<void(const FOOTPRINT_DEF& aFpDef)
 }
 
 
-void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, BRD_DB::FP_INST_VISITOR aVisitor ) const
+void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const
 {
     wxLogTrace( "ALLEGRO_EXTRACT", "Visiting footprint instances for footprint def key %#010x", aFpDef.GetKey() );
+
+    VIEW_OBJS viewObjs;
+    viewObjs.m_Board = this;
 
     const auto fpInstNextFunc = [&]( const DB_OBJ& aObj )
     {
@@ -1190,16 +1193,31 @@ void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, BRD_DB::FP_IN
 
         const FOOTPRINT_INSTANCE& fpInst = static_cast<const FOOTPRINT_INSTANCE&>( aObj );
 
-        aVisitor( fpInst );
+        // viewObjs.m_FootprintDef = &aFpDef;
+        viewObjs.m_FootprintInstance = &fpInst;
+
+        const REFDES* refdes = fpInst.GetRefDes();
+        if( refdes )
+        {
+            viewObjs.m_Function = &refdes->GetFunctionInstance();
+            viewObjs.m_Component = refdes->GetParentComponent();
+        }
+
+        aVisitor( viewObjs );
     };
 
     aFpDef.m_Instances.Visit( fpInstNextFunc );
 }
 
 
-void BRD_DB::VisitFunctionInstances( BRD_DB::FUNCTION_VISITOR aVisitor ) const
+void BRD_DB::VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const
 {
     wxLogTrace( "ALLEGRO_EXTRACT", "Visiting function instances" );
+
+
+    VIEW_OBJS viewObjs;
+
+    viewObjs.m_Board = this;
 
     const auto x06NextFunc = [&]( const DB_OBJ& aObj ) -> const DB_REF&
     {
@@ -1214,13 +1232,17 @@ void BRD_DB::VisitFunctionInstances( BRD_DB::FUNCTION_VISITOR aVisitor ) const
         // Iterate all the refdes linked to this x06 object because each 0x06 can have
         // multiple refdes instances
 
+        viewObjs.m_Component = &x06;
+
         const REFDES* refdes = &x06.GetRefDes();
 
         while( refdes )
         {
             const FUNCTION_INSTANCE& funcInst = refdes->GetFunctionInstance();
 
-            aVisitor( x06, funcInst );
+            viewObjs.m_Function = &funcInst;
+
+            aVisitor( viewObjs );
 
             refdes = refdes->GetNextRefDes();
         }
