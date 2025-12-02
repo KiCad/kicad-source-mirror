@@ -1448,8 +1448,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     wxFileName outputFile = wxFileName::FileName( path );
     wxString msg;
 
-    if( !EnsureFileDirectoryExists( &outputFile,
-                                    Prj().AbsolutePath( m_parent->Schematic().GetFileName() ),
+    if( !EnsureFileDirectoryExists( &outputFile, Prj().AbsolutePath( m_parent->Schematic().GetFileName() ),
                                     &NULL_REPORTER::GetInstance() ) )
     {
         msg.Printf( _( "Could not open/create path '%s'." ), outputFile.GetPath() );
@@ -2397,8 +2396,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
-                                                  std::vector<SCH_ITEM*>& aSchItem )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
@@ -2444,8 +2442,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch,
-                                                    std::vector<SCH_ITEM*>& aSchItem )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
     for( SCH_ITEM* item : aSchItem )
     {
@@ -2461,8 +2458,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch,
-                                                    std::vector<SCH_ITEM*>& aSchItem )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
@@ -2537,9 +2533,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::DisableSelectionEvents()
 }
 
 
-SCH_REFERENCE_LIST
-DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL*         aSymbol,
-                                                 SCH_REFERENCE_LIST& aCachedRefs )
+SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* aSymbol,
+                                                                    SCH_REFERENCE_LIST& aCachedRefs )
 {
     SCH_REFERENCE_LIST symbolRefs;
 
