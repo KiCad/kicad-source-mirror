@@ -355,7 +355,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type32PlacedPad(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr3", "ratline", "pin_num", "fp_refdes", "unknown_1", "pad_name", "ptr6", "bbox_0", "bbox_1"]
+        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr3", "ratline", "pin_num", "next_in_comp", "unknown_1", "pad_name", "ptr6", "bbox_0", "bbox_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -409,9 +409,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['pin_num']['start'] = self._io.pos()
             self.pin_num = self._io.read_u4le()
             self._debug['pin_num']['end'] = self._io.pos()
-            self._debug['fp_refdes']['start'] = self._io.pos()
-            self.fp_refdes = self._io.read_u4le()
-            self._debug['fp_refdes']['end'] = self._io.pos()
+            self._debug['next_in_comp']['start'] = self._io.pos()
+            self.next_in_comp = self._io.read_u4le()
+            self._debug['next_in_comp']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
                 self._debug['unknown_1']['start'] = self._io.pos()
                 self.unknown_1 = self._io.read_u4le()
@@ -825,7 +825,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type0fSlot(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "slot_name", "s", "ptr_x0f_x06", "ptr_x06", "ptr_x11", "unknown_1", "unknown_2"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "slot_name", "s", "next", "ptr_comp", "ptr_x11", "unknown_1", "unknown_2"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -850,13 +850,13 @@ class AllegroBrd(KaitaiStruct):
             self.s = (self._io.read_bytes(32)).decode(u"ASCII")
             self._debug['s']['end'] = self._io.pos()
             if self._root.ver >= 1311744:
-                self._debug['ptr_x0f_x06']['start'] = self._io.pos()
-                self.ptr_x0f_x06 = self._io.read_u4le()
-                self._debug['ptr_x0f_x06']['end'] = self._io.pos()
+                self._debug['next']['start'] = self._io.pos()
+                self.next = self._io.read_u4le()
+                self._debug['next']['end'] = self._io.pos()
 
-            self._debug['ptr_x06']['start'] = self._io.pos()
-            self.ptr_x06 = self._io.read_u4le()
-            self._debug['ptr_x06']['end'] = self._io.pos()
+            self._debug['ptr_comp']['start'] = self._io.pos()
+            self.ptr_comp = self._io.read_u4le()
+            self._debug['ptr_comp']['end'] = self._io.pos()
             self._debug['ptr_x11']['start'] = self._io.pos()
             self.ptr_x11 = self._io.read_u4le()
             self._debug['ptr_x11']['end'] = self._io.pos()
@@ -3694,7 +3694,7 @@ class AllegroBrd(KaitaiStruct):
         Every 0x32 (PLACED_PAD) points to one of these in that chain.
         
         There's also a pointer to the pin number (not the name) string, which is the same as in the chain:
-        0x2D (FP_INST) -> 0x07 (REFDES) -> 0x10 (FUNCTION) -> 0x0F (SLOT) -> 0x11 (PIN_NAME) -> 0x08 (PIN_NUMBER)
+        0x2D (FP_INST) -> 0x07 (COMPONENT_INST) -> 0x10 (FUNCTION) -> 0x0F (SLOT) -> 0x11 (PIN_NAME) -> 0x08 (PIN_NUMBER)
         """
         SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "ptr_pad_num", "next", "unknown_1", "coords", "padstack_ptr", "unknown_2", "unknown_3", "flags", "rotation"]
         def __init__(self, _io, _parent=None, _root=None):

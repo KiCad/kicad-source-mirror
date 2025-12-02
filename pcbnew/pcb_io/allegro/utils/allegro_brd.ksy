@@ -703,7 +703,7 @@ types:
       - id: ptr_refdes
         type: u4
         doc: |
-          Points to an 0x07 REFDES
+          Points to an 0x07 COMPONENT_INST
       - id: ptr_slot
         type: u4
         doc: |
@@ -969,7 +969,7 @@ types:
       Every 0x32 (PLACED_PAD) points to one of these in that chain.
 
       There's also a pointer to the pin number (not the name) string, which is the same as in the chain:
-      0x2D (FP_INST) -> 0x07 (REFDES) -> 0x10 (FUNCTION) -> 0x0F (SLOT) -> 0x11 (PIN_NAME) -> 0x08 (PIN_NUMBER)
+      0x2D (FP_INST) -> 0x07 (COMPONENT_INST) -> 0x10 (FUNCTION) -> 0x0F (SLOT) -> 0x11 (PIN_NAME) -> 0x08 (PIN_NUMBER)
 
     seq:
       - type: u1
@@ -1047,17 +1047,17 @@ types:
           Footprint name and value together. In the .alg, this is COMP_DEVICE_TYPE.
           E.g.:
           PreAmp: R_RES2012X50N_0805_510, R_RES2012X50N_0805_1K
-      - id: ptr_x0f_x06
+      - id: next
         type: u4
         if: _root.ver >= 0x00140400
         doc: |
           Points to the next 0x0F SLOT in the function, only if there are multiple SLOTs for this component.
 
           The last 0x0F in a function points to the same 0x06 as ptr_x06.
-      - id: ptr_x06
+      - id: ptr_comp
         type: u4
         doc:
-          Points to a 0x06.
+          Points to a 0x06 COMPONENT
       - id: ptr_x11
         type: u4
         doc: |
@@ -1091,7 +1091,7 @@ types:
       - id: ptr_x07
         type: u4
         doc: |
-          Points to 0x07 (REFDES?)
+          Points to 0x07 (COMPONENT_INST)
       - type: u4
         id: unknown_2
         if: _root.ver >= 0x00140900
@@ -2005,7 +2005,7 @@ types:
         type: u4
         if: _root.ver < 0x0140400
         doc: |
-          Points to a 0x07 REFDES
+          Points to a 0x07 COMPONENT_INST
       - id: unknown_2
         type: u2
         doc:
@@ -2247,9 +2247,9 @@ types:
       - id: pin_num
         type: u4
         doc: Points to 0x08
-      - id: fp_refdes
+      - id: next_in_comp
         type: u4
-        doc: Points to 0x07 or null
+        doc: Points to next pad or 0x07 COMPONENT_INST
       - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400

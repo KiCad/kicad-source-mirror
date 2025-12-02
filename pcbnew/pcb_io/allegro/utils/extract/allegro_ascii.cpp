@@ -143,18 +143,28 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
             {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
-                        wxCHECK2( aObj.m_FootprintInstance, "" );
+                        // wxCHECK2( aObj.m_FootprintInstance, "" );
 
-                        const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        const REFDES*             refDes = fp.GetRefDes();
+                        const COMPONENT_INST* compInst = nullptr;
 
-                        if( !refDes )
+                        // FIXME
+                        if( aObj.m_FootprintInstance )
+                        {
+                            const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
+                            compInst = fp.GetComponentInstance();
+                        }
+                        else if( aObj.m_ComponentInstance )
+                        {
+                            compInst = aObj.m_ComponentInstance;
+                        }
+
+                        if( !compInst )
                             return "";
 
-                        const wxString* refDesStr = refDes->GetRefDesStr();
+                        const wxString* refDesStr = compInst->GetRefDesStr();
                         return refDesStr ? *refDesStr : "";
                     },
-                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+                    { VTYPE::SYMBOL, VTYPE::COMPONENT, VTYPE::COMPONENT_PIN, VTYPE::FUNCTION },
             },
     },
     {
@@ -252,7 +262,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
             {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
-                        const x06_OBJECT* component = aObj.m_Component;
+                        const COMPONENT* component = aObj.m_Component;
 
                         if( !component )
                             return "";
@@ -272,7 +282,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
             {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
-                        const x06_OBJECT* component = aObj.m_Component;
+                        const COMPONENT* component = aObj.m_Component;
 
                         if( !component )
                             return "";
@@ -601,17 +611,12 @@ void ASCII_EXTRACTOR::extractSymbolInstances( const EXTRACT_SPEC_PARSER::IR::BLO
     OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
 
     // And now visit all the footprint instances, and then visit each field on each one
-    m_Brd.VisitFootprintDefs(
-            [&]( const FOOTPRINT_DEF& aFpDef )
-            {
-                const auto fpInstVisitor = [&]( const VIEW_OBJS& aFpInstObjs )
-                {
-                    visitForLine( aFpInstObjs, 'S', objectVisitor );
-                };
+    const auto fpInstVisitor = [&]( const VIEW_OBJS& aFpInstObjs )
+    {
+        visitForLine( aFpInstObjs, 'S', objectVisitor );
+    };
 
-
-                m_Brd.VisitFootprintInstances( aFpDef, fpInstVisitor );
-            } );
+    m_Brd.VisitFootprintInstances( fpInstVisitor );
 }
 
 
@@ -619,14 +624,12 @@ void ASCII_EXTRACTOR::extractComponentPins( const EXTRACT_SPEC_PARSER::IR::BLOCK
 {
     OBJECT_VISITOR objectVisitor = createObjectVisitor( aBlock );
 
-    // Visit all component pins
-    // m_Brd.VisitComponentDefs( [&]( const VIEW_OBJS& aCompDef )
-    // {
-    //     m_Brd.VisitComponentPins( aCompDef, [&]( const VIEW_OBJS& aPin )
-    //     {
-    //         visitForLine( aPin, 'P', objectVisitor );
-    //     } );
-    // } );
+    const auto pinVisitor = [&]( const VIEW_OBJS& aPinObjs )
+    {
+        visitForLine( aPinObjs, 'S', objectVisitor );
+    };
+
+    m_Brd.VisitComponentPins( pinVisitor );
 }
 
 

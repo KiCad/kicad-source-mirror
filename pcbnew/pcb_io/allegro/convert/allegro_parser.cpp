@@ -482,7 +482,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER
     data.m_Next = stream.ReadU32();
     data.m_CompDeviceType = stream.ReadU32();
     data.m_SymbolName = stream.ReadU32();
-    data.m_PtrRefDes = stream.ReadU32();
+    data.m_FirstInstPtr = stream.ReadU32();
     data.m_PtrFunctionSlot = stream.ReadU32();
     data.m_PtrPinNumber = stream.ReadU32();
     data.m_Fields = stream.ReadU32();
@@ -751,7 +751,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
     data.m_Key = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_Unknown1 );
-    data.m_RefDesPtr = stream.ReadU32();
+    data.m_ComponentInstPtr = stream.ReadU32();
     ReadCond( stream, aVer, data.m_Unknown2 );
     data.m_PtrX12 = stream.ReadU32();
     data.m_Unknown3 = stream.ReadU32();
@@ -1640,7 +1640,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     data.m_Ptr6 = aStream.ReadU32();
     data.m_Ratline = aStream.ReadU32();
     data.m_Ptr8 = aStream.ReadU32();
-    data.m_Previous = aStream.ReadU32();
+    data.m_NextInCompInst = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 

@@ -169,6 +169,7 @@ bool DB_REF_CHAIN::Resolve( const DB_OBJ_RESOLVER& aResolver )
     }
 
     // Ended before the tail
+    wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_REF_CHAIN up to tail %#010x for %s", m_Tail, m_DebugName ? m_DebugName : "<unknown>" );
     return false;
 }
 
@@ -249,13 +250,13 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x06:
     {
         const BLK_0x06& compBlk = BLK_DATA( aBlock, BLK_0x06 );
-        obj = std::make_unique<x06_OBJECT>( *this, compBlk );
+        obj = std::make_unique<COMPONENT>( *this, compBlk );
         break;
     }
     case 0x07:
     {
         const BLK_0x07& strBlk = BLK_DATA( aBlock, BLK_0x07 );
-        obj = std::make_unique<REFDES>( strBlk );
+        obj = std::make_unique<COMPONENT_INST>( strBlk );
         break;
     }
     case 0x08:
@@ -549,135 +550,126 @@ x03_TEXT::x03_TEXT( const BLK_0x03& aBlk ):
 }
 
 
-x06_OBJECT::x06_OBJECT( const BRD_DB& aBrd, const BLK_0x06& aBlk ):
-    DB_OBJ( DB_OBJ::TYPE::x06, aBlk.m_Key )
+COMPONENT::COMPONENT( const BRD_DB& aBrd, const BLK_0x06& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::COMPONENT, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     m_Next.m_EndKey = aBrd.m_Header->m_LL_0x06.m_Tail;
-    m_Next.m_DebugName = "x06_OBJECT::m_Next";
+    m_Next.m_DebugName = "COMPONENT::m_Next";
 
     m_CompDeviceType.m_StringKey = aBlk.m_CompDeviceType;
-    m_CompDeviceType.m_DebugName = "x06_OBJECT::m_CompDeviceType";
+    m_CompDeviceType.m_DebugName = "COMPONENT::m_CompDeviceType";
 
     m_SymbolName.m_StringKey = aBlk.m_SymbolName;
-    m_SymbolName.m_DebugName = "x06_OBJECT::m_SymbolName";
+    m_SymbolName.m_DebugName = "COMPONENT::m_SymbolName";
 
-    m_PtrRefDes.m_TargetKey = aBlk.m_PtrRefDes;
-    m_PtrRefDes.m_DebugName = "x06_OBJECT::m_PtrRefDes";
+    m_Instances.m_Head = aBlk.m_FirstInstPtr;
+    m_Instances.m_Tail = aBlk.m_Key;
+    m_Instances.m_NextKeyGetter = []( const DB_OBJ& aObj )
+    {
+        const COMPONENT_INST& compInst = static_cast<const COMPONENT_INST&>( aObj );
+        return compInst.m_Next.m_TargetKey;
+    };
+    m_Instances.m_DebugName = "COMPONENT::m_Instances";
 
     m_PtrFunctionSlot.m_TargetKey = aBlk.m_PtrFunctionSlot;
-    m_PtrFunctionSlot.m_DebugName = "x06_OBJECT::m_PtrFunctionSlot";
+    m_PtrFunctionSlot.m_DebugName = "COMPONENT::m_PtrFunctionSlot";
 
     m_PtrPinNumber.m_TargetKey = aBlk.m_PtrPinNumber;
-    m_PtrPinNumber.m_DebugName = "x06_OBJECT::m_PtrPinNumber";
+    m_PtrPinNumber.m_DebugName = "COMPONENT::m_PtrPinNumber";
 
     m_Fields.m_TargetKey = aBlk.m_Fields;
-    m_Fields.m_DebugName = "x06_OBJECT::m_Fields";
+    m_Fields.m_DebugName = "COMPONENT::m_Fields";
 }
 
 
-bool x06_OBJECT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool COMPONENT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
     ok &= m_CompDeviceType.Resolve( aResolver );
     ok &= m_SymbolName.Resolve( aResolver );
-    ok &= m_PtrRefDes.Resolve( aResolver );
+    ok &= m_Instances.Resolve( aResolver );
     ok &= m_PtrFunctionSlot.Resolve( aResolver );
     ok &= m_PtrPinNumber.Resolve( aResolver );
     ok &= m_Fields.Resolve( aResolver );
 
-    ok &= CheckTypeIs( m_PtrRefDes, DB_OBJ::TYPE::REFDES, true );
     ok &= CheckTypeIs( m_PtrFunctionSlot, DB_OBJ::TYPE::FUNCTION_SLOT, true );
-
-    // Bind the REFDES back to this component
-    if( m_PtrRefDes.m_Target )
-    {
-        wxASSERT( m_PtrRefDes.m_Target->GetType() == DB_OBJ::TYPE::REFDES );
-        REFDES& refDes = static_cast<REFDES&>( *m_PtrRefDes.m_Target );
-        refDes.m_ParentComponent = this;
-    }
 
     return ok;
 }
 
 
-const REFDES& x06_OBJECT::GetRefDes() const
-{
-    if( m_PtrRefDes.m_Target == nullptr )
-    {
-        THROW_IO_ERROR( "x06_OBJECT::GetRefDes: Null reference to REFDES" );
-    }
-
-    return static_cast<const REFDES&>( *m_PtrRefDes.m_Target );
-}
-
-
-const wxString* x06_OBJECT::GetComponentDeviceType() const
+const wxString* COMPONENT::GetComponentDeviceType() const
 {
     return m_CompDeviceType.m_String;
 }
 
 
-REFDES::REFDES( const BLK_0x07& aBlk ):
-    DB_OBJ( DB_OBJ::TYPE::REFDES, aBlk.m_Key )
+COMPONENT_INST::COMPONENT_INST( const BLK_0x07& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::COMPONENT_INST, aBlk.m_Key )
 {
     m_TextStr.m_StringKey = aBlk.m_RefDesStrPtr;
-    m_TextStr.m_DebugName = "REFDES::m_TextStr";
-
+    m_TextStr.m_DebugName = "COMPONENT_INST::m_TextStr";
     m_Next.m_TargetKey = aBlk.m_Next;
-    m_Next.m_DebugName = "REFDES::m_Next";
+    m_Next.m_DebugName = "COMPONENT_INST::m_Next";
 
     m_FunctionInst.m_TargetKey = aBlk.m_FunctionInstPtr;
-    m_FunctionInst.m_DebugName = "REFDES::m_FunctionInst";
+    m_FunctionInst.m_DebugName = "COMPONENT_INST::m_FunctionInst";
 
-    m_FirstPad.m_TargetKey = aBlk.m_FirstPadPtr;
-    m_FirstPad.m_DebugName = "REFDES::m_FirstPad";
+    m_Pads.m_Head = aBlk.m_FirstPadPtr;
+    m_Pads.m_Tail = aBlk.m_Key;
+    m_Pads.m_NextKeyGetter = []( const DB_OBJ& aObj ) -> uint32_t
+    {
+        const PLACED_PAD& pad = static_cast<const PLACED_PAD&>( aObj );
+        return pad.m_NextInCompInst.m_TargetKey;
+    };
+    m_Pads.m_DebugName = "COMPONENT_INST::m_Pads";
 }
 
 
-bool REFDES::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool COMPONENT_INST::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
     ok &= m_TextStr.Resolve( aResolver );
     ok &= m_Next.Resolve( aResolver );
     ok &= m_FunctionInst.Resolve( aResolver );
-    ok &= m_FirstPad.Resolve( aResolver );
+    ok &= m_Pads.Resolve( aResolver );
 
     return ok;
 }
 
 
-const wxString* REFDES::GetRefDesStr() const
+const wxString* COMPONENT_INST::GetRefDesStr() const
 {
     return m_TextStr.m_String;
 }
 
 
-const FUNCTION_INSTANCE& REFDES::GetFunctionInstance() const
+const FUNCTION_INSTANCE& COMPONENT_INST::GetFunctionInstance() const
 {
     if( m_FunctionInst.m_Target == nullptr )
     {
-        THROW_IO_ERROR( "REFDES::GetFunctionInstance: Null reference to FUNCTION_INSTANCE" );
+        THROW_IO_ERROR( "COMPONENT_INST::GetFunctionInstance: Null reference to FUNCTION_INSTANCE" );
     }
 
     return static_cast<const FUNCTION_INSTANCE&>( *m_FunctionInst.m_Target );
 }
 
 
-const REFDES* REFDES::GetNextRefDes() const
+const COMPONENT_INST* COMPONENT_INST::GetNextInstance() const
 {
-    wxCHECK2_MSG( m_Next.m_Target, nullptr, "REFDES::GetNextRefDes: Null m_Next reference" );
+    wxCHECK2_MSG( m_Next.m_Target, nullptr, "COMPONENT_INST::GetNextInstance: Null m_Next reference" );
 
-    // If the next is not a REFDES, it's the end of the list
-    if( m_Next.m_Target->GetType() != DB_OBJ::TYPE::REFDES )
+    // If the next is not a COMPONENT_INST, it's the end of the list
+    if( m_Next.m_Target->GetType() != DB_OBJ::TYPE::COMPONENT_INST )
     {
         return nullptr;
     }
 
-    return static_cast<const REFDES*>( m_Next.m_Target );
+    return static_cast<const COMPONENT_INST*>( m_Next.m_Target );
 }
 
 
@@ -889,7 +881,21 @@ FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk ):
     m_Next.m_TargetKey = aBlk.m_Next;
 
     // This can be in one of two fields
-    m_RefDes.m_TargetKey = aBlk.m_InstRef16x.value_or( aBlk.m_InstRef.value_or( 0 ) );
+    m_ComponentInstance.m_TargetKey = aBlk.m_InstRef16x.value_or( aBlk.m_InstRef.value_or( 0 ) );
+
+    m_Pads.m_Head = aBlk.m_FirstPadPtr;
+    m_Pads.m_Tail = aBlk.m_Key;
+    m_Pads.m_NextKeyGetter = []( const DB_OBJ& aObj )
+    {
+
+        if (aObj.GetType() != DB_OBJ::TYPE::PLACED_PAD )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "FOOTPRINT_INSTANCE::m_Pads: Unexpected type in pad chain: %d", static_cast<int>( aObj.GetType() ) );
+            return 0U;
+        }
+
+        return static_cast<const PLACED_PAD&>( aObj ).m_NextInFp.m_TargetKey;
+    };
 
     // This will be filled in by the 0x2B resolution
     m_Parent = nullptr;
@@ -906,23 +912,24 @@ bool FOOTPRINT_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
-    ok &= m_RefDes.Resolve( aResolver );
+    ok &= m_ComponentInstance.Resolve( aResolver );
+    ok &= m_Pads.Resolve( aResolver );
 
-    ok &= CheckTypeIs( m_RefDes, DB_OBJ::TYPE::REFDES, true );
+    ok &= CheckTypeIs( m_ComponentInstance, DB_OBJ::TYPE::COMPONENT_INST, true );
 
     return ok;
 }
 
 
-const REFDES* FOOTPRINT_INSTANCE::GetRefDes() const
+const COMPONENT_INST* FOOTPRINT_INSTANCE::GetComponentInstance() const
 {
-    // The ref des is found in the 0x07 string ref
+    // The component instance is found in the 0x07 string ref
     // But it can be null (e.g. for dimensions)
-    if( m_RefDes.m_Target == nullptr )
+    if( m_ComponentInstance.m_Target == nullptr )
         return nullptr;
 
-    const REFDES* refdesObj = static_cast<const REFDES*>( m_RefDes.m_Target );
-    return refdesObj;
+    const COMPONENT_INST* componentInstance = static_cast<const COMPONENT_INST*>( m_ComponentInstance.m_Target );
+    return componentInstance;
 }
 
 
@@ -982,8 +989,8 @@ FUNCTION_INSTANCE::FUNCTION_INSTANCE( const BLK_0x10& aBlk ):
     m_FunctionName.m_StringKey = aBlk.m_FunctionName;
     m_FunctionName.m_DebugName = "FUNCTION_INSTANCE::m_FunctionName";
 
-    m_RefDes.m_TargetKey = aBlk.m_RefDesPtr;
-    m_RefDes.m_DebugName = "FUNCTION_INSTANCE::m_RefDes";
+    m_ComponentInstance.m_TargetKey = aBlk.m_ComponentInstPtr;
+    m_ComponentInstance.m_DebugName = "FUNCTION_INSTANCE::m_ComponentInstance";
 }
 
 
@@ -994,7 +1001,7 @@ bool FUNCTION_INSTANCE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     ok &= m_Slot.Resolve( aResolver );
     ok &= m_Fields.Resolve( aResolver );
     ok &= m_FunctionName.Resolve( aResolver );
-    ok &= m_RefDes.Resolve( aResolver );
+    ok &= m_ComponentInstance.Resolve( aResolver );
 
     return ok;
 }
@@ -1006,9 +1013,9 @@ const wxString* FUNCTION_INSTANCE::GetName() const
 }
 
 
-const REFDES& FUNCTION_INSTANCE::GetRefDes() const
+const COMPONENT_INST& FUNCTION_INSTANCE::GetComponentInstance() const
 {
-    return static_cast<const REFDES&>( *m_RefDes.m_Target );
+    return static_cast<const COMPONENT_INST&>( *m_ComponentInstance.m_Target );
 }
 
 
@@ -1106,6 +1113,12 @@ PLACED_PAD::PLACED_PAD( const BRD_DB& aBrd, const BLK_0x32_PLACED_PAD& aBlk ):
     // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x32.m_Tail;
     m_Next.m_DebugName = "PLACED_PAD::m_Next";
 
+    m_NextInFp.m_TargetKey = aBlk.m_NextInFp;
+    m_NextInFp.m_DebugName = "PLACED_PAD::m_NextInFp";
+
+    m_NextInCompInst.m_TargetKey = aBlk.m_NextInCompInst;
+    m_NextInCompInst.m_DebugName = "PLACED_PAD::m_NextInCompInst";
+
     // m_Padstack.m_TargetKey = aBlk.m_PadstackPtr;
     // m_Padstack.m_DebugName = "PLACED_PAD::m_Padstack";
 }
@@ -1116,6 +1129,8 @@ bool PLACED_PAD::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
+    ok &= m_NextInFp.Resolve( aResolver );
+    ok &= m_NextInCompInst.Resolve( aResolver );
     // ok &= m_Padstack.Resolve( aResolver );
 
     return ok;
@@ -1175,7 +1190,7 @@ void BRD_DB::VisitFootprintDefs( BRD_DB::FP_DEF_VISITOR aVisitor ) const
 }
 
 
-void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const
+void BRD_DB::visitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const
 {
     wxLogTrace( "ALLEGRO_EXTRACT", "Visiting footprint instances for footprint def key %#010x", aFpDef.GetKey() );
 
@@ -1196,11 +1211,11 @@ void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VIS
         // viewObjs.m_FootprintDef = &aFpDef;
         viewObjs.m_FootprintInstance = &fpInst;
 
-        const REFDES* refdes = fpInst.GetRefDes();
-        if( refdes )
+        const COMPONENT_INST* componentInstance = fpInst.GetComponentInstance();
+        if( componentInstance )
         {
-            viewObjs.m_Function = &refdes->GetFunctionInstance();
-            viewObjs.m_Component = refdes->GetParentComponent();
+            viewObjs.m_Function = &componentInstance->GetFunctionInstance();
+            viewObjs.m_Component = componentInstance->GetParentComponent();
         }
 
         aVisitor( viewObjs );
@@ -1210,10 +1225,39 @@ void BRD_DB::VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VIS
 }
 
 
+void BRD_DB::VisitFootprintInstances( VIEW_OBJS_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting footprint instances" );
+
+    VIEW_OBJS viewObjs;
+    viewObjs.m_Board = this;
+
+    // And now visit all the footprint instances, and then visit each field on each one
+    VisitFootprintDefs(
+            [&]( const FOOTPRINT_DEF& aFpDef )
+            {
+                visitFootprintInstances( aFpDef, aVisitor );
+            } );
+}
+
+
 void BRD_DB::VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const
 {
     wxLogTrace( "ALLEGRO_EXTRACT", "Visiting function instances" );
 
+    const auto componentVisitor = [&]( const VIEW_OBJS& aViewObjs )
+    {
+        aVisitor( aViewObjs );
+    };
+
+    // When is FUNCTION != COMPONENT? how should we iterate this?
+    VisitComponents( componentVisitor );
+}
+
+
+void BRD_DB::VisitComponents( VIEW_OBJS_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting components" );
 
     VIEW_OBJS viewObjs;
 
@@ -1221,34 +1265,74 @@ void BRD_DB::VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const
 
     const auto x06NextFunc = [&]( const DB_OBJ& aObj ) -> const DB_REF&
     {
-        if( aObj.GetType() != DB_OBJ::TYPE::x06 )
+        if( aObj.GetType() != DB_OBJ::TYPE::COMPONENT )
         {
-            wxLogTrace( "ALLEGRO_EXTRACT", "  Not an x06 object, skipping key %#010x", aObj.GetKey() );
+            wxLogTrace( "ALLEGRO_EXTRACT", "  Not a component object, skipping key %#010x", aObj.GetKey() );
             return DB_NULLREF;
         }
 
-        const x06_OBJECT& x06 = static_cast<const x06_OBJECT&>( aObj );
+        const COMPONENT& component = static_cast<const COMPONENT&>( aObj );
 
-        // Iterate all the refdes linked to this x06 object because each 0x06 can have
-        // multiple refdes instances
+        viewObjs.m_Component = &component;
 
-        viewObjs.m_Component = &x06;
-
-        const REFDES* refdes = &x06.GetRefDes();
-
-        while( refdes )
+        const auto compInstVisitor = [&]( const DB_OBJ& aObj )
         {
-            const FUNCTION_INSTANCE& funcInst = refdes->GetFunctionInstance();
+            wxLogTrace( "ALLEGRO_EXTRACT", "Visiting component instance key %#010x", aObj.GetKey() );
 
+            if( aObj.GetType() != DB_OBJ::TYPE::COMPONENT_INST )
+            {
+                wxLogTrace( "ALLEGRO_EXTRACT", "  Not a component instance, skipping key %#010x", aObj.GetKey() );
+                return;
+            }
+
+            const COMPONENT_INST& compInst = static_cast<const COMPONENT_INST&>( aObj );
+
+            const FUNCTION_INSTANCE& funcInst = compInst.GetFunctionInstance();
+            viewObjs.m_ComponentInstance = &compInst;
             viewObjs.m_Function = &funcInst;
 
             aVisitor( viewObjs );
+        };
 
-            refdes = refdes->GetNextRefDes();
-        }
+        component.m_Instances.Visit( compInstVisitor );
 
-        return x06.m_Next;
+        return component.m_Next;
     };
 
     visitLinkedList( m_Header->m_LL_0x06, x06NextFunc );
+}
+
+
+void BRD_DB::VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const
+{
+    wxLogTrace( "ALLEGRO_EXTRACT", "Visiting component pins" );
+
+    const auto componentVisitor = [&]( const VIEW_OBJS& aViewObjs )
+    {
+        // For each footprint instance, visit all the pins of the component
+        const COMPONENT_INST* compInst = aViewObjs.m_ComponentInstance;
+
+        wxCHECK2_MSG( compInst != nullptr, , "BRD_DB::VisitComponentPins: Null component instance in view objs" );
+
+        const auto padVisitor = [&]( const DB_OBJ& aObj )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "Visiting pad key %#010x", aObj.GetKey() );
+            if( aObj.GetType() != DB_OBJ::TYPE::PLACED_PAD )
+            {
+                wxLogTrace( "ALLEGRO_EXTRACT", "  Not a placed pad, skipping key %#010x, type", aObj.GetKey() );
+                return;
+            }
+
+            const PLACED_PAD& placedPad = static_cast<const PLACED_PAD&>( aObj );
+
+            VIEW_OBJS viewObj = aViewObjs;
+            viewObj.m_Pad = &placedPad;
+
+            aVisitor( viewObj );
+        };
+
+        compInst->m_Pads.Visit( padVisitor );
+    };
+
+    VisitComponents( componentVisitor );
 }

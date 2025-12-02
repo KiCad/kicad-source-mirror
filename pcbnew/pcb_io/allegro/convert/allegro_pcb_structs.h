@@ -510,8 +510,8 @@ struct BLK_0x06
     uint32_t m_CompDeviceType;
     // Pointer to SYM_NAME string
     uint32_t m_SymbolName;
-    // Points to 0x07, refdes
-    uint32_t m_PtrRefDes;
+    // Points to 0x07, first instance
+    uint32_t m_FirstInstPtr;
     // Points to 0x0F, function slot
     uint32_t m_PtrFunctionSlot;
     // Points to 0x08, pin number
@@ -729,7 +729,7 @@ struct BLK_0x10
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
-    uint32_t m_RefDesPtr;
+    uint32_t m_ComponentInstPtr;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
 
@@ -751,7 +751,7 @@ struct BLK_0x11
     uint32_t m_Key;
     ///< Pointer to pin name string
     uint32_t m_PinNameStrPtr;
-    ///< Pointer to next 0x11 PIN_NAME object or 0x0F REFDES
+    ///< Pointer to next 0x11 PIN_NAME object or 0x0F SLOT
     uint32_t m_Next;
     ///< Pointer to 0x11 PIN_NUMBER object
     uint32_t m_PinNumberPtr;
@@ -1547,7 +1547,7 @@ struct BLK_0x32_PLACED_PAD
     uint32_t m_Ptr6;
     uint32_t m_Ratline;
     uint32_t m_Ptr8;
-    uint32_t m_Previous;
+    uint32_t m_NextInCompInst;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 

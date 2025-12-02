@@ -109,7 +109,7 @@ class AllegroBoard:
                 0x03: "DATA_ITEM?",
                 0x04: "NET_ASSIGNMENT?",
                 0x05: "TRACK",
-                0x07: "REFDES?", # or some kind of instance
+                0x07: "COMPONENT_INST",
                 0x08: "PIN_NUMBER?",
                 0x0C: "FIGURE",
                 0x0D: "PAD",
@@ -180,7 +180,8 @@ class AllegroBoard:
             elif obj.type == 0x07:
                 value_detail = f"'{self.board.string(obj.data.ref_des_ref)}'"
             elif obj.type == 0x08:
-                value_detail = f"'{self.board.string(obj.data.str_ptr_16x)}'"
+                str_ptr = obj.data.str_ptr_16x if hasattr(obj.data, "str_ptr_16x") else obj.data.str_ptr
+                value_detail = f"'{self.board.string(str_ptr)}'"
             elif obj.type == 0x0D:
                 value_detail = f"'{self.board.string(obj.data.ptr_pad_num)}'"
             elif obj.type == 0x0F:  # Slot
@@ -481,8 +482,8 @@ class AllegroBoard:
         elif t == 0x0f:
             prntr.print_s("slot_name", d.slot_name)
             prntr.print_v("s", d.s)
-            prntr.print_ptr("ptr_x0f_x06", d)
-            prntr.print_ptr("Ptr x06", d.ptr_x06)
+            prntr.print_ptr("Next", d.next)
+            prntr.print_ptr("Component", d.ptr_comp)
             prntr.print_ptr("Ptr x11", d.ptr_x11)
 
             prntr.print_v("unknown_1", d)
@@ -789,7 +790,7 @@ class AllegroBoard:
             prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("net_ptr", d)
             prntr.print_ptr("pad_ptr", d)
-            prntr.print_ptr("fp_refdes", d)
+            prntr.print_ptr("next_in_comp", d)
             prntr.print_ptr("pad_name", d)
             prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("track", d)

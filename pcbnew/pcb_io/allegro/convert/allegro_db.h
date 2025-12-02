@@ -155,11 +155,11 @@ struct DB_OBJ
     enum class TYPE
     {
         ARC,
-        x03_TEXT,    // 0x03 subtype 0x68...
-        TRACK,       // 0x05
-        NET_ASSIGN,  // 0x04
-        x06,         // 0x06 ?? component?
-        REFDES,      // 0x07
+        x03_TEXT,       // 0x03 subtype 0x68...
+        TRACK,          // 0x05
+        NET_ASSIGN,     // 0x04
+        COMPONENT,      // 0x06
+        COMPONENT_INST, // 0x07
         PIN_NUMBER,     // 0x08
         x0e,            // 0x0E
         FUNCTION_SLOT,  // 0x0F
@@ -182,7 +182,7 @@ struct DB_OBJ
         FILM,            // 0x3a
         x3b,
         x3c,
-};
+    };
 
     // Where this block was in the file (for debugging)
     struct FILE_LOC
@@ -290,7 +290,7 @@ struct BRD_DB;
 struct FOOTPRINT_INSTANCE;
 struct FUNCTION_INSTANCE;
 struct PLACED_PAD;
-struct REFDES;
+struct COMPONENT_INST;
 
 /**
  * 0x01 ARC objects
@@ -349,50 +349,54 @@ struct TRACK : public DB_OBJ
 
 
 /**
- * 0x06 objects.
+ * COMPONENT 0x06 objects.
+ *
+ * One per component definition (symbol) in the library.
  */
-struct x06_OBJECT : public DB_OBJ
+struct COMPONENT : public DB_OBJ
 {
-    x06_OBJECT( const BRD_DB& aBrd, const BLK_0x06& aBlk );
+    COMPONENT( const BRD_DB& aBrd, const BLK_0x06& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
     DB_STR_REF m_CompDeviceType;
     DB_STR_REF m_SymbolName;
-    DB_REF m_PtrRefDes;
+    DB_REF_CHAIN m_Instances;
     DB_REF m_PtrFunctionSlot;
     DB_REF m_PtrPinNumber;
     DB_REF m_Fields;
 
-    const REFDES& GetRefDes() const;
+    const COMPONENT_INST& GetComponentInstance() const;
     const wxString* GetComponentDeviceType() const;
 };
 
 
 /**
- * 0x07 objects
+ * COMPONENT_INST 0x07 objects
+ *
+ * These represent instances of COMPONENTs placed on the board.
  */
-struct REFDES : public DB_OBJ
+struct COMPONENT_INST : public DB_OBJ
 {
-    REFDES( const BLK_0x07& aBlk );
+    COMPONENT_INST( const BLK_0x07& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF     m_Next;
-    DB_STR_REF m_TextStr;
-    DB_REF     m_FunctionInst;
-    DB_REF     m_X03Chain;
-    DB_REF     m_FirstPad;
+    DB_STR_REF   m_TextStr;
+    DB_REF       m_FunctionInst;
+    DB_REF       m_X03Chain;
+    DB_REF_CHAIN m_Pads;
 
-    x06_OBJECT* m_ParentComponent = nullptr;
+    COMPONENT* m_ParentComponent = nullptr;
 
-    const x06_OBJECT* GetParentComponent() const { return m_ParentComponent; }
+    const COMPONENT* GetParentComponent() const { return m_ParentComponent; }
 
-    const wxString* GetRefDesStr() const;
-    const REFDES* GetNextRefDes() const;
+    const wxString*          GetRefDesStr() const;
+    const COMPONENT_INST*    GetNextInstance() const;
     const FUNCTION_INSTANCE& GetFunctionInstance() const;
-    const PLACED_PAD& GetFirstPad() const;
+    const PLACED_PAD&        GetFirstPad() const;
 };
 
 
@@ -454,14 +458,14 @@ struct FUNCTION_INSTANCE : public DB_OBJ
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
-    DB_REF m_Slot;
-    DB_REF m_Fields;
+    DB_REF     m_Slot;
+    DB_REF     m_Fields;
     DB_STR_REF m_FunctionName;
-    DB_REF m_RefDes;
+    DB_REF     m_ComponentInstance;
 
-    const wxString* GetName() const;
-    const REFDES& GetRefDes() const;
-    const FUNCTION_SLOT& GetFunctionSlot() const;
+    const wxString*       GetName() const;
+    const COMPONENT_INST& GetComponentInstance() const;
+    const FUNCTION_SLOT&  GetFunctionSlot() const;
 };
 
 
@@ -583,17 +587,20 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
-    DB_REF m_RefDes;
+    DB_REF m_ComponentInstance;
     double m_X;
     double m_Y;
     double m_Rotation;
     bool   m_Mirrored;
 
+    // Chain of PLACED_PADs
+    DB_REF_CHAIN m_Pads;
+
     // Backlink to the parent footprint definition
     FOOTPRINT_DEF* m_Parent;
 
-    const REFDES*   GetRefDes() const;
-    const wxString* GetName() const;
+    const COMPONENT_INST* GetComponentInstance() const;
+    const wxString*       GetName() const;
 };
 
 
@@ -624,6 +631,8 @@ struct PLACED_PAD : public DB_OBJ
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
+    DB_REF m_NextInFp;
+    DB_REF m_NextInCompInst;
     // DB_REF m_Ratline; // 0x23;
     uint32_t m_Flags;
     BOX2I m_Bounds;
@@ -664,11 +673,16 @@ struct VIEW_OBJS
     // All views
     const BRD_DB* m_Board;
     // COMPONENT, COMPONENT_PIN, SYMBOL, FUNCTION
-    const x06_OBJECT* m_Component;
+    const COMPONENT* m_Component;
+
+    const COMPONENT_INST* m_ComponentInstance;
     // FUNCTION
     const FUNCTION_INSTANCE* m_Function;
     //
     const FOOTPRINT_INSTANCE* m_FootprintInstance;
+
+    // COMPONENT_PIN, LOGICAL_PIN have these
+    const PLACED_PAD* m_Pad;
 };
 
 
@@ -710,7 +724,8 @@ public:
      *
      * This iterates the 0x2D linked list for a given footprint def.
      */
-    void VisitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const;
+    void VisitFootprintInstances( VIEW_OBJS_VISITOR aVisitor ) const;
+    void visitFootprintInstances( const FOOTPRINT_DEF& aFpDef, VIEW_OBJS_VISITOR aVisitor ) const;
 
     /**
      * Access the function instances in the database.
@@ -718,6 +733,13 @@ public:
      * This iterates the 0x06 linked list and finds the functions.
      */
     void VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const;
+
+    void VisitComponents( VIEW_OBJS_VISITOR aVisitor ) const;
+
+    /**
+     * Visit all component pins in the database.
+     */
+    void VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const;
 
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,
