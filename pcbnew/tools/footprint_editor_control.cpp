@@ -826,7 +826,7 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
     
     try
     {
-        adapter->SaveFootprint( libName, tempFootprint, &m_frame->Prj() );
+        adapter->SaveFootprint( libName, tempFootprint, true );
         
         // Update the tree view
         wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( oldFPID );
