@@ -488,7 +488,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     if( aFill == FILL_T::NO_FILL )
         fmt::println( m_workFile, "S" );
     else if( aWidth == 0 )
-        fmt::println( m_workFile, "f" );
+        fmt::println( m_workFile, "h f" );
     else
         fmt::println( m_workFile, "b" );
 }
@@ -538,7 +538,7 @@ void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, in
     if( aFill == FILL_T::NO_FILL )
         fmt::println( m_workFile, "S" );
     else if( aWidth == 0 )
-        fmt::println( m_workFile, "f" );
+        fmt::println( m_workFile, "h f" );
     else
         fmt::println( m_workFile, "b" );
 }
