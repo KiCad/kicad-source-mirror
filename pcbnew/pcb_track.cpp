@@ -1842,16 +1842,9 @@ PCB_VIA::ValidateViaParameters( std::optional<int> aDiameter,
 
     if( aSecondaryDrill.has_value() )
     {
-        if( aSecondaryDrill.value() < GEOMETRY_MIN_SIZE )
+        if( aSecondaryDrill.value() < aPrimaryDrill.value_or( GEOMETRY_MIN_SIZE ) )
         {
             error.m_Message = _( "Backdrill diameter is too small." );
-            error.m_Field = VIA_PARAMETER_ERROR::FIELD::SECONDARY_DRILL;
-            return error;
-        }
-
-        if( aDiameter.has_value() && aDiameter.value() <= aSecondaryDrill.value() )
-        {
-            error.m_Message = _( "Backdrill diameter must be smaller than via diameter" );
             error.m_Field = VIA_PARAMETER_ERROR::FIELD::SECONDARY_DRILL;
             return error;
         }
@@ -1865,39 +1858,9 @@ PCB_VIA::ValidateViaParameters( std::optional<int> aDiameter,
 
     if( aTertiaryDrill.has_value() )
     {
-        if( aTertiaryDrill.value() < GEOMETRY_MIN_SIZE )
+        if( aTertiaryDrill.value() < aPrimaryDrill.value_or( GEOMETRY_MIN_SIZE ) )
         {
             error.m_Message = _( "Tertiary backdrill diameter is too small." );
-            error.m_Field = VIA_PARAMETER_ERROR::FIELD::TERTIARY_DRILL;
-            return error;
-        }
-
-        if( aDiameter.has_value() && aDiameter.value() <= aTertiaryDrill.value() )
-        {
-            error.m_Message = _( "Tertiary backdrill diameter must be smaller than via diameter" );
-            error.m_Field = VIA_PARAMETER_ERROR::FIELD::TERTIARY_DRILL;
-            return error;
-        }
-
-        if( !validateLayer( aTertiaryStartLayer, VIA_PARAMETER_ERROR::FIELD::TERTIARY_START_LAYER ) )
-            return error;
-
-        if( !validateLayer( aTertiaryEndLayer, VIA_PARAMETER_ERROR::FIELD::TERTIARY_END_LAYER ) )
-            return error;
-    }
-
-    if( aTertiaryDrill.has_value() )
-    {
-        if( aTertiaryDrill.value() < GEOMETRY_MIN_SIZE )
-        {
-            error.m_Message = _( "Tertiary backdrill diameter is too small." );
-            error.m_Field = VIA_PARAMETER_ERROR::FIELD::TERTIARY_DRILL;
-            return error;
-        }
-
-        if( aDiameter.has_value() && aDiameter.value() <= aTertiaryDrill.value() )
-        {
-            error.m_Message = _( "Tertiary backdrill diameter must be smaller than via diameter" );
             error.m_Field = VIA_PARAMETER_ERROR::FIELD::TERTIARY_DRILL;
             return error;
         }
@@ -2947,25 +2910,12 @@ static struct TRACK_VIA_DESC
                     if( via->Padstack().Drill().end != UNDEFINED_LAYER )
                         endLayer = via->Padstack().Drill().end;
 
-                    std::optional<int> secondaryDrill = via->GetSecondaryDrillSize();
-
-                    std::optional<PCB_LAYER_ID> secondaryStart;
-
-                    if( via->GetSecondaryDrillStartLayer() != UNDEFINED_LAYER )
-                        secondaryStart = via->GetSecondaryDrillStartLayer();
-
-                    std::optional<PCB_LAYER_ID> secondaryEnd;
-
-                    if( via->GetSecondaryDrillEndLayer() != UNDEFINED_LAYER )
-                        secondaryEnd = via->GetSecondaryDrillEndLayer();
-
                     int copperLayerCount = via->BoardCopperLayerCount();
 
                     if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
                                 PCB_VIA::ValidateViaParameters( diameter, drill, startLayer, endLayer,
-                                                                secondaryDrill, secondaryStart,
-                                                                secondaryEnd, std::nullopt,
-                                                                std::nullopt, std::nullopt,
+                                                                std::nullopt, std::nullopt, std::nullopt, // secondary drill
+                                                                std::nullopt, std::nullopt, std::nullopt, // tertiary drill
                                                                 copperLayerCount ) )
                     {
                         return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
@@ -3010,13 +2960,24 @@ static struct TRACK_VIA_DESC
                     if( via->GetSecondaryDrillEndLayer() != UNDEFINED_LAYER )
                         secondaryEnd = via->GetSecondaryDrillEndLayer();
 
+                    std::optional<int> tertiaryDrill = via->GetTertiaryDrillSize();
+
+                    std::optional<PCB_LAYER_ID> tertiaryStart;
+
+                    if( via->GetTertiaryDrillStartLayer() != UNDEFINED_LAYER )
+                        tertiaryStart = via->GetTertiaryDrillStartLayer();
+
+                    std::optional<PCB_LAYER_ID> tertiaryEnd;
+
+                    if( via->GetTertiaryDrillEndLayer() != UNDEFINED_LAYER )
+                        tertiaryEnd = via->GetTertiaryDrillEndLayer();
+
                     int copperLayerCount = via->BoardCopperLayerCount();
 
                     if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
                                 PCB_VIA::ValidateViaParameters( diameter, drill, startLayer, endLayer,
-                                                                secondaryDrill, secondaryStart,
-                                                                secondaryEnd, std::nullopt,
-                                                                std::nullopt, std::nullopt,
+                                                                secondaryDrill, secondaryStart, secondaryEnd,
+                                                                tertiaryDrill, tertiaryStart, tertiaryEnd,
                                                                 copperLayerCount ) )
                     {
                         return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
@@ -3066,9 +3027,8 @@ static struct TRACK_VIA_DESC
 
                     if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
                                 PCB_VIA::ValidateViaParameters( diameter, drill, layer, endLayer,
-                                                                secondaryDrill, secondaryStart,
-                                                                secondaryEnd, std::nullopt,
-                                                                std::nullopt, std::nullopt,
+                                                                secondaryDrill, secondaryStart, secondaryEnd,
+                                                                std::nullopt, std::nullopt, std::nullopt, // tertiary drill
                                                                 copperLayerCount ) )
                     {
                         return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );
@@ -3118,9 +3078,8 @@ static struct TRACK_VIA_DESC
 
                     if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
                                 PCB_VIA::ValidateViaParameters( diameter, drill, startLayer, layer,
-                                                                secondaryDrill, secondaryStart,
-                                                                secondaryEnd, std::nullopt,
-                                                                std::nullopt, std::nullopt,
+                                                                secondaryDrill, secondaryStart, secondaryEnd,
+                                                                std::nullopt, std::nullopt, std::nullopt, // tertiary drill
                                                                 copperLayerCount ) )
                     {
                         return std::make_unique<VALIDATION_ERROR_MSG>( error->m_Message );

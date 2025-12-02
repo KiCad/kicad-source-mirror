@@ -59,9 +59,10 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
     std::optional<int> viaDrill = m_viaDrill.GetIntValue();
 
     if( std::optional<PCB_VIA::VIA_PARAMETER_ERROR> error =
-                PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill, std::nullopt,
-                                                std::nullopt, std::nullopt, std::nullopt,
-                                                std::nullopt, 0 ) )
+                PCB_VIA::ValidateViaParameters( viaDiameter, viaDrill, std::nullopt, std::nullopt,
+                                                std::nullopt, std::nullopt, std::nullopt, // secondary drill
+                                                std::nullopt, std::nullopt, std::nullopt, // tertiary drill
+                                                0 ) )
     {
         DisplayError( GetParent(), error->m_Message );
 
