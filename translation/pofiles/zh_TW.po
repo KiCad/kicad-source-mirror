@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-02 22:36+0000\n"
-"Last-Translator: Vic <zz99681254z@gmail.com>\n"
+"PO-Revision-Date: 2025-12-03 07:50+0000\n"
+"Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -129,7 +129,7 @@ msgstr "上次算繪時間 %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "離螢幕算繪期間出現 OpenGL 錯誤：0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:963
 #, c-format
@@ -238,15 +238,13 @@ msgstr "3D 網格"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "旋轉"
+msgstr "旋轉電路板"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "上移電路板"
+msgstr "移動電路板"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -403,14 +401,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "複製目前 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "編輯圖片..."
+msgstr "匯出圖片..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "將目前視圖匯出為 PNG 圖檔"
+msgstr "將目前視圖匯出為圖片檔"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -1126,14 +1122,12 @@ msgid "(unsaved)"
 msgstr "(未儲存)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "選擇 3D 模型"
+msgstr "匯出 3D 視圖"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "圖像尺寸:"
+msgstr "影像尺寸"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
