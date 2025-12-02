@@ -33,6 +33,7 @@
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
 #include <search_stack.h>
+#include <widgets/grid_text_helpers.h>
 
 
 class wxGrid;
@@ -41,39 +42,7 @@ class DIALOG_SHIM;
 class EMBEDDED_FILES;
 
 
-class GRID_CELL_TEXT_BUTTON : public wxGridCellEditor
-{
-public:
-    GRID_CELL_TEXT_BUTTON() {};
-
-    wxString GetValue() const override;
-
-    void SetSize( const wxRect& aRect ) override;
-
-    void StartingKey( wxKeyEvent& event ) override;
-    void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
-    bool EndEdit( int , int , const wxGrid* , const wxString& , wxString *aNewVal ) override;
-    void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;
-    void Reset() override;
-
-#if wxUSE_VALIDATORS
-    void SetValidator( const wxValidator& validator );
-#endif
-
-protected:
-    wxComboCtrl* Combo() const { return static_cast<wxComboCtrl*>( m_control ); }
-
-#if wxUSE_VALIDATORS
-    std::unique_ptr< wxValidator > m_validator;
-#endif
-
-    wxString     m_value;
-
-    wxDECLARE_NO_COPY_CLASS( GRID_CELL_TEXT_BUTTON );
-};
-
-
-class GRID_CELL_SYMBOL_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
+class KICOMMON_API GRID_CELL_SYMBOL_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     GRID_CELL_SYMBOL_ID_EDITOR( DIALOG_SHIM* aParent,

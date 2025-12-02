@@ -98,9 +98,7 @@ bool GRID_TRICKS::isTextEntry( int aRow, int aCol )
     wxGridCellEditor* editor = m_grid->GetCellEditor( aRow, aCol );
     bool              retval = ( dynamic_cast<wxGridCellTextEditor*>( editor )
                               || dynamic_cast<GRID_CELL_STC_EDITOR*>( editor )
-                              || dynamic_cast<GRID_CELL_FPID_EDITOR*>( editor )
-                              || dynamic_cast<GRID_CELL_PATH_EDITOR*>( editor )
-                              || dynamic_cast<GRID_CELL_URL_EDITOR*>( editor ) );
+                              || dynamic_cast<GRID_CELL_TEXT_BUTTON*>( editor ) );
 
     editor->DecRef();
     return retval;
