@@ -955,11 +955,9 @@ void SCH_IO_KICAD_SEXPR::saveField( SCH_FIELD* aField )
     if( !aField->IsVisible() )
         KICAD_FORMAT::FormatBool( m_out, "hide", true );
 
-    if( aField->IsNameShown() )
-        KICAD_FORMAT::FormatBool( m_out, "show_name", true );
+    KICAD_FORMAT::FormatBool( m_out, "show_name", aField->IsNameShown() );
 
-    if( !aField->CanAutoplace() )
-        KICAD_FORMAT::FormatBool( m_out, "do_not_autoplace", true );
+    KICAD_FORMAT::FormatBool( m_out, "do_not_autoplace", !aField->CanAutoplace() );
 
     if( !aField->IsDefaultFormatting()
             || ( aField->GetTextHeight() != schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) ) )

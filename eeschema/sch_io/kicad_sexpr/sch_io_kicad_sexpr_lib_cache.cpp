@@ -515,11 +515,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
                                                            -aField->GetPosition().y ).c_str(),
                       fmt::format( "{:g}", aField->GetTextAngle().AsDegrees() ).c_str() );
 
-    if( aField->IsNameShown() )
-        aFormatter.Print( "(show_name)" );
+    KICAD_FORMAT::FormatBool( &aFormatter, "show_name", aField->IsNameShown() );
 
-    if( !aField->CanAutoplace() )
-        aFormatter.Print( "(do_not_autoplace)" );
+    KICAD_FORMAT::FormatBool( &aFormatter, "do_not_autoplace", !aField->CanAutoplace() );
 
     if( !aField->IsVisible() )
         KICAD_FORMAT::FormatBool( &aFormatter, "hide", true );

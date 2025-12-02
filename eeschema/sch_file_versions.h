@@ -57,7 +57,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250324  // Jumper pin groups
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250829  // Rounded Rectangles
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250901  // Stacked Pin notation
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250925  // Bus alias in Project File
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250925  // Bus alias in Project File
+#define SEXPR_SYMBOL_LIB_FILE_VERSION 20251024 // Updated properties formatting (do_not_autoplace, show_name)
 
 /**
  * Schematic file version.
@@ -131,4 +132,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250829  // Rounded Rectangles
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250901  // Stacked Pin notation
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250922  // Schematic variants.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20251012    // Flat schematic hierarchy support
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20251012  // Flat schematic hierarchy support
+#define SEXPR_SCHEMATIC_FILE_VERSION 20251028 // Updated properties formatting (do_not_autoplace, show_name)
