@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-30 11:00+0000\n"
+"PO-Revision-Date: 2025-12-02 11:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
-"master-source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
+"source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29484,12 +29484,10 @@ msgid "Pre-configured libraries"
 msgstr "Librerie pre-configurate"
 
 #: kicad/dialogs/template_default_html.h:85
-#, fuzzy
 msgid "- Common components and footprints already linked"
-msgstr "Per collegamento libreria impronte genitore:"
+msgstr "- Componenti comuni e impronte già collegate"
 
 #: kicad/dialogs/template_default_html.h:86
-#, fuzzy
 msgid "Design rules"
 msgstr "Regole di progettazione"
 
@@ -29498,18 +29496,16 @@ msgid "- Appropriate electrical and mechanical constraints"
 msgstr "- Vincoli elettrici e meccanici appropriati"
 
 #: kicad/dialogs/template_default_html.h:87
-#, fuzzy
 msgid "Layer stackups"
-msgstr "Stackup scheda"
+msgstr "Stackup strati"
 
 #: kicad/dialogs/template_default_html.h:87
 msgid "- Optimized for the intended application"
 msgstr "- Ottimizzati per l'applicazione prevista"
 
 #: kicad/dialogs/template_default_html.h:88
-#, fuzzy
 msgid "Component placement"
-msgstr "File di piazzamento componenti"
+msgstr "Piazzamento componenti"
 
 #: kicad/dialogs/template_default_html.h:88
 msgid "- Basic layout and routing guidelines"
@@ -29525,9 +29521,8 @@ msgid "- README files and design notes"
 msgstr "- File LEGGIMI e note di progettazione"
 
 #: kicad/dialogs/template_default_html.h:90
-#, fuzzy
 msgid "Manufacturing files"
-msgstr "Fabbricante:"
+msgstr "File di fabbricazione"
 
 #: kicad/dialogs/template_default_html.h:90
 msgid "- Gerber and drill file configurations"
@@ -29538,9 +29533,8 @@ msgid "Pro Tips"
 msgstr "Suggerimenti professionali"
 
 #: kicad/dialogs/template_default_html.h:95
-#, fuzzy
 msgid "Start Simple:"
-msgstr "Strato iniziale:"
+msgstr "Comincia semplice:"
 
 #: kicad/dialogs/template_default_html.h:95
 msgid "Begin with basic templates and add more elements as you go."
@@ -29549,9 +29543,8 @@ msgstr ""
 "procede."
 
 #: kicad/dialogs/template_default_html.h:96
-#, fuzzy
 msgid "Customize Later:"
-msgstr "Personalizza barre strumenti"
+msgstr "Personalizza dopo:"
 
 #: kicad/dialogs/template_default_html.h:96
 msgid ""
@@ -29562,9 +29555,8 @@ msgstr ""
 "disposizioni dopo la creazione del progetto."
 
 #: kicad/dialogs/template_default_html.h:97
-#, fuzzy
 msgid "Save Your Own:"
-msgstr "Salva log sbrogliatore"
+msgstr "Salvare il fatto:"
 
 #: kicad/dialogs/template_default_html.h:97
 msgid ""
@@ -29575,9 +29567,8 @@ msgstr ""
 "personalizzato per i progetti futuri."
 
 #: kicad/dialogs/template_default_html.h:130
-#, fuzzy
 msgid "Template"
-msgstr "Modelli personali"
+msgstr "Modello"
 
 #: kicad/dialogs/template_default_html.h:131
 msgid ""
@@ -29592,9 +29583,8 @@ msgid "To use this template:"
 msgstr "Per utilizzare questo modello:"
 
 #: kicad/dialogs/template_default_html.h:135
-#, fuzzy
 msgid "Create the project"
-msgstr "Crea nuovo progetto"
+msgstr "Crea il progetto"
 
 #: kicad/dialogs/template_default_html.h:135
 msgid ""
@@ -29605,9 +29595,8 @@ msgstr ""
 "popolata con il contenuto di questo modello."
 
 #: kicad/dialogs/template_default_html.h:136
-#, fuzzy
 msgid "Open schematic and PCB"
-msgstr "Apri schema"
+msgstr "Apri schema e circuito stampato"
 
 #: kicad/dialogs/template_default_html.h:136
 msgid ""
