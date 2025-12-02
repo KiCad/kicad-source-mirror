@@ -796,6 +796,7 @@ void SCH_PIN::PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition,
             || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
         const int deco_size = internalPinDecoSize( aPlotter->RenderSettings(), *this );
+
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             aPlotter->MoveTo( VECTOR2I( x1, y1 + deco_size ) );
@@ -871,8 +872,7 @@ void SCH_PIN::PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition,
 
 
 void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
-                            int aTextInside, bool aDrawPinNum, bool aDrawPinName,
-                            bool aDimmed ) const
+                            int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const
 {
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), false, false );
@@ -888,8 +888,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
 
     if( name.IsEmpty() || m_nameTextSize == 0 )
         aDrawPinName = false;
+
     if( number.IsEmpty() || m_numTextSize == 0 )
         aDrawPinNum = false;
+
     if( !aDrawPinNum && !aDrawPinName )
         return;
 
@@ -901,8 +903,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
     COLOR4D nameColor = settings->GetLayerColor( LAYER_PINNAM );
     COLOR4D numColor  = settings->GetLayerColor( LAYER_PINNUM );
     COLOR4D bg = settings->GetBackgroundColor();
+
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
+
     if( aDimmed )
     {
         nameColor.Desaturate();
@@ -913,6 +917,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
 
     int x1 = aPinPos.x;
     int y1 = aPinPos.y;
+
     switch( aPinOrient )
     {
     case PIN_ORIENTATION::PIN_UP:    y1 -= GetLength(); break;
@@ -922,155 +927,157 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
     default: break;
     }
 
-    auto plotSimpleText = [&]( int x, int y, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify,
-                               GR_TEXT_V_ALIGN_T vJustify, const wxString& txt, int size,
-                               int penWidth, const COLOR4D& col )
-    {
-        TEXT_ATTRIBUTES attrs;
-        attrs.m_StrokeWidth = penWidth;
-        attrs.m_Angle = angle;
-        attrs.m_Size = VECTOR2I( size, size );
-        attrs.m_Halign = hJustify;
-        attrs.m_Valign = vJustify;
-        attrs.m_Multiline = false; // we'll manage multi-line manually
-        aPlotter->PlotText( VECTOR2I( x, y ), col, txt, attrs, font, GetFontMetrics() );
-    };
-
-    auto plotMultiLineWithBraces = [&]( int anchorX, int anchorY, bool vertical, bool /*numberBlock*/ )
-    {
-        // If not multi-line formatted, just plot single line centered.
-        if( !number.StartsWith( "[" ) || !number.EndsWith( "]" ) || !number.Contains( "\n" ) )
-        {
-            plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                            GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, number,
-                            GetNumberTextSize(), numPenWidth, numColor );
-            return;
-        }
-
-        wxString content = number.Mid( 1, number.Length() - 2 );
-        wxArrayString lines;
-        wxStringSplit( content, lines, '\n' );
-
-        if( lines.size() <= 1 )
-        {
-            plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                            GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, content,
-                            GetNumberTextSize(), numPenWidth, numColor );
-            return;
-        }
-
-        int textSize = GetNumberTextSize();
-        int lineSpacing = KiROUND( textSize * 1.3 );
-        const KIFONT::METRICS& metrics = GetFontMetrics();
-
-        // Measure line widths for brace spacing
-        int maxLineWidth = 0;
-        for( const wxString& rawLine : lines )
-        {
-            wxString trimmed = rawLine; trimmed.Trim(true).Trim(false);
-            VECTOR2I ext = font->StringBoundaryLimits( trimmed, VECTOR2D( textSize, textSize ),
-                                                       GetPenSizeForNormal( textSize ), false, false, metrics );
-            if( ext.x > maxLineWidth )
-                maxLineWidth = ext.x;
-        }
-
-        // Determine starting position
-        int startX = anchorX;
-        int startY = anchorY;
-
-        if( vertical )
-        {
-            int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-            startX -= totalWidth;
-        }
-        else
-        {
-            int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-            startY -= totalHeight;
-        }
-
-        for( size_t i = 0; i < lines.size(); ++i )
-        {
-            wxString l = lines[i]; l.Trim( true ).Trim( false );
-            int lx = startX + ( vertical ? (int) i * lineSpacing : 0 );
-            int ly = startY + ( vertical ? 0 : (int) i * lineSpacing );
-            plotSimpleText( lx, ly, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
-                            GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, l,
-                            textSize, numPenWidth, numColor );
-        }
-
-        // Now draw braces emulating SCH_PAINTER brace geometry
-        auto plotBrace = [&]( const VECTOR2I& top, const VECTOR2I& bottom, bool leftOrTop, bool isVerticalText )
-        {
-            // Build 4 small segments approximating curly brace
-            VECTOR2I mid = ( top + bottom ) / 2;
-            int braceWidth = textSize / 3; // same scale as painter
-            VECTOR2I p1 = top;
-            VECTOR2I p5 = bottom;
-            VECTOR2I p2 = top;
-            VECTOR2I p3 = mid;
-            VECTOR2I p4 = bottom;
-            int offset = leftOrTop ? -braceWidth : braceWidth;
-
-            if( isVerticalText )
+    auto plotSimpleText =
+            [&]( int x, int y, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify, GR_TEXT_V_ALIGN_T vJustify,
+                 const wxString& txt, int size, int penWidth, const COLOR4D& col )
             {
-                // Text vertical => brace extends in Y (horizontal brace lines across X axis set)
-                // For vertical orientation we offset Y for p2/p3/p4
-                p2.y += offset / 2;
-                p3.y += offset;
-                p4.y += offset / 2;
-            }
-            else
+                TEXT_ATTRIBUTES attrs;
+                attrs.m_StrokeWidth = penWidth;
+                attrs.m_Angle = angle;
+                attrs.m_Size = VECTOR2I( size, size );
+                attrs.m_Halign = hJustify;
+                attrs.m_Valign = vJustify;
+                attrs.m_Multiline = false; // we'll manage multi-line manually
+                aPlotter->PlotText( VECTOR2I( x, y ), col, txt, attrs, font, GetFontMetrics() );
+            };
+
+    auto plotMultiLineWithBraces =
+            [&]( int anchorX, int anchorY, bool vertical, bool /*numberBlock*/ )
             {
-                // Horizontal text => brace extends in X
-                p2.x += offset / 2;
-                p3.x += offset;
-                p4.x += offset / 2;
-            }
+                // If not multi-line formatted, just plot single line centered.
+                if( !number.StartsWith( "[" ) || !number.EndsWith( "]" ) || !number.Contains( "\n" ) )
+                {
+                    plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
+                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, number,
+                                    GetNumberTextSize(), numPenWidth, numColor );
+                    return;
+                }
 
-            aPlotter->MoveTo( p1 ); aPlotter->FinishTo( p2 );
-            aPlotter->MoveTo( p2 ); aPlotter->FinishTo( p3 );
-            aPlotter->MoveTo( p3 ); aPlotter->FinishTo( p4 );
-            aPlotter->MoveTo( p4 ); aPlotter->FinishTo( p5 );
-        };
+                wxString content = number.Mid( 1, number.Length() - 2 );
+                wxArrayString lines;
+                wxStringSplit( content, lines, '\n' );
 
-        aPlotter->SetCurrentLineWidth( numPenWidth );
-        int braceWidth = textSize / 3;
-        int extraHeight = textSize / 3; // extend beyond text block
+                if( lines.size() <= 1 )
+                {
+                    plotSimpleText( anchorX, anchorY, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
+                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, content,
+                                    GetNumberTextSize(), numPenWidth, numColor );
+                    return;
+                }
 
-        if( vertical )
-        {
-            // Lines spaced horizontally, braces horizontal (above & below)
-            int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-            VECTOR2I braceStart( startX - 2 * extraHeight, anchorY );
-            VECTOR2I braceEnd( startX + totalWidth + extraHeight, anchorY );
-            int braceSpacing = maxLineWidth / 2 + braceWidth;
+                int textSize = GetNumberTextSize();
+                int lineSpacing = KiROUND( textSize * 1.3 );
+                const KIFONT::METRICS& metrics = GetFontMetrics();
 
-            VECTOR2I topStart = braceStart; topStart.y -= braceSpacing;
-            VECTOR2I topEnd   = braceEnd;   topEnd.y   -= braceSpacing;
-            VECTOR2I bottomStart = braceStart; bottomStart.y += braceSpacing;
-            VECTOR2I bottomEnd   = braceEnd;   bottomEnd.y   += braceSpacing;
+                // Measure line widths for brace spacing
+                int maxLineWidth = 0;
+                for( const wxString& rawLine : lines )
+                {
+                    wxString trimmed = rawLine; trimmed.Trim(true).Trim(false);
+                    VECTOR2I ext = font->StringBoundaryLimits( trimmed, VECTOR2D( textSize, textSize ),
+                                                               GetPenSizeForNormal( textSize ), false, false, metrics );
+                    if( ext.x > maxLineWidth )
+                        maxLineWidth = ext.x;
+                }
 
-            plotBrace( topStart, topEnd, true,  true );  // leftOrTop=true
-            plotBrace( bottomStart, bottomEnd, false, true );
-        }
-        else
-        {
-            // Lines spaced vertically, braces vertical (left & right)
-            int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-            VECTOR2I braceStart( anchorX, startY - 2 * extraHeight );
-            VECTOR2I braceEnd( anchorX, startY + totalHeight + extraHeight );
-            int braceSpacing = maxLineWidth / 2 + braceWidth;
+                // Determine starting position
+                int startX = anchorX;
+                int startY = anchorY;
 
-            VECTOR2I leftTop = braceStart;   leftTop.x  -= braceSpacing;
-            VECTOR2I leftBot = braceEnd;     leftBot.x  -= braceSpacing;
-            VECTOR2I rightTop = braceStart;  rightTop.x += braceSpacing;
-            VECTOR2I rightBot = braceEnd;    rightBot.x += braceSpacing;
+                if( vertical )
+                {
+                    int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
+                    startX -= totalWidth;
+                }
+                else
+                {
+                    int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
+                    startY -= totalHeight;
+                }
 
-            plotBrace( leftTop, leftBot, true,  false );
-            plotBrace( rightTop, rightBot, false, false );
-        }
-    };
+                for( size_t i = 0; i < lines.size(); ++i )
+                {
+                    wxString l = lines[i]; l.Trim( true ).Trim( false );
+                    int lx = startX + ( vertical ? (int) i * lineSpacing : 0 );
+                    int ly = startY + ( vertical ? 0 : (int) i * lineSpacing );
+                    plotSimpleText( lx, ly, vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL,
+                                    GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, l,
+                                    textSize, numPenWidth, numColor );
+                }
+
+                // Now draw braces emulating SCH_PAINTER brace geometry
+                auto plotBrace =
+                        [&]( const VECTOR2I& top, const VECTOR2I& bottom, bool leftOrTop, bool isVerticalText )
+                        {
+                            // Build 4 small segments approximating curly brace
+                            VECTOR2I mid = ( top + bottom ) / 2;
+                            int braceWidth = textSize / 3; // same scale as painter
+                            VECTOR2I p1 = top;
+                            VECTOR2I p5 = bottom;
+                            VECTOR2I p2 = top;
+                            VECTOR2I p3 = mid;
+                            VECTOR2I p4 = bottom;
+                            int offset = leftOrTop ? -braceWidth : braceWidth;
+
+                            if( isVerticalText )
+                            {
+                                // Text vertical => brace extends in Y (horizontal brace lines across X axis set)
+                                // For vertical orientation we offset Y for p2/p3/p4
+                                p2.y += offset / 2;
+                                p3.y += offset;
+                                p4.y += offset / 2;
+                            }
+                            else
+                            {
+                                // Horizontal text => brace extends in X
+                                p2.x += offset / 2;
+                                p3.x += offset;
+                                p4.x += offset / 2;
+                            }
+
+                            aPlotter->MoveTo( p1 ); aPlotter->FinishTo( p2 );
+                            aPlotter->MoveTo( p2 ); aPlotter->FinishTo( p3 );
+                            aPlotter->MoveTo( p3 ); aPlotter->FinishTo( p4 );
+                            aPlotter->MoveTo( p4 ); aPlotter->FinishTo( p5 );
+                        };
+
+                aPlotter->SetCurrentLineWidth( numPenWidth );
+                int braceWidth = textSize / 3;
+                int extraHeight = textSize / 3; // extend beyond text block
+
+                if( vertical )
+                {
+                    // Lines spaced horizontally, braces horizontal (above & below)
+                    int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
+                    VECTOR2I braceStart( startX - 2 * extraHeight, anchorY );
+                    VECTOR2I braceEnd( startX + totalWidth + extraHeight, anchorY );
+                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+
+                    VECTOR2I topStart = braceStart;     topStart.y -= braceSpacing;
+                    VECTOR2I topEnd   = braceEnd;       topEnd.y   -= braceSpacing;
+                    VECTOR2I bottomStart = braceStart;  bottomStart.y += braceSpacing;
+                    VECTOR2I bottomEnd   = braceEnd;    bottomEnd.y   += braceSpacing;
+
+                    plotBrace( topStart, topEnd, true,  true );  // leftOrTop=true
+                    plotBrace( bottomStart, bottomEnd, false, true );
+                }
+                else
+                {
+                    // Lines spaced vertically, braces vertical (left & right)
+                    int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
+                    VECTOR2I braceStart( anchorX, startY - 2 * extraHeight );
+                    VECTOR2I braceEnd( anchorX, startY + totalHeight + extraHeight );
+                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+
+                    VECTOR2I leftTop = braceStart;   leftTop.x  -= braceSpacing;
+                    VECTOR2I leftBot = braceEnd;     leftBot.x  -= braceSpacing;
+                    VECTOR2I rightTop = braceStart;  rightTop.x += braceSpacing;
+                    VECTOR2I rightBot = braceEnd;    rightBot.x += braceSpacing;
+
+                    plotBrace( leftTop, leftBot, true,  false );
+                    plotBrace( rightTop, rightBot, false, false );
+                }
+            };
 
     // Logic largely mirrors original single-line placement but calls multi-line path for numbers
     if( aTextInside )
@@ -1080,12 +1087,17 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             if( aDrawPinName )
             {
                 if( aPinOrient == PIN_ORIENTATION::PIN_RIGHT )
+                {
                     plotSimpleText( x1 + aTextInside, y1, ANGLE_HORIZONTAL, GR_TEXT_H_ALIGN_LEFT,
                                     GR_TEXT_V_ALIGN_CENTER, name, GetNameTextSize(), namePenWidth, nameColor );
+                }
                 else
+                {
                     plotSimpleText( x1 - aTextInside, y1, ANGLE_HORIZONTAL, GR_TEXT_H_ALIGN_RIGHT,
                                     GR_TEXT_V_ALIGN_CENTER, name, GetNameTextSize(), namePenWidth, nameColor );
+                }
             }
+
             if( aDrawPinNum )
                 plotMultiLineWithBraces( ( x1 + aPinPos.x ) / 2, y1 - num_offset, false, true );
         }
@@ -1094,16 +1106,22 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             if( aPinOrient == PIN_ORIENTATION::PIN_DOWN )
             {
                 if( aDrawPinName )
+                {
                     plotSimpleText( x1, y1 + aTextInside, ANGLE_VERTICAL, GR_TEXT_H_ALIGN_RIGHT,
                                     GR_TEXT_V_ALIGN_CENTER, name, GetNameTextSize(), namePenWidth, nameColor );
+                }
+
                 if( aDrawPinNum )
                     plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, true, true );
             }
             else // PIN_UP
             {
                 if( aDrawPinName )
+                {
                     plotSimpleText( x1, y1 - aTextInside, ANGLE_VERTICAL, GR_TEXT_H_ALIGN_LEFT,
                                     GR_TEXT_V_ALIGN_CENTER, name, GetNameTextSize(), namePenWidth, nameColor );
+                }
+
                 if( aDrawPinNum )
                     plotMultiLineWithBraces( x1 - num_offset, ( y1 + aPinPos.y ) / 2, true, true );
             }

@@ -1215,6 +1215,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 // Find the maximum line width to position braces
                 int maxLineWidth = 0;
                 KIFONT::FONT* font = aAttrs.m_Font;
+
                 if( !font )
                     font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
 
@@ -1223,8 +1224,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     wxString trimmedLine = line;
                     trimmedLine.Trim( true ).Trim( false );
                     VECTOR2I lineExtents = font->StringBoundaryLimits( trimmedLine, aAttrs.m_Size,
-                                                                      aAttrs.m_StrokeWidth, false, false,
-                                                                      KIFONT::METRICS() );
+                                                                       aAttrs.m_StrokeWidth, false, false,
+                                                                       KIFONT::METRICS() );
                     maxLineWidth = std::max( maxLineWidth, lineExtents.x );
                 }
 
@@ -1641,7 +1642,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 else
                 {
                     drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                     aPin->GetFontMetrics() );
+                                       aPin->GetFontMetrics() );
                     const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
