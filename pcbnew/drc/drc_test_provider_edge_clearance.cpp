@@ -135,6 +135,9 @@ void DRC_TEST_PROVIDER_EDGE_CLEARANCE::resolveSilkDisposition( BOARD_ITEM* aItem
             }
         }
 
+        if( !nearestEdge )
+            return;
+
         auto constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT, nearestEdge, aItem, UNDEFINED_LAYER );
         int  minClearance = constraint.GetValue().Min();
 
