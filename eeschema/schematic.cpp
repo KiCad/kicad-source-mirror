@@ -334,6 +334,8 @@ void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
         // Clear the virtual root's screen and add only the new sheet
         if( m_rootSheet->GetScreen() )
         {
+            // Don't free the sheet being added if it already exists in the screen
+            m_rootSheet->GetScreen()->Items().remove( aRootSheet );
             m_rootSheet->GetScreen()->Clear();
             m_rootSheet->GetScreen()->Append( aRootSheet );
         }
