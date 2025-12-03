@@ -61,6 +61,27 @@ static wxString FormatUnits( ALLEGRO::BOARD_UNITS aUnits, double aValue )
 }
 
 
+using NET_EXTRACTOR = std::function<std::optional<int>( const NET& aNet )>;
+
+const auto ExtractLinearFromNet( const VIEW_OBJS& aObj, NET_EXTRACTOR aNetExtractor ) -> wxString
+{
+    const NET* net = aObj.m_Net;
+
+    wxCHECK2( net, "" );
+
+    std::optional<int> optVal = aNetExtractor( *net );
+
+    if( optVal.has_value() )
+    {
+        return FormatUnits( aObj.m_Board->m_Header->m_BoardUnits, optVal.value() );
+    }
+    else
+    {
+        return "";
+    }
+}
+
+
 class LINE_FORMATTER
 {
 public:
@@ -335,6 +356,34 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
 
                         const wxString* name = net->GetName();
                         return name ? *name : "";
+                    },
+                    { VTYPE::NET },
+            },
+    },
+    {
+            "NET_MIN_LINE_WIDTH",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        return ExtractLinearFromNet( aObj,
+                                                     []( const NET& aNet ) -> std::optional<int>
+                                                     {
+                                                         return aNet.GetNetMinLineWidth();
+                                                     } );
+                    },
+                    { VTYPE::NET },
+            },
+    },
+    {
+            "NET_MAX_LINE_WIDTH",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        return ExtractLinearFromNet( aObj,
+                                                     []( const NET& aNet ) -> std::optional<int>
+                                                     {
+                                                         return aNet.GetNetMaxLineWidth();
+                                                     } );
                     },
                     { VTYPE::NET },
             },

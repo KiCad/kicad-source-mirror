@@ -221,18 +221,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x03:
     {
         const BLK_0x03& blk03 = BLK_DATA( aBlock, BLK_0x03 );
-
-        switch( blk03.m_SubType )
-        {
-        case 0x68: // SYM_LIBRARY_PATH, ?...
-            obj = std::make_unique<x03_TEXT>( blk03 );
-            break;
-        default:
-            // Unknown subtype
-            wxLogTrace( "ALLEGRO_EXTRACT", "Unknown BLK_0x03 subtype: 0x%02x", blk03.m_SubType );
-            break;
-        }
-
+        obj = std::make_unique<FIELD>( blk03 );
         break;
     }
     case 0x04:
@@ -542,11 +531,70 @@ bool TRACK::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-x03_TEXT::x03_TEXT( const BLK_0x03& aBlk ):
-    DB_OBJ( DB_OBJ::TYPE::x03_TEXT, aBlk.m_Key )
+FIELD::FIELD( const BLK_0x03& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::FIELD, aBlk.m_Key )
 {
-    // wxASSERT( aBlk.m_Substruct.is<std::string>() );
-    m_TextStr = std::get<std::string>( aBlk.m_Substruct );
+    m_SubType = aBlk.m_SubType;
+    m_Hdr1 = aBlk.m_Hdr1;
+    m_Hdr2 = aBlk.m_Hdr2;
+
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "FIELD::m_Next";
+
+    switch ( aBlk.m_SubType )
+    {
+    case 0x68:
+    {
+        m_FieldValue = wxString(std::get<std::string>( aBlk.m_Substruct ) );
+        break;
+    }
+    case 0x66:
+    {
+        m_FieldValue = std::get<uint32_t>( aBlk.m_Substruct );
+        break;
+    }
+    }
+}
+
+
+const wxString& FIELD::ExpectString() const
+{
+    try
+    {
+        return std::get<wxString>( m_FieldValue );
+    }
+    catch( const std::bad_variant_access& )
+    {
+        THROW_IO_ERROR( "FIELD::ExpectString: Field value is not a string" );
+    }
+}
+
+
+std::optional<int> FIELD_LIST::GetOptFieldExpectInt( uint16_t aFieldCode ) const
+{
+    for( const DB_OBJ* obj : m_Chain.m_Chain )
+    {
+        // Some chains can contain non-FIELD objects like 0x30
+        // not clear if that is always true
+        if( !obj || obj->GetType() != DB_OBJ::TYPE::FIELD)
+            continue;
+
+        const FIELD& field = static_cast<const FIELD&>( *obj );
+        if( field.m_Hdr1 == aFieldCode )
+        {
+            try
+            {
+                return std::get<uint32_t>( field.m_FieldValue );
+            }
+            catch( const std::bad_variant_access& )
+            {
+                THROW_IO_ERROR( wxString::Format( "FIELD code %#04x is not an integer (subtype: %#04x )", aFieldCode,
+                                                field.m_SubType ) );
+            }
+        }
+    }
+
+    return std::nullopt;
 }
 
 
@@ -870,8 +918,8 @@ const wxString* FOOTPRINT_DEF::GetLibPath() const
     if( m_SymLibPath.m_Target == nullptr )
         return nullptr;
 
-    const x03_TEXT& symLibPath = static_cast<const x03_TEXT&>( *m_SymLibPath.m_Target );
-    return &symLibPath.m_TextStr;
+    const FIELD& symLibPath = static_cast<const FIELD&>( *m_SymLibPath.m_Target );
+    return &symLibPath.ExpectString();
 }
 
 
@@ -951,11 +999,11 @@ FUNCTION_SLOT::FUNCTION_SLOT( const BLK_0x0F& aBlk ):
 
     m_CompDeviceType = wxString::FromUTF8( aBlk.m_CompDeviceType.data() );
 
-    m_Ptr0x06.m_TargetKey = aBlk.m_Ptr0x06;
-    m_Ptr0x06.m_DebugName = "FUNCTION_SLOT::m_Ptr0x06";
+    m_Component.m_TargetKey = aBlk.m_Ptr0x06;
+    m_Component.m_DebugName = "FUNCTION_SLOT::m_Component";
 
-    m_Ptr0x11.m_TargetKey = aBlk.m_Ptr0x11;
-    m_Ptr0x11.m_DebugName = "FUNCTION_SLOT::m_Ptr0x11";
+    m_PinName.m_TargetKey = aBlk.m_Ptr0x11;
+    m_PinName.m_DebugName = "FUNCTION_SLOT::m_PinName";
 }
 
 
@@ -964,8 +1012,8 @@ bool FUNCTION_SLOT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_SlotName.Resolve( aResolver );
-    ok &= m_Ptr0x06.Resolve( aResolver );
-    ok &= m_Ptr0x11.Resolve( aResolver );
+    ok &= m_Component.Resolve( aResolver );
+    ok &= m_PinName.Resolve( aResolver );
 
     return ok;
 }
@@ -1031,7 +1079,8 @@ const FUNCTION_SLOT& FUNCTION_INSTANCE::GetFunctionSlot() const
 
 
 NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
-    DB_OBJ( DB_OBJ::TYPE::NET, aBlk.m_Key )
+    DB_OBJ( DB_OBJ::TYPE::NET, aBlk.m_Key ),
+    m_Fields( m_FieldsChain)
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     m_Next.m_EndKey = aBrd.m_Header->m_LL_0x1B_Nets.m_Tail;
@@ -1048,6 +1097,18 @@ NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
         return netAssign.m_Next.m_TargetKey;
     };
     m_NetAssignments.m_DebugName = "NET::m_NetAssignments";
+
+    m_FieldsChain.m_Head = aBlk.m_FieldsPtr;
+    m_FieldsChain.m_Tail = aBlk.m_Key;
+    m_FieldsChain.m_NextKeyGetter = []( const DB_OBJ& aObj )
+    {
+        if( aObj.GetType() != DB_OBJ::TYPE::FIELD )
+            return 0U;
+
+        const FIELD& field = static_cast<const FIELD&>( aObj );
+        return field.m_Next.m_TargetKey;
+    };
+    m_FieldsChain.m_DebugName = "NET::m_Fields";
 }
 
 
@@ -1058,7 +1119,7 @@ bool NET::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     ok &= m_Next.Resolve( aResolver );
     ok &= m_NetNameStr.Resolve( aResolver );
     ok &= m_NetAssignments.Resolve( aResolver );
-
+    ok &= m_FieldsChain.Resolve( aResolver );
     return ok;
 }
 
@@ -1066,6 +1127,18 @@ bool NET::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 const wxString* NET::GetName() const
 {
     return m_NetNameStr.m_String;
+}
+
+
+std::optional<int> NET::GetNetMinLineWidth() const
+{
+    return m_Fields.GetOptFieldExpectInt( 0x55 );
+}
+
+
+std::optional<int> NET::GetNetMaxLineWidth() const
+{
+    return m_Fields.GetOptFieldExpectInt( 0x173 );
 }
 
 
@@ -1400,9 +1473,6 @@ void BRD_DB::VisitConnectedGeometry( VIEW_OBJS_VISITOR aVisitor ) const
         //     wxLogTrace( "ALLEGRO_EXTRACT", "  Net %#010x has no assignment, skipping", net.GetKey() );
         //     return;
         // }
-
-
-
     };
 
     VisitNets( netVisitor );

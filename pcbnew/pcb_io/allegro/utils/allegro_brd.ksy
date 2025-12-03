@@ -520,6 +520,29 @@ types:
 
           - Description in 0x2D FP_INSTANCE, hdr1 = 0x3e80, hdr2 = 0x00
               Capacitor,Aluminum Electrolytic;6.60mm L X 6.60mm W X 7.70mm H
+
+      - Subtype 0x64
+          - ?? hdr1: 0x2f2, hdr2: 0x00 (eg. val 0x2,3,15,16,17)
+          - ?? hdr1: 0x354, hdr2: 0x00 (eg. val 0x15f90)
+
+      - Subtype 0x66 (int? length?)
+          - NET_MIN_LINE_WIDTH:         hdr1: 0x55, hdr2: 0x00   (I think these are the right order)_
+          - NET_MAX_LINE_WIDTH:         hdr1: 0x173, hdr2: 0x00
+          - NET_MIN_NECK_WIDTH:         hdr1: 0x5c, hdr2: 0x00
+          - NET_MAX_NECK_LENGTH(?):     hdr1: 0x1fb, hdr2: 0x00
+
+          - ?? hdr1: 0x250, hdr2: 0x00 (eg. val 0x08)
+          - ?? hdr1: 0x261, hdr2: 0x00 (eg. val 0x08)
+
+      - Subtype 0x6c - some kind of list of items
+
+          - ?? hdr1: 0x2f1, hdr2: 0x00
+          - ?? hdr1: 0x2f4, hdr2: 0x00
+
+      - Subtype 0x73 - binary??
+
+          - ?? hdr1: 0x2f3, hdr2: 0x00
+
     seq:
       - type: u1
       - id: unknown_hdr1
@@ -1296,7 +1319,7 @@ types:
         type: u4
         doc: |
           Points to 0x23 (ratline)
-      - id: path_str_ptr
+      - id: fields
         type: u4
         doc: |
           Points to 0x03 (not to a string ID)
@@ -1990,10 +2013,10 @@ types:
         type: u4
         doc: |
           Points to a 0x37 or 0x3c
-      - id: ptr_2
+      - id: ptr_fields
         type: u4
         doc: |
-          Null?
+          Points to a list of 0x03 fields
       - id: ptr_3
         type: u4
         doc: |

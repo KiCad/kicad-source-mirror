@@ -434,13 +434,16 @@ struct BLK_0x03
         std::array<uint32_t, 20> m_Entries;
     };
 
+    uint16_t m_Hdr1;
+
     uint32_t m_Key;
     uint32_t m_Next;
+
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
     uint8_t  m_SubType;
-    uint8_t  m_UnknownByte;
+    uint8_t  m_Hdr2;
     uint16_t m_Size;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
@@ -842,7 +845,8 @@ struct BLK_0x1B_NET
 
     uint32_t m_Assignment;
     uint32_t m_Ratline;
-    uint32_t m_PathStrPtr;
+    ///< Pointer to first 0x03 FIELD object or null
+    uint32_t m_FieldsPtr;
     uint32_t m_UnknownPtr3;
     uint32_t m_ModelPtr;
     uint32_t m_UnknownPtr4;

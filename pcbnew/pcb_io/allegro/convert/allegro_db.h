@@ -155,7 +155,7 @@ struct DB_OBJ
     enum class TYPE
     {
         ARC,
-        x03_TEXT,       // 0x03 subtype 0x68...
+        FIELD,          // 0x03 subtype 0x68...
         TRACK,          // 0x05
         NET_ASSIGN,     // 0x04
         COMPONENT,      // 0x06
@@ -306,15 +306,27 @@ struct ARC : public DB_OBJ
 
 
 /**
- * 0x03 subtype 0x68
+ * 0x03 FIELD objects
+ *
+ * These can be of several subtypes
  */
-struct x03_TEXT : public DB_OBJ
+struct FIELD : public DB_OBJ
 {
-    x03_TEXT( const BLK_0x03& aBlk );
+    FIELD( const BLK_0x03& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override { return true; }
 
-    wxString m_TextStr;
+    uint8_t m_SubType;
+    DB_REF  m_Next;
+
+    // Unclear if just hdr1 or both are needed for a complete field type determination
+    uint32_t m_Hdr1;
+    uint32_t m_Hdr2;
+
+    std::variant<wxString, uint32_t> m_FieldValue;
+
+    // Expects that the field contains a string and returns it
+    const wxString& ExpectString() const;
 };
 
 
@@ -441,8 +453,8 @@ struct FUNCTION_SLOT : public DB_OBJ
     wxString m_CompDeviceType;
 
     DB_REF m_NextSlot;
-    DB_REF m_Ptr0x06;
-    DB_REF m_Ptr0x11;
+    DB_REF m_Component;
+    DB_REF m_PinName;
 
     const wxString* GetName() const;
 };
@@ -522,6 +534,29 @@ struct LINE : public DB_OBJ
 
 
 /**
+ * A field list is a linked list of 0x03. This class adds accessors for
+ * picking out specific fields by subtype/code
+ */
+class FIELD_LIST
+{
+public:
+    FIELD_LIST( DB_REF_CHAIN& aChain ) :
+            m_Chain( aChain )
+    {
+    }
+
+    /**
+     * Get the integer value of the field with the given code, if in the list.
+     *
+     * If found, it is expected to be an integer field.
+     */
+    std::optional<int> GetOptFieldExpectInt( uint16_t aFieldCode ) const;
+
+private:
+    DB_REF_CHAIN& m_Chain;
+};
+
+/**
  * 0x1B NET objects
  */
 struct NET : public DB_OBJ
@@ -535,7 +570,13 @@ struct NET : public DB_OBJ
     // Not clear if this is ever not 1 entry, but 0x04s have a next field
     DB_REF_CHAIN m_NetAssignments;
 
+    DB_REF_CHAIN m_FieldsChain;
+    FIELD_LIST   m_Fields; // wrapper
+
     const wxString* GetName() const;
+
+    std::optional<int> GetNetMinLineWidth() const;
+    std::optional<int> GetNetMaxLineWidth() const;
 };
 
 

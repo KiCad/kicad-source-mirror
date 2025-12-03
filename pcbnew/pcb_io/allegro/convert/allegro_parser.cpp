@@ -304,15 +304,16 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
 
     auto& data = block->GetData();
 
-    aStream.Skip( 3 );
+    aStream.Skip( 1 );
 
+    data.m_Hdr1 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown1 );
 
     data.m_SubType = aStream.ReadU8();
-    data.m_UnknownByte = aStream.ReadU8();
+    data.m_Hdr2 = aStream.ReadU8();
     data.m_Size = aStream.ReadU16();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
@@ -871,7 +872,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT
     data.m_Type = stream.ReadU32();
     data.m_Assignment = stream.ReadU32();
     data.m_Ratline = stream.ReadU32();
-    data.m_PathStrPtr = stream.ReadU32();
+    data.m_FieldsPtr = stream.ReadU32();
     data.m_UnknownPtr3 = stream.ReadU32();
     data.m_ModelPtr = stream.ReadU32();
     data.m_UnknownPtr4 = stream.ReadU32();

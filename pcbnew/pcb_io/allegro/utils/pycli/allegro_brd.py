@@ -701,7 +701,7 @@ class AllegroBrd(KaitaiStruct):
         All tables have one of thes, but there appear to be others too,
         some to do with dimensions.
         """
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_1", "unknown_2", "unknown_3", "subclass_str", "unknown_4", "ptr_1", "ptr_2", "ptr_3", "flags"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "unknown_1", "unknown_2", "unknown_3", "subclass_str", "unknown_4", "ptr_1", "ptr_fields", "ptr_3", "flags"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -748,9 +748,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr_1']['start'] = self._io.pos()
             self.ptr_1 = self._io.read_u4le()
             self._debug['ptr_1']['end'] = self._io.pos()
-            self._debug['ptr_2']['start'] = self._io.pos()
-            self.ptr_2 = self._io.read_u4le()
-            self._debug['ptr_2']['end'] = self._io.pos()
+            self._debug['ptr_fields']['start'] = self._io.pos()
+            self.ptr_fields = self._io.read_u4le()
+            self._debug['ptr_fields']['end'] = self._io.pos()
             self._debug['ptr_3']['start'] = self._io.pos()
             self.ptr_3 = self._io.read_u4le()
             self._debug['ptr_3']['end'] = self._io.pos()
@@ -2703,6 +2703,28 @@ class AllegroBrd(KaitaiStruct):
         
             - Description in 0x2D FP_INSTANCE, hdr1 = 0x3e80, hdr2 = 0x00
                 Capacitor,Aluminum Electrolytic;6.60mm L X 6.60mm W X 7.70mm H
+        
+        - Subtype 0x64
+            - ?? hdr1: 0x2f2, hdr2: 0x00 (eg. val 0x2,3,15,16,17)
+            - ?? hdr1: 0x354, hdr2: 0x00 (eg. val 0x15f90)
+        
+        - Subtype 0x66 (int? length?)
+            - NET_MIN_LINE_WIDTH:         hdr1: 0x55, hdr2: 0x00
+            - NET_MAX_LINE_WIDTH:         hdr1: 0x173, hdr2: 0x00
+            - NET_MIN_NECK_WIDTH:         hdr1: 0x5c, hdr2: 0x00
+            - NET_MAX_NECK_LENGTH(?):     hdr1: 0x1fb, hdr2: 0x00
+        
+            - ?? hdr1: 0x250, hdr2: 0x00 (eg. val 0x08)
+            - ?? hdr1: 0x261, hdr2: 0x00 (eg. val 0x08)
+        
+        - Subtype 0x6c - some kind of list of items
+        
+            - ?? hdr1: 0x2f1, hdr2: 0x00
+            - ?? hdr1: 0x2f4, hdr2: 0x00
+        
+        - Subtype 0x73 - binary??
+        
+            - ?? hdr1: 0x2f3, hdr2: 0x00
         """
         SEQ_FIELDS = ["_unnamed0", "unknown_hdr1", "key", "next", "unknown_1", "subtype", "unknown_hdr2", "size", "unknown_2", "data"]
         def __init__(self, _io, _parent=None, _root=None):

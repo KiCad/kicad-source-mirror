@@ -66,6 +66,10 @@ NET
     NET_STATUS
     NET_CAPACITANCE
     NET_ETCH_LENGTH
+    NET_MIN_LINE_WIDTH
+    NET_MAX_LINE_WIDTH
+    NET_MIN_NECK_WIDTH
+    #NET_MAX_NECK_LENGTH ?? wrong key - what key for this??
 END
 
 

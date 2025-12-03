@@ -158,6 +158,23 @@ class AllegroBoard:
 
             return value
 
+        def field_name(self, hdr1, hdr2):
+
+            v = (hdr1, hdr2)
+
+            if v == (0x55, 0x00):
+                return "NET_MIN_LINE_WIDTH"
+            elif v == (0x173, 0x00):
+                return "NET_MAX_LINE_WIDTH"
+            elif v == (0x5c, 0x00):
+                return "NET_MIN_NECK_WIDTH"
+            elif v == (0x1fb, 0x00):
+                # Not clear what the key is supposed to be here
+                return "NET_MAX_NECK_LENGTH(?)"
+
+            return None
+
+
         def get_obj_peek_data(self, key_val) -> str:
             """
             Get a short string representation of the object pointed to by key_val.
@@ -180,7 +197,12 @@ class AllegroBoard:
                 else:
                     value_detail = "<unknown>"
 
-                type_str = f"{type_str}, subtype: {obj.data.subtype:#04x}, hdr1: {obj.data.unknown_hdr1:#04x}, hdr2: {obj.data.unknown_hdr2:#04x}"
+                type_str = f"{type_str}"
+
+                if field_name := self.field_name(obj.data.unknown_hdr1, obj.data.unknown_hdr2):
+                    type_str += f", {field_name}"
+
+                type_str += f", subtype: {obj.data.subtype:#04x}, hdr1: {obj.data.unknown_hdr1:#04x}, hdr2: {obj.data.unknown_hdr2:#04x}"
 
             elif obj.type == 0x07:
                 value_detail = f"'{self.board.string(obj.data.ref_des_ref)}'"
@@ -378,6 +400,13 @@ class AllegroBoard:
 
             if d.subtype in [0x68, 0x6B, 0x6D, 0x6E, 0x6F, 0x71, 0x78]:
                 prntr.print_v("string data", d.data)
+            elif d.subtype in [0x64, 0x66, 0x67, 0x6A]:
+                prntr.print_v("u32 data", d.data.val, as_hex=True)
+            elif d.subtype in [0x6c]:
+                prntr.print_v("num_entries", d.data)
+                for( i, entry) in enumerate(d.data.entries):
+                    prntr.print_v(f" - Entry {i}", entry, as_hex=True)
+
             elif d.subtype in [0x73]:
                 # binary data?
                 prntr.print_bytes("data", d.data.chars)
@@ -562,8 +591,6 @@ class AllegroBoard:
             prntr.print_ptr("next", d)
             prntr.print_s("Net", d.net_name)
 
-            prntr.print_ptr("Path str", d.path_str_ptr)
-            prntr.print_ptr("Model str", d.model_ptr)
             prntr.print_ptr("Assignments", d.assignments)
             prntr.print_ptr("Ptr2", d.ptr2)
             prntr.print_ptr("Ptr4", d.ptr4)
@@ -575,6 +602,10 @@ class AllegroBoard:
             prntr.print_v("unknown_2", d)
             prntr.print_v("unknown_3", d)
             prntr.print_v("unknown_4", d)
+
+            prntr.print_ptr("Fields?", d.path_str_ptr)
+            if( d.path_str_ptr != 0):
+                prntr.print_x03_chain(d.path_str_ptr, d.key)
 
         elif t == 0x1c: # Padstack
             prntr.print_ptr("next", d)
@@ -749,7 +780,6 @@ class AllegroBoard:
             prntr.print_ptr("next", d.next)
             prntr.print_v("flags", d.flags)
             prntr.print_ptr("ptr_1", d.ptr_1)
-            prntr.print_ptr("ptr_2", d.ptr_2)
             prntr.print_ptr("ptr_3", d.ptr_3)
             prntr.print_s("subclass_str", d.subclass_str)
 
@@ -757,6 +787,10 @@ class AllegroBoard:
             prntr.print_v("unknown_2", d)
             prntr.print_v("unknown_3", d)
             prntr.print_v("unknown_4", d)
+
+            prntr.print_ptr("ptr_fields", d.ptr_fields)
+            if d.ptr_fields != 0:
+                prntr.print_x03_chain(d.ptr_fields, d.key)
 
         elif t == 0x2d:
             prntr.print_ptr("next", d.next)
