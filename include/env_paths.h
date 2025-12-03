@@ -31,6 +31,7 @@
 
 #include <wx/string.h>
 #include <settings/environment.h>
+#include <kicommon.h>
 
 class wxFileName;
 class PROJECT;
@@ -44,7 +45,7 @@ class PROJECT;
  * @return Normalized full file path (path and file name) if succeeded or the input path if
  *         the path could not be normalized.
  */
-wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
+wxString KICOMMON_API NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
                         const PROJECT* aProject );
 
 /**
@@ -56,7 +57,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
  * @return Normalized full file path (path and file name) if succeeded or the input path if
  *         the path could not be normalized.
  */
-wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
+wxString KICOMMON_API NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
                         const wxString& aProjectPath );
 
 /**
@@ -68,7 +69,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
  * @return Full path (path and file name) if the file was found in one of the paths, otherwise
  *         an empty string.
  */
-wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
+wxString KICOMMON_API ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
                       const PROJECT* aProject );
 
 #endif /* ENV_PATHS_H */

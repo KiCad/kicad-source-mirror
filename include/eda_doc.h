@@ -31,6 +31,8 @@
 #ifndef __INCLUDE__EDA_DOC_H__
 #define __INCLUDE__EDA_DOC_H__ 1
 
+#include <kicommon.h>
+
 class EMBEDDED_FILES;
 
 /**
@@ -44,7 +46,7 @@ class EMBEDDED_FILES;
  * @param aDocName filename of file to open (Full filename or short filename).
  * @param aPaths Additional paths to search for local disk datasheet files
 */
-bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
+bool KICOMMON_API GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
                             SEARCH_STACK* aPaths = nullptr,
                             std::vector<EMBEDDED_FILES*> aFilesStack = {} );
 

@@ -180,6 +180,8 @@ set( KICOMMON_SRCS
     grid_tricks.cpp
     widgets/aui_json_serializer.cpp
     widgets/bitmap_button.cpp
+    widgets/grid_icon_text_helpers.cpp
+    widgets/grid_text_button_helpers.cpp
     widgets/grid_text_helpers.cpp
     widgets/html_window.cpp
     widgets/indicator_icon.cpp
@@ -217,8 +219,11 @@ set( KICOMMON_SRCS
     dpi_scaling.cpp
     dpi_scaling_common.cpp
     dsnlexer.cpp
+    eda_doc.cpp
     eda_pattern_match.cpp
     eda_units.cpp
+    embedded_files.cpp
+    env_paths.cpp
     env_vars.cpp
     exceptions.cpp
     gestfich.cpp
@@ -538,8 +543,6 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_checkbox.cpp
     widgets/grid_color_swatch_helpers.cpp
     widgets/grid_combobox.cpp
-    widgets/grid_icon_text_helpers.cpp
-    widgets/grid_text_button_helpers.cpp
     widgets/wx_infobar.cpp
     widgets/layer_box_selector.cpp
     widgets/layer_presentation.cpp
@@ -686,14 +689,11 @@ set( COMMON_SRCS
     gr_text.cpp
     eda_base_frame.cpp
     eda_dde.cpp
-    eda_doc.cpp
     eda_draw_frame.cpp
     eda_group.cpp
     eda_item.cpp
     eda_shape.cpp
     eda_text.cpp
-    embedded_files.cpp
-    env_paths.cpp
     executable_names.cpp
     filename_resolver.cpp
     file_history.cpp

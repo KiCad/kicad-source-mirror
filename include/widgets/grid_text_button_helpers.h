@@ -34,6 +34,7 @@
 #include <wx/generic/grideditors.h>
 #include <search_stack.h>
 #include <widgets/grid_text_helpers.h>
+#include <kicommon.h>
 
 
 class wxGrid;
@@ -64,7 +65,7 @@ protected:
 };
 
 
-class GRID_CELL_FPID_EDITOR : public GRID_CELL_TEXT_BUTTON
+class KICOMMON_API GRID_CELL_FPID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     GRID_CELL_FPID_EDITOR( DIALOG_SHIM* aParent, const wxString& aSymbolNetlist,
@@ -88,7 +89,7 @@ protected:
 };
 
 
-class GRID_CELL_URL_EDITOR : public GRID_CELL_TEXT_BUTTON
+class KICOMMON_API GRID_CELL_URL_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     GRID_CELL_URL_EDITOR( DIALOG_SHIM* aParent, SEARCH_STACK* aSearchStack = nullptr,
@@ -115,7 +116,7 @@ protected:
 /**
  *  Editor for wxGrid cells that adds a file/folder browser to the grid input field
  */
-class GRID_CELL_PATH_EDITOR : public GRID_CELL_TEXT_BUTTON
+class KICOMMON_API GRID_CELL_PATH_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     /**
@@ -200,7 +201,7 @@ protected:
 * The function has the signature (int, int) -> void. The passed parameters are the (row, col) of the
 * clicked grid cell
 */
-class GRID_CELL_RUN_FUNCTION_EDITOR : public GRID_CELL_TEXT_BUTTON, public GRID_CELL_NULLABLE_INTERFACE
+class KICOMMON_API GRID_CELL_RUN_FUNCTION_EDITOR : public GRID_CELL_TEXT_BUTTON, public GRID_CELL_NULLABLE_INTERFACE
 {
 public:
     GRID_CELL_RUN_FUNCTION_EDITOR( DIALOG_SHIM* aParent, const std::function<void( int, int )> aFunction,

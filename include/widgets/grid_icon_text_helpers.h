@@ -29,6 +29,7 @@
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
 #include <vector>
+#include <kicommon.h>
 
 class wxGrid;
 enum class BITMAPS : unsigned int;
@@ -36,7 +37,7 @@ enum class BITMAPS : unsigned int;
 
 //---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
 
-class GRID_CELL_ICON_TEXT_RENDERER : public wxGridCellStringRenderer
+class KICOMMON_API GRID_CELL_ICON_TEXT_RENDERER : public wxGridCellStringRenderer
 {
 public:
     /**
@@ -71,7 +72,7 @@ private:
 //
 // Note: use with read only cells
 
-class GRID_CELL_ICON_RENDERER : public wxGridCellRenderer
+class KICOMMON_API GRID_CELL_ICON_RENDERER : public wxGridCellRenderer
 {
 public:
     GRID_CELL_ICON_RENDERER( const wxBitmap& icon );
@@ -90,7 +91,7 @@ private:
 //
 // Note: use with read only cells
 
-class GRID_CELL_STATUS_ICON_RENDERER : public wxGridCellRenderer
+class KICOMMON_API GRID_CELL_STATUS_ICON_RENDERER : public wxGridCellRenderer
 {
 public:
     GRID_CELL_STATUS_ICON_RENDERER( int aStatus );
@@ -112,7 +113,7 @@ private:
 //
 // Note: this implementation is an adaptation of wxGridCellChoiceEditor
 
-class GRID_CELL_ICON_TEXT_POPUP : public wxGridCellEditor
+class KICOMMON_API GRID_CELL_ICON_TEXT_POPUP : public wxGridCellEditor
 {
 public:
     GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAPS>& icons, const wxArrayString& names );

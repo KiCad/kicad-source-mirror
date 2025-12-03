@@ -21,8 +21,9 @@
 
 #include <embedded_files.h>
 #include <embedded_files_lexer.h>
+#include <kicommon.h>
 
-class EMBEDDED_FILES_PARSER : public EMBEDDED_FILES_LEXER
+class KICOMMON_API EMBEDDED_FILES_PARSER : public EMBEDDED_FILES_LEXER
 {
 public:
     EMBEDDED_FILES_PARSER( LINE_READER* aReader ) :

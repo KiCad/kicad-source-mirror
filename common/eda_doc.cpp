@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
+#include <eda_doc.h>
 #include <embedded_files.h>
 #include <gestfich.h>
 #include <settings/common_settings.h>

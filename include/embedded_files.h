@@ -29,6 +29,7 @@
 #include <picosha2.h>
 #include <wildcards_and_files_ext.h>
 #include <functional>
+#include <kicommon.h>
 
 class OUTPUTFORMATTER;
 
@@ -37,7 +38,7 @@ namespace KIFONT
     class OUTLINE_FONT;
 }
 
-class EMBEDDED_FILES
+class KICOMMON_API EMBEDDED_FILES
 {
 public:
     struct EMBEDDED_FILE
