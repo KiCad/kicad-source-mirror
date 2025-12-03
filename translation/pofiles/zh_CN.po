@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-29 10:00+0000\n"
+"PO-Revision-Date: 2025-12-03 07:50+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -19131,7 +19131,7 @@ msgstr "创建 '%s' 的副本 (&D)"
 
 #: eeschema/picksymbol.cpp:179
 msgid "Swap Units"
-msgstr "交换单位"
+msgstr "交换单元"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20735,7 +20735,7 @@ msgstr "重复项目 %s%s%s\n"
 #: eeschema/sch_reference_list.cpp:717
 #, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "项目 %s%s%s 和 %s%s%s 的不同单位数量\n"
+msgstr "项目 %s%s%s 和 %s%s%s 的单元数量不同\n"
 
 #: eeschema/sch_reference_list.cpp:733
 #, c-format
@@ -22691,11 +22691,11 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:268
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr "<b> A 电源符号应当只有一个单位</b><br><br>"
+msgstr "<b> 电源符号只应有一个单元</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:274
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr "<b>A 电源符号应该只有一个引脚</b><br><br>"
+msgstr "<b>电源符号只应有一个引脚</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:283
 msgid ""
