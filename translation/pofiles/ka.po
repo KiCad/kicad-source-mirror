@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-02 11:00+0000\n"
+"PO-Revision-Date: 2025-12-03 07:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -32304,7 +32304,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:41
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "დიახ, დაცერებით"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:45
 msgid "Options for edge card connectors."
@@ -32391,7 +32391,7 @@ msgstr "მომხმარებლის..."
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:549
 msgid "Copper layers:"
-msgstr ""
+msgstr "სპილენძის ფენები:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
@@ -32460,7 +32460,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr ""
+msgstr "იმპედანსი მართულია"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -32499,31 +32499,31 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL ტყვიის გარეშე"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:42
 msgid "Hard gold"
-msgstr ""
+msgstr "მაგარი ოქრო"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 msgid "Immersion tin"
-msgstr ""
+msgstr "Immersion tin"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion nickel"
-msgstr ""
+msgstr "Immersion nickel"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion silver"
-msgstr ""
+msgstr "Immersion silver"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion gold"
-msgstr ""
+msgstr "Immersion gold"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
@@ -32577,11 +32577,11 @@ msgstr "ყვითელი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 ბუნებრივი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE ბუნებრივი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
@@ -32589,7 +32589,7 @@ msgstr "პოლიიმიდი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "ფენოლური ბუნებრივი"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
@@ -32971,7 +32971,7 @@ msgstr ""
 
 #: pcbnew/connectivity/connectivity_data.cpp:110
 msgid "Updating nets..."
-msgstr ""
+msgstr "ქსელების განახლება..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:417
 msgid "(multiple board outlines not supported)"
@@ -33116,7 +33116,7 @@ msgstr "(ამოღებული)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:113
 msgid "Reannotate PCB"
-msgstr ""
+msgstr "ნაბეჭდი დაფის თავიდან ანოტაცია"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:218
 msgid "PCB successfully reannotated"
@@ -33184,7 +33184,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "მივანიჭო ანოტაციები თავიდან მაინც?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:587
 #, c-format
@@ -33201,7 +33201,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:25
 msgid "Footprint Order"
-msgstr ""
+msgstr "ნაკვალევების მიმდევრობა"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:49
 msgid "Horizontally: top left to bottom right"
@@ -33253,7 +33253,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:165
 msgid "Reannotation Scope"
-msgstr ""
+msgstr "თავიდან ანოტაციის შუალედი"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
@@ -33280,7 +33280,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:201
 msgid "Exclude references:"
-msgstr ""
+msgstr "მიმართვების ამოღება:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:203
 msgid ""
@@ -33318,7 +33318,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:250
 msgid "Front prefix:"
-msgstr ""
+msgstr "წინას პრეფიქსი:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:252
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
@@ -33327,7 +33327,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:261
 msgid "Back prefix:"
-msgstr ""
+msgstr "უკანას პრეფიქსი:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
@@ -35331,7 +35331,7 @@ msgstr "ყველა კომპონენტი"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:100
 msgid "Only selected"
-msgstr ""
+msgstr "მხოლოდ მონიშნული"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:101
 msgid "Export only the component models that are selected in the PCB editor"
