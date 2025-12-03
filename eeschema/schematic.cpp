@@ -1346,7 +1346,12 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
         if( !aScreen->IsExplicitJunction( item->GetPosition() ) )
+        {
+            if( item->IsSelected() || item->HasFlag( SELECTED_BY_DRAG ) )
+                continue;
+
             items_to_remove.push_back( item );
+        }
         else
             junctions.push_back( static_cast<SCH_JUNCTION*>( item ) );
     }

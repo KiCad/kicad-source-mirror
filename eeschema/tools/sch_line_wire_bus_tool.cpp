@@ -1413,7 +1413,10 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCH_COMMIT* aCommit, SCH_SELEC
     }
 
     for( const VECTOR2I& point : screen->GetNeededJunctions( allItems ) )
+    {
+        wxLogTrace( "KICAD_SCH_MOVE", "AddJunctionsIfNeeded: adding junction at %s", point.Format().c_str() );
         AddJunction( aCommit, m_frame->GetScreen(), point );
+    }
 
     return 0;
 }

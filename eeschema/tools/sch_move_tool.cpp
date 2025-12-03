@@ -1196,6 +1196,9 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
     // Hide junctions connected to line endpoints that are not selected
     m_hiddenJunctions.clear();
 
+    for( EDA_ITEM* item : aSelection )
+        item->SetFlags( STRUCT_DELETED );
+
     for( EDA_ITEM* edaItem : aSelection )
     {
         if( edaItem->Type() != SCH_LINE_T )
@@ -1212,12 +1215,21 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
                 && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct )
                            == m_hiddenJunctions.end() )
             {
-                jct->SetFlags( STRUCT_DELETED );
-                m_frame->RemoveFromScreen( jct, m_frame->GetScreen() );
-                aCommit->Removed( jct, m_frame->GetScreen() );
+                JUNCTION_HELPERS::POINT_INFO info = JUNCTION_HELPERS::AnalyzePoint(
+                        m_frame->GetScreen()->Items(), pt, false );
+
+                if( !info.isJunction )
+                {
+                    jct->SetFlags( STRUCT_DELETED );
+                    m_frame->RemoveFromScreen( jct, m_frame->GetScreen() );
+                    aCommit->Removed( jct, m_frame->GetScreen() );
+                }
             }
         }
     }
+
+    for( EDA_ITEM* item : aSelection )
+        item->ClearFlags( STRUCT_DELETED );
 
     // Generic setup
     aSnapLayer = grid.GetSelectionGrid( aSelection );
@@ -1676,9 +1688,6 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
     for( SCH_LINE* oldLine : m_changedDragLines )
         oldLine->ClearEditFlags();
 
-    m_newDragLines.clear();
-    m_changedDragLines.clear();
-
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
@@ -1742,6 +1751,9 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
     // edit flags cleared
     for( EDA_ITEM* item : selectionCopy )
         item->ClearEditFlags();
+
+    m_newDragLines.clear();
+    m_changedDragLines.clear();
 
     if( aUnselect )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -2227,13 +2239,21 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
-            if( test->IsConnected( aPoint ) && !newWire )
+            if( test->IsConnected( aPoint ) )
             {
-                // Add a new wire between the symbol or junction and the selected item so
-                // the selected item can be dragged.
-                newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
-                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
-                aList.push_back( newWire );
+                if( test->Type() == SCH_JUNCTION_T && test->GetPosition() == aPoint )
+                {
+                    test->SetFlags( SELECTED_BY_DRAG );
+                    aList.push_back( test );
+                }
+                else if( !newWire )
+                {
+                    // Add a new wire between the symbol or junction and the selected item so
+                    // the selected item can be dragged.
+                    newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
+                    newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                    aList.push_back( newWire );
+                }
             }
 
             break;
