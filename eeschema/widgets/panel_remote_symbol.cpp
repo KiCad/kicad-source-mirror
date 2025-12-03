@@ -485,7 +485,8 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     m_pendingHandshake( false ),
     m_loginServer(),
     m_activeDataSourceUrl(),
-    m_activeUserId()
+    m_activeUserId(),
+    m_webViewLoadedBound( false )
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -517,9 +518,6 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
             } );
     m_webView->SetHandleExternalLinks( true );
 
-    if( wxWebView* browser = m_webView->GetWebView() )
-        browser->Bind( wxEVT_WEBVIEW_LOADED, &PANEL_REMOTE_SYMBOL::onWebViewLoaded, this );
-
     topSizer->Add( m_webView, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP( 2 ) );
 
     SetSizer( topSizer );
@@ -532,6 +530,20 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     RefreshDataSources();
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "PANEL_REMOTE_SYMBOL constructed (frame=%p)", (void*)aParent );
+}
+
+
+void PANEL_REMOTE_SYMBOL::BindWebViewLoaded()
+{
+    if( m_webViewLoadedBound )
+        return;
+
+    if( wxWebView* browser = m_webView->GetWebView() )
+    {
+        browser->Bind( wxEVT_WEBVIEW_LOADED, &PANEL_REMOTE_SYMBOL::onWebViewLoaded, this );
+        m_webView->BindLoadedEvent();
+        m_webViewLoadedBound = true;
+    }
 }
 
 

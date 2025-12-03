@@ -54,6 +54,7 @@ public:
 
     void RefreshDataSources();
     bool HasDataSources() const;
+    void BindWebViewLoaded();
 
 private:
     void onDataSourceChanged( wxCommandEvent& aEvent );
@@ -144,6 +145,7 @@ private:
     std::unique_ptr<REMOTE_LOGIN_SERVER>      m_loginServer;
     wxString                                  m_activeDataSourceUrl;
     wxString                                  m_activeUserId;
+    bool                                      m_webViewLoadedBound;
 };
 
 #endif // PANEL_REMOTE_SYMBOL_H

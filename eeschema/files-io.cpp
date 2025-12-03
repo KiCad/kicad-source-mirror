@@ -84,6 +84,7 @@
 #include <kiplatform/io.h>
 
 #include "widgets/filedlg_hook_save_project.h"
+#include "widgets/panel_remote_symbol.h"
 #include "save_project_utils.h"
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
@@ -275,6 +276,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
                     {
                         wxFileName sheetFileName( Prj().GetProjectPath(), sheetInfo.filename );
+
+                        // When loading legacy schematic files, ensure we are referencing the correct extension
+                        if( schFileType == SCH_IO_MGR::SCH_LEGACY )
+                            sheetFileName.SetExt( FILEEXT::LegacySchematicFileExtension );
+
                         wxString sheetPath = sheetFileName.GetFullPath();
 
                         if( !wxFileName::FileExists( sheetPath ) )
@@ -722,6 +728,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                 Pgm().PreloadDesignBlockLibraries( &Kiway() );
             } );
+
+    m_remoteSymbolPane->BindWebViewLoaded();
 
     return true;
 }

@@ -56,6 +56,8 @@ public:
 
     bool HasLoadError() const { return m_loadError; }
 
+    void BindLoadedEvent();
+
 protected:
     void OnNavigationRequest( wxWebViewEvent& evt );
     void OnWebViewLoaded( wxWebViewEvent& evt );
@@ -69,6 +71,7 @@ private:
     bool                                m_initialized;
     bool                                m_handleExternalLinks;
     bool                                m_loadError;
+    bool                                m_loadedEventBound;
     wxWebView*                          m_browser;
     std::map<wxString, MESSAGE_HANDLER> m_msgHandlers;
     TOOL_MANAGER*                       m_toolManager;

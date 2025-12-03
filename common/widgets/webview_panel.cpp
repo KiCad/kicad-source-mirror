@@ -35,6 +35,7 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_initialized( false ),
         m_handleExternalLinks( false ),
         m_loadError( false ),
+        m_loadedEventBound( false ),
         m_browser( wxWebView::New() ),
         m_toolManager( aToolManager ),
         m_tool( aTool )
@@ -65,11 +66,19 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
     Bind( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, &WEBVIEW_PANEL::OnScriptMessage, this, m_browser->GetId() );
     Bind( wxEVT_WEBVIEW_SCRIPT_RESULT, &WEBVIEW_PANEL::OnScriptResult, this, m_browser->GetId() );
     Bind( wxEVT_WEBVIEW_ERROR, &WEBVIEW_PANEL::OnError, this, m_browser->GetId() );
-    Bind( wxEVT_WEBVIEW_LOADED, &WEBVIEW_PANEL::OnWebViewLoaded, this, m_browser->GetId() );
 }
 
 WEBVIEW_PANEL::~WEBVIEW_PANEL()
 {
+}
+
+void WEBVIEW_PANEL::BindLoadedEvent()
+{
+    if( m_loadedEventBound )
+        return;
+
+    Bind( wxEVT_WEBVIEW_LOADED, &WEBVIEW_PANEL::OnWebViewLoaded, this, m_browser->GetId() );
+    m_loadedEventBound = true;
 }
 
 void WEBVIEW_PANEL::LoadURL( const wxString& aURL )

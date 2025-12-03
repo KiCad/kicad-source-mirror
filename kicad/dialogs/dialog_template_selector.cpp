@@ -452,6 +452,8 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
+    m_webviewPanel->BindLoadedEvent();
+
     m_selectedWidget = nullptr;
     m_defaultTemplatePath = aDefaultTemplate;
     m_defaultWidget = nullptr;
