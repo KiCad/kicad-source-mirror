@@ -159,9 +159,11 @@ class AllegroBoard:
             return value
 
         def field_name(self, hdr1, hdr2):
-
+            # if hdr2 actually needed to distinguish?
             v = (hdr1, hdr2)
 
+            if v == (0x37, 0x04):
+                return "LOGICAL_PATH"
             if v == (0x55, 0x00):
                 return "NET_MIN_LINE_WIDTH"
             elif v == (0x173, 0x00):
@@ -865,20 +867,19 @@ class AllegroBoard:
             prntr.print_ptr("net_ptr", d)
             prntr.print_ptr("pad_ptr", d)
             prntr.print_ptr("next_in_comp", d)
-            prntr.print_ptr("pad_name", d)
+            prntr.print_ptr("pin_num", d)
+            prntr.print_ptr("pad_name_text", d)
             prntr.print_ptr("parent_fp", d)
             prntr.print_ptr("track", d)
             prntr.print_ptr("ratline", d)
             prntr.print_v("flags", d)
+            prntr.print_ptr("ptr_x12", d)
+            prntr.print_ptr("ptr6", d)
 
             prntr.print_ptr("unknown_1", d)
 
             prntr.print_coords("bbox_0", d.bbox_0)
             prntr.print_coords("bbox_1", d.bbox_1)
-
-            prntr.print_ptr("ptr4", d)
-
-            prntr.print_ptr("ptr7", d)
 
         elif t == 0x33:
             assert isinstance(d, allegro_brd.AllegroBrd.Type33Via)

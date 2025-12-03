@@ -287,10 +287,16 @@ public:
 
 
 struct BRD_DB;
+struct COMPONENT;
+struct COMPONENT_INST;
 struct FOOTPRINT_INSTANCE;
 struct FUNCTION_INSTANCE;
+struct NET;
+struct NET_ASSIGN;
 struct PLACED_PAD;
-struct COMPONENT_INST;
+struct PIN_NAME;
+struct PIN_NUMBER;
+struct TRACK;
 
 /**
  * 0x01 ARC objects
@@ -331,6 +337,32 @@ struct FIELD : public DB_OBJ
 
 
 /**
+ * A field list is a linked list of 0x03. This class adds accessors for
+ * picking out specific fields by subtype/code
+ */
+class FIELD_LIST
+{
+public:
+    FIELD_LIST( DB_REF_CHAIN& aChain ) :
+            m_Chain( aChain )
+    {
+    }
+
+    /**
+     * Get the integer value of the field with the given code, if in the list.
+     *
+     * If found, it is expected to be an integer field.
+     */
+    std::optional<int> GetOptFieldExpectInt( uint16_t aFieldCode ) const;
+
+    const wxString* GetOptFieldExpectString( uint16_t aFieldCode ) const;
+
+private:
+    DB_REF_CHAIN& m_Chain;
+};
+
+
+/**
  * 0x04 NET_ASSIGN objects
  */
 struct NET_ASSIGN : public DB_OBJ
@@ -344,6 +376,8 @@ struct NET_ASSIGN : public DB_OBJ
     DB_REF m_Net;
     ///< Reference to an 0x05 TRACK or 0x32 PLACED_PAD object
     DB_REF m_ConnItem;
+
+    const NET& GetNet() const;
 };
 
 
@@ -424,6 +458,9 @@ struct PIN_NUMBER : public DB_OBJ
     DB_STR_REF m_PinNumberStr;
     DB_REF     m_PinName;
     DB_REF     m_Next;
+
+    const wxString* GetNumber() const;
+    const PIN_NAME* GetPinName() const;
 };
 
 
@@ -493,6 +530,9 @@ struct PIN_NAME: public DB_OBJ
     DB_REF     m_Next;
     DB_STR_REF m_PinNameStr;
     DB_REF     m_PinNumber;
+
+    const wxString*   GetName() const;
+    const PIN_NUMBER* GetPinNumber() const;
 };
 
 
@@ -534,33 +574,17 @@ struct LINE : public DB_OBJ
 
 
 /**
- * A field list is a linked list of 0x03. This class adds accessors for
- * picking out specific fields by subtype/code
- */
-class FIELD_LIST
-{
-public:
-    FIELD_LIST( DB_REF_CHAIN& aChain ) :
-            m_Chain( aChain )
-    {
-    }
-
-    /**
-     * Get the integer value of the field with the given code, if in the list.
-     *
-     * If found, it is expected to be an integer field.
-     */
-    std::optional<int> GetOptFieldExpectInt( uint16_t aFieldCode ) const;
-
-private:
-    DB_REF_CHAIN& m_Chain;
-};
-
-/**
  * 0x1B NET objects
  */
 struct NET : public DB_OBJ
 {
+    enum class STATUS
+    {
+        REGULAR,
+        SCHEDULED,
+        NO_RAT,
+    };
+
     NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
@@ -573,10 +597,17 @@ struct NET : public DB_OBJ
     DB_REF_CHAIN m_FieldsChain;
     FIELD_LIST   m_Fields; // wrapper
 
+    STATUS m_Status;
+
     const wxString* GetName() const;
+    STATUS          GetStatus() const;
+
+    const wxString* GetLogicalPath() const;
 
     std::optional<int> GetNetMinLineWidth() const;
     std::optional<int> GetNetMaxLineWidth() const;
+    std::optional<int> GetNetMinNeckWidth() const;
+    std::optional<int> GetNetMaxNeckLength() const;
 };
 
 
@@ -679,8 +710,16 @@ struct PLACED_PAD : public DB_OBJ
     DB_REF m_NextInFp;
     DB_REF m_NextInCompInst;
     // DB_REF m_Ratline; // 0x23;
+    DB_REF   m_NetAssign;
+    DB_REF   m_PinNumber;
+    DB_REF   m_PinNumText;
     uint32_t m_Flags;
-    BOX2I m_Bounds;
+    BOX2I    m_Bounds;
+
+    const wxString* GetPinName() const;
+    const wxString* GetPinNumber() const;
+
+    const NET* GetNet() const;
 };
 
 
@@ -778,6 +817,9 @@ public:
      * Access the function instances in the database.
      *
      * This iterates the 0x06 linked list and finds the functions.
+     *
+     * If the function is assigned to a component, the component is set.
+     * If the component is placed, the symbol is also set.
      */
     void VisitFunctionInstances( VIEW_OBJS_VISITOR aVisitor ) const;
 

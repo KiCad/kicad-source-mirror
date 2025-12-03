@@ -61,6 +61,15 @@ static wxString FormatUnits( ALLEGRO::BOARD_UNITS aUnits, double aValue )
 }
 
 
+static wxString YesNoBlank( std::optional<bool> aValue )
+{
+    if( !aValue.has_value() )
+        return "";
+
+    return aValue.value() ? "YES" : "NO";
+}
+
+
 using NET_EXTRACTOR = std::function<std::optional<int>( const NET& aNet )>;
 
 const auto ExtractLinearFromNet( const VIEW_OBJS& aObj, NET_EXTRACTOR aNetExtractor ) -> wxString
@@ -295,7 +304,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                         // }
                         return "??";
                     },
-                    { VTYPE::SYMBOL, VTYPE::COMPONENT },
+                    { VTYPE::COMPONENT_PIN, VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
     },
     {
@@ -311,7 +320,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                         const wxString* deviceType = component->GetComponentDeviceType();
                         return deviceType ? *deviceType : "";
                     },
-                    { VTYPE::FUNCTION },
+                    { VTYPE::COMPONENT_PIN, VTYPE::FUNCTION },
             },
     },
     {
@@ -326,7 +335,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                         const wxString* name = func->GetName();
                         return name ? *name : "";
                     },
-                    { VTYPE::FUNCTION },
+                    { VTYPE::COMPONENT_PIN, VTYPE::FUNCTION },
             },
     },
     {
@@ -342,7 +351,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                         const wxString*      name = slot.GetName();
                         return name ? *name : "";
                     },
-                    { VTYPE::FUNCTION },
+                    { VTYPE::COMPONENT_PIN, VTYPE::FUNCTION },
             },
     },
     {
@@ -357,7 +366,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                         const wxString* name = net->GetName();
                         return name ? *name : "";
                     },
-                    { VTYPE::NET },
+                    { VTYPE::COMPONENT_PIN, VTYPE::NET },
             },
     },
     {
@@ -371,7 +380,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                                                          return aNet.GetNetMinLineWidth();
                                                      } );
                     },
-                    { VTYPE::NET },
+                    { VTYPE::COMPONENT_PIN, VTYPE::NET },
             },
     },
     {
@@ -385,9 +394,111 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                                                          return aNet.GetNetMaxLineWidth();
                                                      } );
                     },
+                    { VTYPE::COMPONENT_PIN, VTYPE::NET },
+            },
+    },
+    {
+            "NET_MIN_NECK_WIDTH",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        return ExtractLinearFromNet( aObj,
+                                                     []( const NET& aNet ) -> std::optional<int>
+                                                     {
+                                                         return aNet.GetNetMinNeckWidth();
+                                                     } );
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::NET },
+            },
+    },
+    {
+            "NET_STATUS",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const NET* net = aObj.m_Net;
+
+                        wxCHECK2( net, "" );
+
+                        switch( net->GetStatus() )
+                        {
+                        case NET::STATUS::REGULAR: return "REGULAR";
+                        case NET::STATUS::SCHEDULED: return "SCHEDULED";
+                        case NET::STATUS::NO_RAT: return "NO_RAT";
+                        }
+
+                        return "??";
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::NET },
+            },
+    },
+    {
+            "LOGICAL_PATH",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const NET* net = aObj.m_Net;
+
+                        wxCHECK2( net, "" );
+
+                        const wxString* path = net->GetLogicalPath();
+                        return path ? *path : "";
+                    },
                     { VTYPE::NET },
             },
-    }
+    },
+    {
+            "PIN_NAME",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const PLACED_PAD* pad = aObj.m_Pad;
+
+                        wxCHECK2( pad, "" );
+
+                        const wxString* name = pad->GetPinName();
+                        return name ? *name : "";
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::LOGICAL_PIN },
+            },
+    },
+    {
+            "PIN_NUMBER",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        const PLACED_PAD* pad = aObj.m_Pad;
+
+                        wxCHECK2( pad, "" );
+
+                        const wxString* number = pad->GetPinNumber();
+                        return number ? *number : "";
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::LOGICAL_PIN },
+            },
+    },
+    {
+            "PIN_POWER",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        // std::optional<bool> padIsPowerPin = std::nullopt;
+                        // return YesNoBlank( pad->IsPowerPin() );
+                        return "??";
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::LOGICAL_PIN },
+            },
+    },
+    {
+            "PIN_GROUND",
+            {
+                    []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
+                    {
+                        return "??";
+                    },
+                    { VTYPE::COMPONENT_PIN, VTYPE::LOGICAL_PIN },
+            },
+    },
 };
 
 

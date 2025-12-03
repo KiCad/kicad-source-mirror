@@ -1640,12 +1640,12 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     data.m_PadPtr = aStream.ReadU32();
     data.m_Ptr6 = aStream.ReadU32();
     data.m_Ratline = aStream.ReadU32();
-    data.m_Ptr8 = aStream.ReadU32();
+    data.m_PtrPinNumber = aStream.ReadU32();
     data.m_NextInCompInst = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
-    data.m_Name0x30 = aStream.ReadU32();
+    data.m_NameText = aStream.ReadU32();
     data.m_Ptr11 = aStream.ReadU32();
 
     for( size_t i = 0; i < data.m_Coords.size(); ++i )

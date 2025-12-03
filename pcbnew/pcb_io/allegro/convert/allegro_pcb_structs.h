@@ -451,6 +451,18 @@ struct BLK_0x03
     std::variant<uint32_t, std::array<uint32_t, 2>, std::string, SUB_0x6C, SUB_0x70_0x74, SUB_0xF6> m_Substruct;
 };
 
+/**
+ * Hdr1 keys for field roles
+ */
+enum FIELD_KEYS
+{
+    LOGICAL_PATH = 0x37,
+    MIN_LINE_WIDTH = 0x55,
+    MAX_LINE_WIDTH = 0x173,
+    MIN_NECK_WIDTH = 0x5c,
+    MAX_NECK_LENGTH = 0x1fb,
+};
+
 
 /**
  * 0x04 objects represent net assignments.
@@ -1550,12 +1562,12 @@ struct BLK_0x32_PLACED_PAD
     uint32_t m_PadPtr;
     uint32_t m_Ptr6;
     uint32_t m_Ratline;
-    uint32_t m_Ptr8;
+    uint32_t m_PtrPinNumber;
     uint32_t m_NextInCompInst;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
 
-    uint32_t m_Name0x30;
+    uint32_t m_NameText;
     uint32_t m_Ptr11;
 
     std::array<int32_t, 4> m_Coords;

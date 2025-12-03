@@ -491,7 +491,7 @@ types:
 
               E.g. 510
 
-          - FUNC_LOGICAL_PATH hdr1 = 0x37, hdr2 = 0x4
+          - LOGICAL_PATH hdr1 = 0x37, hdr2 = 0x4
 
               @preampl_schem.schematic1(sch_1):ins14593@connector.\\con1.normal\(chips)
 
@@ -2274,7 +2274,7 @@ types:
       - id: pad_ptr
         type: u4
         doc: Points to 0x0D
-      - id: ptr3
+      - id: ptr_x12
         type: u4
         doc: Points to 0x12
       - id: ratline
@@ -2289,7 +2289,7 @@ types:
       - id: unknown_1
         type: u4
         if: _root.ver >= 0x00140400
-      - id: pad_name
+      - id: pad_name_text
         type: u4
         doc: Pointer to 0x30
       - id: ptr6

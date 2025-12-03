@@ -354,7 +354,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type32PlacedPad(KaitaiStruct):
-        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr3", "ratline", "pin_num", "next_in_comp", "unknown_1", "pad_name", "ptr6", "bbox_0", "bbox_1"]
+        SEQ_FIELDS = ["type", "layer", "key", "next", "net_ptr", "flags", "prev", "next_in_fp", "parent_fp", "track", "pad_ptr", "ptr_x12", "ratline", "pin_num", "next_in_comp", "unknown_1", "pad_name_text", "ptr6", "bbox_0", "bbox_1"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -399,9 +399,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['pad_ptr']['start'] = self._io.pos()
             self.pad_ptr = self._io.read_u4le()
             self._debug['pad_ptr']['end'] = self._io.pos()
-            self._debug['ptr3']['start'] = self._io.pos()
-            self.ptr3 = self._io.read_u4le()
-            self._debug['ptr3']['end'] = self._io.pos()
+            self._debug['ptr_x12']['start'] = self._io.pos()
+            self.ptr_x12 = self._io.read_u4le()
+            self._debug['ptr_x12']['end'] = self._io.pos()
             self._debug['ratline']['start'] = self._io.pos()
             self.ratline = self._io.read_u4le()
             self._debug['ratline']['end'] = self._io.pos()
@@ -416,9 +416,9 @@ class AllegroBrd(KaitaiStruct):
                 self.unknown_1 = self._io.read_u4le()
                 self._debug['unknown_1']['end'] = self._io.pos()
 
-            self._debug['pad_name']['start'] = self._io.pos()
-            self.pad_name = self._io.read_u4le()
-            self._debug['pad_name']['end'] = self._io.pos()
+            self._debug['pad_name_text']['start'] = self._io.pos()
+            self.pad_name_text = self._io.read_u4le()
+            self._debug['pad_name_text']['end'] = self._io.pos()
             self._debug['ptr6']['start'] = self._io.pos()
             self.ptr6 = self._io.read_u4le()
             self._debug['ptr6']['end'] = self._io.pos()
@@ -1001,7 +1001,7 @@ class AllegroBrd(KaitaiStruct):
 
 
     class Type1bNet(KaitaiStruct):
-        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "net_name", "unknown_1", "unknown_2", "type", "assignments", "ptr2", "path_str_ptr", "ptr4", "model_ptr", "unknown_3", "unknown_4", "ptr6"]
+        SEQ_FIELDS = ["_unnamed0", "_unnamed1", "key", "next", "net_name", "unknown_1", "unknown_2", "type", "assignments", "ptr2", "fields", "ptr4", "model_ptr", "unknown_3", "unknown_4", "ptr6"]
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -1042,9 +1042,9 @@ class AllegroBrd(KaitaiStruct):
             self._debug['ptr2']['start'] = self._io.pos()
             self.ptr2 = self._io.read_u4le()
             self._debug['ptr2']['end'] = self._io.pos()
-            self._debug['path_str_ptr']['start'] = self._io.pos()
-            self.path_str_ptr = self._io.read_u4le()
-            self._debug['path_str_ptr']['end'] = self._io.pos()
+            self._debug['fields']['start'] = self._io.pos()
+            self.fields = self._io.read_u4le()
+            self._debug['fields']['end'] = self._io.pos()
             self._debug['ptr4']['start'] = self._io.pos()
             self.ptr4 = self._io.read_u4le()
             self._debug['ptr4']['end'] = self._io.pos()
@@ -2674,7 +2674,7 @@ class AllegroBrd(KaitaiStruct):
         
                 E.g. 510
         
-            - FUNC_LOGICAL_PATH hdr1 = 0x37, hdr2 = 0x4
+            - LOGICAL_PATH hdr1 = 0x37, hdr2 = 0x4
         
                 @preampl_schem.schematic1(sch_1):ins14593@connector.\\con1.normal\(chips)
         
@@ -2709,7 +2709,7 @@ class AllegroBrd(KaitaiStruct):
             - ?? hdr1: 0x354, hdr2: 0x00 (eg. val 0x15f90)
         
         - Subtype 0x66 (int? length?)
-            - NET_MIN_LINE_WIDTH:         hdr1: 0x55, hdr2: 0x00
+            - NET_MIN_LINE_WIDTH:         hdr1: 0x55, hdr2: 0x00   (I think these are the right order)_
             - NET_MAX_LINE_WIDTH:         hdr1: 0x173, hdr2: 0x00
             - NET_MIN_NECK_WIDTH:         hdr1: 0x5c, hdr2: 0x00
             - NET_MAX_NECK_LENGTH(?):     hdr1: 0x1fb, hdr2: 0x00

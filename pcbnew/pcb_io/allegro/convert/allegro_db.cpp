@@ -505,10 +505,23 @@ bool NET_ASSIGN::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
-    // ok &= m_Net.Resolve( aResolver );
+    ok &= m_Net.Resolve( aResolver );
     ok &= m_ConnItem.Resolve( aResolver );
 
+    ok &= CheckTypeIs( m_Net, DB_OBJ::TYPE::NET, false );
+
     return ok;
+}
+
+
+const NET& NET_ASSIGN::GetNet() const
+{
+    if( m_Net.m_Target == nullptr )
+    {
+        THROW_IO_ERROR( wxString::Format( "NET_ASSIGN::GetNet: NET reference is null for key %#010x", m_Key ) );
+    }
+
+    return static_cast<const NET&>( *m_Net.m_Target );
 }
 
 
@@ -570,6 +583,9 @@ const wxString& FIELD::ExpectString() const
 }
 
 
+
+
+
 std::optional<int> FIELD_LIST::GetOptFieldExpectInt( uint16_t aFieldCode ) const
 {
     for( const DB_OBJ* obj : m_Chain.m_Chain )
@@ -595,6 +611,34 @@ std::optional<int> FIELD_LIST::GetOptFieldExpectInt( uint16_t aFieldCode ) const
     }
 
     return std::nullopt;
+}
+
+
+const wxString* FIELD_LIST::GetOptFieldExpectString( uint16_t aFieldCode ) const
+{
+    for( const DB_OBJ* obj : m_Chain.m_Chain )
+    {
+        // Some chains can contain non-FIELD objects like 0x30
+        // not clear if that is always true
+        if( !obj || obj->GetType() != DB_OBJ::TYPE::FIELD)
+            continue;
+
+        const FIELD& field = static_cast<const FIELD&>( *obj );
+        if( field.m_Hdr1 == aFieldCode )
+        {
+            try
+            {
+                return &std::get<wxString>( field.m_FieldValue );
+            }
+            catch( const std::bad_variant_access& )
+            {
+                THROW_IO_ERROR( wxString::Format( "FIELD code %#04x is not a string (subtype: %#04x )", aFieldCode,
+                                                field.m_SubType ) );
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 
@@ -754,6 +798,23 @@ bool PIN_NUMBER::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
+const wxString* PIN_NUMBER::GetNumber() const
+{
+    return m_PinNumberStr.m_String;
+}
+
+
+const PIN_NAME* PIN_NUMBER::GetPinName() const
+{
+    if( m_PinName.m_Target == nullptr )
+    {
+        return nullptr;
+    }
+
+    return static_cast<const PIN_NAME*>( m_PinName.m_Target );
+}
+
+
 X0E::X0E( const BRD_DB& aBrd, const BLK_0x0E& aBlk ) :
     DB_OBJ( DB_OBJ::TYPE::x0e, aBlk.m_Key )
 {
@@ -794,7 +855,26 @@ bool PIN_NAME::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     ok &= m_Next.Resolve( aResolver );
     ok &= m_PinNumber.Resolve( aResolver );
 
+    ok &= CheckTypeIs( m_PinNumber, DB_OBJ::TYPE::PIN_NUMBER, true );
+
     return ok;
+}
+
+
+const wxString* PIN_NAME::GetName() const
+{
+    return m_PinNameStr.m_String;
+}
+
+
+const PIN_NUMBER* PIN_NAME::GetPinNumber() const
+{
+    if( m_PinNumber.m_Target == nullptr )
+    {
+        return nullptr;
+    }
+
+    return static_cast<const PIN_NUMBER*>( m_PinNumber.m_Target );
 }
 
 
@@ -1080,7 +1160,8 @@ const FUNCTION_SLOT& FUNCTION_INSTANCE::GetFunctionSlot() const
 
 NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::NET, aBlk.m_Key ),
-    m_Fields( m_FieldsChain)
+    m_Fields( m_FieldsChain),
+    m_Status( STATUS::REGULAR )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     m_Next.m_EndKey = aBrd.m_Header->m_LL_0x1B_Nets.m_Tail;
@@ -1109,6 +1190,8 @@ NET::NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk ):
         return field.m_Next.m_TargetKey;
     };
     m_FieldsChain.m_DebugName = "NET::m_Fields";
+
+    // Unsure where status is stored; default to REGULAR
 }
 
 
@@ -1130,15 +1213,39 @@ const wxString* NET::GetName() const
 }
 
 
+NET::STATUS NET::GetStatus() const
+{
+    return m_Status;
+}
+
+
+const wxString* NET::GetLogicalPath() const
+{
+    return m_Fields.GetOptFieldExpectString( FIELD_KEYS::LOGICAL_PATH );
+}
+
+
 std::optional<int> NET::GetNetMinLineWidth() const
 {
-    return m_Fields.GetOptFieldExpectInt( 0x55 );
+    return m_Fields.GetOptFieldExpectInt( FIELD_KEYS::MIN_LINE_WIDTH );
 }
 
 
 std::optional<int> NET::GetNetMaxLineWidth() const
 {
-    return m_Fields.GetOptFieldExpectInt( 0x173 );
+    return m_Fields.GetOptFieldExpectInt( FIELD_KEYS::MAX_LINE_WIDTH );
+}
+
+
+std::optional<int> NET::GetNetMinNeckWidth() const
+{
+    return m_Fields.GetOptFieldExpectInt( FIELD_KEYS::MIN_NECK_WIDTH );
+}
+
+
+std::optional<int> NET::GetNetMaxNeckLength() const
+{
+    return m_Fields.GetOptFieldExpectInt( FIELD_KEYS::MAX_NECK_LENGTH );
 }
 
 
@@ -1210,6 +1317,20 @@ PLACED_PAD::PLACED_PAD( const BRD_DB& aBrd, const BLK_0x32_PLACED_PAD& aBlk ):
 
     // m_Padstack.m_TargetKey = aBlk.m_PadstackPtr;
     // m_Padstack.m_DebugName = "PLACED_PAD::m_Padstack";
+
+    m_PinNumber.m_TargetKey = aBlk.m_PtrPinNumber;
+    m_PinNumber.m_DebugName = "PLACED_PAD::m_PinNumber";
+
+    m_PinNumText.m_TargetKey = aBlk.m_NameText;
+    m_PinNumText.m_DebugName = "PLACED_PAD::m_PinNumText";
+
+    m_NetAssign.m_TargetKey = aBlk.m_NetPtr;
+    m_NetAssign.m_DebugName = "PLACED_PAD::m_NetAssign";
+
+    m_Bounds = BOX2I(
+        {aBlk.m_Coords[0], aBlk.m_Coords[1] },
+        { aBlk.m_Coords[2], aBlk.m_Coords[3] }
+    );
 }
 
 
@@ -1221,8 +1342,48 @@ bool PLACED_PAD::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     ok &= m_NextInFp.Resolve( aResolver );
     ok &= m_NextInCompInst.Resolve( aResolver );
     // ok &= m_Padstack.Resolve( aResolver );
+    ok &= m_PinNumber.Resolve( aResolver );
+    ok &= m_NetAssign.Resolve( aResolver );
+
+    ok &= CheckTypeIs( m_PinNumber, DB_OBJ::TYPE::PIN_NUMBER, true );
+
 
     return ok;
+}
+
+
+const wxString* PLACED_PAD::GetPinNumber() const
+{
+    if( m_PinNumber.m_Target == nullptr )
+        return nullptr;
+
+    return static_cast<const PIN_NUMBER*>( m_PinNumber.m_Target )->GetNumber();
+}
+
+
+const wxString* PLACED_PAD::GetPinName() const
+{
+    if( m_PinNumber.m_Target == nullptr )
+        return nullptr;
+
+    const PIN_NUMBER* pinNumber = static_cast<const PIN_NUMBER*>( m_PinNumber.m_Target );
+    const PIN_NAME* pinName = pinNumber->GetPinName();
+
+    if( pinName == nullptr )
+        return nullptr;
+
+    return pinName->GetName();
+}
+
+
+const NET* PLACED_PAD::GetNet() const
+{
+    if( m_NetAssign.m_Target == nullptr )
+        return nullptr;
+
+    const NET_ASSIGN* netAssign = static_cast<const NET_ASSIGN*>( m_NetAssign.m_Target );
+
+    return &netAssign->GetNet();
 }
 
 
@@ -1416,6 +1577,7 @@ void BRD_DB::VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const
 
             VIEW_OBJS viewObj = aViewObjs;
             viewObj.m_Pad = &placedPad;
+            viewObj.m_Net = placedPad.GetNet();
 
             aVisitor( viewObj );
         };
