@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-30 11:01+0000\n"
+"PO-Revision-Date: 2025-12-03 07:51+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
-"master-source/hu/>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
+"source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17045,7 +17045,6 @@ msgid "Current Sheet and Down"
 msgstr "Csak az aktuális lap"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
-#, fuzzy
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -17953,9 +17952,8 @@ msgid "Sheet background:"
 msgstr "Lap háttér:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:115
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "Táp szimbólum"
+msgstr "Táp szimbólumok:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
 #: eeschema/widgets/search_handlers.cpp:476
@@ -20609,17 +20607,16 @@ msgid "Select variant name to remove"
 msgstr "Válassza ki az eltávolítani kívánt réteget:"
 
 #: eeschema/sch_field.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Mező %s \"%s\""
+msgstr "Mező %s (üres)"
 
 #: eeschema/sch_field.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s '%s'"
 msgstr "Mező %s \"%s\""
 
 #: eeschema/sch_field.cpp:999
-#, fuzzy
 msgid "Symbol Field"
 msgstr "Rajzjel mező"
 
@@ -20693,9 +20690,9 @@ msgid "Members"
 msgstr "Megnevezés tagok"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:801
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "Beállítások importálása"
+msgstr "%s importálása"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:871
 #, c-format
@@ -21144,34 +21141,34 @@ msgid "Failed to parse value: '%s'"
 msgstr "Nem sikerült feldolgozni: \"%s\""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "A %s HTTP könyvtár beállítási fájl hiányzik vagy érvénytelen"
+msgstr "Hiányzó vagy érvénytelen HTTP könyvtár beállítási fájl %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "A %s HTTP könyvtár beállítási fájlból hiányzik az API verziószáma!"
+msgstr "A(z) %s HTTP könyvtár beállítási fájlból hiányzik az API verziószáma."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
-"A %s HTTP könyvtár beállítási fájl %s verziójú API-t használ, a KiCad a(z) "
-"%s verziót igényli"
+"A(z) %s HTTP könyvtár beállítási fájl %s verziójú API-t használ, a KiCad a"
+"(z) %s verziót igényli."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "A %s HTTP könyvtár beállítási fájlból hiányzik a gyökér URL-je!"
+msgstr "A(z) %s HTTP könyvtár beállítási fájlból hiányzik a gyökér URL-je."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
 msgstr ""
-"A %s HTTP könyvtár beállítási fájlban érvénytelen könyvtártípus található"
+"A(z) %s HTTP könyvtár beállítási fájlban érvénytelen könyvtártípus található."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:282
 #, c-format
@@ -21273,9 +21270,9 @@ msgid "Unexpected end of file."
 msgstr "Váratlan fájl vége jelzés."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "Hiányzó jogosultság a(z) \"%s\" könyvtár olvasásához."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:195
 #, fuzzy
@@ -21284,9 +21281,9 @@ msgstr "a rajzjel dokumentumtár fájl üres"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:1932
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "a(z) \"%s\" könyvtár nem tartalmazza a(z) \"%s\" megnevezést"
+msgstr "a(z) \"%s\" könyvtár nem tartalmazza a(z) \"%s\" rajzjelet"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:212
 #, c-format
@@ -21315,7 +21312,7 @@ msgid "Save Anyway"
 msgstr "Mentés mindenképpen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1726
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
 msgstr "A(z) \"%s\" rajzjel könyvtár már létezik."
 
@@ -21325,21 +21322,21 @@ msgid "Symbol library path '%s' already exists."
 msgstr "A(z) \"%s\" rajzjel könyvtár már létezik."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' cannot be deleted."
 msgstr "A(z) \"%s\" rajzjel könyvtár nem törölhető."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
-msgstr "A(z) \"%s\" rajzjel könyvtár nem törölhető."
+msgstr "A(z) \"%s\" rajzjel könyvtár mappa nem törölhető."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:111
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:359
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
-msgstr "A(z) \"%s\" fájt nem lehet olvasni."
+msgstr "Nem sikerült olvasni a(z) \"%s\"fájlt"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:176
 #, fuzzy, c-format
@@ -21362,9 +21359,9 @@ msgstr "Érvénytelen rajzjel név"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:336
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3126
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjelben érvénytelen karakter található: \"%c\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:344
 #, fuzzy
@@ -21474,12 +21471,10 @@ msgid "No schematic object"
 msgstr "A kapcsolási rajz elmentve"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3092
-#, fuzzy
 msgid "Invalid symbol library name"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen rajzjel könyvtár név"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3133
-#, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Érvénytelen rajzjel könyvtár azonosító"
 
@@ -21504,7 +21499,7 @@ msgstr ""
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:364
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr "A \"%s\" fájl %d. soránál egész számot vártunk"
+msgstr "A(z) \"%s\" fájl %d. soránál egész számot vártunk"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:387
 #, c-format
@@ -21549,9 +21544,9 @@ msgid "Expecting CELL or BLOCK"
 msgstr ""
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "A rajzjel nem található."
+msgstr "A rajzjel \"%s.asy\" nem található"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.cpp:120
 #, c-format
@@ -21559,24 +21554,26 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
+"Nem találtunk LTspice rajzjeleket.\n"
+"Telepítse az LTspice-ot, vagy helyezze a könyvtárfájljait az alábbi helyre: "
+"%s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "KiCad kapcsolási rajz fájl (*.sch)"
+msgstr "LTspice kapcsolási rajz fájlok"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
 msgstr "A(z) \"%s\" plugin nem tartalmazza a(z) \"%s\" függvényt."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:45 pcbnew/pcb_io/pcb_io_mgr.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
 msgstr "A(z) \"%s\" plugin típus nem található."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Ismeretlen SCH_FILE_T érték: %d"
 
@@ -21596,19 +21593,16 @@ msgstr "Közös az összes alternatívára"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
 #: pcbnew/microwave/microwave_polygon.cpp:135 pcbnew/pcb_point.cpp:170
 #: pcbnew/pcb_point.cpp:230 pcbnew/pcb_target.cpp:156 pcbnew/pcb_target.cpp:248
-#, fuzzy
 msgid "Size"
 msgstr "Méret"
 
 #: eeschema/sch_junction.cpp:372
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:96 pcbnew/pad.cpp:1415
 #: pcbnew/pcb_track.cpp:2000 pcbnew/pcb_track.cpp:2606
-#, fuzzy
 msgid "Diameter"
-msgstr "Forrszem átmérő"
+msgstr "Átmérő"
 
 #: eeschema/sch_label.cpp:106
-#, fuzzy
 msgid "Tri-State"
 msgstr "Háromállapotú"
 
@@ -21624,14 +21618,12 @@ msgstr "Hierarchikus lap kivezető láb"
 
 #: eeschema/sch_label.cpp:1420 eeschema/sch_tablecell.cpp:151
 #: eeschema/sch_text.cpp:565 eeschema/sch_textbox.cpp:475
-#, fuzzy
 msgid "Bold Italic"
-msgstr "Félkövér és dőlt"
+msgstr "Félkövér dőlt"
 
 #: eeschema/sch_label.cpp:1435 eeschema/sch_text.cpp:595
-#, fuzzy
 msgid "Justification"
-msgstr "Igazítás:"
+msgstr "Igazítás"
 
 #: eeschema/sch_label.cpp:1558 eeschema/sch_line.cpp:915
 #: pcbnew/board_connected_item.cpp:214
@@ -21646,7 +21638,6 @@ msgstr "Igazítás:"
 #: pcbnew/widgets/search_handlers.cpp:206 pcbnew/zone.cpp:889
 #: pcbnew/zone.cpp:1901 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
 #: pcbnew/zone_manager/model_zones_overview.h:70
-#, fuzzy
 msgid "Net"
 msgstr "Vezeték"
 
@@ -21657,14 +21648,13 @@ msgid "Resolved netclass"
 msgstr "Vezetékosztály hozzárendelés"
 
 #: eeschema/sch_label.cpp:1578
-#, fuzzy
 msgid "Hierarchical Labels"
-msgstr "Hierarchikus címke"
+msgstr "Hierarchikus címkék"
 
 #: eeschema/sch_label.cpp:1663
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s'"
-msgstr "%s címke"
+msgstr "Címke \"%s\""
 
 #: eeschema/sch_label.cpp:1946
 #, fuzzy, c-format
@@ -21677,77 +21667,73 @@ msgid "Directive Label [%s %s]"
 msgstr "Új címke"
 
 #: eeschema/sch_label.cpp:2222
-#, fuzzy, c-format
+#, c-format
 msgid "Global Label '%s'"
-msgstr "%s globális címke"
+msgstr "Globális címke \"%s\""
 
 #: eeschema/sch_label.cpp:2369
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "%s hierarchikus címke"
+msgstr "Hierarchikus címke \"%s\""
 
 #: eeschema/sch_label.cpp:2481
-#, fuzzy
 msgid "Pin length"
-msgstr "Láb hosszúsága:"
+msgstr "Láb hossz"
 
 #: eeschema/sch_line.cpp:154
-#, fuzzy
 msgid "Graphic Line"
-msgstr "Grafikai réteg"
+msgstr "Grafikai vonal"
 
 #: eeschema/sch_line.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Függőleges Vezeték,hossz %s"
+msgstr "Függőleges vezeték, hossz %s"
 
 #: eeschema/sch_line.cpp:755
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Függőleges Busz,hossz %s"
+msgstr "Függőleges busz, hossz %s"
 
 #: eeschema/sch_line.cpp:756
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "Függőleges Grafikus Vonal,hossz %s"
+msgstr "Függőleges grafikai vonal, hossz %s"
 
 #: eeschema/sch_line.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Visszintes Vezeték,hossz %s"
+msgstr "Vízszintes vezeték, hossz %s"
 
 #: eeschema/sch_line.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Bus, length %s"
-msgstr "Visszintes Busz, hossz %s"
+msgstr "Vízszintes busz, hossz %s"
 
 #: eeschema/sch_line.cpp:765
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "Visszintes Grafikus Vonal,hossz %s"
+msgstr "Vízszintes grafikai vonal, hossz %s"
 
 #: eeschema/sch_line.cpp:772
-#, fuzzy, c-format
+#, c-format
 msgid "Wire, length %s"
 msgstr "Vezeték, hossz %s"
 
 #: eeschema/sch_line.cpp:773
-#, fuzzy, c-format
+#, c-format
 msgid "Bus, length %s"
-msgstr "Busz,hossz %s"
+msgstr "Busz, hossz %s"
 
 #: eeschema/sch_line.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Line, length %s"
-msgstr "Grafikus Vonal,hossz %s"
+msgstr "Grafikai vonal, hossz %s"
 
 #: eeschema/sch_line.cpp:953
-#, fuzzy
 msgid "Graphical"
-msgstr "Grafikus"
+msgstr "Grafikai"
 
 #: eeschema/sch_line.cpp:956
-#, fuzzy
 msgid "Line Type"
 msgstr "Vonal típus"
 
@@ -21764,9 +21750,8 @@ msgstr "Szimulátor"
 #: eeschema/sch_marker.cpp:366 eeschema/sch_marker.cpp:369
 #: eeschema/sch_marker.cpp:372 pcbnew/pcb_marker.cpp:231
 #: pcbnew/pcb_marker.cpp:234 pcbnew/pcb_marker.cpp:237
-#, fuzzy
 msgid "Severity"
-msgstr "Visszavonás"
+msgstr "Súlyosság"
 
 #: eeschema/sch_marker.cpp:405 pcbnew/pcb_marker.cpp:264
 #, fuzzy
@@ -21799,22 +21784,21 @@ msgid "Pin %s [%s, %s, %s]"
 msgstr "Láb %s [%s, %s, %s]"
 
 #: eeschema/sch_pin.cpp:1635
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Láb %s [%s, %s]"
 
 #: eeschema/sch_pin.cpp:1645
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Láb %s, %s, %s"
+msgstr "Rejtett láb %s [%s, %s, %s]"
 
 #: eeschema/sch_pin.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "Láb %s, %s, %s"
+msgstr "Rejtett láb %s [%s, %s]"
 
 #: eeschema/sch_pin.cpp:1915 pcbnew/pad.cpp:1356 pcbnew/pad.cpp:2844
-#, fuzzy
 msgid "Pin Name"
 msgstr "Lábnév"
 
@@ -21913,14 +21897,14 @@ msgstr ""
 "könyvtárban."
 
 #: eeschema/sch_shape.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Arc, radius %s"
-msgstr "sugár %s"
+msgstr "Körív, sugár %s"
 
 #: eeschema/sch_shape.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Circle, radius %s"
-msgstr "sugár %s"
+msgstr "Kör, sugár %s"
 
 #: eeschema/sch_shape.cpp:396
 #, fuzzy, c-format
