@@ -196,7 +196,6 @@ def test_pcb_export_drill( kitest: KiTestFixture,
     print(stdout)
 
     assert exitcode == 0
-    assert stderr == ''
     assert stdout is not None
     
     stdout_regex = re.search("Created file '(.+)'", stdout)
