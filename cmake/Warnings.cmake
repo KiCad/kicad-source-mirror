@@ -157,8 +157,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     CHECK_CXX_COMPILER_FLAG( "-Wmismatched-tags" COMPILER_SUPPORTS_WMISMATCHED_TAGS )
 
     if( COMPILER_SUPPORTS_WMISMATCHED_TAGS )
-        set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wmismatched-tags" )
-        message( STATUS "Enabling warning -Wmismatched-tags" )
+        # This warning flag is not supported when using PCH and g++ according to
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99642
+        if( NOT ( KICAD_USE_PCH AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" ) )
+            set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wmismatched-tags" )
+            message( STATUS "Enabling warning -Wmismatched-tags" )
+        endif()
     endif()
 
     # Warn about improper move statements
