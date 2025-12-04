@@ -563,11 +563,18 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             return;
         }
 
-        std::map<std::string, wxString> aPathTokenToExtensionMap;
-        aPathTokenToExtensionMap["project"] = wxEmptyString;
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(),
+                [&]( const std::string& token, wxString& value ) -> bool
+                {
+                    if( token == "project" && value == aProjectName )
+                    {
+                        value = aNewProjectName;
+                        return true;
+                    }
 
-        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
-                       aProjectBasePath, aProjectName, aNewProjectBasePath, aNewProjectName, aErrors );
+                    return false;
+                },
+                aErrors );
     }
     else if( ext == FILEEXT::SchematicSymbolFileExtension )
     {
@@ -591,12 +598,34 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         if( destFile.GetName() == aProjectName )
             destFile.SetName( aNewProjectName );
 
-        std::map<std::string, wxString> aPathTokenToExtensionMap;
-        aPathTokenToExtensionMap["source"] = wxS( ".sch" );
-        aPathTokenToExtensionMap["source"] = wxS( ".kicad_sch" );
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(),
+                [&]( const std::string& token, wxString& value ) -> bool
+                {
+                    if( token == "source" )
+                    {
+                        for( const wxString& extension : { wxT( ".sch" ), wxT( ".kicad_sch" ) } )
+                        {
+                            if( value == aProjectName + extension )
+                            {
+                                value = aNewProjectName + extension;
+                                return true;
+                            }
+                            else if( value == aProjectBasePath + "/" + aProjectName + extension )
+                            {
+                                value = aNewProjectBasePath + "/" + aNewProjectName + extension;
+                                return true;
+                            }
+                            else if( value.StartsWith( aProjectBasePath ) )
+                            {
+                                value.Replace( aProjectBasePath, aNewProjectBasePath, false );
+                                return true;
+                            }
+                        }
+                    }
 
-        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
-                       aProjectBasePath, aProjectName, aNewProjectBasePath, aNewProjectName, aErrors );
+                    return false;
+                },
+                aErrors );
     }
     else if( destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
     {
