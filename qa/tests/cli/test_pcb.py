@@ -141,3 +141,71 @@ def test_pcb_export_gerber( kitest: KiTestFixture,
         assert utils.gerbers_are_equivalent( str( generated_gerber_path ), gbr_source_path, 5080,
                                              originInches, windowsizeInches,
                                              diff_handler=kitest.add_attachment )
+
+
+@pytest.mark.parametrize("test_file,golden_name,output_dir,skip_line_count,cli_args",
+                         [
+                            (
+                                "cli/basic_test/basic_test.kicad_pcb",
+                                "basic_test_excellon_default.drl",
+                                "basic_test/drills/excellon_default/",
+                                5,
+                                ["--format","excellon"]
+                            ),
+                            (
+                                "cli/basic_test/basic_test.kicad_pcb",
+                                "basic_test_excellon_inches.drl",
+                                "basic_test/drills/excellon_inches/",
+                                5,
+                                ["--format","excellon","-u","in"]
+                            ),
+                            (
+                                "cli/basic_test/basic_test.kicad_pcb",
+                                "basic_test_excellon_mirror.drl",
+                                "basic_test/drills/excellon_mirror/",
+                                5,
+                                ["--format","excellon","--excellon-mirror-y"]
+                            ),
+                            (
+                                "cli/basic_test/basic_test.kicad_pcb",
+                                "basic_test-PTH-drl.gbr",
+                                "basic_test/drills/gerber_default/",
+                                9,
+                                ["--format","gerber"]
+                            )
+                         ])
+def test_pcb_export_drill( kitest: KiTestFixture,
+                         test_file: str,
+                         golden_name: str,
+                         output_dir: str,
+                         skip_line_count: int,
+                         cli_args: List[str]  ):
+
+    input_file = kitest.get_data_file_path( test_file )
+    
+    output_path =  kitest.get_output_path( "cli/{}/".format( output_dir ) )
+                   
+    command = [utils.kicad_cli(), "pcb", "export", "drill"]
+    command.extend( cli_args )
+    command.append( "-o" )
+    command.append( str( output_path ) )
+    command.append( input_file )
+    
+    stdout, stderr, exitcode = utils.run_and_capture( command )
+    
+    print(stdout)
+
+    assert exitcode == 0
+    assert stderr == ''
+    assert stdout is not None
+    
+    stdout_regex = re.search("Created file '(.+)'", stdout)
+    assert stdout_regex
+    
+    output_drill_path = Path( stdout_regex.group(1) )
+    assert output_drill_path.exists()
+
+    kitest.add_attachment( output_drill_path )
+    
+    compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( golden_name ) )
+    assert utils.textdiff_files( compare_filepath, str( output_drill_path ), skip_line_count )
