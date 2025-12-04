@@ -38,6 +38,8 @@
 #include <string_utils.h>
 #include <launch_ext.h>
 #include "wx/tokenzr.h"
+#include <sexpr/sexpr.h>
+#include <sexpr/sexpr_parser.h>
 
 #include <wx/wfstream.h>
 #include <wx/fs_zip.h>
@@ -295,6 +297,89 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
 
         if( !aErrors.IsEmpty() )
             aErrors += "\n";
+
+        msg.Printf( _( "Cannot copy file '%s'." ), aDestPath );
+        aErrors += msg;
+    }
+}
+
+
+static void traverseSEXPR( SEXPR::SEXPR* aNode, const std::function<void( SEXPR::SEXPR* )>& aVisitor )
+{
+    aVisitor( aNode );
+
+    if( aNode->IsList() )
+    {
+        for( unsigned i = 0; i < aNode->GetNumberOfChildren(); i++ )
+            traverseSEXPR( aNode->GetChild( i ), aVisitor );
+    }
+}
+
+
+void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
+                    const std::map<std::string, wxString>& aPathTokenToExtensionMap,
+                    const wxString& aSrcProjectBasePath, const wxString& aSrcProjectName,
+                    const wxString& aNewProjectBasePath, const wxString& aNewProjectName, wxString& aErrors )
+{
+    bool success = false;
+
+    try
+    {
+        SEXPR::PARSER parser;
+        std::unique_ptr<SEXPR::SEXPR> sexpr( parser.ParseFromFile( TO_UTF8( aSrcPath ) ) );
+
+        traverseSEXPR( sexpr.get(),
+                [&]( SEXPR::SEXPR* node )
+                {
+                    if( node->IsList() && node->GetNumberOfChildren() > 1 && node->GetChild( 0 )->IsSymbol() )
+                    {
+                        std::string token = node->GetChild( 0 )->GetSymbol();
+
+                        if( aPathTokenToExtensionMap.contains( token ) )
+                        {
+                            const wxString&      extension = aPathTokenToExtensionMap.at( token );
+                            SEXPR::SEXPR_STRING* pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
+                            SEXPR::SEXPR_SYMBOL* symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
+                            wxString             path;
+
+                            if( pathNode )
+                                path = pathNode->m_value;
+                            else if( symNode )
+                                path = symNode->m_value;
+
+                            if( path == aSrcProjectName + extension )
+                                path = aNewProjectName + extension;
+                            else if( path == aSrcProjectBasePath + "/" + aSrcProjectName + extension )
+                                path = aNewProjectBasePath + "/" + aNewProjectName + extension;
+                            else if( path.StartsWith( aSrcProjectBasePath ) )
+                                path.Replace( aSrcProjectBasePath, aNewProjectBasePath, false );
+
+                            if( pathNode )
+                                pathNode->m_value = path;
+                            else if( symNode )
+                                symNode->m_value = path;
+                        }
+                    }
+                } );
+
+        wxFFile destFile( aDestPath, "wb" );
+
+        if( destFile.IsOpened() )
+            success = destFile.Write( sexpr->AsString( 0 ) );
+
+        // wxFFile dtor will close the file
+    }
+    catch( ... )
+    {
+        success = false;
+    }
+
+    if( !success )
+    {
+        wxString msg;
+
+        if( !aErrors.empty() )
+            aErrors += wxS( "\n" );
 
         msg.Printf( _( "Cannot copy file '%s'." ), aDestPath );
         aErrors += msg;

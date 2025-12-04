@@ -569,19 +569,6 @@ void IFACE::OnKifaceEnd()
 }
 
 
-static void traverseSEXPR( SEXPR::SEXPR* aNode,
-                           const std::function<void( SEXPR::SEXPR* )>& aVisitor )
-{
-    aVisitor( aNode );
-
-    if( aNode->IsList() )
-    {
-        for( unsigned i = 0; i < aNode->GetNumberOfChildren(); i++ )
-            traverseSEXPR( aNode->GetChild( i ), aVisitor );
-    }
-}
-
-
 void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProjectName,
                         const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
                         const wxString& aSrcFilePath, wxString& aErrors )
@@ -618,16 +605,11 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             return;
         }
 
-        // Sheet paths when auto-generated are relative to the root, so those will stay
-        // pointing to whatever they were pointing at.
-        // The author can create their own absolute and relative sheet paths.  Absolute
-        // sheet paths aren't an issue, and relative ones will continue to work as long
-        // as the author didn't include any '..'s.  If they did, it's still not clear
-        // whether they should be adjusted or not (as the author may be duplicating an
-        // entire tree with several projects within it), so we leave this as an exercise
-        // to the author.
+        std::map<std::string, wxString> aPathTokenToExtensionMap;
+        aPathTokenToExtensionMap["project"] = wxEmptyString;
 
-        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
+                       aProjectBasePath, aProjectName, aNewProjectBasePath, aNewProjectName, aErrors );
     }
     else if( ext == FILEEXT::SchematicSymbolFileExtension )
     {
@@ -648,67 +630,15 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     }
     else if( ext == FILEEXT::NetlistFileExtension )
     {
-        bool success = false;
-
         if( destFile.GetName() == aProjectName )
-            destFile.SetName( aNewProjectName  );
+            destFile.SetName( aNewProjectName );
 
-        try
-        {
-            SEXPR::PARSER parser;
-            std::unique_ptr<SEXPR::SEXPR> sexpr( parser.ParseFromFile( TO_UTF8( aSrcFilePath ) ) );
+        std::map<std::string, wxString> aPathTokenToExtensionMap;
+        aPathTokenToExtensionMap["source"] = wxS( ".sch" );
+        aPathTokenToExtensionMap["source"] = wxS( ".kicad_sch" );
 
-            traverseSEXPR( sexpr.get(), [&]( SEXPR::SEXPR* node )
-                {
-                    if( node->IsList() && node->GetNumberOfChildren() > 1
-                            && node->GetChild( 0 )->IsSymbol()
-                            && node->GetChild( 0 )->GetSymbol() == "source" )
-                    {
-                        auto pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
-                        auto symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
-                        wxString path;
-
-                        if( pathNode )
-                            path = pathNode->m_value;
-                        else if( symNode )
-                            path = symNode->m_value;
-
-                        if( path == aProjectName + wxS( ".sch" ) )
-                            path = aNewProjectName + wxS( ".sch" );
-                        else if( path == aProjectBasePath + "/" + aProjectName + wxS( ".sch" ) )
-                            path = aNewProjectBasePath + "/" + aNewProjectName + wxS( ".sch" );
-                        else if( path.StartsWith( aProjectBasePath ) )
-                            path.Replace( aProjectBasePath, aNewProjectBasePath, false );
-
-                        if( pathNode )
-                            pathNode->m_value = path;
-                        else if( symNode )
-                            symNode->m_value = path;
-                    }
-                } );
-
-            wxFFile destNetList( destFile.GetFullPath(), "wb" );
-
-            if( destNetList.IsOpened() )
-                success = destNetList.Write( sexpr->AsString( 0 ) );
-
-            // wxFFile dtor will close the file
-        }
-        catch( ... )
-        {
-            success = false;
-        }
-
-        if( !success )
-        {
-            wxString msg;
-
-            if( !aErrors.empty() )
-                aErrors += wxS( "\n" );
-
-            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
-            aErrors += msg;
-        }
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
+                       aProjectBasePath, aProjectName, aNewProjectBasePath, aNewProjectName, aErrors );
     }
     // TODO(JE) library tables - does this feature even need to exist?
 #if 0

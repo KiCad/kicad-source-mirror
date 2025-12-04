@@ -496,9 +496,15 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         || ext == FILEEXT::KiCadPcbFileExtension + FILEEXT::BackupFileSuffix )
     {
         if( destFile.GetName() == aSrcProjectName )
-            destFile.SetName( aNewProjectName );
+            destFile.SetName( aNewProjectName  );
 
-        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        std::map<std::string, wxString> aPathTokenToExtensionMap;
+        aPathTokenToExtensionMap["sheetfile"] = wxS( ".sch" );
+        aPathTokenToExtensionMap["sheetfile"] = wxS( ".kicad_sch" );
+
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
+                       aProjectBasePath, aSrcProjectName,
+                       aNewProjectBasePath, aNewProjectName, aErrors );
     }
     else if( ext == FILEEXT::LegacyPcbFileExtension )
     {
