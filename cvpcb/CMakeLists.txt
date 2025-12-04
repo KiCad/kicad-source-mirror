@@ -74,6 +74,7 @@ target_link_libraries( cvpcb_kiface
     gal
     common
     kimath
+    markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     Boost::headers
     ${wxWidgets_LIBRARIES}
