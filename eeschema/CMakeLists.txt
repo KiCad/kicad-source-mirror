@@ -32,7 +32,6 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/common/dialogs
-    ${CMAKE_SOURCE_DIR}/libs/sexpr/include
     ${INC_AFTER}
     ./dialogs
     ./libview
@@ -609,7 +608,6 @@ target_link_libraries( eeschema_kiface
         eeschema_kiface_objects
         markdown_lib
         scripting
-        sexpr
         core
         Boost::headers
         ${wxWidgets_LIBRARIES}

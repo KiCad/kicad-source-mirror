@@ -11,6 +11,7 @@ include_directories(
     ./dialogs
     ./widgets
     ./dialog_about
+    ${CMAKE_SOURCE_DIR}/libs/sexpr/include
     ${CMAKE_SOURCE_DIR}/resources/bitmaps_png
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/pcbnew
@@ -237,6 +238,7 @@ target_link_libraries( kicommon
     fmt::fmt
     CURL::libcurl
     picosha2
+    sexpr
     ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}

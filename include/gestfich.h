@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GESTFICH_H
-#define GESTFICH_H
+#pragma once
 
+#include <map>
 #include <kicommon.h>
 #include <wx/filename.h>
 #include <wx/process.h>
@@ -57,6 +57,20 @@ KICOMMON_API bool OpenPDF( const wxString& file );
  */
 KICOMMON_API void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath,
                               wxString& aErrors );
+
+/**
+ * @param aSrcPath is the full filename of the source.
+ * @param[in] aDestPath is the full filename of the target.
+ * @param[in] aPathTokenToExtensionMap a set of sexpr tokens which might be followed by a path to aSrcPath
+ *                                     which needs to be updated to aDestPath.  The value of the map is the
+ *                                     extension any said path should have.
+ * @param[out] aErrors a wxString to *append* any errors to.
+ */
+KICOMMON_API void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
+                                 const std::map<std::string, wxString>& aPathTokenToExtensionMap,
+                                 const wxString& aSrcProjectBasePath, const wxString& aSrcProjectName,
+                                 const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                                 wxString& aErrors );
 
 /**
  * Call the executable file \a aEditorName with the parameter \a aFileName.
@@ -117,12 +131,10 @@ KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = 
  * @param aDestDir is the directory to copy to.
  * @param aErrors is a string to append any errors to.
  */
-KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,
-                                 wxString& aErrors );
+KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors );
 
-KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir,
-                                        wxString& aErrors, int& fileCopiedCount,
-                                        const std::vector<wxString>& aExclusions );
+KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors,
+                                        int& fileCopiedCount, const std::vector<wxString>& aExclusions );
 
 /**
  * Add a directory and its contents to a zip file.
@@ -132,9 +144,5 @@ KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxStri
  * @param aErrors is a string to append any errors to.
  * @param aParentDir is the parent directory to add to the zip file.
  */
-KICOMMON_API bool AddDirectoryToZip( wxZipOutputStream& aZip,
-                                     const wxString& aSourceDir,
-                                     wxString& aErrors,
+KICOMMON_API bool AddDirectoryToZip( wxZipOutputStream& aZip, const wxString& aSourceDir, wxString& aErrors,
                                      const wxString& aParentDir = "" );
-
-#endif /* GESTFICH_H */
