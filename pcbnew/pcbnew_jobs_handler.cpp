@@ -1414,6 +1414,17 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF:        mapFormat = PLOT_FORMAT::PDF;    break;
     }
 
+    
+    if( aDrillJob->m_generateReport && aDrillJob->m_reportPath.IsEmpty() )
+    {
+        wxFileName fn = outPath;
+        fn.SetFullName( brd->GetFileName() );
+        fn.SetName( fn.GetName() + "-drill" );
+        fn.SetExt( FILEEXT::ReportFileExtension );
+
+        aDrillJob->m_reportPath = fn.GetFullPath();
+    }
+
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
     {
         EXCELLON_WRITER::ZEROS_FMT zeroFmt;
@@ -1459,6 +1470,16 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
+
+        if( aDrillJob->m_generateReport )
+        {
+            wxString reportPath = aDrillJob->ResolveOutputPath( aDrillJob->m_reportPath, true, brd->GetProject() );
+
+            if( !excellonWriter->GenDrillReportFile( reportPath ) )
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
     }
     else if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER )
     {
@@ -1478,6 +1499,16 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
                                                       m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+
+        if( aDrillJob->m_generateReport )
+        {
+            wxString reportPath = aDrillJob->ResolveOutputPath( aDrillJob->m_reportPath, true, brd->GetProject() );
+
+            if( !gerberWriter->GenDrillReportFile( reportPath ) )
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
         }
     }
 
@@ -2296,6 +2327,7 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     return CLI::EXIT_CODES::SUCCESS;
 }
+
 
 
 DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )

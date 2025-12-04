@@ -249,6 +249,8 @@ public:
      */
     wxString GetFullOutputPath( PROJECT* aProject ) const;
 
+    wxString ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, PROJECT* aProject ) const;
+
     bool GetOutputPathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:
@@ -261,6 +263,11 @@ protected:
     wxString m_outputPath;
     bool     m_outputPathIsDirectory;
     wxString m_description;
+
+    /**
+     * The working output path is a transient path that takes priority over the configured
+     * output path when determining where to write output files.
+     */
     wxString m_workingOutputPath;
 
     std::vector<JOB_PARAM_BASE*> m_params;

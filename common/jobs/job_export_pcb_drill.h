@@ -85,6 +85,9 @@ public:
     MAP_FORMAT   m_mapFormat;
     int          m_gerberPrecision;
     bool         m_generateMap;
+
+    bool         m_generateReport;
+    wxString     m_reportPath;
 };
 
 #endif

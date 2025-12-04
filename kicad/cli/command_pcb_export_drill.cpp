@@ -38,6 +38,8 @@
 #define ARG_GERBER_PRECISION "--gerber-precision"
 #define ARG_EXCELLON_UNITS "--excellon-units"
 #define ARG_GENERATE_MAP "--generate-map"
+#define ARG_GENERATE_REPORT "--generate-report"
+#define ARG_REPORT_PATH "--report-path"
 #define ARG_MAP_FORMAT "--map-format"
 #define ARG_DRILL_ORIGIN "--drill-origin"
 
@@ -88,6 +90,15 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMM
     m_argParser.add_argument( ARG_GENERATE_MAP )
             .help( UTF8STDSTR( _( "Generate map / summary of drill hits" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_GENERATE_REPORT )
+            .help( UTF8STDSTR( _( "Generate report of drill hits" ) ) )
+            .flag();
+
+    m_argParser.add_argument( ARG_REPORT_PATH )
+                .default_value( std::string( "" ) )
+                .help( UTF8STDSTR( _( "Report output file path" ) ) )
+                .metavar( "REPORT_FILE" );
 
     m_argParser.add_argument( ARG_MAP_FORMAT )
             .default_value( std::string( "pdf" ) )
@@ -240,12 +251,24 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     drillJob->m_excellonMinimalHeader = m_argParser.get<bool>( ARG_EXCELLON_MINIMALHEAD );
     drillJob->m_excellonCombinePTHNPTH = !m_argParser.get<bool>( ARG_EXCELLON_SEPARATE_TH );
     drillJob->m_generateMap = m_argParser.get<bool>( ARG_GENERATE_MAP );
+    drillJob->m_generateReport = m_argParser.get<bool>( ARG_GENERATE_REPORT );
     drillJob->m_gerberPrecision = m_argParser.get<int>( ARG_GERBER_PRECISION );
 
     if( drillJob->m_gerberPrecision != 5 && drillJob->m_gerberPrecision != 6 )
     {
         wxFprintf( stderr, _( "Gerber coordinate precision should be either 5 or 6\n" ) );
         return EXIT_CODES::ERR_ARGS;
+    }
+
+    wxString reportPath = drillJob->m_reportPath =
+            From_UTF8( m_argParser.get<std::string>( ARG_REPORT_PATH ).c_str() );
+    if( drillJob->m_generateReport )
+    {
+        drillJob->m_reportPath = reportPath;
+    }
+    else if( !reportPath.IsEmpty() )
+    {
+        wxFprintf( stderr, _( "Warning: Report path supplied without --generate-report, no report will be generated\n" ) );
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drillJob.get() );
