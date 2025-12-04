@@ -138,6 +138,7 @@ target_link_libraries( qa_pns_regressions
     nanosvg
     idf3
     pcbcommon
+    markdown_lib
     3d-viewer
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
