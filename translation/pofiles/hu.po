@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-03 07:51+0000\n"
+"PO-Revision-Date: 2025-12-04 08:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -12874,14 +12874,12 @@ msgstr "Csere"
 #: kicad/pcm/dialogs/panel_package_base.cpp:75
 #: kicad/pcm/dialogs/panel_packages_view.cpp:705
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:127
-#, fuzzy
 msgid "Update"
 msgstr "Frissítés"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:459
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Rajzjel frissítése..."
+msgstr "Rajzjelek frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:565
 msgid "*** No symbols matching criteria found ***"
@@ -13930,7 +13928,7 @@ msgstr "Nem-Tápszimbólum"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "Tápszimbólum"
+msgstr "Tápszimbólumok"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 msgid "By net:"
@@ -14040,9 +14038,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_image_properties.cpp:81
 #: eeschema/dialogs/dialog_image_properties_base.h:48
 #: eeschema/sch_bitmap.cpp:315 pcbnew/pcb_reference_image.cpp:359
-#, fuzzy
 msgid "Image Properties"
-msgstr "Cél tulajdonságok"
+msgstr "Kép tulajdonságok"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 #, fuzzy
@@ -14582,9 +14579,8 @@ msgid "Clear the cell value"
 msgstr "Legutóbbi Excellon fúrófájl megnyitása"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Új rajzjel létrehozása"
+msgstr "Származtatott rajzjel létrehozása"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 #, fuzzy
@@ -15760,7 +15756,6 @@ msgid "Search &net names"
 msgstr "Vezeték név keresés"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
-#, fuzzy
 msgid "Replace"
 msgstr "Csere"
 
@@ -15839,7 +15834,6 @@ msgstr "lábszám"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
-#, fuzzy
 msgid "Net classes"
 msgstr "Vezetékosztályok"
 
@@ -15849,9 +15843,8 @@ msgid "Bus alias definitions"
 msgstr "Egyéb Busz Definiciók"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:75
-#, fuzzy
 msgid "Text variables"
-msgstr "Szöveg Variációk"
+msgstr "Szöveg változók"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:45
 #, fuzzy
@@ -21657,14 +21650,14 @@ msgid "Label '%s'"
 msgstr "Címke \"%s\""
 
 #: eeschema/sch_label.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Új címke"
+msgstr "Direktíva címke [%s (üres)]"
 
 #: eeschema/sch_label.cpp:1951
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Új címke"
+msgstr "Direktíva címke [%s %s]"
 
 #: eeschema/sch_label.cpp:2222
 #, c-format
@@ -21769,12 +21762,10 @@ msgid "No Connect"
 msgstr "Nincs csatlakozás"
 
 #: eeschema/sch_pin.cpp:1358
-#, fuzzy
 msgid "Pos X"
 msgstr "X pozíció"
 
 #: eeschema/sch_pin.cpp:1359
-#, fuzzy
 msgid "Pos Y"
 msgstr "Y pozíció"
 
@@ -21803,9 +21794,8 @@ msgid "Pin Name"
 msgstr "Lábnév"
 
 #: eeschema/sch_plotter.cpp:117
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "Lap kivezető lábak importálása"
+msgstr "Nincs ábrázolandó lap."
 
 #: eeschema/sch_plotter.cpp:227 pcbnew/pcbnew_jobs_handler.cpp:1380
 #, fuzzy, c-format
@@ -21907,14 +21897,14 @@ msgid "Circle, radius %s"
 msgstr "Kör, sugár %s"
 
 #: eeschema/sch_shape.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline, %d points"
-msgstr "Sokszög: (%s, %s) %d sarokkal"
+msgstr "Töröttvonal, %d pont"
 
 #: eeschema/sch_shape.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezier görbe"
+msgstr "Bezier-görbe, %d pont"
 
 #: eeschema/sch_shape.cpp:544
 #, fuzzy
@@ -21927,9 +21917,8 @@ msgid "Body background color"
 msgstr "Háttérszín"
 
 #: eeschema/sch_shape.cpp:546
-#, fuzzy
 msgid "Fill color"
-msgstr "Kitöltő szín:"
+msgstr "Kitöltő szín"
 
 #: eeschema/sch_shape.cpp:605 pcbnew/pcb_textbox.cpp:851
 #: pcbnew/pcb_track.cpp:2436
@@ -21938,14 +21927,12 @@ msgid "Filled"
 msgstr "Kitöltve"
 
 #: eeschema/sch_shape.cpp:613 pcbnew/zone.cpp:945 pcbnew/zone.cpp:1968
-#, fuzzy
 msgid "Fill Mode"
 msgstr "Kitöltési mód"
 
 #: eeschema/sch_sheet.cpp:867 eeschema/sch_sheet.cpp:1716
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 #: pcbnew/zone.cpp:1831
-#, fuzzy
 msgid "Sheet Name"
 msgstr "Lap név"
 
@@ -21955,15 +21942,13 @@ msgid "Hierarchical Path"
 msgstr "Hierarchikus címke"
 
 #: eeschema/sch_sheet.cpp:878
-#, fuzzy
 msgid "File Name"
 msgstr "Fájlnév"
 
 #: eeschema/sch_sheet.cpp:884 eeschema/sch_symbol.cpp:2180
 #: eeschema/sch_text.cpp:561 eeschema/sch_textbox.cpp:471
-#, fuzzy
 msgid "Simulation"
-msgstr "Szimulátor"
+msgstr "Szimuláció"
 
 #: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2183
 #, fuzzy
@@ -21984,20 +21969,17 @@ msgstr "Hierarchikus lap %s"
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_table.cpp:534
 #: pcbnew/pcb_table.cpp:731 pcbnew/pcb_tablecell.cpp:234
 #: pcbnew/pcb_textbox.cpp:876
-#, fuzzy
 msgid "Border Width"
-msgstr "Keret vastagság:"
+msgstr "Keret vastagság"
 
 #: eeschema/sch_sheet.cpp:1737 eeschema/sch_table.cpp:543
 #: pcbnew/pcb_table.cpp:740
-#, fuzzy
 msgid "Border Color"
-msgstr "Keret Színe:"
+msgstr "Keret színe"
 
 #: eeschema/sch_sheet.cpp:1740 pcbnew/dialogs/dialog_plot_base.cpp:399
-#, fuzzy
 msgid "Background Color"
-msgstr "Háttérszín felül"
+msgstr "Háttérszín"
 
 #: eeschema/sch_sheet.cpp:1752 eeschema/sch_symbol.cpp:1246
 #: eeschema/sch_symbol.cpp:3449 pcbnew/footprint.cpp:4485
@@ -22013,7 +21995,6 @@ msgid "Do not Populate"
 msgstr "Ne exportálja"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:478
-#, fuzzy
 msgid "(Deleted Item)"
 msgstr "(Törölt elem)"
 
@@ -22023,7 +22004,6 @@ msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarchikus lap kivezető láb %s"
 
 #: eeschema/sch_symbol.cpp:2206
-#, fuzzy
 msgid "Power symbol"
 msgstr "Tápszimbólum"
 
@@ -22042,7 +22022,6 @@ msgid "Undefined!!!"
 msgstr "Meghatározatlan!!!"
 
 #: eeschema/sch_symbol.cpp:2252
-#, fuzzy
 msgid "<Unknown>"
 msgstr "<Ismeretlen>"
 
@@ -22052,14 +22031,14 @@ msgid "No library defined!"
 msgstr "Nincs könyvtár definiálva!"
 
 #: eeschema/sch_symbol.cpp:2278
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol not found in %s!"
-msgstr "A rajzjel nem található a(z) \"%s\"-ben!"
+msgstr "A rajzjel nem található \"%s\"-ben!"
 
 #: eeschema/sch_symbol.cpp:2554
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s [%s]"
-msgstr "Rajzjel %s, [%s]"
+msgstr "Rajzjel %s [%s]"
 
 #: eeschema/sch_symbol.cpp:3351
 msgid "Mirror X"
@@ -22071,9 +22050,8 @@ msgstr "Tükrözés Y tengelyen"
 
 #: eeschema/sch_symbol.cpp:3381 eeschema/widgets/search_handlers.cpp:170
 #: pcbnew/footprint.cpp:4462 pcbnew/widgets/search_handlers.cpp:126
-#, fuzzy
 msgid "Library Link"
-msgstr "Könyvtár"
+msgstr "Könyvtár link"
 
 #: eeschema/sch_table.cpp:292
 #, c-format
@@ -22131,32 +22109,26 @@ msgid "Table Cell %s"
 msgstr "Táblázat név"
 
 #: eeschema/sch_tablecell.cpp:144 pcbnew/pcb_tablecell.cpp:147
-#, fuzzy
 msgid "Cell Width"
-msgstr "Vezetékosztály szélesség"
+msgstr "Cella szélesség"
 
 #: eeschema/sch_tablecell.cpp:146 pcbnew/pcb_tablecell.cpp:149
-#, fuzzy
 msgid "Cell Height"
-msgstr "Szöveg magasság"
+msgstr "Cella magasság"
 
 #: eeschema/sch_tablecell.cpp:239 pcbnew/pcb_tablecell.cpp:253
-#, fuzzy
 msgid "Column Width"
-msgstr "Vezetékosztály szélesség"
+msgstr "Oszlop szélesség"
 
 #: eeschema/sch_tablecell.cpp:244 pcbnew/pcb_tablecell.cpp:258
-#, fuzzy
 msgid "Row Height"
-msgstr "Szöveg magasság"
+msgstr "Sor magasság"
 
 #: eeschema/sch_tablecell.cpp:249
-#, fuzzy
 msgid "Cell Properties"
-msgstr "Minden tulajdonság alkalmazása"
+msgstr "Cella tulajdonságai"
 
 #: eeschema/sch_tablecell.cpp:251
-#, fuzzy
 msgid "Background Fill"
 msgstr "Háttér kitöltés"
 
@@ -22175,7 +22147,6 @@ msgid "Align center"
 msgstr "Középre igazítás"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -22353,9 +22324,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22376,8 +22347,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -22392,8 +22363,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busz Definiciók</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Eredmény</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22444,9 +22416,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -22459,44 +22431,37 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
-msgstr "Szöveg '%s'"
+msgstr "Szövegdoboz '%s'"
 
 #: eeschema/sch_textbox.cpp:481 pcbnew/pcb_textbox.cpp:502
-#, fuzzy
 msgid "Box Width"
-msgstr "Szöveg szélesség"
+msgstr "Doboz szélesség"
 
 #: eeschema/sch_textbox.cpp:484 pcbnew/pcb_textbox.cpp:505
-#, fuzzy
 msgid "Box Height"
-msgstr "Szöveg magasság"
+msgstr "Doboz magasság"
 
 #: eeschema/sch_textbox.cpp:622 pcbnew/pcb_textbox.cpp:881
-#, fuzzy
 msgid "Margins"
-msgstr "Margin_layer"
+msgstr "Margók"
 
 #: eeschema/sch_textbox.cpp:624 pcbnew/pcb_textbox.cpp:883
-#, fuzzy
 msgid "Margin Left"
-msgstr "Balra"
+msgstr "Bal margó"
 
 #: eeschema/sch_textbox.cpp:628 pcbnew/pcb_textbox.cpp:887
-#, fuzzy
 msgid "Margin Top"
-msgstr "Margin_layer"
+msgstr "Felső margó"
 
 #: eeschema/sch_textbox.cpp:632 pcbnew/pcb_textbox.cpp:891
-#, fuzzy
 msgid "Margin Right"
-msgstr "Jobbra"
+msgstr "Jobb margó"
 
 #: eeschema/sch_textbox.cpp:636 pcbnew/pcb_textbox.cpp:895
-#, fuzzy
 msgid "Margin Bottom"
-msgstr "Alsó Réteg"
+msgstr "Alsó margó"
 
 #: eeschema/sch_validators.cpp:59
 #, fuzzy
@@ -22555,14 +22520,12 @@ msgid "Use partial schematic"
 msgstr "Teljes kapcsolási rajzban"
 
 #: eeschema/sheet.cpp:310
-#, fuzzy
 msgid "Continue Load"
-msgstr "Folytatás"
+msgstr "Betöltés folytatása"
 
 #: eeschema/sheet.cpp:311
-#, fuzzy
 msgid "Cancel Load"
-msgstr "Mégsem"
+msgstr "Betöltés megszakítása"
 
 #: eeschema/sheet.cpp:320
 msgid ""
@@ -22739,11 +22702,11 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:407
 msgid "There is an invalid voltage in an IV table"
-msgstr ""
+msgstr "Érvénytelen feszültség érték egy I-V táblázatban"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:414
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Érvénytelen áram érték egy I-V táblázatban"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
 msgid "Invalid R_load."
@@ -23343,14 +23306,14 @@ msgid "Unknown simulation model pin '%s'"
 msgstr "Ismeretlen token: \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "A(z) \"%s\" könyvtár fájl nem található"
+msgstr "IBIS alkatrész \"%s\" nem található"
 
 #: eeschema/sim/sim_model_ibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS alkatrész \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:96
 #, fuzzy, c-format
@@ -23368,9 +23331,9 @@ msgid "Could not find IBIS model '%s'"
 msgstr "A(z) \"%s\" könyvtár fájl nem található"
 
 #: eeschema/sim/sim_model_ibis.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS modell \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:338
 #, fuzzy
@@ -23405,9 +23368,8 @@ msgstr "Lefutási idő:"
 
 #: eeschema/sim/sim_model_ibis.cpp:446 eeschema/sim/sim_model_ibis.cpp:479
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:216
-#, fuzzy
 msgid "Delay"
-msgstr "Késleltetés:"
+msgstr "Késleltetés"
 
 #: eeschema/sim/sim_model_ibis.cpp:454
 #, fuzzy
@@ -23474,7 +23436,6 @@ msgid "Temperature (swept)"
 msgstr "Hőmérséklet-emelkedés:"
 
 #: eeschema/sim/sim_plot_tab.cpp:969
-#, fuzzy
 msgid "Voltage (measured)"
 msgstr "Feszültség (mért)"
 
@@ -36657,7 +36618,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:355 pcbnew/files.cpp:540
 #: pcbnew/tools/pcb_control.cpp:1900
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:185
-#, fuzzy
 msgid "Load PCB"
 msgstr "NYÁK Betöltése"
 
@@ -36673,9 +36633,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:121
 #: pcbnew/dialogs/dialog_render_job_base.cpp:43
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Méretek"
+msgstr "Méretek:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:123
 msgid "Front copper area:"
@@ -38312,24 +38271,20 @@ msgid "Update Footprints from Library"
 msgstr "Alkatrészrajzolatok frissítése könyvtárból"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:97
-#, fuzzy
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "CSV fájl (*.csv)|*."
+msgstr "IPC-2581 fájlok (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:98
-#, fuzzy
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr "IPC-D-356 teszt fájl (.d356)|*."
+msgstr "IPC-2581 tömörített fájlok (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:100
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Exportálás fájlba"
+msgstr "IPC-2581 fájl exportálása"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:148
-#, fuzzy
 msgid "manufacturer"
-msgstr "Mappa kiválasztása"
+msgstr "gyártó"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:152
 #, fuzzy
@@ -38430,9 +38385,8 @@ msgid "Generate unique"
 msgstr "Figyelmeztetés generálása"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "Mappa kiválasztása"
+msgstr "Gyártó típusszám:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
@@ -38452,26 +38406,24 @@ msgstr "Gyártó:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:161
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "Disztribútor típusszám:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:169
 msgid "Column containing the distributor part number"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:173
-#, fuzzy
 msgid "Distributor:"
-msgstr "Igazítás/Szétszórás"
+msgstr "Disztribútor:"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:75
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
 msgstr "A(z) \"%s\" fájl már létezik."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
-#, fuzzy
 msgid "File name:"
 msgstr "Fájlnév:"
 
@@ -38661,9 +38613,8 @@ msgid "Universal 3D files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:267
-#, fuzzy
 msgid "PDF files"
-msgstr "PLY fájlok"
+msgstr "PDF fájlok"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:275
 #, fuzzy
@@ -38712,11 +38663,11 @@ msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STPZ"
-msgstr ""
+msgstr "STPZ"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "U3D"
-msgstr ""
+msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "Board Options"
@@ -38744,9 +38695,8 @@ msgid "Cut vias in board body"
 msgstr "Nyákterv exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "Felső szitanyomat"
+msgstr "Szitanyomat exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:74
 #, fuzzy
@@ -38986,7 +38936,6 @@ msgid "meter"
 msgstr "méter"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
-#, fuzzy
 msgid "0.1 inch"
 msgstr "0.1 hüvelyk"
 
@@ -39086,7 +39035,7 @@ msgstr "\"%s\" megtalálva"
 #: pcbnew/dialogs/dialog_find.cpp:380
 #, c-format
 msgid "Hit(s): %d / %zu"
-msgstr ""
+msgstr "Találat(ok): %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -39122,9 +39071,8 @@ msgid "Search &other text items"
 msgstr "Egyéb szöveges elemek keresése"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:119
-#, fuzzy
 msgid "Restart Search"
-msgstr "Keresés Újraindítás"
+msgstr "Keresés újraindítása"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:49
 msgid "Footprint: "
@@ -39135,9 +39083,8 @@ msgid "Symbol:"
 msgstr "Rajzjel:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:99
-#, fuzzy
 msgid "Sheet: "
-msgstr "Lap"
+msgstr "Lap: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -39220,7 +39167,6 @@ msgstr "Alkatrészrajzolat-tulajdonságok szerkesztése"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:52
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:68
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:97
-#, fuzzy
 msgid "Text Items"
 msgstr "Szöveges elemek"
 
@@ -54726,7 +54672,6 @@ msgid "Increase tuning pattern spacing by one step."
 msgstr "Meander térközök növelése egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:251
-#, fuzzy
 msgid "Decrease Spacing"
 msgstr "Térköz csökkentése"
 
@@ -54736,7 +54681,6 @@ msgid "Decrease tuning pattern spacing by one step."
 msgstr "Meander térközök csökkentése egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:260
-#, fuzzy
 msgid "Increase Amplitude"
 msgstr "Amplitúdó növelése"
 
@@ -54746,7 +54690,6 @@ msgid "Increase tuning pattern amplitude by one step."
 msgstr "Meander amplitúdó növelésével egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:269
-#, fuzzy
 msgid "Decrease Amplitude"
 msgstr "Amplitúdó csökkentése"
 
