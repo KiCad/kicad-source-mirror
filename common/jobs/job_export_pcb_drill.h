@@ -86,6 +86,9 @@ public:
     bool         m_generateMap;
 
     bool         m_generateTenting;
+
+    bool         m_generateReport;
+    wxString     m_reportPath;
 };
 
 #endif
