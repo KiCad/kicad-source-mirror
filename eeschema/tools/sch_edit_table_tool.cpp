@@ -27,7 +27,7 @@
 #include <wx/filedlg.h>
 #include <fstream>
 #include <sch_sheet_path.h>
-
+#include <wx/msgdlg.h>
 
 SCH_EDIT_TABLE_TOOL::SCH_EDIT_TABLE_TOOL() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.TableEditor" )

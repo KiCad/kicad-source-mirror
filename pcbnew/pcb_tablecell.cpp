@@ -29,7 +29,7 @@
 #include <string_utils.h>
 #include <board.h>
 #include <pcb_table.h>
-#include <pcb_tablecell.h>
+#include <footprint.h>
 
 
 PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :

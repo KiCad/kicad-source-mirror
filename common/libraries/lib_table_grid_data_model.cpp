@@ -225,18 +225,18 @@ void LIB_TABLE_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aV
     if( badCoords( aRow, aCol ) )
         return;
 
-    LIBRARY_TABLE_ROW& r = at( aRow );
+    LIBRARY_TABLE_ROW& lrow = at( aRow );
 
     switch( aCol )
     {
-    case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
-    case COL_URI:      r.SetURI( aValue );                                  break;
-    case COL_TYPE:     r.SetType( aValue );                                 break;
-    case COL_OPTIONS:  r.SetOptions( aValue );                              break;
-    case COL_DESCR:    r.SetDescription( aValue );                          break;
-    case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
-    case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
-    case COL_STATUS:                                                        break;
+    case COL_NICKNAME: lrow.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
+    case COL_URI:      lrow.SetURI( aValue );                                  break;
+    case COL_TYPE:     lrow.SetType( aValue );                                 break;
+    case COL_OPTIONS:  lrow.SetOptions( aValue );                              break;
+    case COL_DESCR:    lrow.SetDescription( aValue );                          break;
+    case COL_ENABLED:  lrow.SetDisabled( aValue == wxT( "0" ) );               break;
+    case COL_VISIBLE:  lrow.SetHidden( aValue == wxT( "0" ) );                 break;
+    case COL_STATUS:                                                           break;
     }
 
     if( aCol == COL_URI || aCol == COL_TYPE || aCol == COL_OPTIONS )
