@@ -113,6 +113,7 @@ target_link_libraries( pns_debug_tool
     nanosvg
     idf3
     pcbcommon
+    markdown_lib
     3d-viewer
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
