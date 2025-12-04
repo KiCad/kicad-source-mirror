@@ -3573,7 +3573,7 @@ static struct PAD_DESC
                                        return false;
                                    } );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Top Backdrill Must-cut" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Top Backdrill Must-Cut" ),
                     &PAD::SetTopBackdrillLayer, &PAD::GetTopBackdrillLayer ), groupBackdrill )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
                                    {
