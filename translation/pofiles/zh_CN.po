@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-03 22:00+0000\n"
+"PO-Revision-Date: 2025-12-04 23:00+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -8825,7 +8825,7 @@ msgstr "删除所选项"
 
 #: common/tool/actions.cpp:299
 msgid "Interactive Delete Tool"
-msgstr "交互式删除工具"
+msgstr "交互删除工具"
 
 #: common/tool/actions.cpp:300
 msgid "Delete clicked items"
@@ -11480,9 +11480,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** 找不到符合筛选条件的符号 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** 找不到符号 ***"
+msgstr "*** 符号库 ID 无效 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -14420,8 +14419,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"这对于添加一些不想出现在物料清单中的电路板封装 (如基准定位点) 和 logo 标志等"
-"符号很有用"
+"这对于添加一些不想出现在物料清单中的电路板封装 (如基准定位标记) 和 logo 标志"
+"等符号很有用"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -25835,7 +25834,7 @@ msgstr "点之间最短相距多少才被视作分开的点"
 
 #: kicad/cli/command_pcb_export_3d.cpp:175
 msgid "Only include copper items belonging to nets matching this wildcard"
-msgstr "只包括属于与此通配符匹配的网络的铜箔项目"
+msgstr "只包括属于与此通配符匹配的网络的铜对象"
 
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -33946,7 +33945,7 @@ msgstr "网络过滤器 (支持通配符):"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr "只导出与此过滤器匹配的网络中的铜箔项目。"
+msgstr "只导出与此过滤器匹配的网络中的铜对象。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 msgid "Coordinates"
@@ -34533,7 +34532,7 @@ msgstr "间距重写和设置"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "当前已经分配了库标识和封装标识。使用 \"替换封装…\" 来分配不同的封装。"
+msgstr "当前已经分配了库标识和封装标识。使用 \"替换封装...\" 来分配不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -36249,11 +36248,11 @@ msgid ""
 msgstr ""
 "用于在制造文件中指定特殊用途或约束的可选属性:\n"
 "BGA 特性用于 BGA 封装中的焊盘\n"
-"局部基准点 特性作为父级封装的基准\n"
-"全局基准点 特性作为整个电路板的基准\n"
-"测试点焊盘 (Test Point) 指定电气测试点\n"
-"散热焊盘 (Heatsink) 指定热焊盘\n"
-"半孔焊盘 (Castellated) 指定板边缘金属化半孔焊盘\n"
+"局部基准标记 特性作为父级封装的基准\n"
+"全局基准标记 特性作为整个电路板的基准\n"
+"测试点 (Test Point) 指定电气测试点\n"
+"散热 (Heatsink) 指定热焊盘\n"
+"半孔 (Castellated) 指定板边缘金属化半孔焊盘\n"
 "机械 (Mechanical) 指定用于机械支撑的通孔焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2699
@@ -36262,11 +36261,11 @@ msgstr "BGA 焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2701
 msgid "Fiducial, local to footprint"
-msgstr "基准点 (局部, 仅针对封装)"
+msgstr "基准标记 (局部, 仅针对封装)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2700
 msgid "Fiducial, global to board"
-msgstr "基准点 (全局, 整个电路板)"
+msgstr "基准标记 (全局, 针对电路板)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2702
 msgid "Test point pad"
@@ -38438,7 +38437,7 @@ msgstr "最小连接宽度:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
 msgid "The minimum copper width of connected copper items."
-msgstr "两个铜箔项目之间的最小宽度。"
+msgstr "两个铜对象之间的最小宽度。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -38942,7 +38941,7 @@ msgid ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"阻焊开窗与具有与阻焊开窗父网络不同网络的铜箔项目之间的最小距离。\n"
+"阻焊开窗与具有与阻焊开窗父网络不同网络的铜项目之间的最小距离。\n"
 "小于此距离将导致 DRC 错误。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
@@ -40236,7 +40235,7 @@ msgstr "差分对 skew 默认属性"
 
 #: pcbnew/drc/drc_cache_generator.cpp:147
 msgid "Gathering copper items..."
-msgstr "正在收集铜箔项目..."
+msgstr "正在收集铜对象..."
 
 #: pcbnew/drc/drc_engine.cpp:161 pcbnew/drc/drc_test_provider_hole_size.cpp:160
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:233
@@ -40326,7 +40325,7 @@ msgstr "net tie"
 #: pcbnew/drc/drc_engine.cpp:816 pcbnew/drc/drc_engine.cpp:826
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "%s 上的局部覆盖; 间距: %s。"
+msgstr "%s 上的局部重写; 间距: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:841 pcbnew/drc/drc_engine.cpp:1455
 #: pcbnew/drc/drc_engine.cpp:1471
@@ -40489,7 +40488,7 @@ msgstr "正在检查 %s: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1152
 msgid "Netclass clearances apply only between copper items."
-msgstr "网类间距仅适用于铜箔项目之间。"
+msgstr "网络类间距仅适用于铜对象之间。"
 
 #: pcbnew/drc/drc_engine.cpp:1156 pcbnew/drc/drc_engine.cpp:1161
 #, c-format
@@ -40869,7 +40868,7 @@ msgstr "规则: %s"
 
 #: pcbnew/drc/drc_item.cpp:496
 msgid "Local override"
-msgstr "局部覆盖"
+msgstr "局部重写"
 
 #: pcbnew/drc/drc_rule.h:167
 #, c-format
@@ -41058,9 +41057,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "正在检查覆铜图形间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "正在检查覆铜图形间距..."
+msgstr "正在检查铜层图形孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -43579,23 +43577,23 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:1371
 msgid "Fiducial global"
-msgstr "全局 Fiducial"
+msgstr "全局基准标记"
 
 #: pcbnew/pad.cpp:1372
 msgid "Fiducial local"
-msgstr "局部 Fiducial"
+msgstr "局部基准标记"
 
 #: pcbnew/pad.cpp:1373
 msgid "Test point"
-msgstr "Test point"
+msgstr "测试点"
 
 #: pcbnew/pad.cpp:1374
 msgid "Heat sink"
-msgstr "Heat sink"
+msgstr "散热"
 
 #: pcbnew/pad.cpp:1375
 msgid "Castellated"
-msgstr "半孔焊盘"
+msgstr "半孔"
 
 #: pcbnew/pad.cpp:1409
 msgid "Length in Package"
@@ -44626,7 +44624,7 @@ msgid ""
 "items have been imported as graphical elements."
 msgstr ""
 "封装定义 '%s' 中有与多个图层上的焊盘关联的元件铜箔层。KiCad 不支持自定义 "
-"pinstack。这些铜箔项目已作为图形元素导入。"
+"pinstack。这些铜对象已作为图形元素导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:994
 #, c-format
@@ -45357,7 +45355,7 @@ msgstr ""
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr ""
+msgstr "IPC-2581 revision B 不支持泪滴; 已作为填充区导出。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3234
 msgid "Generating logistic section"
@@ -46405,7 +46403,7 @@ msgstr "切换走线模式"
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Switches posture of the currently routed track."
-msgstr "切换当前交互式布线的模式。"
+msgstr "切换当前交互布线的模式。"
 
 #: pcbnew/router/router_tool.cpp:199
 msgid "Track Corner Mode"
@@ -48788,7 +48786,7 @@ msgstr "切换网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "高亮选定网络中的所有铜箔项目"
+msgstr "高亮选定网络中的所有铜对象"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Hide Net in Ratsnest"
@@ -48832,7 +48830,7 @@ msgstr "显示 Python 脚本控制台"
 
 #: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Show/hide the net inspector"
-msgstr "显示/隐藏 网络检查器"
+msgstr "显示/隐藏 网络检查"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
@@ -50162,7 +50160,7 @@ msgstr "选择何时显示网络和网络类颜色"
 #: pcbnew/widgets/appearance_controls.cpp:723
 #: pcbnew/widgets/appearance_controls.cpp:2589
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "在所有铜箔项目上显示网络和网络类颜色"
+msgstr "在所有铜对象上显示网络和网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:731
 #: pcbnew/widgets/appearance_controls.cpp:2592
@@ -50611,7 +50609,7 @@ msgstr "当前配色主题为只读。在偏好设置中创建新主题以启用
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
-msgstr "显示网络检查器"
+msgstr "显示网络检查"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
@@ -50761,7 +50759,7 @@ msgstr "显示 / 隐藏 列"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1589
 msgid "Save Net Inspector Report File"
-msgstr "保存网络检查器报告文件"
+msgstr "保存网络检查报告文件"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1590
 msgid "Report file"
