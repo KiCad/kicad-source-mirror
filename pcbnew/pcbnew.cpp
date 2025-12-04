@@ -498,13 +498,34 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName  );
 
-        std::map<std::string, wxString> aPathTokenToExtensionMap;
-        aPathTokenToExtensionMap["sheetfile"] = wxS( ".sch" );
-        aPathTokenToExtensionMap["sheetfile"] = wxS( ".kicad_sch" );
+        CopySexprFile( aSrcFilePath, destFile.GetFullPath(),
+                [&]( const std::string& token, wxString& value )
+                {
+                    if( token == "sheetfile" )
+                    {
+                        for( const wxString& extension : { wxT( ".sch" ), wxT( ".kicad_sch" ) } )
+                        {
+                            if( value == aSrcProjectName + extension )
+                            {
+                                value = aNewProjectName + extension;
+                                return true;
+                            }
+                            else if( value == aProjectBasePath + "/" + aSrcProjectName + extension )
+                            {
+                                value = aNewProjectBasePath + "/" + aNewProjectName + extension;
+                                return true;
+                            }
+                            else if( value.StartsWith( aProjectBasePath ) )
+                            {
+                                value.Replace( aProjectBasePath, aNewProjectBasePath, false );
+                                return true;
+                            }
+                        }
+                    }
 
-        CopySexprFile( aSrcFilePath, destFile.GetFullPath(), aPathTokenToExtensionMap,
-                       aProjectBasePath, aSrcProjectName,
-                       aNewProjectBasePath, aNewProjectName, aErrors );
+                    return false;
+                },
+                aErrors );
     }
     else if( ext == FILEEXT::LegacyPcbFileExtension )
     {

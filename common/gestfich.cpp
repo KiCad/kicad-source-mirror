@@ -317,9 +317,8 @@ static void traverseSEXPR( SEXPR::SEXPR* aNode, const std::function<void( SEXPR:
 
 
 void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
-                    const std::map<std::string, wxString>& aPathTokenToExtensionMap,
-                    const wxString& aSrcProjectBasePath, const wxString& aSrcProjectName,
-                    const wxString& aNewProjectBasePath, const wxString& aNewProjectName, wxString& aErrors )
+                    std::function<bool( const std::string& token, wxString& value )> aCallback,
+                    wxString& aErrors )
 {
     bool success = false;
 
@@ -333,27 +332,18 @@ void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
                 {
                     if( node->IsList() && node->GetNumberOfChildren() > 1 && node->GetChild( 0 )->IsSymbol() )
                     {
-                        std::string token = node->GetChild( 0 )->GetSymbol();
+                        std::string          token = node->GetChild( 0 )->GetSymbol();
+                        SEXPR::SEXPR_STRING* pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
+                        SEXPR::SEXPR_SYMBOL* symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
+                        wxString             path;
 
-                        if( aPathTokenToExtensionMap.contains( token ) )
+                        if( pathNode )
+                            path = pathNode->m_value;
+                        else if( symNode )
+                            path = symNode->m_value;
+
+                        if( aCallback( token, path ) )
                         {
-                            const wxString&      extension = aPathTokenToExtensionMap.at( token );
-                            SEXPR::SEXPR_STRING* pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
-                            SEXPR::SEXPR_SYMBOL* symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
-                            wxString             path;
-
-                            if( pathNode )
-                                path = pathNode->m_value;
-                            else if( symNode )
-                                path = symNode->m_value;
-
-                            if( path == aSrcProjectName + extension )
-                                path = aNewProjectName + extension;
-                            else if( path == aSrcProjectBasePath + "/" + aSrcProjectName + extension )
-                                path = aNewProjectBasePath + "/" + aNewProjectName + extension;
-                            else if( path.StartsWith( aSrcProjectBasePath ) )
-                                path.Replace( aSrcProjectBasePath, aNewProjectBasePath, false );
-
                             if( pathNode )
                                 pathNode->m_value = path;
                             else if( symNode )

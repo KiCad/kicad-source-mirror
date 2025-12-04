@@ -61,15 +61,12 @@ KICOMMON_API void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPat
 /**
  * @param aSrcPath is the full filename of the source.
  * @param[in] aDestPath is the full filename of the target.
- * @param[in] aPathTokenToExtensionMap a set of sexpr tokens which might be followed by a path to aSrcPath
- *                                     which needs to be updated to aDestPath.  The value of the map is the
- *                                     extension any said path should have.
+ * @param[in] aCallback a facility to allow modification of the values of particular tokens.  Normally used
+ *                      to update paths in the copied document.
  * @param[out] aErrors a wxString to *append* any errors to.
  */
 KICOMMON_API void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
-                                 const std::map<std::string, wxString>& aPathTokenToExtensionMap,
-                                 const wxString& aSrcProjectBasePath, const wxString& aSrcProjectName,
-                                 const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                                 std::function<bool( const std::string& token, wxString& value )> aCallback,
                                  wxString& aErrors );
 
 /**
