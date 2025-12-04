@@ -2306,6 +2306,9 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     {
         double radius = static_cast<PCB_ARC*>( this )->GetRadius();
         aList.emplace_back( _( "Radius" ), aFrame->MessageTextFromValue( radius ) );
+
+        aList.emplace_back( _( "Angle" ), wxString::Format( "%.2fdeg",
+                            static_cast<PCB_ARC*>(this)->GetAngle().AsDegrees() ) );
     }
 
     double segmentLength = GetLength();

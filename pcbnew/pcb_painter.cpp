@@ -1006,11 +1006,22 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     ERROR_LOC errorloc = aLayer == F_Cu ? ERROR_LOC::ERROR_INSIDE : ERROR_LOC::ERROR_OUTSIDE;
     TransformArcToPolygon( cornerBuffer, aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), width,
                            m_maxError, errorloc );
-    m_canvas->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    m_canvas->SetIsFill( false );
-    m_canvas->SetIsStroke( true );
-    m_canvas->SetStrokeColor( COLOR4D( 0, 0, 1.0, 1.0 ) );
-    m_canvas->DrawPolygon( cornerBuffer );
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( COLOR4D( 0, 0, 1.0, 1.0 ) );
+    m_gal->DrawPolygon( cornerBuffer );
+
+#if 0
+    // Draw 3 lines from arc center to arc start, arc middle, arc end to show how the arc is defined
+    SHAPE_ARC arc( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), m_pcbSettings.m_outlineWidth );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( color );
+    m_gal->DrawSegment( arc.GetStart(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
+    m_gal->DrawSegment( aArc->GetFocusPosition(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
+    m_gal->DrawSegment( arc.GetEnd(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
+#endif
 #endif
 
 #if 0
@@ -1018,13 +1029,13 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     // polyline created by it.
     SHAPE_ARC arc( aArc->GetCenter(), aArc->GetStart(), aArc->GetAngle(), aArc->GetWidth() );
     SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( m_maxError );
-    m_canvas->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    m_canvas->SetIsFill( false );
-    m_canvas->SetIsStroke( true );
-    m_canvas->SetStrokeColor( COLOR4D( 0.3, 0.2, 0.5, 1.0 ) );
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( COLOR4D( 0.3, 0.2, 0.5, 1.0 ) );
 
     for( int idx = 1; idx < arcSpine.PointCount(); idx++ )
-        m_canvas->DrawSegment( arcSpine.CPoint( idx-1 ), arcSpine.CPoint( idx ), aArc->GetWidth() );
+        m_gal->DrawSegment( arcSpine.CPoint( idx-1 ), arcSpine.CPoint( idx ), aArc->GetWidth() );
 #endif
 }
 
