@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-03 22:00+0000\n"
+"PO-Revision-Date: 2025-12-04 23:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -11980,14 +11980,12 @@ msgstr "Csere"
 #: kicad/pcm/dialogs/panel_package_base.cpp:75
 #: kicad/pcm/dialogs/panel_packages_view.cpp:720
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
-#, fuzzy
 msgid "Update"
 msgstr "Frissítés"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Rajzjel frissítése..."
+msgstr "Rajzjelek frissítése"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:563
 msgid "*** No symbols matching criteria found ***"
@@ -13060,7 +13058,7 @@ msgstr "Nem-Tápszimbólum"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "Tápszimbólum"
+msgstr "Tápszimbólumok"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -13210,9 +13208,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_image_properties.cpp:78
 #: eeschema/dialogs/dialog_image_properties_base.h:56
 #: eeschema/sch_bitmap.cpp:318 pcbnew/pcb_reference_image.cpp:353
-#, fuzzy
 msgid "Image Properties"
-msgstr "Cél tulajdonságok"
+msgstr "Kép tulajdonságok"
 
 #: eeschema/dialogs/dialog_image_properties_base.cpp:25
 #: gerbview/gerber_draw_item.cpp:706
@@ -13676,9 +13673,8 @@ msgid "Revert the symbol to its last saved state"
 msgstr "'%s' visszaállítása az utolsó mentett verzióra?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Szigetelési távolság"
+msgstr "Cella törlése"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
 #, fuzzy
@@ -13686,9 +13682,8 @@ msgid "Clear the cell value"
 msgstr "Legutóbbi fúrófájlok törlése"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Új rajzjel létrehozása"
+msgstr "Származtatott rajzjel létrehozása"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
 #, fuzzy
@@ -14781,7 +14776,6 @@ msgstr "lábszám"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
-#, fuzzy
 msgid "Net classes"
 msgstr "Vezetékosztályok"
 
@@ -14791,9 +14785,8 @@ msgid "Bus alias definitions"
 msgstr "Egyéb Busz Definiciók"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Text variables"
-msgstr "Szöveg Variációk"
+msgstr "Szöveg változók"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -14867,7 +14860,6 @@ msgid "Search &net names"
 msgstr "Vezeték név keresés"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:127
-#, fuzzy
 msgid "Replace"
 msgstr "Csere"
 
@@ -22074,14 +22066,14 @@ msgid "Unknown simulation model pin '%s'"
 msgstr "Ismeretlen token: \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "A(z) \"%s\" könyvtár fájl nem található"
+msgstr "IBIS alkatrész \"%s\" nem található"
 
 #: eeschema/sim/sim_model_ibis.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS alkatrész \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:96
 #, fuzzy, c-format
@@ -22099,9 +22091,9 @@ msgid "Could not find IBIS model '%s'"
 msgstr "A(z) \"%s\" könyvtár fájl nem található"
 
 #: eeschema/sim/sim_model_ibis.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS modell \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:338
 #, fuzzy
@@ -22135,9 +22127,8 @@ msgid "OFF time"
 msgstr "Lefutási idő:"
 
 #: eeschema/sim/sim_model_ibis.cpp:446 eeschema/sim/sim_model_ibis.cpp:479
-#, fuzzy
 msgid "Delay"
-msgstr "Késleltetés:"
+msgstr "Késleltetés"
 
 #: eeschema/sim/sim_model_ibis.cpp:454
 #, fuzzy
@@ -22199,7 +22190,6 @@ msgid "Temperature (swept)"
 msgstr "Hőmérséklet-emelkedés:"
 
 #: eeschema/sim/sim_plot_tab.cpp:793
-#, fuzzy
 msgid "Voltage (measured)"
 msgstr "Feszültség (mért)"
 
@@ -28564,7 +28554,6 @@ msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr "Letölthető csomagok kezelése a KiCad-ből és harmadik fél adattáraiból"
 
 #: kicad/files-io.cpp:46
-#, fuzzy
 msgid "KiCad project file"
 msgstr "KiCad projekt fájl"
 
@@ -28676,54 +28665,45 @@ msgstr "A(z) \"%s\" nem kapcsolási rajz fájl"
 
 #: kicad/kicad_cli.cpp:120
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "GLB exportálása (bináris GLTF)"
 
 #: kicad/kicad_cli.cpp:121
-#, fuzzy
 msgid "Export STEP"
 msgstr "STEP exportálása"
 
 #: kicad/kicad_cli.cpp:122
-#, fuzzy
 msgid "Export BREP"
-msgstr "STEP exportálása"
+msgstr "BREP exportálása"
 
 #: kicad/kicad_cli.cpp:123
-#, fuzzy
 msgid "Export XAO"
-msgstr "IDFv3 exportálás"
+msgstr "XAO exportálása"
 
 #: kicad/kicad_cli.cpp:124
-#, fuzzy
 msgid "Export VRML"
-msgstr "Exportolás"
+msgstr "VRML exportálása"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export PLY"
-msgstr "STEP exportálása"
+msgstr "PLY exportálása"
 
 #: kicad/kicad_cli.cpp:126
-#, fuzzy
 msgid "Export STL"
-msgstr "STEP exportálása"
+msgstr "STL exportálása"
 
 #: kicad/kicad_cli.cpp:146
-#, fuzzy
 msgid "Export PS"
-msgstr "STEP exportálása"
+msgstr "PS exportálása"
 
 #: kicad/kicad_cli.cpp:333
 msgid "prints version information and exits"
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:89
-#, fuzzy
 msgid "Editors"
-msgstr "Szerkesztés"
+msgstr "Szerkesztők"
 
 #: kicad/kicad_manager_frame.cpp:90
-#, fuzzy
 msgid "Project Files"
 msgstr "Projekt fájlok"
 
@@ -28743,9 +28723,8 @@ msgid "Error opening jobs file"
 msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 
 #: kicad/kicad_manager_frame.cpp:980
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Kijelölt fájl szerkesztése szövegszerkesztővel"
+msgstr "Fájl szerkesztése szövegszerkesztővel"
 
 #: kicad/kicad_manager_frame.cpp:1073
 #, fuzzy
@@ -28753,9 +28732,9 @@ msgid "[no project loaded]"
 msgstr "Nincs megadva alkatrészrajzolat"
 
 #: kicad/kicad_manager_frame.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Projekt"
+msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:1152
 #, fuzzy
@@ -28778,9 +28757,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "Nem KiCad Project fájl importálása..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE Projekt..."
+msgstr "Altium Projekt..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
@@ -28850,14 +28828,12 @@ msgid "Open project directory in file browser"
 msgstr "Projektkönyvtár megnyitása fájlkezelőben"
 
 #: kicad/menubar.cpp:209
-#, fuzzy
 msgid "Edit Local File..."
 msgstr "Helyi fájl szerkesztése..."
 
 #: kicad/menubar.cpp:210
-#, fuzzy
 msgid "Edit local file in text editor"
-msgstr "Szkript fájl szerkesztése szövegszerkesztővel"
+msgstr "Helyi fájl szerkesztése szövegszerkesztővel"
 
 #: kicad/menubar.cpp:268
 msgid "Archive all project files"
@@ -28898,9 +28874,9 @@ msgid "Manage Repositories"
 msgstr "Busz definíciók kezelése"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Szabálysértés / Jelölők (%d)"
+msgstr "Pluginok (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, fuzzy, c-format
@@ -28908,14 +28884,14 @@ msgid "Fabrication plugins (%d)"
 msgstr "Sorozatgyártáshoz szükséges fájlok"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Könyvtárak"
+msgstr "Könyvtárak (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Szín:"
+msgstr "Szín témák (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:83
 #, fuzzy, c-format
@@ -28923,9 +28899,8 @@ msgid "Are you sure you want to update pinned package from version %s to %s?"
 msgstr "Biztosan törli a kijelölt elemeket?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:86
-#, fuzzy
 msgid "Confirm update"
-msgstr "Módosítás megerősítése"
+msgstr "Frissítés megerősítése"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:107 kicad/pcm/dialogs/panel_package.cpp:111
 #: kicad/pcm/dialogs/panel_package.cpp:117
@@ -29036,9 +29011,8 @@ msgid "Download Progress"
 msgstr "3D modell könyvtárak letöltése"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "Betöltés..."
+msgstr "Várakozás..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 #, fuzzy
@@ -29947,7 +29921,6 @@ msgid "A problem occurred creating new project from template."
 msgstr "Probléma merült fel az új projekt sablonból történ létrehozása során."
 
 #: kicad/tools/kicad_manager_control.cpp:408
-#, fuzzy
 msgid "Open Existing Project"
 msgstr "Meglévő projekt megnyitása"
 
@@ -31579,22 +31552,21 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
-#, fuzzy
 msgid "Type:"
-msgstr "Tipus:"
+msgstr "Típus:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
-#, fuzzy
 msgid ""
 "Type of the regulator.\n"
 "There are 2 types:\n"
 "- regulators which have a dedicated sense pin for the voltage regulation.\n"
 "- 3 terminal pins."
 msgstr ""
-"Feszültségszabályozó típusok:\n"
+"Feszültségszabályozó típusok.\n"
+"Kétféle típus van:\n"
 "- normál stabilizátorok, amelyek különálló visszacsatoló lábbal "
-"rendelkeznek,\n"
-"- háromlábú típusok (pl: 7805)"
+"rendelkeznek.\n"
+"- háromlábú típusok (pl: 7805)."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:64
@@ -31797,9 +31769,8 @@ msgid "R3:"
 msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Hőmérséklet-emelkedés:"
+msgstr "Hőmérséklet-emelkedés"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 msgid "Current (I):"
@@ -32017,7 +31988,6 @@ msgid "Plating thickness (T):"
 msgstr "Furatfémezés vastagság (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
-#, fuzzy
 msgid "Via length:"
 msgstr "Via hossz:"
 
@@ -32225,7 +32195,7 @@ msgstr "Adatfájl hiba."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/tip/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -32346,9 +32316,8 @@ msgid "Fusing Current"
 msgstr "Áram"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:179
-#, fuzzy
 msgid "Cable Size"
-msgstr "Furat méret X:"
+msgstr "Kábel méret"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:181
 msgid "High Speed"
@@ -32359,7 +32328,6 @@ msgid "Wavelength"
 msgstr "Hullámhossz"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:184
-#, fuzzy
 msgid "RF Attenuators"
 msgstr "RF csillapítók"
 
@@ -32375,12 +32343,11 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:189
 msgid "E-Series"
-msgstr ""
+msgstr "E-sorozat"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:190
-#, fuzzy
 msgid "Color Code"
-msgstr "Ellenállás színkódok"
+msgstr "Színkód"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:191
 #, fuzzy
@@ -32607,7 +32574,6 @@ msgstr "A vezető relatív permeabilitása (μᵣ)"
 #: pcb_calculator/transline_ident.cpp:214
 #: pcb_calculator/transline_ident.cpp:333
 #: pcb_calculator/transline_ident.cpp:375
-#, fuzzy
 msgid "Line width"
 msgstr "Vonal szélesség"
 
@@ -32617,7 +32583,6 @@ msgstr "Vonal szélesség"
 #: pcb_calculator/transline_ident.cpp:292
 #: pcb_calculator/transline_ident.cpp:337
 #: pcb_calculator/transline_ident.cpp:377
-#, fuzzy
 msgid "Line length"
 msgstr "Vonal hosszúság"
 
@@ -32799,7 +32764,6 @@ msgid "Relative permittivity of environment"
 msgstr "A környezet relatív permittivitása"
 
 #: pcb_calculator/transline_ident.cpp:416
-#, fuzzy
 msgid "Cable length"
 msgstr "Vezetékhossz"
 
@@ -33997,7 +33961,6 @@ msgid "Unspecified:"
 msgstr "Meghatározatlan:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
-#, fuzzy
 msgid "Through hole:"
 msgstr "Átmenő furat:"
 
@@ -34007,7 +33970,6 @@ msgid "Connector:"
 msgstr "Csatlakozó:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:153
-#, fuzzy
 msgid "NPTH:"
 msgstr "NPTH:"
 
@@ -34144,9 +34106,8 @@ msgid "Generate Report File..."
 msgstr "Jelentésfájl létrehozása..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
-#, fuzzy
 msgid "Board Statistics"
-msgstr "NYÁK Terv Statisztika"
+msgstr "Panel Statisztika"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:48
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:323
@@ -34877,7 +34838,6 @@ msgid "Horizontal, then vertical"
 msgstr "Vízszintesen, aztán függőlegesen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Vertical, then horizontal"
 msgstr "Függőlegesen, aztán vízszintesen"
 
@@ -35667,29 +35627,24 @@ msgid "Update/reset 3D models"
 msgstr "3D modellek Feltöltése/ törlése"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:91
-#, fuzzy
 msgid "Update Footprints from Library"
 msgstr "Alkatrészrajzolatok frissítése könyvtárból"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:112
-#, fuzzy
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "CSV fájl (*.csv)|*."
+msgstr "IPC-2581 fájlok (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:113
-#, fuzzy
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr "IPC-D-356 teszt fájl (.d356)|*."
+msgstr "IPC-2581 tömörített fájlok (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:115
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Exportálás fájlba"
+msgstr "IPC-2581 fájl exportálása"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:166
-#, fuzzy
 msgid "manufacturer"
-msgstr "Mappa kiválasztása"
+msgstr "gyártó"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:174
 #, fuzzy
@@ -35723,9 +35678,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "A STEP fájl sikeresen létrejött."
+msgstr "IPC-2581 fájl sikeresen létrehozva."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -35764,9 +35718,8 @@ msgid "BOM Columns"
 msgstr "Oszlopok"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "Internal ID:"
-msgstr "Belső"
+msgstr "Belső azonosító:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:123
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:131
@@ -35781,9 +35734,8 @@ msgid "Generate Unique"
 msgstr "Figyelmeztetés generálása"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:135
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "Mappa kiválasztása"
+msgstr "Gyártó típusszám:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
@@ -35803,26 +35755,24 @@ msgstr "Gyártó:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:161
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "Disztribútor típusszám:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:169
 msgid "Column containing the distributor part number"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:173
-#, fuzzy
 msgid "Distributor:"
-msgstr "Igazítás/Szétszórás"
+msgstr "Disztribútor:"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:137
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
 msgstr "A(z) \"%s\" fájl már létezik."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
-#, fuzzy
 msgid "File name:"
 msgstr "Fájlnév:"
 
@@ -36085,9 +36035,8 @@ msgid "Cut vias in board body"
 msgstr "Nyákterv exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "Felső szitanyomat"
+msgstr "Szitanyomat exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
 #, fuzzy
@@ -36430,7 +36379,7 @@ msgstr "\"%s\" megtalálva"
 #: pcbnew/dialogs/dialog_find.cpp:434
 #, c-format
 msgid "Hit(s): %d / %zu"
-msgstr ""
+msgstr "Találat(ok): %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -36466,9 +36415,8 @@ msgid "Search DRC &markers"
 msgstr "DRC jelölések keresése"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
-#, fuzzy
 msgid "Restart Search"
-msgstr "Keresés Újraindítás"
+msgstr "Keresés újraindítása"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:49
 msgid "Footprint: "
@@ -36479,9 +36427,8 @@ msgid "Symbol:"
 msgstr "Rajzjel:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:99
-#, fuzzy
 msgid "Sheet: "
-msgstr "Lap"
+msgstr "Lap: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -36559,7 +36506,6 @@ msgstr "Alkatrészrajzolat-tulajdonságok szerkesztése"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:52
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:171
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:97
-#, fuzzy
 msgid "Text Items"
 msgstr "Szöveges elemek"
 
@@ -39846,9 +39792,8 @@ msgid "Transparent"
 msgstr "Átlátszó"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:43
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Méretek"
+msgstr "Méretek:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:53
 #: pcbnew/dialogs/dialog_render_job_base.cpp:64
@@ -46523,7 +46468,6 @@ msgid "NPTH, mechanical"
 msgstr "Fémezetlen furat / rögzítő"
 
 #: pcbnew/pad.cpp:2692
-#, fuzzy
 msgid "Trapezoid"
 msgstr "Trapéz"
 
@@ -46558,12 +46502,10 @@ msgid "Pad Number"
 msgstr "Forrszem sorszám"
 
 #: pcbnew/pad.cpp:2807
-#, fuzzy
 msgid "Size X"
 msgstr "X méret"
 
 #: pcbnew/pad.cpp:2811
-#, fuzzy
 msgid "Size Y"
 msgstr "Y méret"
 
@@ -49648,14 +49590,12 @@ msgstr ""
 "A \"WIRE_VIA\" a nem létező \"%s\" via rétegstruktúrára próbál hivatkozni"
 
 #: pcbnew/toolbars_footprint_editor.cpp:94
-#, fuzzy
 msgid "Load footprint from current board"
 msgstr "Alkatrészrajzolat betöltése az aktuális panelről"
 
 #: pcbnew/toolbars_footprint_editor.cpp:98
-#, fuzzy
 msgid "Insert footprint into current board"
-msgstr "Alkatrészrajzolat beszúrása az aktuális nyáktervre"
+msgstr "Alkatrészrajzolat beszúrása az aktuális panelra"
 
 #: pcbnew/toolbars_footprint_editor.cpp:288 pcbnew/toolbars_pcb_editor.cpp:699
 #, fuzzy
@@ -49663,12 +49603,10 @@ msgid "+/- to switch"
 msgstr "+/- a váltáshoz"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:62
-#, fuzzy
 msgid "Display previous footprint"
 msgstr "Előző alkatrészrajzolat megjelenítése"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:65
-#, fuzzy
 msgid "Display next footprint"
 msgstr "Következő alkatrészrajzolat megjelenítése"
 
@@ -51121,9 +51059,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:174
-#, fuzzy
 msgid "Place Reference Images"
-msgstr "Referencia"
+msgstr "Referencia kép elhelyezése"
 
 #: pcbnew/tools/pcb_actions.cpp:175
 #, fuzzy
@@ -51144,7 +51081,6 @@ msgid "Increase tuning pattern spacing by one step."
 msgstr "Meander térközök növelése egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Decrease Spacing"
 msgstr "Térköz csökkentése"
 
@@ -51154,7 +51090,6 @@ msgid "Decrease tuning pattern spacing by one step."
 msgstr "Meander térközök csökkentése egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:226
-#, fuzzy
 msgid "Increase Amplitude"
 msgstr "Amplitúdó növelése"
 
@@ -51164,7 +51099,6 @@ msgid "Increase tuning pattern amplitude by one step."
 msgstr "Meander amplitúdó növelésével egy egységgel."
 
 #: pcbnew/tools/pcb_actions.cpp:235
-#, fuzzy
 msgid "Decrease Amplitude"
 msgstr "Amplitúdó csökkentése"
 
@@ -51244,12 +51178,10 @@ msgid "Set the anchor point of the footprint"
 msgstr "Beállítja az alkatrészrajzolat koordináta kezdőpontját (horgonyzóját)"
 
 #: pcbnew/tools/pcb_actions.cpp:358
-#, fuzzy
 msgid "Increase Line Width"
 msgstr "Vonalszélesség növelése"
 
 #: pcbnew/tools/pcb_actions.cpp:365
-#, fuzzy
 msgid "Decrease Line Width"
 msgstr "Vonalszélesség csökkentése"
 
@@ -51310,12 +51242,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Move Individually"
-msgstr "Mozgatás egyénileg"
+msgstr "Mozgatás egyenként"
 
 #: pcbnew/tools/pcb_actions.cpp:467
-#, fuzzy
 msgid "Moves the selected items one-by-one"
-msgstr "A kijelölt elem(ek) mozgatása"
+msgstr "A kijelölt elemek mozgatása külön-külön"
 
 #: pcbnew/tools/pcb_actions.cpp:475
 #, fuzzy
@@ -51353,9 +51284,8 @@ msgid "Move Exactly..."
 msgstr "Mozgatás pontosan..."
 
 #: pcbnew/tools/pcb_actions.cpp:504
-#, fuzzy
 msgid "Moves the selected item(s) by an exact amount"
-msgstr "A kijelölt elem(ek) pontos mozgatása"
+msgstr "A kijelölt elem(ek) mozgatása egy adott értékkel"
 
 #: pcbnew/tools/pcb_actions.cpp:510
 #, fuzzy
@@ -51503,32 +51433,26 @@ msgid "Deletes selected item(s) and copper connections"
 msgstr "Kijelölt elem(ek) és csatlakozó vezetősávok törlése"
 
 #: pcbnew/tools/pcb_actions.cpp:687
-#, fuzzy
 msgid "Create Array..."
 msgstr "Tömb létrehozása..."
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "New Footprint"
 msgstr "Új alkatrészrajzolat"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Create a new, empty footprint"
-msgstr "Új alkatrészrajzolat létrehozása"
+msgstr "Új, üres alkatrészrajzolat létrehozása"
 
 #: pcbnew/tools/pcb_actions.cpp:705
-#, fuzzy
 msgid "Create Footprint..."
-msgstr "Alkatrészrajzolat varázsló..."
+msgstr "Alkatrészrajzolat létrehozása..."
 
 #: pcbnew/tools/pcb_actions.cpp:706
-#, fuzzy
 msgid "Create a new footprint using the Footprint Wizard"
 msgstr "Új alkatrészrajzolat létrehozása varázslóval"
 
 #: pcbnew/tools/pcb_actions.cpp:712
-#, fuzzy
 msgid "Edit Footprint"
 msgstr "Alkatrészrajzolat szerkesztése"
 
@@ -51543,54 +51467,44 @@ msgid "Duplicate Footprint"
 msgstr "Alkatrészrajzolat Duplázása"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Alkatrészrajzolat átnevezés..."
+msgstr "Alkatrészrajzolat átnevezése..."
 
 #: pcbnew/tools/pcb_actions.cpp:731
-#, fuzzy
 msgid "Delete Footprint from Library"
 msgstr "Alkatrészrajzolat törlése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:737
-#, fuzzy
 msgid "Cut Footprint"
 msgstr "Alkatrészrajzolat kivágása"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Copy Footprint"
 msgstr "Alkatrészrajzolat másolása"
 
 #: pcbnew/tools/pcb_actions.cpp:749
-#, fuzzy
 msgid "Paste Footprint"
 msgstr "Alkatrészrajzolat beillesztése"
 
 #: pcbnew/tools/pcb_actions.cpp:755
-#, fuzzy
 msgid "Import Footprint..."
 msgstr "Alkatrészrajzolat importálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:756
-#, fuzzy
 msgid "Import footprint from file"
 msgstr "Alkatrészrajzolat importálása fájlból"
 
 #: pcbnew/tools/pcb_actions.cpp:762
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Alkatrészrajzolat exportálása..."
+msgstr "Aktuális alkatrészrajzolat exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:763
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Alkatrészrajzolat exportálása a szerkesztőbe"
+msgstr "Szerkesztett alkatrészrajzolat exportálása fájlba"
 
 #: pcbnew/tools/pcb_actions.cpp:769
-#, fuzzy
 msgid "Footprint Properties..."
-msgstr "Alkatrészrajzolat tulajdonságok..."
+msgstr "Alkatrészrajzolat tulajdonságai..."
 
 #: pcbnew/tools/pcb_actions.cpp:776
 #, fuzzy
@@ -51598,7 +51512,6 @@ msgid "Show the footprint checker window"
 msgstr "Tervezési szabályellenőrző ablak bekapcsolása"
 
 #: pcbnew/tools/pcb_actions.cpp:784
-#, fuzzy
 msgid "Update Footprint..."
 msgstr "Alkatrészrajzolat frissítése..."
 
@@ -51618,9 +51531,8 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Remove Unused Pads..."
-msgstr "Nem Használt Forrszemek Eltávolítása..."
+msgstr "Nem használt forrszemek eltávolítása..."
 
 #: pcbnew/tools/pcb_actions.cpp:799
 #, fuzzy
@@ -51634,7 +51546,6 @@ msgid "Assign a different footprint from the library"
 msgstr "Egy másik alkatrészrajzolat hozzárendelése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Change Footprints..."
 msgstr "Alkatrészrajzolatok cseréje..."
 
@@ -51644,9 +51555,8 @@ msgid "Assign different footprints from the library"
 msgstr "Másik alkatrészrajzolat hozzárendelése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:819
-#, fuzzy
 msgid "Swap Layers..."
-msgstr "Rétegek felcserélés..."
+msgstr "Rétegek felcserélése..."
 
 #: pcbnew/tools/pcb_actions.cpp:820
 #, fuzzy
@@ -51654,7 +51564,6 @@ msgid "Move tracks or drawings from one layer to another"
 msgstr "Vezetősávok és rajzolatok áthelyezése egy másik rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:826
-#, fuzzy
 msgid "Edit Track & Via Properties..."
 msgstr "Vezetősáv és via tulajdonságok szerkesztése..."
 
@@ -51679,7 +51588,6 @@ msgid "Add, remove or edit teardrops globally across board"
 msgstr "Rajzjel és szövegmező tulajdonságok szerkesztése"
 
 #: pcbnew/tools/pcb_actions.cpp:847
-#, fuzzy
 msgid "Global Deletions..."
 msgstr "Globális törlések..."
 
@@ -51801,12 +51709,10 @@ msgid "Renumber pads by clicking on them in the desired order"
 msgstr "Forrszemek átszámozása, az azokra történő kattintások sorrendjében."
 
 #: pcbnew/tools/pcb_actions.cpp:946
-#, fuzzy
 msgid "Add Pad"
 msgstr "Forrszem hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:947
-#, fuzzy
 msgid "Add a pad"
 msgstr "Forrszem hozzáadása"
 
@@ -52079,9 +51985,8 @@ msgid "Leave the current group"
 msgstr "Aktuális csoport elhagyása"
 
 #: pcbnew/tools/pcb_actions.cpp:1230
-#, fuzzy
 msgid "Append Board..."
-msgstr "Nyákterv hozzáfűzése..."
+msgstr "Panel hozzáfűzése..."
 
 #: pcbnew/tools/pcb_actions.cpp:1231
 #, fuzzy
@@ -52502,14 +52407,12 @@ msgid "Cycle between preset layer pairs"
 msgstr "Váltás a rétegek között az aktív rétegpárban"
 
 #: pcbnew/tools/pcb_actions.cpp:1838
-#, fuzzy
 msgid "Show Board Statistics"
-msgstr "Nyákterv Statisztika megjelenítése"
+msgstr "Panel Statisztika"
 
 #: pcbnew/tools/pcb_actions.cpp:1839
-#, fuzzy
 msgid "Shows board statistics"
-msgstr "Nyákterv Statisztika megjelenítése"
+msgstr "Panel statisztika megjelenítése"
 
 #: pcbnew/tools/pcb_actions.cpp:1844
 #, fuzzy
@@ -52555,18 +52458,16 @@ msgid "Reannotate PCB in geographical order"
 msgstr "A NYÁK alkatrészeinek újrajelölése elhelyezkedés szerint"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
-#, fuzzy
 msgid "Repair Board"
-msgstr "Panel javítás"
+msgstr "Panel javítása"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
 msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1888
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "Alkatrészrajzolat Javítás"
+msgstr "Alkatrészrajzolat javítása"
 
 #: pcbnew/tools/pcb_actions.cpp:1889
 #, fuzzy
@@ -53353,9 +53254,8 @@ msgid "Add Zone Cutout"
 msgstr "Zóna-kivágás hozzáadása"
 
 #: pcbnew/tools/zone_create_helper.cpp:229
-#, fuzzy
 msgid "Draw Zone"
-msgstr "Vonal rajzolása"
+msgstr "Zóna rajzolása"
 
 #: pcbnew/tools/zone_create_helper.cpp:251
 msgid "Draw Polygon"
@@ -53395,9 +53295,8 @@ msgstr "Auto-Zóna kitöltés"
 
 #: pcbnew/tools/zone_filler_tool.cpp:275
 #: pcbnew/widgets/appearance_controls.cpp:3499
-#, fuzzy
 msgid "Open Preferences"
-msgstr "Beállítások Megnyítása"
+msgstr "Beállítások megnyitása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:286
 msgid ""
@@ -53502,14 +53401,12 @@ msgid "Show copper zones"
 msgstr "Réz zónák megjelenítése"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
-#, fuzzy
 msgid "Filled Shapes"
-msgstr "Kijelölt elem(ek) átfordítása"
+msgstr "Kitöltött alakzatok"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
-#, fuzzy
 msgid "Opacity of filled shapes"
-msgstr "Kijelölt elem(ek) átfordítása"
+msgstr "Kitöltött alakzatok átlátszósága"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show user images"
@@ -53896,12 +53793,10 @@ msgid "Solder mask on board's back"
 msgstr "Alsó forrasztásgátló réteg"
 
 #: pcbnew/widgets/appearance_controls.cpp:1681
-#, fuzzy
 msgid "Explanatory drawings"
 msgstr "Értelmező rajzok"
 
 #: pcbnew/widgets/appearance_controls.cpp:1682
-#, fuzzy
 msgid "Explanatory comments"
 msgstr "Értelmező megjegyzések"
 
@@ -54380,9 +54275,9 @@ msgid "Report file"
 msgstr "Napló fájlok"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1611
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "Lap %s (%s)"
+msgstr "%s (%s)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1725
 #, fuzzy
