@@ -48,10 +48,6 @@
     "design_blocks_panel_float_height": -1,
     "design_blocks_panel_float_width": -1,
     "design_blocks_show": false,
-    "remote_symbol_panel_docked_width": -1,
-    "remote_symbol_panel_float_height": -1,
-    "remote_symbol_panel_float_width": -1,
-    "remote_symbol_show": false,
     "float_net_nav_panel": false,
     "hierarchy_panel_docked_height": -1,
     "hierarchy_panel_docked_width": -1,
@@ -72,6 +68,10 @@
     "net_nav_search_mode_wildcard": true,
     "properties_panel_width": -1,
     "properties_splitter_proportion": 0.5,
+    "remote_symbol_panel_docked_width": -1,
+    "remote_symbol_panel_float_height": -1,
+    "remote_symbol_panel_float_width": -1,
+    "remote_symbol_show": false,
     "schematic_hierarchy_float": false,
     "search_panel_dock_direction": 3,
     "search_panel_height": -1,
@@ -349,6 +349,12 @@
     "scale": 1.0,
     "title_block": false,
     "use_theme": false
+  },
+  "remote_symbols": {
+    "add_to_global_table": false,
+    "destination_dir": "${KIPRJMOD}/RemoteLibrary",
+    "library_prefix": "remote",
+    "user_ids": {}
   },
   "search_pane": {
     "search_hidden_fields": true,
