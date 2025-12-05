@@ -39,7 +39,6 @@
 #include <pcbplot.h>
 #include <pcb_painter.h>
 #include <pcb_shape.h>
-#include <locale_io.h>
 #include <fmt.h>
 #include <wx/ffile.h>
 #include <reporter.h>
@@ -756,8 +755,6 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     int       bottom_limit = 0; // Y coord limit of page. 0 mean do not use
 
     PCB_PLOT_PARAMS plot_opts; // starts plotting with default options
-
-    LOCALE_IO toggle; // use standard C notation for float numbers
 
     const PAGE_INFO& page_info = m_pageInfo ? *m_pageInfo : dummy;
 
