@@ -81,7 +81,7 @@ class BASE_SET {};
 #include <exporters/export_d356.h>
 #include <exporters/place_file_exporter.h>
 #include <exporters/export_vrml.h>
-#include <exporters/gendrill_file_writer_base.h>
+#include <exporters/gendrill_writer_base.h>
 #include <exporters/gendrill_Excellon_writer.h>
 #include <exporters/gendrill_gerber_writer.h>
 #include <exporters/gerber_jobfile_writer.h>
@@ -126,7 +126,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <exporters/export_d356.h>
 %include <exporters/place_file_exporter.h>
 %include <exporters/export_vrml.h>
-%include <exporters/gendrill_file_writer_base.h>
+%include <exporters/gendrill_writer_base.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <exporters/gendrill_gerber_writer.h>
 %include <exporters/gerber_jobfile_writer.h>

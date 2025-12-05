@@ -23,11 +23,11 @@
  */
 
 /**
- * @file gendrill_file_writer_base.h
+ * @file gendrill_writer_base.h
  * @brief helper classes to handle hole info for drill files generators.
  */
-#ifndef GENDRILL_FILE_WRITER_BASE_H
-#define GENDRILL_FILE_WRITER_BASE_H
+#ifndef GENDRILL_WRITER_BASE_H
+#define GENDRILL_WRITER_BASE_H
 
 // holes can have an attribute in Excellon drill files, similar to attributes
 // in Gerber X2 format

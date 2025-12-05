@@ -30,7 +30,7 @@
 #ifndef _GENDRILL_GERBER_WRITER_
 #define _GENDRILL_GERBER_WRITER_
 
-#include "gendrill_file_writer_base.h"
+#include "gendrill_writer_base.h"
 
 #include <wx/filename.h>
 

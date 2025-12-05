@@ -31,7 +31,7 @@
 #ifndef _GENDRILL_EXCELLON_WRITER_
 #define _GENDRILL_EXCELLON_WRITER_
 
-#include "gendrill_file_writer_base.h"
+#include "gendrill_writer_base.h"
 
 #include <wx/filename.h>
 

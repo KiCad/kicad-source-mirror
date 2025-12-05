@@ -259,9 +259,8 @@ set( PCBNEW_EXPORTERS
     exporters/u3d/writer.cpp
     exporters/exporter_vrml.cpp
     exporters/place_file_exporter.cpp
-    exporters/gen_drill_report_files.cpp
     exporters/gendrill_Excellon_writer.cpp
-    exporters/gendrill_file_writer_base.cpp
+    exporters/gendrill_writer_base.cpp
     exporters/gendrill_gerber_writer.cpp
     exporters/gerber_jobfile_writer.cpp
     exporters/gerber_placefile_writer.cpp
