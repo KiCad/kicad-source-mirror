@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-04 23:00+0000\n"
+"PO-Revision-Date: 2025-12-06 07:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -27907,14 +27907,12 @@ msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:226
-#, fuzzy
 msgid "Image width"
-msgstr "Szélesség"
+msgstr "Kép szélesség"
 
 #: kicad/cli/command_pcb_render.cpp:232
-#, fuzzy
 msgid "Image height"
-msgstr "Szöveg magasság"
+msgstr "Kép magasság"
 
 #: kicad/cli/command_pcb_render.cpp:238
 #, fuzzy, c-format
@@ -28035,12 +28033,10 @@ msgid "Invalid light camera intensity format\n"
 msgstr "Érvénytelen vezetősáv szélesség."
 
 #: kicad/cli/command_pcb_render.cpp:418
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Érvénytelen vezetősáv szélesség."
+msgstr "Érvénytelen képformátum\n"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
 msgstr "Kapcsolási rajz"
 
@@ -28106,12 +28102,11 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:68
 msgid "Color theme to use (will default to schematic settings)"
-msgstr ""
+msgstr "Színséma (alapértelmezett: kapcsolási rajz beállításai)"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
-#, fuzzy
 msgid "Default font name"
-msgstr "Alapértelmezet tbetű"
+msgstr "Alapértelmezett betűtípus"
 
 #: kicad/cli/command_sch_export_plot.cpp:87
 #, fuzzy
@@ -28156,9 +28151,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Rajzjel könyvtárak betöltése"
+msgstr "Rajzjel és rajzjel könyvtárak"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 #, fuzzy
@@ -28274,7 +28268,7 @@ msgstr "Kimeneti üzenetek"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Nullától különböző visszatérési értékek figyelmen kívül hagyása"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 #, fuzzy
@@ -28288,9 +28282,8 @@ msgstr "Beállítások szerkesztése"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
-#, fuzzy
 msgid "Project Template Selector"
-msgstr "Projektsablon kiválasztás"
+msgstr "Projektsablon választó"
 
 #: kicad/dialogs/dialog_template_selector.cpp:128
 #, fuzzy
@@ -28298,12 +28291,10 @@ msgid "<h1>Template Selector</h1>"
 msgstr "<h1>Sablonválasztó</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:225
-#, fuzzy
 msgid "Select Templates Directory"
-msgstr "Sablonmappa kiválasztás"
+msgstr "Sablonmappa kiválasztása"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:24
-#, fuzzy
 msgid "Folder:"
 msgstr "Mappa:"
 
@@ -28321,15 +28312,15 @@ msgstr "Alkatrészrajzolat ellenőrzése"
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
 msgstr ""
+"A KiCad %s verziója elérhető (jelenlegi verzió: %s). Szeretné letölteni?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
 msgstr "A KiCad egy újabb verziója elérhető!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
-msgstr "Elvárt \"%s\""
+msgstr "Ezen verzió kihagyása"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -28348,9 +28339,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
-msgstr "Vezetékosztályok"
+msgstr "Részletek megjelenítése"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
@@ -28363,12 +28353,11 @@ msgstr "3D modell könyvtárak letöltése"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Ugrás az operációs rendszernek megfelelő letöltési oldalra."
 
 #: kicad/dialogs/dialog_update_notice_base.h:55
-#, fuzzy
 msgid "Update Available"
-msgstr "Frissítés"
+msgstr "Frissítés elérhető"
 
 #: kicad/dialogs/panel_jobset.cpp:63
 #, fuzzy, c-format
@@ -28424,9 +28413,8 @@ msgid "View Last Run Log..."
 msgstr "Megtekintés PNG-ként..."
 
 #: kicad/dialogs/panel_jobset.cpp:380
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Leírás"
+msgstr "Feladat leírásának szerkesztése"
 
 #: kicad/dialogs/panel_jobset.cpp:381
 #, fuzzy
@@ -28434,24 +28422,20 @@ msgid "Edit Job Settings..."
 msgstr "Beállítások szerkesztése"
 
 #: kicad/dialogs/panel_jobset.cpp:386
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Kiválasztott vezetékek törlése"
+msgstr "Kiválasztott feladatok törlése"
 
 #: kicad/dialogs/panel_jobset.cpp:388
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Összes kijelölése"
+msgstr "Összes feladat kijelölése"
 
 #: kicad/dialogs/panel_jobset.cpp:679
-#, fuzzy
 msgid "Job Types"
-msgstr "Feladat fájlok"
+msgstr "Feladat típusok"
 
 #: kicad/dialogs/panel_jobset.cpp:690
-#, fuzzy
 msgid "Add New Job"
-msgstr "Új vezetősáv hozzáadása"
+msgstr "Új feladat hozzáadása"
 
 #: kicad/dialogs/panel_jobset.cpp:691
 #, fuzzy
@@ -28479,9 +28463,8 @@ msgid "No destinations defined"
 msgstr "Nincs csatlakoztatva"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "%s vagy %s"
+msgstr "Feladatok"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
 #, fuzzy
@@ -28523,7 +28506,6 @@ msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Globális vagy Projekt szintű Alkatrészrajzolat könyvtárak szerkesztése"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:160
-#, fuzzy
 msgid "Preview Gerber files"
 msgstr "Gerber fájlok előnézete"
 
@@ -28558,12 +28540,11 @@ msgid "KiCad project file"
 msgstr "KiCad projekt fájl"
 
 #: kicad/files-io.cpp:66
-#, fuzzy
 msgid "Unzip Project"
-msgstr "Projekt kitömörítése"
+msgstr "Projekt kicsomagolása"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
@@ -28572,14 +28553,13 @@ msgstr ""
 "\"%s\" megnyitása\n"
 
 #: kicad/files-io.cpp:76
-#, fuzzy
 msgid "Target Directory"
 msgstr "Célmappa"
 
 #: kicad/files-io.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "Projekt kitömörítése a(z) \"%s\" mappába.\n"
+msgstr "Projekt kicsomagolása a(z) \"%s\" mappába.\n"
 
 #: kicad/files-io.cpp:115
 msgid "Archive Project Files"
@@ -28594,20 +28574,18 @@ msgid ""
 msgstr ""
 
 #: kicad/import_project.cpp:75
-#, fuzzy
 msgid "KiCad Project Destination"
 msgstr "KiCad projekt célmappa"
 
 #: kicad/import_project.cpp:105
-#, fuzzy
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"A kiválasztott mappa nem üres.\n"
-"Javasoljuk, hogy a projekteket mindig egy üres mappába hozza létre.\n"
+"A kiválasztott mappa nem üres. Javasoljuk, hogy a projekteket mindig egy "
+"üres mappába hozza létre.\n"
 "\n"
 "Létrehoz egy üres mappát a projekt számára?"
 
@@ -28616,19 +28594,18 @@ msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
+"Hiba az új mappa létrehozása során. Kérjük, adjon meg egy másik helyet. Nem "
+"sikerült importálni a projektet."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Eagle projektfájlok importálása"
+msgstr "Altium projektfájlok importálása"
 
 #: kicad/import_project.cpp:154
-#, fuzzy
 msgid "Import CADSTAR Archive Project Files"
-msgstr "CADSTAR Projekt fájlok importálása"
+msgstr "CADSTAR projekt fájlok importálása"
 
 #: kicad/import_project.cpp:162
-#, fuzzy
 msgid "Import Eagle Project Files"
 msgstr "Eagle projektfájlok importálása"
 
@@ -28637,24 +28614,21 @@ msgid "Import EasyEDA Std Backup"
 msgstr ""
 
 #: kicad/import_project.cpp:176
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Eagle projektfájlok importálása"
+msgstr "EasyEDA Pro projekt importálása"
 
 #: kicad/jobs_runner.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Definiált színek"
+msgstr "Feladat %d futtatása: %s"
 
 #: kicad/jobs_runner.cpp:280
-#, fuzzy
 msgid "Job successful"
-msgstr "A STEP fájl sikeresen létrejött."
+msgstr "Feladat sikerült"
 
 #: kicad/jobs_runner.cpp:287
-#, fuzzy
 msgid "Job failed"
-msgstr "Feladat fájlok"
+msgstr "Feladat meghiúsult"
 
 #: kicad/kicad.cpp:321
 #, fuzzy, c-format
@@ -28718,18 +28692,16 @@ msgid "%d package update(s) avaliable"
 msgstr "%d csomag frissíthető"
 
 #: kicad/kicad_manager_frame.cpp:805
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba a feladatfájl megnyitása közben"
 
 #: kicad/kicad_manager_frame.cpp:980
 msgid "Edit File in Text Editor"
 msgstr "Fájl szerkesztése szövegszerkesztővel"
 
 #: kicad/kicad_manager_frame.cpp:1073
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "Nincs megadva alkatrészrajzolat"
+msgstr "[nincs betöltött projekt]"
 
 #: kicad/kicad_manager_frame.cpp:1116
 #, c-format
@@ -28737,14 +28709,13 @@ msgid "Project: %s"
 msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:1152
-#, fuzzy
 msgid "Restoring session"
-msgstr "Elvárt \"%s\""
+msgstr "Munkamenet helyreállítása"
 
 #: kicad/kicad_manager_frame.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "Elvárt \"%s\""
+msgstr "\"%s\" helyreállítása"
 
 #: kicad/menubar.cpp:58
 #, fuzzy
@@ -28752,9 +28723,8 @@ msgid "Clear Recent Projects"
 msgstr "Nyisson meg egy nemrég használt projektet"
 
 #: kicad/menubar.cpp:112
-#, fuzzy
 msgid "Import Non-KiCad Project..."
-msgstr "Nem KiCad Project fájl importálása..."
+msgstr "Nem KiCad projekt importálása..."
 
 #: kicad/menubar.cpp:115
 msgid "Altium Project..."
@@ -28762,7 +28732,7 @@ msgstr "Altium Projekt..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr ""
+msgstr "Altium kapcsolási rajz és NYÁK importálása (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -45116,7 +45086,6 @@ msgid "Couldn't reload footprint wizard"
 msgstr "Nem lehet újratölteni az alkatrészrajzolat varázslót"
 
 #: pcbnew/generate_footprint_info.cpp:43
-#, fuzzy
 msgid "Documentation"
 msgstr "Dokumentáció"
 
