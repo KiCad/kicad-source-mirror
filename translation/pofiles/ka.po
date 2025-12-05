@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-03 07:51+0000\n"
+"PO-Revision-Date: 2025-12-06 11:00+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -32616,7 +32616,7 @@ msgstr "მიუთითებელია:"
 
 #: pcbnew/board_statistics_report.cpp:104
 msgid "Through hole:"
-msgstr ""
+msgstr "გამჭოლი ნახვრეტი:"
 
 #: pcbnew/board_statistics_report.cpp:106
 msgid "Connector:"
@@ -32636,7 +32636,7 @@ msgstr "პრესფიტინგი:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Through vias:"
-msgstr ""
+msgstr "გამჭოლი გამტარი ხვრელები:"
 
 #: pcbnew/board_statistics_report.cpp:115
 msgid "Blind vias:"
@@ -32708,12 +32708,12 @@ msgstr "კომპონენტები"
 #: pcbnew/board_statistics_report.cpp:533
 #: pcbnew/dialogs/dialog_board_statistics.cpp:112
 msgid "Front Side"
-msgstr ""
+msgstr "წინა მხარე"
 
 #: pcbnew/board_statistics_report.cpp:534
 #: pcbnew/dialogs/dialog_board_statistics.cpp:113
 msgid "Back Side"
-msgstr ""
+msgstr "უკანა მხარე"
 
 #: pcbnew/board_statistics_report.cpp:535
 #: pcbnew/dialogs/dialog_board_statistics.cpp:114
@@ -33360,7 +33360,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:60
 msgid "Board Setup"
-msgstr ""
+msgstr "დაფის მორგება"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:61
 msgid "Import Settings from Another Board..."
@@ -33368,7 +33368,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
 msgid "Board Stackup"
-msgstr ""
+msgstr "დაფის სტრუქტურა"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 msgid "Board Editor Layers"
@@ -33376,16 +33376,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:112
 msgid "Physical Stackup"
-msgstr ""
+msgstr "ფიზიკური სტრუქტურა"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:119
 msgid "Board Finish"
-msgstr ""
+msgstr "დაფის დამუშავება"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:126
 #: pcbnew/dialogs/dialog_plot.cpp:1321
 msgid "Solder Mask/Paste"
-msgstr ""
+msgstr "სარჩილავი ნიღაბი/პასტა"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:128
 msgid "Text & Graphics"
@@ -33397,7 +33397,7 @@ msgstr "ნაგულისხმევი მნიშვნელობე�
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:150
 msgid "Design Rules"
-msgstr ""
+msgstr "დიზაინის წესები"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:157
 msgid "Constraints"
@@ -33406,7 +33406,7 @@ msgstr "შეზღუდვები"
 #: pcbnew/dialogs/dialog_board_setup.cpp:164 pcbnew/edit_track_width.cpp:164
 #: pcbnew/edit_track_width.cpp:188
 msgid "Pre-defined Sizes"
-msgstr ""
+msgstr "წინასწარ აღწერილი ზომები"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:183
 msgid "Length-tuning Patterns"
