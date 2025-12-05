@@ -1476,7 +1476,7 @@ EELEMENT::EELEMENT( wxXmlNode* aElement, IO_BASE* aIo ) :
     library = parseRequiredAttribute<wxString>( aElement, "library" );
     value   = parseRequiredAttribute<wxString>( aElement, "value" );
     std::string p = parseRequiredAttribute<std::string>( aElement, "package" );
-    ReplaceIllegalFileNameChars( &p, '_' );
+    ReplaceIllegalFileNameChars( p, '_' );
     package = wxString::FromUTF8( p.c_str() );
 
     x       = parseRequiredAttribute<ECOORD>( aElement, "x" );
@@ -1732,7 +1732,7 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice, IO_BASE* aIo ) :
     if( pack )
     {
         std::string p( pack->c_str() );
-        ReplaceIllegalFileNameChars( &p, '_' );
+        ReplaceIllegalFileNameChars( p, '_' );
         package.Set( wxString::FromUTF8( p.c_str() ) );
     }
 

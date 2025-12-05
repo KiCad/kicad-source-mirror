@@ -286,7 +286,7 @@ KICOMMON_API bool IsFullFileNameValid( const wxString& aFullFilename );
  * @param aReplaceChar (if not 0) is the replacement char.
  * @return true if any characters have been replaced in \a aName.
  */
-KICOMMON_API bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
+KICOMMON_API bool ReplaceIllegalFileNameChars( std::string& aName, int aReplaceChar = 0 );
 KICOMMON_API bool  ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
 
 

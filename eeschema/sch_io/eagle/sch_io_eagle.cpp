@@ -852,7 +852,7 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         else
             sheet->SetName( filename );
 
-        ReplaceIllegalFileNameChars( &filename );
+        ReplaceIllegalFileNameChars( filename );
         replace( filename.begin(), filename.end(), ' ', '_' );
 
         fn.SetName( filename );

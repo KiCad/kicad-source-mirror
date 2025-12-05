@@ -541,7 +541,7 @@ void PCB_IO_KICAD_LEGACY::loadAllSections( bool doAppend )
 
             // The footprint names in legacy libraries can contain the '/' and ':'
             // characters which will cause the FPID parser to choke.
-            ReplaceIllegalFileNameChars( &fpName );
+            ReplaceIllegalFileNameChars( fpName );
 
             if( !fpName.empty() )
                 fpid.Parse( fpName, true );
@@ -3171,7 +3171,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
             // The footprint names in legacy libraries can contain the '/' and ':'
             // characters which will cause the LIB_ID parser to choke.
-            ReplaceIllegalFileNameChars( &footprintName );
+            ReplaceIllegalFileNameChars( footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
             fp_ptr->SetFPID( LIB_ID( wxEmptyString, footprintName ) );

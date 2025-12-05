@@ -48,7 +48,7 @@
  * platforms.  This is the list of illegal file name characters for Windows which includes
  * the illegal file name characters for Linux and OSX.
  */
-static const char illegalFileNameChars[] = "\\/:\"<>|*?";
+static constexpr std::string_view illegalFileNameChars = "\\/:\"<>|*?";
 
 static const wxChar defaultVariantName[] = wxT( "< Default >" );
 
@@ -1323,37 +1323,49 @@ int GetTrailingInt( const wxString& aStr )
 
 wxString GetIllegalFileNameWxChars()
 {
-    return From_UTF8( illegalFileNameChars );
+    return wxString::FromUTF8( illegalFileNameChars.data(), illegalFileNameChars.length() );
 }
 
 
-bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar )
+bool ReplaceIllegalFileNameChars( std::string& aName, int aReplaceChar )
 {
-    bool changed = false;
-    std::string result;
-    result.reserve( aName->length() );
+    size_t first_illegal_pos = aName.find_first_of( illegalFileNameChars );
 
-    for( std::string::iterator it = aName->begin();  it != aName->end();  ++it )
+    if( first_illegal_pos == std::string::npos )
     {
-        if( strchr( illegalFileNameChars, *it ) )
+        return false;
+    }
+
+    std::string result;
+    // result will be at least equal to original, add 16 in case of hex replacements
+    result.reserve( aName.length() + 16 );
+    // append the valid part
+    result.append( aName, 0, first_illegal_pos );
+
+    for( size_t i = first_illegal_pos; i < aName.length(); ++i )
+    {
+        char c = aName[i];
+
+        // Check if this specific char is illegal
+        if( illegalFileNameChars.find( c ) != std::string_view::npos )
         {
             if( aReplaceChar )
-                StrPrintf( &result, "%c", aReplaceChar );
+            {
+                result.push_back( aReplaceChar );
+            }
             else
-                StrPrintf( &result, "%%%02x", *it );
-
-            changed = true;
+            {
+                fmt::format_to( std::back_inserter( result ), "%{:02x}", static_cast<unsigned char>( c ) );
+            }
         }
         else
         {
-            result += *it;
+            result.push_back( c );
         }
     }
 
-    if( changed )
-        *aName = std::move( result );
-
-    return changed;
+    aName = std::move( result );
+    return true;
 }
 
 
