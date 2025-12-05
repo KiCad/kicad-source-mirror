@@ -657,6 +657,8 @@ void FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser( wxCommandEvent& aEvent )
 
 void FOOTPRINT_CHOOSER_FRAME::onFpChanged( wxCommandEvent& event )
 {
+    GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
     updateViews();
 
     GetToolManager()->RunAction( ACTIONS::measureTool );
