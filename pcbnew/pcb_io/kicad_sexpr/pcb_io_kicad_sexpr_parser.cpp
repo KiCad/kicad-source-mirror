@@ -132,7 +132,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::init()
 
     for( int i=1; i<=14; ++i )
     {
-        std::string key = StrPrintf( "Inner%d.Cu", i );
+        std::string key = fmt::format( "Inner{}.Cu", i );
 
         m_layerMasks[key] = LSET( { PCB_LAYER_ID( In15_Cu - 2 * i ) } );
     }

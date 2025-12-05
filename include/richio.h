@@ -42,34 +42,6 @@
 #include <kicommon.h>
 #include <io/kicad/kicad_io_utils.h>
 
-/**
- * This is like sprintf() but the output is appended to a std::string instead of to a
- * character array.
- *
- * @param aResult is the string to append to, previous text is not clear()ed.
- * @param aFormat is a printf() style format string.
- * @return the count of bytes appended to the result string, no terminating nul is included.
- */
-KICOMMON_API int
-#if defined(__GNUG__)
-    __attribute__ ((format (printf, 2, 3)))
-#endif
-    StrPrintf( std::string* aResult, const char* aFormat, ... );
-
-
-/**
- * This is like sprintf() but the output is returned in a std::string instead of to a
- * character array.
- *
- * @param format is a printf() style format string.
- * @return std::string - the result of the sprintf().
- */
-KICOMMON_API std::string
-#if defined(__GNUG__)
-    __attribute__ ((format (printf, 1, 2)))
-#endif
-    StrPrintf( const char* format, ... );
-
 
 /**
  * Nominally opens a file and reads it into a string.  But unlike other facilities, this handles

@@ -50,49 +50,6 @@
 #endif
 
 
-static int vprint( std::string* result, const char* format, va_list ap )
-{
-    va_list tmp;
-    va_copy( tmp, ap );
-    size_t  len = vsnprintf( nullptr, 0, format, tmp );
-    va_end( tmp );
-
-    // Resize the output to hold the required data
-    size_t  size = result->size();
-    result->resize( size + len );
-
-    // Now do the actual printing
-    len = vsnprintf( result->data() + size, len + 1, format, ap );
-
-    return len;
-}
-
-
-int StrPrintf( std::string* result, const char* format, ... )
-{
-    va_list     args;
-
-    va_start( args, format );
-    int ret = vprint( result, format, args );
-    va_end( args );
-
-    return ret;
-}
-
-
-std::string StrPrintf( const char* format, ... )
-{
-    std::string ret;
-    va_list     args;
-
-    va_start( args, format );
-    ignore_unused( vprint( &ret, format, args ) );
-    va_end( args );
-
-    return ret;
-}
-
-
 wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
 {
     // Check the path exists as a file first

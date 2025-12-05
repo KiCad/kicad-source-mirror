@@ -32,7 +32,6 @@
 #include <core/map_helpers.h>
 #include <fmt/core.h>
 #include <macros.h>
-#include <richio.h>                        // StrPrintf
 #include <string_utils.h>
 #include <wx_filename.h>
 #include <fmt/chrono.h>

@@ -464,8 +464,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // This is for python:
     if( aFileSet.size() != 1 )
     {
-        UTF8 msg = StrPrintf( "Pcbnew:%s() takes a single filename", __func__ );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( "Pcbnew:%s() takes a single filename", __func__ ) );
         return false;
     }
 

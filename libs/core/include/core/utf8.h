@@ -60,7 +60,6 @@ bool IsUTF8( const char* aString );
  * wxString() with many member functions. There are multiple ways to create text into
  * a std::string without the need of too many member functions:
  *
- *  - richio.h's StrPrintf().
  *  - std::ostringstream.
  *
  * Because this class uses no virtuals, it should be possible to cast any std::string
