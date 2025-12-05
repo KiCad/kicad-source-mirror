@@ -40,6 +40,9 @@
 #include <pcb_painter.h>
 #include <pcb_shape.h>
 #include <locale_io.h>
+#include <fmt.h>
+#include <wx/ffile.h>
+#include <reporter.h>
 
 #include <set>
 
@@ -1085,108 +1088,140 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 }
 
 
-bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
+bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, REPORTER* aReporter )
 {
-    FILE_OUTPUTFORMATTER out( aFullFileName );
+    wxFFile out( aFullFileName, "wb" );
+    if( !out.IsOpened() )
+    {
+        wxString msg = wxString::Format( _( "Error creating drill report file '%s'" ), aFullFileName );
+        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        return false;
+    }
 
-    static const char separator[] = "    =============================================================\n";
+    FILE*                outFp = out.fp();
+
+    static const char separator[] =
+        "    =============================================================\n";
 
     wxASSERT( m_pcb );
 
-    unsigned   totalHoleCount;
-    wxFileName brdFilename( m_pcb->GetFileName() );
+    unsigned    totalHoleCount;
+    wxFileName  brdFilename( m_pcb->GetFileName() );
 
     std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
 
-    out.Print( 0, "Drill report for %s\n", TO_UTF8( brdFilename.GetFullName() ) );
-    out.Print( 0, "Created on %s\n\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
-
-    // Output the cu layer stackup, so layer name references make sense.
-    out.Print( 0, "Copper Layer Stackup:\n" );
-    out.Print( 0, separator );
-
-    int conventional_layer_num = 1;
-
-    for( PCB_LAYER_ID layer : LSET::AllCuMask( m_pcb->GetCopperLayerCount() ).UIOrder() )
+    try
     {
-        out.Print( 0, "    L%-2d:  %-25s %s\n", conventional_layer_num++, TO_UTF8( m_pcb->GetLayerName( layer ) ),
-                   layerName( layer ).c_str() ); // generic layer name
-    }
+        fmt::print( outFp, "Drill report for {}\n", TO_UTF8( brdFilename.GetFullName() ) );
+        fmt::print( outFp, "Created on {}\n\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
-    out.Print( 0, "\n\n" );
+        // Output the cu layer stackup, so layer name references make sense.
+        fmt::print( outFp, "Copper Layer Stackup:\n" );
+        fmt::print( outFp, "{}", separator );
 
-    /* output hole lists:
-     * 1 - through holes
-     * 2 - for partial holes only: by layer starting and ending pair
-     * 3 - Non Plated through holes
-     */
+        int conventional_layer_num = 1;
 
-    bool buildNPTHlist = false; // First pass: build PTH list only
-
-    // in this loop are plated only:
-    for( unsigned pair_ndx = 0; pair_ndx < hole_sets.size(); ++pair_ndx )
-    {
-        const DRILL_SPAN& span = hole_sets[pair_ndx];
-
-        buildHolesList( span, buildNPTHlist );
-
-        if( span.Pair() == DRILL_LAYER_PAIR( F_Cu, B_Cu ) && !span.m_IsBackdrill )
+        for( PCB_LAYER_ID layer : LSET::AllCuMask( m_pcb->GetCopperLayerCount() ).UIOrder() )
         {
-            out.Print( 0, "Drill file '%s' contains\n", TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
-
-            out.Print( 0, "    plated through holes:\n" );
-            out.Print( 0, separator );
-            totalHoleCount = printToolSummary( out, false );
-            out.Print( 0, "    Total plated holes count %u\n", totalHoleCount );
+            fmt::print( outFp, "    L{:<2}:  {:<25} {}\n", conventional_layer_num++,
+                        TO_UTF8( m_pcb->GetLayerName( layer ) ),
+                        layerName( layer ).c_str() ); // generic layer name
         }
-        else if( span.m_IsBackdrill )
+
+        fmt::print( outFp, "\n\n" );
+
+        /* output hole lists:
+         * 1 - through holes
+         * 2 - for partial holes only: by layer starting and ending pair
+         * 3 - Non Plated through holes
+         */
+
+        bool buildNPTHlist = false; // First pass: build PTH list only
+
+        // in this loop are plated only:
+        for( unsigned pair_ndx = 0; pair_ndx < hole_sets.size(); ++pair_ndx )
         {
-            out.Print( 0, "Drill file '%s' contains\n", TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
+            const DRILL_SPAN& span = hole_sets[pair_ndx];
 
-            out.Print( 0, "    backdrill span: '%s' to '%s':\n",
-                       TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.DrillStartLayer() ) ) ),
-                       TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.DrillEndLayer() ) ) ) );
+            buildHolesList( span, buildNPTHlist );
 
-            out.Print( 0, separator );
-            totalHoleCount = printToolSummary( out, false );
-            out.Print( 0, "    Total backdrilled holes count %u\n", totalHoleCount );
+            if( span.Pair() == DRILL_LAYER_PAIR( F_Cu, B_Cu ) && !span.m_IsBackdrill )
+            {
+                fmt::print( outFp, "Drill file '{}' contains\n",
+                            TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
+
+                fmt::print( outFp, "    plated through holes:\n" );
+                fmt::print( outFp, "{}", separator );
+                totalHoleCount = printToolSummary( outFp, false );
+                fmt::print( outFp, "    Total plated holes count {}\n", totalHoleCount );
+            }
+            else if( span.m_IsBackdrill )
+            {
+                fmt::print( outFp, "Drill file '{}' contains\n",
+                            TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
+
+                fmt::print( outFp, "    backdrill span: '{}' to '{}':\n",
+                            TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.DrillStartLayer() ) ) ),
+                            TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.DrillEndLayer() ) ) ) );
+
+                fmt::print( outFp, "{}", separator );
+                totalHoleCount = printToolSummary( outFp, false );
+                fmt::print( outFp, "    Total backdrilled holes count {}\n", totalHoleCount );
+            }
+            else
+            {
+                fmt::print( outFp, "Drill file '{}' contains\n",
+                            TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
+
+                fmt::print( outFp, "    holes connecting layer pair: '{} and {}' ({} vias):\n",
+                            TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.Pair().first ) ) ),
+                            TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.Pair().second ) ) ),
+                            span.Pair().first == F_Cu || span.Pair().second == B_Cu ? "blind" : "buried" );
+
+                fmt::print( outFp, "{}", separator );
+                totalHoleCount = printToolSummary( outFp, false );
+                fmt::print( outFp, "    Total plated holes count {}\n", totalHoleCount );
+            }
+
+            fmt::print( outFp, "\n\n" );
         }
+
+        // NPTHoles. Generate the full list (pads+vias) if PTH and NPTH are merged,
+        // or only the NPTH list (which never has vias)
+        if( !m_merge_PTH_NPTH )
+            buildNPTHlist = true;
+
+        DRILL_SPAN npthSpan( F_Cu, B_Cu, false, buildNPTHlist );
+
+        buildHolesList( npthSpan, buildNPTHlist );
+
+        // nothing wrong with an empty NPTH file in report.
+        if( m_merge_PTH_NPTH )
+            fmt::print( outFp, "Not plated through holes are merged with plated holes\n" );
         else
+            fmt::print( outFp, "Drill file '{}' contains\n",
+                        TO_UTF8( getDrillFileName( npthSpan, true, m_merge_PTH_NPTH ) ) );
+
+        fmt::print( outFp, "    unplated through holes:\n" );
+        fmt::print( outFp, "{}", separator );
+        totalHoleCount = printToolSummary( outFp, true );
+        fmt::print( outFp, "    Total unplated holes count {}\n", totalHoleCount );
+    }
+    catch( const fmt::format_error& )
+    {
+        if( aReporter != nullptr )
         {
-            out.Print( 0, "Drill file '%s' contains\n", TO_UTF8( getDrillFileName( span, false, m_merge_PTH_NPTH ) ) );
-
-            out.Print( 0, "    holes connecting layer pair: '%s and %s' (%s vias):\n",
-                       TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.Pair().first ) ) ),
-                       TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( span.Pair().second ) ) ),
-                       span.Pair().first == F_Cu || span.Pair().second == B_Cu ? "blind" : "buried" );
-
-            out.Print( 0, separator );
-            totalHoleCount = printToolSummary( out, false );
-            out.Print( 0, "    Total plated holes count %u\n", totalHoleCount );
+            wxString msg = wxString::Format( _( "Error writing drill report file '%s'" ), aFullFileName);
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
-
-        out.Print( 0, "\n\n" );
+        return false;
     }
 
-    // NPTHoles. Generate the full list (pads+vias) if PTH and NPTH are merged,
-    // or only the NPTH list (which never has vias)
-    if( !m_merge_PTH_NPTH )
-        buildNPTHlist = true;
-
-    DRILL_SPAN npthSpan( F_Cu, B_Cu, false, buildNPTHlist );
-
-    buildHolesList( npthSpan, buildNPTHlist );
-
-    // nothing wrong with an empty NPTH file in report.
-    if( m_merge_PTH_NPTH )
-        out.Print( 0, "Not plated through holes are merged with plated holes\n" );
-    else
-        out.Print( 0, "Drill file '%s' contains\n", TO_UTF8( getDrillFileName( npthSpan, true, m_merge_PTH_NPTH ) ) );
-
-    out.Print( 0, "    unplated through holes:\n" );
-    out.Print( 0, separator );
-    totalHoleCount = printToolSummary( out, true );
-    out.Print( 0, "    Total unplated holes count %u\n", totalHoleCount );
+    if( aReporter != nullptr )
+    {
+        wxString msg = wxString::Format( _( "Created drill report file '%s'" ), aFullFileName );
+        aReporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
 
     return true;
 }
@@ -1218,7 +1253,7 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
 }
 
 
-unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSummaryNPTH ) const
+unsigned GENDRILL_WRITER_BASE::printToolSummary( FILE* out, bool aSummaryNPTH ) const
 {
     unsigned totalHoleCount = 0;
 
@@ -1233,34 +1268,35 @@ unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSum
             continue;
 
         // List the tool number assigned to each drill in mm then in inches.
-        int tool_number = ii + 1;
-        out.Print( 0, "    T%d  %2.3fmm  %2.4f\"  ", tool_number, diameter_in_mm( tool.m_Diameter ),
+        int tool_number = ii+1;
+        fmt::print( 0, "    T{}  {:2.3f}mm  {:2.4f}\"  ", tool_number,
+                   diameter_in_mm( tool.m_Diameter ),
                    diameter_in_inches( tool.m_Diameter ) );
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( tool.m_TotalCount == 1 ) && ( tool.m_OvalCount == 0 ) )
-            out.Print( 0, "(1 hole" );
+            fmt::print( out, "(1 hole" );
         else if( tool.m_TotalCount == 1 )
-            out.Print( 0, "(1 hole)  (with 1 slot" );
+            fmt::print( out, "(1 hole)  (with 1 slot" );
         else if( tool.m_OvalCount == 0 )
-            out.Print( 0, "(%d holes)", tool.m_TotalCount );
+            fmt::print( out, "({} holes)", tool.m_TotalCount );
         else if( tool.m_OvalCount == 1 )
-            out.Print( 0, "(%d holes)  (with 1 slot", tool.m_TotalCount );
+            fmt::print( out, "({} holes)  (with 1 slot", tool.m_TotalCount );
         else // tool.m_OvalCount > 1
-            out.Print( 0, "(%d holes)  (with %d slots", tool.m_TotalCount, tool.m_OvalCount );
+            fmt::print( out, "({} holes)  (with {} slots", tool.m_TotalCount, tool.m_OvalCount );
 
         if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED )
-            out.Print( 0, ", castellated" );
+            fmt::print( out, ", castellated" );
 
         if( tool.m_HoleAttribute == HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT )
-            out.Print( 0, ", press-fit" );
+            fmt::print( out, ", press-fit" );
 
-        out.Print( 0, ")\n" );
+        fmt::print( out, ")\n" );
 
         totalHoleCount += tool.m_TotalCount;
     }
 
-    out.Print( 0, "\n" );
+    fmt::print( out, "\n" );
 
     return totalHoleCount;
 }

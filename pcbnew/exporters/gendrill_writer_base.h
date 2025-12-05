@@ -407,7 +407,7 @@ public:
      * @param aFullFileName is the name of the file to create.
      * @return true if the file is created.
      */
-    bool GenDrillReportFile( const wxString& aFullFileName );
+    bool GenDrillReportFile( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
 
     /**
      * Returns the file extension of the drill writer format
@@ -464,7 +464,7 @@ protected:
      * @param aOut is the current OUTPUTFORMATTER to print summary.
      * @param aSummaryNPTH is true to print summary for NPTH, false for PTH.
      */
-    unsigned printToolSummary( OUTPUTFORMATTER& aOut, bool aSummaryNPTH ) const;
+    unsigned printToolSummary( FILE* out, bool aSummaryNPTH ) const;
 
     /**
      * @return a string from aPair to identify the layer layer pair.
