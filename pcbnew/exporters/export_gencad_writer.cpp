@@ -26,9 +26,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <richio.h>
 #include <string_utils.h>
-#include <locale_io.h>
 #include <macros.h>
 #include <hash_eda.h>
 #include <fmt.h>
@@ -44,9 +42,9 @@ static std::string genCADLayerName( int aCuCount, PCB_LAYER_ID aId )
         else if( aId == B_Cu )
             return "BOTTOM";
         else if( aId <= 14 )
-            return StrPrintf( "INNER%d", aCuCount - aId - 1 );
+            return fmt::format( "INNER{}", aCuCount - aId - 1 );
         else
-            return StrPrintf( "LAYER%d", aId );
+            return fmt::format( "LAYER{}", static_cast<int>( aId ) );
     }
 
     else
@@ -94,7 +92,7 @@ static std::string genCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 static std::string genCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 {
     if( 1<= aId && aId <= 14 )
-        return StrPrintf(  "INNER%d", 14 - aId );
+        return fmt::format(  "INNER{}", 14 - aId );
 
     return genCADLayerName( aCuCount, aId );
 }

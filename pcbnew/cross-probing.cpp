@@ -33,6 +33,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <fmt.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -255,7 +256,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     case PCB_FOOTPRINT_T:
     {
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
-        return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
+        return fmt::format( "$PART: \"{}\"", TO_UTF8( footprint->GetReference() ) );
     }
 
     case PCB_PAD_T:
@@ -263,9 +264,9 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         PAD*       pad = static_cast<PAD*>( aItem );
         FOOTPRINT* footprint = pad->GetParentFootprint();
 
-        return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
-                          TO_UTF8( footprint->GetReference() ),
-                          TO_UTF8( pad->GetNumber() ) );
+        return fmt::format( "$PART: \"{}\" $PAD: \"{}\"",
+                            TO_UTF8( footprint->GetReference() ),
+                            TO_UTF8( pad->GetNumber() ) );
     }
 
     case PCB_FIELD_T:
@@ -283,10 +284,10 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         else
             break;
 
-        return StrPrintf( "$PART: \"%s\" %s \"%s\"",
-                          TO_UTF8( footprint->GetReference() ),
-                          text_key,
-                          TO_UTF8( field->GetText() ) );
+        return fmt::format( "$PART: \"{}\" {} \"{}\"",
+                            TO_UTF8( footprint->GetReference() ),
+                            text_key,
+                            TO_UTF8( field->GetText() ) );
     }
 
     default:
@@ -394,7 +395,7 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
 
 void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
-    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
+    std::string packet = fmt::format( "$NET: \"{}\"", TO_UTF8( aNetName ) );
 
     if( !packet.empty() )
     {

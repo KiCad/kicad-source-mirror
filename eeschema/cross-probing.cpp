@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <fmt.h>
 #include <kiface_base.h>
 #include <kiway.h>
 #include <kiway_express.h>
@@ -371,7 +372,7 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
     // The command is a keyword followed by a quoted string.
 
-    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
+    std::string packet = fmt::format( "$NET: \"{}\"", TO_UTF8( aNetName ) );
 
     if( !packet.empty() )
     {
@@ -424,7 +425,7 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     for( size_t i = 1; i < all_members.size(); i++ )
         nets << "," << all_members[i]->Name();
 
-    std::string packet = StrPrintf( "$NETS: \"%s\"", TO_UTF8( nets ) );
+    std::string packet = fmt::format( "$NETS: \"{}\"", TO_UTF8( nets ) );
 
     if( !packet.empty() )
     {
