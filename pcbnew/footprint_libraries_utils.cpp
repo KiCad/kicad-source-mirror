@@ -658,9 +658,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 // Reset reference designator, group membership, and zone offset before saving
 
                 fpCopy->SetReference( "REF**" );
-
-                if( EDA_GROUP* parentGroup = fpCopy->GetParentGroup() )
-                    parentGroup->RemoveItem( fpCopy );
+                fpCopy->SetParentGroup( nullptr );
 
                 for( ZONE* zone : fpCopy->Zones() )
                     zone->Move( -fpCopy->GetPosition() );
