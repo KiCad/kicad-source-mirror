@@ -31,7 +31,6 @@
 #include <collectors.h>
 #include <macros.h>
 #include <reporter.h>
-#include <richio.h>
 #include <string_utils.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_gerber.h>
@@ -425,7 +424,7 @@ const std::string GENDRILL_WRITER_BASE::layerName( PCB_LAYER_ID aLayer ) const
     {
         // aLayer use even values, and the first internal layer (In1) is B_Cu + 2.
         int ly_id = ( aLayer - B_Cu ) / 2;
-        return StrPrintf( "in%d", ly_id );
+        return fmt::format( "in{}", ly_id );
     }
     }
 }
