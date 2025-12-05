@@ -127,7 +127,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <exporters/place_file_exporter.h>
 %include <exporters/export_vrml.h>
 %include <exporters/gendrill_writer_base.h>
-%include <exporters/gendrill_Excellon_writer.h>
+%include <exporters/gendrill_excellon_writer.h>
 %include <exporters/gendrill_gerber_writer.h>
 %include <exporters/gerber_jobfile_writer.h>
 %include <gal/color4d.h>
