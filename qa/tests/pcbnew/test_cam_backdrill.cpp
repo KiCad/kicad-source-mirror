@@ -24,7 +24,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <board.h>
-#include <pcbnew/exporters/gendrill_Excellon_writer.h>
+#include <pcbnew/exporters/gendrill_excellon_writer.h>
 #include <pcbnew/exporters/gendrill_gerber_writer.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 #include <pcbnew/pcb_track.h>

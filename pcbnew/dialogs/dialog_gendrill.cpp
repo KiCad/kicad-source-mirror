@@ -33,7 +33,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <pcb_edit_frame.h>
 #include <pcbplot.h>
-#include <gendrill_Excellon_writer.h>
+#include <gendrill_excellon_writer.h>
 #include <gendrill_gerber_writer.h>
 #include <bitmaps.h>
 #include <tools/board_editor_control.h>

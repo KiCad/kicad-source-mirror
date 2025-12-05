@@ -61,7 +61,7 @@
 #include <filename_resolver.h>
 #include <gerber_jobfile_writer.h>
 #include "gerber_placefile_writer.h"
-#include <gendrill_Excellon_writer.h>
+#include <gendrill_excellon_writer.h>
 #include <gendrill_gerber_writer.h>
 #include <kiface_base.h>
 #include <macros.h>

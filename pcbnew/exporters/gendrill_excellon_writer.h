@@ -23,7 +23,7 @@
  */
 
 /**
- * @file gendrill_Excellon_writer.h
+ * @file gendrill_excellon_writer.h
  * @brief Classes used in drill files, map files and report files generation.
  */
 
