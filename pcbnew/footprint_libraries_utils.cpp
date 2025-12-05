@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
 #include <wx/ffile.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -1214,7 +1215,12 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
             fpnames = adapter->GetFootprintNames( aLibName, true );
 
             if( !fpnames.empty() )
-                footprintAttrs = adapter->LoadFootprint( aLibName, fpnames.back(), false )->GetAttributes();
+            {
+                std::unique_ptr<FOOTPRINT> fp( adapter->LoadFootprint( aLibName, fpnames.back(), false ) );
+
+                if( fp )
+                    footprintAttrs = fp->GetAttributes();
+            }
         }
         catch( ... )
         {

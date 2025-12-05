@@ -304,8 +304,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     try
     {
-        if( const FOOTPRINT* fp = adapter->LoadFootprint( libNickname, fpName, false ) )
-            footprint = static_cast<FOOTPRINT*>( fp->Duplicate( IGNORE_PARENT_GROUP ) );
+        footprint = adapter->LoadFootprint( libNickname, fpName, false );
     }
     catch( const IO_ERROR& ioe )
     {

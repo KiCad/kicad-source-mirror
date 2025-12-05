@@ -45,7 +45,7 @@ void FOOTPRINT_INFO_IMPL::load()
     FOOTPRINT_LIBRARY_ADAPTER* adapter = m_owner->GetAdapter();
     wxCHECK( adapter, /* void */ );
 
-    const FOOTPRINT* footprint = adapter->LoadFootprint( m_nickname, m_fpname, false );
+    std::unique_ptr<FOOTPRINT> footprint( adapter->LoadFootprint( m_nickname, m_fpname, false ) );
 
     if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {

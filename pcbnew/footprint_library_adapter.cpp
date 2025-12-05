@@ -419,7 +419,10 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
                 FOOTPRINT* existing = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), fpname, false );
 
                 if( existing )
+                {
+                    delete existing;
                     return SAVE_SKIPPED;
+                }
             }
             catch( IO_ERROR& e )
             {
