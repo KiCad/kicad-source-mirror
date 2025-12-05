@@ -173,6 +173,7 @@ void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDir
     m_referenceImage.Flip( aCentre, aFlipDirection );
 }
 
+
 void PCB_REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 {
     m_referenceImage.Rotate( aCenter, aAngle );

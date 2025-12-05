@@ -258,9 +258,9 @@ void REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 
     norm.Normalize();
 
-    // each call to m_bitmapBase->Rotate() rotates 90 degrees CCW
+    // each call to m_bitmapBase->Rotate() rotates 90 degrees
     for( double ang = 45.0; ang < norm.AsDegrees(); ang += 90.0 )
-        m_bitmapBase->Rotate( false );
+        m_bitmapBase->Rotate( true );
 }
 
 
