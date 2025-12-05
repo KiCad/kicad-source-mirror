@@ -45,7 +45,7 @@
 
 #include <pcbplot.h>
 #include <board.h>
-#include <gendrill_Excellon_writer.h>
+#include <gendrill_excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
