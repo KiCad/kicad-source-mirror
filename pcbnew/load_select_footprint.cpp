@@ -395,7 +395,7 @@ static FOOTPRINT* s_FootprintInitialCopy = nullptr;    // Copy of footprint for 
 static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
                                                     //   and dragged tracks
 
-void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest )
+void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest, std::optional<VECTOR2I> aPosition )
 {
     if( aFootprint == nullptr )
         return;
@@ -423,7 +423,11 @@ void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsne
         s_PickedList.ClearItemsList();
     }
 
-    aFootprint->SetPosition( GetCanvas()->GetViewControls()->GetCursorPosition() );
+    if( aPosition.has_value() )
+        aFootprint->SetPosition( aPosition.value() );
+    else
+        aFootprint->SetPosition( GetCanvas()->GetViewControls()->GetCursorPosition() );
+
     aFootprint->ClearFlags();
 
     delete s_FootprintInitialCopy;
