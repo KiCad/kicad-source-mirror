@@ -138,6 +138,31 @@ LSET getBoardNormalizedLayerSet( const BOARD_ITEM* aLibItem, const BOARD* aBoard
 }
 
 
+bool boardLayersMatchWithBoardLayerIncrease( const LSET& aItem, const LSET& bLib )
+{
+    // first test non copper layers, these should exact match
+    const LSET nonCuMask = LSET::AllNonCuMask();
+    const LSET aNonCu = aItem & nonCuMask;
+    const LSET bNonCu = bLib & nonCuMask;
+
+    if( aNonCu != bNonCu )
+        return false;
+
+    // Now test if aItem is missing layers from the library but not vice versa
+    // As additional board layers will get applied to padstacks
+    // but library padstacks themselves only have F.Cu/B.Cu at most
+    const LSET cuMask = LSET::AllCuMask();
+    const LSET aCu = aItem & cuMask;
+    const LSET bCu = bLib & cuMask;
+
+    const LSET missingCuInA = bCu & ~aCu;
+    if( missingCuInA.count() )
+        return false;
+
+    return true;
+}
+
+
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
 {
@@ -298,7 +323,9 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
 
     if( layerSettingsDiffer
-            || getBoardNormalizedLayerSet( a, a->GetBoard() ) != getBoardNormalizedLayerSet( b, a->GetBoard() ) )
+        || !boardLayersMatchWithBoardLayerIncrease(
+                getBoardNormalizedLayerSet( a, a->GetBoard() ),
+                getBoardNormalizedLayerSet( b, a->GetBoard() ) ) )
     {
         diff = true;
 
