@@ -1118,43 +1118,33 @@ wxString LIBRARY_MANAGER_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
 }
 
 
-std::optional<const LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
-        const wxString& aNickname ) const
+std::optional<const LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded( const wxString& aNickname ) const
 {
-    if( m_libraries.contains( aNickname )
-        && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-    {
+    if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
         return &m_libraries.at( aNickname );
-    }
 
-    if( globalLibs().contains( aNickname )
-        && globalLibs().at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-    {
+    if( globalLibs().contains( aNickname ) && globalLibs().at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
         return &globalLibs().at( aNickname );
-    }
 
     return std::nullopt;
 }
 
 
-std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
-        const wxString& aNickname )
+std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded( const wxString& aNickname )
 {
     if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
         return &m_libraries.at( aNickname );
 
-    if( globalLibs().contains( aNickname )
-        && globalLibs().at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
-    {
+    if( globalLibs().contains( aNickname ) && globalLibs().at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
         return &globalLibs().at( aNickname );
-    }
 
     return std::nullopt;
 }
 
 
 LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString& aNickname,
-        LIBRARY_TABLE_SCOPE aScope, std::map<wxString, LIB_DATA>& aTarget, std::mutex& aMutex )
+                                                                  LIBRARY_TABLE_SCOPE aScope, std::map<wxString,
+                                                                  LIB_DATA>& aTarget, std::mutex& aMutex )
 {
     bool present = false;
 
@@ -1196,8 +1186,8 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
 
 LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
 {
-    LIBRARY_RESULT<LIB_DATA*> result =
-            loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_libraries_mutex );
+    LIBRARY_RESULT<LIB_DATA*> result = loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::PROJECT, m_libraries,
+                                                      m_libraries_mutex );
 
     if( !result.has_value() || *result )
         return result;
