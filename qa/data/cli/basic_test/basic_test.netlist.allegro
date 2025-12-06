@@ -1,0 +1,40 @@
+(NETLIST)
+(Source: E:\kicad\kicad\qa\data\cli\basic_test\basic_test.kicad_sch)
+(Date: 2025-12-05T23:11:58-0500)
+$PACKAGES
+! '10k_resistor_smd_r_1206_3216metric' ! '10k' ; R1,
+	R2
+! '10u_capacitor_smd_c_1206_3216metric' ! '10u' ; C1
+! 'conn_01x01_pin_testpoint_testpoint_pad_3_0x3_0mm' ! 'Conn_01x01_Pin' ; J1,
+	J2,
+	J4
+! 'tlv2371dbv_package_to_sot_smd_sot-23-5' ! 'TLV2371DBV' ; U1
+$A_PROPERTIES
+'ROOM' '/' ; C1,
+	J1,
+	J2,
+	J3,
+	J4,
+	R1,
+	R2,
+	R3,
+	U1
+$NETS
+/IN; J2.1,
+	R3.1
+/OUT; J3.1,
+	R2.2,
+	U1.1
+/VCC; J1.1,
+	U1.5
+GND; C1.2,
+	J4.1,
+	R1.1,
+	U1.2
+'NET-(U1-+)'; C1.1,
+	R3.2,
+	U1.3
+'NET-(U1--)'; R1.2,
+	R2.1,
+	U1.4
+$END

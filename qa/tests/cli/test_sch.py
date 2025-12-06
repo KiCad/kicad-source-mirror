@@ -80,7 +80,9 @@ def test_sch_export_svg( kitest,
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadsexpr", 5, True,["--format=kicadsexpr"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.kicadxml", 6, True,["--format=kicadxml"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.cadstar", 3, False, ["--format=cadstar"]),
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.orcadpcb2", 1, False, ["--format=orcadpcb2"])
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.orcadpcb2", 1, False, ["--format=orcadpcb2"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.pads", 0, False, ["--format=pads"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.netlist.allegro", 3, False, ["--format=allegro"]),
                              ])
 def test_sch_export_netlist( kitest,
                              test_file: str,
