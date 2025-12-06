@@ -11,16 +11,16 @@ R3               Resistor_SMD:R_1206_3216Metric
 U1               Package_TO_SOT_SMD:SOT-23-5
 
 *NET*
+*SIGNAL* /IN
+J2.1 R3.1 
 *SIGNAL* /OUT
 J3.1 R2.2 U1.1 
 *SIGNAL* /VCC
 J1.1 U1.5 
+*SIGNAL* GND
+C1.2 J4.1 R1.1 U1.2 
 *SIGNAL* Net-(U1-+)
 C1.1 R3.2 U1.3 
 *SIGNAL* Net-(U1--)
 R1.2 R2.1 U1.4 
-*SIGNAL* GND
-C1.2 J4.1 R1.1 U1.2 
-*SIGNAL* /IN
-J2.1 R3.1 
 *END*

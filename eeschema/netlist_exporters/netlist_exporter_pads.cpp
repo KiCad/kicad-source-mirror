@@ -124,11 +124,14 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 
         fmt::print( f, "*NET*\n" );
 
+        // Collect all nets and sort them by name to ensure stable ordering
+        std::vector<std::pair<wxString, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>>> allNets;
+
         for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
         {
             netName = key.Name;
 
-            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sortedItems;
 
             for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
             {
@@ -137,12 +140,12 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
                 for( SCH_ITEM* item : subgraph->GetItems() )
                 {
                     if( item->Type() == SCH_PIN_T )
-                        sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                        sortedItems.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
                 }
             }
 
-            // Netlist ordering: Net name, then ref des, then pin name
-            std::sort( sorted_items.begin(), sorted_items.end(),
+            // Netlist ordering: Net name, then ref des, then pin name (intra-net)
+            std::sort( sortedItems.begin(), sortedItems.end(),
                     []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                     {
                         wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
@@ -154,10 +157,8 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
                         return ref_a < ref_b;
                     } );
 
-            // Some duplicates can exist, for example on multi-unit parts with duplicated
-            // pins across units.  If the user connects the pins on each unit, they will
-            // appear on separate subgraphs.  Remove those here:
-            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+            // Remove duplicates across subgraphs for multi-unit parts
+            sortedItems.erase( std::unique( sortedItems.begin(), sortedItems.end(),
                     []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                     {
                         wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
@@ -165,8 +166,20 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 
                         return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
                     } ),
-                    sorted_items.end() );
+                    sortedItems.end() );
 
+            allNets.emplace_back( netName, std::move( sortedItems ) );
+        }
+
+        // Sort nets by name (inter-net ordering) for deterministic output
+        std::sort( allNets.begin(), allNets.end(),
+                   []( const auto& a, const auto& b )
+                   {
+                       return a.first < b.first;
+                   } );
+
+        for( const auto& [sortedNetName, sorted_items] : allNets )
+        {
             std::vector<wxString> netConns;
 
             for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
@@ -188,7 +201,7 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
             // which seems to be the standard everyone follows
             if( netConns .size() > 1 )
             {
-                fmt::print( f, "*SIGNAL* {}\n", TO_UTF8(netName) );
+                fmt::print( f, "*SIGNAL* {}\n", TO_UTF8(sortedNetName) );
                 int cnt = 0;
 
                 for( wxString& netConn : netConns )
