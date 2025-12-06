@@ -30,6 +30,8 @@
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
+#include <fmt.h>
+#include <system_error>
 
 #include "netlist_exporter_cadstar.h"
 
@@ -50,72 +52,89 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
         return false;
     }
 
-    wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
-    wxString msg;
-    wxString footprint;
-    SCH_SYMBOL* symbol;
-    wxString title = wxT( "Eeschema " ) + GetBuildVersion();
-
-    ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
-    ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( GetISO8601CurrentDateTime() ) );
-    ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
-    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
-    ret |= fprintf( f, ".TYP FULL\n\n" );
-
-    // Create netlist footprints section
-    m_referencesAlreadyFound.Clear();
-
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    try
     {
-        // The rtree returns items in a non-deterministic order (platform-dependent)
-        // Therefore we need to sort them before outputting to ensure file stability for version
-        // control and QA comparisons
-        std::vector<EDA_ITEM*> sheetItems;
+        wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
+        wxString msg;
+        wxString footprint;
+        SCH_SYMBOL* symbol;
+        wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
-        for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
-            sheetItems.push_back( item );
+        fmt::print( f, "{}HEA\n", TO_UTF8( StartLine ) );
+        fmt::print( f, "{}TIM {}\n", TO_UTF8( StartLine ), TO_UTF8( GetISO8601CurrentDateTime() ) );
+        fmt::print( f, "{}APP ", TO_UTF8( StartLine ) );
+        fmt::print( f, "\"{}\"\n", TO_UTF8( title ) );
+        fmt::print( f, ".TYP FULL\n\n" );
 
-        auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+        // Create netlist footprints section
+        m_referencesAlreadyFound.Clear();
+
+        for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
         {
-            return item1->m_Uuid < item2->m_Uuid;
-        };
+            // The rtree returns items in a non-deterministic order (platform-dependent)
+            // Therefore we need to sort them before outputting to ensure file stability for version
+            // control and QA comparisons
+            std::vector<EDA_ITEM*> sheetItems;
 
-        std::sort( sheetItems.begin(), sheetItems.end(), pred );
+            for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                sheetItems.push_back( item );
 
-        // Process symbol attributes
-        for( EDA_ITEM* item : sheetItems )
-        {
-            symbol = findNextSymbol( item, sheet );
+            auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+            {
+                return item1->m_Uuid < item2->m_Uuid;
+            };
 
-            if( !symbol )
-                continue;
+            std::sort( sheetItems.begin(), sheetItems.end(), pred );
 
-            if( symbol->GetExcludedFromBoard() )
-                continue;
+            // Process symbol attributes
+            for( EDA_ITEM* item : sheetItems )
+            {
+                symbol = findNextSymbol( item, sheet );
 
-            footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+                if( !symbol )
+                    continue;
 
-            if( footprint.IsEmpty() )
-                footprint = "$noname";
+                if( symbol->GetExcludedFromBoard() )
+                    continue;
 
-            msg = symbol->GetRef( &sheet );
-            ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
-            ret |= fprintf( f, "%s", TO_UTF8( msg ) );
+                footprint = symbol->GetFootprintFieldText( true, &sheet, false );
 
-            msg = symbol->GetValue( true, &sheet, false );
-            msg.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
-            ret |= fprintf( f, "     \"%s\"", TO_UTF8( footprint ) );
-            ret |= fprintf( f, "\n" );
+                if( footprint.IsEmpty() )
+                    footprint = "$noname";
+
+                msg = symbol->GetRef( &sheet );
+                fmt::print( f, "{}     ", TO_UTF8( StartCmpDesc ) );
+                fmt::print( f, "{}", TO_UTF8( msg ) );
+
+                msg = symbol->GetValue( true, &sheet, false );
+                msg.Replace( wxT( " " ), wxT( "_" ) );
+                fmt::print( f, "     \"{}\"", TO_UTF8( msg ) );
+                fmt::print( f, "     \"{}\"", TO_UTF8( footprint ) );
+                fmt::print( f, "\n" );
+            }
         }
+
+        fmt::print( f, "\n" );
+
+        if( ! writeListOfNets( f ) )
+            ret = -1;   // set error
+
+        fmt::print( f, "\n{}END\n", TO_UTF8( StartLine ) );
+
+        // Check for file I/O errors
+        if( ferror( f ) )
+            ret = -1;
     }
-
-    ret |= fprintf( f, "\n" );
-
-    if( ! writeListOfNets( f ) )
-        ret = -1;   // set error
-
-    ret |= fprintf( f, "\n%sEND\n", TO_UTF8( StartLine ) );
+    catch( const std::system_error& e )
+    {
+        aReporter.Report( wxString::Format( _( "I/O error writing netlist: %s" ), e.what() ), RPT_SEVERITY_ERROR );
+        ret = -1;
+    }
+    catch( const fmt::format_error& e )
+    {
+        aReporter.Report( wxString::Format( _( "Formatting error writing netlist: %s" ), e.what() ), RPT_SEVERITY_ERROR );
+        ret = -1;
+    }
 
     fclose( f );
 
@@ -125,112 +144,122 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
 
 bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 {
-    int ret       = 0;
-    int print_ter = 0;
-
-    wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
-    wxString StartNetDesc = StartLine + wxT( "TER" );
-    wxString InitNetDescLine;
-
-    std::vector<std::pair<wxString, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>>> all_nets;
-
-    for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
+    try
     {
-        wxString netName;
-        netName.Printf( wxT( "\"%s\"" ), key.Name );
+        int print_ter = 0;
 
-        all_nets.emplace_back( netName, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>{} );
-        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& sorted_items = all_nets.back().second;
+        wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
+        wxString StartNetDesc = StartLine + wxT( "TER" );
+        wxString InitNetDescLine;
 
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        std::vector<std::pair<wxString, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>>> all_nets;
+
+        for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
         {
-            SCH_SHEET_PATH sheet = subgraph->GetSheet();
+            wxString netName;
+            netName.Printf( wxT( "\"%s\"" ), key.Name );
 
-            for( SCH_ITEM* item : subgraph->GetItems() )
+            all_nets.emplace_back( netName, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>{} );
+            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& sorted_items = all_nets.back().second;
+
+            for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
             {
-                if( item->Type() == SCH_PIN_T )
-                    sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                SCH_SHEET_PATH sheet = subgraph->GetSheet();
+
+                for( SCH_ITEM* item : subgraph->GetItems() )
+                {
+                    if( item->Type() == SCH_PIN_T )
+                        sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                }
+            }
+
+            // Intra-net ordering: Ref des, then pin name
+            std::sort( sorted_items.begin(), sorted_items.end(),
+                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                    {
+                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+
+                        if( ref_a == ref_b )
+                            return a.first->GetShownNumber() < b.first->GetShownNumber();
+
+                        return ref_a < ref_b;
+                    } );
+
+            // Some duplicates can exist, for example on multi-unit parts with duplicated
+            // pins across units.  If the user connects the pins on each unit, they will
+            // appear on separate subgraphs.  Remove those here:
+            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                    {
+                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+
+                        return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
+                    } ),
+                    sorted_items.end() );
+        }
+
+        // Inter-net ordering by net name
+        std::sort( all_nets.begin(), all_nets.end(),
+                   []( const auto& a, const auto& b )
+                   {
+                       return a.first < b.first;
+                   } );
+
+        for( const auto& [netName, sorted_items] : all_nets )
+        {
+            print_ter = 0;
+
+            for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
+            {
+                SCH_PIN*       pin   = pair.first;
+                SCH_SHEET_PATH sheet = pair.second;
+
+                wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
+                wxString pinText = pin->GetShownNumber();
+
+                // Skip power symbols and virtual symbols
+                if( refText[0] == wxChar( '#' ) )
+                    continue;
+
+                switch( print_ter )
+                {
+                case 0:
+                    InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                                            InitNetDesc,
+                                            refText,
+                                            pinText,
+                                            netName );
+                    print_ter++;
+                    break;
+
+                case 1:
+                    fmt::print( f, "{}\n", TO_UTF8( InitNetDescLine ) );
+                    fmt::print( f, "{}       {}   {:.4s}\n",
+                                    TO_UTF8( StartNetDesc ),
+                                    TO_UTF8( refText ),
+                                    TO_UTF8( pinText ) );
+                    print_ter++;
+                    break;
+
+                default:
+                    fmt::print( f, "            {}   {:.4s}\n",
+                                    TO_UTF8( refText ),
+                                    TO_UTF8( pinText ) );
+                    break;
+                }
             }
         }
 
-        // Intra-net ordering: Ref des, then pin name
-        std::sort( sorted_items.begin(), sorted_items.end(),
-                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                {
-                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                    if( ref_a == ref_b )
-                        return a.first->GetShownNumber() < b.first->GetShownNumber();
-
-                    return ref_a < ref_b;
-                } );
-
-        // Some duplicates can exist, for example on multi-unit parts with duplicated
-        // pins across units.  If the user connects the pins on each unit, they will
-        // appear on separate subgraphs.  Remove those here:
-        sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                {
-                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                    return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
-                } ),
-                sorted_items.end() );
+        return ferror( f ) == 0;
     }
-
-    // Inter-net ordering by net name
-    std::sort( all_nets.begin(), all_nets.end(),
-               []( const auto& a, const auto& b )
-               {
-                   return a.first < b.first;
-               } );
-
-    for( const auto& [netName, sorted_items] : all_nets )
+    catch( const std::system_error& )
     {
-        print_ter = 0;
-
-        for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
-        {
-            SCH_PIN*       pin   = pair.first;
-            SCH_SHEET_PATH sheet = pair.second;
-
-            wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
-            wxString pinText = pin->GetShownNumber();
-
-            // Skip power symbols and virtual symbols
-            if( refText[0] == wxChar( '#' ) )
-                continue;
-
-            switch( print_ter )
-            {
-            case 0:
-                InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                        InitNetDesc,
-                                        refText,
-                                        pinText,
-                                        netName );
-                print_ter++;
-                break;
-
-            case 1:
-                ret |= fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
-                ret |= fprintf( f, "%s       %s   %.4s\n",
-                                TO_UTF8( StartNetDesc ),
-                                TO_UTF8( refText ),
-                                TO_UTF8( pinText ) );
-                print_ter++;
-                break;
-
-            default:
-                ret |= fprintf( f, "            %s   %.4s\n",
-                                TO_UTF8( refText ),
-                                TO_UTF8( pinText ) );
-                break;
-            }
-        }
+        return false;
     }
-
-    return ret >= 0;
+    catch( const fmt::format_error& )
+    {
+        return false;
+    }
 }
