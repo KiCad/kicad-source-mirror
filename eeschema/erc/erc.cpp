@@ -913,6 +913,28 @@ int ERC_TESTER::TestNoConnectPins()
         {
             if( pair.second.size() > 1 )
             {
+                bool all_nc = true;
+
+                for( SCH_ITEM* item : pair.second )
+                {
+                    if( item->Type() != SCH_PIN_T )
+                    {
+                        all_nc = false;
+                        break;
+                    }
+
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+                    if( pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+                    {
+                        all_nc = false;
+                        break;
+                    }
+                }
+
+                if( all_nc )
+                    continue;
+
                 err_count++;
 
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
