@@ -862,7 +862,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
                 testShape = testShapes.front();
         }
 
-        if( !aVia && !m_extraPadThickness && !testShape.IsNull() )
+        if( !aVia && m_extraPadThickness && !testShape.IsNull() )
         {
             if( pcb_layer == F_Cu || pcb_layer == B_Cu )
             {
