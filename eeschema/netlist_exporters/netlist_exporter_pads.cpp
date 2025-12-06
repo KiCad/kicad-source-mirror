@@ -28,6 +28,8 @@
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
+#include <fmt.h>
+#include <system_error>
 
 #include "netlist_exporter_pads.h"
 
@@ -49,48 +51,64 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
     wxString footprint;
     SCH_SYMBOL* symbol;
 
-    ret |= fputs( "*PADS-PCB*\n", f );
-    ret |= fputs( "*PART*\n", f );
-
-    // Create netlist footprints section
-    m_referencesAlreadyFound.Clear();
-
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    try
     {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        fmt::print( f, "*PADS-PCB*\n" );
+        fmt::print( f, "*PART*\n" );
+
+        // Create netlist footprints section
+        m_referencesAlreadyFound.Clear();
+
+        for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
         {
-            symbol = findNextSymbol( item, sheet );
-
-            if( !symbol )
-                continue;
-
-            if( symbol->GetExcludedFromBoard() )
-                continue;
-
-            footprint = symbol->GetFootprintFieldText( true, &sheet, false );
-
-            footprint = footprint.Trim( true );
-            footprint = footprint.Trim( false );
-            footprint.Replace( wxT( " " ), wxT( "_" ) );
-
-            if( footprint.IsEmpty() )
+            for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
-                // fall back to value field
-                footprint = symbol->GetValue( true, &sheet, false );
-                footprint.Replace( wxT( " " ), wxT( "_" ) );
+                symbol = findNextSymbol( item, sheet );
+
+                if( !symbol )
+                    continue;
+
+                if( symbol->GetExcludedFromBoard() )
+                    continue;
+
+                footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+
                 footprint = footprint.Trim( true );
                 footprint = footprint.Trim( false );
+                footprint.Replace( wxT( " " ), wxT( "_" ) );
+
+                if( footprint.IsEmpty() )
+                {
+                    // fall back to value field
+                    footprint = symbol->GetValue( true, &sheet, false );
+                    footprint.Replace( wxT( " " ), wxT( "_" ) );
+                    footprint = footprint.Trim( true );
+                    footprint = footprint.Trim( false );
+                }
+
+                msg = symbol->GetRef( &sheet );
+                fmt::print( f, "{:<16} {}\n", TO_UTF8( msg ), TO_UTF8( footprint ) );
             }
-
-            msg = symbol->GetRef( &sheet );
-            ret |= fprintf( f, "%-16s %s\n", TO_UTF8( msg ), TO_UTF8( footprint ) );
         }
+
+        fmt::print( f, "\n" );
+
+        if( !writeListOfNets( f ) )
+            ret = -1;   // set error
+
+        if( ferror( f ) )
+            ret = -1;
     }
-
-    ret |= fputs( "\n", f );
-
-    if( !writeListOfNets( f ) )
-        ret = -1;   // set error
+    catch( const std::system_error& e )
+    {
+        aReporter.Report( wxString::Format( _( "I/O error writing netlist: %s" ), e.what() ), RPT_SEVERITY_ERROR );
+        ret = -1;
+    }
+    catch( const fmt::format_error& e )
+    {
+        aReporter.Report( wxString::Format( _( "Formatting error writing netlist: %s" ), e.what() ), RPT_SEVERITY_ERROR );
+        ret = -1;
+    }
 
     fclose( f );
 
@@ -100,95 +118,105 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
 
 bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 {
-    int      ret = 0;
-    wxString netName;
-
-    ret |= fputs( "*NET*\n", f );
-
-    for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
+    try
     {
-        netName = key.Name;
+        wxString netName;
 
-        std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+        fmt::print( f, "*NET*\n" );
 
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
         {
-            SCH_SHEET_PATH sheet = subgraph->GetSheet();
+            netName = key.Name;
 
-            for( SCH_ITEM* item : subgraph->GetItems() )
+            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
+
+            for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
             {
-                if( item->Type() == SCH_PIN_T )
-                    sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                SCH_SHEET_PATH sheet = subgraph->GetSheet();
+
+                for( SCH_ITEM* item : subgraph->GetItems() )
+                {
+                    if( item->Type() == SCH_PIN_T )
+                        sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                }
+            }
+
+            // Netlist ordering: Net name, then ref des, then pin name
+            std::sort( sorted_items.begin(), sorted_items.end(),
+                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                    {
+                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+
+                        if( ref_a == ref_b )
+                            return a.first->GetShownNumber() < b.first->GetShownNumber();
+
+                        return ref_a < ref_b;
+                    } );
+
+            // Some duplicates can exist, for example on multi-unit parts with duplicated
+            // pins across units.  If the user connects the pins on each unit, they will
+            // appear on separate subgraphs.  Remove those here:
+            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+                    {
+                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+
+                        return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
+                    } ),
+                    sorted_items.end() );
+
+            std::vector<wxString> netConns;
+
+            for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
+            {
+                SCH_PIN*       pin   = pair.first;
+                SCH_SHEET_PATH sheet = pair.second;
+
+                wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
+                wxString pinText = pin->GetShownNumber();
+
+                // Skip power symbols and virtual symbols
+                if( refText[0] == wxChar( '#' ) )
+                    continue;
+
+                netConns.push_back( wxString::Format( "%s.%.4s", refText, pinText ) );
+            }
+
+            // format it such that there are 6 net connections per line
+            // which seems to be the standard everyone follows
+            if( netConns .size() > 1 )
+            {
+                fmt::print( f, "*SIGNAL* {}\n", TO_UTF8(netName) );
+                int cnt = 0;
+
+                for( wxString& netConn : netConns )
+                {
+                    fmt::print( f, "{}", TO_UTF8( netConn ) );
+
+                    if( cnt != 0 && cnt % 6 == 0 )
+                        fmt::print( f, "\n" );
+                    else
+                        fmt::print( f, " " );
+
+                    cnt++;
+                }
+
+                fmt::print( f, "\n" );
             }
         }
 
-        // Netlist ordering: Net name, then ref des, then pin name
-        std::sort( sorted_items.begin(), sorted_items.end(),
-                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                {
-                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+        fmt::print( f, "*END*\n" );
 
-                    if( ref_a == ref_b )
-                        return a.first->GetShownNumber() < b.first->GetShownNumber();
-
-                    return ref_a < ref_b;
-                } );
-
-        // Some duplicates can exist, for example on multi-unit parts with duplicated
-        // pins across units.  If the user connects the pins on each unit, they will
-        // appear on separate subgraphs.  Remove those here:
-        sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                {
-                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                    return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
-                } ),
-                sorted_items.end() );
-
-        std::vector<wxString> netConns;
-
-        for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : sorted_items )
-        {
-            SCH_PIN*       pin   = pair.first;
-            SCH_SHEET_PATH sheet = pair.second;
-
-            wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
-            wxString pinText = pin->GetShownNumber();
-
-            // Skip power symbols and virtual symbols
-            if( refText[0] == wxChar( '#' ) )
-                continue;
-
-            netConns.push_back( wxString::Format( "%s.%.4s", refText, pinText ) );
-        }
-
-        // format it such that there are 6 net connections per line
-        // which seems to be the standard everyone follows
-        if( netConns .size() > 1 )
-        {
-            ret |= fprintf( f, "*SIGNAL* %s\n", TO_UTF8(netName) );
-            int cnt = 0;
-
-            for( wxString& netConn : netConns )
-            {
-                ret |= fputs( TO_UTF8( netConn ), f );
-
-                if( cnt != 0 && cnt % 6 == 0 )
-                    ret |= fputc( '\n', f );
-                else
-                    ret |= fputc( ' ', f );
-
-                cnt++;
-            }
-
-            ret |= fputc( '\n', f );
-        }
+        return ferror( f ) == 0;
     }
-
-    ret |= fprintf( f, "*END*\n" );
-
-    return ret >= 0;
+    catch( const std::system_error& )
+    {
+        return false;
+    }
+    catch( const fmt::format_error& )
+    {
+        return false;
+    }
 }
