@@ -131,6 +131,30 @@ LSET getBoardNormalizedLayerSet( const BOARD_ITEM* aLibItem, const BOARD* aBoard
     return lset;
 }
 
+bool boardLayersMatchWithBoardLayerIncrease( const LSET& aItem, const LSET& bLib )
+{
+    // first test non copper layers, these should exact match
+    const LSET nonCuMask = LSET::AllNonCuMask();
+    const LSET aNonCu = aItem & nonCuMask;
+    const LSET bNonCu = bLib & nonCuMask;
+
+    if( aNonCu != bNonCu )
+        return false;
+
+    // Now test if aItem is missing layers from the library but not vice versa
+    // As additional board layers will get applied to padstacks
+    // but library padstacks themselves only have F.Cu/B.Cu at most
+    const LSET cuMask = LSET::AllCuMask();
+    const LSET aCu = aItem & cuMask;
+    const LSET bCu = bLib & cuMask;
+
+    const LSET missingCuInA = bCu & ~aCu;
+    if( missingCuInA.count() )
+        return false;
+
+    return true;
+}
+
 
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
@@ -269,30 +293,31 @@ bool padHasOverrides( const PAD* a, const PAD* b, REPORTER& aReporter )
 }
 
 
-bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
+bool padNeedsUpdate( const PAD* a, const PAD* bLib, REPORTER* aReporter )
 {
     bool      diff = false;
 
-    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(),
+    TEST( a->GetPadToDieLength(), bLib->GetPadToDieLength(),
           wxString::Format( _( "%s pad to die length differs." ), PAD_DESC( a ) ) );
-    TEST_PT( a->GetFPRelativePosition(), b->GetFPRelativePosition(),
+    TEST_PT( a->GetFPRelativePosition(), bLib->GetFPRelativePosition(),
              wxString::Format( _( "%s position differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetNumber(), b->GetNumber(),
+    TEST( a->GetNumber(), bLib->GetNumber(),
           wxString::Format( _( "%s has different numbers." ), PAD_DESC( a ) ) );
 
     // These are assigned from the schematic and not from the library
     // TEST( a->GetPinFunction(), b->GetPinFunction() );
     // TEST( a->GetPinType(), b->GetPinType() );
 
-    bool layerSettingsDiffer = a->GetRemoveUnconnected() != b->GetRemoveUnconnected();
+    bool layerSettingsDiffer = a->GetRemoveUnconnected() != bLib->GetRemoveUnconnected();
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
-        layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
+        layerSettingsDiffer |= a->GetKeepTopBottom() != bLib->GetKeepTopBottom();
 
     if( layerSettingsDiffer
-            || getBoardNormalizedLayerSet( a, a->GetBoard() ) != getBoardNormalizedLayerSet( b, a->GetBoard() ) )
+           || !boardLayersMatchWithBoardLayerIncrease( getBoardNormalizedLayerSet( a, a->GetBoard() ),
+                                                       getBoardNormalizedLayerSet( bLib, a->GetBoard() ) ) )
     {
         diff = true;
 
@@ -302,14 +327,14 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             return true;
     }
 
-    TEST( a->GetAttribute(), b->GetAttribute(),
+    TEST( a->GetAttribute(), bLib->GetAttribute(),
           wxString::Format( _( "%s pad type differs." ), PAD_DESC( a ) ) );
-    TEST( a->GetProperty(), b->GetProperty(),
+    TEST( a->GetProperty(), bLib->GetProperty(),
           wxString::Format( _( "%s fabrication property differs." ), PAD_DESC( a ) ) );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
     TEST_D( a->GetFPRelativeOrientation().Normalize().AsDegrees(),
-            b->GetFPRelativeOrientation().Normalize().AsDegrees(),
+            bLib->GetFPRelativeOrientation().Normalize().AsDegrees(),
             wxString::Format( _( "%s orientation differs." ), PAD_DESC( a ) ) );
 
     std::vector<PCB_LAYER_ID> layers = a->Padstack().UniqueLayers();
@@ -320,17 +345,17 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     {
         layerName = board ? board->GetLayerName( layer ) : LayerName( layer );
 
-        TEST( a->GetShape( layer ), b->GetShape( layer ),
+        TEST( a->GetShape( layer ), bLib->GetShape( layer ),
               wxString::Format( _( "%s pad shape type differs on layer %s." ),
                                 PAD_DESC( a ),
                                 layerName ) );
 
-        TEST( a->GetSize( layer ), b->GetSize( layer ),
+        TEST( a->GetSize( layer ), bLib->GetSize( layer ),
               wxString::Format( _( "%s size differs on layer %s." ),
                                 PAD_DESC( a ),
                                 layerName ) );
 
-        TEST( a->GetDelta( layer ), b->GetDelta( layer ),
+        TEST( a->GetDelta( layer ), bLib->GetDelta( layer ),
               wxString::Format( _( "%s trapezoid delta differs on layer %s." ),
                                 PAD_DESC( a ),
                                 layerName ) );
@@ -338,7 +363,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         if( a->GetShape( layer ) == PAD_SHAPE::ROUNDRECT || a->GetShape( layer ) == PAD_SHAPE::CHAMFERED_RECT)
         {
             TEST_D( a->GetRoundRectRadiusRatio( layer ),
-                    b->GetRoundRectRadiusRatio( layer ),
+                    bLib->GetRoundRectRadiusRatio( layer ),
                     wxString::Format( _( "%s rounded corners differ on layer %s." ),
                                       PAD_DESC( a ),
                                       layerName ) );
@@ -347,27 +372,27 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
         if( a->GetShape( layer ) == PAD_SHAPE::CHAMFERED_RECT)
         {
             TEST_D( a->GetChamferRectRatio( layer ),
-                    b->GetChamferRectRatio( layer ),
+                    bLib->GetChamferRectRatio( layer ),
                     wxString::Format( _( "%s chamfered corner sizes differ on layer %s." ),
                                       PAD_DESC( a ),
                                       layerName ) );
 
             TEST( a->GetChamferPositions( layer ),
-                  b->GetChamferPositions( layer ),
+                  bLib->GetChamferPositions( layer ),
                   wxString::Format( _( "%s chamfered corners differ on layer %s." ),
                                     PAD_DESC( a ),
                                     layerName ) );
         }
 
-        TEST_PT( a->GetOffset( layer ), b->GetOffset( layer ),
+        TEST_PT( a->GetOffset( layer ), bLib->GetOffset( layer ),
                  wxString::Format( _( "%s shape offset from hole differs on layer %s." ),
                                    PAD_DESC( a ),
                                    layerName ) );
     }
 
-    TEST( a->GetDrillShape(), b->GetDrillShape(),
+    TEST( a->GetDrillShape(), bLib->GetDrillShape(),
           wxString::Format( _( "%s drill shape differs." ), PAD_DESC( a ) ) );
-    TEST( a->GetDrillSize(), b->GetDrillSize(),
+    TEST( a->GetDrillSize(), bLib->GetDrillSize(),
           wxString::Format( _( "%s drill size differs." ), PAD_DESC( a ) ) );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
@@ -380,7 +405,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     // going to be VERY noisy.
     //
     // So we just do it when we have a reporter.
-    if( aReporter && padHasOverrides( a, b, *aReporter ) )
+    if( aReporter && padHasOverrides( a, bLib, *aReporter ) )
         diff = true;
 
     bool primitivesDiffer = false;
@@ -389,7 +414,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     a->Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
-                if( a->GetPrimitives( aLayer ).size() != b->GetPrimitives( aLayer ).size() )
+                if( a->GetPrimitives( aLayer ).size() != bLib->GetPrimitives( aLayer ).size() )
                 {
                     primitivesDiffer = true;
                 }
@@ -398,7 +423,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
                     for( size_t ii = 0; ii < a->GetPrimitives( aLayer ).size(); ++ii )
                     {
                         if( primitiveNeedsUpdate( a->GetPrimitives( aLayer )[ii],
-                                                  b->GetPrimitives( aLayer )[ii] ) )
+                                                  bLib->GetPrimitives( aLayer )[ii] ) )
                         {
                             primitivesDiffer = true;
                             break;
@@ -925,20 +950,20 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     CHECKPOINT;
 
     std::set<PAD*, FOOTPRINT::cmp_pads> aPads( Pads().begin(), Pads().end() );
-    std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFP->Pads().begin(), aLibFP->Pads().end() );
+    std::set<PAD*, FOOTPRINT::cmp_pads> bLibPads( aLibFP->Pads().begin(), aLibFP->Pads().end() );
 
-    if( aPads.size() != bPads.size() )
+    if( aPads.size() != bLibPads.size() )
     {
         diff = true;
         REPORT( _( "Pad count differs." ) );
     }
     else
     {
-        for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
+        for( auto aIt = aPads.begin(), bLibIt = bLibPads.begin(); aIt != aPads.end(); aIt++, bLibIt++ )
         {
-            if( padNeedsUpdate( *aIt, *bIt, aReporter ) )
+            if( padNeedsUpdate( *aIt, *bLibIt, aReporter ) )
                 diff = true;
-            else if( aReporter && padHasOverrides( *aIt, *bIt, *aReporter ) )
+            else if( aReporter && padHasOverrides( *aIt, *bLibIt, *aReporter ) )
                 diff = true;
         }
     }
