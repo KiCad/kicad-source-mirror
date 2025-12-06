@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-05 09:00+0000\n"
+"PO-Revision-Date: 2025-12-06 11:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -27264,9 +27264,8 @@ msgstr ""
 
 #: eeschema/widgets/hierarchy_pane.cpp:543
 #: pcbnew/footprint_libraries_utils.cpp:1179
-#, fuzzy
 msgid "Untitled"
-msgstr "névtelen"
+msgstr "Névtelen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:577
 msgid "Add new top-level sheet"
@@ -28418,7 +28417,6 @@ msgid "Highlight items belonging to this net"
 msgstr "Ehhez a vezetékhez tartozó elemek kiemelése"
 
 #: gerbview/toolbars_gerber.cpp:233 gerbview/toolbars_gerber.cpp:236
-#, fuzzy
 msgid "Attr:"
 msgstr "Attribútum:"
 
@@ -28428,7 +28426,6 @@ msgid "Highlight items with this aperture attribute"
 msgstr "Megegyező apertúra tulajdonságú elemek kiemelése"
 
 #: gerbview/toolbars_gerber.cpp:259 gerbview/toolbars_gerber.cpp:261
-#, fuzzy
 msgid "DCode:"
 msgstr "D kód:"
 
@@ -29712,14 +29709,12 @@ msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:226
-#, fuzzy
 msgid "Image width"
-msgstr "Szélesség"
+msgstr "Kép szélesség"
 
 #: kicad/cli/command_pcb_render.cpp:232
-#, fuzzy
 msgid "Image height"
-msgstr "Szöveg magasság"
+msgstr "Kép magasság"
 
 #: kicad/cli/command_pcb_render.cpp:238
 #, fuzzy, c-format
@@ -29840,9 +29835,8 @@ msgid "Invalid light camera intensity format\n"
 msgstr "Érvénytelen vezetősáv szélesség."
 
 #: kicad/cli/command_pcb_render.cpp:418
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Érvénytelen vezetősáv szélesség."
+msgstr "Érvénytelen képformátum\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
 #, fuzzy
@@ -29854,7 +29848,6 @@ msgid "Forces the board file to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
 msgstr "Kapcsolási rajz"
 
@@ -29921,12 +29914,11 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:61
 msgid "Color theme to use (will default to schematic settings)"
-msgstr ""
+msgstr "Színséma (alapértelmezett: kapcsolási rajz beállításai)"
 
 #: kicad/cli/command_sch_export_plot.cpp:72
-#, fuzzy
 msgid "Default font name"
-msgstr "Alapértelmezet tbetű"
+msgstr "Alapértelmezett betűtípus"
 
 #: kicad/cli/command_sch_export_plot.cpp:76
 msgid "Draw hop over at wire crossings"
@@ -29957,9 +29949,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:112
 #: kicad/cli/command_sch_export_plot.cpp:118
-#, fuzzy
 msgid "Deprecated.  Has no effect."
-msgstr "Elavult KICAD_TEMPLATE_DIR verzió."
+msgstr "Elavult. Nincs hatása."
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -29976,9 +29967,8 @@ msgid "Forces the schematic file to be resaved regardless of versioning"
 msgstr ""
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Rajzjel könyvtárak betöltése"
+msgstr "Rajzjel és rajzjel könyvtárak"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
 #, fuzzy
@@ -30084,9 +30074,8 @@ msgid "Include jobs:"
 msgstr "Zónákat belevesz"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:145
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "Konfiguráció újratöltése"
+msgstr "Haladó konfiguráció szerkesztése"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:154
 msgid "Key"
@@ -30097,7 +30086,6 @@ msgid "Extant"
 msgstr ""
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:271
-#, fuzzy
 msgid "Reset to default"
 msgstr "Visszaállítás alapértelmezettre"
 
@@ -30112,7 +30100,7 @@ msgstr "Kimeneti üzenetek"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Nullától különböző visszatérési értékek figyelmen kívül hagyása"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 #, fuzzy
@@ -30125,30 +30113,25 @@ msgid "Execute Command Job Settings"
 msgstr "Beállítások szerkesztése"
 
 #: kicad/dialogs/dialog_template_selector.cpp:230
-#, fuzzy
 msgid "Edit Template"
-msgstr "Felhasználói sablonok"
+msgstr "Sablon szerkesztése"
 
 #: kicad/dialogs/dialog_template_selector.cpp:231
 #: kicad/dialogs/dialog_template_selector.cpp:300
-#, fuzzy
 msgid "Duplicate Template"
-msgstr "Elem duplikálása"
+msgstr "Sablon megkettőzése"
 
 #: kicad/dialogs/dialog_template_selector.cpp:261
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Nem sikerült megnyitni a forrás mappát: %s"
+msgstr "Nem sikerült megnyitni a sablonok mappáját."
 
 #: kicad/dialogs/dialog_template_selector.cpp:271
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "Projektfájlok importálása más szoftverekből"
+msgstr "Nincs projektfájl a sablon mappában."
 
 #: kicad/dialogs/dialog_template_selector.cpp:299
-#, fuzzy
 msgid "Enter name for the new template:"
-msgstr "Írja be az oldalszámot a lap elérési útjához'%s'"
+msgstr "Adja meg az új sablon nevét:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:301
 #: pcbnew/tools/footprint_editor_control.cpp:413
@@ -30156,24 +30139,22 @@ msgid "_copy"
 msgstr "_másolat"
 
 #: kicad/dialogs/dialog_template_selector.cpp:310
-#, fuzzy
 msgid "Template name cannot be empty."
-msgstr "A vezeték név nem lehet üres."
+msgstr "A sablon neve nem lehet üres."
 
 #: kicad/dialogs/dialog_template_selector.cpp:319
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Kimeneti mappa \"%s\" nem hozható létre"
+msgstr "Nem található a felhasználói sablonok mappája."
 
 #: kicad/dialogs/dialog_template_selector.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Kimeneti mappa \"%s\" már létezik."
+msgstr "A(z) \"%s\" mappa már létezik."
 
 #: kicad/dialogs/dialog_template_selector.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Kimeneti mappa \"%s\" nem hozható létre"
+msgstr "A(z) \"%s\" mappa nem hozható létre."
 
 #: kicad/dialogs/dialog_template_selector.cpp:350
 #, fuzzy
@@ -30188,9 +30169,8 @@ msgstr ""
 #: kicad/dialogs/dialog_template_selector.cpp:452
 #: kicad/dialogs/dialog_template_selector_base.h:64
 #: kicad/dialogs/template_default_html.h:58
-#, fuzzy
 msgid "Project Template Selector"
-msgstr "Projektsablon kiválasztás"
+msgstr "Projektsablon választó"
 
 #: kicad/dialogs/dialog_template_selector.cpp:470
 #: kicad/tools/kicad_manager_control.cpp:214
@@ -30198,12 +30178,10 @@ msgid "User Templates"
 msgstr "Felhasználói sablonok"
 
 #: kicad/dialogs/dialog_template_selector.cpp:673
-#, fuzzy
 msgid "Select Templates Directory"
-msgstr "Sablonmappa kiválasztás"
+msgstr "Sablonmappa kiválasztása"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:25
-#, fuzzy
 msgid "Folder:"
 msgstr "Mappa:"
 
@@ -30212,15 +30190,15 @@ msgstr "Mappa:"
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
 msgstr ""
+"A KiCad %s verziója elérhető (jelenlegi verzió: %s). Szeretné letölteni?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
 msgstr "A KiCad egy újabb verziója elérhető!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
-msgstr "Elvárt \"%s\""
+msgstr "Ezen verzió kihagyása"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -30239,9 +30217,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
-msgstr "Vezetékosztályok"
+msgstr "Részletek megjelenítése"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
@@ -30254,12 +30231,11 @@ msgstr "3D modell könyvtárak letöltése"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
-msgstr ""
+msgstr "Ugrás az operációs rendszernek megfelelő letöltési oldalra."
 
 #: kicad/dialogs/dialog_update_notice_base.h:55
-#, fuzzy
 msgid "Update Available"
-msgstr "Frissítés"
+msgstr "Frissítés elérhető"
 
 #: kicad/dialogs/panel_jobset.cpp:66
 #, fuzzy, c-format
@@ -30300,7 +30276,7 @@ msgid "Running Jobs"
 msgstr "Definiált színek"
 
 #: kicad/dialogs/panel_jobset.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
 msgstr "A '%s' fájl megnyitása nem sikerült."
 
@@ -30325,9 +30301,8 @@ msgid "Open Output"
 msgstr "Kimenet"
 
 #: kicad/dialogs/panel_jobset.cpp:428
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Leírás"
+msgstr "Feladat leírásának szerkesztése"
 
 #: kicad/dialogs/panel_jobset.cpp:429
 #, fuzzy
@@ -30335,24 +30310,20 @@ msgid "Edit Job Settings..."
 msgstr "Beállítások szerkesztése"
 
 #: kicad/dialogs/panel_jobset.cpp:432
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Kiválasztott vezetékek törlése"
+msgstr "Kiválasztott feladatok törlése"
 
 #: kicad/dialogs/panel_jobset.cpp:433
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Összes kijelölése"
+msgstr "Összes feladat kijelölése"
 
 #: kicad/dialogs/panel_jobset.cpp:725
-#, fuzzy
 msgid "Job Types"
-msgstr "Feladat fájlok"
+msgstr "Feladat típusok"
 
 #: kicad/dialogs/panel_jobset.cpp:739
-#, fuzzy
 msgid "Add New Job"
-msgstr "Új vezetősáv hozzáadása"
+msgstr "Új feladat hozzáadása"
 
 #: kicad/dialogs/panel_jobset.cpp:740
 #, fuzzy
@@ -30380,9 +30351,8 @@ msgid "No destinations defined"
 msgstr "Nincs csatlakoztatva"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "%s vagy %s"
+msgstr "Feladatok"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
 #, fuzzy
@@ -30429,7 +30399,6 @@ msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Globális vagy Projekt szintű Alkatrészrajzolat könyvtárak szerkesztése"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:160
-#, fuzzy
 msgid "Preview Gerber files"
 msgstr "Gerber fájlok előnézete"
 
@@ -30483,19 +30452,16 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:70
-#, fuzzy
 msgid "Select a Template"
-msgstr "Fájl kiválasztása"
+msgstr "Válasszon sablont"
 
 #: kicad/dialogs/template_default_html.h:71
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "A törléshez kattintson az elemekre"
+msgstr "Kattintson egy sablonra a listából "
 
 #: kicad/dialogs/template_default_html.h:71
-#, fuzzy
 msgid "preview its details"
-msgstr "Részletek"
+msgstr "a részletei megtekintéséhez"
 
 #: kicad/dialogs/template_default_html.h:71
 msgid ""
@@ -30631,9 +30597,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:130
-#, fuzzy
 msgid "Template"
-msgstr "Felhasználói sablonok"
+msgstr "Sablon"
 
 #: kicad/dialogs/template_default_html.h:131
 msgid ""
@@ -30646,7 +30611,6 @@ msgid "To use this template:"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:135
-#, fuzzy
 msgid "Create the project"
 msgstr "Projekt létrehozása"
 
@@ -30682,9 +30646,8 @@ msgid "Add an info page later:"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid "Create a file at"
-msgstr "ERC jelentés fájlba mentése"
+msgstr "Fájl létrehozása"
 
 #: kicad/dialogs/template_default_html.h:142
 msgid ""
@@ -30697,9 +30660,8 @@ msgid "You can copy styling from the default pages for consistency."
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
-msgstr "Nincs találat"
+msgstr "Nem találtunk sablont"
 
 #: kicad/dialogs/template_default_html.h:180
 #, fuzzy
@@ -30730,13 +30692,15 @@ msgstr ""
 
 #: kicad/dialogs/template_default_html.h:192
 msgid "Tip:"
-msgstr ""
+msgstr "Tipp:"
 
 #: kicad/dialogs/template_default_html.h:192
 msgid ""
 "Templates are organized in subdirectories. Each template needs a 'meta' "
 "folder with configuration files."
 msgstr ""
+"A sablonok almappákba vannak rendezve. Minden sablonnak kell egy \"meta\" "
+"mappa a konfigurációs fájloknak."
 
 #: kicad/files-io.cpp:41
 msgid "KiCad project file"
@@ -30747,7 +30711,7 @@ msgid "Unzip Project"
 msgstr "Projekt kicsomagolása"
 
 #: kicad/files-io.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
@@ -30756,7 +30720,6 @@ msgstr ""
 "\"%s\" megnyitása\n"
 
 #: kicad/files-io.cpp:71
-#, fuzzy
 msgid "Target Directory"
 msgstr "Célmappa"
 
@@ -30766,20 +30729,18 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "Projekt kicsomagolása a(z) \"%s\" mappába.\n"
 
 #: kicad/import_project.cpp:75
-#, fuzzy
 msgid "KiCad Project Destination"
 msgstr "KiCad projekt célmappa"
 
 #: kicad/import_project.cpp:105
-#, fuzzy
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"A kiválasztott mappa nem üres.\n"
-"Javasoljuk, hogy a projekteket mindig egy üres mappába hozza létre.\n"
+"A kiválasztott mappa nem üres. Javasoljuk, hogy a projekteket mindig egy "
+"üres mappába hozza létre.\n"
 "\n"
 "Létrehoz egy üres mappát a projekt számára?"
 
@@ -30796,9 +30757,8 @@ msgid "Import Altium Project Files"
 msgstr "Altium projektfájlok importálása"
 
 #: kicad/import_project.cpp:154
-#, fuzzy
 msgid "Import CADSTAR Archive Project Files"
-msgstr "CADSTAR Projekt fájlok importálása"
+msgstr "CADSTAR projekt fájlok importálása"
 
 #: kicad/import_project.cpp:162
 msgid "Import Eagle Project Files"
@@ -30809,24 +30769,21 @@ msgid "Import EasyEDA Std Backup"
 msgstr ""
 
 #: kicad/import_project.cpp:176
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Eagle projektfájlok importálása"
+msgstr "EasyEDA Pro projekt importálása"
 
 #: kicad/jobs_runner.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Definiált színek"
+msgstr "Feladat %d futtatása: %s"
 
 #: kicad/jobs_runner.cpp:282
-#, fuzzy
 msgid "Job successful"
-msgstr "A STEP fájl sikeresen létrejött."
+msgstr "Feladat sikerült"
 
 #: kicad/jobs_runner.cpp:289
-#, fuzzy
 msgid "Job failed"
-msgstr "Feladat fájlok"
+msgstr "Feladat meghiúsult"
 
 #: kicad/kicad.cpp:342
 #, c-format
@@ -30905,9 +30862,8 @@ msgid "%d package update(s) available"
 msgstr "%d csomag frissíthető"
 
 #: kicad/kicad_manager_frame.cpp:821
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba a feladatfájl megnyitása közben"
 
 #: kicad/kicad_manager_frame.cpp:855
 msgid "A newer local history snapshot is available. Restore it?"
@@ -30923,9 +30879,8 @@ msgid "Project '%s' is already open by '%s' at '%s'."
 msgstr "A(z) \"%s\" nyákterv fájl már meg van nyitva."
 
 #: kicad/kicad_manager_frame.cpp:1148
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "Nincs megadva alkatrészrajzolat"
+msgstr "[nincs betöltött projekt]"
 
 #: kicad/kicad_manager_frame.cpp:1194
 #, c-format
@@ -30933,14 +30888,13 @@ msgid "Project: %s"
 msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:1230
-#, fuzzy
 msgid "Restoring session"
-msgstr "Elvárt \"%s\""
+msgstr "Munkamenet helyreállítása"
 
 #: kicad/kicad_manager_frame.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "Elvárt \"%s\""
+msgstr "\"%s\" helyreállítása"
 
 #: kicad/local_history_pane.cpp:121
 #, fuzzy
@@ -30963,14 +30917,12 @@ msgid "Restore Commit"
 msgstr "Választás megjegyzése"
 
 #: kicad/menubar.cpp:63
-#, fuzzy
 msgid "Clear Recent Projects"
-msgstr "Nyisson meg egy nemrég használt projektet"
+msgstr "Legutóbbi projektek törlése"
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import Non-KiCad Project..."
-msgstr "Nem KiCad Project fájl importálása..."
+msgstr "Nem KiCad projekt importálása..."
 
 #: kicad/menubar.cpp:125
 msgid "Altium Project..."
@@ -30978,7 +30930,7 @@ msgstr "Altium Projekt..."
 
 #: kicad/menubar.cpp:126
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr ""
+msgstr "Altium kapcsolási rajz és NYÁK importálása (*.PrjPcb)"
 
 #: kicad/menubar.cpp:129
 msgid "CADSTAR Project..."
@@ -31002,19 +30954,16 @@ msgid "EasyEDA (JLCEDA) Std Backup..."
 msgstr ""
 
 #: kicad/menubar.cpp:140
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "EAGLE CAD XML kapcsolási rajz és nyákterv importálása"
+msgstr "EasyEDA (JLCEDA) Standard kapcsolási rajz és panel importálása"
 
 #: kicad/menubar.cpp:144
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EAGLE Project..."
+msgstr "EasyEDA (JLCEDA) Pro projekt..."
 
 #: kicad/menubar.cpp:145
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "EAGLE CAD XML kapcsolási rajz és nyákterv importálása"
+msgstr "EasyEDA (JLCEDA) Professional kapcsolási rajz és panel importálása"
 
 #: kicad/menubar.cpp:173
 msgid "Edit Advanced Config..."
@@ -31096,9 +31045,8 @@ msgstr "Frissítés megerősítése"
 #: kicad/pcm/dialogs/panel_package_base.cpp:72
 #: kicad/pcm/dialogs/panel_packages_view.cpp:703
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Install"
-msgstr "Egyedi méret"
+msgstr "Telepítés"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:122 kicad/pcm/dialogs/panel_package.cpp:78
 #: kicad/pcm/dialogs/panel_package.cpp:124
@@ -31133,9 +31081,8 @@ msgid ""
 msgstr "Biztosan törli a kijelölt elemeket?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "Install Package"
-msgstr "Csomagban"
+msgstr "Csomag telepítése"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:404
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -31145,9 +31092,9 @@ msgstr "Egyedi méret"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:444
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Installed (%d)"
-msgstr "Egyedi méret"
+msgstr "Telepítve (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
@@ -31170,9 +31117,8 @@ msgid "Discard action"
 msgstr "Módosítások elvetése"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
-msgstr "A fájlt nem lehet átnevezni..."
+msgstr "Telepítés fájlból..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
 #, fuzzy
@@ -31190,9 +31136,9 @@ msgid "Aborting remaining tasks."
 msgstr "Fityegő végű vezetősávok törlése"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "3D modell könyvtárak letöltése"
+msgstr "%lld/%lld kB letöltve"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 #, fuzzy
@@ -31209,9 +31155,8 @@ msgid "Overall Progress"
 msgstr "Anyagok tulajdonságai"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
-#, fuzzy
 msgid "Details"
-msgstr "Vezetékosztályok"
+msgstr "Részletek"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 #, fuzzy
@@ -31246,7 +31191,7 @@ msgstr "Nyákterv frissítése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:228
 msgid "Metadata"
-msgstr ""
+msgstr "Metaadatok"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
 #, fuzzy
@@ -31254,9 +31199,8 @@ msgid "Package identifier: "
 msgstr "Nincs könyvtár definiálva!"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
-#, fuzzy
 msgid "License: "
-msgstr "GPL Licensz"
+msgstr "Licensz: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
@@ -31287,14 +31231,12 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:515
-#, fuzzy
 msgid "Save Package"
-msgstr "Változások mentése"
+msgstr "Csomag mentése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:527
-#, fuzzy
 msgid "Download Package"
-msgstr "3D modell könyvtárak letöltése"
+msgstr "Csomag letöltése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:543
 msgid ""
@@ -31318,9 +31260,8 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:596
 #: kicad/pcm/pcm_task_manager.cpp:385
-#, fuzzy
 msgid "Install package"
-msgstr "Csomagban"
+msgstr "Csomag telepítése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:711
 msgid "Pending"
@@ -31519,7 +31460,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Az archívumban nincs érvényes metadata.json fájl"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
@@ -31908,14 +31849,12 @@ msgid "Close Project"
 msgstr "Projekt bezárása"
 
 #: kicad/tools/kicad_manager_actions.cpp:106
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "Meglévő kapcsolási rajz megnyitása"
+msgstr "Kapcsolási rajz szerkesztése a szerkesztőben"
 
 #: kicad/tools/kicad_manager_actions.cpp:128
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Kijelölt fájl szerkesztése szövegszerkesztővel"
+msgstr "NYÁK szerkesztése a szerkesztőben"
 
 #: kicad/tools/kicad_manager_actions.cpp:139
 #, fuzzy
@@ -32937,9 +32876,8 @@ msgid "Thermal coefficient at 20 deg C"
 msgstr "Hőmérsékleti együttható 20 °C-on"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:114
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Hőellenállás:"
+msgstr "Fajlagos ellenállás:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
@@ -32986,9 +32924,8 @@ msgid "Current:"
 msgstr "Áram:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:201
-#, fuzzy
 msgid "Length:"
-msgstr "Lábhossz:"
+msgstr "Hossz:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:203
 msgid "Length includes the return path"
@@ -33315,7 +33252,6 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
-#, fuzzy
 msgid "Voltage > 500 V:"
 msgstr "Feszültség > 500V:"
 
@@ -33325,11 +33261,10 @@ msgid "Update Values"
 msgstr "Értékek frissítése"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:51
-#, fuzzy
 msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr ""
 "Megjegyzés: A táblázatban szereplő értékek az IPC-2221 szabvány szerinti "
-"minimális értékek."
+"minimális értékek"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:76
 msgid "B1"
@@ -33782,7 +33717,6 @@ msgstr ""
 "A kimeneti feszültségnek (Vki) nagyobbnak kell lennie a referenciánál (Vref)"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:407
-#, fuzzy
 msgid "Vref set to 0 !"
 msgstr "Vref értéke 0 !"
 
@@ -34026,7 +33960,6 @@ msgstr "Áram (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
-#, fuzzy
 msgid "Temperature rise:"
 msgstr "Hőmérséklet-emelkedés:"
 
@@ -34202,12 +34135,10 @@ msgid "Physical Parameters"
 msgstr "Fizikai paraméterek"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:307
-#, fuzzy
 msgid "Analyze"
 msgstr "Analizálás"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:316
-#, fuzzy
 msgid "Synthesize"
 msgstr "Szintetizálás"
 
