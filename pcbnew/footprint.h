@@ -1058,6 +1058,8 @@ public:
     /// Used for display in the properties panel
     wxString GetComponentClassAsString() const;
 
+    /// Used post-loading of a footprint to adjust the layers on pads to match board inner layers
+    void FixUpPadsForBoard( BOARD* aBoard );
 
     bool operator==( const BOARD_ITEM& aOther ) const override;
     bool operator==( const FOOTPRINT& aOther ) const;

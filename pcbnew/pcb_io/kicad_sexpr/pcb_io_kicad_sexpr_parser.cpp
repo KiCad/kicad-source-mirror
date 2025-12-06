@@ -4943,6 +4943,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         }
     }
 
+    footprint->FixUpPadsForBoard( m_board );
+
     // In legacy files the lack of attributes indicated a through-hole component which was by
     // default excluded from pos files.  However there was a hack to look for SMD pads and
     // consider those "mislabeled through-hole components" and therefore include them in place
@@ -5174,14 +5176,6 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_layers:
         {
             LSET layerMask = parseBoardItemLayersAsMask();
-
-            // We force this mask to include all copper layers if the pad is a PTH pad.
-            // This is because PTH pads are always drawn on all copper layers, even if the
-            // padstack has inner layers that are smaller than the hole.  There was a corner
-            // case in the past where a PTH pad was defined with NPTH layer set (F&B.Cu) and
-            // could not be reset without effort
-            if( pad->GetAttribute() == PAD_ATTRIB::PTH && m_board )
-                layerMask |= LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
             pad->SetLayerSet( layerMask );
             break;
