@@ -1106,6 +1106,8 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
 
     std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
 
+    bool writeError = false;
+
     try
     {
         fmt::print( outFp, "Drill report for {}\n", TO_UTF8( brdFilename.GetFullName() ) );
@@ -1203,23 +1205,22 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
         totalHoleCount = printToolSummary( outFp, true );
         fmt::print( outFp, "    Total unplated holes count {}\n", totalHoleCount );
     }
+    catch( const std::system_error& e )
+    {
+        writeError = true;
+    }
     catch( const fmt::format_error& )
     {
-        if( aReporter != nullptr )
-        {
-            wxString msg = wxString::Format( _( "Error writing drill report file '%s'" ), aFullFileName);
-            aReporter->Report( msg, RPT_SEVERITY_ERROR );
-        }
-        return false;
+        writeError = true;
     }
 
-    if( aReporter != nullptr )
+    if( writeError )
     {
         wxString msg = wxString::Format( _( "Created drill report file '%s'" ), aFullFileName );
         aReporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    return true;
+    return !writeError;
 }
 
 
