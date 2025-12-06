@@ -354,18 +354,21 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
         }
         else
         {
-            m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit );
+             // Expand the footprint pad layers
+             newFootprint->FixUpPadsForBoard( m_board );
 
-            msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
-                        aFootprint->GetReference(),
-                        EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
-                        EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-            ++m_newFootprintsCount;
-            return newFootprint;
-        }
-    }
-}
+             m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit );
+
+             msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
+                         aFootprint->GetReference(),
+                         EscapeHTML( aFootprint->GetFPID().Format().wx_str() ),
+                         EscapeHTML( aNewComponent->GetFPID().Format().wx_str() ) );
+             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+             ++m_newFootprintsCount;
+             return newFootprint;
+         }
+     }
+ }
 
 
 bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,

@@ -1072,6 +1072,9 @@ public:
     void ResolveComponentClassNames( BOARD*                              aBoard,
                                      const std::unordered_set<wxString>& aComponentClassNames );
 
+    /// Used post-loading of a footprint to adjust the layers on pads to match board inner layers
+    void FixUpPadsForBoard( BOARD* aBoard );
+
     bool operator==( const BOARD_ITEM& aOther ) const override;
     bool operator==( const FOOTPRINT& aOther ) const;
 

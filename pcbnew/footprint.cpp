@@ -4405,6 +4405,28 @@ void FOOTPRINT::SetStackupLayers( LSET aLayers )
 }
 
 
+void FOOTPRINT::FixUpPadsForBoard( BOARD* aBoard )
+{
+    if( !aBoard )
+        return;
+
+    if( GetStackupMode() != FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
+        return;
+
+    const LSET boardCopper = LSET::AllCuMask( aBoard->GetCopperLayerCount() );
+
+    for( PAD* pad : Pads() )
+    {
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+        {
+            LSET padLayers = pad->GetLayerSet();
+            padLayers |= boardCopper;
+            pad->SetLayerSet( padLayers );
+        }
+    }
+}
+
+
 static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()
