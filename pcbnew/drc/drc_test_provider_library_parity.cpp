@@ -131,8 +131,15 @@ LSET getBoardNormalizedLayerSet( const BOARD_ITEM* aLibItem, const BOARD* aBoard
     return lset;
 }
 
-bool boardLayersMatchWithBoardLayerIncrease( const LSET& aItem, const LSET& bLib )
+
+static bool boardLayersMatchWithInnerLayerExpansion( const LSET& aItem, const LSET& bLib,
+                                                     bool aAllowCuExpansion )
 {
+    if( !aAllowCuExpansion )
+    {
+        return aItem == bLib;
+    }
+
     // first test non copper layers, these should exact match
     const LSET nonCuMask = LSET::AllNonCuMask();
     const LSET aNonCu = aItem & nonCuMask;
@@ -141,15 +148,20 @@ bool boardLayersMatchWithBoardLayerIncrease( const LSET& aItem, const LSET& bLib
     if( aNonCu != bNonCu )
         return false;
 
-    // Now test if aItem is missing layers from the library but not vice versa
-    // As additional board layers will get applied to padstacks
-    // but library padstacks themselves only have F.Cu/B.Cu at most
-    const LSET cuMask = LSET::AllCuMask();
-    const LSET aCu = aItem & cuMask;
-    const LSET bCu = bLib & cuMask;
+    // top and bottom copper must match exactly
+    if( ( aItem & LSET::ExternalCuMask() ) != ( bLib & LSET::ExternalCuMask() ) )
+        return false;
 
-    const LSET missingCuInA = bCu & ~aCu;
-    if( missingCuInA.count() )
+    // technically we can ignore the inner layers entirely due to aAllowCuExpansion at this point
+    // since its assumed the layers got expanded elsewhere
+    // but it feels weird not to sanity this
+
+    // extract the inner layers to compare prescence
+    const LSET aInner = ( aItem & LSET::AllCuMask() ) & ~( LSET::ExternalCuMask() );
+    const LSET bInner = ( bLib & LSET::AllCuMask() ) & ~( LSET::ExternalCuMask() );
+
+    const LSET missingInnerInA = bInner & ~aInner;
+    if( missingInnerInA.count() )
         return false;
 
     return true;
@@ -315,9 +327,14 @@ bool padNeedsUpdate( const PAD* a, const PAD* bLib, REPORTER* aReporter )
     if( a->GetRemoveUnconnected() )
         layerSettingsDiffer |= a->GetKeepTopBottom() != bLib->GetKeepTopBottom();
 
+    bool allowExpansion = false;
+    if( const FOOTPRINT* fp = a->GetParentFootprint() )
+        allowExpansion = ( fp->GetStackupMode() == FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS );
+
     if( layerSettingsDiffer
-           || !boardLayersMatchWithBoardLayerIncrease( getBoardNormalizedLayerSet( a, a->GetBoard() ),
-                                                       getBoardNormalizedLayerSet( bLib, a->GetBoard() ) ) )
+           || !boardLayersMatchWithInnerLayerExpansion( getBoardNormalizedLayerSet( a, a->GetBoard() ),
+                                                       getBoardNormalizedLayerSet( bLib, a->GetBoard() ),
+                                                       allowExpansion ) )
     {
         diff = true;
 
@@ -582,8 +599,25 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
     TEST( a->GetDoNotAllowVias(), b->GetDoNotAllowVias(),
           wxString::Format( _( "%s keep out vias setting differs." ), ITEM_DESC( a ) ) );
 
-    TEST( a->GetLayerSet(), getBoardNormalizedLayerSet( b, a->GetBoard() ),
-          wxString::Format( _( "%s layers differ." ), ITEM_DESC( a ) ) );
+    // In1_Cu is used to indicate whether inner layer expansion is allowed on rulesets
+    // Kind of annoying footprint pads use both in1_cu and have an stackup mode setting
+    bool innerLayerExpansionAllowed = b->GetLayerSet().Contains( In1_Cu );
+
+    if( !boardLayersMatchWithInnerLayerExpansion( a->GetLayerSet(), 
+                                                 getBoardNormalizedLayerSet( b, a->GetBoard() ),
+                                                 innerLayerExpansionAllowed ) )
+    {
+        diff = true;
+
+        if( aReporter )
+        {
+            aReporter->Report( wxString::Format( _( "%s layers differ." ), ITEM_DESC( a ) ) );
+        }
+        else
+        {
+            return true;
+        }
+    }
 
     TEST( a->GetPadConnection(), b->GetPadConnection(),
           wxString::Format( _( "%s pad connection property differs." ), ITEM_DESC( a ) ) );
