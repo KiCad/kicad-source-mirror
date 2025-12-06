@@ -653,14 +653,13 @@ void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 void SCH_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
                                                    std::vector<wxArrayString>& aItemsToDisplay )
 {
-    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&         project = Prj().GetProjectFile();
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-    std::vector<wxString> libNicknames = adapter->GetLibraryNames();
-
     aHeaders.Add( _( "Library" ) );
     aHeaders.Add( _( "Description" ) );
 
+    COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&              project = Prj().GetProjectFile();
+    SYMBOL_LIBRARY_ADAPTER*    adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+    std::vector<wxString>      libNicknames = adapter->GetLibraryNames();
     std::vector<wxArrayString> unpinned;
 
     for( const wxString& nickname : libNicknames )

@@ -1309,39 +1309,31 @@ void PCB_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
     aHeaders.Add( _( "Library" ) );
     aHeaders.Add( _( "Description" ) );
 
-    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
+    COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
-    std::vector<wxString> nicknames = adapter->GetLibraryNames();
+    std::vector<wxString>      nicknames = adapter->GetLibraryNames();
+    std::vector<wxArrayString> unpinned;
 
     for( const wxString& nickname : nicknames )
     {
-        wxString description = adapter->GetLibraryDescription( nickname ).value_or( wxEmptyString );
+        wxArrayString item;
+        wxString      description = adapter->GetLibraryDescription( nickname ).value_or( wxEmptyString );
 
         if( alg::contains( project.m_PinnedFootprintLibs, nickname )
                 || alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
         {
-            wxArrayString item;
-
             item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
             item.Add( description );
             aItemsToDisplay.push_back( item );
         }
-    }
-
-    // TODO this double loop isn't used on the symbol side, what is broken here?
-    for( const wxString& nickname : nicknames )
-    {
-        wxString description = adapter->GetLibraryDescription( nickname ).value_or( wxEmptyString );
-
-        if( !alg::contains( project.m_PinnedFootprintLibs, nickname )
-                && !alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
+        else
         {
-            wxArrayString item;
-
             item.Add( nickname );
             item.Add( description );
-            aItemsToDisplay.push_back( item );
+            unpinned.push_back( item );
         }
     }
+
+    std::ranges::copy( unpinned, std::back_inserter( aItemsToDisplay ) );
 }
