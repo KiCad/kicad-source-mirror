@@ -2459,11 +2459,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     aNew->SetParent( GetBoard() );
 
-    PlaceFootprint( aNew, false );
-
-    // PlaceFootprint will move the footprint to the cursor position, which we don't want.  Copy
-    // the original position across.
-    aNew->SetPosition( aExisting->GetPosition() );
+    PlaceFootprint( aNew, false, aExisting->GetPosition() );
 
     if( aNew->GetLayer() != aExisting->GetLayer() )
         aNew->Flip( aNew->GetPosition(), GetPcbNewSettings()->m_FlipDirection );
