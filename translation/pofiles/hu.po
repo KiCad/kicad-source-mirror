@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-06 07:00+0000\n"
+"PO-Revision-Date: 2025-12-07 10:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -25491,9 +25491,8 @@ msgid "Save Plot as Image"
 msgstr "Ábra mentése képként"
 
 #: eeschema/tools/simulator_control.cpp:287
-#, fuzzy
 msgid "Save Plot Data"
-msgstr "Ábra mentése adatsorként"
+msgstr "Ábra adatainak mentése"
 
 #: eeschema/tools/simulator_control.cpp:520
 #, fuzzy
@@ -25501,10 +25500,9 @@ msgid "SPICE Netlist"
 msgstr "SPICE netlista fájl (*.cir)"
 
 #: eeschema/tools/symbol_editor_control.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr ""
-"Nem sikerült hozzáadni a(z) \"%s\" rajzjelet a(z) \"%s\" könyvtárfájlhoz."
+msgstr "Nem sikerült betölteni a(z) \"%s\" rajzjelet a(z) \"%s\" könyvtárból."
 
 #: eeschema/tools/symbol_editor_control.cpp:313
 msgid "No symbol library selected."
@@ -25541,9 +25539,8 @@ msgstr "Rajzjel Nevének cseréje"
 
 #: eeschema/tools/symbol_editor_control.cpp:773
 #: eeschema/tools/symbol_editor_control.cpp:820
-#, fuzzy
 msgid "No symbol to export"
-msgstr "Ne exportálja"
+msgstr "Nincs exportálandó rajzjel"
 
 #: eeschema/tools/symbol_editor_control.cpp:782
 #: pcbnew/footprint_edit_frame.cpp:1515
@@ -25565,9 +25562,8 @@ msgid "Library Fields"
 msgstr "Könyvtárak"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
-#, fuzzy
 msgid "Place Pin"
-msgstr "Via hozzáadása"
+msgstr "Láb lehelyezése"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
 #: pcbnew/tools/edit_tool.cpp:2710
@@ -25584,9 +25580,8 @@ msgid "Use the Symbol Properties dialog to remove fields."
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:784
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Vonal hozzáadása"
+msgstr "Lábak szerkesztése"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:800
 msgid "Symbol is not derived from another symbol."
@@ -25625,9 +25620,8 @@ msgid "Place Pin Anyway"
 msgstr "Mindenféleképpen létrehozza a lábat"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:459
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "Lap kivezető láb hozzáadása"
+msgstr "Láb ismétlése"
 
 #: eeschema/widgets/design_block_pane.cpp:40
 #, fuzzy
@@ -25655,9 +25649,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/widgets/filedlg_hook_save_project.h:36
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "Projekt létrehozása sablonból"
+msgstr "Új projekt létrehozása az aktuális kapcsolási rajznak"
 
 #: eeschema/widgets/hierarchy_pane.cpp:383
 msgid "Edit Page Number"
@@ -25668,9 +25661,8 @@ msgid "Rename"
 msgstr "Átnevezés"
 
 #: eeschema/widgets/hierarchy_pane.cpp:387
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "Kapcsolási rajzon lévő összes rajzjel cseréje"
+msgstr "A lap nevének megváltoztatása"
 
 #: eeschema/widgets/hierarchy_pane.cpp:406
 #, fuzzy, c-format
@@ -25807,9 +25799,9 @@ msgid "Add new project library table entry"
 msgstr "Projekt rajzjel könyvtártáblázat létrehozva.\n"
 
 #: eeschema/widgets/tuner_slider.cpp:67 eeschema/widgets/tuner_slider.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Hangolás"
+msgstr "%s hangolása"
 
 #: eeschema/widgets/tuner_slider.cpp:84
 #, c-format
@@ -25913,9 +25905,8 @@ msgid "Assign to matching PCB layers?"
 msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
-#, fuzzy
 msgid "Automatic Layer Assignment"
-msgstr "Kapcsolási rajz hozzárendelés"
+msgstr "Automatikus réteg-hozzárendelés"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:340
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:393
@@ -26123,9 +26114,8 @@ msgid "Sketch lines"
 msgstr "Vonalak vázlat módban"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:68
-#, fuzzy
 msgid "Sketch polygons"
-msgstr "Sokszögek vázlat módban"
+msgstr "Sokszögek rajzolása"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
 #, fuzzy
@@ -26138,9 +26128,8 @@ msgid "Forced Opacity Display Mode"
 msgstr "Vezetősáv megjelenítési mód"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Átlátszóság:"
+msgstr "Kényszerített átlátszóság:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
@@ -26747,7 +26736,6 @@ msgid "Highlight items belonging to this net"
 msgstr "Ehhez a vezetékhez tartozó elemek kiemelése"
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
-#, fuzzy
 msgid "Attr:"
 msgstr "Attribútum:"
 
@@ -26757,7 +26745,6 @@ msgid "Highlight items with this aperture attribute"
 msgstr "Megegyező apertúra tulajdonságú elemek kiemelése"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
-#, fuzzy
 msgid "DCode:"
 msgstr "D kód:"
 
@@ -28718,9 +28705,8 @@ msgid "Restoring '%s'"
 msgstr "\"%s\" helyreállítása"
 
 #: kicad/menubar.cpp:58
-#, fuzzy
 msgid "Clear Recent Projects"
-msgstr "Nyisson meg egy nemrég használt projektet"
+msgstr "Legutóbbi projektek törlése"
 
 #: kicad/menubar.cpp:112
 msgid "Import Non-KiCad Project..."
@@ -28756,19 +28742,16 @@ msgid "EasyEDA (JLCEDA) Std Backup..."
 msgstr ""
 
 #: kicad/menubar.cpp:130
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "EAGLE CAD XML kapcsolási rajz és nyákterv importálása"
+msgstr "EasyEDA (JLCEDA) Standard kapcsolási rajz és panel importálása"
 
 #: kicad/menubar.cpp:134
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EAGLE Project..."
+msgstr "EasyEDA (JLCEDA) Pro projekt..."
 
 #: kicad/menubar.cpp:135
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "EAGLE CAD XML kapcsolási rajz és nyákterv importálása"
+msgstr "EasyEDA (JLCEDA) Professional kapcsolási rajz és panel importálása"
 
 #: kicad/menubar.cpp:141
 #, fuzzy
@@ -28877,9 +28860,8 @@ msgstr "Frissítés megerősítése"
 #: kicad/pcm/dialogs/panel_package_base.cpp:72
 #: kicad/pcm/dialogs/panel_packages_view.cpp:718
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Install"
-msgstr "Egyedi méret"
+msgstr "Telepítés"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:122 kicad/pcm/dialogs/panel_package.cpp:78
 #: kicad/pcm/dialogs/panel_package.cpp:124
@@ -28914,9 +28896,8 @@ msgid ""
 msgstr "Biztosan törli a kijelölt elemeket?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:291
-#, fuzzy
 msgid "Install Package"
-msgstr "Csomagban"
+msgstr "Csomag telepítése"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:406
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -28926,9 +28907,9 @@ msgstr "Egyedi méret"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:446
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Installed (%d)"
-msgstr "Egyedi méret"
+msgstr "Telepítve (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
@@ -28951,9 +28932,8 @@ msgid "Discard action"
 msgstr "Módosítások elvetése"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
-msgstr "A fájlt nem lehet átnevezni..."
+msgstr "Telepítés fájlból..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
 #, fuzzy
@@ -28971,9 +28951,9 @@ msgid "Aborting remaining tasks."
 msgstr "Fityegő végű vezetősávok törlése"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "3D modell könyvtárak letöltése"
+msgstr "%lld/%lld kB letöltve"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 #, fuzzy
@@ -28990,9 +28970,8 @@ msgid "Overall Progress"
 msgstr "Anyagok tulajdonságai"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
-#, fuzzy
 msgid "Details"
-msgstr "Vezetékosztályok"
+msgstr "Részletek"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 #, fuzzy
@@ -29027,7 +29006,7 @@ msgstr "Nyákterv frissítése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:228
 msgid "Metadata"
-msgstr ""
+msgstr "Metaadatok"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
 #, fuzzy
@@ -29035,9 +29014,8 @@ msgid "Package identifier: "
 msgstr "Nincs könyvtár definiálva!"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
-#, fuzzy
 msgid "License: "
-msgstr "GPL Licensz"
+msgstr "Licensz: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
@@ -29068,9 +29046,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:525
-#, fuzzy
 msgid "Save Package"
-msgstr "Változások mentése"
+msgstr "Csomag mentése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:538
 #, fuzzy
@@ -29099,9 +29076,8 @@ msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:385
-#, fuzzy
 msgid "Install package"
-msgstr "Csomagban"
+msgstr "Csomag telepítése"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:726
 msgid "Pending"
@@ -29300,7 +29276,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Az archívumban nincs érvényes metadata.json fájl"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
@@ -29369,12 +29345,11 @@ msgid "Cannot create folder '%s'."
 msgstr "Nem sikerült létrehozni a(z) \"%s\" mappát."
 
 #: kicad/project_tree_item.cpp:132
-#, fuzzy
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"A fájlkiterjesztés módosítása megváltoztatja a fájltípust.\n"
+"A fájl kiterjesztésének módosítása megváltoztatja a fájltípust.\n"
 "Folytatja?"
 
 #: kicad/project_tree_item.cpp:134
@@ -29766,14 +29741,12 @@ msgid "Close Project"
 msgstr "Projekt bezárása"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
-#, fuzzy
 msgid "Edit schematic in schematic editor"
-msgstr "Meglévő kapcsolási rajz megnyitása"
+msgstr "Kapcsolási rajz szerkesztése a szerkesztőben"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Kijelölt fájl szerkesztése szövegszerkesztővel"
+msgstr "NYÁK szerkesztése a szerkesztőben"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 #, fuzzy
@@ -29781,9 +29754,8 @@ msgid "Create, delete and edit PCB footprints"
 msgstr "Alkatrészrajzolat létrehozása, törlése vagy szerkesztése"
 
 #: kicad/tools/kicad_manager_actions.cpp:159
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Gerber fájlok kimeneti megtekintése"
+msgstr "Gerber fájlok előnézete"
 
 #: kicad/tools/kicad_manager_actions.cpp:169
 #, fuzzy
@@ -30148,7 +30120,6 @@ msgid "Rotation:"
 msgstr "Forgatás:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:372
-#, fuzzy
 msgid "Bitmap DPI:"
 msgstr "Bitkép DPI:"
 
@@ -30309,14 +30280,12 @@ msgid "Drawing sheet changes are unsaved"
 msgstr "\"%s\" alkatrészrajzolat elmentve."
 
 #: pagelayout_editor/pl_editor_frame.cpp:970
-#, fuzzy
 msgid "Page Width"
-msgstr "Szélesség"
+msgstr "Oldal szélesség"
 
 #: pagelayout_editor/pl_editor_frame.cpp:971
-#, fuzzy
 msgid "Page Height"
-msgstr "Szöveg magasság"
+msgstr "Oldal magasság"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Left Top paper corner"
@@ -30431,6 +30400,15 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
+"### Áthidalt T-csillapító\n"
+"___a___ a csillapítás dB-ben<br>\n"
+"___Z<sub>be</sub>___ a kívánt bemeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>ki</sub>___ a kívánt kimeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>0</sub> = Z<sub>be</sub> = Z<sub>ki</sub>___\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
@@ -30447,6 +30425,18 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
+"### Pi csillapító\n"
+"___a___ a csillapítás dB-ben<br>\n"
+"___Z<sub>be</sub>___ a kívánt bemeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>ki</sub>___ a kívánt kimeneti impedancia &#x2126;-ban<br>\n"
+"\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>be</sub> &middot; Z<sub>ki</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>be</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>ki</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -30458,6 +30448,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
+"### Osztott csillapító\n"
+"A csillapítás 6 dB<br>\n"
+"___Z<sub>be</sub>___ a kívánt bemeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>ki</sub>___ a kívánt kimeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>0</sub> = Z<sub>be</sub> = Z<sub>k</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -30474,6 +30471,18 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
+"### T-csillapító\n"
+"___a___ a csillapítás dB-ben<br>\n"
+"___Z<sub>be</sub>___ a kívánt bemeneti impedancia &#x2126;-ban<br>\n"
+"___Z<sub>ki</sub>___ a kívánt kimeneti impedancia &#x2126;-ban<br>\n"
+"\n"
+"___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
+"___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>be</sub> &middot; Z<sub>ki</"
+"sub>) / (L&minus;1)___<br>\n"
+"___R1 = Z<sub>be</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>ki</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
@@ -30690,14 +30699,12 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Fajlagos ellenállás:"
+msgstr "Vezető fajlagos ellenállása:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Fajlagos ellenállás [Ω⋅m]"
+msgstr "Fajlagos ellenállás 20 °C-on [Ω⋅m]"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:83
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:105
@@ -30727,9 +30734,8 @@ msgid "Thermal coefficient at 20 deg C"
 msgstr "Hőmérsékleti együttható 20 °C-on"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:114
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Hőellenállás:"
+msgstr "Fajlagos ellenállás:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
@@ -30776,9 +30782,8 @@ msgid "Current:"
 msgstr "Áram:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:201
-#, fuzzy
 msgid "Length:"
-msgstr "Lábhossz:"
+msgstr "Hossz:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:203
 msgid "Length includes the return path"
@@ -30871,7 +30876,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
-msgstr ""
+msgstr "Túlfeszültség kategória:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
 msgid ""
@@ -30905,9 +30910,8 @@ msgid "OVC IV"
 msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
-#, fuzzy
 msgid "Impulse voltage:"
-msgstr "Pulzáló érték:"
+msgstr "Impulzus feszültség:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
 msgid ""
@@ -31061,9 +31065,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
-#, fuzzy
 msgid "Max altitude:"
-msgstr "Maximális amplitúdó (Amax):"
+msgstr "Maximális magasság:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:223
 msgid ""
@@ -31104,21 +31107,18 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
-#, fuzzy
 msgid "Voltage > 500 V:"
 msgstr "Feszültség > 500V:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:43
-#, fuzzy
 msgid "Update Values"
 msgstr "Értékek frissítése"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:51
-#, fuzzy
 msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr ""
 "Megjegyzés: A táblázatban szereplő értékek az IPC-2221 szabvány szerinti "
-"minimális értékek."
+"minimális értékek"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:76
 msgid "B1"
@@ -31249,9 +31249,8 @@ msgid "Time to fuse:"
 msgstr "Időlépés:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:123
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:168
@@ -31361,9 +31360,8 @@ msgid "Copper (Cu)"
 msgstr "Réz (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:64
-#, fuzzy
 msgid "Threshold voltage:"
-msgstr "Vég feszültség:"
+msgstr "Küszöb feszültség:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
 msgid "Material names:"
@@ -31437,21 +31435,18 @@ msgid "E24"
 msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:94
-#, fuzzy
 msgid "Solutions"
-msgstr "Felbontás:"
+msgstr "Megoldások"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:102
-#, fuzzy
 msgid "Simple solution:"
-msgstr "Felbontás:"
+msgstr "Egyszerű megoldás:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:111
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
-#, fuzzy
 msgid "Approximation:"
-msgstr "Hozzávetőleges méretarány:"
+msgstr "Közelítés:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 #, fuzzy
@@ -31503,7 +31498,6 @@ msgstr ""
 "A kimeneti feszültségnek (Vki) nagyobbnak kell lennie a referenciánál (Vref)"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:407
-#, fuzzy
 msgid "Vref set to 0 !"
 msgstr "Vref értéke 0 !"
 
@@ -31552,7 +31546,6 @@ msgstr "Háromlábú típus"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:55
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:184
-#, fuzzy
 msgid "Formula"
 msgstr "Képlet"
 
@@ -31572,7 +31565,6 @@ msgid "The name of the data file which stores known regulators parameters."
 msgstr "Feszültségszabályozó adatfájl neve."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
-#, fuzzy
 msgid "Browse"
 msgstr "Tallózás"
 
@@ -31650,14 +31642,12 @@ msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "Visszacsatoló láb áramfelvétele (\"háromlábú\" stabilizátor esetén!)"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Hőcsapda hézag:"
+msgstr "Teljes tolerancia:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "Ellenállás:"
+msgstr "Ellenállás tolerancia:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -31693,14 +31683,12 @@ msgid "Pi"
 msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
-#, fuzzy
 msgid "Tee"
-msgstr "T csillapító"
+msgstr "T"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
-#, fuzzy
 msgid "Bridged tee"
-msgstr "Áthidalt T csillapító"
+msgstr "Áthidalt T"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Resistive splitter"
@@ -31748,7 +31736,6 @@ msgstr "Áram (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
-#, fuzzy
 msgid "Temperature rise:"
 msgstr "Hőmérséklet-emelkedés:"
 
@@ -31919,12 +31906,10 @@ msgid "Physical Parameters"
 msgstr "Fizikai paraméterek"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:299
-#, fuzzy
 msgid "Analyze"
 msgstr "Analizálás"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:308
-#, fuzzy
 msgid "Synthesize"
 msgstr "Szintetizálás"
 
@@ -31948,9 +31933,8 @@ msgid "Electrical Resistivity in Ohm*m"
 msgstr "Fajlagos ellenállás [Ω⋅m]"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
-#, fuzzy
 msgid "Finished hole diameter (D):"
-msgstr "Kész via furat méret (D):"
+msgstr "Kész furat méret (D):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:45
 #, fuzzy
@@ -32343,7 +32327,7 @@ msgstr ""
 "Biztosan kilép, és elveti a módosításokat?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
@@ -45017,9 +45001,8 @@ msgstr ""
 "A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
 
 #: pcbnew/footprint_libraries_utils.cpp:1249
-#, fuzzy
 msgid "Untitled"
-msgstr "névtelen"
+msgstr "Névtelen"
 
 #: pcbnew/footprint_viewer_frame.cpp:116
 #, fuzzy
