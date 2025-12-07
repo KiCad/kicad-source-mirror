@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-07 13:00+0000\n"
+"PO-Revision-Date: 2025-12-08 15:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -34976,7 +34976,6 @@ msgid "environment"
 msgstr "Környezeti változók"
 
 #: pcb_calculator/transline_ident.cpp:439
-#, fuzzy
 msgid "Relative permittivity of environment"
 msgstr "A környezet relatív permittivitása"
 
@@ -35237,7 +35236,6 @@ msgstr "Helytelen forrszem eltolási érték"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:93
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:87
 #: pcbnew/board_tables/board_stackup_table.cpp:87
-#, fuzzy
 msgid "Material"
 msgstr "Anyag"
 
@@ -35263,9 +35261,8 @@ msgid "Loss Tan:"
 msgstr "Mágneses Veszteség Tangens"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Közös az összes részegységre"
+msgstr "Gyakori anyagok:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:56
 #, fuzzy
@@ -35341,9 +35338,8 @@ msgstr "Réteg kiválasztása"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:330
 #: pcbnew/dialogs/panel_setup_layers.cpp:1110
-#, fuzzy
 msgid "Select layer to add:"
-msgstr "Válassza ki a hozzáadni kívánt könyvtárakat:"
+msgstr "Válassza ki a hozzáadni kívánt réteget:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:375
 #, c-format
@@ -35702,9 +35698,8 @@ msgid "Min track width"
 msgstr "Minimális vezetősáv szélesség"
 
 #: pcbnew/board_statistics_report.cpp:506
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "Minimális furatátmérő: "
+msgstr "Minimális furatátmérő"
 
 #: pcbnew/board_statistics_report.cpp:509
 #, fuzzy
@@ -36113,36 +36108,33 @@ msgstr "Mikro QR kód"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~20% (Level L)"
-msgstr ""
+msgstr "~20% (L szint)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~37% (Level M)"
-msgstr ""
+msgstr "~37% (M szint)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~55% (Level Q)"
-msgstr ""
+msgstr "~55% (Q szint)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "~65% (Level H)"
-msgstr ""
+msgstr "~65% (H szint)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:183
 #: pcbnew/pcb_barcode.cpp:772
-#, fuzzy
 msgid "Error Correction"
-msgstr "Keresés iránya:"
+msgstr "Hibajavítás"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:97
 #: pcbnew/pcb_barcode.cpp:708
-#, fuzzy
 msgid "Barcode Properties"
-msgstr "Kör tulajdonságok"
+msgstr "Vonalkód tulajdonságok"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
-#, fuzzy
 msgid "(not updated)"
-msgstr "(nem aktivált)"
+msgstr "(nem frissített)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:90
 msgid "(unannotated; not updated)"
@@ -36179,9 +36171,8 @@ msgid "(Excluding %s from reannotation.)"
 msgstr "Sorszámozások törlése"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
-#, fuzzy
 msgid "Change Log"
-msgstr "Csere erre"
+msgstr "Változásnapló"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
 #, fuzzy
@@ -36503,9 +36494,8 @@ msgid "Component Classes"
 msgstr "Alkatrészek"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:235
-#, fuzzy
 msgid "Board Data"
-msgstr "NYÁK terv neve"
+msgstr "Panel adatok"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:253
 #, fuzzy
@@ -36562,9 +36552,8 @@ msgid "Min track width:"
 msgstr "Minimális vezetősáv szélesség:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:127
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "Minimális furatátmérő: "
+msgstr "Minimális furatátmérő:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:128
 #, fuzzy
@@ -36749,7 +36738,6 @@ msgid "delete tracks having at least one dangling end"
 msgstr "nem folytatott véggel rendelkező vezetősáv szakaszok törlése"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:62
-#, fuzzy
 msgid "Delete tracks fully inside pads"
 msgstr "Forrszemen belüli vezetősáv szegmensek törlése"
 
@@ -36800,17 +36788,15 @@ msgstr "Körív tulajdonságok"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:150
 #: pcbnew/tools/convert_tool.cpp:69
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Forrszem felsorolási beállítások"
+msgstr "Konverzió beállítások"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:153
 #: pcbnew/tools/convert_tool.cpp:91
-#, fuzzy
 msgid "Use centerlines"
-msgstr "Metrikus mértékegységek használata"
+msgstr "Középvonalak használata"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:203
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:122
@@ -36831,9 +36817,8 @@ msgstr "Hézag:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:175
 #: pcbnew/tools/convert_tool.cpp:141
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Mappa és tartalmának törlése"
+msgstr "Forrás objektumok törlése a konverzió után"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #, fuzzy
@@ -37635,7 +37620,7 @@ msgstr "Plottolás formátuma:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:151
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "Mértékegységek megjelenítése"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:63
@@ -38196,30 +38181,28 @@ msgid "mfg"
 msgstr "meg"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:244
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "A panelt el kell menteni az IPC2581 fájl generálása előtt."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:251 pcbnew/files.cpp:965
 #: pcbnew/files.cpp:1082 pcbnew/footprint_libraries_utils.cpp:277
 #: pcbnew/pcb_design_block_utils.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" fájl mentéséhez írási jogosultságokra van szükség."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:259
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "IPC-D-356 netlista fájl létrehozása"
+msgstr "IPC-2581 fájl generálása"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:281
 #: pcbnew/pcbnew_jobs_handler.cpp:2453
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
+"Hiba a(z) \"%s\" IPC-2581 fájl generálása során:\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
@@ -38229,7 +38212,6 @@ msgstr "IPC-2581 fájl sikeresen létrehozva."
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
-#, fuzzy
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -38257,9 +38239,8 @@ msgid "C"
 msgstr "C"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:89
-#, fuzzy
 msgid "Compress output"
-msgstr "Létrehozás A4-es méretben"
+msgstr "Kimenet tömörítése"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:90
 msgid "Compress output into 'zip' file"
@@ -38444,12 +38425,12 @@ msgid "Output directory '%s' already exists."
 msgstr "Kimeneti mappa \"%s\" már létezik."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
+"Hiba a(z) \"%s\" ODBPP fájlok generálása közben.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:459
@@ -38576,9 +38557,8 @@ msgid "Board Options"
 msgstr "Panel beállítások"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Nem KiCad nyákterv fájl importálása"
+msgstr "Exportálás összetett alakzatként"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:60
 msgid ""
@@ -38626,19 +38606,16 @@ msgid "Export solder paste graphics."
 msgstr "Felső forrasztópaszta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:89
-#, fuzzy
 msgid "Export components"
-msgstr "Nem alkatrész"
+msgstr "Alkatrészek exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:96
-#, fuzzy
 msgid "All components"
-msgstr "Alaktrész hozzáadása"
+msgstr "Összes alkatrész"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:100
-#, fuzzy
 msgid "Only selected"
-msgstr "Nincs fájl kiválasztva"
+msgstr "Csak a kijelöltek"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:101
 msgid "Export only the component models that are selected in the PCB editor"
@@ -38908,9 +38885,8 @@ msgid "Include &zones"
 msgstr "Zónákat belevesz"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:56
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Elem kijelölése"
+msgstr "Kijelölt elemek szűrése"
 
 #: pcbnew/dialogs/dialog_find.cpp:217
 msgid "Searching..."
@@ -39424,9 +39400,8 @@ msgid "Copper layers"
 msgstr "Vezető rétegek:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
-#, fuzzy
 msgid "User Layers"
-msgstr "Egyéb rétegek"
+msgstr "Felhasználói rétegek"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
 #, fuzzy
