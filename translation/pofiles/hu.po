@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-07 10:00+0000\n"
+"PO-Revision-Date: 2025-12-08 12:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -31394,9 +31394,8 @@ msgid "Inputs"
 msgstr "Bemenetek"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:29
-#, fuzzy
 msgid "Required resistance:"
-msgstr "Ellenállás:"
+msgstr "Kívánt ellenállás:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:36
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:47
@@ -31405,14 +31404,12 @@ msgid "kOhm"
 msgstr "kOhm"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
-#, fuzzy
 msgid "Exclude value 1:"
-msgstr "Mező érték:"
+msgstr "Kizárt érték 1:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:51
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "Mező érték:"
+msgstr "Kizárt érték 2:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:71
 msgid "E1"
@@ -31449,14 +31446,12 @@ msgid "Approximation:"
 msgstr "Közelítés:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
-#, fuzzy
 msgid "3R solution:"
-msgstr "Felbontás:"
+msgstr "3R megoldás:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:142
-#, fuzzy
 msgid "4R solution:"
-msgstr "Felbontás:"
+msgstr "4R megoldás:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:190
 #, fuzzy
@@ -32255,9 +32250,8 @@ msgid "Resistor Calculator"
 msgstr "PCB Calculator - Elektronikai méretező kalkulátor"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:173
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "lokális távolságtartás és szigetelési távolság beállítások"
+msgstr "Teljesítmény, áram és szigetelés"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:175
 #, fuzzy
@@ -32352,6 +32346,21 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"- Ez a program standard E-sorozatú ellenállások (10Ω és 1MΩ között) "
+"kombinációjaiként állítja elő a kért értéket.\n"
+"- A kívánt érték 0.0025 és 4000 kΩ közötti lehet.\n"
+"- Legfeljebb 4 alkatrészből álló megoldásokat közöl.\n"
+"\n"
+"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. <br>"
+"\n"
+"Ezen kívül két további értéket is kizárhatunk, beszerezhetőségi problémák "
+"esetén.\n"
+"\n"
+"A megoldásokat az alábbi formátumban közöljük:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tsorosan kapcsolt ellenállások\n"
+"\tR1 | R2 |...| Rn\tpárhuzamosan kapcsolt ellenállások\n"
+"\tR1 + (R2|R3)...\t\ta fentiek kombinációja\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -32713,7 +32722,6 @@ msgid "environment"
 msgstr "Környezeti változók"
 
 #: pcb_calculator/transline_ident.cpp:407
-#, fuzzy
 msgid "Relative permittivity of environment"
 msgstr "A környezet relatív permittivitása"
 
@@ -32975,7 +32983,6 @@ msgstr "Helytelen forrszem eltolási érték"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:93
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:87
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:255
-#, fuzzy
 msgid "Material"
 msgstr "Anyag"
 
@@ -33001,9 +33008,8 @@ msgid "Loss Tan:"
 msgstr "Mágneses Veszteség Tangens"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Közös az összes részegységre"
+msgstr "Gyakori anyagok:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:56
 #, fuzzy
@@ -33084,9 +33090,8 @@ msgstr "Réteg kiválasztása"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:330
 #: pcbnew/dialogs/panel_setup_layers.cpp:1059
-#, fuzzy
 msgid "Select layer to add:"
-msgstr "Válassza ki a hozzáadni kívánt könyvtárakat:"
+msgstr "Válassza ki a hozzáadni kívánt réteget:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:375
 #, c-format
@@ -33475,9 +33480,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:91
 #: pcbnew/dialogs/dialog_export_step_base.cpp:98
-#, fuzzy
 msgid "Only selected"
-msgstr "Nincs fájl kiválasztva"
+msgstr "Csak a kijelöltek"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
 msgid "Empty"
@@ -33850,9 +33854,8 @@ msgid "Length-tuning Patterns"
 msgstr "Vezetősávhossz hangolás"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:204
-#, fuzzy
 msgid "Board Data"
-msgstr "NYÁK terv neve"
+msgstr "Panel adatok"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:221
 #, fuzzy
@@ -34198,7 +34201,6 @@ msgid "delete tracks having at least one dangling end"
 msgstr "nem folytatott véggel rendelkező vezetősáv szakaszok törlése"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:62
-#, fuzzy
 msgid "Delete tracks fully inside pads"
 msgstr "Forrszemen belüli vezetősáv szegmensek törlése"
 
@@ -34259,17 +34261,15 @@ msgstr "Körív tulajdonságok"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:144
 #: pcbnew/tools/convert_tool.cpp:64
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Forrszem felsorolási beállítások"
+msgstr "Konverzió beállítások"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:224
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:147
 #: pcbnew/tools/convert_tool.cpp:86
-#, fuzzy
 msgid "Use centerlines"
-msgstr "Metrikus mértékegységek használata"
+msgstr "Középvonalak használata"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:228
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:122
@@ -34290,9 +34290,8 @@ msgstr "Hézag:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:169
 #: pcbnew/tools/convert_tool.cpp:136
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Mappa és tartalmának törlése"
+msgstr "Forrás objektumok törlése a konverzió után"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:254
 #, fuzzy
@@ -35062,7 +35061,7 @@ msgstr "Plottolás formátuma:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:151
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "Mértékegységek megjelenítése"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:60
@@ -35606,29 +35605,27 @@ msgid "mfg"
 msgstr "meg"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:268
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "A panelt el kell menteni az IPC2581 fájl generálása előtt."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:275 pcbnew/files.cpp:1001
 #: pcbnew/files.cpp:1118 pcbnew/footprint_libraries_utils.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" fájl mentéséhez írási jogosultságokra van szükség."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "IPC-D-356 netlista fájl létrehozása"
+msgstr "IPC-2581 fájl generálása"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
+"Hiba a(z) \"%s\" IPC-2581 fájl generálása során:\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
@@ -35638,7 +35635,6 @@ msgstr "IPC-2581 fájl sikeresen létrehozva."
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
-#, fuzzy
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -35658,9 +35654,8 @@ msgid "Version:"
 msgstr "Verzió:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:89
-#, fuzzy
 msgid "Compress output"
-msgstr "Létrehozás A4-es méretben"
+msgstr "Kimenet tömörítése"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:90
 msgid "Compress output into 'zip' file"
@@ -35848,12 +35843,12 @@ msgid "Output directory '%s' already exists."
 msgstr "Kimeneti mappa \"%s\" már létezik."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
+"Hiba a(z) \"%s\" ODBPP fájlok generálása közben.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:506
@@ -35968,9 +35963,8 @@ msgid "Board Options"
 msgstr "Panel beállítások"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Nem KiCad nyákterv fájl importálása"
+msgstr "Exportálás összetett alakzatként"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:60
 msgid ""
@@ -36018,14 +36012,12 @@ msgid "Export solder paste graphics."
 msgstr "Felső forrasztópaszta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:88
-#, fuzzy
 msgid "Export components"
-msgstr "Nem alkatrész"
+msgstr "Alkatrészek exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:94
-#, fuzzy
 msgid "All components"
-msgstr "Alaktrész hozzáadása"
+msgstr "Összes alkatrész"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:99
 msgid "Export only the component models that are selected in the PCB editor"
@@ -36304,9 +36296,8 @@ msgid "Include &zones"
 msgstr "Zónákat belevesz"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Elem kijelölése"
+msgstr "Kijelölt elemek szűrése"
 
 #: pcbnew/dialogs/dialog_find.cpp:271
 msgid "Searching..."
