@@ -1372,7 +1372,8 @@ void DIALOG_DRC::updateDisplayedCounts()
                      || ii == DRCE_EXTRA_FOOTPRINT
                      || ii == DRCE_NET_CONFLICT
                      || ii == DRCE_SCHEMATIC_PARITY
-                     || ii == DRCE_FOOTPRINT_FILTERS )
+                     || ii == DRCE_FOOTPRINT_FILTERS
+                     || ii == DRCE_SCHEMATIC_FIELDS_PARITY )
             {
                 if( m_showWarnings->GetValue() && severity == RPT_SEVERITY_WARNING )
                     footprintsOverflowed = true;

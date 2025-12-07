@@ -205,6 +205,10 @@ DRC_ITEM DRC_ITEM::footprintFilters( DRCE_FOOTPRINT_FILTERS,
         _HKI( "Footprint doesn't match symbol's footprint filters" ),
         wxT( "footprint_filters_mismatch" ) );
 
+DRC_ITEM DRC_ITEM::schematicFieldsParity( DRCE_SCHEMATIC_FIELDS_PARITY,
+        _HKI( "Footprint field does not match symbol field" ),
+        wxT( "footprint_symbol_field_mismatch" ) );
+
 DRC_ITEM DRC_ITEM::libFootprintIssues( DRCE_LIB_FOOTPRINT_ISSUES,
         _HKI( "Footprint not found in libraries" ),
         wxT( "lib_footprint_issues" ) );
@@ -346,6 +350,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::missingFootprint,
         DRC_ITEM::extraFootprint,
         DRC_ITEM::schematicParity,
+        DRC_ITEM::schematicFieldsParity,
         DRC_ITEM::footprintFilters,
         DRC_ITEM::netConflict,
         DRC_ITEM::unconnectedItems,
@@ -434,6 +439,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_SCHEMATIC_PARITY:         return std::make_shared<DRC_ITEM>( schematicParity );
+    case DRCE_SCHEMATIC_FIELDS_PARITY:         return std::make_shared<DRC_ITEM>( schematicFieldsParity );
     case DRCE_FOOTPRINT_FILTERS:        return std::make_shared<DRC_ITEM>( footprintFilters );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
     case DRCE_LIB_FOOTPRINT_MISMATCH:   return std::make_shared<DRC_ITEM>( libFootprintMismatch );

@@ -300,6 +300,7 @@ wxString DRC_TOOL::FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem
         return frame()->GetRunMenuCommandDescription( PCB_ACTIONS::changeFootprint );
     }
     else if( aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                || aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_FIELDS_PARITY
                 || aDRCItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
                 || aDRCItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
                 || aDRCItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT )
@@ -359,6 +360,7 @@ void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
         }
     }
     else if( aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                || aDRCItem->GetErrorCode() == DRCE_SCHEMATIC_FIELDS_PARITY
                 || aDRCItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
                 || aDRCItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
                 || aDRCItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT )

@@ -201,6 +201,59 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
 
+            // Compare custom fields between schematic component and PCB footprint
+            if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_FIELDS_PARITY ) )
+            {
+                std::unordered_map<wxString, wxString> fpFieldsAsMap;
+
+                for( PCB_FIELD* field : footprint->GetFields() )
+                {
+                    if( field->IsReference() || field->IsValue() || field->IsComponentClass() )
+                        continue;
+
+                    fpFieldsAsMap[field->GetName()] = field->GetText();
+                }
+
+                // Remove the extra component fields we don't want to evaluate here
+                nlohmann::ordered_map<wxString, wxString> compFields = component->GetFields();
+                compFields.erase( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+                compFields.erase( GetCanonicalFieldName( FIELD_T::VALUE ) );
+                compFields.erase( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
+                compFields.erase( wxT( "Component Class" ) );
+
+                bool fieldsMatch = true;
+                wxString mismatchDetail;
+
+                for( const auto& [name, value] : compFields )
+                {
+                    auto it = fpFieldsAsMap.find( name );
+
+                    if( it == fpFieldsAsMap.end() )
+                    {
+                        fieldsMatch = false;
+                        mismatchDetail = wxString::Format( _( "Missing symbol field '%s' in footprint" ), name );
+                        break;
+                    }
+
+                    if( it->second != value )
+                    {
+                        fieldsMatch = false;
+                        mismatchDetail = wxString::Format( _( "Field '%s' differs (PCB: '%s', Schematic: '%s')" ),
+                                                           name, it->second, value );
+                        break;
+                    }
+                }
+
+                if( !fieldsMatch && !mismatchDetail.IsEmpty() )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_FIELDS_PARITY );
+
+                    drcItem->SetErrorMessage( mismatchDetail );
+                    drcItem->SetItems( footprint );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+                }
+            }
+
             for( PAD* pad : footprint->Pads() )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
