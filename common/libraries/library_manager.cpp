@@ -502,6 +502,20 @@ void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
 }
 
 
+bool LIBRARY_MANAGER::RemoveAdapter( LIBRARY_TABLE_TYPE aType, LIBRARY_MANAGER_ADAPTER* aAdapter )
+{
+    if( !m_adapters.contains( aType ) )
+        return false;
+
+    if( m_adapters[aType].get() != aAdapter )
+        return false;
+
+    std::scoped_lock lock( m_adaptersMutex );
+    m_adapters.erase( aType );
+    return true;
+}
+
+
 std::optional<LIBRARY_MANAGER_ADAPTER*> LIBRARY_MANAGER::Adapter( LIBRARY_TABLE_TYPE aType ) const
 {
     std::scoped_lock lock( m_adaptersMutex );

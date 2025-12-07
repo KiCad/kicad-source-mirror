@@ -128,9 +128,6 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
         wxRemoveFile( prjSymLibTableFileName.GetFullPath() );
 
     createProjectSymbolLibTable( m_messagePanel->Reporter() );
-    Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-    // TODO(JE) re-enable this
-    //PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
 

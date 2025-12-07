@@ -861,11 +861,6 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
     if( changed.count( PCM_PACKAGE_TYPE::PT_LIBRARY )
         && ( settings->m_PcmLibAutoAdd || settings->m_PcmLibAutoRemove ) )
     {
-        // Reset project tables
-        Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-        Prj().SetElem( PROJECT::ELEM::FPTBL, nullptr );
-        Prj().SetElem( PROJECT::ELEM::DESIGN_BLOCK_LIB_TABLE, nullptr );
-
         KIWAY& kiway = m_frame->Kiway();
 
         // Reset state containing global lib tables

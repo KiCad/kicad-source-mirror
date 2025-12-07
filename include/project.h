@@ -69,15 +69,10 @@ public:
      */
     enum class ELEM
     {
-        FPTBL,
-
         LEGACY_SYMBOL_LIBS,
         SCH_SEARCH_STACK,
         S3DCACHE,
-        SYMBOL_LIB_TABLE,
         SEARCH_STACK,
-
-        DESIGN_BLOCK_LIB_TABLE,
 
         SCHEMATIC,
         BOARD,

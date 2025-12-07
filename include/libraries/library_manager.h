@@ -239,6 +239,8 @@ public:
     void RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                           std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter );
 
+    bool RemoveAdapter( LIBRARY_TABLE_TYPE aType, LIBRARY_MANAGER_ADAPTER* aAdapter );
+
     std::optional<LIBRARY_MANAGER_ADAPTER*> Adapter( LIBRARY_TABLE_TYPE aType ) const;
 
     /**

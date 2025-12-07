@@ -35,14 +35,12 @@ class FOOTPRINT;
  * and linked to one project in particular.  This is what can return actual concrete
  * schematic library content (symbols).
  */
-class FOOTPRINT_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER, public PROJECT::_ELEM
+class FOOTPRINT_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 {
 public:
     FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::FOOTPRINT; }
-
-    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::FPTBL; }
 
     static wxString GlobalPathEnvVariableName();
 

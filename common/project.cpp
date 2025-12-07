@@ -409,20 +409,8 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
 
 FOOTPRINT_LIBRARY_ADAPTER* PROJECT::FootprintLibAdapter( KIWAY& aKiway )
 {
-    FOOTPRINT_LIBRARY_ADAPTER* adapter = static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( GetElem( ELEM::FPTBL ) );
-
-    if( adapter )
-    {
-        wxASSERT( adapter->ProjectElementType() == PROJECT::ELEM::FPTBL );
-    }
-    else
-    {
-        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-        adapter = static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( kiface->IfaceOrAddress( KIFACE_FOOTPRINT_LIBRARY_ADAPTER ) );
-        SetElem( ELEM::FPTBL, adapter );
-    }
-
-    return adapter;
+    KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+    return static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( kiface->IfaceOrAddress( KIFACE_FOOTPRINT_LIBRARY_ADAPTER ) );
 }
 
 
