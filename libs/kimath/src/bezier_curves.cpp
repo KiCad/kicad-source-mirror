@@ -534,8 +534,12 @@ void BEZIER_POLY::getCubicPoly( std::vector<VECTOR2D>& aOutput, double aMaxError
 
         subdivide( t1, sub1, tmp1 );
 
+        // Use PA for first subsegment
+        sub1.cubicParabolicApprox( aOutput, aMaxError );
+
         // Now find the second inflection point in the second curve and subdivide
         numOfIfP = tmp1.findInflectionPoints( t1, t2 );
+
         if( numOfIfP == 2 )
             tmp1.subdivide( t1, sub2, sub3 );
         else if( numOfIfP == 1 )
@@ -543,11 +547,9 @@ void BEZIER_POLY::getCubicPoly( std::vector<VECTOR2D>& aOutput, double aMaxError
         else
         {
             wxLogTrace( BEZIER_DBG, "getCubicPoly: 2nd inflection point not found" );
+            aOutput.push_back( tmp1.m_ctrlPts[3] );
             return;
         }
-
-        // Use PA for first subsegment
-        sub1.cubicParabolicApprox( aOutput, aMaxError );
 
         // Use Segment for the second (middle) subsegment
         sub2.recursiveSegmentation( aOutput, aMaxError );
