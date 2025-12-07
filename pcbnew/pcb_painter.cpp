@@ -1011,17 +1011,18 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( COLOR4D( 0, 0, 1.0, 1.0 ) );
     m_gal->DrawPolygon( cornerBuffer );
+#endif
 
 #if 0
+    // Debug only: enable this code only to test the arc geometry.
     // Draw 3 lines from arc center to arc start, arc middle, arc end to show how the arc is defined
     SHAPE_ARC arc( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), m_pcbSettings.m_outlineWidth );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( color );
+    m_gal->SetStrokeColor( COLOR4D( 0, 0, 1.0, 1.0 ) );
     m_gal->DrawSegment( arc.GetStart(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
     m_gal->DrawSegment( aArc->GetFocusPosition(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
     m_gal->DrawSegment( arc.GetEnd(), arc.GetCenter(), m_pcbSettings.m_outlineWidth );
-#endif
 #endif
 
 #if 0

@@ -645,7 +645,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                 {
                     if( token == "source" )
                     {
-                        for( const wxString& extension : { wxT( ".sch" ), wxT( ".kicad_sch" ) } )
+                        for( const wxString& extension : { wxString( wxT( ".sch" ) ), wxString( wxT( ".kicad_sch" ) ) } )
                         {
                             if( value == aProjectName + extension )
                             {
