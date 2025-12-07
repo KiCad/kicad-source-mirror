@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-04 08:00+0000\n"
+"PO-Revision-Date: 2025-12-08 15:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -9507,7 +9507,7 @@ msgstr "ズーム選択ボックス"
 
 #: common/tool/action_toolbar.cpp:1055
 msgid "IPC/Scripting plugins"
-msgstr "PIC/スクリプトプラグイン"
+msgstr "IPC/スクリプトプラグイン"
 
 #: common/tool/action_toolbar.cpp:1056
 msgid "Region to hold the IPC/Scripting action buttons"
