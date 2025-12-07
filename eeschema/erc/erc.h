@@ -52,12 +52,13 @@ class ERC_TESTER
 {
 public:
 
-    ERC_TESTER( SCHEMATIC* aSchematic ) :
+    ERC_TESTER( SCHEMATIC* aSchematic, bool aShowAllErrors = false ) :
             m_schematic( aSchematic ),
             m_settings( aSchematic->ErcSettings() ),
             m_sheetList( aSchematic->BuildSheetListSortedByPageNumbers() ),
             m_screens( aSchematic->Root() ),
-            m_nets( aSchematic->ConnectionGraph()->GetNetMap() )
+            m_nets( aSchematic->ConnectionGraph()->GetNetMap() ),
+            m_showAllErrors( aShowAllErrors )
     {
         m_sheetList.GetMultiUnitSymbols( m_refMap, true );
     }
@@ -191,6 +192,7 @@ private:
     SCH_SCREENS                  m_screens;
     SCH_MULTI_UNIT_REFERENCE_MAP m_refMap;
     const NET_MAP&               m_nets;
+    bool                         m_showAllErrors;
 };
 
 

@@ -284,6 +284,7 @@ public:
     {
         bool crossprobe;
         bool scroll_on_crossprobe;
+        bool show_all_errors;
     };
 
     struct DIALOG_CHANGE_SYMBOLS

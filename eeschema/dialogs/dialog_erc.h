@@ -120,4 +120,5 @@ private:
 
     bool               m_crossprobe;
     bool               m_scroll_on_crossprobe;
+    bool               m_showAllErrors;
 };

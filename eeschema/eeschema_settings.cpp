@@ -642,6 +642,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "ERC.scroll_on_crossprobe",
             &m_ERCDialog.scroll_on_crossprobe, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "ERC.show_all_errors",
+            &m_ERCDialog.show_all_errors, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "change_symbols.update_references",
             &m_ChangeSymbols.updateReferences, false ) );
 

@@ -954,6 +954,8 @@ int ERC_TESTER::TestPinToPin()
         ERC_SCH_PIN_CONTEXT needsDriver;
         ELECTRICAL_PINTYPE  needsDriverType = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
         bool                hasDriver = false;
+        std::vector<ERC_SCH_PIN_CONTEXT*> pinsNeedingDrivers;
+        std::vector<ERC_SCH_PIN_CONTEXT*> nonPowerPinsNeedingDrivers;
 
         // We need different drivers for power nets and normal nets.
         // A power net has at least one pin having the ELECTRICAL_PINTYPE::PT_POWER_IN
@@ -982,6 +984,11 @@ int ERC_TESTER::TestPinToPin()
                 // needsDriver will be the pin shown in the error report eventually, so try to
                 // upgrade to a "better" pin if possible: something visible and only a power symbol
                 // if this net needs a power driver
+                pinsNeedingDrivers.push_back( &refPin );
+
+                if( !refPin.Pin()->IsPower() )
+                    nonPowerPinsNeedingDrivers.push_back( &refPin );
+
                 if( !needsDriver.Pin()
                     || ( !needsDriver.Pin()->IsVisible() && refPin.Pin()->IsVisible() )
                     || ( ispowerNet != ( needsDriverType == ELECTRICAL_PINTYPE::PT_POWER_IN )
@@ -1126,15 +1133,35 @@ int ERC_TESTER::TestPinToPin()
 
             if( m_settings.IsTestEnabled( err_code ) )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
+                std::vector<ERC_SCH_PIN_CONTEXT*> pinsToMark;
 
-                ercItem->SetItems( needsDriver.Pin() );
-                ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
-                ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
+                if( m_showAllErrors )
+                {
+                    if( !nonPowerPinsNeedingDrivers.empty() )
+                        pinsToMark = nonPowerPinsNeedingDrivers;
+                    else
+                        pinsToMark = pinsNeedingDrivers;
+                }
+                else
+                {
+                    if( !nonPowerPinsNeedingDrivers.empty() )
+                        pinsToMark.push_back( nonPowerPinsNeedingDrivers.front() );
+                    else
+                        pinsToMark.push_back( &needsDriver );
+                }
 
-                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), needsDriver.Pin()->GetPosition() );
-                pinToScreenMap[needsDriver.Pin()]->Append( marker );
-                errors++;
+                for( ERC_SCH_PIN_CONTEXT* pinCtx : pinsToMark )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
+
+                    ercItem->SetItems( pinCtx->Pin() );
+                    ercItem->SetSheetSpecificPath( pinCtx->Sheet() );
+                    ercItem->SetItemsSheetPaths( pinCtx->Sheet() );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pinCtx->Pin()->GetPosition() );
+                    pinToScreenMap[pinCtx->Pin()]->Append( marker );
+                    errors++;
+                }
             }
         }
     }

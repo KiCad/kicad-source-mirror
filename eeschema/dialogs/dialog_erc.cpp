@@ -79,7 +79,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_ercRun( false ),
         m_centerMarkerOnIdle( nullptr ),
         m_crossprobe( true ),
-        m_scroll_on_crossprobe( true )
+        m_scroll_on_crossprobe( true ),
+        m_showAllErrors( false )
 {
     m_currentSchematic = &parent->Schematic();
 
@@ -135,6 +136,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     {
         m_crossprobe = cfg->m_ERCDialog.crossprobe;
         m_scroll_on_crossprobe = cfg->m_ERCDialog.scroll_on_crossprobe;
+        m_showAllErrors = cfg->m_ERCDialog.show_all_errors;
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -156,6 +158,7 @@ DIALOG_ERC::~DIALOG_ERC()
     {
         cfg->m_ERCDialog.crossprobe = m_crossprobe;
         cfg->m_ERCDialog.scroll_on_crossprobe = m_scroll_on_crossprobe;
+        cfg->m_ERCDialog.show_all_errors = m_showAllErrors;
     }
 
     m_markerTreeModel->DecRef();
@@ -229,6 +232,11 @@ void DIALOG_ERC::OnMenu( wxCommandEvent& event )
                  wxITEM_CHECK );
     menu.Check( 4207, m_scroll_on_crossprobe );
 
+    menu.Append( 4208, _( "Show all errors" ),
+                 _( "Show duplicate ERC markers on all applicable pins" ),
+                 wxITEM_CHECK );
+    menu.Check( 4208, m_showAllErrors );
+
     // menu_id is the selected submenu id from the popup menu or wxID_NONE
     int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
 
@@ -239,6 +247,10 @@ void DIALOG_ERC::OnMenu( wxCommandEvent& event )
     else if( menu_id == 1 || menu_id == 4207 )
     {
         m_scroll_on_crossprobe = !m_scroll_on_crossprobe;
+    }
+    else if( menu_id == 2 || menu_id == 4208 )
+    {
+        m_showAllErrors = !m_showAllErrors;
     }
 }
 
@@ -572,7 +584,7 @@ void DIALOG_ERC::testErc()
     SCHEMATIC* sch = &m_parent->Schematic();
 
     SCH_SCREENS screens( sch->Root() );
-    ERC_TESTER tester( sch );
+    ERC_TESTER tester( sch, m_showAllErrors );
 
     {
         wxBusyCursor dummy;
