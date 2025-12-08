@@ -62,6 +62,7 @@ PLOTTER::PLOTTER( const PROJECT* aProject ) :
     m_IUsPerDecimil = 1;        // will be set later to the actual value
     m_iuPerDeviceUnit = 1;        // will be set later to the actual value
     m_renderSettings = nullptr;
+    m_layer = PCB_LAYER_ID::UNDEFINED_LAYER;
 }
 
 
