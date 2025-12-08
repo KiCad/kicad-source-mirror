@@ -51,6 +51,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
     m_raGrid->SetColLabelValue( 3, wxT( "Details" ) );
     m_raGrid->AutoSizeColumn( 1 );
     m_raGrid->AppendRows( m_targetRAs.size() - 1 );
+    m_raGrid->SetupColumnAutosizer( 1 );
 
     m_raGrid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &DIALOG_MULTICHANNEL_REPEAT_LAYOUT::OnGridCellLeftClick, this );
     m_raGrid->SetMaxSize( wxSize( -1, 400 ) );
@@ -136,7 +137,7 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
     for( TABLE_ENTRY& entry : m_targetRAs )
     {
         m_raGrid->SetCellValue( i, 1, entry.m_raName );
-        m_raGrid->SetCellValue( i, 2, entry.m_isOK ? _("OK") : entry.m_errMsg );
+        m_raGrid->SetCellValue( i, 2, entry.m_isOK ? _( "OK" ) : entry.m_errMsg );
         m_raGrid->SetCellValue( i, 3, wxString() );
         m_raGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
         m_raGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
@@ -172,11 +173,6 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
     m_cbGroupItems->SetValue( data->m_options.m_groupItems );
     m_cbCopyOtherItems->SetValue( data->m_options.m_copyOtherItems );
     m_cbIncludeLockedComponents->SetValue( data->m_options.m_includeLockedItems );
-
-    // fixme: I have no idea how to use this together with wxGrid so that it resizes correctly...
-
-    //if( !wxDialog::TransferDataToWindow() )
-        //return false;
 
     return true;
 }
