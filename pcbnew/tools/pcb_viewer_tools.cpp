@@ -285,8 +285,13 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : controls.GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
-        controls.ForceCursorPosition( true, cursorPos );
+
+        if( !evt->IsActivate() && !evt->IsCancelInteractive() )
+        {
+            // If we are switching, the canvas may not be valid any more
+            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            controls.ForceCursorPosition( true, cursorPos );
+        }
 
         if( evt->IsCancelInteractive() )
         {
