@@ -1745,20 +1745,20 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                         }
                         break;
 
-                case SHAPE_T::RECTANGLE:
-                    if( primitive->IsProxyItem() )
-                    {
-                        m_out->Print( "(gr_bbox (start %s) (end %s)",
-                                      formatInternalUnits( primitive->GetStart() ).c_str(),
-                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    }
-                    else
-                    {
-                        m_out->Print( "(gr_rect (start %s) (end %s)",
-                                      formatInternalUnits( primitive->GetStart() ).c_str(),
-                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    }
-                    break;
+                    case SHAPE_T::RECTANGLE:
+                        if( primitive->IsProxyItem() )
+                        {
+                            m_out->Print( "(gr_bbox (start %s) (end %s)",
+                                          formatInternalUnits( primitive->GetStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        }
+                        else
+                        {
+                            m_out->Print( "(gr_rect (start %s) (end %s)",
+                                          formatInternalUnits( primitive->GetStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        }
+                        break;
 
                     case SHAPE_T::ARC:
                         m_out->Print( "(gr_arc (start %s) (mid %s) (end %s)",
@@ -1799,14 +1799,14 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                     if( !primitive->IsProxyItem() )
                         m_out->Print( "(width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );
 
-                // The filled flag represents if a solid fill is present on circles,
-                // rectangles and polygons
-                if( ( primitive->GetShape() == SHAPE_T::POLY )
-                    || ( primitive->GetShape() == SHAPE_T::RECTANGLE )
-                    || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
-                {
-                    KICAD_FORMAT::FormatBool( m_out, "fill", primitive->IsFilled() );
-                }
+                    // The filled flag represents if a solid fill is present on circles,
+                    // rectangles and polygons
+                    if( ( primitive->GetShape() == SHAPE_T::POLY )
+                        || ( primitive->GetShape() == SHAPE_T::RECTANGLE )
+                        || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
+                    {
+                        KICAD_FORMAT::FormatBool( m_out, "fill", primitive->IsFilled() );
+                    }
 
                     m_out->Print( ")" );
                 }
