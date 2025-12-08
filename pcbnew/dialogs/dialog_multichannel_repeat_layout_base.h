@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -35,7 +37,7 @@ class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_staticText4;
-		wxGrid* m_raGrid;
+		WX_GRID* m_raGrid;
 		wxStaticText* m_staticText1;
 		wxStaticText* m_refRAName;
 		wxStaticText* m_staticText2;

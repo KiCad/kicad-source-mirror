@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_multichannel_repeat_layout_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -23,9 +25,9 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	fgSizer3->SetMinSize( wxSize( 600,-1 ) );
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Target areas:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer3->Add( m_staticText4, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_raGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_raGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_raGrid->CreateGrid( 1, 4 );

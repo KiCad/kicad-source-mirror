@@ -75,7 +75,7 @@
         <property name="vgap">0</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxALL</property>
+          <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxStaticText" expanded="true">
             <property name="BottomDockable">1</property>
@@ -216,7 +216,7 @@
             <property name="rows">1</property>
             <property name="show">1</property>
             <property name="size"></property>
-            <property name="subclass">; ; forward_declare</property>
+            <property name="subclass">WX_GRID; widgets/wx_grid.h; forward_declare</property>
             <property name="toolbar_pane">0</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
