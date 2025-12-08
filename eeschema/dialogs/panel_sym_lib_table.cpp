@@ -695,8 +695,8 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
+    LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
     wxCHECK( optTable, false );
     LIBRARY_TABLE* globalTable = *optTable;
 
@@ -713,7 +713,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
                 } );
     }
 
-    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( optTable.has_value() && get_model( 1 )->Table().Path() == optTable.value()->Path() )
     {
@@ -727,7 +727,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
             projectTable->Save().map_error(
                     []( const LIBRARY_ERROR& aError )
                     {
-                        wxMessageBox( _( "Error saving project-specific library table:\n\n" ) + aError.message,
+                        wxMessageBox( _( "Error saving project library table:\n\n" ) + aError.message,
                                       _( "File Save Error" ), wxOK | wxICON_ERROR );
                     } );
         }

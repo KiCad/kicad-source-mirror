@@ -110,6 +110,20 @@ std::optional<LIB_STATUS> DESIGN_BLOCK_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib 
 }
 
 
+std::optional<LIB_STATUS> DESIGN_BLOCK_LIBRARY_ADAPTER::LoadOne( const wxString& nickname )
+{
+    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
+
+    if( result.has_value() )
+        return LoadOne( *result );
+
+    return LIB_STATUS{
+        .load_status = LOAD_STATUS::LOAD_ERROR,
+        .error = LIBRARY_ERROR( { result.error() } )
+    };
+}
+
+
 void DESIGN_BLOCK_LIBRARY_ADAPTER::AsyncLoad()
 {
     // TODO(JE) library tables - how much of this can be shared with other library types?

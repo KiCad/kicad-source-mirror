@@ -1145,8 +1145,11 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable() ? LIBRARY_TABLE_SCOPE::GLOBAL
                                                                  : LIBRARY_TABLE_SCOPE::PROJECT;
 
-    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
-    wxCHECK( table, wxEmptyString );
+    LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
+
+    wxCHECK( optTable.has_value(), wxEmptyString );
+    LIBRARY_TABLE* table = optTable.value();
 
     wxString libName = fn.GetName();
 
@@ -1180,14 +1183,21 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         }
     }
 
-    ( *table )->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
+    bool success = true;
+
+    table->Save().map_error(
+            [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageBox( wxString::Format( _( "Error saving library table:\n\n%s" ), aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                     wxOK | wxICON_ERROR );
+                dlg.SetExtendedMessage( aError.message );
+                dlg.ShowModal();
+
+                success = false;
             } );
 
-    adapter->LoadOne( fn.GetName() );
+    if( success )
+        adapter->LoadOne( fn.GetName() );
 
     std::string packet = fn.GetFullPath().ToStdString();
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, packet );
@@ -1205,6 +1215,7 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
     if( libName.IsEmpty() )
         return;
 
+    LIBRARY_MANAGER&        manager = Pgm().GetLibraryManager();
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     if( adapter->HasLibrary( libName ) )
@@ -1220,16 +1231,24 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
         return;
     }
 
-    std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                           LIBRARY_TABLE_SCOPE::PROJECT );
-    wxCHECK( table, /* void */ );
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    wxCHECK( optTable.has_value(), /* void */ );
+    LIBRARY_TABLE* table = optTable.value();
+    bool           success = true;
 
-    ( *table )->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
+    table->Save().map_error(
+            [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageBox( wxString::Format( _( "Error saving library table:\n\n%s" ), aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                     wxOK | wxICON_ERROR );
+                dlg.SetExtendedMessage( aError.message );
+                dlg.ShowModal();
+
+                success = false;
             } );
+
+    if( success )
+        adapter->LoadOne( libName );
 
     std::string packet = fn.GetFullPath().ToStdString();
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, packet );
@@ -1923,7 +1942,8 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
     wxFileName libTableFileName( Prj().GetProjectPath(), FILEEXT::SymbolLibraryTableFileName );
     wxString libNickname = fn.GetName();
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+    LIBRARY_MANAGER&        manager = Pgm().GetLibraryManager();
+    const ENV_VAR_MAP&      envVars = Pgm().GetLocalEnvVariables();
 
     if( adapter->HasLibrary( libNickname ) )
     {
@@ -1938,10 +1958,9 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
         }
     }
 
-    std::optional<LIBRARY_TABLE*> optTable =
-            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, aScope );
-    wxCHECK( optTable, false );
-    LIBRARY_TABLE* table = *optTable;
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, aScope );
+    wxCHECK( optTable.has_value(), false );
+    LIBRARY_TABLE* table = optTable.value();
 
     LIBRARY_TABLE_ROW* row = &table->InsertRow();
 
@@ -1960,10 +1979,8 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxString msg = aScope == LIBRARY_TABLE_SCOPE::GLOBAL ? _( "Error saving global library table." )
-                                                                     : _( "Error saving project library table." );
-
-                wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                     wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 
@@ -1971,7 +1988,10 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
             } );
 
     if( success )
+    {
+        manager.ReloadTables( aScope, { LIBRARY_TABLE_TYPE::SYMBOL } );
         adapter->LoadOne( libNickname );
+    }
 
     return success;
 }
@@ -1980,17 +2000,17 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
 bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname, const wxString& aLibFile )
 {
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-    LIBRARY_TABLE* table = nullptr;
-    LIBRARY_TABLE_SCOPE scope = LIBRARY_TABLE_SCOPE::GLOBAL;
+    LIBRARY_MANAGER&        manager = Pgm().GetLibraryManager();
+    LIBRARY_TABLE*          table = nullptr;
+    LIBRARY_TABLE_SCOPE     scope = LIBRARY_TABLE_SCOPE::GLOBAL;
 
     // Check the global library table first because checking the project library table
     // checks the global library table as well due to library chaining.
     if( adapter->GetRow( aLibNickname, scope ) )
     {
-        std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                                  scope );
-        wxCHECK( optTable, false );
-        table = *optTable;
+        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
+        wxCHECK( optTable.has_value(), false );
+        table = optTable.value();
     }
     else
     {
@@ -1998,19 +2018,18 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname, cons
 
         if( adapter->GetRow( aLibNickname, scope ) )
         {
-            std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                                      scope );
+            std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
 
-            if( optTable )
-                table = *optTable;
+            if( optTable.has_value() )
+                table = optTable.value();
         }
     }
 
     wxCHECK( table, false );
 
-    auto optRow = adapter->GetRow( aLibNickname, scope );
-    wxCHECK( optRow, false );
-    LIBRARY_TABLE_ROW* row = *optRow;
+    std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( aLibNickname, scope );
+    wxCHECK( optRow.has_value(), false );
+    LIBRARY_TABLE_ROW* row = optRow.value();
 
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
 
@@ -2029,10 +2048,8 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname, cons
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxString msg = scope == LIBRARY_TABLE_SCOPE::GLOBAL ? _( "Error saving global library table." )
-                                                                    : _( "Error saving project library table." );
-
-                wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                     wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 
@@ -2040,7 +2057,10 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname, cons
             } );
 
     if( success )
+    {
+        manager.ReloadTables( scope, { LIBRARY_TABLE_TYPE::SYMBOL } );
         adapter->LoadOne( aLibNickname );
+    }
 
     return success;
 }

@@ -563,13 +563,13 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     if( libTableChanged && projectTable )
     {
         projectTable->Save().map_error(
-            [&]( const LIBRARY_ERROR& aError )
-            {
-                wxMessageDialog dlg( this, _( "Error saving project library table." ),
-                                     _( "File Save Error" ), wxOK | wxICON_ERROR );
-                dlg.SetExtendedMessage( aError.message );
-                dlg.ShowModal();
-            } );
+                [&]( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                         wxOK | wxICON_ERROR );
+                    dlg.SetExtendedMessage( aError.message );
+                    dlg.ShowModal();
+                } );
     }
 
     // Make the best attempt to set the symbol instance data for the loaded schematic.

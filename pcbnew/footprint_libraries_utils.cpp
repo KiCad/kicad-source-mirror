@@ -477,9 +477,11 @@ wxString PCB_BASE_EDIT_FRAME::SelectLibrary( const wxString& aDialogTitle, const
 bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxString& aFilename,
                                       std::optional<LIBRARY_TABLE_SCOPE> aScope )
 {
-    bool                      isGlobal = false;
-    FILEDLG_HOOK_NEW_LIBRARY  tableChooser( isGlobal );
-    FILEDLG_HOOK_NEW_LIBRARY* fileDlgHook = &tableChooser;
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+    LIBRARY_MANAGER&           manager = Pgm().GetLibraryManager();
+    bool                       isGlobal = false;
+    FILEDLG_HOOK_NEW_LIBRARY   tableChooser( isGlobal );
+    FILEDLG_HOOK_NEW_LIBRARY*  fileDlgHook = &tableChooser;
 
     if( aScope )
     {
@@ -498,11 +500,10 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
         }
 
         if( fileDlgHook )
-        {
             isGlobal = fileDlgHook->GetUseGlobalTable();
-            aScope = isGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
-        }
     }
+
+    aScope = isGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
 
     wxString libPath = fn.GetFullPath();
     wxString libName = fn.GetName();
@@ -524,24 +525,27 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
 
     // try to use path normalized to an environmental variable or project path
     wxString normalizedPath = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &Prj() );
+    bool     success = true;
 
     try
     {
-        std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT, *aScope );
-        wxCHECK( table, false );
+        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, aScope.value() );
+        wxCHECK( optTable, false );
+        LIBRARY_TABLE* table = optTable.value();
 
-        LIBRARY_TABLE_ROW& row = ( *table )->InsertRow();
+        LIBRARY_TABLE_ROW& row = table->InsertRow();
 
         row.SetNickname( libName );
         row.SetURI( normalizedPath );
         row.SetType( type );
 
-        ( *table )->Save().map_error(
-            []( const LIBRARY_ERROR& aError )
-            {
-                wxMessageBox( wxString::Format( _( "Error saving library table:\n\n%s" ), aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
-            } );
+        table->Save().map_error(
+                [&]( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageBox( _( "Error saving library table:\n\n" ) + aError.message,
+                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
+                    success = false;
+                } );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -549,21 +553,26 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
         return false;
     }
 
-    auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
-
-    if( editor )
+    if( success )
     {
-        LIB_ID libID( libName, wxEmptyString );
-        editor->SyncLibraryTree( true );
-        editor->FocusOnLibID( libID );
+        manager.ReloadTables( aScope.value(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+        adapter->LoadOne( fn.GetName() );
+
+        // Don't use dynamic_cast; it will fail across compile units on MacOS
+        if( FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false ) )
+        {
+            LIB_ID libID( libName, wxEmptyString );
+            editor->SyncLibraryTree( true );
+            editor->FocusOnLibID( libID );
+        }
+
+        auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
+
+        if( viewer )
+            viewer->ReCreateLibraryList();
     }
 
-    auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
-
-    if( viewer )
-        viewer->ReCreateLibraryList();
-
-    return true;
+    return success;
 }
 
 

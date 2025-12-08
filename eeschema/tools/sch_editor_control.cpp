@@ -432,28 +432,6 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( row->Scope() == LIBRARY_TABLE_SCOPE::GLOBAL )
-    {
-        LIBRARY_TABLE* globalTable = adapter->GlobalTable();
-
-        globalTable->Save().map_error(
-                []( const LIBRARY_ERROR& aError )
-                {
-                    wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
-                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
-                } );
-    }
-    else if( LIBRARY_TABLE* projectTable = adapter->ProjectTable().value_or( nullptr ) )
-    {
-        projectTable->Save().map_error(
-                []( const LIBRARY_ERROR& aError )
-                {
-                    wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
-                                                    aError.message ),
-                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
-                } );
-    }
-
     if( append )
     {
         std::set<SCH_SCREEN*> processedScreens;

@@ -233,6 +233,11 @@ public:
     /// (Re)loads the global library tables in the given list, or all tables if no list is given
     void LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
+    /// (Re)loads the project library tables in the given list, or all tables if no list is given
+    void LoadProjectTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
+
+    void ReloadTables( LIBRARY_TABLE_SCOPE aScope, std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
+
     /// Notify all adapters that the project has changed
     void ProjectChanged();
 
@@ -272,20 +277,17 @@ public:
      * @param aNickname is the library nickname to retrieve
      * @return the row, or a nullopt if it does not exist
      */
-    std::optional<LIBRARY_TABLE_ROW*> GetRow( LIBRARY_TABLE_TYPE aType,
-                                               const wxString &aNickname,
-                                               LIBRARY_TABLE_SCOPE aScope =
-                                                       LIBRARY_TABLE_SCOPE::BOTH ) const;
+    std::optional<LIBRARY_TABLE_ROW*> GetRow( LIBRARY_TABLE_TYPE aType, const wxString &aNickname,
+                                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
 
-    std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( LIBRARY_TABLE_TYPE aType,
-                                                    const wxString &aUri,
-                                                    LIBRARY_TABLE_SCOPE aScope =
-                                                            LIBRARY_TABLE_SCOPE::BOTH ) const;
+    std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( LIBRARY_TABLE_TYPE aType, const wxString &aUri,
+                                                    LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
 
     void ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
-    void LoadProjectTables( const wxString& aProjectPath );
+    void LoadProjectTables( const wxString& aProjectPath,
+                            std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
     /**
      * Return the full location specifying URI for the LIB, either in original UI form or

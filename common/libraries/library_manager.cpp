@@ -435,41 +435,40 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
             for( LIBRARY_TABLE* table : traverser.Modified() )
             {
                 table->Save().map_error(
-                    []( const LIBRARY_ERROR& aError )
-                    {
-                        wxLogTrace( traceLibraries, "Warning: save failed after PCM auto-add: %s",
-                                    aError.message );
-                    } );
+                        []( const LIBRARY_ERROR& aError )
+                        {
+                            wxLogTrace( traceLibraries, wxT( "Warning: save failed after PCM auto-add: %s" ),
+                                        aError.message );
+                        } );
             }
         }
     }
 
     auto cleanupRemovedPCMLibraries =
-        [&]( LIBRARY_TABLE_TYPE aType )
-        {
-            LIBRARY_TABLE* table = Table( aType, LIBRARY_TABLE_SCOPE::GLOBAL ).value_or( nullptr );
-            wxCHECK( table, /* void */ );
-
-            auto toErase = std::ranges::remove_if( table->Rows(),
-                [&]( const LIBRARY_TABLE_ROW& aRow )
-                {
-                    wxString path = GetFullURI( &aRow, true );
-                    return path.StartsWith( *packagesPath ) && !wxFile::Exists( path );
-                } );
-
-            table->Rows().erase( toErase.begin(), toErase.end() );
-
-            if( !toErase.empty() )
+            [&]( LIBRARY_TABLE_TYPE aType )
             {
-                table->Save().map_error(
-                        []( const LIBRARY_ERROR& aError )
+                LIBRARY_TABLE* table = Table( aType, LIBRARY_TABLE_SCOPE::GLOBAL ).value_or( nullptr );
+                wxCHECK( table, /* void */ );
+
+                auto toErase = std::ranges::remove_if( table->Rows(),
+                        [&]( const LIBRARY_TABLE_ROW& aRow )
                         {
-                            wxLogTrace( traceLibraries,
-                                        "Warning: save failed after PCM auto-remove: %s",
-                                        aError.message );
+                            wxString path = GetFullURI( &aRow, true );
+                            return path.StartsWith( *packagesPath ) && !wxFile::Exists( path );
                         } );
-            }
-        };
+
+                table->Rows().erase( toErase.begin(), toErase.end() );
+
+                if( !toErase.empty() )
+                {
+                    table->Save().map_error(
+                            []( const LIBRARY_ERROR& aError )
+                            {
+                                wxLogTrace( traceLibraries, wxT( "Warning: save failed after PCM auto-remove: %s" ),
+                                            aError.message );
+                            } );
+                }
+            };
 
     if( packagesPath && settings->m_PcmLibAutoRemove )
     {
@@ -477,6 +476,12 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
         cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::FOOTPRINT );
         cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
     }
+}
+
+
+void LIBRARY_MANAGER::LoadProjectTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
+{
+    LoadProjectTables( Pgm().GetSettingsManager().Prj().GetProjectDirectory(), aTablesToLoad );
 }
 
 
@@ -678,19 +683,29 @@ void LIBRARY_MANAGER::ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxStri
 }
 
 
-void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath )
+void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
+                                         std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
     if( wxFileName::IsDirReadable( aProjectPath ) )
     {
-        loadTables( aProjectPath, LIBRARY_TABLE_SCOPE::PROJECT );
+        loadTables( aProjectPath, LIBRARY_TABLE_SCOPE::PROJECT, aTablesToLoad );
     }
     else
     {
         m_projectTables.clear();
-        wxLogTrace( traceLibraries,
-                    "New project path %s is not readable, not loading project tables",
+        wxLogTrace( traceLibraries, "New project path %s is not readable, not loading project tables",
                     aProjectPath );
     }
+}
+
+
+void LIBRARY_MANAGER::ReloadTables( LIBRARY_TABLE_SCOPE aScope,
+                                    std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
+{
+    if( aScope == LIBRARY_TABLE_SCOPE::PROJECT )
+        LoadProjectTables( aTablesToLoad );
+    else
+        LoadGlobalTables( aTablesToLoad );
 }
 
 
@@ -914,15 +929,15 @@ std::optional<wxString> LIBRARY_MANAGER_ADAPTER::GetLibraryDescription( const wx
 }
 
 
-std::vector<LIBRARY_TABLE_ROW *> LIBRARY_MANAGER_ADAPTER::Rows(
-        LIBRARY_TABLE_SCOPE aScope, bool aIncludeInvalid ) const
+std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER_ADAPTER::Rows( LIBRARY_TABLE_SCOPE aScope,
+                                                               bool aIncludeInvalid ) const
 {
     return m_manager.Rows( Type(), aScope, aIncludeInvalid );
 }
 
 
-std::optional<LIBRARY_TABLE_ROW *> LIBRARY_MANAGER_ADAPTER::GetRow(
-    const wxString &aNickname, LIBRARY_TABLE_SCOPE aScope ) const
+std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER_ADAPTER::GetRow( const wxString &aNickname,
+                                                                   LIBRARY_TABLE_SCOPE aScope ) const
 {
     return m_manager.GetRow( Type(), aNickname, aScope );
 }

@@ -44,6 +44,8 @@ public:
 
     std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override;
 
+    std::optional<LIB_STATUS> LoadOne( const wxString& nickname );
+
     // Currently unused for design blocks
     std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const override { return std::nullopt; }
 

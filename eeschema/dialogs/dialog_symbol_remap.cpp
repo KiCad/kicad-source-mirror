@@ -170,9 +170,9 @@ size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< LEGAC
 void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 {
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+    LIBRARY_MANAGER&        manager = Pgm().GetLibraryManager();
 
-    std::optional<LIBRARY_TABLE*> optTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
     wxCHECK( optTable, /* void */ );
     LIBRARY_TABLE* projectTable = *optTable;
 
@@ -227,8 +227,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             }
             else
             {
-                aReporter.Report( wxString::Format( _( "Library '%s' not found." ),
-                                                    normalizedPath ),
+                aReporter.Report( wxString::Format( _( "Library '%s' not found." ), normalizedPath ),
                                   RPT_SEVERITY_WARNING );
             }
         }
@@ -237,17 +236,15 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
         if( !projectTable->Rows().empty() )
         {
             projectTable->Save().map_error(
-                [&aReporter]( const LIBRARY_ERROR& aError )
-                {
-                    aReporter.ReportTail( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
-                                                    aError.message ) );
-                } );
+                    [&aReporter]( const LIBRARY_ERROR& aError )
+                    {
+                        aReporter.ReportTail( _( "Error saving library table:\n\n" ) + aError.message );
+                    } );
 
             // Trigger a reload of the table and cancel an in-progress background load
             Pgm().GetLibraryManager().ProjectChanged();
 
-            aReporter.ReportTail( _( "Created project symbol library table.\n" ),
-                                  RPT_SEVERITY_INFO );
+            aReporter.ReportTail( _( "Created project symbol library table.\n" ), RPT_SEVERITY_INFO );
         }
     }
 }

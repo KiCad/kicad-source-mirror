@@ -757,10 +757,12 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    std::optional<LIBRARY_TABLE*> optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
-                                                                              LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxCHECK( optTable, false );
-    LIBRARY_TABLE* globalTable = *optTable;
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
+                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxCHECK( optTable.has_value(), false );
+    LIBRARY_TABLE* globalTable = optTable.value();
 
     if( get_model( 0 )->Table() != *globalTable )
     {
@@ -775,11 +777,11 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::TransferDataFromWindow()
                 } );
     }
 
-    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::PROJECT );
+    optTable = manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( optTable.has_value() && get_model( 1 )->Table().Path() == optTable.value()->Path() )
     {
-        LIBRARY_TABLE* projectTable = *optTable;
+        LIBRARY_TABLE* projectTable = optTable.value();
 
         if( get_model( 1 )->Table() != *projectTable )
         {
@@ -789,7 +791,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::TransferDataFromWindow()
             projectTable->Save().map_error(
                     []( const LIBRARY_ERROR& aError )
                     {
-                        wxMessageBox( _( "Error saving project-specific library table:\n\n" ) + aError.message,
+                        wxMessageBox( _( "Error saving project library table:\n\n" ) + aError.message,
                                       _( "File Save Error" ), wxOK | wxICON_ERROR );
                     } );
         }

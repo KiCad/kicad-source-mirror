@@ -802,8 +802,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
-    std::optional<const LIBRARY_TABLE_ROW*> optRow =
-                manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, fn.GetName() );
+    std::optional<const LIBRARY_TABLE_ROW*> optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, fn.GetName() );
 
     fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
@@ -831,9 +830,8 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         wxString uri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
-        std::optional<LIBRARY_TABLE*> optTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                 LIBRARY_TABLE_SCOPE::PROJECT );
+        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                LIBRARY_TABLE_SCOPE::PROJECT );
         wxCHECK( optTable, false );
         LIBRARY_TABLE* projectTable = *optTable;
         LIBRARY_TABLE_ROW* row = nullptr;
@@ -850,13 +848,13 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         bool success = true;
 
         projectTable->Save().map_error(
-            [&success]( const LIBRARY_ERROR& aError )
-            {
-                success = false;
-                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
-                                                aError.message ),
-                              _( "File Save Error" ), wxOK | wxICON_ERROR );
-            } );
+                [&success]( const LIBRARY_ERROR& aError )
+                {
+                    wxMessageBox( _( "Error saving library table:\n\n" ) + aError.message,
+                                  _( "File Save Error" ), wxOK | wxICON_ERROR );
+
+                    success = false;
+                } );
 
         if( !success )
             return false;

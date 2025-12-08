@@ -224,6 +224,9 @@ wxString DESIGN_BLOCK_PANE::createNewDesignBlockLibrary( const wxString& aDialog
 bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, const wxString& aFilename,
                                                LIBRARY_TABLE_SCOPE aScope )
 {
+    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_frame->Prj().DesignBlockLibs();
+    LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
+
     // TODO(JE) library tables -- figure out where Jeff's added aDialogTitle should be used?
     bool isGlobal = ( aScope == LIBRARY_TABLE_SCOPE::GLOBAL );
 
@@ -253,11 +256,11 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     // try to use path normalized to an environmental variable or project path
     wxString normalizedPath = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &m_frame->Prj() );
 
-    std::optional<LIBRARY_TABLE*> optTable =
-                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, aScope );
-    wxCHECK( optTable, false );
-    LIBRARY_TABLE* table = *optTable;
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, aScope );
+    wxCHECK( optTable.has_value(), false );
+    LIBRARY_TABLE* table = optTable.value();
 
+    bool               success = true;
     LIBRARY_TABLE_ROW& newRow = table->InsertRow();
 
     newRow.SetNickname( libName );
@@ -266,20 +269,21 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     newRow.SetDescription( description );
 
     table->Save().map_error(
-        [&]( const LIBRARY_ERROR& aError )
-        {
-            wxString msg = wxString::Format( _( "Error saving library table:\n\n%s" ), aError.message );
-            DisplayError( m_frame, msg );
-        } );
+            [&]( const LIBRARY_ERROR& aError )
+            {
+                DisplayError( m_frame, _( "Error saving library table:\n\n" ) + aError.message );
+                success = false;
+            } );
 
-    if( isGlobal )
-        Pgm().GetLibraryManager().LoadGlobalTables();
-    else
-        Pgm().GetLibraryManager().ProjectChanged();
+    if( success )
+    {
+        manager.ReloadTables( aScope, { LIBRARY_TABLE_TYPE::DESIGN_BLOCK } );
+        adapter->LoadOne( libName );
 
-    LIB_ID libID( libName, wxEmptyString );
-    RefreshLibs();
-    SelectLibId( libID );
+        LIB_ID libID( libName, wxEmptyString );
+        RefreshLibs();
+        SelectLibId( libID );
+    }
 
     return true;
 }

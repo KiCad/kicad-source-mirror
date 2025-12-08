@@ -809,7 +809,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             projectTable->Save().map_error(
                     []( const LIBRARY_ERROR& aError )
                     {
-                        wxMessageBox( _( "Error saving project-specific library table:\n\n" ) + aError.message,
+                        wxMessageBox( _( "Error saving project library table:\n\n" ) + aError.message,
                                       _( "File Save Error" ), wxOK | wxICON_ERROR );
                     } );
         }

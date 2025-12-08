@@ -847,13 +847,13 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         std::stringstream ss( payload );
         std::string       file;
 
-        LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-        std::optional<LIBRARY_TABLE*> optTable =
-                manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+        LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
+        SYMBOL_LIBRARY_ADAPTER*       adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                LIBRARY_TABLE_SCOPE::PROJECT );
 
-        wxCHECK_RET( optTable, "Could not load symbol lib table." );
-
-        LIBRARY_TABLE* table = *optTable;
+        wxCHECK_RET( optTable.has_value(), "Could not load symbol lib table." );
+        LIBRARY_TABLE* table = optTable.value();
 
         while( std::getline( ss, file, '\n' ) )
         {
@@ -863,6 +863,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxFileName             fn( file );
             IO_RELEASER<SCH_IO>    pi;
             SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+            bool                   success = true;
 
             if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
             {
@@ -880,14 +881,17 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 row.SetType( SCH_IO_MGR::ShowType( type ) );
 
                 table->Save().map_error(
-                    []( const LIBRARY_ERROR& aError )
-                    {
-                        wxLogError( _( "Error saving project-specific library table:\n\n%s" ),
-                                    aError.message );
-                    } );
+                        [&]( const LIBRARY_ERROR& aError )
+                        {
+                            wxLogError( wxT( "Error saving project library table:\n\n" ) + aError.message );
+                            success = false;
+                        } );
 
-                SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-                adapter->LoadOne( fn.GetName() );
+                if( success )
+                {
+                    manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+                    adapter->LoadOne( fn.GetName() );
+                }
             }
         }
 
