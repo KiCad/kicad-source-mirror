@@ -897,15 +897,15 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // Now that we have a new project, trigger a library preload, which will load in any
     // project-specific symbol and footprint libraries into the manager
     CallAfter( [&]()
-        {
-            KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-            schface->PreloadLibraries( &Kiway() );
+            {
+                KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+                schface->PreloadLibraries( &Kiway() );
 
-            KIFACE *pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
-            pcbface->PreloadLibraries( &Kiway() );
+                KIFACE *pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
+                pcbface->PreloadLibraries( &Kiway() );
 
-            Pgm().PreloadDesignBlockLibraries( &Kiway() );
-        } );
+                Pgm().PreloadDesignBlockLibraries( &Kiway() );
+            } );
 }
 
 

@@ -669,17 +669,16 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                 },
                 aErrors );
     }
-    // TODO(JE) library tables - does this feature even need to exist?
-#if 0
     else if( destFile.GetName() == FILEEXT::SymbolLibraryTableFileName )
     {
-        SYMBOL_LIB_TABLE symbolLibTable;
-        symbolLibTable.Load( aSrcFilePath );
+        wxFileName    libTableFn( aSrcFilePath );
+        LIBRARY_TABLE libTable( libTableFn, LIBRARY_TABLE_SCOPE::PROJECT );
+        libTable.SetPath( destFile.GetFullPath() );
+        libTable.SetType( LIBRARY_TABLE_TYPE::SYMBOL );
 
-        for( unsigned i = 0; i < symbolLibTable.GetCount(); i++ )
+        for( LIBRARY_TABLE_ROW& row : libTable.Rows() )
         {
-            LIB_TABLE_ROW& row = symbolLibTable.At( i );
-            wxString       uri = row.GetFullURI();
+            wxString uri = row.URI();
 
             uri.Replace( wxS( "/" ) + aProjectName + wxS( "-cache.lib" ),
                          wxS( "/" ) + aNewProjectName + wxS( "-cache.lib" ) );
@@ -688,25 +687,21 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             uri.Replace( wxS( "/" ) + aProjectName + wxS( ".lib" ),
                          wxS( "/" ) + aNewProjectName + wxS( ".lib" ) );
 
-            row.SetFullURI( uri );
+            row.SetURI( uri );
         }
 
-        try
-        {
-            symbolLibTable.Save( destFile.GetFullPath() );
-        }
-        catch( ... )
-        {
-            wxString msg;
+        libTable.Save().map_error(
+                [&]( const LIBRARY_ERROR& aError )
+                {
+                        wxString msg;
 
-            if( !aErrors.empty() )
-                aErrors += "\n";
+                        if( !aErrors.empty() )
+                            aErrors += wxT( "\n" );
 
-            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
-            aErrors += msg;
-        }
+                        msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
+                        aErrors += msg;
+                } );
     }
-#endif
     else
     {
         wxFAIL_MSG( wxS( "Unexpected filetype for Eeschema::SaveFileAs()" ) );

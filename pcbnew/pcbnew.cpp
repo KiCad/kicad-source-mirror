@@ -552,40 +552,35 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         // name.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    // TODO(JE) library tables - does this feature even need to exist?
-#if 0
     else if( destFile.GetName() == FILEEXT::FootprintLibraryTableFileName )
     {
-        try
+        wxFileName    libTableFn( aSrcFilePath );
+        LIBRARY_TABLE libTable( libTableFn, LIBRARY_TABLE_SCOPE::PROJECT );
+        libTable.SetPath( destFile.GetFullPath() );
+        libTable.SetType( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+        for( LIBRARY_TABLE_ROW& row : libTable.Rows() )
         {
-            FP_LIB_TABLE fpLibTable;
-            fpLibTable.Load( aSrcFilePath );
+            wxString uri = row.URI();
 
-            for( unsigned i = 0; i < fpLibTable.GetCount(); i++ )
-            {
-                LIB_TABLE_ROW& row = fpLibTable.At( i );
-                wxString       uri = row.GetFullURI();
+            uri.Replace( wxT( "/" ) + aSrcProjectName + wxT( ".pretty" ),
+                         wxT( "/" ) + aNewProjectName + wxT( ".pretty" ) );
 
-                uri.Replace( wxT( "/" ) + aSrcProjectName + wxT( ".pretty" ),
-                             wxT( "/" ) + aNewProjectName + wxT( ".pretty" ) );
-
-                row.SetFullURI( uri );
-            }
-
-            fpLibTable.Save( destFile.GetFullPath() );
+            row.SetURI( uri );
         }
-        catch( ... )
-        {
-            wxString msg;
 
-            if( !aErrors.empty() )
-                aErrors += wxT( "\n" );
+        libTable.Save().map_error(
+                [&]( const LIBRARY_ERROR& aError )
+                {
+                        wxString msg;
 
-            msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
-            aErrors += msg;
-        }
+                        if( !aErrors.empty() )
+                            aErrors += wxT( "\n" );
+
+                        msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
+                        aErrors += msg;
+                } );
     }
-#endif
     else
     {
         wxFAIL_MSG( wxT( "Unexpected filetype for Pcbnew::SaveFileAs()" ) );
