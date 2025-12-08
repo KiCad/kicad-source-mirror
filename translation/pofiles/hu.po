@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-08 12:00+0000\n"
+"PO-Revision-Date: 2025-12-09 21:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -31378,16 +31378,16 @@ msgstr "Nevek"
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:64
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:148
 msgid "Exact"
-msgstr ""
+msgstr "Egzakt"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "Helytelen sarokméret"
+msgstr "Helytelen kívánt ellenállás érték: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
-msgstr ""
+msgstr "Nem éri meg használni"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:21
 msgid "Inputs"
@@ -32413,7 +32413,6 @@ msgid ""
 msgstr "Vezető fajlagos ellenállása (Ω⋅m)"
 
 #: pcb_calculator/transline_ident.cpp:110
-#, fuzzy
 msgid "Frequency of the input signal"
 msgstr "A bemeneti jel frekvenciája"
 
@@ -32603,19 +32602,16 @@ msgid "Relative permeability (mu) of insulator"
 msgstr "A szigetelő relatív permeabilitása (µᵣ)"
 
 #: pcb_calculator/transline_ident.cpp:251
-#, fuzzy
 msgid "Width of waveguide"
-msgstr "Csőtápvonal szélesség"
+msgstr "Hullámvezető szélesség"
 
 #: pcb_calculator/transline_ident.cpp:253
-#, fuzzy
 msgid "Height of waveguide"
-msgstr "Csőtápvonal magasság"
+msgstr "Hullámvezető magasság"
 
 #: pcb_calculator/transline_ident.cpp:255
-#, fuzzy
 msgid "Waveguide length"
-msgstr "Csőtápvonal hosszúság"
+msgstr "Hullámvezető hosszúság"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:410
@@ -32862,12 +32858,10 @@ msgid "Unrouted"
 msgstr "Nem huzalozott"
 
 #: pcbnew/board_connected_item.cpp:235
-#, fuzzy
 msgid "NetClass"
 msgstr "Vezetékosztály"
 
 #: pcbnew/board_connected_item.cpp:242
-#, fuzzy
 msgid "NetName"
 msgstr "Vezetéknév"
 
@@ -33072,7 +33066,7 @@ msgstr "Réteg kiválasztása"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Túl kicsi érték (min: %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:246
 msgid "All dielectric  thickness layers are locked"
@@ -48946,14 +48940,12 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2213
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "IPC-D-356 fájl sikeresen létrehozva\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2218
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Nem sikerült létrehozni a(z) \"%s\" fájlt"
+msgstr "Nem sikerült létrehozni az IPC-D-356 fájlt\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 #, fuzzy
@@ -49132,7 +49124,6 @@ msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "A differenciális jelvezeték nem kezdhető el a semmi közepén."
 
 #: pcbnew/router/router_tool.cpp:118
-#, fuzzy
 msgid "Place Through Via"
 msgstr "Átmenő via hozzáadása"
 
@@ -49153,7 +49144,6 @@ msgstr ""
 "Zsák vagy eltemetett via hozzáadása a jelenleg huzalozott vezetősáv végén."
 
 #: pcbnew/router/router_tool.cpp:140
-#, fuzzy
 msgid "Place Microvia"
 msgstr "μVia hozzáadása"
 
@@ -49204,7 +49194,6 @@ msgstr ""
 "végén."
 
 #: pcbnew/router/router_tool.cpp:182
-#, fuzzy
 msgid "Custom Track/Via Size..."
 msgstr "Egyedi vezetősáv/via méret..."
 
@@ -49276,7 +49265,7 @@ msgid "Track netclass width"
 msgstr "Vezetősáv vezetékosztály szerinti szélessége"
 
 #: pcbnew/router/router_tool.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s"
 msgstr "Vezetősáv: %s"
 
@@ -49286,12 +49275,12 @@ msgid "Via netclass values"
 msgstr "Via vezetékosztály szerinti mérete"
 
 #: pcbnew/router/router_tool.cpp:285 pcbnew/tools/drawing_tool.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s, hole %s"
-msgstr "\"%s\" érték mely a(z) \"%s\" alkatrészhez tartozik."
+msgstr "Via: %s, furat: %s"
 
 #: pcbnew/router/router_tool.cpp:291 pcbnew/tools/drawing_tool.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s"
 msgstr "Via: %s"
 
@@ -49312,9 +49301,9 @@ msgid "Specify custom differential pair dimensions"
 msgstr "Egyedi differenciális jelvezeték méretek megadása"
 
 #: pcbnew/router/router_tool.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s"
-msgstr "Szélesség "
+msgstr "Szélesség %s"
 
 #: pcbnew/router/router_tool.cpp:400
 #, fuzzy, c-format
@@ -49342,9 +49331,8 @@ msgid "Save router log"
 msgstr "Projekt mentése"
 
 #: pcbnew/router/router_tool.cpp:1115
-#, fuzzy
 msgid "Via needs 2 different layers."
-msgstr "Ne módosítsa az eltérő rétegeken lévő forrszemeket"
+msgstr "A viához két különböző réteg kell."
 
 #: pcbnew/router/router_tool.cpp:1188
 #, fuzzy
@@ -49580,7 +49568,7 @@ msgid "Track: use netclass width"
 msgstr "Vezetősáv: vezetékosztály szerinti szélesség"
 
 #: pcbnew/toolbars_pcb_editor.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "Track: %s (%s)"
 msgstr "Vezetősáv: %s (%s)"
 
@@ -49764,7 +49752,7 @@ msgid "Net Inspection Tools"
 msgstr "Vezeték Ellenőrzési Eszközök"
 
 #: pcbnew/tools/board_inspection_tool.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "[netclass %s]"
 msgstr "[vezetékosztály %s]"
 
@@ -49869,9 +49857,8 @@ msgstr "Csatlakozás típusa:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:494
 #: pcbnew/tools/board_inspection_tool.cpp:1376
-#, fuzzy
 msgid "Via Diameter"
-msgstr "Átvezetőforrpont átmérő"
+msgstr "Via átmérő"
 
 #: pcbnew/tools/board_inspection_tool.cpp:495
 #: pcbnew/tools/board_inspection_tool.cpp:1377
@@ -49885,9 +49872,8 @@ msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
 #: pcbnew/tools/board_inspection_tool.cpp:509
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Impulzusszélesség:"
+msgstr "Via körgyűrű"
 
 #: pcbnew/tools/board_inspection_tool.cpp:510
 #: pcbnew/tools/board_inspection_tool.cpp:1394
@@ -49902,9 +49888,8 @@ msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
 #: pcbnew/tools/board_inspection_tool.cpp:525
 #: pcbnew/tools/board_inspection_tool.cpp:1414
-#, fuzzy
 msgid "Hole Size"
-msgstr "Furat Méret"
+msgstr "Furat méret"
 
 #: pcbnew/tools/board_inspection_tool.cpp:526
 #: pcbnew/tools/board_inspection_tool.cpp:1415
@@ -50234,9 +50219,8 @@ msgstr "3D modellek helyi mappája:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1610
 #: pcbnew/tools/board_inspection_tool.cpp:1618
-#, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "Alkatrészrajzolat könyvtárak kezelése..."
+msgstr "Alkatrészrajzolat könyvtárak kezelése"
 
 #: pcbnew/tools/convert_tool.cpp:79
 msgid "Copy line width of first object"
