@@ -31,6 +31,7 @@
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
 #include <board.h>
+#include <footprint.h>
 #include <geometry/intersection.h>
 #include <geometry/nearest.h>
 
@@ -72,17 +73,22 @@ public:
 
     VECTOR2I SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads );
 
-    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override
+    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem ) override
     {
         // If the item being removed is involved in the snap, clear the snap item
         if( m_snapItem )
         {
-            for( EDA_ITEM* item : m_snapItem->items )
+            for( EDA_ITEM* eda_item : m_snapItem->items )
             {
-                if( item == aBoardItem )
+                if( eda_item->IsBOARD_ITEM() )
                 {
-                    m_snapItem = std::nullopt;
-                    break;
+                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+                    if( item == aRemovedItem || item->GetParentFootprint() == aRemovedItem )
+                    {
+                        m_snapItem = std::nullopt;
+                        break;
+                    }
                 }
             }
         }
