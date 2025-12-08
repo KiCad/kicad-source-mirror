@@ -1525,32 +1525,36 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                       formatInternalUnits( aPad->GetDelta( PADSTACK::ALL_LAYERS ) ).c_str() );
     }
 
-    VECTOR2I sz = aPad->GetDrillSize();
-    VECTOR2I shapeoffset = aPad->GetOffset( PADSTACK::ALL_LAYERS );
+    const VECTOR2I& drill = aPad->GetDrillSize();
+    VECTOR2I        shapeoffset = aPad->GetOffset( PADSTACK::ALL_LAYERS );
+    bool            forceShapeOffsetOutput = false;
 
-    if( (sz.x > 0) || (sz.y > 0) ||
-        (shapeoffset.x != 0) || (shapeoffset.y != 0) )
+    aPad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( aPad->GetOffset( layer ) != shapeoffset )
+                    forceShapeOffsetOutput = true;
+            } );
+
+    if( drill.x > 0 || drill.y > 0 || shapeoffset.x != 0 || shapeoffset.y != 0 || forceShapeOffsetOutput )
     {
         m_out->Print( "(drill" );
 
         if( aPad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
             m_out->Print( " oval" );
 
-        if( sz.x > 0 )
-            m_out->Print( " %s", formatInternalUnits( sz.x ).c_str() );
+        if( drill.x > 0 )
+            m_out->Print( " %s", formatInternalUnits( drill.x ).c_str() );
 
-        if( sz.y > 0  && sz.x != sz.y )
-            m_out->Print( " %s", formatInternalUnits( sz.y ).c_str() );
+        if( drill.y > 0 && drill.x != drill.y )
+            m_out->Print( " %s", formatInternalUnits( drill.y ).c_str() );
 
         // NOTE: Shape offest is a property of the copper shape, not of the drill, but this was put
         // in the file format under the drill section.  So, it is left here to minimize file format
         // changes, but note that the other padstack layers (if present) will have an offset stored
         // separately.
-        if( shapeoffset.x != 0 || shapeoffset.y != 0 )
-        {
-            m_out->Print( "(offset %s)",
-                          formatInternalUnits( aPad->GetOffset( PADSTACK::ALL_LAYERS ) ).c_str() );
-        }
+        if( shapeoffset.x != 0 || shapeoffset.y != 0 || forceShapeOffsetOutput )
+            m_out->Print( "(offset %s)", formatInternalUnits( aPad->GetOffset( PADSTACK::ALL_LAYERS ) ).c_str() );
 
         m_out->Print( ")" );
     }
@@ -1585,40 +1589,40 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     }
 
     auto formatCornerProperties =
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            // Output the radius ratio for rounded and chamfered rect pads
-            if( aPad->GetShape( aLayer ) == PAD_SHAPE::ROUNDRECT
-                || aPad->GetShape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT)
+            [&]( PCB_LAYER_ID aLayer )
             {
-                m_out->Print( "(roundrect_rratio %s)",
-                              FormatDouble2Str( aPad->GetRoundRectRadiusRatio( aLayer ) ).c_str() );
-            }
+                // Output the radius ratio for rounded and chamfered rect pads
+                if( aPad->GetShape( aLayer ) == PAD_SHAPE::ROUNDRECT
+                    || aPad->GetShape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT)
+                {
+                    m_out->Print( "(roundrect_rratio %s)",
+                                  FormatDouble2Str( aPad->GetRoundRectRadiusRatio( aLayer ) ).c_str() );
+                }
 
-            // Output the chamfer corners for chamfered rect pads
-            if( aPad->GetShape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT)
-            {
-                m_out->Print( "(chamfer_ratio %s)",
-                              FormatDouble2Str( aPad->GetChamferRectRatio( aLayer ) ).c_str() );
+                // Output the chamfer corners for chamfered rect pads
+                if( aPad->GetShape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT)
+                {
+                    m_out->Print( "(chamfer_ratio %s)",
+                                  FormatDouble2Str( aPad->GetChamferRectRatio( aLayer ) ).c_str() );
 
-                m_out->Print( "(chamfer" );
+                    m_out->Print( "(chamfer" );
 
-                if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_TOP_LEFT ) )
-                    m_out->Print( " top_left" );
+                    if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_TOP_LEFT ) )
+                        m_out->Print( " top_left" );
 
-                if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_TOP_RIGHT ) )
-                    m_out->Print( " top_right" );
+                    if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_TOP_RIGHT ) )
+                        m_out->Print( " top_right" );
 
-                if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_BOTTOM_LEFT ) )
-                    m_out->Print( " bottom_left" );
+                    if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_BOTTOM_LEFT ) )
+                        m_out->Print( " bottom_left" );
 
-                if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_BOTTOM_RIGHT ) )
-                    m_out->Print( " bottom_right" );
+                    if( ( aPad->GetChamferPositions( aLayer ) & RECT_CHAMFER_BOTTOM_RIGHT ) )
+                        m_out->Print( " bottom_right" );
 
-                m_out->Print( ")" );
-            }
+                    m_out->Print( ")" );
+                }
 
-        };
+            };
 
     // For normal padstacks, this is the one and only set of properties.  For complex ones, this
     // will represent the front layer properties, and other layers will be formatted below
@@ -1686,9 +1690,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
     EDA_ANGLE defaultThermalSpokeAngle = ANGLE_90;
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE ||
-      ( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM
-          && aPad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE ) )
+    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
+        || ( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM
+             && aPad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE ) )
     {
         defaultThermalSpokeAngle = ANGLE_45;
     }
@@ -1706,40 +1710,40 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     }
 
     auto anchorShape =
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            switch( aPad->GetAnchorPadShape( aLayer ) )
+            [&]( PCB_LAYER_ID aLayer )
             {
-            case PAD_SHAPE::RECTANGLE:  return "rect";
-            default:
-            case PAD_SHAPE::CIRCLE:     return "circle";
-            }
-        };
+                switch( aPad->GetAnchorPadShape( aLayer ) )
+                {
+                case PAD_SHAPE::RECTANGLE:  return "rect";
+                default:
+                case PAD_SHAPE::CIRCLE:     return "circle";
+                }
+            };
 
     auto formatPrimitives =
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            m_out->Print( "(primitives" );
-
-            // Output all basic shapes
-            for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( aLayer ) )
+            [&]( PCB_LAYER_ID aLayer )
             {
-                switch( primitive->GetShape() )
+                m_out->Print( "(primitives" );
+
+                // Output all basic shapes
+                for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( aLayer ) )
                 {
-                case SHAPE_T::SEGMENT:
-                    if( primitive->IsProxyItem() )
+                    switch( primitive->GetShape() )
                     {
-                        m_out->Print( "(gr_vector (start %s) (end %s)",
-                                      formatInternalUnits( primitive->GetStart() ).c_str(),
-                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    }
-                    else
-                    {
-                        m_out->Print( "(gr_line (start %s) (end %s)",
-                                      formatInternalUnits( primitive->GetStart() ).c_str(),
-                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    }
-                    break;
+                    case SHAPE_T::SEGMENT:
+                        if( primitive->IsProxyItem() )
+                        {
+                            m_out->Print( "(gr_vector (start %s) (end %s)",
+                                          formatInternalUnits( primitive->GetStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        }
+                        else
+                        {
+                            m_out->Print( "(gr_line (start %s) (end %s)",
+                                          formatInternalUnits( primitive->GetStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        }
+                        break;
 
                 case SHAPE_T::RECTANGLE:
                     if( primitive->IsProxyItem() )
@@ -1756,44 +1760,44 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                     }
                     break;
 
-                case SHAPE_T::ARC:
-                    m_out->Print( "(gr_arc (start %s) (mid %s) (end %s)",
-                                  formatInternalUnits( primitive->GetStart() ).c_str(),
-                                  formatInternalUnits( primitive->GetArcMid() ).c_str(),
-                                  formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    break;
+                    case SHAPE_T::ARC:
+                        m_out->Print( "(gr_arc (start %s) (mid %s) (end %s)",
+                                      formatInternalUnits( primitive->GetStart() ).c_str(),
+                                      formatInternalUnits( primitive->GetArcMid() ).c_str(),
+                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        break;
 
-                case SHAPE_T::CIRCLE:
-                    m_out->Print( "(gr_circle (center %s) (end %s)",
-                                  formatInternalUnits( primitive->GetStart() ).c_str(),
-                                  formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    break;
+                    case SHAPE_T::CIRCLE:
+                        m_out->Print( "(gr_circle (center %s) (end %s)",
+                                      formatInternalUnits( primitive->GetStart() ).c_str(),
+                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        break;
 
-                case SHAPE_T::BEZIER:
-                    m_out->Print( "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
-                                  formatInternalUnits( primitive->GetStart() ).c_str(),
-                                  formatInternalUnits( primitive->GetBezierC1() ).c_str(),
-                                  formatInternalUnits( primitive->GetBezierC2() ).c_str(),
-                                  formatInternalUnits( primitive->GetEnd() ).c_str() );
-                    break;
+                    case SHAPE_T::BEZIER:
+                        m_out->Print( "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
+                                      formatInternalUnits( primitive->GetStart() ).c_str(),
+                                      formatInternalUnits( primitive->GetBezierC1() ).c_str(),
+                                      formatInternalUnits( primitive->GetBezierC2() ).c_str(),
+                                      formatInternalUnits( primitive->GetEnd() ).c_str() );
+                        break;
 
-                case SHAPE_T::POLY:
-                    if( primitive->IsPolyShapeValid() )
-                    {
-                        const SHAPE_POLY_SET& poly = primitive->GetPolyShape();
-                        const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+                    case SHAPE_T::POLY:
+                        if( primitive->IsPolyShapeValid() )
+                        {
+                            const SHAPE_POLY_SET& poly = primitive->GetPolyShape();
+                            const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
-                        m_out->Print( "(gr_poly" );
-                        formatPolyPts( outline );
+                            m_out->Print( "(gr_poly" );
+                            formatPolyPts( outline );
+                        }
+                        break;
+
+                    default:
+                        break;
                     }
-                    break;
 
-                default:
-                    break;
-                }
-
-                if( !primitive->IsProxyItem() )
-                    m_out->Print( "(width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );
+                    if( !primitive->IsProxyItem() )
+                        m_out->Print( "(width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );
 
                 // The filled flag represents if a solid fill is present on circles,
                 // rectangles and polygons
@@ -1804,11 +1808,11 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                     KICAD_FORMAT::FormatBool( m_out, "fill", primitive->IsFilled() );
                 }
 
-                m_out->Print( ")" );
-            }
+                    m_out->Print( ")" );
+                }
 
-            m_out->Print( ")" );   // end of (primitives
-        };
+                m_out->Print( ")" );   // end of (primitives
+            };
 
     if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
     {
@@ -1837,79 +1841,79 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
     // TODO: Refactor so that we call formatPadLayer( ALL_LAYERS ) above instead of redundant code
     auto formatPadLayer =
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            const PADSTACK& padstack = aPad->Padstack();
-
-            m_out->Print( "(shape %s)", shapeName( aLayer ) );
-            m_out->Print( "(size %s)", formatInternalUnits( aPad->GetSize( aLayer ) ).c_str() );
-
-            const VECTOR2I& delta = aPad->GetDelta( aLayer );
-
-            if( delta.x != 0 || delta.y != 0 )
-                m_out->Print( "(rect_delta %s)", formatInternalUnits( delta ).c_str() );
-
-            shapeoffset = aPad->GetOffset( aLayer );
-
-            if( shapeoffset.x != 0 || shapeoffset.y != 0 )
-                m_out->Print( "(offset %s)", formatInternalUnits( shapeoffset ).c_str() );
-
-            formatCornerProperties( aLayer );
-
-            if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
+            [&]( PCB_LAYER_ID aLayer )
             {
-                m_out->Print( "(options" );
+                const PADSTACK& padstack = aPad->Padstack();
 
-                // Output the anchor pad shape (circle/rect)
-                m_out->Print( "(anchor %s)", anchorShape( aLayer ) );
+                m_out->Print( "(shape %s)", shapeName( aLayer ) );
+                m_out->Print( "(size %s)", formatInternalUnits( aPad->GetSize( aLayer ) ).c_str() );
 
-                m_out->Print( ")" ); // end of (options ...
+                const VECTOR2I& delta = aPad->GetDelta( aLayer );
 
-                // Output graphic primitive of the pad shape
-                formatPrimitives( aLayer );
-            }
+                if( delta.x != 0 || delta.y != 0 )
+                    m_out->Print( "(rect_delta %s)", formatInternalUnits( delta ).c_str() );
 
-            EDA_ANGLE defaultLayerAngle = ANGLE_90;
+                shapeoffset = aPad->GetOffset( aLayer );
 
-            if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE ||
-                ( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM
-                  && aPad->GetAnchorPadShape( aLayer ) == PAD_SHAPE::CIRCLE ) )
-            {
-                defaultLayerAngle = ANGLE_45;
-            }
+                if( shapeoffset.x != 0 || shapeoffset.y != 0 )
+                    m_out->Print( "(offset %s)", formatInternalUnits( shapeoffset ).c_str() );
 
-            EDA_ANGLE layerSpokeAngle = padstack.ThermalSpokeAngle( aLayer );
+                formatCornerProperties( aLayer );
 
-            if( layerSpokeAngle != defaultLayerAngle )
-            {
-                m_out->Print( "(thermal_bridge_angle %s)",
-                              EDA_UNIT_UTILS::FormatAngle( layerSpokeAngle ).c_str() );
-            }
+                if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
+                {
+                    m_out->Print( "(options" );
 
-            if( padstack.ThermalGap( aLayer ).has_value() )
-            {
-                m_out->Print( "(thermal_gap %s)",
-                              formatInternalUnits( *padstack.ThermalGap( aLayer ) ).c_str() );
-            }
+                    // Output the anchor pad shape (circle/rect)
+                    m_out->Print( "(anchor %s)", anchorShape( aLayer ) );
 
-            if( padstack.ThermalSpokeWidth( aLayer ).has_value() )
-            {
-                m_out->Print( "(thermal_bridge_width %s)",
-                              formatInternalUnits( *padstack.ThermalSpokeWidth( aLayer ) ).c_str() );
-            }
+                    m_out->Print( ")" ); // end of (options ...
 
-            if( padstack.Clearance( aLayer ).has_value() )
-            {
-                m_out->Print( "(clearance %s)",
-                              formatInternalUnits( *padstack.Clearance( aLayer ) ).c_str() );
-            }
+                    // Output graphic primitive of the pad shape
+                    formatPrimitives( aLayer );
+                }
 
-            if( padstack.ZoneConnection( aLayer ).has_value() )
-            {
-                m_out->Print( "(zone_connect %d)",
-                              static_cast<int>( *padstack.ZoneConnection( aLayer ) ) );
-            }
-        };
+                EDA_ANGLE defaultLayerAngle = ANGLE_90;
+
+                if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE ||
+                    ( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM
+                      && aPad->GetAnchorPadShape( aLayer ) == PAD_SHAPE::CIRCLE ) )
+                {
+                    defaultLayerAngle = ANGLE_45;
+                }
+
+                EDA_ANGLE layerSpokeAngle = padstack.ThermalSpokeAngle( aLayer );
+
+                if( layerSpokeAngle != defaultLayerAngle )
+                {
+                    m_out->Print( "(thermal_bridge_angle %s)",
+                                  EDA_UNIT_UTILS::FormatAngle( layerSpokeAngle ).c_str() );
+                }
+
+                if( padstack.ThermalGap( aLayer ).has_value() )
+                {
+                    m_out->Print( "(thermal_gap %s)",
+                                  formatInternalUnits( *padstack.ThermalGap( aLayer ) ).c_str() );
+                }
+
+                if( padstack.ThermalSpokeWidth( aLayer ).has_value() )
+                {
+                    m_out->Print( "(thermal_bridge_width %s)",
+                                  formatInternalUnits( *padstack.ThermalSpokeWidth( aLayer ) ).c_str() );
+                }
+
+                if( padstack.Clearance( aLayer ).has_value() )
+                {
+                    m_out->Print( "(clearance %s)",
+                                  formatInternalUnits( *padstack.Clearance( aLayer ) ).c_str() );
+                }
+
+                if( padstack.ZoneConnection( aLayer ).has_value() )
+                {
+                    m_out->Print( "(zone_connect %d)",
+                                  static_cast<int>( *padstack.ZoneConnection( aLayer ) ) );
+                }
+            };
 
 
     if( aPad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
