@@ -231,11 +231,25 @@ public:
                                   int aMaxError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;
 
+   /**
+     * Convert the TABLE shape to a polyset. details will be included.
+     *
+     * @param aBuffer a buffer to store the polygon.
+     * @param aClearance the clearance around the pad.
+     * @param aError the maximum deviation from true circle.
+     * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
+     * @param aRenderSettings used to plot outlines with not solid segments like dashed lines.
+     * If null, lines like dashed will be converted as SOLID
+     */
+    void TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                  int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                  KIGFX::RENDER_SETTINGS* aRenderSettings = nullptr ) const override;
+
     /**
      * Convert graphic items (segments and texts) to a set of polygonal shapes
      */
     void TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMaxError, ERROR_LOC aErrorLoc,
-                                    KIGFX::RENDER_SETTINGS* aRenderSettings ) const;
+                                         KIGFX::RENDER_SETTINGS* aRenderSettings ) const;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& aScanTypes ) override;

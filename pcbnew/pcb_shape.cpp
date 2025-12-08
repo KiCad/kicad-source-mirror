@@ -836,7 +836,8 @@ void PCB_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
 
 
 void PCB_SHAPE::TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                         int aClearance, int aError, ERROR_LOC aErrorLoc ) const
+                                         int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                         KIGFX::RENDER_SETTINGS* aRenderSettings ) const
 {
     EDA_SHAPE::TransformShapeToPolygon( aBuffer, aClearance, aError, aErrorLoc, false, true );
 }

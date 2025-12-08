@@ -46,8 +46,7 @@
 #include <gbr_metadata.h>
 #include <advanced_config.h>
 
-
-void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLayer,
+void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         bool aPlotFPText, bool aPlotReferences, bool aPlotValues );
 
 
@@ -102,7 +101,7 @@ void PlotSolderMaskLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMa
     SHAPE_POLY_SET solderMask;
     PCB_LAYER_ID   layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
 
-    GenerateLayerPoly( &solderMask, aBoard, layer, aPlotOpt.GetPlotFPText(),
+    GenerateLayerPoly( &solderMask, aBoard, aPlotter, layer, aPlotOpt.GetPlotFPText(),
                        aPlotOpt.GetPlotReference(), aPlotOpt.GetPlotValue() );
 
     PlotPolySet( aBoard, aPlotter, aPlotOpt, &solderMask, layer );
@@ -116,9 +115,9 @@ void PlotClippedSilkLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerM
     PCB_LAYER_ID   silkLayer = aLayerMask[F_SilkS] ? F_SilkS : B_SilkS;
     PCB_LAYER_ID   maskLayer = aLayerMask[F_SilkS] ? F_Mask : B_Mask;
 
-    GenerateLayerPoly( &silkscreen, aBoard, silkLayer, aPlotOpt.GetPlotFPText(),
+    GenerateLayerPoly( &silkscreen, aBoard, aPlotter, silkLayer, aPlotOpt.GetPlotFPText(),
                        aPlotOpt.GetPlotReference(), aPlotOpt.GetPlotValue() );
-    GenerateLayerPoly( &solderMask, aBoard, maskLayer, aPlotOpt.GetPlotFPText(),
+    GenerateLayerPoly( &solderMask, aBoard, aPlotter, maskLayer, aPlotOpt.GetPlotFPText(),
                        aPlotOpt.GetPlotReference(), aPlotOpt.GetPlotValue() );
 
     silkscreen.BooleanSubtract( solderMask );
@@ -936,7 +935,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 /**
  * Generates a SHAPE_POLY_SET representing the plotted items on a layer.
  */
-void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLayer,
+void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                          bool aPlotFPText, bool aPlotReferences, bool aPlotValues )
 {
     int             maxError = aBoard->GetDesignSettings().m_MaxError;
@@ -1052,9 +1051,11 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                 else
                 {
                     if( inflate != 0 )
-                        item->TransformShapeToPolygon( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
+                        item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE,
+                                                       aPlotter->RenderSettings() );
 
-                    item->TransformShapeToPolygon( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
+                    item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError,
+                                                    ERROR_OUTSIDE, aPlotter->RenderSettings() );
                 }
             }
         }

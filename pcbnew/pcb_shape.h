@@ -170,8 +170,20 @@ public:
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false ) const override;
 
-    void TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                  int aError, ERROR_LOC aErrorLoc ) const override;
+    /**
+     * Convert the item shape to a polyset. Circles and arcs are approximated by segments; hatched
+     * fills and details (if any) will be included.
+     *
+     * @param aBuffer a buffer to store the polygon.
+     * @param aClearance the clearance around the pad.
+     * @param aError the maximum deviation from true circle.
+     * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
+     * @param aRenderSettings used to plot outlines with not solid segments like dashed lines.
+     * So it is not used by all BOARD_ITEMS. If null lines like dashed will be converted as SOLID
+     */
+    void TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                  int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                  KIGFX::RENDER_SETTINGS* aRenderSettings = nullptr ) const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 

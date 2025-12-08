@@ -451,6 +451,8 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
                                                 KIGFX::RENDER_SETTINGS* aRenderSettings ) const
 {
     // Convert graphic items (segments and texts) to a set of polygonal shapes
+    // aRenderSettings is used to draw lines when line style != LINE_STYLE::SOLID, so
+    // if nullptr line style will be ignored
     DrawBorders(
             [&aBuffer, aMaxError, aErrorLoc, aRenderSettings]( const VECTOR2I& ptA, const VECTOR2I& ptB,
                                                                const STROKE_PARAMS& stroke )
@@ -458,7 +460,7 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
                 int        lineWidth = stroke.GetWidth();
                 LINE_STYLE lineStyle = stroke.GetLineStyle();
 
-                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE || aRenderSettings == nullptr )
                     TransformOvalToPolygon( aBuffer, ptA, ptB, lineWidth, aMaxError, aErrorLoc );
                 else
                 {
@@ -484,6 +486,22 @@ void PCB_TABLE::TransformGraphicItemsToPolySet( SHAPE_POLY_SET& aBuffer, int aMa
     for( PCB_TABLECELL* cell : m_cells )
     {
         cell->TransformTextToPolySet( aBuffer, 0, aMaxError, ERROR_INSIDE );
+    }
+}
+
+
+void PCB_TABLE::TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                         int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
+                                         KIGFX::RENDER_SETTINGS* aRenderSettings ) const
+{
+    if( aClearance <= 0 )
+        TransformGraphicItemsToPolySet( aBuffer, aMaxError, aErrorLoc, aRenderSettings );
+    else
+    {
+        SHAPE_POLY_SET tmp;
+        TransformGraphicItemsToPolySet( tmp, aMaxError, aErrorLoc, aRenderSettings );
+        tmp.Inflate( aClearance, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, aMaxError );
+        aBuffer.Append( tmp );
     }
 }
 
