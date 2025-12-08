@@ -414,7 +414,7 @@ void PCB_TEXT::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // the position and justification are mirrored, but not the text itself
 
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
     {
         if( GetTextAngle() == ANGLE_VERTICAL )
             SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
