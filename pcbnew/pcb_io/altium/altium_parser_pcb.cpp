@@ -34,7 +34,16 @@
 #include "io/altium/altium_binary_parser.h"
 #include "io/altium/altium_props_utils.h"
 
-#define TRACE_MASK "altium"
+
+/**
+ * Flag to enable Altium importer logging.
+ *
+ * Use "KICAD_ALTIUM_IMPORT" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* traceAltiumImport = wxT( "KICAD_ALTIUM_IMPORT" );
+
 
 ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
 {
@@ -1070,16 +1079,16 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     if( remaining >= 103 )
     {
         VECTOR2I unk_vec = aReader.ReadVector2ISize();
-        wxLogTrace( TRACE_MASK, " Unk vec: %d, %d\n", unk_vec.x, unk_vec.y );
+        wxLogTrace( traceAltiumImport, " Unk vec: %d, %d\n", unk_vec.x, unk_vec.y );
 
         barcode_margin = aReader.ReadVector2ISize();
 
         int32_t unk32 = aReader.ReadKicadUnit();
-        wxLogTrace( TRACE_MASK, " Unk32: %d\n", unk32 );
+        wxLogTrace( traceAltiumImport, " Unk32: %d\n", unk32 );
 
         barcode_type = static_cast<ALTIUM_BARCODE_TYPE>( aReader.Read<uint8_t>() );
         uint8_t unk8 = aReader.Read<uint8_t>();
-        wxLogTrace( TRACE_MASK, " Unk8: %u\n", unk8 );
+        wxLogTrace( traceAltiumImport, " Unk8: %u\n", unk8 );
 
         barcode_inverted = aReader.Read<uint8_t>() != 0;
         fonttype = static_cast<ALTIUM_TEXT_TYPE>( aReader.Read<uint8_t>() );
@@ -1091,7 +1100,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         {
             uint8_t temp = aReader.Peek<uint8_t>();
             uint32_t temp32 = ii < 1 ? ALTIUM_PROPS_UTILS::ConvertToKicadUnit( aReader.Peek<uint32_t>() ) : 0;
-            wxLogTrace( TRACE_MASK, "2ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
+            wxLogTrace( traceAltiumImport, "2ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
             aReader.Skip( 1 );
         }
 
@@ -1105,7 +1114,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         {
             uint8_t temp = aReader.Peek<uint8_t>();
             uint32_t temp32 = ii < 3 ? ALTIUM_PROPS_UTILS::ConvertToKicadUnit( aReader.Peek<uint32_t>() ) : 0;
-            wxLogTrace( TRACE_MASK, "3ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
+            wxLogTrace( traceAltiumImport, "3ATEXT6 %zu:\t Byte:%u, Kicad:%u\n", ii, temp, temp32 );
             aReader.Skip( 1 );
         }
     }
