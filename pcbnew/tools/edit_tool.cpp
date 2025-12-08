@@ -2572,8 +2572,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     updateModificationPoint( selection );
     VECTOR2I mirrorPoint = selection.GetReferencePoint();
 
-    FLIP_DIRECTION flipDirection =
-            aEvent.IsAction( &PCB_ACTIONS::mirrorV ) ? FLIP_DIRECTION::TOP_BOTTOM : FLIP_DIRECTION::LEFT_RIGHT;
+    FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV ) ? FLIP_DIRECTION::TOP_BOTTOM
+                                                                            : FLIP_DIRECTION::LEFT_RIGHT;
 
     for( EDA_ITEM* item : selection )
     {
@@ -2585,30 +2585,48 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         // modify each object as necessary
         switch( item->Type() )
         {
-        case PCB_SHAPE_T: static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_SHAPE_T:
+            static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
-        case PCB_ZONE_T: static_cast<ZONE*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_ZONE_T:
+            static_cast<ZONE*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
         case PCB_FIELD_T:
-        case PCB_TEXT_T: static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_TEXT_T:
+            static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
-        case PCB_TEXTBOX_T: static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_TEXTBOX_T:
+            static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
         case PCB_TABLE_T:
             // JEY TODO: tables
             break;
 
-        case PCB_PAD_T: mirrorPad( *static_cast<PAD*>( item ), mirrorPoint, flipDirection ); break;
+        case PCB_PAD_T:
+            mirrorPad( *static_cast<PAD*>( item ), mirrorPoint, flipDirection );
+            break;
 
         case PCB_TRACE_T:
         case PCB_ARC_T:
-        case PCB_VIA_T: static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_VIA_T:
+            static_cast<PCB_TRACK*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
-        case PCB_GROUP_T: static_cast<PCB_GROUP*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_GROUP_T:
+            static_cast<PCB_GROUP*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
-        case PCB_GENERATOR_T: static_cast<PCB_GENERATOR*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_GENERATOR_T:
+            static_cast<PCB_GENERATOR*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
-        case PCB_POINT_T: static_cast<PCB_POINT*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_POINT_T:
+
+            static_cast<PCB_POINT*>( item )->Mirror( mirrorPoint, flipDirection ); break;
 
         default:
             // it's likely the commit object is wrong if you get here
