@@ -365,6 +365,7 @@ void PCB_SHAPE::UpdateHatching() const
                     {
                         if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_SHAPE_T )
                                 && item->GetLayer() == layer
+                                && !( item->Type() == PCB_FIELD_T && !static_cast<PCB_FIELD*>(item)->IsVisible() )
                                 && item->GetBoundingBox().Intersects( bbox ) )
                         {
                             knockoutItem( item );
