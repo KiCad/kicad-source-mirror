@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-02 11:00+0000\n"
+"PO-Revision-Date: 2025-12-09 21:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -29607,9 +29607,8 @@ msgstr ""
 "avviare gli editor di schemi e circuiti stampati."
 
 #: kicad/dialogs/template_default_html.h:137
-#, fuzzy
 msgid "Review libraries & settings"
-msgstr "Anteprima impostazioni"
+msgstr "Panoramica librerie e impostazioni"
 
 #: kicad/dialogs/template_default_html.h:137
 msgid ""
@@ -29624,9 +29623,8 @@ msgid "Add an info page later:"
 msgstr "Aggiungere una pagina informativa in seguito:"
 
 #: kicad/dialogs/template_default_html.h:142
-#, fuzzy
 msgid "Create a file at"
-msgstr "Creato file '%s'"
+msgstr "Crea un file su"
 
 #: kicad/dialogs/template_default_html.h:142
 msgid ""
@@ -29641,15 +29639,13 @@ msgid "You can copy styling from the default pages for consistency."
 msgstr "Per coerenza, è possibile copiare lo stile dalle pagine predefinite."
 
 #: kicad/dialogs/template_default_html.h:178
-#, fuzzy
 msgid "No Templates Found"
-msgstr "Non trovato"
+msgstr "Nessun modello trovato"
 
 #: kicad/dialogs/template_default_html.h:180
-#, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "La cartella selezionata non è un progetto Git."
+msgstr "La cartella modelli selezionata non contiene alcun modello di progetto."
 
 #: kicad/dialogs/template_default_html.h:183
 msgid "What to do:"
@@ -29759,9 +29755,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Importa file progetto EasyEDA"
 
 #: kicad/jobs_runner.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Lavori in esecuzione"
+msgstr "Lavoro in esecuzione %d: %s"
 
 #: kicad/jobs_runner.cpp:282
 msgid "Job successful"
@@ -29772,13 +29768,13 @@ msgid "Job failed"
 msgstr "Lavoro fallito"
 
 #: kicad/kicad.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a KiCad project file."
 msgstr ""
-"Il file \"%s\"\n"
-"non sembra essere un file progetto KiCad valido."
+"Il file '%s'\n"
+"non sembra essere un file progetto KiCad."
 
 #: kicad/kicad_cli.cpp:127
 msgid "Export GLB (binary GLTF)"
@@ -29809,14 +29805,12 @@ msgid "Export STL"
 msgstr "Esporta STL"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export STEPZ"
-msgstr "Esporta STEP"
+msgstr "Esporta STEPZ"
 
 #: kicad/kicad_cli.cpp:135
-#, fuzzy
 msgid "Export U3D"
-msgstr "Esporta DXF"
+msgstr "Esporta U3D"
 
 #: kicad/kicad_cli.cpp:161
 msgid "Export PS"
@@ -29835,16 +29829,15 @@ msgid "Project Files"
 msgstr "File progetto"
 
 #: kicad/kicad_manager_frame.cpp:238 kicad/tools/kicad_manager_actions.cpp:244
-#, fuzzy
 msgid "Local History"
-msgstr "File locale"
+msgstr "Cronologia locale"
 
 #: kicad/kicad_manager_frame.cpp:400
 msgid "PCM Updates Available"
 msgstr "Aggiornamento PCM disponibile"
 
 #: kicad/kicad_manager_frame.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) available"
 msgstr "%d aggiornamento(i) pacchetti disponibile"
 
@@ -29886,14 +29879,13 @@ msgid "Restoring '%s'"
 msgstr "Recupero '%s'"
 
 #: kicad/local_history_pane.cpp:121
-#, fuzzy
 msgid "Moments ago"
-msgstr "Commenti"
+msgstr "Istanti fa"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "minuti"
+msgstr "%d minuti fa"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
@@ -29901,9 +29893,8 @@ msgid "%d hours ago"
 msgstr "%d ore fa"
 
 #: kicad/local_history_pane.cpp:227
-#, fuzzy
 msgid "Restore Commit"
-msgstr "Ultimo commit"
+msgstr "Ripristina commit"
 
 #: kicad/menubar.cpp:63
 msgid "Clear Recent Projects"
@@ -29958,9 +29949,8 @@ msgid "Edit Advanced Config..."
 msgstr "Modifica configurazione avanzata..."
 
 #: kicad/menubar.cpp:174
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "Impostazioni modifica lavoro..."
+msgstr "Modifica impostazioni avanzate"
 
 #: kicad/menubar.cpp:224
 msgid "Edit Local File..."
@@ -29975,12 +29965,10 @@ msgid "Add Default Repository"
 msgstr "Aggiungi repository predefinito"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
-#, fuzzy
 msgid "Fully qualified repository url:"
-msgstr "Prego inserire url assoluto repository"
+msgstr "FQ url repository:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
 msgstr "Aggiungi repository"
 
@@ -30473,19 +30461,19 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr "%d di %d operazioni sono state iniziate ma senza successo."
 
 #: kicad/project_template.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "Impossibile aprire il percorso modelli!"
+msgstr "Impossibile aprire il percorso modelli '%s'"
 
 #: kicad/project_template.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "Impossibile creare la cartella '%s'"
+msgstr "Impossibile trovare la cartella 'meta' prevista in '%s'"
 
 #: kicad/project_template.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected meta HTML file at '%s'"
-msgstr "Impossibile trovare il file di libreria '%s'"
+msgstr "Impossibile trovare il file meta HTML previsto in '%s'"
 
 #: kicad/project_template.cpp:340
 #, c-format
@@ -30509,9 +30497,8 @@ msgid "Unable to rename file ... "
 msgstr "Impossibile rinominare il file ... "
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Permission denied"
-msgstr "permesso negato"
+msgstr "Permesso negato"
 
 #: kicad/project_tree_item.cpp:161
 #, c-format
@@ -30740,9 +30727,8 @@ msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Sicuri di voler rimuovere il versionamento Git da questo progetto?"
 
 #: kicad/project_tree_pane.cpp:1836
-#, fuzzy
 msgid "Failed to remove VCS"
-msgstr "Fallita rimozione cartella %s"
+msgstr "Fallita rimozione VCS"
 
 #: kicad/project_tree_pane.cpp:2080
 msgid "The selected directory is not a Git project."
@@ -30858,19 +30844,16 @@ msgid "Open project directory in file explorer"
 msgstr "Apri la cartella del progetto nell'esploratore file"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "Clona progetto da repository..."
+msgstr "Recupera progetto da cronologia locale..."
 
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "Recupera i file del progetto da un archivio zip"
+msgstr "Recupera i file del progetto dalla cronologia locale"
 
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "Mostra o nascondi questo strato"
+msgstr "Mostra o nascondi il pannello della cronologia locale"
 
 #: kicad/tools/kicad_manager_control.cpp:80
 msgid "Create New Project"
@@ -30951,7 +30934,7 @@ msgid "Save Project To"
 msgstr "Salva progetto su"
 
 #: kicad/tools/kicad_manager_control.cpp:632
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -30959,7 +30942,7 @@ msgid ""
 msgstr ""
 "La cartella '%s' non può essere creata.\n"
 "\n"
-"Assicurarsi di avere i permessi di scrittura e riprovare."
+"Assicurarsi di avere permessi sufficienti e riprovare."
 
 #: kicad/tools/kicad_manager_control.cpp:696
 msgid "Create (or open) a project to edit a schematic."
@@ -31000,9 +30983,8 @@ msgid "Success"
 msgstr "Successo"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
-msgstr "Annulla"
+msgstr "Annullato"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:540
@@ -31011,19 +30993,16 @@ msgid "File not found"
 msgstr "File non trovato"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Failed to load PDF"
-msgstr "Fallito caricamento di \"%s\"."
+msgstr "Fallito caricamento PDF"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "Impronte filtrate"
+msgstr "Stampa fallita"
 
 #: libs/kiplatform/include/printing.h:51
-#, fuzzy
 msgid "Unsupported"
-msgstr "%s non è supportato."
+msgstr "Non supportato"
 
 #: libs/kiplatform/include/printing.h:52
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:550
@@ -31287,9 +31266,9 @@ msgstr ""
 "Il foglio di disegno corrente è stato modificato. Salvare le modifiche?"
 
 #: pagelayout_editor/files.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "File \"%s\" caricato"
+msgstr "File '%s' caricato"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
@@ -31301,9 +31280,9 @@ msgid "Unable to load %s file"
 msgstr "Impossibile caricare il file %s"
 
 #: pagelayout_editor/files.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "File \"%s\" inserito"
+msgstr "File '%s' inserito"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
