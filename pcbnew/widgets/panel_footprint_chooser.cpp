@@ -354,6 +354,8 @@ void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
     if( !m_preview_ctrl || !m_preview_ctrl->IsInitialized() )
         return;
 
+    m_frame->GetToolManager()->CancelTool();
+
     LIB_ID lib_id = m_tree->GetSelectedLibId();
 
     if( !lib_id.IsValid() )
