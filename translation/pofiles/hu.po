@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-09 21:00+0000\n"
+"PO-Revision-Date: 2025-12-10 06:58+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -42089,13 +42089,11 @@ msgstr "Differenciális jelvezeték méretek"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
 #: pcbnew/router/router_tool.cpp:2897
-#, fuzzy
 msgid "Mode"
 msgstr "Mód"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
 #: pcbnew/router/router_tool.cpp:2891
-#, fuzzy
 msgid "Highlight collisions"
 msgstr "Ütközések kiemelés"
 
@@ -42105,7 +42103,6 @@ msgid "Free angle mode"
 msgstr "Bármilyen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
-#, fuzzy
 msgid "Allow DRC violations"
 msgstr "DRC szabálysértések megengedése"
 
@@ -42243,17 +42240,14 @@ msgid "Interactive Router Settings"
 msgstr "Interaktív huzalozó beállítások"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:216
-#, fuzzy
 msgid "Select reference item..."
-msgstr "Klikk referencia elemen..."
+msgstr "Referencia elem kiválasztása..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:233
-#, fuzzy
 msgid "Select reference point..."
-msgstr "Referenciapont megadása az áthelyezéshez…"
+msgstr "Referenciapont választása..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:242
-#, fuzzy
 msgid "Reference location: grid origin"
 msgstr "Referencia pont: rács origó"
 
@@ -42263,7 +42257,6 @@ msgid "Reference location: local coordinates origin"
 msgstr "Referencia pont: lokális koordináta-rendszer origó"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:252
-#, fuzzy
 msgid "<none selected>"
 msgstr "<nincs kiválasztva>"
 
@@ -42278,9 +42271,8 @@ msgid "Reference location: selected point (%s, %s)"
 msgstr "Referencia pont: rács origó"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
-#, fuzzy
 msgid "Reference item: <none selected>"
-msgstr "Referencia pont: <nincs kiválasztva>"
+msgstr "Referencia elem: <nincs kiválasztva>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:34
 #, fuzzy
@@ -42288,7 +42280,6 @@ msgid "Use Local Origin"
 msgstr "Lokális koordináta-rendszer origó használata"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:37
-#, fuzzy
 msgid "Use Grid Origin"
 msgstr "Rács origó használata"
 
@@ -42332,7 +42323,6 @@ msgid "Real drill"
 msgstr "Valós furat méret"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
-#, fuzzy
 msgid "Print one page per layer"
 msgstr "Minden réteg külön lapra"
 
@@ -42352,7 +42342,6 @@ msgid "Deselect all Copper Layers"
 msgstr "Vezető réteg kijelölések megszüntetése"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:281
-#, fuzzy
 msgid "Select all Layers"
 msgstr "Összes réteg kijelölése"
 
@@ -42855,12 +42844,10 @@ msgid "Edit Text Box Properties"
 msgstr "Szövegdoboz tulajdonságok"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
-#, fuzzy
 msgid "Border width:"
 msgstr "Keret vastagság:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:228
-#, fuzzy
 msgid "Border style:"
 msgstr "Keret stílus:"
 
