@@ -202,6 +202,10 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
 EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     Prj().GetProjectFile().m_Viewports3D = m_appearancePanel->GetUserViewports();
 
     m_canvas->SetEventDispatcher( nullptr );

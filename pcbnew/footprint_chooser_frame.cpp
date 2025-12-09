@@ -234,6 +234,10 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     // Work around assertion firing when we try to LockCtx on a hidden 3D canvas during dtor
     wxCloseEvent dummy;
     m_preview3DCanvas->Show();
