@@ -193,6 +193,10 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
 PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     // Restore the 3D viewer Render settings, that can be modified by the panel tools
     if( m_boardAdapter.m_Cfg )
         m_boardAdapter.m_Cfg->m_Render = m_initialRender;

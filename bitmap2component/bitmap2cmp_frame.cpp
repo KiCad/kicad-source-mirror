@@ -205,7 +205,12 @@ BITMAP2CMP_FRAME::BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 BITMAP2CMP_FRAME::~BITMAP2CMP_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     SaveSettings( config() );
+
     /*
      * This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed

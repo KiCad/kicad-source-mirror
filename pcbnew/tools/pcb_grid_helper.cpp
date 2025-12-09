@@ -177,6 +177,9 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
     m_viewSnapPoint.SetDrawAtZero( true );
     view->Add( &m_viewSnapPoint );
     view->SetVisible( &m_viewSnapPoint, false );
+
+    if( m_toolMgr->GetModel() )
+        static_cast<BOARD*>( aToolMgr->GetModel() )->AddListener( this );
 }
 
 
@@ -189,6 +192,9 @@ PCB_GRID_HELPER::~PCB_GRID_HELPER()
 
     view->Remove( &m_viewAxis );
     view->Remove( &m_viewSnapPoint );
+
+    if( m_toolMgr->GetModel() )
+        static_cast<BOARD*>( m_toolMgr->GetModel() )->RemoveListener( this );
 }
 
 

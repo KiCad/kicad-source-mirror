@@ -1723,21 +1723,25 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 
 void BOARD::DeleteAllFootprints()
 {
-    for( FOOTPRINT* footprint : m_footprints )
-        delete footprint;
+    std::vector<FOOTPRINT*> footprints;
+    std::copy( m_footprints.begin(), m_footprints.end(), std::back_inserter( footprints ) );
 
-    m_footprints.clear();
-    IncrementTimeStamp();
+    RemoveAll( { PCB_FOOTPRINT_T } );
+
+    for( FOOTPRINT* footprint : footprints )
+        delete footprint;
 }
 
 
 void BOARD::DetachAllFootprints()
 {
-    for( FOOTPRINT* footprint : m_footprints )
-        footprint->SetParent( nullptr );
+    std::vector<FOOTPRINT*> footprints;
+    std::copy( m_footprints.begin(), m_footprints.end(), std::back_inserter( footprints ) );
 
-    m_footprints.clear();
-    IncrementTimeStamp();
+    RemoveAll( { PCB_FOOTPRINT_T } );
+
+    for( FOOTPRINT* footprint : footprints )
+        footprint->SetParent( nullptr );
 }
 
 

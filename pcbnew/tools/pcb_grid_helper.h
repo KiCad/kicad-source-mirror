@@ -94,6 +94,12 @@ public:
         }
     }
 
+    virtual void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override
+    {
+        // This is a bulk-remove.  Simply clearing the snap item will be the most performant.
+        m_snapItem = std::nullopt;
+    }
+
     /**
      * Chooses the "best" snap anchor around the given point, optionally taking layers from
      * the reference item.  The reference item will not be snapped to (it is being dragged or
