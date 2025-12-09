@@ -2435,13 +2435,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
             auto gr_it = comp_graphics.find( src->refdes );
 
-            if( gr_it == comp_graphics.end() )
+            if( gr_it != comp_graphics.end() )
             {
-                continue;
-                //TODO: Error
-            }
-
-            for( auto& gr_ref : gr_it->second )
+                for( auto& gr_ref : gr_it->second )
             {
                 auto& graphic = gr_ref.second;
 
@@ -2608,6 +2604,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         continue;
                     }
                 }
+            }
             }
 
             auto pin_it = pins.find( src->refdes );
