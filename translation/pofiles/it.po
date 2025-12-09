@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-11-30 10:25+0000\n"
+"PO-Revision-Date: 2025-12-09 21:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -27650,9 +27650,9 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Importa file progetto EasyEDA"
 
 #: kicad/jobs_runner.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Lavori in esecuzione"
+msgstr "Lavoro in esecuzione %d: %s"
 
 #: kicad/jobs_runner.cpp:280
 msgid "Job successful"
