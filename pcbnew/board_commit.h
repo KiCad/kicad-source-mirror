@@ -43,6 +43,7 @@ class TOOL_BASE;
 #define SKIP_CONNECTIVITY  0x0008
 #define ZONE_FILL_OP       0x0010
 #define SKIP_TEARDROPS     0x0020
+#define SKIP_ENTERED_GROUP 0x0040
 
 class BOARD_COMMIT : public COMMIT
 {

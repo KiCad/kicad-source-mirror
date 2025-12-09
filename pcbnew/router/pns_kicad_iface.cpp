@@ -41,6 +41,7 @@
 #include <optional>
 #include <kidialog.h>
 #include <tools/pcb_tool_base.h>
+#include <tools/pcb_selection_tool.h>
 #include <tool/tool_manager.h>
 #include <settings/app_settings.h>
 
@@ -80,6 +81,8 @@
 
 typedef VECTOR2I::extended_type ecoord;
 
+// Keep this odd so that it can never match a "real" pointer
+#define ENTERED_GROUP_MAGIC_NUMBER ( (BOARD*)777 )
 
 struct CLEARANCE_CACHE_KEY
 {
@@ -2351,6 +2354,11 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
             if( m_itemGroups.contains( src ) )
                 m_replacementMap[src].push_back( newBoardItem );
         }
+        else
+        {
+            // This is a new item, which goes in the entered group (if any)
+            m_replacementMap[ENTERED_GROUP_MAGIC_NUMBER].push_back( newBoardItem );
+        }
     }
 
     return newBoardItem;
@@ -2373,6 +2381,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::Commit()
 {
+    PCB_SELECTION_TOOL*  selTool = m_tool->GetManager()->GetTool<PCB_SELECTION_TOOL>();
     std::set<FOOTPRINT*> processedFootprints;
 
     EraseView();
@@ -2396,9 +2405,15 @@ void PNS_KICAD_IFACE::Commit()
 
     for( const auto& [ src, items ] : m_replacementMap )
     {
-        if( auto it = m_itemGroups.find( src ); it != m_itemGroups.end() )
+        EDA_GROUP* group = nullptr;
+
+        if( src == ENTERED_GROUP_MAGIC_NUMBER )
+            group = selTool ? selTool->GetEnteredGroup() : nullptr;
+        else if( auto it = m_itemGroups.find( src ); it != m_itemGroups.end() )
+            group = it->second;
+
+        if( group )
         {
-            EDA_GROUP* group = it->second;
             m_commit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
 
             for( BOARD_ITEM* bi : items )
@@ -2409,7 +2424,7 @@ void PNS_KICAD_IFACE::Commit()
     m_itemGroups.clear();
     m_replacementMap.clear();
 
-    m_commit->Push( _( "Routing" ), m_commitFlags );
+    m_commit->Push( _( "Routing" ), m_commitFlags | SKIP_ENTERED_GROUP );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 

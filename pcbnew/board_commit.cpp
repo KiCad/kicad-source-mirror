@@ -179,8 +179,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     BOARD*              board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    PCB_GROUP*          enteredGroup = selTool ? selTool->GetEnteredGroup() : nullptr;
-
+    PCB_GROUP*          enteredGroup = selTool && !( aCommitFlags & SKIP_ENTERED_GROUP ) ? selTool->GetEnteredGroup()
+                                                                                         : nullptr;
     // Notification info
     PICKED_ITEMS_LIST   undoList;
     bool                itemsDeselected = false;
