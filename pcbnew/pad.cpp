@@ -3271,14 +3271,16 @@ static struct PAD_DESC
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PAD );
+        propMgr.AddTypeCast( new TYPE_CAST<PAD, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PAD, BOARD_CONNECTED_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( PAD ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         propMgr.Mask( TYPE_HASH( PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
         propMgr.Mask( TYPE_HASH( PAD ), TYPE_HASH( BOARD_ITEM ), _HKI( "Locked" ) );
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
-                    &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
-                    PROPERTY_DISPLAY::PT_DEGREE ) );
+                    &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees, PROPERTY_DISPLAY::PT_DEGREE ) );
 
         auto isCopperPad =
                 []( INSPECTABLE* aItem ) -> bool
