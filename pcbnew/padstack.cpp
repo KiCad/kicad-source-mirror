@@ -34,7 +34,7 @@
 
 IMPLEMENT_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );
 IMPLEMENT_ENUM_TO_WXANY( BACKDRILL_MODE );
-IMPLEMENT_ENUM_TO_WXANY( PADSTACK::UNCONNECTED_LAYER_MODE );
+IMPLEMENT_ENUM_TO_WXANY( UNCONNECTED_LAYER_MODE );
 
 
 PADSTACK::PADSTACK( BOARD_ITEM* aParent ) :
@@ -764,8 +764,8 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
                 CopperLayer( ALL_LAYERS ).thermal_spoke_angle.value().AsDegrees() );
     }
 
-    padstack.set_unconnected_layer_removal(
-            ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
+    padstack.set_unconnected_layer_removal( ToProtoEnum<UNCONNECTED_LAYER_MODE,
+                                            kiapi::board::types::UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
 
     if( FrontOuterLayers().has_solder_mask.has_value() )
     {

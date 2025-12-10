@@ -204,8 +204,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
                            ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "board.prototype_zone_fills", &m_PrototypeZoneFill, false ) );
+    m_params.emplace_back( new PARAM<bool>( "board.prototype_zone_fills", &m_PrototypeZoneFill, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "git.repo_username", &m_GitRepoUsername, "" ) );
 

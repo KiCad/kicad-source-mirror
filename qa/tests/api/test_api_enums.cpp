@@ -190,7 +190,7 @@ BOOST_AUTO_TEST_CASE( DrillShape )
 
 BOOST_AUTO_TEST_CASE( UnconnectedLayerRemoval )
 {
-    testEnums<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>();
+    testEnums<UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>();
 }
 
 BOOST_AUTO_TEST_CASE( ViaType )

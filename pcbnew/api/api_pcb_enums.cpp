@@ -249,20 +249,20 @@ ZONE_CONNECTION FromProtoEnum( types::ZoneConnectionStyle aValue )
 
 
 template<>
-types::UnconnectedLayerRemoval ToProtoEnum( PADSTACK::UNCONNECTED_LAYER_MODE aValue )
+types::UnconnectedLayerRemoval ToProtoEnum( UNCONNECTED_LAYER_MODE aValue )
 {
     switch( aValue )
     {
-    case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+    case UNCONNECTED_LAYER_MODE::KEEP_ALL:
         return types::UnconnectedLayerRemoval::ULR_KEEP;
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+    case UNCONNECTED_LAYER_MODE::REMOVE_ALL:
         return types::UnconnectedLayerRemoval::ULR_REMOVE;
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+    case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
         return types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END;
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+    case UNCONNECTED_LAYER_MODE::START_END_ONLY:
         return types::UnconnectedLayerRemoval::ULR_START_END_ONLY;
 
     default:
@@ -273,25 +273,25 @@ types::UnconnectedLayerRemoval ToProtoEnum( PADSTACK::UNCONNECTED_LAYER_MODE aVa
 
 
 template<>
-PADSTACK::UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval aValue )
+UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval aValue )
 {
     switch( aValue )
     {
     case types::UnconnectedLayerRemoval::ULR_UNKNOWN:
     case types::UnconnectedLayerRemoval::ULR_KEEP:
-        return PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+        return UNCONNECTED_LAYER_MODE::KEEP_ALL;
 
     case types::UnconnectedLayerRemoval::ULR_REMOVE:
-        return PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL;
+        return UNCONNECTED_LAYER_MODE::REMOVE_ALL;
 
     case types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END:
-        return PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+        return UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
 
     case types::UnconnectedLayerRemoval::ULR_START_END_ONLY:
-        return PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY;
+        return UNCONNECTED_LAYER_MODE::START_END_ONLY;
 
     default:
-        wxCHECK_MSG( false, PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,
+        wxCHECK_MSG( false, UNCONNECTED_LAYER_MODE::KEEP_ALL,
                      "Unhandled case in FromProtoEnum<types::UnconnectedLayerRemoval>");
     }
 }

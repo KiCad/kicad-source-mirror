@@ -56,8 +56,8 @@ BOOST_AUTO_TEST_CASE( PadsInSameFootprintDoNotForceInnerLayerFlashing )
     pad2->SetDrillSize( VECTOR2I( drill, drill ) );
     pad1->SetPosition( VECTOR2I( 0, 0 ) );
     pad2->SetPosition( VECTOR2I( 0, 0 ) );
-    pad1->SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
-    pad2->SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+    pad1->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+    pad2->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
     pad1->SetNet( net );
     pad2->SetNet( net );
 
@@ -100,8 +100,8 @@ BOOST_AUTO_TEST_CASE( PadsInDifferentFootprintsDoNotForceInnerLayerFlashing )
     pad2->SetDrillSize( VECTOR2I( drill, drill ) );
     pad1->SetPosition( VECTOR2I( 0, 0 ) );
     pad2->SetPosition( VECTOR2I( 0, 0 ) );
-    pad1->SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
-    pad2->SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+    pad1->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+    pad2->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
     pad1->SetNet( net );
     pad2->SetNet( net );
 

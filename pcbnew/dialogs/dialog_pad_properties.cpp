@@ -783,7 +783,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
     }
 
-    if( m_previewPad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
+    if( m_previewPad->GetCustomShapeInZoneOpt() == CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
         m_ZoneCustomPadShape->SetSelection( 1 );
     else
         m_ZoneCustomPadShape->SetSelection( 0 );
@@ -2121,9 +2121,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     // Define the way the clearance area is defined in zones.  Since all non-custom pad
     // shapes are convex to begin with, this really only makes any difference for custom
     // pad shapes.
-    aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
-                                   PADSTACK::CUSTOM_SHAPE_ZONE_MODE::OUTLINE :
-                                   PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
+    aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ? CUSTOM_SHAPE_ZONE_MODE::OUTLINE
+                                                                             : CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
 
     switch( aPad->GetAttribute() )
     {
@@ -2176,7 +2175,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     LSET padLayerMask = LSET();
     int  copperLayersChoice = m_rbCopperLayersSel->GetSelection();
 
-    aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+    aPad->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
     switch( m_padType->GetSelection() )
     {
@@ -2191,13 +2190,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         case 1:
             // Front, back and connected
             padLayerMask |= LSET::AllCuMask();
-            aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+            aPad->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
             break;
 
         case 2:
             // Connected only
             padLayerMask |= LSET::AllCuMask();
-            aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+            aPad->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_ALL );
             break;
 
         case 3:
@@ -2313,8 +2312,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( m_topPostMachining->GetSelection() )
     {
-    case 1: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-    case 2: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    case 1:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+    case 2:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
     default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
     }
 
@@ -2332,8 +2331,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( m_bottomPostMachining->GetSelection() )
     {
-    case 1: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-    case 2: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    case 1:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
+    case 2:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
     default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
     }
 
@@ -2388,9 +2387,7 @@ void DIALOG_PAD_PROPERTIES::onTopPostMachining( wxCommandEvent& event )
         m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
 
         if( m_topPostMachineSize2Binder.IsIndeterminate() || m_topPostMachineSize2Binder.GetDoubleValue() == 0 )
-        {
              m_topPostMachineSize2Binder.SetValue( "82" );
-        }
     }
     else if( selection == 2 ) // Counterbore
     {
@@ -2417,9 +2414,7 @@ void DIALOG_PAD_PROPERTIES::onBottomPostMachining( wxCommandEvent& event )
         m_bottomPostMachineSize2Units->SetLabel( _( "deg" ) );
 
         if( m_bottomPostMachineSize2Binder.IsIndeterminate() || m_bottomPostMachineSize2Binder.GetDoubleValue() == 0 )
-        {
              m_bottomPostMachineSize2Binder.SetValue( "82" );
-        }
     }
     else if( selection == 2 ) // Counterbore
     {

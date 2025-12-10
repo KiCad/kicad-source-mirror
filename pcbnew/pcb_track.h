@@ -649,14 +649,13 @@ public:
      */
     void SetRemoveUnconnected( bool aSet )
     {
-        m_padStack.SetUnconnectedLayerMode( aSet
-                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL
-                : PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+        m_padStack.SetUnconnectedLayerMode( aSet ? UNCONNECTED_LAYER_MODE::REMOVE_ALL
+                                                 : UNCONNECTED_LAYER_MODE::KEEP_ALL );
     }
 
     bool GetRemoveUnconnected() const
     {
-        return m_padStack.UnconnectedLayerMode() != PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+        return m_padStack.UnconnectedLayerMode() != UNCONNECTED_LAYER_MODE::KEEP_ALL;
     }
 
     /**
@@ -665,29 +664,27 @@ public:
      */
     void SetKeepStartEnd( bool aSet )
     {
-        m_padStack.SetUnconnectedLayerMode( aSet
-                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
-                : PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+        m_padStack.SetUnconnectedLayerMode( aSet ? UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+                                                 : UNCONNECTED_LAYER_MODE::REMOVE_ALL );
     }
 
     bool GetKeepStartEnd() const
     {
-        return m_padStack.UnconnectedLayerMode()
-               == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+        return m_padStack.UnconnectedLayerMode() == UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
     }
 
     bool ConditionallyFlashed( PCB_LAYER_ID aLayer ) const
     {
         switch( m_padStack.UnconnectedLayerMode() )
         {
-        case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+        case UNCONNECTED_LAYER_MODE::KEEP_ALL:
             return false;
 
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+        case UNCONNECTED_LAYER_MODE::REMOVE_ALL:
             return true;
 
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
-        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+        case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+        case UNCONNECTED_LAYER_MODE::START_END_ONLY:
             return aLayer != m_padStack.Drill().start && aLayer != m_padStack.Drill().end;
         }
 

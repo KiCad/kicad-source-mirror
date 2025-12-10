@@ -1955,7 +1955,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     {
         m_out->Print( "(options" );
 
-        if( aPad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
+        if( aPad->GetCustomShapeInZoneOpt() == CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
             m_out->Print( "(clearance convexhull)" );
         else
             m_out->Print( "(clearance outline)" );
@@ -2569,21 +2569,21 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
 
         switch( via->Padstack().UnconnectedLayerMode() )
         {
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+        case UNCONNECTED_LAYER_MODE::REMOVE_ALL:
             KICAD_FORMAT::FormatBool( m_out, "remove_unused_layers", true );
             KICAD_FORMAT::FormatBool( m_out, "keep_end_layers", false );
             break;
 
-        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+        case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
             KICAD_FORMAT::FormatBool( m_out, "remove_unused_layers", true );
             KICAD_FORMAT::FormatBool( m_out, "keep_end_layers", true );
             break;
 
-        case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+        case UNCONNECTED_LAYER_MODE::START_END_ONLY:
             KICAD_FORMAT::FormatBool( m_out, "start_end_only", true );
             break;
 
-        case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+        case UNCONNECTED_LAYER_MODE::KEEP_ALL:
             break;
         }
 

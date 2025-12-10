@@ -77,7 +77,7 @@ std::vector<int> VIA::UniqueShapeLayers() const
 
 bool VIA::ConnectsLayer( int aLayer ) const
 {
-    if( m_unconnectedLayerMode == PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY )
+    if( m_unconnectedLayerMode == UNCONNECTED_LAYER_MODE::START_END_ONLY )
         return aLayer == m_layers.Start() || aLayer == m_layers.End();
 
     return m_layers.Overlaps( aLayer );

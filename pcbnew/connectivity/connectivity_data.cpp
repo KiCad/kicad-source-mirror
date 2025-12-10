@@ -471,10 +471,10 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     const PAD* thisPad = static_cast<const PAD*>( aItem );
                     const PAD* otherPad = static_cast<const PAD*>( connectedItem );
 
-                    auto flashesConditionally = []( PADSTACK::UNCONNECTED_LAYER_MODE aMode )
+                    auto flashesConditionally = []( UNCONNECTED_LAYER_MODE aMode )
                             {
-                                return aMode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
-                                        || aMode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL;
+                                return aMode == UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+                                        || aMode == UNCONNECTED_LAYER_MODE::REMOVE_ALL;
                             };
 
                     if( flashesConditionally( thisPad->Padstack().UnconnectedLayerMode() )

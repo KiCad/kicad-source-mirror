@@ -202,10 +202,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                 switch( via->Padstack().UnconnectedLayerMode() )
                 {
                 default:
-                case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:                    return 0;
-                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
-                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:                  return 2;
-                case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:              return 3;
+                case UNCONNECTED_LAYER_MODE::KEEP_ALL:                    return 0;
+                case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
+                case UNCONNECTED_LAYER_MODE::REMOVE_ALL:                  return 2;
+                case UNCONNECTED_LAYER_MODE::START_END_ONLY:              return 3;
                 }
             };
 
@@ -1180,20 +1180,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 switch( m_annularRingsCtrl->GetSelection() )
                 {
                 case 0:
-                    via->Padstack().SetUnconnectedLayerMode(
-                            PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+                    via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL );
                     break;
                 case 1:
-                    via->Padstack().SetUnconnectedLayerMode(
-                            PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+                    via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
                     break;
                 case 2:
-                    via->Padstack().SetUnconnectedLayerMode(
-                            PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+                    via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_ALL );
                     break;
                 case 3:
-                    via->Padstack().SetUnconnectedLayerMode(
-                            PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
+                    via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::START_END_ONLY );
                     break;
                 default:
                     break;

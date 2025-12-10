@@ -6169,10 +6169,8 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
         {
         case T_anchor:
             token = NextTok();
-            // Custom shaped pads have a "anchor pad", which is the reference
-            // for connection calculations.
-            // Because this is an anchor, only the 2 very basic shapes are managed:
-            // circle and rect.
+            // Custom shaped pads have a "anchor pad", which is the reference for connection calculations.
+            // Because this is an anchor, only the 2 very basic shapes are managed: circle and rect.
             switch( token )
             {
                 case T_circle:
@@ -6184,8 +6182,7 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
                     break;
 
                 default:
-                    // Currently, because pad options is a moving target
-                    // just skip unknown keywords
+                    Expecting( "circle or rect" );
                     break;
             }
             NeedRIGHT();
@@ -6193,21 +6190,20 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
 
         case T_clearance:
             token = NextTok();
-            // Custom shaped pads have a clearance area that is the pad shape
-            // (like usual pads) or the convex hull of the pad shape.
+            // Custom shaped pads have a clearance area that is the pad shape (like usual pads) or the
+            // convex hull of the pad shape.
             switch( token )
             {
             case T_outline:
-                aPad->SetCustomShapeInZoneOpt( PADSTACK::CUSTOM_SHAPE_ZONE_MODE::OUTLINE );
+                aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::OUTLINE );
                 break;
 
             case T_convexhull:
-                aPad->SetCustomShapeInZoneOpt( PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
+                aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
                 break;
 
             default:
-                // Currently, because pad options is a moving target
-                // just skip unknown keywords
+                Expecting( "outline or convexhull" );
                 break;
             }
 
@@ -6215,11 +6211,7 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             break;
 
         default:
-            // Currently, because pad options is a moving target
-            // just skip unknown keywords
-            while( (token = NextTok() ) != T_RIGHT )
-            {}
-
+            Expecting( "anchor or clearance" );
             break;
         }
     }
@@ -7092,7 +7084,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
     // File format default is no-token == no-feature.
-    via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+    via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
     // Versions before 10.0 had no protection features other than tenting, so those features must
     // be interpreted as OFF in legacy boards, not as unspecified (aka: inherit from board stackup)
@@ -7184,7 +7176,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
         case T_start_end_only:
             if( parseMaybeAbsentBool( true ) )
-                via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY );
+                via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::START_END_ONLY );
 
             break;
 

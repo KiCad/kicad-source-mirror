@@ -447,19 +447,19 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
     if( GetAttribute() == PAD_ATTRIB::PTH && IsCopperLayer( aLayer ) )
     {
-        PADSTACK::UNCONNECTED_LAYER_MODE mode = m_padStack.UnconnectedLayerMode();
+        UNCONNECTED_LAYER_MODE mode = m_padStack.UnconnectedLayerMode();
 
-        if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL )
+        if( mode == UNCONNECTED_LAYER_MODE::KEEP_ALL )
             return true;
 
         // Plated through hole pads need copper on the top/bottom layers for proper soldering
         // Unless the user has removed them in the pad dialog
-        if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY )
+        if( mode == UNCONNECTED_LAYER_MODE::START_END_ONLY )
         {
             return aLayer == m_padStack.Drill().start || aLayer == m_padStack.Drill().end;
         }
 
-        if( mode == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+        if( mode == UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
             && IsExternalCopperLayer( aLayer ) )
         {
             return true;
@@ -3244,7 +3244,7 @@ static struct PAD_DESC
             if( bdMap.Choices().GetCount() == 0 )
             {
                 bdMap.Undefined( BACKDRILL_MODE::NO_BACKDRILL )
-                    .Map( BACKDRILL_MODE::NO_BACKDRILL,   _HKI( "No backdrill" ) )
+                    .Map( BACKDRILL_MODE::NO_BACKDRILL,     _HKI( "No backdrill" ) )
                     .Map( BACKDRILL_MODE::BACKDRILL_BOTTOM, _HKI( "Backdrill bottom" ) )
                     .Map( BACKDRILL_MODE::BACKDRILL_TOP,    _HKI( "Backdrill top" ) )
                     .Map( BACKDRILL_MODE::BACKDRILL_BOTH,   _HKI( "Backdrill both" ) );
@@ -3263,13 +3263,11 @@ static struct PAD_DESC
                  .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 
-        ENUM_MAP<PADSTACK::UNCONNECTED_LAYER_MODE>::Instance()
-                .Map( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,   _HKI( "All copper layers" ) )
-                .Map( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL, _HKI( "Connected layers only" ) )
-                .Map( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END,
-                      _HKI( "Front, back and connected layers" ) )
-                .Map( PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY,
-                      _HKI( "Start and end layers only" ) );
+        ENUM_MAP<UNCONNECTED_LAYER_MODE>::Instance()
+                .Map( UNCONNECTED_LAYER_MODE::KEEP_ALL,                    _HKI( "All copper layers" ) )
+                .Map( UNCONNECTED_LAYER_MODE::REMOVE_ALL,                  _HKI( "Connected layers only" ) )
+                .Map( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END, _HKI( "Front, back and connected layers" ) )
+                .Map( UNCONNECTED_LAYER_MODE::START_END_ONLY,              _HKI( "Start and end layers only" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PAD );
@@ -3592,7 +3590,7 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ), groupPad );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PADSTACK::UNCONNECTED_LAYER_MODE>( _HKI( "Copper Layers" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, UNCONNECTED_LAYER_MODE>( _HKI( "Copper Layers" ),
                     &PAD::SetUnconnectedLayerMode, &PAD::GetUnconnectedLayerMode ), groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),

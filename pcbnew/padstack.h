@@ -124,6 +124,22 @@ enum class PAD_PROP
 };
 
 
+enum class UNCONNECTED_LAYER_MODE
+{
+    KEEP_ALL,
+    START_END_ONLY,
+    REMOVE_ALL,
+    REMOVE_EXCEPT_START_AND_END
+};
+
+
+enum class CUSTOM_SHAPE_ZONE_MODE
+{
+    OUTLINE,
+    CONVEXHULL
+};
+
+
 /**
  * A PADSTACK defines the characteristics of a single or multi-layer pad, in the IPC sense of
  * the word.  This means that a PCB_PAD has a padstack, but also a PCB_VIA.  The padstack for
@@ -164,20 +180,6 @@ public:
     static constexpr PCB_LAYER_ID INNER_LAYERS = In1_Cu;
 
     ///! Whether or not to remove the copper shape for unconnected layers
-    enum class UNCONNECTED_LAYER_MODE
-    {
-        KEEP_ALL,
-        START_END_ONLY,
-        REMOVE_ALL,
-        REMOVE_EXCEPT_START_AND_END
-    };
-
-    enum class CUSTOM_SHAPE_ZONE_MODE
-    {
-        OUTLINE,
-        CONVEXHULL
-    };
-
     ///! The set of properties that define a pad's shape on a given layer
     struct SHAPE_PROPS
     {
@@ -556,7 +558,7 @@ private:
 
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );
-DECLARE_ENUM_TO_WXANY( PADSTACK::UNCONNECTED_LAYER_MODE );
+DECLARE_ENUM_TO_WXANY( UNCONNECTED_LAYER_MODE );
 DECLARE_ENUM_TO_WXANY( BACKDRILL_MODE );
 #endif
 

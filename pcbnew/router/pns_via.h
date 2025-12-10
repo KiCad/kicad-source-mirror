@@ -85,7 +85,7 @@ public:
         m_diameters[0] = 2; // Dummy value
         m_drill = 1;        // Dummy value
         m_viaType = VIATYPE::THROUGH;
-        m_unconnectedLayerMode = PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+        m_unconnectedLayerMode = UNCONNECTED_LAYER_MODE::KEEP_ALL;
         m_isFree = false;
         m_isVirtual = false;
         SetHoleLayers( PNS_LAYER_RANGE() );
@@ -115,7 +115,7 @@ public:
         m_secondaryPostMachining.reset();
         SetHole( HOLE::MakeCircularHole( m_pos, aDrill / 2, PNS_LAYER_RANGE() ) );
         m_viaType = aViaType;
-        m_unconnectedLayerMode = PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+        m_unconnectedLayerMode = UNCONNECTED_LAYER_MODE::KEEP_ALL;
         m_isFree = false;
         m_isVirtual = false;
     }
@@ -218,11 +218,8 @@ public:
     VIATYPE ViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
-    PADSTACK::UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
-    void SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE aMode )
-    {
-        m_unconnectedLayerMode = aMode;
-    }
+    UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
+    void SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE aMode ) { m_unconnectedLayerMode = aMode; }
 
     bool ConnectsLayer( int aLayer ) const;
 
@@ -344,21 +341,23 @@ public:
     virtual const std::string Format() const override;
 
 private:
-    STACK_MODE   m_stackMode;
+    STACK_MODE                     m_stackMode;
 
     /// May contain 1..n diameters depending on m_stackMode
-    std::map<int, int> m_diameters;
-    std::map<int, SHAPE_CIRCLE> m_shapes;
+    std::map<int, int>             m_diameters;
+    std::map<int, SHAPE_CIRCLE>    m_shapes;
 
-    int          m_drill;
-    VECTOR2I     m_pos;
-    VIATYPE      m_viaType;
-    PADSTACK::UNCONNECTED_LAYER_MODE m_unconnectedLayerMode;
-    bool         m_isFree;
-    HOLE*        m_hole;
-    PNS_LAYER_RANGE m_holeLayers;
+    int                            m_drill;
+    VECTOR2I                       m_pos;
+    VIATYPE                        m_viaType;
+    UNCONNECTED_LAYER_MODE         m_unconnectedLayerMode;
+    bool                           m_isFree;
+    HOLE*                          m_hole;
+    PNS_LAYER_RANGE                m_holeLayers;
+
     std::optional<PNS_LAYER_RANGE> m_secondaryHoleLayers;
-    std::optional<int> m_secondaryDrill;
+    std::optional<int>             m_secondaryDrill;
+
     std::optional<PAD_DRILL_POST_MACHINING_MODE> m_primaryPostMachining;
     std::optional<PAD_DRILL_POST_MACHINING_MODE> m_secondaryPostMachining;
 };

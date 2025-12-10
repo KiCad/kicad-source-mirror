@@ -112,7 +112,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     Padstack().Drill().end = B_Cu;
     SetDrillDefault();
 
-    m_padStack.SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+    m_padStack.SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
     // Padstack layerset is not used for vias right now
     m_padStack.LayerSet().reset();
@@ -1931,10 +1931,10 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
 
     switch( Padstack().UnconnectedLayerMode() )
     {
-    case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+    case UNCONNECTED_LAYER_MODE::KEEP_ALL:
         return true;
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+    case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
     {
         if( layer == Padstack().Drill().start || layer == Padstack().Drill().end )
             return true;
@@ -1943,11 +1943,11 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         break;
     }
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+    case UNCONNECTED_LAYER_MODE::REMOVE_ALL:
         // Check for removal below
         break;
 
-    case PADSTACK::UNCONNECTED_LAYER_MODE::START_END_ONLY:
+    case UNCONNECTED_LAYER_MODE::START_END_ONLY:
         return layer == Padstack().Drill().start || layer == Padstack().Drill().end;
     }
 
