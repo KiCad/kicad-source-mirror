@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
 "PO-Revision-Date: 2025-12-11 08:00+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
 "Language: uk\n"
@@ -51999,18 +51999,21 @@ msgstr "Починаючи з KiCad 10.0, побудова графіків HPGL
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не вдалося виконати першу фазу ініціалізації модуля Python '%s' через Python "
+"C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
-#, fuzzy
 msgid "Scripting init"
-msgstr "Консоль скриптів"
+msgstr "Ініціалізація сценаріїв"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не вдалося виконати другу фазу ініціалізації модуля Python '%s' через Python "
+"C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
@@ -57119,9 +57122,8 @@ msgid "Filled Area"
 msgstr "Залита область"
 
 #: pcbnew/zone.cpp:964
-#, fuzzy
 msgid "Outline Area"
-msgstr "Область з правилами"
+msgstr "Контур області"
 
 #: pcbnew/zone.cpp:976
 msgid "Corner Count"
