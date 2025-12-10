@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 05:47+0300\n"
+"POT-Creation-Date: 2025-12-10 10:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5165,6 +5165,20 @@ msgstr "Notifications"
 
 msgid "There are no notifications available"
 msgstr "There are no notifications available"
+
+#, c-format
+msgid ""
+"KiCad was unable to use '%s'.\n"
+"\n"
+"1. Disable 'Controlled folder access' in Windows settings or Group Policy\n"
+"2. Make sure no other antivirus software interferes with KiCad\n"
+"3. Make sure you have correct permissions set up"
+msgstr ""
+"KiCad was unable to use '%s'.\n"
+"\n"
+"1. Disable 'Controlled folder access' in Windows settings or Group Policy\n"
+"2. Make sure no other antivirus software interferes with KiCad\n"
+"3. Make sure you have correct permissions set up"
 
 msgid "No default editor found, you must choose one."
 msgstr "No default editor found, you must choose one."
@@ -12555,6 +12569,14 @@ msgid ""
 msgstr ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
+
+#, c-format
+msgid ""
+"Unable to read file '%s'.\n"
+"'%s' at line %d, column %d, offset %d"
+msgstr ""
+"Unable to read file '%s'.\n"
+"'%s' at line %d, column %d, offset %d"
 
 #, c-format
 msgid ""
@@ -33418,6 +33440,21 @@ msgstr "Multiple Layers"
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
 
+#, c-format
+msgid ""
+"Failed first phase initializing Python module '%s', through Python C API."
+msgstr ""
+"Failed first phase initializing Python module '%s', through Python C API."
+
+msgid "Scripting init"
+msgstr "Scripting init"
+
+#, c-format
+msgid ""
+"Failed second phase initializing Python module '%s', through Python C API."
+msgstr ""
+"Failed second phase initializing Python module '%s', through Python C API."
+
 msgid "Exception on python action plugin code"
 msgstr "Exception on python action plugin code"
 
@@ -36962,6 +36999,9 @@ msgstr "Fill Mode"
 
 msgid "Filled Area"
 msgstr "Filled Area"
+
+msgid "Outline Area"
+msgstr "Outline Area"
 
 msgid "Corner Count"
 msgstr "Corner Count"
