@@ -210,6 +210,11 @@ public:
     void CancelProposal();
 
     /**
+     * Clear all construction items.
+     */
+    void Clear();
+
+    /**
      * Check if all 'real' (non-null = constructed) the items in the batch are in the list of items
      * currently 'involved' in an active construction.
      */
@@ -304,6 +309,8 @@ public:
 
     void SetSnapGuideColors( const KIGFX::COLOR4D& aBase, const KIGFX::COLOR4D& aHighlight );
     void UpdateSnapGuides();
+
+    void Clear();
 
 public:
     void updateView() override;

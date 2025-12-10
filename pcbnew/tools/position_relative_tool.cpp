@@ -273,9 +273,18 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : controls.GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
-        controls.ForceCursorPosition( true, cursorPos );
         setPopupPosition();
+
+        if( !evt->IsActivate() && !evt->IsCancelInteractive() )
+        {
+            // If we are switching, the canvas may not be valid any more
+            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            controls.ForceCursorPosition( true, cursorPos );
+        }
+        else
+        {
+            grid.FullReset();
+        }
 
         if( evt->IsCancelInteractive() )
         {
