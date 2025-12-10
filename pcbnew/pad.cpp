@@ -3317,51 +3317,58 @@ static struct PAD_DESC
         const wxString groupBackdrill = _HKI( "Backdrill Properties" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_ATTRIB>( _HKI( "Pad Type" ),
-                    &PAD::SetAttribute, &PAD::GetAttribute ), groupPad );
+                    &PAD::SetAttribute, &PAD::GetAttribute ),
+                    groupPad );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Pad Shape" ),
-                    &PAD::SetFrontShape, &PAD::GetFrontShape ), groupPad )
+                    &PAD::SetFrontShape, &PAD::GetFrontShape ),
+                    groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
-                    &PAD::SetNumber, &PAD::GetNumber ), groupPad )
+                    &PAD::SetNumber, &PAD::GetNumber ),
+                    groupPad )
                 .SetAvailableFunc( isCopperPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
-                    &PAD::SetPinFunction, &PAD::GetPinFunction ), groupPad )
+                    &PAD::SetPinFunction, &PAD::GetPinFunction ),
+                    groupPad )
                 .SetIsHiddenFromLibraryEditors();
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
-                    &PAD::SetPinType, &PAD::GetPinType ), groupPad )
+                    &PAD::SetPinType, &PAD::GetPinType ),
+                    groupPad )
                 .SetIsHiddenFromLibraryEditors()
                 .SetChoicesFunc( []( INSPECTABLE* aItem )
-                                 {
-                                     wxPGChoices choices;
+                    {
+                        wxPGChoices choices;
 
-                                     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
-                                         choices.Add( GetCanonicalElectricalTypeName( (ELECTRICAL_PINTYPE) ii ) );
+                        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+                            choices.Add( GetCanonicalElectricalTypeName( (ELECTRICAL_PINTYPE) ii ) );
 
-                                     return choices;
-                                 } );
+                        return choices;
+                    } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
-                    &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
-                    &PAD::SetSizeY, &PAD::GetSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetSizeY, &PAD::GetSizeY, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                       {
-                                           // Custom padstacks can't have size modified through panel
-                                           if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
-                                               return false;
+                    {
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        {
+                            // Custom padstacks can't have size modified through panel
+                            if( pad->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                                return false;
 
-                                           // Circle pads have no usable y-size
-                                           return pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CIRCLE;
-                                       }
+                            // Circle pads have no usable y-size
+                            return pad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CIRCLE;
+                        }
 
-                                       return true;
-                                   } );
+                        return true;
+                    } );
 
         const auto hasRoundRadius =
                 []( INSPECTABLE* aItem ) -> bool
@@ -3379,7 +3386,8 @@ static struct PAD_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
-                    &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio ), groupPad )
+                    &PAD::SetFrontRoundRectRadiusRatio, &PAD::GetFrontRoundRectRadiusRatio ),
+                    groupPad )
                 .SetAvailableFunc( hasRoundRadius );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Corner Radius Size" ),
@@ -3392,25 +3400,28 @@ static struct PAD_DESC
                 .SetWriteableFunc( padCanHaveHole );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
-                    &PAD::SetDrillSizeX, &PAD::GetDrillSizeX, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetDrillSizeX, &PAD::GetDrillSizeX, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size Y" ),
-                    &PAD::SetDrillSizeY, &PAD::GetDrillSizeY, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetDrillSizeY, &PAD::GetDrillSizeY, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       // Circle holes have no usable y-size
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                           return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
+                    {
+                        // Circle holes have no usable y-size
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                            return pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE;
 
-                                       return true;
-                                   } );
+                        return true;
+                    } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_POST_MACHINING_MODE>( _HKI( "Top Post-machining" ),
-                    &PAD::SetFrontPostMachiningMode, &PAD::GetFrontPostMachiningMode ), groupPostMachining )
+                    &PAD::SetFrontPostMachiningMode, &PAD::GetFrontPostMachiningMode ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3422,7 +3433,8 @@ static struct PAD_DESC
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Post-machining Size" ),
-                    &PAD::SetFrontPostMachiningSize, &PAD::GetFrontPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                    &PAD::SetFrontPostMachiningSize, &PAD::GetFrontPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3431,13 +3443,16 @@ static struct PAD_DESC
                             return false;
 
                         auto mode = pad->GetFrontPostMachining();
-                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
                     }
+
                     return false;
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Counterbore Depth" ),
-                    &PAD::SetFrontPostMachiningDepth, &PAD::GetFrontPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                    &PAD::SetFrontPostMachiningDepth, &PAD::GetFrontPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3448,11 +3463,13 @@ static struct PAD_DESC
                         auto mode = pad->GetFrontPostMachining();
                         return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
                     }
+
                     return false;
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Top Countersink Angle" ),
-                    &PAD::SetFrontPostMachiningAngle, &PAD::GetFrontPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ), groupPostMachining )
+                    &PAD::SetFrontPostMachiningAngle, &PAD::GetFrontPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3463,11 +3480,13 @@ static struct PAD_DESC
                         auto mode = pad->GetFrontPostMachining();
                         return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
                     }
+
                     return false;
                 } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_DRILL_POST_MACHINING_MODE>( _HKI( "Bottom Post-machining" ),
-                    &PAD::SetBackPostMachiningMode, &PAD::GetBackPostMachiningMode ), groupPostMachining )
+                    &PAD::SetBackPostMachiningMode, &PAD::GetBackPostMachiningMode ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3479,7 +3498,8 @@ static struct PAD_DESC
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Post-machining Size" ),
-                    &PAD::SetBackPostMachiningSize, &PAD::GetBackPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                    &PAD::SetBackPostMachiningSize, &PAD::GetBackPostMachiningSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3488,13 +3508,16 @@ static struct PAD_DESC
                             return false;
 
                         auto mode = pad->GetBackPostMachining();
-                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                        return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                || mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
                     }
+
                     return false;
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Counterbore Depth" ),
-                    &PAD::SetBackPostMachiningDepth, &PAD::GetBackPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ), groupPostMachining )
+                    &PAD::SetBackPostMachiningDepth, &PAD::GetBackPostMachiningDepth, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3505,11 +3528,13 @@ static struct PAD_DESC
                         auto mode = pad->GetBackPostMachining();
                         return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
                     }
+
                     return false;
                 } );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Bottom Countersink Angle" ),
-                    &PAD::SetBackPostMachiningAngle, &PAD::GetBackPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ), groupPostMachining )
+                    &PAD::SetBackPostMachiningAngle, &PAD::GetBackPostMachiningAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    groupPostMachining )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) {
                     if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
@@ -3520,6 +3545,7 @@ static struct PAD_DESC
                         auto mode = pad->GetBackPostMachining();
                         return mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
                     }
+
                     return false;
                 } );
 
@@ -3527,84 +3553,97 @@ static struct PAD_DESC
                     &PAD::SetBackdrillMode, &PAD::GetBackdrillMode ), groupBackdrill );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Bottom Backdrill Size" ),
-                    &PAD::SetBottomBackdrillSize, &PAD::GetBottomBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ), groupBackdrill )
+                    &PAD::SetBottomBackdrillSize, &PAD::GetBottomBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupBackdrill )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                       {
-                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
-                                               return false;
+                    {
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        {
+                            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                return false;
 
-                                           auto mode = pad->GetBackdrillMode();
-                                           return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
-                                       }
-                                       return false;
-                                   } );
+                            auto mode = pad->GetBackdrillMode();
+                            return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                        }
+
+                        return false;
+                    } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Bottom Backdrill Must-Cut" ),
-                    &PAD::SetBottomBackdrillLayer, &PAD::GetBottomBackdrillLayer ), groupBackdrill )
+                    &PAD::SetBottomBackdrillLayer, &PAD::GetBottomBackdrillLayer ),
+                    groupBackdrill )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                       {
-                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
-                                               return false;
+                    {
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        {
+                            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                return false;
 
-                                           auto mode = pad->GetBackdrillMode();
-                                           return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
-                                       }
-                                       return false;
-                                   } );
+                            auto mode = pad->GetBackdrillMode();
+                            return mode == BACKDRILL_MODE::BACKDRILL_BOTTOM || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                        }
+
+                        return false;
+                    } );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Top Backdrill Size" ),
-                    &PAD::SetTopBackdrillSize, &PAD::GetTopBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ), groupBackdrill )
+                    &PAD::SetTopBackdrillSize, &PAD::GetTopBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupBackdrill )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                       {
-                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
-                                               return false;
+                    {
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        {
+                            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                return false;
 
-                                           auto mode = pad->GetBackdrillMode();
-                                           return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
-                                       }
-                                       return false;
-                                   } );
+                            auto mode = pad->GetBackdrillMode();
+                            return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                        }
+
+                        return false;
+                    } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PCB_LAYER_ID>( _HKI( "Top Backdrill Must-Cut" ),
-                    &PAD::SetTopBackdrillLayer, &PAD::GetTopBackdrillLayer ), groupBackdrill )
+                    &PAD::SetTopBackdrillLayer, &PAD::GetTopBackdrillLayer ),
+                    groupBackdrill )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                                       {
-                                           if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
-                                               return false;
+                    {
+                        if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                        {
+                            if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
+                                return false;
 
-                                           auto mode = pad->GetBackdrillMode();
-                                           return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
-                                       }
-                                       return false;
-                                   } );
+                            auto mode = pad->GetBackdrillMode();
+                            return mode == BACKDRILL_MODE::BACKDRILL_TOP || mode == BACKDRILL_MODE::BACKDRILL_BOTH;
+                        }
+
+                        return false;
+                    } );
 
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
-                    &PAD::SetProperty, &PAD::GetProperty ), groupPad );
+                    &PAD::SetProperty, &PAD::GetProperty ),
+                    groupPad );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, UNCONNECTED_LAYER_MODE>( _HKI( "Copper Layers" ),
-                    &PAD::SetUnconnectedLayerMode, &PAD::GetUnconnectedLayerMode ), groupPad );
+                    &PAD::SetUnconnectedLayerMode, &PAD::GetUnconnectedLayerMode ),
+                    groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
-                    &PAD::SetPadToDieLength, &PAD::GetPadToDieLength, PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                    &PAD::SetPadToDieLength, &PAD::GetPadToDieLength, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupPad )
                 .SetAvailableFunc( isCopperPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Delay" ),
-                    &PAD::SetPadToDieDelay, &PAD::GetPadToDieDelay, PROPERTY_DISPLAY::PT_TIME ), groupPad )
+                    &PAD::SetPadToDieDelay, &PAD::GetPadToDieDelay, PROPERTY_DISPLAY::PT_TIME ),
+                    groupPad )
                 .SetAvailableFunc( isCopperPad );
 
         const wxString groupOverrides = _HKI( "Overrides" );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Clearance Override" ),
-                    &PAD::SetLocalClearance, &PAD::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
+                    &PAD::SetLocalClearance, &PAD::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
                     &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin, PROPERTY_DISPLAY::PT_SIZE ),
@@ -3616,25 +3655,30 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio,
-                    PROPERTY_DISPLAY::PT_RATIO ), groupOverrides );
+                    PROPERTY_DISPLAY::PT_RATIO ),
+                    groupOverrides );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
-                    &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ), groupOverrides );
+                    &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ),
+                    groupOverrides );
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Spoke Width" ),
                     &PAD::SetLocalThermalSpokeWidthOverride, &PAD::GetLocalThermalSpokeWidthOverride,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> );
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
-                    PROPERTY_DISPLAY::PT_DEGREE ), groupOverrides );
+                    PROPERTY_DISPLAY::PT_DEGREE ),
+                    groupOverrides );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetLocalThermalGapOverride, &PAD::GetLocalThermalGapOverride,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupOverrides )
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         // TODO delta, drill shape offset, layer set
