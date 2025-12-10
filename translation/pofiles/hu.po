@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-10 06:58+0000\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -43043,9 +43043,9 @@ msgid "<none selected>"
 msgstr "<nincs kiválasztva>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "%s referencia"
+msgstr "Referencia elem: %s"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:262
 #, fuzzy, c-format
@@ -43057,9 +43057,8 @@ msgid "Reference item: <none selected>"
 msgstr "Referencia elem: <nincs kiválasztva>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:34
-#, fuzzy
 msgid "Use Local Origin"
-msgstr "Lokális koordináta-rendszer origó használata"
+msgstr "Lokális origó használata"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:37
 msgid "Use Grid Origin"
@@ -43114,7 +43113,6 @@ msgid "Print board edges on all pages"
 msgstr "Panel széleinek nyomtatása"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:279
-#, fuzzy
 msgid "Select all Copper Layers"
 msgstr "Összes vezető réteg kiválasztása"
 
@@ -43128,14 +43126,12 @@ msgid "Select all Layers"
 msgstr "Összes réteg kijelölése"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:282
-#, fuzzy
 msgid "Deselect all Layers"
-msgstr "Az összes réteg kijelölés megszüntetése"
+msgstr "Összes rétegkijelölés megszüntetése"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Mappa kiválasztása"
+msgstr "Gyártó kiválasztása"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
 #, fuzzy, c-format
