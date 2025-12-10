@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-08 15:50-0800\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -665,44 +665,36 @@ msgid "Show user defined layer 3"
 msgstr "顯示使用者定義層 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "使用者定義層 4"
+msgstr "顯示使用者定義層 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "使用者定義層 5"
+msgstr "顯示使用者定義層 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "使用者定義層 6"
+msgstr "顯示使用者定義層 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "使用者定義層 7"
+msgstr "顯示使用者定義層 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "使用者定義層 8"
+msgstr "顯示使用者定義層 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "使用者定義層 9"
+msgstr "顯示使用者定義層 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 #, fuzzy
@@ -715,14 +707,12 @@ msgid "Show user defined layer 13"
 msgstr "使用者定義層 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
 #, fuzzy
@@ -735,24 +725,20 @@ msgid "Show user defined layer 17"
 msgstr "使用者定義層 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "使用者定義層 1"
+msgstr "顯示使用者定義層 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
 #, fuzzy
@@ -760,9 +746,8 @@ msgid "Show user defined layer 22"
 msgstr "使用者定義層 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
 #, fuzzy
@@ -775,9 +760,8 @@ msgid "Show user defined layer 25"
 msgstr "使用者定義層 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
 #, fuzzy
@@ -785,9 +769,8 @@ msgid "Show user defined layer 27"
 msgstr "使用者定義層 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "使用者定義層 2"
+msgstr "顯示使用者定義層 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
 #, fuzzy
@@ -800,14 +783,12 @@ msgid "Show user defined layer 30"
 msgstr "使用者定義層 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
 #, fuzzy
@@ -825,19 +806,16 @@ msgid "Show user defined layer 35"
 msgstr "使用者定義層 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "使用者定義層 3"
+msgstr "顯示使用者定義層 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
 #, fuzzy
@@ -860,9 +838,8 @@ msgid "Show user defined layer 42"
 msgstr "使用者定義層 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "使用者定義層 4"
+msgstr "顯示使用者定義層 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
 #, fuzzy
