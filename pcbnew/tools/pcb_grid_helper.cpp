@@ -1493,6 +1493,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         case PCB_FOOTPRINT_T:
         {
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
+            bool       footprintVisible = checkVisibility( footprint );
 
             for( PAD* pad : footprint->Pads() )
             {
@@ -1525,6 +1526,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         } );
             }
 
+            if( !footprintVisible )
+                break;
+
             if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
                 break;
 
@@ -1534,8 +1538,13 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             VECTOR2I center = footprint->GetBoundingBox( false ).Centre();
             VECTOR2I grid( GetGrid() );
 
-            if( view->IsLayerVisible( LAYER_ANCHOR ) )
+            // Don't snap to invisible anchors, which may be invisible because anchors are off,
+            // or the footprint is on a layer not currently visible.
+            if( view->IsLayerVisible( LAYER_ANCHOR )
+                && footprint->ViewGetLOD( LAYER_ANCHOR, view ) < view->GetScale() )
+            {
                 addAnchor( position, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
+            }
 
             if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
                 addAnchor( center, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
