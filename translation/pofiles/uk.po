@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-11-08 08:29+0000\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -4485,17 +4485,15 @@ msgstr "Попередження: Дублювання унікальних ім
 #: common/dialogs/panel_design_block_lib_table.cpp:682
 #: eeschema/dialogs/panel_sym_lib_table.cpp:445
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
-msgstr "Бібліотека з псевдонімом '%s' вже існує."
+msgstr "Елемент з псевдонімом '%s' вже існує."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:683
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:615
-#, fuzzy
 msgid "One of the nicknames will need to be changed."
-msgstr ""
-"Після додавання цієї бібліотеки потрібно буде змінити один із псевдонімів."
+msgstr "Один із псевдонімім необхідно змінити."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:700
 #: common/dialogs/panel_embedded_files.cpp:423
@@ -4515,14 +4513,12 @@ msgstr "Додати все одно"
 #: common/dialogs/panel_design_block_lib_table.cpp:775
 #: eeschema/dialogs/panel_sym_lib_table.cpp:711
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:793
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
 "Помилка збереження таблиці глобальної бібліотеки:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:776
 #: common/dialogs/panel_design_block_lib_table.cpp:795
@@ -4543,11 +4539,12 @@ msgstr "Помилка збереження файлу"
 #: common/dialogs/panel_design_block_lib_table.cpp:794
 #: eeschema/dialogs/panel_sym_lib_table.cpp:730
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Помилка при збереженні таблиці бібліотеки проекту."
+msgstr ""
+"Помилка при збереженні таблиці бібліотеки проекту.\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 msgid "Design Block Libraries"
@@ -6252,9 +6249,8 @@ msgid "Field Name Templates"
 msgstr "Шаблони імен полів"
 
 #: common/eda_base_frame.cpp:1375
-#, fuzzy
 msgid "Data Sources"
-msgstr "Назва джерела даних"
+msgstr "Джерело даних"
 
 #: common/eda_base_frame.cpp:1376 eeschema/sim/simulator_frame.cpp:117
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
@@ -8689,48 +8685,40 @@ msgid "Error loading library '%s'"
 msgstr "Помилка завантаження бібліотеки '%s'"
 
 #: common/lib_table_grid_tricks.cpp:93
-#, fuzzy
 msgid "Edit Options"
-msgstr "Параметри редагування"
+msgstr "Редагування параметрів"
 
 #: common/lib_table_grid_tricks.cpp:94
 msgid "Edit options for this library entry"
 msgstr "Редагувати параметри для цього запису бібліотеки"
 
 #: common/lib_table_grid_tricks.cpp:124
-#, fuzzy
 msgid "Activate Selected"
-msgstr "Активувати виділене"
+msgstr "Активувати вибране"
 
 #: common/lib_table_grid_tricks.cpp:127
-#, fuzzy
 msgid "Deactivate Selected"
-msgstr "Деактивувати виділене"
+msgstr "Деактивувати вибране"
 
 #: common/lib_table_grid_tricks.cpp:132
-#, fuzzy
 msgid "Set Visible Flag"
-msgstr "Встановити видимий шар"
+msgstr "Встановити прапор видимості"
 
 #: common/lib_table_grid_tricks.cpp:135
-#, fuzzy
 msgid "Unset Visible Flag"
-msgstr "Зняти видимий шар"
+msgstr "Зняти прапор видимості"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
-msgstr "Редагувати налаштування завдання..."
+msgstr "Редагувати налаштування"
 
 #: common/lib_table_grid_tricks.cpp:156
-#, fuzzy
 msgid "Open Library Table"
-msgstr "Додати до таблиці бібліотек"
+msgstr "Відкрити таблицю бібліотеки"
 
 #: common/lib_table_grid_tricks.cpp:480
-#, fuzzy
 msgid "Library must have a nickname."
-msgstr "Шар повинен мати ім'я."
+msgstr "Бібліотека повинна мати псевдонім."
 
 #: common/lib_table_grid_tricks.cpp:482
 #, c-format
@@ -8747,19 +8735,16 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Кілька бібліотек не можуть використовувати однаковий псевдонім ('%s')."
 
 #: common/lib_table_notebook_panel.cpp:100
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Помилка збереження таблиці бібліотеки:\n"
+"Помилка при збереженні вкладеної таблиці бібліотек:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Створити порожню глобальну таблицю бібліотек %s"
+msgstr "Зберегти зміни вкладеної таблиці бібліотек?"
 
 #: common/lib_tree_model_adapter.cpp:142 common/lib_tree_model_adapter.cpp:145
 #: common/lib_tree_model_adapter.cpp:163 common/lib_tree_model_adapter.cpp:165
@@ -8839,14 +8824,12 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Невідповідність типів між %lf і '%s'"
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
-#, fuzzy
 msgid "Edit settings"
-msgstr "Редагувати розширені налаштування"
+msgstr "Редагувати налаштування"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Open library table"
-msgstr "Бібліотечний стіл Footprint"
+msgstr "Відкрити таблицю бібліотеки"
 
 #: common/libraries/lib_table_grid_data_model.cpp:335
 msgid "Nickname"
@@ -9152,6 +9135,13 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad не зміг використати '%s'.\n"
+"\n"
+"1. Вимкніть «Контроль доступу до папок» (Controlled folder access) у "
+"налаштуваннях Windows або в груповій політиці\n"
+"2. Переконайтеся, що інше антивірусне програмне забезпечення не заважає "
+"роботі KiCad\n"
+"3. Перевірте, що у вас правильно налаштовані дозволи"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
