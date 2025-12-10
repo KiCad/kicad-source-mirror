@@ -731,6 +731,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
             }
         }
 
+        adapter->LoadOne( libName );
         OnDataChanged();
     }
 
