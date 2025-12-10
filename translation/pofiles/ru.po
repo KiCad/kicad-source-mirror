@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-10-27 00:02+0000\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8515,6 +8515,12 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad не удалось использовать '%s'.\n"
+"\n"
+"1. Отключите функцию \"Контролируемый доступ к папкам\" в настройках Windows "
+"или в редакторе групповой политики (Group Policy).\n"
+"2. Убедитесь, что другие антивирусные программы не блокируют работу KiCad.\n"
+"3. Убедитесь, что у вас настроены нужные права доступа"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
@@ -17740,7 +17746,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:413
 msgid "Do not show this dialog again."
-msgstr "Не показывать снова"
+msgstr "Не показывать снова."
 
 #: eeschema/files-io.cpp:442
 #, c-format
@@ -19220,11 +19226,13 @@ msgstr ""
 "Eagle формата XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Недопустимый слой padstack '%s' в файле '%s' в строке %d, смещение %d."
+msgstr ""
+"Не удалось прочитать файл '%s'.\n"
+"'%s' в строке %d, столбец %d, смещение %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -26070,7 +26078,7 @@ msgstr "Сбросить все параметры на странице до з
 
 #: include/widgets/wx_infobar.h:119
 msgid "Hide this message."
-msgstr "Скрыть сообщение"
+msgstr "Скрыть сообщение."
 
 #: include/wxstream_helper.h:49
 msgid "Failed to output data"
@@ -30676,7 +30684,7 @@ msgstr "Диаметр конт. пл. перех. отв.:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Диаметр конт. пл. вокруг перех. отв."
+msgstr "Диаметр конт. пл. вокруг перех. отв. (annular ring)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -33917,6 +33925,7 @@ msgid ""
 "Outward: <----->"
 msgstr ""
 "Выбор направления размерных стрелок\n"
+"Автоматически: Зависит от положения текста.\n"
 "Внутрь:    >-----<\n"
 "Наружу: <----->"
 
@@ -35490,9 +35499,8 @@ msgid "Footprint Report"
 msgstr "Отчёт о посад. местах"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Найти текст"
+msgstr "Обычный текст"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41925,9 +41933,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Проверка зазоров медной графики..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Проверка зазоров медной графики..."
+msgstr "Проверка зазоров отверстий медной графики..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -47227,18 +47234,21 @@ msgstr "Ошибка загрузки библиотек посад. мест п
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не удалось выполнить первую фазу инициализации Python-модуля '%s' через "
+"Python C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Консоль скриптов"
+msgstr "Инициализация скриптов"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не удалось выполнить вторую фазу инициализации Python-модуля '%s' через "
+"Python C API."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -52008,9 +52018,8 @@ msgid "Filled Area"
 msgstr "Площадь заливки"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Область запрета"
+msgstr "Площадь контура"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
