@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,7 +124,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 
 	fgSizer3->Add( bSizer3, 1, wxEXPAND, 5 );
 
-	m_filterByViaSize = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter vias by size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filterByViaSize = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter vias by diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_filterByViaSize, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer31;
