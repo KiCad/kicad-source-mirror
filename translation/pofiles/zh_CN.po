@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-04 23:00+0000\n"
+"PO-Revision-Date: 2025-12-10 06:58+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -7434,7 +7434,7 @@ msgstr "目前不支持 DXF 测量标注。"
 
 #: common/import_gfx/dxf_import_plugin.h:516
 msgid "DXF hatches not currently supported."
-msgstr "目前不支持 DXF 网格。"
+msgstr "目前不支持 DXF 栅格。"
 
 #: common/import_gfx/dxf_import_plugin.h:524
 msgid "DXF traces not currently supported."
@@ -32382,6 +32382,7 @@ msgstr "外框显示:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:862
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
+#, fuzzy
 msgid "Hatched"
 msgstr "影线"
 
@@ -32389,6 +32390,7 @@ msgstr "影线"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
+#, fuzzy
 msgid "Fully hatched"
 msgstr "完整阴影"
 
@@ -32396,6 +32398,7 @@ msgstr "完整阴影"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:65
+#, fuzzy
 msgid "Outline hatch pitch:"
 msgstr "外框影线间距:"
 
@@ -37290,7 +37293,7 @@ msgstr "为规则域设置一个唯一的名称, 以便在 DRC 规则中使用"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr "用于网格区域的平行线距离"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -41400,7 +41403,7 @@ msgstr "%s 个 '死铜移除设置' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:552
 #, c-format
 msgid "%s minimum island size setting differs."
-msgstr "%s 个 '最小死铜大小设置' 不一致。"
+msgstr "%s 个 '最小死铜面积设置' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:555
 #, c-format
@@ -41425,7 +41428,7 @@ msgstr "%s 个 '栅格定向角度' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:563
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 个 '网格平滑等级' 不一致。"
+msgstr "%s 个 '栅格平滑等级' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:565
 #, c-format
@@ -44781,9 +44784,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔离"
-"\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜区的最小死铜"
-"大小设置。"
+"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔"
+"离\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜区的最小死"
+"铜面积设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2041
 #, c-format
