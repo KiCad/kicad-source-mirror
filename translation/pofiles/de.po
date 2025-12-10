@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-11-08 08:29+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -4587,14 +4587,12 @@ msgstr "Trotzdem hinzufügen"
 #: common/dialogs/panel_design_block_lib_table.cpp:775
 #: eeschema/dialogs/panel_sym_lib_table.cpp:711
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:793
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
 "Fehler beim Speichern der globalen Bibliothekstabelle:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:776
 #: common/dialogs/panel_design_block_lib_table.cpp:795
@@ -4615,11 +4613,12 @@ msgstr "Fehler beim Speichern"
 #: common/dialogs/panel_design_block_lib_table.cpp:794
 #: eeschema/dialogs/panel_sym_lib_table.cpp:730
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Fehler beim Speichern der projektspezifischen Bibliothekstabelle."
+msgstr ""
+"Fehler beim Speichern der projektspezifischen Bibliothekstabelle:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 msgid "Design Block Libraries"
@@ -7784,7 +7783,7 @@ msgstr "Alle Zellen auswählen"
 #: common/history_lock.cpp:135
 #, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Kann das Historieverzeichnis \"%s\" nicht erstellen."
+msgstr "Konnte Verlaufsverzeichnis nicht erstellen: %s"
 
 #: common/history_lock.cpp:156
 #, fuzzy, c-format
@@ -8819,9 +8818,8 @@ msgid "Unset Visible Flag"
 msgstr "Sichtbar-Kennzeichnung entfernen"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
-msgstr "Auftragseinstellungen bearbeiten..."
+msgstr "Einstellungen bearbeiten"
 
 #: common/lib_table_grid_tricks.cpp:156
 #, fuzzy
@@ -8849,19 +8847,16 @@ msgstr ""
 "Es können nicht mehrere Bibliotheken denselben Aliasnamen (\"%s\") verwenden."
 
 #: common/lib_table_notebook_panel.cpp:100
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Fehler beim Speichern der Bibliothekstabelle:\n"
+"Fehler beim Speichern der verschachtelten Bibliothekstabelle:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Leere globale %s-Bibliothekstabelle erstellen"
+msgstr "Änderungen in verschachtelter Bibliothekstabelle speichern?"
 
 #: common/lib_tree_model_adapter.cpp:142 common/lib_tree_model_adapter.cpp:145
 #: common/lib_tree_model_adapter.cpp:163 common/lib_tree_model_adapter.cpp:165
@@ -10964,14 +10959,12 @@ msgstr "Bibliotheksbeschreibung"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:708
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
 "Fehler beim Speichern der Bibliothekstabelle:\n"
 "\n"
-"%s"
 
 #: common/widgets/design_block_pane.cpp:296
 msgid "Please select a library to delete."
@@ -14288,9 +14281,9 @@ msgstr "Feldname \"%s\" ist bereits vorhanden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:814
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "Symbolfelder-Tabelle"
+msgstr "Symbolfelder-Tabelle (\"%s\" Bibliothek)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1031
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -15205,9 +15198,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:74
-#, fuzzy
 msgid "Browse…"
-msgstr "Durchsuchen"
+msgstr "Durchsuchen…"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
 #, fuzzy
@@ -15219,9 +15211,8 @@ msgid "Prefix that will be applied to the generated libraries."
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "%zu Bibliotheken geladen"
+msgstr "Bibliotheken hinzufügen zu:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
 #, fuzzy
@@ -15229,9 +15220,8 @@ msgid "Project library table"
 msgstr "Symbolbibliothek-Tabelle"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Neue Bibliothek zur Projektbibliothekstabelle hinzufügen"
+msgstr "Erzeugte Bibliotheken in Projekt-Bibliothekstabelle aufnehmen."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
 #, fuzzy
@@ -15239,9 +15229,8 @@ msgid "Global library table"
 msgstr "Symbolbibliothek-Tabelle"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Neue Bibliothek in globale Bibliothekstabelle aufnehmen"
+msgstr "Neue Bibliothek in globale Bibliothekstabellen aufnehmen."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
@@ -15258,9 +15247,8 @@ msgid "Please enter a library prefix."
 msgstr "Wähle Sie bitte eine zu löschende Bibliothek."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Zieltyp wählen:"
+msgstr "Zielverzeichnis wählen"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
@@ -19574,11 +19562,9 @@ msgstr "Datei \"%s\" konnte nicht erstellt werden.\n"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:130
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:148
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error writing netlist: %s"
-msgstr ""
-"Fehler beim Einlesen der Netzliste.\n"
-"%s"
+msgstr "E/A-Fehler beim Schreiben der Netzliste: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:135
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:154
@@ -20844,10 +20830,10 @@ msgid "Cannot create symbol library path '%s'."
 msgstr "Der Pfad \"%s\" für die Symbolbibliothek kann nicht erstellt werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
 msgstr ""
-"Kein Stammsymbol für erweitertes Symbol %s in Bibliothek \"%s\" gefunden."
+"Kein Stammsymbol für erweitertes Symbol %s in Bibliothek \"%s\" gefunden"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:293
 #, c-format
@@ -22208,12 +22194,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1242
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1982
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"Fehler beim Speichern der Bibliothekstabelle:\n"
-"\n"
-"%s"
+msgstr "Fehler beim Speichern der Bibliothekstabelle."
 
 #: eeschema/sheet.cpp:696
 msgid "Cannot create the schematic image"
@@ -22403,9 +22385,8 @@ msgid "Missing or invalid C_comp_pulldown value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
-#, fuzzy
 msgid "No C_comp values are available."
-msgstr "Paketaktualisierungen sind verfügbar"
+msgstr "Es sind keine C_comp-Werte verfügbar."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
 #, fuzzy
@@ -22413,9 +22394,8 @@ msgid "Missing or invalid Temperature Range value."
 msgstr "Temperaturbereich ist ungültig."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Missing or invalid Voltage Range value."
-msgstr "Ungültiger Spannungswert in einer IV-Tabelle"
+msgstr "Fehlender oder ungültiger Spannungsbereichswert."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
@@ -22461,9 +22441,8 @@ msgid "Invalid ISSO_PU table."
 msgstr "Ungültiger Wert für R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:677
-#, fuzzy
 msgid "Invalid Composite Current table."
-msgstr "Ungültiger Eigenschaftswert"
+msgstr "Ungültige zusammengesetzte Stromtabelle."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:683
 #: eeschema/sim/kibis/ibis_parser.cpp:768
@@ -22479,9 +22458,8 @@ msgstr "Ungültige GND-Klemme."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:698
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Invalid Ramp specification."
-msgstr "Ungültige Zeilendefinition"
+msgstr "Ungültige Rampendefinition."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:711
 #, fuzzy
@@ -22509,9 +22487,8 @@ msgid "Missing or invalid V_trigger_f value."
 msgstr "Ungültiger Wert für V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
-#, fuzzy
 msgid "Missing or invalid Off_delay value."
-msgstr "Ungültiger Eigenschaftswert"
+msgstr "Fehlender oder ungültiger Off_delay-Wert."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
 #, fuzzy
@@ -22524,9 +22501,8 @@ msgid "Invalid POWER Pulse table."
 msgstr "Ungültige Stromklemme."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "DXF SOLID derzeit nicht unterstützt."
+msgstr " Untermodelle werden derzeit nicht unterstützt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
 #, fuzzy
@@ -22614,23 +22590,20 @@ msgid "Error on line "
 msgstr "Fehler in Zeile "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "Symbol nicht gefunden."
+msgstr " Untermodell nicht gefunden."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr "Eine Zeile endete nicht ordnungsgemäß."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "\"%s\" ist kein gültiger SPICE-Wert."
+msgstr " ist kein gültiger dU/dt-Wert."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
-#, fuzzy
 msgid "A dV/dt value is missing."
-msgstr "Datei ist nicht vorhanden.\n"
+msgstr "Ein dU/dt-Wert fehlt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1233
 #: eeschema/sim/kibis/ibis_parser.cpp:1248
@@ -22695,29 +22668,24 @@ msgid " is not a recognised Submodel Spec subparameter."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
-#, fuzzy
 msgid "Missing pin name/number for matrix row."
-msgstr "Fehlende Information"
+msgstr "Fehlende/-r Pinname/-nummer in Matrixzeile."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1921
-#, fuzzy
 msgid "Invalid pin name/number in matrix row."
-msgstr "Ungültige Zeile in Matrix"
+msgstr "Ungültige/-r Pinname/-nummer in Matrixzeile."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1942
-#, fuzzy
 msgid "The matrix type is missing."
-msgstr "Datei ist nicht vorhanden.\n"
+msgstr "Der Matrixtyp fehlt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
-msgstr "Fehlender Matrix-Typ"
+msgstr " wird nicht als Matrix-Typ erkannt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
-#, fuzzy
 msgid "Unexpected [Bandwidth] keyword."
-msgstr "Unerwartete Einheiten für \"%s\""
+msgstr "Unerwartetes Schlüsselwort [Bandwidth]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1992
 #, fuzzy
@@ -22740,9 +22708,8 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2048
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
-#, fuzzy
 msgid "Failed to read a matrix element."
-msgstr "Kann ein Matrixelement nicht lesen"
+msgstr "Konnte ein Matrixelement nicht lesen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2061
 #, fuzzy
@@ -22780,9 +22747,8 @@ msgstr ""
 "Lesen eines Modells fortgeführt, das nicht begonnen hat (interner Fehler)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr "Undefinierter Modelltyp."
+msgstr " wird nicht als Untermodelltyp erkannt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
@@ -26177,9 +26143,8 @@ msgstr "Im aktuellen Projekt wurde kein Teilschaltplan gefunden"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:119
 #: pcbnew/tools/pcb_edit_table_tool.cpp:160
-#, fuzzy
 msgid "Export Table to CSV"
-msgstr "Als CSV exportieren..."
+msgstr "Tabelle als CSV exportieren"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:121
 #: pcbnew/tools/pcb_edit_table_tool.cpp:162
@@ -26189,11 +26154,13 @@ msgstr "Alle Dateien (*.*)|*.*"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:142
 #: pcbnew/tools/pcb_edit_table_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "Konnte Datei \"%s\" nicht öffnen."
+msgstr ""
+"Konnte Datei nicht öffnen:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:143
 #: pcbnew/tools/pcb_edit_table_tool.cpp:184
@@ -26413,9 +26380,8 @@ msgid "Paste Cells"
 msgstr "Spezielles Einfügen"
 
 #: eeschema/tools/sch_editor_control.cpp:1748 pcbnew/tools/pcb_control.cpp:1158
-#, fuzzy
 msgid "Failed to paste cells"
-msgstr "Fehler beim Speichern von \"%s\"."
+msgstr "Fehler beim Einfügen der Zellen"
 
 #: eeschema/tools/sch_editor_control.cpp:1864
 #, c-format
@@ -26919,9 +26885,9 @@ msgstr ""
 #: eeschema/widgets/panel_remote_symbol.cpp:1849
 #: eeschema/widgets/panel_remote_symbol.cpp:1921
 #: eeschema/widgets/panel_remote_symbol.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Kann %s nicht erstellen"
+msgstr "Konnte \"%s\" nicht erstellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:381
 #, fuzzy, c-format
@@ -26940,9 +26906,8 @@ msgstr "Die Symbolbibliotheksdatei \"%s\" ist leer."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:410
 #: eeschema/widgets/panel_remote_symbol.cpp:420
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
+msgstr "Konnte temporäre Datei für Symbol-Nutzdaten nicht erstellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:427
 #, fuzzy
@@ -26960,18 +26925,17 @@ msgid "Symbol payload did not include the expected symbol."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Die ausgewählten Polygone konnten nicht vereint werden."
+msgstr "Konnte Symbol-Nutzdaten nicht dekodieren: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:496
 msgid "Select which remote data source to query."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:508
-#, fuzzy
 msgid "Configure remote data sources."
-msgstr "Netzklassen konfigurieren"
+msgstr "Entfernte Datenquellen konfigurieren."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:577
 msgid "No remote data sources are currently installed."
@@ -26989,9 +26953,9 @@ msgid "Unable to open '%s'."
 msgstr "Konnte \"%s\" nicht öffnen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read '%s'."
-msgstr "Kann %s nicht erstellen"
+msgstr "Konnte \"%s\" nicht lesen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:675
 #, fuzzy, c-format
@@ -26999,9 +26963,8 @@ msgid "Unable to load remote data for '%s'."
 msgstr "Datei \"%s\" nicht lesbar."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:932
-#, fuzzy
 msgid "Missing login URL for remote authentication."
-msgstr "Fehlende Information"
+msgstr "Anmelde-URL für entfernte Authentifizierung fehlt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:943
 #, fuzzy
@@ -27009,14 +26972,13 @@ msgid "Unable to start the local login listener."
 msgstr "Die ausgewählten Polygone konnten nicht subtrahiert werden."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:952
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "Konnte den Sicherungsordner \"%s\" nicht erstellen.\n"
+msgstr "Zuweisung eines Callback-Ports für die Anmeldung schlug fehl."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "Nicht unterstützte Via-Form: %s."
+msgstr "Nicht unterstützte RPC-Version %d."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
 #, fuzzy
@@ -27035,22 +26997,19 @@ msgid "Command '%s' is not supported."
 msgstr "%s wird nicht unterstützt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1238
-#, fuzzy
 msgid "Unable to store payload."
-msgstr "Kann Datei nicht öffnen"
+msgstr "Konnte Nutzdaten nicht speichern."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1254
 #: eeschema/widgets/panel_remote_symbol.cpp:1538
 #: eeschema/widgets/panel_remote_symbol.cpp:1734
 #: eeschema/widgets/panel_remote_symbol.cpp:1964
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "Konnte Schaltplan nicht laden\n"
+msgstr "Einstellungen für Schaltplan konnten nicht geladen werden."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1269
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "3D-Konfigurationsverzeichnis ist unbekannt"
+msgstr "Das Zielverzeichnis ist nicht konfiguriert."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1280
 #, fuzzy, c-format
@@ -27079,10 +27038,8 @@ msgid "Failed to save the symbol library table."
 msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1356
-#, fuzzy
 msgid "Unable to access the footprint library table."
-msgstr ""
-"Fensterbereich für die Footprint-Darstellung konnte nicht erstellt werden"
+msgstr "Konnte nicht auf Footprint-Bibliothekstabelle zugreifen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1375
 #, fuzzy
@@ -27095,9 +27052,8 @@ msgid "Failed to save the footprint library table."
 msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1435
-#, fuzzy
 msgid "No schematic editor is available for placement."
-msgstr "Farbthema des Schaltplaneditors verwenden"
+msgstr "Für die Platzierung ist kein Schaltplaneditor verfügbar."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1442
 msgid "Downloaded symbol metadata is incomplete."
@@ -27122,14 +27078,12 @@ msgid "Unsupported transfer mode '%s'."
 msgstr "Nicht unterstützte Schaltplandatei \"%s\"."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1524
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[kein Symbol geladen]"
+msgstr "Symbol-Nutzdatentyp wird nicht unterstützt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1530
-#, fuzzy
 msgid "No schematic editor is available to store symbols."
-msgstr "Kein Repository verfügbar, um Remote einzurichten"
+msgstr "Es ist kein Schaltplaneditor verfügbar um Symbole zu speichern."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
 #, fuzzy
@@ -27137,14 +27091,12 @@ msgid "Unable to access the symbol library manager."
 msgstr "Konnte Symbolbibliotheksdatei \"%s\" nicht erstellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1605
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Kann Download-Verzeichnis nicht erstellen!"
+msgstr "Konnte heruntergeladenes Symbol nicht verarbeiten."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1620
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "Auswahl des Ordners für heruntergeladene Bibliotheken"
+msgstr "Konnte heruntergeladenes Symbol nicht speichern."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1680
 #, fuzzy
@@ -27160,18 +27112,17 @@ msgid "Unsupported SPICE payload type."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Konnte Bauteildaten nicht hinzufügen"
+msgstr "Konnte Bauteilliste nicht verarbeiten: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1893
 msgid "Component list must be an array."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1899
-#, fuzzy
 msgid "Component list was empty."
-msgstr "Bauteilplatzierung"
+msgstr "Bauteilliste war leer."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1997
 #, fuzzy
@@ -27179,9 +27130,8 @@ msgid "Component entries must be objects."
 msgstr "Der Bauteilname darf nicht leer sein."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2006
-#, fuzzy
 msgid "Component entry was missing a type."
-msgstr "Anzahl der Bauteile stimmt nicht überein"
+msgstr "Dem Bauteileintrag fehlte ein Typ."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2183
 #, fuzzy, c-format
@@ -28665,14 +28615,12 @@ msgid "Delete Column"
 msgstr "Spalte löschen"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "Keine Netze ausgewählt."
+msgstr "Keine Zellen ausgewählt"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "Die Auswahl enthält %zu gesperrte Elemente."
+msgstr "Auswahl enthält keine Elemente, die keine Zellen sind"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
@@ -30847,9 +30795,9 @@ msgid "Libraries (%d)"
 msgstr "Bibliotheken (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Data sources (%d)"
-msgstr "Datenquellenname"
+msgstr "Datenquellen (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
@@ -35766,9 +35714,9 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "net %d"
-msgstr "Netzverbinder"
+msgstr "Netz %d"
 
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
@@ -36364,9 +36312,8 @@ msgid "Front footprint area:"
 msgstr "Vorderseitige Kupferfläche:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Front footprint density:"
-msgstr "Footprints vorne"
+msgstr "Vorderseitige Footprintdichte:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
 #, fuzzy
@@ -36374,9 +36321,8 @@ msgid "Back footprint area:"
 msgstr "Rückseitige Kupferfläche:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Back footprint density:"
-msgstr "Footprints hinten"
+msgstr "Rückseitige Footprintdichte:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:477
 #, c-format
@@ -38967,9 +38913,8 @@ msgid "Pad numbers:"
 msgstr "Padnummer:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:82
-#, fuzzy
 msgid "Pad count:"
-msgstr "Pad-Anzahl"
+msgstr "Padanzahl:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
 #, fuzzy
@@ -40972,9 +40917,8 @@ msgstr ""
 "ist."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1113
-#, fuzzy
 msgid "Hole post machining"
-msgstr "Zutreffende Netze ausblenden:"
+msgstr "Loch nach Bearbeitung"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
@@ -45336,9 +45280,8 @@ msgid "Chamfer:"
 msgstr "Abschrägung:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:240
-#, fuzzy
 msgid "Fillet:"
-msgstr "Abrundung"
+msgstr "Abrundung:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:392
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -45419,9 +45362,8 @@ msgid "Clearances && Pad Connections"
 msgstr "Freiraumüberschreibungen && Padverbindungen"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
-#, fuzzy
 msgid "Display Overrides"
-msgstr "Viaverzögerung-Überschreibungen:"
+msgstr "Darstellungs-Überschreibungen"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
 #, fuzzy
@@ -47035,14 +46977,14 @@ msgid "'%s' settings differ"
 msgstr "\"%s\" Einstellungen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Fehlender Footprint"
+msgstr "Fehlendes Symbolfeld \"%s\" in Footprint"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "Feld \"%s\" weicht ab: %s; %s."
+msgstr "Feld \"%s\" weicht ab (PCB: \"%s\", Schaltplan: \"%s\")"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:271
 msgid "No corresponding pin found in schematic"
@@ -47288,14 +47230,15 @@ msgid "Created file '%s'."
 msgstr "Datei \"%s\" wurde erstellt."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "Beim Schreiben der Datei \"%s\" ist ein Fehler aufgetreten."
+msgstr ""
+"Beim Erstellen der Bohrprotokoll-Datei \"%s\" ist ein Fehler aufgetreten."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Created drill report file '%s'"
-msgstr "Protokolldatei erstellen:"
+msgstr "Bohrprotokoll-Datei \"%s\" erstellt"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
@@ -47392,9 +47335,9 @@ msgid "Failed to create counterbore cylinder shape"
 msgstr "Konnte Autorensignatur nicht erstellen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s"
+msgstr "OCC-Ausnahme während der Erstellung einer zylindrischen Senkung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
 #, fuzzy
@@ -47402,9 +47345,9 @@ msgid "Failed to create countersink cone shape"
 msgstr "Konnte prismatische Form nicht erstellen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "OCC-Ausnahme während der Erstellung der Kontur %d: %s"
+msgstr "OCC-Ausnahme während der Erstellung einer konischen Senkung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1663
 #, c-format
@@ -49405,9 +49348,8 @@ msgid "Press-fit pad"
 msgstr "Einpresspad"
 
 #: pcbnew/pad.cpp:3222
-#, fuzzy
 msgid "Undefined"
-msgstr "Undefiniert!"
+msgstr "Undefiniert"
 
 #: pcbnew/pad.cpp:3234
 #, fuzzy
@@ -52013,9 +51955,8 @@ msgid "Via hole size must be smaller than via diameter"
 msgstr "Via-Lochgröße muss kleiner als Via-Durchmesser sein"
 
 #: pcbnew/pcb_track.cpp:1808
-#, fuzzy
 msgid "Via layer must be a copper layer."
-msgstr "Wenn eine rückseitige Kupferlage benötigt wird"
+msgstr "Vialage muss eine Kupferlage sein"
 
 #: pcbnew/pcb_track.cpp:1820
 msgid "Via layer is outside the board stack."
@@ -52094,9 +52035,8 @@ msgstr "Leiterbahn %s auf %s, Länge %s"
 #: pcbnew/pcb_track.cpp:2852 pcbnew/pcb_track.cpp:2858
 #: pcbnew/pcb_track.cpp:2864 pcbnew/pcb_track.cpp:2870
 #: pcbnew/pcb_track.cpp:2876
-#, fuzzy
 msgid "From board stackup"
-msgstr "Lagenaufbau Platine:"
+msgstr "Aus Lagenaufbau"
 
 #: pcbnew/pcb_track.cpp:2853
 msgid "Tented"
@@ -57847,14 +57787,12 @@ msgid "Zone Manager"
 msgstr "Zonenmanager"
 
 #: pcbnew/zone_settings.h:279
-#, fuzzy
 msgid "Offset X"
-msgstr "Versatz X:"
+msgstr "Versatz X"
 
 #: pcbnew/zone_settings.h:280
-#, fuzzy
 msgid "Offset Y"
-msgstr "Versatz Y:"
+msgstr "Versatz Y"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
