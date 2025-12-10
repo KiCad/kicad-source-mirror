@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
 "PO-Revision-Date: 2025-12-11 08:00+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -19191,13 +19191,13 @@ msgstr ""
 "програми Eagle можуть бути імпортованими."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Недійсний шар стеку контактних площадок '%s' у файлі '%s' у рядку %d, "
-"зміщення %d."
+"Не вдалося прочитати файл '%s'.\n"
+"'%s' у рядку %d, стовпці %d, зміщенні %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -47226,18 +47226,21 @@ msgstr "Помилка завантаження бібліотеки посад�
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не вдалося виконати першу фазу ініціалізації модуля Python '%s' через Python "
+"C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Консоль скриптів"
+msgstr "Ініціалізація сценаріїв"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Не вдалося виконати другу фазу ініціалізації модуля Python '%s' через Python "
+"C API."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -52023,9 +52026,8 @@ msgid "Filled Area"
 msgstr "Залита область"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Область з правилами"
+msgstr "Контур області"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
