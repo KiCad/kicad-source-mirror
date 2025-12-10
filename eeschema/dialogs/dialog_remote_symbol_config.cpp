@@ -71,7 +71,7 @@ DIALOG_REMOTE_SYMBOL_CONFIG::DIALOG_REMOTE_SYMBOL_CONFIG( wxWindow* aParent ) :
         m_destinationCtrl->SetToolTip( _( "Directory where downloaded symbol, footprint, and 3D model data will be written." ) );
         destSizer->Add( m_destinationCtrl, 1, wxALIGN_CENTER_VERTICAL );
 
-        m_browseButton = new wxButton( this, wxID_ANY, _( "Browse…" ) );
+        m_browseButton = new wxButton( this, wxID_ANY, _( "Browse..." ) );
         destSizer->Add( m_browseButton, 0, wxLEFT, FromDIP( 4 ) );
         gridSizer->Add( destSizer, 1, wxEXPAND );
 
