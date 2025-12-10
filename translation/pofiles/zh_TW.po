@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-03 07:50+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -625,12 +625,10 @@ msgid "Show board body"
 msgstr "顯示電路板主體"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
 msgstr "鍍孔"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
 msgstr "顯示通孔焊盤"
 
