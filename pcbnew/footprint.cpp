@@ -2477,6 +2477,10 @@ double FOOTPRINT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return LOD_HIDE;
     }
 
+    // Only show anchors if the layer the footprint is on is visible
+    if( aLayer == LAYER_ANCHOR && !aView->IsLayerVisible( m_layer ) )
+        return LOD_HIDE;
+
     int layer = ( m_layer == F_Cu ) ? LAYER_FOOTPRINTS_FR :
                 ( m_layer == B_Cu ) ? LAYER_FOOTPRINTS_BK : LAYER_ANCHOR;
 
