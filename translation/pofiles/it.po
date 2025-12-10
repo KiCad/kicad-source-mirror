@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-10 07:01+0000\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -4622,18 +4622,15 @@ msgstr "Attenzione: denominatori duplicati"
 #: common/dialogs/panel_design_block_lib_table.cpp:682
 #: eeschema/dialogs/panel_sym_lib_table.cpp:445
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
-msgstr "La libreria con denominazione \"%s\" esiste già."
+msgstr "Un elemento con denominazione '%s' esiste già."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:683
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:615
-#, fuzzy
 msgid "One of the nicknames will need to be changed."
-msgstr ""
-"Una delle denominazioni deve essere cambiata dopo l'aggiunta di questa "
-"libreria."
+msgstr "Una delle denominazioni dovrà essere cambiata."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:700
 #: common/dialogs/panel_embedded_files.cpp:423
@@ -4653,14 +4650,12 @@ msgstr "Aggiungi comunque"
 #: common/dialogs/panel_design_block_lib_table.cpp:775
 #: eeschema/dialogs/panel_sym_lib_table.cpp:711
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:793
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
 "Errore durante il salvataggio della tabella librerie globale:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:776
 #: common/dialogs/panel_design_block_lib_table.cpp:795
@@ -4681,11 +4676,12 @@ msgstr "Errore salvataggio file"
 #: common/dialogs/panel_design_block_lib_table.cpp:794
 #: eeschema/dialogs/panel_sym_lib_table.cpp:730
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Errore nel salvataggio della tabella librerie del progetto."
+msgstr ""
+"Errore nel salvataggio della tabella librerie del progetto:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 msgid "Design Block Libraries"
@@ -6405,9 +6401,8 @@ msgid "Field Name Templates"
 msgstr "Modelli di nome campo"
 
 #: common/eda_base_frame.cpp:1375
-#, fuzzy
 msgid "Data Sources"
-msgstr "Nome sorgente dati"
+msgstr "Sorgenti dati"
 
 #: common/eda_base_frame.cpp:1376 eeschema/sim/simulator_frame.cpp:117
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
@@ -8842,16 +8837,14 @@ msgid "Error loading library '%s'"
 msgstr "Errore nel caricamento della libreria '%s'"
 
 #: common/lib_table_grid_tricks.cpp:93
-#, fuzzy
 msgid "Edit Options"
-msgstr "Opzioni di modifica"
+msgstr "Modifica opzioni"
 
 #: common/lib_table_grid_tricks.cpp:94
 msgid "Edit options for this library entry"
 msgstr "Modifica opzioni per questa voce di libreria"
 
 #: common/lib_table_grid_tricks.cpp:124
-#, fuzzy
 msgid "Activate Selected"
 msgstr "Attiva selezionati"
 
@@ -8910,9 +8903,8 @@ msgstr ""
 "%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Creare una tabella librerie %s globale vuota"
+msgstr "Salvare le modifiche alla tabella della libreria nidificata?"
 
 #: common/lib_tree_model_adapter.cpp:142 common/lib_tree_model_adapter.cpp:145
 #: common/lib_tree_model_adapter.cpp:163 common/lib_tree_model_adapter.cpp:165
@@ -8992,14 +8984,12 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Mancata corrispondenza di tipo tra %lf e \"%s\""
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
-#, fuzzy
 msgid "Edit settings"
-msgstr "Modifica impostazioni avanzate"
+msgstr "Modifica impostazioni"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Open library table"
-msgstr "Tabella librerie di impronte"
+msgstr "Apri tabella librerie"
 
 #: common/libraries/lib_table_grid_data_model.cpp:335
 msgid "Nickname"
@@ -9318,6 +9308,12 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad non è riuscito a utilizzare '%s'.\n"
+"\n"
+"1. Disattivare 'Accesso controllato alle cartelle' nelle impostazioni di "
+"Windows o nei Criteri di gruppo\n"
+"2. Assicurarsi che nessun altro software antivirus interferisca con KiCad\n"
+"3. Assicurarsi di aver impostato le autorizzazioni corrette"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
@@ -9622,7 +9618,7 @@ msgstr "Librerie"
 
 #: common/startwizard/startwizard_provider_privacy.cpp:76
 msgid "Updates && Privacy"
-msgstr ""
+msgstr "Aggiornamenti e privacy"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9633,9 +9629,8 @@ msgid "Select Settings Path"
 msgstr "Seleziona il percorso delle impostazioni"
 
 #: common/startwizard/startwizard_provider_settings.cpp:183
-#, fuzzy
 msgid "Configuration"
-msgstr "Conferma"
+msgstr "Configurazione"
 
 #: common/tool/action_menu.cpp:224 common/tool/action_menu.cpp:229
 #, c-format
@@ -10129,13 +10124,14 @@ msgid "Edit Table..."
 msgstr "Modifica tabella..."
 
 #: common/tool/actions.cpp:574
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "Esporta simbolo come SVG..."
+msgstr "Esporta tabella in CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
 msgstr ""
+"Esporta il contenuto della tabella in un file CSV con variabili di testo "
+"risolte"
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
@@ -11007,14 +11003,12 @@ msgstr "Descrizione libreria"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:708
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
-"Errore nel salvataggio della tabella librerie:\n"
+"Errore nel salvataggio tabella librerie:\n"
 "\n"
-"%s"
 
 #: common/widgets/design_block_pane.cpp:296
 msgid "Please select a library to delete."
@@ -11306,9 +11300,8 @@ msgid "Confirm change"
 msgstr "Conferma i cambiamenti"
 
 #: common/widgets/widget_hotkey_list.cpp:516
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(doppio clic per modificare)"
+msgstr "Comando (doppio clic per modificare)"
 
 #: common/widgets/widget_hotkey_list.cpp:519
 msgid "Hotkey"
@@ -12927,13 +12920,12 @@ msgstr ""
 "l'elemento sia visibile"
 
 #: eeschema/dialogs/dialog_erc.cpp:235
-#, fuzzy
 msgid "Show all errors"
-msgstr "Mostra tutte le versioni"
+msgstr "Mostra tutti gli errori"
 
 #: eeschema/dialogs/dialog_erc.cpp:236
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "Mostra i marcatori ERC duplicati su tutti i pin applicabili"
 
 #: eeschema/dialogs/dialog_erc.cpp:410 pcbnew/dialogs/dialog_drc.cpp:1286
 msgid "Delete exclusions too?"
@@ -14324,9 +14316,9 @@ msgstr "Il nome campo '%s' esiste già."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:814
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "Tabella campi simbolo"
+msgstr "Tabella dei campi dei simboli (libreria '%s')"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1031
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -15210,94 +15202,87 @@ msgid "Plot Schematic"
 msgstr "Traccia schema"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "Importa impostazioni"
+msgstr "Impostazioni dei simboli remoti"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:58
 msgid ""
 "Configure where downloaded remote libraries are stored and how they are "
 "named."
 msgstr ""
+"Configurare dove vengono archiviate le librerie remote scaricate e come "
+"vengono denominate."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:65
-#, fuzzy
 msgid "Destination directory:"
-msgstr "Percorso destinazione:"
+msgstr "Cartella destinazione:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:71
 msgid ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
 msgstr ""
+"Cartella in cui verranno scritti i dati dei simboli, delle impronte e dei "
+"modelli 3D scaricati."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:74
-#, fuzzy
 msgid "Browse…"
-msgstr "Esplora"
+msgstr "Esplora…"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Library prefix:"
-msgstr "Prefisso denominazione libreria:"
+msgstr "Prefisso libreria:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Prefix that will be applied to the generated libraries."
-msgstr ""
+msgstr "Prefisso che verrà applicato alle librerie generate."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "Caricate %zu librerie"
+msgstr "Aggiungi librerie a:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "Tabella librerie di simboli"
+msgstr "Tabella librerie del progetto"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Aggiungi nuova libreria alla tabella librerie del progetto"
+msgstr "Aggiunge le librerie generate alle tabelle librerie del progetto."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "Tabella librerie di simboli"
+msgstr "Tabella librerie globale"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Aggiungi nuova libreria alla tabella librerie globale"
+msgstr "Aggiunge le librerie generate alle tabelle librerie globali."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
-msgstr ""
+msgstr "Ripristina la destinazione e il prefisso predefiniti."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
-#, fuzzy
 msgid "Please choose a destination directory."
-msgstr "Scegliere un file netlist valido."
+msgstr "Selezionare una cartella di destinazione."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:158
-#, fuzzy
 msgid "Please enter a library prefix."
-msgstr "Selezionare la libreria da eliminare."
+msgstr "Inserire un prefisso per la libreria."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Seleziona tipo destinazione:"
+msgstr "Seleziona la cartella di destinazione"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
 "Library names will be created with suffixes such as _symbols, _fp, and _3d."
 msgstr ""
+"I nomi delle librerie verranno creati con suffissi quali _symbols, _fp e _3d."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:263
 #, c-format
 msgid "Will create libraries like %1$s_symbols, %1$s_fp, %1$s_3d, etc."
-msgstr ""
+msgstr "Creerà librerie come %1$s_symbols, %1$s_fp, %1$s_3d, ecc."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:96
 msgid ""
@@ -17699,20 +17684,21 @@ msgid ""
 "Install schematic data sources from the Plugin and Content Manager. Data "
 "sources extend KiCad by linking schematic items to external data providers."
 msgstr ""
+"Installa le fonti di dati schema dalla Gestione Plugin e Contenuti. Le fonti "
+"di dati estendono KiCad collegando gli elementi schematici a provider di "
+"dati esterni."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:63
-#, fuzzy
 msgid "Manage Data Sources..."
-msgstr "Gestione librerie simboli..."
+msgstr "Gestione sorgenti dati..."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:123
-#, fuzzy
 msgid "No data sources are currently installed."
-msgstr "Tracce DXF non attualmente supportate."
+msgstr "Al momento non è installata alcuna fonte dati."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:136
 msgid "Installed data sources are listed above."
-msgstr ""
+msgstr "Le fonti di dati installate sono elencate sopra."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:282
 #, c-format
@@ -18421,9 +18407,8 @@ msgstr "Blocchi progetto"
 
 #: eeschema/eeschema_settings.cpp:157 eeschema/menubar.cpp:191
 #: eeschema/sch_edit_frame.cpp:2025 eeschema/tools/sch_actions.cpp:130
-#, fuzzy
 msgid "Remote Symbols"
-msgstr "Rimappa simboli"
+msgstr "Simboli remoti"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
 msgid "Input Pin"
@@ -19468,6 +19453,8 @@ msgstr "Pannelli"
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manger to enable"
 msgstr ""
+"Installa un server di simboli remoto utilizzando la Gestione Plugin e "
+"Contenuti per abilitare"
 
 #: eeschema/menubar.cpp:335
 msgid "Variants"
@@ -19592,18 +19579,16 @@ msgstr "Fallita creazione file '%s'.\n"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:130
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:148
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error writing netlist: %s"
-msgstr ""
-"Errore nel caricamento della netlist.\n"
-"%s"
+msgstr "Errore I/O durante la scrittura della netlist: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:135
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:154
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:109
 #, c-format
 msgid "Formatting error writing netlist: %s"
-msgstr ""
+msgstr "Errore di formattazione durante la scrittura della netlist: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:453
 #, c-format
@@ -20065,9 +20050,8 @@ msgid "Variant Name"
 msgstr "Nome variante"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove"
-msgstr "Selezionare nome variante da rimuovere"
+msgstr "Seleziona nome variante da rimuovere"
 
 #: eeschema/sch_field.cpp:968
 #, c-format
@@ -22203,12 +22187,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1242
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1982
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"Errore nel salvataggio della tabella librerie:\n"
-"\n"
-"%s"
+msgstr "Errore nel salvataggio della tabella librerie."
 
 #: eeschema/sheet.cpp:696
 msgid "Cannot create the schematic image"
@@ -22250,9 +22230,8 @@ msgid "There are NaN elements in a matrix."
 msgstr "Ci sono elementi NaN in una matrice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:137
-#, fuzzy
 msgid "Missing or invalid R_pkg value."
-msgstr "Valore R_pkg non valido."
+msgstr "Valore R_pkg mancante o non valido."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:143
 #, fuzzy
