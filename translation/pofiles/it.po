@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-02 05:47+0300\n"
-"PO-Revision-Date: 2025-12-09 21:00+0000\n"
+"PO-Revision-Date: 2025-12-10 07:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -20012,6 +20012,7 @@ msgid "Variant Name"
 msgstr "Nome variante"
 
 #: eeschema/sch_edit_frame.cpp:2958
+#, fuzzy
 msgid "Select variant name to remove"
 msgstr "Selezionare nome variante da rimuovere"
 
