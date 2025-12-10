@@ -138,7 +138,16 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
         grid.SetSnap( false ); // Interactive placement tools need to set their own item snaps
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( controls()->GetMousePosition(), nullptr );
+        VECTOR2I cursorPos = controls()->GetMousePosition();
+
+        if( !evt->IsActivate() && !evt->IsCancelInteractive() )
+        {
+            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+        }
+        else
+        {
+            grid.FullReset();
+        }
 
         aPlacer->m_modifiers = evt->Modifier();
 

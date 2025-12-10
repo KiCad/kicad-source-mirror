@@ -869,3 +869,22 @@ SNAP_MANAGER::GetConstructionItems() const
 
     return batches;
 }
+
+
+void CONSTRUCTION_MANAGER::Clear()
+{
+    std::lock_guard<std::mutex> lock( m_batchesMutex );
+
+    m_persistentConstructionBatch.reset();
+    m_temporaryConstructionBatches.clear();
+    m_involvedItems.clear();
+    CancelProposal();
+}
+
+
+void SNAP_MANAGER::Clear()
+{
+    m_snapLineManager.ClearSnapLine();
+    m_constructionManager.Clear();
+    UpdateSnapGuides();
+}

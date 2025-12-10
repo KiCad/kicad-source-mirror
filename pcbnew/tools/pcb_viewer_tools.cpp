@@ -321,6 +321,10 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
             controls.ForceCursorPosition( true, cursorPos );
         }
+        else
+        {
+            grid.FullReset();
+        }
 
         if( evt->IsCancelInteractive() )
         {

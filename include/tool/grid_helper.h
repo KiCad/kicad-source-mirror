@@ -64,6 +64,17 @@ public:
     VECTOR2D GetVisibleGrid() const;
     VECTOR2I GetOrigin() const;
 
+    /**
+     * Reset all internal state.  Used to remove any dangling pointers to items
+     * that have been deleted.
+     */
+    virtual void FullReset()
+    {
+        m_constructionGeomPreview.ClearSnapLine();
+        m_snapManager.Clear();
+        m_anchors.clear();
+    }
+
     // Manual setters used when no TOOL_MANAGER/View is available (e.g. in tests)
     void SetGridSize( const VECTOR2D& aGrid ) { m_manualGrid = aGrid; }
     void SetVisibleGridSize( const VECTOR2D& aGrid ) { m_manualVisibleGrid = aGrid; }
