@@ -1045,6 +1045,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
                                              aErrorHandler, aAllowUseArcsInPolygons, cleaner );
     }
 
+#if 0  // there are currently no clients that want an approximated outline
     if( !success || !aOutlines.OutlineCount() )
     {
         // Couldn't create a valid polygon outline.  Use the board edge cuts bounding box to
@@ -1076,6 +1077,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         corner.y = bbbox.GetOrigin().y;
         aOutlines.Append( corner );
     }
+#endif
 
     if( aAllowUseArcsInPolygons )
     {
