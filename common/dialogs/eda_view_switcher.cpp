@@ -36,7 +36,8 @@
 EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems,
                                       wxKeyCode aCtrlKey ) :
         EDA_VIEW_SWITCHER_BASE( aParent ),
-        m_tabState( true ),
+        // Start with the tab marked as "up" so the initial ctrl-tab press advances selection.
+        m_tabState( false ),
         m_receivingEvents( false ),
         m_ctrlKey( aCtrlKey )
 {
