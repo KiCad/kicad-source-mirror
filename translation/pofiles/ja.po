@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-12 09:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -21745,6 +21745,412 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>マークアップ</th>\n"
+"        <th></th>\n"
+"        <th>結果例</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{上付き}文字</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>上付き</sup>&nbsp;</samp>文字</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>ドライバボード^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ドライバボード<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{下付き}文字</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>下付き</sub>&nbsp;</samp>文字</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</samp>"
+"</td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp</u></samp><br> <samp>上線</"
+"samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${変数}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>変数値</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:フィルド}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>シンボル リファレンスのフィールド値</i></samp>"
+"</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A0, B1, C2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{式}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>評価結果</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>4</samp> (ROW=3のとき)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>文字列比較 & 条件付きテキスト</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"テキスト\" == \"テキスト\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"テキスト\" != \"違うテキスト\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>条件付きテキスト表示</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"トップ "
+"\"ボトム\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>トップ</samp> (フロントレイヤならば) さもなくば "
+"<samp>ボトム</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>数値比較も可能</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>シンボルピンの機能</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:REFERENCE(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンを含む完全なリファレンス名</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (ピン3の所属する複数ユニットのシンボル"
+"の場合)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:SHORT_REFERENCE(pin)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンの所属するユニット文字の無いリファレンス名</"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:UNIT(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンの所属するユニット文字</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:UNIT(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>B</samp> (ピン3の所属するユニット文字)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:NET_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンに接続するネット名</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R1:NET_NAME(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:PIN_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピン名あるいは代替ピン名</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp> (代替ピン名) または <samp>PA9</"
+"samp> (ベース ピン名)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:PIN_BASE_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ベース ピン名 (代替ピン名は無視する)</samp></td>"
+"\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_BASE_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>PA9</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:PIN_ALT_LIST(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>すべての代替ピン機能 (ベース ピン名を除く)</samp>"
+"</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:SHORT_NET_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>短いネット名または未接続の場合はNC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> または <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:NET_CLASS(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンのネットクラス</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>エスケープシーケンス</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (展開されない)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>価格: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>価格: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (計算されない)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>ネストされた変数</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (ROW=0でピン2がユニットBに属している"
+"例)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>テーブル内の動的ネット検索</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>テーブルセル参照</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(\"A0\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>セルA0の評価値</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(0, 1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>行0、列1の値</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(${ADDR})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>動的セル参照</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(${ROW}-1, ${COL})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>上のセルの値（ROW > 0の場合）</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>バス定義</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
+"        <th>結果ネット</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>接頭辞mから接頭辞n</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>接頭辞.net1, 接頭辞.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>マークアップはバス定義よりも優先されることに注意してください。</i>\n"
+"<p></p>\n"
+"<p><b>ピンの機能:</b>正しいユニットの配置を自動的に検出します。 複数ユニット"
+"のシンボルの場合、ピンのユニットが現在のシートのユニットと異なっていて"
+"も<samp>NET_NAME(pin)</samp>などの関数は機能します。</p>\n"
+"<p><b>テーブルセル参照:</b> <samp>CELL()</samp> 関数は表セル内でのみ機能しま"
+"す。同じテーブル内の他のセルを参照するには、<samp>${CELL(\"A0\")}</samp> ある"
+"いは <samp>${CELL(row, col)}</samp> を使用します。行番号と列番号は 0 から始ま"
+"ります（A0 は最初の行の最初の列です）。CELL は、セルの生のテキストではなく、"
+"評価/表示された値を返します。</p>\n"
+"<p><b>ネストされた変数:</b> 変数は他の変数を含むことができます。内側の変数が"
+"最初に展開されます。最大ネスト深度：6 レベル。</p>\n"
+"<p><b>エラーメッセージ:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - 変数または関数を解決できません</"
+"li>\n"
+"<li><samp>&lt;Unit X not placed&gt;</samp> - ピンがどのシートにも配置されてい"
+"ないユニットにあります</li>\n"
+"<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - セルアドレスが"
+"テーブルの範囲外です</li>\n"
+"</ul>\n"
+"\n"
 
 #: eeschema/sch_textbox.cpp:339
 #, c-format
@@ -22195,18 +22601,16 @@ msgid "The submodel has no type."
 msgstr "このサブモデルにはタイプがありません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
-#, fuzzy
 msgid "Missing or invalid V_trigger_r value."
-msgstr "不正な V_ref 値."
+msgstr "不正な立ち上がりエッジトリガ電圧(V_trigger_r)値。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:740
-#, fuzzy
 msgid "Missing or invalid V_trigger_f value."
-msgstr "不正な V_ref 値."
+msgstr "不正な立ち下がりエッジトリガ電圧(V_trigger_f )値。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
 msgid "Missing or invalid Off_delay value."
-msgstr "不正な遅延値(Off_delay)。"
+msgstr "不正なV_trigger_rまたはV_trigger_fからのターンオフ遅延(Off_delay)値。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
 msgid "Invalid GND Pulse table."
@@ -36016,9 +36420,8 @@ msgid "Layers:"
 msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "ゾーン マネージャー…"
+msgstr "ゾーン マネージャーを開く…"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -39473,7 +39876,7 @@ msgid "Generate Multichannel Rule Areas"
 msgstr "マルチチャンネルルール領域を生成する"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area topologies do not match: %s"
 msgstr "ルールエリアのトポロジーが一致しません: %s"
 
@@ -39796,7 +40199,7 @@ msgstr "内層"
 msgid ""
 "Switching to non-circular hole will disable backdrills and post-machining. "
 "Continue?"
-msgstr ""
+msgstr "非円形穴に切り替えると、バックドリルと後加工が無効になります。続行しますか?"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1248
 #, c-format
@@ -40282,43 +40685,39 @@ msgstr ""
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1113
-#, fuzzy
 msgid "Hole post machining"
-msgstr "ネット マッチングを非表示:"
+msgstr "穴の仕上げ加工"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3236
-#, fuzzy
 msgid "Countersink"
-msgstr "カウント"
+msgstr "皿穴"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
-#, fuzzy
 msgid "Counterbore"
-msgstr "カウント"
+msgstr "座ぐり"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1216
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3146
-#, fuzzy
 msgid "Backdrill"
-msgstr "ビア ドリル"
+msgstr "バックドリル"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
-msgstr ""
+msgstr "両面"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1240
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
 msgid "Top backdrill must-cut:"
-msgstr ""
+msgstr "表面バックドリルで必須切り取り:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1247
@@ -40326,12 +40725,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1280
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:464
 msgid "The backdrill must pass through this layer"
-msgstr ""
+msgstr "バックドリルはこの層を通過する必要がある"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
 msgid "Bottom backdrill must-cut:"
-msgstr ""
+msgstr "裏面バックドリルで必須切り取り:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1451
 msgid "Preview pad in sketch mode"
@@ -40682,9 +41081,8 @@ msgid "Single document"
 msgstr "単一のドキュメント"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "Export selected layers into a single DXF"
-msgstr "選択した表のセルを単一のセルにする"
+msgstr "選択したレイヤーを単一のDXFにエクスポートする"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "SVG Options"
@@ -41581,7 +41979,7 @@ msgstr "保護機能:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
 msgid "Hole post-machining"
-msgstr ""
+msgstr "スルーホール後加工"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 msgid "Add teardrops on via's track connections"
@@ -42194,9 +42592,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "新規グラフィック アイテムのデフォルトのプロパティ"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:381
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "シンボル ライブラリ テーブル"
+msgstr "テーブル(入れ子になったライブラリ テーブル)"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:500
 #, c-format
@@ -44590,12 +44987,11 @@ msgstr "ビアレイヤーへ"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
-msgstr ""
+msgstr "ゾーン ハッチングの塗りつぶし オフセット"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "新しい寸法線オブジェクトのデフォルト値"
+msgstr "新しいゾーンのデフォルトプロパティ"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:235
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:341
@@ -44611,9 +45007,8 @@ msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "サーマルリリーフのスポーク幅は最小幅より狭くできません。"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:449
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "すべてのユーザー定義レイヤーはすでに追加済みです。"
+msgstr "すべてのゾーン レイヤーはすでに上書きされています。"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:472
 msgid "<no net> will result in an isolated copper island."
@@ -44679,33 +45074,28 @@ msgid "Width of copper in thermal reliefs."
 msgstr "サーマルリリーフ内のブリッジ幅。"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:142
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "クリアランスのオーバーライドとパッド接続"
+msgstr "クリアランス && パッド接続"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
-#, fuzzy
 msgid "Display Overrides"
-msgstr "ビア 遅延の上書き:"
+msgstr "表示上書き"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
-#, fuzzy
 msgid "Hatched fill"
 msgstr "ハッチング"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:259
-#, fuzzy
 msgid "Hatch offset overrides:"
-msgstr "ビア 遅延の上書き:"
+msgstr "ハッチオフセットの上書き:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:320
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "ハッチング"
+msgstr "ハッチング塗りつぶし"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Remove islands:"
-msgstr "孤立した導体部分を削除:"
+msgstr "孤立部を削除:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:354
 msgid "Choose what to do with unconnected copper islands"
@@ -45329,9 +45719,8 @@ msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "フットプリントがシンボルのフットプリント フィルターと一致しません"
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Footprint field does not match symbol field"
-msgstr "フットプリントの属性がシンボルと一致しない"
+msgstr "フットプリントとシンボルのカスタムフィールドが一致しない"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint not found in libraries"
@@ -45362,9 +45751,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "基板端でシルクスクリーンが切り取られている"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "シルクスクリーンのオーバーラップ"
+msgstr "シルクスクリーンのクリアランス"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
@@ -45420,13 +45808,12 @@ msgid "Missing tuning profile"
 msgstr "調整プロファイル がありません"
 
 #: pcbnew/drc/drc_item.cpp:310
-#, fuzzy
 msgid "Tuning profile track geometries"
-msgstr "チューニングプロファイル名はすでに使用されています"
+msgstr "調整プロファイル配線形状"
 
 #: pcbnew/drc/drc_item.cpp:314
 msgid "Track connected to post-machined or backdrilled layer"
-msgstr ""
+msgstr "後加工またはバックドリル層上のパッド/ビアに接続されたトラック"
 
 #: pcbnew/drc/drc_item.cpp:516
 #, c-format
@@ -45729,9 +46116,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "禁止と不許可の制約をチェック..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:167
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "基板端でシルクスクリーンが切り取られている"
+msgstr "基板端外側のシルクスクリーン"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:243
 msgid "Checking copper to board edge clearances..."
@@ -46648,9 +47034,8 @@ msgid "OCC error adding pad/via polygon."
 msgstr "パッド/ビア ポリゴン追加中にOCC エラー。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy
 msgid "Failed to create counterbore cylinder shape"
-msgstr "署名の作成に失敗しました: %s"
+msgstr "座ぐりの円筒形状の作成を失敗しました"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
 #, c-format
@@ -46658,9 +47043,8 @@ msgid "OCC exception creating counterbore: %s"
 msgstr "座ぐり作成中のOpenCasCade(OCC)例外発生: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "多面体の形状を作成できませんでした"
+msgstr "皿穴の円錐形状の作成を失敗しました"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
 #, c-format
@@ -48631,41 +49015,36 @@ msgid "Undefined"
 msgstr "未定義"
 
 #: pcbnew/pad.cpp:3234
-#, fuzzy
 msgid "Not post-machined"
-msgstr "指定なし"
+msgstr "後加工なし"
 
 #: pcbnew/pad.cpp:3247
-#, fuzzy
 msgid "No backdrill"
-msgstr "ドリルマークなし"
+msgstr "バックドリルなし"
 
 #: pcbnew/pad.cpp:3248
-#, fuzzy
 msgid "Backdrill bottom"
-msgstr "背景下端:"
+msgstr "バックドリル裏面"
 
 #: pcbnew/pad.cpp:3249
 msgid "Backdrill top"
-msgstr ""
+msgstr "バックドリル表面"
 
 #: pcbnew/pad.cpp:3250
 msgid "Backdrill both"
-msgstr ""
+msgstr "バックドリル両面"
 
 #: pcbnew/pad.cpp:3270
 msgid "Front, back and connected layers"
 msgstr "前面、背面、接続されたレイヤー"
 
 #: pcbnew/pad.cpp:3318
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "ピンのプロパティ"
+msgstr "後加工のプロパティ"
 
 #: pcbnew/pad.cpp:3319
-#, fuzzy
 msgid "Backdrill Properties"
-msgstr "バーコードのプロパティ"
+msgstr "バックドリルのプロパティ"
 
 #: pcbnew/pad.cpp:3321
 msgid "Pad Type"
@@ -48700,65 +49079,60 @@ msgid "Hole Size Y"
 msgstr "穴サイズ Y"
 
 #: pcbnew/pad.cpp:3414
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "位置"
+msgstr "表面後加工"
 
 #: pcbnew/pad.cpp:3426
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "表面後加工サイズ"
 
 #: pcbnew/pad.cpp:3441
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "表面座ぐり深さ"
 
 #: pcbnew/pad.cpp:3456
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "表面皿穴角度"
 
 #: pcbnew/pad.cpp:3471
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "裏面後加工"
 
 #: pcbnew/pad.cpp:3483
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "裏面後加工サイズ"
 
 #: pcbnew/pad.cpp:3498
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "裏面座ぐり深さ"
 
 #: pcbnew/pad.cpp:3513
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "裏面皿穴角度"
 
 #: pcbnew/pad.cpp:3528 pcbnew/pcb_track.cpp:3196
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "塗りつぶしモード"
+msgstr "バックドリル モード"
 
 #: pcbnew/pad.cpp:3531 pcbnew/pcb_track.cpp:3199
-#, fuzzy
 msgid "Bottom Backdrill Size"
-msgstr "カスタム配線幅/ビアサイズ"
+msgstr "裏面バックドリル サイズ"
 
 #: pcbnew/pad.cpp:3546 pcbnew/pcb_track.cpp:3211
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
-#, fuzzy
 msgid "Bottom Backdrill Must-Cut"
-msgstr "裏面パッド マスター"
+msgstr "裏面バックドリル必須切り取り"
 
 #: pcbnew/pad.cpp:3561 pcbnew/pcb_track.cpp:3223
-#, fuzzy
 msgid "Top Backdrill Size"
-msgstr "マイクロ ビア ドリルの値"
+msgstr "表面バックドリル サイズ"
 
 #: pcbnew/pad.cpp:3576 pcbnew/pcb_track.cpp:3235
 #: pcbnew/widgets/pcb_properties_panel.cpp:564
 #: pcbnew/widgets/pcb_properties_panel.cpp:568
 msgid "Top Backdrill Must-Cut"
-msgstr ""
+msgstr "表面バックドリル 必須切り取り"
 
 #: pcbnew/pad.cpp:3592
 msgid "Fabrication Property"
@@ -51161,6 +51535,308 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>マークアップ</th>\n"
+"        <th></th>\n"
+"        <th>結果例</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{上付き}文字</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>上付き</sup>&nbsp;</samp>文字</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>ドライバボード^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ドライバボード<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{下付き}文字</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>下付き</sub>&nbsp;</samp>文字</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</samp>"
+"</td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp</u></samp><br> <samp>上線</"
+"samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${変数}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>変数値</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${PROJECTNAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>MyBoard</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>プリント基板変数</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILENAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILEPATH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>/path/to/board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${LAYER}</samp> (テキスト/テーブル毎)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>F.Cu, B.Cu, F.SilkS...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>フットプリント相互参照</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:フィルド}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>フットプリント リファレンスのフィールド値</i>"
+"</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:REFERENCE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>U1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>STM32F407VGT6</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_LIBRARY}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Package_QFP</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_NAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>LQFP-100_14x14mm_P0.5mm</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>パッド/ピンの機能</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>パッドに接続されたネット名</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:SHORT_NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>短いネット名または未接続の場合はNC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> または <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:NET_CLASS(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>パッドのネットクラス</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:PIN_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>ピンの機能/名前</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>テーブル変数</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A1, B2, C3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>数式</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{式}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>評価結果</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} - 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>3</samp> (ROW=4のとき)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>文字列比較 & 条件付きテキスト</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"テキスト\" == \"テキスト\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"テキスト\" != \"他のテキスト\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>条件付きテキスト表示</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"トップ\", "
+"\"ボトム\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>トップ</samp> (フロントレイヤならば) さもなくば "
+"<samp>ボトム</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>数値比較も可能</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>エスケープシーケンス</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (展開されない)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>価格: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>価格: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (計算されない)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>ネストされた変数</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(@{${ROW}-2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>テーブル内の動的ネット検索</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U${ROW}:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>動的フットプリント参照</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>マークアップは変数の展開よりも優先されることに注意してください。</i>\n"
+"<p></p>\n"
+"<p><b>フットプリント相互参照:</b><samp>${refdes:field}</samp>または<samp>$"
+"{refdes:function(pad)}</samp>構文を使用して、他のフットプリント上のフィールド"
+"、パッドを参照します。<samp></p>\n"
+"<p><b>Nested Variables:</b> 変数は他の変数を含むことができます。内側の変数が"
+"最初に展開されます。最大ネストの深さは10レベルです。</p>\n"
+"<p><b>エラーメッセージ:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - 変数または関数を解決できません</"
+"li>\n"
+"<li><samp>&lt;Unknown reference: U1&gt;</samp> - フットプリントが有りません</"
+"li>\n"
+"</ul>\n"
+"\n"
 
 #: pcbnew/pcb_textbox.cpp:589
 #, c-format
@@ -51221,21 +51897,19 @@ msgstr "ビアレイヤーは導体レイヤーでなければなりません。
 
 #: pcbnew/pcb_track.cpp:1820
 msgid "Via layer is outside the board stack."
-msgstr ""
+msgstr "ビア レイヤーは基板スタックの外側。"
 
 #: pcbnew/pcb_track.cpp:1838
 msgid "Via start layer and end layer cannot be the same"
 msgstr "ビアの開始レイヤーと終了レイヤーは同じにできません"
 
 #: pcbnew/pcb_track.cpp:1847
-#, fuzzy
 msgid "Backdrill diameter is too small."
-msgstr "ビアの直径が小さすぎます。"
+msgstr "バックドリルの直径が小さすぎます。"
 
 #: pcbnew/pcb_track.cpp:1863
-#, fuzzy
 msgid "Tertiary backdrill diameter is too small."
-msgstr "ビアの直径が小さすぎます。"
+msgstr "バックドリルの直径が小さすぎます。"
 
 #: pcbnew/pcb_track.cpp:2284
 msgid "Track (arc)"
@@ -51296,9 +51970,8 @@ msgstr "配線 %s ( %s 上、長さ: %s )"
 #: pcbnew/pcb_track.cpp:2852 pcbnew/pcb_track.cpp:2858
 #: pcbnew/pcb_track.cpp:2864 pcbnew/pcb_track.cpp:2870
 #: pcbnew/pcb_track.cpp:2876
-#, fuzzy
 msgid "From board stackup"
-msgstr "基板スタックアップ"
+msgstr "基板スタックアップから"
 
 #: pcbnew/pcb_track.cpp:2853
 msgid "Tented"
@@ -51385,38 +52058,36 @@ msgid "Filling"
 msgstr "充填"
 
 #: pcbnew/pcb_track.cpp:3247
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "表面のテンティング"
+msgstr "表面後加工"
 
 #: pcbnew/pcb_track.cpp:3250
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "表面後加工サイズ"
 
 #: pcbnew/pcb_track.cpp:3261
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "表面後加工深さ"
 
 #: pcbnew/pcb_track.cpp:3272
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "表面後加工角度"
 
 #: pcbnew/pcb_track.cpp:3283
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "裏面のテンティング"
+msgstr "裏面後加工"
 
 #: pcbnew/pcb_track.cpp:3286
 msgid "Back Post-machining Size"
-msgstr ""
+msgstr "裏面後加工サイズ"
 
 #: pcbnew/pcb_track.cpp:3297
 msgid "Back Post-machining Depth"
-msgstr ""
+msgstr "裏面後加工深さ"
 
 #: pcbnew/pcb_track.cpp:3308
 msgid "Back Post-machining Angle"
-msgstr ""
+msgstr "裏面後加工角度"
 
 #: pcbnew/pcbexpr_evaluator.cpp:689
 msgid "must be mm, in, mil, deg, fs, or ps"
@@ -51932,7 +52603,6 @@ msgid "Switches posture of the currently routed track."
 msgstr "現在の配線パターンの姿勢を変更します。"
 
 #: pcbnew/router/router_tool.cpp:201
-#, fuzzy
 msgid "Track Corner Mode Switch"
 msgstr "配線のコーナー モード切り替え"
 
@@ -52062,7 +52732,7 @@ msgstr "インタラクティブ ルーター"
 
 #: pcbnew/router/router_tool.cpp:579
 msgid "Track Corner Mode"
-msgstr "配線のコーナー モード切り替え"
+msgstr "配線のコーナー モード"
 
 #: pcbnew/router/router_tool.cpp:665
 msgid "Save router log"
