@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-11-13 04:51+0000\n"
+"PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -8468,6 +8468,13 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad が '%s' にアクセスできません。\n"
+"\n"
+"1. Windows の設定またはグループポリシーで「制御されたフォルダー アクセス、"
+"Controlled Folder Access (CFA)」をしていないか確認してください\n"
+"2. 他のウイルス対策ソフトウェアが KiCad の動作に干渉していないか確認してくだ"
+"さい\n"
+"3. 適切な権限が設定されていることを確認してください"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
@@ -9900,7 +9907,7 @@ msgstr "フットプリントが見つかりません。"
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "フットプリント ライブラリをロード中"
+msgstr "フットプリント ライブラリを読み込み中"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -19171,12 +19178,13 @@ msgstr ""
 "ポートできます。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"不正なパッドスタックレイヤー '%s'、ファイル '%s'、行 %d、オフセット %d."
+"ファイル '%s' を読み取れません。\n"
+"'%s' (行 %d、カラム %d、オフセット %d)"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -20671,7 +20679,7 @@ msgstr "帯行列のバンド幅は >= 1 でなければならない。"
 #: eeschema/sim/kibis/ibis_parser.cpp:82 eeschema/sim/kibis/ibis_parser.cpp:105
 #: eeschema/sim/kibis/ibis_parser.cpp:128
 msgid "There are NaN elements in a matrix."
-msgstr "行列に NaN の要素があります。"
+msgstr "行列に 数値でない(NaN:Not a Number) の要素があります。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:167
 msgid "Invalid R_pkg value."
@@ -47028,18 +47036,21 @@ msgstr "プロジェクトのフットプリント ライブラリの読み込�
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Python C API を介して Python モジュール '%s' を初期化する最初のフェーズで失敗"
+"しました。"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "スクリプト コンソール"
+msgstr "スクリプトの初期化"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Python C API を介して Python モジュール '%s' を初期化する第二のフェーズで失敗"
+"しました。"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -51753,9 +51764,8 @@ msgid "Filled Area"
 msgstr "塗りつぶし領域"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "ルールエリア"
+msgstr "アウトライン エリア"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
