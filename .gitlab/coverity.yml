@@ -53,9 +53,9 @@ Coverity:
     - export COVERITY_SCAN_PROJECT_NAME="kicad"
     - test "$(git rev-parse --is-shallow-repository)" = "false" || (git fetch --unshallow)
     - git fetch origin
-    - curl -LO https://github.com/peak/s5cmd/releases/download/v2.0.0/s5cmd_2.0.0_Linux-64bit.tar.gz
+    - curl -LO https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz
     - mkdir s5cmd
-    - tar -xvf ./s5cmd_2.0.0_Linux-64bit.tar.gz -C s5cmd
+    - tar -xvf ./s5cmd_2.3.0_Linux-64bit.tar.gz -C s5cmd
     - export AWS_ACCESS_KEY_ID=$KICAD_CI_R2_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$KICAD_CI_R2_ACCESS_KEY
     - export S3_ENDPOINT_URL=$KICAD_CI_R2_ENDPOINT
