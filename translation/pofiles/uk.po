@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-12 09:00+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -9445,7 +9445,7 @@ msgstr "Бібліотеки"
 
 #: common/startwizard/startwizard_provider_privacy.cpp:76
 msgid "Updates && Privacy"
-msgstr ""
+msgstr "Оновлення та конфіденційність"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9456,9 +9456,8 @@ msgid "Select Settings Path"
 msgstr "Виберати шлях до налаштувань"
 
 #: common/startwizard/startwizard_provider_settings.cpp:183
-#, fuzzy
 msgid "Configuration"
-msgstr "Підтвердження"
+msgstr "Конфігурація"
 
 #: common/tool/action_menu.cpp:224 common/tool/action_menu.cpp:229
 #, c-format
@@ -9952,13 +9951,12 @@ msgid "Edit Table..."
 msgstr "Редагувати таблицю..."
 
 #: common/tool/actions.cpp:574
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "Експортувати як CSV..."
+msgstr "Експорт таблиці у формат CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
-msgstr ""
+msgstr "Експорт вмісту таблиці у файл CSV із визначеними текстовими змінними"
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
@@ -10842,14 +10840,12 @@ msgstr "Опис бібліотеки"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:708
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
 "Помилка збереження таблиці бібліотеки:\n"
 "\n"
-"%s"
 
 #: common/widgets/design_block_pane.cpp:296
 msgid "Please select a library to delete."
@@ -11141,9 +11137,8 @@ msgid "Confirm change"
 msgstr "Підтвердити зміну"
 
 #: common/widgets/widget_hotkey_list.cpp:516
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(натисніть двічі для редагування)"
+msgstr "Команда (подвійне клацання для редагування)"
 
 #: common/widgets/widget_hotkey_list.cpp:519
 msgid "Hotkey"
@@ -12742,13 +12737,12 @@ msgstr ""
 "видимим"
 
 #: eeschema/dialogs/dialog_erc.cpp:235
-#, fuzzy
 msgid "Show all errors"
-msgstr "Показати всі версії"
+msgstr "Показати всі помилки"
 
 #: eeschema/dialogs/dialog_erc.cpp:236
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "Показати дублікати маркерів ERC на всіх відповідних контактах"
 
 #: eeschema/dialogs/dialog_erc.cpp:410 pcbnew/dialogs/dialog_drc.cpp:1286
 msgid "Delete exclusions too?"
@@ -14137,9 +14131,9 @@ msgstr "Назва поля '%s' вже існує."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:814
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "Таблиця полів символів"
+msgstr "Таблиця полів символів (бібліотека '%s')"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1031
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -15023,94 +15017,86 @@ msgid "Plot Schematic"
 msgstr "Схема ділянки"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "Імпортувати налаштування"
+msgstr "Налаштування віддалених символів"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:58
 msgid ""
 "Configure where downloaded remote libraries are stored and how they are "
 "named."
 msgstr ""
+"Налаштуйте місце зберігання завантажених віддалених бібліотек та їх імена."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:65
-#, fuzzy
 msgid "Destination directory:"
-msgstr "Шлях призначення:"
+msgstr "Каталог призначення:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:71
 msgid ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
 msgstr ""
+"Каталог, куди будуть записані завантажені дані символів, посадкового місця "
+"та 3D-моделі."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:74
-#, fuzzy
 msgid "Browse…"
-msgstr "Перегляд"
+msgstr "Переглянути…"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Library prefix:"
-msgstr "Префікс псевдоніму бібліотеки:"
+msgstr "Префікс бібліотеки:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Prefix that will be applied to the generated libraries."
-msgstr ""
+msgstr "Префікс, який буде застосовано до згенерованих бібліотек."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "Завантажено %zu бібліотек"
+msgstr "Додати бібліотеки до:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "Таблиця бібліотеки символів"
+msgstr "Таблиця бібліотеки проектів"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Додати нову бібліотеку до таблиці бібліотек проекту"
+msgstr "Додає згенеровані бібліотеки до таблиць бібліотек проєкту."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "Таблиця бібліотеки символів"
+msgstr "Глобальна таблиця бібліотеки"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Додати нову бібліотеку до глобальної таблиці бібліотек"
+msgstr "Додає згенеровані бібліотеки до глобальних таблиць бібліотек."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
-msgstr ""
+msgstr "Відновіть пункт призначення та префікс за замовчуванням."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
-#, fuzzy
 msgid "Please choose a destination directory."
-msgstr "Будь ласка, виберіть коректний файл списку звʼязків."
+msgstr "Будь ласка, виберіть каталог призначення."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:158
-#, fuzzy
 msgid "Please enter a library prefix."
-msgstr "Будь ласка, виберіть бібліотеку для видалення."
+msgstr "Будь ласка, введіть префікс бібліотеки."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Виберіть тип місця призначення:"
+msgstr "Виберіть каталог призначення"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
 "Library names will be created with suffixes such as _symbols, _fp, and _3d."
 msgstr ""
+"Назви бібліотек будуть створені з суфіксами, такими як _symbols, _fp та _3d."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:263
 #, c-format
 msgid "Will create libraries like %1$s_symbols, %1$s_fp, %1$s_3d, etc."
-msgstr ""
+msgstr "Буде створено бібліотеки, такі як %1$s_symbols, %1$s_fp, %1$s_3d тощо."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:96
 msgid ""
@@ -17493,20 +17479,21 @@ msgid ""
 "Install schematic data sources from the Plugin and Content Manager. Data "
 "sources extend KiCad by linking schematic items to external data providers."
 msgstr ""
+"Встановіть джерела даних схем з плагіна та менеджера вмісту. Джерела даних "
+"розширюють можливості KiCad, пов'язуючи елементи схем із зовнішніми "
+"постачальниками даних."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:63
-#, fuzzy
 msgid "Manage Data Sources..."
-msgstr "Менеджер бібліотек символів..."
+msgstr "Керування джерелами даних..."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:123
-#, fuzzy
 msgid "No data sources are currently installed."
-msgstr "Фігури DXF наразі не підтримуються."
+msgstr "Наразі не встановлено жодних джерел даних."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:136
 msgid "Installed data sources are listed above."
-msgstr ""
+msgstr "Встановлені джерела даних перелічені вище."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:282
 #, c-format
@@ -18217,9 +18204,8 @@ msgstr "Блоки дизайну"
 
 #: eeschema/eeschema_settings.cpp:157 eeschema/menubar.cpp:191
 #: eeschema/sch_edit_frame.cpp:2025 eeschema/tools/sch_actions.cpp:130
-#, fuzzy
 msgid "Remote Symbols"
-msgstr "Перевизначення символів"
+msgstr "Віддалені символи"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
 msgid "Input Pin"
@@ -18779,9 +18765,8 @@ msgid "Do not show this dialog again."
 msgstr "Більше не показувати це вікно."
 
 #: eeschema/files-io.cpp:528
-#, fuzzy
 msgid "Legacy project cache library"
-msgstr "Файли застарілих бібліотек посадкових місць"
+msgstr "Бібліотека кешу старих проектів"
 
 #: eeschema/files-io.cpp:606
 #, c-format
@@ -19252,6 +19237,8 @@ msgstr "Панелі"
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manger to enable"
 msgstr ""
+"Встановіть віддалений сервер символів за допомогою плагіна та менеджера "
+"вмісту, щоб увімкнути"
 
 #: eeschema/menubar.cpp:335
 msgid "Variants"
@@ -19376,18 +19363,16 @@ msgstr "Не вдалося створити файл '%s'.\n"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:130
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:148
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error writing netlist: %s"
-msgstr ""
-"Помилка завантаження списку зв'язків.\n"
-"%s"
+msgstr "Помилка вводу/виводу при записі списку неттопів: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:135
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:154
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:109
 #, c-format
 msgid "Formatting error writing netlist: %s"
-msgstr ""
+msgstr "Помилка форматування під час запису списку нетто: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:453
 #, c-format
@@ -21801,6 +21786,412 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
+"</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A0, B1, C2...</samp> (0-based)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{expression}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>4</samp> (when ROW=3)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>String Comparison & Conditional Text</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" == \"text\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" != \"other\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Conditional text display</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
+"\"BOTTOM\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (on front layer) or <samp>BOTTOM</"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Numeric comparisons work too</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Symbol Pin Functions</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:REFERENCE(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Full reference with unit for pin</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (for multi-unit symbol)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Reference without unit letter for pin</samp></td>"
+"\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:UNIT(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Unit letter only for pin</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:UNIT(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>B</samp> (unit letter for pin 3)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Net name connected to pin</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R1:NET_NAME(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Pin name or selected alternate</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp> (alternate) or <samp>PA9</samp> "
+"(base)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_BASE_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Base pin name (ignoring alternates)</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_BASE_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>PA9</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>All alternate pin functions (excludes base name)"
+"</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Short net name or NC if unconnected</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> or <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pin)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Net class for pin</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Escape Sequences</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (not expanded)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Price: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Price: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (not evaluated)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Nested Variables</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (when ROW=0, pin 2 in unit B)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamic net lookup in tables</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Table Cell References</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(\"A0\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Evaluated value from cell A0</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(0, 1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Value from row 0, column 1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(${ADDR})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamic cell reference</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${CELL(${ROW}-1, ${COL})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Value from cell above (if ROW > 0)</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Зверніть увагу, що розмітка має пріоритет над визначеннями шини.</i>\n"
+"<p></p>\n"
+"<p><b>Функції виводів:</b> Автоматично знаходять правильне розташування "
+"одиниць. Для символів з кількома одиницями такі функції, як <samp>NET_NAME"
+"(pin)</samp>, працюють, навіть якщо вивод знаходиться в іншій одиниці, ніж "
+"та, що знаходиться на поточному аркуші.</p>\n"
+"<p><b>Посилання на комірки таблиці:</b> Функція <samp>CELL()</samp> працює "
+"лише в комірках таблиці. Використовуйте <samp>${CELL(\"A0\")}<samp> або "
+"<samp>${CELL(row, col)}<samp> для посилання на інші комірки в тій самій "
+"таблиці. Номери рядків і стовпців починаються з 0 (A0 - це перший рядок, "
+"перший стовпець). CELL повертає обчислене/відображене значення, а не "
+"необроблений текст комірки.</p>\n"
+"<p><b>Вкладені змінні:</b> Змінні можуть містити інші змінні. Внутрішні "
+"змінні розгортаються спочатку.  Максимальна глибина вкладеності: 6 рівнів.</"
+"p>\n"
+"<p><b>Повідомлення про помилки:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Змінну або функцію неможливо "
+"розпізнати</li>\n"
+"<li><samp>&lt;Unit X not placed&gt;</samp> - PIN-код знаходиться в блоці, "
+"який не розміщено на жодному аркуші</li>\n"
+"<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - Адреса комірки "
+"виходить за межі таблиці</li>\n"
+"</ul>\n"
+"\n"
 
 #: eeschema/sch_textbox.cpp:339
 #, c-format
@@ -21982,12 +22373,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1242
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1982
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"Помилка збереження таблиці бібліотеки:\n"
-"\n"
-"%s"
+msgstr "Помилка збереження таблиці бібліотеки."
 
 #: eeschema/sheet.cpp:696
 msgid "Cannot create the schematic image"
@@ -22029,19 +22416,16 @@ msgid "There are NaN elements in a matrix."
 msgstr "У матриці є елементи NaN."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:137
-#, fuzzy
 msgid "Missing or invalid R_pkg value."
-msgstr "Неправильне значення R_pkg."
+msgstr "Відсутнє або недійсне значення R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:143
-#, fuzzy
 msgid "Missing or invalid L_pkg value."
-msgstr "Неправильне значення L_pkg."
+msgstr "Відсутнє або недійсне значення L_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Missing or invalid C_pkg value."
-msgstr "Некоректне значення C_pkg."
+msgstr "Відсутнє або недійсне значення C_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:164
 msgid "Checking pin "
@@ -22152,156 +22536,134 @@ msgid "Invalid V_meas value."
 msgstr "Недійсне значення V_meas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
-#, fuzzy
 msgid "Missing or invalid C_comp value."
-msgstr "Відсутнє оптимальне значення."
+msgstr "Відсутнє або недійсне значення C_comp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
 msgid "Missing or invalid C_comp_gnd_clamp value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення C_comp_gnd_clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:555
 msgid "Missing or invalid C_comp_power_clamp value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення C_comp_power_clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:564
 msgid "Missing or invalid C_comp_pullup value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення C_comp_pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:573
 msgid "Missing or invalid C_comp_pulldown value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення C_comp_pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
-#, fuzzy
 msgid "No C_comp values are available."
-msgstr "Доступні оновлення пакетів"
+msgstr "Значення C_comp недоступні."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
-#, fuzzy
 msgid "Missing or invalid Temperature Range value."
-msgstr "Діапазон температур некоректний."
+msgstr "Відсутнє або недійсне значення діапазону температур."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Missing or invalid Voltage Range value."
-msgstr "Некоректна напруга в IV таблиці"
+msgstr "Відсутнє або недійсне значення діапазону напруги."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення опорного значення підтягування."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:619
 msgid "Missing or invalid Pulldown Reference value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення посилання на випадання."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:628
 msgid "Missing or invalid GND Clamp Reference value."
-msgstr ""
+msgstr "Відсутнє або недійсне значення опорного затискача GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
 msgid "Missing or invalid POWER Clamp Reference value."
 msgstr ""
+"Відсутнє або недійсне значення опорного значення струмових затискачів POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Voltage Range or Reference is missing."
-msgstr "Діапазон напруги некоректний."
+msgstr "Відсутній діапазон напруги або опорне значення."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:653
 #: eeschema/sim/kibis/ibis_parser.cpp:758
-#, fuzzy
 msgid "Invalid Pulldown table."
-msgstr "Некоректний pulldown."
+msgstr "Недійсна розкривна таблиця."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:659
 #: eeschema/sim/kibis/ibis_parser.cpp:753
-#, fuzzy
 msgid "Invalid Pullup table."
-msgstr "Некоректний pullup."
+msgstr "Недійсна таблиця підтягування."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:665
-#, fuzzy
 msgid "Invalid ISSO_PD table."
-msgstr "Неправильне значення R_pkg."
+msgstr "Недійсна таблиця ISSO_PD."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:671
-#, fuzzy
 msgid "Invalid ISSO_PU table."
-msgstr "Неправильне значення R_pkg."
+msgstr "Недійсна таблиця ISSO_PU."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:677
-#, fuzzy
 msgid "Invalid Composite Current table."
-msgstr "Некоректне значення властивості"
+msgstr "Недійсна таблиця складеного струму."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:683
 #: eeschema/sim/kibis/ibis_parser.cpp:768
-#, fuzzy
 msgid "Invalid POWER Clamp table."
-msgstr "Некоректний термінал POWER."
+msgstr "Недійсна таблиця затискачів POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:689
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Invalid GND Clamp table."
-msgstr "Некоректний термінал GND."
+msgstr "Недійсна таблиця затискачів GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:698
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Invalid Ramp specification."
-msgstr "Некоректне визначення рядка"
+msgstr "Недійсна специфікація рампи."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:711
-#, fuzzy
 msgid "Submodel name cannot be empty."
-msgstr "Поле імені моделі не може бути незаповненим."
+msgstr "Назва підмоделі не може бути порожньою."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Checking submodel "
-msgstr "Перевірка міток "
+msgstr "Перевірка підмоделі "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "The submodel has no type."
-msgstr "Цей символ має лише одну одиницю."
+msgstr "Підмодель не має типу."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
-#, fuzzy
 msgid "Missing or invalid V_trigger_r value."
-msgstr "Недійсне значення V_ref."
+msgstr "Відсутнє або недійсне значення V_trigger_r."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:740
-#, fuzzy
 msgid "Missing or invalid V_trigger_f value."
-msgstr "Недійсне значення V_ref."
+msgstr "Відсутнє або недійсне значення V_trigger_f."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
-#, fuzzy
 msgid "Missing or invalid Off_delay value."
-msgstr "Неправильне значення затримки"
+msgstr "Відсутнє або недійсне значення Off_delay."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
-#, fuzzy
 msgid "Invalid GND Pulse table."
-msgstr "Некоректний термінал GND."
+msgstr "Недійсна таблиця імпульсів GND."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:778
-#, fuzzy
 msgid "Invalid POWER Pulse table."
-msgstr "Некоректний термінал POWER."
+msgstr "Недійсна таблиця імпульсів POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "Повнотілі фігури DXF наразі не підтримуються."
+msgstr " Підмоделі ще не підтримуються."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
-#, fuzzy
 msgid "Triggered mode dynamic clamp submodels are not yet supported."
-msgstr "Проігноровано штрих-код на шарі Altium %d (не підтримується зараз)."
+msgstr "Підмоделі динамічного обмеження в режимі тригера ще не підтримуються."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:813
 msgid "Checking Header..."
@@ -22384,23 +22746,20 @@ msgid "Error on line "
 msgstr "Помилка у рядку "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "Символ не знайдено."
+msgstr " підмодель не знайдено."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr "Рядок незакінчений належним чином."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "'%s' не є дійсним значенням SPICE."
+msgstr " не є дійсним значенням dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
-#, fuzzy
 msgid "A dV/dt value is missing."
-msgstr "Він відсутній.\n"
+msgstr "Відсутнє значення dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1233
 #: eeschema/sim/kibis/ibis_parser.cpp:1248
@@ -22434,7 +22793,7 @@ msgstr "Зайвих аргументів не очікується"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 msgid "Submodel name is not unique: "
-msgstr ""
+msgstr "Назва підмоделі не є унікальною: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1585
 msgid "Unknown keyword in "
@@ -22450,54 +22809,47 @@ msgstr "Некоректні дані ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1733
 msgid "The submodel name is missing."
-msgstr ""
+msgstr "Відсутня назва підмоделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
 msgid "The submodel mode is missing."
-msgstr ""
+msgstr "Режим підмоделі відсутній."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
 msgid " is not a recognised submodel mode."
-msgstr ""
+msgstr " не є розпізнаним режимом підмоделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1856
 msgid " is not a recognised Submodel Spec subparameter."
-msgstr ""
+msgstr " не є розпізнаним підпараметром специфікації підмоделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
-#, fuzzy
 msgid "Missing pin name/number for matrix row."
-msgstr "Відсутня інформація"
+msgstr "Відсутня назва/номер виводу для рядка матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1921
-#, fuzzy
 msgid "Invalid pin name/number in matrix row."
-msgstr "Недійсний рядок у матриці"
+msgstr "Недійсна назва/номер виводу в рядку матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1942
-#, fuzzy
 msgid "The matrix type is missing."
-msgstr "Він відсутній.\n"
+msgstr "Тип матриці відсутній."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
-msgstr "Відсутній тип матриці"
+msgstr " не є розпізнаним типом матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
-#, fuzzy
 msgid "Unexpected [Bandwidth] keyword."
-msgstr "Неочікувані елементи для '%s'"
+msgstr "Неочікуване ключове слово [Bandwidth]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1992
-#, fuzzy
 msgid "Matrix bandwidth must be >= 0."
-msgstr "Довжина тексту має бути принаймні %s."
+msgstr "Пропускна здатність матриці має бути >= 0."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2007
-#, fuzzy
 msgid "Unexpected [Row] keyword."
-msgstr "Неочікуваний кінець файлу."
+msgstr "Неочікуване ключове слово [Рядок]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2037
 msgid "Too much data for this matrix row."
@@ -22506,18 +22858,16 @@ msgstr "Забагато даних для цього рядка матриці.
 #: eeschema/sim/kibis/ibis_parser.cpp:2043
 #: eeschema/sim/kibis/ibis_parser.cpp:2073
 msgid "Element location is outside the matrix."
-msgstr ""
+msgstr "Розташування елемента знаходиться поза матрицею."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2048
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
-#, fuzzy
 msgid "Failed to read a matrix element."
-msgstr "Не можна прочитати елемент матриці"
+msgstr "Не вдалося прочитати елемент матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2061
-#, fuzzy
 msgid "Failed to read a matrix pin name."
-msgstr "Не вдалося прочитати данні зображення."
+msgstr "Не вдалося прочитати назву виводу матриці."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2236
 msgid "Typ-Min-Max Values requires at least Typ."
@@ -22550,17 +22900,16 @@ msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr "Продовження читання моделі не починалося. ( внутрішня помилка )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr "Невизначений тип моделі."
+msgstr " не є розпізнаним типом підмоделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
-msgstr ""
+msgstr "Значення Submodel_type відсутнє."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
-msgstr ""
+msgstr " не є розпізнаним підпараметром підмоделі."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2616
 msgid "A [Package] line requires exactly 4 elements."
@@ -24310,9 +24659,8 @@ msgid "Show/hide design blocks library"
 msgstr "Показати/приховати бібліотеку блоків проектування"
 
 #: eeschema/tools/sch_actions.cpp:131
-#, fuzzy
 msgid "Show/hide the remote symbol panel"
-msgstr "Показати або приховати панель пошуку"
+msgstr "Показати/приховати панель символів пульта дистанційного керування"
 
 #: eeschema/tools/sch_actions.cpp:137
 msgid "Save Current Sheet as Design Block..."
@@ -24461,24 +24809,21 @@ msgid "Remove inheritance from symbol"
 msgstr "Вилучити успадкування від символу"
 
 #: eeschema/tools/sch_actions.cpp:289 eeschema/tools/sch_actions.cpp:1099
-#, fuzzy
 msgid "Bulk Edit Symbol Fields..."
-msgstr "Редагувати поля символу..."
+msgstr "Масове редагування полів символів..."
 
 #: eeschema/tools/sch_actions.cpp:290
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the library"
-msgstr "Редагувати таблицю полів усіх символів, пов'язаних з вибраним символом"
+msgstr "Редагувати таблицю полів з усіх символів у бібліотеці"
 
 #: eeschema/tools/sch_actions.cpp:296
-#, fuzzy
 msgid "Bulk Edit Related Symbol Fields..."
-msgstr "Редагувати поля символу..."
+msgstr "Масове редагування пов'язаних полів символів..."
 
 #: eeschema/tools/sch_actions.cpp:297
-#, fuzzy
 msgid "Edit a table of fields from all symbols related to the selected symbol"
-msgstr "Редагувати таблицю полів усіх символів, пов'язаних з вибраним символом"
+msgstr ""
+"Редагувати таблицю полів з усіх символів, пов'язаних з вибраним символом"
 
 #: eeschema/tools/sch_actions.cpp:303
 msgid "Add Symbol to Schematic"
@@ -24706,24 +25051,20 @@ msgid "Imports and auto places all sheet pins"
 msgstr "Імпортує та автоматично розміщує всі шпильки аркушів"
 
 #: eeschema/tools/sch_actions.cpp:611
-#, fuzzy
 msgid "Sync Selected Sheet Pins..."
-msgstr "Синхронізація закріплених аркушів..."
+msgstr "Синхронізувати вибрані закріплені аркуші..."
 
 #: eeschema/tools/sch_actions.cpp:612
-#, fuzzy
 msgid "Synchronize selected sheet pins and hierarchical labels"
-msgstr "Синхронізувати закріплення аркушів та ієрархічні мітки"
+msgstr "Синхронізувати вибрані закріплення аркушів та ієрархічні підписи"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheets Pins..."
-msgstr "Синхронізація закріплених аркушів..."
+msgstr "Синхронізувати всі піни Таблиць..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheets pins and hierarchical labels"
-msgstr "Синхронізувати закріплення аркушів та ієрархічні мітки"
+msgstr "Синхронізувати всі закріплені елементи аркушів та ієрархічні мітки"
 
 #: eeschema/tools/sch_actions.cpp:627
 msgid "Import Sheet..."
@@ -25089,19 +25430,16 @@ msgid "Open the library symbol in the Symbol Editor"
 msgstr "Відкрити символ бібліотеки в редакторі символів"
 
 #: eeschema/tools/sch_actions.cpp:1100
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the schematic"
-msgstr "Редагувати таблицю полів усіх символів, пов'язаних з вибраним символом"
+msgstr "Редагувати таблицю полів з усіх символів у схемі"
 
 #: eeschema/tools/sch_actions.cpp:1106
-#, fuzzy
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Редагувати посилання на бібліотеку символів..."
+msgstr "Масове редагування посилань бібліотеки символів..."
 
 #: eeschema/tools/sch_actions.cpp:1107
-#, fuzzy
 msgid "Edit a table of links between schematic and library symbols"
-msgstr "Змінити посилання між схемою і бібліотекою символів"
+msgstr "Редагувати таблицю зв'язків між схемами та символами бібліотеки"
 
 #: eeschema/tools/sch_actions.cpp:1113
 msgid "Assign Footprints..."
@@ -25892,28 +26230,28 @@ msgstr "У поточному проєкті не знайдено жодної 
 
 #: eeschema/tools/sch_edit_table_tool.cpp:119
 #: pcbnew/tools/pcb_edit_table_tool.cpp:160
-#, fuzzy
 msgid "Export Table to CSV"
-msgstr "Експортувати як CSV..."
+msgstr "Експорт таблиці у формат CSV"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:121
 #: pcbnew/tools/pcb_edit_table_tool.cpp:162
 msgid "CSV files (*.csv)|*.csv"
-msgstr ""
+msgstr "CSV-файли (*.csv)|*.csv"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:142
 #: pcbnew/tools/pcb_edit_table_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "Не вдалося відкрити файл '%s'."
+msgstr ""
+"Не вдалося відкрити файл:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:143
 #: pcbnew/tools/pcb_edit_table_tool.cpp:184
-#, fuzzy
 msgid "Export Error"
-msgstr "Експорт STEP"
+msgstr "Помилка експорту"
 
 #: eeschema/tools/sch_edit_tool.cpp:86
 msgid "Symbol Unit"
@@ -26115,14 +26453,12 @@ msgid ""
 msgstr "Вставка довгого текстового рядка може бути дуже повільною. Продовжити?"
 
 #: eeschema/tools/sch_editor_control.cpp:1743 pcbnew/tools/pcb_control.cpp:1153
-#, fuzzy
 msgid "Paste Cells"
-msgstr "Спеціальна вставка"
+msgstr "Вставити клітинки"
 
 #: eeschema/tools/sch_editor_control.cpp:1748 pcbnew/tools/pcb_control.cpp:1158
-#, fuzzy
 msgid "Failed to paste cells"
-msgstr "Не вдалося зберегти %s."
+msgstr "Не вдалося вставити клітинки"
 
 #: eeschema/tools/sch_editor_control.cpp:1864
 #, c-format
@@ -26583,32 +26919,30 @@ msgid "(page %s)"
 msgstr "(сторінка %s)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:218
-#, fuzzy
 msgid "Missing payload data."
-msgstr "Відсутнє ключове слово."
+msgstr "Відсутні дані корисного навантаження."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:226
-#, fuzzy
 msgid "Failed to decode base64 payload."
-msgstr "Не вдалося прочитати слово."
+msgstr "Не вдалося декодувати корисне навантаження base64."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported compression '%s'."
-msgstr "Файли схем Altium"
+msgstr "Непідтримуване стиснення '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:254
 msgid "Compressed payload was empty."
-msgstr ""
+msgstr "Стиснене корисне навантаження було порожнім."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "ZSTD decompression failed: %s"
-msgstr "Помилка підключення до бази даних: %s"
+msgstr "Не вдалося декомпресувати ZSTD: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:361
 msgid "Payload was empty."
-msgstr ""
+msgstr "Корисний вантаж був порожній."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:372
 #: eeschema/widgets/panel_remote_symbol.cpp:1554
@@ -26618,272 +26952,241 @@ msgstr ""
 #: eeschema/widgets/panel_remote_symbol.cpp:1849
 #: eeschema/widgets/panel_remote_symbol.cpp:1921
 #: eeschema/widgets/panel_remote_symbol.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Не вдалося записати '%s'."
+msgstr "Не вдалося створити '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s' for writing."
-msgstr "Не вдалося відкрити %s для читання."
+msgstr "Не вдалося відкрити '%s' для запису."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write '%s'."
-msgstr "Не вдалося записати файл '%s'."
+msgstr "Не вдалося записати '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:402
-#, fuzzy
 msgid "Symbol payload was empty."
-msgstr "Файл бібліотеки символів '%s' незаповнений."
+msgstr "Корисне навантаження символу було порожнім."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:410
 #: eeschema/widgets/panel_remote_symbol.cpp:420
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Не вдається створити тимчасовий файл '%s'.</b>"
+msgstr ""
+"Не вдалося створити тимчасовий файл для корисного навантаження символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:427
-#, fuzzy
 msgid "Failed to write the temporary symbol payload."
-msgstr "Не вдалося створити тимчасовий файл '%s'."
+msgstr "Не вдалося записати тимчасове корисне навантаження символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:439
 #: eeschema/widgets/panel_remote_symbol.cpp:1974
-#, fuzzy
 msgid "Unable to access the KiCad symbol plugin."
-msgstr "Не вдалося зняти фаску з вибраних ліній."
+msgstr "Не вдається отримати доступ до плагіна символів KiCad."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:462
 msgid "Symbol payload did not include the expected symbol."
-msgstr ""
+msgstr "Корисне навантаження символу не містило очікуваного символу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Не вдалося об'єднати вибрані полігони."
+msgstr "Не вдається декодувати корисне навантаження символу: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:496
 msgid "Select which remote data source to query."
-msgstr ""
+msgstr "Виберіть, до якого віддаленого джерела даних надсилати запит."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:508
-#, fuzzy
 msgid "Configure remote data sources."
-msgstr "Налаштувати класи звʼязків"
+msgstr "Налаштуйте віддалені джерела даних."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:577
 msgid "No remote data sources are currently installed."
-msgstr ""
+msgstr "Наразі не встановлено жодних віддалених джерел даних."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "No configuration JSON found for '%s'."
-msgstr "Не знайдено визначення моделі моделювання для символу '%s'."
+msgstr "Не знайдено JSON конфігурації для '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:650
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s'."
 msgstr "Не вдалося відкрити '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read '%s'."
-msgstr "Не вдалося прочитати файл '%s'."
+msgstr "Не вдалося прочитати '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load remote data for '%s'."
-msgstr "Не вдалося прочитати файл даних '%s'."
+msgstr "Не вдалося завантажити віддалені дані для '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:932
-#, fuzzy
 msgid "Missing login URL for remote authentication."
-msgstr "Відсутня інформація"
+msgstr "Відсутня URL-адреса входу для віддаленої автентифікації."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:943
-#, fuzzy
 msgid "Unable to start the local login listener."
-msgstr "Не вдалося відняти вибрані полігони."
+msgstr "Не вдалося запустити локальний прослуховувач входу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:952
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "Не вдалося створити теку для резервного копіювання '%s'.\n"
+msgstr "Не вдалося виділити порт зворотного виклику для входу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "Не підтримується форма перехідного отвору: %s."
+msgstr "Непідтримувана версія RPC %d."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
-#, fuzzy
 msgid "Missing session identifier."
-msgstr "Не вказано номер версії."
+msgstr "Відсутній ідентифікатор сеансу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1188
-#, fuzzy
 msgid "Missing compression metadata."
-msgstr "Відсутній вираз умови."
+msgstr "Відсутні метадані стиснення."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1230
 #: eeschema/widgets/panel_remote_symbol.cpp:1244
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' is not supported."
-msgstr "%s не підтримується."
+msgstr "Команда '%s' не підтримується."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1238
-#, fuzzy
 msgid "Unable to store payload."
-msgstr "Не вдалося відкрити файл"
+msgstr "Не вдається зберегти корисне навантаження."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1254
 #: eeschema/widgets/panel_remote_symbol.cpp:1538
 #: eeschema/widgets/panel_remote_symbol.cpp:1734
 #: eeschema/widgets/panel_remote_symbol.cpp:1964
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "Не вдалося завантажити схему\n"
+msgstr "Не вдалося завантажити налаштування схеми."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1269
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "Тека 3D конфігурації невідома"
+msgstr "Каталог призначення не налаштовано."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create directory '%s'."
-msgstr "Не вдалося видалити теку %s"
+msgstr "Не вдалося створити каталог '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1300
-#, fuzzy
 msgid "Unable to access the symbol library table."
-msgstr "Не вдалося створити файл з символами бібліотеки '%s'."
+msgstr "Не вдається отримати доступ до таблиці бібліотеки символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1319
-#, fuzzy
 msgid "Failed to update the symbol library table."
-msgstr "Не вдалося створити файл з символами бібліотеки '%s'."
+msgstr "Не вдалося оновити таблицю бібліотеки символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1333
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
-#, fuzzy
 msgid "Remote download"
-msgstr "Зберегти завантажений файл"
+msgstr "Віддалене завантаження"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1338
-#, fuzzy
 msgid "Failed to save the symbol library table."
-msgstr "Не вдалося зберегти файл бібліотеці символів '%s'."
+msgstr "Не вдалося зберегти таблицю бібліотеки символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1356
-#, fuzzy
 msgid "Unable to access the footprint library table."
-msgstr "Не вдалося творити вікно перегляду посадкового місця"
+msgstr "Не вдається отримати доступ до таблиці бібліотеки слідів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1375
-#, fuzzy
 msgid "Failed to update the footprint library table."
-msgstr "Не вдалося зберегти файл бібліотеки слідів '%s'."
+msgstr "Не вдалося оновити таблицю бібліотеки слідів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1394
-#, fuzzy
 msgid "Failed to save the footprint library table."
-msgstr "Не вдалося зберегти файл бібліотеки слідів '%s'."
+msgstr "Не вдалося зберегти таблицю бібліотеки слідів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1435
-#, fuzzy
 msgid "No schematic editor is available for placement."
-msgstr "Використовувати кольорову тему редактора схем"
+msgstr "Редактор схем для розміщення недоступний."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1442
 msgid "Downloaded symbol metadata is incomplete."
-msgstr ""
+msgstr "Завантажені метадані символу неповні."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1470
-#, fuzzy
 msgid "Unable to load the downloaded symbol for placement."
-msgstr "Не вдалося заокруглити вибрані сегменти."
+msgstr "Не вдалося завантажити завантажений символ для розміщення."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1492
-#, fuzzy
 msgid "Unable to access the schematic placement tools."
-msgstr "Не вдалося заокруглити вибрані сегменти."
+msgstr "Не вдається отримати доступ до інструментів розміщення схем."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1516
 #: eeschema/widgets/panel_remote_symbol.cpp:1672
 #: eeschema/widgets/panel_remote_symbol.cpp:1762
 #: eeschema/widgets/panel_remote_symbol.cpp:1827
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported transfer mode '%s'."
-msgstr "Файли схем Altium"
+msgstr "Непідтримуваний режим передачі '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1524
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[символ не завантажено]"
+msgstr "Непідтримуваний тип корисного навантаження символу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1530
-#, fuzzy
 msgid "No schematic editor is available to store symbols."
-msgstr "Немає доступного репозиторію для налаштування віддаленого доступу"
+msgstr "Немає редактора схем для зберігання символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
-#, fuzzy
 msgid "Unable to access the symbol library manager."
-msgstr "Не вдалося створити файл з символами бібліотеки '%s'."
+msgstr "Не вдається отримати доступ до менеджера бібліотеки символів."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1605
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Неможливо створити теку для завантаження!"
+msgstr "Не вдалося проаналізувати завантажений символ."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1620
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "Неможливо створити теку для завантаження!"
+msgstr "Не вдалося зберегти завантажений символ."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1680
-#, fuzzy
 msgid "Unsupported footprint payload type."
-msgstr "Не завантажено жодного посадкового місця."
+msgstr "Непідтримуваний тип корисного навантаження сліду."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1771
 msgid "Unsupported 3D model payload type."
-msgstr ""
+msgstr "Непідтримуваний тип корисного навантаження 3D-моделі."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1835
 msgid "Unsupported SPICE payload type."
-msgstr ""
+msgstr "Непідтримуваний тип корисного навантаження SPICE."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Не вдалося додати дані компонента"
+msgstr "Не вдалося проаналізувати список компонентів: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1893
 msgid "Component list must be an array."
-msgstr ""
+msgstr "Список компонентів має бути масивом."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1899
-#, fuzzy
 msgid "Component list was empty."
-msgstr "Розміщення компонентів"
+msgstr "Список компонентів був порожній."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1997
-#, fuzzy
 msgid "Component entries must be objects."
-msgstr "Компонент: ім'я не може бути пустим."
+msgstr "Записи компонентів мають бути об'єктами."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2006
-#, fuzzy
 msgid "Component entry was missing a type."
-msgstr "Невідповідність кількості компонентів"
+msgstr "У записі компонента бракувало типу."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2183
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported component type '%s'."
-msgstr "Файли схем Altium"
+msgstr "Непідтримуваний тип компонента '%s'."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -28354,27 +28657,24 @@ msgid "Delete Column"
 msgstr "Видалити стовпець"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "Не вибрано жодної мережі."
+msgstr "Не вибрано жодної клітинки"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "Виділення містить %zu заблокованих елементів."
+msgstr "Вибрано елементи, що не належать до клітинок"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
-msgstr ""
+msgstr "Вибрані клітинки з різних таблиць"
 
 #: include/tool/edit_table_tool_base.h:673
-#, fuzzy
 msgid "Cannot paste into merged cells"
-msgstr "Не вдається створити вхідний потік '%s'.\n"
+msgstr "Неможливо вставити в об'єднані клітинки"
 
 #: include/tool/edit_table_tool_base.h:683
 msgid "Selected cells must form a contiguous block"
-msgstr ""
+msgstr "Вибрані комірки повинні утворювати суцільний блок"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
 msgid "Embed file"
@@ -28691,6 +28991,8 @@ msgstr "Не прорізайте наскрізні отвори в шарах 
 #: kicad/cli/command_pcb_export_3d.cpp:169
 msgid "Disable extra pad thickness (pads will have normal thickness)"
 msgstr ""
+"Вимкнути додаткову товщину контактних площадок (колонки матимуть нормальну "
+"товщину)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:174
 msgid "Minimum distance between points to treat them as separate ones"
@@ -28794,14 +29096,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Генерувати мапу/ зведені результати свердління"
 
 #: kicad/cli/command_pcb_export_drill.cpp:96
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Генерувати мапу/ зведені результати свердління"
+msgstr "Створити звіт про результати буріння"
 
 #: kicad/cli/command_pcb_export_drill.cpp:101
-#, fuzzy
 msgid "Report output file path"
-msgstr "Виберіть вихідний шлях"
+msgstr "Шлях до файлу виводу звіту"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
@@ -28849,6 +29149,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Попередження: Шлях звіту, вказаний без параметра --generate-report, звіт не "
+"буде згенеровано\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -30506,9 +30808,9 @@ msgid "Libraries (%d)"
 msgstr "Бібліотеки (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Data sources (%d)"
-msgstr "Назва джерела даних"
+msgstr "Джерела даних (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
@@ -32584,7 +32886,6 @@ msgid "Pollution Degree:"
 msgstr "Ступінь забруднення:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
-#, fuzzy
 msgid ""
 "PD1: No pollution or only dry, non-conductive pollution occurs\n"
 "\n"
@@ -35069,24 +35370,20 @@ msgid "Board stackup thickness"
 msgstr "Товщина стопки дощок"
 
 #: pcbnew/board_statistics_report.cpp:574
-#, fuzzy
 msgid "Front footprint area"
-msgstr "Передні сліди"
+msgstr "Площа передньої поверхні"
 
 #: pcbnew/board_statistics_report.cpp:576
-#, fuzzy
 msgid "Back footprint area"
-msgstr "Сліди на спині"
+msgstr "Площа відбитка спини"
 
 #: pcbnew/board_statistics_report.cpp:579
-#, fuzzy
 msgid "Front component density"
-msgstr "Експорт компонентів"
+msgstr "Щільність фронтальних компонентів"
 
 #: pcbnew/board_statistics_report.cpp:590
-#, fuzzy
 msgid "Back component density"
-msgstr "Перевірка компоненту "
+msgstr "Щільність задніх компонентів"
 
 #: pcbnew/board_statistics_report.cpp:616
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -35280,7 +35577,7 @@ msgstr "Діелектрик"
 #: pcbnew/board_tables/board_stackup_table.cpp:118
 #, c-format
 msgid " %d (%d/%d)"
-msgstr ""
+msgstr " %d (%d/%d)"
 
 #: pcbnew/build_BOM_from_board.cpp:76
 msgid "Cannot export BOM: there are no footprints on the PCB."
@@ -35372,6 +35669,8 @@ msgid ""
 "Pad %s of %s connects to %lu pads, but candidate pad %s of %s connects to "
 "%lu."
 msgstr ""
+"Колодка %s з %s підключається до колодок %lu, але колодка-кандидат %s з %s "
+"підключається до %lu."
 
 #: pcbnew/connectivity/topo_match.cpp:124
 #, c-format
@@ -35379,27 +35678,32 @@ msgid ""
 "Pad %s of %s cannot match candidate pad %s of %s due to differing "
 "connectivity."
 msgstr ""
+"Колодка %s з %s не може збігатися з колодкою-кандидатом %s з %s через різне "
+"з'єднання."
 
 #: pcbnew/connectivity/topo_match.cpp:171
 #, c-format
 msgid "Component %s expects %lu matching pads but candidate %s provides %lu."
 msgstr ""
+"Компонент %s очікує %lu відповідних контактних майданчиків, але кандидат %s "
+"надає %lu."
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "net %d"
-msgstr "сітчаста краватка"
+msgstr "нетто %d"
 
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
 msgid "Pad %s of %s is on net %s but its match in candidate %s is on net %s."
 msgstr ""
+"Колодка %s з %s знаходиться в мережі %s, але її збіг у кандидаті %s "
+"знаходиться в мережі %s."
 
 #: pcbnew/connectivity/topo_match.cpp:324
-#, fuzzy
 msgid "No compatible component found in the target area."
-msgstr "У поточному проєкті не знайдено жодної підсхеми"
+msgstr "У цільовій області не знайдено сумісного компонента."
 
 #: pcbnew/connectivity/topo_match.cpp:404
 msgid "One or both of the areas has no components assigned."
@@ -35416,29 +35720,32 @@ msgstr "Перевищено кількість ітерацій (тайм-ау�
 #: pcbnew/connectivity/topo_match.cpp:682
 #, c-format
 msgid "Component %s has %d pads but candidate %s has %d."
-msgstr ""
+msgstr "Компонент %s має %d контактних майданчиків, але кандидат %s має %d."
 
 #: pcbnew/connectivity/topo_match.cpp:695
 #, c-format
 msgid ""
 "Reference prefix mismatch: %s uses prefix '%s' but candidate %s uses '%s'."
 msgstr ""
+"Невідповідність префікса посилання: %s використовує префікс '%s', але "
+"кандидат %s використовує '%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:704
 #: pcbnew/connectivity/topo_match.cpp:707
-#, fuzzy
 msgid "(no library ID)"
-msgstr "Недійсний ідентифікатор бібліотеки"
+msgstr "(без ідентифікатора бібліотеки)"
 
 #: pcbnew/connectivity/topo_match.cpp:710
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
+"Невідповідність посилань на бібліотеку: %s очікує '%s', але кандидатом %s є "
+"'%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Component pads differ between %s and %s."
-msgstr "Ширина лінії має бути між %s і %s."
+msgstr "Компонентні контактні площадки відрізняються між %s та %s."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:417
 msgid "(multiple board outlines not supported)"
@@ -35876,9 +36183,8 @@ msgid "Solder Mask/Paste"
 msgstr "Паяльна маска/паста"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:138
-#, fuzzy
 msgid "Zone Hatch Offsets"
-msgstr "Встановити зсув"
+msgstr "Зміщення штрихування зони"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:140
 msgid "Text & Graphics"
@@ -35980,24 +36286,20 @@ msgid "Board stackup thickness:"
 msgstr "Товщина стопки дощок:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "Передня мідна область:"
+msgstr "Площа передньої поверхні:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Front footprint density:"
-msgstr "Передні сліди"
+msgstr "Щільність фронтального сліду:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "Задня мідна область:"
+msgstr "Площа задньої поверхні тіла:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Back footprint density:"
-msgstr "Сліди на спині"
+msgstr "Щільність заднього сліду:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:477
 #, c-format
@@ -36248,9 +36550,8 @@ msgid "Layers:"
 msgstr "Шари:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "Менеджер зони..."
+msgstr "Відкрити менеджер зон..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -38572,19 +38873,16 @@ msgid "Pad Table"
 msgstr "Таблиця килимків"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad numbers:"
-msgstr "Номер контактної площадки:"
+msgstr "Номери колодок:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:82
-#, fuzzy
 msgid "Pad count:"
-msgstr "Кількість контактних площадок"
+msgstr "Кількість колодок:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "Дублікати виводів:"
+msgstr "Дублікати колодок:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3348
 msgid "Size X"
@@ -38632,9 +38930,8 @@ msgid "Aperture"
 msgstr "Діафрагма"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:553
-#, fuzzy
 msgid "Edit Pads"
-msgstr "Редагувати панель"
+msgstr "Редагувати педи"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:199
 msgid "Use a relative path?"
@@ -39543,7 +39840,7 @@ msgstr "Початкові значення паяльної маски/паст
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Zone hatched fill offsets"
-msgstr ""
+msgstr "Зміщення заливки штрихуванням зони"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
 msgid "Text && graphics default properties"
@@ -39751,7 +40048,7 @@ msgid "Generate Multichannel Rule Areas"
 msgstr "Генерація багатоканальних областей правил"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area topologies do not match: %s"
 msgstr "Топології області правил не збігаються: %s"
 
@@ -40081,6 +40378,8 @@ msgid ""
 "Switching to non-circular hole will disable backdrills and post-machining. "
 "Continue?"
 msgstr ""
+"Перемикання на некруглий отвір вимкне зворотне свердління та подальшу "
+"обробку. Продовжити?"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1248
 #, c-format
@@ -40130,7 +40429,7 @@ msgstr "w"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1598
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1627
 msgid "Depth:"
-msgstr ""
+msgstr "Глибина:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -40578,41 +40877,38 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1113
 msgid "Hole post machining"
-msgstr ""
+msgstr "Обробка отворів для стовпів"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3236
-#, fuzzy
 msgid "Countersink"
-msgstr "Кількість"
+msgstr "Зенкер"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
-#, fuzzy
 msgid "Counterbore"
-msgstr "Кількість"
+msgstr "Розточування"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1216
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3146
-#, fuzzy
 msgid "Backdrill"
-msgstr "Заповнення фону"
+msgstr "Зворотне буріння"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
-msgstr ""
+msgstr "Обидва"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1240
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
 msgid "Top backdrill must-cut:"
-msgstr ""
+msgstr "Верхній зворотний свердління обов'язково ріжеться:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1247
@@ -40620,12 +40916,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1280
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:464
 msgid "The backdrill must pass through this layer"
-msgstr ""
+msgstr "Зворотне буріння повинно проходити крізь цей шар"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
 msgid "Bottom backdrill must-cut:"
-msgstr ""
+msgstr "Обов'язкове різання нижнього свердла:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1451
 msgid "Preview pad in sketch mode"
@@ -40979,9 +41275,8 @@ msgid "Single document"
 msgstr "Єдиний документ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "Export selected layers into a single DXF"
-msgstr "Перетворити вибрані клітинки таблиці на одну клітинку"
+msgstr "Експорт вибраних шарів в один DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "SVG Options"
@@ -41887,7 +42182,7 @@ msgstr "Функції захисту:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
 msgid "Hole post-machining"
-msgstr ""
+msgstr "Післяобробка отворів"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 msgid "Add teardrops on via's track connections"
@@ -42505,9 +42800,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Властивості за замовчуванням для нових графічних елементів"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:381
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "Таблиця бібліотеки символів"
+msgstr "Таблиця (вкладена таблиця бібліотеки)"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:500
 #, c-format
@@ -42521,9 +42815,8 @@ msgid "Failed to save footprint library file '%s'."
 msgstr "Не вдалося зберегти файл бібліотеки слідів '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:568
-#, fuzzy
 msgid "Select Library Table"
-msgstr "Вибрати бібліотеку"
+msgstr "Виберіть таблицю бібліотеки"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:115
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:443
@@ -44009,7 +44302,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -44179,142 +44471,159 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"### Функції виразу\n"
+"### Функції виразів\n"
 "\n"
-"Усі параметри функції підтримують прості символи-замінники (`*` та `?`).\n"
+"Усі параметри функції підтримують прості символи підстановки (`*` та `?`).\n"
 "\n"
+"```\n"
+"A.enclosedByArea('<назва_зони>')\n"
+"```\n"
+"> True, якщо весь `A` знаходиться в межах контуру заданої зони.\n"
 "\n"
-"    A.enclosedByArea('<zone_name>')\n"
-"        True, якщо все `A` лежить в межах контуру заданої зони.\n"
+"> Примітка: це потенційно дорожчий виклик, ніж `intersectsArea()`.\n"
+"Використовуйте `intersectsArea()`, де це можливо.\n"
 "\n"
-"        NB: це потенційно більш дорогий виклик, ніж `intersectsArea()`.\n"
-"        Використовуйте `intersectsArea()`, де це можливо.\n"
+"```\n"
+"A.existsOnLayer('<назва_шару>')\n"
+"```\n"
+"> True, якщо `A` існує на заданому шарі. Назва шару може бути\n"
+"або назвою, призначеною в Налаштування плати > Шари редактора плати, або\n"
+"канонічною назвою (наприклад: `F.Cu`).\n"
 "\n"
-"\n"
-"    A.existsOnLayer('<layer_name>')\n"
-"        True, якщо `A` існує на заданому шарі.  Назва шару може бути\n"
-"        або назвою, призначеною в Board Setup > Board Editor Layers, або\n"
-"        канонічною назвою (наприклад: `F.Cu`).\n"
-"\n"
-"        NB: це повертає true, якщо `A` знаходиться на заданому шарі, "
+"> Примітка: це повертає true, якщо `A` знаходиться на заданому шарі, "
 "незалежно\n"
-"        від того, чи оцінюється правило для цього шару.\n"
-"        Для останнього використовуйте в правилі клаузулу `(layer "
-"\"layer_name\")`.\n"
+"від того, чи оцінюється правило для цього шару.\n"
+"Для останнього використовуйте пункт `(шар \"назва_шару\")` у правилі.\n"
 "\n"
-"\n"
-"    A.fromTo('x', 'y')\n"
-"        True, якщо об'єкт існує на мідному шляху між заданими\n"
-"        контактними площадками. `x` і `y` — повні імена контактних площадок "
+" ```\n"
+"A.fromTo('x', 'y')\n"
+"```\n"
+"> Істина, якщо об'єкт існує на мідному шляху між заданими\n"
+"контактними майданчиками. `x` та `y` – це повні назви контактних майданчиків "
 "у проекті, наприклад\n"
-"        `R1-Pad1`.\n"
+"`R1-Pad1`.\n"
 "\n"
+"```\n"
+"A.getField('<назва_поля>')\n"
+"```\n"
+"> Значення заданого поля. Тільки контури мають поля, тому поле повертається "
+"лише якщо\n"
+"`A` є контуром.\n"
 "\n"
-"    A.getField('<field_name>')\n"
-"        Значення заданого поля. Поля мають тільки сліді, тому поле "
-"повертається тільки в тому випадку, якщо\n"
-"        `A` є слідом.\n"
+"```\n"
+"A.hasComponentClass('<назва_класу_компонента>')\n"
+"```\n"
+"> Істина, якщо набір класів компонентів, призначених `A`, містить "
+"іменований\n"
+"клас компонента.\n"
 "\n"
+"```\n"
+"A.hasNetclass('<назва_класу_мережі>')\n"
+"```\n"
+"> Істина, якщо `A` було призначено заданий клас мережі, або явною міткою "
+"класу мережі,\n"
+"або через призначення за шаблоном.\n"
 "\n"
-"    A.hasComponentClass('<component_class_name>')\n"
-"        True, якщо набір класів компонентів, призначених для `A`, містить "
-"вказаний\n"
-"        клас компонентів.\n"
-"\n"
-"\n"
-"    A.hasNetclass('<netclass_name>')\n"
-"        True, якщо `A` має призначений йому заданий клас мережі, або за "
-"допомогою явного мітки класу мережі,\n"
-"        або за допомогою призначення збігу шаблону.\n"
-"\n"
-"\n"
-"    A.inDiffPair('<net_name>')\n"
-"        True, якщо `A` має мережу, яка є частиною заданої диференціальної "
+" ```\n"
+"A.inDiffPair('<назва_мережі>')\n"
+"```\n"
+"> Істина, якщо `A` має мережу, яка є частиною зазначеної диференціальної "
 "пари.\n"
-"        `<net_name>` — базова назва диференціальної пари.\n"
-"        Наприклад, `inDiffPair('/CLK')` відповідає елементам у мережах `/"
-"CLK_P` та `/CLK_N`.\n"
+"`<назва_мережі>` – це базова назва диференціальної пари.\n"
+"Наприклад, `inDiffPair('/CLK')` відповідає елементам у мережах `/CLK_P` та `/"
+"CLK_N`.\n"
 "\n"
+"```\n"
+"A.intersectsArea('<назва_зони>')\n"
+"```\n"
+"> Істина, якщо будь-яка частина `A` лежить в межах контуру заданої зони.\n"
 "\n"
-"    A.intersectsArea('<zone_name>')\n"
-"        True, якщо будь-яка частина `A` лежить в межах контуру заданої "
-"зони.\n"
+"```\n"
+"A.intersectsCourtyard('<ідентифікатор_сліду>')\n"
+"```\n"
+"> Істина, якщо будь-яка частина `A` лежить в межах головного внутрішнього "
+"двору заданого сліду.\n"
 "\n"
-"\n"
-"    A.intersectsCourtyard('<footprint_identifier>')\n"
-"        True, якщо будь-яка частина `A` лежить в межах основного "
-"внутрішнього дворика заданого сліду.\n"
-"\n"
-"\n"
-"A.intersectsFrontCourtyard('<footprint_identifier>')\n"
-"        True, якщо будь-яка частина `A` лежить в межах переднього "
-"внутрішнього дворика заданого сліду.\n"
-"\n"
-"\n"
-"    A.intersectsBackCourtyard('<footprint_identifier>')\n"
-"        True, якщо будь-яка частина `A` лежить в межах заднього двору "
+" ```\n"
+"A.intersectsFrontCourtyard('<identifier_footprint>')\n"
+"```\n"
+"> Істина, якщо будь-яка частина `A` знаходиться в межах переднього двору "
 "заданого сліду.\n"
 "\n"
+"```\n"
+"A.intersectsBackCourtyard('<identifier_footprint>')\n"
+"```\n"
+"> Істина, якщо будь-яка частина `A` знаходиться в межах заднього двору "
+"заданого сліду.\n"
 "\n"
-"Вищезазначений `footprint_identifier` може бути одним із таких:\n"
+"> `footprint_identifier`, перелічений вище, може бути одним із наступних:\n"
 "\n"
-"1. Позначення посилання, яке може містити символи-замінники `*` та `?`\n"
-"2. Ідентифікатор бібліотеки сліду, такий як `LibName:FootprintName`. У цьому "
-"випадку\n"
-"   ідентифікатор бібліотеки повинен містити символ `:` для відокремлення "
-"імені бібліотеки\n"
-"   від імені сліду, і будь-яке з імен може містити символи-замінники.\n"
-"3. Клас компонента у формі `${Class:ClassName}`.  Ключове слово `Class` не\n"
-"   чутливе до регістру, але імена класів компонентів чутливі до регістру.\n"
+"> 1. Позначення посилання, можливо, що містить символи підстановки `*` та "
+"`?`\n"
+"> 2. Ідентифікатор бібліотеки слідів, такий як `LibName:FootprintName`. У "
+"цьому випадку,\n"
+"ідентифікатор бібліотеки повинен містити символ `:` для відокремлення назви "
+"бібліотеки від назви сліду, і будь-яка з назв може містити символи "
+"підстановки.\n"
+"> 3. Клас компонента у формі `${Class:ClassName}`.  Ключове слово `Class` не "
+"чутливе до регістру, але назви класів компонентів чутливі до регістру.\n"
 "\n"
+"```\n"
+"AB.isCoupledDiffPair()\n"
+"```\n"
+"> True, якщо `A` та `B` є членами однієї пари різниці.\n"
 "\n"
-"    AB.isCoupledDiffPair()\n"
-"        True, якщо `A` і `B` є членами однієї диференціальної пари.\n"
+"```\n"
+"A.isMicroVia()\n"
+"```\n"
+"> True, якщо `A` є мікроперехідним отвором.\n"
 "\n"
+"```\n"
+"A.isBlindVia()\n"
+"```\n"
+"> True, якщо `A` є глухим перехідним отвором.\n"
 "\n"
-"    A.isMicroVia()\n"
-"        True, якщо `A` є мікроперехідною діркою.\n"
+"```\n"
+"A.isBuriedVia()\n"
+"```\n"
+"> True, якщо `A` є закопаним перехідним отвором.\n"
 "\n"
+"```\n"
+"A.isPlated()\n"
+"```\n"
+"> True, якщо `A` має отвір, який покритий металом.\n"
 "\n"
-"    A.isBlindVia()\n"
-"        True, якщо `A` є сліпою перехідною діркою.\n"
+"```\n"
+"A.memberOfGroup('<назва_групи>')\n"
+"```\n"
+"> True, якщо `A` є членом заданої групи\n"
+"Назва може містити символи підстановки.\n"
+"Включає вкладене членство.\n"
 "\n"
+" ```\n"
+"A.memberOfFootprint('<ідентифікатор_відбитка>')\n"
+"```\n"
+"> Істина, якщо `A` є членом заданого сліду\n"
+"(наприклад, контактна площадка або графічна фігура, визначена всередині "
+"цього сліду).\n"
+"Різні способи визначення `ідентифікатора_відбитка` описані вище.\n"
 "\n"
-"    A.isBuriedVia()\n"
-"        True, якщо `A` є заглибленою перехідною діркою.\n"
+"```\n"
+"A.memberOfSheet('<шлях_до_листка>')\n"
+"```\n"
+"> Істина, якщо `A` є членом заданого аркуша схеми.\n"
+"Шлях до аркуша може містити символи підстановки.\n"
 "\n"
-"\n"
-"    A.isPlated()\n"
-"        True, якщо `A` має отвір, який покритий металом.\n"
-"\n"
-"\n"
-"    A.memberOfGroup('<group_name>')\n"
-"        True, якщо `A` є членом заданої групи.\n"
-"        Ім'я може містити символи-замінники.\n"
-"        Включає вкладене членство.\n"
-"\n"
-"\n"
-"    A.memberOfFootprint('<footprint_identifier>')\n"
-"        Істинне, якщо `A` є членом заданого сліду\n"
-"        (наприклад, контактна площадка або графічна фігура, визначена "
-"всередині цього сліду).\n"
-"        Різні способи визначення `footprint_identifier` описані вище.\n"
-"\n"
-"\n"
-"A.memberOfSheet('<sheet_path>')\n"
-"        True, якщо `A` є членом заданого схематичного аркуша.\n"
-"        Шлях до аркуша може містити символи-замінники.\n"
-"\n"
-"\n"
-"A.memberOfSheetOrChildren('<sheet_path>')\n"
-"        True, якщо `A` є членом заданого схематичного аркуша або будь-якого "
-"з його дочірніх ієрархічних аркушів.\n"
-"        Шлях до аркуша може містити символи-замінники.\n"
+"```\n"
+"A.memberOfSheetOrChildren('<шлях_до_листка>')\n"
+"```\n"
+"> Істина, якщо `A` є членом заданого аркуша схеми або будь-якого з його "
+"дочірніх ієрархічних аркушів.\n"
+"Шлях до аркуша може містити символи підстановки.\n"
 "\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -44480,11 +44789,11 @@ msgstr ""
 "### Більше прикладів\n"
 "\n"
 "    (rule \"мідний блок\"\n"
-"       (обмеження заборонити відстеження через зону)\n"
+"       (constraint disallow track via zone)\n"
 "       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
-"    (rule \"BGA neckdown\"\n"
+"    (rule \"Згинання BGA\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
 "       (condition \"A.intersectsCourtyard('U3')\"))\n"
@@ -44496,146 +44805,150 @@ msgstr ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (правило «Відстань між перехідними отворами різних мереж»\n"
-"        (обмеження hole_to_hole (min 0,254 мм))\n"
-"        (умова «A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
-"\n"
-"    (правило «Відстань між контактними площадками різних мереж»\n"
-"        (обмеження clearance (min 3.0 мм))\n"
-"        (умова \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
+"    (rule \"Відстань між переходними отворами різних мереж\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (правило \"Відстань між отвором та доріжкою\"\n"
-"        (обмеження hole_clearance (min 0.254 мм))\n"
-"        (умова \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"\n"
-"    (правило \"Відстань між контактними площадками та доріжками\"\n"
-"        (обмеження clearance (min 0.2mm))\n"
-"        (умова \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"    (rule \"Зазор між прокладками різних сіток\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (правило «clearance-to-1mm-cutout»\n"
-"        (обмеження edge_clearance (min 0,8 мм))\n"
-"        (умова «A.Layer == 'Edge.Cuts' && A.Line_Width == 1,0 мм»))\n"
+"\n"
+"    (rule \"Від отвору до колії\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Зазор між колодкою та доріжкою\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    (правило «Максимальний розмір отвору для свердління механічний»\n"
-"        (обмеження розмір_отвору (макс. 6,3 мм))\n"
-"        (умова «A.Pad_Type == 'NPTH, mechanical'»))\n"
-"\n"
-"    (правило «Максимальний розмір отвору для свердління PTH»\n"
-"        (обмеження розмір_отвору (макс. 6,35 мм))\n"
-"        (умова \"A.Pad_Type == 'Through-hole'\"))\n"
+"    (rule \"зазор до вирізу 1 мм\"\n"
+"        (constraint edge_clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
 "\n"
-"    # Вказати оптимальний зазор для конкретної диференціальної пари\n"
-"    (правило \"dp clock gap\"\n"
-"        (обмеження diff_pair_gap (opt \"0.8mm\"))\n"
-"        (умова \"A.inDiffPair('/CLK')\"))\n"
+"    (rule \"Максимальний розмір отвору для свердління, механічний\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    # Вказати більший зазор навколо будь-якої диференціальної пари\n"
-"    (правило \"dp clearance\"\n"
-"        (обмеження clearance (min \"1,5 мм\"))\n"
-"        (умова \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"    (rule \"Максимальний розмір отвору для свердління PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Не використовувати теплові рельєфи на підкладках радіатора\n"
-"    (правило heat_sink_pad\n"
-"        (обмеження zone_connection solid)\n"
-"        (умова \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"    # Вкажіть оптимальний проміжок для конкретної пари диференціалів\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Вимагати, щоб усі чотири теплові рельєфні спиці були підключені до "
+"    # Вкажіть більший зазор навколо будь-якої пари диференціалів\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Не використовуйте термозахисні прокладки на радіаторних прокладках.\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Потрібно, щоб усі чотири терморозвантажувальні спиці підключалися до "
 "батьківської зони\n"
-"    (правило fully_spoked_pads\n"
-"        (обмеження min_resolved_spokes 4))\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
 "\n"
-"    # Встановити зазор теплового рельєфу та ширину спиць для всіх зон\n"
-"    (правило defined_relief\n"
-"        (обмеження thermal_relief_gap (min 10mil))\n"
-"        (обмеження thermal_spoke_width (min 12mil)))\n"
+"    # Встановіть зазор для термозняття та ширину спиць для всіх зон\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # Перезаписати зазор теплового рельєфу та ширину спиць для зон GND та "
-"PWR\n"
-"    (правило defined_relief_pwr\n"
-"        (обмеження thermal_relief_gap (min 10mil))\n"
-"        (обмеження thermal_spoke_width (min 12mil))\n"
-"        (умова \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    # Перевизначення зазору для теплового зняття напруги та ширини спиць для "
+"зон GND та PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
-"    # Запобігання заповненню міддю під дворами конденсаторів\n"
-"    (правило no_copper_under_caps\n"
-"        (обмеження physical_clearance (мінімум 0 мм))\n"
-"        (умова \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"    # Запобігання засипанню міддю під внутрішніми двориками конденсаторів\n"
+"    (rule no_copper_under_caps\n"
+"        (constraint physical_clearance (min 0mm))\n"
+"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
 "\n"
 "\n"
-"    # Запобігання просочуванню припою з SMD-контактних майданчиків\n"
-"    (правило holes_in_pads\n"
-"        (обмеження physical_hole_clearance (min 0.2mm))\n"
-"        (умова \"B.Pad_Type == 'SMD'\"))\n"
+"    # Запобігання розтікання припою з SMD-контактних площадок\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
 "\n"
-"    # Заборонити перевищення меж маски для пайки\n"
-"    (правило \"disallow solder mask margin overrides\"\n"
-"        (обмеження assertion \"A.Soldermask_Margin_Override == null\")\n"
-"        (умова \"A.Type == 'Pad'\"))\n"
+"    # Заборонити заміну полів маски паяння\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
 "    # Забезпечити механічний зазор між компонентами та краєм плати\n"
-"    (правило front_mechanical_board_edge_clearance\n"
-"        (шар \"F.Courtyard\")\n"
-"        (обмеження physical_clearance (min 3mm))\n"
-"        (умова \"B.Layer == 'Edge.Cuts'\"))\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 "\n"
 "\n"
 "    # Дозволити перетин шовку з краєм плати для роз'ємів\n"
-"    (правило silk_board_edge_clearance\n"
-"        (обмеження silk_clearance)\n"
-"        (серйозність ignore)\n"
-"        (умова \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # Перевірити пропускну здатність струму\n"
-"    (правило high-current\n"
-"        (обмеження track_width (min 1.0mm))\n"
-"        (обмеження connection_width (min 0.8mm))\n"
-"        (умова \"A.hasNetclass('Power')\"))\n"
+"    # Перевірте струмопровідну здатність\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.hasNetclass('Power')\"))\n"
 "\n"
 "\n"
 "    # Окремі обмеження розміру свердла та фрези\n"
-"    (правило \"Розмір металізованого наскрізного отвору\"\n"
-"        (обмеження розміру отвору (мінімум 0,2 мм) (максимум 6,35 мм))\n"
-"        (умова \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"    (правило «Розмір плакованого паза»\n"
-"        (обмеження розміру отвору (мінімум 0,5 мм))\n"
-"        (умова «A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y»))\n"
+"(правило \"Розмір наскрізного отвору з покриттям\"\n"
+"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"    (rule \"Plated slot size\"\n"
+"        (constraint hole_size (min 0.5mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
-"    # Дозволити порушення між отворами сліпих/заглиблених мікропереходів, "
-"якщо відомо, що\n"
-"    # виробництво буде механічно свердлити сліпі/заглиблені отвори перед "
-"лазерним свердлінням \n"
-"    # мікроотворів.\n"
-"    (правило hole_to_hole_uvia_exclusion\n"
-"        (умова \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")\n"
+"    # Дозволити порушення правил встановлення мікроперехідних отворів у "
+"глухий/закопаний отвір, якщо відомо, що\n"
+"    # Фабрика механічно просвердлить сліпі/закопані отвори перед лазерним "
+"свердлінням \n"
+"    # мікроперехідні отвори.\n"
+"    (rule hole_to_hole_uvia_exclusion\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
 "\n"
-"    # Не розширювати маску для пайки для отворів.\n"
+"    # Немає розширення паяльної маски для перехідних отворів.\n"
 "    (rule \"no mask expansion on vias\"\n"
 "        (constraint solder_mask_expansion (opt 0mm))\n"
 "        (condition \"A.type == via\"))\n"
 "\n"
 "\n"
-"    # Видалити паяльну пасту з слідів DNP.\n"
-"    (правило remove_solder_paste_from_DNP\n"
-"        (обмеження solder_paste_abs_margin (opt -50mm))\n"
-"        (умова \"A.Do_not_Populate\"))\n"
+"    # Видаліть паяльну пасту з контактних майданчиків DNP.\n"
+"    (rule remove_solder_paste_from_DNP\n"
+"        (constraint solder_paste_abs_margin (opt -50mm))\n"
+"        (condition \"A.Do_not_Populate\"))\n"
 "\n"
 "\n"
-"    # Дозволити з'єднання маски пайки під отворами маски захисного кільця.\n"
+"    # Дозволити перемикання паяльної маски під отворами захисного кільця "
+"маски\n"
 "    (rule guard_ring_bridging\n"
 "        (constraint bridged_mask)\n"
 "        (condition \"A.intersectsArea('guard_ring')\")\n"
-"        (severity ignore))"
+"        (severity ignore))\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
@@ -44900,32 +45213,28 @@ msgstr "Через шар до"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
-msgstr ""
+msgstr "Зміщення штрихової заливки зони"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "Властивості за замовчуванням для нових об'єктів виміру"
+msgstr "Властивості за замовчуванням для нових зон"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:235
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:341
-#, fuzzy
 msgid "Chamfer:"
-msgstr "Фаска"
+msgstr "Фаска:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:240
-#, fuzzy
 msgid "Fillet:"
-msgstr "Закруглення"
+msgstr "Філе:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:392
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Ширина мосту терм. відведення не може бути менше мінімальної ширини."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:449
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "Всі шари користувача вже додані."
+msgstr "Усі шари зони вже перезазначені."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:472
 msgid "<no net> will result in an isolated copper island."
@@ -44990,29 +45299,24 @@ msgid "Width of copper in thermal reliefs."
 msgstr "Ширина міді в термо рельєфах."
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:142
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "Перевизначення зазорів та з'єднання колодок"
+msgstr "Зазори та з'єднання колодок"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
-#, fuzzy
 msgid "Display Overrides"
-msgstr "Через перевизначення затримки:"
+msgstr "Перевизначення відображення"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
-#, fuzzy
 msgid "Hatched fill"
-msgstr "Заштриховка"
+msgstr "Штрихована заливка"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:259
-#, fuzzy
 msgid "Hatch offset overrides:"
-msgstr "Через перевизначення затримки:"
+msgstr "Перевизначення зміщення штрихування:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:320
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "Заштриховка"
+msgstr "Штрихована Заливка"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Remove islands:"
@@ -45640,9 +45944,8 @@ msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Слід не відповідає фільтрам слідів символу"
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Footprint field does not match symbol field"
-msgstr "Атрибути сліду не відповідають символу"
+msgstr "Поле сліду не відповідає полю символу"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint not found in libraries"
@@ -45673,9 +45976,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "Шар шовкографії обрізаний по краю плати"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "Перекриття шару шовкографії"
+msgstr "Розпродаж шовкографії"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
@@ -45732,13 +46034,12 @@ msgid "Missing tuning profile"
 msgstr "Відсутній профіль налаштування"
 
 #: pcbnew/drc/drc_item.cpp:310
-#, fuzzy
 msgid "Tuning profile track geometries"
-msgstr "Назва профілю налаштування вже використовується"
+msgstr "Налаштування геометрії профілю доріжки"
 
 #: pcbnew/drc/drc_item.cpp:314
 msgid "Track connected to post-machined or backdrilled layer"
-msgstr ""
+msgstr "Колія, з'єднана з шаром після обробки або просвердлення"
 
 #: pcbnew/drc/drc_item.cpp:516
 #, c-format
@@ -46040,9 +46341,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Перевірка загальних обмежень і зон заборон..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:167
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "Шар шовкографії обрізаний по краю плати"
+msgstr "Зовнішній край дошки з шовкографією"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:243
 msgid "Checking copper to board edge clearances..."
@@ -46612,14 +46912,14 @@ msgid "'%s' settings differ"
 msgstr "Налаштування '%s' відрізняються"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Відсутнє посадкове місце"
+msgstr "Відсутнє поле символу '%s' у сліді"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "Поле '%s' відрізняється: %s; %s."
+msgstr "Поле '%s' відрізняється (друкована плата: '%s', схема: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:271
 msgid "No corresponding pin found in schematic"
@@ -46865,14 +47165,14 @@ msgid "Created file '%s'."
 msgstr "Створено файл '%s'."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "Помилка запису файлу '%s'."
+msgstr "Помилка створення файлу звіту про перевірку '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Created drill report file '%s'"
-msgstr "Неможливо записати звіт у файл '%s'."
+msgstr "Створено файл звіту про дриль '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
@@ -46966,24 +47266,22 @@ msgstr ""
 "отвору."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy
 msgid "Failed to create counterbore cylinder shape"
-msgstr "Не вдалося створити підпис автора: %s"
+msgstr "Не вдалося створити форму циліндра з розтенуванням"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "Виняток OCC, що створює контур %d: %s"
+msgstr "Виняток OCC, що створює розточування: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "Не вдалося створити призматичну фігуру"
+msgstr "Не вдалося створити форму конуса зенкування"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "Виняток OCC, що створює контур %d: %s"
+msgstr "Виняток OCC, що створює зенковку: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1663
 #, c-format
@@ -48958,46 +49256,40 @@ msgid "Press-fit pad"
 msgstr "Прес-фітингова підкладка"
 
 #: pcbnew/pad.cpp:3222
-#, fuzzy
 msgid "Undefined"
-msgstr "Невизначено!"
+msgstr "Невизначено"
 
 #: pcbnew/pad.cpp:3234
-#, fuzzy
 msgid "Not post-machined"
-msgstr "Не вказано"
+msgstr "Не підлягає подальшій обробці"
 
 #: pcbnew/pad.cpp:3247
-#, fuzzy
 msgid "No backdrill"
-msgstr "Свердління не відмічено"
+msgstr "Без зворотного свердління"
 
 #: pcbnew/pad.cpp:3248
-#, fuzzy
 msgid "Backdrill bottom"
-msgstr "Нижнє поле"
+msgstr "Зворотне свердління дна"
 
 #: pcbnew/pad.cpp:3249
 msgid "Backdrill top"
-msgstr ""
+msgstr "Верхня частина зворотного свердла"
 
 #: pcbnew/pad.cpp:3250
 msgid "Backdrill both"
-msgstr ""
+msgstr "Зворотне свердління обох"
 
 #: pcbnew/pad.cpp:3270
 msgid "Front, back and connected layers"
 msgstr "Передній, задній та сполучені шари"
 
 #: pcbnew/pad.cpp:3318
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "Властивості виводів"
+msgstr "Властивості після обробки"
 
 #: pcbnew/pad.cpp:3319
-#, fuzzy
 msgid "Backdrill Properties"
-msgstr "Властивості штрих-коду"
+msgstr "Властивості зворотного буріння"
 
 #: pcbnew/pad.cpp:3321
 msgid "Pad Type"
@@ -49032,64 +49324,60 @@ msgid "Hole Size Y"
 msgstr "Розмір отвору Y"
 
 #: pcbnew/pad.cpp:3414
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "Позиціонування"
+msgstr "Верхня пост-механічна обробка"
 
 #: pcbnew/pad.cpp:3426
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "Верхній розмір після обробки"
 
 #: pcbnew/pad.cpp:3441
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "Глибина верхнього роззенкування"
 
 #: pcbnew/pad.cpp:3456
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "Верхній кут зенкування"
 
 #: pcbnew/pad.cpp:3471
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "Обробка дна після обробки"
 
 #: pcbnew/pad.cpp:3483
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "Розмір нижньої частини після обробки"
 
 #: pcbnew/pad.cpp:3498
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "Глибина нижнього роззенкування"
 
 #: pcbnew/pad.cpp:3513
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "Кут нижнього зенкування"
 
 #: pcbnew/pad.cpp:3528 pcbnew/pcb_track.cpp:3196
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "Режим заливки"
+msgstr "Режим зворотного буріння"
 
 #: pcbnew/pad.cpp:3531 pcbnew/pcb_track.cpp:3199
-#, fuzzy
 msgid "Bottom Backdrill Size"
-msgstr "Шовкографія знизу"
+msgstr "Розмір нижнього отвору для зворотного свердла"
 
 #: pcbnew/pad.cpp:3546 pcbnew/pcb_track.cpp:3211
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
-#, fuzzy
 msgid "Bottom Backdrill Must-Cut"
-msgstr "Pad Master знизу"
+msgstr "Обов'язкове свердління знизу"
 
 #: pcbnew/pad.cpp:3561 pcbnew/pcb_track.cpp:3223
 msgid "Top Backdrill Size"
-msgstr ""
+msgstr "Розмір верхнього отвору для зворотного свердла"
 
 #: pcbnew/pad.cpp:3576 pcbnew/pcb_track.cpp:3235
 #: pcbnew/widgets/pcb_properties_panel.cpp:564
 #: pcbnew/widgets/pcb_properties_panel.cpp:568
 msgid "Top Backdrill Must-Cut"
-msgstr ""
+msgstr "Верхнє зворотне свердло обов'язково ріжеться"
 
 #: pcbnew/pad.cpp:3592
 msgid "Fabrication Property"
@@ -51485,6 +51773,309 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${PROJECTNAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>MyBoard</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>PCB Variables</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILENAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILEPATH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>/path/to/board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${LAYER}</samp> (in text/tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>F.Cu, B.Cu, F.SilkS...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Footprint Cross-References</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of footprint <i>refdes</i></"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:REFERENCE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>U1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>STM32F407VGT6</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_LIBRARY}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Package_QFP</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_NAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>LQFP-100_14x14mm_P0.5mm</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Pad/Pin Functions</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Net name connected to pad</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Short net name or NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> or <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Net class for pad</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Pin function/name</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Table Variables</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (in tables)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A1, B2, C3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Math Expressions</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{expression}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} - 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>3</samp> (when ROW=4)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>String Comparison & Conditional Text</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" == \"text\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" != \"other\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Conditional text display</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
+"\"BOTTOM\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (on front layer) or <samp>BOTTOM</"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Numeric comparisons work too</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Escape Sequences</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (not expanded)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Price: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Price: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (not evaluated)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Nested Variables</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(@{${ROW}-2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamic net lookup in tables</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U${ROW}:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamic footprint reference</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Зверніть увагу, що розмітка має пріоритет над розширенням змінних.</i>\n"
+"<p></p>\n"
+"<p><b>Перехресні посилання на сліди:</b> Посилання на поля та контактні "
+"майданчики на інших слідах за допомогою синтаксису <samp>${refdes:field}"
+"<samp> або <samp>${refdes:function(pad)}<samp>.</p>\n"
+"<p><b>Вкладені змінні:</b> Змінні можуть містити інші змінні. Внутрішні "
+"змінні розгортаються першими. Максимальна глибина вкладеності: 10 рівнів.</p>"
+"\n"
+"<p><b>Повідомлення про помилки:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Змінну або функцію неможливо "
+"розпізнати</li>\n"
+"<li><samp>&lt;Невідоме посилання: U1&gt;</samp> - Слід не знайдено</li>\n"
+"</ul>\n"
+"\n"
 
 #: pcbnew/pcb_textbox.cpp:589
 #, c-format
@@ -51540,27 +52131,24 @@ msgid "Via hole size must be smaller than via diameter"
 msgstr "Розмір свердла повинен бути меншим за діаметр отвору"
 
 #: pcbnew/pcb_track.cpp:1808
-#, fuzzy
 msgid "Via layer must be a copper layer."
-msgstr "Якщо необхідно нижній мідний шар"
+msgstr "Перехідний шар повинен бути мідним."
 
 #: pcbnew/pcb_track.cpp:1820
 msgid "Via layer is outside the board stack."
-msgstr ""
+msgstr "Шар перехідних отворів знаходиться поза стеком плати."
 
 #: pcbnew/pcb_track.cpp:1838
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Початковий і кінцевий шари не повинні співпадати"
 
 #: pcbnew/pcb_track.cpp:1847
-#, fuzzy
 msgid "Backdrill diameter is too small."
-msgstr "Діаметр переходного отвору занадто малий."
+msgstr "Діаметр зворотного свердла занадто малий."
 
 #: pcbnew/pcb_track.cpp:1863
-#, fuzzy
 msgid "Tertiary backdrill diameter is too small."
-msgstr "Діаметр переходного отвору занадто малий."
+msgstr "Діаметр третинного зворотного свердла занадто малий."
 
 #: pcbnew/pcb_track.cpp:2284
 msgid "Track (arc)"
@@ -51621,9 +52209,8 @@ msgstr "Доріжка %s на %s, довжина %s"
 #: pcbnew/pcb_track.cpp:2852 pcbnew/pcb_track.cpp:2858
 #: pcbnew/pcb_track.cpp:2864 pcbnew/pcb_track.cpp:2870
 #: pcbnew/pcb_track.cpp:2876
-#, fuzzy
 msgid "From board stackup"
-msgstr "Структура плати"
+msgstr "Зі стеку плати"
 
 #: pcbnew/pcb_track.cpp:2853
 msgid "Tented"
@@ -51710,38 +52297,36 @@ msgid "Filling"
 msgstr "Начинка"
 
 #: pcbnew/pcb_track.cpp:3247
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "Передній намет"
+msgstr "Передня пост-обробка"
 
 #: pcbnew/pcb_track.cpp:3250
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "Розмір передньої частини після обробки"
 
 #: pcbnew/pcb_track.cpp:3261
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "Глибина передньої обробки після обробки"
 
 #: pcbnew/pcb_track.cpp:3272
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "Передній кут після обробки"
 
 #: pcbnew/pcb_track.cpp:3283
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "Наметування на спині"
+msgstr "Назад Після обробки"
 
 #: pcbnew/pcb_track.cpp:3286
 msgid "Back Post-machining Size"
-msgstr ""
+msgstr "Розмір після обробки назад"
 
 #: pcbnew/pcb_track.cpp:3297
 msgid "Back Post-machining Depth"
-msgstr ""
+msgstr "Глибина після обробки назад"
 
 #: pcbnew/pcb_track.cpp:3308
 msgid "Back Post-machining Angle"
-msgstr ""
+msgstr "Кут після обробки назад"
 
 #: pcbnew/pcbexpr_evaluator.cpp:689
 msgid "must be mm, in, mil, deg, fs, or ps"
@@ -51817,7 +52402,6 @@ msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Відсутній аргумент назви класу компонента для hasComponentClass()"
 
 #: pcbnew/pcbnew.cpp:614 pcbnew/pcbnew.cpp:626
-#, fuzzy
 msgid "Loading Footprint Libraries"
 msgstr "Завантаження бібліотек слідів"
 
@@ -52259,9 +52843,8 @@ msgid "Switches posture of the currently routed track."
 msgstr "Перемкнути позицію поточної доріжки."
 
 #: pcbnew/router/router_tool.cpp:201
-#, fuzzy
 msgid "Track Corner Mode Switch"
-msgstr "Режим заокруглення доріжки"
+msgstr "Перемикач режиму відстеження кутів"
 
 #: pcbnew/router/router_tool.cpp:202
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -57324,14 +57907,12 @@ msgid "Zone Manager"
 msgstr "Менеджер зони"
 
 #: pcbnew/zone_settings.h:279
-#, fuzzy
 msgid "Offset X"
-msgstr "Зміщення по X:"
+msgstr "Зсув X"
 
 #: pcbnew/zone_settings.h:280
-#, fuzzy
 msgid "Offset Y"
-msgstr "Зміщення по Y:"
+msgstr "Зсув Y"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
