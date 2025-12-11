@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-12 09:00+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -9918,7 +9918,7 @@ msgstr "Посадкове місце не знайдено."
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "Завантаження бібліотек посадкових місць"
+msgstr "Завантаження бібліотек слідів"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
