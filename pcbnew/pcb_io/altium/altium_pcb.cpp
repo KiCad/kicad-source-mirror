@@ -1155,6 +1155,9 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         curLayer = aStackup[ii];
         layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
 
+        if( m_layermap.find( layer_num ) != m_layermap.end() )
+            continue;
+
         if( ii >= m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
             && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY
                    && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
@@ -1185,7 +1188,6 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
     // Callback:
     std::map<wxString, PCB_LAYER_ID> reMappedLayers = m_layerMappingHandler( inputLayers );
-    m_layermap.clear();
 
     for( std::pair<wxString, PCB_LAYER_ID> layerPair : reMappedLayers )
     {
