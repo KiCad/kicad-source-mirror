@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-12 09:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -33124,7 +33124,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:276
 msgid "Remove islands:"
-msgstr "孤立した導体部分を削除:"
+msgstr "孤立部を削除:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:278
@@ -47269,7 +47269,7 @@ msgstr "現在の配線パターンの姿勢を変更します。"
 
 #: pcbnew/router/router_tool.cpp:199
 msgid "Track Corner Mode"
-msgstr "配線のコーナー モード切り替え"
+msgstr "配線のコーナー モード"
 
 #: pcbnew/router/router_tool.cpp:200
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
