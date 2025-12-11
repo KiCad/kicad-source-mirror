@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-12 09:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -8729,9 +8729,8 @@ msgid "Unset Visible Flag"
 msgstr "Nollställ synlighetsflagga"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
-msgstr "Redigera inställningar för åtgärd..."
+msgstr "Redigera inställningar"
 
 #: common/lib_table_grid_tricks.cpp:156
 msgid "Open Library Table"
@@ -15041,9 +15040,8 @@ msgid "Plot Schematic"
 msgstr "Plotta kretsschema"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "Fjärrsymbolinställningar"
+msgstr "Inställningar för fjärrsymboler"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:58
 msgid ""
@@ -22464,18 +22462,16 @@ msgid " is not a recognised matrix type."
 msgstr " är inte en erkänd matristyp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
-#, fuzzy
 msgid "Unexpected [Bandwidth] keyword."
-msgstr "Oväntade enheter för '%s'"
+msgstr "Oväntat nyckelord [Bandwidth]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1992
 msgid "Matrix bandwidth must be >= 0."
 msgstr "Matrisens bandbredd måste vara >= 0."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2007
-#, fuzzy
 msgid "Unexpected [Row] keyword."
-msgstr "Oväntat slut på filen."
+msgstr "Oväntat nyckelord [Row]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2037
 msgid "Too much data for this matrix row."
@@ -22525,9 +22521,8 @@ msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr "Fortsatte att läsa en modell som inte började. ( internt fel )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr " är inte en Odefinierad modelltyp."
+msgstr " är inte en erkänd submodelltyp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
@@ -22535,7 +22530,7 @@ msgstr "Värdet Submodel_type saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
-msgstr ""
+msgstr " är inte en erkänd subparameter för en submodell."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2616
 msgid "A [Package] line requires exactly 4 elements."
@@ -26269,14 +26264,12 @@ msgid "Press <ESC> to cancel drag."
 msgstr "Tryck på <ESC> för att avbryta drag."
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "Tryck på <ESC> för att avbryta drag."
+msgstr "Tryck på <ESC> för att avbryta brytning."
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "Tryck på <ESC> för att avbryta flytt."
+msgstr "Tryck på <ESC> för att avbryta skärning."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -26550,32 +26543,30 @@ msgid "(page %s)"
 msgstr "(sida %s)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:218
-#, fuzzy
 msgid "Missing payload data."
-msgstr "Saknat nyckelord."
+msgstr "Saknat datainnehåll."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:226
-#, fuzzy
 msgid "Failed to decode base64 payload."
-msgstr "Det gick inte att läsa ett ord."
+msgstr "Det gick inte att avkoda base64 datainnehåll."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported compression '%s'."
-msgstr "Kretsschemafil '%s' stöds ej."
+msgstr "Komprimering '%s' stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:254
 msgid "Compressed payload was empty."
-msgstr ""
+msgstr "Komprimerat datainnehåll var tomt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "ZSTD decompression failed: %s"
-msgstr "Databasanslutning misslyckades: %s"
+msgstr "ZSTD-dekomprimering misslyckades: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:361
 msgid "Payload was empty."
-msgstr ""
+msgstr "Datainnehåll var tomt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:372
 #: eeschema/widgets/panel_remote_symbol.cpp:1554
@@ -26585,272 +26576,240 @@ msgstr ""
 #: eeschema/widgets/panel_remote_symbol.cpp:1849
 #: eeschema/widgets/panel_remote_symbol.cpp:1921
 #: eeschema/widgets/panel_remote_symbol.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Det gick inte att skapa %s"
+msgstr "Det gick inte att skapa '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s' for writing."
-msgstr "Kunde inte öppna %s för läsning."
+msgstr "Kunde inte öppna '%s' för läsning."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write '%s'."
-msgstr "Det gick inte att skriva filen '%s'."
+msgstr "Det gick inte att skriva '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:402
-#, fuzzy
 msgid "Symbol payload was empty."
-msgstr "Symbolbiblioteksfilen '%s' är tom."
+msgstr "Symbolens datainnehåll var tomt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:410
 #: eeschema/widgets/panel_remote_symbol.cpp:420
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Kunde inte skapa temporär fil '%s'.</b>"
+msgstr "Kunde inte skapa temporär fil för symbolens datainnehåll."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:427
-#, fuzzy
 msgid "Failed to write the temporary symbol payload."
-msgstr "Det gick inte att skapa temporär fil '%s'."
+msgstr "Det gick inte att skriva symbolens temporära datainnehåll."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:439
 #: eeschema/widgets/panel_remote_symbol.cpp:1974
-#, fuzzy
 msgid "Unable to access the KiCad symbol plugin."
-msgstr "Det går inte att fasa av de valda linjerna."
+msgstr "Det går inte att komma åt KiCad symbolinsticksmodulen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:462
 msgid "Symbol payload did not include the expected symbol."
-msgstr ""
+msgstr "Symbolens datainnehåll innehöll inte den förväntade symbolen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Det går inte att sammanfoga de valda polygonerna."
+msgstr "Det går inte att avkoda symbolens datainnehåll: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:496
 msgid "Select which remote data source to query."
 msgstr "Välj vilken fjärrdatakälla som skall anropas."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:508
-#, fuzzy
 msgid "Configure remote data sources."
-msgstr "Konfigurera nätklasser"
+msgstr "Konfigurera fjärrdatakällor."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:577
 msgid "No remote data sources are currently installed."
 msgstr "Inga fjärrdatakällor är för närvarande installerade."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "No configuration JSON found for '%s'."
-msgstr "Ingen definition av simulationsmodell hittades för symbol '%s'."
+msgstr "Ingen JSON-konfiguration hittades för '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:650
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s'."
-msgstr "Kunde inte öppna '%s'."
+msgstr "Kan inte öppna '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read '%s'."
-msgstr "Det gick inte att skapa %s"
+msgstr "Det gick inte att läsa '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load remote data for '%s'."
-msgstr "Kunde inte läsa datafil '%s'."
+msgstr "Kunde inte läsa in fjärrdata för '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:932
-#, fuzzy
 msgid "Missing login URL for remote authentication."
-msgstr "Saknad information"
+msgstr "Saknad inloggnings-URL för fjärrautentisering."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:943
-#, fuzzy
 msgid "Unable to start the local login listener."
-msgstr "Det går inte att subtrahera de valda polygonerna."
+msgstr "Det går inte att starta inloggningslyssnaren."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:952
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "Det gick inte att skapa katalog '%s' för säkerhetskopiering.\n"
+msgstr "Det gick inte att tilldela en callback-port för inloggning."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "Icke-stödd via-form: %s."
+msgstr "RPC-version %s stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
-#, fuzzy
 msgid "Missing session identifier."
-msgstr "Versionsnummer saknas."
+msgstr "Sessionsidentifierare saknas."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1188
-#, fuzzy
 msgid "Missing compression metadata."
-msgstr "Saknade tillståndsuttryck."
+msgstr "Metadata för komprimering saknas."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1230
 #: eeschema/widgets/panel_remote_symbol.cpp:1244
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' is not supported."
-msgstr "%s stöds inte."
+msgstr "Kommando '%s' stöds inte."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1238
-#, fuzzy
 msgid "Unable to store payload."
-msgstr "Kunde inte läsa "
+msgstr "Kunde inte spara datainnehåll."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1254
 #: eeschema/widgets/panel_remote_symbol.cpp:1538
 #: eeschema/widgets/panel_remote_symbol.cpp:1734
 #: eeschema/widgets/panel_remote_symbol.cpp:1964
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "Det gick inte att läsa in kretsschemat\n"
+msgstr "Det gick inte att läsa in kretsschemainställningar."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1269
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "3D-konfigurationskatalog är okänd"
+msgstr "Destinationskatalog är inte konfigurerad."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create directory '%s'."
 msgstr "Kunde inte skapa katalog '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1300
-#, fuzzy
 msgid "Unable to access the symbol library table."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att komma åt symbolbibliotekstabellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1319
-#, fuzzy
 msgid "Failed to update the symbol library table."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att uppdatera symbolbibliotekstabellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1333
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
-#, fuzzy
 msgid "Remote download"
-msgstr "Spara nedladdad fil"
+msgstr "Fjärrnedladdning"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1338
-#, fuzzy
 msgid "Failed to save the symbol library table."
-msgstr "Det gick inte att spara symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att spara symbolbibliotekstabell."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1356
-#, fuzzy
 msgid "Unable to access the footprint library table."
-msgstr "Det gick inte att skapa rutan för fotavtrycksvisaren"
+msgstr "Det gick inte att komma åt fotavtrycksbibliotekstabellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1375
-#, fuzzy
 msgid "Failed to update the footprint library table."
-msgstr "Det gick inte att spara fotavtrycksbiblioteksfil '%s'."
+msgstr "Det gick inte att uppdatera fotavtrycksbibliotekstabellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1394
-#, fuzzy
 msgid "Failed to save the footprint library table."
-msgstr "Det gick inte att spara fotavtrycksbiblioteksfil '%s'."
+msgstr "Det gick inte att spara fotavtrycksbibliotekstabellen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1435
-#, fuzzy
 msgid "No schematic editor is available for placement."
-msgstr "Använd kretsschemaredigerarens färgtema"
+msgstr "Ingen kretsschemaredigerare finns tillgänglig för utplacering."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1442
 msgid "Downloaded symbol metadata is incomplete."
 msgstr "Nedladdad symbolmetadata är ofullständig."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1470
-#, fuzzy
 msgid "Unable to load the downloaded symbol for placement."
-msgstr "Det går inte att runda av de valda ledarsegmenten."
+msgstr "Det går inte att läsa in den valda symbolen för utplacering."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1492
-#, fuzzy
 msgid "Unable to access the schematic placement tools."
-msgstr "Det går inte att runda av de valda ledarsegmenten."
+msgstr "Det går inte att komma åt placeringsverktygen för kretsschema."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1516
 #: eeschema/widgets/panel_remote_symbol.cpp:1672
 #: eeschema/widgets/panel_remote_symbol.cpp:1762
 #: eeschema/widgets/panel_remote_symbol.cpp:1827
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported transfer mode '%s'."
-msgstr "Kretsschemafil '%s' stöds ej."
+msgstr "Överföringsläge '%s' stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1524
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[ingen symbol inläst]"
+msgstr "Symbolens datainnehållstyp stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1530
-#, fuzzy
 msgid "No schematic editor is available to store symbols."
-msgstr "Inget mjukvaruförråd tillgängligt för att upprätta fjärranslutning"
+msgstr "Ingen kretsschemaredigerare tillgänglig för att lagra symboler."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
-#, fuzzy
 msgid "Unable to access the symbol library manager."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Det gick inte komma åt symbolbibliotekshanteraren."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1605
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Kunde inte skapa nedladdningslatalog!"
+msgstr "Kunde inte tolka den nedladdade symbolen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1620
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "Välj en mapp för att spara de nedladdade biblioteken"
+msgstr "Kunde inte spara den nedladdade symbolen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1680
-#, fuzzy
 msgid "Unsupported footprint payload type."
-msgstr "Inget fotavtryck laddat."
+msgstr "Fotavtrycks datainnehållstyp stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1771
 msgid "Unsupported 3D model payload type."
-msgstr ""
+msgstr "3D-modells datainnehållstyp stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1835
 msgid "Unsupported SPICE payload type."
-msgstr ""
+msgstr "SPICE datainnehållstyp stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Det gick inte att lägga till komponentdata"
+msgstr "Det gick inte att tolka komponentlistan: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1893
 msgid "Component list must be an array."
 msgstr "Komponentlistan måste vara en array."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1899
-#, fuzzy
 msgid "Component list was empty."
-msgstr "Komponentplacering"
+msgstr "Komponentlistan var tom."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1997
-#, fuzzy
 msgid "Component entries must be objects."
-msgstr "Komponentnamnet kan inte utelämnas."
+msgstr "Komponentinstanserna måste vara objekt."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2006
-#, fuzzy
 msgid "Component entry was missing a type."
-msgstr "Komponentantal överensstämmer inte"
+msgstr "Komponentinstans saknade typ."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2183
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported component type '%s'."
-msgstr "Kretsschemafil '%s' stöds ej."
+msgstr "Komponenttyp '%s' stöds ej."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -28320,23 +28279,20 @@ msgid "Delete Column"
 msgstr "Radera kolumn"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "Inga nät valda."
+msgstr "Inga celler valda"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "Urvalet innehåller %zu låsta objekt."
+msgstr "Urvalet innehåller objekt som inte är celler."
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
 msgstr "Valda celler är från olika tabeller"
 
 #: include/tool/edit_table_tool_base.h:673
-#, fuzzy
 msgid "Cannot paste into merged cells"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'.\n"
+msgstr "Det går inte att klistra in i sammanslagna celler"
 
 #: include/tool/edit_table_tool_base.h:683
 msgid "Selected cells must form a contiguous block"
@@ -28762,14 +28718,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Generera karta / översikt över borrträffar"
 
 #: kicad/cli/command_pcb_export_drill.cpp:96
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Generera karta / översikt över borrträffar"
+msgstr "Generera rapport över borrträffar"
 
 #: kicad/cli/command_pcb_export_drill.cpp:101
-#, fuzzy
 msgid "Report output file path"
-msgstr "Välj utmatningssökväg"
+msgstr "Rapportera utmatningsfils sökväg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
@@ -29134,7 +29088,6 @@ msgid "Report units; valid options: in, mm"
 msgstr "Rapportens måttenhet; giltiga alternativ: tum, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
 msgstr "Uteslut fotavtryck utan lödytor"
 
@@ -30488,9 +30441,9 @@ msgid "Libraries (%d)"
 msgstr "Bibliotek (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Data sources (%d)"
-msgstr "Datakällans namn"
+msgstr "Datakällor (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
@@ -32568,7 +32521,6 @@ msgid "Pollution Degree:"
 msgstr "Nedsmutsningsgrad:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
-#, fuzzy
 msgid ""
 "PD1: No pollution or only dry, non-conductive pollution occurs\n"
 "\n"
@@ -32580,7 +32532,7 @@ msgid ""
 "PD4: Continuous conductivity occurs due to conductive dust, rain, ..."
 msgstr ""
 "PD1: Ingen nedsmutsning eller endast torr, icke-konduktiv nedsmutsning "
-"förekommer\n"
+"förekommer \n"
 "\n"
 "PD2: Endast icke-konduktiv nedsmutsning förekommer. Kondens kan förekomma.\n"
 "\n"
@@ -35070,24 +35022,20 @@ msgid "Board stackup thickness"
 msgstr "Mönsterkortets lageruppbyggnads tjocklek"
 
 #: pcbnew/board_statistics_report.cpp:574
-#, fuzzy
 msgid "Front footprint area"
-msgstr "Framsidans fotavtryck"
+msgstr "Area för framsidans fotavtryck"
 
 #: pcbnew/board_statistics_report.cpp:576
-#, fuzzy
 msgid "Back footprint area"
-msgstr "Baksidans fotavtryck"
+msgstr "Area för baksidans fotavtryck"
 
 #: pcbnew/board_statistics_report.cpp:579
-#, fuzzy
 msgid "Front component density"
-msgstr "Exportera komponenter"
+msgstr "Framsidans komponenttäthet"
 
 #: pcbnew/board_statistics_report.cpp:590
-#, fuzzy
 msgid "Back component density"
-msgstr "Kontrollerar komponent "
+msgstr "Baksidans komponenttäthet"
 
 #: pcbnew/board_statistics_report.cpp:616
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -35397,9 +35345,9 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "net %d"
-msgstr "nätbrygga"
+msgstr "nät %d"
 
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
@@ -35409,9 +35357,8 @@ msgstr ""
 "i nät %s."
 
 #: pcbnew/connectivity/topo_match.cpp:324
-#, fuzzy
 msgid "No compatible component found in the target area."
-msgstr "Inget underordnat kretsscheman hittades i det aktuella projektet"
+msgstr "Ingen kompatibel komponent hittades i det aktuella området."
 
 #: pcbnew/connectivity/topo_match.cpp:404
 msgid "One or both of the areas has no components assigned."
@@ -35440,9 +35387,8 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:704
 #: pcbnew/connectivity/topo_match.cpp:707
-#, fuzzy
 msgid "(no library ID)"
-msgstr "Ogiltigt ID för bibliotek"
+msgstr "(inget biblioteks-ID)"
 
 #: pcbnew/connectivity/topo_match.cpp:710
 #, c-format
@@ -35452,9 +35398,9 @@ msgstr ""
 "'%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Component pads differ between %s and %s."
-msgstr "Textbredden måste vara mellan %s och %s."
+msgstr "Komponentlödytor skiljer mellan %s och %s."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:417
 msgid "(multiple board outlines not supported)"
@@ -35892,9 +35838,8 @@ msgid "Solder Mask/Paste"
 msgstr "Lödmask / lodpasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:138
-#, fuzzy
 msgid "Zone Hatch Offsets"
-msgstr "Sätt förskjutning"
+msgstr "Förskjutning för skrafferad fyllning"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:140
 msgid "Text & Graphics"
@@ -35996,18 +35941,16 @@ msgid "Board stackup thickness:"
 msgstr "Mönsterkortets lageruppbyggnads tjocklek:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "Framsidans koppararea:"
+msgstr "Area för framsidans fotavtryck:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 msgid "Front footprint density:"
 msgstr "Framsidans fotavtrycksdensitet:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "Baksidans koppararea:"
+msgstr "Area för baksidans fotavtryck:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 msgid "Back footprint density:"
@@ -36257,9 +36200,8 @@ msgid "Layers:"
 msgstr "Lager:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "Zonhanterare..."
+msgstr "Öppna zonhanterare..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -38578,7 +38520,6 @@ msgid "Pad Table"
 msgstr "Lödytetabell"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad numbers:"
 msgstr "Lödytenummer:"
 
@@ -38587,9 +38528,8 @@ msgid "Pad count:"
 msgstr "Antal lödytor:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "Duplicera stift:"
+msgstr "Duplicerade lödytor:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3348
 msgid "Size X"
@@ -38637,9 +38577,8 @@ msgid "Aperture"
 msgstr "Öppning"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:553
-#, fuzzy
 msgid "Edit Pads"
-msgstr "Redigera lödyta"
+msgstr "Redigera lödytor"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:199
 msgid "Use a relative path?"
@@ -39746,9 +39685,9 @@ msgid "Generate Multichannel Rule Areas"
 msgstr "Generera flerkanals regelområden"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area topologies do not match: %s"
-msgstr "Regelareatopologier överensstämmer inte: %s"
+msgstr "Regelområdenas topologier överensstämmer inte: %s"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:35
 msgid "Reference rule area:"
@@ -40576,17 +40515,15 @@ msgstr "Efterbearbetning av hål"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3236
-#, fuzzy
 msgid "Countersink"
-msgstr "Antal"
+msgstr "Försänkning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
-#, fuzzy
 msgid "Counterbore"
-msgstr "Antal"
+msgstr "Planförsänkning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1216
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
@@ -40964,9 +40901,8 @@ msgid "Single document"
 msgstr "En och samma fil"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "Export selected layers into a single DXF"
-msgstr "Omvandla valda celler i tabellen till en enda cell"
+msgstr "Exportera valda lager till en enda DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "SVG Options"
@@ -42471,9 +42407,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Förinställda egenskaper för nya grafiska objekt"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:381
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "Symbolbibliotekstabell"
+msgstr "Tabell (nästlad bibliotekstabell)"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:500
 #, c-format
@@ -44799,9 +44734,8 @@ msgid "Zone Hatched Fill Offsets"
 msgstr "Offset för skrafferad zonfyllning"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "Förinställda egenskaper för nya måttsättningsobjekt"
+msgstr "Förinställda egenskaper för nya zoner"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:235
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:341
@@ -44818,9 +44752,8 @@ msgstr ""
 "Bredd på eker för termisk avlastning kan inte vara mindre än minsta bredd."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:449
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "Alla användar-definierade lager har redan lagts till."
+msgstr "Zonens alla lager har redan undantag."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:472
 msgid "<no net> will result in an isolated copper island."
@@ -44886,28 +44819,25 @@ msgid "Width of copper in thermal reliefs."
 msgstr "Kopparbredd i termiska avlastningar."
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:142
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "Undantag för frigång && lödyteanslutningar"
+msgstr "Frigång && lödyteanslutningar"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
 msgid "Display Overrides"
 msgstr "Visa undantag"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
-#, fuzzy
 msgid "Hatched fill"
-msgstr "Skrafferad kant"
+msgstr "Skrafferad fyllning"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:259
 #, fuzzy
 msgid "Hatch offset overrides:"
-msgstr "Undantag för fördröjning i vior:"
+msgstr "Undantag för den skrafferade fyllningens förskjutning:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:320
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "Skrafferad kant"
+msgstr "Skrafferad fyllning"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Remove islands:"
@@ -45538,9 +45468,8 @@ msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Fotavtryck stämmer inte överens med symbolens fotavtrycksfilter"
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Footprint field does not match symbol field"
-msgstr "Fotavtrycks attribut överensstämmer inte med symbol"
+msgstr "Fotavtrycks fält överensstämmer inte med symbolens fält"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint not found in libraries"
@@ -45571,9 +45500,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "Anvisningstryck beskuret av mönsterkortskant"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "Överlappande anvisningstryck"
+msgstr "Frigång för anvisningstryck"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
@@ -45628,9 +45556,8 @@ msgid "Missing tuning profile"
 msgstr "Längdjusteringsprofil saknas"
 
 #: pcbnew/drc/drc_item.cpp:310
-#, fuzzy
 msgid "Tuning profile track geometries"
-msgstr "Namnet för längdjusteringsprofilen används redan"
+msgstr "Längdjusteringsprofilens ledargeometrier"
 
 #: pcbnew/drc/drc_item.cpp:314
 #, fuzzy
@@ -45937,9 +45864,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Kontrollerar spärrzoner och förbudsbegränsningar..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:167
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "Anvisningstryck beskuret av mönsterkortskant"
+msgstr "Anvisningstryck utanför mönsterkortskant"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:243
 msgid "Checking copper to board edge clearances..."
@@ -46509,14 +46435,14 @@ msgid "'%s' settings differ"
 msgstr "Inställningarna '%s' är olika"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Fotavtryck saknas"
+msgstr "Saknat symbolfält '%s' i fotavtryck"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "Fält '%s' är olika: %s; %s."
+msgstr "Fält '%s' är olika (Mönsterkort: '%s', Kretsschema: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:271
 msgid "No corresponding pin found in schematic"
@@ -46760,9 +46686,9 @@ msgid "Created file '%s'."
 msgstr "Skapade fil '%s'."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "Fel under skrivning av fil '%s'."
+msgstr "Fel uppstod vid försök att skapa borr-rapportfil '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1219
 #, c-format
@@ -46869,14 +46795,13 @@ msgid "OCC exception creating counterbore: %s"
 msgstr "OCC-undantag vid skapande av kontur %d: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "Det gick inte att skapa en prismatisk form"
+msgstr "Det gick inte att skapa försänkningens konform"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "OCC-undantag vid skapande av kontur %d: %s"
+msgstr "OCC-undantag vid försök att skapa försänkning: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1663
 #, c-format
@@ -48849,12 +48774,12 @@ msgstr "Odefinierad"
 #: pcbnew/pad.cpp:3234
 #, fuzzy
 msgid "Not post-machined"
-msgstr "Inte angiven"
+msgstr "Inte efterbearbetad"
 
 #: pcbnew/pad.cpp:3247
 #, fuzzy
 msgid "No backdrill"
-msgstr "Inget borrmärke"
+msgstr "Ingen urfräsning på baksidan"
 
 #: pcbnew/pad.cpp:3248
 #, fuzzy
@@ -48876,7 +48801,7 @@ msgstr "Framsida, baksida och anslutna lager"
 #: pcbnew/pad.cpp:3318
 #, fuzzy
 msgid "Post-machining Properties"
-msgstr "Egenskaper för stift"
+msgstr "Egenskaper för efterföljande maskinbearbetning"
 
 #: pcbnew/pad.cpp:3319
 #, fuzzy
@@ -48927,11 +48852,11 @@ msgstr "Storlek för ovansidans efterföljande maskinbearbetning"
 
 #: pcbnew/pad.cpp:3441
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "Djup för ovansidans försänkning"
 
 #: pcbnew/pad.cpp:3456
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "Vinkel för ovansidans försänkning"
 
 #: pcbnew/pad.cpp:3471
 msgid "Bottom Post-machining"
@@ -48943,11 +48868,11 @@ msgstr ""
 
 #: pcbnew/pad.cpp:3498
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "Djup för undersidans försänkning"
 
 #: pcbnew/pad.cpp:3513
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "Vinkel för undersidans försänkning"
 
 #: pcbnew/pad.cpp:3528 pcbnew/pcb_track.cpp:3196
 #, fuzzy
@@ -51406,9 +51331,8 @@ msgid "Via hole size must be smaller than via diameter"
 msgstr "Viahålets storlek måste vara mindre än via-diametern"
 
 #: pcbnew/pcb_track.cpp:1808
-#, fuzzy
 msgid "Via layer must be a copper layer."
-msgstr "Om du vill ha ett bakre kopparskikt"
+msgstr "Viats lager måste vara ett kopparlager."
 
 #: pcbnew/pcb_track.cpp:1820
 msgid "Via layer is outside the board stack."
@@ -51487,9 +51411,8 @@ msgstr "Ledare %s på %s, längd %s"
 #: pcbnew/pcb_track.cpp:2852 pcbnew/pcb_track.cpp:2858
 #: pcbnew/pcb_track.cpp:2864 pcbnew/pcb_track.cpp:2870
 #: pcbnew/pcb_track.cpp:2876
-#, fuzzy
 msgid "From board stackup"
-msgstr "Rutnätsstorlek"
+msgstr "Från mönsterkortets lageruppbyggnad"
 
 #: pcbnew/pcb_track.cpp:2853
 msgid "Tented"
@@ -51578,7 +51501,7 @@ msgstr "Fyllning"
 #: pcbnew/pcb_track.cpp:3247
 #, fuzzy
 msgid "Front Post-machining"
-msgstr "Viatäckning på framsida"
+msgstr "Efterföljande maskinbearbetning på framsida"
 
 #: pcbnew/pcb_track.cpp:3250
 msgid "Front Post-machining Size"
@@ -51595,7 +51518,7 @@ msgstr ""
 #: pcbnew/pcb_track.cpp:3283
 #, fuzzy
 msgid "Back Post-machining"
-msgstr "Viatäckning på baksida"
+msgstr "Efterföljande maskinbearbetning på baksida"
 
 #: pcbnew/pcb_track.cpp:3286
 msgid "Back Post-machining Size"
@@ -52136,9 +52059,8 @@ msgid "Switches posture of the currently routed track."
 msgstr "Växla ställning för den för närvarande dragna ledaren."
 
 #: pcbnew/router/router_tool.cpp:201
-#, fuzzy
 msgid "Track Corner Mode Switch"
-msgstr "Ledarhörnsläge"
+msgstr "Byte av läge för ledarhörn"
 
 #: pcbnew/router/router_tool.cpp:202
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -56966,9 +56888,8 @@ msgid "Filled Area"
 msgstr "Fyllt område"
 
 #: pcbnew/zone.cpp:964
-#, fuzzy
 msgid "Outline Area"
-msgstr "Regelområde"
+msgstr "Konturens area"
 
 #: pcbnew/zone.cpp:976
 msgid "Corner Count"
