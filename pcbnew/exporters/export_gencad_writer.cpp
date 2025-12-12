@@ -1084,7 +1084,7 @@ void GENCAD_EXPORTER::createBoardSection()
     // Extract the board edges
     SHAPE_POLY_SET outline;
 
-    if( !m_board->GetBoardPolygonOutlines( outline ) )
+    if( !m_board->GetBoardPolygonOutlines( outline, true ) )
         wxLogError( _( "Board outline is malformed. Run DRC for a full analysis." ) );
 
     for( auto seg1 = outline.IterateSegmentsWithHoles(); seg1; seg1++ )

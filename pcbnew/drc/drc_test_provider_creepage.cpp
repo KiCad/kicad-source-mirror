@@ -311,7 +311,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
     SHAPE_POLY_SET outline;
 
-    if( !m_board->GetBoardPolygonOutlines( outline ) )
+    if( !m_board->GetBoardPolygonOutlines( outline, false ) )
         return -1;
 
     const DRAWINGS drawings = m_board->Drawings();

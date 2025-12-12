@@ -129,7 +129,7 @@ int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 int AUTOPLACE_TOOL::autoplaceOffboard( const TOOL_EVENT& aEvent )
 {
     SHAPE_POLY_SET boardShape;
-    board()->GetBoardPolygonOutlines( boardShape );
+    board()->GetBoardPolygonOutlines( boardShape, true );
 
     std::vector<FOOTPRINT*> footprints;
 

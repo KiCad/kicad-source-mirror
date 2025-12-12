@@ -263,7 +263,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
     // The board outlines is used to clip solid areas inside the board (when outlines are valid)
     m_boardOutline.RemoveAllContours();
-    m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
+    m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline, true );
 
     // Update and cache zone bounding boxes and pad effective shapes so that we don't have to
     // make them thread-safe.

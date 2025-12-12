@@ -784,6 +784,9 @@ public:
      * i.e. have valid vertices to build a closed polygon.
      *
      * @param aOutlines is the #SHAPE_POLY_SET to fill in with outlines/holes.
+     * @param aInferOutlineIfNecessary if the edges do not define a closed shape then we'll approximate the
+     *                                 bounding box outline based on the edges, or failing that, any other items
+     *                                 on the board
      * @param aErrorHandler is an optional DRC_ITEM error handler.
      * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
      *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
@@ -793,10 +796,9 @@ public:
      * drawn on edge cut layer inside the board main outline.
      * @return true if success, false if a contour is not valid
      */
-    bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
+    bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, bool aInferOutlineIfNecessary,
                                   OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr,
-                                  bool aAllowUseArcsInPolygons = false,
-                                  bool aIncludeNPTHAsOutlines = false );
+                                  bool aAllowUseArcsInPolygons = false, bool aIncludeNPTHAsOutlines = false );
 
     /**
      * @return a epsilon value that is the max distance between 2 points to see them

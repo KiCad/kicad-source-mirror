@@ -1057,6 +1057,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     SHAPE_POLY_SET pcbOutlines; // stores the board main outlines
 
     if( !m_board->GetBoardPolygonOutlines( pcbOutlines,
+                                           /* infer outline if necessary */ true,
                                            /* error handler */ nullptr,
                                            /* allows use arcs in outlines */ true ) )
     {

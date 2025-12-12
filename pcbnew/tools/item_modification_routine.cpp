@@ -445,7 +445,7 @@ bool DOGBONE_CORNER_ROUTINE::EnsureBoardOutline() const
     }
 
     // Build outlines; ignore errors and arcs for this classification
-    if( !board->GetBoardPolygonOutlines( m_boardOutline ) )
+    if( !board->GetBoardPolygonOutlines( m_boardOutline, false ) )
     {
         wxLogTrace( "DOGBONE", "EnsureBoardOutline: GetBoardPolygonOutlines failed" );
         return false;

@@ -244,7 +244,7 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
     }
 
     SHAPE_POLY_SET polySet;
-    aData.hasOutline = aBoard->GetBoardPolygonOutlines( polySet );
+    aData.hasOutline = aBoard->GetBoardPolygonOutlines( polySet, false );
 
     if( aData.hasOutline )
     {

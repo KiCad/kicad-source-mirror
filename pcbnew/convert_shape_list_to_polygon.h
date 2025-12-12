@@ -76,7 +76,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
  * @param aBoard is the board to build outlines.
  * @param aOutlines will contain the outlines ( complex polygons ).
  * @param aErrorMax is the max error distance when polygonizing a curve (internal units).
- * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units),
+ * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
+ * @param aInferOutlineIfNecessary if the edges do not define a closed shape then we'll approximate the bounding
+ *                                 box outline based on the edges, or failing that, any other items on the board
  * @param aErrorHandler = an optional error handler.
  * @param aAllowUseArcsInPolygons is an option to allow adding arcs in #SHAPE_LINE_CHAIN
  *                                polylines/polygons when building outlines from aShapeList
@@ -84,7 +86,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
  * @return true if success, false if a contour is not valid.
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                       int aErrorMax, int aChainingEpsilon,
+                                       int aErrorMax, int aChainingEpsilon, bool aInferOutlineIfNecessary,
                                        OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr,
                                        bool aAllowUseArcsInPolygons = false );
 

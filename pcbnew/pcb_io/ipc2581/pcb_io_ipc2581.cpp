@@ -2472,7 +2472,7 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
 {
     SHAPE_POLY_SET board_outline;
 
-    if( ! m_board->GetBoardPolygonOutlines( board_outline ) )
+    if( ! m_board->GetBoardPolygonOutlines( board_outline, false ) )
     {
         Report( _( "Board outline is invalid or missing.  Please run DRC." ), RPT_SEVERITY_ERROR );
         return;

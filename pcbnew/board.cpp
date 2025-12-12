@@ -2829,14 +2829,15 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 }
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, OUTLINE_ERROR_HANDLER* aErrorHandler,
-                                     bool aAllowUseArcsInPolygons, bool aIncludeNPTHAsOutlines )
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, bool aInferOutlineIfNecessary,
+                                     OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons,
+                                     bool aIncludeNPTHAsOutlines )
 {
     // max dist from one endPt to next startPt: use the current value
     int chainingEpsilon = GetOutlinesChainingEpsilon();
 
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError, chainingEpsilon,
-                                              aErrorHandler, aAllowUseArcsInPolygons );
+                                              aInferOutlineIfNecessary, aErrorHandler, aAllowUseArcsInPolygons );
 
     // Now add NPTH oval holes as holes in outlines if required
     if( aIncludeNPTHAsOutlines )
@@ -3424,7 +3425,7 @@ void BOARD::UpdateBoardOutline()
 {
     m_boardOutline->GetOutline().RemoveAllContours();
 
-    bool has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline() );
+    bool has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline(), false );
 
     if( has_outline )
         m_boardOutline->GetOutline().Fracture();

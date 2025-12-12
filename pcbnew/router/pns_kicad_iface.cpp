@@ -1808,7 +1808,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     SHAPE_POLY_SET  buffer;
     SHAPE_POLY_SET* boardOutline = nullptr;
 
-    if( m_board->GetBoardPolygonOutlines( buffer ) )
+    if( m_board->GetBoardPolygonOutlines( buffer, true ) )
         boardOutline = &buffer;
 
     for( ZONE* zone : m_board->Zones() )

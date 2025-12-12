@@ -83,7 +83,7 @@ PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayU
     addDataCell( units_provider.MessageTextFromValue(  brd_stat_data.boardThickness, true ) );
 
     SHAPE_POLY_SET outline;
-    aBoard->GetBoardPolygonOutlines( outline );
+    aBoard->GetBoardPolygonOutlines( outline, false );
     BOX2I size = outline.BBox();
 
     addDataCell( _( "Board overall dimensions: " ) );

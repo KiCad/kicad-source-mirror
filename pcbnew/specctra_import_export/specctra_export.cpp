@@ -236,7 +236,7 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 
 bool SPECCTRA_DB::BuiltBoardOutlines( BOARD* aBoard  )
 {
-    return aBoard->GetBoardPolygonOutlines( m_brd_outlines );
+    return aBoard->GetBoardPolygonOutlines( m_brd_outlines, true );
 }
 
 

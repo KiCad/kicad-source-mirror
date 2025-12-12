@@ -1236,7 +1236,7 @@ void ODB_STEP_ENTITY::GenerateProfileFile( ODB_TREE_WRITER& writer )
 
     SHAPE_POLY_SET board_outline;
 
-    if( !m_board->GetBoardPolygonOutlines( board_outline ) )
+    if( !m_board->GetBoardPolygonOutlines( board_outline, true ) )
     {
         wxLogError( "Failed to get board outline" );
     }

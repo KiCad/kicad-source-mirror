@@ -380,7 +380,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         // Arc to segment approximation error (not critical here: we do not use the outline shape):
         int maxError = pcbIUScale.mmToIU( 0.05 );
 
-        if( !BuildBoardPolygonOutlines( m_editFrame->GetBoard(), outline, maxError, chainingEpsilon ) )
+        if( !BuildBoardPolygonOutlines( m_editFrame->GetBoard(), outline, maxError, chainingEpsilon, false ) )
         {
             DisplayErrorMessage( this, wxString::Format( _( "Board outline is missing or not closed using "
                                                             "%.3f mm tolerance.\n"

@@ -966,8 +966,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
 
 bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
-                                int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler,
-                                bool aAllowUseArcsInPolygons )
+                                int aChainingEpsilon, bool aInferOutlineIfNecessary,
+                                OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons )
 {
     PCB_TYPE_COLLECTOR items;
     SHAPE_POLY_SET     fpHoles;
@@ -1001,9 +1001,10 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
             SHAPE_POLY_SET fpOutlines;
             success = doConvertOutlineToPolygon( fpSegList, fpOutlines, aErrorMax, aChainingEpsilon,
                                                  false,
-                                                 // don't report errors here; the second pass also
-                                                 // gets an opportunity to use these segments
-                                                 nullptr, aAllowUseArcsInPolygons, cleaner );
+                                                 nullptr, // don't report errors here; the second pass also
+                                                          // gets an opportunity to use these segments
+                                                 aAllowUseArcsInPolygons,
+                                                 cleaner );
 
             // Test to see if we should make holes or outlines.  Holes are made if the footprint
             // has copper outside of a single, closed outline.  If there are multiple outlines,
@@ -1045,8 +1046,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
                                              aErrorHandler, aAllowUseArcsInPolygons, cleaner );
     }
 
-#if 0  // there are currently no clients that want an approximated outline
-    if( !success || !aOutlines.OutlineCount() )
+    if( ( !success || !aOutlines.OutlineCount() ) && aInferOutlineIfNecessary )
     {
         // Couldn't create a valid polygon outline.  Use the board edge cuts bounding box to
         // create a rectangular outline, or, failing that, the bounding box of the items on
@@ -1077,7 +1077,6 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         corner.y = bbbox.GetOrigin().y;
         aOutlines.Append( corner );
     }
-#endif
 
     if( aAllowUseArcsInPolygons )
     {

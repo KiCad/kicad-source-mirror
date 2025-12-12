@@ -291,7 +291,7 @@ bool HYPERLYNX_EXPORTER::writeBoardInfo()
 
     m_out->Print( 0, "{BOARD \"%s\"\n", (const char*) m_board->GetFileName().c_str() );
 
-    if( !m_board->GetBoardPolygonOutlines( outlines ) )
+    if( !m_board->GetBoardPolygonOutlines( outlines, false ) )
     {
         wxLogError( _( "Board outline is malformed. Run DRC for a full analysis." ) );
         return false;
