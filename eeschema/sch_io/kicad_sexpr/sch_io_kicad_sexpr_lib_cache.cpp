@@ -391,6 +391,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             saveField( field, aFormatter );
 
         saveDcmInfoAsFields( aSymbol, aFormatter );
+
+        KICAD_FORMAT::FormatBool( &aFormatter, "embedded_fonts", aSymbol->GetAreFontsEmbedded() );
+
+        if( !aSymbol->EmbeddedFileMap().empty() )
+            aSymbol->WriteEmbeddedFiles( aFormatter, aIncludeData );
     }
 
     aFormatter.Print( ")" );

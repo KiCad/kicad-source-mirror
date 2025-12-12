@@ -187,6 +187,23 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                         libParent = new LIB_SYMBOL( *oldParent );
                         pi->SaveSymbol( aLibrary, libParent, &properties );
                     }
+                    else
+                    {
+                        // Copy embedded files from the in-memory parent to the loaded parent
+                        // This ensures that any embedded files added to the parent are preserved
+                        //
+                        // We do this manually rather than using the assignment operator to avoid
+                        // potential ABI issues where the size of EMBEDDED_FILES differs between
+                        // compilation units, potentially causing the assignment to overwrite
+                        // members of LIB_SYMBOL (like m_me) that follow the EMBEDDED_FILES base.
+                        libParent->ClearEmbeddedFiles();
+
+                        for( const auto& [name, file] : oldParent->EmbeddedFileMap() )
+                            libParent->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
+
+                        libParent->SetAreFontsEmbedded( oldParent->GetAreFontsEmbedded() );
+                        libParent->SetFileAddedCallback( oldParent->GetFileAddedCallback() );
+                    }
 
                     newSymbol = new LIB_SYMBOL( *symbol );
                     newSymbol->SetParent( libParent );
@@ -1044,6 +1061,21 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
         }
         else
         {
+            // Copy embedded files from the buffered parent to the cached parent
+            // This ensures that any embedded files added to the parent are preserved
+            //
+            // We do this manually rather than using the assignment operator to avoid
+            // potential ABI issues where the size of EMBEDDED_FILES differs between
+            // compilation units, potentially causing the assignment to overwrite
+            // members of LIB_SYMBOL (like m_me) that follow the EMBEDDED_FILES base.
+            cachedParent->ClearEmbeddedFiles();
+
+            for( const auto& [name, file] : bufferedParent->EmbeddedFileMap() )
+                cachedParent->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
+
+            cachedParent->SetAreFontsEmbedded( bufferedParent->GetAreFontsEmbedded() );
+            cachedParent->SetFileAddedCallback( bufferedParent->GetFileAddedCallback() );
+
             newCachedSymbol->SetParent( cachedParent );
 
             try

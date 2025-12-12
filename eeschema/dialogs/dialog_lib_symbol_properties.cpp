@@ -41,6 +41,7 @@
 #include <project_sch.h>
 #include <refdes_utils.h>
 #include <dialog_sim_model.h>
+#include <vector>
 
 #include <panel_embedded_files.h>
 #include <settings/settings_manager.h>
@@ -69,7 +70,19 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         m_delayedFocusPage( -1 ),
         m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) )
 {
-    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry );
+    std::vector<const EMBEDDED_FILES*> inheritedEmbeddedFiles;
+
+    if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
+    {
+        while( parent )
+        {
+            inheritedEmbeddedFiles.push_back( parent->GetEmbeddedFiles() );
+            parent = parent->GetParent().lock();
+        }
+    }
+
+    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0,
+                                                std::move( inheritedEmbeddedFiles ) );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry,
@@ -516,7 +529,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_grid->CommitPendingChanges()
             || !m_unitNamesGrid->CommitPendingChanges()
             || !m_bodyStyleNamesGrid->CommitPendingChanges()
-            || !m_jumperGroupsGrid->CommitPendingChanges() )
+            || !m_jumperGroupsGrid->CommitPendingChanges()
+            || !m_embeddedFiles->TransferDataFromWindow() )
     {
         return false;
     }

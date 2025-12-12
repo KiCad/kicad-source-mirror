@@ -1690,7 +1690,20 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
         }
 
         if( EMBEDDED_FILES* symbolEmbeddedFiles = aSymbol.GetEmbeddedFiles() )
+        {
             embeddedFilesStack.push_back( symbolEmbeddedFiles );
+
+            if constexpr (std::is_same_v<T, SCH_SYMBOL>)
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( &aSymbol );
+                symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( embeddedFilesStack );
+            }
+            else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
+            {
+                LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( &aSymbol );
+                symbol->AppendParentEmbeddedFiles( embeddedFilesStack );
+            }
+        }
 
         libMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 

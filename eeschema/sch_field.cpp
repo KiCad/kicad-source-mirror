@@ -736,7 +736,10 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyl
                     embeddedFilesStack.push_back( schematic->GetEmbeddedFiles() );
 
                     if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+                    {
                         embeddedFilesStack.push_back( symbolEmbeddedFiles );
+                        symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( embeddedFilesStack );
+                    }
 
                     mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 

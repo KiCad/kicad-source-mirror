@@ -398,6 +398,12 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
 
+        for( const auto& file : EmbeddedFileMap() )
+        {
+            EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file.second );
+            retv->AddFile( newFile );
+        }
+
         retv->SetExcludedFromSim( parent->GetExcludedFromSim() );
         retv->SetExcludedFromBOM( parent->GetExcludedFromBOM() );
         retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
@@ -1993,6 +1999,18 @@ EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles()
 const EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles() const
 {
     return static_cast<const EMBEDDED_FILES*>( this );
+}
+
+
+void LIB_SYMBOL::AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack ) const
+{
+    std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
+
+    while( parent )
+    {
+        aStack.push_back( parent->GetEmbeddedFiles() );
+        parent = parent->GetParent().lock();
+    }
 }
 
 

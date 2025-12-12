@@ -510,6 +510,7 @@ public:
 
     EMBEDDED_FILES* GetEmbeddedFiles() override;
     const EMBEDDED_FILES* GetEmbeddedFiles() const;
+    void AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack ) const;
 
     void EmbedFonts() override;
 

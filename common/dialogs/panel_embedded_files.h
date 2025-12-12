@@ -23,6 +23,9 @@
 
 #pragma once
 
+#include <set>
+#include <vector>
+
 #include <embedded_files.h>
 #include "panel_embedded_files_base.h"
 
@@ -58,7 +61,8 @@ protected:
 class PANEL_EMBEDDED_FILES : public PANEL_EMBEDDED_FILES_BASE
 {
 public:
-    PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags = 0 );
+    PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags = 0,
+                          std::vector<const EMBEDDED_FILES*> aInheritedFiles = {} );
     ~PANEL_EMBEDDED_FILES() override;
 
     bool TransferDataFromWindow() override;
@@ -78,4 +82,6 @@ protected:
 private:
     EMBEDDED_FILES* m_files;
     EMBEDDED_FILES* m_localFiles;
+    std::vector<const EMBEDDED_FILES*> m_inheritedFiles;
+    std::set<wxString>                 m_inheritedFileNames;
 };
