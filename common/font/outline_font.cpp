@@ -355,7 +355,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                                                 // contents
 
     hb_font_t* referencedFont = hb_ft_font_create_referenced( face );
-    hb_ft_font_set_funcs( referencedFont );
+
     hb_shape( referencedFont, buf, nullptr, 0 );
 
     unsigned int         glyphCount;
@@ -553,9 +553,8 @@ void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString
 
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
 
-    hb_font_t*           referencedFont = hb_ft_font_create_referenced( m_face );
+    hb_font_t* referencedFont = hb_ft_font_create_referenced( m_face );
 
-    hb_ft_font_set_funcs( referencedFont );
     hb_shape( referencedFont, buf, nullptr, 0 );
 
     const double mirror_factor = ( aIsMirrored ? 1 : -1 );
