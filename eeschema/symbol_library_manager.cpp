@@ -720,6 +720,11 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     {
         manager.ReloadTables( aScope, { LIBRARY_TABLE_TYPE::SYMBOL } );
 
+        // Tables are reinitialized. So reinit table reference.
+        optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, aScope );
+        wxCHECK( optTable, false );
+        table = optTable.value();
+
         if( aCreate )
         {
             wxCHECK( schFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );

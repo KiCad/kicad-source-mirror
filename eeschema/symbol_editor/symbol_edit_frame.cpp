@@ -1185,6 +1185,11 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     bool success = true;
 
+    // Tables are reinitialized by m_libMgr->AddLibrary(). So reinit table reference.
+    optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, scope );
+    wxCHECK( optTable.has_value(), wxEmptyString );
+    table = optTable.value();
+
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
