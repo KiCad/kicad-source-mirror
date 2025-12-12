@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-13 00:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -47677,7 +47677,7 @@ msgstr "Konnte Autorensignatur nicht erstellen: %s"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
 #, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "OCC-Ausnahme während der Erstellung einer zylindrischen Senkung: %s"
+msgstr "OCC-Ausnahme während der Erstellung einer Flachsenkung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
 #, fuzzy
@@ -49761,47 +49761,44 @@ msgid "Hole Size Y"
 msgstr "Lochgröße Y"
 
 #: pcbnew/pad.cpp:3414
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "Positionierung"
+msgstr "Obers. Nachbearbeitung"
 
 #: pcbnew/pad.cpp:3426
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "Obers. Nachbearbeitungsgröße"
 
 #: pcbnew/pad.cpp:3441
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "Obers. Flachsenkungstiefe"
 
 #: pcbnew/pad.cpp:3456
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "Obers. Senkungswinkel"
 
 #: pcbnew/pad.cpp:3471
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "Unters. Nachbearbeitung"
 
 #: pcbnew/pad.cpp:3483
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "Unters. Nachbearbeitungsgröße"
 
 #: pcbnew/pad.cpp:3498
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "Unters. Flachsenkungstiefe"
 
 #: pcbnew/pad.cpp:3513
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "Unters. Senkungswinkel"
 
 #: pcbnew/pad.cpp:3528 pcbnew/pcb_track.cpp:3196
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "Füllmodus"
+msgstr "Backdrillmodus"
 
 #: pcbnew/pad.cpp:3531 pcbnew/pcb_track.cpp:3199
-#, fuzzy
 msgid "Bottom Backdrill Size"
-msgstr "Benutzerdefinierte Leiterbahn/DuKo Größe"
+msgstr "Unters. Backdrillgröße"
 
 #: pcbnew/pad.cpp:3546 pcbnew/pcb_track.cpp:3211
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -49812,7 +49809,7 @@ msgstr "Pad-Master unten"
 
 #: pcbnew/pad.cpp:3561 pcbnew/pcb_track.cpp:3223
 msgid "Top Backdrill Size"
-msgstr ""
+msgstr "Obers. Backdrillgröße"
 
 #: pcbnew/pad.cpp:3576 pcbnew/pcb_track.cpp:3235
 #: pcbnew/widgets/pcb_properties_panel.cpp:564
