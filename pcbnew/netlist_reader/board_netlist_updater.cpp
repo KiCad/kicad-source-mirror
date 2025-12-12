@@ -870,13 +870,11 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
             if( pad->IsNoConnectPad() )
             {
-                netName = wxString::Format( wxS( "%s" ),
-                                            EscapeHTML( net.GetNetName() ) );
+                netName = wxString::Format( wxS( "%s" ), net.GetNetName() );
 
                 for( int jj = 1; !padNetnames.insert( netName ).second; jj++ )
                 {
-                    netName = wxString::Format( wxS( "%s_%d" ),
-                                                EscapeHTML( net.GetNetName() ), jj );
+                    netName = wxString::Format( wxS( "%s_%d" ), net.GetNetName(), jj );
                 }
             }
 
