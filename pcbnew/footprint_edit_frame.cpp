@@ -624,66 +624,79 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
     updateEnabledLayers();
 
-    const wxString libName = aFootprint->GetFPID().GetLibNickname();
+    // Use CallAfter so that we update the canvas before waiting for the infobar animation
+    CallAfter(
+            [this]()
+            {
+                FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
+                wxString   libName = fp->GetFPID().GetLibNickname();
+                wxString   msg, link;
 
-    if( IsCurrentFPFromBoard() )
-    {
-        const wxString msg = wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
-                                               aFootprint->GetReference() );
-        const wxString openLibLink = wxString::Format( _( "Open in library %s" ),
-                                                       UnescapeString( libName ) );
-
-        const auto openLibraryCopy =
-                [this]( wxHyperlinkEvent& aEvent )
+                if( IsCurrentFPFromBoard() )
                 {
-                    GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
-                };
+                    msg.Printf( _( "Editing %s from board.  Saving will update the board only." ), fp->GetReference() );
+                    link.Printf( _( "Open in library %s" ), UnescapeString( libName ) );
 
-        if( WX_INFOBAR* infobar = GetInfoBar() )
-        {
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, openLibLink,
-                                                           wxEmptyString );
-            button->Bind( wxEVT_COMMAND_HYPERLINK, openLibraryCopy );
+                    const auto openLibraryCopy =
+                            [this]( wxHyperlinkEvent& aEvent )
+                            {
+                                GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
+                            };
 
-            infobar->RemoveAllButtons();
-            infobar->AddButton( button );
-            infobar->AddCloseButton();
-            infobar->ShowMessage( msg, wxICON_INFORMATION );
-        }
-    }
-    // An empty libname is OK - you get that when creating a new footprint from the main menu
-    // In that case. treat is as editable, and the user will be prompted for save-as when saving.
-    else if( !libName.empty()
-             && !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( libName ) )
-    {
-        wxString msg = wxString::Format( _( "Editing footprint from read-only library %s." ),
-                                         UnescapeString( libName ) );
-
-        if( WX_INFOBAR* infobar = GetInfoBar() )
-        {
-            wxString link = _( "Save as editable copy" );
-
-            const auto saveAsEditableCopy =
-                    [this, aFootprint]( wxHyperlinkEvent& aEvent )
+                    if( WX_INFOBAR* infobar = GetInfoBar() )
                     {
-                        SaveFootprintAs( aFootprint );
-                        SyncLibraryTree( true );
-                    };
+                        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+                        button->Bind( wxEVT_COMMAND_HYPERLINK, openLibraryCopy );
 
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
-            button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
+                        infobar->RemoveAllButtons();
+                        infobar->AddButton( button );
+                        infobar->AddCloseButton();
+                        infobar->ShowMessage( msg, wxICON_INFORMATION );
+                    }
+                }
+                // An empty libname is OK - you get that when creating a new footprint from the main menu
+                // In that case. treat is as editable, and the user will be prompted for save-as when saving.
+                else if( !libName.empty()
+                         && !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( libName ) )
+                {
+                    msg.Printf( _( "Editing footprint from read-only library %s." ), UnescapeString( libName ) );
 
-            infobar->RemoveAllButtons();
-            infobar->AddButton( button );
-            infobar->AddCloseButton();
-            infobar->ShowMessage( msg, wxICON_INFORMATION );
-        }
-    }
-    else
-    {
-        if( WX_INFOBAR* infobar = GetInfoBar() )
-            infobar->Dismiss();
-    }
+                    if( WX_INFOBAR* infobar = GetInfoBar() )
+                    {
+                        link = _( "Save as editable copy" );
+
+                        const auto saveAsEditableCopy =
+                                [this]( wxHyperlinkEvent& aEvent )
+                                {
+                                    SaveFootprintAs( GetBoard()->GetFirstFootprint() );
+                                    GetCanvas()->GetView()->Update( GetBoard()->GetFirstFootprint() );
+                                    ClearModify();
+
+                                    // Get rid of the save-will-update-board-only (or any other dismissable warning)
+                                    WX_INFOBAR* infobar = GetInfoBar();
+
+                                    if( infobar->IsShownOnScreen() && infobar->HasCloseButton() )
+                                        infobar->Dismiss();
+
+                                    GetCanvas()->ForceRefresh();
+                                    SyncLibraryTree( true );
+                                };
+
+                        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+                        button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
+
+                        infobar->RemoveAllButtons();
+                        infobar->AddButton( button );
+                        infobar->AddCloseButton();
+                        infobar->ShowMessage( msg, wxICON_INFORMATION );
+                    }
+                }
+                else
+                {
+                    if( WX_INFOBAR* infobar = GetInfoBar() )
+                        infobar->Dismiss();
+                }
+            } );
 
     UpdateMsgPanel();
     UpdateUserInterface();
