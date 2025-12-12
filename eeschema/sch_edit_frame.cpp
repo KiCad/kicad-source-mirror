@@ -1616,7 +1616,10 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 embeddedFilesStack.push_back( m_schematic->GetEmbeddedFiles() );
 
                 if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+                {
                     embeddedFilesStack.push_back( symbolEmbeddedFiles );
+                    symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( embeddedFilesStack );
+                }
 
                 simLibMgr.SetFilesStack( embeddedFilesStack );
 

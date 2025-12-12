@@ -1514,7 +1514,10 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
     embeddedFilesStack.push_back( m_schematicFrame->Schematic().GetEmbeddedFiles() );
 
     if( EMBEDDED_FILES* symbolEmbeddedFiles = symbol->GetEmbeddedFiles() )
+    {
         embeddedFilesStack.push_back( symbolEmbeddedFiles );
+        symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( embeddedFilesStack );
+    }
 
     mgr.SetFilesStack( embeddedFilesStack );
 

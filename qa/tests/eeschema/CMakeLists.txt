@@ -85,6 +85,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_symbol.cpp
     test_schematic.cpp
     test_symbol_library_manager.cpp
+    test_symbol_embedded_files.cpp
 )
 
 if( WIN32 )

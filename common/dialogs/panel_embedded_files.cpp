@@ -90,13 +90,30 @@ void EMBEDDED_FILES_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 /* ---------- End of GRID_TRICKS for embedded files grid ---------- */
 
 
-PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aFiles ) :
-        PANEL_EMBEDDED_FILES_BASE( parent ), m_files( aFiles ), m_localFiles( new EMBEDDED_FILES() )
+PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags,
+                                            std::vector<const EMBEDDED_FILES*> aInheritedFiles ) :
+        PANEL_EMBEDDED_FILES_BASE( aParent ),
+        m_files( aFiles ),
+        m_localFiles( new EMBEDDED_FILES() ),
+        m_inheritedFiles( std::move( aInheritedFiles ) )
 {
     for( auto& [name, file] : m_files->EmbeddedFileMap() )
     {
         EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
         m_localFiles->AddFile( newFile );
+    }
+
+    for( const EMBEDDED_FILES* inheritedFiles : m_inheritedFiles )
+    {
+        for( auto& [name, file] : inheritedFiles->EmbeddedFileMap() )
+        {
+            if( m_localFiles->HasFile( name ) )
+                continue;
+
+            EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
+            m_localFiles->AddFile( newFile );
+            m_inheritedFileNames.insert( name );
+        }
     }
 
     // Set up the standard buttons
@@ -131,6 +148,7 @@ PANEL_EMBEDDED_FILES::~PANEL_EMBEDDED_FILES()
 {
     // Remove the GRID_TRICKS handler
     m_files_grid->PopEventHandler( true );
+    delete m_localFiles;
 }
 
 
@@ -242,6 +260,9 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
 
     for( auto& file : files )
     {
+        if( m_inheritedFileNames.count( file->name ) )
+            continue;
+
         m_files->AddFile( file );
         m_localFiles->RemoveFile( file->name, false );
     }
@@ -378,6 +399,14 @@ bool PANEL_EMBEDDED_FILES::RemoveEmbeddedFile( const wxString& aFileName )
     if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
         name = name.Mid( FILEEXT::KiCadUriPrefix.size() + 3 );
 
+    if( m_inheritedFileNames.count( name ) )
+    {
+        wxString msg = _( "Embedded files inherited from a parent symbol cannot be removed." );
+
+        DisplayErrorMessage( this, msg );
+        return false;
+    }
+
     int row = std::max( 0, m_files_grid->GetGridCursorRow() );
 
     for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
@@ -409,14 +438,7 @@ void PANEL_EMBEDDED_FILES::onDeleteEmbeddedFile( wxCommandEvent& event )
 
     wxString name = m_files_grid->GetCellValue( row, 0 );
 
-    m_localFiles->RemoveFile( name );
-
-    m_files_grid->DeleteRows( row );
-
-    if( row < m_files_grid->GetNumberRows() )
-        m_files_grid->SetGridCursor( row, 0 );
-    else if( m_files_grid->GetNumberRows() > 0 )
-        m_files_grid->SetGridCursor( m_files_grid->GetNumberRows() - 1, 0 );
+    RemoveEmbeddedFile( name );
 }
 
 
