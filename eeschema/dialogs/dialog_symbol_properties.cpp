@@ -47,6 +47,7 @@
 #include <tool/actions.h>
 
 #include <dialog_sim_model.h>
+#include <panel_embedded_files.h>
 
 
 wxDEFINE_EVENT( SYMBOL_DELAY_FOCUS, wxCommandEvent );
@@ -313,7 +314,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_lastRequestedPinsSize( 0, 0 ),
         m_editorShown( false ),
         m_fields( nullptr ),
-        m_dataModel( nullptr )
+        m_dataModel( nullptr ),
+        m_embeddedFiles( nullptr )
 {
     m_symbol = aSymbol;
     m_part = m_symbol->GetLibSymbolRef().get();
@@ -335,6 +337,12 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_fieldsGrid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
     m_shownColumns = m_fieldsGrid->GetShownColumns();
+
+    if( m_symbol->GetEmbeddedFiles() )
+    {
+        m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_notebook1, m_symbol->GetEmbeddedFiles() );
+        m_notebook1->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+    }
 
     if( m_part && m_part->IsMultiBodyStyle() )
     {
@@ -545,6 +553,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     // Set the symbol's library name.
     m_tcLibraryID->SetValue( UnescapeString( m_symbol->GetLibId().Format() ) );
 
+    if( m_embeddedFiles && !m_embeddedFiles->TransferDataToWindow() )
+        return false;
+
     Layout();
     m_fieldsGrid->Layout();
 
@@ -670,6 +681,9 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
 bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
+        return false;
+
+    if( m_embeddedFiles && !m_embeddedFiles->TransferDataFromWindow() )
         return false;
 
     if( !m_fieldsGrid->CommitPendingChanges() )
