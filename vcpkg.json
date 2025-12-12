@@ -80,6 +80,10 @@
       "name": "protobuf",
       "version": "3.21.12#4",
       "$comment": "Pinned until compat in kicad is improved"
+    },
+    {
+      "name": "harfbuzz",
+      "version": "11.2.0#0"
     }
   ]
 }
