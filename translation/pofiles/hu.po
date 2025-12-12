@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-13 00:03+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -59335,9 +59335,8 @@ msgid "Netclass"
 msgstr "Vezetékosztály"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:114
-#, fuzzy
 msgid "Total Delay"
-msgstr "Késleltetés:"
+msgstr "Teljes késleltetés"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:119
 msgid "Total Length"
@@ -59348,9 +59347,8 @@ msgid "Via Count"
 msgstr "Viák száma"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:127
-#, fuzzy
 msgid "Via Delay"
-msgstr "Átvezetőforrpon átmérő"
+msgstr "Via késleltetés"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:129
 #, fuzzy
@@ -59519,9 +59517,8 @@ msgid "Priority"
 msgstr "Elsőbbség"
 
 #: pcbnew/widgets/search_handlers.cpp:324
-#, fuzzy
 msgid "Textbox"
-msgstr "Szöveg X pozíció"
+msgstr "Szövegdoboz"
 
 #: pcbnew/widgets/search_handlers.cpp:411
 #: pcbnew/widgets/search_handlers.cpp:494
