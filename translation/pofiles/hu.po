@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-13 00:03+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -54265,9 +54265,8 @@ msgid "Priority"
 msgstr "Elsőbbség"
 
 #: pcbnew/widgets/search_handlers.cpp:298
-#, fuzzy
 msgid "Textbox"
-msgstr "Szöveg X pozíció"
+msgstr "Szövegdoboz"
 
 #: pcbnew/widgets/search_handlers.cpp:326
 #: pcbnew/widgets/search_handlers.cpp:408
