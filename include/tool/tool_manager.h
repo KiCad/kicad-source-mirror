@@ -400,6 +400,7 @@ public:
     VECTOR2D GetCursorPosition() const;
 
     EDA_ITEM* GetModel() const { return m_model; }
+    void      ClearModel() { m_model = nullptr; }
 
     APP_SETTINGS_BASE* GetSettings() const { return m_settings; }
 

@@ -93,6 +93,9 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     if( GetCanvas() )
         m_canvasType = GetCanvas()->GetBackend();
 
+    if( m_toolManager )
+        m_toolManager->ClearModel();
+
     delete m_pcb;
     m_pcb = nullptr;
 }
