@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-13 00:03+0000\n"
+"PO-Revision-Date: 2025-12-13 17:07+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -55848,9 +55848,8 @@ msgid "Place pad"
 msgstr "Forrszem elhelyezése"
 
 #: pcbnew/tools/pad_tool.cpp:733 pcbnew/tools/pad_tool.cpp:746
-#, fuzzy
 msgid "Edit Pad"
-msgstr "Forrszem szerkesztése..."
+msgstr "Forrszem szerkesztése"
 
 #: pcbnew/tools/pad_tool.cpp:820
 #, c-format
@@ -56513,7 +56512,6 @@ msgid "Update footprint to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:990
-#, fuzzy
 msgid "Update Footprints from Library..."
 msgstr "Alkatrészrajzolatok frissítése könyvtárból..."
 
@@ -56817,9 +56815,8 @@ msgid "Import routed Specctra session (*.ses) file"
 msgstr "Huzalozott \"Specctra Session\" (*.ses) fájl importálása"
 
 #: pcbnew/tools/pcb_actions.cpp:1245
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN fájl..."
+msgstr "Specctra DSN exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 #, fuzzy
@@ -56897,9 +56894,8 @@ msgid "Create bill of materials from board"
 msgstr "Bevásárlólista létrehozása a jelenlegi kapcsolási rajzból"
 
 #: pcbnew/tools/pcb_actions.cpp:1308
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Exportálás SVG fájlba"
+msgstr "GenCAD exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 #, fuzzy
@@ -56907,9 +56903,8 @@ msgid "Export GenCAD board representation"
 msgstr "Aktuális panel exportálása \"GenCAD\" fájlba"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Exportolás"
+msgstr "VRML exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 #, fuzzy
@@ -56917,9 +56912,8 @@ msgid "Export VRML 3D board representation"
 msgstr "Aktuális panel exportálása \"VRML\" fájlba"
 
 #: pcbnew/tools/pcb_actions.cpp:1322
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "IDFv3 exportálás"
+msgstr "IDFv3 exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1323
 #, fuzzy
@@ -56927,9 +56921,8 @@ msgid "Export IDF 3D board representation"
 msgstr "Aktuális panel exportálása \"IDFv3\" fájlba"
 
 #: pcbnew/tools/pcb_actions.cpp:1329
-#, fuzzy
 msgid "Export STEP/GLB/BREP/XAO/PLY/STL..."
-msgstr "STEP exportálása"
+msgstr "STEP/GLB/BREP/XAO/PLY/STL exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 #, fuzzy
@@ -56981,7 +56974,6 @@ msgid "Change via size to next pre-defined size"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1383
-#, fuzzy
 msgid "Decrease Via Size"
 msgstr "Via méret csökkentése"
 
