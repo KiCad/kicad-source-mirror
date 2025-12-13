@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-13 17:07+0000\n"
+"PO-Revision-Date: 2025-12-14 20:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -4659,7 +4659,7 @@ msgstr "埋め込むファイルを選択"
 
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "親シンボルから継承された埋め込みファイルは削除できません。"
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -39532,7 +39532,6 @@ msgid "Filter tracks by width:"
 msgstr "配線を幅でフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
 msgstr "ビアをサイズでフィルター:"
 
