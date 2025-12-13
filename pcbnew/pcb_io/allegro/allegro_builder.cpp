@@ -650,6 +650,8 @@ void BOARD_BUILDER::cacheFontDefs()
 
 void BOARD_BUILDER::createNets()
 {
+    wxLogTrace( traceAllegroBuilder, "Creating nets from Allegro data" );
+
     // Incrementing netcode. We could also choose to, say, use the 0x1B key if we wanted
     int netCode = 1;
 
@@ -687,6 +689,8 @@ void BOARD_BUILDER::createNets()
 
 void BOARD_BUILDER::setupLayers()
 {
+    wxLogTrace( traceAllegroBuilder, "Setting up layer mapping from Allegro to KiCad" );
+
     const auto& layerMap = m_rawBoard.m_Header->m_LayerMap;
 
     for( size_t i = 0; i < layerMap.size(); ++i )
@@ -967,7 +971,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
     const wxString& padStackName = m_rawBoard.GetString( aPadstack.m_PadStr );
 
-    std::cout << " Pad " << padStackName << " with " << aPadstack.m_LayerCount << " layers" << std::endl;
+    wxLogTrace( traceAllegroBuilder, "Building pad '%s' with %lu layers", padStackName, aPadstack.m_LayerCount );
 
     // First, gather all the copper layers into a set of shape props, which we can then use to decide on the padstack mode
     for( size_t i = 0; i < aPadstack.m_LayerCount; ++i )
@@ -998,7 +1002,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
 
         auto& layerCuProps = copperLayers[i];
-        std::cout << " Adding layer " << i << " with type " << (int) padComp.m_Type << std::endl;
+        wxLogTrace( traceAllegroBuilder, "  Adding copper layer %lu with pad type %d", i, (int) padComp.m_Type );
         layerCuProps = std::make_unique<PADSTACK::COPPER_LAYER_PROPS>();
 
         switch( padComp.m_Type )
@@ -1084,21 +1088,21 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
         for(size_t i = 0; i < copperLayers.size(); ++i )
         {
-            std::cout << " Layer " << i << ": " << !!copperLayers[i] << std::endl;
+            wxLogTrace( traceAllegroBuilder, "  Layer %lu: %s", i, copperLayers[i] ? "present" : "null" );
         }
 
         padStack.SetLayerSet( PAD::PTHMask() );
 
         if( layersEqual(0, copperLayers.size() ) )
         {
-            std::cout << " Normal mode" << std::endl;
+            wxLogTrace( traceAllegroBuilder, "  Using NORMAL padstack mode (all layers identical)" );
             padStack.SetMode( PADSTACK::MODE::NORMAL );
             PADSTACK::COPPER_LAYER_PROPS& layerProps = padStack.CopperLayer( F_Cu );
             layerProps = *copperLayers.front();
         }
         else if( layersEqual( 1, copperLayers.size() - 1) )
         {
-            std::cout << " FIB mode" << std::endl;
+            wxLogTrace( traceAllegroBuilder, "  Using FRONT_INNER_BACK padstack mode (inner layers identical)" );
             padStack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
             padStack.CopperLayer( F_Cu ) = *copperLayers.front();
             padStack.CopperLayer( B_Cu ) = *copperLayers.back();
@@ -1108,7 +1112,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
         else
         {
-            std::cout << " Custom mode" << std::endl;
+            wxLogTrace( traceAllegroBuilder, "  CUSTOM padstack mode needed but not yet implemented - using NORMAL as fallback" );
             // padStack.SetMode( PADSTACK::MODE::CUSTOM );
             // for( size_t i = 0; i < copperLayers.size(); ++i )
             // {
@@ -1166,6 +1170,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
     const BLK_0x07* fpInstData = getFpInstRef( aFpInstance );
 
+    wxLogTrace( traceAllegroBuilder, "Building footprint from 0x2D block key %#010x", aFpInstance.m_Key );
+
     wxString refDesStr;
     if( fpInstData )
     {
@@ -1183,6 +1189,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     // but if not, set the refdes at least, but make it invisible
     fp->SetReference( refDesStr );
     fp->GetField( FIELD_T::REFERENCE )->SetVisible( false );
+
+    wxLogTrace( traceAllegroBuilder, "  Footprint reference: '%s'", refDesStr );
 
     const VECTOR2I  fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
     const EDA_ANGLE rotation{ aFpInstance.m_Rotation / 1000. };
@@ -1364,6 +1372,8 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
 
 void BOARD_BUILDER::createTracks()
 {
+    wxLogTrace( traceAllegroBuilder, "Creating tracks, vias, and other routed items" );
+
     std::vector<BOARD_ITEM*> newItems;
 
     // We need to walk this list again - we could do this all in createNets, but this seems tidier.
@@ -1432,7 +1442,7 @@ void BOARD_BUILDER::createTracks()
                 case 0x2E: // This is something else
                 default:
                 {
-                    std::cout << "  Unhandled connected item code" << (int) connType << std::endl;
+                    wxLogTrace( traceAllegroBuilder, "  Unhandled connected item code: %#04x", (int) connType );
                 }
                 }
 
@@ -1446,17 +1456,22 @@ void BOARD_BUILDER::createTracks()
     }
 
     m_board.FinalizeBulkAdd( newItems );
+
+    wxLogTrace( traceAllegroBuilder, "Finished creating %lu track/via items", newItems.size() );
 }
 
 
 bool BOARD_BUILDER::BuildBoard()
 {
+    wxLogTrace( traceAllegroBuilder, "Starting BuildBoard() - Phase 2 of Allegro import" );
+
     if( m_progressReporter )
     {
         m_progressReporter->AddPhases( 4 );
         m_progressReporter->AdvancePhase( _( "Constructing caches" ) );
     }
 
+    wxLogTrace( traceAllegroBuilder, "Caching font definitions and setting up layers" );
     cacheFontDefs();
     setupLayers();
 
@@ -1474,6 +1489,8 @@ bool BOARD_BUILDER::BuildBoard()
     {
         m_progressReporter->AdvancePhase( _( "Converting footprints" ) );
     }
+
+    wxLogTrace( traceAllegroBuilder, "Converting footprints from Allegro to KiCad" );
 
     const LL_WALKER          fpWalker( m_rawBoard.m_Header->m_LL_0x2B, m_rawBoard );
     std::vector<BOARD_ITEM*> bulkAddedItems;
@@ -1521,5 +1538,7 @@ bool BOARD_BUILDER::BuildBoard()
     if( !bulkAddedItems.empty() )
         m_board.FinalizeBulkAdd( bulkAddedItems );
 
-    return false;
+    wxLogTrace( traceAllegroBuilder, "Converted %lu footprints", bulkAddedItems.size() );
+    wxLogTrace( traceAllegroBuilder, "Board construction completed successfully" );
+    return true;
 }

@@ -109,9 +109,9 @@ public:
 
     std::string ReadStringFixed( size_t aLen, bool aRoundToNextU32 )
     {
-        std::vector<char> buffer( aLen + 1 );
+        std::vector<char> buffer( aLen );
         ReadBytes( buffer.data(), aLen );
-        buffer.push_back( '\0' ); // Null-terminate the string
+        buffer.push_back( '\0' );
 
         const size_t pos = Position();
         if( aRoundToNextU32 && pos % sizeof( uint32_t ) != 0 )

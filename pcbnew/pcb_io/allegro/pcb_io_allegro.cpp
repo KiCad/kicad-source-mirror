@@ -99,6 +99,11 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
     std::ifstream fin( aFileName, std::ios::binary );
 
+    if( !fin.is_open() )
+    {
+        THROW_IO_ERROR( wxString::Format( "Cannot open file: %s", aFileName ) );
+    }
+
     ALLEGRO::FILE_STREAM allegroStream( fin );
 
     ALLEGRO::PARSER parser( allegroStream, m_progressReporter );
@@ -113,6 +118,9 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     std::unique_ptr<ALLEGRO::RAW_BOARD> rawBoard = parser.Parse();
 
     m_reporter->Report( wxString::Format( "Phase 1 parse took %fms", timer.msecs() ), RPT_SEVERITY_DEBUG ); // format:allow
+
+    wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 1 parse complete, starting Phase 2 board construction" );
+
     // Import Phase 2: turn the C++ structs into the KiCad BOARD
     ALLEGRO::BOARD_BUILDER builder( *rawBoard, *m_board, *m_reporter, m_progressReporter );
 
@@ -120,5 +128,14 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
     m_reporter->Report( wxString::Format( "Phase 2 parse took %fms", timer.msecs( true ) ), RPT_SEVERITY_DEBUG ); // format:allow
 
+    if( !phase2Ok )
+    {
+        wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 2 board construction failed" );
+        m_reporter->Report( _( "Failed to build board from Allegro data" ), RPT_SEVERITY_ERROR );
+        delete m_board;
+        return nullptr;
+    }
+
+    wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Board construction completed successfully" );
     return m_board;
 }
