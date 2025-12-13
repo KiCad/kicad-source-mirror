@@ -612,8 +612,7 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::loadSheet( LINE_READER& aReader )
                 case 'T': sheetPin->SetSide( SHEET_SIDE::TOP );    break;
                 case 'B': sheetPin->SetSide( SHEET_SIDE::BOTTOM ); break;
                 case 'L': sheetPin->SetSide( SHEET_SIDE::LEFT );   break;
-                default:
-                    SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
+                default:  SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
                 }
 
                 VECTOR2I position;

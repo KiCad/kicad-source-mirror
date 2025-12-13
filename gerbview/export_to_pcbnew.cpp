@@ -174,22 +174,22 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         VECTOR2I center = aGbrItem->GetABPosition( seg_start );
         int radius = d_codeDescr->m_Size.x / 2;
         writePcbFilledCircle( center, radius, aLayer );
-    }
         break;
+    }
 
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
+    {
         d_codeDescr->ConvertShapeToPolygon( aGbrItem );
-        {
         SHAPE_POLY_SET polyshape = d_codeDescr->m_Polygon;
 
         // Compensate the Y axis orientation ( writePcbPolygon invert the Y coordinate )
         polyshape.Outline( 0 ).Mirror( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
         writePcbPolygon( polyshape, aLayer, aGbrItem->GetABPosition( seg_start ) );
-        }
         break;
+    }
 
     case GBR_ARC:
         export_non_copper_arc( aGbrItem, aLayer );
@@ -238,6 +238,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
             export_stroke_info( aGbrItem->m_Size.x );
             fprintf( m_fp, "\t)\n" );
         }
+
         break;
     }
 }

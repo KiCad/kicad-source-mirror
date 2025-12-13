@@ -825,80 +825,78 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
     {
         switch( *text )
         {
-            case 'X':
-            case 'Y':
-                ReadXYCoord( text, true );
+        case 'X':
+        case 'Y':
+            ReadXYCoord( text, true );
 
-                if( *text == 'I' || *text == 'J' )
-                    ReadIJCoord( text );
+            if( *text == 'I' || *text == 'J' )
+                ReadIJCoord( text );
 
-                break;
+            break;
 
-            case 'G':  // G85 is found here for oval holes
-                m_PreviousPos = m_CurrentPos;
-                Execute_EXCELLON_G_Command( text );
-                break;
+        case 'G':  // G85 is found here for oval holes
+            m_PreviousPos = m_CurrentPos;
+            Execute_EXCELLON_G_Command( text );
+            break;
 
-            case 0:     // E.O.L: execute command
-                if( m_RouteModeOn )
+        case 0:     // E.O.L: execute command
+            if( m_RouteModeOn )
+            {
+                // We are in routing mode, and this is an intermediate point.
+                // So just store it
+                int rmode = 0;  // linear routing.
+
+                if( m_Iterpolation == GERB_INTERPOL_ARC_NEG )
+                    rmode = ROUTE_CW;
+                else if( m_Iterpolation == GERB_INTERPOL_ARC_POS )
+                    rmode = ROUTE_CCW;
+
+                if( m_LastArcDataType == ARC_INFO_TYPE_CENTER )
                 {
-                    // We are in routing mode, and this is an intermediate point.
-                    // So just store it
-                    int rmode = 0;  // linear routing.
-
-                    if( m_Iterpolation == GERB_INTERPOL_ARC_NEG )
-                        rmode = ROUTE_CW;
-                    else if( m_Iterpolation == GERB_INTERPOL_ARC_POS )
-                        rmode = ROUTE_CCW;
-
-                    if( m_LastArcDataType == ARC_INFO_TYPE_CENTER )
-                    {
-                        EXCELLON_ROUTE_COORD point( m_CurrentPos, m_IJPos, rmode );
-                        m_RoutePositions.push_back( point );
-                    }
-                    else
-                    {
-                        EXCELLON_ROUTE_COORD point( m_CurrentPos, m_ArcRadius, rmode );
-                        m_RoutePositions.push_back( point );
-                    }
-                    return true;
-                }
-
-                tool = GetDCODE( m_Current_Tool );
-                if( !tool )
-                {
-                    wxString msg;
-                    msg.Printf( _( "Tool %d not defined" ), m_Current_Tool );
-                    AddMessageToList( msg );
-                    return false;
-                }
-
-                gbritem = new GERBER_DRAW_ITEM( this );
-                AddItemToList( gbritem );
-
-                if( m_SlotOn )  // Oblong hole
-                {
-                    fillLineGBRITEM( gbritem, tool->m_Num_Dcode,
-                                    m_PreviousPos, m_CurrentPos,
-                                    tool->m_Size, false );
-                    // the hole is made: reset the slot on command (G85)
-                    // (it is needed for each oblong hole)
-                    m_SlotOn = false;
+                    EXCELLON_ROUTE_COORD point( m_CurrentPos, m_IJPos, rmode );
+                    m_RoutePositions.push_back( point );
                 }
                 else
                 {
-                    fillFlashedGBRITEM( gbritem, tool->m_ApertType, tool->m_Num_Dcode,
-                                    m_CurrentPos, tool->m_Size, false );
+                    EXCELLON_ROUTE_COORD point( m_CurrentPos, m_ArcRadius, rmode );
+                    m_RoutePositions.push_back( point );
                 }
-
-                StepAndRepeatItem( *gbritem );
-                m_PreviousPos = m_CurrentPos;
                 return true;
-                break;
+            }
 
-            default:
-                text++;
-                break;
+            tool = GetDCODE( m_Current_Tool );
+            if( !tool )
+            {
+                wxString msg;
+                msg.Printf( _( "Tool %d not defined" ), m_Current_Tool );
+                AddMessageToList( msg );
+                return false;
+            }
+
+            gbritem = new GERBER_DRAW_ITEM( this );
+            AddItemToList( gbritem );
+
+            if( m_SlotOn )  // Oblong hole
+            {
+                fillLineGBRITEM( gbritem, tool->m_Num_Dcode, m_PreviousPos, m_CurrentPos, tool->m_Size, false );
+                // the hole is made: reset the slot on command (G85)
+                // (it is needed for each oblong hole)
+                m_SlotOn = false;
+            }
+            else
+            {
+                fillFlashedGBRITEM( gbritem, tool->m_ApertType, tool->m_Num_Dcode, m_CurrentPos, tool->m_Size,
+                                    false );
+            }
+
+            StepAndRepeatItem( *gbritem );
+            m_PreviousPos = m_CurrentPos;
+            return true;
+            break;
+
+        default:
+            text++;
+            break;
         }
     }
 
@@ -1029,6 +1027,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
             m_RoutePositions.emplace_back( m_CurrentPos, m_IJPos, ROUTE_CW );
         else
             m_RoutePositions.emplace_back( m_CurrentPos, m_ArcRadius, ROUTE_CW );
+
         break;
 
     case DRILL_G_CCWMOVE:
@@ -1042,6 +1041,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
             m_RoutePositions.emplace_back( m_CurrentPos, m_IJPos, ROUTE_CCW );
         else
             m_RoutePositions.emplace_back( m_CurrentPos, m_ArcRadius, ROUTE_CCW );
+
         break;
 
     case DRILL_G_ABSOLUTE:
@@ -1055,8 +1055,10 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
     case DRILL_G_UNKNOWN:
     default:
         AddMessageToList( wxString::Format( _( "Unknown Excellon G Code: &lt;%s&gt;" ), From_UTF8(gcmd) ) );
+
         while( *text )
             text++;
+
         return false;
     }
 

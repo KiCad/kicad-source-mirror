@@ -251,49 +251,42 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     switch( ntype )
     {
     case WRL1NODES::WRL1_GROUP:
-
         if( !readGroup( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_SEPARATOR:
-
         if( !readSeparator( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_SWITCH:
-
         if( !readSwitch( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_MATERIAL:
-
         if( !readMaterial( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_MATERIALBINDING:
-
         if( !readMatBinding( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_COORDINATE3:
-
         if( !readCoords( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_INDEXEDFACESET:
-
         if( !readFaceSet( proc, aParent, aNode ) )
             return false;
 
@@ -303,14 +296,12 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     case WRL1NODES::WRL1_TRANSLATION:
     case WRL1NODES::WRL1_ROTATION:
     case WRL1NODES::WRL1_SCALE:
-
         if( !readTransform( proc, aParent, aNode ) )
             return false;
 
         break;
 
     case WRL1NODES::WRL1_SHAPEHINTS:
-
         if( !readShapeHints( proc, aParent, aNode ) )
             return false;
 
@@ -320,7 +311,6 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     // items not implemented or for optional future implementation:
     //
     default:
-
         if( !proc.DiscardNode() )
         {
             wxLogTrace( traceVrmlPlugin,

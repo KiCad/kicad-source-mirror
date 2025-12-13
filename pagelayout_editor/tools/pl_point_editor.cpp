@@ -76,6 +76,7 @@ public:
             points->AddPoint( line->GetEnd() );
             break;
         }
+
         case WSG_RECT_T:
         {
             DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( aItem );
@@ -94,6 +95,7 @@ public:
             points->AddPoint( botRight );
             break;
         }
+
         default:
             points.reset();
             break;

@@ -766,7 +766,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         case T_outputformat:
             aPcbPlotParams->m_format = static_cast<PLOT_FORMAT>(
                     parseInt( static_cast<int>( PLOT_FORMAT::FIRST_FORMAT ),
-                            static_cast<int>( PLOT_FORMAT::LAST_FORMAT ) ) );
+                             static_cast<int>( PLOT_FORMAT::LAST_FORMAT ) ) );
             break;
 
         case T_mirror:

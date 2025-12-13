@@ -206,8 +206,9 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
                     for( CN_ITEM* zitem : m_itemList.Add( zone, layer ) )
                         m_itemMap[zone].Link( zitem );
                 } );
-    }
+
         break;
+    }
 
     default:
         return false;

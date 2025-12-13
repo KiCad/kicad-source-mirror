@@ -309,7 +309,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     }
 
     case GBR_SPOT_CIRCLE:
-    {
         if( code )
         {
             int radius = code->m_Size.x >> 1;
@@ -317,23 +316,18 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         }
 
         break;
-    }
 
     case GBR_SPOT_RECT:
-    {
         if( code )
             bbox.Inflate( code->m_Size.x / 2, code->m_Size.y / 2 );
 
         break;
-    }
 
     case GBR_SPOT_OVAL:
-    {
         if( code )
             bbox.Inflate( code->m_Size.x /2, code->m_Size.y / 2 );
 
         break;
-    }
 
     case GBR_SPOT_MACRO:
     case GBR_SPOT_POLY:
@@ -349,7 +343,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         break;
 
     case GBR_SEGMENT:
-    {
         if( code && code->m_ApertType == APT_RECT )
         {
             if( m_ShapeAsPolygon.OutlineCount() == 0 )
@@ -380,7 +373,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         }
 
         break;
-    }
+
     default:
         wxASSERT_MSG( false, wxT( "GERBER_DRAW_ITEM shape is unknown!" ) );
         break;

@@ -204,8 +204,8 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>& aShapeList, int aChainingEpsil
             {
             case 0: segShape->SetStart( arcPts[0] ); break;
             case 1: segShape->SetStart( arcPts[1] ); break;
-            case 2: segShape->SetEnd( arcPts[0] ); break;
-            case 3: segShape->SetEnd( arcPts[1] ); break;
+            case 2: segShape->SetEnd( arcPts[0] );   break;
+            case 3: segShape->SetEnd( arcPts[1] );   break;
             }
 
             success = true;
@@ -313,8 +313,8 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>& aShapeList, int aChainingEpsil
             {
             case 0: segShape->SetStart( bezPts[0] ); break;
             case 1: segShape->SetStart( bezPts[1] ); break;
-            case 2: segShape->SetEnd( bezPts[0] ); break;
-            case 3: segShape->SetEnd( bezPts[1] ); break;
+            case 2: segShape->SetEnd( bezPts[0] );   break;
+            case 3: segShape->SetEnd( bezPts[1] );   break;
             }
 
             success = true;

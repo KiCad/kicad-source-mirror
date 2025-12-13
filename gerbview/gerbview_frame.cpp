@@ -411,7 +411,6 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
         break;
 
     case LAYER_NEGATIVE_OBJECTS:
-    {
         gvconfig()->m_Appearance.show_negative_objects = aNewState;
 
         view->UpdateAllItemsConditionally( KIGFX::REPAINT,
@@ -424,7 +423,6 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
                 } );
 
         break;
-    }
 
     case LAYER_GERBVIEW_DRAWINGSHEET:
         gvconfig()->m_Appearance.show_border_and_titleblock = aNewState;

@@ -138,6 +138,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
             kpin->writeSpiceDiffDevice( result, aItem.modelName, *kmodel, kparams );
         else
             kpin->writeSpiceDevice( result, aItem.modelName, *kmodel, kparams );
+
         break;
 
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:
@@ -148,22 +149,17 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
             paramValue = dc->value;
 
         if( paramValue == "hi-Z" )
-        {
             kparams.m_waveform = new KIBIS_WAVEFORM_HIGH_Z( kibis );
-        }
         else if( paramValue == "low" )
-        {
             kparams.m_waveform = new KIBIS_WAVEFORM_STUCK_LOW( kibis );
-        }
         else if( paramValue == "high" )
-        {
             kparams.m_waveform = new KIBIS_WAVEFORM_STUCK_HIGH( kibis );
-        }
 
         if( diffMode )
             kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
             kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
+
         break;
     }
 
@@ -189,6 +185,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
             kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
             kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
+
         break;
     }
 
@@ -211,6 +208,7 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
             kpin->writeSpiceDiffDriver( result, aItem.modelName, *kmodel, kparams );
         else
             kpin->writeSpiceDriver( result, aItem.modelName, *kmodel, kparams );
+
         break;
     }
 
@@ -241,10 +239,7 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType ) :
     case SIM_MODEL::TYPE::KIBIS_DRIVER_DC:   paramInfos = &dcDriver;   break;
     case SIM_MODEL::TYPE::KIBIS_DRIVER_RECT: paramInfos = &rectDriver; break;
     case SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS: paramInfos = &prbsDriver; break;
-
-    default:
-        wxFAIL;
-        return;
+    default:                                 wxFAIL;                   return;
     }
 
     for( const PARAM::INFO& paramInfo : *paramInfos )
@@ -379,16 +374,19 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makeParamInfos( TYPE aType )
     case TYPE::KIBIS_DRIVER_DC:
         for( const PARAM::INFO& param : makeDcWaveformParamInfos() )
             paramInfos.push_back( param );
+
         break;
 
     case TYPE::KIBIS_DRIVER_RECT:
         for( const PARAM::INFO& param : makeRectWaveformParamInfos() )
             paramInfos.push_back( param );
+
         break;
 
     case TYPE::KIBIS_DRIVER_PRBS:
         for( const PARAM::INFO& param : makePrbsWaveformParamInfos() )
             paramInfos.push_back( param );
+
         break;
 
     default:

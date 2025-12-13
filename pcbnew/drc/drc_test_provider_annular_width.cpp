@@ -94,32 +94,32 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     size_t effort = 0;
 
                     pad->Padstack().ForEachUniqueLayer(
-                        [&pad, &effort]( PCB_LAYER_ID aLayer )
-                        {
-                            if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
+                            [&pad, &effort]( PCB_LAYER_ID aLayer )
                             {
-                                switch( pad->GetShape( aLayer ) )
+                                if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
                                 {
-                                case PAD_SHAPE::CHAMFERED_RECT:
-                                    if( pad->GetChamferRectRatio( aLayer ) > 0.30 )
+                                    switch( pad->GetShape( aLayer ) )
+                                    {
+                                    case PAD_SHAPE::CHAMFERED_RECT:
+                                        if( pad->GetChamferRectRatio( aLayer ) > 0.30 )
+                                            break;
+
+                                        KI_FALLTHROUGH;
+
+                                    case PAD_SHAPE::CIRCLE:
+                                    case PAD_SHAPE::OVAL:
+                                    case PAD_SHAPE::RECTANGLE:
+                                    case PAD_SHAPE::ROUNDRECT:
+                                        effort += 1;
                                         break;
 
-                                    KI_FALLTHROUGH;
-
-                                case PAD_SHAPE::CIRCLE:
-                                case PAD_SHAPE::OVAL:
-                                case PAD_SHAPE::RECTANGLE:
-                                case PAD_SHAPE::ROUNDRECT:
-                                    effort += 1;
-                                    break;
-
-                                default:
-                                    break;
+                                    default:
+                                        break;
+                                    }
                                 }
-                            }
 
-                            effort += 5;
-                        } );
+                                effort += 5;
+                            } );
 
                     return effort;
                 }

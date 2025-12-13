@@ -1006,45 +1006,45 @@ void EXPORTER_STEP::initOutputVariant()
     // it can have some minor actions for the generator
     switch( m_params.m_Format )
     {
-        case EXPORTER_STEP_PARAMS::FORMAT::STEP:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEP );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEP );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::STEPZ:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEPZ );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STEPZ:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STEPZ );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::BREP:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_BREP );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::BREP:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_BREP );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::XAO:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_XAO );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_XAO );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::GLB:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_GLTF );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_GLTF );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::PLY:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PLY );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::PLY:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PLY );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::STL:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STL );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STL:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_STL );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::U3D:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_U3D );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::U3D:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_U3D );
+        break;
 
-        case EXPORTER_STEP_PARAMS::FORMAT::PDF:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PDF );
-            break;
+    case EXPORTER_STEP_PARAMS::FORMAT::PDF:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_PDF );
+        break;
 
-        default:
-            m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_UNKNOWN );
-            break;
+    default:
+        m_pcbModel->SpecializeVariant( OUTPUT_FORMAT::FMT_OUT_UNKNOWN );
+        break;
     }
 }
 

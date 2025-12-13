@@ -608,15 +608,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         switch( aStepJob->m_format )
         {
-        case JOB_EXPORT_PCB_3D::FORMAT::STEP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP;  break;
         case JOB_EXPORT_PCB_3D::FORMAT::STEPZ: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEPZ; break;
-        case JOB_EXPORT_PCB_3D::FORMAT::BREP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP; break;
-        case JOB_EXPORT_PCB_3D::FORMAT::XAO:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::GLB:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PLY:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STL:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::U3D:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::U3D;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PDF:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PDF;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::BREP:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::U3D:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::U3D;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PDF:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PDF;   break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -1699,17 +1699,21 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
     {
         EXCELLON_WRITER::ZEROS_FMT zeroFmt;
+
         switch( aDrillJob->m_zeroFormat )
         {
         case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::KEEP_ZEROS:
             zeroFmt = EXCELLON_WRITER::KEEP_ZEROS;
             break;
+
         case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_LEADING:
             zeroFmt = EXCELLON_WRITER::SUPPRESS_LEADING;
             break;
+
         case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_TRAILING:
             zeroFmt = EXCELLON_WRITER::SUPPRESS_TRAILING;
             break;
+
         case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::DECIMAL:
         default:
             zeroFmt = EXCELLON_WRITER::DECIMAL_FORMAT;
@@ -2250,7 +2254,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     switch( drcJob->m_units )
     {
-    case JOB_PCB_DRC::UNITS::INCH: units = EDA_UNITS::INCH;   break;
+    case JOB_PCB_DRC::UNITS::INCH: units = EDA_UNITS::INCH; break;
     case JOB_PCB_DRC::UNITS::MILS: units = EDA_UNITS::MILS; break;
     case JOB_PCB_DRC::UNITS::MM:   units = EDA_UNITS::MM;   break;
     default:                       units = EDA_UNITS::MM;   break;
@@ -2600,9 +2604,11 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
             case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP:
                 fn.SetExt( FILEEXT::ArchiveFileExtension );
                 break;
+
             case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ:
                 fn.SetExt( "tgz" );
                 break;
+
             default:
                 break;
             };

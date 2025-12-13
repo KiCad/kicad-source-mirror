@@ -326,7 +326,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 switch( item_itr->second )
                 {
                 case ITEM_CHANGE_TYPE::ADDED:
-                {
                     if( change_type == ITEM_CHANGE_TYPE::DELETED )
                     {
                         // The item was previously added, now deleted - as far as bulk callbacks
@@ -341,16 +340,14 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     // For all other cases, the item remains as ADDED as seen by the bulk callbacks
                     break;
-                }
+
                 case ITEM_CHANGE_TYPE::DELETED:
-                {
                     // This is an error condition - item has already been deleted so should not
                     // be operated on further
                     wxASSERT_MSG( false, wxT( "UndoRedo: should not alter already deleted item" ) );
                     break;
-                }
+
                 case ITEM_CHANGE_TYPE::CHANGED:
-                {
                     if( change_type == ITEM_CHANGE_TYPE::DELETED )
                     {
                         item_itr->second = ITEM_CHANGE_TYPE::DELETED;
@@ -364,7 +361,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     // Otherwise, item remains CHANGED
                     break;
-                }
                 }
             };
 

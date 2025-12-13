@@ -630,6 +630,7 @@ void EDA_ARC_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint, ED
         case ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION:
             editArcCenterKeepEndpoints( m_arc, center, start, mid, end );
             break;
+
         case ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS:
         case ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE:
         {

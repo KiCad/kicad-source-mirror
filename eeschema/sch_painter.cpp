@@ -219,8 +219,8 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
     case SCH_GROUP_T:
         draw( static_cast<const SCH_GROUP*>( aItem ), aLayer );
         break;
-
-    default: return;
+    default:
+        return;
     }
 
     if( drawBoundingBox )

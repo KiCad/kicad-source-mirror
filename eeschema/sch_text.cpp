@@ -565,9 +565,9 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT: msg = _( "Align left" ); break;
-    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Align center" ); break;
-    case GR_TEXT_H_ALIGN_RIGHT: msg = _( "Align right" ); break;
+    case GR_TEXT_H_ALIGN_LEFT:          msg = _( "Align left" );   break;
+    case GR_TEXT_H_ALIGN_CENTER:        msg = _( "Align center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         msg = _( "Align right" );  break;
     case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
@@ -577,9 +577,9 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
         switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP: msg = _( "Top" ); break;
-        case GR_TEXT_V_ALIGN_CENTER: msg = _( "Center" ); break;
-        case GR_TEXT_V_ALIGN_BOTTOM: msg = _( "Bottom" ); break;
+        case GR_TEXT_V_ALIGN_TOP:           msg = _( "Top" );          break;
+        case GR_TEXT_V_ALIGN_CENTER:        msg = _( "Center" );       break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        msg = _( "Bottom" );       break;
         case GR_TEXT_V_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
         }
 

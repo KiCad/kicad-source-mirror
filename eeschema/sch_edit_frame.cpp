@@ -2722,18 +2722,15 @@ void SCH_EDIT_FRAME::onNetNavigatorMenuCommand( wxCommandEvent& aEvent )
 
     case ID_NET_NAVIGATOR_SEARCH_WILDCARD:
     case ID_NET_NAVIGATOR_SEARCH_REGEX:
-    {
-        EESCHEMA_SETTINGS* cfg = eeconfig();
-        if( cfg )
+        if( EESCHEMA_SETTINGS* cfg = eeconfig() )
         {
-            cfg->m_AuiPanels.net_nav_search_mode_wildcard =
-                    ( aEvent.GetId() == ID_NET_NAVIGATOR_SEARCH_WILDCARD );
+            cfg->m_AuiPanels.net_nav_search_mode_wildcard = ( aEvent.GetId() == ID_NET_NAVIGATOR_SEARCH_WILDCARD );
 
             // Refresh the navigator with current filter
             RefreshNetNavigator();
         }
+
         break;
-    }
 
     default:
         aEvent.Skip();

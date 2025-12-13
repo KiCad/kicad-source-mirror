@@ -89,6 +89,7 @@ public:
         case SCH_BUS_WIRE_ENTRY_T:  return new SCH_BUS_WIRE_ENTRY();
         case SCH_BUS_BUS_ENTRY_T:   return new SCH_BUS_BUS_ENTRY();
         case SCH_LINE_T:            return new SCH_LINE();
+
         case SCH_RULE_AREA_T:
         {
             SHAPE_POLY_SET ruleShape;
@@ -107,11 +108,13 @@ public:
 
             return ruleArea;
         }
+
         case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC, LAYER_NOTES );
         case SCH_BITMAP_T:          return new SCH_BITMAP();
         case SCH_TEXT_T:            return new SCH_TEXT( VECTOR2I( 0, 0 ), "test text" );
         case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( LAYER_NOTES, 0, FILL_T::NO_FILL, "test textbox" );
         case SCH_TABLECELL_T:       return new SCH_TABLECELL();
+
         case SCH_TABLE_T:
         {
             SCH_TABLE* table = new SCH_TABLE( schIUScale.mmToIU( 0.1 ) );
@@ -123,6 +126,7 @@ public:
 
             return table;
         }
+
         case SCH_LABEL_T:           return new SCH_LABEL( VECTOR2I( 0, 0 ), "test label" );
         case SCH_DIRECTIVE_LABEL_T: return new SCH_DIRECTIVE_LABEL( VECTOR2I( 0, 0 ) );
         case SCH_GLOBAL_LABEL_T:    return new SCH_GLOBALLABEL();
@@ -139,6 +143,7 @@ public:
 
         case SCH_SHEET_T:           return new SCH_SHEET();
         case SCH_PIN_T:             return new SCH_PIN( &m_symbol );
+
         case SCH_GROUP_T:
         {
             SCH_GROUP* group = new SCH_GROUP();

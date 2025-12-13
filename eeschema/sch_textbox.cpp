@@ -138,17 +138,17 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
     {
         switch( GetHorizJustify() )
         {
-        case GR_TEXT_H_ALIGN_LEFT: pos.y = bbox.GetBottom() - m_marginBottom; break;
-        case GR_TEXT_H_ALIGN_CENTER: pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2; break;
-        case GR_TEXT_H_ALIGN_RIGHT: pos.y = bbox.GetTop() + m_marginTop; break;
+        case GR_TEXT_H_ALIGN_LEFT:          pos.y = bbox.GetBottom() - m_marginBottom;                         break;
+        case GR_TEXT_H_ALIGN_CENTER:        pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;                  break;
+        case GR_TEXT_H_ALIGN_RIGHT:         pos.y = bbox.GetTop() + m_marginTop;                               break;
         case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
 
         switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP: pos.x = bbox.GetLeft() + m_marginLeft; break;
-        case GR_TEXT_V_ALIGN_CENTER: pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2; break;
-        case GR_TEXT_V_ALIGN_BOTTOM: pos.x = bbox.GetRight() - m_marginRight; break;
+        case GR_TEXT_V_ALIGN_TOP:           pos.x = bbox.GetLeft() + m_marginLeft;                             break;
+        case GR_TEXT_V_ALIGN_CENTER:        pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;                  break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        pos.x = bbox.GetRight() - m_marginRight;                           break;
         case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
     }
@@ -156,17 +156,17 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
     {
         switch( GetHorizJustify() )
         {
-        case GR_TEXT_H_ALIGN_LEFT: pos.x = bbox.GetLeft() + m_marginLeft; break;
-        case GR_TEXT_H_ALIGN_CENTER: pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2; break;
-        case GR_TEXT_H_ALIGN_RIGHT: pos.x = bbox.GetRight() - m_marginRight; break;
+        case GR_TEXT_H_ALIGN_LEFT:          pos.x = bbox.GetLeft() + m_marginLeft;                             break;
+        case GR_TEXT_H_ALIGN_CENTER:        pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;                  break;
+        case GR_TEXT_H_ALIGN_RIGHT:         pos.x = bbox.GetRight() - m_marginRight;                           break;
         case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
 
         switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP: pos.y = bbox.GetTop() + m_marginTop; break;
-        case GR_TEXT_V_ALIGN_CENTER: pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2; break;
-        case GR_TEXT_V_ALIGN_BOTTOM: pos.y = bbox.GetBottom() - m_marginBottom; break;
+        case GR_TEXT_V_ALIGN_TOP:           pos.y = bbox.GetTop() + m_marginTop;                               break;
+        case GR_TEXT_V_ALIGN_CENTER:        pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;                  break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        pos.y = bbox.GetBottom() - m_marginBottom;                         break;
         case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
     }

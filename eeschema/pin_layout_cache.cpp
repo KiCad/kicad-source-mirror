@@ -698,64 +698,59 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedDecorationBox() const
     const int              decoSize = externalPinDecoSize( m_schSettings, m_pin );
     const int              intDecoSize = internalPinDecoSize( m_schSettings, m_pin );
 
-    const auto makeInvertBox = [&]()
-    {
-        return BOX2I::ByCenter( { -decoSize, 0 }, { decoSize * 2, decoSize * 2 } );
-    };
+    const auto makeInvertBox =
+            [&]()
+            {
+                return BOX2I::ByCenter( { -decoSize, 0 }, { decoSize * 2, decoSize * 2 } );
+            };
 
-    const auto makeLowBox = [&]()
-    {
-        return BOX2I::ByCorners( { -decoSize * 2, -decoSize * 2 }, { 0, 0 } );
-    };
+    const auto makeLowBox =
+            [&]()
+            {
+                return BOX2I::ByCorners( { -decoSize * 2, -decoSize * 2 }, { 0, 0 } );
+            };
 
-    const auto makeClockBox = [&]()
-    {
-        return BOX2I::ByCorners( { 0, -intDecoSize }, { intDecoSize, intDecoSize } );
-    };
+    const auto makeClockBox =
+            [&]()
+            {
+                return BOX2I::ByCorners( { 0, -intDecoSize }, { intDecoSize, intDecoSize } );
+            };
 
     OPT_BOX2I box;
 
     switch( shape )
     {
     case GRAPHIC_PINSHAPE::INVERTED:
-    {
         box = makeInvertBox();
         break;
-    }
+
     case GRAPHIC_PINSHAPE::CLOCK:
-    {
         box = makeClockBox();
         break;
-    }
+
     case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
-    {
         box = makeInvertBox();
         box->Merge( makeClockBox() );
         break;
-    }
+
     case GRAPHIC_PINSHAPE::INPUT_LOW:
-    {
         box = makeLowBox();
         break;
-    }
+
     case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK:
     case GRAPHIC_PINSHAPE::CLOCK_LOW:
-    {
         box = makeLowBox();
         box->Merge( makeClockBox() );
         break;
-    }
+
     case GRAPHIC_PINSHAPE::NONLOGIC:
-    {
         box = BOX2I::ByCenter( { 0, 0 }, { decoSize * 2, decoSize * 2 } );
         break;
-    }
+
     case GRAPHIC_PINSHAPE::LINE:
     default:
-    {
         // No decoration
         break;
-    }
     }
 
     if( box )

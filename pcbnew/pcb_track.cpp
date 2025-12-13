@@ -172,10 +172,10 @@ wxString PCB_VIA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND:    formatStr = _( "Blind via %s on %s" ); break;
+    case VIATYPE::BLIND:    formatStr = _( "Blind via %s on %s" );  break;
     case VIATYPE::BURIED:   formatStr = _( "Buried via %s on %s" ); break;
-    case VIATYPE::MICROVIA: formatStr = _( "Micro via %s on %s" ); break;
-    default:                formatStr = _( "Via %s on %s" ); break;
+    case VIATYPE::MICROVIA: formatStr = _( "Micro via %s on %s" );  break;
+    default:                formatStr = _( "Via %s on %s" );        break;
     }
 
     return wxString::Format( formatStr, GetNetnameMsg(), LayerMaskDescribe() );
@@ -1935,13 +1935,11 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         return true;
 
     case UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
-    {
         if( layer == Padstack().Drill().start || layer == Padstack().Drill().end )
             return true;
 
         // Check for removal below
         break;
-    }
 
     case UNCONNECTED_LAYER_MODE::REMOVE_ALL:
         // Check for removal below
@@ -2393,11 +2391,11 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     switch( GetViaType() )
     {
-    case VIATYPE::MICROVIA:     msg = _( "Micro Via" );        break;
-    case VIATYPE::BLIND:        msg = _( "Blind Via" ); break;
-    case VIATYPE::BURIED:       msg = _( "Buried Via" ); break;
-    case VIATYPE::THROUGH:      msg = _( "Through Via" );      break;
-    default:                    msg = _( "Via" );              break;
+    case VIATYPE::MICROVIA:     msg = _( "Micro Via" );    break;
+    case VIATYPE::BLIND:        msg = _( "Blind Via" );    break;
+    case VIATYPE::BURIED:       msg = _( "Buried Via" );   break;
+    case VIATYPE::THROUGH:      msg = _( "Through Via" );  break;
+    default:                    msg = _( "Via" );          break;
     }
 
     aList.emplace_back( _( "Type" ), msg );
@@ -2406,27 +2404,23 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
     // TODO(JE) padstacks
-    aList.emplace_back( _( "Diameter" ),
-                        aFrame->MessageTextFromValue( GetWidth( PADSTACK::ALL_LAYERS ) ) );
+    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( GetWidth( PADSTACK::ALL_LAYERS ) ) );
     aList.emplace_back( _( "Hole" ), aFrame->MessageTextFromValue( GetDrillValue() ) );
 
     wxString  source;
     int clearance = GetOwnClearance( GetLayer(), &source );
 
-    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          aFrame->MessageTextFromValue( clearance ) ),
+    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ), aFrame->MessageTextFromValue( clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
-    aList.emplace_back( wxString::Format( _( "Min Annular Width: %s" ),
-                                          aFrame->MessageTextFromValue( minAnnulus ) ),
+    aList.emplace_back( wxString::Format( _( "Min Annular Width: %s" ), aFrame->MessageTextFromValue( minAnnulus ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 }
 
 
-void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
-                                            std::vector<MSG_PANEL_ITEM>& aList ) const
+void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const
 {
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 

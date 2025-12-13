@@ -52,10 +52,13 @@ std::string SPICE_GENERATOR_SOURCE::TunerCommand( const SPICE_ITEM& aItem, doubl
     {
     case SIM_MODEL::TYPE::V: // VDC/IDC: it is clear which parameter should be used
     case SIM_MODEL::TYPE::I:
-        result = fmt::format( "alter @{}={:g}", aItem.model->SpiceGenerator().ItemName( aItem ),
+        result = fmt::format( "alter @{}={:g}",
+                              aItem.model->SpiceGenerator().ItemName( aItem ),
                               aValue );
         break;
-    default: break; // other sources: unclear which parameter the user wants
+
+    default:
+        break; // other sources: unclear which parameter the user wants
     }
     return result;
 }
@@ -104,8 +107,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             try
             {
                 root = tao::pegtl::parse_tree::parse<SIM_MODEL_SOURCE_PARSER::pwlValuesGrammar,
-                                                     SIM_MODEL_SOURCE_PARSER::pwlValuesSelector>
-                    ( in );
+                                                     SIM_MODEL_SOURCE_PARSER::pwlValuesSelector>( in );
             }
             catch( const tao::pegtl::parse_error& )
             {
@@ -1228,8 +1230,11 @@ const SIM_MODEL::PARAM* SIM_MODEL_SOURCE::GetTunerParam() const
     switch( GetType() )
     {
     case SIM_MODEL::TYPE::V: // VDC/IDC: it is clear which parameter should be used
-    case SIM_MODEL::TYPE::I: return &GetParam( 0 ); break;
-    default: break; // other sources: unclear which parameter the user wants
+    case SIM_MODEL::TYPE::I:
+        return &GetParam( 0 );
+
+    default:
+        break; // other sources: unclear which parameter the user wants
     }
     return nullptr;
 }

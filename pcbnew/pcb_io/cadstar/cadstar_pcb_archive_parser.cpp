@@ -726,7 +726,6 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_PAD_SHAPE::Parse( XNODE* aNode, PARSER_
     case PAD_SHAPE_TYPE::DIAMOND:
     case PAD_SHAPE_TYPE::OCTAGON:
     case PAD_SHAPE_TYPE::SQUARE:
-
         if( aNode->GetChildren() )
         {
             if( aNode->GetChildren()->GetName() == wxT( "ORIENT" ) )

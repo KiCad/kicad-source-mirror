@@ -686,9 +686,9 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
             switch( aProps.mode.value() )
             {
             case PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED: aProto->set_mode( VDPM_NOT_POST_MACHINED ); break;
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: aProto->set_mode( VDPM_COUNTERBORE ); break;
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: aProto->set_mode( VDPM_COUNTERSINK ); break;
-            default: break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE:       aProto->set_mode( VDPM_COUNTERBORE );       break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK:       aProto->set_mode( VDPM_COUNTERSINK );       break;
+            default:                                                                                           break;
             }
         }
 

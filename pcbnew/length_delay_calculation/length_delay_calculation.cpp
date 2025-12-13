@@ -98,10 +98,10 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
     {
         switch( item.Type() )
         {
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD:  initialPads++; break;
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA:  initialVias++; break;
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE: initialLines++; break;
-            default: initialUnknown++; break;
+            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD:  initialPads++;    break;
+            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA:  initialVias++;    break;
+            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE: initialLines++;   break;
+            default:                                        initialUnknown++; break;
         }
     }
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: initial items - PADs=%d, VIAs=%d, LINEs=%d, UNKNOWN=%d" ),

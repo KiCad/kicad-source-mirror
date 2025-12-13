@@ -539,32 +539,35 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
     // All FPs have these layers enabled
     LSET enabledLayers = LSET::AllTechMask() | LSET::UserMask();
 
-    const auto configureStackup = [&]( FOOTPRINT_STACKUP aMode, const LSET& aLayerSet )
-    {
-        const LSET cuLayers = aLayerSet & LSET::AllCuMask();
-        board.SetCopperLayerCount( cuLayers.count() );
+    const auto configureStackup =
+            [&]( FOOTPRINT_STACKUP aMode, const LSET& aLayerSet )
+            {
+                const LSET cuLayers = aLayerSet & LSET::AllCuMask();
+                board.SetCopperLayerCount( cuLayers.count() );
 
-        switch( aMode )
-        {
-        case FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS:
-        {
-            enabledLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
-            enabledLayers |= LSET::UserDefinedLayersMask( 4 );
-            board.SetLayerName( In1_Cu, _( "Inner layers" ) );
-            break;
-        }
-        case FOOTPRINT_STACKUP::CUSTOM_LAYERS:
-        {
-            // Nothing extra to add
+                switch( aMode )
+                {
+                case FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS:
+                {
+                    enabledLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
+                    enabledLayers |= LSET::UserDefinedLayersMask( 4 );
+                    board.SetLayerName( In1_Cu, _( "Inner layers" ) );
+                    break;
+                }
 
-            // Clear layer name defaults
-            board.SetLayerName( In1_Cu, wxEmptyString );
-            break;
-        }
-        }
+                case FOOTPRINT_STACKUP::CUSTOM_LAYERS:
+                {
+                    // Nothing extra to add
 
-        enabledLayers |= aLayerSet;
-    };
+                    // Clear layer name defaults
+                    board.SetLayerName( In1_Cu, wxEmptyString );
+                    break;
+                }
+
+                }
+
+                enabledLayers |= aLayerSet;
+            };
 
     if( footprint )
     {

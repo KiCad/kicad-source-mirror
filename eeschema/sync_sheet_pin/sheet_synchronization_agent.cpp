@@ -64,10 +64,9 @@ void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM*                       sc
     switch( aKind )
     {
     case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL:
-    {
         m_doModify( sch_item, aPath, aDoModify );
         break;
-    }
+
     case SHEET_SYNCHRONIZATION_ITEM_KIND::SHEET_PIN:
     {
         SCH_SHEET_PATH path_cp = aPath;
@@ -75,6 +74,7 @@ void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM*                       sc
         m_doModify( sch_item, path_cp, aDoModify );
         break;
     }
+
     case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN:
         break;
     }
@@ -90,18 +90,17 @@ void SHEET_SYNCHRONIZATION_AGENT::RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
     switch( aItem.GetKind() )
     {
     case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL:
-    {
         m_doDelete( aItem.GetItem(), aPath );
         break;
-    }
-    case SHEET_SYNCHRONIZATION_ITEM_KIND::SHEET_PIN:
 
+    case SHEET_SYNCHRONIZATION_ITEM_KIND::SHEET_PIN:
     {
         SCH_SHEET_PATH path_cp = aPath;
         path_cp.pop_back();
         m_doDelete( aItem.GetItem(), std::move( path_cp ) );
         break;
     }
+
     case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN:
         break;
     }

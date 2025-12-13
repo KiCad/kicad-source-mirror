@@ -73,10 +73,10 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
     SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) )
 {
     static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
-    static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F"   );
-    static PARAM::INFO inductor  = makeParams( "l", "Expression for inductance",  "H"   );
-    static PARAM::INFO vsource   = makeParams( "v", "Expression for voltage",     "V"   );
-    static PARAM::INFO isource   = makeParams( "i", "Expression for current",     "A"   );
+    static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F" );
+    static PARAM::INFO inductor  = makeParams( "l", "Expression for inductance",  "H" );
+    static PARAM::INFO vsource   = makeParams( "v", "Expression for voltage",     "V" );
+    static PARAM::INFO isource   = makeParams( "i", "Expression for current",     "A" );
 
     switch( aType )
     {
@@ -85,8 +85,7 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
     case TYPE::L_BEHAVIORAL: AddParam( inductor  ); break;
     case TYPE::V_BEHAVIORAL: AddParam( vsource   ); break;
     case TYPE::I_BEHAVIORAL: AddParam( isource   ); break;
-    default:
-        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
+    default: wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
 }
 

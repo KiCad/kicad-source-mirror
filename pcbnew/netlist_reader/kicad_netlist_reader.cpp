@@ -105,6 +105,7 @@ void KICAD_NETLIST_PARSER::Parse()
 
         case T_components:  // The section comp starts here.
             wxLogTrace( "CVPCB_PINCOUNT", wxT( "Parse: entering components section" ) );
+
             while( ( token = NextTok() ) != T_EOF )
             {
                 if( token == T_RIGHT )
@@ -134,6 +135,7 @@ void KICAD_NETLIST_PARSER::Parse()
 
         case T_nets:    // The section nets starts here.
             wxLogTrace( "CVPCB_PINCOUNT", wxT( "Parse: entering nets section" ) );
+
             while( ( token = NextTok() ) != T_EOF )
             {
                 if( token == T_RIGHT )
@@ -149,6 +151,7 @@ void KICAD_NETLIST_PARSER::Parse()
 
         case T_libparts:    // The section libparts starts here.
             wxLogTrace( "CVPCB_PINCOUNT", wxT( "Parse: entering libparts section" ) );
+
             while( ( token = NextTok() ) != T_EOF )
             {
                 if( token == T_RIGHT )
@@ -423,8 +426,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
             if( !propName.IsEmpty() )
                 properties[propName] = std::move( propValue );
-        }
             break;
+        }
 
         case T_fields:
             while( ( token = NextTok() ) != T_RIGHT )
@@ -576,6 +579,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     skipCurrent();
                 }
             }
+
             break;
         }
 

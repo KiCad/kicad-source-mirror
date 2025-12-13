@@ -1076,10 +1076,9 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     switch( mail.Command() )
     {
     case MAIL_RELOAD_LIB:
-    {
         ReCreateLibList();
         break;
-    }
+
     case MAIL_REFRESH_SYMBOL:
     {
         LIB_SYMBOL* symbol = GetSelectedSymbol();
@@ -1095,8 +1094,8 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         wxString libfullname = LIBRARY_MANAGER::GetFullURI( row, true );
 
         wxString lib( mail.GetPayload() );
-    wxLogTrace( traceLibWatch, "Received refresh symbol request for %s, current symbols "
-            "is %s", lib, libfullname );
+        wxLogTrace( traceLibWatch, "Received refresh symbol request for %s, current symbols is %s",
+                    lib, libfullname );
 
         if( lib == libfullname )
         {
@@ -1104,6 +1103,7 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             updatePreviewSymbol();
             GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         }
+
         break;
     }
     default:;

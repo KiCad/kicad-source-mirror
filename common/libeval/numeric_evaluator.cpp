@@ -492,7 +492,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             case Unit::MM:   retval.value.dValue = 1000.0 / 25.4;  break;
             case Unit::CM:   retval.value.dValue = 1000.0 / 2.54;  break;
             default:
-            case Unit::Invalid:                                   break;
+            case Unit::Invalid:                                    break;
             }
         }
         else if( m_defaultUnits == Unit::Degrees && convertFrom == Unit::Degrees )

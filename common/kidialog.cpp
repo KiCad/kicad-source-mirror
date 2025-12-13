@@ -136,9 +136,9 @@ long KIDIALOG::getStyle( KD_TYPE aType )
     {
     case KD_NONE:       break;
     case KD_INFO:       style |= wxICON_INFORMATION; break;
-    case KD_QUESTION:   style |= wxICON_QUESTION; break;
-    case KD_WARNING:    style |= wxICON_WARNING; break;
-    case KD_ERROR:      style |= wxICON_ERROR; break;
+    case KD_QUESTION:   style |= wxICON_QUESTION;    break;
+    case KD_WARNING:    style |= wxICON_WARNING;     break;
+    case KD_ERROR:      style |= wxICON_ERROR;       break;
     }
 
     return style;

@@ -842,16 +842,22 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP: bbox.Offset( 0, -fudgeFactor ); break;
+    case GR_TEXT_V_ALIGN_TOP:
+        bbox.Offset( 0, -fudgeFactor );
+        break;
 
-    case GR_TEXT_V_ALIGN_CENTER: bbox.SetY( bbox.GetY() - bbox.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_CENTER:
+        bbox.SetY( bbox.GetY() - bbox.GetHeight() / 2 );
+        break;
 
     case GR_TEXT_V_ALIGN_BOTTOM:
         bbox.SetY( bbox.GetY() - bbox.GetHeight() );
         bbox.Offset( 0, fudgeFactor );
         break;
 
-    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     bbox.Normalize(); // Make h and v sizes always >= 0
@@ -920,13 +926,20 @@ void EDA_TEXT::GetLinePositions( const RENDER_SETTINGS* aSettings, std::vector<V
     {
         switch( GetVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP: break;
+        case GR_TEXT_V_ALIGN_TOP:
+            break;
 
-        case GR_TEXT_V_ALIGN_CENTER: pos.y -= ( aLineCount - 1 ) * offset.y / 2; break;
+        case GR_TEXT_V_ALIGN_CENTER:
+            pos.y -= ( aLineCount - 1 ) * offset.y / 2;
+            break;
 
-        case GR_TEXT_V_ALIGN_BOTTOM: pos.y -= ( aLineCount - 1 ) * offset.y; break;
+        case GR_TEXT_V_ALIGN_BOTTOM:
+            pos.y -= ( aLineCount - 1 ) * offset.y;
+            break;
 
-        case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+            break;
         }
     }
 

@@ -36,7 +36,7 @@ std::string GetTeardropTargetCanonicalName( TARGET_TD aTdType )
     switch( aTdType )
     {
     case  TARGET_ROUND: name = TARGET_NAME_ROUND; break;
-    case  TARGET_RECT:  name = TARGET_NAME_RECT; break;
+    case  TARGET_RECT:  name = TARGET_NAME_RECT;  break;
     case  TARGET_TRACK: name = TARGET_NAME_TRACK; break;
     default: break;
     }

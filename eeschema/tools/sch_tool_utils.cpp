@@ -52,12 +52,14 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
         const SCH_TEXT& text = static_cast<const SCH_TEXT&>( aItem );
         return text.GetShownText( true );
     }
+
     case SCH_FIELD_T:
     {
         // Goes via EDA_TEXT
         const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aItem );
         return field.GetShownText( true );
     }
+
     case SCH_TEXTBOX_T:
     case SCH_TABLECELL_T:
     {
@@ -68,6 +70,7 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
         // This ensures proper variable expansion and escape marker conversion
         return textbox.GetShownText( nullptr, nullptr, true, 0 );
     }
+
     case SCH_PIN_T:
     {
         // This is a choice - probably the name makes more sense than the number
@@ -75,6 +78,7 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
         const SCH_PIN& pin = static_cast<const SCH_PIN&>( aItem );
         return pin.GetShownName();
     }
+
     case SCH_TABLE_T:
     {
         // A simple tabbed list of the cells seems like a place to start here
@@ -101,10 +105,9 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
         }
         return s;
     }
+
     default:
-    {
         break;
-    }
     }
 
     return wxEmptyString;

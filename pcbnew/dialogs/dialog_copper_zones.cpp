@@ -107,6 +107,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE* aZone, ZONE_SETTINGS
                 {
                     aCaller->GetToolManager()->RunAction( PCB_ACTIONS::zonesManager );
                 } );
+
         return wxID_OK;
 
     default:

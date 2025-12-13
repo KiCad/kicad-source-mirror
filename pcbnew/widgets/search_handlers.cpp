@@ -836,24 +836,15 @@ wxString DRILL_SEARCH_HANDLER::cellText( const DRILL_LINE_ITEM& e, int col ) con
 
     switch( col )
     {
-    case 0:
-        return wxString::Format( "%d", e.m_Qty );
-    case 1:
-        return e.shape == PAD_DRILL_SHAPE::CIRCLE ? _( "Round" ) : _( "Slot" );
-    case 2:
-        return m_frame->MessageTextFromValue( e.xSize );
-    case 3:
-        return m_frame->MessageTextFromValue( e.ySize );
-    case 4:
-        return e.isPlated ? _( "PTH" ) : _( "NPTH" );
-    case 5:
-        return e.isPad ? _( "Pad" ) : _( "Via" );
-    case 6:
-        return ( e.startLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.startLayer );
-    case 7:
-        return ( e.stopLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.stopLayer );
-    default:
-        return wxEmptyString;
+    case 0:  return wxString::Format( "%d", e.m_Qty );
+    case 1:  return e.shape == PAD_DRILL_SHAPE::CIRCLE ? _( "Round" ) : _( "Slot" );
+    case 2:  return m_frame->MessageTextFromValue( e.xSize );
+    case 3:  return m_frame->MessageTextFromValue( e.ySize );
+    case 4:  return e.isPlated ? _( "PTH" ) : _( "NPTH" );
+    case 5:  return e.isPad ? _( "Pad" ) : _( "Via" );
+    case 6:  return ( e.startLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.startLayer );
+    case 7:  return ( e.stopLayer == UNDEFINED_LAYER ) ? _( "N/A" ) : board->GetLayerName( e.stopLayer );
+    default: return wxEmptyString;
     }
 }
 

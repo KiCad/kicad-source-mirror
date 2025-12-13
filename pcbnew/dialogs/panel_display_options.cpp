@@ -56,8 +56,8 @@ public:
     {
         switch( aCol )
         {
-        case 0: return _( "Layer" );
-        case 1: return _( "Name" );
+        case 0:  return _( "Layer" );
+        case 1:  return _( "Name" );
         default: return wxEmptyString;
         }
     }
@@ -66,8 +66,8 @@ public:
     {
         switch( aCol )
         {
-        case 0: return aTypeName == wxGRID_VALUE_NUMBER;
-        case 1: return aTypeName == wxGRID_VALUE_STRING;
+        case 0:  return aTypeName == wxGRID_VALUE_NUMBER;
+        case 1:  return aTypeName == wxGRID_VALUE_STRING;
         default: wxFAIL; return false;
         }
     }

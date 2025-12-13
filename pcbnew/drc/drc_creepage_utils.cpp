@@ -528,6 +528,7 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
             m_shapeCollection.push_back( a );
             break;
         }
+
         case SHAPE_T::RECTANGLE:
         {
             BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
@@ -540,15 +541,16 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
             m_shapeCollection.push_back( a );
             break;
         }
+
         case SHAPE_T::POLY:
-        {
             for( const VECTOR2I& p : d->GetPolyPoints() )
             {
                 BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
                 m_shapeCollection.push_back( a );
             }
+
             break;
-        }
+
         case SHAPE_T::CIRCLE:
         {
             BE_SHAPE_CIRCLE* a = new BE_SHAPE_CIRCLE( d->GetCenter(), d->GetRadius() );
@@ -575,7 +577,9 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
             m_shapeCollection.push_back( a );
             break;
         }
-        default: break;
+
+        default:
+            break;
         }
     }
 }
@@ -1681,8 +1685,7 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
         {
         case SHAPE_T::SEGMENT:
         {
-            bool intersects = segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd(),
-                                                  intersectionPoints );
+            bool intersects = segments_intersect( aP1, aP2, d->GetStart(), d->GetEnd(), intersectionPoints );
 
             if( intersects && !TestGrooveWidth )
                 return false;
@@ -1761,8 +1764,8 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
             break;
         }
 
-
-        default: break;
+        default:
+            break;
         }
     }
 
@@ -2043,6 +2046,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         newshape = dynamic_cast<CREEP_SHAPE*>( cuseg );
         break;
     }
+
     case SH_CIRCLE:
     {
         const SHAPE_CIRCLE& circle = dynamic_cast<const SHAPE_CIRCLE&>( aShape );
@@ -2050,6 +2054,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         newshape = dynamic_cast<CREEP_SHAPE*>( cucircle );
         break;
     }
+
     case SH_ARC:
     {
         const SHAPE_ARC& arc = dynamic_cast<const SHAPE_ARC&>( aShape );
@@ -2079,6 +2084,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         newshape = dynamic_cast<CREEP_SHAPE*>( cuarc );
         break;
     }
+
     case SH_COMPOUND:
     {
         int nbShapes = static_cast<const SHAPE_COMPOUND*>( &aShape )->Shapes().size();
@@ -2093,6 +2099,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         }
         break;
     }
+
     case SH_POLY_SET:
     {
         const SHAPE_POLY_SET& polySet = dynamic_cast<const SHAPE_POLY_SET&>( aShape );
@@ -2105,6 +2112,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         }
         break;
     }
+
     case SH_LINE_CHAIN:
     {
         const SHAPE_LINE_CHAIN& lineChain = dynamic_cast<const SHAPE_LINE_CHAIN&>( aShape );
@@ -2120,6 +2128,7 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
 
         break;
     }
+
     case SH_RECT:
     {
         const SHAPE_RECT& rect = dynamic_cast<const SHAPE_RECT&>( aShape );
@@ -2135,7 +2144,9 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
         Addshape( SHAPE_SEGMENT( point3, point0 ), aConnectTo, aParent );
         break;
     }
-    default: break;
+
+    default:
+        break;
     }
 
     if( !newshape )

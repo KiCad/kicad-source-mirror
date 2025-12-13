@@ -505,10 +505,10 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
 
                 switch( i )
                 {
-                case 1: shape->SetStart( pt ); break;
+                case 1: shape->SetStart( pt );    break;
                 case 3: shape->SetBezierC1( pt ); break;
                 case 5: shape->SetBezierC2( pt ); break;
-                case 7: shape->SetEnd( pt ); break;
+                case 7: shape->SetEnd( pt );      break;
                 }
             }
 
@@ -1271,7 +1271,8 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     case ELECTRICAL_PINTYPE::PT_BIDI:
                         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
                         break;
-                    default: break;
+                    default:
+                        break;
                     }
                 }
 

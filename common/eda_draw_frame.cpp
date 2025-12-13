@@ -1388,8 +1388,8 @@ bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName,
     wxBitmapType type = wxBITMAP_TYPE_PNG;
     switch( aBitmapType )
     {
-    case BITMAP_TYPE::PNG: type = wxBITMAP_TYPE_PNG; break;
-    case BITMAP_TYPE::BMP: type = wxBITMAP_TYPE_BMP; break;
+    case BITMAP_TYPE::PNG: type = wxBITMAP_TYPE_PNG;  break;
+    case BITMAP_TYPE::BMP: type = wxBITMAP_TYPE_BMP;  break;
     case BITMAP_TYPE::JPG: type = wxBITMAP_TYPE_JPEG; break;
     }
 
@@ -1401,8 +1401,7 @@ bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName,
 }
 
 
-bool EDA_DRAW_FRAME::IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction,
-                                                  APP_SETTINGS_BASE* aCfg )
+bool EDA_DRAW_FRAME::IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction, APP_SETTINGS_BASE* aCfg )
 {
     wxCHECK( aCfg, aAction.show_button );
 
@@ -1416,8 +1415,8 @@ bool EDA_DRAW_FRAME::IsPluginActionButtonVisible( const PLUGIN_ACTION& aAction,
 }
 
 
-std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions(
-    PLUGIN_ACTION_SCOPE aScope, APP_SETTINGS_BASE* aCfg )
+std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions( PLUGIN_ACTION_SCOPE aScope,
+                                                                           APP_SETTINGS_BASE* aCfg )
 {
     std::vector<const PLUGIN_ACTION*> actions;
     wxCHECK( aCfg, actions );
@@ -1461,8 +1460,7 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 
     mgr.ButtonBindings().clear();
 
-    std::vector<const PLUGIN_ACTION*> actions =
-            GetOrderedPluginActions( PluginActionScope(), config() );
+    std::vector<const PLUGIN_ACTION*> actions = GetOrderedPluginActions( PluginActionScope(), config() );
 
     for( const PLUGIN_ACTION* action : actions )
     {
@@ -1473,8 +1471,7 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
                                              ? action->icon_dark
                                              : action->icon_light;
 
-        wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, icon,
-                                                           action->name );
+        wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, icon, action->name );
 
         Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                  wxCommandEventHandler( EDA_DRAW_FRAME::OnApiPluginInvoke ) );

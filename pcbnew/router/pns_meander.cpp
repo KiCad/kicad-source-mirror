@@ -561,12 +561,10 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     switch( aType )
     {
     case MT_EMPTY:
-    {
         lc.Append( aP + dir_v_b + aDir );
         break;
-    }
+
     case MT_START:
-    {
         if( targetBaseLen )
             top = std::max( top, targetBaseLen - sCorner - uCorner * 2 + offset );
 
@@ -575,10 +573,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         forward( std::min( sCorner, uCorner ) );
         forward( std::abs( offset ) );
         break;
-    }
 
     case MT_FINISH:
-    {
         if( targetBaseLen )
             top = std::max( top, targetBaseLen - cr - spc );
 
@@ -595,10 +591,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
             lc.Append( aP + dir_v_b + aDir.Resize( 2 * spc - cr ) );
 
         break;
-    }
 
     case MT_TURN:
-    {
         if( targetBaseLen )
             top = std::max( top, targetBaseLen - uCorner * 2 + offset * 2 );
 
@@ -608,10 +602,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         uShape( turnSide, uCorner, top );
         forward( std::abs( offset ) );
         break;
-    }
 
     case MT_SINGLE:
-    {
         if( targetBaseLen )
             top = std::max( top, ( targetBaseLen - sCorner * 2 - uCorner * 2 ) / 2 );
 
@@ -620,7 +612,6 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         miter( sCorner, false );
         lc.Append( aP + dir_v_b + aDir.Resize( 2 * spc ) );
         break;
-    }
 
     default:
         break;

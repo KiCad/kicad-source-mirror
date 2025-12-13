@@ -3248,6 +3248,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECT
                                 RPT_SEVERITY_ERROR );
             return false;
         }
+
         break;
 
     case FMT_STEP:
@@ -3258,6 +3259,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, const VECT
                                 RPT_SEVERITY_ERROR );
             return false;
         }
+
         break;
 
     case FMT_STEPZ:

@@ -346,6 +346,7 @@ void DIALOG_PRINT_PCBNEW::onPopUpLayers( wxCommandEvent& event )
             else
                 m_layerCheckListBox->Check( i, false );
         }
+
         break;
 
     case ID_SELECT_COPPER_LAYERS:
@@ -354,6 +355,7 @@ void DIALOG_PRINT_PCBNEW::onPopUpLayers( wxCommandEvent& event )
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, true );
         }
+
         break;
 
     case ID_DESELECT_COPPER_LAYERS:
@@ -362,16 +364,19 @@ void DIALOG_PRINT_PCBNEW::onPopUpLayers( wxCommandEvent& event )
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, false );
         }
+
         break;
 
     case ID_SELECT_ALL_LAYERS:
         for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, true );
+
         break;
 
     case ID_DESELECT_ALL_LAYERS:
         for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, false );
+
         break;
 
     default:

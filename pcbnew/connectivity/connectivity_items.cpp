@@ -177,6 +177,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
 
          break;
      }
+
      default:
          break;
      }

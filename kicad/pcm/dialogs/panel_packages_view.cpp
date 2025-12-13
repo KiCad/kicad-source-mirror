@@ -434,8 +434,11 @@ bool PANEL_PACKAGES_VIEW::canRunAction() const
     {
     case PPS_PENDING_INSTALL:
     case PPS_PENDING_UNINSTALL:
-    case PPS_PENDING_UPDATE: return false;
-    default: break;
+    case PPS_PENDING_UPDATE:
+        return false;
+
+    default:
+        break;
     }
 
     return m_gridVersions->GetNumberRows() == 1 || m_gridVersions->GetSelectedRows().size() == 1;

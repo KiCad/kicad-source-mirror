@@ -85,6 +85,7 @@ bool DIALOG_DRAW_LAYERS_SETTINGS::TransferDataFromWindow()
             if( gbrImage )
                 gbrCandidates.push_back( gbrImage );
         }
+
         break;
 
     case 2:     // All active layers
@@ -95,6 +96,7 @@ bool DIALOG_DRAW_LAYERS_SETTINGS::TransferDataFromWindow()
             if( gbrImage && m_parent->IsLayerVisible( layer ) )
                 gbrCandidates.push_back( gbrImage );
         }
+
         break;
     }
 

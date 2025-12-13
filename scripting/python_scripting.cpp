@@ -554,15 +554,10 @@ wxString SCRIPTING::PyScriptingPath( PATH_TYPE aPathType )
     {
         const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
 
-        if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env,
-                                                                          wxT( "3RD_PARTY" ) ) )
-        {
+        if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
             path = *v;
-        }
         else
-        {
             path = PATHS::GetDefault3rdPartyPath();
-        }
 
         break;
     }

@@ -2453,7 +2453,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     switch( seg->shape )
                     {
-
                     case GR_SHAPE_LINE:
                     {
                         const GRAPHIC_LINE* lsrc = static_cast<const GRAPHIC_LINE*>( seg.get() );
@@ -2481,6 +2480,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         fp->Add( line, ADD_MODE::APPEND );
                         break;
                     }
+
                     case GR_SHAPE_CIRCLE:
                     {
                         const GRAPHIC_ARC& lsrc = static_cast<const GRAPHIC_ARC&>( *seg );
@@ -2517,6 +2517,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         fp->Add( circle, ADD_MODE::APPEND );
                         break;
                     }
+
                     case GR_SHAPE_ARC:
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
@@ -2548,6 +2549,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         fp->Add( arc.release(), ADD_MODE::APPEND );
                         break;
                     }
+
                     case GR_SHAPE_RECTANGLE:
                     {
                         const GRAPHIC_RECTANGLE *lsrc =
@@ -2573,6 +2575,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         fp->Add( rect, ADD_MODE::APPEND );
                         break;
                     }
+
                     case GR_SHAPE_TEXT:
                     {
                         const GRAPHIC_TEXT& lsrc = static_cast<const GRAPHIC_TEXT&>( *seg );
@@ -2601,6 +2604,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         break;
                     }
+
                     default:
                         continue;
                     }
@@ -2956,6 +2960,7 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
                 aBoard->Add( trk, ADD_MODE::APPEND );
                 break;
             }
+
             case GR_SHAPE_ARC:
             {
                 const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
@@ -2970,16 +2975,13 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
                 aBoard->Add( trk, ADD_MODE::APPEND );
                 break;
             }
+
             default:
-            {
                 // Defer to the generic graphics factory
-                for( std::unique_ptr<BOARD_ITEM>& new_item :
-                     createBoardItems( *aBoard, layer, *seg ) )
-                {
+                for( std::unique_ptr<BOARD_ITEM>& new_item : createBoardItems( *aBoard, layer, *seg ) )
                     aBoard->Add( new_item.release(), ADD_MODE::APPEND );
-                }
+
                 break;
-            }
             }
         }
         else
@@ -3105,12 +3107,14 @@ bool FABMASTER::traceIsOpen( const FABMASTER::TRACE& aLine )
         end = VECTOR2I{ line.end_x, line.end_y };
         break;
     }
+
     case GR_SHAPE_ARC:
     {
         const GRAPHIC_ARC& arc = static_cast<const GRAPHIC_ARC&>( *last );
         end = VECTOR2I{ arc.end_x, arc.end_y };
         break;
     }
+
     default:
         // These shapes don't have "ends" that make sense for a polyline
         break;
@@ -3159,6 +3163,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
         new_items.emplace_back( std::move( new_text ) );
         break;
     }
+
     case GR_SHAPE_CROSS:
     {
         const GRAPHIC_CROSS& src = static_cast<const GRAPHIC_CROSS&>( aGraphic );
@@ -3180,6 +3185,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
         }
         break;
     }
+
     default:
     {
         // Simple single shape
@@ -3199,6 +3205,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
 
             break;
         }
+
         case GR_SHAPE_ARC:
         {
             const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( aGraphic );
@@ -3208,6 +3215,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
                                        src.result.GetP1() );
             break;
         }
+
         case GR_SHAPE_CIRCLE:
         {
             const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( aGraphic );
@@ -3217,6 +3225,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
             new_shape->SetRadius( src.radius );
             break;
         }
+
         case GR_SHAPE_RECTANGLE:
         {
             const GRAPHIC_RECTANGLE& src = static_cast<const GRAPHIC_RECTANGLE&>( aGraphic );
@@ -3228,6 +3237,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
             new_shape->SetFilled( src.fill );
             break;
         }
+
         case GR_SHAPE_POLYGON:
         {
             const GRAPHIC_POLYGON& src = static_cast<const GRAPHIC_POLYGON&>( aGraphic );
@@ -3235,6 +3245,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
             new_shape->SetPolyPoints( src.m_pts );
             break;
         }
+
         case GR_SHAPE_OBLONG:
         {
             // Create as a polygon, but we could also make a group of two lines and two arcs
@@ -3264,11 +3275,10 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
             new_shape->SetPolyShape( poly );
             break;
         }
+
         default:
-        {
             wxLogError( _( "Unhandled shape type %d in polygon on layer %s, seq %d %d" ),
                         aGraphic.shape, aGraphic.layer, aGraphic.seq, aGraphic.subseq );
-        }
         }
 
         new_items.emplace_back( std::move( new_shape ) );

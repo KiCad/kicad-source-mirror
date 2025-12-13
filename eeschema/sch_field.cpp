@@ -458,13 +458,13 @@ SCH_LAYER_ID SCH_FIELD::GetDefaultLayer() const
 
     switch( m_id )
     {
-    case FIELD_T::REFERENCE: return LAYER_REFERENCEPART;
-    case FIELD_T::VALUE: return LAYER_VALUEPART;
-    case FIELD_T::SHEET_NAME: return LAYER_SHEETNAME;
-    case FIELD_T::SHEET_FILENAME: return LAYER_SHEETFILENAME;
-    case FIELD_T::SHEET_USER: return LAYER_SHEETFIELDS;
+    case FIELD_T::REFERENCE:       return LAYER_REFERENCEPART;
+    case FIELD_T::VALUE:           return LAYER_VALUEPART;
+    case FIELD_T::SHEET_NAME:      return LAYER_SHEETNAME;
+    case FIELD_T::SHEET_FILENAME:  return LAYER_SHEETFILENAME;
+    case FIELD_T::SHEET_USER:      return LAYER_SHEETFIELDS;
     case FIELD_T::INTERSHEET_REFS: return LAYER_INTERSHEET_REFS;
-    default: return LAYER_FIELDS;
+    default:                       return LAYER_FIELDS;
     }
 }
 
@@ -531,12 +531,15 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
             return render_center.y > pos.y;
         else
             return render_center.x < pos.x;
+
     case GR_TEXT_H_ALIGN_RIGHT:
         if( GetDrawRotation().IsVertical() )
             return render_center.y < pos.y;
         else
             return render_center.x > pos.x;
-    default: return false;
+
+    default:
+        return false;
     }
 }
 
@@ -550,10 +553,13 @@ void SCH_FIELD::SetEffectiveHorizJustify( GR_TEXT_H_ALIGN_T aJustify )
     case GR_TEXT_H_ALIGN_LEFT:
         actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
         break;
+
     case GR_TEXT_H_ALIGN_RIGHT:
         actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_LEFT : GR_TEXT_H_ALIGN_RIGHT;
         break;
-    default: actualJustify = aJustify;
+
+    default:
+        actualJustify = aJustify;
     }
 
     SetHorizJustify( actualJustify );
@@ -564,9 +570,9 @@ GR_TEXT_H_ALIGN_T SCH_FIELD::GetEffectiveHorizJustify() const
 {
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT: return IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
+    case GR_TEXT_H_ALIGN_LEFT:  return IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
     case GR_TEXT_H_ALIGN_RIGHT: return IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_LEFT : GR_TEXT_H_ALIGN_RIGHT;
-    default: return GR_TEXT_H_ALIGN_CENTER;
+    default:                    return GR_TEXT_H_ALIGN_CENTER;
     }
 }
 
@@ -583,12 +589,15 @@ bool SCH_FIELD::IsVertJustifyFlipped() const
             return render_center.x < pos.x;
         else
             return render_center.y < pos.y;
+
     case GR_TEXT_V_ALIGN_BOTTOM:
         if( GetDrawRotation().IsVertical() )
             return render_center.x > pos.x;
         else
             return render_center.y > pos.y;
-    default: return false;
+
+    default:
+        return false;
     }
 }
 
@@ -602,10 +611,13 @@ void SCH_FIELD::SetEffectiveVertJustify( GR_TEXT_V_ALIGN_T aJustify )
     case GR_TEXT_V_ALIGN_TOP:
         actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
         break;
+
     case GR_TEXT_V_ALIGN_BOTTOM:
         actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_TOP : GR_TEXT_V_ALIGN_BOTTOM;
         break;
-    default: actualJustify = aJustify;
+
+    default:
+        actualJustify = aJustify;
     }
 
     SetVertJustify( actualJustify );
@@ -616,9 +628,9 @@ GR_TEXT_V_ALIGN_T SCH_FIELD::GetEffectiveVertJustify() const
 {
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP: return IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
+    case GR_TEXT_V_ALIGN_TOP:    return IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
     case GR_TEXT_V_ALIGN_BOTTOM: return IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_TOP : GR_TEXT_V_ALIGN_BOTTOM;
-    default: return GR_TEXT_V_ALIGN_CENTER;
+    default:                     return GR_TEXT_V_ALIGN_CENTER;
     }
 }
 
@@ -887,7 +899,8 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
             break;
 
         case GR_TEXT_H_ALIGN_CENTER:
-        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            break;
         }
 
         SetTextAngle( ANGLE_HORIZONTAL );
@@ -909,7 +922,8 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
             break;
 
         case GR_TEXT_H_ALIGN_CENTER:
-        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            break;
         }
 
         SetTextAngle( ANGLE_VERTICAL );
@@ -996,9 +1010,9 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT: msg = _( "Left" ); break;
-    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_H_ALIGN_RIGHT: msg = _( "Right" ); break;
+    case GR_TEXT_H_ALIGN_LEFT:          msg = _( "Left" );         break;
+    case GR_TEXT_H_ALIGN_CENTER:        msg = _( "Center" );       break;
+    case GR_TEXT_H_ALIGN_RIGHT:         msg = _( "Right" );        break;
     case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
@@ -1006,9 +1020,9 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP: msg = _( "Top" ); break;
-    case GR_TEXT_V_ALIGN_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: msg = _( "Bottom" ); break;
+    case GR_TEXT_V_ALIGN_TOP:           msg = _( "Top" );          break;
+    case GR_TEXT_V_ALIGN_CENTER:        msg = _( "Center" );       break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        msg = _( "Bottom" );       break;
     case GR_TEXT_V_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
@@ -1137,9 +1151,9 @@ BITMAPS SCH_FIELD::GetMenuImage() const
         switch( m_id )
         {
         case FIELD_T::REFERENCE: return BITMAPS::edit_comp_ref;
-        case FIELD_T::VALUE: return BITMAPS::edit_comp_value;
+        case FIELD_T::VALUE:     return BITMAPS::edit_comp_value;
         case FIELD_T::FOOTPRINT: return BITMAPS::edit_comp_footprint;
-        default: return BITMAPS::text;
+        default:                 return BITMAPS::text;
         }
     }
 
@@ -1598,7 +1612,6 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
         switch( m_parent->Type() )
         {
         case SCH_SYMBOL_T:
-        {
             if( const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_parent ) )
             {
                 if( m_id == FIELD_T::REFERENCE )
@@ -1623,11 +1636,12 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
             }
 
             break;
-        }
 
-        case SCH_SHEET_T: break;
+        case SCH_SHEET_T:
+            break;
 
-        default: break;
+        default:
+            break;
         }
     }
 

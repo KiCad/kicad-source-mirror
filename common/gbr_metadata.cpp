@@ -63,8 +63,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
         break;
 
     case GBR_NC_STRING_FORMAT_X1:
-        msg.Printf( wxS( "G04 #@! TF.CreationDate,%s%s*" ), date.FormatISOCombined(),
-                    timezone_offset );
+        msg.Printf( wxS( "G04 #@! TF.CreationDate,%s%s*" ), date.FormatISOCombined(), timezone_offset );
         break;
 
     case GBR_NC_STRING_FORMAT_GBRJOB:
@@ -72,8 +71,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
         break;
 
     case GBR_NC_STRING_FORMAT_NCDRILL:
-        msg.Printf( wxS( "; #@! TF.CreationDate,%s%s" ), date.FormatISOCombined(),
-                    timezone_offset );
+        msg.Printf( wxS( "; #@! TF.CreationDate,%s%s" ), date.FormatISOCombined(), timezone_offset );
         break;
     }
 

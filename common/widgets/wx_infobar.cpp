@@ -524,13 +524,13 @@ void INFOBAR_REPORTER::Finalize()
     switch( m_severity )
     {
     case RPT_SEVERITY_UNDEFINED: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_INFO: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_ACTION: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_WARNING: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_ERROR: icon = wxICON_ERROR; break;
-    case RPT_SEVERITY_IGNORE: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_DEBUG: icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_INFO:      icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_ACTION:    icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_WARNING:   icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_ERROR:     icon = wxICON_ERROR;       break;
+    case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_DEBUG:     icon = wxICON_INFORMATION; break;
     }
 
     if( m_message->EndsWith( wxS( "\n" ) ) )

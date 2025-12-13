@@ -1416,7 +1416,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             switch( padchar )
             {
             case 'C':   padshape = static_cast<int>( PAD_SHAPE::CIRCLE );      break;
-            case 'R':   padshape = static_cast<int>( PAD_SHAPE::RECTANGLE );        break;
+            case 'R':   padshape = static_cast<int>( PAD_SHAPE::RECTANGLE );   break;
             case 'O':   padshape = static_cast<int>( PAD_SHAPE::OVAL );        break;
             case 'T':   padshape = static_cast<int>( PAD_SHAPE::TRAPEZOID );   break;
             default:
@@ -1952,9 +1952,11 @@ void PCB_IO_KICAD_LEGACY::loadPCB_LINE()
 
                     dseg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
                     break;
+
                 case 1:
                     ignore_unused( intParse( data ) );
                     break;
+
                 case 2:
                 {
                     EDA_ANGLE angle = degParse( data );
@@ -1964,15 +1966,16 @@ void PCB_IO_KICAD_LEGACY::loadPCB_LINE()
 
                     break;
                 }
+
                 case 3:
                     const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );
                     break;
+
                 case 4:
-                {
                     // Ignore state data
                     hexParse( data );
                     break;
-                }
+
                 // Bezier Control Points
                 case 5:
                     x = biuParse( data );
@@ -2270,7 +2273,7 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
         {
         default:
         case PCB_TRACE_T: newTrack = new PCB_TRACK( m_board ); break;
-        case PCB_VIA_T:   newVia = new PCB_VIA( m_board );   break;
+        case PCB_VIA_T:   newVia = new PCB_VIA( m_board );     break;
         }
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:

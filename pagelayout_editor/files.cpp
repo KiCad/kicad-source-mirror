@@ -149,8 +149,9 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             msg.Printf( _( "File '%s' inserted" ), filename );
             SetStatusText( msg );
         }
-    }
+
         break;
+    }
 
     case wxID_OPEN:
     {
@@ -173,8 +174,9 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             msg.Printf( _( "File '%s' saved." ), filename );
             SetStatusText( msg );
         }
-    }
+
         break;
+    }
 
     case wxID_SAVE:
         if( !SaveDrawingSheetFile( filename ) )
@@ -187,6 +189,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             msg.Printf( _("File '%s' saved."), filename );
             SetStatusText( msg );
         }
+
         break;
 
     case wxID_SAVEAS:
@@ -222,8 +225,9 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             SetCurrentFileName( filename );
             UpdateTitleAndInfo();
         }
-    }
+
         break;
+    }
 
     default:
         break;
