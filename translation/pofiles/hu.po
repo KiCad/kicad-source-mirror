@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-13 00:03+0000\n"
+"PO-Revision-Date: 2025-12-13 17:07+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -50904,9 +50904,8 @@ msgid "Place pad"
 msgstr "Forrszem elhelyezése"
 
 #: pcbnew/tools/pad_tool.cpp:743 pcbnew/tools/pad_tool.cpp:756
-#, fuzzy
 msgid "Edit Pad"
-msgstr "Forrszem szerkesztése..."
+msgstr "Forrszem szerkesztése"
 
 #: pcbnew/tools/pad_tool.cpp:830
 #, c-format
@@ -51469,7 +51468,6 @@ msgid "Update footprint to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: pcbnew/tools/pcb_actions.cpp:791
-#, fuzzy
 msgid "Update Footprints from Library..."
 msgstr "Alkatrészrajzolatok frissítése könyvtárból..."
 
@@ -51733,9 +51731,8 @@ msgid "Import routed Specctra session (*.ses) file"
 msgstr "Huzalozott \"Specctra Session\" (*.ses) fájl importálása"
 
 #: pcbnew/tools/pcb_actions.cpp:1016
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN fájl..."
+msgstr "Specctra DSN exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1017
 #, fuzzy
@@ -51835,7 +51832,6 @@ msgid "Change via size to next pre-defined size"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1106
-#, fuzzy
 msgid "Decrease Via Size"
 msgstr "Via méret csökkentése"
 
