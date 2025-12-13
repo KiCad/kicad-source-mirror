@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 10:04+0300\n"
+"POT-Creation-Date: 2025-12-13 20:08+0300\n"
 "PO-Revision-Date: 2025-11-28 09:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
@@ -157,7 +157,7 @@ msgstr "Ładowanie warstwy OpenGL %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:654
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2019
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2021
 msgid "Loading 3D models..."
 msgstr "Ładowanie modeli 3D..."
 
@@ -222,7 +222,7 @@ msgstr "Eksportuj bieżący widok jako plik JPEG..."
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:671
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:326
-#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
+#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:681
 msgid "3D Viewer"
 msgstr "Przeglądarka 3D"
 
@@ -3469,7 +3469,7 @@ msgstr "Opcje"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:183
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4214
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4218
 #: pcbnew/footprint_wizard_frame.cpp:324 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -5292,7 +5292,7 @@ msgstr "Powiększenie"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1101
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4173
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4177
 #: pcbnew/pad.cpp:2746 pcbnew/pad.cpp:2765 pcbnew/pcb_dimension.cpp:2026
 #: pcbnew/widgets/appearance_controls.cpp:736
 #: pcbnew/widgets/appearance_controls.cpp:778
@@ -5530,7 +5530,7 @@ msgstr "<Niezdefiniowane>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4175
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4179
 #: pcbnew/pad.cpp:2767 pcbnew/pcb_table.cpp:662 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1889
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6806,7 +6806,7 @@ msgstr "Dolna"
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4205 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
+#: pcbnew/footprint.cpp:4209 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
 #: pcbnew/pcb_dimension.cpp:1893 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -8729,7 +8729,7 @@ msgstr "Edycja domyślna"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2030
 #: eeschema/sch_symbol.cpp:2084 eeschema/sch_symbol.cpp:2977
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4211
+#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4215
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Oznaczenie"
@@ -8751,7 +8751,7 @@ msgstr "Pogrupowane wg wartości i footprintów"
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
-#: pcbnew/footprint.cpp:4234
+#: pcbnew/footprint.cpp:4238
 msgid "Attributes"
 msgstr "Atrybuty"
 
@@ -10668,7 +10668,7 @@ msgstr "'%s' nie jest poprawnym footprintem."
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2079
 #: eeschema/sch_symbol.cpp:2661 eeschema/sch_symbol.cpp:2989
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
-#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4224
+#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4228
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "Słowa kluczowe"
@@ -11201,7 +11201,7 @@ msgid "Enter a description for the library:"
 msgstr "Wprowadź opis dla biblioteki:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2986
-#: pcbnew/footprint.cpp:4221 pcbnew/plot_board_layers.cpp:189
+#: pcbnew/footprint.cpp:4225 pcbnew/plot_board_layers.cpp:189
 msgid "Library Description"
 msgstr "Opis biblioteki"
 
@@ -12991,7 +12991,7 @@ msgstr "Pokaż okno z pomocą na temat składni"
 #: eeschema/sch_symbol.cpp:2975
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
-#: pcbnew/footprint.cpp:4209
+#: pcbnew/footprint.cpp:4213
 msgid "Fields"
 msgstr "Pola"
 
@@ -20169,13 +20169,13 @@ msgid "Background Color"
 msgstr "Kolor Tła"
 
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1070
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4241
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4245
 msgid "Exclude From Bill of Materials"
 msgstr "Wyklucz z listy materiałowej"
 
 #: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1071
 #: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:993
-#: pcbnew/footprint.cpp:4244
+#: pcbnew/footprint.cpp:4248
 msgid "Do not Populate"
 msgstr "Nie obsadzony"
 
@@ -20230,7 +20230,7 @@ msgstr "Odbij w osi X"
 msgid "Mirror Y"
 msgstr "Odbij w osi Y"
 
-#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4218
+#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4222
 msgid "Library Link"
 msgstr "Łącze do biblioteki"
 
@@ -25138,7 +25138,7 @@ msgstr "Wybieram warstwę: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
-#: pcbnew/footprint.cpp:4200 pcbnew/footprint.cpp:4203
+#: pcbnew/footprint.cpp:4204 pcbnew/footprint.cpp:4207
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1395
 #: pcbnew/pad.cpp:2781 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
@@ -33274,7 +33274,7 @@ msgstr ""
 "To ustawienie może zostać zmienione przez  lokalne ustawienia pól "
 "lutowniczych"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4174
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4178
 #: pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1888
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -36677,7 +36677,7 @@ msgid "Sheet Path"
 msgstr "Ścieżka arkusza"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
-#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4230 pcbnew/zone.cpp:1919
+#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4234 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "Klasa komponentu"
 
@@ -42516,7 +42516,7 @@ msgid "'%s' settings differ."
 msgstr "Ustawienie '%s' różni się."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:697
-#: pcbnew/footprint.cpp:4251
+#: pcbnew/footprint.cpp:4255
 msgid "Exempt From Courtyard Requirement"
 msgstr "Zwolniony z wymogu posiadania pola zajętości"
 
@@ -43371,59 +43371,59 @@ msgstr "<brak oznaczenia>"
 msgid "Footprint %s"
 msgstr "Footprint %s"
 
-#: pcbnew/footprint.cpp:3383
+#: pcbnew/footprint.cpp:3387
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(spodziewano się 'Pole lutownicze z otworem na wylot'; aktualnie '%s')"
 
-#: pcbnew/footprint.cpp:3386
+#: pcbnew/footprint.cpp:3390
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(spodziewano się 'SMD'; obecnie '%s')"
 
-#: pcbnew/footprint.cpp:3607
+#: pcbnew/footprint.cpp:3611
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(węzeł sieci grupy pól zawiera nieznany numer pola %s)"
 
-#: pcbnew/footprint.cpp:3612
+#: pcbnew/footprint.cpp:3616
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(pole %s występuje więcej niż jeden raz w grupie pól węzłów sieci)"
 
-#: pcbnew/footprint.cpp:4172 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
+#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
 msgid "Inherited"
 msgstr "Dziedziczony"
 
-#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
+#: pcbnew/footprint.cpp:4180 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
 msgid "Thermal reliefs for PTH"
 msgstr "Połączenia termiczne dla PTH"
 
-#: pcbnew/footprint.cpp:4236
+#: pcbnew/footprint.cpp:4240
 msgid "Not in Schematic"
 msgstr "Poza schematem"
 
-#: pcbnew/footprint.cpp:4238
+#: pcbnew/footprint.cpp:4242
 msgid "Exclude From Position Files"
 msgstr "Wyklucz z plików położeń"
 
-#: pcbnew/footprint.cpp:4248 pcbnew/pad.cpp:2940
+#: pcbnew/footprint.cpp:4252 pcbnew/pad.cpp:2940
 msgid "Overrides"
 msgstr "Przekroczenia"
 
-#: pcbnew/footprint.cpp:4255 pcbnew/pad.cpp:2943
+#: pcbnew/footprint.cpp:4259 pcbnew/pad.cpp:2943
 msgid "Clearance Override"
 msgstr "Przekroczenie prześwitu"
 
-#: pcbnew/footprint.cpp:4260 pcbnew/pad.cpp:2953
+#: pcbnew/footprint.cpp:4264 pcbnew/pad.cpp:2953
 msgid "Solderpaste Margin Override"
 msgstr "Przekroczenie marginesu pasy lutowniczej"
 
-#: pcbnew/footprint.cpp:4265 pcbnew/pad.cpp:2958
+#: pcbnew/footprint.cpp:4269 pcbnew/pad.cpp:2958
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Przekroczenie współczynnika marginesu pasty"
 
-#: pcbnew/footprint.cpp:4271 pcbnew/pad.cpp:2964
+#: pcbnew/footprint.cpp:4275 pcbnew/pad.cpp:2964
 msgid "Zone Connection Style"
 msgstr "Styl łączy ze strefą"
 
@@ -44428,79 +44428,79 @@ msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr ""
 "Nie znaleziono sieci dla komponentu %s pola %s (brak pinu %s w symbolu)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:910
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:908
 #, c-format
 msgid "Add net %s."
 msgstr "Dodaję sieć %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:921
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:919
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Ponowne łączenie %s pin %s z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:929
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:927
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Ponownie połączono %s pin %s z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:940
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:938
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Łączenie %s pin %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:947
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:945
 #, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "Połączono %s pin %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1028
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1026
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Ponowne łączenie przelotki %s z %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1048
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
 #, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Ponownie połączono przelotki %s z %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1056
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Przelotka połączona z nieznaną siecią (%s)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1101
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "Ponowne łączenie strefy '%s' z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1110
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1108
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "Ponowne łączenie strefy z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1133
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1131
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Ponowne łączenie strefy '%s' z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1140
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "Ponownie połączono strefę z %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1153
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1151
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "Strefa miedzi '%s' nie ma połączenia z żadnym polem."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1170
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr ""
 "Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma połączenia z żadnym "
 "polem."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1213
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1211
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
@@ -44509,54 +44509,54 @@ msgstr ""
 "Symbol %s ma piny bez numeru.  Te piny nie mogą być dopasowane do pól "
 "lutowniczych w %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1223
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1221
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s pole %s nie znalezione w %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1275
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1273
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Przetwarzam symbol '%s:%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1349
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1347
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr "Znaleziono kilka footprintów dla %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr ""
 "Nie można usunąć nieużywanego footprintu %s (footprint jest zablokowany)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr ""
 "Nie było można usunąć nieużywanego footprintu %s (footprint jest "
 "zablokowany)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1399
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1397
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Usuwam nieużywany footprint %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1408
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1406
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "Usunięto nieużywany footprint %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1437
 #, c-format
 msgid "Removed unused net %s."
 msgstr "Usunięto nieużywaną sieć %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1451
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1449
 msgid "Update Netlist"
 msgstr "Uaktualnianie listy sieci"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1475
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1473
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Ostrzeżeń w sumie: %d, błędów w sumie: %d."
@@ -44987,7 +44987,7 @@ msgstr "Kąt łącza termicznego"
 msgid "Thermal Relief Gap"
 msgstr "Przerwa połączenia termicznego"
 
-#: pcbnew/pcb_base_frame.cpp:1225
+#: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
@@ -45282,11 +45282,11 @@ msgstr "Wczytywanie danych o rozszerzonej informacji o prymitywach..."
 msgid "Loading board data..."
 msgstr "Wczytywanie danych płytki..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1251
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1253
 msgid "Loading netclasses..."
 msgstr "Wczytywanie klas sieci..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1277
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1279
 #, c-format
 msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
@@ -45295,20 +45295,20 @@ msgstr ""
 "Znaleziono więcej niż jedną klasę sieci Altium o nazwie '%s'. Tylko pierwsza "
 "z nich zostanie zaimportowana."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1300
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1302
 msgid "Loading components..."
 msgstr "Wczytywanie komponentów..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1379
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1481
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1381
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 msgid "Loading component 3D models..."
 msgstr "Wczytywanie modeli 3D komponentów..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1595
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1702
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1882
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1913
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1597
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1704
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1785
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1884
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1915
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -45317,63 +45317,63 @@ msgstr ""
 "Wymiar na warstwie Altium (%d) nie ma odpowiednika w programie KiCad. "
 "Zamiast tego umieszczono go na Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1939
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1941
 msgid "Loading dimension drawings..."
 msgstr "Wczytywanie wymiarowania..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1956
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1958
 msgid "Ignored Angular dimension (not yet supported)."
 msgstr "Zignorowano wymiar typu Angular (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1969
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1971
 msgid "Ignored Datum dimension (not yet supported)."
 msgstr "Zignorowano wymiar typu Datum (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1977
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1979
 msgid "Ignored Baseline dimension (not yet supported)."
 msgstr "Zignorowano wymiar typu Baseline (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1987
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1989
 msgid "Ignored Linear dimension (not yet supported)."
 msgstr "Zignorowano wymiar typu Linear (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1994
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1996
 msgid "Ignored Radial dimension (not yet supported)."
 msgstr "Zignorowano wymiar typu Radial (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2002
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2004
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Zignorowano wymiar typu %d (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2050
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2052
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Nie znaleziono pliku: '%s'. Moel 3D nie został zaimportowany."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2111
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2113
 msgid "Loading nets..."
 msgstr "Wczytywanie sieci..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2137
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2392
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2139
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2394
 msgid "Loading polygons..."
 msgstr "Wczytywanie polygonów..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2177
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2179
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
 msgstr "Liczba zarysów wielokątów wynosi %d, oczekiwano 1."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2304
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2306
 msgid "Loading rules..."
 msgstr "Wczytywanie reguł..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2372
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2374
 msgid "Loading board regions..."
 msgstr "Wczytywanie regionów płytki..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2476
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2478
 #, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -45382,12 +45382,12 @@ msgstr ""
 "Przerywany kontur istniejący na warstwie Altium (%d) nie ma odpowiednika w "
 "programie KiCad. Został przeniesiony na warstwę KiCad Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2522
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2524
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2599
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2601
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45399,7 +45399,7 @@ msgstr ""
 "posiada odpowiednika w programie KiCad. Został on przeniesiony na warstwę "
 "Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2615
 #, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
@@ -45409,7 +45409,7 @@ msgstr ""
 "który nie ma odpowiednika w programie KiCad. Został przeniesiony na warstwę "
 "Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2656
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2658
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45418,24 +45418,24 @@ msgstr ""
 "Błąd podczas wczytywania biblioteki '%s':\n"
 "Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2669
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2671
 #, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr "Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2826
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2828
 msgid "Loading zone fills..."
 msgstr "Wczytywanie wypełnień strefy..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2901
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2903
 msgid "Loading arcs..."
 msgstr "Wczytywanie łuków..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3153
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3155
 msgid "Loading pads..."
 msgstr "Wczytywanie pól lutowniczych..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3313
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3315
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45445,14 +45445,14 @@ msgstr ""
 "W footprincie %s pole %s nie jest oznaczone jako wielowarstwowe, choć jest "
 "to pole z otworem na wylot."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3326
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3328
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "W footprincie %s pole %s nie jest oznaczone jako wielowarstwowe, choć jest "
 "to pole z otworem na wylot."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3355
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3357
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45461,13 +45461,13 @@ msgstr ""
 "Wczytywanie biblioteki '%s':\n"
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3368
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3370
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3403
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3405
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45478,7 +45478,7 @@ msgstr ""
 "Footprint %s posiada otwór w polu %s obrócony o %f stopni. KiCad wspiera "
 "obrót tylko o 90 stopni."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3418
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3420
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -45487,7 +45487,7 @@ msgstr ""
 "Footprint %s posiada otwór w polu %s obrócony o %f stopni. KiCad wspiera "
 "obrót tylko o 90 stopni."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3438
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3440
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45496,12 +45496,12 @@ msgstr ""
 "Błąd podczas ładowania biblioteki '%s':\n"
 "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3452
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3454
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3517
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3519
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45510,12 +45510,12 @@ msgstr ""
 "Błąd podczas ładowania biblioteki '%s':\n"
 "W footprincie %s pole %s używa nieznanego kształtu."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3530
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3532
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "W footprincie %s pole %s używa nieznanego kształtu."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3631
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3633
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -45524,7 +45524,7 @@ msgstr ""
 "Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
 "programie KiCad. Zamiast tego umieszczono go na Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3659
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3661
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45536,7 +45536,7 @@ msgstr ""
 "ma odpowiednika w programie KiCad. Został on przesunięty na warstwę "
 "Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3674
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3676
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -45546,36 +45546,36 @@ msgstr ""
 "ma odpowiednika w programie KiCad. Zostanie on przeniesiony na warstwę "
 "Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3704
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Pole nie będące polem miedzi %s należy do jednej z sieci, co nie jest "
 "obsługiwane."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3713
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3715
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 "Pole nie będące polem miedzi %s posiada otwór, co nie jest obsługiwane."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3723
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3725
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Pole nie będące polem miedzi %s używa skomplikowanego stosu warstw (obecnie "
 "nie obsługiwane)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3870
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3872
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Pole nie będące polem miedzi %s używa nieznanego kształtu pola."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3883
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3885
 msgid "Loading vias..."
 msgstr "Wczytywanie przelotek..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3927
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3929
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -45583,24 +45583,24 @@ msgstr ""
 "Przelotka pomiędzy warstwami %d a %d używa warstwy nie będącą warstwą "
 "sygnałową, co nie jest jeszcze obsługiwane."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3990
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3992
 msgid "Loading tracks..."
 msgstr "Wczytywanie ścieżek..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4207
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4209
 msgid "Loading unicode strings..."
 msgstr "Wczytywanie treści Unicode..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4221
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4223
 msgid "Loading text..."
 msgstr "Wczytywanie tekstu..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4255
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4275
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4277
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -45610,19 +45610,19 @@ msgstr ""
 "Footprint %s posiada kod kreskowy na warstwie Altium %d (obecnie nie "
 "wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4288
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4290
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Footprint %s zawiera kod kreskowy na warstwie Altium %d (obecnie nie "
 "wspierany)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4488
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4490
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Nieznane wyrównanie tekstu %d, tekst %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4644
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4646
 msgid "Loading rectangles..."
 msgstr "Wczytywanie prostokątów..."
 
@@ -51221,7 +51221,7 @@ msgstr "Wybierz punkt, od którego zdefiniować nowe przesunięcie."
 msgid "Set Relative Position Interactively"
 msgstr "Interaktywne ustalanie pozycji względnej"
 
-#: pcbnew/tools/position_relative_tool.cpp:422
+#: pcbnew/tools/position_relative_tool.cpp:431
 msgid "Position Relative"
 msgstr "Pozycjonuje względnie"
 

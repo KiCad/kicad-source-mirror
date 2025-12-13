@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 10:04+0300\n"
+"POT-Creation-Date: 2025-12-13 20:08+0300\n"
 "PO-Revision-Date: 2025-12-13 17:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -179,7 +179,7 @@ msgstr "加载 OpenGL 层 %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:654
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2019
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2021
 msgid "Loading 3D models..."
 msgstr "正在加载 3D 模型..."
 
@@ -244,7 +244,7 @@ msgstr "将当前视图导出为 JPEG..."
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:671
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:326
-#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
+#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:681
 msgid "3D Viewer"
 msgstr "3D 查看器"
 
@@ -3428,7 +3428,7 @@ msgstr "选项"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:183
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4214
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4218
 #: pcbnew/footprint_wizard_frame.cpp:324 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -5189,7 +5189,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1101
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4173
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4177
 #: pcbnew/pad.cpp:2746 pcbnew/pad.cpp:2765 pcbnew/pcb_dimension.cpp:2026
 #: pcbnew/widgets/appearance_controls.cpp:736
 #: pcbnew/widgets/appearance_controls.cpp:778
@@ -5414,7 +5414,7 @@ msgstr "<未定义>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4175
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4179
 #: pcbnew/pad.cpp:2767 pcbnew/pcb_table.cpp:662 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1889
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6689,7 +6689,7 @@ msgstr "向下"
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4205 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
+#: pcbnew/footprint.cpp:4209 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
 #: pcbnew/pcb_dimension.cpp:1893 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -8588,7 +8588,7 @@ msgstr "编辑默认值"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2030
 #: eeschema/sch_symbol.cpp:2084 eeschema/sch_symbol.cpp:2977
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4211
+#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4215
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "位号"
@@ -8610,7 +8610,7 @@ msgstr "按值和封装分组"
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
-#: pcbnew/footprint.cpp:4234
+#: pcbnew/footprint.cpp:4238
 msgid "Attributes"
 msgstr "特性"
 
@@ -10507,7 +10507,7 @@ msgstr "'%s' 不是有效封装。"
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2079
 #: eeschema/sch_symbol.cpp:2661 eeschema/sch_symbol.cpp:2989
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
-#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4224
+#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4228
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "关键字"
@@ -11010,7 +11010,7 @@ msgid "Enter a description for the library:"
 msgstr "输入库描述:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2986
-#: pcbnew/footprint.cpp:4221 pcbnew/plot_board_layers.cpp:189
+#: pcbnew/footprint.cpp:4225 pcbnew/plot_board_layers.cpp:189
 msgid "Library Description"
 msgstr "库描述"
 
@@ -12753,7 +12753,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/sch_symbol.cpp:2975
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
-#: pcbnew/footprint.cpp:4209
+#: pcbnew/footprint.cpp:4213
 msgid "Fields"
 msgstr "字段"
 
@@ -19724,13 +19724,13 @@ msgid "Background Color"
 msgstr "背景颜色"
 
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1070
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4241
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4245
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
 #: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1071
 #: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:993
-#: pcbnew/footprint.cpp:4244
+#: pcbnew/footprint.cpp:4248
 msgid "Do not Populate"
 msgstr "不作装配"
 
@@ -19785,7 +19785,7 @@ msgstr "X 轴镜像"
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4218
+#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4222
 msgid "Library Link"
 msgstr "库链接"
 
@@ -24561,7 +24561,7 @@ msgstr "选择层: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
-#: pcbnew/footprint.cpp:4200 pcbnew/footprint.cpp:4203
+#: pcbnew/footprint.cpp:4204 pcbnew/footprint.cpp:4207
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1395
 #: pcbnew/pad.cpp:2781 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
@@ -32482,7 +32482,7 @@ msgstr ""
 "焊盘与填充区的默认连接类型。\n"
 "该设置可被局部焊盘设置覆盖"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4174
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4178
 #: pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1888
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -35800,7 +35800,7 @@ msgid "Sheet Path"
 msgstr "图纸路径"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
-#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4230 pcbnew/zone.cpp:1919
+#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4234 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "元件类"
 
@@ -41488,7 +41488,7 @@ msgid "'%s' settings differ."
 msgstr "%s 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:697
-#: pcbnew/footprint.cpp:4251
+#: pcbnew/footprint.cpp:4255
 msgid "Exempt From Courtyard Requirement"
 msgstr "忽略封装外框要求"
 
@@ -42327,59 +42327,59 @@ msgstr "< 无位号 >"
 msgid "Footprint %s"
 msgstr "封装 %s"
 
-#: pcbnew/footprint.cpp:3383
+#: pcbnew/footprint.cpp:3387
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(应当为 '通孔', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:3386
+#: pcbnew/footprint.cpp:3390
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(应当为 '贴片', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:3607
+#: pcbnew/footprint.cpp:3611
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(net-tie 焊盘组包含未知的焊盘编号 %s)"
 
-#: pcbnew/footprint.cpp:3612
+#: pcbnew/footprint.cpp:3616
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盘 %s 出现在一个以上的 net-tie 焊盘组中)"
 
-#: pcbnew/footprint.cpp:4172 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
+#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
 msgid "Inherited"
 msgstr "继承"
 
-#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
+#: pcbnew/footprint.cpp:4180 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
 msgid "Thermal reliefs for PTH"
 msgstr "在电镀孔 (PTH) 上使用缓释热焊盘 (花焊盘)"
 
-#: pcbnew/footprint.cpp:4236
+#: pcbnew/footprint.cpp:4240
 msgid "Not in Schematic"
 msgstr "不在原理图中"
 
-#: pcbnew/footprint.cpp:4238
+#: pcbnew/footprint.cpp:4242
 msgid "Exclude From Position Files"
 msgstr "从定位文件中排除"
 
-#: pcbnew/footprint.cpp:4248 pcbnew/pad.cpp:2940
+#: pcbnew/footprint.cpp:4252 pcbnew/pad.cpp:2940
 msgid "Overrides"
 msgstr "覆盖"
 
-#: pcbnew/footprint.cpp:4255 pcbnew/pad.cpp:2943
+#: pcbnew/footprint.cpp:4259 pcbnew/pad.cpp:2943
 msgid "Clearance Override"
 msgstr "间距重写"
 
-#: pcbnew/footprint.cpp:4260 pcbnew/pad.cpp:2953
+#: pcbnew/footprint.cpp:4264 pcbnew/pad.cpp:2953
 msgid "Solderpaste Margin Override"
 msgstr "锡膏外边距重写"
 
-#: pcbnew/footprint.cpp:4265 pcbnew/pad.cpp:2958
+#: pcbnew/footprint.cpp:4269 pcbnew/pad.cpp:2958
 msgid "Solderpaste Margin Ratio Override"
 msgstr "锡膏外边距比例重写"
 
-#: pcbnew/footprint.cpp:4271 pcbnew/pad.cpp:2964
+#: pcbnew/footprint.cpp:4275 pcbnew/pad.cpp:2964
 msgid "Zone Connection Style"
 msgstr "填充区连接样式"
 
@@ -43372,128 +43372,128 @@ msgstr "断开连接的 %s 引脚 %s。"
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr "找不到元件 %s 的焊盘 %s 的网络 (引脚 %s 不存在于符号中)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:910
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:908
 #, c-format
 msgid "Add net %s."
 msgstr "添加网络 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:921
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:919
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "重新连接 %s 的引脚 %s 从 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:929
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:927
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "将 %s 引脚 %s 从 %s 重新连接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:940
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:938
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "连接 %s 的引脚 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:947
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:945
 #, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "将 %s 引脚 %s 连接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1028
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1026
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "重新连接过孔从 %s 到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1048
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
 #, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "将过孔从 %s 重新连接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1056
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "过孔连接到未知网络 (%s)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1101
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "将覆铜区 '%s' 从 %s 重新连接到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1110
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1108
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "将覆铜区 %s 重新连接到 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1133
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1131
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "将覆铜区 '%s' 从 %s 重新连接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1140
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "将覆铜区从 %s 重新连接到了 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1153
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1151
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "覆铜区 '%s' 没有与之相连的焊盘。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1170
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "坐标 (%s, %s) 层 %s 上的覆铜区没有与之相连的焊盘。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1213
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1211
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr "符号 %s 有没有编号的引脚。这些引脚无法匹配到 %s 中的焊盘。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1223
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1221
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s 的焊盘 %s 在 %s 中未找到。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1275
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1273
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "正在处理符号 '%s:%s'。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1349
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1347
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr "为 %s 找到了多个封装。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "无法移除未使用的封装 %s (封装已锁定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "不能移除未使用的封装 %s (封装已锁定)。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1399
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1397
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "移除未使用封装 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1408
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1406
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "移除了未使用的封装 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1437
 #, c-format
 msgid "Removed unused net %s."
 msgstr "移除未使用的网络 %s。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1451
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1449
 msgid "Update Netlist"
 msgstr "更新网表"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1475
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1473
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "总计警告: %d, 错误: %d。"
@@ -43907,7 +43907,7 @@ msgstr "缓释热焊盘 (花焊盘) 引线角度"
 msgid "Thermal Relief Gap"
 msgstr "缓释热焊盘 (花焊盘) 间隙"
 
-#: pcbnew/pcb_base_frame.cpp:1225
+#: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
@@ -44200,31 +44200,31 @@ msgstr "正在加载扩展基本元素信息数据..."
 msgid "Loading board data..."
 msgstr "正加载板数据..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1251
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1253
 msgid "Loading netclasses..."
 msgstr "正加载网络类..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1277
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1279
 #, c-format
 msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr "发现多个名称为 '%s' 的 Altium 网络类。将只导入第一个。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1300
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1302
 msgid "Loading components..."
 msgstr "正加载元件..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1379
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1481
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1381
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 msgid "Loading component 3D models..."
 msgstr "正加载元件 3D 模型..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1595
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1702
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1882
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1913
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1597
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1704
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1785
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1884
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1915
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -44233,63 +44233,63 @@ msgstr ""
 "Altium 层 ( %d ) 上存在测量标注, 但在 KiCad 中没有对应的等效项。已将其移至 "
 "KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1939
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1941
 msgid "Loading dimension drawings..."
 msgstr "正加载测量标注图形..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1956
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1958
 msgid "Ignored Angular dimension (not yet supported)."
 msgstr "忽略了 Angular 测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1969
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1971
 msgid "Ignored Datum dimension (not yet supported)."
 msgstr "忽略了 Datum 测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1977
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1979
 msgid "Ignored Baseline dimension (not yet supported)."
 msgstr "忽略了基线测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1987
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1989
 msgid "Ignored Linear dimension (not yet supported)."
 msgstr "忽略了线性测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1994
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1996
 msgid "Ignored Radial dimension (not yet supported)."
 msgstr "忽略了 Radial 测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2002
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2004
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2050
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2052
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "找不到文件: '%s'。未导入 3D 模型。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2111
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2113
 msgid "Loading nets..."
 msgstr "加载网中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2137
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2392
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2139
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2394
 msgid "Loading polygons..."
 msgstr "正加载多边形..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2177
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2179
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
 msgstr "多边形外框数量为 %d, 应当为 1。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2304
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2306
 msgid "Loading rules..."
 msgstr "加载规则中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2372
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2374
 msgid "Loading board regions..."
 msgstr "正加载 board regions..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2476
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2478
 #, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -44298,12 +44298,12 @@ msgstr ""
 "Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等效项。已将其移至 "
 "KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2522
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2524
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "忽略类型为 %d 的多边形, 因为尚未实现。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2599
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2601
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -44314,7 +44314,7 @@ msgstr ""
 "在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等"
 "效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2615
 #, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
@@ -44323,7 +44323,7 @@ msgstr ""
 "在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线外框, 但在 KiCad 中没有对应的等"
 "效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2656
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2658
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -44332,24 +44332,24 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 上包含 %d 类型的多边形 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2669
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2671
 #, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr "封装 %s 包含类型为 %d 的多边形形状 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2826
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2828
 msgid "Loading zone fills..."
 msgstr "加载填充区填充内容中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2901
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2903
 msgid "Loading arcs..."
 msgstr "加载弧中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3153
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3155
 msgid "Loading pads..."
 msgstr "加载焊盘中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3313
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3315
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -44358,12 +44358,12 @@ msgstr ""
 "加载库 '%s' 库出错:\n"
 "封装 %s 的焊盘 %s 未被标记为多层焊盘, 但它却是一个通孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3326
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3328
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层, 但它是 TH 焊盘。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3355
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3357
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -44372,12 +44372,12 @@ msgstr ""
 "正在加载 '%s' 库:\n"
 "在封装 %s 的焊盘 %s 上有一个方孔 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3368
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3370
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "封装 %s 焊盘 %s 有一个方孔。(尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3403
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3405
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -44388,14 +44388,14 @@ msgstr ""
 "在封装 %s 的焊盘 %s 上有旋转角度为 %f 度的孔。KiCad 只支持旋转角度为 90 度的"
 "孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3418
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3420
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3438
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3440
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -44404,12 +44404,12 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 的焊盘 %s 使用了未知类型 (%d) 的孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3452
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3454
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3517
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3519
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -44418,12 +44418,12 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 的焊盘 %s 使用了未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3530
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3532
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3631
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3633
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -44432,7 +44432,7 @@ msgstr ""
 "在 Altium 层 (%2$d) 上存在非铜焊盘 %1$s, 但在 KiCad 中没有对应的等效项。已将"
 "其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3659
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3661
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -44443,7 +44443,7 @@ msgstr ""
 "在 Altium 层 (%4$d) 上发现封装 %2$s 中存在非铜焊盘 %3$s, 但在 KiCad 中没有对"
 "应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3674
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3676
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -44452,54 +44452,54 @@ msgstr ""
 "在 Altium 层 (%3$d) 上发现封装 %1$s 中存在非铜焊盘 %2$s, 但在 KiCad 中没有对"
 "应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3704
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "非铜焊盘 %s 被连接到了某个网络, KiCad 不支持这种行为。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3713
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3715
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 %s有一个孔, KiCad 不支持这种情况。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3723
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3725
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "非铜焊盘\"%s\"使用复杂的焊盘压层, 尚未支持。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3870
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3872
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非铜焊盘 '%s' 使用了未知的焊盘形状。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3883
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3885
 msgid "Loading vias..."
 msgstr "加载过孔中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3927
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3929
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "来自层 %d <-> %d 的过孔使用非铜层, KiCad 不支持这种情况。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3990
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3992
 msgid "Loading tracks..."
 msgstr "加载走线中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4207
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4209
 msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4221
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4223
 msgid "Loading text..."
 msgstr "加载文本中..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4255
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "忽略了 Altium 层 %d 上的条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4275
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4277
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -44508,17 +44508,17 @@ msgstr ""
 "加载库 '%s' 时出错:\n"
 "封装 %s 在 Altium 层 %d 中包含条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4288
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4290
 #, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "封装 %s 包含 Altium 层 %d 上的条形码 (尚未支持)。"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4488
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4490
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "未知的文本框对齐方式 %d, aText %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4644
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4646
 msgid "Loading rectangles..."
 msgstr "加载矩形中..."
 
@@ -49864,7 +49864,7 @@ msgstr "选择要定义新偏移量的点。"
 msgid "Set Relative Position Interactively"
 msgstr "交互式设置相对位置"
 
-#: pcbnew/tools/position_relative_tool.cpp:422
+#: pcbnew/tools/position_relative_tool.cpp:431
 msgid "Position Relative"
 msgstr "相对位置"
 

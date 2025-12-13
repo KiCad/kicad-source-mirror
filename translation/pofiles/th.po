@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 10:04+0300\n"
+"POT-Creation-Date: 2025-12-13 20:08+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -138,7 +138,7 @@ msgstr "อ่าน OpenGL เลเยอร์ %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:654
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2019
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2021
 msgid "Loading 3D models..."
 msgstr "กำลังอ่านโมเดล3มิติ…"
 
@@ -203,7 +203,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:671
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:326
-#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:678
+#: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:681
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
 
@@ -3514,7 +3514,7 @@ msgstr "ทางเลือก"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:183
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4214
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:437 pcbnew/footprint.cpp:4218
 #: pcbnew/footprint_wizard_frame.cpp:324 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -5329,7 +5329,7 @@ msgstr "ขยาย"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1101
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4173
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4177
 #: pcbnew/pad.cpp:2746 pcbnew/pad.cpp:2765 pcbnew/pcb_dimension.cpp:2026
 #: pcbnew/widgets/appearance_controls.cpp:736
 #: pcbnew/widgets/appearance_controls.cpp:778
@@ -5562,7 +5562,7 @@ msgstr "เชื่อมต่อไม่ได้"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4175
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4179
 #: pcbnew/pad.cpp:2767 pcbnew/pcb_table.cpp:662 pcbnew/pcb_textbox.cpp:789
 #: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1889
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6860,7 +6860,7 @@ msgstr "ล่าง"
 #: eeschema/sch_text.cpp:792 eeschema/sch_textbox.cpp:711
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4205 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
+#: pcbnew/footprint.cpp:4209 pcbnew/pad.cpp:2784 pcbnew/pcb_dimension.cpp:1818
 #: pcbnew/pcb_dimension.cpp:1893 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
@@ -8881,7 +8881,7 @@ msgstr "หน่วยปริยาย:"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2030
 #: eeschema/sch_symbol.cpp:2084 eeschema/sch_symbol.cpp:2977
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4211
+#: eeschema/widgets/search_handlers.cpp:249 pcbnew/footprint.cpp:4215
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "อ้างอิง"
@@ -8905,7 +8905,7 @@ msgstr "รับและย้ายฟุ้ทพรินท์"
 #: eeschema/tools/sch_edit_tool.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
-#: pcbnew/footprint.cpp:4234
+#: pcbnew/footprint.cpp:4238
 msgid "Attributes"
 msgstr "คุณลักษณะ"
 
@@ -10909,7 +10909,7 @@ msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2079
 #: eeschema/sch_symbol.cpp:2661 eeschema/sch_symbol.cpp:2989
 #: eeschema/symbol_editor/symbol_editor.cpp:1771
-#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4224
+#: eeschema/symbol_viewer_frame.cpp:459 pcbnew/footprint.cpp:4228
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:192
 msgid "Keywords"
 msgstr "คำสำคัญ"
@@ -11440,7 +11440,7 @@ msgid "Enter a description for the library:"
 msgstr "ตัวเลือกสําหรับไลบรารี '%s'"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2986
-#: pcbnew/footprint.cpp:4221 pcbnew/plot_board_layers.cpp:189
+#: pcbnew/footprint.cpp:4225 pcbnew/plot_board_layers.cpp:189
 #, fuzzy
 msgid "Library Description"
 msgstr "คำอธิบาย"
@@ -13261,7 +13261,7 @@ msgstr "แสดงหน้าต่างช่วยเหลือไวย
 #: eeschema/sch_symbol.cpp:2975
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
-#: pcbnew/footprint.cpp:4209
+#: pcbnew/footprint.cpp:4213
 msgid "Fields"
 msgstr "ช่อง"
 
@@ -20502,14 +20502,14 @@ msgid "Background Color"
 msgstr "เติมเต็มพื้นหลัง"
 
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1070
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4241
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4245
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "ไม่รวมในรายการวัสดุ"
 
 #: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1071
 #: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:993
-#: pcbnew/footprint.cpp:4244
+#: pcbnew/footprint.cpp:4248
 #, fuzzy
 msgid "Do not Populate"
 msgstr "ไม่ใส่อุปกรณ์"
@@ -20567,7 +20567,7 @@ msgstr "กลับกระจก"
 msgid "Mirror Y"
 msgstr "กลับกระจก"
 
-#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4218
+#: eeschema/sch_symbol.cpp:2983 pcbnew/footprint.cpp:4222
 #, fuzzy
 msgid "Library Link"
 msgstr "เชื่อมโยงไลบรารี"
@@ -25706,7 +25706,7 @@ msgstr "เลือกเลเยอร์: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
-#: pcbnew/footprint.cpp:4200 pcbnew/footprint.cpp:4203
+#: pcbnew/footprint.cpp:4204 pcbnew/footprint.cpp:4207
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1395
 #: pcbnew/pad.cpp:2781 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
@@ -33891,7 +33891,7 @@ msgstr ""
 "ค่าปริยายชนิดการเชื่อมต่อแพ็ดไปยังโซน\n"
 "การตั้งค่านี้สามารถแทนที่ได้ โดยการตั้งค่าแพ็ดเฉพาะที่"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4174
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4178
 #: pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1888
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -37386,7 +37386,7 @@ msgid "Sheet Path"
 msgstr "เลือกเส้นทางไดเร็คตอรี"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
-#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4230 pcbnew/zone.cpp:1919
+#: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4234 pcbnew/zone.cpp:1919
 #, fuzzy
 msgid "Component Class"
 msgstr "อุปกรณ์"
@@ -42774,7 +42774,7 @@ msgid "'%s' settings differ."
 msgstr "ชนิดฟุ้ทพรินท์:"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:697
-#: pcbnew/footprint.cpp:4251
+#: pcbnew/footprint.cpp:4255
 #, fuzzy
 msgid "Exempt From Courtyard Requirement"
 msgstr "ยกเว้นจากข้อกำหนดของลานสนาม"
@@ -43638,62 +43638,62 @@ msgstr "<ไม่มีอักษรอ้างอิง>"
 msgid "Footprint %s"
 msgstr "ฟุ้ทพรินท์:%s"
 
-#: pcbnew/footprint.cpp:3383
+#: pcbnew/footprint.cpp:3387
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "คาดหวังชนิด \"รูเจาะทะลุ\" แต่ตั้งเป็น \"%s\""
 
-#: pcbnew/footprint.cpp:3386
+#: pcbnew/footprint.cpp:3390
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(คาดหวัง 'SMD'; ค่าจริง %s)"
 
-#: pcbnew/footprint.cpp:3607
+#: pcbnew/footprint.cpp:3611
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3612
+#: pcbnew/footprint.cpp:3616
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4172 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
+#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
 msgid "Inherited"
 msgstr "ถูกสืบทอด"
 
-#: pcbnew/footprint.cpp:4176 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
+#: pcbnew/footprint.cpp:4180 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
 msgid "Thermal reliefs for PTH"
 msgstr "บรรเทาความร้อนสำหรับ PTH"
 
-#: pcbnew/footprint.cpp:4236
+#: pcbnew/footprint.cpp:4240
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "ไม่อยู่ในวงจร"
 
-#: pcbnew/footprint.cpp:4238
+#: pcbnew/footprint.cpp:4242
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "แยกออกจากไฟล์ตำแหน่ง"
 
-#: pcbnew/footprint.cpp:4248 pcbnew/pad.cpp:2940
+#: pcbnew/footprint.cpp:4252 pcbnew/pad.cpp:2940
 #, fuzzy
 msgid "Overrides"
 msgstr "เขียนทับ"
 
-#: pcbnew/footprint.cpp:4255 pcbnew/pad.cpp:2943
+#: pcbnew/footprint.cpp:4259 pcbnew/pad.cpp:2943
 msgid "Clearance Override"
 msgstr "การทับค่าระยะห่าง"
 
-#: pcbnew/footprint.cpp:4260 pcbnew/pad.cpp:2953
+#: pcbnew/footprint.cpp:4264 pcbnew/pad.cpp:2953
 msgid "Solderpaste Margin Override"
 msgstr "ทับค่าขอบโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:4265 pcbnew/pad.cpp:2958
+#: pcbnew/footprint.cpp:4269 pcbnew/pad.cpp:2958
 msgid "Solderpaste Margin Ratio Override"
 msgstr "ทับค่าอัตราส่วนโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:4271 pcbnew/pad.cpp:2964
+#: pcbnew/footprint.cpp:4275 pcbnew/pad.cpp:2964
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "ไม่มีการเชื่อมต่อ"
@@ -44731,129 +44731,129 @@ msgstr "ยกเลิกการเชื่อมต่อแล้ว %s �
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr "ไม่พบเน็ตสําหรับสัญลักษณ์ %s ขา %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:910
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:908
 #, c-format
 msgid "Add net %s."
 msgstr "เพิ่มเน็ต %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:921
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:919
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "เชื่อมต่ออีกครั้ง %s ขา %s จาก %s ถึง %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:929
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:927
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "เชื่อมต่ออีกครั้งแล้ว %s ขา %s จาก %s ถึง %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:940
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:938
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "เชื่อมต่อ %s ขา %s กับ %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:947
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:945
 #, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "เชื่อมต่อแล้ว %s ขา %s กับ %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1028
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1026
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "เชื่อมต่อใหม่เวีย จาก %s ถึง %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1048
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
 #, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "เชื่อมต่อใหม่เวียแล้ว จาก %s ถึง %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1056
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "เวียเชื่อมต่อกับเน็ตที่ไม่รู้จัก (%s)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1101
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "เชื่อมต่อโซนทองแดง '%s' จาก %s ถึง %s อีกครั้ง"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1110
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1108
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "เชื่อมต่อโซนทองแดงอีกจาก %s ถึง %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1133
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1131
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "เชื่อมต่อโซนทองแดง '%s' จาก %s ถึง %s อีกครั้งแล้ว"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1140
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "เชื่อมต่อโซนทองแดงจาก %s ถึง %s อีกครั้งแล้ว"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1153
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1151
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "โซนทองแดง '%s' ไม่มีแพ็ดเชื่อมต่อ"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1170
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "โซนทองแดงบนเลเยอร์ %s ที่ (%s, %s) ไม่มีแพ็ดเชื่อมต่อ"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1213
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1211
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr "สัญลักษณ์ %s มีขาไม่มีหมายเลข  ขาเหล่านี้ไม่สามารถจับคู่กับแพ็ดใน %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1223
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1221
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s แพ็ด %s ไม่พบใน %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1275
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1273
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "กําลังประมวลผลสัญลักษณ์ '%s:%s'"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1349
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1347
 #, fuzzy, c-format
 msgid "Multiple footprints found for %s."
 msgstr "พบหลายฟุ้ทพรินท์สําหรับ '%s'"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "ไม่สามารถลบฟุ้ทพรินท์ที่ไม่ได้ใช้ %s (ล็อคอยู่)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1384
 #, fuzzy, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "ไม่สามารถลบฟุ้ทพรินท์ที่ไม่ได้ใช้ %s (ล็อคอยู่)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1399
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1397
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "ลบฟุ้ทพรินท์ที่ไม่ได้ใช้ %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1408
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1406
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "ลบฟุ้ทพรินท์ที่ไม่ได้ใช้ %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1437
 #, c-format
 msgid "Removed unused net %s."
 msgstr "ลบเน็ตที่ไม่ได้ใช้ %s"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1451
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1449
 #, fuzzy
 msgid "Update Netlist"
 msgstr "ปรับปรุงรายชื่อเน็ต"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1475
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1473
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "คําเตือนทั้งหมด: %d, ข้อผิดพลาด: %d"
@@ -45304,7 +45304,7 @@ msgstr "ช่องว่างบรรเทาความร้อน"
 msgid "Thermal Relief Gap"
 msgstr "ช่องว่างบรรเทาความร้อน"
 
-#: pcbnew/pcb_base_frame.cpp:1225
+#: pcbnew/pcb_base_frame.cpp:1228
 #, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
@@ -45615,31 +45615,31 @@ msgstr "ไม่รู้จักชนิด MIME ของไฟล์เอ
 msgid "Loading board data..."
 msgstr "กําลังอ่านข้อมูลบอร์ด..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1251
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1253
 msgid "Loading netclasses..."
 msgstr "กําลังอ่านเน็ตคลาส..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1277
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1279
 #, c-format
 msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1300
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1302
 msgid "Loading components..."
 msgstr "กําลังอ่านอุปกรณ์..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1379
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1481
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1381
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 msgid "Loading component 3D models..."
 msgstr "กำลังอ่านโมเดล3มิติ…"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1595
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1702
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1783
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1882
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1913
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1597
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1704
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1785
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1884
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1915
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -45648,68 +45648,68 @@ msgstr ""
 "วัดขนาดข้อมูลที่พบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad จะถูกย้ายไปที่เลเยอร์ "
 "Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1939
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1941
 msgid "Loading dimension drawings..."
 msgstr "กําลังอ่านขนาดเขียนแบบ..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1956
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1958
 #, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1969
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1971
 #, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1977
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1979
 #, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1987
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1989
 #, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:1994
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:1996
 #, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2002
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2004
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2050
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2052
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "ไม่พบไฟล์: '%s' ไม่ได้นำเข้าโมเดล 3 มิติ"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2111
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2113
 msgid "Loading nets..."
 msgstr "กําลังโหลดเน็ต..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2137
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2392
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2139
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2394
 msgid "Loading polygons..."
 msgstr "กําลังโหลดรูปหลายเหลี่ยม..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2177
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2179
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2304
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2306
 msgid "Loading rules..."
 msgstr "กําลังโหลดกฎ..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2372
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2374
 msgid "Loading board regions..."
 msgstr "กําลังโหลดขอบเขตบอร์ด..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2476
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2478
 #, fuzzy, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -45717,12 +45717,12 @@ msgid ""
 msgstr ""
 "โซนที่พบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad จะถูกย้ายไปที่เลเยอร์ Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2522
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2524
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "ละเว้นรูปร่างรูปหลายเหลี่ยมชนิด %d (ยังไม่ได้รับการสนับสนุน)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2599
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2601
 #, fuzzy, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45732,7 +45732,7 @@ msgstr ""
 "รูปหลายเหลี่ยมพบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad จะถูกย้ายไปที่เลเยอร์ "
 "Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2613
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2615
 #, fuzzy, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
@@ -45740,55 +45740,55 @@ msgid ""
 msgstr ""
 "โซนที่พบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad จะถูกย้ายไปที่เลเยอร์ Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2656
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2658
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr "ละเว้นรูปร่างรูปหลายเหลี่ยมชนิด %d (ยังไม่ได้รับการสนับสนุน)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2669
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2671
 #, fuzzy, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr "ละเว้นรูปร่างรูปหลายเหลี่ยมชนิด %d (ยังไม่ได้รับการสนับสนุน)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2826
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2828
 msgid "Loading zone fills..."
 msgstr "กําลังโหลดการเติมโซน..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:2901
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:2903
 msgid "Loading arcs..."
 msgstr "กําลังโหลดส่วนโค้ง..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3153
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3155
 msgid "Loading pads..."
 msgstr "กำลังอ่านแพ็ด…"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3313
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3315
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ไม่ได้ทำเครื่องหมายเป็นชนิดหลายเลเยอร์, แต่แพ็ดชนิด TH เป็น"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3326
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3328
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ไม่ได้ทำเครื่องหมายเป็นชนิดหลายเลเยอร์, แต่แพ็ดชนิด TH เป็น"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3355
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3357
 #, fuzzy, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีรูเจาะเป็นสี่เหลี่ยม (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3368
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3370
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีรูเจาะเป็นสี่เหลี่ยม (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3403
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3405
 #, fuzzy, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45796,38 +45796,38 @@ msgid ""
 "90 degree rotations."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีรูเจาะหมุมเป็นมุม %f องศา ใน KiCad สนับสนุน 90 องศาเท่านั้น"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3418
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3420
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีรูเจาะหมุมเป็นมุม %f องศา ใน KiCad สนับสนุน 90 องศาเท่านั้น"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3438
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3440
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีการใช้รูเจาะที่ไม่รู้จักชนิด %d"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3452
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3454
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีการใช้รูเจาะที่ไม่รู้จักชนิด %d"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3517
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3519
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ใช้รูปร่างแพ็ดที่ไม่รู้จัก"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3530
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3532
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ใช้รูปร่างแพ็ดที่ไม่รู้จัก"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3631
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3633
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -45836,7 +45836,7 @@ msgstr ""
 "แพ็ดที่ไม่ใช่ทองแดง %s พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
 "จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3659
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3661
 #, fuzzy, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -45846,7 +45846,7 @@ msgstr ""
 "แพ็ดที่ไม่ใช่ทองแดง %s พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
 "จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3674
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3676
 #, fuzzy, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -45855,71 +45855,71 @@ msgstr ""
 "แพ็ดที่ไม่ใช่ทองแดง %s พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
 "จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3704
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s เชื่อมต่อกับเน็ต ซึ่งยังไม่รองรับ"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3713
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3715
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s ไม่มีรูเจาะ ยังไม่รองรับ"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3723
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3725
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s มีแพ็ดสแต็กที่ซับซ้อน (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3870
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3872
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s ใช้รูปร่างที่ไม่รู้จัก"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3883
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3885
 msgid "Loading vias..."
 msgstr "กําลังโหลดเวีย..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3927
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3929
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "เวียจากเลเยอร์ %d ไป %d ใช้เลเยอร์ไม่ใช่ทองแดง ยังไม่สนับสนุน"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3990
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3992
 msgid "Loading tracks..."
 msgstr "กำลังโหลดแทร็ก..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4207
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4209
 msgid "Loading unicode strings..."
 msgstr "กําลังอ่านข้อความ..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4221
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4223
 msgid "Loading text..."
 msgstr "กําลังโหลดข้อความ..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4255
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "บาร์โค้ดถูกละเว้นบนเลเยอร์ Altium %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4275
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4277
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "บาร์โค้ดถูกละเว้นบนเลเยอร์ Altium %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4288
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4290
 #, fuzzy, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr "บาร์โค้ดถูกละเว้นบนเลเยอร์ Altium %d (ยังไม่รองรับ)"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4488
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4490
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr ""
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4644
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4646
 msgid "Loading rectangles..."
 msgstr "กําลังโหลดสี่เหลี่ยมผืนผ้า..."
 
@@ -51598,7 +51598,7 @@ msgstr "เลือกมุมเพื่อเพิ่มมุมใหม
 msgid "Set Relative Position Interactively"
 msgstr "ทำซ้ำตำแหน่งเพิ่มขึ้น"
 
-#: pcbnew/tools/position_relative_tool.cpp:422
+#: pcbnew/tools/position_relative_tool.cpp:431
 msgid "Position Relative"
 msgstr "ตําแหน่งสัมพัทธ์"
 
