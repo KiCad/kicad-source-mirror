@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-10 06:58+0000\n"
+"PO-Revision-Date: 2025-12-13 17:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -12310,7 +12310,7 @@ msgstr "向左对齐"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:128
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:54
 msgid "Align horizontal center"
-msgstr "水平居中对齐"
+msgstr "左右对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:63
@@ -12333,7 +12333,7 @@ msgstr "顶部对齐"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:148
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:81
 msgid "Align vertical center"
-msgstr "垂直居中对齐"
+msgstr "上下对齐"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:202
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:90
@@ -35522,6 +35522,7 @@ msgid "Group name:"
 msgstr "分组名称:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
+#, fuzzy
 msgid "Prevents group from being moved on canvas"
 msgstr "防止组在画布上被移动"
 
@@ -49245,21 +49246,21 @@ msgstr "将所选项目与光标下项目的右边缘对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1925
 msgid "Align to Vertical Center"
-msgstr "垂直居中"
+msgstr "上下对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1926
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "将所选项目与光标下项目垂直居中对齐"
+msgstr "将所选项目对齐到光标所指的项目的垂直中心"
 
 #: pcbnew/tools/pcb_actions.cpp:1932
 msgid "Align to Horizontal Center"
-msgstr "水平居中"
+msgstr "左右对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1933
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "将所选项目与光标下项目水平居中对齐"
+msgstr "将所选项目对齐到光标所指的项目的水平中心"
 
 #: pcbnew/tools/pcb_actions.cpp:1939
 msgid "Distribute Horizontally by Centers"
