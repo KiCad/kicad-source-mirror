@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 10:04+0300\n"
+"POT-Creation-Date: 2025-12-13 20:08+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2731,6 +2731,9 @@ msgstr "Failed to add file '%s'."
 
 msgid "Select a file to embed"
 msgstr "Select a file to embed"
+
+msgid "Embedded files inherited from a parent symbol cannot be removed."
+msgstr "Embedded files inherited from a parent symbol cannot be removed."
 
 msgid "Select a directory to export files"
 msgstr "Select a directory to export files"
@@ -9527,7 +9530,7 @@ msgstr ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
 
-msgid "Browse…"
+msgid "Browse..."
 msgstr "Browse…"
 
 msgid "Library prefix:"
@@ -27367,8 +27370,8 @@ msgstr "Microvias"
 msgid "Filter tracks by width:"
 msgstr "Filter tracks by width:"
 
-msgid "Filter vias by size:"
-msgstr "Filter vias by size:"
+msgid "Filter vias by diameter:"
+msgstr "Filter vias by diameter:"
 
 msgid "-- leave unchanged --  "
 msgstr "-- leave unchanged --  "
@@ -33112,6 +33115,9 @@ msgstr "Save Footprint Association File"
 msgid "Export to GenCAD"
 msgstr "Export to GenCAD"
 
+msgid "Board outline is malformed. Run DRC for a full analysis."
+msgstr "Board outline is malformed. Run DRC for a full analysis."
+
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
@@ -33121,9 +33127,6 @@ msgstr ""
 
 msgid "They have been exported as oval pads."
 msgstr "They have been exported as oval pads."
-
-msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Board outline is malformed. Run DRC for a full analysis."
 
 msgid "Export Hyperlynx Layout"
 msgstr "Export Hyperlynx Layout"
@@ -41531,6 +41534,12 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Browse…"
+#~ msgstr "Browse…"
+
+#~ msgid "Filter vias by size:"
+#~ msgstr "Filter vias by size:"
 
 #~ msgid "A library table row nickname and path cells are empty."
 #~ msgstr "A library table row nickname and path cells are empty."
@@ -76690,9 +76699,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Drawing sheet file"
 #~ msgstr "Drawing sheet file"
-
-#~ msgid "Browse..."
-#~ msgstr "Browse…"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
