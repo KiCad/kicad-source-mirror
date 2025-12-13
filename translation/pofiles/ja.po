@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 10:04+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-13 17:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -2873,7 +2873,7 @@ msgstr "カスタム"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
 msgid "Data Source Name"
-msgstr "データソース名"
+msgstr "データ ソース名"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -17443,7 +17443,7 @@ msgid ""
 "sources extend KiCad by linking schematic items to external data providers."
 msgstr ""
 "回路図データをプラグイン＆コンテンツ マネージャー(PCM)でインストールします。"
-"KiCADのデータ ソース拡張は、回路図アイテムを外部データ提供者にリンクすること"
+"KiCad のデータ ソース拡張は、回路図アイテムを外部データ提供者にリンクすること"
 "で行われます。"
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:63
@@ -30720,7 +30720,7 @@ msgstr "ライブラリ (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
 #, c-format
 msgid "Data sources (%d)"
-msgstr "データソース (%d)"
+msgstr "データ ソース (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
