@@ -790,6 +790,7 @@ void DIALOG_LIB_FIELDS_TABLE::OnFilterText( wxCommandEvent& event )
 
 void DIALOG_LIB_FIELDS_TABLE::OnFilterMouseMoved(wxMouseEvent& aEvent)
 {
+#if defined( __WXOSX__ ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
     int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
@@ -801,6 +802,7 @@ void DIALOG_LIB_FIELDS_TABLE::OnFilterMouseMoved(wxMouseEvent& aEvent)
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );
+#endif
 }
 
 

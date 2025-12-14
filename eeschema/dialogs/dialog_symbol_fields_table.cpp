@@ -870,7 +870,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
 {
-#if defined( __WXOSX__ ) || wxCHECK_VERSION( 3, 3, 0 ) // Doesn't work properly on other ports
+#if defined( __WXOSX__ ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
     int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
