@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-15 11:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -10032,7 +10032,7 @@ msgstr "Footprint nicht gefunden."
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "Footprint-Bibliotheken laden"
+msgstr "Lade Footprint-Bibliotheken"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -19418,11 +19418,13 @@ msgstr ""
 "können importiert werden."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Unzulässige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr ""
+"Konnte Datei \"%s\" nicht lesen.\n"
+"\"%s\" in Zeile %d, Spalte %d, Versatz %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -36657,7 +36659,7 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
-"Wählen Sie aus, ob die Footprint-Referenzen aktualisiert werden sollen damit "
+"Wählen Sie aus, ob die Footprintreferenzen aktualisiert werden sollen damit "
 "diese mit den aktuell zugewiesenen Symbolen übereinstimmen, oder ob den "
 "Footprints die Symbole zugewiesen werden sollen, die deren aktuellen "
 "Referenzen entsprechen."
@@ -38655,7 +38657,7 @@ msgstr "Objekt Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:107
 msgid "Footprint Reference Properties"
-msgstr "Footprint-Referenz-Eigenschaften"
+msgstr "Footprintreferenz-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:108
 msgid "Reference:"
@@ -47670,18 +47672,21 @@ msgstr ""
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Die erste Phase der Initialisierung des Pythonmoduls \"%s\" über die Python-"
+"C-API schlug fehl."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Skriptkonsole"
+msgstr "Scripting-Initialisierung"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Die zweite Phase der Initialisierung des Pythonmoduls \"%s\" über die Python-"
+"C-API schlug fehl."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -52526,9 +52531,8 @@ msgid "Filled Area"
 msgstr "Gefüllte Flächen"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Regelbereich"
+msgstr "Umrissfläche"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
