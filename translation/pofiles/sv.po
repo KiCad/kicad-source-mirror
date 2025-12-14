@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-14 20:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -4668,7 +4668,7 @@ msgstr "Välj en fil att bädda in"
 
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Inbäddade filer ärvda från en överordnad symbol kan inte tas bort."
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -33813,7 +33813,6 @@ msgstr ""
 "fyllts på nytt.\n"
 
 #: pcb_calculator/iec60664_help.h:2
-#, fuzzy
 msgid ""
 "The goal of the IEC60664-1 is to provide guidance on designing insulation "
 "for products that have a connection to mains supply.\n"
@@ -33834,8 +33833,8 @@ msgstr ""
 "\n"
 "Emellertid täcks vissa fall inte av denna kalkylator:\n"
 "\n"
-"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. "
-"IEC60664-4 behandlar dessa fall.\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
+"4 behandlar dessa fall.\n"
 "- Om täckande skikt eller ingjutning används för att skydda mot "
 "nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
 "isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
@@ -39330,9 +39329,8 @@ msgid "Filter tracks by width:"
 msgstr "Filtrera ledare efter bredd:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "Filtrera vior efter storlek:"
+msgstr "Filtrera vior efter diameter:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -40536,9 +40534,8 @@ msgstr "Planförsänkning"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3146
-#, fuzzy
 msgid "Backdrill"
-msgstr "Bakgrundsfyllning"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
