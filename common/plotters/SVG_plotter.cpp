@@ -683,10 +683,10 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
         img_stream.CopyTo( buffer.data(), buffer.size() );
         base64::encode( buffer, encoded );
 
+        VECTOR2D pos = userToDeviceCoordinates( start );
         fprintf( m_outputFile,
                  "<image x=\"%f\" y=\"%f\" xlink:href=\"data:image/png;base64,",
-                 userToDeviceSize( start.x ),
-                 userToDeviceSize( start.y ) );
+                 pos.x, pos.y );
 
         for( size_t i = 0; i < encoded.size(); i++ )
         {
