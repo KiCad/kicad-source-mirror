@@ -223,10 +223,11 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::unarchiveProject( TOOL_ACTION_ARGS()
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openProjectDirectory( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.OpenProjectDirectory" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Browse Project Files" ) )
 #ifdef __APPLE__
-        .Tooltip( _( "Reveal project folder in Finder" ) )
+        .FriendlyName( _( "Reveal Project in Finder" ) )
+        .Tooltip( _( "Open project folder in Finder" ) )
 #else
+        .FriendlyName( _( "Browse Project Files" ) )
         .Tooltip( _( "Open project directory in file explorer" ) )
 #endif
         .Icon( BITMAPS::directory_browser ) );
