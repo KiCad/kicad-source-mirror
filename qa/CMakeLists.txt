@@ -80,6 +80,7 @@ add_subdirectory( tests )
 
 # Utility/debugging/profiling programs
 add_subdirectory( tools )
+add_subdirectory( fuzz )
 
 if( KICAD_SIGNAL_INTEGRITY )
     #add_subdirectory( ibis )
