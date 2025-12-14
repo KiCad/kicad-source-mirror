@@ -44,15 +44,19 @@ static wxString paramValueString( const PARAM_CFG& aParam )
         case paramcfg_id::PARAM_INT:
             s << *static_cast<const PARAM_CFG_INT&>( aParam ).m_Pt_param;
             break;
+
         case paramcfg_id::PARAM_DOUBLE:
             s = wxString::FromCDouble( *static_cast<const PARAM_CFG_DOUBLE&>( aParam ).m_Pt_param );
             break;
+
         case paramcfg_id::PARAM_WXSTRING:
             s = *static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_Pt_param;
             break;
+
         case paramcfg_id::PARAM_BOOL:
             s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? wxS( "true" ) : wxS( "false" ) );
             break;
+
         default:
             wxLogError( wxS( "Unsupported PARAM_CFG variant: " ) + wxString::Format( wxS( "%d" ), aParam.m_Type ) );
         }
@@ -76,15 +80,19 @@ static wxString paramDefaultString( const PARAM_CFG& aParam )
         case paramcfg_id::PARAM_INT:
             s << static_cast<const PARAM_CFG_INT&>( aParam ).m_Default;
             break;
+
         case paramcfg_id::PARAM_DOUBLE:
             s = wxString::FromCDouble( static_cast<const PARAM_CFG_DOUBLE&>( aParam ).m_Default );
             break;
+
         case paramcfg_id::PARAM_WXSTRING:
             s << static_cast<const PARAM_CFG_WXSTRING&>( aParam ).m_default;
             break;
+
         case paramcfg_id::PARAM_BOOL:
             s << ( static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Default ? wxS( "true" ) : wxS( "false" ) );
             break;
+
         default:
             break;
         }
@@ -108,6 +116,7 @@ static void writeParam( PARAM_CFG& aParam, const wxString& aValue )
         *param.m_Pt_param = wxAtoi( aValue );
         break;
     }
+
     case paramcfg_id::PARAM_BOOL:
     {
         PARAM_CFG_BOOL& param = static_cast<PARAM_CFG_BOOL&>( aParam );
@@ -123,23 +132,27 @@ static void writeParam( PARAM_CFG& aParam, const wxString& aValue )
         }
         break;
     }
+
     case paramcfg_id::PARAM_DOUBLE:
     {
         PARAM_CFG_DOUBLE& param = static_cast<PARAM_CFG_DOUBLE&>( aParam );
         aValue.ToCDouble( param.m_Pt_param );
         break;
     }
+
     case paramcfg_id::PARAM_WXSTRING:
     {
         PARAM_CFG_WXSTRING& param = static_cast<PARAM_CFG_WXSTRING&>( aParam );
         *param.m_Pt_param = aValue;
         break;
     }
+
     default:
         wxASSERT_MSG( false, wxS( "Unsupported PARAM_CFG variant: " )
                                 + wxString::Format( wxS( "%d" ), aParam.m_Type ) );
     }
 }
+
 
 DIALOG_EDIT_CFG::DIALOG_EDIT_CFG( wxWindow* aParent ) :
         wxDialog( aParent, wxID_ANY, _( "Edit Advanced Configuration" ), wxDefaultPosition, wxDefaultSize,
@@ -157,8 +170,6 @@ DIALOG_EDIT_CFG::DIALOG_EDIT_CFG( wxWindow* aParent ) :
     m_grid->HideCol( 2 );
     m_grid->SetRowLabelSize( 0 );
     m_grid->SetupColumnAutosizer( 1 );
-
-    loadSettings();
 
     wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( this, wxID_OK, _( "OK" ) );
@@ -189,12 +200,9 @@ DIALOG_EDIT_CFG::DIALOG_EDIT_CFG( wxWindow* aParent ) :
 }
 
 
-void DIALOG_EDIT_CFG::loadSettings()
+bool DIALOG_EDIT_CFG::TransferDataToWindow()
 {
-    const ADVANCED_CFG&                            adv = ADVANCED_CFG::GetCfg();
-    const std::vector<std::unique_ptr<PARAM_CFG>>& entries = adv.GetEntries();
-
-    for( const auto& entry : entries )
+    for( const std::unique_ptr<PARAM_CFG>& entry : ADVANCED_CFG::GetCfg().GetEntries() )
     {
         wxString value = paramValueString( *entry );
         wxString def = paramDefaultString( *entry );
@@ -206,6 +214,18 @@ void DIALOG_EDIT_CFG::loadSettings()
         m_grid->SetReadOnly( row, 2 );
         updateRowAppearance( row );
     }
+
+    return true;
+}
+
+
+bool DIALOG_EDIT_CFG::TransferDataFromWindow()
+{
+    if( !m_grid->CommitPendingChanges() )
+        return false;
+
+    saveSettings();
+    return true;
 }
 
 
@@ -222,8 +242,7 @@ void DIALOG_EDIT_CFG::saveSettings()
         if( key.IsEmpty() || ext != wxS( "1" ) )
             continue;
 
-        const std::vector<std::unique_ptr<PARAM_CFG>>& entries = ADVANCED_CFG::GetCfg().GetEntries();
-        for( auto& entry : entries )
+        for( const std::unique_ptr<PARAM_CFG>& entry : ADVANCED_CFG::GetCfg().GetEntries() )
         {
             if( entry->m_Ident == key )
             {
@@ -252,6 +271,7 @@ void DIALOG_EDIT_CFG::OnCellChange( wxGridEvent& aEvent )
     saveSettings();
 
     int lastRow = m_grid->GetNumberRows() - 1;
+
     if( !m_grid->GetCellValue( lastRow, 0 ).IsEmpty() || !m_grid->GetCellValue( lastRow, 1 ).IsEmpty() )
     {
         m_grid->AppendRows( 1 );
@@ -283,10 +303,7 @@ void DIALOG_EDIT_CFG::OnResetDefault( wxCommandEvent& aEvent )
     wxString key = m_grid->GetCellValue( m_contextRow, 0 );
     wxString def;
 
-    const ADVANCED_CFG&                            adv = ADVANCED_CFG::GetCfg();
-    const std::vector<std::unique_ptr<PARAM_CFG>>& entries = adv.GetEntries();
-
-    for( const auto& entry : entries )
+    for( const std::unique_ptr<PARAM_CFG>& entry : ADVANCED_CFG::GetCfg().GetEntries() )
     {
         if( entry->m_Ident == key )
         {

@@ -30,8 +30,10 @@ class DIALOG_EDIT_CFG : public wxDialog
 public:
     DIALOG_EDIT_CFG( wxWindow* aParent );
 
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
 private:
-    void loadSettings();
     void saveSettings();
     void OnCellChange( wxGridEvent& aEvent );
     void OnCellRightClick( wxGridEvent& aEvent );
