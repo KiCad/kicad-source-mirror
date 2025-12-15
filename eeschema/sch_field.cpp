@@ -193,57 +193,6 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     // Use local depth counter so each text element starts fresh
     int depth = 0;
 
-    std::function<bool( wxString* )> libSymbolResolver = [&]( wxString* token ) -> bool
-    {
-        LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( token, depth + 1 );
-    };
-
-    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
-    {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( aPath, token, depth + 1 );
-    };
-
-    std::function<bool( wxString* )> schematicResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        if( SCHEMATIC* schematic = Schematic() )
-            return schematic->ResolveTextVar( aPath, token, depth + 1 );
-
-        return false;
-    };
-
-    std::function<bool( wxString* )> sheetResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-
-        SCHEMATIC*     schematic = Schematic();
-        SCH_SHEET_PATH path = *aPath;
-        path.push_back( sheet );
-
-        bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
-
-        if( schematic )
-            retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
-
-        return retval;
-    };
-
-    std::function<bool( wxString* )> labelResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-        return label->ResolveTextVar( aPath, token, depth + 1 );
-    };
-
     wxString variantName;
 
     if( SCHEMATIC* schematic = Schematic() )
@@ -255,32 +204,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
         text = GetShownName() << wxS( ": " ) << text;
 
     if( HasTextVars() )
-    {
-        // Create a unified resolver that delegates to the appropriate resolver based on parent type
-        std::function<bool( wxString* )> fieldResolver = [&]( wxString* token ) -> bool
-        {
-            bool resolved = false;
-
-            if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
-                resolved = libSymbolResolver( token );
-            else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-                resolved = symbolResolver( token );
-            else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-                resolved = sheetResolver( token );
-            else if( m_parent && m_parent->IsType( labelTypes ) )
-                resolved = labelResolver( token );
-            else if( Schematic() )
-            {
-                // Project-level and schematic-level variables
-                resolved = Schematic()->Project().TextVarResolver( token );
-                resolved |= schematicResolver( token );
-            }
-
-            return resolved;
-        };
-
-        text = ResolveTextVars( text, &fieldResolver, depth );
-    }
+        text = ResolveText( text, aPath, depth );
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
@@ -1251,13 +1175,15 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     int                  penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
 
     COLOR4D bg = renderSettings->GetBackgroundColor();
-    ;
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
     if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
+
+    if( color.m_text.has_value() && Schematic() )
+        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
 
     if( aDimmed )
     {

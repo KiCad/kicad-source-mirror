@@ -736,6 +736,9 @@ void SCH_PIN::PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition,
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
+    if( color.m_text.has_value() && Schematic() )
+        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+
     if( aDimmed )
     {
         color.Desaturate( );
@@ -906,6 +909,12 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
+
+    if( nameColor.m_text.has_value() && Schematic() )
+        nameColor = COLOR4D( ResolveText( nameColor.m_text.value(), &Schematic()->CurrentSheet() ) );
+
+    if( numColor.m_text.has_value() && Schematic() )
+        numColor = COLOR4D( ResolveText( numColor.m_text.value(), &Schematic()->CurrentSheet() ) );
 
     if( aDimmed )
     {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,15 +74,18 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	bSizerPanels->Add( sbSizerViewRGB, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizerViewHSV;
-	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("HSV") ), wxVERTICAL );
+	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("HSV") ), wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeftCol;
+	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	m_HsvBitmap = new wxStaticBitmap( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_HsvBitmap->SetMinSize( wxSize( 264,264 ) );
 
-	sbSizerViewHSV->Add( m_HsvBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND|wxSHAPED, 5 );
+	bSizerLeftCol->Add( m_HsvBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND|wxSHAPED, 5 );
 
 
-	sbSizerViewHSV->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerLeftCol->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerHSV;
 	fgSizerHSV = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -106,23 +109,26 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	fgSizerHSV->Add( m_spinCtrlSaturation, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerViewHSV->Add( fgSizerHSV, 0, wxEXPAND, 5 );
+	bSizerLeftCol->Add( fgSizerHSV, 0, wxEXPAND, 5 );
 
 
-	bSizerPanels->Add( sbSizerViewHSV, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerViewHSV->Add( bSizerLeftCol, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerBright;
 	bSizerBright = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextBright = new wxStaticText( m_panelFreeColors, wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBright = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBright->Wrap( -1 );
 	bSizerBright->Add( m_staticTextBright, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_sliderBrightness = new wxSlider( m_panelFreeColors, wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerBright->Add( m_sliderBrightness, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxTOP, 5 );
+	m_sliderBrightness = new wxSlider( sbSizerViewHSV->GetStaticBox(), wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
+	bSizerBright->Add( m_sliderBrightness, 1, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT, 5 );
 
 
-	bSizerPanels->Add( bSizerBright, 0, wxALL|wxEXPAND, 5 );
+	sbSizerViewHSV->Add( bSizerBright, 0, wxEXPAND, 5 );
+
+
+	bSizerPanels->Add( sbSizerViewHSV, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerUpperFreeColors->Add( bSizerPanels, 1, wxEXPAND, 5 );

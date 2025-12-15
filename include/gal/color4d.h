@@ -395,6 +395,9 @@ public:
     double b; ///< Blue component
     double a; ///< Alpha component
 
+    // Optional text for evaluated colors
+    std::optional<wxString> m_text;
+
     /// For legacy support; used as a value to indicate color hasn't been set yet
     static const COLOR4D UNSPECIFIED;
 

@@ -34,9 +34,8 @@ wxDEFINE_EVENT( COLOR_SWATCH_CHANGED, wxCommandEvent );
 using KIGFX::COLOR4D;
 
 
-wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackground,
-                                   const wxSize& aSize, const wxSize& aCheckerboardSize,
-                                   const COLOR4D& aCheckerboardBackground,
+wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackground, const wxSize& aSize,
+                                   const wxSize& aCheckerboardSize, const COLOR4D& aCheckerboardBackground,
                                    const std::vector<int>& aMargins )
 {
     wxBitmap   bitmap( aSize );
@@ -52,9 +51,8 @@ wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackgr
 
 wxBitmap COLOR_SWATCH::makeBitmap()
 {
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( m_color, m_background,
-                                                ToPhys( m_size ), ToPhys( m_checkerboardSize ),
-                                                m_checkerboardBg );
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( m_color, m_background, ToPhys( m_size ),
+                                                ToPhys( m_checkerboardSize ), m_checkerboardBg );
 
     bitmap.SetScaleFactor( GetDPIScaleFactor() );
     return bitmap;
@@ -65,7 +63,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
                                const wxRect& aRect, const wxSize& aCheckerboardSize,
                                const KIGFX::COLOR4D& aCheckerboardBackground, const std::vector<int>& aMargins )
 {
-    wxColor fg = aColor.ToColour();
+    wxColor fg = aColor.m_text.has_value() ? COLOR4D::UNSPECIFIED.ToColour() : aColor.ToColour();
 
     wxBrush brush;
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
@@ -77,7 +75,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
     COLOR4D black;
     bool    rowCycle;
 
-    if( aColor == COLOR4D::UNSPECIFIED )
+    if( aColor.m_text.has_value() || aColor == COLOR4D::UNSPECIFIED )
     {
         if( aCheckerboardBackground.GetBrightness() > 0.4 )
         {
@@ -117,9 +115,9 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
             wxColor bg = colCycle ? black.ToColour() : white.ToColour();
 
             // Blend fg bg with the checkerboard
-            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), aColor.a );
-            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), aColor.a );
-            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), aColor.a );
+            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() );
+            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() );
+            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() );
 
             brush.SetColour( r, g, b );
 
@@ -148,9 +146,8 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
 }
 
 
-COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
-                            const COLOR4D& aBackground, const COLOR4D& aDefault,
-                            SWATCH_SIZE aSwatchSize, bool aTriggerWithSingleClick ) :
+COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID, const COLOR4D& aBackground,
+                            const COLOR4D& aDefault, SWATCH_SIZE aSwatchSize, bool aTriggerWithSingleClick ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
@@ -184,8 +181,8 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
 }
 
 
-COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aPos,
-                            const wxSize& aSize, long aStyle ) :
+COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aPos, const wxSize& aSize,
+                            long aStyle ) :
         wxPanel( aParent, aID, aPos, aSize, aStyle ),
         m_userColors( nullptr ),
         m_readOnly( false ),
@@ -319,8 +316,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
         return;
     }
 
-    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, m_supportsOpacity,
-                                m_userColors, m_default );
+    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, m_supportsOpacity, m_userColors, m_default );
 
     if( dialog.ShowModal() == wxID_OK )
     {

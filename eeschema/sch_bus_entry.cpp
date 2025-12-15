@@ -480,6 +480,9 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PL
     COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED )
                             ? renderSettings->GetLayerColor( m_layer ) : GetBusEntryColor();
 
+    if( color.m_text.has_value() && Schematic() )
+        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+
     int penWidth = ( GetPenWidth() == 0 ) ? renderSettings->GetDefaultPenWidth() : GetPenWidth();
 
     penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );

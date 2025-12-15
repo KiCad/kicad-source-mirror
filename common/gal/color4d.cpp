@@ -107,13 +107,14 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     g = colorRefs()[candidate].m_Green / 255.0;
     b = colorRefs()[candidate].m_Blue / 255.0;
     a = 1.0;
+    m_text = std::nullopt;
 }
 
 
 COLOR4D::COLOR4D( const wxString& aColorStr )
 {
-    if( !SetFromHexString( aColorStr ) )
-        SetFromWxString( aColorStr );
+    if( !SetFromHexString( aColorStr ) && !SetFromWxString( aColorStr ) )
+        m_text = aColorStr;
 }
 
 
@@ -123,6 +124,7 @@ COLOR4D::COLOR4D( const wxColour& aColor )
     g = aColor.Green() / 255.0;
     b = aColor.Blue() / 255.0;
     a = aColor.Alpha() / 255.0;
+    m_text = std::nullopt;
 }
 
 
@@ -136,6 +138,7 @@ bool COLOR4D::SetFromWxString( const wxString& aColorString )
         g = c.Green() / 255.0;
         b = c.Blue() / 255.0;
         a = c.Alpha() / 255.0;
+        m_text = std::nullopt;
 
         return true;
     }
@@ -202,6 +205,8 @@ bool COLOR4D::SetFromHexString( const wxString& aColorString )
         b = (  tmp        & 0xFF ) / 255.0;
         a = 1.0;
     }
+
+    m_text = std::nullopt;
 
     return true;
 }
@@ -362,6 +367,8 @@ void COLOR4D::FromHSL( double aInHue, double aInSaturation, double aInLightness 
         r += P;
         b += Q;
     }
+
+    m_text = std::nullopt;
 }
 
 
@@ -490,6 +497,8 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
         b = q;
         break;
     }
+
+    m_text = std::nullopt;
 }
 
 
@@ -580,6 +589,7 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
     g = std::clamp( aGreen, 0, 255 ) / 255.0;
     b = std::clamp( aBlue, 0, 255 ) / 255.0;
     a = std::clamp( aAlpha, 0.0, 1.0 );
+    m_text = std::nullopt;
 
     return *this;
 }
@@ -587,6 +597,22 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 
 int COLOR4D::Compare( const COLOR4D& aRhs ) const
 {
+    if( m_text.has_value() && aRhs.m_text.has_value() )
+    {
+        if( m_text.value() == aRhs.m_text.value() )
+            return 0;
+        else
+            return m_text.value() < aRhs.m_text.value() ? -1 : 1;
+    }
+    else if( m_text.has_value() )
+    {
+        return -1;
+    }
+    else if( aRhs.m_text.has_value() )
+    {
+        return 1;
+    }
+
     if( r != aRhs.r )
         return ( r < aRhs.r ) ? -1 : 1;
 

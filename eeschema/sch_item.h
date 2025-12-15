@@ -277,6 +277,8 @@ public:
     bool ResolveDNP( const SCH_SHEET_PATH* aInstance = nullptr,
                      const wxString& aVariantName = wxEmptyString ) const;
 
+    wxString ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth = 0 ) const;
+
     /**
      * Check if object is movable from the anchor point.
      *

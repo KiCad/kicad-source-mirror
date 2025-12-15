@@ -189,8 +189,13 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     int pY = m_pos.y;
     int penWidth = GetEffectivePenWidth( getRenderSettings( aPlotter ) );
 
+    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT );
+
+    if( color.m_text.has_value() && Schematic() )
+        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+
     aPlotter->SetCurrentLineWidth( penWidth );
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT ) );
+    aPlotter->SetColor( color );
     aPlotter->MoveTo( VECTOR2I( pX - delta, pY - delta ) );
     aPlotter->FinishTo( VECTOR2I( pX + delta, pY + delta ) );
     aPlotter->MoveTo( VECTOR2I( pX + delta, pY - delta ) );

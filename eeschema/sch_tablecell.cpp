@@ -342,7 +342,8 @@ void SCH_TABLECELL::SetRowHeight( int aHeight )
 void SCH_TABLECELL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts, int aUnit,
                           int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    const int cell_body_style = -1; // flage to disable box ouline plotting
+    const int cell_body_style = -1; // flag to disable box ouline plotting
+
     if( m_colSpan >= 1 && m_rowSpan >= 1 )
         SCH_TEXTBOX::Plot( aPlotter, aBackground, aPlotOpts, aUnit, cell_body_style, aOffset, aDimmed );
 }

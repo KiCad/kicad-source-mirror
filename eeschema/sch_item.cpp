@@ -45,6 +45,9 @@
 #define BITMAP_FONT_SIZE_THRESHOLD 3
 
 
+static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
+
+
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
@@ -330,6 +333,100 @@ bool SCH_ITEM::ResolveDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVar
     }
 
     return false;
+}
+
+
+wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth ) const
+{
+    // Use local depth counter so each text element starts fresh
+    int depth = 0;
+
+    std::function<bool( wxString* )> libSymbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
+                return symbol->ResolveTextVar( token, depth + 1 );
+            };
+
+    std::function<bool( wxString* )> symbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+                return symbol->ResolveTextVar( aPath, token, depth + 1 );
+            };
+
+    std::function<bool( wxString* )> schematicResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( !aPath )
+                    return false;
+
+                if( SCHEMATIC* schematic = Schematic() )
+                    return schematic->ResolveTextVar( aPath, token, depth + 1 );
+
+                return false;
+            };
+
+    std::function<bool( wxString* )> sheetResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( !aPath )
+                    return false;
+
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+
+                SCHEMATIC*     schematic = Schematic();
+                SCH_SHEET_PATH path = *aPath;
+                path.push_back( sheet );
+
+                bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
+
+                if( schematic )
+                    retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
+
+                return retval;
+            };
+
+    std::function<bool( wxString* )> labelResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( !aPath )
+                    return false;
+
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+                return label->ResolveTextVar( aPath, token, depth + 1 );
+            };
+
+    wxString variantName;
+
+    if( SCHEMATIC* schematic = Schematic() )
+        variantName = schematic->GetCurrentVariant();
+
+    // Create a unified resolver that delegates to the appropriate resolver based on parent type
+    std::function<bool( wxString* )> fieldResolver =
+            [&]( wxString* token ) -> bool
+            {
+                bool resolved = false;
+
+                if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+                    resolved = libSymbolResolver( token );
+                else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+                    resolved = symbolResolver( token );
+                else if( m_parent && m_parent->Type() == SCH_SHEET_T )
+                    resolved = sheetResolver( token );
+                else if( m_parent && m_parent->IsType( labelTypes ) )
+                    resolved = labelResolver( token );
+                else if( Schematic() )
+                {
+                    // Project-level and schematic-level variables
+                    resolved = Schematic()->Project().TextVarResolver( token );
+                    resolved |= schematicResolver( token );
+                }
+
+                return resolved;
+            };
+
+    return ResolveTextVars( aText, &fieldResolver, depth );
 }
 
 

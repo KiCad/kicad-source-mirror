@@ -91,7 +91,10 @@ public:
                          const KIGFX::COLOR4D& aDefaultColor = KIGFX::COLOR4D::UNSPECIFIED );
 	~DIALOG_COLOR_PICKER();
 
-	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
+	KIGFX::COLOR4D GetColor()
+    {
+        return KIGFX::COLOR4D( m_colorValue->GetValue() );
+    };
 
 private:
     /* When the dialog is created, the mouse cursor can be on the RGB or HSV palette selector

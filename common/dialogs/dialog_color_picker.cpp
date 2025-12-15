@@ -142,7 +142,7 @@ void DIALOG_COLOR_PICKER::updatePreview( wxStaticBitmap* aStaticBitmap, COLOR4D&
 
 bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 {
-    SetEditVals( ALL_CHANGED, false );
+    SetEditVals( HEX_CHANGED, false );
 
     // Configure the spin control sizes
     configureSpinCtrl( m_spinCtrlGreen );
@@ -564,10 +564,11 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
     if( aChanged != VAL_CHANGED )
         m_sliderBrightness->SetValue(normalizeToInt( m_val ) );
 
-    if( aChanged == HEX_CHANGED )
-        m_sliderTransparency->SetValue( normalizeToInt( m_newColor4D.a, ALPHA_MAX ) );
-    else
+    if( aChanged != HEX_CHANGED )
+    {
+        m_newColor4D.m_text = std::nullopt;
         m_colorValue->ChangeValue( m_newColor4D.ToHexString() );
+    }
 }
 
 
@@ -751,12 +752,10 @@ void DIALOG_COLOR_PICKER::onSize( wxSizeEvent& event )
 void DIALOG_COLOR_PICKER::OnColorValueText( wxCommandEvent& event )
 {
     if( m_newColor4D.SetFromHexString( m_colorValue->GetValue() ) )
-    {
         m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
 
-        SetEditVals( HEX_CHANGED, false );
-        drawAll();
-    }
+    SetEditVals( HEX_CHANGED, false );
+    drawAll();
 }
 
 

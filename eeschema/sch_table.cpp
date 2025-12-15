@@ -445,6 +445,9 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
                 if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
                     color = settings->GetLayerColor( m_layer );
 
+                if( color.m_text.has_value() && Schematic() )
+                    color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+
                 if( lineStyle == LINE_STYLE::DEFAULT )
                     lineStyle = LINE_STYLE::SOLID;
 
