@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-13 17:07+0000\n"
+"PO-Revision-Date: 2025-12-15 11:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2156,18 +2156,18 @@ msgstr ""
 "Váratlan mappa \"%s\" található a(z) \"%s\" könyvtár elérési útvonalában."
 
 #: common/design_block_io.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "a(z) \"%s\" könyvtár nem törölhető"
+msgstr "A(z) \"%s\" terv blokk könyvtár nem törölhető."
 
 #: common/design_block_io.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "A(z) '%s' fájl nem hozható létre."
+msgstr "A(z) \"%s\" terv blokk metaadat fájl nem olvasható."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr "A tervezési blokknak nincs érvényes könyvtári ID-je."
+msgstr "A terv blokknak nincs érvényes könyvtári azonosítója."
 
 #: common/design_block_io.cpp:362
 #, c-format
@@ -2175,9 +2175,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl nem létezik."
 
 #: common/design_block_io.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "A(z) '%s' fájl nem hozható létre."
+msgstr "A(z) '%s' terv blokk mappa nem hozható létre."
 
 #: common/design_block_io.cpp:393
 #, fuzzy, c-format
@@ -2185,19 +2185,19 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
 
 #: common/design_block_io.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "A(z) '%s' fájl nem hozható létre."
+msgstr "Nem sikerült menteni a(z) '%s' terv blokk metaadat fájlt."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Az adott elérési útvonal nem létezik"
+msgstr "A(z) \"%s\" terv blokk nem létezik."
 
 #: common/design_block_io.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "A(z) '%s' fájl nem hozható létre."
+msgstr "Nem sikerült törölni a(z) '%s' terv blokk mappát."
 
 #: common/design_block_lib_table.cpp:234
 #, c-format
@@ -2853,14 +2853,12 @@ msgid "Configure Global Library Table"
 msgstr "Globális könyvtártáblázat beállítása"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Furat kívül esik a tartományon"
+msgstr "Rácsméret X a tartományon kívül esik."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Furat kívül esik a tartományon"
+msgstr "Rácsméret Y a tartományon kívül esik."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: common/dialogs/git/dialog_git_repository_base.cpp:31
@@ -3081,9 +3079,8 @@ msgid "Import settings from a previous version at:"
 msgstr "Beállítások importálása egy előző verzióból:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Differenciális jelvezeték jelcsúszás kompenzálása"
+msgstr "Válasszon egy másik útvonalat"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -4726,12 +4723,12 @@ msgid "Library '%s' not found."
 msgstr "'%s' könyvtár nem található."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
-"A(z) \"%s\" fájl már létezik.\n"
-"Biztosan felülírja?"
+"A(z) \"%s\" mappa már létezik. Szeretné felülírni a már létező terv "
+"blokkokat?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:859
 #: eeschema/dialogs/panel_sym_lib_table.cpp:979
@@ -4741,9 +4738,9 @@ msgid "Migrate Library"
 msgstr "Könyvtár böngésző..."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájlt"
+msgstr "Nem sikerült menteni a(z) \"%s\" terv blokk könyvtár fájlt."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:927
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:953
@@ -4787,9 +4784,8 @@ msgid "Add Anyway"
 msgstr "Mindenképpen hozzáad"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1173
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Összes könyvtár metése"
+msgstr "Terv blokk könyvtárak"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1194
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1208
@@ -5001,9 +4997,8 @@ msgid "Failed to add file '%s'."
 msgstr "Nem sikerült hozzáadni a(z) \"%s\" fájlt."
 
 #: common/dialogs/panel_embedded_files.cpp:359
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Válasszon ki egy hangolandó értéket"
+msgstr "Válassza ki a beágyazandó fájlt"
 
 #: common/dialogs/panel_embedded_files.cpp:425
 #, fuzzy
@@ -5053,27 +5048,25 @@ msgstr "Betűtípusok beágyazása"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Másolat megtartása a használt betűtípusokból"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
 msgid "&Export..."
 msgstr "&Exportálás..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Alkatrészek:"
+msgstr "Alkatrészrajzolatok/forrszemek:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
-#, fuzzy
 msgid "Tracks:"
-msgstr "Vezetősáv:"
+msgstr "Vezetősávok:"
 
 #: common/dialogs/panel_grid_settings.cpp:137 common/tool/grid_menu.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:264
 #: common/dialogs/panel_grid_settings.cpp:308
@@ -7377,9 +7370,9 @@ msgid "Received %u of %u objects"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "%s -%s frissítve erre: %s"
+msgstr "* [frissítve] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:900
 #, c-format
@@ -7392,9 +7385,9 @@ msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:935
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Rács: %s (%s)"
+msgstr "* [elutasítva] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:940
 #, c-format
@@ -7659,11 +7652,11 @@ msgstr "Hiba: %s"
 #: common/http_lib/http_lib_connection.cpp:139
 #, c-format
 msgid "API Response:  %s"
-msgstr "API válasz: %s"
+msgstr "API válasz:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "API válasz: %s"
 
@@ -8113,9 +8106,8 @@ msgid "PCB: Render"
 msgstr "NYÁK: renderelés"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "A NYÁK-tervből származó szín használata"
+msgstr "ERC futtatása"
 
 #: common/jobs/job_sch_erc.cpp:39
 #, fuzzy
@@ -8123,18 +8115,16 @@ msgid "Schematic ERC Job Settings"
 msgstr "Netlista exportálása"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Kapcsolásirajz frissítése a NYÁK rajzból"
+msgstr "Kapcsolási rajz: ERC futtatása"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Eszközök"
+msgstr "Speciális: fájlok másolása"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Speciális: parancs futtatása"
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:45
 msgid "Archive"
@@ -8547,9 +8537,8 @@ msgid "DRC marker shadows"
 msgstr "Árnyékok megjelenítése"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Grid axes"
-msgstr "Rács beállítások"
+msgstr "Rács tengelyek"
 
 #: common/layer_id.cpp:153
 #, fuzzy
@@ -10371,17 +10360,14 @@ msgid "Never"
 msgstr "Soha"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "Kicsi célkereszt"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
 msgstr "Teljes képernyős célkereszt"
 
 #: common/widgets/gal_options_panel_base.cpp:141
-#, fuzzy
 msgid "Always show crosshairs"
 msgstr "Mindig mutassa a célkeresztet"
 
@@ -11497,10 +11483,10 @@ msgstr "Kiválasztott vezeték:"
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
 #: eeschema/design_block_utils.cpp:622
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr ""
-"Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
+"Hiba történt a(z) '%s' terv blokk '%s' könyvtárból történő betöltése során."
 
 #: eeschema/design_block_utils.cpp:47
 #, fuzzy, c-format
@@ -12278,9 +12264,8 @@ msgid "Description:"
 msgstr "Leírás:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Összes könyvtár metése"
+msgstr "Terv blokk tulajdonságok"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, fuzzy, c-format
@@ -17762,9 +17747,8 @@ msgstr "Szűrő kiválasztása"
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
 #: eeschema/sch_edit_frame.cpp:1954 eeschema/sch_edit_frame.cpp:1960
 #: eeschema/tools/sch_actions.cpp:149
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Tervezési Szabályok"
+msgstr "Terv blokkok"
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
 msgid "Input Pin"
@@ -40517,7 +40501,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
-#, fuzzy
 msgid "Override locks"
 msgstr "Zárolások felülírása"
 
@@ -46103,7 +46086,7 @@ msgid ""
 msgstr "%s: alkatrészrajzolat \"%s\" nem található egy könyvtárban sem.\n"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -50452,9 +50435,8 @@ msgid "Drag Arc Track"
 msgstr "Vezetősáv/via vonszolása"
 
 #: pcbnew/tools/edit_tool.cpp:1069
-#, fuzzy
 msgid "Edit Track Width/Via Size"
-msgstr "Vezetősáv szélesség / via méret szerkesztés"
+msgstr "Vezetősáv szélesség / via méret szerkesztése"
 
 #: pcbnew/tools/edit_tool.cpp:1104
 #, fuzzy
@@ -50541,9 +50523,8 @@ msgstr "Sokszögek egyszerűsítése"
 
 #: pcbnew/tools/edit_tool.cpp:1723 pcbnew/tools/edit_tool.cpp:1760
 #: pcbnew/tools/pcb_actions.cpp:630
-#, fuzzy
 msgid "Heal Shapes"
-msgstr "Teardrop Zóna"
+msgstr "Alakzatok javítása"
 
 #: pcbnew/tools/edit_tool.cpp:2461 pcbnew/tools/pcb_actions.cpp:547
 msgid "Change Side / Flip"
@@ -50609,30 +50590,28 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
+"Az alkatrészrajzolatot nem lehet hozzáadni a megadott könyvtárhoz (\"%s\"). "
+"A könyvtár csak olvasható."
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
 msgstr "_másolat"
 
 #: pcbnew/tools/footprint_editor_control.cpp:454
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Alkatrész nevének cseréje"
+msgstr "Alkatrészrajzolat nevének megváltoztatása"
 
 #: pcbnew/tools/footprint_editor_control.cpp:523
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "Szülő alkatrészrajzolatból"
+msgstr "Hiba az alkatrészrajzolat átnevezése során"
 
 #: pcbnew/tools/footprint_editor_control.cpp:726
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "Nincs megadva via furat"
+msgstr "Az alkatrészrajzolatban nem található adatlap."
 
 #: pcbnew/tools/footprint_editor_control.cpp:908
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "Nem található alkatrész."
+msgstr "Nem találtunk hibát az alkatrészrajzolatokkal."
 
 #: pcbnew/tools/generator_tool.cpp:173
 #, fuzzy
@@ -50683,24 +50662,20 @@ msgid "Remove Group Items"
 msgstr "Csoportelemek eltávolítása"
 
 #: pcbnew/tools/item_modification_routine.cpp:111
-#, fuzzy
 msgid "Unable to fillet the selected lines."
-msgstr "A szegmens nem vonszolható: két kollineáris szegmens"
+msgstr "Nem sikerült lekerekíteni a kijelölt éleket."
 
 #: pcbnew/tools/item_modification_routine.cpp:115
-#, fuzzy
 msgid "Some of the lines could not be filleted."
-msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
+msgstr "Nem sikerült lekerekíteni némely kijelölt élt."
 
 #: pcbnew/tools/item_modification_routine.cpp:206
-#, fuzzy
 msgid "Unable to chamfer the selected lines."
-msgstr "A szegmens nem vonszolható: két kollineáris szegmens"
+msgstr "A kijelölt élek letörése sikertelen."
 
 #: pcbnew/tools/item_modification_routine.cpp:210
-#, fuzzy
 msgid "Some of the lines could not be chamfered."
-msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
+msgstr "Nem sikerült letörni némely kijelölt élt."
 
 #: pcbnew/tools/item_modification_routine.cpp:265
 #, fuzzy
@@ -50753,14 +50728,12 @@ msgid "Merge polygons."
 msgstr "Sokszög rajzolása"
 
 #: pcbnew/tools/item_modification_routine.cpp:577
-#, fuzzy
 msgid "Unable to merge the selected polygons."
-msgstr "A szegmens nem vonszolható: két kollineáris szegmens"
+msgstr "Nem sikerült egyesíteni a kijelölt sokszögeket."
 
 #: pcbnew/tools/item_modification_routine.cpp:581
-#, fuzzy
 msgid "Some of the polygons could not be merged."
-msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
+msgstr "Némely sokszöget nem sikerült egyesíteni."
 
 #: pcbnew/tools/item_modification_routine.cpp:599
 #, fuzzy
@@ -50875,7 +50848,6 @@ msgid "Group components with their placement rule areas"
 msgstr "Komponens paraméterek:"
 
 #: pcbnew/tools/pad_tool.cpp:164
-#, fuzzy
 msgid "Paste Pad Properties"
 msgstr "Forrszem tulajdonságok beillesztése"
 
@@ -50894,7 +50866,6 @@ msgstr ""
 "dupla-klikkelés a befejezéshez"
 
 #: pcbnew/tools/pad_tool.cpp:433 pcbnew/tools/pad_tool.cpp:536
-#, fuzzy
 msgid "Renumber Pads"
 msgstr "Forrszemek újraszámozása"
 
@@ -50918,9 +50889,8 @@ msgid "Pad Edit Mode.  Press %s to exit."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:54
-#, fuzzy
 msgid "Create Polygon from Selection..."
-msgstr "Sokszög rajzolása"
+msgstr "Sokszög létrehozása a kijelölésből..."
 
 #: pcbnew/tools/pcb_actions.cpp:55
 #, fuzzy
@@ -50928,9 +50898,8 @@ msgid "Creates a graphic polygon from the selection"
 msgstr "Sokszög rajzolása"
 
 #: pcbnew/tools/pcb_actions.cpp:61
-#, fuzzy
 msgid "Create Zone from Selection..."
-msgstr "Kijelölésre nagyítás"
+msgstr "Zóna létrehozása a kijelölésből..."
 
 #: pcbnew/tools/pcb_actions.cpp:62
 #, fuzzy
@@ -50948,9 +50917,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Új könyvtár létrehozása a projekt számára"
 
 #: pcbnew/tools/pcb_actions.cpp:75
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "Vonal / sokszög hozzáadása"
+msgstr "Vonalak létrehozása a kijelölésből..."
 
 #: pcbnew/tools/pcb_actions.cpp:76
 #, fuzzy
@@ -50958,19 +50926,16 @@ msgid "Creates graphic lines from the selection"
 msgstr "Vonal / sokszög hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:82
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "Kijelölésre nagyítás"
+msgstr "Körív létrehozása a kijelölésből"
 
 #: pcbnew/tools/pcb_actions.cpp:83
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "Vonalszegmens rajzolása"
+msgstr "Körív létrehozása a kijelölt szegmensekből"
 
 #: pcbnew/tools/pcb_actions.cpp:89
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "Vonal / sokszög hozzáadása"
+msgstr "Vezetősáv létrehozása a kijelölésből"
 
 #: pcbnew/tools/pcb_actions.cpp:90
 #, fuzzy
@@ -50988,22 +50953,20 @@ msgid "Create outset lines from the selected item"
 msgstr "Vonal / sokszög hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:159
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Alapértelmezett forrpont tulajdonságok beállítása"
+msgstr "Panel tulajdonságok hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:160
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Paneltulajdonságok hozzáadása egy grafikai rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Csonk hozzáadása"
+msgstr "Rétegszerkezet táblázat hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "Rétegszerkezet táblázat hozzáadása egy grafikai rétegre"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Place Reference Images"
@@ -51085,17 +51048,14 @@ msgid "Draw Filled Zones"
 msgstr "Kitöltött zóna hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Place Vias"
 msgstr "Via hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:297
-#, fuzzy
 msgid "Place free-standing vias"
 msgstr "Szabadon álló via hozzáadása"
 
 #: pcbnew/tools/pcb_actions.cpp:316
-#, fuzzy
 msgid "Add a Zone Cutout"
 msgstr "Zóna-kivágás hozzáadása"
 
@@ -51105,7 +51065,6 @@ msgid "Add a cutout to an existing zone or rule area"
 msgstr "Kivágott terület hozzáadása zónához"
 
 #: pcbnew/tools/pcb_actions.cpp:327
-#, fuzzy
 msgid "Add a Similar Zone"
 msgstr "Hasonló zóna hozzáadása"
 
@@ -51351,18 +51310,16 @@ msgid "Merge selected polygons into a single polygon"
 msgstr "A kijelölt sokszögek egyesítése egyetlen sokszöggé"
 
 #: pcbnew/tools/pcb_actions.cpp:650
-#, fuzzy
 msgid "Subtract Polygons"
-msgstr "Sokszögek vázlat módban"
+msgstr "Sokszögek kivonása"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Subtract selected polygons from the last one selected"
 msgstr "A kijelölt sokszögek kivonása a legutoljára kijelöltből"
 
 #: pcbnew/tools/pcb_actions.cpp:657
-#, fuzzy
 msgid "Intersect Polygons"
-msgstr "Helytelen sokszög"
+msgstr "Sokszögek metszete"
 
 #: pcbnew/tools/pcb_actions.cpp:658
 #, fuzzy
@@ -54441,9 +54398,8 @@ msgid "Keep Out Footprints"
 msgstr "Alkatrészrajzolatok kizárása"
 
 #: pcbnew/zone.cpp:2033
-#, fuzzy
 msgid "Enable"
-msgstr "Engedélyez:"
+msgstr "Engedélyez"
 
 #: pcbnew/zone.cpp:2040
 #, fuzzy
