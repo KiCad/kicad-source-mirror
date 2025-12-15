@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-14 20:00+0000\n"
+"PO-Revision-Date: 2025-12-15 15:14+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:368
@@ -8344,9 +8344,8 @@ msgid "PCB: Export Postscript"
 msgstr "NYÁK: Postscript exportálása"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Nyákterv Statisztika megjelenítése"
+msgstr "Panel statisztika exportálása"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
 #, fuzzy
@@ -8354,9 +8353,8 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Netlista exportálása"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Statistics"
-msgstr "NYÁK Terv Statisztika"
+msgstr "NYÁK: statisztika exportálása"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:146 kicad/kicad_cli.cpp:165
@@ -8455,9 +8453,8 @@ msgid "PCB: Render"
 msgstr "NYÁK: renderelés"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "A NYÁK-tervből származó szín használata"
+msgstr "ERC futtatása"
 
 #: common/jobs/job_sch_erc.cpp:39
 #, fuzzy
@@ -8465,18 +8462,16 @@ msgid "Schematic ERC Job Settings"
 msgstr "Netlista exportálása"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Kapcsolásirajz frissítése a NYÁK rajzból"
+msgstr "Kapcsolási rajz: ERC futtatása"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Eszközök"
+msgstr "Speciális: fájlok másolása"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Speciális: parancs futtatása"
 
 #: common/jobs/jobs_output_archive.cpp:105 common/jobs/jobset.cpp:46
 msgid "Archive"
@@ -8890,9 +8885,8 @@ msgid "DRC marker shadows"
 msgstr "Árnyékok megjelenítése"
 
 #: common/layer_id.cpp:152
-#, fuzzy
 msgid "Grid axes"
-msgstr "Rács beállítások"
+msgstr "Rács tengelyek"
 
 #: common/layer_id.cpp:155
 #, fuzzy
@@ -8929,14 +8923,14 @@ msgid "Illegal character found in library nickname"
 msgstr "Érvénytelen karakter található a logikai könyvtárnévben"
 
 #: common/lib_table_grid_tricks.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Hiba történt a(z) \"%s\" rajzjel könyvtártáblázat betöltése során."
+msgstr "Hiba a(z) \"%s\" könyvtár táblázat betöltése közben"
 
 #: common/lib_table_grid_tricks.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr "Hiba történt a(z) %s rajzjel könyvtár betöltése során."
+msgstr "Hiba a(z) \"%s\" könyvtár betöltése közben"
 
 #: common/lib_table_grid_tricks.cpp:93
 #, fuzzy
@@ -8968,7 +8962,6 @@ msgid "Unset Visible Flag"
 msgstr "Megjelenítés"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
 msgstr "Beállítások szerkesztése"
 
@@ -8978,9 +8971,8 @@ msgid "Open Library Table"
 msgstr "Könyvtártáblázat kiválasztása"
 
 #: common/lib_table_grid_tricks.cpp:480
-#, fuzzy
 msgid "Library must have a nickname."
-msgstr "A rétegnek nevet kell adni."
+msgstr "A könyvtárnak nevet kell adni."
 
 #: common/lib_table_grid_tricks.cpp:482
 #, c-format
@@ -9093,14 +9085,12 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "A sugárnak nullánál nagyobbnak kell lennie."
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
-#, fuzzy
 msgid "Edit settings"
-msgstr "Haladó beállítások szerkesztése"
+msgstr "Beállítások szerkesztése"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Open library table"
-msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
+msgstr "Könyvtár táblázat megnyitása"
 
 #: common/libraries/lib_table_grid_data_model.cpp:335
 msgid "Nickname"
@@ -9115,9 +9105,8 @@ msgid "Library Format"
 msgstr "Könyvtár formátum"
 
 #: common/libraries/lib_table_grid_data_model.cpp:342 pcbnew/zone.cpp:1959
-#, fuzzy
 msgid "Enable"
-msgstr "Engedélyez:"
+msgstr "Engedélyez"
 
 #: common/libraries/lib_table_grid_data_model.cpp:343
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
@@ -9145,37 +9134,33 @@ msgid "Added by Plugin and Content Manager"
 msgstr "Plugin és tartalomkezelő által hozzáadott"
 
 #: common/libraries/library_manager.cpp:384
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Alapértelmezett"
+msgstr "KiCad alapértelmezett könyvtárak"
 
 #: common/libraries/library_manager.cpp:1034
 msgid "Library not found in library table"
 msgstr "A könyvtár nem található a könyvtártáblázatban"
 
 #: common/libraries/library_manager.cpp:1215
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "'%s' könyvtár nem található."
+msgstr "'%s' könyvtár nem található"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "A könyvtár elérési útvonala \"%s\" nem létezik!"
+msgstr "A könyvtár táblázat elérési útvonala \"%s\" nem létezik"
 
 #: common/libraries/library_table_parser.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr ""
-"Hiba történt az üres alkatrészrajzolat könyvtártáblázat fájl írása során.\n"
-"\n"
-"%s"
+msgstr "Váratlan hiba a könyvtár táblázat olvasása közben: %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:233
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Szintaktikai hiba: %zu. sor, %zu. oszlop"
 
 #: common/libraries/library_table_parser.cpp:219
 #, fuzzy
@@ -9208,12 +9193,11 @@ msgstr "Mappa törlése"
 
 #: common/local_history.cpp:1394
 msgid "Proceed"
-msgstr ""
+msgstr "Folytatás"
 
 #: common/local_history.cpp:1394
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Összes fájl"
+msgstr "Összes fájl megtartása"
 
 #: common/local_history.cpp:1394 eeschema/files-io.cpp:620
 msgid "Abort"
@@ -9327,7 +9311,7 @@ msgstr ""
 
 #: common/netlist_reader/netlist_reader.cpp:189
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
