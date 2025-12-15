@@ -683,6 +683,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             case SCH_GLOBAL_LABEL_T:
             {
                 SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( *static_cast<SCH_GLOBALLABEL*>( m_currentLabel ) );
+                const_cast<KIID&>( label->m_Uuid ) = KIID();     // Gives a new UUID to the copy
                 label->SetText( text );
                 m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
                 break;
@@ -690,6 +691,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             case SCH_HIER_LABEL_T:
             {
                 SCH_HIERLABEL* label = new SCH_HIERLABEL( *static_cast<SCH_HIERLABEL*>( m_currentLabel ) );
+                const_cast<KIID&>( label->m_Uuid ) = KIID();
                 label->SetText( text );
                 m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
                 break;
@@ -697,6 +699,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             case SCH_LABEL_T:
             {
                 SCH_LABEL* label = new SCH_LABEL( *static_cast<SCH_LABEL*>( m_currentLabel ) );
+                const_cast<KIID&>( label->m_Uuid ) = KIID();
                 label->SetText( text );
                 m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
                 break;
