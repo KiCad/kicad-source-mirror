@@ -699,6 +699,12 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     ShapeGetMsgPanelInfo( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
+
+    if( IsOnCopperLayer() )
+    {
+        if( GetNetCode() > 0 )  // Only graphics connected to a net have a netcode > 0
+            aList.emplace_back( _( "Net" ), GetNetname() );
+    }
 }
 
 
