@@ -25,10 +25,18 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_leftPanel = new wxPanel( m_splitterMainWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_splitter_left = new wxSplitterWindow( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
+	m_splitter_left->SetSashGravity( 0.7 );
+	m_splitter_left->SetMinimumPaneSize( 80 );
+
+	m_viewControlsPanel = new wxPanel( m_splitter_left, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bViewControlsSizer;
+	bViewControlsSizer = new wxBoxSizer( wxVERTICAL );
+
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_viewControlsGrid = new WX_GRID( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_viewControlsGrid = new WX_GRID( m_viewControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_viewControlsGrid->CreateGrid( 1, 4 );
@@ -67,12 +75,12 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	wxBoxSizer* bFieldsButtons;
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addFieldButton = new STD_BITMAP_BUTTON( m_viewControlsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_addFieldButton->SetToolTip( _("Add a new field") );
 
 	bFieldsButtons->Add( m_addFieldButton, 0, wxBOTTOM, 5 );
 
-	m_renameFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_renameFieldButton = new STD_BITMAP_BUTTON( m_viewControlsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_renameFieldButton->SetToolTip( _("Rename selected field") );
 
 	bFieldsButtons->Add( m_renameFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
@@ -80,7 +88,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bFieldsButtons->Add( 15, 0, 0, wxEXPAND, 5 );
 
-	m_removeFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_removeFieldButton = new STD_BITMAP_BUTTON( m_viewControlsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_removeFieldButton->SetToolTip( _("Remove selected field") );
 
 	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
@@ -88,46 +96,13 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bMargins->Add( bFieldsButtons, 0, wxEXPAND|wxTOP, 5 );
 
-	variantSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_staticline6 = new wxStaticLine( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	variantSizer->Add( m_staticline6, 0, wxEXPAND|wxTOP, 5 );
-
-	m_staticText9 = new wxStaticText( m_leftPanel, wxID_ANY, _("Variants:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	variantSizer->Add( m_staticText9, 0, wxBOTTOM|wxTOP, 5 );
-
-	m_variantListBox = new wxListBox( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	variantSizer->Add( m_variantListBox, 1, wxBOTTOM|wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_addVariantButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_addVariantButton, 0, wxRIGHT, 5 );
-
-	m_renameVariantButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_renameVariantButton, 0, 0, 5 );
-
-
-	bSizer14->Add( 15, 0, 0, 0, 5 );
-
-	m_deleteVariantButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_deleteVariantButton, 0, wxLEFT, 5 );
-
-
-	variantSizer->Add( bSizer14, 0, wxEXPAND, 5 );
-
-
-	bMargins->Add( variantSizer, 1, wxEXPAND, 5 );
-
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
-	m_staticline11 = new wxStaticLine( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bPresets->Add( m_staticline11, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	m_staticline11 = new wxStaticLine( m_viewControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bPresets->Add( m_staticline11, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bomPresetsLabel = new wxStaticText( m_viewControlsPanel, wxID_ANY, _("View presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
 	bPresets->Add( m_bomPresetsLabel, 0, 0, 5 );
 
@@ -136,18 +111,63 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	wxString m_cbBomPresetsChoices[] = { _("Default"), _("(unsaved)") };
 	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
-	m_cbBomPresets = new wxChoice( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
+	m_cbBomPresets = new wxChoice( m_viewControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
 	m_cbBomPresets->SetSelection( 0 );
 	bPresets->Add( m_cbBomPresets, 0, wxEXPAND, 5 );
 
 
-	bPresets->Add( 0, 2, 0, wxEXPAND, 5 );
+	bPresets->Add( 0, 5, 0, wxEXPAND, 5 );
 
 
 	bMargins->Add( bPresets, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bLeftSizer->Add( bMargins, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bViewControlsSizer->Add( bMargins, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_viewControlsPanel->SetSizer( bViewControlsSizer );
+	m_viewControlsPanel->Layout();
+	bViewControlsSizer->Fit( m_viewControlsPanel );
+	m_variantsPanel = new wxPanel( m_splitter_left, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bVariantsSizer;
+	bVariantsSizer = new wxBoxSizer( wxVERTICAL );
+
+	bMargins2 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticText9 = new wxStaticText( m_variantsPanel, wxID_ANY, _("Variants:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	bMargins2->Add( m_staticText9, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
+
+	m_variantListBox = new wxListBox( m_variantsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bMargins2->Add( m_variantListBox, 1, wxEXPAND|wxBOTTOM, 2 );
+
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_addVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer14->Add( m_addVariantButton, 0, wxRIGHT, 5 );
+
+	m_renameVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer14->Add( m_renameVariantButton, 0, 0, 5 );
+
+
+	bSizer14->Add( 15, 0, 0, 0, 5 );
+
+	m_deleteVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer14->Add( m_deleteVariantButton, 0, wxLEFT, 5 );
+
+
+	bMargins2->Add( bSizer14, 0, wxEXPAND|wxTOP|wxLEFT, 2 );
+
+
+	bVariantsSizer->Add( bMargins2, 1, wxALL|wxEXPAND, 3 );
+
+
+	m_variantsPanel->SetSizer( bVariantsSizer );
+	m_variantsPanel->Layout();
+	bVariantsSizer->Fit( m_variantsPanel );
+	m_splitter_left->SplitHorizontally( m_viewControlsPanel, m_variantsPanel, -1 );
+	bLeftSizer->Add( m_splitter_left, 1, wxEXPAND, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );

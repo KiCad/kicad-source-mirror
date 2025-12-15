@@ -574,6 +574,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "field_editor.sash_pos",
             &m_FieldEditorPanel.sash_pos, 400 ) );
 
+    m_params.emplace_back( new PARAM<int>( "field_editor.variant_sash_pos",
+            &m_FieldEditorPanel.variant_sash_pos, 500 ) );
+
     m_params.emplace_back( new PARAM<bool>( "field_editor.sidebar_collapsed",
             &m_FieldEditorPanel.sidebar_collapsed, false ) );
 

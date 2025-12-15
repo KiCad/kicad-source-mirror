@@ -28,15 +28,15 @@ class WX_GRID;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
-#include <wx/listbox.h>
 #include <wx/choice.h>
 #include <wx/panel.h>
+#include <wx/listbox.h>
+#include <wx/splitter.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/notebook.h>
-#include <wx/splitter.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,20 +52,22 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
 		wxBoxSizer* bLeftSizer;
+		wxSplitterWindow* m_splitter_left;
+		wxPanel* m_viewControlsPanel;
 		WX_GRID* m_viewControlsGrid;
 		STD_BITMAP_BUTTON* m_addFieldButton;
 		STD_BITMAP_BUTTON* m_renameFieldButton;
 		STD_BITMAP_BUTTON* m_removeFieldButton;
-		wxBoxSizer* variantSizer;
-		wxStaticLine* m_staticline6;
-		wxStaticText* m_staticText9;
-		wxListBox* m_variantListBox;
-		wxBitmapButton* m_addVariantButton;
-		wxBitmapButton* m_renameVariantButton;
-		wxBitmapButton* m_deleteVariantButton;
 		wxStaticLine* m_staticline11;
 		wxStaticText* m_bomPresetsLabel;
 		wxChoice* m_cbBomPresets;
+		wxPanel* m_variantsPanel;
+		wxBoxSizer* bMargins2;
+		wxStaticText* m_staticText9;
+		wxListBox* m_variantListBox;
+		STD_BITMAP_BUTTON* m_addVariantButton;
+		STD_BITMAP_BUTTON* m_renameVariantButton;
+		STD_BITMAP_BUTTON* m_deleteVariantButton;
 		wxPanel* m_rightPanel;
 		wxNotebook* m_nbPages;
 		wxPanel* m_panelEdit;

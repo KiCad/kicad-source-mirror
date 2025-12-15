@@ -255,6 +255,7 @@ public:
         int                        selection_mode;
         int                        sash_pos;
         bool                       sidebar_collapsed;
+        int                        variant_sash_pos;
     };
 
     struct PANEL_LIB_VIEW

@@ -60,7 +60,7 @@
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 #ifdef __WXMAC__
-#define COLUMN_MARGIN 3
+#define COLUMN_MARGIN 4
 #else
 #define COLUMN_MARGIN 15
 #endif
@@ -264,7 +264,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_variantListBox->Set( parent->Schematic().GetVariantNamesForUI() );
 
     if( !ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
-        bLeftSizer->Hide( variantSizer, true );
+        m_splitter_left->Unsplit( m_variantsPanel );
 
     // Load our BOM view presets
     SetUserBomPresets( m_schSettings.m_BomPresets );
@@ -351,6 +351,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
                        m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
 
                    setSideBarButtonLook( cfg.sidebar_collapsed );
+
+                   m_splitter_left->SetSashPosition( cfg.variant_sash_pos );
                } );
 
     if( m_job )
@@ -391,6 +393,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 
     if( !cfg.sidebar_collapsed )
         cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+    cfg.variant_sash_pos = m_splitter_left->GetSashPosition();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
