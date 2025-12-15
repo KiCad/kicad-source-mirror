@@ -24,9 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef COLOR4D_H_
-#define COLOR4D_H_
+#pragma once
 
+#include <optional>
 #include <kicommon.h>
 #include <wx/debug.h>
 #include <wx/colour.h>
@@ -434,5 +434,3 @@ struct KICOMMON_API std::hash<KIGFX::COLOR4D>
         return hash_val( aColor.r, aColor.b, aColor.g, aColor.a );
     }
 };
-
-#endif /* COLOR4D_H_ */
