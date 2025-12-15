@@ -134,7 +134,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bMargins2 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText9 = new wxStaticText( m_variantsPanel, wxID_ANY, _("Variants:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9 = new wxStaticText( m_variantsPanel, wxID_ANY, _("Schematic variants:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	bMargins2->Add( m_staticText9, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
 
