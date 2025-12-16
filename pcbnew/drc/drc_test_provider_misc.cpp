@@ -231,7 +231,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     // Arc to segment approximation error (not critical here: we do not use the outline shape):
     int maxError = pcbIUScale.mmToIU( 0.05 );
 
-    if( !BuildBoardPolygonOutlines( m_board, dummyOutline, maxError, chainingEpsilon, &errorHandler ) )
+    if( !BuildBoardPolygonOutlines( m_board, dummyOutline, maxError, chainingEpsilon, true, &errorHandler ) )
     {
         if( errorHandled )
         {
