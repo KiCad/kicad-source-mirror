@@ -92,4 +92,21 @@ if(KICAD_BUILD_FUZZ_TESTS)
     endif()
 
     add_fuzz_flags(qa_fuzz_pcb_sexpr)
+
+    set( PCB_KEYWORDS_FILE "${CMAKE_SOURCE_DIR}/common/pcb.keywords" )
+    set( PCB_DICT_FILE "${CMAKE_SOURCE_DIR}/qa/data/fuzz/dict/pcb.dict" )
+
+    add_custom_command(
+        OUTPUT ${PCB_DICT_FILE}
+        COMMAND ${CMAKE_COMMAND}
+            -DINPUT_FILE=${PCB_KEYWORDS_FILE}
+            -DOUTPUT_FILE=${PCB_DICT_FILE}
+            -P ${CMAKE_SOURCE_DIR}/cmake/keywords_to_dict.cmake
+        DEPENDS ${PCB_KEYWORDS_FILE} ${CMAKE_SOURCE_DIR}/cmake/keywords_to_dict.cmake
+        COMMENT "Generating libfuzzer dictionary from pcb.keywords"
+        VERBATIM
+    )
+
+    add_custom_target( qa_fuzz_dict ALL DEPENDS ${PCB_DICT_FILE} )
+
 endif()
