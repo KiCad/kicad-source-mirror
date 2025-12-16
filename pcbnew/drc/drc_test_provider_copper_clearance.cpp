@@ -192,16 +192,17 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
     int            actual;
     VECTOR2I       pos;
     bool           has_error = false;
-    NETINFO_ITEM*  net = nullptr;
+    NETINFO_ITEM*  itemNet = nullptr;
     NETINFO_ITEM*  otherNet = nullptr;
 
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-        net = connectedItem->GetNet();
-
-    NETINFO_ITEM*  itemNet = net;
+        itemNet = connectedItem->GetNet();
 
     if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other ) )
         otherNet = connectedItem->GetNet();
+
+    if( itemNet == otherNet )
+        testClearance = testShorting = false;
 
     std::shared_ptr<SHAPE> otherShape_shared_ptr;
 
@@ -230,6 +231,15 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
     SHAPE* otherShape = otherShape_shared_ptr.get();
 
+    // Collide (and generate violations) based on a well-defined order so that exclusion checking
+    // against previously-generated violations will work.
+    if( item->m_Uuid > other->m_Uuid )
+    {
+        std::swap( item, other );
+        std::swap( itemShape, otherShape );
+        std::swap( itemNet, otherNet );
+    }
+
     if( testClearance || testShorting )
     {
         constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, item, other, layer );
@@ -238,15 +248,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
-        // Collide (and generate violations) based on a well-defined order so that exclusion
-        // checking against previously-generated violations will work.
-        if( item->m_Uuid > other->m_Uuid )
-        {
-            std::swap( item, other );
-            std::swap( itemShape, otherShape );
-            std::swap( net, otherNet );
-        }
-
         // Special processing for track:track intersections
         if( item->Type() == PCB_TRACE_T && other->Type() == PCB_TRACE_T )
         {
@@ -277,7 +278,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
-                                                           net ? net->GetNetname() : _( "<no net>" ),
+                                                           itemNet ? itemNet->GetNetname() : _( "<no net>" ),
                                                            otherNet ? otherNet->GetNetname() : _( "<no net>" ) ) );
                 drcItem->SetItems( item, other );
                 reportTwoPointGeometry( drcItem, pos, pos, pos, layer );
