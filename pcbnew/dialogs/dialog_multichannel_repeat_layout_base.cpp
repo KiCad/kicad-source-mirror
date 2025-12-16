@@ -11,19 +11,17 @@
 
 DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 800,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
 	m_GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_GeneralBoxSizer->SetMinSize( wxSize( 800,300 ) );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	fgSizer3->AddGrowableCol( 0 );
-	fgSizer3->AddGrowableRow( 2 );
+	fgSizer3->AddGrowableRow( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	fgSizer3->SetMinSize( wxSize( 800,300 ) );
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Target areas:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	fgSizer3->Add( m_staticText4, 0, wxALL, 5 );
@@ -31,7 +29,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_raGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_raGrid->CreateGrid( 1, 3 );
+	m_raGrid->CreateGrid( 0, 3 );
 	m_raGrid->EnableEditing( false );
 	m_raGrid->EnableGridLines( true );
 	m_raGrid->EnableDragGridSize( false );
@@ -53,6 +51,8 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 
 	// Cell Defaults
 	m_raGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_raGrid->SetMinSize( wxSize( 600,200 ) );
+
 	fgSizer3->Add( m_raGrid, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer4;
@@ -69,7 +69,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	bSizer4->Add( m_refRAName, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
+	fgSizer3->Add( bSizer4, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );

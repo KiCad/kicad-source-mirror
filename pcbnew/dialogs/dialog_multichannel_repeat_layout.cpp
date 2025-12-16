@@ -70,7 +70,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_raGrid->SetColLabelValue( 1, wxT("Target Rule Area") );
     m_raGrid->SetColLabelValue( 2, wxT("Status") );
     m_raGrid->AutoSizeColumn( 1 );
-    m_raGrid->AppendRows( m_targetRAs.size() - 1 );
+    m_raGrid->AppendRows( m_targetRAs.size() );
 
     for( TABLE_ENTRY& entry : m_targetRAs)
     {
