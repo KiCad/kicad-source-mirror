@@ -42,8 +42,8 @@ public:
     /**
      * Retrieve a single part with full details from the HTTP library.
      *
-     * @param aPk is the primary key of the part
-     * @param aResult will contain the part if one was found
+     * @param aPartID is the unique ID of the part
+     * @param aFetchedPart will contain the part if one was found
      * @return true if aResult was filled; false otherwise
      */
     bool SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart );
@@ -51,8 +51,8 @@ public:
     /**
      * Retrieve all parts from a specific category from the HTTP library.
      *
-     * @param aPk is the primary key of the category
-     * @param aResults will be filled with all parts in that category
+     * @param aCategory is the category to fetch parts from
+     * @param aParts will be filled with all parts in that category
      * @return true if the query succeeded and at least one part was found, false otherwise
      */
     bool SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::vector<HTTP_LIB_PART>& aParts );
