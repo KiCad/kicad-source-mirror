@@ -44,18 +44,10 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
     m_raGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_raGrid ) ) );
     m_raGrid->ClearGrid();
     m_raGrid->EnableEditing( true );
-    m_raGrid->HideRowLabels();
-    m_raGrid->SetColLabelValue( 0, wxT( "Copy" ) );
-    m_raGrid->SetColLabelValue( 1, wxT( "Target Rule Area" ) );
-    m_raGrid->SetColLabelValue( 2, wxT( "Status" ) );
-    m_raGrid->SetColLabelValue( 3, wxT( "Details" ) );
     m_raGrid->AutoSizeColumn( 1 );
-    m_raGrid->AppendRows( m_targetRAs.size() - 1 );
     m_raGrid->SetupColumnAutosizer( 1 );
 
     m_raGrid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &DIALOG_MULTICHANNEL_REPEAT_LAYOUT::OnGridCellLeftClick, this );
-    m_raGrid->SetMaxSize( wxSize( -1, 400 ) );
-    m_raGrid->Fit();
 
     Layout();
     SetupStandardButtons();
@@ -132,6 +124,9 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
                     return a.m_raName < b.m_raName;
             } );
 
+    m_raGrid->ClearRows();
+    m_raGrid->AppendRows( m_targetRAs.size() );
+
     int i = 0;
 
     for( TABLE_ENTRY& entry : m_targetRAs )
@@ -154,6 +149,8 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
 
         i++;
     }
+
+    m_raGrid->Fit();
 
     m_refRAName->SetLabelText( data->m_refRA->m_zone->GetZoneName() );
 

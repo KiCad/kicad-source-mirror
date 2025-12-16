@@ -21,11 +21,10 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 1, 0, 0 );
 	fgSizer3->AddGrowableCol( 0 );
-	fgSizer3->AddGrowableRow( 1 );
+	fgSizer3->AddGrowableRow( 2 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	fgSizer3->SetMinSize( wxSize( 600,-1 ) );
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 2, 5, 5 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
@@ -61,10 +60,10 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_staticText4->Wrap( -1 );
 	fgSizer3->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_raGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_raGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxVSCROLL );
 
 	// Grid
-	m_raGrid->CreateGrid( 1, 4 );
+	m_raGrid->CreateGrid( 0, 4 );
 	m_raGrid->EnableEditing( false );
 	m_raGrid->EnableGridLines( true );
 	m_raGrid->EnableDragGridSize( false );
@@ -74,19 +73,25 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	m_raGrid->AutoSizeColumns();
 	m_raGrid->EnableDragColMove( false );
 	m_raGrid->EnableDragColSize( true );
+	m_raGrid->SetColLabelValue( 0, _("Copy") );
+	m_raGrid->SetColLabelValue( 1, _("Target Rule Area") );
+	m_raGrid->SetColLabelValue( 2, _("Status") );
+	m_raGrid->SetColLabelValue( 3, _("Details") );
 	m_raGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_raGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_raGrid->AutoSizeRows();
-	m_raGrid->EnableDragRowSize( true );
-	m_raGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
+	m_raGrid->EnableDragRowSize( false );
+	m_raGrid->SetRowLabelSize( 0 );
 	m_raGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
 	m_raGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_raGrid->SetMinSize( wxSize( 500,100 ) );
+
 	fgSizer3->Add( m_raGrid, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
