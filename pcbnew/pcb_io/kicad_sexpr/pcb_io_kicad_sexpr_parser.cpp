@@ -5754,8 +5754,11 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
                                 CurSource(), CurLineNumber(), CurOffset() );
                 }
+                else
+                {
+                    foundNetcode = true;
+                }
 
-                foundNetcode = true;
                 token = NextTok();
             }
 
