@@ -253,6 +253,9 @@ namespace KIGFX {
 
 bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
 {
+    if( lhs.m_text.has_value() || rhs.m_text.has_value() )
+        return lhs.m_text.value_or( wxEmptyString ) == rhs.m_text.value_or( wxEmptyString );
+
     return lhs.a == rhs.a && lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }
 
@@ -265,6 +268,9 @@ bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 
 bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 {
+    if( lhs.m_text.has_value() || rhs.m_text.has_value() )
+        return lhs.m_text.value_or( wxEmptyString ) < rhs.m_text.value_or( wxEmptyString );
+
     if( lhs.r < rhs.r )
         return true;
     else if( lhs.g < rhs.g )
@@ -280,13 +286,19 @@ bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
+    if( aColor.m_text.has_value() )
+        return aStream << aColor.m_text.value();
+
     return aStream << aColor.ToCSSString();
 }
 
 
 void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
 {
-    aJson = nlohmann::json( aColor.ToCSSString().ToStdString() );
+    if( aColor.m_text.has_value() )
+        aJson = nlohmann::json( aColor.m_text.value().ToStdString() );
+    else
+        aJson = nlohmann::json( aColor.ToCSSString().ToStdString() );
 }
 
 
@@ -597,21 +609,8 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 
 int COLOR4D::Compare( const COLOR4D& aRhs ) const
 {
-    if( m_text.has_value() && aRhs.m_text.has_value() )
-    {
-        if( m_text.value() == aRhs.m_text.value() )
-            return 0;
-        else
-            return m_text.value() < aRhs.m_text.value() ? -1 : 1;
-    }
-    else if( m_text.has_value() )
-    {
-        return -1;
-    }
-    else if( aRhs.m_text.has_value() )
-    {
-        return 1;
-    }
+    if( m_text.has_value() || aRhs.m_text.has_value() )
+        return ( m_text.value_or( wxEmptyString ) < aRhs.m_text.value_or( wxEmptyString ) ) ? -1 : 1;
 
     if( r != aRhs.r )
         return ( r < aRhs.r ) ? -1 : 1;

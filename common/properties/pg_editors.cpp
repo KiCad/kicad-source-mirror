@@ -349,6 +349,7 @@ wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPrope
                 [=]()
                 {
                     editor->GetNewSwatchColor();
+                    aGrid->DrawItem( aProperty );
                 } );
     }
 

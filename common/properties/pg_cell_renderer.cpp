@@ -42,16 +42,19 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             KIGFX::COLOR4D color = av.IsNull() ? KIGFX::COLOR4D::UNSPECIFIED
                                                : av.As<KIGFX::COLOR4D>();
 
-            wxSize swatchSize = aGrid->ConvertDialogToPixels( wxSize( 24, 16 ) );
-            int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
-            wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
+            if( !color.m_text.has_value() )
+            {
+                wxSize swatchSize = aGrid->ConvertDialogToPixels( wxSize( 24, 16 ) );
+                int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
+                wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
 
-            aDC.Clear();    // Ensure the "old" background is erased.
-            COLOR_SWATCH::RenderToDC( &aDC, color, colorProp->GetBackgroundColor(), swatch,
-                                      aGrid->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
-                                      aGrid->GetBackgroundColour() );
+                aDC.Clear();    // Ensure the "old" background is erased.
+                COLOR_SWATCH::RenderToDC( &aDC, color, colorProp->GetBackgroundColor(), swatch,
+                                          aGrid->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
+                                          aGrid->GetBackgroundColour() );
 
-            return true;
+                return true;
+            }
         }
 
         // Default behavior for value column
