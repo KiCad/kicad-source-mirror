@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
+"PO-Revision-Date: 2025-12-16 20:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -4796,6 +4796,8 @@ msgstr "Seleziona file da incorporare"
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"I file incorporati ereditati da un simbolo genitore non possono essere "
+"rimossi."
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -8853,34 +8855,28 @@ msgid "Activate Selected"
 msgstr "Attiva selezionati"
 
 #: common/lib_table_grid_tricks.cpp:127
-#, fuzzy
 msgid "Deactivate Selected"
 msgstr "Disattiva selezionati"
 
 #: common/lib_table_grid_tricks.cpp:132
-#, fuzzy
 msgid "Set Visible Flag"
 msgstr "Imposta flag visibile"
 
 #: common/lib_table_grid_tricks.cpp:135
-#, fuzzy
 msgid "Unset Visible Flag"
 msgstr "Togli flag visibile"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
-msgstr "Impostazioni modifica lavoro..."
+msgstr "Modifica impostazioni"
 
 #: common/lib_table_grid_tricks.cpp:156
-#, fuzzy
 msgid "Open Library Table"
-msgstr "Aggiungi alla tabella librerie"
+msgstr "Apri tabella librerie"
 
 #: common/lib_table_grid_tricks.cpp:480
-#, fuzzy
 msgid "Library must have a nickname."
-msgstr "Lo strato deve avere un nome."
+msgstr "La libreria deve avere un denominatore."
 
 #: common/lib_table_grid_tricks.cpp:482
 #, c-format
@@ -8897,14 +8893,12 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Più librerie non possono condividere la stessa denominazione (\"%s\")."
 
 #: common/lib_table_notebook_panel.cpp:100
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Errore nel salvataggio della tabella librerie:\n"
+"Errore nel salvataggio della tabella librerie annidata:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:117
 msgid "Save changes to nested library table?"
