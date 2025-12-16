@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-15 11:00+0000\n"
+"PO-Revision-Date: 2025-12-16 20:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -9123,9 +9123,8 @@ msgid "Cancel current tool"
 msgstr "Aktuális eszköz megszakítása"
 
 #: common/tool/actions.cpp:168
-#, fuzzy
 msgid "Finish"
-msgstr "Finn"
+msgstr "Befejezés"
 
 #: common/tool/actions.cpp:169
 #, fuzzy
@@ -9696,14 +9695,12 @@ msgid "Cycle Fast Grid"
 msgstr "Gyors rácsváltás \"Rács 1\"-re"
 
 #: common/tool/actions.cpp:885
-#, fuzzy
 msgid "Switch to Next Grid"
-msgstr "Következő Rács"
+msgstr "Következő rács"
 
 #: common/tool/actions.cpp:892
-#, fuzzy
 msgid "Switch to Previous Grid"
-msgstr "Előző Rács"
+msgstr "Előző rács"
 
 #: common/tool/actions.cpp:898 common/tool/common_tools.cpp:627
 msgid "Grid Origin"
@@ -9786,12 +9783,10 @@ msgid "Switch between polar and cartesian coordinate systems"
 msgstr "Váltás polár és derékszögű koordináta-rendszer között"
 
 #: common/tool/actions.cpp:1001
-#, fuzzy
 msgid "Reset Local Coordinates"
 msgstr "Helyi koordináták visszaállítása"
 
 #: common/tool/actions.cpp:1008
-#, fuzzy
 msgid "Always Show Crosshairs"
 msgstr "Mindig mutassa a célkeresztet"
 
@@ -9801,7 +9796,6 @@ msgid "Display crosshairs even when not drawing objects"
 msgstr "Célkereszt megjelenítése még a kijelölések esetén is"
 
 #: common/tool/actions.cpp:1015
-#, fuzzy
 msgid "Full-Window Crosshairs"
 msgstr "Teljes képernyős célkereszt"
 
@@ -9851,25 +9845,21 @@ msgid "Switch to Project Manager"
 msgstr "Váltás a Projektmenedzserre"
 
 #: common/tool/actions.cpp:1072
-#, fuzzy
 msgid "Show project window"
-msgstr "Konzolablak megjelenítése / elrejtése"
+msgstr "Projektablak megjelenítése"
 
 #: common/tool/actions.cpp:1081
-#, fuzzy
 msgid "Show 3D viewer window"
-msgstr "3D megjelenítő ablak megjelenítése"
+msgstr "3D nézegető megjelenítése"
 
 #: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1102
-#, fuzzy
 msgid "Symbol Library Browser"
-msgstr "Könyvtár böngésző"
+msgstr "Rajzjel könyvtár böngésző"
 
 #: common/tool/actions.cpp:1096 kicad/tools/kicad_manager_actions.cpp:126
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Rajzjelek létrehozása, törlése vagy szerkesztése"
+msgstr "Rajzjelek létrehozása, törlése és szerkesztése"
 
 #: common/tool/actions.cpp:1104 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1041
@@ -9877,9 +9867,8 @@ msgid "Footprint Library Browser"
 msgstr "Alkatrészrajzolat könyvtár böngésző"
 
 #: common/tool/actions.cpp:1113
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Alkatrészrajzolat létrehozása, törlése vagy szerkesztése"
+msgstr "Alkatrészrajzolat létrehozása, törlése és szerkesztése"
 
 #: common/tool/actions.cpp:1122
 #, fuzzy
@@ -9926,18 +9915,16 @@ msgid "Configure Paths..."
 msgstr "Elérési útvonalak konfigurálása..."
 
 #: common/tool/actions.cpp:1163
-#, fuzzy
 msgid "Edit path configuration environment variables"
-msgstr "Környezeti változók útvonalainak konfigurálása"
+msgstr "Elérési útvonalak környezeti változóinak szerkesztése"
 
 #: common/tool/actions.cpp:1169
 msgid "Manage Symbol Libraries..."
 msgstr "Rajzjel könyvtárak kezelése..."
 
 #: common/tool/actions.cpp:1170
-#, fuzzy
 msgid "Edit the global and project symbol library lists"
-msgstr "Globális és projekt szintű Könyvtárlisták szerkesztése"
+msgstr "Globális és projekt szintű könyvtárlisták szerkesztése"
 
 #: common/tool/actions.cpp:1176
 msgid "Manage Footprint Libraries..."
@@ -9949,9 +9936,8 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Alkatrészrajzolat könyvtártáblázatok szerkesztése"
 
 #: common/tool/actions.cpp:1183
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Rajzjel könyvtárak kezelése..."
+msgstr "Terv blokk könyvtárak kezelése..."
 
 #: common/tool/actions.cpp:1184
 #, fuzzy
@@ -9975,9 +9961,8 @@ msgid "Help"
 msgstr "Segítség"
 
 #: common/tool/actions.cpp:1198
-#, fuzzy
 msgid "Open product documentation in a web browser"
-msgstr "A kapcsolódó adatlap vagy dokumentum megnyitása"
+msgstr "Termékdokumentáció megnyitása webböngészőben"
 
 #: common/tool/actions.cpp:1204
 msgid "About KiCad"
@@ -10713,9 +10698,8 @@ msgid "Eagle XML files"
 msgstr "EAGLE XML fájlok"
 
 #: common/wildcards_and_files_ext.cpp:307
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "OrcadPCB2 netlista fájl"
+msgstr "OrcadPCB2 netlista fájlok"
 
 #: common/wildcards_and_files_ext.cpp:314
 #, fuzzy
@@ -10759,12 +10743,11 @@ msgstr "KiCad alkatrészrajzolat könyvtár útvonal (*.pretty)"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad terv blokk útvonal"
 
 #: common/wildcards_and_files_ext.cpp:372
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "KiCad alkatrészrajzolat könyvtár útvonal (*.pretty)"
+msgstr "KiCad terv blokk könyvtár útvonalak"
 
 #: common/wildcards_and_files_ext.cpp:379
 #, fuzzy
@@ -10819,9 +10802,8 @@ msgid "VRML and X3D files"
 msgstr "VRML és X3D fájlok (*.wrl *.x3d)"
 
 #: common/wildcards_and_files_ext.cpp:456
-#, fuzzy
 msgid "IDFv3 footprint files"
-msgstr "IDFv3 alkatrészrajzolat fájl (*.idf)|*.idf"
+msgstr "IDFv3 alkatrészrajzolat fájlok"
 
 #: common/wildcards_and_files_ext.cpp:462
 msgid "Text files"
@@ -11156,9 +11138,10 @@ msgid "Footprint ID '%s' is not valid."
 msgstr "A(z) \"%s\" alkatrészrajzolat azonosító nem érvényes."
 
 #: cvpcb/display_footprints_frame.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "A könyvtár nem található az alkatrészrajzolat könyvtártáblázatban."
+msgstr ""
+"A(z) \"%s\" könyvtár nem található az alkatrészrajzolat könyvtártáblázatban."
 
 #: cvpcb/display_footprints_frame.cpp:439
 #: cvpcb/display_footprints_frame.cpp:463
@@ -11358,7 +11341,6 @@ msgid "Cleared annotation for %s."
 msgstr "Sorszámozások törlése"
 
 #: eeschema/annotate.cpp:174
-#, fuzzy
 msgid "Delete Annotation"
 msgstr "Sorszámozások törlése"
 
@@ -11368,9 +11350,9 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d azonos időbélyeget talált majd cserélt le."
 
 #: eeschema/annotate.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "%s (%s részegység) frissítve (\"%s\" -> \"%s\")"
+msgstr "%s (%s részegység) frissítve (\"%s\" -> \"%s\")."
 
 #: eeschema/annotate.cpp:405
 #, fuzzy, c-format
@@ -11388,7 +11370,6 @@ msgid "Annotated %s as %s."
 msgstr "%s sorszámozása %s-ként."
 
 #: eeschema/annotate.cpp:439
-#, fuzzy
 msgid "Annotation complete."
 msgstr "A sorszámozás elkészült."
 
@@ -11489,14 +11470,13 @@ msgstr ""
 "Hiba történt a(z) '%s' terv blokk '%s' könyvtárból történő betöltése során."
 
 #: eeschema/design_block_utils.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" terv blokk már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/design_block_utils.cpp:50
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Felülírja a meglévő előbeállítást?"
+msgstr "Felülírja a meglévő terv blokkot?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:414
@@ -11593,9 +11573,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[nincs könyvtár kiválasztva]"
+msgstr "Terv blokk könyvtár \"%s\" törölve"
 
 #: eeschema/design_block_utils.cpp:523
 #, fuzzy, c-format
@@ -11603,9 +11583,9 @@ msgid "Delete design block '%s' in library '%s' from disk?"
 msgstr "Alkatrészrajzolat törlése a könyvtárból"
 
 #: eeschema/design_block_utils.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "A(z) '%s' alkatrészrajzolat a(z) '%s' könyvtárból törölésre került."
+msgstr "'%s' terv blokk törölve a(z) '%s' könyvtárból"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11665,9 +11645,8 @@ msgid "Sort symbols by &Y position"
 msgstr "Rendezés &Y pozíció szerint"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
-#, fuzzy
 msgid "Keep existing annotations"
-msgstr "Létező sorszámozások megtartása, és folytatása"
+msgstr "Meglévő sorszámozások megtartása"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 #, fuzzy
@@ -11697,7 +11676,6 @@ msgid "First free after sheet number X 1000"
 msgstr "Első szabad szám használata az N = oldalszám x 1000 után"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
-#, fuzzy
 msgid "Clear Annotation"
 msgstr "Sorszámozások törlése"
 
@@ -12165,14 +12143,13 @@ msgid "Database connection failed: %s"
 msgstr "Nem sikerült csatlakozni az adatbázishoz: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Forrszem csatlakozása zónához:"
+msgstr "Nincs kapcsolat az adatbázishoz"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Rajzjelkönyvtárak betöltése"
+msgstr "%zu könyvtár betöltve"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -12594,7 +12571,6 @@ msgstr "Kihagyható (%s)"
 #: eeschema/dialogs/dialog_erc_base.cpp:147
 #: pcbnew/dialogs/dialog_drc_base.cpp:196
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
-#, fuzzy
 msgid "Exclusions"
 msgstr "Kizárások"
 
@@ -12670,7 +12646,7 @@ msgstr "Összes feszültség mentése"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Direktíva írása az összes feszültség mentésére (.save all)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:374
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
@@ -12679,7 +12655,7 @@ msgstr "Összes áram mentése"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:375
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Direktíva írása az összes áram mentésére (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:380
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
@@ -14683,9 +14659,8 @@ msgstr ""
 "és az eszköz manuálisan aktiválható a \\\"Eszközök\\\" menüben."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
-#, fuzzy
 msgid "Symbols to update:"
-msgstr "Rajzjelek frissítése:"
+msgstr "Frissítendő rajzjelek:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:38
 msgid "Instances of this symbol:"
@@ -14836,7 +14811,6 @@ msgid "Search &hidden fields"
 msgstr "Keresés minden alkatrész mezőben"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
-#, fuzzy
 msgid "Search the current &sheet only"
 msgstr "Keresés csak az aktuális lapon"
 
@@ -15390,14 +15364,12 @@ msgid "Use initial conditions"
 msgstr "Angolszász mértékegységek használata"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Bemeneti láb"
+msgstr "Bemeneti jelek:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "DRC ellenőrzés előtt mindig végezze el a zónák újra kitöltését"
+msgstr "Bemenetek linearizálása FFT előtt"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 #, fuzzy
@@ -25683,9 +25655,8 @@ msgid "(page %s)"
 msgstr "(oldal %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Rajzjel könyvtárak betöltése"
+msgstr "Terv blokk könyvtárak betöltése"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:275
 #, fuzzy
