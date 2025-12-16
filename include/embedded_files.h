@@ -105,7 +105,7 @@ public:
     EMBEDDED_FILES( EMBEDDED_FILES&& other ) noexcept;
     EMBEDDED_FILES( const EMBEDDED_FILES& other );
 
-    ~EMBEDDED_FILES()
+    virtual ~EMBEDDED_FILES()
     {
         for( auto& file : m_files )
             delete file.second;
