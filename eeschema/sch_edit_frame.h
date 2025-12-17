@@ -725,9 +725,9 @@ public:
 
     bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 
-    bool SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PATH& aSheetPath );
+    bool UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET_PATH& aSheetPath );
 
-    bool SaveSelectionToDesignBlock( const LIB_ID& aLibId );
+    bool UpdateDesignBlockFromSelection( const LIB_ID& aLibId );
 
     SCH_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 

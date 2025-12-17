@@ -207,8 +207,8 @@ public:
     static TOOL_ACTION showRemoteSymbolPanel;
     static TOOL_ACTION saveSheetAsDesignBlock;
     static TOOL_ACTION saveSelectionAsDesignBlock;
-    static TOOL_ACTION saveSheetToDesignBlock;
-    static TOOL_ACTION saveSelectionToDesignBlock;
+    static TOOL_ACTION updateDesignBlockFromSheet;
+    static TOOL_ACTION updateDesignBlockFromSelection;
     static TOOL_ACTION deleteDesignBlock;
     static TOOL_ACTION editDesignBlockProperties;
 

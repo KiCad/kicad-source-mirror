@@ -68,8 +68,8 @@ bool PCB_DESIGN_BLOCK_CONTROL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
     ctxMenu.AddItem( PCB_ACTIONS::saveBoardAsDesignBlock,     isInLibrary, 100 );
     ctxMenu.AddItem( PCB_ACTIONS::saveSelectionAsDesignBlock, isInLibrary && hasSelection, 100 );
-    ctxMenu.AddItem( PCB_ACTIONS::saveBoardToDesignBlock,     isDesignBlock, 100 );
-    ctxMenu.AddItem( PCB_ACTIONS::saveSelectionToDesignBlock, isDesignBlock && hasSelection, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::updateDesignBlockFromBoard,     isDesignBlock, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::updateDesignBlockFromSelection, isDesignBlock && hasSelection, 100 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
     ctxMenu.AddSeparator( 100 );
 
@@ -115,7 +115,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
 }
 
 
-int PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromBoard( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -125,7 +125,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock( const TOOL_EVENT& aEvent )
     // This can be modified as a result of the save operation so copy it
     LIB_ID libId = current->m_LibId;
 
-    if( !m_editFrame->SaveBoardToDesignBlock( libId ) )
+    if( !m_editFrame->UpdateDesignBlockFromBoard( libId ) )
         return -1;
 
     notifyOtherFrames();
@@ -134,7 +134,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSelection( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -144,7 +144,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
     // This can be modified as a result of the save operation so copy it
     LIB_ID libId = current->m_LibId;
 
-    if( !m_editFrame->SaveSelectionToDesignBlock( libId ) )
+    if( !m_editFrame->UpdateDesignBlockFromSelection( libId ) )
         return -1;
 
     notifyOtherFrames();
@@ -158,8 +158,8 @@ void PCB_DESIGN_BLOCK_CONTROL::setTransitions()
 
     Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock,      PCB_ACTIONS::saveBoardAsDesignBlock.MakeEvent() );
     Go( &PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  PCB_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
-    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock,      PCB_ACTIONS::saveBoardToDesignBlock.MakeEvent() );
-    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock,  PCB_ACTIONS::saveSelectionToDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromBoard,      PCB_ACTIONS::updateDesignBlockFromBoard.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSelection,  PCB_ACTIONS::updateDesignBlockFromSelection.MakeEvent() );
     Go( &PCB_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           PCB_ACTIONS::deleteDesignBlock.MakeEvent() );
     Go( &PCB_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   PCB_ACTIONS::editDesignBlockProperties.MakeEvent() );
 }

@@ -1727,7 +1727,7 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
 
     editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
 
-    return m_toolMgr->RunAction( PCB_ACTIONS::saveSelectionToDesignBlock ) ? 1 : 0;
+    return m_toolMgr->RunAction( PCB_ACTIONS::updateDesignBlockFromSelection ) ? 1 : 0;
 }
 
 

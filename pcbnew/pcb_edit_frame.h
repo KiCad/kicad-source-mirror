@@ -416,9 +416,9 @@ public:
 
     bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 
-    bool SaveBoardToDesignBlock( const LIB_ID& aLibId );
+    bool UpdateDesignBlockFromBoard( const LIB_ID& aLibId );
 
-    bool SaveSelectionToDesignBlock( const LIB_ID& aLibId );
+    bool UpdateDesignBlockFromSelection( const LIB_ID& aLibId );
 
     PCB_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 

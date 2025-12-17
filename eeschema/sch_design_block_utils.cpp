@@ -151,7 +151,7 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
 }
 
 
-bool SCH_EDIT_FRAME::SaveSheetToDesignBlock( const LIB_ID& aLibId, SCH_SHEET_PATH& aSheetPath )
+bool SCH_EDIT_FRAME::UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET_PATH& aSheetPath )
 {
     // Make sure the user has selected a library to save into
     if( !Prj().DesignBlockLibs()->DesignBlockExists( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) )
@@ -388,7 +388,7 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 }
 
 
-bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
+bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
 {
     // Get all selected items
     SCH_SELECTION selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
@@ -415,7 +415,7 @@ bool SCH_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
             SCH_SHEET_PATH curPath = GetCurrentSheet();
 
             curPath.push_back( sheet );
-            SaveSheetToDesignBlock( aLibId, curPath );
+            UpdateDesignBlockFromSheet( aLibId, curPath );
         }
         else
         {

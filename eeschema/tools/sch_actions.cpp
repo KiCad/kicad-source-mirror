@@ -145,22 +145,22 @@ TOOL_ACTION SCH_ACTIONS::saveSelectionAsDesignBlock( TOOL_ACTION_ARGS()
         .Tooltip( _( "Create a new design block from the current selection" ) )
         .Icon( BITMAPS::new_component ) );
 
-TOOL_ACTION SCH_ACTIONS::saveSheetToDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SchDesignBlockControl.saveSheetToDesignBlock" )
+TOOL_ACTION SCH_ACTIONS::updateDesignBlockFromSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.updateDesignBlockFromSheet" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Current Sheet to Design Block..." ) )
-        .Tooltip( _( "Add current sheet to design block" ) )
+        .FriendlyName( _( "Update Design Block from Current Sheet" ) )
+        .Tooltip( _( "Set design block schematic to current sheet" ) )
         .Icon( BITMAPS::save ) );
 
-TOOL_ACTION SCH_ACTIONS::saveSelectionToDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SchDesignBlockControl.saveSelectionToDesignBlock" )
+TOOL_ACTION SCH_ACTIONS::updateDesignBlockFromSelection( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.updateDesignBlockFromSelection" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Selection to Design Block..." ) )
-        .Tooltip( _( "Add current selection to design block" ) )
+        .FriendlyName( _( "Update Design Block from Selection" ) )
+        .Tooltip( _( "Set design block schematic to current selection" ) )
         .Icon( BITMAPS::save ) );
 
 TOOL_ACTION SCH_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SchDesignBlockControl.saveDeleteDesignBlock" )
+        .Name( "eeschema.SchDesignBlockControl.deleteDesignBlock" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Delete Design Block" ) )
         .Tooltip( _( "Remove the selected design block from its library" ) )

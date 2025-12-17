@@ -511,7 +511,7 @@ TOOL_ACTION PCB_ACTIONS::showDesignBlockPanel( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::saveBoardAsDesignBlock( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PcbDesignBlockControl.saveBoardAsDesignBlock" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Current Board as Design Block..." ) )
+        .FriendlyName( _( "Save Board as Design Block..." ) )
         .Tooltip( _( "Create a new design block from the current board" ) )
         .Icon( BITMAPS::new_component ) );
 
@@ -522,22 +522,22 @@ TOOL_ACTION PCB_ACTIONS::saveSelectionAsDesignBlock( TOOL_ACTION_ARGS()
         .Tooltip( _( "Create a new design block from the current selection" ) )
         .Icon( BITMAPS::new_component ) );
 
-TOOL_ACTION PCB_ACTIONS::saveBoardToDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PcbDesignBlockControl.saveBoardToDesignBlock" )
+TOOL_ACTION PCB_ACTIONS::updateDesignBlockFromBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.updateDesignBlockFromBoard" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Current Board to Design Block..." ) )
-        .Tooltip( _( "Add current board to design block" ) )
+        .FriendlyName( _( "Update Design Block from Board" ) )
+        .Tooltip( _( "Set design block layout to current board" ) )
         .Icon( BITMAPS::save ) );
 
-TOOL_ACTION PCB_ACTIONS::saveSelectionToDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PcbDesignBlockControl.saveSelectionToDesignBlock" )
+TOOL_ACTION PCB_ACTIONS::updateDesignBlockFromSelection( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PcbDesignBlockControl.updateDesignBlockFromSelection" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save Selection to Design Block..." ) )
-        .Tooltip( _( "Add current selection to design block" ) )
+        .FriendlyName( _( "Update Design Block from Selection" ) )
+        .Tooltip( _( "Set design block layout to current selection" ) )
         .Icon( BITMAPS::save ) );
 
 TOOL_ACTION PCB_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PcbDesignBlockControl.saveDeleteDesignBlock" )
+        .Name( "pcbnew.PcbDesignBlockControl.deleteDesignBlock" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Delete Design Block" ) )
         .Tooltip( _( "Remove the selected design block from its library" ) )

@@ -45,8 +45,8 @@ public:
     int SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent );
     int SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent );
 
-    int SaveSheetToDesignBlock( const TOOL_EVENT& aEvent );
-    int SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent );
+    int UpdateDesignBlockFromSheet( const TOOL_EVENT& aEvent );
+    int UpdateDesignBlockFromSelection( const TOOL_EVENT& aEvent );
 
 private:
     LIB_ID getSelectedLibId();

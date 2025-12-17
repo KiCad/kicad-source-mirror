@@ -68,8 +68,8 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
     ctxMenu.AddItem( SCH_ACTIONS::saveSheetAsDesignBlock,     isInLibrary, 100 );
     ctxMenu.AddItem( SCH_ACTIONS::saveSelectionAsDesignBlock, isInLibrary && hasSelection, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSheetToDesignBlock,     isDesignBlock, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSelectionToDesignBlock, isDesignBlock && hasSelection, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::updateDesignBlockFromSheet,     isDesignBlock, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::updateDesignBlockFromSelection, isDesignBlock && hasSelection, 100 );
     ctxMenu.AddItem( SCH_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
     ctxMenu.AddSeparator( 100 );
 
@@ -115,7 +115,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
+int SCH_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSheet( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -125,7 +125,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
     // This can be modified as a result of the save operation so copy it
     LIB_ID libId = current->m_LibId;
 
-    if( !m_editFrame->SaveSheetToDesignBlock( libId, m_editFrame->GetCurrentSheet() ) )
+    if( !m_editFrame->UpdateDesignBlockFromSheet( libId, m_editFrame->GetCurrentSheet() ) )
         return -1;
 
     notifyOtherFrames();
@@ -134,7 +134,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent )
+int SCH_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSelection( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -144,7 +144,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
     // This can be modified as a result of the save operation so copy it
     LIB_ID libId = current->m_LibId;
 
-    if( !m_editFrame->SaveSelectionToDesignBlock( libId ) )
+    if( !m_editFrame->UpdateDesignBlockFromSelection( libId ) )
         return -1;
 
     notifyOtherFrames();
@@ -159,8 +159,8 @@ void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
 
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      SCH_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  SCH_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock,      SCH_ACTIONS::saveSheetToDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock,  SCH_ACTIONS::saveSelectionToDesignBlock.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSheet,      SCH_ACTIONS::updateDesignBlockFromSheet.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::UpdateDesignBlockFromSelection,  SCH_ACTIONS::updateDesignBlockFromSelection.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           SCH_ACTIONS::deleteDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   SCH_ACTIONS::editDesignBlockProperties.MakeEvent() );
 }

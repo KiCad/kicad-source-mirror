@@ -180,7 +180,7 @@ bool PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
 }
 
 
-bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
+bool PCB_EDIT_FRAME::UpdateDesignBlockFromBoard( const LIB_ID& aLibId )
 {
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
@@ -384,7 +384,7 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 }
 
 
-bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
+bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
 {
     // Make sure the user has selected a library to save into
     if( !aLibId.IsValid() )
