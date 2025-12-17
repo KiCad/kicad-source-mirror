@@ -53,7 +53,6 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_sheetGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_sheetGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-    m_sheetGrid->EnableEditing( true );
     m_sheetGrid->HideRowLabels();
     m_sheetGrid->SetColLabelValue( 0, _( "Generate" ) );
     m_sheetGrid->SetColLabelValue( 1, _( "Sheet Path" ) );
@@ -83,7 +82,6 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_componentClassGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_componentClassGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_componentClassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-    m_componentClassGrid->EnableEditing( true );
     m_componentClassGrid->HideRowLabels();
     m_componentClassGrid->SetColLabelValue( 0, _( "Generate" ) );
     m_componentClassGrid->SetColLabelValue( 1, _( "Component Class" ) );
@@ -112,7 +110,6 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_groupGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_groupGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_groupGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-    m_groupGrid->EnableEditing( true );
     m_groupGrid->HideRowLabels();
     m_groupGrid->SetColLabelValue( 0, _( "Generate" ) );
     m_groupGrid->SetColLabelValue( 1, _( "Name" ) );
