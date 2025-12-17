@@ -647,6 +647,13 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 
             int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
 
+            // Use DNP cross color from color scheme
+            COLOR4D dnpMarkerColor = aPlotOpt.ColorSettings()->GetColor( LAYER_DNP_MARKER );
+            if( dnpMarkerColor != COLOR4D::UNSPECIFIED )
+                aPlotter->SetColor( dnpMarkerColor );
+            else
+                aPlotter->SetColor( aPlotOpt.ColorSettings()->GetColor( onFrontFab ? F_Fab : B_Fab ) );
+
             aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, nullptr );
             aPlotter->ThickSegment( VECTOR2I( rect.GetLeft(), rect.GetBottom() ),
                                     VECTOR2I( rect.GetRight(), rect.GetTop() ),
