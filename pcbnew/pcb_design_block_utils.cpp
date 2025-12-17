@@ -363,9 +363,20 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     }
 
     DESIGN_BLOCK blk;
-    wxFileName   fn = wxFileNameFromPath( GetBoard()->GetFileName() );
+    PCB_GROUP*   group = nullptr;
 
-    blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+    if( selection.Size() == 1 && selection.HasType( PCB_GROUP_T ) )
+        group = static_cast<PCB_GROUP*>( selection.Front() );
+
+    if( group && !group->GetName().IsEmpty() )
+        // If the user has selected a single group, they probably want the design block named after the group
+        blk.SetLibId( LIB_ID( aLibraryName, group->GetName() ) );
+    else
+    {
+        // Otherwise, use the current screen name
+        wxFileName fn = wxFileNameFromPath( GetBoard()->GetFileName() );
+        blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+    }
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
@@ -378,6 +389,20 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) && !checkOverwriteDb( this, libName, newName ) )
     {
         return false;
+    }
+
+    // If we have a single group, we want to strip the group and select the children
+    if( group )
+    {
+        selection.Remove( group );
+
+        // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
+        group->RunOnChildren(
+                [&]( EDA_ITEM* aItem )
+                {
+                    selection.Add( aItem );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     return saveSelectionToDesignBlock( libName, selection, blk );
