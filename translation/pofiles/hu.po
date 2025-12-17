@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-16 20:00+0000\n"
+"PO-Revision-Date: 2025-12-17 21:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -8317,9 +8317,8 @@ msgid "PCB: Export PDF"
 msgstr "NYÁK: PDF exportálása"
 
 #: common/jobs/job_export_pcb_pos.cpp:102
-#, fuzzy
 msgid "Export position data"
-msgstr "Alkatrészrajzolat exportálása"
+msgstr "Pozícióadatok exportálása"
 
 #: common/jobs/job_export_pcb_pos.cpp:108
 #, fuzzy
@@ -8328,7 +8327,7 @@ msgstr "Exportálás a GenCAD beállításaihoz"
 
 #: common/jobs/job_export_pcb_pos.cpp:126
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "NYÁK: pozícióadatok exportálása"
 
 #: common/jobs/job_export_pcb_ps.cpp:57 common/jobs/job_export_sch_plot.cpp:165
 msgid "Export Postscript"
@@ -8775,12 +8774,10 @@ msgid "Operating point currents"
 msgstr "Munkapont áramok"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Footprints front"
 msgstr "Felső alkatrészrajzolatok"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Footprints back"
 msgstr "Alsó alkatrészrajzolatok"
 
@@ -8810,7 +8807,7 @@ msgstr "Vezetősávok"
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:38
 msgid "Through vias"
-msgstr "átvezető furat"
+msgstr "Átmenő viák"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
@@ -8820,9 +8817,8 @@ msgstr "Zsák/eltemetett viák"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Eltemetett viák:"
+msgstr "Temetett viák"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
@@ -8838,9 +8834,8 @@ msgid "Via hole walls"
 msgstr "Via: %s"
 
 #: common/layer_id.cpp:136
-#, fuzzy
 msgid "Plated holes"
-msgstr "Nem furatfémezett furatok"
+msgstr "Galvanizált furatok"
 
 #: common/layer_id.cpp:137
 #, fuzzy
@@ -8870,14 +8865,12 @@ msgid "DRC errors"
 msgstr "DRC hibák"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "DRC alak 1"
+msgstr "DRC alakzatok"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Kijelölések törlése"
+msgstr "DRC kizárások"
 
 #: common/layer_id.cpp:144
 #, fuzzy
@@ -8918,9 +8911,8 @@ msgid "Via net names"
 msgstr "Vezeték név keresés"
 
 #: common/lib_id.cpp:146
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Érvénytelen karakter található a logikai könyvtárnévben"
+msgstr "Érvénytelen karakter a könyvtár nevében"
 
 #: common/lib_table_grid_tricks.cpp:61
 #, c-format
@@ -8933,21 +8925,18 @@ msgid "Error loading library '%s'"
 msgstr "Hiba a(z) \"%s\" könyvtár betöltése közben"
 
 #: common/lib_table_grid_tricks.cpp:93
-#, fuzzy
 msgid "Edit Options"
-msgstr "Szerkesztési beállítások"
+msgstr "Beállítások szerkesztése"
 
 #: common/lib_table_grid_tricks.cpp:94
 msgid "Edit options for this library entry"
 msgstr "Beállítások szerkesztése ehhez a tételhez"
 
 #: common/lib_table_grid_tricks.cpp:124
-#, fuzzy
 msgid "Activate Selected"
 msgstr "Kiválasztott elem aktiválása"
 
 #: common/lib_table_grid_tricks.cpp:127
-#, fuzzy
 msgid "Deactivate Selected"
 msgstr "Kiválasztott elem deaktiválása"
 
@@ -8966,9 +8955,8 @@ msgid "Edit Settings"
 msgstr "Beállítások szerkesztése"
 
 #: common/lib_table_grid_tricks.cpp:156
-#, fuzzy
 msgid "Open Library Table"
-msgstr "Könyvtártáblázat kiválasztása"
+msgstr "Könyvtártáblázat megnyitása"
 
 #: common/lib_table_grid_tricks.cpp:480
 msgid "Library must have a nickname."
@@ -9163,12 +9151,8 @@ msgid "Syntax error at line %zu, column %zu"
 msgstr "Szintaktikai hiba: %zu. sor, %zu. oszlop"
 
 #: common/libraries/library_table_parser.cpp:219
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr ""
-"Hiba történt az üres alkatrészrajzolat könyvtártáblázat fájl írása során.\n"
-"\n"
-"%s"
+msgstr "Váratlan hiba történt a könyvtártáblázat olvasása közben"
 
 #: common/local_history.cpp:1377
 #, fuzzy
@@ -9187,9 +9171,8 @@ msgid ""
 msgstr ""
 
 #: common/local_history.cpp:1392
-#, fuzzy
 msgid "Delete Files during Restore"
-msgstr "Mappa törlése"
+msgstr "Fájlok törlése a helyreállítás során"
 
 #: common/local_history.cpp:1394
 msgid "Proceed"
@@ -9216,9 +9199,8 @@ msgid "Select snapshot"
 msgstr "Elérési útvonal kiválasztása"
 
 #: common/local_history.cpp:1814 kicad/kicad_manager_frame.cpp:859
-#, fuzzy
 msgid "Restore"
-msgstr "Ellenállás"
+msgstr "Helyreállítás"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1256 pcbnew/zone.cpp:911
@@ -9240,7 +9222,7 @@ msgstr "%s, %s és további %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9249,20 +9231,22 @@ msgid ""
 msgstr ""
 "Érvénytelen alkatrészrajzolat azonosító\n"
 "fájl: \"%s\"\n"
-"%d. sor, %d. oszlop"
+"%d. sor\n"
+"%d. oszlop"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Érvénytelen alkatrészrajzolat azonosító\n"
+"Érvénytelen könyvtár azonosító\n"
 "fájl: \"%s\"\n"
-"%d. sor, %d. oszlop"
+"%d. sor\n"
+"%d. oszlop"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:115
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
@@ -9529,9 +9513,9 @@ msgid "Error opening directory: '%s'."
 msgstr "Nem sikerült megnyitni a mappát: %s."
 
 #: common/project/project_archiver.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Archívum fájl \"%s\""
+msgstr "Archivált fájl \"%s\"."
 
 #: common/project/project_archiver.cpp:325
 #, c-format
@@ -9690,14 +9674,12 @@ msgid ""
 msgstr ""
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
-#, fuzzy
 msgid "Symbol library table"
-msgstr "A rajzjel könyvtár nincs engedélyezve."
+msgstr "Rajzjel könyvtár táblázat"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:113
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
+msgstr "Alkatrészrajzolat könyvtár táblázat"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:117
 msgid "Design Block library table"
@@ -9777,9 +9759,8 @@ msgid "Control to select the layer"
 msgstr "A kiválasztott grafikai réteg törlése"
 
 #: common/tool/action_toolbar.cpp:1061
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Rajzjel részegység jelölés:"
+msgstr "Rajzjel részegység választó"
 
 #: common/tool/action_toolbar.cpp:1062
 #, fuzzy
@@ -16394,11 +16375,11 @@ msgstr "Átviteli függvény:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(kimenő feszültség) / (bemenő feszültség)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(kimenő feszültség) / (bemenő áram)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
 msgid "Input:"
