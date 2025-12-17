@@ -145,7 +145,7 @@
 %{
     def GetPluginForPath(libname):
         plugin_type = PCB_IO_MGR.GuessPluginTypeFromLibPath( libname );
-        return PCB_IO_MGR.PluginFind(plugin_type)
+        return PCB_IO_MGR.FindPlugin(plugin_type)
 
     def FootprintEnumerate(libname):
         plug = GetPluginForPath(libname)
