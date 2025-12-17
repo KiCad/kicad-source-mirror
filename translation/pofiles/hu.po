@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-17 21:00+0000\n"
+"PO-Revision-Date: 2025-12-18 16:28+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -9989,9 +9989,8 @@ msgid "Paste item(s) from clipboard"
 msgstr "Tartalom beillesztése vágólapról"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Négyszög rajzolása"
+msgstr "Téglalap kijelölés"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
@@ -9999,7 +9998,7 @@ msgstr "Lasszó"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Lasszó kijelölés"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10212,7 +10211,7 @@ msgstr "Cellák egyesítése"
 
 #: common/tool/actions.cpp:554
 msgid "Turn selected table cells into a single cell"
-msgstr ""
+msgstr "A kijelölt cellák egyesítése egyetlen cellává"
 
 #: common/tool/actions.cpp:560 include/tool/edit_table_tool_base.h:585
 msgid "Unmerge Cells"
@@ -10220,7 +10219,7 @@ msgstr "Cellák szétválasztása"
 
 #: common/tool/actions.cpp:561
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Az egyesített cellák szétválasztása különálló cellákká."
 
 #: common/tool/actions.cpp:568
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:392
@@ -10318,19 +10317,16 @@ msgid "Replace All"
 msgstr "Összes cseréje"
 
 #: common/tool/actions.cpp:682
-#, fuzzy
 msgid "Previous Marker"
-msgstr "Előző Megjelölés"
+msgstr "Előző jelölő"
 
 #: common/tool/actions.cpp:688
-#, fuzzy
 msgid "Next Marker"
-msgstr "Következő megjelölés"
+msgstr "Következő jelölő"
 
 #: common/tool/actions.cpp:694
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Megjelölés Kizárása"
+msgstr "Jelölő kizárása"
 
 #: common/tool/actions.cpp:695
 msgid "Mark current violation in Checker window as an exclusion"
@@ -10543,14 +10539,12 @@ msgstr ""
 "Válassza ki a könyvtártáblázatot amelyhez hozzá akarja adni a könyvtárat:"
 
 #: common/tool/actions.cpp:966
-#, fuzzy
 msgid "Library Tree"
-msgstr "Új könyvtár hivatkozás"
+msgstr "Könyvtárfa"
 
 #: common/tool/actions.cpp:973
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Új könyvtár hivatkozás"
+msgstr "Könyvtárfa elrejtése"
 
 #: common/tool/actions.cpp:979
 #, fuzzy
@@ -10867,9 +10861,8 @@ msgid "Manage Design Block Libraries..."
 msgstr "Terv blokk könyvtárak kezelése..."
 
 #: common/tool/actions.cpp:1384
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Globális és projekt szintű Könyvtárlisták szerkesztése"
+msgstr "Globális és projekt szintű terv blokk listák szerkesztése"
 
 #: common/tool/actions.cpp:1390
 msgid "Getting Started with KiCad"
@@ -11000,14 +10993,13 @@ msgid "Get involved with KiCad"
 msgstr "Részvétel a KiCad fejlesztésében"
 
 #: common/tool/common_control.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "Nem sikerült elindítani az alapértelmezett böngészőt.\n"
-"A KiCad projekt segítségére vonatkozó információkért keresse fel a %s "
-"webhelyet"
+"A KiCad projekt támogatásához keresse fel a %s weboldalt"
 
 #: common/tool/design_block_control.cpp:121
 msgid "New Design Block Library"
@@ -11047,16 +11039,14 @@ msgid "Invalid signal name"
 msgstr "Érvénytelen jel név"
 
 #: common/validators.cpp:216
-#, fuzzy
 msgid "Signal names cannot contain CR or LF characters"
 msgstr ""
 "Jelek nevei nem tartalmazhatnak soremelés (LF) és kocsivissza (CR) "
 "karaktereket"
 
 #: common/validators.cpp:219
-#, fuzzy
 msgid "Signal names cannot contain spaces"
-msgstr "Jelek nevei nem tartalmazhatnak szóköz karaktereket"
+msgstr "Jelek nevei nem tartalmazhatnak szóközt"
 
 #: common/validators.cpp:301
 #, fuzzy
