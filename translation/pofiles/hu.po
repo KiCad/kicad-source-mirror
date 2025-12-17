@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-16 20:00+0000\n"
+"PO-Revision-Date: 2025-12-17 21:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -7978,9 +7978,8 @@ msgid "PCB: Export PDF"
 msgstr "NYÁK: PDF exportálása"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "Alkatrészrajzolat exportálása"
+msgstr "Pozícióadatok exportálása"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 #, fuzzy
@@ -7989,7 +7988,7 @@ msgstr "Exportálás a GenCAD beállításaihoz"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "NYÁK: pozícióadatok exportálása"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
@@ -8433,12 +8432,10 @@ msgid "Operating point currents"
 msgstr "Munkapont áramok"
 
 #: common/layer_id.cpp:123
-#, fuzzy
 msgid "Footprints front"
 msgstr "Felső alkatrészrajzolatok"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Footprints back"
 msgstr "Alsó alkatrészrajzolatok"
 
@@ -8467,7 +8464,7 @@ msgstr "Vezetősávok"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr "átvezető furat"
+msgstr "Átmenő viák"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
@@ -8487,9 +8484,8 @@ msgid "Via hole walls"
 msgstr "Via: %s"
 
 #: common/layer_id.cpp:134
-#, fuzzy
 msgid "Plated holes"
-msgstr "Nem furatfémezett furatok"
+msgstr "Galvanizált furatok"
 
 #: common/layer_id.cpp:135
 #, fuzzy
@@ -8527,9 +8523,8 @@ msgid "DRC shape 2"
 msgstr "DRC alak 2"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Kijelölések törlése"
+msgstr "DRC kizárások"
 
 #: common/layer_id.cpp:143
 #, fuzzy
@@ -8565,9 +8560,8 @@ msgid "Via net names"
 msgstr "Vezeték név keresés"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Érvénytelen karakter található a logikai könyvtárnévben"
+msgstr "Érvénytelen karakter a könyvtár nevében"
 
 #: common/lib_table_base.cpp:543
 #, fuzzy, c-format
@@ -8875,9 +8869,9 @@ msgid "Error opening directory: '%s'."
 msgstr "Nem sikerült megnyitni a mappát: %s."
 
 #: common/project/project_archiver.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Archívum fájl \"%s\""
+msgstr "Archivált fájl \"%s\"."
 
 #: common/project/project_archiver.cpp:326
 #, c-format
@@ -15413,11 +15407,11 @@ msgstr "Átviteli függvény:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(kimenő feszültség) / (bemenő feszültség)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(kimenő feszültség) / (bemenő áram)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
 msgid "Input:"
@@ -45971,7 +45965,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Összes figyelmeztetés: %d, hibák: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -45980,7 +45974,8 @@ msgid ""
 msgstr ""
 "Érvénytelen alkatrészrajzolat azonosító\n"
 "fájl: \"%s\"\n"
-"%d. sor, %d. oszlop"
+"%d. sor\n"
+"%d. oszlop"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
 #, fuzzy
