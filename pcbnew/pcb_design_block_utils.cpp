@@ -405,7 +405,19 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
                 RECURSE_MODE::NO_RECURSE );
     }
 
-    return saveSelectionToDesignBlock( libName, selection, blk );
+    bool success = saveSelectionToDesignBlock( libName, selection, blk );
+
+    if( success && group && !group->HasDesignBlockLink() )
+    {
+        BOARD_COMMIT commit( m_toolManager );
+
+        commit.Modify( group, nullptr, RECURSE_MODE::NO_RECURSE );
+        group->SetDesignBlockLibId( blk.GetLibId() );
+
+        commit.Push( _( "Set Group Design Block Link" ) );
+    }
+
+    return success;
 }
 
 
@@ -477,7 +489,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             commit.Modify( group, nullptr, RECURSE_MODE::NO_RECURSE );
             group->SetDesignBlockLibId( aLibId );
 
-            commit.Push( "Set Group Design Block Link" );
+            commit.Push( _( "Set Group Design Block Link" ) );
         }
     }
 

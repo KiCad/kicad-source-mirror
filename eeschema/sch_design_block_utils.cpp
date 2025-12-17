@@ -376,6 +376,16 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         DisplayError( this, ioe.What() );
     }
 
+    if( success && group && !group->HasDesignBlockLink() )
+    {
+        SCH_COMMIT commit( m_toolManager );
+
+        commit.Modify( group, GetScreen() );
+        group->SetDesignBlockLibId( blk.GetLibId() );
+
+        commit.Push( _( "Set Group Design Block Link" ) );
+    }
+
     // Clean up the temporaries
     wxRemoveFile( tempFile );
     // This will also delete the screen
@@ -529,7 +539,7 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
                 commit.Modify( group, GetScreen() );
                 group->SetDesignBlockLibId( aLibId );
 
-                commit.Push( "Set Group Design Block Link" );
+                commit.Push( _( "Set Group Design Block Link" ) );
             }
         }
     }
