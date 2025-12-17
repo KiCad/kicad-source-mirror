@@ -44,6 +44,7 @@
 #include <kidialog.h>
 #include <locale_io.h>
 #include <netinfo.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
@@ -407,6 +408,51 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     bool success = saveSelectionToDesignBlock( libName, selection, blk );
 
+    if( success && !group )
+    {
+        BOARD_COMMIT commit( m_toolManager );
+
+        PCB_GROUP* newGroup = new PCB_GROUP( GetBoard() );
+        newGroup->SetName( blk.GetLibId().GetUniStringLibItemName() );
+        newGroup->SetDesignBlockLibId( blk.GetLibId() );
+
+        bool added = false;
+
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( !edaItem->IsBOARD_ITEM() )
+                continue;
+
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
+
+            if( item->GetParentFootprint() )
+                continue;
+
+            if( !item->IsGroupableType() )
+                continue;
+
+            if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                commit.Modify( existingGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+
+            commit.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+            newGroup->AddItem( item );
+            added = true;
+        }
+
+        if( added )
+        {
+            commit.Add( newGroup );
+            commit.Push( _( "Group Items" ) );
+
+            m_toolManager->RunAction( ACTIONS::selectionClear );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
+        }
+        else
+        {
+            delete newGroup;
+        }
+    }
+
     if( success && group && !group->HasDesignBlockLink() )
     {
         BOARD_COMMIT commit( m_toolManager );
@@ -490,6 +536,50 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             group->SetDesignBlockLibId( aLibId );
 
             commit.Push( _( "Set Group Design Block Link" ) );
+        }
+    }
+    else
+    {
+        BOARD_COMMIT commit( m_toolManager );
+
+        PCB_GROUP* newGroup = new PCB_GROUP( GetBoard() );
+        newGroup->SetName( aLibId.GetUniStringLibItemName() );
+        newGroup->SetDesignBlockLibId( aLibId );
+
+        bool added = false;
+
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( !edaItem->IsBOARD_ITEM() )
+                continue;
+
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
+
+            if( item->GetParentFootprint() )
+                continue;
+
+            if( !item->IsGroupableType() )
+                continue;
+
+            if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                commit.Modify( existingGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+
+            commit.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+            newGroup->AddItem( item );
+            added = true;
+        }
+
+        if( added )
+        {
+            commit.Add( newGroup );
+            commit.Push( _( "Group Items" ) );
+
+            m_toolManager->RunAction( ACTIONS::selectionClear );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
+        }
+        else
+        {
+            delete newGroup;
         }
     }
 

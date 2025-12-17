@@ -37,6 +37,7 @@
 #include <common.h>
 #include <kidialog.h>
 #include <confirm.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <sch_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
@@ -376,7 +377,53 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         DisplayError( this, ioe.What() );
     }
 
-    if( success && group && !group->HasDesignBlockLink() )
+    if( success && !group )
+    {
+        SCH_COMMIT  commit( m_toolManager );
+        SCH_SCREEN* screen = GetScreen();
+
+        SCH_GROUP* newGroup = new SCH_GROUP;
+        newGroup->SetParent( screen );
+        newGroup->SetName( blk.GetLibId().GetUniStringLibItemName() );
+        newGroup->SetDesignBlockLibId( blk.GetLibId() );
+
+        bool added = false;
+
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( !edaItem->IsSCH_ITEM() )
+                continue;
+
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+            if( item->GetParentSymbol() )
+                continue;
+
+            if( !item->IsGroupableType() )
+                continue;
+
+            if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                commit.Modify( existingGroup->AsEdaItem(), screen, RECURSE_MODE::NO_RECURSE );
+
+            commit.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+            newGroup->AddItem( item );
+            added = true;
+        }
+
+        if( added )
+        {
+            commit.Add( newGroup, screen );
+            commit.Push( _( "Group Items" ) );
+
+            m_toolManager->RunAction( ACTIONS::selectionClear );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
+        }
+        else
+        {
+            delete newGroup;
+        }
+    }
+    else if( success && group && !group->HasDesignBlockLink() )
     {
         SCH_COMMIT commit( m_toolManager );
 
@@ -546,6 +593,53 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
+    }
+
+    if( success && !group )
+    {
+        SCH_COMMIT  commit( m_toolManager );
+        SCH_SCREEN* screen = GetScreen();
+
+        SCH_GROUP* newGroup = new SCH_GROUP;
+        newGroup->SetParent( screen );
+        newGroup->SetName( aLibId.GetUniStringLibItemName() );
+        newGroup->SetDesignBlockLibId( aLibId );
+
+        bool added = false;
+
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( !edaItem->IsSCH_ITEM() )
+                continue;
+
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+            if( item->GetParentSymbol() )
+                continue;
+
+            if( !item->IsGroupableType() )
+                continue;
+
+            if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                commit.Modify( existingGroup->AsEdaItem(), screen, RECURSE_MODE::NO_RECURSE );
+
+            commit.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+            newGroup->AddItem( item );
+            added = true;
+        }
+
+        if( added )
+        {
+            commit.Add( newGroup, screen );
+            commit.Push( _( "Group Items" ) );
+
+            m_toolManager->RunAction( ACTIONS::selectionClear );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
+        }
+        else
+        {
+            delete newGroup;
+        }
     }
 
     // Clean up the temporaries
