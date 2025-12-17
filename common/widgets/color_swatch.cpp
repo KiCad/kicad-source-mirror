@@ -115,9 +115,10 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
             wxColor bg = colCycle ? black.ToColour() : white.ToColour();
 
             // Blend fg bg with the checkerboard
-            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() );
-            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() );
-            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() );
+            double alpha = (double)fg.Alpha() / 255.0;
+            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), alpha );
+            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), alpha );
+            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), alpha );
 
             brush.SetColour( r, g, b );
 
