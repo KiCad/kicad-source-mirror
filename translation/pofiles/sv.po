@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-14 20:00+0000\n"
+"PO-Revision-Date: 2025-12-18 16:28+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -26670,7 +26670,7 @@ msgstr "Det gick inte att tilldela en callback-port för inloggning."
 #: eeschema/widgets/panel_remote_symbol.cpp:1074
 #, c-format
 msgid "Unsupported RPC version %d."
-msgstr "RPC-version %s stöds ej."
+msgstr "RPC-version %d stöds ej."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
 msgid "Missing session identifier."
@@ -28290,7 +28290,7 @@ msgstr "Inga celler valda"
 
 #: include/tool/edit_table_tool_base.h:656
 msgid "Selection contains non-cell items"
-msgstr "Urvalet innehåller objekt som inte är celler."
+msgstr "Urvalet innehåller objekt som inte är celler"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
@@ -46797,7 +46797,7 @@ msgstr "Lyckades inte skapa upphovssignatur: %s"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
 #, fuzzy, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "OCC-undantag vid skapande av kontur %d: %s"
+msgstr "OCC-undantag vid skapande av kontur: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
 msgid "Failed to create countersink cone shape"
