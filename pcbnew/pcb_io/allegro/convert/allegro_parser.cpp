@@ -57,8 +57,12 @@ static FMT_VER GetFormatVer( uint32_t aMagic )
     case 0x00130C00: return FMT_VER::V_164;
     case 0x00131000: return FMT_VER::V_165;
     case 0x00131500: return FMT_VER::V_166;
-    case 0x00140400: return FMT_VER::V_172;
-    case 0x00140900: return FMT_VER::V_174;
+    case 0x00140400:
+    case 0x00140500:
+    case 0x00140600:
+    case 0x00140700: return FMT_VER::V_172;
+    case 0x00140900:
+    case 0x00140E00: return FMT_VER::V_174;
     case 0x00141500: return FMT_VER::V_175;
     default: break;
     }
@@ -729,13 +733,12 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
     data.m_SlotName = stream.ReadU32();
     stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
 
-    ReadCond( stream, aVer, data.m_NextSlot );
-
     data.m_Ptr0x06 = stream.ReadU32();
     data.m_Ptr0x11 = stream.ReadU32();
     data.m_Unknown1 = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_Unknown2 );
+    ReadCond( stream, aVer, data.m_Unknown3 );
 
     return block;
 }
@@ -1429,7 +1432,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 
     auto& data = block->GetData();
 
-    stream.Skip( 3 );
+    data.m_UnknownByte1 = stream.ReadU8();
+    data.m_Layer = stream.ReadU8();
+    data.m_UnknownByte2 = stream.ReadU8();
 
     data.m_Key = stream.ReadU32();
     data.m_Next = stream.ReadU32();
@@ -2028,7 +2033,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
         // This seems to be always true and is quite useful for debugging out-of-sync objects
         wxASSERT_MSG( offset % 4 == 0,
-                      wxString::Format( "Allegro object at %#010lx, offset not aligned to 4 bytes", offset ) );
+                      wxString::Format( "Allegro object at %#010zx, offset not aligned to 4 bytes", offset ) );
 
         // Read the type of the object
         // The file can end here without error.
@@ -2296,17 +2301,24 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
             break;
         }
         case 0x00:
+        {
+            // Block type 0x00 marks the end of the objects section
+            wxLogTrace( traceAllegroParser,
+                        wxString::Format( "End of objects marker (0x00) at index %zu, offset %#010zx",
+                                          aBoard.GetObjectCount(), offset ) );
+            return;
+        }
         default:
         {
             if( !m_endAtUnknownBlock )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        "Do not have parser for block index %lu type %#02x available at offset %#010lx",
+                        "Do not have parser for block index %zu type %#02x available at offset %#010zx",
                         aBoard.GetObjectCount(), type, offset ) );
             }
 
             wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Ending at unknown block, index %lu type %#04x at offset %#010lx",
+                        wxString::Format( "Ending at unknown block, index %zu type %#04x at offset %#010zx",
                                           aBoard.GetObjectCount(), type, offset ) );
             return;
         }
@@ -2315,11 +2327,11 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         if( block )
         {
             wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Added block %lu, type %#04x from %#010lx to %#010lx",
+                        wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
                                           aBoard.GetObjectCount(), type, offset, m_stream.Position() ) );
 
             // Turn the binary-ish data into database objects
-            aBoard.InsertBlock( *block );
+            aBoard.InsertBlock( std::move( block ) );
 
             // if( m_progressReporter )
             // {

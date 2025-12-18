@@ -165,6 +165,7 @@ struct DB_OBJ
         FUNCTION_SLOT,  // 0x0F
         FUNCTION_INST,  // 0x10
         PIN_NAME,       // 0x11
+        x12,            // 0x12
         GRAPHIC_SEG,    // 0x14
         LINE,           // 0x15, 0x16, 0x17
         NET,            // 0x1B
@@ -271,7 +272,7 @@ public:
 
     const wxString* ResolveString( uint32_t aRef ) const override;
 
-    virtual void InsertBlock( const BLOCK_BASE& aBlock ) = 0;
+    virtual void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock ) = 0;
 
 protected:
     void visitLinkedList( const FILE_HEADER::LINKED_LIST                     aLList,
@@ -537,6 +538,21 @@ struct PIN_NAME: public DB_OBJ
 
 
 /**
+ * 0x12 objects.
+ */
+struct X12 : public DB_OBJ
+{
+    X12( const BLK_0x12& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Ptr1;
+    DB_REF m_Ptr2;
+    DB_REF m_Ptr3;
+};
+
+
+/**
  * 0x14 objects (a line or arc graphic segment)
  */
 struct GRAPHIC_SEG: public DB_OBJ
@@ -786,7 +802,7 @@ public:
     {
     }
 
-    void InsertBlock( const BLOCK_BASE& aBlock ) override;
+    void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock ) override;
 
     /**
      * Iterate all the links we know about and fill in the object links
@@ -834,12 +850,35 @@ public:
 
     void VisitConnectedGeometry( VIEW_OBJS_VISITOR aVisitor ) const;
 
+    /**
+     * Get a raw block by its key (for compatibility with BOARD_BUILDER).
+     */
+    const BLOCK_BASE* GetObjectByKey( uint32_t aKey ) const
+    {
+        auto it = m_ObjectKeyMap.find( aKey );
+        return it != m_ObjectKeyMap.end() ? it->second : nullptr;
+    }
+
+    /**
+     * Get a string from the string table by key.
+     */
+    const wxString& GetString( uint32_t aKey ) const
+    {
+        static const wxString empty;
+        auto it = m_StringTable.find( aKey );
+        return it != m_StringTable.end() ? it->second : empty;
+    }
+
     // It's not fully clear how much of the header is brd specific or is a more general
     // DB format (or is there is a more general format). Clearly much of it (linked lists,
     // for example) is very board-related.
     // For now, keep it up here, but generalities can push down to DB.
     FMT_VER                      m_FmtVer;
     std::unique_ptr<FILE_HEADER> m_Header;
+
+    // Raw block storage for backward compatibility with BOARD_BUILDER
+    std::vector<std::unique_ptr<BLOCK_BASE>> m_Blocks;
+    std::unordered_map<uint32_t, BLOCK_BASE*> m_ObjectKeyMap;
 
 private:
     /**

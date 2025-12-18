@@ -97,6 +97,13 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
 }
 
 
+uint32_t BLOCK_BASE::GetKey() const
+{
+    std::optional<uint32_t> key = GetBlockKey( *this );
+    return key.value_or( 0 );
+}
+
+
 bool DB_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 {
     if( m_TargetKey == m_EndKey )
@@ -112,7 +119,8 @@ bool DB_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 
     if(!m_Target)
     {
-        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_REF target key %#010x for %s", m_TargetKey, m_DebugName ? m_DebugName : "<unknown>" );
+        wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_REF target key %#010x for %s",
+                    m_TargetKey, m_DebugName ? m_DebugName : "<unknown>" );
     }
 
     return m_Target != nullptr;
@@ -192,18 +200,22 @@ void DB_REF_CHAIN::Visit( std::function<void ( DB_OBJ& aObj )> aVisitor )
 }
 
 
-void BRD_DB::InsertBlock( const BLOCK_BASE& aBlock )
+void BRD_DB::InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock )
 {
-    std::unique_ptr<DB_OBJ> dbObj = createObject( aBlock );
+    std::unique_ptr<DB_OBJ> dbObj = createObject( *aBlock );
 
     if( dbObj )
     {
         AddObject( std::move( dbObj ) );
     }
-    else
+
+    // Store raw block for BOARD_BUILDER compatibility
+    if( aBlock->GetKey() != 0 )
     {
-        // THROW?
+        m_ObjectKeyMap[aBlock->GetKey()] = aBlock.get();
     }
+
+    m_Blocks.push_back( std::move( aBlock ) );
 }
 
 std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
@@ -276,6 +288,12 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     {
         const BLK_0x11& pinNameBlk = BLK_DATA( aBlock, BLK_0x11 );
         obj = std::make_unique<PIN_NAME>( pinNameBlk );
+        break;
+    }
+    case 0x12:
+    {
+        const BLK_0x12& blk = BLK_DATA( aBlock, BLK_0x12 );
+        obj = std::make_unique<X12>( blk );
         break;
     }
     case 0x14:
@@ -477,11 +495,10 @@ ARC::ARC( const BLK_0x01_ARC& aBlk ) :
 
 bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
-    bool ok = true;
+    // m_Parent may point to objects of types we don't parse, so don't fail if it can't be resolved.
+    m_Parent.Resolve( aResolver );
 
-    ok &= m_Parent.Resolve( aResolver );
-
-    return ok;
+    return true;
 }
 
 
@@ -878,6 +895,31 @@ const PIN_NUMBER* PIN_NAME::GetPinNumber() const
 }
 
 
+X12::X12( const BLK_0x12& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::x12, aBlk.m_Key )
+{
+    m_Ptr1.m_TargetKey = aBlk.m_Ptr1;
+    m_Ptr1.m_DebugName = "X12::m_Ptr1";
+
+    m_Ptr2.m_TargetKey = aBlk.m_Ptr2;
+    m_Ptr2.m_DebugName = "X12::m_Ptr2";
+
+    m_Ptr3.m_TargetKey = aBlk.m_Ptr3;
+    m_Ptr3.m_DebugName = "X12::m_Ptr3";
+}
+
+
+bool X12::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    // These pointers may point to objects we don't parse, so don't fail if resolution fails
+    m_Ptr1.Resolve( aResolver );
+    m_Ptr2.Resolve( aResolver );
+    m_Ptr3.Resolve( aResolver );
+
+    return true;
+}
+
+
 GRAPHIC_SEG::GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::GRAPHIC_SEG, aBlk.m_Key )
 {
@@ -933,12 +975,11 @@ LINE::LINE( const BLK_0x15_16_17_SEGMENT& aBlk ):
 
 bool LINE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
-    bool ok = true;
+    // m_Next may point to objects we don't parse (terminator values), so don't fail if it
+    // can't be resolved. Segments are iterated by following the parent SHAPE/TRACK.
+    m_Next.Resolve( aResolver );
 
-    // ok &= m_Parent.Resolve( aResolver );
-    ok &= m_Next.Resolve( aResolver );
-
-    return ok;
+    return true;
 }
 
 
@@ -1031,7 +1072,7 @@ FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk ):
     m_X = aBlk.m_CoordX;
     m_Y = aBlk.m_CoordY;
     m_Rotation = aBlk.m_Rotation;
-    m_Mirrored = false; //aBlk.m_Flags & ??? //;
+    m_Mirrored = ( aBlk.m_Layer != 0 );
 }
 
 
@@ -1092,7 +1133,10 @@ bool FUNCTION_SLOT::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_SlotName.Resolve( aResolver );
-    ok &= m_Component.Resolve( aResolver );
+
+    // m_Component may point to objects we don't parse, so don't fail if resolution fails
+    m_Component.Resolve( aResolver );
+
     ok &= m_PinName.Resolve( aResolver );
 
     return ok;
@@ -1253,7 +1297,7 @@ SHAPE::SHAPE( const BRD_DB& aBrd, const BLK_0x28_SHAPE& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::SHAPE, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
-    // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x28.m_Tail;
+    m_Next.m_EndKey = aBrd.m_Header->m_LL_Shapes.m_Tail;
     m_Next.m_DebugName = "SHAPE::m_Next";
 
     m_Segments.m_TargetKey = aBlk.m_FirstSegmentPtr;
@@ -1265,7 +1309,10 @@ bool SHAPE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
-    ok &= m_Next.Resolve( aResolver );
+    // m_Next may point to objects we don't parse, so don't fail if it can't be resolved.
+    // The SHAPE linked list is used internally by Allegro but not needed for board building.
+    m_Next.Resolve( aResolver );
+
     ok &= m_Segments.Resolve( aResolver );
 
     return ok;
@@ -1296,7 +1343,9 @@ bool X2E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 
     ok &= m_Next.Resolve( aResolver );
     ok &= m_NetAssign.Resolve( aResolver );
-    ok &= m_Connection.Resolve( aResolver );
+
+    // m_Connection may point to objects we don't parse, so don't fail if resolution fails
+    m_Connection.Resolve( aResolver );
 
     return ok;
 }

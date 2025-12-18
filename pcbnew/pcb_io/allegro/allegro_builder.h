@@ -27,6 +27,7 @@
 #include <memory>
 
 #include <convert/allegro_pcb_structs.h>
+#include <convert/allegro_db.h>
 
 #include <board.h>
 #include <reporter.h>
@@ -44,25 +45,29 @@ namespace ALLEGRO
 class LAYER_MAPPER;
 
 /**
- * Class that builds a KiCad board from a RAW_BOARD
+ * Class that builds a KiCad board from a BRD_DB
  * (= FILE_HEADER + STRINGS + OBJECTS + bookkeeping)
  */
 class BOARD_BUILDER
 {
 public:
-    BOARD_BUILDER(const RAW_BOARD& aRawBoard, BOARD& aBoard, REPORTER& aReporter, PROGRESS_REPORTER* aProgressReporter );
+    BOARD_BUILDER( const BRD_DB& aBrdDb, BOARD& aBoard, REPORTER& aReporter, PROGRESS_REPORTER* aProgressReporter );
     ~BOARD_BUILDER();
 
     bool BuildBoard();
 
 private:
     VECTOR2I scale( const VECTOR2I& aVector ) const;
+    VECTOR2I scaleSize( const VECTOR2I& aSize ) const;
     int scale( int aVal ) const;
 
     template <typename T>
     const T* expectBlockByKey( uint32_t aKey, uint8_t aType ) const
     {
-        const BLOCK_BASE* block = m_rawBoard.GetObjectByKey( aKey );
+        if( aKey == 0 )
+            return nullptr;
+
+        const BLOCK_BASE* block = m_brdDb.GetObjectByKey( aKey );
 
         if( !block )
         {
@@ -79,7 +84,7 @@ private:
         return &static_cast<const BLOCK<T>&>( *block ).GetData();
     }
 
-    void reportMissingBlock( uint8_t aKey, uint8_t aType ) const;
+    void reportMissingBlock( uint32_t aKey, uint8_t aType ) const;
     void reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, uint32_t aKey = 0, size_t aOffset = 0,
                                     const wxString& aName = wxEmptyString ) const;
 
@@ -111,6 +116,8 @@ private:
     void setupLayers();
     void createNets();
     void createTracks();
+    void createBoardOutline();
+    void createZones();
     /**
      * Get the font definition for a given index in a 0x30, etc.
      *
@@ -124,7 +131,7 @@ private:
      */
     const BLK_0x07* getFpInstRef( const BLK_0x2D& aFpInstance ) const;
 
-    const RAW_BOARD&   m_rawBoard;
+    const BRD_DB&      m_brdDb;
     BOARD&             m_board;
     REPORTER&          m_reporter;
     PROGRESS_REPORTER* m_progressReporter;

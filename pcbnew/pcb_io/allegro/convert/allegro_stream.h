@@ -64,7 +64,7 @@ public:
         m_stream.read( static_cast<char*>( aDest ), static_cast<std::streamsize>( aSize ) );
         if( m_stream.gcount() != static_cast<std::streamsize>( aSize ) )
         {
-            THROW_IO_ERROR( wxString::Format( "Failed to read requested %lu bytes at offset %lu", aSize, Position() ) );
+            THROW_IO_ERROR( wxString::Format( "Failed to read requested %zu bytes at offset %zu", aSize, Position() ) );
         }
     }
 

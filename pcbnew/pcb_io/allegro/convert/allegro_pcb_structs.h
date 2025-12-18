@@ -722,14 +722,14 @@ struct BLK_0x0F
 
     std::array<char, 32> m_CompDeviceType;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_NextSlot;
-
     uint32_t m_Ptr0x06;
     uint32_t m_Ptr0x11;
 
     uint32_t m_Unknown1;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 };
 
 
@@ -987,11 +987,33 @@ struct BLK_0x1C_PADSTACK
     /**
      * Indexes of fixed slots in the component table
      */
+    /**
+     * Fixed slot indices in the component table.
+     *
+     * The fixed slots come before the per-layer copper entries.
+     * V<172 has 10 fixed slots, V>=172 has 21.
+     *
+     * All fixed slots are technical layers (solder mask, paste mask, film mask,
+     * assembly variant, etc). The exact slot-to-layer mapping is version-dependent
+     * and not fully contiguous. Verified mappings from WORKLOG reverse engineering:
+     *
+     * V<172 (10 fixed):
+     *   Slot 0  = ~TSM (top solder mask)
+     *   Slot 5  = ~TPM (top paste mask)
+     *   Slot 7  = ~TFM (top film mask)
+     *
+     * V>=172 (21 fixed):
+     *   Slot 14 = ~TSM (top solder mask)
+     */
     enum SLOTS
     {
-        SOLDERMASK_TOP = 0,
-        PASTEMASK_TOP = 5,
-        FILMMASKTOP = 7,
+        // V<172 verified slots
+        SOLDERMASK_TOP_V16X = 0,
+        PASTEMASK_TOP_V16X  = 5,
+        FILMMASK_TOP_V16X   = 7,
+
+        // V>=172 verified slots
+        SOLDERMASK_TOP_V17X = 14,
     };
 
     /**
@@ -1385,6 +1407,10 @@ struct BLK_0x2C_TABLE
  */
 struct BLK_0x2D
 {
+    uint8_t  m_UnknownByte1;
+    uint8_t  m_Layer;         // 0 = top (F_Cu), 1 = bottom (B_Cu)
+    uint8_t  m_UnknownByte2;
+
     uint32_t m_Key;
 
     uint32_t m_Next;

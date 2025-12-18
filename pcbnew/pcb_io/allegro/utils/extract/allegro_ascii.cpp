@@ -30,7 +30,25 @@
 
 #include <string_utils.h>
 
+#include <cmath>
+#include <cstdio>
+
 using namespace ALLEGRO;
+
+
+static std::string FormatDouble3( double aValue )
+{
+    char buf[32];
+    std::snprintf( buf, sizeof( buf ), "%.3f", aValue ); //format:allow locale handled below
+
+    for( char* p = buf; *p; ++p )
+    {
+        if( *p == ',' )
+            *p = '.';
+    }
+
+    return buf;
+}
 
 
 static wxString FormatUnits( ALLEGRO::BOARD_UNITS aUnits )
@@ -52,12 +70,12 @@ static wxString FormatUnits( ALLEGRO::BOARD_UNITS aUnits, double aValue )
     switch( aUnits )
     {
         case ALLEGRO::BOARD_UNITS::IMPERIAL:
-            return wxString::Format( "%g mil", aValue );
+            return wxString( FormatDouble2Str( aValue ) ) + wxS( " mil" );
         case ALLEGRO::BOARD_UNITS::METRIC:
-            return wxString::Format( "%g mm", aValue );
+            return wxString( FormatDouble2Str( aValue ) ) + wxS( " mm" );
     }
 
-    return wxString::Format( "%g unknown_units", aValue );
+    return wxString( FormatDouble2Str( aValue ) ) + wxS( " unknown_units" );
 }
 
 
@@ -130,7 +148,7 @@ public:
 
     void AddDegrees( double aDegrees )
     {
-        m_Formatter.Print( "%.3f!", aDegrees / 1000.0 );
+        m_Formatter.Print( "%s!", FormatDouble3( aDegrees / 1000.0 ).c_str() );
     }
 
     void AddYesNo( bool aValue )
@@ -215,7 +233,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
                         const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        return wxString::Format( "%g", fp.m_X );
+                        return wxString( FormatDouble2Str( fp.m_X ) );
                     },
                     { VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
@@ -226,7 +244,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
                         const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        return wxString::Format( "%g", fp.m_Y );
+                        return wxString( FormatDouble2Str( fp.m_Y ) );
                     },
                     { VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
@@ -238,7 +256,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     {
                         // HACK: this is actually done via TEXT position and falls back to PLACE_BOUND center
                         const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        return wxString::Format( "%g", fp.m_X );
+                        return wxString( FormatDouble2Str( fp.m_X ) );
                     },
                     { VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
@@ -249,7 +267,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
                         const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        return wxString::Format( "%g", fp.m_Y );
+                        return wxString( FormatDouble2Str( fp.m_Y ) );
                     },
                     { VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
@@ -260,7 +278,7 @@ std::unordered_map<wxString, FIELD_EXTRACTOR_DEF> g_Extractors = {
                     []( const VIEW_OBJS& aObj, VTYPE aViewType ) -> wxString
                     {
                         const FOOTPRINT_INSTANCE& fp = *aObj.m_FootprintInstance;
-                        return wxString::Format( "%.3f", fp.m_Rotation / 1000.0 );
+                        return wxString( FormatDouble3( fp.m_Rotation / 1000.0 ) );
                     },
                     { VTYPE::SYMBOL, VTYPE::COMPONENT },
             },
