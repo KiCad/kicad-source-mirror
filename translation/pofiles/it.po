@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-17 21:00+0000\n"
+"PO-Revision-Date: 2025-12-18 16:28+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3690,7 +3690,7 @@ msgstr "Segnala il fallimento del lavoro quando sono presenti violazioni"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:58
 msgid "Report all errors for each track"
-msgstr "Riporta tutti gli errori per ogni pista"
+msgstr "Segnala tutti gli errori per ogni pista"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:62
 #: pcbnew/dialogs/dialog_drc_base.cpp:49
@@ -35820,16 +35820,17 @@ msgid "PCB has %d empty or invalid reference designations."
 msgstr "Il C.S. ha %d riferimenti vuoti o non validi."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
-#, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
-msgstr "Controlla la parità tra C.S. e schema elettrico"
+msgstr ""
+"Potresti voler eseguire un DRC selezionando l'opzione 'Controllo parità tra "
+"C.S. e schema elettrico'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>RefDes: %s Impronta: %s:%s in %s sul C.S."
+msgstr "<br/>    RefDes: %s; impronta: %s a %s sul CS."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -36050,9 +36051,8 @@ msgid "Solder Mask/Paste"
 msgstr "Maschera di saldatura / pasta salda"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:138
-#, fuzzy
 msgid "Zone Hatch Offsets"
-msgstr "Imposta scostamento"
+msgstr "Scostamento tratteggio zona"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:140
 msgid "Text & Graphics"
@@ -36081,9 +36081,8 @@ msgstr "Modelli di regolazione lunghezze"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:205
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
-#, fuzzy
 msgid "Tuning Profiles"
-msgstr "Modalità regolazione"
+msgstr "Profili di regolazione"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:227
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -36139,43 +36138,36 @@ msgid "Back copper area:"
 msgstr "Area rame retro:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:129
-#, fuzzy
 msgid "Min track clearance:"
-msgstr "Clearance minima elemento:"
+msgstr "Clearance min pista:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:130
-#, fuzzy
 msgid "Min track width:"
-msgstr "Larghezza pista minima:"
+msgstr "Larghezza min pista:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:131
 msgid "Min drill diameter:"
 msgstr "Diametro min foro:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:132
-#, fuzzy
 msgid "Board stackup thickness:"
-msgstr "Spessore scheda:"
+msgstr "Spessore stackup scheda:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "Area rame fronte:"
+msgstr "Area impronta fronte:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Front footprint density:"
-msgstr "Esporta impronta"
+msgstr "Densità impronta fronte:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "Area rame retro:"
+msgstr "Area impronta retro:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Back footprint density:"
-msgstr "Compatta impronte"
+msgstr "Densità impronta retro:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:477
 #, c-format
@@ -36370,9 +36362,8 @@ msgid "Cleanup Tracks and Vias"
 msgstr "Pulisci piste e via"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:135
-#, fuzzy
 msgid "Legacy Teardrop Properties"
-msgstr "Proprietà arrotondamenti a goccia"
+msgstr "Proprietà arrotondamenti a goccia obsoleti"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:139
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
@@ -36424,9 +36415,8 @@ msgid "Layers:"
 msgstr "Strati:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "Gestore zone..."
+msgstr "Apri gestione zone..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -37126,20 +37116,18 @@ msgid "Run DRC"
 msgstr "Avvia DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:268
-#, fuzzy
 msgid "Report All Errors for Each Track"
-msgstr "Riporta tutti gli errori per ogni pista"
+msgstr "Segnala tutti gli errori per ogni pista"
 
 #: pcbnew/dialogs/dialog_drc.cpp:269
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
-msgstr ""
-"Se selezionata, le zone verranno riempite nuovamente dopo ogni modifica"
+msgstr "Se non selezionata, verrà segnalato solo il primo errore per ogni pista"
 
 #: pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "Evidenzia i simboli corrispondenti alle impronte selezionate"
+msgstr ""
+"Evidenzia gli elementi corrispondenti sull'area di lavoro se selezionati "
+"nell'elenco DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:359
 msgid "DRC incomplete: could not compile custom design rules."
@@ -37256,14 +37244,12 @@ msgid "Update text layers and visibilities"
 msgstr "Aggiorna strati e visibilità testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "Aggiorna dimensioni e stili campi"
+msgstr "Aggiorna dimensioni e stili testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Update text positions"
-msgstr "Aggiorna posizioni campi"
+msgstr "Aggiorna posizioni testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Update text content"
@@ -37352,14 +37338,12 @@ msgid "Update/reset text layers and visibilities"
 msgstr "Aggiorna/reimposta strati e visibilità testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "Aggiorna/reimposta campi stili e dimensioni testo"
+msgstr "Aggiorna/reimposta stili e dimensioni testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text positions"
-msgstr "Aggiorna/reimposta posizioni campi"
+msgstr "Aggiorna/reimposta posizioni testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -37427,9 +37411,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:300
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Generazione file riuscita."
+msgstr "Generazione file IPC-2581 riuscita."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -37486,7 +37469,6 @@ msgstr ""
 "Questo numero deve essere univoco per parte."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:127
-#, fuzzy
 msgid "Generate unique"
 msgstr "Genera univocamente"
 
@@ -37540,9 +37522,8 @@ msgid "*.emn"
 msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "Punto di riferimento griglia:"
+msgstr "Imposta punto di riferimento scheda:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:194
@@ -38792,14 +38773,12 @@ msgid "Drill Y"
 msgstr "Y foratura"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:113
-#, fuzzy
 msgid "Pad->Die Length"
-msgstr "Lunghezza da piazzola a die"
+msgstr "Lunghezza piazzola->die"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:114
-#, fuzzy
 msgid "Pad->Die Delay"
-msgstr "Ritardo da piazzola a die"
+msgstr "Ritardo piazzola->die"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:124
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:253
@@ -38814,20 +38793,17 @@ msgstr "Foro passante"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:255
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:459
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:686
-#, fuzzy
 msgid "Connector"
-msgstr "Connettore:"
+msgstr "Connettore"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:128
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:278
-#, fuzzy
 msgid "Aperture"
-msgstr "Apertura SMD"
+msgstr "Apertura"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:553
-#, fuzzy
 msgid "Edit Pads"
-msgstr "Modifica piazzola"
+msgstr "Modifica piazzole"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:199
 msgid "Use a relative path?"
@@ -38899,9 +38875,8 @@ msgid "Footprint Report"
 msgstr "Rapporto impronta"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Trova il testo"
+msgstr "Testo normale"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -38916,9 +38891,8 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Escludi tutte le impronte senza piazzole passanti"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:102
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Escludi tutte le impronte senza l'opzione non popolare impostata"
+msgstr "Escludi tutte le impronte con l'opzione escludi dalla DIBA impostata"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 msgid "Include board edge layer"
@@ -39148,19 +39122,17 @@ msgid "Unlocked tracks"
 msgstr "Piste sbloccate"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "Elementi bloccati"
+msgstr "Via bloccati"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
-#, fuzzy
 msgid "Unlocked vias"
-msgstr "Piste sbloccate"
+msgstr "Via sbloccati"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "Solo lo strato corrente"
+msgstr "Solo lo strato (%s) corrente"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -39567,7 +39539,6 @@ msgid "Unknown choice"
 msgstr "Scelta sconosciuta"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
 msgstr "Microvia"
 
@@ -39576,9 +39547,8 @@ msgid "Filter tracks by width:"
 msgstr "Filtra piste per larghezza:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "Filtra via per dimensione:"
+msgstr "Filtra via per diametro:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -39589,9 +39559,8 @@ msgid "Via size:"
 msgstr "Dimensione via:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
-#, fuzzy
 msgid "Via annular rings:"
-msgstr "Anelli:"
+msgstr "Anelli via:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1247
@@ -39612,14 +39581,12 @@ msgstr "Solo lo strati connessi"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3270
-#, fuzzy
 msgid "Start and end layers only"
-msgstr "Inizio, fine, e strati connessi"
+msgstr "Solo strati inizio e fine"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:206
-#, fuzzy
 msgid "Via protection features:"
-msgstr "Caratteristiche di protezione:"
+msgstr "Caratteristiche di protezione via:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
@@ -39737,7 +39704,7 @@ msgstr "Valori predefiniti maschere di saldatura / pasta salda"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Zone hatched fill offsets"
-msgstr ""
+msgstr "Scostamento riempimento tratteggiato della zona"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
 msgid "Text && graphics default properties"
@@ -39851,13 +39818,12 @@ msgid "KiCad Layer"
 msgstr "Strato KiCad"
 
 #: pcbnew/dialogs/dialog_map_layers.cpp:332
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Tutti gli strati richiesti (marcati con \"*\") devono essere abbinati. Fare "
-"clic su \"Auto-abbina strati\" per far abbinare automaticamente gli strati "
+"Tutti gli strati richiesti (marcati con '*') devono essere abbinati. Fare "
+"clic su 'Auto-abbina strati' per far abbinare automaticamente gli strati "
 "rimanenti."
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
