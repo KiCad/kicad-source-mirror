@@ -26,6 +26,7 @@
 
 
 #include <trigo.h>
+#include <chrono>
 #include <bitmap_base.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -2635,6 +2636,7 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
 
 void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
+    auto t1 = std::chrono::high_resolution_clock::now();
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     std::optional<SCH_SHEET_PATH> optSheetPath;
@@ -2680,7 +2682,16 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     std::vector<SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
-    LIB_SYMBOL            tempSymbol( *originalSymbol );
+    auto       tCopy1 = std::chrono::high_resolution_clock::now();
+    LIB_SYMBOL tempSymbol( *originalSymbol, nullptr, false );
+    auto       tCopy2 = std::chrono::high_resolution_clock::now();
+
+    if( std::chrono::duration_cast<std::chrono::microseconds>( tCopy2 - tCopy1 ).count() > 100 )
+    {
+        wxLogTrace( traceSchPainter, "SCH_PAINTER::draw symbol copy %s: %lld us", aSymbol->m_Uuid.AsString(),
+                    std::chrono::duration_cast<std::chrono::microseconds>( tCopy2 - tCopy1 ).count() );
+    }
+
     std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
@@ -2807,6 +2818,14 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetFillColor( marker_color );
         m_gal->DrawCurve( left, top, bottom, right, 1 );
+    }
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    if( std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count() > 100 )
+    {
+        wxLogTrace( traceSchPainter, "SCH_PAINTER::draw symbol %s: %lld us", aSymbol->m_Uuid.AsString(),
+                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count() );
     }
 }
 
@@ -3452,6 +3471,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
 {
+    auto t1 = std::chrono::high_resolution_clock::now();
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
 
@@ -3495,6 +3515,13 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
     }
 
     m_gal->Restore();
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    if( std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count() > 100 )
+    {
+        wxLogTrace( traceSchPainter, "SCH_PAINTER::draw bitmap %s: %lld us", aBitmap->m_Uuid.AsString(),
+                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count() );
+    }
 }
 
 

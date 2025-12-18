@@ -85,7 +85,7 @@ public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
                 LEGACY_SYMBOL_LIB* aLibrary = nullptr );
 
-    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary = nullptr );
+    LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary = nullptr, bool aCopyEmbeddedFiles = true );
 
     virtual ~LIB_SYMBOL() = default;
 

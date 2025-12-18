@@ -104,6 +104,7 @@ public:
 
     EMBEDDED_FILES( EMBEDDED_FILES&& other ) noexcept;
     EMBEDDED_FILES( const EMBEDDED_FILES& other );
+    EMBEDDED_FILES( const EMBEDDED_FILES& other, bool aDeepCopy );
 
     virtual ~EMBEDDED_FILES()
     {

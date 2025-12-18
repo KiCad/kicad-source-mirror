@@ -586,6 +586,21 @@ EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other ) :
 }
 
 
+EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other, bool aDeepCopy ) :
+        m_embedFonts( other.m_embedFonts )
+{
+    if( aDeepCopy )
+    {
+        for( const auto& [name, file] : other.m_files )
+            m_files[name] = new EMBEDDED_FILE( *file );
+
+        m_fontFiles = other.m_fontFiles;
+    }
+
+    m_fileAddedCallback = other.m_fileAddedCallback;
+}
+
+
 // Copy assignment operator
 EMBEDDED_FILES& EMBEDDED_FILES::operator=( const EMBEDDED_FILES& other )
 {
