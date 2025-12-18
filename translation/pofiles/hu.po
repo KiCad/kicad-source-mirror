@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-18 16:28+0000\n"
+"PO-Revision-Date: 2025-12-19 22:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:368
@@ -11167,14 +11167,12 @@ msgstr "Könyvtár leírása"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:725
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
-"Hiba történt a globális könyvtártáblázat mentése közben:\n"
+"Hiba történt a könyvtártáblázat mentése során:\n"
 "\n"
-"%s"
 
 #: common/widgets/design_block_pane.cpp:296
 msgid "Please select a library to delete."
@@ -11197,6 +11195,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Töröljük a(z) \"%s\" terv blokk könyvtárat? Ez törölni fogja az összes terv "
+"blokkot is, ami a könyvtárban van."
 
 #: common/widgets/design_block_pane.cpp:325
 #, c-format
@@ -17178,9 +17178,8 @@ msgid "Pin Functions"
 msgstr "Csomópontok"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:326
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Szimulátor..."
+msgstr "Szimulációs modell..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:110
 msgid "Symbol Properties"
@@ -17220,7 +17219,7 @@ msgid "Created project symbol library table.\n"
 msgstr "Projekt rajzjel könyvtártáblázat létrehozva.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
 msgstr "A(z) \"%s\" rajzjel nem található a könyvtártáblázatban."
 
@@ -17241,7 +17240,6 @@ msgstr "Nem hozható létre a biztonsági mentés \"%s\" könyvtára."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:356
 #: eeschema/dialogs/dialog_symbol_remap.cpp:529
-#, fuzzy
 msgid "Backup Error"
 msgstr "Biztonsági mentés hiba"
 
