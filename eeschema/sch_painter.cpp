@@ -2091,7 +2091,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     std::vector<SCH_PIN*> originalPins = originalSymbol->GetPins( unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
-    LIB_SYMBOL            tempSymbol( *originalSymbol );
+    LIB_SYMBOL tempSymbol( *originalSymbol, nullptr, false );
+
     std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
@@ -2219,6 +2220,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->SetFillColor( marker_color );
         m_gal->DrawCurve( left, top, bottom, right, 1 );
     }
+
 }
 
 

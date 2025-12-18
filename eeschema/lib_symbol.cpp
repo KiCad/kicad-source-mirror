@@ -165,9 +165,10 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 }
 
 
-LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
+LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary,
+                        bool aCopyEmbeddedFiles ) :
     SYMBOL( aSymbol ),
-    EMBEDDED_FILES( aSymbol ),
+    EMBEDDED_FILES( aSymbol, aCopyEmbeddedFiles ),
     m_me( this, null_deleter() )
 {
     m_library        = aLibrary;
