@@ -17,7 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
 "PO-Revision-Date: 2025-12-18 16:28+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Stefan Bjornelund the Gnome "
+"<stefan.bjornelund.gnome@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
 "Language: sv\n"
@@ -22438,12 +22439,14 @@ msgid "The submodel name is missing."
 msgstr "Submodellnamnet saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
+#, fuzzy
 msgid "The submodel mode is missing."
-msgstr ""
+msgstr "Delmodellläget saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
+#, fuzzy
 msgid " is not a recognised submodel mode."
-msgstr ""
+msgstr " är inte ett erkänt submodell."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1856
 msgid " is not a recognised Submodel Spec subparameter."
