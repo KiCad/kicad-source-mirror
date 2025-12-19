@@ -220,16 +220,12 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart,
     spline->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
 
     // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
-    // null (i.e. very small) length
+    // null (i.e. very small) length)
     if( spline->GetBezierPoints().size() <= 2 )
     {
-        spline->SetShape( SHAPE_T::SEGMENT );
-        int dist = VECTOR2I( spline->GetStart() - spline->GetEnd() ).EuclideanNorm();
-
-// segment smaller than MIN_SEG_LEN_ACCEPTABLE_NM nanometers are skipped.
-#define MIN_SEG_LEN_ACCEPTABLE_NM 20
-        if( dist < MIN_SEG_LEN_ACCEPTABLE_NM )
-            return;
+         // segment smaller than 1 IU len are skipped by AddLine()
+        AddLine( aStart, aEnd, aStroke );
+        return;
     }
 
     addItem( std::move( spline ) );
