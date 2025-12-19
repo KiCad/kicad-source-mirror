@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-18 16:28+0000\n"
+"PO-Revision-Date: 2025-12-19 22:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -39912,7 +39912,7 @@ msgid "Generate Multichannel Rule Areas"
 msgstr "Genera aree di regole multicanale"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area topologies do not match: %s"
 msgstr "Le topologie dell'area regole non corrispondono: %s"
 
@@ -40135,19 +40135,16 @@ msgid "Reset to the current Y offset from the reference position."
 msgstr "Reimposta allo spostamento Y corrente dalla posizione di riferimento."
 
 #: pcbnew/dialogs/dialog_offset_item_base.h:62
-#, fuzzy
 msgid "Offset Item"
-msgstr "Elementi inizio"
+msgstr "Scostamento elemento"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:175
-#, fuzzy
 msgid "Outset must be a positive value."
-msgstr "(la piazzola deve avere una dimensione positiva)"
+msgstr "Lo scostamento deve essere un valore positivo."
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:181
-#, fuzzy
 msgid "Line width must be a positive value."
-msgstr "La larghezza linea deve essere maggiore di zero."
+msgstr "La larghezza linea deve essere un valore positivo."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -40198,7 +40195,6 @@ msgstr ""
 "valore riportato di seguito."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
 msgstr "Predefiniti strato"
 
@@ -40246,6 +40242,8 @@ msgid ""
 "Switching to non-circular hole will disable backdrills and post-machining. "
 "Continue?"
 msgstr ""
+"Passando a un foro non circolare verranno disattivate le forature posteriori "
+"e la post-lavorazione. Continuare?"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1248
 #, c-format
@@ -40295,7 +40293,7 @@ msgstr "w"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1594
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1623
 msgid "Depth:"
-msgstr ""
+msgstr "Profondità:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -40592,9 +40590,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Piazzola castellata (solo fori passanti)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round through hole only)"
-msgstr "Piazzola castellata (solo fori passanti)"
+msgstr "Press-fit (solo foro passante rotondo)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:595
@@ -40743,7 +40740,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1113
 msgid "Hole post machining"
-msgstr ""
+msgstr "Postlavorazione foro"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
@@ -40772,12 +40769,12 @@ msgstr "Riempimento sfondo"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
-msgstr ""
+msgstr "Entrambi"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1240
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
 msgid "Top backdrill must-cut:"
-msgstr ""
+msgstr "Profondità retroforatura fronte:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1247
@@ -40785,12 +40782,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1280
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:464
 msgid "The backdrill must pass through this layer"
-msgstr ""
+msgstr "La retroforatura deve passare attraverso questo strato"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
 msgid "Bottom backdrill must-cut:"
-msgstr ""
+msgstr "Profondità retroforatura retro:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1451
 msgid "Preview pad in sketch mode"
@@ -41147,9 +41144,8 @@ msgid "Single document"
 msgstr "Documento singolo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "Export selected layers into a single DXF"
-msgstr "Converte le celle selezionate in un unica cella"
+msgstr "Esporta i livelli selezionati in un singolo DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "SVG Options"
@@ -41722,9 +41718,8 @@ msgid "Mid Point"
 msgstr "Punto mediano"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:924
-#, fuzzy
 msgid "Included Angle"
-msgstr "Includi &zone"
+msgstr "Angolo incluso"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:944
 msgid "Point on Circle"
@@ -42031,9 +42026,8 @@ msgstr "Cieco"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/pcb_track.cpp:2847
-#, fuzzy
 msgid "Buried"
-msgstr "Via coperti/interni:"
+msgstr "Sepolto"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:363
 msgid "Start layer:"
@@ -42053,7 +42047,7 @@ msgstr "Caratteristiche di protezione:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
 msgid "Hole post-machining"
-msgstr ""
+msgstr "Postlavorazione foro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 msgid "Add teardrops on via's track connections"
@@ -42668,9 +42662,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Proprietà predefinite per i nuovi elementi grafici"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:381
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "Tabella librerie di simboli"
+msgstr "Tabella (tabella librerie nidificata)"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:500
 #, c-format
@@ -42685,9 +42678,8 @@ msgid "Failed to save footprint library file '%s'."
 msgstr "Fallito salvataggio file libreria impronte '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:568
-#, fuzzy
 msgid "Select Library Table"
-msgstr "Seleziona libreria"
+msgstr "Seleziona tabella librerie"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:115
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:443
