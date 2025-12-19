@@ -268,7 +268,7 @@ REFDES_PREFIX_INFO* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxStrin
     // Wasn't in the info array so add it
     REFDES_PREFIX_INFO newtype;
     newtype.RefDesPrefix = aRefDesPrefix;
-    newtype.LastUsedRefDes = aStartRefDes - 1;
+    newtype.LastUsedRefDes = std::max( aStartRefDes - 1, 0 );
     m_refDesPrefixInfos.push_back( newtype );
 
     return &m_refDesPrefixInfos.back();
