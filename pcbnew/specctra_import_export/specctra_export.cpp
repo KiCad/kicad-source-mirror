@@ -784,70 +784,22 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         {
             // this is best done by QARC's but freerouter does not yet support QARCs.
             // for now, support by using line segments.
-            // So we use a polygon (PATH) to create a approximate arc shape
+            // So we use a "polygon" (PATH) to create a approximate arc shape
+            // Note we can't use "path" with aperture width because FreeRouting converts it to a convex polygon
             outline = new SHAPE( image, T_outline );
 
             image->Append( outline );
-            path = new PATH( outline );
+            path = new PATH( outline, T_polygon );
 
             outline->SetShape( path );
-            path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
+            path->SetAperture( 0 );
             path->SetLayerId( "signal" );
 
-            VECTOR2I  arc_centre = graphic->GetCenter();
-            double    radius = graphic->GetRadius() + graphic->GetWidth()/2;
-            EDA_ANGLE arcAngle = graphic->GetArcAngle();
-
-            VECTOR2I  startRadial = graphic->GetStart() - graphic->GetCenter();
-            EDA_ANGLE arcStart( startRadial );
-
-            arcStart.Normalize();
-
-            // For some obscure reason, FreeRouter does not show the same polygonal
-            // shape for polygons CW and CCW. So used only the order of corners
-            // giving the best look.
-            if( arcAngle < ANGLE_0 )
-            {
-                VECTOR2I endRadial = graphic->GetEnd() - graphic->GetCenter();
-                arcStart = EDA_ANGLE( endRadial );
-                arcStart.Normalize();
-
-                arcAngle = -arcAngle;
-            }
-
-            SHAPE_LINE_CHAIN polyline;
-            ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStart, arcAngle,
-                                  ARC_HIGH_DEF, ERROR_INSIDE );
-
             SHAPE_POLY_SET polyBuffer;
-            polyBuffer.AddOutline( polyline );
+            graphic->TransformShapeToPolygon( polyBuffer, graphic->GetLayer(), 0, ARC_HIGH_DEF,
+                                              ERROR_INSIDE, false );
 
-            radius -= graphic->GetWidth();
-
-            if( radius > 0 )
-            {
-                polyline.Clear();
-                ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStart, arcAngle,
-                                      ARC_HIGH_DEF, ERROR_INSIDE );
-
-                // Add points in reverse order, to create a closed polygon
-                for( int ii = polyline.PointCount() - 1; ii >= 0; --ii )
-                    polyBuffer.Append( polyline.CPoint( ii ) );
-            }
-
-            // ensure the polygon is closed
-            polyBuffer.Append( polyBuffer.Outline( 0 ).CPoint( 0 ) );
-
-            VECTOR2I move = graphic->GetCenter() - arc_centre;
-
-            TransformCircleToPolygon( polyBuffer, graphic->GetStart() - move,
-                                      graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
-
-            TransformCircleToPolygon( polyBuffer, graphic->GetEnd() - move,
-                                      graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
-
-            polyBuffer.Simplify();
-            SHAPE_LINE_CHAIN& poly = polyBuffer.Outline( 0 );
+            const SHAPE_LINE_CHAIN& poly = polyBuffer.COutline( 0 );
 
             for( int ii = 0; ii < poly.PointCount(); ++ii )
             {
