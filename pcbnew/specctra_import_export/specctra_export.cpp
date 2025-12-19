@@ -703,6 +703,32 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
+    SHAPE_POLY_SET crtYd = aFootprint->GetCourtyard( F_CrtYd );
+    crtYd.Append( aFootprint->GetCourtyard( B_CrtYd ) );
+    crtYd.Simplify();
+
+    // Specctra only supports the first outline, so add courtyard first
+    for( const SHAPE_POLY_SET::POLYGON& polygon : crtYd.CPolygons() )
+    {
+        for( const SHAPE_LINE_CHAIN& chain : polygon )
+        {
+            SHAPE* outline = new SHAPE( image, T_outline );
+            image->Append( outline );
+
+            PATH* path = new PATH( outline, T_polygon );
+
+            outline->SetShape( path );
+            path->SetAperture( 0 );
+            path->SetLayerId( "signal" );
+
+            for( int ii = 0; ii < chain.PointCount(); ++ii )
+            {
+                VECTOR2I corner( chain.CPoint( ii ).x, chain.CPoint( ii ).y );
+                path->AppendPoint( mapPt( corner, aFootprint ) );
+            }
+        }
+    }
+
     // get all the FOOTPRINT's SHAPEs and convert those to DSN outlines.
     fpItems.Collect( aFootprint, { PCB_SHAPE_T } );
 
@@ -711,6 +737,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( fpItems[i] );
         SHAPE*     outline;
         PATH*      path;
+
+        if( graphic->IsOnLayer( F_CrtYd ) || graphic->IsOnLayer( B_CrtYd ) )
+            continue; // Courtyard already handled above 
 
         switch( graphic->GetShape() )
         {
