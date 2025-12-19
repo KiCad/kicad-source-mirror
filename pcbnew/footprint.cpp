@@ -4249,7 +4249,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
+            if( aLayer == UNDEFINED_LAYER || text->GetLayer() == aLayer )
                 text->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
         }
 
@@ -4257,7 +4257,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer )
+            if( aLayer == UNDEFINED_LAYER || textbox->GetLayer() == aLayer )
             {
                 // border
                 if( textbox->IsBorderEnabled() )
@@ -4272,7 +4272,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             const PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && shape->GetLayer() == aLayer )
+            if( aLayer == UNDEFINED_LAYER || shape->GetLayer() == aLayer )
                 shape->TransformShapeToPolySet( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
 
@@ -4280,7 +4280,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             const PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && barcode->GetLayer() == aLayer )
+            if( aLayer == UNDEFINED_LAYER || barcode->GetLayer() == aLayer )
                 barcode->TransformShapeToPolySet( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
     }
@@ -4289,7 +4289,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
     {
         for( const PCB_FIELD* field : m_fields )
         {
-            if( field->GetLayer() == aLayer && field->IsVisible() )
+            if( ( aLayer == UNDEFINED_LAYER || field->GetLayer() == aLayer ) && field->IsVisible() )
                 field->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
         }
     }
