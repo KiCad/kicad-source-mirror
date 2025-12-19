@@ -225,7 +225,7 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     else if( aCol == 2 )
         return sym->GetField( FOOTPRINT_FIELD )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 3 )
-        return aHit.sheetPath->empty() ? wxS( "???" ) : aHit.sheetPath->GetPageNumber();
+        return aHit.sheetPath->empty() ? wxString( wxS( "???" ) ) : aHit.sheetPath->GetPageNumber();
     else if( aCol == 4 )
         return m_frame->MessageTextFromValue( sym->GetPosition().x );
     else if( aCol == 5 )
