@@ -777,6 +777,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
             corner.x = graphic->GetStart().x;
             path->AppendPoint( mapPt( corner, aFootprint ) );
+
+            corner = graphic->GetStart();
+            path->AppendPoint( mapPt( corner, aFootprint ) );
             break;
         }
 
