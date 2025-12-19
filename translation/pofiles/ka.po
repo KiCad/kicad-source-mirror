@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-06 07:00+0000\n"
+"PO-Revision-Date: 2025-12-19 22:00+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -9630,7 +9630,7 @@ msgstr ""
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr ""
+msgstr "იტვირთება ნაკვალევის ბიბლიოთეკები"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -45577,7 +45577,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1362
 msgid "Chamfer setback:"
-msgstr "კუთხის ნაზოლი:"
+msgstr "კუთხის ნაზოლის დაყენება:"
 
 #: pcbnew/tools/edit_tool.cpp:1457
 msgid "Exactly two lines must be selected to extend them."
