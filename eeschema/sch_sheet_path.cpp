@@ -621,7 +621,11 @@ wxString SCH_SHEET_PATH::GetPageNumber() const
     wxCHECK( sheet, wxEmptyString );
 
     KIID_PATH tmpPath = Path();
-    tmpPath.pop_back();
+
+    if( !tmpPath.empty() )
+        tmpPath.pop_back();
+    else
+        wxFAIL_MSG( wxS( "Sheet paths must have a least one valid sheet." ) );
 
     return sheet->getPageNumber( tmpPath );
 }
@@ -646,7 +650,10 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 
     KIID_PATH tmpPath = Path();
 
-    tmpPath.pop_back();
+    if( !tmpPath.empty() )
+        tmpPath.pop_back();
+    else
+        wxCHECK_MSG( false, /* void */, wxS( "Sheet paths must have a least one valid sheet." ) );
 
     sheet->addInstance( tmpPath );
     sheet->setPageNumber( tmpPath, aPageNumber );
