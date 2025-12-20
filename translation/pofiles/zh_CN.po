@@ -38,13 +38,14 @@
 # KK0571 <190506420@qq.com>, 2025.
 # yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025.
 # Li Yi <yilibj@gmail.com>, 2025.
+# CharlieYu <charlieyu4994@outlook.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-13 17:07+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-12-21 00:00+0000\n"
+"Last-Translator: CharlieYu <charlieyu4994@outlook.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -52,7 +53,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4481,14 +4482,12 @@ msgstr "仍然添加"
 #: common/dialogs/panel_design_block_lib_table.cpp:775
 #: eeschema/dialogs/panel_sym_lib_table.cpp:711
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:793
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
-"保存全局库表时出错: \n"
+"保存全局库表时出错:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:776
 #: common/dialogs/panel_design_block_lib_table.cpp:795
@@ -4509,11 +4508,12 @@ msgstr "文件保存错误"
 #: common/dialogs/panel_design_block_lib_table.cpp:794
 #: eeschema/dialogs/panel_sym_lib_table.cpp:730
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "保存工程库表时出错。"
+msgstr ""
+"保存工程库表时出错：\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 msgid "Design Block Libraries"
@@ -4625,7 +4625,7 @@ msgstr "选择要嵌入的文件"
 
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "无法移除从父符号继承的嵌入文件。"
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -5707,6 +5707,11 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad 自带一组数量庞大的由 KiCad 库团队维护的符号与封装库。你也许需要制作自己"
+"的库或者从「插件与内容管理器」或其他源安装库\n"
+"\n"
+"库列表是列出已加载的库的配置文件。全局库在每个项目中都能使用，如果需要，你也"
+"可以加入项目特定的库。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
@@ -9063,6 +9068,11 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad 无法使用 '%s'。\n"
+"\n"
+"1. 关闭在 Windows 设置或者本地策略组中的「受控文件夹访问」\n"
+"2. 确保没有其他杀毒软件会干扰 KiCad\n"
+"3. 确保你的权限设置正确"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
@@ -13928,9 +13938,9 @@ msgid "No symbols found in library '%s'."
 msgstr "在库 '%s' 中找不到符号 。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:578
-#, c-format
+#, c-format, fuzzy
 msgid "Error loading symbol '%s': %s"
-msgstr "加载符号 '%s' 时出错: %s"
+msgstr "加载符号 %s 出错: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:586
 msgid "No related symbols could be loaded from the library."
@@ -20048,8 +20058,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"无法读取文件 '%s'。\n"
-"'%s' at line %d, column %d, offset %d"
+"无法加载文件 '%s'。\n"
+"位于文件: %s, 行: %d, 偏移: %d。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1005
 #, c-format
@@ -39101,9 +39111,8 @@ msgstr "外框样式:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:156 pcbnew/zone.cpp:940
-#, fuzzy
 msgid "Hatched"
-msgstr "影线"
+msgstr "阴影线"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
@@ -40715,7 +40724,7 @@ msgstr "外框显示:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
-msgstr ""
+msgstr "区域阴影线距离"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:197
 msgid "Rectangle cannot be zero-sized."
@@ -49547,7 +49556,7 @@ msgstr "生成 content section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:936
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "不支持的引脚类型；已跳过。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1219
 msgid "Generating history section"
@@ -49566,7 +49575,7 @@ msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1320
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "器件 \"%s\" 没有 OEM 编号；BOM 录入将被跳过。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1424
 msgid "Generating CAD data"
@@ -49582,7 +49591,7 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2859
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
+msgstr "检测到重复的封装指针。IPC-2581 输出可能不正确。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3024
 #, c-format
@@ -49591,11 +49600,11 @@ msgstr "导出层 %s, 网络 %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3060
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
+msgstr "过孔使用了不支持的堆叠；已在钻孔文件中省略。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3087
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr ""
+msgstr "焊盘使用了不支持的堆叠；已在钻孔文件中省略。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3230
 msgid ""
@@ -52391,15 +52400,15 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
 msgid "Gate swapping must be performed on gates with equal pin counts."
-msgstr ""
+msgstr "门电路交换只能在具有相同引脚数量的门上。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
 msgid "Gate swapping failed: pad in unit missing from footprint."
-msgstr ""
+msgstr "门电路交换失败：单元中的引脚在封装中不存在。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
 msgid "Gate swapping has no effect: all selected gates have identical nets."
-msgstr ""
+msgstr "交换门电路没有效果：所有选定的门电路都具有相同的网络。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:614
 #: pcbnew/tools/edit_tool_move_fct.cpp:656 pcbnew/tools/pcb_actions.cpp:711
