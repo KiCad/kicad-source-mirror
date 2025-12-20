@@ -144,9 +144,9 @@ private:
 
     std::unique_ptr<LAYER_MAPPER> m_layerMapper;
 
-    // The computed scale factor for the board
-    // (based on units and divisor)
-    int m_scale;
+    // Conversion factor from internal units to nanometers.
+    // Internal coordinates are in mils / divisor, so scale = 25400 / divisor.
+    double m_scale;
 };
 
 } // namespace ALLEGRO

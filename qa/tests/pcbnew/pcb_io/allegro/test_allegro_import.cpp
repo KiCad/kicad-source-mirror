@@ -767,7 +767,8 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
         {
             for( const auto& entry : std::filesystem::directory_iterator( dataPath ) )
             {
-                if( entry.is_regular_file() && entry.path().extension() == ".brd" )
+                if( entry.is_regular_file() && entry.path().extension() == ".brd"
+                    && entry.file_size() > 0 )
                 {
                     boards.push_back( entry.path().filename().string() );
                 }

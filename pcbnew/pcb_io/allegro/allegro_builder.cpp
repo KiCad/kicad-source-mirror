@@ -24,6 +24,7 @@
 #include "allegro_builder.h"
 
 #include <cmath>
+#include <limits>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -544,24 +545,15 @@ BOARD_BUILDER::BOARD_BUILDER( const BRD_DB& aRawBoard, BOARD& aBoard, REPORTER& 
         m_brdDb( aRawBoard ), m_board( aBoard ), m_reporter( aReporter ), m_progressReporter( aProgressReporter ),
         m_layerMapper( std::make_unique<LAYER_MAPPER>( m_brdDb, m_board ) )
 {
-    double scale = 1;
-    switch( m_brdDb.m_Header->m_BoardUnits )
-    {
-    case BOARD_UNITS::IMPERIAL:
-        // 1 mil = 25400 nm
-        scale = 25400;
-        break;
-    case BOARD_UNITS::METRIC:
-        // TODO: is the metric scale um?
-        scale = 1000;
-        break;
-    default: THROW_IO_ERROR( "Unknown board units" ); break;
-    }
+    // Internal coordinates are always stored in mils / divisor, regardless of the
+    // "board units" flag (which controls UI display only, not internal storage).
+    // 1 mil = 25400 nm (KiCad internal units are nanometers).
+    static constexpr double NM_PER_MIL = 25400.0;
 
     if( m_brdDb.m_Header->m_UnitsDivisor == 0 )
         THROW_IO_ERROR( "Board units divisor is 0" );
 
-    m_scale = scale / m_brdDb.m_Header->m_UnitsDivisor;
+    m_scale = NM_PER_MIL / m_brdDb.m_Header->m_UnitsDivisor;
 }
 
 
@@ -570,22 +562,35 @@ BOARD_BUILDER::~BOARD_BUILDER()
 }
 
 
+static int safeScale( double aValue )
+{
+    double result = std::round( aValue );
+
+    if( result > std::numeric_limits<int>::max() )
+        return std::numeric_limits<int>::max();
+
+    if( result < std::numeric_limits<int>::min() )
+        return std::numeric_limits<int>::min();
+
+    return static_cast<int>( result );
+}
+
+
 VECTOR2I BOARD_BUILDER::scale( const VECTOR2I& aVector ) const
 {
-    const VECTOR2I vec{ aVector.x * m_scale, -aVector.y * m_scale };
-    return vec;
+    return VECTOR2I{ safeScale( aVector.x * m_scale ), safeScale( -aVector.y * m_scale ) };
 }
 
 int BOARD_BUILDER::scale( int aValue ) const
 {
-    return aValue * m_scale;
+    return safeScale( aValue * m_scale );
 }
 
 
 VECTOR2I BOARD_BUILDER::scaleSize( const VECTOR2I& aSize ) const
 {
-    // Sizes must always be positive. Unlike coordinates, we don't negate Y.
-    return VECTOR2I{ std::abs( aSize.x ) * m_scale, std::abs( aSize.y ) * m_scale };
+    return VECTOR2I{ safeScale( std::abs( aSize.x ) * m_scale ),
+                     safeScale( std::abs( aSize.y ) * m_scale ) };
 }
 
 
@@ -790,8 +795,8 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
         return nullptr;
 
     text->SetText( strGraphic->m_Value );
-    text->SetTextWidth( m_scale * fontDef->m_CharWidth );
-    text->SetTextHeight( m_scale * fontDef->m_CharHeight );
+    text->SetTextWidth( safeScale( m_scale * fontDef->m_CharWidth ) );
+    text->SetTextHeight( safeScale( m_scale * fontDef->m_CharHeight ) );
 
     return text;
 }
@@ -844,12 +849,12 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
 
-            int radius = static_cast<int>( arc.m_Radius * m_scale );
+            int radius = safeScale( arc.m_Radius * m_scale );
 
             bool clockwise = false; // TODO - flag?
             // Probably follow fabmaster here for flipping, as I guess it's identical.
 
-            shape->SetWidth( m_scale * arc.m_Width );
+            shape->SetWidth( safeScale( m_scale * arc.m_Width ) );
 
             if( start == end )
             {
@@ -902,7 +907,7 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             shape->SetStart( start );
             shape->SetEnd( end );
-            shape->SetWidth( width * m_scale );
+            shape->SetWidth( safeScale( width * m_scale ) );
             break;
         }
         default:
@@ -1157,12 +1162,9 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
     }
 
-    // Determine if this is an SMD pad based on drill size and copper layer count.
-    // If drill is 0, it's definitely SMD. If there's only one copper layer, it's also SMD.
-    // Additionally, a drill size less than 200um (0.2mm) is too small to be a real plated
-    // through-hole and indicates an SMD pad with a placeholder drill value.
-    static const uint32_t MIN_DRILL_UM = 200;
-    bool isSmd = ( aPadstack.m_Drill < MIN_DRILL_UM ) || ( aPadstack.m_LayerCount == 1 );
+    // SMD if there is no drill or only one copper layer
+    int drillNm = scale( static_cast<int>( aPadstack.m_Drill ) );
+    bool isSmd = ( drillNm == 0 ) || ( aPadstack.m_LayerCount == 1 );
 
     if( isSmd )
     {
@@ -1170,7 +1172,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     }
     else
     {
-        padStack.Drill().size = VECTOR2I( scale( aPadstack.m_Drill ), scale( aPadstack.m_Drill ) );
+        padStack.Drill().size = VECTOR2I( drillNm, drillNm );
     }
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( &aFp );
@@ -1490,40 +1492,17 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
         }
     }
 
-    // Debug: dump padstack fields to understand where drill size actually is
-    wxLogTrace( traceAllegroBuilder,
-                "Via padstack fields: m_Drill=%u, m_Unknown2=%u, type=%d, layers=%u",
-                viaPadstack->m_Drill, viaPadstack->m_Unknown2,
-                static_cast<int>( viaPadstack->m_Type ), viaPadstack->m_LayerCount );
-
-    // Dump first few component fields
-    for( size_t i = 0; i < std::min( size_t( 3 ), viaPadstack->m_Components.size() ); ++i )
-    {
-        const auto& comp = viaPadstack->m_Components[i];
-        wxLogTrace( traceAllegroBuilder,
-                    "  Component[%zu]: type=%u, W=%d, H=%d, X3=%d, X4=%d",
-                    i, comp.m_Type, comp.m_W, comp.m_H, comp.m_X3, comp.m_X4 );
-    }
-
-    // The field we labeled m_Drill appears to not be the drill size.
-    // For vias, the drill is typically derived from the pad component dimensions.
-    // Try to find a reasonable drill from the padstack data.
     int viaDrill = 0;
 
-    // Check if m_Unknown2 might be the drill (it's the next field after m_Drill)
-    if( viaPadstack->m_Unknown2 > 0 && viaPadstack->m_Unknown2 < static_cast<uint32_t>( viaWidth ) )
+    if( viaPadstack->m_Drill > 0 )
     {
-        viaDrill = scale( viaPadstack->m_Unknown2 );
-    }
-    else if( viaPadstack->m_Drill > 0 && viaPadstack->m_Drill < static_cast<uint32_t>( viaWidth / 1000 ) )
-    {
-        // m_Drill might be the drill if it's smaller than the via width
-        viaDrill = scale( viaPadstack->m_Drill );
+        viaDrill = scale( static_cast<int>( viaPadstack->m_Drill ) );
     }
     else
     {
-        // Default to a reasonable drill based on via width (drill = 50% of via diameter)
         viaDrill = viaWidth / 2;
+        wxLogTrace( traceAllegroBuilder, "Via at (%d, %d): no drill in padstack, using fallback %d",
+                    aViaData.m_CoordsX, aViaData.m_CoordsY, viaDrill );
     }
 
     if( viaWidth <= 0 )
@@ -1718,7 +1697,7 @@ void BOARD_BUILDER::createBoardOutline()
                 VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
                 VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
 
-                int radius = static_cast<int>( arc.m_Radius * m_scale );
+                int radius = safeScale( arc.m_Radius * m_scale );
 
                 shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( Edge_Cuts ) );
 
@@ -1851,7 +1830,7 @@ void BOARD_BUILDER::createZones()
                 if( start == end )
                 {
                     // Full circle - use arc approximation
-                    int       radius = static_cast<int>( arc.m_Radius * m_scale );
+                    int       radius = safeScale( arc.m_Radius * m_scale );
                     SHAPE_ARC shapeArc( center, start, ANGLE_360 );
                     outline.Append( shapeArc );
                 }
