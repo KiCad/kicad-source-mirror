@@ -64,6 +64,14 @@ DIALOG_DESTINATION::DIALOG_DESTINATION( wxWindow* aParent, JOBSET* aJobsFile,
 
     m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
+    m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                  wxCommandEventHandler( DIALOG_DESTINATION::onDeselectAllClicked ),
+                                  NULL, this );
+
+    m_includeJobs->Connect( wxEVT_CHECKLISTBOX,
+                           wxCommandEventHandler( DIALOG_DESTINATION::onIncludeJobsCheck ),
+                           NULL, this );
+
     SetupStandardButtons();
 }
 
@@ -121,6 +129,36 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
     }
 
 }
+
+
+void DIALOG_DESTINATION::onDeselectAllClicked(wxCommandEvent& event)
+{
+    for( size_t idx = 0; idx < m_includeJobs->GetCount(); ++idx )
+    {
+        m_includeJobs->Check( idx, false );
+    }
+
+    event.Skip();
+}
+
+
+void DIALOG_DESTINATION::onIncludeJobsCheck(wxCommandEvent& event)
+{
+    int clickedIndex = event.GetInt();
+
+    bool newCheckedState = m_includeJobs->IsChecked( clickedIndex );
+
+    wxArrayInt currentSelections;
+    m_includeJobs->GetSelections( currentSelections );
+
+    for( size_t i = 0; i < currentSelections.GetCount(); i++ )
+    {
+        m_includeJobs->Check( currentSelections[i], newCheckedState );
+    }
+
+    event.Skip();
+}
+
 
 bool DIALOG_DESTINATION::TransferDataFromWindow()
 {

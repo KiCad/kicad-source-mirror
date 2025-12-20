@@ -65,11 +65,20 @@ DIALOG_DESTINATION_BASE::DIALOG_DESTINATION_BASE( wxWindow* parent, wxWindowID i
 	m_staticText10->Wrap( -1 );
 	fgSizer1->Add( m_staticText10, 0, wxTOP, 5 );
 
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxVERTICAL );
+
 	wxArrayString m_includeJobsChoices;
-	m_includeJobs = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_includeJobsChoices, 0 );
+	m_includeJobs = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_includeJobsChoices, wxLB_EXTENDED );
 	m_includeJobs->SetMinSize( wxSize( 300,200 ) );
 
-	fgSizer1->Add( m_includeJobs, 1, wxEXPAND, 5 );
+	bSizer3->Add( m_includeJobs, 1, wxEXPAND, 5 );
+
+	m_buttonDeselectAll = new wxButton( this, wxID_ANY, _("Deselect All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_buttonDeselectAll, 0, wxALL, 5 );
+
+
+	fgSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
 
 
 	bSizerMain->Add( fgSizer1, 1, wxEXPAND|wxALL, 10 );

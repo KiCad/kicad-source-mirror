@@ -49,6 +49,7 @@ class DIALOG_DESTINATION_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_buttonOutputPath;
 		wxStaticText* m_staticText10;
 		wxCheckListBox* m_includeJobs;
+		wxButton* m_buttonDeselectAll;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

@@ -32,6 +32,8 @@ public:
 
 private:
     virtual void onOutputPathBrowseClicked(wxCommandEvent& event) override;
+    void onDeselectAllClicked(wxCommandEvent& event);
+    void onIncludeJobsCheck(wxCommandEvent& event);
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
