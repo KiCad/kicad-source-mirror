@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-19 22:00+0000\n"
+"PO-Revision-Date: 2025-12-21 00:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2117,9 +2117,8 @@ msgid "UNKNOWN (%d)"
 msgstr "ISMERETLEN (%d)"
 
 #: common/design_block_io.cpp:137
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "KiCad projekt fájl"
+msgstr "KiCad terv blokk mappák"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3038
@@ -2180,9 +2179,10 @@ msgid "Design block folder '%s' could not be created."
 msgstr "A(z) '%s' terv blokk mappa nem hozható létre."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
+msgstr ""
+"A(z) \"%s\" kapcsolási rajz nem menthető terv blokként a(z) \"%s\" helyre."
 
 #: common/design_block_io.cpp:427
 #, c-format
@@ -10851,7 +10851,7 @@ msgstr "IPC-D-356 teszt fájlok"
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "Workbook file"
-msgstr "Workbook fájl (*.wbk)"
+msgstr "Munkafüzet fájl (*.wbk)"
 
 #: common/wildcards_and_files_ext.cpp:556
 msgid "PNG file"
@@ -15305,7 +15305,6 @@ msgid "Increment step:"
 msgstr "Lépésköz:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:222
-#, fuzzy
 msgid "Swap sources"
 msgstr "Források felcserélése"
 
@@ -21637,8 +21636,9 @@ msgid "New comment character is invalid."
 msgstr "Hőmérséklet-emelkedés:"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1206
+#, fuzzy
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Érvénytelen szintaxis. Should be |_char or &_char, etc..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1215
 #, fuzzy
@@ -21730,9 +21730,8 @@ msgid "Internal Error while reading Enable"
 msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2013
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Primitív átalakítása"
+msgstr "Ismeretlen polaritás "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2047
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -21788,41 +21787,36 @@ msgid "Internal error: Bad parser context."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2606
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Megnevezés kulcsszavak:"
+msgstr "Hiányzó kulcsszó."
 
 #: eeschema/sim/kibis/kibis.cpp:449
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Az alakzatnak nincsenek pontjai!"
+msgstr "A jelalaknak kevesebb, mint két pontja van"
 
 #: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:717
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr ""
-"Nem lehet átnevezni a(z) \"%s\" ideiglenes fájlt a(z) \"%s\" "
-"alkatrészrajzolat könyvtár fájlba."
+msgstr "Nem sikerült törölni az ideiglenes kimeneti fájlt"
 
 #: eeschema/sim/kibis/kibis.cpp:702
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
+msgstr "Hiba az ideiglenes fájl beolvasása közben"
 
 #: eeschema/sim/kibis/kibis.cpp:712
-#, fuzzy
 msgid "Error while creating temporary output file"
-msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
+msgstr "Hiba az ideiglenes kimeneti fájl létrehozása közben"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"A Kibis egyelőre nem támogatja a DUT értékeket. https://ibis.org/summits/"
+"nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:854
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "A modellben egyetlen jelalak pár található. Csökken a pontosság"
 
 #: eeschema/sim/kibis/kibis.cpp:874 eeschema/sim/kibis/kibis.cpp:1080
 msgid "Driver needs at least a pullup or a pulldown"
@@ -21833,6 +21827,8 @@ msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Két jelalak pár, de csak egyetlen tranzisztor. Több egyenlet, mint "
+"ismeretlen."
 
 #: eeschema/sim/kibis/kibis.cpp:1171
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
@@ -21841,6 +21837,7 @@ msgstr ""
 #: eeschema/sim/kibis/kibis.cpp:1185
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr ""
+"A modellben több, mint két jelalak pár található. Az első kettőt használjuk."
 
 #: eeschema/sim/kibis/kibis.cpp:1225
 #, fuzzy
@@ -21902,11 +21899,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
 #: eeschema/sim/legacy_workbook.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"Hiba a nyákterv betöltése közben:\n"
-"%s"
+msgstr "Hiba a munkafüzet megnyitása során: %d. sor: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:132
 #, fuzzy
@@ -21960,6 +21955,8 @@ msgstr ""
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
+"Nem sikerült betölteni az ngspice megosztott könyvtárat. Kérjük, ellenőrizze "
+"a telepítését."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
@@ -22022,9 +22019,9 @@ msgstr ""
 "%s"
 
 #: eeschema/sim/sim_model.cpp:788
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Ismeretlen token: \"%s\""
+msgstr "Ismeretlen szimulációs modell láb \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:86
 #, c-format
@@ -22042,9 +22039,9 @@ msgid "Could not find IBIS pin '%s' in component '%s'"
 msgstr "A(z) \"%s\" könyvtár fájl nem található"
 
 #: eeschema/sim/sim_model_ibis.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen IBIS láb \"%s\" a(z) \"%s\" alkatrészben"
 
 #: eeschema/sim/sim_model_ibis.cpp:111
 #, fuzzy, c-format
@@ -22092,9 +22089,8 @@ msgid "Delay"
 msgstr "Késleltetés"
 
 #: eeschema/sim/sim_model_ibis.cpp:454
-#, fuzzy
 msgid "Number of cycles"
-msgstr "Forrpontok száma"
+msgstr "Ciklusok száma"
 
 #: eeschema/sim/sim_model_ibis.cpp:471
 msgid "Bitrate"
@@ -22219,14 +22215,13 @@ msgid "Another simulation is already running."
 msgstr "Egy másik szimuláció már fut."
 
 #: eeschema/sim/simulator_frame.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "A(z) \"%s\" fájlt nem lehet betölteni"
+msgstr "A(z) \"%s\" fájlt nem lehet betölteni vagy értelmezni"
 
 #: eeschema/sim/simulator_frame.cpp:621
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Nyákterv módosítások mentése"
+msgstr "Módosítások mentése a munkafüzetbe?"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
 #, fuzzy
@@ -22283,9 +22278,8 @@ msgid "Perform Fourier Analysis..."
 msgstr ""
 
 #: eeschema/sim/simulator_frame_ui.cpp:174
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Jelek"
+msgstr "Jel nevének másolása"
 
 #: eeschema/sim/simulator_frame_ui.cpp:218
 #: eeschema/sim/simulator_frame_ui.cpp:771
@@ -22301,12 +22295,11 @@ msgstr "%s (valamint a  %s) rajzjel tulajdonságai"
 
 #: eeschema/sim/simulator_frame_ui.cpp:277
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "Több jel Fourier analízise"
 
 #: eeschema/sim/simulator_frame_ui.cpp:279
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "Kezdő frekvencia:"
+msgstr "Alapharmonikus:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:343
 #, fuzzy, c-format
@@ -22319,9 +22312,8 @@ msgid "Format Value..."
 msgstr "Érték szerkesztése..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:421
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "Szegmens törlése"
+msgstr "Mérés törlése"
 
 #: eeschema/sim/simulator_frame_ui.cpp:600
 #: eeschema/sim/simulator_frame_ui.cpp:1003
@@ -22333,16 +22325,14 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:615
 #: eeschema/sim/simulator_frame_ui_base.cpp:111
 #: eeschema/sim/simulator_frame_ui_base.cpp:168
-#, fuzzy
 msgid "Signal"
 msgstr "Jel"
 
 #: eeschema/sim/simulator_frame_ui.cpp:609
 #: eeschema/sim/simulator_frame_ui_base.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:225 pcbnew/dialogs/dialog_plot_base.h:154
-#, fuzzy
 msgid "Plot"
-msgstr "Plottolás"
+msgstr "Ábra"
 
 #: eeschema/sim/simulator_frame_ui.cpp:611
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
@@ -22373,14 +22363,12 @@ msgid "%s is not tunable"
 msgstr "%s nem hangolható"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1612
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "lokális távolságtartás és szigetelési távolság beállítások"
+msgstr "Hiba: nincs aktuális szimuláció.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1621
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "Hiba a papírelrendezés fájl írása közben"
+msgstr "Hiba: nincs definiálva a szimuláció típusa.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1627
 #, fuzzy
@@ -22390,13 +22378,16 @@ msgstr "Hiba a papírelrendezés fájl írása közben"
 #: eeschema/sim/simulator_frame_ui.cpp:2901
 #: eeschema/sim/simulator_frame_ui.cpp:3017
 #: eeschema/sim/simulator_frame_ui.cpp:3060
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Szimulátor beállítások"
+msgstr ""
+"\n"
+"\n"
+"Szimuláció eredményei:\n"
+"\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
 msgid "Measurement"
@@ -22977,6 +22968,8 @@ msgstr ""
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
+"A(z) \"%s\" rajzjel nem helyettesítheti a belőle származtatott \"%s\" "
+"rajzjelet."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:998
 #, c-format
@@ -22992,11 +22985,12 @@ msgid ""
 msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1024
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
-msgstr "Biztos benne, hogy felülírja a fájlokat a célmappában?"
+msgstr ""
+"\n"
+"Szeretné az összeset felülírni, vagy az új rajzjeleket átnevezni?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1028
 msgid "Overwrite All"
@@ -23042,16 +23036,18 @@ msgid "Symbol %s saved to library '%s'."
 msgstr "\"%s\" rajzjel mentve a(z) \"%s\" könyvtárba."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1240
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "Már létezik egy \"%s\" nevű réteg."
+msgstr "Már létezik egy \"%s\" nevű rajzjel."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
-msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
+msgstr ""
+"A(z) \"%s\" rajzjel megváltozott.\n"
+"Szeretné törölni a könyvtárból?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1290
 #, c-format
@@ -23501,33 +23497,28 @@ msgid "Select a complete connection"
 msgstr "Teljes csatlakozás kiválasztása"
 
 #: eeschema/tools/sch_actions.cpp:150
-#, fuzzy
 msgid "Show/hide design blocks library"
-msgstr "KiCad alkatrészrajzolat könyvtár útvonal (*.pretty)"
+msgstr "Terv blokk könyvtár mutatása/elrejtése"
 
 #: eeschema/tools/sch_actions.cpp:156
-#, fuzzy
 msgid "Save Current Sheet as Design Block..."
-msgstr "Aktuális lap mentése más néven..."
+msgstr "Aktuális lap mentése terv blokként..."
 
 #: eeschema/tools/sch_actions.cpp:157
-#, fuzzy
 msgid "Create a new design block from the current sheet"
-msgstr "Aktuális képernyőtartalom mentése PNG fájlba"
+msgstr "Új terv blokk létrehozása az aktuális lapból"
 
 #: eeschema/tools/sch_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Kijelölés mentése terv blokként..."
 
 #: eeschema/tools/sch_actions.cpp:164
-#, fuzzy
 msgid "Create a new design block from the current selection"
-msgstr "Új könyvtár létrehozása a projekt számára"
+msgstr "Új terv blokk létrehozása a kijelölésből"
 
 #: eeschema/tools/sch_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Blokk törlése"
+msgstr "Terv blokk törlése"
 
 #: eeschema/tools/sch_actions.cpp:171
 #, fuzzy
@@ -23873,9 +23864,8 @@ msgid "Sync Sheet Pins..."
 msgstr "Lap kivezető láb hozzáadása"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Lap kivezető lábak importálása"
+msgstr "Lap importálása..."
 
 #: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
@@ -24424,7 +24414,6 @@ msgid "Open PCB in board editor"
 msgstr "NYÁK megnyitása a tervezőben"
 
 #: eeschema/tools/sch_actions.cpp:1115
-#, fuzzy
 msgid "Export Netlist..."
 msgstr "Netlista exportálása..."
 
@@ -24508,7 +24497,6 @@ msgid "Show Directive Labels"
 msgstr "Új címke"
 
 #: eeschema/tools/sch_actions.cpp:1183
-#, fuzzy
 msgid "Show ERC Warnings"
 msgstr "ERC figyelmeztetések mutatása"
 
@@ -24519,7 +24507,6 @@ msgstr ""
 "Jelölők megjelenítése az elektromos szabályellenőrző figyelmeztetésekhez"
 
 #: eeschema/tools/sch_actions.cpp:1189
-#, fuzzy
 msgid "Show ERC Errors"
 msgstr "ERC hibák mutatása"
 
@@ -24529,9 +24516,8 @@ msgid "Show markers for electrical rules checker errors"
 msgstr "Elektromos szabályellenőrző (ERC) indítása"
 
 #: eeschema/tools/sch_actions.cpp:1195
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "ERC-kizárások mutatása"
+msgstr "ERC kizárások mutatása"
 
 #: eeschema/tools/sch_actions.cpp:1196
 #, fuzzy
@@ -24615,9 +24601,8 @@ msgid "Toggle automatic annotation of new symbols"
 msgstr "Automatikusan elhelyezheti rajzjel mezőket"
 
 #: eeschema/tools/sch_actions.cpp:1266
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Nyomtatás"
+msgstr "Kapcsolási rajz javítása"
 
 #: eeschema/tools/sch_actions.cpp:1267
 msgid "Run various diagnostics and attempt to repair schematic"
@@ -24661,7 +24646,6 @@ msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Kiválasztott lap tartalmának megjelenítése"
 
 #: eeschema/tools/sch_actions.cpp:1305
-#, fuzzy
 msgid "Leave Sheet"
 msgstr "Lap elhagyása"
 
@@ -24801,7 +24785,7 @@ msgstr "Aktuális lap másolatának mentése másik helyre vagy más néven"
 
 #: eeschema/tools/sch_actions.cpp:1468
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Új analízis fül..."
 
 #: eeschema/tools/sch_actions.cpp:1469
 msgid "Create a new tab containing a simulation analysis"
@@ -24948,9 +24932,8 @@ msgid "All units of this symbol are already placed."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:778
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Jelek hozzáadása az ábrához"
+msgstr "Terv blokk hozzáadása"
 
 #: eeschema/tools/sch_drawing_tools.cpp:779
 #, fuzzy
@@ -24969,9 +24952,9 @@ msgstr "Nyomja meg az <ESC>-t a kép létrehozásának megszakításához."
 #: eeschema/tools/sch_drawing_tools.cpp:1095
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #: pagelayout_editor/pl_editor_frame.cpp:881 pcbnew/tools/drawing_tool.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr "Nem sikerült betölteni a(z) \"%s\" képet"
+msgstr "Nem sikerült betölteni a(z) \"%s\" képet."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1118 pcbnew/tools/drawing_tool.cpp:801
 msgid "Place Image"
@@ -25081,7 +25064,6 @@ msgid "No sub schematic found in the current project"
 msgstr "Aktuális projekt bezárása"
 
 #: eeschema/tools/sch_edit_tool.cpp:78
-#, fuzzy
 msgid "Symbol Unit"
 msgstr "Rajzjel részegység"
 
@@ -25272,9 +25254,8 @@ msgstr "%d lehetséges probléma kijavítva."
 
 #: eeschema/tools/sch_editor_control.cpp:2905
 #: pcbnew/drc/drc_rule_parser.cpp:179
-#, fuzzy
 msgid "No errors found."
-msgstr "Nem található jelölő"
+msgstr "Nem találtunk hibát."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:330
 #, fuzzy
@@ -25343,9 +25324,8 @@ msgstr "Könyvtár: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1590
-#, fuzzy
 msgid "Library item: "
-msgstr "Könyvtárszűrő:"
+msgstr "Könyvtár elem: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1608
@@ -25363,12 +25343,8 @@ msgstr "Rajzjel könyvtárak kezelése"
 
 #: eeschema/tools/sch_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1616
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr ""
-"A(z) \"%s\" megnevezésű könyvtár nincs engedélyezve a jelenlegi "
-"konfiguráció.\n"
-"Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
+msgstr "A könyvtár nincs engedélyezve a jelenlegi konfigurációban."
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
 #: pcbnew/tools/board_inspection_tool.cpp:1636
@@ -25435,9 +25411,8 @@ msgid "Add Corner"
 msgstr "Tápszimbólum hozzáadása"
 
 #: eeschema/tools/simulator_control.cpp:109
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "Szimulátor munkafüzetet megnyitása"
+msgstr "Szimulációs munkafüzet megnyitása"
 
 #: eeschema/tools/simulator_control.cpp:128
 msgid "noname"
@@ -25456,9 +25431,8 @@ msgid "Save Plot Data"
 msgstr "Ábra adatainak mentése"
 
 #: eeschema/tools/simulator_control.cpp:520
-#, fuzzy
 msgid "SPICE Netlist"
-msgstr "SPICE netlista fájl (*.cir)"
+msgstr "SPICE netlista"
 
 #: eeschema/tools/symbol_editor_control.cpp:293
 #, c-format
@@ -32839,18 +32813,16 @@ msgid "Enable Teardrops"
 msgstr "Címke hozzáadása"
 
 #: pcbnew/board_connected_item.cpp:284
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "Legjobb hossz:"
+msgstr "Legjobb hossz arány"
 
 #: pcbnew/board_connected_item.cpp:291
 msgid "Max Length"
 msgstr "Max hossz"
 
 #: pcbnew/board_connected_item.cpp:297
-#, fuzzy
 msgid "Best Width Ratio"
-msgstr "Szöveg szélesség"
+msgstr "Legjobb szélesség arány"
 
 #: pcbnew/board_connected_item.cpp:304
 msgid "Max Width"
@@ -32872,9 +32844,8 @@ msgid "Allow Teardrops To Span Two Tracks"
 msgstr "Furat túl közel van egy vezetősávhoz"
 
 #: pcbnew/board_connected_item.cpp:328
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "Maximális szélesség:"
+msgstr "Maximális szélesség arány"
 
 #: pcbnew/board_item.cpp:183
 #, fuzzy
@@ -32906,14 +32877,12 @@ msgid "Top Solder Paste"
 msgstr "Forrasztásgátló és paszta réteg"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:668
-#, fuzzy
 msgid "Top Solder Mask"
-msgstr "Forrasztásgátló réteg színe"
+msgstr "Felső forrasztásgátló réteg"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:709
-#, fuzzy
 msgid "Bottom Solder Mask"
-msgstr "Felső forrasztásgátló réteg"
+msgstr "Alsó forrasztásgátló réteg"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:717
 #, fuzzy
@@ -32925,9 +32894,8 @@ msgid "Bottom Silk Screen"
 msgstr "Alsó Szitanyomat"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
-#, fuzzy
 msgid "Incorrect value for Epsilon R"
-msgstr "Helytelen R1 / R2 érték."
+msgstr "Érvénytelen Epszilon R érték"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:51
 #, fuzzy
@@ -32944,7 +32912,7 @@ msgstr "Anyag"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:102
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
 msgid "Epsilon R"
-msgstr ""
+msgstr "Epszilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:106
@@ -32954,7 +32922,7 @@ msgstr "Mágneses Veszteség Tangens"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr ""
+msgstr "Epszilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 #, fuzzy
@@ -33038,9 +33006,8 @@ msgid "Layer '%s' (sublayer %d/%d)"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:327
-#, fuzzy
 msgid "Add Dielectric Layer"
-msgstr "Réteg kiválasztása"
+msgstr "Dielektrikum réteg hozzáadása"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:330
 #: pcbnew/dialogs/panel_setup_layers.cpp:1059
@@ -33053,9 +33020,8 @@ msgid "Layer '%s' sublayer %d/%d"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:385
-#, fuzzy
 msgid "Remove Dielectric Layer"
-msgstr "Relatív dielektromos állandók"
+msgstr "Dielektrikum réteg törlése"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:388
 msgid "Select layer to remove:"
@@ -33161,7 +33127,6 @@ msgstr "Dielektromos réteg eltávolítása..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:109
-#, fuzzy
 msgid "Id"
 msgstr "Azonosító"
 
@@ -33217,7 +33182,6 @@ msgid "Immersion gold"
 msgstr "Aranyozás"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
-#, fuzzy
 msgid "HT_OSP"
 msgstr "HT_OSP"
 
@@ -47036,9 +47000,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3885
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Via betöltés..."
+msgstr "Viák betöltése..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3929
 #, fuzzy, c-format
@@ -47047,9 +47010,8 @@ msgid ""
 msgstr "Rézkitöltés nem csatlakozik egy forrszemhez sem."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3992
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Vezetősáv betöltés..."
+msgstr "Vezetősávok betöltése..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4209
 #, fuzzy
@@ -47057,9 +47019,8 @@ msgid "Loading unicode strings..."
 msgstr "Betöltés..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4223
-#, fuzzy
 msgid "Loading text..."
-msgstr "Szöveg betöltés..."
+msgstr "Szöveg betöltése..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4255
 #, c-format
@@ -47086,24 +47047,21 @@ msgid "Unknown textbox justification %d, aText %s"
 msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4646
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Gerber fájlok betöltése..."
+msgstr "Téglalapok betöltése..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
-#, fuzzy
 msgid "Altium Circuit Maker PCB files"
-msgstr "Geda alkatrészrajzolat könyvtár fájl (*.fp)"
+msgstr "Altium Circuit Maker NYÁK fájlok"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_studio.h:37
-#, fuzzy
 msgid "Altium Circuit Studio PCB files"
-msgstr "KiCad kapcsolási rajz fájl (*.sch)"
+msgstr "Altium Circuit Studio NYÁK fájlok"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Alkatrésztok betöltése könyvtárból"
+msgstr "Nincs alkatrészrajzolat a(z) %s könyvtárban"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:328
 #, fuzzy, c-format
@@ -47111,18 +47069,16 @@ msgid "Footprint '%s' not found in '%s'."
 msgstr "A rajzjel nem található a(z) \"%s\"-ben!"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
-#, fuzzy
 msgid "Altium Designer PCB files"
-msgstr "KiCad kapcsolási rajz fájl (*.sch)"
+msgstr "Altium Designer NYÁK fájlok"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:49
 msgid "Altium PCB Library or Integrated Library"
 msgstr ""
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:32
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Tömör"
+msgstr "Solidworks NYÁK fájlok"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -47627,14 +47583,12 @@ msgstr ""
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:137
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:72
-#, fuzzy
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Eagle ver. 6.x XML nyákterv fájl"
+msgstr "Eagle ver. 6.x XML NYÁK fájlok"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:142
-#, fuzzy
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML könyvtár fájl (*.lbr)"
+msgstr "Eagle ver. 6.x XML könyvtár fájlok (*.lbr)"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:778
 #, fuzzy, c-format
@@ -47690,7 +47644,7 @@ msgstr "A rajzjel nem található a(z) \"%s\"-ben!"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro projekt"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:268
 #, c-format
@@ -47865,27 +47819,26 @@ msgid "Could not read file "
 msgstr "Nem sikerült olvasni a fájlt. "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
-#, fuzzy
 msgid "Fabmaster PCB files"
-msgstr "Fabmaster PCB fájlok"
+msgstr "Fabmaster NYÁK fájlok"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "A(z) \"%s\" nem konvertálható egész számra."
+msgstr "\"%s\" nem konvertálható egész számmá."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:225
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:871
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Az alkatrészrajzolat könyvtár nem található!"
+msgstr "A(z) \"%s\" alkatrészrajzolat könyvtár nem található."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:279
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "A(z) \"%s\" könyvtárnak nincs \"%s\" alkatrészrajzolatja a törléshez"
+msgstr "A(z) \"%s\" könyvtárban nincs \"%s\" alkatrészrajzolat."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:343
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:874
@@ -47895,37 +47848,35 @@ msgid "Unknown token '%s'"
 msgstr "Ismeretlen token: \"%s\""
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Element token contains %d parameters."
 msgstr "Az elem tokenje %d paramétert tartalmaz."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:972
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3071
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "a(z) \"%s\" könyvtár mappa nem várt almappákat tartalmaz"
+msgstr "A(z) \"%s\" könyvtár mappa nem várt almappákat tartalmaz."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:991
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "váratlan fájl \"%s\" található a(z) \"%s\" mappában"
+msgstr "Váratlan fájl \"%s\" található a(z) \"%s\" könyvtárban."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1010
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3270
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3108
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "\"%s\" alkatrészrajzolat könyvtár nem törölhető"
+msgstr "\"%s\" alkatrészrajzolat könyvtár nem törölhető."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:52
-#, fuzzy
 msgid "gEDA PCB footprint file"
-msgstr "Alkatrészrajzolat szűrő hozzáadása"
+msgstr "gEDA PCB alkatrészrajzolat fájl"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:57
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Altium PCB alkatrészrajzolat könyvtár fájlok"
+msgstr "gEDA PCB alkatrészrajzolat könyvtár mappa"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:339
 #, fuzzy
@@ -48011,9 +47962,9 @@ msgid "File '%s' has an unrecognized version: %d."
 msgstr "A(z) \"%s\" fájl nem található."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:796
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Ismeretlen laptípus \"%s\" a %d. sorban"
+msgstr "Ismeretlen laptípus \"%s\" a %d. sorban."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1377
 #, fuzzy, c-format
@@ -48101,15 +48052,14 @@ msgid "Legacy footprint library files"
 msgstr "Örökölt alkatrészrajzolat könyvtár fájl (*.mod)"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr ""
-"Nem hozható létre az alkatrészrajzolat könyvtár \"%s\" elérési útvonala"
+msgstr "A(z) \"%s\" alkatrészrajzolat könyvtár nem hozható létre."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala csak olvasható"
+msgstr "A(z) \"%s\" alkatrészrajzolat könyvtár csak olvasható."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:294
 msgid "Internal Group Data Error"
@@ -48143,12 +48093,11 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "ismeretlen zóna sarok simítás típus: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2762
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "ez a fájl nem tartalmaz NYÁK tervet"
+msgstr "Ez a fájl nem tartalmaz NYÁK tervet."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2929
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
@@ -48157,12 +48106,11 @@ msgstr ""
 "Szeretné létrehozni?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
-#, fuzzy
 msgid "Library Not Found"
-msgstr "A könyvtár nem található"
+msgstr "Könyvtár nem található"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2959
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Alkatrészrajzolat fájlnév \"%s\" nem érvényes."
 
@@ -48172,14 +48120,13 @@ msgid "Insufficient permissions to delete '%s'."
 msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3090
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "váratlan fájl \"%s\" található a(z) \"%s\" mappában"
+msgstr "Váratlan fájl \"%s\" a(z) \"%s\" könyvtárban."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:307
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "KiCad alkatrészrajzolat fájlok"
+msgstr "KiCad alkatrészrajzolat fájl"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:287
 #, fuzzy, c-format
@@ -48364,14 +48311,12 @@ msgid "Failed to add component data"
 msgstr "\"%s\" betöltése sikertelen"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "IPC-D-356 netlista fájl létrehozása"
+msgstr "ODB++ struktúra létrehozása"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "Nyákterv exportálása"
+msgstr "Panel exportálása ODB++-ba"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:64
 #, fuzzy
@@ -48380,9 +48325,9 @@ msgstr "Rajzjel adatlapja:"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCad layer %u"
-msgstr "ismeretlen forrszem típus (%d)"
+msgstr "Ismeretlen PCad réteg: %u"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:753
 msgid "KiCad only supports 32 signal layers."
@@ -48475,9 +48420,8 @@ msgid "Associated Layer"
 msgstr "Inaktív Rétegek:"
 
 #: pcbnew/pcb_reference_image.cpp:389
-#, fuzzy
 msgid "Greyscale"
-msgstr "Szürkeárnyalatos kép"
+msgstr "Szürkeárnyalatos"
 
 #: pcbnew/pcb_shape.cpp:615
 msgid "Drawing"
@@ -48570,9 +48514,8 @@ msgid "removed annular ring"
 msgstr "Fityegő viák törlése"
 
 #: pcbnew/pcb_track.cpp:1610
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Vezetősáv "
+msgstr "Vezetősáv (ív)"
 
 #: pcbnew/pcb_track.cpp:1637
 #, fuzzy
@@ -49003,7 +48946,6 @@ msgid "board minimum track width"
 msgstr "Minimális szélesség:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:715 pcbnew/router/router_tool.cpp:783
-#, fuzzy
 msgid "existing track"
 msgstr "létező vezetősáv"
 
@@ -50496,9 +50438,9 @@ msgid "Move Exactly"
 msgstr "Pontos áthelyezés"
 
 #: pcbnew/tools/edit_tool.cpp:3046
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicated %d item(s)"
-msgstr "%d azonos elem"
+msgstr "%d elem megkettőzve"
 
 #: pcbnew/tools/edit_tool.cpp:3392
 #, fuzzy
@@ -50698,14 +50640,12 @@ msgid "Subtract polygons."
 msgstr "Sokszögek vázlat módban"
 
 #: pcbnew/tools/item_modification_routine.cpp:607
-#, fuzzy
 msgid "Unable to subtract the selected polygons."
-msgstr "A szegmens nem vonszolható: két kollineáris szegmens"
+msgstr "Nem sikerült kivonni a kijelölt sokszögeket."
 
 #: pcbnew/tools/item_modification_routine.cpp:611
-#, fuzzy
 msgid "Some of the polygons could not be subtracted."
-msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
+msgstr "Némely sokszöget nem sikerült kivonni."
 
 #: pcbnew/tools/item_modification_routine.cpp:634
 #, fuzzy
@@ -51142,7 +51082,6 @@ msgid "Duplicates the selected item(s), incrementing pad numbers"
 msgstr "Kijelölt elem(ek) duplikálása, a forrszem számozások növelése"
 
 #: pcbnew/tools/pcb_actions.cpp:503
-#, fuzzy
 msgid "Move Exactly..."
 msgstr "Mozgatás pontosan..."
 
@@ -51151,9 +51090,8 @@ msgid "Moves the selected item(s) by an exact amount"
 msgstr "A kijelölt elem(ek) mozgatása egy adott értékkel"
 
 #: pcbnew/tools/pcb_actions.cpp:510
-#, fuzzy
 msgid "Move Corner To..."
-msgstr "Sarok mozgatása"
+msgstr "Sarok mozgatása..."
 
 #: pcbnew/tools/pcb_actions.cpp:511
 #, fuzzy
@@ -51161,9 +51099,8 @@ msgid "Move the active corner to an exact location"
 msgstr "A kijelölt elem(ek) pontos mozgatása"
 
 #: pcbnew/tools/pcb_actions.cpp:517
-#, fuzzy
 msgid "Move Midpoint To..."
-msgstr "Végpont mozgatása"
+msgstr "Középpont mozgatása..."
 
 #: pcbnew/tools/pcb_actions.cpp:518
 #, fuzzy
@@ -51176,12 +51113,10 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Kijelölt elem(ek) tükrözése a vízszintes tengelyre"
 
 #: pcbnew/tools/pcb_actions.cpp:555
-#, fuzzy
 msgid "Mirrors selected item(s) across the Y axis"
 msgstr "Kijelölt elem(ek) tükrözése az Y tengelyre"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Mirrors selected item(s) across the X axis"
 msgstr "Kijelölt elem(ek) tükrözése az X tengelyre"
 
@@ -51197,9 +51132,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:586
-#, fuzzy
 msgid "Skip to next item"
-msgstr "Zárolás: zárolt"
+msgstr "Ugrás a következő elemre"
 
 #: pcbnew/tools/pcb_actions.cpp:592
 #, fuzzy
@@ -51284,7 +51218,6 @@ msgid "Create the intersection of the selected polygons"
 msgstr "A kiválasztott grafikai réteg törlése"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Delete Full Track"
 msgstr "Teljes vezetősáv törlése"
 
@@ -51419,7 +51352,6 @@ msgid "Swap Layers..."
 msgstr "Rétegek felcserélése..."
 
 #: pcbnew/tools/pcb_actions.cpp:820
-#, fuzzy
 msgid "Move tracks or drawings from one layer to another"
 msgstr "Vezetősávok és rajzolatok áthelyezése egy másik rétegre"
 
@@ -51459,24 +51391,20 @@ msgstr ""
 "alapján"
 
 #: pcbnew/tools/pcb_actions.cpp:854
-#, fuzzy
 msgid "Cleanup Tracks & Vias..."
 msgstr "Vezetősávok és viák tisztázása..."
 
 #: pcbnew/tools/pcb_actions.cpp:855
-#, fuzzy
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "Eltávolítja a felesleges elemeket, zárlatos elemeket stb."
+msgstr "Eltávolítja a redundáns elemeket, zárlatos elemeket stb."
 
 #: pcbnew/tools/pcb_actions.cpp:861
-#, fuzzy
 msgid "Cleanup Graphics..."
-msgstr "Grafika Tisztázása..."
+msgstr "Grafika tisztázása..."
 
 #: pcbnew/tools/pcb_actions.cpp:862
-#, fuzzy
 msgid "Cleanup redundant items, etc."
-msgstr "Eltávolítja a felesleges elemeket stb."
+msgstr "Eltávolítja a redundáns elemeket stb."
 
 #: pcbnew/tools/pcb_actions.cpp:870
 #, fuzzy
