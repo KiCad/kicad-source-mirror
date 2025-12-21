@@ -129,7 +129,13 @@ public:
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
     inline bool IsRollover() const { return m_isRollover; }
-    inline void SetIsRollover( bool aIsRollover ) { m_isRollover = aIsRollover; }
+    inline VECTOR2I GetRolloverPos() const { return m_rolloverPos; }
+    inline void SetIsRollover( bool aIsRollover, const VECTOR2I& aMousePos )
+    {
+        m_isRollover = aIsRollover;
+        m_rolloverPos = aMousePos;
+    }
+    inline void SetActiveUrl( const wxString& aUrl ) const { m_activeUrl = aUrl; }
 
     inline void SetSelected() { SetFlags( SELECTED ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }
@@ -528,7 +534,10 @@ protected:
     EDA_ITEM*      m_parent;        ///< Owner.
     EDA_GROUP*     m_group;         ///< The group this item belongs to, if any.  No ownership implied.
     bool           m_forceVisible;
-    bool           m_isRollover;
+
+    bool             m_isRollover;
+    VECTOR2I         m_rolloverPos;
+    mutable wxString m_activeUrl;
 };
 
 

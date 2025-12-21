@@ -129,7 +129,7 @@ bool PCB_FIELD::IsMandatory() const
 }
 
 
-bool PCB_FIELD::IsHypertext() const
+bool PCB_FIELD::HasHypertext() const
 {
     return IsURL( GetShownText( false ) );
 }

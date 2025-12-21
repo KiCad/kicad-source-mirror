@@ -39,6 +39,7 @@
 #include <geometry/geometry_utils.h>
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
+#include <markup_parser.h>
 
 
 SCH_TEXTBOX::SCH_TEXTBOX( SCH_LAYER_ID aLayer, int aLineWidth, FILL_T aFillType, const wxString& aText,
@@ -312,25 +313,46 @@ bool SCH_TEXTBOX::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) cons
 }
 
 
-bool SCH_TEXTBOX::IsHypertext() const
+bool recursiveDescent( const std::unique_ptr<MARKUP::NODE>& aNode )
+{
+    if( aNode->isURL() )
+        return true;
+
+    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
+    {
+        if( recursiveDescent( child ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_TEXTBOX::HasHypertext() const
 {
     if( HasHyperlink() )
         return true;
 
-    return IsURL( GetShownText( false ) );
+    wxString showntext = GetShownText( false );
+    MARKUP::MARKUP_PARSER markupParser( TO_UTF8( showntext ) );
+    return recursiveDescent( markupParser.Parse() );
 }
 
 
-void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
+bool SCH_TEXTBOX::HasHoveredHypertext() const
 {
-    wxCHECK_MSG( IsHypertext(), /* void */, wxT( "Calling a hypertext menu on a SCH_TEXTBOX with no hyperlink?" ) );
+    return !m_activeUrl.IsEmpty();
+}
 
+
+void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const
+{
     SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
 
     if( HasHyperlink() )
         navTool->HypertextCommand( m_hyperlink );
-    else
-        navTool->HypertextCommand( GetShownText( false ) );
+    else if( !m_activeUrl.IsEmpty() )
+        navTool->HypertextCommand( m_activeUrl );
 }
 
 

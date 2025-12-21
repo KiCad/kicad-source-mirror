@@ -56,6 +56,7 @@ std::string NODE::typeString() const
     else if( is_type<MARKUP::superscript>() )           os << "SUPERSCRIPT";
     else if( is_type<MARKUP::overbar>() )               os << "OVERBAR";
     else if( is_type<MARKUP::anyString>() )             os << "ANYSTRING";
+    else if( is_type<MARKUP::url>() )                   os << "URL";
     else if( is_type<MARKUP::anyStringWithinBraces>() ) os << "ANYSTRINGWITHINBRACES";
     else                                                os << "other";
 

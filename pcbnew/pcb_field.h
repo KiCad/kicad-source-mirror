@@ -72,7 +72,7 @@ public:
 
     bool IsMandatory() const;
 
-    bool IsHypertext() const;
+    bool HasHypertext() const;
 
     wxString GetTextTypeDescription() const override;
 

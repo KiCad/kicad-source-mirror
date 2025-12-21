@@ -611,7 +611,8 @@ static BOX2I GetTextExtents( const wxString& aText, const VECTOR2D& aPosition, K
 
 
 static void strokeText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics,
+                        std::optional<VECTOR2I> aMousePos = std::nullopt, wxString* aActiveUrl = nullptr )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -621,7 +622,7 @@ static void strokeText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D&
     aGal.SetIsFill( font->IsOutline() );
     aGal.SetIsStroke( font->IsStroke() );
 
-    font->Draw( &aGal, aText, aPosition, aAttrs, aFontMetrics );
+    font->Draw( &aGal, aText, aPosition, aAttrs, aFontMetrics, aMousePos, aActiveUrl );
 }
 
 
@@ -2228,6 +2229,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
+    m_gal->SetHoverColor( color );
 
     wxString        shownText( aText->GetShownText( true ) );
     VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
@@ -2348,11 +2350,17 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     }
     else
     {
-        if( aText->IsHypertext() && aText->IsRollover() && !aText->IsMoving() )
+        if( aText->IsRollover() && !aText->IsMoving() )
         {
-            m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-            m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-            attrs.m_Underlined = true;
+            // Highlight any urls found within the text
+            m_gal->SetHoverColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+
+            // Highlight the whole text if it has a link definition
+            if( aText->HasHyperlink() )
+            {
+                attrs.m_Hover = true;
+                attrs.m_Underlined = true;
+            }
         }
 
         if( nonCached( aText ) && aText->RenderAsBitmap( m_gal->GetWorldScale() )
@@ -2365,7 +2373,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            if( !aText->IsHypertext() && font->IsOutline() )
+            if( !aText->IsRollover() && font->IsOutline() )
                 cache = aText->GetRenderCache( font, shownText, text_offset );
 
             if( cache )
@@ -2376,7 +2384,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             else
             {
                 strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
-                            aText->GetFontMetrics() );
+                            aText->GetFontMetrics(), aText->GetRolloverPos() );
             }
 
             const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
@@ -2453,16 +2461,22 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 attrs.m_Angle = aTextBox->GetDrawRotation();
                 attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
 
-                if( aTextBox->IsHypertext() && aTextBox->IsRollover() && !aTextBox->IsMoving() )
+                if( aTextBox->IsRollover() && !aTextBox->IsMoving() )
                 {
-                    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-                    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-                    attrs.m_Underlined = true;
+                    // Highlight any urls found within the text
+                    m_gal->SetHoverColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+
+                    // Highlight the whole text if it has a link definition
+                    if( aTextBox->HasHyperlink() )
+                    {
+                        attrs.m_Hover = true;
+                        attrs.m_Underlined = true;
+                    }
                 }
 
                 std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-                if( !aTextBox->IsHypertext() && font->IsOutline() )
+                if( !aTextBox->IsRollover() && font->IsOutline() )
                     cache = aTextBox->GetRenderCache( font, shownText );
 
                 if( cache )
@@ -2472,8 +2486,12 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 }
                 else
                 {
+                    wxString activeUrl;
+
                     strokeText( *m_gal, shownText, aTextBox->GetDrawPos(), attrs,
-                                aTextBox->GetFontMetrics() );
+                                aTextBox->GetFontMetrics(), aTextBox->GetRolloverPos(), &activeUrl );
+
+                    aTextBox->SetActiveUrl( activeUrl );
                 }
             };
 
@@ -2482,6 +2500,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
+    m_gal->SetHoverColor( color );
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
@@ -2911,6 +2930,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
+    m_gal->SetHoverColor( color );
 
     if( drawingShadows && getFont( aField )->IsOutline() )
     {
@@ -2934,11 +2954,17 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         if( drawingShadows )
             attributes.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
-        if( aField->IsHypertext() && aField->IsRollover() && !aField->IsMoving() )
+        if( aField->IsRollover() && !aField->IsMoving() )
         {
-            m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-            m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-            attributes.m_Underlined = true;
+            // Highlight any urls found within the text
+            m_gal->SetHoverColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+
+            // Highlight the whole text if it has a link definition
+            if( aField->HasHyperlink() )
+            {
+                attributes.m_Hover = true;
+                attributes.m_Underlined = true;
+            }
         }
 
         if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
@@ -2950,7 +2976,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            if( !aField->IsHypertext() )
+            if( !aField->IsRollover() )
                 cache = aField->GetRenderCache( shownText, textpos, attributes );
 
             if( cache )
@@ -2960,7 +2986,8 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             }
             else
             {
-                strokeText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics() );
+                strokeText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics(),
+                            aField->GetRolloverPos() );
             }
 
             const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );

@@ -31,6 +31,7 @@ TEXT_ATTRIBUTES::TEXT_ATTRIBUTES( KIFONT::FONT* aFont ) :
     m_Italic( false ),
     m_Bold( false ),
     m_Underlined( false ),
+    m_Hover( false ),
     m_Color( KIGFX::COLOR4D::UNSPECIFIED ),
     m_Mirrored( false ),
     m_Multiline( true ),

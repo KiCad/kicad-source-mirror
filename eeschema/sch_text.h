@@ -77,12 +77,12 @@ public:
     int GetSchTextSize() const { return GetTextWidth(); }
     void SetSchTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
 
-    bool IsHypertext() const override
+    bool HasHypertext() const override
     {
         return HasHyperlink();
     }
 
-    void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
+    void DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const override;
 
     void SetExcludedFromSim( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override

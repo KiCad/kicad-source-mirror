@@ -212,8 +212,25 @@ public:
      */
     virtual void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs )
     {
+        COLOR4D fillColor = GetFillColor();
+        COLOR4D strokeColor = GetStrokeColor();
+
         for( size_t i = 0; i < aGlyphs.size(); i++ )
+        {
+            if( aGlyphs[i]->IsHover() )
+            {
+                SetFillColor( m_hoverColor );
+                SetStrokeColor( m_hoverColor );
+            }
+
             DrawGlyph( *aGlyphs[i], i, aGlyphs.size() );
+
+            if( aGlyphs[i]->IsHover() )
+            {
+                SetFillColor( fillColor );
+                SetStrokeColor( strokeColor );
+            }
+        }
     }
 
 
@@ -359,6 +376,11 @@ public:
     virtual void SetStrokeColor( const COLOR4D& aColor )
     {
         m_strokeColor = aColor;
+    }
+
+    virtual void SetHoverColor( const COLOR4D& aColor )
+    {
+        m_hoverColor = aColor;
     }
 
     /**
@@ -1128,6 +1150,7 @@ protected:
     COLOR4D              m_fillColor;          ///< The fill color
     COLOR4D              m_strokeColor;        ///< The color of the outlines
     COLOR4D              m_clearColor;
+    COLOR4D              m_hoverColor;         ///< Color for hovered (active) links
 
     double               m_layerDepth;         ///< The actual layer depth
     VECTOR2D             m_depthRange;         ///< Range of the depth

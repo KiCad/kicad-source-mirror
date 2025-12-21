@@ -311,11 +311,18 @@ public:
     SYMBOL* GetParentSymbol();
 
     /**
-     * Allow items to support hypertext actions when hovered/clicked.
+     * Indicates that the item has at least one hypertext action.  This could be a URL assigned to
+     * the item as a whole, or one (or more) urls within the text of the item.
      */
-    virtual bool IsHypertext() const { return false; }
+    virtual bool HasHypertext() const { return false; }
 
-    virtual void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const { }
+    /**
+     * Indicates that a hypertext link is currently active.
+     * (Note that the default implementation here only handles the simple case.)
+     */
+    virtual bool HasHoveredHypertext() const { return HasHypertext() && IsRollover(); }
+
+    virtual void DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const { }
 
     /**
      * Return the layer this item is on.

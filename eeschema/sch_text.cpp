@@ -358,9 +358,9 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
 }
 
 
-void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
+void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const
 {
-    wxCHECK_MSG( IsHypertext(), /* void */, wxT( "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" ) );
+    wxCHECK_MSG( HasHyperlink(), /* void */, wxT( "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" ) );
 
     SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
     navTool->HypertextCommand( m_hyperlink );

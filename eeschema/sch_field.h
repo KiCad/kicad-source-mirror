@@ -91,9 +91,9 @@ public:
         return _( "Field" );
     }
 
-    bool IsHypertext() const override;
+    bool HasHypertext() const override;
 
-    void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
+    void DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const override;
 
     /**
      * Return the field name (not translated).

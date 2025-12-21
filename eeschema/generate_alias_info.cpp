@@ -197,7 +197,7 @@ protected:
         default:
             text = aField.GetShownText( false );
 
-            if( aField.IsHypertext() )
+            if( aField.HasHypertext() )
             {
                 wxString link = LinkFormat;
                 link.Replace( wxS( "__HREF__" ), EscapeHTML( text ) );

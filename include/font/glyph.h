@@ -51,6 +51,12 @@ public:
     virtual bool IsStroke() const  { return false; }
 
     virtual BOX2D BoundingBox() = 0;
+
+    bool IsHover() const { return m_isHover; }
+    void SetIsHover( bool aIsHover ) { m_isHover = aIsHover; }
+
+private:
+    bool m_isHover = false;
 };
 
 
@@ -89,8 +95,7 @@ public:
      * Cache the triangulation for the glyph from a known set of triangle indexes.
      * (See GetTriangulationData() above for more info.)
      */
-    void CacheTriangulation(
-            std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData );
+    void CacheTriangulation( std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>>& aHintData );
 };
 
 

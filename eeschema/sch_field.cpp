@@ -954,7 +954,7 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-bool SCH_FIELD::IsHypertext() const
+bool SCH_FIELD::HasHypertext() const
 {
     if( m_id == FIELD_T::INTERSHEET_REFS )
         return true;
@@ -966,50 +966,47 @@ bool SCH_FIELD::IsHypertext() const
 }
 
 
-void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
+void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const
 {
     constexpr int START_ID = 1;
 
-    if( IsHypertext() )
+    wxString href;
+
+    if( m_id == FIELD_T::INTERSHEET_REFS )
     {
-        wxString href;
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        SCH_SHEET_PATH* sheet = &label->Schematic()->CurrentSheet();
+        wxMenu          menu;
 
-        if( m_id == FIELD_T::INTERSHEET_REFS )
+        std::vector<std::pair<wxString, wxString>> pages;
+
+        label->GetIntersheetRefs( sheet, &pages );
+
+        for( int i = 0; i < (int) pages.size(); ++i )
         {
-            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-            SCH_SHEET_PATH* sheet = &label->Schematic()->CurrentSheet();
-            wxMenu          menu;
-
-            std::vector<std::pair<wxString, wxString>> pages;
-
-            label->GetIntersheetRefs( sheet, &pages );
-
-            for( int i = 0; i < (int) pages.size(); ++i )
-            {
-                menu.Append( i + START_ID,
-                             wxString::Format( _( "Go to Page %s (%s)" ), pages[i].first, pages[i].second ) );
-            }
-
-            menu.AppendSeparator();
-            menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
-
-            int sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
-
-            if( sel >= 0 && sel < (int) pages.size() )
-                href = wxT( "#" ) + pages[sel].first;
-            else if( sel == 999 )
-                href = SCH_NAVIGATE_TOOL::g_BackLink;
-        }
-        else if( IsURL( GetShownText( false ) ) || m_name == SIM_LIBRARY::LIBRARY_FIELD )
-        {
-            href = GetShownText( false );
+            menu.Append( i + START_ID,
+                         wxString::Format( _( "Go to Page %s (%s)" ), pages[i].first, pages[i].second ) );
         }
 
-        if( !href.IsEmpty() )
-        {
-            SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
-            navTool->HypertextCommand( href );
-        }
+        menu.AppendSeparator();
+        menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
+
+        int sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
+
+        if( sel >= 0 && sel < (int) pages.size() )
+            href = wxT( "#" ) + pages[sel].first;
+        else if( sel == 999 )
+            href = SCH_NAVIGATE_TOOL::g_BackLink;
+    }
+    else if( IsURL( GetShownText( false ) ) || m_name == SIM_LIBRARY::LIBRARY_FIELD )
+    {
+        href = GetShownText( false );
+    }
+
+    if( !href.IsEmpty() )
+    {
+        SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
+        navTool->HypertextCommand( href );
     }
 }
 

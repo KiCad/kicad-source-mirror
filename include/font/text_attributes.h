@@ -135,6 +135,7 @@ public:
     bool              m_Italic;
     bool              m_Bold;
     bool              m_Underlined;
+    bool              m_Hover;
     KIGFX::COLOR4D    m_Color;
     bool              m_Mirrored;
     bool              m_Multiline;

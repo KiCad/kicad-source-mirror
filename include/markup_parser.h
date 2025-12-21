@@ -36,6 +36,7 @@ using namespace tao::pegtl;
 struct subscript;
 struct superscript;
 struct overbar;
+struct url;
 
 struct KICOMMON_API NODE : parse_tree::basic_node<NODE>
 {
@@ -48,6 +49,7 @@ struct KICOMMON_API NODE : parse_tree::basic_node<NODE>
     bool isOverbar() const     { return is_type<MARKUP::overbar>(); }
     bool isSubscript() const   { return is_type<MARKUP::subscript>(); }
     bool isSuperscript() const { return is_type<MARKUP::superscript>(); }
+    bool isURL() const         { return is_type<MARKUP::url>(); }
 };
 
 struct markup : sor< subscript,
@@ -60,6 +62,7 @@ struct markup : sor< subscript,
  * a complete command prefix (command char + open brace)
  */
 struct anyString : plus< seq< not_at< markup >,
+                              not_at< url >,
                               utf8::any > > {};
 
 struct escapeSequence : seq< string<'{'>, identifier, string<'}'> > {};
@@ -68,6 +71,10 @@ struct anyStringWithinBraces : plus< sor< seq< not_at< markup >,
                                                escapeSequence >,
                                           seq< not_at< markup >,
                                                utf8::not_one<'}'> > > > {};
+
+struct url : seq< sor< string<'h', 't', 't', 'p', ':', '/', '/'>,
+                       string<'h', 't', 't', 'p', 's', ':', '/', '/'> >,
+                  plus< utf8::not_one<' '> > > {};
 
 template< typename ControlChar >
 struct braces : seq< seq< ControlChar,
@@ -86,6 +93,7 @@ struct overbar     : braces< string<'~'> > {};
  * Finally, the full grammar
  */
 struct anything : sor< anyString,
+                       url,
                        subscript,
                        superscript,
                        overbar > {};
@@ -95,6 +103,7 @@ struct grammar : until< tao::pegtl::eof, anything > {};
 template <typename Rule>
 using selector = parse_tree::selector< Rule,
                                        parse_tree::store_content::on< anyStringWithinBraces,
+                                                                      url,
                                                                       anyString >,
                                        parse_tree::discard_empty::on< superscript,
                                                                       subscript,

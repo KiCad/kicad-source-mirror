@@ -766,7 +766,7 @@ int SCH_ITEM::GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const
 
 bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 {
-    if( IsHypertext() )
+    if( HasHypertext() )
         return false;
 
     if( const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( this ) )
