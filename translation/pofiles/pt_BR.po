@@ -11,13 +11,14 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
+# soldado-do-wolfenstein <luigi.rebelato1234@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-08-20 01:21+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"PO-Revision-Date: 2025-12-22 02:01+0000\n"
+"Last-Translator: soldado-do-wolfenstein <luigi.rebelato1234@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -25,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -1413,7 +1414,7 @@ msgstr "Solução 3R:"
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pixels"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2513,7 +2514,7 @@ msgstr "Desenvolvedores de pacotes"
 #: common/dialog_about/dialog_about.cpp:122
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "objetos GDI em uso %u"
 
 #: common/dialog_about/dialog_about.cpp:129
 #, c-format
@@ -4268,6 +4269,8 @@ msgstr "Desativa as macros do diafragma"
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"quando ativado, o KiCad irá usar o sistema de cursores padrão em vez do "
+"customizado"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4695,12 +4698,17 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"arquivos associados foram deletados mas ainda há vestígios deles.\n"
+"deletar os vestígios também?"
 
 #: common/dialogs/panel_embedded_files.cpp:211
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"arquivos associados foram deletados mas ainda há símbolos relacionado à "
+"eles.\n"
+"deletar os símbolos também?"
 
 #: common/dialogs/panel_embedded_files.cpp:331
 #: common/dialogs/panel_embedded_files.cpp:446
@@ -4745,6 +4753,7 @@ msgstr "Selecione um arquivo para ser incorporado"
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"arquivos associados herdados de um símbolo parente não puderam ser removidos."
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -5135,7 +5144,7 @@ msgstr "Limpar arquivos recentes"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "resetar os diálogos \"não exibir de novo\""
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 #, fuzzy
@@ -5300,7 +5309,7 @@ msgstr "Botão direito para arrastar:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Arrastar no mouse com a tecla:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -5842,11 +5851,11 @@ msgstr "Velocidade da panorâmica automática:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Inverter a direção do deslizamento vertical"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Inverter a direção do deslizamento horizontal"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
 #, fuzzy
@@ -5864,11 +5873,21 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"O KiCad vem com uma grande quantia configurada de símbolos e bibliotecas de "
+"footprints mantidos  pelo time de desenvolvimento de bibliotecas do KiCad.  "
+"Você pode criar suas próprias bibliotecas, ou instalar bibliotecas de "
+"terceiros por extensões no gerenciador de conteúdo ou por outras fontes\n"
+"\n"
+"'Tabelas de bibliotecas' são os arquivos de configuração que listam as "
+"bibliotecas à serem carregadas. Bibliotecas gerais/globais são utilizáveis "
+"em qualquer projeto, e você pode adicionar bibliotecas especificas à um "
+"projeto, se preferir."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
 msgstr ""
+"<b>As tabelas das bibliotecas gerais a seguir precisam serem geradas</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
@@ -5877,7 +5896,7 @@ msgstr "Como gostaria de configurar o KiCad?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Começar com bibliotecas padrão do Kicad (recomendado)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 #, fuzzy
