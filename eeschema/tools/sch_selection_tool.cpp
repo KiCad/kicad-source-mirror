@@ -2507,7 +2507,7 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
                     continue;
 
                 if( Selectable( static_cast<SCH_ITEM*>( group_item ) ) )
-                    collector.Append( *newset.begin() );
+                    collector.Append( group_item );
             }
         }
 
@@ -2642,6 +2642,17 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
     {
         if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
             item->SetFlags( SHOW_ELEC_TYPE );
+
+        // If the pin lives inside a group that is already being selected, don't also select the pin.
+        if( EDA_GROUP* group =
+                    SCH_GROUP::TopLevelGroup( static_cast<SCH_ITEM*>( item ), m_enteredGroup, m_isSymbolEditor ) )
+        {
+            if( collector.HasItem( group->AsEdaItem() ) )
+            {
+                item->ClearFlags( SHOW_ELEC_TYPE );
+                continue;
+            }
+        }
 
         if( Selectable( item ) && itemPassesFilter( item, nullptr )
             && !item->GetParent()->HasFlag( SELECTION_CANDIDATE ) && hitTest( static_cast<SCH_ITEM*>( item ) ) )
