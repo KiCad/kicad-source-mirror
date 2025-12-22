@@ -19,7 +19,6 @@
 #include "sexpr/sexpr_parser.h"
 #include "sexpr/sexpr_exception.h"
 #include <cctype>
-#include <cstdlib>     /* strtod */
 #include <iterator>
 #include <stdexcept>
 
@@ -185,9 +184,11 @@ namespace SEXPR
 
                         if( tmp.find( '.' ) != std::string::npos )
                         {
-                            res = std::make_unique<SEXPR_DOUBLE>(
-                                    strtod( tmp.c_str(), nullptr ), m_lineNumber );
-                            //floating point type
+                            // floating point type. Use only a "C" string to double conversion
+                            wxString stmp( tmp );
+                            double fnumb;
+                            stmp.ToCDouble( &fnumb );
+                            res = std::make_unique<SEXPR_DOUBLE>( fnumb, m_lineNumber );
                         }
                         else
                         {
