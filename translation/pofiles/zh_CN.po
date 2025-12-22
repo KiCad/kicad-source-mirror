@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-21 00:00+0000\n"
-"Last-Translator: CharlieYu <charlieyu4994@outlook.com>\n"
+"PO-Revision-Date: 2025-12-23 02:01+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8381,9 +8381,10 @@ msgid ""
 msgstr ""
 "KiCad 无法使用 '%s'。\n"
 "\n"
-"1. 关闭在 Windows 设置或者本地策略组中的「受控文件夹访问」\n"
-"2. 确保没有其他杀毒软件会干扰 KiCad\n"
-"3. 确保你的权限设置正确"
+"1. 在 Microsoft Defender 设置中禁用「文件夹限制访问」或在组策略中禁用「配置受"
+"控文件夹访问权限」\n"
+"2. 确保没有其他杀毒软件干扰 KiCad\n"
+"3. 确保你已设置正确的权限"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
@@ -9815,7 +9816,7 @@ msgstr "找不到封装。"
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "加载封装库"
+msgstr "正在加载封装库"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -13217,7 +13218,7 @@ msgstr "当所有的符号单元除引脚编号外都相同时, 请勾选此选�
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "符号具有备选主体图形样式"
+msgstr "符号具有备选图形样式"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 msgid "Create symbol as power symbol"
@@ -19338,7 +19339,7 @@ msgstr "所有单元"
 #: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
 #: eeschema/sch_item.cpp:663
 msgid "All body styles"
-msgstr "所有主体样式"
+msgstr "所有图形样式"
 
 #: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
 #: eeschema/sch_symbol.cpp:3027 eeschema/tools/sch_edit_tool.cpp:138
@@ -32408,6 +32409,7 @@ msgstr "外框显示:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75 pcbnew/zone.cpp:864
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:59
+#, fuzzy
 msgid "Hatched"
 msgstr "阴影线"
 
@@ -37319,6 +37321,7 @@ msgid "A unique name for this rule area for use in DRC rules"
 msgstr "为规则域设置一个唯一的名称, 以便在 DRC 规则中使用"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
+#, fuzzy
 msgid "Distance between parallel lines used for hatching the area"
 msgstr "区域阴影线距离"
 
@@ -41455,7 +41458,7 @@ msgstr "%s 个 '栅格定向角度' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 个 '栅格平滑等级' 不一致。"
+msgstr "%s 个 '栅格平滑等级' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:621
 #, c-format
@@ -45331,7 +45334,7 @@ msgstr "生成 content section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr "不支持的引脚类型；已跳过。"
+msgstr "焊盘类型不受支持; 已跳过。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1177
 msgid "Generating history section"
@@ -45350,18 +45353,15 @@ msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1276
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr "器件 \"%s\" 没有 OEM 编号；BOM 录入将被跳过。"
+msgstr "元件 \"%s\" 缺少 OEM 引用; 将跳过该 BOM 条目。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1370
 msgid "Generating CAD data"
 msgstr "生成 CAD data"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2119
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可以通过设计规则检查 "
-"(DRC) 来分析原因。"
+msgstr "电路板外框无效或缺失。请运行 DRC。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2501
 msgid ""
@@ -45374,10 +45374,12 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "导出层 %s, 网络 %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2702
+#, fuzzy
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr "过孔使用了不支持的堆叠；已在钻孔文件中省略。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2728
+#, fuzzy
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr "焊盘使用了不支持的堆叠；已在钻孔文件中省略。"
 
