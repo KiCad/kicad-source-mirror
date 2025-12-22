@@ -138,7 +138,7 @@ public:
      * Adjust label position to edge based on proximity to vertical or horizontal edge
      * of the parent sheet.
      */
-    void ConstrainOnEdge( VECTOR2I aPos, bool aAllowEdgeSwitch );
+    void ConstrainOnEdge( const VECTOR2I& aPos, bool aAllowEdgeSwitch );
 
     /**
      * Get the parent sheet object of this sheet pin.
