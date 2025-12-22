@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-19 22:00+0000\n"
+"PO-Revision-Date: 2025-12-23 02:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -40746,25 +40746,22 @@ msgstr "Postlavorazione foro"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3236
-#, fuzzy
 msgid "Countersink"
-msgstr "Conteggio"
+msgstr "Svasatura"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
-#, fuzzy
 msgid "Counterbore"
-msgstr "Conteggio"
+msgstr "Allargamento"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1216
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3146
-#, fuzzy
 msgid "Backdrill"
-msgstr "Riempimento sfondo"
+msgstr "Retroforatura"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
@@ -42828,26 +42825,23 @@ msgid "Minimum clearance:"
 msgstr "Clearance minima:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
 "Clearance minima tra elementi rame che non appartengono alla stessa net.  Se "
-"impostata, è un minimo assoluto che non può essere ridotto da netclass, "
-"regola personalizzata, o altre impostazioni."
+"impostata, può essere ridotta solo da regole personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Larghezza pista minima:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Larghezza minima pista.  Se impostata, è un minimo assoluto che non può "
-"essere ridotto da netclass, regole personalizzate, o altre impostazioni."
+"Larghezza minima pista. Se impostata, può essere ridotta solo da regole "
+"personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -42862,53 +42856,47 @@ msgid "Minimum annular width:"
 msgstr "Larghezza minima anello:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Larghezza minima anello.  Se impostata, è un minimo assoluto che non può "
-"essere ridotto da netclass, regole personalizzate o altre impostazioni."
+"Larghezza minima anello. Se impostata, può essere ridotta solo da regole "
+"personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
 msgstr "Diametro via minimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Diametro minimo via.  Se impostata, è un valore minimo che non può essere "
-"ridotto da netclass, regole personalizzate o altre impostazioni."
+"Diametro minimo via. Se impostata, può essere ridotta solo da regole "
+"personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
 msgstr "Clearance foro rame:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
-"Clearance minima tra un foro e un elemento rame non associato.  Se "
-"impostata, è un minimo assoluto e non può essere ridotto da regole "
-"personalizzate o altre impostazioni."
+"Clearance minima tra un foro e un elemento rame non associato. Se impostata, "
+"può essere ridotta solo da regole personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Clearance bordo rame:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"Clearance minima tra il bordo scheda e qualunque elemento rame.  Se "
-"impostata, è un valore minimo e non può essere ridotto da regole "
-"personalizzate o altre impostazioni."
+"Clearance minima tra il bordo scheda e qualunque elemento rame. Se "
+"impostata, può essere ridotta solo da regole personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -42927,27 +42915,24 @@ msgid "Minimum through hole:"
 msgstr "Foro minimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Dimensione minima foro passante.  Se impostata, è un minimo assoluto e non "
-"può essere ridotto da netclass, regole personalizzare o altre impostazioni."
+"Dimensione minima foro passante. Se impostata, può essere ridotta solo da "
+"regole personalizzare."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
 msgstr "Clearance da foro a foro:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"La clearance minima tra due fori passanti.  Se impostata, è un minimo "
-"assoluto e non può essere ridotto da regole personalizzate o altre "
-"impostazioni. (Nota: non si applica ai fori fresati.)"
+"La clearance minima tra due fori passanti. Se impostata, può essere ridotta "
+"solo da regole personalizzate. (Nota: non si applica ai fori fresati.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -42958,26 +42943,24 @@ msgid "Minimum uVia diameter:"
 msgstr "Diametro uVia minimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Diametro minimo per microvia.  Se impostata, è un minimo assoluto e non può "
-"essere ridotto da netclass, regole personalizzate o altre impostazioni."
+"Diametro minimo per microvia. Se impostata, può essere ridotta solo da "
+"regole personalizzate."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
 msgstr "Foro uVia minimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Dimensione foro microvia.  Se impostata, è un minimo assoluto e non può "
-"essere ridotto da netclass, regole personalizzare o altre impostazioni."
+"Dimensione minima foro microvia.  Se impostata, può essere ridotta solo da "
+"regole personalizzare."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -42988,15 +42971,14 @@ msgid "Minimum item clearance:"
 msgstr "Clearance minima elemento:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
-#, fuzzy
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Clearance minima tra due elementi sullo stesso strato serigrafia.  Se "
+"Clearance minima tra due elementi sullo stesso strato serigrafia. Se "
 "impostata può migliorare la leggibilità.  (Nota: non si applica a forme "
-"multiple all'interno di una singola impronta)"
+"multiple all'interno di una singola impronta.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum text height:"
@@ -43129,14 +43111,12 @@ msgstr ""
 "Applica impostazioni predefinite scheda alle forme impronta non in rame"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
-msgstr "Applica impostazioni predefinite scheda ai campi dell'impronta"
+msgstr "Applica impostazioni predefinite scheda alle dimensioni dell'impronta"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
-#, fuzzy
 msgid "Apply board defaults to footprint barcodes"
-msgstr "Applica impostazioni predefinite scheda ai campi dell'impronta"
+msgstr "Applica impostazioni predefinite scheda ai codici a barre dell'impronta"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
@@ -43347,21 +43327,20 @@ msgid "Add User Defined Layer..."
 msgstr "Aggiungi strato definito dall'utente..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
 msgstr ""
 "Usa i valori raccomandati dal produttore di C.S. per l'espansione della "
-"maschera di saldatura e per lo spessore minimo del reticolo."
+"maschera di saldatura e per le impostazioni di clearance."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
-#, fuzzy
 msgid ""
 "If no specifications are provided, setting these values to zero is "
 "recommended."
 msgstr ""
-"Se non ne viene fornito nessuno, si suggerisce di impostare i valori a zero."
+"Se non vengono fornite specifiche, è raccomandato di impostare questi valori "
+"a zero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:46
 msgid "Solder Mask Settings"
@@ -43506,14 +43485,14 @@ msgid "Rules '%s' and '%s' share the same condition."
 msgstr "Le regole '%s' e '%s' condividono la stessa condizione."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "Cambia riferimento %s a '%s'."
+msgstr "La regola '%s' fa riferimento alla netclass non definita '%s'."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:813
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "Cambia riferimento %s a %s."
+msgstr "La regola '%s' fa riferimento a strati non definiti: %s."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Design rules cannot be added without a project"
@@ -45090,20 +45069,17 @@ msgstr "Proprietà predefinite per gli skew delle coppie differenziali"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:754
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:805
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "Controllo per selezionare la larghezza della pista"
+msgstr "Impossibile calcolare la larghezza pista"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:759
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Sbroglia coppie differenziali"
+msgstr "Impossibile calcolare la distanza coppia differenziale"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:764
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:810
-#, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Ritardo di propagazione dell'unità:"
+msgstr "Impossibile calcolare il ritardo di propagazione della pista"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:830
 msgid "Tuning profile must have a name"
@@ -45118,9 +45094,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:884
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:940
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:946
-#, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "I nomi dei segnali non possono contenere spazi"
+msgstr "Strato segnali non trovato nello stackup"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:879
 msgid "Internal error: Microstrip can only be on an outer copper layer"
@@ -45130,23 +45105,20 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:890
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:952
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "Lo spessore dello strato segnali deve essere maggiore di 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:901
-#, fuzzy
 msgid "Reference layer not found in stackup"
-msgstr "Riferimento \"%s\" non trovato."
+msgstr "Strato di riferimento non trovato nello stackup"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:907
 msgid "Reference layer must be different to signal layer"
 msgstr "Lo strato di riferimento deve essere diverso dallo strato del segnale"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:918
-#, fuzzy
 msgid "Dielectric height must be greater than 0"
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "L'altezza dielettrico deve essere maggiore di 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:958
 msgid "Top reference layer not found in stackup"
@@ -45169,25 +45141,22 @@ msgstr ""
 "nello stackup della scheda"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:999
-#, fuzzy
 msgid "Dielectric heights must be greater than 0"
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "Le altezze dielettrici devono essere maggiori di 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1020
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1096
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1171
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1273
-#, fuzzy
 msgid "Target impedance must be greater than 0"
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "L'impedenza obiettivo deve essere maggiore di 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1073
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1148
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1245
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1346
-#, fuzzy
 msgid "Width calculation failed"
-msgstr "Modifica file di associazione"
+msgstr "Calcolo della larghezza fallito"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1076
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1151
