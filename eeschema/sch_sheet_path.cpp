@@ -651,9 +651,13 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
     KIID_PATH tmpPath = Path();
 
     if( !tmpPath.empty() )
+    {
         tmpPath.pop_back();
+    }
     else
+    {
         wxCHECK_MSG( false, /* void */, wxS( "Sheet paths must have a least one valid sheet." ) );
+    }
 
     sheet->addInstance( tmpPath );
     sheet->setPageNumber( tmpPath, aPageNumber );
