@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-22 02:00+0000\n"
+"PO-Revision-Date: 2025-12-23 02:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -11490,9 +11490,8 @@ msgid "Library Description"
 msgstr "Könyvtár leírása"
 
 #: eeschema/design_block_utils.cpp:291 eeschema/design_block_utils.cpp:369
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Válasszon ki egy rajzjel könyvtártáblázat fájlt."
+msgstr "Válasszon egy könyvtárat, ahová a terv blokkot mentjük."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:395
 msgid "Design blocks with nested sheets are not supported."
@@ -17609,9 +17608,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1096
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Rajzjel könyvtár mentése frissített formátumban\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1115
 msgid "Symbol library was not updated\n"
@@ -17623,11 +17621,9 @@ msgid "Found %d violations\n"
 msgstr "DRC szabálysértések megengedése"
 
 #: eeschema/eeschema_jobs_handler.cpp:1203
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült elmenteni az ERC jelentést ide: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1208
 #, c-format
@@ -18566,7 +18562,6 @@ msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origó a nyákterv rácson, Y koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
-#, fuzzy
 msgid "Import Parameters"
 msgstr "Paraméterek importálása"
 
@@ -18597,9 +18592,8 @@ msgstr "%s részegység"
 
 #: eeschema/lib_symbol.cpp:594 eeschema/sch_sheet.cpp:312
 #: eeschema/sch_symbol.cpp:1564
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Nem kerül a BOM listára"
+msgstr "Nem kerül az anyagjegyzékbe"
 
 #: eeschema/lib_symbol.cpp:599 eeschema/sch_sheet.cpp:321
 #: eeschema/sch_symbol.cpp:1573
@@ -19330,9 +19324,8 @@ msgid "[Unsaved]"
 msgstr "[Nincs mentve]"
 
 #: eeschema/sch_edit_frame.cpp:1753
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "A kapcsolási rajz elmentve"
+msgstr "[nincs betöltve kapcsolási rajz]"
 
 #: eeschema/sch_edit_frame.cpp:1983
 #, c-format
@@ -19396,7 +19389,7 @@ msgstr "Via: %s (%s)"
 #: eeschema/sch_field.cpp:1300
 #, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Forrszem készítése a kijelölt alakzatokból"
+msgstr "Vissza az előzőleg kijelölt lapra"
 
 #: eeschema/sch_field.cpp:1391 eeschema/sch_label.cpp:217
 #, fuzzy
@@ -19500,9 +19493,9 @@ msgid "Port %s has no connections."
 msgstr "Forrszem csatlakozások:"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4030
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
+msgstr "A(z) \"%s\" beágyazott fájl nem található."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4047
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4066
@@ -46567,23 +46560,22 @@ msgid "Generator Properties"
 msgstr "Generátor szkript tulajdonságok"
 
 #: pcbnew/pcb_group.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Rajzjelek csoportosítása"
+msgstr "Névtelen csoport, %z tag"
 
 #: pcbnew/pcb_group.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Rajzjelek csoportosítása"
+msgstr "Csoport \"%s\", %z tag"
 
 #: pcbnew/pcb_group.cpp:387
 msgid "<unnamed>"
 msgstr "<névtelen>"
 
 #: pcbnew/pcb_group.cpp:388
-#, fuzzy
 msgid "Members"
-msgstr "Megnevezés tagok"
+msgstr "Tagok"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:136
 #, c-format
