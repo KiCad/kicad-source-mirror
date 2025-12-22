@@ -851,8 +851,7 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             int radius = safeScale( arc.m_Radius * m_scale );
 
-            bool clockwise = false; // TODO - flag?
-            // Probably follow fabmaster here for flipping, as I guess it's identical.
+            bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
 
             shape->SetWidth( safeScale( m_scale * arc.m_Width ) );
 
@@ -1407,47 +1406,38 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildTrack( const BLK_0x
         {
             const BLK_0x01_ARC& arcInfo = static_cast<const BLOCK<BLK_0x01_ARC>&>( *block ).GetData();
 
-            VECTOR2I start{ arcInfo.m_StartX, arcInfo.m_StartY };
-            VECTOR2I end{ arcInfo.m_EndX, arcInfo.m_EndY };
-            VECTOR2D center{ arcInfo.m_CenterX, arcInfo.m_CenterY };
-            int      width = static_cast<int>( arcInfo.m_Width );
+            VECTOR2I start = scale( { arcInfo.m_StartX, arcInfo.m_StartY } );
+            VECTOR2I end = scale( { arcInfo.m_EndX, arcInfo.m_EndY } );
+            VECTOR2I c = scale( KiROUND( VECTOR2D{ arcInfo.m_CenterX, arcInfo.m_CenterY } ) );
+            int      width = scale( static_cast<int>( arcInfo.m_Width ) );
 
-            // Calculate the mid-point of the arc for PCB_ARC construction
-            // PCB_ARC needs start, mid, end points
-            VECTOR2D startD{ static_cast<double>( start.x ), static_cast<double>( start.y ) };
-            VECTOR2D endD{ static_cast<double>( end.x ), static_cast<double>( end.y ) };
+            bool clockwise = ( arcInfo.m_SubType & 0x40 ) != 0;
 
-            // Calculate angles from center to start and end
-            double startAngle = atan2( startD.y - center.y, startD.x - center.x );
-            double endAngle = atan2( endD.y - center.y, endD.x - center.x );
+            EDA_ANGLE startAngle( start - c );
+            EDA_ANGLE endAngle( end - c );
+            startAngle.Normalize();
+            endAngle.Normalize();
 
-            // Calculate angle difference and normalize to [-π, π]
-            double angleDiff = endAngle - startAngle;
+            EDA_ANGLE angle = endAngle - startAngle;
 
-            if( angleDiff > M_PI )
-                angleDiff -= 2 * M_PI;
-            else if( angleDiff < -M_PI )
-                angleDiff += 2 * M_PI;
+            if( clockwise && angle < ANGLE_0 )
+                angle += ANGLE_360;
 
-            // Calculate mid angle using the normalized difference.
-            // This correctly handles wrap-around at ±180°.
-            double midAngle = startAngle + angleDiff / 2.0;
+            if( !clockwise && angle > ANGLE_0 )
+                angle -= ANGLE_360;
 
-            // Calculate mid point on the arc
-            VECTOR2I mid{
-                static_cast<int>( center.x + arcInfo.m_Radius * cos( midAngle ) ),
-                static_cast<int>( center.y + arcInfo.m_Radius * sin( midAngle ) )
-            };
+            VECTOR2I mid = start;
+            RotatePoint( mid, c, -angle / 2.0 );
 
             std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( &m_board );
 
             arc->SetNetCode( aNetCode );
             arc->SetLayer( layer );
 
-            arc->SetStart( scale( start ) );
-            arc->SetMid( scale( mid ) );
-            arc->SetEnd( scale( end ) );
-            arc->SetWidth( scale( width ) );
+            arc->SetStart( start );
+            arc->SetMid( mid );
+            arc->SetEnd( end );
+            arc->SetWidth( width );
 
             items.push_back( std::move( arc ) );
             break;
@@ -1710,6 +1700,9 @@ void BOARD_BUILDER::createBoardOutline()
                 else
                 {
                     shape->SetShape( SHAPE_T::ARC );
+
+                    bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
+
                     EDA_ANGLE startangle( start - c );
                     EDA_ANGLE endangle( end - c );
 
@@ -1718,7 +1711,10 @@ void BOARD_BUILDER::createBoardOutline()
 
                     EDA_ANGLE angle = endangle - startangle;
 
-                    if( angle > ANGLE_0 )
+                    if( clockwise && angle < ANGLE_0 )
+                        angle += ANGLE_360;
+
+                    if( !clockwise && angle > ANGLE_0 )
                         angle -= ANGLE_360;
 
                     VECTOR2I mid = start;
@@ -1829,20 +1825,23 @@ void BOARD_BUILDER::createZones()
 
                 if( start == end )
                 {
-                    // Full circle - use arc approximation
-                    int       radius = safeScale( arc.m_Radius * m_scale );
                     SHAPE_ARC shapeArc( center, start, ANGLE_360 );
                     outline.Append( shapeArc );
                 }
                 else
                 {
+                    bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
+
                     EDA_ANGLE startAngle( start - center );
                     EDA_ANGLE endAngle( end - center );
                     startAngle.Normalize();
                     endAngle.Normalize();
                     EDA_ANGLE arcAngle = endAngle - startAngle;
 
-                    if( arcAngle > ANGLE_0 )
+                    if( clockwise && arcAngle < ANGLE_0 )
+                        arcAngle += ANGLE_360;
+
+                    if( !clockwise && arcAngle > ANGLE_0 )
                         arcAngle -= ANGLE_360;
 
                     SHAPE_ARC shapeArc( center, start, arcAngle );

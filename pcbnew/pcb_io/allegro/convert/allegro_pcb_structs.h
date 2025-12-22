@@ -388,7 +388,7 @@ struct LAYER_INFO
 struct BLK_0x01_ARC
 {
     uint8_t  m_UnknownByte;
-    uint8_t  m_SubType;
+    uint8_t  m_SubType;     ///< Bit 6 (0x40) = clockwise direction
     uint32_t m_Key;
     uint32_t m_Next;
     uint32_t m_Parent;
