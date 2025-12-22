@@ -394,6 +394,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     void PreloadLibraries( KIWAY* aKiway ) override;
     void ProjectChanged() override;
+    void CancelPreload( bool aBlock = true ) override;
 
 private:
     std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
@@ -681,4 +682,16 @@ void IFACE::ProjectChanged()
 {
     if( m_libraryPreloadInProgress.load() )
         m_libraryPreloadAbort.store( true );
+}
+
+
+void IFACE::CancelPreload( bool aBlock )
+{
+    if( m_libraryPreloadInProgress.load() )
+    {
+        m_libraryPreloadAbort.store( true );
+
+        if( aBlock )
+            m_libraryPreloadReturn.wait();
+    }
 }

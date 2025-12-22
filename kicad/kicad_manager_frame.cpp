@@ -735,6 +735,13 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     if( !Kiway().PlayersClose( false ) )
         return false;
 
+    // Abort any in-progress background load, since the threads depend on the project not changing
+    KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+    schface->CancelPreload();
+
+    KIFACE *pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    pcbface->CancelPreload();
+
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {

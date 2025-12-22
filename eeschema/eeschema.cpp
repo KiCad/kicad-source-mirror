@@ -419,6 +419,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
     void PreloadLibraries( KIWAY* aKiway ) override;
+    void CancelPreload( bool aBlock = true ) override;
     void ProjectChanged() override;
 
 private:
@@ -553,6 +554,18 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
     thread_pool& tp = GetKiCadThreadPool();
     m_libraryPreloadInProgress.store( true );
     m_libraryPreloadReturn = tp.submit_task( preload );
+}
+
+
+void IFACE::CancelPreload( bool aBlock )
+{
+    if( m_libraryPreloadInProgress.load() )
+    {
+        m_libraryPreloadAbort.store( true );
+
+        if( aBlock )
+            m_libraryPreloadReturn.wait();
+    }
 }
 
 

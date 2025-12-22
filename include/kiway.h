@@ -257,6 +257,8 @@ struct KIFACE
 
     virtual void PreloadLibraries( KIWAY* aKiway ) {}
 
+    virtual void CancelPreload( bool aBlock = true ) {}
+
     virtual void ProjectChanged() {}
 };
 
