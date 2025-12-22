@@ -44,8 +44,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-21 00:00+0000\n"
-"Last-Translator: CharlieYu <charlieyu4994@outlook.com>\n"
+"PO-Revision-Date: 2025-12-23 02:01+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5707,11 +5707,11 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
-"KiCad 自带一组数量庞大的由 KiCad 库团队维护的符号与封装库。你也许需要制作自己"
-"的库或者从「插件与内容管理器」或其他源安装库\n"
+"KiCad 自带了由 KiCad 库团队维护的大量符号库与封装库。你也可以创建你的自有库, "
+"抑或是从「扩展内容管理器」或其他安装第三方库。\n"
 "\n"
-"库列表是列出已加载的库的配置文件。全局库在每个项目中都能使用，如果需要，你也"
-"可以加入项目特定的库。"
+"库表是记录了需要加载的库的配置文件。全局库在每个工程中均可使用, 必要时你也可"
+"以添加工程专用库。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
@@ -6184,9 +6184,8 @@ msgid "Field Name Templates"
 msgstr "字段名称模板"
 
 #: common/eda_base_frame.cpp:1375
-#, fuzzy
 msgid "Data Sources"
-msgstr "数据源名称"
+msgstr "数据源"
 
 #: common/eda_base_frame.cpp:1376 eeschema/sim/simulator_frame.cpp:117
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
@@ -8606,7 +8605,6 @@ msgid "Error loading library '%s'"
 msgstr "加载库 '%s' 时出错"
 
 #: common/lib_table_grid_tricks.cpp:93
-#, fuzzy
 msgid "Edit Options"
 msgstr "编辑选项"
 
@@ -8615,34 +8613,28 @@ msgid "Edit options for this library entry"
 msgstr "库条目的编辑选项"
 
 #: common/lib_table_grid_tricks.cpp:124
-#, fuzzy
 msgid "Activate Selected"
 msgstr "激活所选"
 
 #: common/lib_table_grid_tricks.cpp:127
-#, fuzzy
 msgid "Deactivate Selected"
 msgstr "停用所选"
 
 #: common/lib_table_grid_tricks.cpp:132
-#, fuzzy
 msgid "Set Visible Flag"
 msgstr "设置可见标记"
 
 #: common/lib_table_grid_tricks.cpp:135
-#, fuzzy
 msgid "Unset Visible Flag"
 msgstr "取消可见标记"
 
 #: common/lib_table_grid_tricks.cpp:148
-#, fuzzy
 msgid "Edit Settings"
-msgstr "编辑作业设置..."
+msgstr "编辑设置"
 
 #: common/lib_table_grid_tricks.cpp:156
-#, fuzzy
 msgid "Open Library Table"
-msgstr "选择库表"
+msgstr "打开库表"
 
 #: common/lib_table_grid_tricks.cpp:480
 #, fuzzy
@@ -8674,9 +8666,8 @@ msgstr ""
 "%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "创建一个空的全局%s库表"
+msgstr "是否保存对嵌套库表的更改?"
 
 #: common/lib_tree_model_adapter.cpp:142 common/lib_tree_model_adapter.cpp:145
 #: common/lib_tree_model_adapter.cpp:163 common/lib_tree_model_adapter.cpp:165
@@ -8756,14 +8747,12 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'之间类型不匹配"
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
-#, fuzzy
 msgid "Edit settings"
-msgstr "编辑高级设置"
+msgstr "编辑设置"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Open library table"
-msgstr "封装库表"
+msgstr "打开库表"
 
 #: common/libraries/lib_table_grid_data_model.cpp:335
 msgid "Nickname"
@@ -9070,9 +9059,10 @@ msgid ""
 msgstr ""
 "KiCad 无法使用 '%s'。\n"
 "\n"
-"1. 关闭在 Windows 设置或者本地策略组中的「受控文件夹访问」\n"
-"2. 确保没有其他杀毒软件会干扰 KiCad\n"
-"3. 确保你的权限设置正确"
+"1. 在 Microsoft Defender 设置中禁用「文件夹限制访问」或在组策略中禁用「配置受"
+"控文件夹访问权限」\n"
+"2. 确保没有其他杀毒软件干扰 KiCad\n"
+"3. 确保你已设置正确的权限"
 
 #: common/pgm_base.cpp:226
 msgid "No default editor found, you must choose one."
@@ -9369,7 +9359,7 @@ msgstr "库"
 
 #: common/startwizard/startwizard_provider_privacy.cpp:76
 msgid "Updates && Privacy"
-msgstr ""
+msgstr "更新与隐私"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9380,9 +9370,8 @@ msgid "Select Settings Path"
 msgstr "选择设置路径"
 
 #: common/startwizard/startwizard_provider_settings.cpp:183
-#, fuzzy
 msgid "Configuration"
-msgstr "确认"
+msgstr "配置"
 
 #: common/tool/action_menu.cpp:224 common/tool/action_menu.cpp:229
 #, c-format
@@ -9436,7 +9425,7 @@ msgstr "显示当前符号单元"
 
 #: common/tool/action_toolbar.cpp:1065
 msgid "Symbol body style selector"
-msgstr "符号主题样式选择器"
+msgstr "符号图形样式选择器"
 
 #: common/tool/action_toolbar.cpp:1066
 msgid "Displays the current body style"
@@ -9873,9 +9862,8 @@ msgid "Edit Table..."
 msgstr "编辑表格..."
 
 #: common/tool/actions.cpp:574
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "导出为 CSV..."
+msgstr "导出表格为 CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
@@ -10596,9 +10584,8 @@ msgid "Grouping"
 msgstr "分组"
 
 #: common/tool/group_tool.cpp:239
-#, fuzzy
 msgid "Add Items to Group"
-msgstr "将项目对齐到栅格"
+msgstr "将项目添加到组"
 
 #: common/tool/group_tool.cpp:266
 msgid "Remove Group Items"
@@ -11044,9 +11031,8 @@ msgid "Confirm change"
 msgstr "确认修改"
 
 #: common/widgets/widget_hotkey_list.cpp:516
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(双击编辑)"
+msgstr "命令 (双击编辑)"
 
 #: common/widgets/widget_hotkey_list.cpp:519
 msgid "Hotkey"
@@ -11623,14 +11609,12 @@ msgid "Footprint Filters:"
 msgstr "封装筛选规则:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "封装筛选规则列表:"
+msgstr "封装筛选器"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "封装筛选规则列表:"
+msgstr "封装筛选控制"
 
 #: cvpcb/toolbars_display_footprints.cpp:50
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:66
@@ -12606,13 +12590,12 @@ msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr "交叉探测时, 滚动画布以确保该项目可见"
 
 #: eeschema/dialogs/dialog_erc.cpp:235
-#, fuzzy
 msgid "Show all errors"
-msgstr "显示所有版本"
+msgstr "显示所有错误"
 
 #: eeschema/dialogs/dialog_erc.cpp:236
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "在所有适用引脚上显示重复的 ERC 标记"
 
 #: eeschema/dialogs/dialog_erc.cpp:410 pcbnew/dialogs/dialog_drc.cpp:1286
 msgid "Delete exclusions too?"
@@ -13733,7 +13716,7 @@ msgstr "选择引脚数据文件"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1040
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr ""
+msgstr "数据中存在未知列: %s。将忽略这些列。"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1200
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:154
@@ -13797,23 +13780,20 @@ msgid "Duplicate pins:"
 msgstr "编号重复的引脚:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:134
-#, fuzzy
 msgid "Filter Pin Table"
-msgstr "引脚属性表"
+msgstr "筛选引脚表"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
 msgid "Filter by unit:"
 msgstr "按单元筛选:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:149
-#, fuzzy
 msgid "Filter by body style:"
-msgstr "根据大小筛选过孔:"
+msgstr "按图形样式筛选:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:157
-#, fuzzy
 msgid "Filter by selection"
-msgstr "选择筛选器"
+msgstr "按选定内容筛选"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:366
@@ -13992,9 +13972,9 @@ msgstr "字段名 '%s' 已存在。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:814
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "符号字段表"
+msgstr "符号字段表 ('%s' 库)"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1031
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -14100,7 +14080,7 @@ msgstr "当所有的符号单元除引脚编号外都相同时, 请勾选此选�
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:83
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "符号具有备选主体图形样式"
+msgstr "符号具有备选图形样式"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:86
 msgid "Create symbol as power symbol"
@@ -14392,9 +14372,8 @@ msgid "Body Styles"
 msgstr "图形样式"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:350
-#, fuzzy
 msgid "Single body style"
-msgstr "作用于符号的所有图形符号样式"
+msgstr "单一图形样式"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
@@ -14858,93 +14837,82 @@ msgid "Plot Schematic"
 msgstr "绘制原理图"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "导入设置"
+msgstr "远程符号设置"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:58
 msgid ""
 "Configure where downloaded remote libraries are stored and how they are "
 "named."
-msgstr ""
+msgstr "配置下载的远程库的存储位置和命名方式。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:65
-#, fuzzy
 msgid "Destination directory:"
-msgstr "目标路径:"
+msgstr "目标目录:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:71
 msgid ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
-msgstr ""
+msgstr "下载的符号, 封装和 3D 模型数据的保存目录。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:74
 msgid "Browse..."
 msgstr "浏览..."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Library prefix:"
-msgstr "库名称前缀:"
+msgstr "库前缀:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Prefix that will be applied to the generated libraries."
-msgstr ""
+msgstr "将应用于生成的库的前缀。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "已加载 %zu 个库"
+msgstr "将库添加到:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "符号库表"
+msgstr "工程库表"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "将新库添加到工程库表"
+msgstr "将生成的库添加到工程库表中。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "符号库表"
+msgstr "全局库表"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "将新库添加到全局库表"
+msgstr "将生成的库添加到全局库表中。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
-msgstr ""
+msgstr "恢复默认目标目录和前缀。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
-#, fuzzy
 msgid "Please choose a destination directory."
-msgstr "请选择一个有效的网表文件。"
+msgstr "请选择目标目录。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:158
-#, fuzzy
 msgid "Please enter a library prefix."
-msgstr "请选择要删除的库。"
+msgstr "请输入库前缀。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "选择目标类型:"
+msgstr "选择目标目录"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
 "Library names will be created with suffixes such as _symbols, _fp, and _3d."
-msgstr ""
+msgstr "创建的库名称将使用 _symbols, _fp 和 _3d 等后缀标识。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:263
 #, c-format
 msgid "Will create libraries like %1$s_symbols, %1$s_fp, %1$s_3d, etc."
-msgstr ""
+msgstr "将创建的库名称如 %1$s_symbols, %1$s_fp, %1$s_3d。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:96
 msgid ""
@@ -17284,14 +17252,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:63
-#, fuzzy
 msgid "Manage Data Sources..."
-msgstr "管理符号库..."
+msgstr "管理数据源..."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:123
-#, fuzzy
 msgid "No data sources are currently installed."
-msgstr "目前不支持 DXF 曲线。"
+msgstr "当前未安装任何数据源。"
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:136
 msgid "Installed data sources are listed above."
@@ -17983,9 +17949,8 @@ msgstr "设计图块"
 
 #: eeschema/eeschema_settings.cpp:157 eeschema/menubar.cpp:191
 #: eeschema/sch_edit_frame.cpp:2028 eeschema/tools/sch_actions.cpp:130
-#, fuzzy
 msgid "Remote Symbols"
-msgstr "重新映射符号"
+msgstr "远程符号"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
 msgid "Input Pin"
@@ -18539,9 +18504,8 @@ msgid "Do not show this dialog again."
 msgstr "不再显示。"
 
 #: eeschema/files-io.cpp:528
-#, fuzzy
 msgid "Legacy project cache library"
-msgstr "旧版封装库文件"
+msgstr "旧版工程缓存库"
 
 #: eeschema/files-io.cpp:606
 #, c-format
@@ -18944,7 +18908,7 @@ msgstr "设置 '从物料清单中移除' 特性"
 
 #: eeschema/lib_symbol.cpp:2136
 msgid "Units and Body Styles"
-msgstr "单元和主体样式"
+msgstr "单元和图形样式"
 
 #: eeschema/lib_symbol.cpp:2138
 msgid "Number of Symbol Units"
@@ -20555,7 +20519,7 @@ msgstr "所有单元"
 #: eeschema/sch_item.cpp:182 eeschema/sch_item.cpp:218
 #: eeschema/sch_item.cpp:782
 msgid "All body styles"
-msgstr "所有主体样式"
+msgstr "所有图形样式"
 
 #: eeschema/sch_junction.cpp:299 pcbnew/dialogs/dialog_shape_properties.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties.cpp:890
@@ -21664,12 +21628,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1247
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1987
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2056
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"保存库表时出错: \n"
-"\n"
-"%s"
+msgstr "保存库表时出错。"
 
 #: eeschema/sheet.cpp:696
 msgid "Cannot create the schematic image"
@@ -21708,19 +21668,16 @@ msgid "There are NaN elements in a matrix."
 msgstr "矩阵中有 NaN 个元素。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:137
-#, fuzzy
 msgid "Missing or invalid R_pkg value."
-msgstr "R_pkg 值无效。"
+msgstr "缺失或无效的 R_pkg 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:143
-#, fuzzy
 msgid "Missing or invalid L_pkg value."
-msgstr "L_pkg 值无效。"
+msgstr "缺失或无效的 L_pkg 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Missing or invalid C_pkg value."
-msgstr "C_pkg 值无效。"
+msgstr "缺失或无效的 C_pkg 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:164
 msgid "Checking pin "
@@ -21831,156 +21788,133 @@ msgid "Invalid V_meas value."
 msgstr "V_meas 值无效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:537
-#, fuzzy
 msgid "Missing or invalid C_comp value."
-msgstr "缺少选择值。"
+msgstr "缺失或无效的 C_comp 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
 msgid "Missing or invalid C_comp_gnd_clamp value."
-msgstr ""
+msgstr "缺失或无效的 C_comp_gnd_clamp 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:555
 msgid "Missing or invalid C_comp_power_clamp value."
-msgstr ""
+msgstr "缺失或无效的 C_comp_power_clamp 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:564
 msgid "Missing or invalid C_comp_pullup value."
-msgstr ""
+msgstr "缺失或无效的 C_comp_pullup 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:573
 msgid "Missing or invalid C_comp_pulldown value."
-msgstr ""
+msgstr "缺失或无效的 C_comp_pulldown 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
-#, fuzzy
 msgid "No C_comp values are available."
-msgstr "有可用的包更新"
+msgstr "无 C_comp 值可用。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
-#, fuzzy
 msgid "Missing or invalid Temperature Range value."
-msgstr "温度范围无效。"
+msgstr "缺失或无效的温度范围值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Missing or invalid Voltage Range value."
-msgstr "IV 表中有一个无效电压"
+msgstr "缺失或无效的电压范围值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
-msgstr ""
+msgstr "缺失或无效的上拉参考值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:619
 msgid "Missing or invalid Pulldown Reference value."
-msgstr ""
+msgstr "缺失或无效的下拉参考值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:628
 msgid "Missing or invalid GND Clamp Reference value."
-msgstr ""
+msgstr "缺失或无效的 GND 钳位参考值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
 msgid "Missing or invalid POWER Clamp Reference value."
-msgstr ""
+msgstr "缺失或无效的 POWER 钳位参考值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Voltage Range or Reference is missing."
-msgstr "电压范围无效。"
+msgstr "电压范围或参考值缺失。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:653
 #: eeschema/sim/kibis/ibis_parser.cpp:758
-#, fuzzy
 msgid "Invalid Pulldown table."
-msgstr "无效下拉电阻。"
+msgstr "无效的下拉表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:659
 #: eeschema/sim/kibis/ibis_parser.cpp:753
-#, fuzzy
 msgid "Invalid Pullup table."
-msgstr "无效上拉电阻。"
+msgstr "无效的上拉表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:665
-#, fuzzy
 msgid "Invalid ISSO_PD table."
-msgstr "R_pkg 值无效。"
+msgstr "无效的 ISSO_PD 表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:671
-#, fuzzy
 msgid "Invalid ISSO_PU table."
-msgstr "R_pkg 值无效。"
+msgstr "无效的 ISSO_PU 表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:677
-#, fuzzy
 msgid "Invalid Composite Current table."
-msgstr "无效的属性值"
+msgstr "无效的复合电流表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:683
 #: eeschema/sim/kibis/ibis_parser.cpp:768
-#, fuzzy
 msgid "Invalid POWER Clamp table."
-msgstr "无效电源钳位。"
+msgstr "无效的 POWER 钳位表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:689
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Invalid GND Clamp table."
-msgstr "无效的 GND 钳位。"
+msgstr "无效的 GND 钳位表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:698
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Invalid Ramp specification."
-msgstr "无效的行定义"
+msgstr "无效的 Ramp 规格。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:711
-#, fuzzy
 msgid "Submodel name cannot be empty."
-msgstr "型号名不能为空。"
+msgstr "子模型名称不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Checking submodel "
-msgstr "正在检查模型 "
+msgstr "正在检查子模型 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "The submodel has no type."
-msgstr "该符号只有一个符号单元。"
+msgstr "子模型没有类型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
-#, fuzzy
 msgid "Missing or invalid V_trigger_r value."
-msgstr "无效的 V_ref 值。"
+msgstr "缺失或无效的 V_trigger_r 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:740
-#, fuzzy
 msgid "Missing or invalid V_trigger_f value."
-msgstr "无效的 V_ref 值。"
+msgstr "缺失或无效的 V_trigger_f 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
-#, fuzzy
 msgid "Missing or invalid Off_delay value."
-msgstr "无效的延迟值"
+msgstr "缺失或无效的 Off_delay 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
-#, fuzzy
 msgid "Invalid GND Pulse table."
-msgstr "无效的 GND 钳位。"
+msgstr "无效的 GND 脉冲表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:778
-#, fuzzy
 msgid "Invalid POWER Pulse table."
-msgstr "无效电源钳位。"
+msgstr "无效的 POWER 脉冲表。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "目前不支持 DXF 实体。"
+msgstr " 尚未支持子模型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
-#, fuzzy
 msgid "Triggered mode dynamic clamp submodels are not yet supported."
-msgstr "忽略了 Altium 层 %d 上的条形码 (尚未支持)。"
+msgstr "尚未支持触发模式为动态钳位的子模型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:813
 msgid "Checking Header..."
@@ -22063,23 +21997,20 @@ msgid "Error on line "
 msgstr "线错误 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "找不到符号。"
+msgstr " 未找到子模型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr "一根线没有正确结束。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "'%s' 不是有效的 SPICE 值。"
+msgstr " 不是有效的 dV/dt 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
-#, fuzzy
 msgid "A dV/dt value is missing."
-msgstr "该文件缺失。\n"
+msgstr "缺失 dV/dt 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1233
 #: eeschema/sim/kibis/ibis_parser.cpp:1248
@@ -22113,7 +22044,7 @@ msgstr "没有预期的额外参数"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 msgid "Submodel name is not unique: "
-msgstr ""
+msgstr "子模型名称不唯一: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1585
 msgid "Unknown keyword in "
@@ -22129,19 +22060,19 @@ msgstr "无效的 ramp 数据"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1733
 msgid "The submodel name is missing."
-msgstr ""
+msgstr "缺失子模型名称。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
 msgid "The submodel mode is missing."
-msgstr ""
+msgstr "缺失子模型模式。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
 msgid " is not a recognised submodel mode."
-msgstr ""
+msgstr " 不是已识别的子模型模式。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1856
 msgid " is not a recognised Submodel Spec subparameter."
-msgstr ""
+msgstr " 不是已识别的子模型规格子参数。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
 #, fuzzy
@@ -24065,19 +23996,16 @@ msgid "Remove inheritance from symbol"
 msgstr "从符号中移除继承关系"
 
 #: eeschema/tools/sch_actions.cpp:289 eeschema/tools/sch_actions.cpp:1099
-#, fuzzy
 msgid "Bulk Edit Symbol Fields..."
-msgstr "编辑符号字段..."
+msgstr "批量编辑符号字段..."
 
 #: eeschema/tools/sch_actions.cpp:290
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the library"
-msgstr "编辑包含所有与所选符号的相关符号的字段表格"
+msgstr "编辑库中所有符号的字段表"
 
 #: eeschema/tools/sch_actions.cpp:296
-#, fuzzy
 msgid "Bulk Edit Related Symbol Fields..."
-msgstr "编辑符号字段..."
+msgstr "批量编辑相关符号字段..."
 
 #: eeschema/tools/sch_actions.cpp:297
 #, fuzzy
@@ -24307,24 +24235,20 @@ msgid "Imports and auto places all sheet pins"
 msgstr "导入并自动放置所有图纸引脚"
 
 #: eeschema/tools/sch_actions.cpp:611
-#, fuzzy
 msgid "Sync Selected Sheet Pins..."
-msgstr "同步图纸引脚..."
+msgstr "同步所选图纸引脚..."
 
 #: eeschema/tools/sch_actions.cpp:612
-#, fuzzy
 msgid "Synchronize selected sheet pins and hierarchical labels"
-msgstr "同步图纸引脚和层次标签"
+msgstr "同步所选图纸引脚和层次标签"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheets Pins..."
-msgstr "同步图纸引脚..."
+msgstr "同步所有图纸引脚..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheets pins and hierarchical labels"
-msgstr "同步图纸引脚和层次标签"
+msgstr "同步所有图纸引脚和层次标签"
 
 #: eeschema/tools/sch_actions.cpp:627
 msgid "Import Sheet..."
@@ -24511,9 +24435,8 @@ msgid "Find in Net Navigator"
 msgstr "在网络导航查找"
 
 #: eeschema/tools/sch_actions.cpp:896
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "在封装编辑器中打开选择的封装"
+msgstr "在网络导航中定位选定的网络"
 
 #: eeschema/tools/sch_actions.cpp:901
 msgid "Cycle Body Style"
@@ -24688,19 +24611,16 @@ msgid "Open the library symbol in the Symbol Editor"
 msgstr "在符号编辑器中打开库符号"
 
 #: eeschema/tools/sch_actions.cpp:1100
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the schematic"
-msgstr "编辑包含所有与所选符号的相关符号的字段表格"
+msgstr "编辑原理图中所有符号的字段表"
 
 #: eeschema/tools/sch_actions.cpp:1106
-#, fuzzy
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "编辑符号库链接..."
+msgstr "批量编辑符号库链接..."
 
 #: eeschema/tools/sch_actions.cpp:1107
-#, fuzzy
 msgid "Edit a table of links between schematic and library symbols"
-msgstr "编辑原理图和库符号之间的链接"
+msgstr "编辑原理图和库符号之间的链接表"
 
 #: eeschema/tools/sch_actions.cpp:1113
 msgid "Assign Footprints..."
@@ -25477,29 +25397,28 @@ msgstr "在当前工程中找不到子原理图"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:119
 #: pcbnew/tools/pcb_edit_table_tool.cpp:160
-#, fuzzy
 msgid "Export Table to CSV"
-msgstr "导出为 CSV..."
+msgstr "将表格导出为 CSV"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:121
 #: pcbnew/tools/pcb_edit_table_tool.cpp:162
-#, fuzzy
 msgid "CSV files (*.csv)|*.csv"
-msgstr "所有文件 (*.*)|*.*"
+msgstr "CSV 文件 (*.csv)|*.csv"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:142
 #: pcbnew/tools/pcb_edit_table_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "打开文件 '%s' 失败。"
+msgstr ""
+"无法打开文件:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:143
 #: pcbnew/tools/pcb_edit_table_tool.cpp:184
-#, fuzzy
 msgid "Export Error"
-msgstr "导出 STEP"
+msgstr "导出错误"
 
 #: eeschema/tools/sch_edit_tool.cpp:86
 msgid "Symbol Unit"
@@ -25687,14 +25606,12 @@ msgid ""
 msgstr "粘贴长文本字符串可能会引起卡顿。是否继续?"
 
 #: eeschema/tools/sch_editor_control.cpp:1743 pcbnew/tools/pcb_control.cpp:1153
-#, fuzzy
 msgid "Paste Cells"
-msgstr "特殊粘贴"
+msgstr "粘贴单元格"
 
 #: eeschema/tools/sch_editor_control.cpp:1748 pcbnew/tools/pcb_control.cpp:1158
-#, fuzzy
 msgid "Failed to paste cells"
-msgstr "无法保存 %s 。"
+msgstr "粘贴单元格失败"
 
 #: eeschema/tools/sch_editor_control.cpp:1864
 #, c-format
@@ -26169,9 +26086,9 @@ msgid "Compressed payload was empty."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "ZSTD decompression failed: %s"
-msgstr "数据库连接失败: %s"
+msgstr "ZSTD 解压失败: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:361
 msgid "Payload was empty."
@@ -26190,14 +26107,14 @@ msgid "Unable to create '%s'."
 msgstr "无法创建' %s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s' for writing."
-msgstr "无法打开 %s 进行读取。"
+msgstr "无法打开 '%s' 进行写入。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write '%s'."
-msgstr "写入文件 '%s' 失败。"
+msgstr "写入 '%s' 失败。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:402
 #, fuzzy
@@ -26232,72 +26149,66 @@ msgstr "无法合并所选多边形。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:496
 msgid "Select which remote data source to query."
-msgstr ""
+msgstr "选择要查询的远程数据源。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:508
-#, fuzzy
 msgid "Configure remote data sources."
-msgstr "配置网络类"
+msgstr "配置远程数据源。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:577
 msgid "No remote data sources are currently installed."
-msgstr ""
+msgstr "当前未安装远程数据源。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:639
-#, fuzzy, c-format
+#, c-format
 msgid "No configuration JSON found for '%s'."
-msgstr "找不到符号 '%s' 的仿真模型定义。"
+msgstr "未找到 '%s' 的配置 JSON。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:650
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s'."
 msgstr "无法打开 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read '%s'."
-msgstr "无法创建' %s'。"
+msgstr "无法读取 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load remote data for '%s'."
-msgstr "无法读取数据文件 '%s'。"
+msgstr "无法加载 '%s' 的远程数据。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:932
-#, fuzzy
 msgid "Missing login URL for remote authentication."
-msgstr "缺少信息"
+msgstr "缺少用于远程身份验证的登录 URL。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:943
-#, fuzzy
 msgid "Unable to start the local login listener."
-msgstr "无法减去所选多边形。"
+msgstr "无法启动本地登录监听器。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:952
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "无法创建备份文件夹 '%s'。\n"
+msgstr "无法为登录分配回调端口。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "不支持的过孔形状: %s。"
+msgstr "不支持的 RPC 版本 %d。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
-#, fuzzy
 msgid "Missing session identifier."
-msgstr "缺少版本号。"
+msgstr "缺少会话标识符。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1188
-#, fuzzy
 msgid "Missing compression metadata."
-msgstr "缺少条件表达式。"
+msgstr "缺少压缩元数据。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1230
 #: eeschema/widgets/panel_remote_symbol.cpp:1244
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' is not supported."
-msgstr "不支持 %s。"
+msgstr "不支持命令 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1238
 #, fuzzy
@@ -26308,55 +26219,46 @@ msgstr "无法打开文件"
 #: eeschema/widgets/panel_remote_symbol.cpp:1538
 #: eeschema/widgets/panel_remote_symbol.cpp:1734
 #: eeschema/widgets/panel_remote_symbol.cpp:1964
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "加载原理图失败\n"
+msgstr "无法加载原理图设置。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1269
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "3D 配置目录未知"
+msgstr "未配置目标目录。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create directory '%s'."
-msgstr "创建目录 '%s' 失败。"
+msgstr "无法创建目录 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1300
-#, fuzzy
 msgid "Unable to access the symbol library table."
-msgstr "符号库文件 '%s' 创建失败。"
+msgstr "无法访问符号库表。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1319
-#, fuzzy
 msgid "Failed to update the symbol library table."
-msgstr "符号库文件 '%s' 创建失败。"
+msgstr "更新符号库表失败。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1333
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
-#, fuzzy
 msgid "Remote download"
-msgstr "保留已下载文件"
+msgstr "远程下载"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1338
-#, fuzzy
 msgid "Failed to save the symbol library table."
-msgstr "无法保存符号库文件 '%s'。"
+msgstr "保存符号库表失败。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1356
-#, fuzzy
 msgid "Unable to access the footprint library table."
-msgstr "无法创建封装视图框架"
+msgstr "无法访问封装库表。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1375
-#, fuzzy
 msgid "Failed to update the footprint library table."
-msgstr "无法保存封装库文件 '%s'。"
+msgstr "更新封装库表失败。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1394
-#, fuzzy
 msgid "Failed to save the footprint library table."
-msgstr "无法保存封装库文件 '%s'。"
+msgstr "保存封装库表失败。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1435
 #, fuzzy
@@ -26365,7 +26267,7 @@ msgstr "使用原理图编辑器配色主题"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1442
 msgid "Downloaded symbol metadata is incomplete."
-msgstr ""
+msgstr "下载的符号元数据不完整。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1470
 #, fuzzy
@@ -26396,19 +26298,16 @@ msgid "No schematic editor is available to store symbols."
 msgstr "没有可用于设置远程的仓库"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
-#, fuzzy
 msgid "Unable to access the symbol library manager."
-msgstr "符号库文件 '%s' 创建失败。"
+msgstr "无法访问符号库管理器。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1605
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "无法创建下载目录!"
+msgstr "无法解析下载的符号。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1620
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "选择一个文件夹保存下载库"
+msgstr "无法保存下载的符号。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1680
 #, fuzzy
@@ -27911,27 +27810,24 @@ msgid "Delete Column"
 msgstr "删除列"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "未选择任何网络。"
+msgstr "未选择单元格"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "选区包含 %zu 个锁定项目。"
+msgstr "选区包含非单元格项目"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
-msgstr ""
+msgstr "选定的单元格来自不同的表"
 
 #: include/tool/edit_table_tool_base.h:673
-#, fuzzy
 msgid "Cannot paste into merged cells"
-msgstr "无法创建输入流 '%s'。\n"
+msgstr "无法粘贴到已合并的单元格中"
 
 #: include/tool/edit_table_tool_base.h:683
 msgid "Selected cells must form a contiguous block"
-msgstr ""
+msgstr "选定的单元格必须形成一个连续的块"
 
 #: include/widgets/filedlg_hook_embed_file.h:38
 msgid "Embed file"
@@ -28322,9 +28218,8 @@ msgid "Generate report of drill hits"
 msgstr "生成钻孔的映射/摘要"
 
 #: kicad/cli/command_pcb_export_drill.cpp:101
-#, fuzzy
 msgid "Report output file path"
-msgstr "选择输出路径"
+msgstr "报告文件输出路径"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
@@ -29943,9 +29838,9 @@ msgid "Libraries (%d)"
 msgstr "库 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Data sources (%d)"
-msgstr "数据源名称"
+msgstr "数据源 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
@@ -34446,24 +34341,20 @@ msgid "Board stackup thickness"
 msgstr "电路板叠层厚度"
 
 #: pcbnew/board_statistics_report.cpp:574
-#, fuzzy
 msgid "Front footprint area"
-msgstr "顶部封装"
+msgstr "顶层封装面积"
 
 #: pcbnew/board_statistics_report.cpp:576
-#, fuzzy
 msgid "Back footprint area"
-msgstr "底部封装"
+msgstr "底层封装面积"
 
 #: pcbnew/board_statistics_report.cpp:579
-#, fuzzy
 msgid "Front component density"
-msgstr "导出元件"
+msgstr "顶层元件密度"
 
 #: pcbnew/board_statistics_report.cpp:590
-#, fuzzy
 msgid "Back component density"
-msgstr "正在检查元件 "
+msgstr "底层元件密度"
 
 #: pcbnew/board_statistics_report.cpp:616
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -34657,7 +34548,7 @@ msgstr "介质"
 #: pcbnew/board_tables/board_stackup_table.cpp:118
 #, c-format
 msgid " %d (%d/%d)"
-msgstr ""
+msgstr " %d (%d/%d)"
 
 #: pcbnew/build_BOM_from_board.cpp:76
 msgid "Cannot export BOM: there are no footprints on the PCB."
@@ -34764,9 +34655,9 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "net %d"
-msgstr "net tie"
+msgstr "网络 %d"
 
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
@@ -35346,24 +35237,20 @@ msgid "Board stackup thickness:"
 msgstr "电路板叠层厚度:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "顶层铜箔面积:"
+msgstr "顶层封装面积:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Front footprint density:"
-msgstr "顶部封装"
+msgstr "顶层封装密度:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "底层铜箔面积:"
+msgstr "底层封装面积:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Back footprint density:"
-msgstr "底部封装"
+msgstr "底层封装密度:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:477
 #, c-format
@@ -35606,9 +35493,8 @@ msgid "Layers:"
 msgstr "层:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "填充区管理器..."
+msgstr "打开填充区管理器..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -37873,19 +37759,16 @@ msgid "Pad Table"
 msgstr "焊盘表"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad numbers:"
 msgstr "焊盘编号:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:82
-#, fuzzy
 msgid "Pad count:"
-msgstr "焊盘数量"
+msgstr "焊盘数量:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "编号重复的引脚:"
+msgstr "重复焊盘:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3353
 msgid "Size X"
@@ -37936,7 +37819,6 @@ msgid "Aperture"
 msgstr "Aperture"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:553
-#, fuzzy
 msgid "Edit Pads"
 msgstr "编辑焊盘"
 
@@ -38671,9 +38553,8 @@ msgid "Filter tracks by width:"
 msgstr "根据线宽筛选走线:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "根据大小筛选过孔:"
+msgstr "按直径筛选过孔:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -39111,6 +38992,7 @@ msgstr "外框样式:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:156 pcbnew/zone.cpp:940
+#, fuzzy
 msgid "Hatched"
 msgstr "阴影线"
 
@@ -39397,7 +39279,7 @@ msgstr "w"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1594
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1623
 msgid "Depth:"
-msgstr ""
+msgstr "深度:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -40723,6 +40605,7 @@ msgid "Outline display:"
 msgstr "外框显示:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
+#, fuzzy
 msgid "Distance between parallel lines used for hatching the area"
 msgstr "区域阴影线距离"
 
@@ -41695,9 +41578,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "新建图形项目的默认属性"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:381
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "符号库表"
+msgstr "表 (嵌套库表)"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:500
 #, c-format
@@ -43775,20 +43657,17 @@ msgstr "差分对 skew 默认属性"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:754
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:805
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "板最小走线宽度"
+msgstr "无法计算走线宽度"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:759
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "差分对布线"
+msgstr "无法计算差分对间隙"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:764
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:810
-#, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "单位传播时延:"
+msgstr "无法计算走线传播延迟"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:830
 msgid "Tuning profile must have a name"
@@ -43965,12 +43844,11 @@ msgstr "过孔层终止"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
-msgstr ""
+msgstr "填充区栅格填充偏移"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "新建测量标注对象的默认属性"
+msgstr "新建填充区的默认属性"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:235
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:341
@@ -44052,9 +43930,8 @@ msgid "Width of copper in thermal reliefs."
 msgstr "缓释热焊盘 (花焊盘) 连接线的宽度。"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:142
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "间距重写与焊盘连接"
+msgstr "间距与焊盘连接"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
 #, fuzzy
@@ -44062,9 +43939,8 @@ msgid "Display Overrides"
 msgstr "过孔时延重写:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
-#, fuzzy
 msgid "Hatched fill"
-msgstr "影线"
+msgstr "栅格填充"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:259
 #, fuzzy
@@ -44072,9 +43948,8 @@ msgid "Hatch offset overrides:"
 msgstr "过孔时延重写:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:320
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "影线"
+msgstr "栅格填充"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Remove islands:"
@@ -44737,9 +44612,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "被板边截断的丝印"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "丝印重叠"
+msgstr "丝印间距"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
@@ -45103,9 +44977,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "正在检查 keepouts 和 disallow 约束..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:167
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "被板边截断的丝印"
+msgstr "丝印超出板边"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:243
 msgid "Checking copper to board edge clearances..."
@@ -45419,7 +45292,7 @@ msgstr "%s 个 '栅格定向角度' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:648
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 个 '栅格平滑等级' 不一致。"
+msgstr "%s 个 '栅格平滑等级' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
 #, c-format
@@ -47970,9 +47843,8 @@ msgid "Press-fit pad"
 msgstr "压接焊盘"
 
 #: pcbnew/pad.cpp:3222
-#, fuzzy
 msgid "Undefined"
-msgstr "未定义!"
+msgstr "未定义"
 
 #: pcbnew/pad.cpp:3234
 #, fuzzy
@@ -49556,7 +49428,7 @@ msgstr "生成 content section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:936
 msgid "Pad has unsupported type; it was skipped."
-msgstr "不支持的引脚类型；已跳过。"
+msgstr "焊盘类型不受支持; 已跳过。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1219
 msgid "Generating history section"
@@ -49575,18 +49447,15 @@ msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1320
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr "器件 \"%s\" 没有 OEM 编号；BOM 录入将被跳过。"
+msgstr "元件 \"%s\" 缺少 OEM 引用; 将跳过该 BOM 条目。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1424
 msgid "Generating CAD data"
 msgstr "生成 CAD data"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2477
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可以通过设计规则检查 "
-"(DRC) 来分析原因。"
+msgstr "电路板外框无效或缺失。请运行 DRC。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2859
 msgid ""
@@ -49599,10 +49468,12 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "导出层 %s, 网络 %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3060
+#, fuzzy
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr "过孔使用了不支持的堆叠；已在钻孔文件中省略。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3087
+#, fuzzy
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr "焊盘使用了不支持的堆叠；已在钻孔文件中省略。"
 
@@ -50729,9 +50600,8 @@ msgid "Missing component class name argument to hasComponentClass()"
 msgstr "hasComponentClass() 缺少组件类名参数"
 
 #: pcbnew/pcbnew.cpp:614 pcbnew/pcbnew.cpp:626
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "加载封装库"
+msgstr "正在加载封装库"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:438
 msgid "Failed to load board\n"
@@ -52399,14 +52269,17 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:492
+#, fuzzy
 msgid "Gate swapping must be performed on gates with equal pin counts."
 msgstr "门电路交换只能在具有相同引脚数量的门上。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:513
+#, fuzzy
 msgid "Gate swapping failed: pad in unit missing from footprint."
 msgstr "门电路交换失败：单元中的引脚在封装中不存在。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:541
+#, fuzzy
 msgid "Gate swapping has no effect: all selected gates have identical nets."
 msgstr "交换门电路没有效果：所有选定的门电路都具有相同的网络。"
 
