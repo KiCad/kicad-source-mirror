@@ -42,7 +42,9 @@
 #include <sch_sheet.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
+#include <sch_sheet_pin.h>
 #include <symbol_editor/symbol_editor_settings.h>
+#include <sch_no_connect.h>
 
 
 static const std::vector<KICAD_T> pointEditorTypes = { SCH_SHAPE_T,
@@ -743,7 +745,19 @@ class SHEET_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     SHEET_POINT_EDIT_BEHAVIOR( SCH_SHEET& aSheet ) :
             m_sheet( aSheet )
-    {}
+    {
+        if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( m_sheet.GetParent() ) )
+        {
+            for( SCH_SHEET_PIN* sheetPin : m_sheet.GetPins() )
+            {
+                for( SCH_ITEM* noConnect : screen->Items().Overlapping( SCH_NO_CONNECT_T, sheetPin->GetTextPos() ) )
+                {
+                    noConnects[sheetPin] = noConnect;
+                    break;
+                }
+            }
+        }
+    }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -841,10 +855,24 @@ public:
 
         if( m_sheet.GetSize() != sheetNewSize )
             m_sheet.Resize( sheetNewSize );
+
+        if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( m_sheet.GetParent() ) )
+        {
+            for( auto& [sheetPin, noConnect] : noConnects )
+            {
+                if( noConnect->GetPosition() != sheetPin->GetTextPos() )
+                {
+                    aCommit.Modify( noConnect, screen );
+                    noConnect->SetPosition( sheetPin->GetTextPos() );
+                    aUpdatedItems.push_back( noConnect );
+                }
+            }
+        }
     }
 
 private:
-    SCH_SHEET& m_sheet;
+    SCH_SHEET&                          m_sheet;
+    std::map<SCH_SHEET_PIN*, SCH_ITEM*> noConnects;
 };
 
 
