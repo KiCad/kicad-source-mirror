@@ -107,7 +107,15 @@ protected:
     {
         FP_LIB_TABLE_GRID_DATA_MODEL* table = static_cast<FP_LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
         LIBRARY_TABLE_ROW&            tableRow = table->at( aRow );
+
+        if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+            return wxEmptyString;
+
         PCB_IO_MGR::PCB_FILE_T        fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
+
+        if( fileType == PCB_IO_MGR::PCB_FILE_UNKNOWN )
+            return wxEmptyString;
+
         const IO_BASE::IO_FILE_DESC&  pluginDesc = m_supportedFpFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
