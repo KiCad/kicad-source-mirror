@@ -762,7 +762,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                         return;
 
                     const double query_pt[2] = { static_cast<double>( pt.x ), static_cast<double>( pt.y ) };
-                    uint32_t    indices[2];
+                    uint32_t    indices[2] = { 0, 0 };      // make gcc quiet
                     double      dists[2];
 
                     // Find the two closest items to the given point using kdtree

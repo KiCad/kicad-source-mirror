@@ -809,7 +809,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2I                           originalCursorPos = controls->GetCursorPosition();
     VECTOR2I                           originalMousePos = controls->GetMousePosition();
     std::unique_ptr<STATUS_TEXT_POPUP> statusPopup;
-    wxString                           status;
     size_t                             itemIdx = 0;
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
@@ -1272,10 +1271,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         // Don't snap the items on the initial drag start - this would warp
                         // the object position before the mouse moves. Instead, set up construction
                         // lines at the current object position and let the user move from there.
-                        
+
                         // Get the best drag origin (where an item anchor is)
                         VECTOR2I dragOrigin = m_cursor;
-                        
+
                         // Set the reference point to the drag origin (actual item position)
                         selection.SetReferencePoint( dragOrigin );
 

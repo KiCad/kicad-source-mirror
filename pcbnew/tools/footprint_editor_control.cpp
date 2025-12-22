@@ -247,7 +247,6 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID selected = m_frame->GetLibTree()->GetSelectedLibId();
-    wxString libraryName = selected.GetUniStringLibNickname();
 
     if( m_frame->IsContentModified() )
     {
@@ -769,7 +768,7 @@ int FOOTPRINT_EDITOR_CONTROL::Properties( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::footprintProperties ) )
     {
         LIB_ID treeLibId = m_frame->GetLibTree()->GetSelectedLibId();
-        
+
         // Check if a different footprint is selected in the tree
         if( treeLibId.IsValid()
                 && (  !m_frame->GetBoard()->GetFirstFootprint()
@@ -795,44 +794,44 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
 {
     // Load the footprint from the library (without adding it to the canvas)
     FOOTPRINT* libraryFootprint = m_frame->LoadFootprint( aLibId );
-    
+
     if( !libraryFootprint )
         return;
-    
+
     // Create a temporary board to hold the footprint (required by the dialog)
     std::unique_ptr<BOARD> tempBoard( new BOARD() );
-    
+
     // Create a copy to work with and add it to the temporary board
     FOOTPRINT* tempFootprint = static_cast<FOOTPRINT*>( libraryFootprint->Clone() );
     delete libraryFootprint;
-    
+
     tempBoard->Add( tempFootprint );
     tempFootprint->SetParent( tempBoard.get() );
-    
+
     LIB_ID oldFPID = tempFootprint->GetFPID();
-    
+
     // Open the properties dialog
     DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR dialog( m_frame, tempFootprint );
-    
+
     if( dialog.ShowQuasiModal() != wxID_OK )
         return;
-    
+
     // Remove from temporary board before saving (to avoid double-delete)
     tempBoard->Remove( tempFootprint );
-    
+
     // Save the modified footprint back to the library
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() );
     wxString libName = aLibId.GetLibNickname();
-    
+
     try
     {
         adapter->SaveFootprint( libName, tempFootprint, true );
-        
+
         // Update the tree view
         wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( oldFPID );
         m_frame->UpdateLibraryTree( treeItem, tempFootprint );
         m_frame->SyncLibraryTree( true );
-        
+
         // Clean up
         delete tempFootprint;
     }

@@ -732,8 +732,6 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, cons
             rh = m_dataStore[rhRefKey][m_cols[i].m_fieldName];
         }
 
-        wxString fieldName = m_cols[i].m_fieldName;
-
         if( lh != rh )
             return false;
 

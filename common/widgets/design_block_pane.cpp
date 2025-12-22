@@ -228,7 +228,6 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
 
     // TODO(JE) library tables -- figure out where Jeff's added aDialogTitle should be used?
-    bool isGlobal = ( aScope == LIBRARY_TABLE_SCOPE::GLOBAL );
 
     wxFileName fn( aFilename );
     wxString   libPath = fn.GetFullPath();

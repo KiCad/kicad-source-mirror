@@ -1370,7 +1370,6 @@ void SCH_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aP
 
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
     SYMBOL*  symbol = GetParentSymbol();
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
