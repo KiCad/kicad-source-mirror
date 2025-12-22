@@ -116,6 +116,8 @@ public:
 
     DATABASE_CACHE_SETTINGS m_Cache;
 
+    bool m_GloballyUniqueKeys;
+
 protected:
     wxString getFileExt() const override;
 };

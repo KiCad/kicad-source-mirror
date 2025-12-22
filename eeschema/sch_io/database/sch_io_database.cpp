@@ -137,7 +137,8 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 
     for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
     {
-        if( tableIter.name == tableName )
+        // no table means globally unique keys, try all tables
+        if( tableName.empty() || tableIter.name == tableName )
             tablesToTry.emplace_back( &tableIter );
     }
 
@@ -255,7 +256,8 @@ void SCH_IO_DATABASE::cacheLib()
             std::string rawName = std::any_cast<std::string>( result[table.key_col] );
             UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
             std::string sanitizedKey = sanitizedName.c_str();
-            std::string prefix = table.name.empty() ? "" : fmt::format( "{}/", table.name );
+            std::string prefix =
+                    ( m_settings->m_GloballyUniqueKeys || table.name.empty() ) ? "" : fmt::format( "{}/", table.name );
             std::string sanitizedDisplayName = fmt::format( "{}{}", prefix, sanitizedKey );
             wxString    name( sanitizedDisplayName );
 
