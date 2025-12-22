@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-13 20:08+0300\n"
-"PO-Revision-Date: 2025-12-22 02:01+0000\n"
+"PO-Revision-Date: 2025-12-23 02:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -18751,9 +18751,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1087
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Rajzjel könyvtár mentése frissített formátumban\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1105
 msgid "Symbol library was not updated\n"
@@ -18765,11 +18764,9 @@ msgid "Found %d violations\n"
 msgstr "DRC szabálysértések megengedése"
 
 #: eeschema/eeschema_jobs_handler.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült elmenteni az ERC jelentést ide: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1202
 #, c-format
@@ -18777,9 +18774,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "ERC jelentés elmentve ide: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1234
-#, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
+msgstr "A kapcsolási rajz fájl nem frissült.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1252 eeschema/files-io.cpp:959
 #: eeschema/files-io.cpp:1003
@@ -18793,7 +18789,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1257
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr ""
+msgstr "Kapcsolási rajz sikeresen elmentve a legújabb formátumban\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:1052
 #, fuzzy
@@ -19655,7 +19651,6 @@ msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origó a nyákterv rácson, Y koordináta"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
-#, fuzzy
 msgid "Import Parameters"
 msgstr "Paraméterek importálása"
 
@@ -19686,9 +19681,8 @@ msgstr "%s részegység"
 
 #: eeschema/lib_symbol.cpp:593 eeschema/sch_label.cpp:867
 #: eeschema/sch_sheet.cpp:287 eeschema/sch_symbol.cpp:1722
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Nem kerül a BOM listára"
+msgstr "Nem kerül az anyagjegyzékbe"
 
 #: eeschema/lib_symbol.cpp:598 eeschema/sch_label.cpp:880
 #: eeschema/sch_sheet.cpp:296 eeschema/sch_symbol.cpp:1731
@@ -19865,9 +19859,8 @@ msgid "Units and Body Styles"
 msgstr "Keret stílus:"
 
 #: eeschema/lib_symbol.cpp:2138
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "Bitek száma"
+msgstr "Részegységek száma"
 
 #: eeschema/lib_symbol.cpp:2141
 #, fuzzy
@@ -19917,9 +19910,8 @@ msgid "Netlist..."
 msgstr "Netlista..."
 
 #: eeschema/menubar.cpp:121
-#, fuzzy
 msgid "Symbols..."
-msgstr "Rajzjel..."
+msgstr "Rajzjelek..."
 
 #: eeschema/menubar.cpp:181
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124 kicad/menubar.cpp:184
@@ -20398,9 +20390,9 @@ msgid "Bus Alias %s Members"
 msgstr "\"%s\" busz megnevezés tagjai"
 
 #: eeschema/sch_design_block_utils.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" terv blokkban már van kapcsolási rajz."
 
 #: eeschema/sch_design_block_utils.cpp:66
 msgid "Overwrite existing schematic?"
@@ -20410,9 +20402,8 @@ msgstr "Felülírja a kapcsolási rajzot?"
 #: eeschema/sch_design_block_utils.cpp:251
 #: pcbnew/pcb_design_block_utils.cpp:127 pcbnew/pcb_design_block_utils.cpp:188
 #: pcbnew/pcb_design_block_utils.cpp:352 pcbnew/pcb_design_block_utils.cpp:392
-#, fuzzy
 msgid "Please select a library to save the design block to."
-msgstr "Válasszon ki egy rajzjel könyvtártáblázat fájlt."
+msgstr "Válasszon egy könyvtárat, ahová a terv blokkot mentjük."
 
 #: eeschema/sch_design_block_utils.cpp:91
 #: eeschema/sch_design_block_utils.cpp:169
@@ -20433,9 +20424,8 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:159
 #: eeschema/sch_design_block_utils.cpp:405
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
-msgstr "Válasszon ki egy rajzjel könyvtártáblázat fájlt."
+msgstr "Válasszon egy terv blokkot, ahová a kapcsolási rajzot mentjük."
 
 #: eeschema/sch_design_block_utils.cpp:244
 #: eeschema/sch_design_block_utils.cpp:398
@@ -20514,9 +20504,8 @@ msgid "[Unsaved]"
 msgstr "[Nincs mentve]"
 
 #: eeschema/sch_edit_frame.cpp:1803
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "A kapcsolási rajz elmentve"
+msgstr "[nincs betöltve kapcsolási rajz]"
 
 #: eeschema/sch_edit_frame.cpp:2051
 #, c-format
@@ -20558,9 +20547,8 @@ msgid "Enter new variant name"
 msgstr "Új alkatrészrajzolat neve:"
 
 #: eeschema/sch_edit_frame.cpp:2995 eeschema/sch_edit_frame.cpp:3033
-#, fuzzy
 msgid "Variant Name"
-msgstr "Változó neve"
+msgstr "Változat neve"
 
 #: eeschema/sch_edit_frame.cpp:3033
 #, fuzzy
@@ -20624,7 +20612,7 @@ msgstr "Via: %s (%s)"
 #: eeschema/sch_field.cpp:1056
 #, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Forrszem készítése a kijelölt alakzatokból"
+msgstr "Vissza az előzőleg kijelölt lapra"
 
 #: eeschema/sch_field.cpp:1684
 #, fuzzy
@@ -20632,23 +20620,22 @@ msgid "Show Field Name"
 msgstr "Mező név megjelenítés:"
 
 #: eeschema/sch_group.cpp:324 pcbnew/pcb_group.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Rajzjelek csoportosítása"
+msgstr "Névtelen csoport, %z tag"
 
 #: eeschema/sch_group.cpp:326 pcbnew/pcb_group.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Rajzjelek csoportosítása"
+msgstr "Csoport \"%s\", %z tag"
 
 #: eeschema/sch_group.cpp:338 pcbnew/pcb_group.cpp:392
 msgid "<unnamed>"
 msgstr "<névtelen>"
 
 #: eeschema/sch_group.cpp:339 pcbnew/pcb_group.cpp:393
-#, fuzzy
 msgid "Members"
-msgstr "Megnevezés tagok"
+msgstr "Tagok"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:801
 #, c-format
@@ -20747,9 +20734,9 @@ msgid "Port %s has no connections."
 msgstr "Forrszem csatlakozások:"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3971
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
+msgstr "A(z) \"%s\" beágyazott fájl nem található."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3988
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4007
