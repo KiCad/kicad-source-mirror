@@ -137,6 +137,8 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
                     }
                 }
             } );
+
+    Reset();
 }
 
 
@@ -157,11 +159,15 @@ void SCHEMATIC::Reset()
 
     m_rootSheet = nullptr;
     m_topLevelSheets.clear();
+    m_hierarchy.clear();
 
     m_connectionGraph->Reset();
     m_currentSheet->clear();
 
     m_busAliases.clear();
+
+    ensureVirtualRoot();
+    ensureDefaultTopLevelSheet();
 }
 
 
@@ -235,127 +241,139 @@ bool SCHEMATIC::Contains( const SCH_REFERENCE& aRef ) const
 }
 
 
-void SCHEMATIC::SetRoot( SCH_SHEET* aRootSheet )
+void SCHEMATIC::ensureVirtualRoot()
 {
-    wxCHECK_RET( aRootSheet, wxS( "Call to SetRoot with null SCH_SHEET!" ) );
-
-    // Check if this is a virtual root (has niluuid) or a regular sheet
-    bool isVirtualRoot = ( aRootSheet->m_Uuid == niluuid );
-
-    wxLogTrace( traceSchSheetPaths,
-                "SetRoot called: sheet='%s', UUID=%s, isVirtualRoot=%d, m_topLevelSheets.size()=%zu",
-                aRootSheet->GetName(), aRootSheet->m_Uuid.AsString(), isVirtualRoot ? 1 : 0, m_topLevelSheets.size() );
-
-    for( size_t i = 0; i < m_topLevelSheets.size(); ++i )
+    if( m_rootSheet && m_rootSheet->m_Uuid == niluuid )
     {
-        SCH_SHEET* sheet = m_topLevelSheets[i];
-        wxLogTrace( traceSchSheetPaths, "  m_topLevelSheets[%zu]: '%s' (UUID=%s, isVirtualRoot=%d)", i,
-                    sheet ? sheet->GetName() : wxString( "(null)" ),
-                    sheet ? sheet->m_Uuid.AsString() : wxString( "(null)" ),
-                    sheet && sheet->m_Uuid == niluuid ? 1 : 0 );
+        if( !m_rootSheet->GetScreen() )
+            m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
+
+        return;
     }
 
-    if( isVirtualRoot )
+    SCH_SHEET* previousRoot = m_rootSheet;
+
+    m_rootSheet = new SCH_SHEET( this );
+    const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
+    m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
+
+    if( previousRoot )
     {
-        // aRootSheet is already the virtual root, use it directly
-        m_rootSheet = aRootSheet;
+        previousRoot->SetParent( m_rootSheet );
 
-        // Ensure virtual root has a screen to hold top-level sheets
-        // Only create if we have a project (screens need a valid schematic parent)
-        if( !m_rootSheet->GetScreen() && m_project )
-        {
-            m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
-        }
-
-        // Add all existing top-level sheets to the virtual root's screen
         if( m_rootSheet->GetScreen() )
-        {
-            for( SCH_SHEET* sheet : m_topLevelSheets )
-            {
-                if( sheet && sheet->GetParent() != m_rootSheet )
-                {
-                    sheet->SetParent( m_rootSheet );
-                }
+            m_rootSheet->GetScreen()->Append( previousRoot );
 
-                // Add to screen if not already there
-                if( sheet && !m_rootSheet->GetScreen()->Items().contains( sheet ) )
-                {
-                    m_rootSheet->GetScreen()->Append( sheet );
-                }
-            }
-        }
-
-        // Current sheet should point to the first top-level sheet if available
-        m_currentSheet->clear();
-
-        if( !m_topLevelSheets.empty() )
-        {
-            m_currentSheet->push_back( m_topLevelSheets[0] );
-            wxLogTrace( traceSchCurrentSheet,
-                        "SetRoot: Set current sheet to first top-level sheet '%s', path='%s', size=%zu",
-                        m_topLevelSheets[0]->GetName(), m_currentSheet->Path().AsString(), m_currentSheet->size() );
-        }
-        else
-        {
-            wxLogTrace( traceSchCurrentSheet, "SetRoot: No top-level sheets, current sheet left empty" );
-        }
-        // If no top-level sheets, leave current sheet empty - it will be set when sheets are added
-    }
-    else
-    {
-        // aRootSheet is a regular sheet, create virtual root and make it a child
-        if( m_rootSheet == nullptr || m_rootSheet->m_Uuid != niluuid )
-        {
-            // Need to create a new virtual root
-            m_rootSheet = new SCH_SHEET( this );
-            const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
-            // Create screen only if we have a project
-            if( m_project )
-            {
-                m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
-            }
-        }
-        else if( m_project && !m_rootSheet->GetScreen() )
-        {
-            // Virtual root exists but has no screen - create one now
-            m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
-        }
-
-        // Add this sheet as a top-level sheet
         m_topLevelSheets.clear();
-        m_topLevelSheets.push_back( aRootSheet );
-        aRootSheet->SetParent( m_rootSheet );
-
-        // Clear the virtual root's screen and add only the new sheet
-        if( m_rootSheet->GetScreen() )
-        {
-            // Don't free the sheet being added if it already exists in the screen
-            m_rootSheet->GetScreen()->Items().remove( aRootSheet );
-            m_rootSheet->GetScreen()->Clear();
-            m_rootSheet->GetScreen()->Append( aRootSheet );
-        }
-
-        m_currentSheet->clear();
-        m_currentSheet->push_back( aRootSheet );
-        wxLogTrace( traceSchCurrentSheet, "SetRoot: Set current sheet to root sheet '%s', path='%s', size=%zu",
-                    aRootSheet->GetName(), m_currentSheet->Path().AsString(), m_currentSheet->size() );
+        m_topLevelSheets.push_back( previousRoot );
     }
+}
 
-    if( m_project )
+
+void SCHEMATIC::ensureDefaultTopLevelSheet()
+{
+    ensureVirtualRoot();
+
+    if( !m_topLevelSheets.empty() )
+        return;
+
+    SCH_SHEET*  rootSheet = new SCH_SHEET( this );
+    SCH_SCREEN* rootScreen = new SCH_SCREEN( this );
+
+    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
+    rootSheet->SetScreen( rootScreen );
+
+    SetTopLevelSheets( { rootSheet } );
+
+    SCH_SHEET_PATH rootSheetPath;
+    rootSheetPath.push_back( m_rootSheet );
+    rootSheetPath.push_back( rootSheet );
+    rootSheetPath.SetPageNumber( wxT( "1" ) );
+}
+
+
+void SCHEMATIC::ensureCurrentSheetIsTopLevel()
+{
+    if( m_topLevelSheets.empty() )
+        return;
+
+    if( m_currentSheet->empty() || !IsTopLevelSheet( m_currentSheet->at( 0 ) ) )
     {
-        m_hierarchy = BuildSheetListSortedByPageNumbers();
+        m_currentSheet->clear();
+        m_currentSheet->push_back( m_topLevelSheets[0] );
+    }
+}
+
+
+void SCHEMATIC::rebuildHierarchyState( bool aResetConnectionGraph )
+{
+    RefreshHierarchy();
+
+    if( aResetConnectionGraph && m_project )
         m_connectionGraph->Reset();
 
-        // Build screen list from root (which now has a screen)
-        m_variantNames.clear();
+    m_variantNames.clear();
+
+    if( m_rootSheet && m_rootSheet->GetScreen() )
+    {
+        SCH_SCREENS        screens( m_rootSheet );
+        std::set<wxString> variantNames = screens.GetVariantNames();
+        m_variantNames.insert( variantNames.begin(), variantNames.end() );
+    }
+}
+
+
+void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
+{
+    wxCHECK_RET( !aSheets.empty(), wxS( "Cannot set empty top-level sheets!" ) );
+
+    std::vector<SCH_SHEET*> validSheets;
+    validSheets.reserve( aSheets.size() );
+
+    for( SCH_SHEET* sheet : aSheets )
+    {
+        if( sheet )
+            validSheets.push_back( sheet );
+    }
+
+    if( validSheets.empty() )
+    {
+        ensureDefaultTopLevelSheet();
+        return;
+    }
+
+    ensureVirtualRoot();
+
+    std::set<SCH_SHEET*> desiredSheets( validSheets.begin(), validSheets.end() );
+
+    if( m_rootSheet->GetScreen() )
+    {
+        for( SCH_ITEM* item : m_rootSheet->GetScreen()->Items() )
+        {
+            SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item );
+
+            if( sheet && !desiredSheets.contains( sheet ) )
+                delete sheet;
+        }
+
+        m_rootSheet->GetScreen()->Clear( false );
+    }
+
+    m_currentSheet->clear();
+    m_topLevelSheets.clear();
+
+    for( SCH_SHEET* sheet : validSheets )
+    {
+        sheet->SetParent( m_rootSheet );
 
         if( m_rootSheet->GetScreen() )
-        {
-            SCH_SCREENS        screens( m_rootSheet );
-            std::set<wxString> variantNames = screens.GetVariantNames();
-            m_variantNames.insert( variantNames.begin(), variantNames.end() );
-        }
+            m_rootSheet->GetScreen()->Append( sheet );
+
+        m_topLevelSheets.push_back( sheet );
     }
+
+    ensureCurrentSheetIsTopLevel();
+    rebuildHierarchyState( true );
 }
 
 
@@ -380,6 +398,7 @@ SCH_SHEET_LIST SCHEMATIC::Hierarchy() const
 
 void SCHEMATIC::RefreshHierarchy()
 {
+    ensureDefaultTopLevelSheet();
     m_hierarchy = BuildSheetListSortedByPageNumbers();
 }
 
@@ -1891,10 +1910,7 @@ void SCHEMATIC::CreateDefaultScreens()
 {
     Reset();
 
-    // Create virtual root with niluuid and a screen to hold top-level sheets
-    SCH_SHEET* virtualRoot = new SCH_SHEET( this );
-    const_cast<KIID&>( virtualRoot->m_Uuid ) = niluuid;
-    virtualRoot->SetScreen( new SCH_SCREEN( this ) ); // Virtual root has a screen
+    ensureVirtualRoot();
 
     // Create the actual first top-level sheet
     SCH_SHEET*  rootSheet = new SCH_SHEET( this );
@@ -1905,28 +1921,13 @@ void SCHEMATIC::CreateDefaultScreens()
     rootScreen->SetFileName( "untitled.kicad_sch" ); // Set default filename to avoid conflicts
     rootScreen->SetPageNumber( wxT( "1" ) );
 
-    // Set parent to virtual root
-    rootSheet->SetParent( virtualRoot );
-
-    // Add the top-level sheet to the virtual root's screen
-    virtualRoot->GetScreen()->Append( rootSheet );
-
     // Don't leave root page number empty
     SCH_SHEET_PATH rootSheetPath;
-    rootSheetPath.push_back( virtualRoot );
+    rootSheetPath.push_back( m_rootSheet );
     rootSheetPath.push_back( rootSheet );
     rootSheetPath.SetPageNumber( wxT( "1" ) );
 
-    // Set up the schematic structure
-    m_rootSheet = virtualRoot;
-    m_topLevelSheets.clear();
-    m_topLevelSheets.push_back( rootSheet );
-
-    m_currentSheet->clear();
-    m_currentSheet->push_back( rootSheet );
-
-    // Rehash sheetpaths in hierarchy since we changed the uuid.
-    RefreshHierarchy();
+    SetTopLevelSheets( { rootSheet } );
 }
 
 
@@ -1935,29 +1936,25 @@ std::vector<SCH_SHEET*> SCHEMATIC::GetTopLevelSheets() const
     return m_topLevelSheets;
 }
 
+SCH_SHEET* SCHEMATIC::GetTopLevelSheet( int aIndex ) const
+{
+    if( aIndex < 0 )
+        return nullptr;
+
+    size_t index = static_cast<size_t>( aIndex );
+
+    if( index >= m_topLevelSheets.size() )
+        return nullptr;
+
+    return m_topLevelSheets[index];
+}
 
 void SCHEMATIC::AddTopLevelSheet( SCH_SHEET* aSheet )
 {
     wxCHECK_RET( aSheet, wxS( "Cannot add null sheet!" ) );
     wxCHECK_RET( aSheet->GetScreen(), wxS( "Cannot add virtual root as top-level sheet!" ) );
 
-    // Make sure we have a virtual root
-    if( m_rootSheet == nullptr )
-    {
-        m_rootSheet = new SCH_SHEET( this );
-        const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
-        // Create screen only if we have a project
-        if( m_project )
-        {
-            m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
-        }
-    }
-
-    // Ensure virtual root has a screen (may have been created before project was set)
-    if( !m_rootSheet->GetScreen() && m_project )
-    {
-        m_rootSheet->SetScreen( new SCH_SCREEN( this ) );
-    }
+    ensureVirtualRoot();
 
     // Set parent to virtual root
     aSheet->SetParent( m_rootSheet );
@@ -1971,10 +1968,9 @@ void SCHEMATIC::AddTopLevelSheet( SCH_SHEET* aSheet )
     // Add to our list
     m_topLevelSheets.push_back( aSheet );
 
-    // Refresh hierarchy
-    RefreshHierarchy();
+    ensureCurrentSheetIsTopLevel();
+    rebuildHierarchyState( true );
 }
-
 
 bool SCHEMATIC::RemoveTopLevelSheet( SCH_SHEET* aSheet )
 {
@@ -1983,7 +1979,13 @@ bool SCHEMATIC::RemoveTopLevelSheet( SCH_SHEET* aSheet )
     if( it == m_topLevelSheets.end() )
         return false;
 
+    if( m_topLevelSheets.size() == 1 )
+        return false;
+
     m_topLevelSheets.erase( it );
+
+    if( m_rootSheet && m_rootSheet->GetScreen() )
+        m_rootSheet->GetScreen()->Items().remove( aSheet );
 
     // If we're removing the current sheet, switch to another one
     if( !m_currentSheet->empty() && m_currentSheet->at( 0 ) == aSheet )
@@ -1995,7 +1997,7 @@ bool SCHEMATIC::RemoveTopLevelSheet( SCH_SHEET* aSheet )
         }
     }
 
-    RefreshHierarchy();
+    rebuildHierarchyState( true );
     return true;
 }
 

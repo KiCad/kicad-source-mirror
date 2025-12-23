@@ -43,11 +43,15 @@ struct NC_PIN_CONNECTIVITY_FIXTURE
         m_settingsManager.LoadProject( "" );
         m_schematic = std::make_unique<SCHEMATIC>( &m_settingsManager.Prj() );
         m_schematic->Reset();
+        SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
 
         SCH_SHEET* root = new SCH_SHEET( m_schematic.get() );
-        m_schematic->SetRoot( root );
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic.get() );
         root->SetScreen( screen );
+
+        m_schematic->AddTopLevelSheet( root );
+        m_schematic->RemoveTopLevelSheet( defaultSheet );
+        delete defaultSheet;
     }
 
     SETTINGS_MANAGER           m_settingsManager;

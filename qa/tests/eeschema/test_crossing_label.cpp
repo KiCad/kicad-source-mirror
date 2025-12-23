@@ -17,11 +17,15 @@ BOOST_AUTO_TEST_CASE( LabelDrivesCrossingWires )
     manager.LoadProject( "" );
 
     SCHEMATIC schematic( &manager.Prj() );
+    schematic.Reset();
+    SCH_SHEET* defaultSheet = schematic.GetTopLevelSheet( 0 );
 
     SCH_SCREEN* screen = new SCH_SCREEN( nullptr );
     SCH_SHEET*  sheet  = new SCH_SHEET( nullptr, VECTOR2I( 0, 0 ), VECTOR2I( 1000, 1000 ) );
     sheet->SetScreen( screen );
-    schematic.SetRoot( sheet );
+    schematic.AddTopLevelSheet( sheet );
+    schematic.RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
 
     CONNECTION_GRAPH graph;
     graph.SetSchematic( &schematic );

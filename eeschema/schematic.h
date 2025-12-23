@@ -128,21 +128,15 @@ public:
     }
 
     /**
-     * Initialize the schematic with a new root sheet.
-     *
-     * This is typically done by calling a file loader that returns the new root sheet
-     * As a side-effect, takes care of some post-load initialization.
-     *
-     * @param aRootSheet is the new root sheet for this schematic.
-     */
-    void SetRoot( SCH_SHEET* aRootSheet );
-
-    /**
      * Get the list of top-level sheets.
      *
      * @return vector of pointers to top-level sheets (children of virtual root).
      */
     std::vector<SCH_SHEET*> GetTopLevelSheets() const;
+
+    SCH_SHEET* GetTopLevelSheet( int aIndex = 0 ) const;
+
+    void SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets );
 
     /**
      * Add a new top-level sheet to the schematic.
@@ -496,6 +490,11 @@ private:
         for( auto&& l : m_listeners )
             ( l->*aFunc )( std::forward<Args>( args )... );
     }
+
+    void ensureVirtualRoot();
+    void ensureDefaultTopLevelSheet();
+    void ensureCurrentSheetIsTopLevel();
+    void rebuildHierarchyState( bool aResetConnectionGraph );
 
     PROJECT* m_project;
 

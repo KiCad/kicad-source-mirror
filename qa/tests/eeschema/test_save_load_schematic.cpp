@@ -130,6 +130,7 @@ BOOST_AUTO_TEST_CASE( TestSaveLoadSimpleSchematic )
 
     // Now try to load it back
     m_schematic->Reset();
+    SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
     SCH_SHEET* loadedSheet = nullptr;
     BOOST_CHECK_NO_THROW( loadedSheet = io.LoadSchematicFile( fileName, m_schematic.get() ) );
     BOOST_CHECK( loadedSheet != nullptr );
@@ -137,7 +138,9 @@ BOOST_AUTO_TEST_CASE( TestSaveLoadSimpleSchematic )
     if( loadedSheet )
     {
         // Set it as root (which should create virtual root and make it a top-level sheet)
-        m_schematic->SetRoot( loadedSheet );
+        m_schematic->AddTopLevelSheet( loadedSheet );
+        m_schematic->RemoveTopLevelSheet( defaultSheet );
+        delete defaultSheet;
 
         // Verify we can access the schematic
         BOOST_CHECK( m_schematic->IsValid() );
@@ -208,13 +211,16 @@ BOOST_AUTO_TEST_CASE( TestSaveLoadHierarchicalSchematic )
 
     // Load it back
     m_schematic->Reset();
+    SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
     SCH_SHEET* loadedSheet = nullptr;
     BOOST_CHECK_NO_THROW( loadedSheet = io.LoadSchematicFile( mainFileName, m_schematic.get() ) );
     BOOST_CHECK( loadedSheet != nullptr );
 
     if( loadedSheet )
     {
-        m_schematic->SetRoot( loadedSheet );
+        m_schematic->AddTopLevelSheet( loadedSheet );
+        m_schematic->RemoveTopLevelSheet( defaultSheet );
+        delete defaultSheet;
 
         // Build hierarchy
         m_schematic->RefreshHierarchy();
@@ -267,7 +273,11 @@ BOOST_AUTO_TEST_CASE( TestLoadLegacyHierarchicalSchematic )
     BOOST_TEST_MESSAGE( "Loaded sheet UUID: " + loadedSheet->m_Uuid.AsString().ToStdString() );
     BOOST_TEST_MESSAGE( "Loaded sheet name: " + loadedSheet->GetName().ToStdString() );
 
-    m_schematic->SetRoot( loadedSheet );
+    m_schematic->Reset();
+    SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
+    m_schematic->AddTopLevelSheet( loadedSheet );
+    m_schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
 
     // Build the hierarchy
     m_schematic->RefreshHierarchy();

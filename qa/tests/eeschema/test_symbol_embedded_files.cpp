@@ -192,11 +192,16 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolEmbeddedFiles )
     {
         SCHEMATIC schematic( nullptr );
 
-        SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
-        schematic.SetRoot( rootSheet );
+        schematic.Reset();
+        SCH_SHEET* defaultSheet = schematic.GetTopLevelSheet( 0 );
 
+        SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
         SCH_SCREEN* screen = new SCH_SCREEN( &schematic );
         rootSheet->SetScreen( screen );
+
+        schematic.AddTopLevelSheet( rootSheet );
+        schematic.RemoveTopLevelSheet( defaultSheet );
+        delete defaultSheet;
 
         IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
         LIB_SYMBOL* loadedParent = plugin->LoadSymbol( GetLibPath(), wxS( "ParentSymbol" ) );
@@ -206,6 +211,7 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolEmbeddedFiles )
 
         SCH_SHEET_PATH rootPath;
         rootPath.push_back( &schematic.Root() );
+        rootPath.push_back( rootSheet );
 
         SCH_SYMBOL* schSymbol = new SCH_SYMBOL( *loadedDerived, LIB_ID( "test_lib", "DerivedSymbol" ),
                                                 &rootPath, 0 );

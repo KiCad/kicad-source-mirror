@@ -406,7 +406,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_rootSheet = new SCH_SHEET( aSchematic );
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
         m_rootSheet->SetFileName( newFilename.GetFullPath() );
-        aSchematic->SetRoot( m_rootSheet );
+        aSchematic->SetTopLevelSheets( { m_rootSheet } );
     }
 
     if( !m_rootSheet->GetScreen() )

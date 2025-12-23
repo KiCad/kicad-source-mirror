@@ -272,8 +272,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                 if( !topLevelSheets.empty() )
                 {
-                    // New multi-root format: Load all top-level sheets
-                    // Note: AddTopLevelSheet will create the virtual root as needed
+                    std::vector<SCH_SHEET*> loadedSheets;
 
                     // Load each top-level sheet
                     for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
@@ -304,9 +303,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             }
 
                             sheet->SetName( sheetInfo.name );
-
-                            // Regular top-level sheet, add it normally
-                            newSchematic->AddTopLevelSheet( sheet );
+                            loadedSheets.push_back( sheet );
 
                             wxLogTrace( tracePathsAndFiles,
                                        wxS( "Loaded top-level sheet '%s' (UUID %s) from %s" ),
@@ -316,17 +313,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                         }
                     }
 
-                    // Virtual root was already created by AddTopLevelSheet, no need to call SetRoot
-                    // Set current sheet to the first top-level sheet
-                    if( !newSchematic->GetTopLevelSheets().empty() )
+                    if( !loadedSheets.empty() )
                     {
-                        newSchematic->CurrentSheet().clear();
-                        newSchematic->CurrentSheet().push_back( newSchematic->GetTopLevelSheets()[0] );
-
-                        wxLogTrace( tracePathsAndFiles,
-                                   wxS( "Loaded multi-root schematic with %zu top-level sheets, current sheet set to '%s'" ),
-                                   newSchematic->GetTopLevelSheets().size(),
-                                   newSchematic->GetTopLevelSheets()[0]->GetName() );
+                        newSchematic->SetTopLevelSheets( loadedSheets );
                     }
                     else
                     {
@@ -338,20 +327,31 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 else
                 {
                     // Legacy single-root format: Load the single root sheet
-                    newSchematic->SetRoot( pi->LoadSchematicFile( fullFileName, newSchematic.get() ) );
+                    SCH_SHEET* rootSheet = pi->LoadSchematicFile( fullFileName, newSchematic.get() );
 
-                    // Make ${SHEETNAME} work on the root sheet until we properly support
-                    // naming the root sheet
-                    newSchematic->Root().SetName( _( "Root" ) );
+                    if( rootSheet )
+                    {
+                        newSchematic->SetTopLevelSheets( { rootSheet } );
 
-                    wxLogTrace( tracePathsAndFiles,
-                               wxS( "Loaded schematic with root sheet UUID %s" ),
-                               newSchematic->Root().m_Uuid.AsString() );
-                    wxLogTrace( traceSchCurrentSheet,
-                               "After loading: Current sheet path='%s', size=%zu, empty=%d",
-                               newSchematic->CurrentSheet().Path().AsString(),
-                               newSchematic->CurrentSheet().size(),
-                               newSchematic->CurrentSheet().empty() ? 1 : 0 );
+                        // Make ${SHEETNAME} work on the root sheet until we properly support
+                        // naming the root sheet
+                        if( SCH_SHEET* topSheet = newSchematic->GetTopLevelSheet() )
+                            topSheet->SetName( _( "Root" ) );
+
+                        wxLogTrace( tracePathsAndFiles,
+                                   wxS( "Loaded schematic with root sheet UUID %s" ),
+                                   rootSheet->m_Uuid.AsString() );
+                        wxLogTrace( traceSchCurrentSheet,
+                                   "After loading: Current sheet path='%s', size=%zu, empty=%d",
+                                   newSchematic->CurrentSheet().Path().AsString(),
+                                   newSchematic->CurrentSheet().size(),
+                                   newSchematic->CurrentSheet().empty() ? 1 : 0 );
+                    }
+                    else
+                    {
+                        newSchematic->CreateDefaultScreens();
+                    }
+
                 }
             }
 
@@ -1458,7 +1458,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             if( loadedSheet )
             {
-                Schematic().SetRoot( loadedSheet );
+                Schematic().SetTopLevelSheets( { loadedSheet } );
 
                 if( errorReporter.m_Reporter->HasMessage() )
                 {
@@ -1478,7 +1478,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
                 SetScreen( Schematic().RootScreen() );
 
-                Schematic().Root().SetFileName( newfilename.GetFullName() );
+                if( SCH_SHEET* topSheet = Schematic().GetTopLevelSheet() )
+                    topSheet->SetFileName( newfilename.GetFullName() );
+
                 GetScreen()->SetFileName( newfilename.GetFullPath() );
                 GetScreen()->SetContentModified();
 

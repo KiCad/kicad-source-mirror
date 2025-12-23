@@ -67,7 +67,14 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxFileName& aFn )
     m_manager.Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
 
     m_schematic = std::make_unique<SCHEMATIC>( &m_manager.Prj() );
-    m_schematic->SetRoot( m_pi->LoadSchematicFile( fn.GetFullPath(), m_schematic.get() ) );
+    m_schematic->Reset();
+    SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
+
+    SCH_SHEET* root = m_pi->LoadSchematicFile( fn.GetFullPath(), m_schematic.get() );
+    m_schematic->AddTopLevelSheet( root );
+
+    m_schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
 

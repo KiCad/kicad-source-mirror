@@ -41,10 +41,15 @@ struct BUS_ENTRY_CONCURRENCY_FIXTURE
     {
         m_mgr.LoadProject( "" );
         m_schematic = std::make_unique<SCHEMATIC>( &m_mgr.Prj() );
+        m_schematic->Reset();
+        SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
+
         m_screen = new SCH_SCREEN( m_schematic.get() );
         m_sheet = new SCH_SHEET( m_schematic.get() );
         m_sheet->SetScreen( m_screen );
-        m_schematic->SetRoot( m_sheet );
+        m_schematic->AddTopLevelSheet( m_sheet );
+        m_schematic->RemoveTopLevelSheet( defaultSheet );
+        delete defaultSheet;
     }
 
     SETTINGS_MANAGER           m_mgr;

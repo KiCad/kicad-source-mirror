@@ -79,13 +79,13 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     if( aAppendToMe )
     {
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
-        rootSheet = &aSchematic->Root();
+        rootSheet = aAppendToMe;
     }
     else
     {
         rootSheet = new SCH_SHEET( aSchematic );
         rootSheet->SetFileName( aFileName );
-        aSchematic->SetRoot( rootSheet );
+        aSchematic->SetTopLevelSheets( { rootSheet } );
     }
 
     if( !rootSheet->GetScreen() )

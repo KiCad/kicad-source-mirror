@@ -109,9 +109,14 @@ std::unique_ptr<SCHEMATIC> LoadHierarchyFromRoot( const std::string& rootFilenam
     std::unordered_map<std::string, SCH_SCREEN*> parsedScreens;
 
     schematic->SetProject( project );
+    schematic->Reset();
+    SCH_SHEET* defaultSheet = schematic->GetTopLevelSheet( 0 );
+
     SCH_SHEET* rootSheet = new SCH_SHEET( schematic.get() );
     LoadHierarchy( schematic.get(), rootSheet, rootFilename, parsedScreens );
-    schematic->SetRoot( rootSheet );  // Call SetRoot AFTER loading so sheet has a screen
+    schematic->AddTopLevelSheet( rootSheet );
+    schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
 
     return schematic;
 }

@@ -442,13 +442,13 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         wxCHECK_MSG( aSchematic->IsValid(), nullptr,
                      wxS( "Can't append to a schematic with no root!" ) );
 
-        rootSheet = &aSchematic->Root();
+        rootSheet = aAppendToMe;
     }
     else
     {
         rootSheet = new SCH_SHEET( aSchematic );
         rootSheet->SetFileName( aFileName );
-        aSchematic->SetRoot( rootSheet );
+        aSchematic->SetTopLevelSheets( { rootSheet } );
     }
 
     if( !rootSheet->GetScreen() )

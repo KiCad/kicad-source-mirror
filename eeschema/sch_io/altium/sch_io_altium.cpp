@@ -465,14 +465,14 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     if( aAppendToMe )
     {
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
-        m_rootSheet = &aSchematic->Root();
+        m_rootSheet = aAppendToMe;
     }
     else
     {
         m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( fileName.GetFullPath() );
 
-        aSchematic->SetRoot( m_rootSheet );
+        aSchematic->SetTopLevelSheets( { m_rootSheet } );
 
         SCH_SHEET_PATH sheetpath;
         sheetpath.push_back( m_rootSheet );

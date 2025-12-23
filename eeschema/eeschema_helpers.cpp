@@ -155,7 +155,12 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     try
     {
-        schematic->SetRoot( pi->LoadSchematicFile( schFile.GetFullPath(), schematic ) );
+        SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic );
+
+        if( rootSheet )
+            schematic->SetTopLevelSheets( { rootSheet } );
+        else
+            return nullptr;
     }
     catch( ... )
     {

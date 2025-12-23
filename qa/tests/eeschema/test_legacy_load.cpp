@@ -79,7 +79,11 @@ BOOST_AUTO_TEST_CASE( TestLoadWithLogging )
     BOOST_REQUIRE( loadedSheet != nullptr );
 
     BOOST_TEST_MESSAGE( "=== Setting root sheet" );
-    schematic->SetRoot( loadedSheet );
+    schematic->Reset();
+    SCH_SHEET* defaultSheet = schematic->GetTopLevelSheet( 0 );
+    schematic->AddTopLevelSheet( loadedSheet );
+    schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
 
     BOOST_TEST_MESSAGE( "=== Building hierarchy" );
     schematic->RefreshHierarchy();
