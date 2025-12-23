@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-24 09:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -5966,7 +5966,7 @@ msgstr "Oavslutad avgränsad sträng"
 
 #: common/dsnlexer.cpp:752
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Strängavgränsare måste bestå av enstaka tecken av ', \"eller $"
+msgstr "Strängavgränsare måste bestå av enstaka tecken av ', \" eller $"
 
 #: common/dsnlexer.cpp:874
 #, c-format
@@ -7152,14 +7152,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Kunde inte hämta referens-OID för referens '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Det gick inte att slå upp överlämning"
+msgstr "Det gick inte att slå upp målversion"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Kunde inte hämta träd från överlämning"
+msgstr "Kunde inte hämta träd från målversion"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
