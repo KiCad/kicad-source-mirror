@@ -3490,18 +3490,19 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     picker->SetCursor( KICURSOR::PLACE );
     picker->ClearHandlers();
 
-    const auto setPickerLayerSet = [&]()
-    {
-        MAGNETIC_SETTINGS* magSettings = editFrame->GetMagneticItemsSettings();
-        LSET               layerFilter;
+    const auto setPickerLayerSet =
+            [&]()
+            {
+                MAGNETIC_SETTINGS* magSettings = editFrame->GetMagneticItemsSettings();
+                LSET               layerFilter;
 
-        if( !magSettings->allLayers )
-            layerFilter = LSET( { editFrame->GetActiveLayer() } );
-        else
-            layerFilter = LSET::AllLayersMask();
+                if( !magSettings->allLayers )
+                    layerFilter = LSET( { editFrame->GetActiveLayer() } );
+                else
+                    layerFilter = LSET::AllLayersMask();
 
-        picker->SetLayerSet( layerFilter );
-    };
+                picker->SetLayerSet( layerFilter );
+            };
 
     // Initial set
     setPickerLayerSet();
