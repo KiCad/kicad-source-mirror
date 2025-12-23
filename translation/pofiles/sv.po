@@ -16,9 +16,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-18 16:28+0000\n"
-"Last-Translator: Stefan Bjornelund the Gnome <stefan.bjornelund.gnome@gmail."
-"com>\n"
+"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
 "Language: sv\n"
@@ -26,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -623,7 +622,6 @@ msgid "Show board body"
 msgstr "Visa basmaterial"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
 msgstr "Pläterade håls väggar"
 
@@ -4097,7 +4095,6 @@ msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hårdvaruaccelererad grafik (rekommenderas)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
 msgstr "Reserv-grafik"
 
@@ -6161,13 +6158,12 @@ msgid "need a number for '%s'"
 msgstr "behöver ett nummer för '%s'"
 
 #: common/dsnlexer.cpp:733
-#, fuzzy
 msgid "Unterminated delimited string"
 msgstr "Oavslutad avgränsad sträng"
 
 #: common/dsnlexer.cpp:755
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Strängavgränsare måste bestå av enstaka tecken av ', \"eller $"
+msgstr "Strängavgränsare måste bestå av enstaka tecken av ', \" eller $"
 
 #: common/dsnlexer.cpp:794
 msgid "Un-terminated delimited string"
@@ -7522,9 +7518,9 @@ msgid "No repository available to set up remote"
 msgstr "Inget mjukvaruförråd tillgängligt för att upprätta fjärranslutning"
 
 #: common/git/libgit_backend.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Lyckades inte skapa överlämning: %s"
+msgstr "Lyckades inte skapa fjärrförvar: %s"
 
 #: common/git/libgit_backend.cpp:675
 msgid "No repository available"
@@ -7591,14 +7587,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Kunde inte hämta referens-OID för referens '%s'"
 
 #: common/git/libgit_backend.cpp:921
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Det gick inte att slå upp överlämning"
+msgstr "Det gick inte att slå upp målversion"
 
 #: common/git/libgit_backend.cpp:932
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Kunde inte hämta träd från överlämning"
+msgstr "Kunde inte hämta träd från målversion"
 
 #: common/git/libgit_backend.cpp:981
 #, c-format
@@ -7627,19 +7621,16 @@ msgid "Merge failed"
 msgstr "Sammanslagning misslyckades"
 
 #: common/git/libgit_backend.cpp:1065
-#, fuzzy
 msgid "Rebase failed to start"
-msgstr "Eeschema kunde inte ladda."
+msgstr "Start av grenflytt misslyckades"
 
 #: common/git/libgit_backend.cpp:1079
-#, fuzzy
 msgid "Rebase commit failed"
-msgstr "Databasanslutning misslyckades: %s"
+msgstr "Överlämning av grenflytt misslyckades"
 
 #: common/git/libgit_backend.cpp:1086
-#, fuzzy
 msgid "Rebase finish failed"
-msgstr "Senaste körning misslyckades"
+msgstr "Avslut av grenflytt misslyckades"
 
 #: common/grid_tricks.cpp:363 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -16503,9 +16494,8 @@ msgid "View presets:"
 msgstr "Visa förinställningar:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "Överensstämmelse med kretsschema"
+msgstr "Varianter av kretsschema:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -19774,9 +19764,8 @@ msgstr "Vänligen välj några objekt att spara som ett designblock."
 #: eeschema/sch_design_block_utils.cpp:433
 #: eeschema/sch_design_block_utils.cpp:589
 #: pcbnew/pcb_design_block_utils.cpp:463 pcbnew/pcb_design_block_utils.cpp:538
-#, fuzzy
 msgid "Set Group Design Block Link"
-msgstr "Rita ark från designblock"
+msgstr "Sätt grupplänk för designblock"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -22459,11 +22448,11 @@ msgstr "Delmodellläget saknas."
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
 #, fuzzy
 msgid " is not a recognised submodel mode."
-msgstr " är inte ett erkänt submodell."
+msgstr " är inte ett erkänt läge för submodell."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1856
 msgid " is not a recognised Submodel Spec subparameter."
-msgstr ""
+msgstr " är inte en erkänd specifikationssubparameter för submodell."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
 msgid "Missing pin name/number for matrix row."
@@ -22478,7 +22467,6 @@ msgid "The matrix type is missing."
 msgstr "Matrisens typ saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
 msgstr " är inte en erkänd matristyp."
 
@@ -24312,24 +24300,20 @@ msgid "Create a new design block from the current selection"
 msgstr "Skapa ett nytt desigblock från det aktuella urvalet"
 
 #: eeschema/tools/sch_actions.cpp:151
-#, fuzzy
 msgid "Update Design Block from Current Sheet"
-msgstr "Skapa ett nytt designblock från det aktuella arket"
+msgstr "Uppdatera designblock från aktuellt ark"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Lägg till valt designblock till aktuellt ark"
+msgstr "Sätt designblockets kretsschema till aktuellt ark"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "Uppdatera designblocksbibliotek"
+msgstr "Uppdatera designblock från urval"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "Skapa ett nytt desigblock från det aktuella urvalet"
+msgstr "Sätt desigblockets kretsschema till det aktuella urvalet"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:542
 msgid "Delete Design Block"
@@ -31306,14 +31290,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Packa upp arkiverat projekt från zip-arkiv"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Avslöja projektmappen i Finder"
+msgstr "Visa projekt i Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Avslöja projektmappen i Finder"
+msgstr "Öppna projektmappen i Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
