@@ -2417,7 +2417,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // Note a RECT shape rotated by a not cardinal angle is a POLY shape
     bool usePcbShapeCenter = false;
 
-    if( selection.Size() == 1 && dynamic_cast<PCB_SHAPE*>( selection.Front() ) )
+    if( selection.Size() == 1 && !m_dragging && dynamic_cast<PCB_SHAPE*>( selection.Front() ) )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( selection.Front() );
 
@@ -2425,7 +2425,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             usePcbShapeCenter = true;
     }
 
-    if( selection.Size() == 1 && dynamic_cast<PCB_TABLE*>( selection.Front() ) )
+    if( selection.Size() == 1 && !m_dragging && dynamic_cast<PCB_TABLE*>( selection.Front() ) )
         usePcbShapeCenter = true;
 
     if( selection.Size() == 1 && dynamic_cast<PCB_TEXTBOX*>( selection.Front() ) )
