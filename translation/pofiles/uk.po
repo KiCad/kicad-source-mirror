@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-14 20:00+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:368
@@ -16477,9 +16477,8 @@ msgid "View presets:"
 msgstr "Попередні налаштування вигляду:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "Відповідність схеми"
+msgstr "Варіанти схем:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -19741,9 +19740,8 @@ msgstr "Будь ласка, виберіть кілька елементів д
 #: eeschema/sch_design_block_utils.cpp:433
 #: eeschema/sch_design_block_utils.cpp:589
 #: pcbnew/pcb_design_block_utils.cpp:463 pcbnew/pcb_design_block_utils.cpp:538
-#, fuzzy
 msgid "Set Group Design Block Link"
-msgstr "Малювання аркуша з блоку проектування"
+msgstr "Встановити посилання на блок дизайну групи"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -24697,24 +24695,20 @@ msgid "Create a new design block from the current selection"
 msgstr "Створити новий блок дизайну з поточного виділення"
 
 #: eeschema/tools/sch_actions.cpp:151
-#, fuzzy
 msgid "Update Design Block from Current Sheet"
-msgstr "Створити новий блок дизайну з поточного аркуша"
+msgstr "Оновити блок проектування з поточного аркуша"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Додати вибраний блок дизайну до поточного аркуша"
+msgstr "Встановити схему блоку проектування на поточний аркуш"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "Оновлення бібліотек блоків проектування"
+msgstr "Оновити блок проектування з виділеного фрагмента"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "Створити новий блок дизайну з поточного виділення"
+msgstr "Встановити схему блоку проектування на поточний вибір"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:542
 msgid "Delete Design Block"
@@ -31663,14 +31657,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Розархівувати файли проекту з архіву zip"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Показати теку проекту у пошуку"
+msgstr "Показати проєкт у Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Показати теку проекту у пошуку"
+msgstr "Відкрити папку проекту у Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -40104,9 +40096,8 @@ msgid "Target areas:"
 msgstr "Цільові області:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "Область лінійки малювання"
+msgstr "Цільова область правила"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -54672,28 +54663,24 @@ msgid "Apply linked design block layout to selected group"
 msgstr "Застосувати макет зв'язаного блоку дизайну до вибраної групи"
 
 #: pcbnew/tools/pcb_actions.cpp:514
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Зберегти поточну плату як блок проектування..."
+msgstr "Зберегти плату як блок дизайну..."
 
 #: pcbnew/tools/pcb_actions.cpp:515
 msgid "Create a new design block from the current board"
 msgstr "Створити новий блок дизайну з поточної дошки"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Оновлення бібліотек блоків проектування"
+msgstr "Оновити блок дизайну з плати"
 
 #: pcbnew/tools/pcb_actions.cpp:529
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Додати вибраний блок дизайну до поточної плати"
+msgstr "Встановити макет блоку дизайну на поточну дошку"
 
 #: pcbnew/tools/pcb_actions.cpp:536
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Створити новий блок дизайну з поточного виділення"
+msgstr "Встановити макет блоку дизайну на поточний вибір"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 msgid "Open in Footprint Editor"
