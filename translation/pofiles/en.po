@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10494,11 +10494,11 @@ msgstr "Rename selected field"
 msgid "Remove selected field"
 msgstr "Remove selected field"
 
-msgid "Variants:"
-msgstr "Variants:"
-
 msgid "View presets:"
 msgstr "View presets:"
+
+msgid "Schematic variants:"
+msgstr "Schematic variants:"
 
 msgid "Entire Project"
 msgstr "Entire Project"
@@ -12775,6 +12775,9 @@ msgstr "Please select a design block to save the schematic to."
 
 msgid "Please select some items to save as a design block."
 msgstr "Please select some items to save as a design block."
+
+msgid "Set Group Design Block Link"
+msgstr "Set Group Design Block Link"
 
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schematic Editor"
@@ -16678,17 +16681,17 @@ msgstr "Save Selection as Design Block..."
 msgid "Create a new design block from the current selection"
 msgstr "Create a new design block from the current selection"
 
-msgid "Save Current Sheet to Design Block..."
-msgstr "Save Current Sheet to Design Block..."
+msgid "Update Design Block from Current Sheet"
+msgstr "Update Design Block from Current Sheet"
 
-msgid "Add current sheet to design block"
-msgstr "Add current sheet to design block"
+msgid "Set design block schematic to current sheet"
+msgstr "Set design block schematic to current sheet"
 
-msgid "Save Selection to Design Block..."
-msgstr "Save Selection to Design Block..."
+msgid "Update Design Block from Selection"
+msgstr "Update Design Block from Selection"
 
-msgid "Add current selection to design block"
-msgstr "Add current selection to design block"
+msgid "Set design block schematic to current selection"
+msgstr "Set design block schematic to current selection"
 
 msgid "Delete Design Block"
 msgstr "Delete Design Block"
@@ -21726,11 +21729,14 @@ msgstr "Unarchive Project..."
 msgid "Unarchive project files from zip archive"
 msgstr "Unarchive project files from zip archive"
 
+msgid "Reveal Project in Finder"
+msgstr "Reveal Project in Finder"
+
+msgid "Open project folder in Finder"
+msgstr "Open project folder in Finder"
+
 msgid "Browse Project Files"
 msgstr "Browse Project Files"
-
-msgid "Reveal project folder in Finder"
-msgstr "Reveal project folder in Finder"
 
 msgid "Open project directory in file explorer"
 msgstr "Open project directory in file explorer"
@@ -27648,6 +27654,9 @@ msgstr ""
 
 msgid "Target areas:"
 msgstr "Target areas:"
+
+msgid "Target Rule Area"
+msgstr "Target Rule Area"
 
 msgid "Copy footprint placement"
 msgstr "Copy footprint placement"
@@ -38979,17 +38988,20 @@ msgstr "Apply Design Block Layout"
 msgid "Apply linked design block layout to selected group"
 msgstr "Apply linked design block layout to selected group"
 
-msgid "Save Current Board as Design Block..."
-msgstr "Save Current Board as Design Block..."
+msgid "Save Board as Design Block..."
+msgstr "Save Board as Design Block..."
 
 msgid "Create a new design block from the current board"
 msgstr "Create a new design block from the current board"
 
-msgid "Save Current Board to Design Block..."
-msgstr "Save Current Board to Design Block..."
+msgid "Update Design Block from Board"
+msgstr "Update Design Block from Board"
 
-msgid "Add current board to design block"
-msgstr "Add current board to design block"
+msgid "Set design block layout to current board"
+msgstr "Set design block layout to current board"
+
+msgid "Set design block layout to current selection"
+msgstr "Set design block layout to current selection"
 
 msgid "Open in Footprint Editor"
 msgstr "Open in Footprint Editor"
@@ -41534,6 +41546,33 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Variants:"
+#~ msgstr "Variants:"
+
+#~ msgid "Save Current Sheet to Design Block..."
+#~ msgstr "Save Current Sheet to Design Block..."
+
+#~ msgid "Add current sheet to design block"
+#~ msgstr "Add current sheet to design block"
+
+#~ msgid "Save Selection to Design Block..."
+#~ msgstr "Save Selection to Design Block..."
+
+#~ msgid "Add current selection to design block"
+#~ msgstr "Add current selection to design block"
+
+#~ msgid "Reveal project folder in Finder"
+#~ msgstr "Reveal project folder in Finder"
+
+#~ msgid "Save Current Board as Design Block..."
+#~ msgstr "Save Current Board as Design Block..."
+
+#~ msgid "Save Current Board to Design Block..."
+#~ msgstr "Save Current Board to Design Block..."
+
+#~ msgid "Add current board to design block"
+#~ msgstr "Add current board to design block"
 
 #~ msgid "Browse…"
 #~ msgstr "Browse…"
