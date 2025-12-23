@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2025-10-28 02:06+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -10092,8 +10092,8 @@ msgstr "Aseta piirtonäkymä näyttämään kaikki kohteet"
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:401
 #: pcbnew/dialogs/dialog_copper_zones.cpp:767
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 msgid "<no net>"
 msgstr "<ei verkkoa>"
 
@@ -12906,7 +12906,7 @@ msgstr "nimetön"
 msgid "Edit Label Properties"
 msgstr "Muokkaa nimiön ominaisuuksia"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:804
+#: eeschema/dialogs/dialog_label_properties.cpp:807
 msgid "The first field is mandatory."
 msgstr "Ensimmäinen kenttä on pakollinen."
 
@@ -28484,65 +28484,65 @@ msgstr "Haluatko varmasti poistaa git-seurannan tästä projektista?"
 msgid "Failed to remove Git directory"
 msgstr "Git-hakemiston poistaminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2319
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Valittu hakemisto on jo git-projekti."
 
-#: kicad/project_tree_pane.cpp:2462
+#: kicad/project_tree_pane.cpp:2465
 msgid "Discarding commit due to empty commit message."
 msgstr "Hylätään muutos tyhjän toimitusviestin vuoksi."
 
-#: kicad/project_tree_pane.cpp:2468
+#: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty file selection."
 msgstr "Hylätään muutos tyhjän tiedoston valinnan vuoksi."
 
-#: kicad/project_tree_pane.cpp:2474
+#: kicad/project_tree_pane.cpp:2477
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Arkistoindeksin hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2485
+#: kicad/project_tree_pane.cpp:2488
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Tiedoston lisääminen hakemistoon epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2496
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Indeksin kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2500
+#: kicad/project_tree_pane.cpp:2503
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Hakemistopuun kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2507
+#: kicad/project_tree_pane.cpp:2510
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Hakemistopuun haku epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2519
+#: kicad/project_tree_pane.cpp:2522
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "HEAD-viitteen hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2528
+#: kicad/project_tree_pane.cpp:2531
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Muutoksien saaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2546
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Tekijän allekirjoituksen luominen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2580
+#: kicad/project_tree_pane.cpp:2583
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Ei onnistunut luoda commit: %s"
 
-#: kicad/project_tree_pane.cpp:2585
+#: kicad/project_tree_pane.cpp:2588
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "Indeksin kirjoittaminen epäonnistui: %s"
@@ -36631,7 +36631,7 @@ msgstr "Ryhmittele jalanjäljet niiden sijoitussääntöalueista"
 msgid "Generate Multichannel Rule Areas"
 msgstr "Luo monikanavaisia sääntöalueita"
 
-#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
+#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 msgid "Target areas:"
 msgstr "Kohdealueet:"
 
@@ -41498,22 +41498,22 @@ msgstr "Tarkistetaan kuparin graafisia välyksiä..."
 msgid "Checking copper zone clearances..."
 msgstr "Tarkastetaan kuparivyöhykkeen etäisyyksiä ..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:887
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:918
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(verkot %s ja %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:326
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:504
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:542
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -41529,12 +41529,12 @@ msgstr "(verkot %s ja %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s välys %s; todellinen %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:387
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s välys %s; todellinen <0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "Kaaressa on oltava 3 erillistä pistettä"
@@ -47215,12 +47215,12 @@ msgstr "PIIRILEVY viety onnistuneesti."
 msgid "Unable to export, please fix and try again"
 msgstr "Vienti ei onnistu, ole hyvä, korjaa ja yritä uudelleen"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1095
+#: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "Jalanjäljellä, jonka arvo on '%s' kohteella on tyhjä viitetunnus."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1105
+#: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "Useilla jalanjäljillä on viitetunnus \"%s\"."

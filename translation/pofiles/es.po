@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2025-08-16 22:13+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
@@ -10249,8 +10249,8 @@ msgstr "Configurar la vista del trazado para ver todos los elementos"
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:401
 #: pcbnew/dialogs/dialog_copper_zones.cpp:767
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 msgid "<no net>"
 msgstr "<sin red>"
 
@@ -13131,7 +13131,7 @@ msgstr "sin título"
 msgid "Edit Label Properties"
 msgstr "Editar propiedades de la etiqueta"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:804
+#: eeschema/dialogs/dialog_label_properties.cpp:807
 msgid "The first field is mandatory."
 msgstr "El primer campo es obligatorio."
 
@@ -29028,65 +29028,65 @@ msgstr "¿Está seguro de que desea eliminar el rastreo de git de este proyecto?
 msgid "Failed to remove Git directory"
 msgstr "Fallo al eliminar la carpeta de git"
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2319
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "La carpeta seleccionada ya es un proyecto de git."
 
-#: kicad/project_tree_pane.cpp:2462
+#: kicad/project_tree_pane.cpp:2465
 msgid "Discarding commit due to empty commit message."
 msgstr "Descartando confirmación debido a un mensaje de confirmación vacío."
 
-#: kicad/project_tree_pane.cpp:2468
+#: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty file selection."
 msgstr "Descartando confirmación debido a una selección de archivos vacía."
 
-#: kicad/project_tree_pane.cpp:2474
+#: kicad/project_tree_pane.cpp:2477
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Fallo al obtener el índice del repositorio: %s"
 
-#: kicad/project_tree_pane.cpp:2485
+#: kicad/project_tree_pane.cpp:2488
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Fallo al añadir el archivo al índice: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2496
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Fallo al escribir al índice: %s"
 
-#: kicad/project_tree_pane.cpp:2500
+#: kicad/project_tree_pane.cpp:2503
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Fallo al escribir el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2507
+#: kicad/project_tree_pane.cpp:2510
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Fallo al buscar el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2519
+#: kicad/project_tree_pane.cpp:2522
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Fallo al obtener la referencia HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2528
+#: kicad/project_tree_pane.cpp:2531
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Fallo al obtener confirmación: %s"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2546
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Fallo al crear la firma del autor: %s"
 
-#: kicad/project_tree_pane.cpp:2580
+#: kicad/project_tree_pane.cpp:2583
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Fallo al crear la confirmación: %s"
 
-#: kicad/project_tree_pane.cpp:2585
+#: kicad/project_tree_pane.cpp:2588
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "Fallo al escribir al índice: %s"
@@ -37308,7 +37308,7 @@ msgstr "Archivos colocación de componentes"
 msgid "Generate Multichannel Rule Areas"
 msgstr "Convertir a área de reglas"
 
-#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
+#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 #, fuzzy
 msgid "Target areas:"
 msgstr "Forma de la Mira de centrado:"
@@ -42731,22 +42731,22 @@ msgstr "Comprobando las holguras de los gráficos de cobre..."
 msgid "Checking copper zone clearances..."
 msgstr "Comprobando márgenes de zonas de cobres..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:887
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:918
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(redes %s y %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:326
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:504
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:542
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -42762,12 +42762,12 @@ msgstr "(redes %s y %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s margen %s; real %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:387
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s brecha%s ; actual < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -48559,13 +48559,13 @@ msgstr "PLACA bien exportada."
 msgid "Unable to export, please fix and try again"
 msgstr "Imposible exportar, por favor, corrija e inténtelo de nuevo"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1095
+#: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr ""
 "La huella con el valor '%s' tiene un identificador de referencia vacío."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1105
+#: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "Múltiples huellas tienen el indicador de referencia '%s'."

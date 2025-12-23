@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2025-11-07 07:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -10014,8 +10014,8 @@ msgstr "모든 항목을 표시하도록 플롯 뷰 설정"
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:401
 #: pcbnew/dialogs/dialog_copper_zones.cpp:767
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 msgid "<no net>"
 msgstr "<네트 없음>"
 
@@ -12797,7 +12797,7 @@ msgstr "제목 없음"
 msgid "Edit Label Properties"
 msgstr "라벨 속성 편집"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:804
+#: eeschema/dialogs/dialog_label_properties.cpp:807
 msgid "The first field is mandatory."
 msgstr "첫 번째 필드는 필수입니다."
 
@@ -28148,64 +28148,64 @@ msgstr "이 프로젝트에서 Git 추적을 제거하시겠습니까?"
 msgid "Failed to remove Git directory"
 msgstr "Git 디렉토리를 제거하지 못함"
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2319
 msgid "The selected directory is not a Git project."
 msgstr "선택한 디렉터리는 Git 프로젝트가 아닙니다."
 
-#: kicad/project_tree_pane.cpp:2462
+#: kicad/project_tree_pane.cpp:2465
 msgid "Discarding commit due to empty commit message."
 msgstr "커밋 메시지가 비어 있어 커밋을 취소합니다."
 
-#: kicad/project_tree_pane.cpp:2468
+#: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty file selection."
 msgstr "빈 파일 선택으로 인해 커밋을 삭제합니다."
 
-#: kicad/project_tree_pane.cpp:2474
+#: kicad/project_tree_pane.cpp:2477
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "저장소 인덱스를 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2485
+#: kicad/project_tree_pane.cpp:2488
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "인덱스에 파일을 추가하지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2496
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "인덱스 작성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2500
+#: kicad/project_tree_pane.cpp:2503
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "트리 작성 실패: %s"
 
-#: kicad/project_tree_pane.cpp:2507
+#: kicad/project_tree_pane.cpp:2510
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "트리 조회 실패: %s"
 
-#: kicad/project_tree_pane.cpp:2519
+#: kicad/project_tree_pane.cpp:2522
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "HEAD 참조를 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2528
+#: kicad/project_tree_pane.cpp:2531
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "커밋을 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2546
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "작성자 서명 생성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2580
+#: kicad/project_tree_pane.cpp:2583
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "커밋 생성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2585
+#: kicad/project_tree_pane.cpp:2588
 #, c-format
 msgid "Created commit with id: %s"
 msgstr "커밋 생성한 ID: %s"
@@ -36174,7 +36174,7 @@ msgstr "배치 규칙 영역으로 풋프린트 그룹화하기"
 msgid "Generate Multichannel Rule Areas"
 msgstr "다중 채널 규칙 영역 생성"
 
-#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
+#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 msgid "Target areas:"
 msgstr "대상 지역:"
 
@@ -41471,22 +41471,22 @@ msgstr "동박 그래픽 공간거리 확인..."
 msgid "Checking copper zone clearances..."
 msgstr "동박 영역 공간거리 확인..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:887
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:918
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(네트 %s 와 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:326
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:504
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:542
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -41502,12 +41502,12 @@ msgstr "(네트 %s 와 %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 공간거리 %s; 실제값 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:387
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s 공간거리 %s; 실제값 < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "아크는 3개의 별개의 점이 있음"
@@ -47135,12 +47135,12 @@ msgstr "기판 내보내기 완료."
 msgid "Unable to export, please fix and try again"
 msgstr "내보내기 할 수 없습니다. 수정 후 다시 시도해주세요"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1095
+#: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "값이 '%s'인 풋프린트에는 빈 참조 지정자가 있습니다."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1105
+#: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "여러 풋프린트에는 참조 지정자 '%s'가 있습니다."

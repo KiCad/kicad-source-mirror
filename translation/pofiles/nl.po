@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2025-09-13 10:02+0000\n"
 "Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
@@ -10168,8 +10168,8 @@ msgstr "Plotweergave instellen om alle items weer te geven"
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:401
 #: pcbnew/dialogs/dialog_copper_zones.cpp:767
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 msgid "<no net>"
 msgstr "<geen net>"
 
@@ -13018,7 +13018,7 @@ msgstr "naamloos"
 msgid "Edit Label Properties"
 msgstr "Labeleigenschappen bewerken"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:804
+#: eeschema/dialogs/dialog_label_properties.cpp:807
 msgid "The first field is mandatory."
 msgstr "Het eerste veld is verplicht."
 
@@ -28732,65 +28732,65 @@ msgstr "Weet u zeker dat u Git-versiebeheer van dit project wilt verwijderen?"
 msgid "Failed to remove Git directory"
 msgstr "Kan git-map niet verwijderen"
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2319
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "De geselecteerde map is al een git-project."
 
-#: kicad/project_tree_pane.cpp:2462
+#: kicad/project_tree_pane.cpp:2465
 msgid "Discarding commit due to empty commit message."
 msgstr "Commit genegeerd vanwege een leeg commitbericht."
 
-#: kicad/project_tree_pane.cpp:2468
+#: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty file selection."
 msgstr "Commit genegeerd vanwege een lege bestandsselectie."
 
-#: kicad/project_tree_pane.cpp:2474
+#: kicad/project_tree_pane.cpp:2477
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Ophalen repositoryindex mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2485
+#: kicad/project_tree_pane.cpp:2488
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Toevoegen bestand aan index mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2496
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Schrijven van index mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2500
+#: kicad/project_tree_pane.cpp:2503
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Schrijven van boom mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2507
+#: kicad/project_tree_pane.cpp:2510
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Kan boom niet vinden: %s"
 
-#: kicad/project_tree_pane.cpp:2519
+#: kicad/project_tree_pane.cpp:2522
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Kan HEAD-verwijzing niet ophalen: %s"
 
-#: kicad/project_tree_pane.cpp:2528
+#: kicad/project_tree_pane.cpp:2531
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Kan commit niet ophalen: %s"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2546
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Maken van signatuur auteur mislukt: %s"
 
-#: kicad/project_tree_pane.cpp:2580
+#: kicad/project_tree_pane.cpp:2583
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Aanmaken van commit mislukt: '%s'"
 
-#: kicad/project_tree_pane.cpp:2585
+#: kicad/project_tree_pane.cpp:2588
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "Schrijven van index mislukt: %s"
@@ -36974,7 +36974,7 @@ msgstr "Component-plaatsing bestanden"
 msgid "Generate Multichannel Rule Areas"
 msgstr "Omzetten naar regelgebied"
 
-#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
+#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 #, fuzzy
 msgid "Target areas:"
 msgstr "Target scheefheid:"
@@ -42372,22 +42372,22 @@ msgstr "Controle vrije afstanden van kopertekeningen..."
 msgid "Checking copper zone clearances..."
 msgstr "Controle vrije afstanden van koperzones..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:887
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:918
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(netten %s en %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:326
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:504
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:542
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -42403,12 +42403,12 @@ msgstr "(netten %s en %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s vrije afstand %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:387
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s vrije afstand %s; werkelijk < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -48113,12 +48113,12 @@ msgstr "BOARD is OK geëxporteerd."
 msgid "Unable to export, please fix and try again"
 msgstr "Kan niet exporteren. Los het probleem op en probeer het opnieuw"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1095
+#: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "Footprint met waarde '%s' heeft een lege referentie-aanduiding."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1105
+#: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "Meerdere footprints hebben de referentieaanduiding '%s'."

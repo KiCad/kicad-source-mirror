@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 20:08+0300\n"
+"POT-Creation-Date: 2025-12-23 05:02+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -10354,8 +10354,8 @@ msgstr "ตั้งภาพพล็อตแสดงทุกชิ้นส
 #: common/widgets/net_selector.cpp:32 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:401
 #: pcbnew/dialogs/dialog_copper_zones.cpp:767
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
 msgid "<no net>"
 msgstr "<ไม่มีเน็ต>"
 
@@ -13218,7 +13218,7 @@ msgstr "ไม่มีชื่อ"
 msgid "Edit Label Properties"
 msgstr "คุณสมบัติป้ายชื่อ"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:804
+#: eeschema/dialogs/dialog_label_properties.cpp:807
 msgid "The first field is mandatory."
 msgstr "ฟิลด์แรกเป็นฟิลด์บังคับ"
 
@@ -29177,65 +29177,65 @@ msgstr "คุณแน่ใจว่าต้องการลบช่อง
 msgid "Failed to remove Git directory"
 msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2319
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "ไฟล์ที่เลือกไม่สมบูรณ์หรืออาจจะมีข้อมูลเสีย!"
 
-#: kicad/project_tree_pane.cpp:2462
+#: kicad/project_tree_pane.cpp:2465
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2468
+#: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2474
+#: kicad/project_tree_pane.cpp:2477
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
-#: kicad/project_tree_pane.cpp:2485
+#: kicad/project_tree_pane.cpp:2488
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "ไม่สามารถเขียนพล็อตไฟล์ที่ไดเร็คตอรี ‘%s’"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2496
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2500
+#: kicad/project_tree_pane.cpp:2503
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2507
+#: kicad/project_tree_pane.cpp:2510
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "โหลด '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:2519
+#: kicad/project_tree_pane.cpp:2522
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
 
-#: kicad/project_tree_pane.cpp:2528
+#: kicad/project_tree_pane.cpp:2531
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2546
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "ล้มเหลวในการสร้างไฟล์ชั่วคราว '%s'"
 
-#: kicad/project_tree_pane.cpp:2580
+#: kicad/project_tree_pane.cpp:2583
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
-#: kicad/project_tree_pane.cpp:2585
+#: kicad/project_tree_pane.cpp:2588
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
@@ -37415,7 +37415,7 @@ msgstr "ไฟล์ตำแหน่งอุปกรณ์"
 msgid "Generate Multichannel Rule Areas"
 msgstr "แปลงเป็นพื้นที่กฎ"
 
-#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
+#: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 #, fuzzy
 msgid "Target areas:"
 msgstr "เป้าหมายบิดเบือน:"
@@ -42372,22 +42372,22 @@ msgstr "กำลังตรวจสอบระยะห่างโซนท
 msgid "Checking copper zone clearances..."
 msgstr "กำลังตรวจสอบระยะห่างโซนทองแดง..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:617
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:886
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:917
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:887
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:918
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(เน็ต %s และ %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:325
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:385
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:503
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:541
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:624
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:931
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:953
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1272
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:326
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:504
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:542
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:118
@@ -42403,12 +42403,12 @@ msgstr "(เน็ต %s และ %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s ระยะห่าง %s ค่าจริง %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:386
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:387
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s ระยะห่าง %s ;ค่าจริง<0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1264
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
@@ -48098,12 +48098,12 @@ msgstr "บอร์ดส่งออกเรียบร้อย"
 msgid "Unable to export, please fix and try again"
 msgstr "ไม่สามารถส่งออก,โปรดแก้ไขแล้วลองอีกครั้ง"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1095
+#: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, fuzzy, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
 msgstr "สัญลักษณ์ที่มีค่า '%s' มีรหัสอ้างอิงว่างเปล่า"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1105
+#: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
 msgid "Multiple footprints have the reference designator '%s'."
 msgstr "ฟุ้ทพรินท์หลายตัวมีอักษรอ้างอิง '%s'"
