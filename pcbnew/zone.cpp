@@ -1905,14 +1905,13 @@ static struct ZONE_DESC
         // a layer set
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
                                  new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
-                                                                        &ZONE::SetLayer,
-                                                                        &ZONE::GetLayer ) )
+                                                                        &ZONE::SetLayer, &ZONE::GetLayer ) )
                 .SetIsHiddenFromPropertiesManager();
 
-        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                      _HKI( "Net" ), isCopperZone );
-        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                      _HKI( "Net Class" ), isCopperZone );
+        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ),
+                                      isCopperZone );
+        propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net Class" ),
+                                      isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
@@ -1920,54 +1919,46 @@ static struct ZONE_DESC
         const wxString groupKeepout = _HKI( "Keepout" );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Tracks" ),
-                                                       &ZONE::SetDoNotAllowTracks,
-                                                       &ZONE::GetDoNotAllowTracks ),
-                             groupKeepout )
+                    &ZONE::SetDoNotAllowTracks, &ZONE::GetDoNotAllowTracks ),
+                    groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Vias" ),
-                                                       &ZONE::SetDoNotAllowVias,
-                                                       &ZONE::GetDoNotAllowVias ),
-                             groupKeepout )
+                    &ZONE::SetDoNotAllowVias, &ZONE::GetDoNotAllowVias ),
+                    groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Pads" ),
-                                                       &ZONE::SetDoNotAllowPads,
-                                                       &ZONE::GetDoNotAllowPads ),
-                             groupKeepout )
+                    &ZONE::SetDoNotAllowPads, &ZONE::GetDoNotAllowPads ),
+                    groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Zone Fills" ),
-                                                       &ZONE::SetDoNotAllowZoneFills,
-                                                       &ZONE::GetDoNotAllowZoneFills ),
-                             groupKeepout )
+                    &ZONE::SetDoNotAllowZoneFills, &ZONE::GetDoNotAllowZoneFills ),
+                    groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Footprints" ),
-                                                       &ZONE::SetDoNotAllowFootprints,
-                                                       &ZONE::GetDoNotAllowFootprints ),
-                             groupKeepout )
+                    &ZONE::SetDoNotAllowFootprints, &ZONE::GetDoNotAllowFootprints ),
+                    groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
 
         const wxString groupPlacement = _HKI( "Placement" );
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Enable" ),
-                                                       &ZONE::SetPlacementAreaEnabled,
-                                                       &ZONE::GetPlacementAreaEnabled ),
-                             groupPlacement )
+                    &ZONE::SetPlacementAreaEnabled, &ZONE::GetPlacementAreaEnabled ),
+                    groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, PLACEMENT_SOURCE_T>( _HKI( "Source Type" ),
-                                                                          &ZONE::SetPlacementAreaSourceType,
-                                                                          &ZONE::GetPlacementAreaSourceType ),
-                             groupPlacement )
+                    &ZONE::SetPlacementAreaSourceType, &ZONE::GetPlacementAreaSourceType ),
+                    groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Source Name" ),
-                                                           &ZONE::SetPlacementAreaSource,
-                                                           &ZONE::GetPlacementAreaSource ),
-                             groupPlacement )
+                    &ZONE::SetPlacementAreaSource, &ZONE::GetPlacementAreaSource ),
+                    groupPlacement )
                 .SetAvailableFunc( isRuleArea );
 
 
@@ -2046,15 +2037,13 @@ static struct ZONE_DESC
         const wxString groupElectrical = _HKI( "Electrical" );
 
         auto clearance = new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
-                    &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE );
+                    &ZONE::SetLocalClearance, &ZONE::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE );
         clearance->SetAvailableFunc( isCopperZone );
         constexpr int maxClearance = pcbIUScale.mmToIU( ZONE_CLEARANCE_MAX_VALUE_MM );
         clearance->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
 
         auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
-                    &ZONE::SetMinThickness, &ZONE::GetMinThickness,
-                    PROPERTY_DISPLAY::PT_SIZE );
+                    &ZONE::SetMinThickness, &ZONE::GetMinThickness, PROPERTY_DISPLAY::PT_SIZE );
         minWidth->SetAvailableFunc( isCopperZone );
         constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
         minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth, INT_MAX> );
@@ -2064,14 +2053,12 @@ static struct ZONE_DESC
         padConnections->SetAvailableFunc( isCopperZone );
 
         auto thermalGap = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
-                    &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
-                    PROPERTY_DISPLAY::PT_SIZE );
+                    &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap, PROPERTY_DISPLAY::PT_SIZE );
         thermalGap->SetAvailableFunc( isCopperZone );
         thermalGap->SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         auto thermalSpokeWidth = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
-                    &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
-                    PROPERTY_DISPLAY::PT_SIZE );
+                    &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth, PROPERTY_DISPLAY::PT_SIZE );
         thermalSpokeWidth->SetAvailableFunc( isCopperZone );
         thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
 
