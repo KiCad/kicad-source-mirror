@@ -102,6 +102,8 @@ enum PCB_DRC_CODE
     DRCE_TEXT_THICKNESS,
 
     DRCE_LENGTH_OUT_OF_RANGE,
+    DRCE_NET_CHAIN_STUB_TOO_LONG,   // Routed stub on a net chain exceeds the (stub_length max) constraint
+    DRCE_NET_CHAIN_RETURN_PATH_BREAK,  // Net chain routed without copper on the required reference layer
     DRCE_SKEW_OUT_OF_RANGE,
     DRCE_VIA_COUNT_OUT_OF_RANGE,
     DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
@@ -243,6 +245,8 @@ private:
     static DRC_ITEM textHeightOutOfRange;
     static DRC_ITEM textThicknessOutOfRange;
     static DRC_ITEM lengthOutOfRange;
+    static DRC_ITEM netChainStubTooLong;
+    static DRC_ITEM netChainReturnPathBreak;
     static DRC_ITEM skewOutOfRange;
     static DRC_ITEM viaCountOutOfRange;
     static DRC_ITEM diffPairGapOutOfRange;

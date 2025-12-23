@@ -20,6 +20,7 @@
 #include <common.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <zone.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
@@ -352,7 +353,10 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SIGNAL_LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
+                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SIGNAL_LENGTH_CONSTRAINT,
+                                             NET_CHAIN_STUB_LENGTH_CONSTRAINT,
+                                             NET_CHAIN_RETURN_PATH_CONSTRAINT,
+                                             SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
                 {
                     DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( jj, item, nullptr, item->GetLayer() );
 
@@ -498,6 +502,128 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
             if( viaCountConstraint && viaCountConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkViaCounts( *viaCountConstraint, matchedConnections );
+
+            // Return-path constraint: warn when the chain is routed on a layer
+            // but the specified reference layer has no continuous zone on it
+            // (coarse check: any zone of any net covers *some* of the chain's
+            // trunk path).  Fine-grained per-track checks are future work.
+            std::optional<DRC_CONSTRAINT> returnPathConstraint =
+                    rule->FindConstraint( NET_CHAIN_RETURN_PATH_CONSTRAINT );
+
+            if( returnPathConstraint
+                && returnPathConstraint->GetSeverity() != RPT_SEVERITY_IGNORE
+                && !returnPathConstraint->m_ReferenceLayer.IsEmpty() )
+            {
+                const wxString&    refLayerName = returnPathConstraint->m_ReferenceLayer;
+                const LSET         copperLayers = LSET::AllCuMask();
+                PCB_LAYER_ID       refLayer = UNDEFINED_LAYER;
+
+                for( PCB_LAYER_ID layer : copperLayers )
+                {
+                    if( m_board->GetLayerName( layer ) == refLayerName )
+                    {
+                        refLayer = layer;
+                        break;
+                    }
+                }
+
+                if( refLayer != UNDEFINED_LAYER )
+                {
+                    // Count zones on the reference layer.  A chain with tracks on
+                    // a different layer but no zone on the reference layer is
+                    // probably missing its return path.
+                    int zonesOnRefLayer = 0;
+
+                    for( ZONE* zone : m_board->Zones() )
+                    {
+                        if( zone && zone->IsOnLayer( refLayer ) && !zone->GetIsRuleArea() )
+                            ++zonesOnRefLayer;
+                    }
+
+                    if( zonesOnRefLayer == 0 )
+                    {
+                        for( const CONNECTION& conn : matchedConnections )
+                        {
+                            NETINFO_ITEM* netInfo =
+                                    m_board->GetNetInfo().GetNetItem( conn.netcode );
+
+                            if( !netInfo || netInfo->GetSignal().IsEmpty() )
+                                continue;
+
+                            std::shared_ptr<DRC_ITEM> item =
+                                    DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
+                            item->SetErrorMessage( wxString::Format(
+                                    _( "Net chain '%s' has no copper zone on reference "
+                                       "layer '%s' (net '%s')." ),
+                                    netInfo->GetSignal(),
+                                    refLayerName,
+                                    netInfo->GetNetname() ) );
+                            item->SetViolatingRule( rule );
+
+                            reportViolation( item, VECTOR2I{}, UNDEFINED_LAYER );
+                        }
+                    }
+                }
+            }
+
+            // Stub-length constraint: on a multi-net net chain, any member net that
+            // touches neither terminal pad is a pure stub; its total routed length
+            // must stay within the (stub_length ...) range.
+            std::optional<DRC_CONSTRAINT> stubLengthConstraint =
+                    rule->FindConstraint( NET_CHAIN_STUB_LENGTH_CONSTRAINT );
+
+            if( stubLengthConstraint
+                && stubLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+            {
+                for( const CONNECTION& conn : matchedConnections )
+                {
+                    NETINFO_ITEM* netInfo = m_board->GetNetInfo().GetNetItem( conn.netcode );
+
+                    if( !netInfo || netInfo->GetSignal().IsEmpty() )
+                        continue;
+
+                    // Look up every net in this chain and check whether *this* net
+                    // is one that touches a terminal pad.
+                    bool onTrunk = false;
+
+                    for( NETINFO_ITEM* candidate : m_board->GetNetInfo() )
+                    {
+                        if( !candidate || candidate->GetSignal() != netInfo->GetSignal() )
+                            continue;
+
+                        if( candidate == netInfo )
+                        {
+                            if( candidate->GetTerminalPad( 0 ) || candidate->GetTerminalPad( 1 ) )
+                                onTrunk = true;
+                        }
+                    }
+
+                    if( onTrunk )
+                        continue;
+
+                    const MINOPTMAX<int>& range = stubLengthConstraint->GetValue();
+
+                    if( !range.HasMax() && !range.HasMin() )
+                        continue;
+
+                    if( ( range.HasMax() && conn.totalRoute > range.Max() )
+                        || ( range.HasMin() && conn.totalRoute < range.Min() ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> item =
+                                DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
+                        wxString msg = wxString::Format(
+                                _( "Stub length (%s) out of range for net chain '%s' on net "
+                                   "'%s'." ),
+                                MessageTextFromValue( conn.totalRoute ),
+                                netInfo->GetSignal(),
+                                netInfo->GetNetname() );
+                        item->SetErrorMessage( msg );
+                        item->SetViolatingRule( rule );
+
+                        reportViolation( item, VECTOR2I{}, UNDEFINED_LAYER );
+                    }
+                }
+            }
         }
     }
 

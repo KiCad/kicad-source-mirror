@@ -76,6 +76,8 @@ enum DRC_CONSTRAINT_T
     VIA_DIAMETER_CONSTRAINT,
     LENGTH_CONSTRAINT,
     SIGNAL_LENGTH_CONSTRAINT,
+    NET_CHAIN_STUB_LENGTH_CONSTRAINT,
+    NET_CHAIN_RETURN_PATH_CONSTRAINT,
     SKEW_CONSTRAINT,
     DIFF_PAIR_GAP_CONSTRAINT,
     MAX_UNCOUPLED_CONSTRAINT,
@@ -244,6 +246,11 @@ public:
     ZONE_CONNECTION     m_ZoneConnection;
     DRC_RULE_CONDITION* m_Test;
     bool                m_ImplicitMin;
+
+    // Reference layer for NET_CHAIN_RETURN_PATH_CONSTRAINT.  Empty means "no
+    // reference layer specified".  Stored as a user-visible layer name so it
+    // can survive save/load without layer-id renumbering.
+    wxString            m_ReferenceLayer;
 
 private:
     wxString            m_name;          // For just-in-time constraints

@@ -540,6 +540,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
     case T_signal_length:
     case T_net_chain_length:          c.m_Type = SIGNAL_LENGTH_CONSTRAINT;             break;
+    case T_stub_length:               c.m_Type = NET_CHAIN_STUB_LENGTH_CONSTRAINT;     break;
+    case T_return_path:               c.m_Type = NET_CHAIN_RETURN_PATH_CONSTRAINT;     break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
     case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
     case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;
@@ -612,6 +614,37 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         if( (int) CurTok() != DSN_RIGHT )
             reportError( _( "Missing ')'." ) );
+
+        aRule->AddConstraint( c );
+        return;
+    }
+    else if( c.m_Type == NET_CHAIN_RETURN_PATH_CONSTRAINT )
+    {
+        // (constraint return_path (layer "B.Cu"))
+        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        {
+            if( token == T_LEFT )
+                token = NextTok();
+
+            switch( token )
+            {
+            case T_layer:
+                NeedSYMBOLorNUMBER();
+                c.m_ReferenceLayer = FromUTF8();
+                NeedRIGHT();
+                break;
+
+            case T_EOF:
+                reportError( _( "Missing ')'." ) );
+                return;
+
+            default:
+                // Unknown sub-option; skip its subtree.
+                while( NextTok() != T_RIGHT )
+                    ;
+                break;
+            }
+        }
 
         aRule->AddConstraint( c );
         return;

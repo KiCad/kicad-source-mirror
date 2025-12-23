@@ -1463,6 +1463,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case DIFF_PAIR_GAP_CONSTRAINT:
                 case LENGTH_CONSTRAINT:
                 case SIGNAL_LENGTH_CONSTRAINT:
+                case NET_CHAIN_STUB_LENGTH_CONSTRAINT:
+                case NET_CHAIN_RETURN_PATH_CONSTRAINT:
                 case CONNECTION_WIDTH_CONSTRAINT:
                 case HOLE_TO_HOLE_CONSTRAINT:
                 {
