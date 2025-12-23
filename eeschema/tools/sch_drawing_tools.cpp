@@ -1941,6 +1941,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_SHEET*            sheet = nullptr;
     wxString              description;
 
+    std::list<std::unique_ptr<SCH_LABEL_BASE>> itemsToPlace;
+
     if( m_inDrawingTool )
         return 0;
 
@@ -2002,6 +2004,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
+
+                while( !itemsToPlace.empty() )
+                {
+                    itemsToPlace.front().release();
+                    itemsToPlace.pop_front();
+                }
             };
 
     auto prepItemForPlacement =
@@ -2043,7 +2051,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     }
 
     SCH_COMMIT commit( m_toolMgr );
-    std::list<std::unique_ptr<SCH_LABEL_BASE>> itemsToPlace;
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
