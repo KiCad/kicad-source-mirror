@@ -746,17 +746,7 @@ public:
     SHEET_POINT_EDIT_BEHAVIOR( SCH_SHEET& aSheet ) :
             m_sheet( aSheet )
     {
-        if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( m_sheet.GetParent() ) )
-        {
-            for( SCH_SHEET_PIN* sheetPin : m_sheet.GetPins() )
-            {
-                for( SCH_ITEM* noConnect : screen->Items().Overlapping( SCH_NO_CONNECT_T, sheetPin->GetTextPos() ) )
-                {
-                    noConnects[sheetPin] = noConnect;
-                    break;
-                }
-            }
-        }
+        m_noConnects = m_sheet.GetNoConnects();
     }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
@@ -858,7 +848,7 @@ public:
 
         if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( m_sheet.GetParent() ) )
         {
-            for( auto& [sheetPin, noConnect] : noConnects )
+            for( auto& [sheetPin, noConnect] : m_noConnects )
             {
                 if( noConnect->GetPosition() != sheetPin->GetTextPos() )
                 {
@@ -871,8 +861,8 @@ public:
     }
 
 private:
-    SCH_SHEET&                          m_sheet;
-    std::map<SCH_SHEET_PIN*, SCH_ITEM*> noConnects;
+    SCH_SHEET&                                m_sheet;
+    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> m_noConnects;
 };
 
 

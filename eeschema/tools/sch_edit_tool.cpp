@@ -50,6 +50,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
+#include <sch_no_connect.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <dialogs/dialog_change_symbols.h>
@@ -756,6 +757,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     bool        moving = false;
     SCH_COMMIT  localCommit( m_toolMgr );
     SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+
+    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> noConnects;
 
     if( !commit )
         commit = &localCommit;
@@ -786,7 +790,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             rotPoint = m_frame->GetNearestHalfGridPosition( head->GetBoundingBox().GetCenter() );
 
         if( !moving )
-            commit->Modify( head, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+            commit->Modify( head, screen, RECURSE_MODE::RECURSE );
 
         switch( head->Type() )
         {
@@ -801,7 +805,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 AUTOPLACE_ALGO fieldsAutoplaced = symbol->GetFieldsAutoplaced();
 
                 if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
-                    symbol->AutoplaceFields( m_frame->GetScreen(), fieldsAutoplaced );
+                    symbol->AutoplaceFields( screen, fieldsAutoplaced );
             }
 
             break;
@@ -823,6 +827,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // Rotate pin within parent sheet
             SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( head );
             SCH_SHEET*     sheet = pin->GetParent();
+
+            for( SCH_ITEM* ncItem : screen->Items().Overlapping( SCH_NO_CONNECT_T, pin->GetTextPos() ) )
+                noConnects[pin] = static_cast<SCH_NO_CONNECT*>( ncItem );
 
             pin->Rotate( sheet->GetBoundingBox().GetCenter(), !clockwise );
 
@@ -915,6 +922,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // Rotate the sheet on itself. Sheets do not have an anchor point.
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( head );
 
+            noConnects = sheet->GetNoConnects();
+
             rotPoint = m_frame->GetNearestHalfGridPosition( sheet->GetRotationCenter() );
             sheet->Rotate( rotPoint, !clockwise );
 
@@ -944,7 +953,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             continue;
 
         if( !moving )
-            commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+            commit->Modify( item, screen, RECURSE_MODE::RECURSE );
 
         if( item->Type() == SCH_LINE_T )
         {
@@ -963,6 +972,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 // rotate within parent
                 SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                 SCH_SHEET*     sheet = pin->GetParent();
+
+                for( SCH_ITEM* ncItem : screen->Items().Overlapping( SCH_NO_CONNECT_T, pin->GetTextPos() ) )
+                    noConnects[pin] = static_cast<SCH_NO_CONNECT*>( ncItem );
 
                 pin->Rotate( sheet->GetBodyBoundingBox().GetCenter(), !clockwise );
             }
@@ -993,6 +1005,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
             table->Move( beforeCenter - table->GetCenter() );
         }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            noConnects = sheet->GetNoConnects();
+
+            sheet->Rotate( rotPoint, !clockwise );
+        }
         else
         {
             VECTOR2I posBefore = item->GetPosition();
@@ -1015,6 +1035,16 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else
     {
+        for( auto& [sheetPin, noConnect] : noConnects )
+        {
+            if( noConnect->GetPosition() != sheetPin->GetTextPos() )
+            {
+                commit->Modify( noConnect, screen );
+                noConnect->SetPosition( sheetPin->GetTextPos() );
+                updateItem( noConnect, true );
+            }
+        }
+
         SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
@@ -1047,6 +1077,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     bool        moving = item->IsMoving();
     SCH_COMMIT  localCommit( m_toolMgr );
     SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+
+    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> noConnects;
 
     if( !commit )
         commit = &localCommit;
@@ -1054,7 +1087,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
     {
         if( !moving )
-            commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+            commit->Modify( item, screen, RECURSE_MODE::RECURSE );
 
         switch( item->Type() )
         {
@@ -1087,6 +1120,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             // mirror within parent sheet
             SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
             SCH_SHEET*     sheet = pin->GetParent();
+
+            for( SCH_ITEM* ncItem : screen->Items().Overlapping( SCH_NO_CONNECT_T, pin->GetTextPos() ) )
+                noConnects[pin] = static_cast<SCH_NO_CONNECT*>( ncItem );
 
             if( vertical )
                 pin->MirrorVertically( sheet->GetBoundingBox().GetCenter().y );
@@ -1123,6 +1159,8 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
+            noConnects = static_cast<SCH_SHEET*>( item )->GetNoConnects();
+
             // Mirror the sheet on itself. Sheets do not have a anchor point.
             VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
 
@@ -1155,7 +1193,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             item = static_cast<SCH_ITEM*>( edaItem );
 
             if( !moving )
-                commit->Modify( item, m_frame->GetScreen(), RECURSE_MODE::RECURSE );
+                commit->Modify( item, screen, RECURSE_MODE::RECURSE );
 
             if( item->Type() == SCH_SHEET_PIN_T )
             {
@@ -1210,6 +1248,16 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else
     {
+        for( auto& [sheetPin, noConnect] : noConnects )
+        {
+            if( noConnect->GetPosition() != sheetPin->GetTextPos() )
+            {
+                commit->Modify( noConnect, screen );
+                noConnect->SetPosition( sheetPin->GetTextPos() );
+                updateItem( noConnect, true );
+            }
+        }
+
         SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )

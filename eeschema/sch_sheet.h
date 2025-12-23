@@ -34,6 +34,7 @@ class SCH_SHEET_LIST;
 class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class EDA_DRAW_FRAME;
+class SCH_NO_CONNECT;
 
 
 #define MIN_SHEET_WIDTH  500    // Units are mils.
@@ -181,6 +182,12 @@ public:
      * format, we detect orientation based on pin edges
      */
     bool IsVerticalOrientation() const;
+
+    /**
+     * @return a map containing any of the sheet's pins that have no-connects on them and the
+     * associated no-connect items.
+     */
+    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> GetNoConnects() const;
 
     void SetPositionIgnoringPins( const VECTOR2I& aPosition );
 

@@ -40,6 +40,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
+#include <sch_no_connect.h>
 #include <sch_symbol.h>
 #include <sch_painter.h>
 #include <schematic.h>
@@ -897,6 +898,23 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     if( !msg.empty() )
         aList.emplace_back( _( "Exclude from" ), msg );
+}
+
+
+std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> SCH_SHEET::GetNoConnects() const
+{
+    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> noConnects;
+
+    if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( GetParent() ) )
+    {
+        for( SCH_SHEET_PIN* sheetPin : m_pins )
+        {
+            for( SCH_ITEM* noConnect : screen->Items().Overlapping( SCH_NO_CONNECT_T, sheetPin->GetTextPos() ) )
+                noConnects[sheetPin] = static_cast<SCH_NO_CONNECT*>( noConnect );
+        }
+    }
+
+    return noConnects;
 }
 
 
