@@ -38,9 +38,13 @@
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <netinfo.h>
 #include <reporter.h>
 
 #include <filesystem>
+#include <fstream>
+#include <map>
+#include <set>
 
 
 /**
@@ -1449,6 +1453,285 @@ BOOST_AUTO_TEST_CASE( ArcConnectivity )
                 BOOST_CHECK_LE( disconnectedArcs, arcCount / 5 );
             }
         }
+    }
+}
+
+
+/**
+ * Parse a FabMaster .alg file and extract reference data for cross-validation.
+ *
+ * The .alg format uses `!` as field delimiter with three record types:
+ *   A! = column header definition
+ *   J! = journal/metadata
+ *   S! = data record
+ *
+ * Sections are demarcated by A! lines. Data lines follow the schema of the
+ * most recent A! header.
+ */
+struct ALG_REFERENCE_DATA
+{
+    std::set<wxString>                     netNames;
+    std::set<wxString>                     refDes;
+    std::map<wxString, wxString>           refDesToSymName;
+    std::map<wxString, std::set<wxString>> netToRefDes;
+
+    static std::vector<wxString> SplitAlgLine( const wxString& aLine )
+    {
+        std::vector<wxString> fields;
+        wxString              current;
+
+        for( size_t i = 0; i < aLine.size(); ++i )
+        {
+            if( aLine[i] == '!' )
+            {
+                fields.push_back( current );
+                current.clear();
+            }
+            else
+            {
+                current += aLine[i];
+            }
+        }
+
+        if( !current.empty() )
+            fields.push_back( current );
+
+        return fields;
+    }
+
+    static ALG_REFERENCE_DATA ParseAlgFile( const std::string& aPath )
+    {
+        ALG_REFERENCE_DATA data;
+        std::ifstream      file( aPath );
+
+        if( !file.is_open() )
+            return data;
+
+        enum class SECTION
+        {
+            UNKNOWN,
+            NET_NODES,
+            SYM_PLACEMENT,
+        };
+
+        SECTION     currentSection = SECTION::UNKNOWN;
+        std::string line;
+
+        while( std::getline( file, line ) )
+        {
+            if( line.empty() || line[0] == 'J' )
+                continue;
+
+            if( line[0] == 'A' )
+            {
+                if( line.find( "NET_NAME_SORT!NODE_SORT!NET_NAME!REFDES!" ) != std::string::npos )
+                    currentSection = SECTION::NET_NODES;
+                else if( line.find( "SYM_TYPE!SYM_NAME!REFDES!SYM_MIRROR!" ) != std::string::npos )
+                    currentSection = SECTION::SYM_PLACEMENT;
+                else
+                    currentSection = SECTION::UNKNOWN;
+
+                continue;
+            }
+
+            if( line[0] != 'S' )
+                continue;
+
+            auto fields = SplitAlgLine( wxString::FromUTF8( line ) );
+
+            switch( currentSection )
+            {
+            case SECTION::NET_NODES:
+            {
+                // S!sort!nodeSort!NET_NAME!REFDES!PIN!PIN_NAME!SUBCLASS!
+                if( fields.size() >= 5 )
+                {
+                    wxString netName = fields[3];
+                    wxString refdes = fields[4];
+
+                    if( !netName.empty() )
+                    {
+                        data.netNames.insert( netName );
+
+                        if( !refdes.empty() )
+                            data.netToRefDes[netName].insert( refdes );
+                    }
+                }
+
+                break;
+            }
+            case SECTION::SYM_PLACEMENT:
+            {
+                // S!SYM_TYPE!SYM_NAME!REFDES!MIRROR!ROTATE!X!Y!CX!CY!LIB_PATH!
+                if( fields.size() >= 4 )
+                {
+                    wxString symType = fields[1];
+                    wxString symName = fields[2];
+                    wxString refdes = fields[3];
+
+                    if( symType == wxT( "PACKAGE" ) && !refdes.empty() )
+                    {
+                        data.refDes.insert( refdes );
+                        data.refDesToSymName[refdes] = symName;
+                    }
+                }
+
+                break;
+            }
+            default:
+                break;
+            }
+        }
+
+        return data;
+    }
+};
+
+
+/**
+ * Cross-validate imported board net names against .alg ASCII reference export.
+ */
+BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+
+    struct BOARD_REF
+    {
+        std::string brdFile;
+        std::string algFile;
+    };
+
+    std::vector<BOARD_REF> boardsWithAlg;
+
+    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
+    {
+        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
+        {
+            std::string algName = entry.path().filename().string();
+            std::string brdName = algName.substr( 0, algName.size() - 4 );
+
+            std::filesystem::path brdPath( dataPath + brdName );
+
+            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
+                boardsWithAlg.push_back( { brdName, entry.path().string() } );
+        }
+    }
+
+    BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
+
+    for( const auto& ref : boardsWithAlg )
+    {
+        BOOST_TEST_MESSAGE( "Validating net names: " << ref.brdFile );
+
+        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( ref.algFile );
+        BOOST_REQUIRE_GT( algData.netNames.size(), 0u );
+
+        CAPTURING_REPORTER     reporter;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + ref.brdFile, reporter );
+        BOOST_REQUIRE( board );
+
+        std::set<wxString> boardNets;
+
+        for( const NETINFO_ITEM* net : board->GetNetInfo() )
+        {
+            if( net->GetNetCode() > 0 )
+                boardNets.insert( net->GetNetname() );
+        }
+
+        int missingNets = 0;
+
+        for( const wxString& algNet : algData.netNames )
+        {
+            if( boardNets.find( algNet ) == boardNets.end() )
+            {
+                missingNets++;
+
+                if( missingNets <= 10 )
+                    BOOST_TEST_MESSAGE( "  Missing net: " << algNet );
+            }
+        }
+
+        BOOST_TEST_MESSAGE( ref.brdFile << ": .alg has " << algData.netNames.size()
+                            << " nets, board has " << boardNets.size()
+                            << ", missing " << missingNets );
+
+        BOOST_CHECK_EQUAL( missingNets, 0 );
+    }
+}
+
+
+/**
+ * Cross-validate imported board component reference designators against .alg reference.
+ */
+BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+
+    std::vector<std::pair<std::string, std::string>> boardsWithAlg;
+
+    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
+    {
+        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
+        {
+            std::string algName = entry.path().filename().string();
+            std::string brdName = algName.substr( 0, algName.size() - 4 );
+
+            std::filesystem::path brdPath( dataPath + brdName );
+
+            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
+                boardsWithAlg.push_back( { brdName, entry.path().string() } );
+        }
+    }
+
+    BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
+
+    for( const auto& [brdFile, algFile] : boardsWithAlg )
+    {
+        BOOST_TEST_MESSAGE( "Validating components: " << brdFile );
+
+        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+        BOOST_REQUIRE_GT( algData.refDes.size(), 0u );
+
+        CAPTURING_REPORTER     reporter;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+        BOOST_REQUIRE( board );
+
+        std::set<wxString> boardRefDes;
+
+        for( const FOOTPRINT* fp : board->Footprints() )
+            boardRefDes.insert( fp->GetReference() );
+
+        int missingRefDes = 0;
+        int extraRefDes = 0;
+
+        for( const wxString& algRef : algData.refDes )
+        {
+            if( boardRefDes.find( algRef ) == boardRefDes.end() )
+            {
+                missingRefDes++;
+
+                if( missingRefDes <= 10 )
+                    BOOST_TEST_MESSAGE( "  Missing refdes: " << algRef );
+            }
+        }
+
+        for( const wxString& boardRef : boardRefDes )
+        {
+            if( algData.refDes.find( boardRef ) == algData.refDes.end() )
+            {
+                extraRefDes++;
+
+                if( extraRefDes <= 10 )
+                    BOOST_TEST_MESSAGE( "  Extra refdes in board: " << boardRef );
+            }
+        }
+
+        BOOST_TEST_MESSAGE( brdFile << ": .alg has " << algData.refDes.size()
+                            << " components, board has " << boardRefDes.size()
+                            << ", missing " << missingRefDes
+                            << ", extra " << extraRefDes );
+
+        BOOST_CHECK_EQUAL( missingRefDes, 0 );
     }
 }
 
