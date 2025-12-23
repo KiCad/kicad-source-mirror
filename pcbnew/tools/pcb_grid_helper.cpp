@@ -36,6 +36,7 @@
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_point.h>
+#include <pcb_barcode.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -558,8 +559,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     int snapRange = KiROUND( m_enableGrid ? std::min( snapScale, GetVisibleGrid().x ) : snapScale );
 
     //Respect limits of coordinates representation
-    const BOX2I visibilityHorizon =
-            BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0, VECTOR2D( snapRange, snapRange ) );
+    const BOX2I visibilityHorizon = BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0,
+                                               VECTOR2D( snapRange, snapRange ) );
 
     clearAnchors();
 
@@ -570,8 +571,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     VECTOR2I nearestGrid = Align( aOrigin, aGrid );
     const VECTOR2D gridSize = GetGridSize( aGrid );
 
-    const int hysteresisWorld =
-            KiROUND( m_toolMgr->GetView()->ToWorld( ADVANCED_CFG::GetCfg().m_SnapHysteresis ) );
+    const int hysteresisWorld = KiROUND( m_toolMgr->GetView()->ToWorld( ADVANCED_CFG::GetCfg().m_SnapHysteresis ) );
     const int snapIn = std::max( 0, snapRange - hysteresisWorld );
     const int snapOut = snapRange + hysteresisWorld;
 
@@ -1753,11 +1753,11 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
         {
-            const PCB_DIM_ALIGNED* dim = static_cast<const PCB_DIM_ALIGNED*>( aItem );
-            addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
+            PCB_DIM_ALIGNED* dim = static_cast<PCB_DIM_ALIGNED*>( aItem );
+            addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, dim );
+            addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, dim );
+            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, dim );
+            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, dim );
         }
 
         break;
@@ -1768,9 +1768,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
         {
-            const PCB_DIM_CENTER* dim = static_cast<const PCB_DIM_CENTER*>( aItem );
-            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
+            PCB_DIM_CENTER* dim = static_cast<PCB_DIM_CENTER*>( aItem );
+            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, dim );
+            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, dim );
 
             VECTOR2I start( dim->GetStart() );
             VECTOR2I radial( dim->GetEnd() - dim->GetStart() );
@@ -1778,7 +1778,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             for( int i = 0; i < 2; i++ )
             {
                 RotatePoint( radial, -ANGLE_90 );
-                addAnchor( start + radial, CORNER | SNAPPABLE, aItem );
+                addAnchor( start + radial, CORNER | SNAPPABLE, dim );
             }
         }
 
@@ -1790,11 +1790,11 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
         {
-            const PCB_DIM_RADIAL* radialDim = static_cast<const PCB_DIM_RADIAL*>( aItem );
-            addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, aItem );
-            addAnchor( radialDim->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            PCB_DIM_RADIAL* radialDim = static_cast<PCB_DIM_RADIAL*>( aItem );
+            addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, radialDim );
+            addAnchor( radialDim->GetEnd(), CORNER | SNAPPABLE, radialDim );
+            addAnchor( radialDim->GetKnee(), CORNER | SNAPPABLE, radialDim );
+            addAnchor( radialDim->GetTextPos(), CORNER | SNAPPABLE, radialDim );
         }
 
         break;
@@ -1805,10 +1805,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
         {
-            const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
-            addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
-            addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
-            addAnchor( leader->GetTextPos(), CORNER | SNAPPABLE, aItem );
+            PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( aItem );
+            addAnchor( leader->GetStart(), CORNER | SNAPPABLE, leader );
+            addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, leader );
+            addAnchor( leader->GetTextPos(), CORNER | SNAPPABLE, leader );
         }
 
         break;
@@ -1820,6 +1820,21 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
             addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+
+        break;
+
+    case PCB_BARCODE_T:
+        if( aFrom && aSelectionFilter && !aSelectionFilter->otherItems )
+            break;
+
+        if( checkVisibility( aItem ) )
+        {
+            PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( aItem );
+            const BOX2I  bbox = barcode->GetSymbolPoly().BBox();
+
+            addAnchor( aItem->GetPosition(), ORIGIN, barcode, POINT_TYPE::PT_CENTER );
+            addRectPoints( bbox, *barcode );
+        }
 
         break;
 
@@ -1838,16 +1853,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         if( checkVisibility( aItem ) )
         {
-            const PCB_REFERENCE_IMAGE& image = static_cast<const PCB_REFERENCE_IMAGE&>( *aItem );
-            const REFERENCE_IMAGE&     refImg = image.GetReferenceImage();
-            const BOX2I                bbox = refImg.GetBoundingBox();
+            PCB_REFERENCE_IMAGE*   image = static_cast<PCB_REFERENCE_IMAGE*>( aItem );
+            const REFERENCE_IMAGE& refImg = image->GetReferenceImage();
+            const BOX2I            bbox = refImg.GetBoundingBox();
 
-            addRectPoints( bbox, *aItem );
+            addRectPoints( bbox, *image );
 
             if( refImg.GetTransformOriginOffset() != VECTOR2I( 0, 0 ) )
             {
-                addAnchor( aItem->GetPosition() + refImg.GetTransformOriginOffset(), ORIGIN,
-                           aItem, POINT_TYPE::PT_CENTER );
+                addAnchor( image->GetPosition() + refImg.GetTransformOriginOffset(), ORIGIN,
+                           image, POINT_TYPE::PT_CENTER );
             }
         }
 
@@ -1901,25 +1916,27 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
     // as some users will think it's fiddly; without 'activation', others will
     // think the snaps are intrusive.
     SNAP_MANAGER& snapManager = getSnapManager();
-    const auto    noRealItemsInAnchorAreInvolved = [&]( ANCHOR* aAnchor ) -> bool
-    {
-        // If no extension snaps are enabled, don't inhibit
-        static const bool haveExtensions = ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
 
-        if( !haveExtensions )
-            return false;
+    auto noRealItemsInAnchorAreInvolved =
+            [&]( ANCHOR* aAnchor ) -> bool
+            {
+                // If no extension snaps are enabled, don't inhibit
+                static const bool haveExtensions = ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
 
-        // If the anchor is not constructed, it may be involved (because it is one
-        // of the nearest anchors). The items will only be activated later, but don't
-        // discard the anchor yet.
-        const bool anchorIsConstructed = aAnchor->flags & ANCHOR_FLAGS::CONSTRUCTED;
+                if( !haveExtensions )
+                    return false;
 
-        if( !anchorIsConstructed )
-            return false;
+                // If the anchor is not constructed, it may be involved (because it is one
+                // of the nearest anchors). The items will only be activated later, but don't
+                // discard the anchor yet.
+                const bool anchorIsConstructed = aAnchor->flags & ANCHOR_FLAGS::CONSTRUCTED;
 
-        bool allRealAreInvolved = snapManager.GetConstructionManager().InvolvesAllGivenRealItems( aAnchor->items );
-        return !allRealAreInvolved;
-    };
+                if( !anchorIsConstructed )
+                    return false;
+
+                bool allRealAreInvolved = snapManager.GetConstructionManager().InvolvesAllGivenRealItems( aAnchor->items );
+                return !allRealAreInvolved;
+            };
 
     // Trim out items that aren't involved
     std::erase_if( anchorsAtMinDistance, noRealItemsInAnchorAreInvolved );
