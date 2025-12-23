@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-23 02:01+0000\n"
+"PO-Revision-Date: 2025-12-24 09:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -6753,7 +6753,6 @@ msgstr "Vonal színe"
 
 #: common/eda_shape.cpp:2496 eeschema/sch_shape.cpp:759
 #: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:812
-#, fuzzy
 msgid "Filled"
 msgstr "Kitöltve"
 
@@ -19772,8 +19771,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Ismétlődő VEZETÉKOSZTÁLY név: \"%s\", a(z) \"%s\" fájl %d. sorában (%d. "
-"karakter)"
+"Nem sikerült olvasni a fájlt: \"%s\"\n"
+"\"%s\" a %d. sorban, %d. oszlopban,"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -20029,9 +20028,8 @@ msgid "Symbol %s contains invalid character '%c'"
 msgstr "A(z) \"%s\" rajzjelben érvénytelen karakter található: \"%c\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:354
-#, fuzzy
 msgid "Invalid library identifier"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen könyvtár azonosító"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:409
 #, fuzzy
@@ -20065,9 +20063,9 @@ msgstr ""
 "%d. sor, %d. oszlop"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Érvénytelen rajzjel könyvtár azonosító"
+msgstr "Érvénytelen rajzjel alegység szám %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:476
 #, fuzzy, c-format
@@ -20630,9 +20628,8 @@ msgid "Simulation"
 msgstr "Szimuláció"
 
 #: eeschema/sch_sheet.cpp:894 eeschema/sch_symbol.cpp:2001
-#, fuzzy
 msgid "BOM"
-msgstr "BOM (bevásárlólista)..."
+msgstr "Anyagjegyzék"
 
 #: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:2013
 #: eeschema/sch_text.cpp:642 eeschema/sch_textbox.cpp:537
@@ -20695,7 +20692,6 @@ msgid "Missing parent"
 msgstr "Hiányzó alkatrészrajzolatok"
 
 #: eeschema/sch_symbol.cpp:2064
-#, fuzzy
 msgid "Undefined!!!"
 msgstr "Meghatározatlan!!!"
 
@@ -20704,7 +20700,6 @@ msgid "<Unknown>"
 msgstr "<Ismeretlen>"
 
 #: eeschema/sch_symbol.cpp:2097
-#, fuzzy
 msgid "No library defined!"
 msgstr "Nincs könyvtár definiálva!"
 
@@ -20741,49 +20736,42 @@ msgid "%d Columns"
 msgstr "Oszlopok"
 
 #: eeschema/sch_table.cpp:671 pcbnew/pcb_table.cpp:686
-#, fuzzy
 msgid "External Border"
-msgstr "Külső adat"
+msgstr "Külső keret"
 
 #: eeschema/sch_table.cpp:675 pcbnew/pcb_table.cpp:690
-#, fuzzy
 msgid "Header Border"
-msgstr "Papírméret és lapkeret"
+msgstr "Fejléc keret"
 
 #: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:699
 #: pcbnew/pcb_tablecell.cpp:224 pcbnew/pcb_textbox.cpp:827
-#, fuzzy
 msgid "Border Style"
-msgstr "Keret stílus:"
+msgstr "Keret stílus"
 
 #: eeschema/sch_table.cpp:692 pcbnew/pcb_table.cpp:707
-#, fuzzy
 msgid "Row Separators"
-msgstr "Generátor eltávolítása..."
+msgstr "Sor elválasztók"
 
 #: eeschema/sch_table.cpp:696 pcbnew/pcb_table.cpp:711
 msgid "Cell Separators"
-msgstr ""
+msgstr "Cella elválasztók"
 
 #: eeschema/sch_table.cpp:700 pcbnew/pcb_table.cpp:715
-#, fuzzy
 msgid "Separators Width"
-msgstr "Vezetősáv szélesség"
+msgstr "Elválasztók szélessége"
 
 #: eeschema/sch_table.cpp:705 pcbnew/pcb_table.cpp:720
-#, fuzzy
 msgid "Separators Style"
-msgstr "Generátor fájlok:"
+msgstr "Elválasztók stílusa"
 
 #: eeschema/sch_table.cpp:709 pcbnew/pcb_table.cpp:724
-#, fuzzy
 msgid "Separators Color"
-msgstr "Szín törlése"
+msgstr "Elválasztók színe"
 
 #: eeschema/sch_tablecell.cpp:52 pcbnew/pcb_tablecell.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Table Cell %s"
-msgstr "Táblázat név"
+msgstr "Táblázat cella %s"
 
 #: eeschema/sch_tablecell.cpp:152 pcbnew/pcb_tablecell.cpp:144
 msgid "Cell Width"
@@ -21145,9 +21133,8 @@ msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr "A jel neve tartalmazza ezt '[' vagy ezt ']' de nem érvényes a busznév"
 
 #: eeschema/schematic.cpp:1548
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "Kapcsolási rajz beállítások"
+msgstr "Kapcsolási rajz tisztázása"
 
 #: eeschema/sheet.cpp:76
 #, fuzzy, c-format
@@ -27371,7 +27358,6 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_drill.cpp:48
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
-#, fuzzy
 msgid "Generate Drill Files"
 msgstr "Fúrófájlok létrehozása"
 
