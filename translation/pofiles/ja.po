@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-14 20:00+0000\n"
+"PO-Revision-Date: 2025-12-24 09:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16449,9 +16449,8 @@ msgid "View presets:"
 msgstr "プリセットを表示:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "回路図の等価性"
+msgstr "回路図のバリアント:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -19703,9 +19702,8 @@ msgstr "デザイン ブロックとして保存する項目をいくつか選�
 #: eeschema/sch_design_block_utils.cpp:433
 #: eeschema/sch_design_block_utils.cpp:589
 #: pcbnew/pcb_design_block_utils.cpp:463 pcbnew/pcb_design_block_utils.cpp:538
-#, fuzzy
 msgid "Set Group Design Block Link"
-msgstr "デザイン ブロックからシートを描画"
+msgstr "デザイン ブロック グループ リンクを設定"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -24658,19 +24656,16 @@ msgid "Create a new design block from the current selection"
 msgstr "現在の選択箇所から新しいデザインブロックを作成する"
 
 #: eeschema/tools/sch_actions.cpp:151
-#, fuzzy
 msgid "Update Design Block from Current Sheet"
-msgstr "現在のシートから新しいデザインブロックを作成する"
+msgstr "現在のシートからデザインブロックを更新する"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "選択したデザインブロックを現在のシートに追加"
+msgstr "デザインブロック回路図を現在のシートに設定"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "デザインブロックライブラリの更新"
+msgstr "選択箇所からデザインブロックを更新"
 
 #: eeschema/tools/sch_actions.cpp:159
 #, fuzzy
@@ -31586,14 +31581,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "zip アーカイブからプロジェクト ファイルを解凍"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "ファインダーにプロジェクト フォルダーを表示"
+msgstr "ファインダーでプロジェクトを表示"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "ファインダーにプロジェクト フォルダーを表示"
+msgstr "ファインダーでプロジェクト フォルダーを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -39940,9 +39933,8 @@ msgid "Target areas:"
 msgstr "対象領域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "ルールエリアを描画"
+msgstr "ターゲットのルールエリア"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -54428,7 +54420,6 @@ msgid "Apply linked design block layout to selected group"
 msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
 
 #: pcbnew/tools/pcb_actions.cpp:514
-#, fuzzy
 msgid "Save Board as Design Block..."
 msgstr "現在の基板をデザイン ブロックとして保存..."
 
@@ -54437,19 +54428,16 @@ msgid "Create a new design block from the current board"
 msgstr "現在の基板から新しいデザインブロックを作成する"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "デザインブロックライブラリの更新"
+msgstr "基板からデザイン ブロックを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:529
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "選択されたデザインブロックを現在の基板に追加"
+msgstr "デザインブロックレイアウトを現在の基板に設定"
 
 #: pcbnew/tools/pcb_actions.cpp:536
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "現在の選択箇所から新しいデザインブロックを作成する"
+msgstr "現在の選択箇所からデザインブロックレイアウトを設定"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 msgid "Open in Footprint Editor"
