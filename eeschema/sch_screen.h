@@ -648,6 +648,8 @@ private:
     size_t getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol, std::vector<wxString>& aMatches );
 
 public:
+    bool IsZoomInitialized() const { return m_zoomInitialized; }
+
     /**
      * last value for the zoom level, useful in Eeschema when changing the current displayed
      * sheet to reuse the same zoom level when back to the sheet using this screen
