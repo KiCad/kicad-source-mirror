@@ -2508,10 +2508,33 @@ void SCH_SELECTION_TOOL::SyncSelection( const std::optional<SCH_SHEET_PATH>& tar
     if( !editFrame )
         return;
 
-    if( targetSheetPath && targetSheetPath != editFrame->Schematic().CurrentSheet() )
+    double targetZoom = 0.0;
+    VECTOR2D targetCenter;
+    bool targetZoomValid = false;
+    bool changedSheet = false;
+
+    if( targetSheetPath )
     {
-        editFrame->Schematic().SetCurrentSheet( *targetSheetPath );
-        editFrame->DisplayCurrentSheet();
+        SCH_SHEET_PATH path = targetSheetPath.value();
+
+        if( SCH_SCREEN* screen = path.LastScreen() )
+        {
+            targetZoom = screen->m_LastZoomLevel;
+            targetCenter = screen->m_ScrollCenter;
+            targetZoomValid = screen->IsZoomInitialized();
+        }
+
+        if( path != editFrame->Schematic().CurrentSheet() )
+        {
+            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &path );
+            changedSheet = true;
+        }
+    }
+
+    if( changedSheet && targetZoomValid && !m_frame->eeconfig()->m_CrossProbing.zoom_to_fit )
+    {
+        getView()->SetScale( targetZoom );
+        getView()->SetCenter( targetCenter );
     }
 
     ClearSelection( items.size() > 0 ? true /*quiet mode*/ : false );
