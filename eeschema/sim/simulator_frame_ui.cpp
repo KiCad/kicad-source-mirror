@@ -543,8 +543,7 @@ private:
 #define REFRESH_INTERVAL 50   // 20 frames/second.
 
 
-SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
-                                        SCH_EDIT_FRAME* aSchematicFrame ) :
+SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_EDIT_FRAME* aSchematicFrame ) :
         SIMULATOR_FRAME_UI_BASE( aSimulatorFrame ),
         m_SuppressGridEvents( 0 ),
         m_simulatorFrame( aSimulatorFrame ),
@@ -636,9 +635,7 @@ void SIMULATOR_FRAME_UI::CustomCursorsInit()
     for( size_t index = 0; index < std::size( m_cursorFormats ); index++ )
     {
         for( size_t index2 = 0; index2 < std::size( m_cursorFormats[0] ); index2++ )
-        {
             m_cursorFormatsDyn[index].push_back( m_cursorFormats[index][index2] );
-        }
     }
 
     // Dump string helper, tries to get the current higher cursor name to form the next one.
@@ -992,8 +989,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
                         attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
                         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
                         m_signalsGrid->SetAttr( row, COL_CURSOR_2 + i, attr );
-                        m_signalsGrid->SetCellValue( row, COL_CURSOR_2 + i,
-                                                     trace->GetCursor( i ) ? "1" : "0" );
+                        m_signalsGrid->SetCellValue( row, COL_CURSOR_2 + i, trace->GetCursor( i ) ? "1" : "0" );
                     }
                 }
             }
@@ -1106,9 +1102,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
         for( const std::string& portnum1 : portnums )
         {
             for( const std::string& portnum2 : portnums )
-            {
                 addSignal( wxString::Format( wxS( "S_%s_%s" ), portnum1, portnum2 ) );
-            }
         }
     }
 
@@ -1193,8 +1187,7 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
  * For user-defined signals we display the user-oriented signal name such as "V(out)-V(in)",
  * but the simulator vector we actually have to plot will be "user0" or some-such.
  */
-wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
-                                                       const wxString& aSignalName,
+wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab, const wxString& aSignalName,
                                                        int* aTraceType )
 {
     auto looksLikePower = []( const wxString& aExpression ) -> bool
@@ -1321,8 +1314,7 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
         }
     }
     else if( col == COL_CURSOR_1 || col == COL_CURSOR_2
-             || ( ( std::size( m_cursorFormatsDyn ) > std::size( m_cursorFormats ) )
-                  && col > COL_CURSOR_2 ) )
+             || ( std::size( m_cursorFormatsDyn ) > std::size( m_cursorFormats ) && col > COL_CURSOR_2 ) )
     {
         int    id = col == COL_CURSOR_1 ? 1 : 2;
 
@@ -1729,7 +1721,9 @@ void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
 
     if( std::find( m_multiRunState.tuners.begin(), m_multiRunState.tuners.end(), aTuner )
             != m_multiRunState.tuners.end() )
+    {
         clearMultiRunState( true );
+    }
 
     m_tunerOverrides.erase( aTuner );
 
@@ -1917,9 +1911,8 @@ void SIMULATOR_FRAME_UI::SetUserDefinedSignals( const std::map<int, wxString>& a
 }
 
 
-void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceType,
-                                      SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX,
-                                      bool aClearData )
+void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
+                                      std::vector<double>* aDataX, bool aClearData )
 {
     if( !m_simulatorFrame->SimFinished() && !simulator()->IsRunning())
     {
@@ -2108,10 +2101,9 @@ template <typename T, typename U, typename R>
 void SIMULATOR_FRAME_UI::signalsGridCursorUpdate( T t, U u, R r ) // t=cursor type/signals' grid col, u=cursor number/cursor "id", r=table's row
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-
-    wxString          signalName = m_signalsGrid->GetCellValue( r, COL_SIGNAL_NAME );
-    int               traceType = SPT_UNKNOWN;
-    wxString          vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
+    wxString      signalName = m_signalsGrid->GetCellValue( r, COL_SIGNAL_NAME );
+    int           traceType = SPT_UNKNOWN;
+    wxString      vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
 
     wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( r, static_cast<int>( t ) );
 
@@ -2195,10 +2187,7 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
             for( int i = 3; i < m_customCursorsCnt; i++ )
             {
                 int tm = i + 2;
-                signalsGridCursorUpdate(
-                        static_cast<SIGNALS_GRID_COLUMNS>( tm ),
-                        i,
-                        row );
+                signalsGridCursorUpdate( static_cast<SIGNALS_GRID_COLUMNS>( tm ), i, row );
             }
         }
     }
@@ -2208,103 +2197,104 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
 
 void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
-    auto quoteNetNames = [&]( wxString aExpression ) -> wxString
-    {
-        std::vector<bool> mask( aExpression.length(), false );
-
-        auto isNetnameChar = []( wxUniChar aChar ) -> bool
-        {
-            wxUint32 value = aChar.GetValue();
-
-            if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' )
-                || ( value >= 'a' && value <= 'z' ) )
+    auto quoteNetNames =
+            [&]( wxString aExpression ) -> wxString
             {
-                return true;
-            }
+                std::vector<bool> mask( aExpression.length(), false );
 
-            switch( value )
-            {
-            case '_':
-            case '/':
-            case '+':
-            case '-':
-            case '~':
-            case '.':
-                return true;
-            default:
-                break;
-            }
+                auto isNetnameChar =
+                        []( wxUniChar aChar ) -> bool
+                        {
+                            wxUint32 value = aChar.GetValue();
 
-            return false;
-        };
+                            if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' )
+                                || ( value >= 'a' && value <= 'z' ) )
+                            {
+                                return true;
+                            }
 
-        for( const auto& netname : m_netnames )
-        {
-            size_t pos = aExpression.find( netname );
+                            switch( value )
+                            {
+                            case '_':
+                            case '/':
+                            case '+':
+                            case '-':
+                            case '~':
+                            case '.':
+                                return true;
+                            default:
+                                break;
+                            }
 
-            while( pos != wxString::npos )
-            {
-                for( size_t i = 0; i < netname.length(); ++i )
+                            return false;
+                        };
+
+                for( const wxString& netname : m_netnames )
                 {
-                    mask[pos + i] = true; // Mark the positions of the netname
-                }
-                pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
-            }
-        }
+                    size_t pos = aExpression.find( netname );
 
-        for( size_t i = 0; i < aExpression.length(); ++i )
-        {
-            if( !mask[i] || ( i > 0 && mask[i - 1] ) )
-                continue;
+                    while( pos != wxString::npos )
+                    {
+                        for( size_t i = 0; i < netname.length(); ++i )
+                            mask[pos + i] = true; // Mark the positions of the netname
 
-            size_t j = i + 1;
-
-            while( j < aExpression.length() )
-            {
-                if( mask[j] )
-                {
-                    ++j;
-                    continue;
+                        pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
+                    }
                 }
 
-                if( isNetnameChar( aExpression[j] ) )
+                for( size_t i = 0; i < aExpression.length(); ++i )
                 {
-                    mask[j] = true;
-                    ++j;
+                    if( !mask[i] || ( i > 0 && mask[i - 1] ) )
+                        continue;
+
+                    size_t j = i + 1;
+
+                    while( j < aExpression.length() )
+                    {
+                        if( mask[j] )
+                        {
+                            ++j;
+                            continue;
+                        }
+
+                        if( isNetnameChar( aExpression[j] ) )
+                        {
+                            mask[j] = true;
+                            ++j;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
-                else
+
+                wxString quotedNetnames = "";
+                bool     startQuote = true;
+
+                // put quotes around all the positions that were found above
+                for( size_t i = 0; i < aExpression.length(); i++ )
                 {
-                    break;
+                    if( mask[i] && startQuote )
+                    {
+                        quotedNetnames = quotedNetnames + "\"";
+                        startQuote = false;
+                    }
+                    else if( !mask[i] && !startQuote )
+                    {
+                        quotedNetnames = quotedNetnames + "\"";
+                        startQuote = true;
+                    }
+
+                    wxString ch = aExpression[i];
+                    quotedNetnames = quotedNetnames + ch;
                 }
-            }
-        }
 
-        wxString quotedNetnames = "";
-        bool     startQuote = true;
+                if( !startQuote )
+                    quotedNetnames = quotedNetnames + "\"";
 
-        // put quotes around all the positions that were found above
-        for( size_t i = 0; i < aExpression.length(); i++ )
-        {
-            if( mask[i] && startQuote )
-            {
-                quotedNetnames = quotedNetnames + "\"";
-                startQuote = false;
-            }
-            else if( !mask[i] && !startQuote )
-            {
-                quotedNetnames = quotedNetnames + "\"";
-                startQuote = true;
-            }
-            wxString ch = aExpression[i];
-            quotedNetnames = quotedNetnames + ch;
-        }
-
-        if( !startQuote )
-        {
-            quotedNetnames = quotedNetnames + "\"";
-        }
-        return quotedNetnames;
-    };
+                return quotedNetnames;
+            };
 
     for( const auto& [ id, signal ] : m_userDefinedSignals )
     {
@@ -2355,8 +2345,7 @@ void SIMULATOR_FRAME_UI::applyTuners()
     }
 
     if( reporter.HasMessage() )
-        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" )
-                                           + reporter.GetMessages() );
+        DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" ) + reporter.GetMessages() );
 }
 
 bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
@@ -2552,10 +2541,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                     {
                         if( aCursorId < 3 )
                         {
-                            m_cursorFormatsDyn[aCursorId - 1][0].FromString(
-                                    aCursor_js["x_format"] );
-                            m_cursorFormatsDyn[aCursorId - 1][1].FromString(
-                                    aCursor_js["y_format"] );
+                            m_cursorFormatsDyn[aCursorId - 1][0].FromString( aCursor_js["x_format"] );
+                            m_cursorFormatsDyn[aCursorId - 1][1].FromString( aCursor_js["y_format"] );
                         }
                         else
                         {
@@ -3247,11 +3234,9 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
 
                     valColName = _( "Value" );
 
-                    if( !cursName.IsEmpty()
-                        && ( m_cursorsGrid->GetColLabelValue( COL_CURSOR_Y ) == cursName ) )
-                    {
+                    if( !cursName.IsEmpty() && m_cursorsGrid->GetColLabelValue( COL_CURSOR_Y ) == cursName )
                         valColName = cursName;
-                    }
+
                     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
                     break;
                 }
@@ -3601,9 +3586,7 @@ void SIMULATOR_FRAME_UI::prepareMultiRunState()
     if( !m_multiRunState.active )
     {
         if( tunersChanged || m_multiRunState.storedSteps > 0 || !m_multiRunState.traces.empty() )
-        {
             clearMultiRunState( true );
-        }
 
         m_multiRunState.tuners = multiTuners;
         m_multiRunState.steps = calculateMultiRunSteps( multiTuners );
