@@ -54,14 +54,21 @@ struct DRILL_LINE_ITEM
 
     bool operator==( const DRILL_LINE_ITEM& other ) const
     {
-        return xSize == other.xSize && ySize == other.ySize && shape == other.shape
-               && isPlated == other.isPlated && isPad == other.isPad && startLayer == other.startLayer
-               && stopLayer == other.stopLayer;
+        return xSize == other.xSize
+                && ySize == other.ySize
+                && shape == other.shape
+                && isPlated == other.isPlated
+                && isPad == other.isPad
+                && startLayer == other.startLayer
+                && stopLayer == other.stopLayer;
     }
 
     struct COMPARE
     {
-        COMPARE( COL_ID aColId, bool aAscending ) : colId( aColId ), ascending( aAscending ) {}
+        COMPARE( COL_ID aColId, bool aAscending ) :
+                colId( aColId ),
+                ascending( aAscending )
+        {}
 
         bool operator()( const DRILL_LINE_ITEM& aLeft, const DRILL_LINE_ITEM& aRight )
         {

@@ -109,10 +109,10 @@ void InitializeBoardStatisticsData( BOARD_STATISTICS_DATA& aData )
     aData.padEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ) ) );
     aData.padEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ) ) );
 
-    aData.padPropertyEntries.push_back(
-            BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>( PAD_PROP::CASTELLATED, _( "Castellated:" ) ) );
-    aData.padPropertyEntries.push_back(
-            BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>( PAD_PROP::PRESSFIT, _( "Press-fit:" ) ) );
+    aData.padPropertyEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>( PAD_PROP::CASTELLATED,
+                                                                               _( "Castellated:" ) ) );
+    aData.padPropertyEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>( PAD_PROP::PRESSFIT,
+                                                                               _( "Press-fit:" ) ) );
 
     aData.viaEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<VIATYPE>( VIATYPE::THROUGH, _( "Through vias:" ) ) );
     aData.viaEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<VIATYPE>( VIATYPE::BLIND, _( "Blind vias:" ) ) );
@@ -169,8 +169,8 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
                 switch( footprint->GetSide() )
                 {
                 case F_Cu: entry.frontCount++; break;
-                case B_Cu: entry.backCount++; break;
-                default: break;
+                case B_Cu: entry.backCount++;  break;
+                default:                       break;
                 }
 
                 break;
@@ -308,6 +308,7 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
 
     std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
     int                            minPadClearanceOuter = netSettings->GetDefaultNetclass()->GetClearance();
+
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         const SHAPE_POLY_SET& frontA = fp->GetCourtyard( F_CrtYd );
@@ -365,7 +366,8 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
     aBoard->RunOnChildren(
             [&]( BOARD_ITEM* child )
             {
-                if( child->Type() == PCB_FOOTPRINT_T || child->Type() == PCB_GROUP_T
+                if( child->Type() == PCB_FOOTPRINT_T
+                    || child->Type() == PCB_GROUP_T
                     || child->Type() == PCB_GENERATOR_T )
                 {
                     return;
@@ -577,25 +579,21 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
            << aUnitsProvider.MessageTextFromValue( aData.backFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA ) << wxS( "\n" );
 
     report << wxS( "- " ) << _( "Front component density" ) << wxS( ": " );
+
     if( aData.hasOutline )
-    {
         report << wxString::Format( "%.2f %", aData.frontFootprintDensity );
-    }
     else
-    {
         report << _( "unknown" );
-    }
+
     report << wxS( "\n" );
 
     report << wxS( "- " ) << _( "Back component density" ) << wxS( ": " );
+
     if( aData.hasOutline )
-    {
         report << wxString::Format( "%.2f %", aData.backFootprintDensity );
-    }
     else
-    {
         report << _( "unknown" );
-    }
+
     report << wxS( "\n" );
 
     report << _( "Pads" ) << wxS( "\n----\n" );
@@ -670,8 +668,8 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
         switch( drill.shape )
         {
         case PAD_DRILL_SHAPE::CIRCLE: shapeStr = _( "Round" ); break;
-        case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" ); break;
-        default: shapeStr = _( "???" ); break;
+        case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" );  break;
+        default:                      shapeStr = _( "???" );   break;
         }
 
         wxString platedStr = drill.isPlated ? _( "PTH" ) : _( "NPTH" );
@@ -745,17 +743,18 @@ wxString FormatBoardStatisticsJson( const BOARD_STATISTICS_DATA& aData, BOARD* a
         board["back_component_density"] = nlohmann::json();
     }
 
-    board["front_copper_area"] =
-            aUnitsProvider.MessageTextFromValue( aData.frontCopperArea, true, EDA_DATA_TYPE::AREA );
-    board["back_copper_area"] = aUnitsProvider.MessageTextFromValue( aData.backCopperArea, true, EDA_DATA_TYPE::AREA );
+    board["front_copper_area"] = aUnitsProvider.MessageTextFromValue( aData.frontCopperArea, true,
+                                                                      EDA_DATA_TYPE::AREA );
+    board["back_copper_area"] = aUnitsProvider.MessageTextFromValue( aData.backCopperArea, true,
+                                                                     EDA_DATA_TYPE::AREA );
     board["min_track_clearance"] = aUnitsProvider.MessageTextFromValue( aData.minClearanceTrackToTrack );
     board["min_track_width"] = aUnitsProvider.MessageTextFromValue( aData.minTrackWidth );
     board["min_drill_diameter"] = aUnitsProvider.MessageTextFromValue( aData.minDrillSize );
     board["board_thickness"] = aUnitsProvider.MessageTextFromValue( aData.boardThickness );
-    board["front_footprint_area"] =
-            aUnitsProvider.MessageTextFromValue( aData.frontFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA );
-    board["back_footprint_area"] =
-            aUnitsProvider.MessageTextFromValue( aData.backFootprintCourtyardArea, true, EDA_DATA_TYPE::AREA );
+    board["front_footprint_area"] = aUnitsProvider.MessageTextFromValue( aData.frontFootprintCourtyardArea, true,
+                                                                         EDA_DATA_TYPE::AREA );
+    board["back_footprint_area"] = aUnitsProvider.MessageTextFromValue( aData.backFootprintCourtyardArea, true,
+                                                                        EDA_DATA_TYPE::AREA );
 
     if( aData.hasOutline )
     {

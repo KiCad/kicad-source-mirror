@@ -58,10 +58,8 @@
 #include <unordered_map>
 
 
-static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame,
-                                        const std::vector<PAD*>& aPads,
-                                        const wxString& aDialogTitle,
-                                        bool& aIncludeConnectedPads )
+static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame, const std::vector<PAD*>& aPads,
+                                        const wxString& aDialogTitle, bool& aIncludeConnectedPads )
 {
     if( aPads.empty() )
     {
@@ -228,7 +226,6 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* it : orderedPads )
         pads.push_back( static_cast<PAD*>( static_cast<BOARD_ITEM*>( it ) ) );
 
-
     // Record original nets and build selected set for quick membership tests
     std::vector<int>         originalNets( padsCount );
     std::unordered_set<PAD*> selectedPads;
@@ -241,6 +238,7 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
 
     // If all nets are the same, nothing to do
     bool allSame = true;
+
     for( size_t i = 1; i < padsCount; ++i )
     {
         if( originalNets[i] != originalNets[0] )
@@ -254,10 +252,11 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
         return 0;
 
     // Desired new nets are a cyclic rotation of original nets (like Swap positions)
-    auto newNetForIndex = [&]( size_t i )
-        {
-            return originalNets[( i + 1 ) % padsCount];
-        };
+    auto newNetForIndex =
+            [&]( size_t i )
+            {
+                return originalNets[( i + 1 ) % padsCount];
+            };
 
     // Take an event commit since we will eventually support this while actively routing the board
     BOARD_COMMIT  localCommit( this );
@@ -313,9 +312,7 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
     bool includeConnectedPads = true;
 
     if( !PromptConnectedPadDecision( frame(), nonSelectedPadsToChange, _( "Swap Pad Nets" ), includeConnectedPads ) )
-    {
         return 0;
-    }
 
     // Apply changes
     // 1) Selected pads get their new nets directly
@@ -365,10 +362,12 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    auto showError = [this]()
-        {
-            frame()->ShowInfoBarError( _( "Gate swapping must be performed on pads within one multi-gate footprint." ) );
-        };
+    auto showError =
+            [this]()
+            {
+                frame()->ShowInfoBarError( _( "Gate swapping must be performed on pads within one multi-gate "
+                                              "footprint." ) );
+            };
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection( &EDIT_TOOL::PadFilter );
 
@@ -388,7 +387,9 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
         FOOTPRINT* fp = static_cast<PAD*>( static_cast<BOARD_ITEM*>( it ) )->GetParentFootprint();
 
         if( !targetFp )
+        {
             targetFp = fp;
+        }
         else if( fp && targetFp != fp )
         {
             fail = true;
@@ -462,9 +463,7 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
                 continue;
 
             if( units[i].m_pins.size() == units[sourceIdx].m_pins.size() && units[i].m_unitName == targetUnitByName )
-            {
                 targetIdx = static_cast<int>( i );
-            }
         }
 
         if( targetIdx < 0 )

@@ -28,21 +28,22 @@ void CollectDrillLineItems( BOARD* board, std::vector<DRILL_LINE_ITEM>& out )
 {
     out.clear();
 
-    auto addOrIncrement = [&]( const DRILL_LINE_ITEM& d )
-        {
-            for( DRILL_LINE_ITEM& e : out )
+    auto addOrIncrement =
+            [&]( const DRILL_LINE_ITEM& d )
             {
-                if( e == d )
+                for( DRILL_LINE_ITEM& e : out )
                 {
-                    e.m_Qty++;
-                    return;
+                    if( e == d )
+                    {
+                        e.m_Qty++;
+                        return;
+                    }
                 }
-            }
 
-            DRILL_LINE_ITEM n = d;
-            n.m_Qty = 1;
-            out.push_back( n );
-        };
+                DRILL_LINE_ITEM n = d;
+                n.m_Qty = 1;
+                out.push_back( n );
+            };
 
     if( !board )
         return;
