@@ -60,8 +60,15 @@ std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const SPICE_ITEM&
 {
     std::vector<std::string> currentNames;
 
-    for( const SIM_MODEL_PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
+    if( GetPins().size() == 2 )
+    {
+        currentNames.push_back( fmt::format( "I({})", ItemName( aItem ) ) );
+    }
+    else
+    {
+        for( const SIM_MODEL_PIN& pin : GetPins() )
+            currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
+    }
 
     return currentNames;
 }
