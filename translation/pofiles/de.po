@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"PO-Revision-Date: 2025-12-25 13:00+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -24942,19 +24942,16 @@ msgid "Update Design Block from Current Sheet"
 msgstr "Designblock von aktueller Schaltplanseite aktualisieren"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
+msgstr "Aktuelle Schaltplanseite als Designblock-Schaltplan nutzen"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "Designblock-Bibliotheken aktualisieren"
+msgstr "Designblock auf Auswahl aktualisieren"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "Neuen Designblock aus aktueller Auswahl erstellen"
+msgstr "Aktuelle Auswahl als Designblock-Schaltplan nutzen"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:542
 msgid "Delete Design Block"
@@ -31999,14 +31996,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Projektdateien aus einem Zip-Archiv entpacken"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Projektverzeichnis in Dateimanager anzeigen"
+msgstr "Projekt im Dateimanager anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Projektverzeichnis in Dateimanager anzeigen"
+msgstr "Projektordner im Dateimanager anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -40484,9 +40479,8 @@ msgid "Target areas:"
 msgstr "Zielfläche:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "Regelbereich zeichnen"
+msgstr "Ziel-Regelbereich"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -55182,28 +55176,24 @@ msgid "Apply linked design block layout to selected group"
 msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:514
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Aktuelle Platine als Designblock speichern..."
+msgstr "Platine als Designblock speichern..."
 
 #: pcbnew/tools/pcb_actions.cpp:515
 msgid "Create a new design block from the current board"
 msgstr "Neuen Designblock aus aktueller Leiterplatte erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Designblock-Bibliotheken aktualisieren"
+msgstr "Designblock von Platine aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:529
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Gewählten Designblock in aktuelle Leiterplatte einfügen"
+msgstr "Aktuelle Platine als Designblock-Layout nutzen"
 
 #: pcbnew/tools/pcb_actions.cpp:536
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Neuen Designblock aus aktueller Auswahl erstellen"
+msgstr "Aktuelle Auswahl als Designblock-Layout nutzen"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 msgid "Open in Footprint Editor"
