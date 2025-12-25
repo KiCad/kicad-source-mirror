@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"PO-Revision-Date: 2025-12-25 13:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -24668,9 +24668,8 @@ msgid "Update Design Block from Selection"
 msgstr "選択箇所からデザインブロックを更新"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "現在の選択箇所から新しいデザインブロックを作成する"
+msgstr "現在の選択箇所からデザインブロックを更新する"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:542
 msgid "Delete Design Block"
@@ -37214,7 +37213,7 @@ msgstr "回路図の等価性 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:109 pcbnew/tools/pcb_actions.cpp:464
 msgid "Design Rules Checker"
-msgstr "デザインルール チェッカー"
+msgstr "デザインルール チェッカー(DRC)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -41295,7 +41294,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
 msgid "Use mouse path to set track posture"
-msgstr "マウスの軌跡を配線の姿勢を設定に使用"
+msgstr "マウスの軌跡を利用して配線の姿勢を設定"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:108
 msgid ""
@@ -54405,7 +54404,7 @@ msgstr "作成中の外形を閉じます"
 
 #: pcbnew/tools/pcb_actions.cpp:465
 msgid "Show the design rules checker window"
-msgstr "デザインルール チェッカーのウィンドウを表示"
+msgstr "デザインルール チェッカー(DRC)のウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:474
 msgid "Add selected design block to current board"
