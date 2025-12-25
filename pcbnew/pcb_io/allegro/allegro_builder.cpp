@@ -37,6 +37,7 @@
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 
 using namespace ALLEGRO;
@@ -1045,6 +1046,158 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
             layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
             break;
+        case PADSTACK_COMPONENT::TYPE_ROUNDED_RECTANGLE:
+        {
+            layerCuProps->shape.shape = PAD_SHAPE::ROUNDRECT;
+            layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+
+            int minDim = std::min( std::abs( padComp.m_W ), std::abs( padComp.m_H ) );
+
+            if( padComp.m_Z1.has_value() && padComp.m_Z1.value() > 0 && minDim > 0 )
+                layerCuProps->shape.round_rect_radius_ratio = padComp.m_Z1.value() / (double) minDim;
+            else
+                layerCuProps->shape.round_rect_radius_ratio = 0.25;
+
+            break;
+        }
+        case PADSTACK_COMPONENT::TYPE_CHAMFERED_RECTANGLE:
+        {
+            layerCuProps->shape.shape = PAD_SHAPE::CHAMFERED_RECT;
+            layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+
+            int minDim = std::min( std::abs( padComp.m_W ), std::abs( padComp.m_H ) );
+
+            if( padComp.m_Z1.has_value() && padComp.m_Z1.value() > 0 && minDim > 0 )
+                layerCuProps->shape.chamfered_rect_ratio = padComp.m_Z1.value() / (double) minDim;
+            else
+                layerCuProps->shape.chamfered_rect_ratio = 0.25;
+
+            layerCuProps->shape.chamfered_rect_positions = RECT_CHAMFER_ALL;
+            break;
+        }
+        case PADSTACK_COMPONENT::TYPE_OCTAGON:
+        {
+            // Approximate octagon as a round rectangle with ~29.3% corner radius
+            // (tan(22.5°) ≈ 0.414, half of that as ratio ≈ 0.207, but visually 0.293 is closer)
+            layerCuProps->shape.shape = PAD_SHAPE::CHAMFERED_RECT;
+            layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.chamfered_rect_ratio = 1.0 - 1.0 / sqrt( 2.0 );
+            layerCuProps->shape.chamfered_rect_positions = RECT_CHAMFER_ALL;
+            break;
+        }
+        case PADSTACK_COMPONENT::TYPE_SHAPE_SYMBOL:
+        {
+            // Custom shape defined by a 0x28 polygon. Walk the shape's segments and build
+            // a polygon primitive for this pad.
+            const BLK_0x28_SHAPE* shapeData =
+                    expectBlockByKey<BLK_0x28_SHAPE>( padComp.m_StrPtr, 0x28 );
+
+            if( !shapeData )
+            {
+                wxLogTrace( traceAllegroBuilder,
+                            "Padstack %s: SHAPE_SYMBOL on layer %zu has no 0x28 shape at %#010x",
+                            padStackName, i, padComp.m_StrPtr );
+                break;
+            }
+
+            SHAPE_LINE_CHAIN outline;
+            const LL_WALKER  segWalker{ shapeData->m_FirstSegmentPtr, shapeData->m_Key, m_brdDb };
+
+            for( const BLOCK_BASE* segBlock : segWalker )
+            {
+                switch( segBlock->GetBlockType() )
+                {
+                case 0x01:
+                {
+                    const auto& arc =
+                            static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
+                    VECTOR2I start = scale( { arc.m_StartX, arc.m_StartY } );
+                    VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
+                    VECTOR2I center =
+                            scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
+
+                    if( start == end )
+                    {
+                        SHAPE_ARC shapeArc( center, start, ANGLE_360 );
+                        outline.Append( shapeArc );
+                    }
+                    else
+                    {
+                        bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
+
+                        EDA_ANGLE startAngle( start - center );
+                        EDA_ANGLE endAngle( end - center );
+                        startAngle.Normalize();
+                        endAngle.Normalize();
+                        EDA_ANGLE arcAngle = endAngle - startAngle;
+
+                        if( clockwise && arcAngle < ANGLE_0 )
+                            arcAngle += ANGLE_360;
+
+                        if( !clockwise && arcAngle > ANGLE_0 )
+                            arcAngle -= ANGLE_360;
+
+                        SHAPE_ARC shapeArc( center, start, arcAngle );
+                        outline.Append( shapeArc );
+                    }
+                    break;
+                }
+                case 0x15:
+                case 0x16:
+                case 0x17:
+                {
+                    const auto& seg =
+                            static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock )
+                                    .GetData();
+                    VECTOR2I start = scale( { seg.m_StartX, seg.m_StartY } );
+
+                    if( outline.PointCount() == 0 || outline.CLastPoint() != start )
+                        outline.Append( start );
+
+                    VECTOR2I end = scale( { seg.m_EndX, seg.m_EndY } );
+                    outline.Append( end );
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+
+            if( outline.PointCount() >= 3 )
+            {
+                outline.SetClosed( true );
+
+                layerCuProps->shape.shape = PAD_SHAPE::CUSTOM;
+                layerCuProps->shape.anchor_shape = PAD_SHAPE::CIRCLE;
+
+                // Anchor size based on the shape's bounding box center
+                BOX2I bbox = outline.BBox();
+                int anchorSize = static_cast<int>(
+                        std::min( bbox.GetWidth(), bbox.GetHeight() ) / 4 );
+
+                if( anchorSize < 1 )
+                    anchorSize = 1;
+
+                layerCuProps->shape.size = VECTOR2I( anchorSize, anchorSize );
+
+                auto poly = std::make_shared<PCB_SHAPE>( nullptr, SHAPE_T::POLY );
+                poly->SetPolyShape( SHAPE_POLY_SET( outline ) );
+                poly->SetFilled( true );
+                poly->SetWidth( 0 );
+                layerCuProps->custom_shapes.push_back( poly );
+            }
+            else
+            {
+                wxLogTrace( traceAllegroBuilder,
+                            "Padstack %s: SHAPE_SYMBOL on layer %zu produced only %d points",
+                            padStackName, i, outline.PointCount() );
+            }
+
+            break;
+        }
         default:
             m_reporter.Report(
                     wxString::Format( "Padstack %s: unhandled copper pad shape type %d on layer %zu",
@@ -1057,10 +1210,9 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         {
             if( antiPadComp.m_Type != padComp.m_Type )
             {
-                m_reporter.Report( wxString::Format( "Copper layer %zu has an antipad of a different shape to the pad. The "
-                                                     "pad shape will be used.",
-                                                     i ),
-                                   RPT_SEVERITY_WARNING );
+                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu antipad shape %d "
+                            "differs from pad shape %d",
+                            padStackName, i, antiPadComp.m_Type, padComp.m_Type );
             }
 
             int clearanceX = scale( ( antiPadComp.m_W - padComp.m_W ) / 2 );
@@ -1068,18 +1220,16 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
             if( clearanceX && clearanceX != clearanceY )
             {
-                m_reporter.Report( wxString::Format( "Padstack %s: copper layer %zu has a unequal X and Y antipad clearance (%d vs %d). "
-                                "The X clearance will be used.",
-                                padStackName, i, clearanceX, clearanceY ),
-                        RPT_SEVERITY_WARNING );
+                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu unequal antipad "
+                            "clearance X=%d Y=%d",
+                            padStackName, i, clearanceX, clearanceY );
             }
 
             if( antiPadComp.m_X3 != 0 || antiPadComp.m_X4 != 0 )
             {
-                m_reporter.Report(
-                        wxString::Format( "Copper layer %zu has an antipad offset %d, %d, which is not supported.", i,
-                                          antiPadComp.m_X3, antiPadComp.m_X4 ),
-                        RPT_SEVERITY_WARNING );
+                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu antipad offset "
+                            "%d, %d",
+                            padStackName, i, antiPadComp.m_X3, antiPadComp.m_X4 );
             }
 
             layerCuProps->clearance = clearanceX;

@@ -894,16 +894,22 @@ struct PADSTACK_COMPONENT
     {
         TYPE_NULL = 0x00,
         TYPE_CIRCLE = 0x02,
-        TYPE_SQUARE= 0x05,
+        TYPE_OCTAGON = 0x03,
+        TYPE_CROSS = 0x04,
+        TYPE_SQUARE = 0x05,
         TYPE_RECTANGLE = 0x06,
+        TYPE_DIAMOND = 0x07,
         TYPE_OBLONG_X = 0x0b,
         TYPE_OBLONG_Y = 0x0c,
-        // Presumably:
-        // OCTAGON,
-        // POLYGON
-        // DONUT
-        // OBLONG
-        // etc
+        TYPE_HEXAGON_X = 0x0f,
+        TYPE_HEXAGON_Y = 0x10,
+        TYPE_TRIANGLE = 0x12,
+        TYPE_SHAPE_SYMBOL = 0x16,
+        TYPE_FLASH = 0x17,
+        TYPE_DONUT = 0x19,
+        TYPE_ROUNDED_RECTANGLE = 0x1b,
+        TYPE_CHAMFERED_RECTANGLE = 0x1c,
+        TYPE_NSIDED_POLYGON = 0x1e,
     };
 
     uint8_t m_Type;
