@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-12 09:00+0000\n"
+"PO-Revision-Date: 2025-12-25 17:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -33888,7 +33888,7 @@ msgstr "回路図の等価性 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:107 pcbnew/tools/pcb_actions.cpp:420
 msgid "Design Rules Checker"
-msgstr "デザインルール チェッカー"
+msgstr "デザインルール チェッカー(DRC)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -37582,7 +37582,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
 msgid "Use mouse path to set track posture"
-msgstr "マウスの軌跡を配線の姿勢を設定に使用"
+msgstr "マウスの軌跡を利用して配線の姿勢を設定"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:108
 msgid ""
@@ -48995,7 +48995,7 @@ msgstr "作成中の外形を閉じます"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Show the design rules checker window"
-msgstr "デザインルール チェッカーのウィンドウを表示"
+msgstr "デザインルール チェッカー(DRC)のウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Open in Footprint Editor"
