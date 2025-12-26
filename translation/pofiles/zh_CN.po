@@ -39,13 +39,14 @@
 # yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025.
 # Li Yi <yilibj@gmail.com>, 2025.
 # CharlieYu <charlieyu4994@outlook.com>, 2025.
+# aisuneko icecat <iceneko@protonmail.ch>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-23 02:01+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-12-26 14:00+0000\n"
+"Last-Translator: aisuneko icecat <iceneko@protonmail.ch>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5758,7 +5759,7 @@ msgstr "更新"
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
-msgstr ""
+msgstr "允许连接到互联网以检查 KiCad 和已安装的插件更新？"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1333
@@ -9324,6 +9325,9 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad 初次启动，或者有配置文件缺失。\n"
+"\n"
+"让我们花一些时间配置基本设置。您也可以随时在“偏好设置”对话框中更改这些设置。"
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
@@ -9337,7 +9341,7 @@ msgstr "KiCad 配置"
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
-msgstr ""
+msgstr "您确定吗？  如果您取消 KiCad 配置，将采用默认设置。"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
 msgid "Symbol library table"
@@ -9871,7 +9875,7 @@ msgstr "导出表格为 CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
-msgstr ""
+msgstr "导出带有解析后变量的表格内容到 CSV 文件"
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
@@ -9897,9 +9901,8 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "保持弧线中心, 调整半径"
 
 #: common/tool/actions.cpp:601
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
-msgstr "切换弧线编辑模式到保持中心、调整半径和端点"
+msgstr "切换弧线编辑模式到端点移动时调整半径"
 
 #: common/tool/actions.cpp:608
 msgid "Cycle Arc Editing Mode"
@@ -9970,7 +9973,7 @@ msgstr "自适应缩放"
 
 #: common/tool/actions.cpp:721
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "当存在或编辑过对象时放大到工作表区域"
 
 #: common/tool/actions.cpp:728
 msgid "Zoom to All Objects"
@@ -10738,14 +10741,15 @@ msgstr "库描述"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:725
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
 "保存库表时出错: \n"
 "\n"
-"%s"
+"\n"
+"%s\n"
+"\n"
 
 #: common/widgets/design_block_pane.cpp:295
 msgid "Please select a library to delete."
@@ -16747,8 +16751,9 @@ msgid "Net names"
 msgstr "网络名称"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
+#, fuzzy
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "优先交换原理图符号而不是标签"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
@@ -17266,7 +17271,7 @@ msgstr "当前未安装任何数据源。"
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:136
 msgid "Installed data sources are listed above."
-msgstr ""
+msgstr "上面列出了已安装的数据源。"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:282
 #, c-format
@@ -22129,7 +22134,7 @@ msgstr "此矩阵行的数据过多。"
 #: eeschema/sim/kibis/ibis_parser.cpp:2043
 #: eeschema/sim/kibis/ibis_parser.cpp:2073
 msgid "Element location is outside the matrix."
-msgstr ""
+msgstr "元素位置在矩阵外。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2048
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
@@ -22178,7 +22183,7 @@ msgstr "未定义模型类型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
-msgstr ""
+msgstr "缺少 Submodel_type 的值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
@@ -23688,7 +23693,7 @@ msgstr "用户取消了封装重链接。"
 #: eeschema/tools/backannotate.cpp:754
 #, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr ""
+msgstr "将 %s 单位 %s 与单位 %s 交换。"
 
 #: eeschema/tools/backannotate.cpp:804
 msgid "true"
