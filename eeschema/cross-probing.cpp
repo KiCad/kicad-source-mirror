@@ -1089,8 +1089,11 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_RELOAD_LIB:
-        m_designBlocksPane->RefreshLibs();
-        SyncView();
+        if( m_designBlocksPane && m_designBlocksPane->IsShown() )
+        {
+            m_designBlocksPane->RefreshLibs();
+            SyncView();
+        }
         break;
 
     default:;
