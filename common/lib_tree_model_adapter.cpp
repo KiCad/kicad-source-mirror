@@ -324,7 +324,10 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
     // them, leading to mismatched tree contents.
     m_widget->Refresh();
     m_widget->Update();
-    wxYield();
+
+    // This causes crashes on Linux.  Until someone can figure out why, please leave this commented
+    // out.
+    // wxSafeYield();
 #endif
 
     if( firstMatch )
