@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-25 13:00+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2025-12-27 21:56+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -35634,13 +35634,15 @@ msgstr "反復回数を超えました（タイムアウト）"
 #: pcbnew/connectivity/topo_match.cpp:682
 #, c-format
 msgid "Component %s has %d pads but candidate %s has %d."
-msgstr ""
+msgstr "コンポーネント %s には %d 個のパッドがありますが、候補の %s は %d 個です。"
 
 #: pcbnew/connectivity/topo_match.cpp:695
 #, c-format
 msgid ""
 "Reference prefix mismatch: %s uses prefix '%s' but candidate %s uses '%s'."
 msgstr ""
+"ライブラリ接頭辞の不一致: %s は接頭辞 '%s' を使っていますが、候補の %s は "
+"'%s' を使っています。"
 
 #: pcbnew/connectivity/topo_match.cpp:704
 #: pcbnew/connectivity/topo_match.cpp:707
@@ -35651,6 +35653,8 @@ msgstr "(ライブラリID無し)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
+"ライブラリのリンクの不一致: %s は '%s' を期待していますが、候補の %s は '%s' "
+"です。"
 
 #: pcbnew/connectivity/topo_match.cpp:725
 #, c-format
