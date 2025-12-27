@@ -1104,23 +1104,28 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
             libFile = m_includes[value];
 
         if( !libFile.IsEmpty() )
+        {
             addField( wxS( "Sim.Library" ), libFile );
-
-        if( type == wxS( "X" ) )
-            addField( wxS( "Sim.Device" ), wxS( "SUBCKT" ) );
-        else
-            addField( wxS( "Sim.Device" ), wxS( "SPICE" ) );
+            addField( wxS( "Sim.Name" ), symbolName );
+        }
 
         wxString spiceLine = aLTSymbol.SymAttributes[wxS( "SPICELINE" )];
 
-        if( !spiceLine.IsEmpty() )
+        if( type == wxS( "X" ) )
         {
-            // TODO: append value
-            addField( wxS( "Sim.Params" ), spiceLine );
+            addField( wxS( "Sim.Device" ), wxS( "SUBCKT" ) );
+
+            if( !spiceLine.IsEmpty() )
+                addField( wxS( "Sim.Params" ), spiceLine );
         }
         else
         {
-            addField( wxS( "Sim.Params" ), "model=\"" + value + "\"" );
+            addField( wxS( "Sim.Device" ), wxS( "SPICE" ) );
+
+            if( !spiceLine.IsEmpty() )
+                addField( wxS( "Sim.Params" ), spiceLine );
+            else
+                addField( wxS( "Sim.Params" ), "model=\"" + value + "\"" );
         }
     }
 
