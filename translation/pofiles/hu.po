@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-26 21:00+0000\n"
+"PO-Revision-Date: 2025-12-27 21:56+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -23798,9 +23798,8 @@ msgid "Place Global Labels"
 msgstr "Globális címke"
 
 #: eeschema/tools/sch_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
-#, fuzzy
 msgid "Draw Tables"
-msgstr "Vonal rajzolása"
+msgstr "Táblázat rajzolása"
 
 #: eeschema/tools/sch_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
@@ -24063,7 +24062,6 @@ msgid "Edit text and graphics properties globally across schematic"
 msgstr "Rajzjel és szövegmező tulajdonságok szerkesztése"
 
 #: eeschema/tools/sch_actions.cpp:900
-#, fuzzy
 msgid "Symbol Properties..."
 msgstr "Rajzjel tulajdonságok..."
 
