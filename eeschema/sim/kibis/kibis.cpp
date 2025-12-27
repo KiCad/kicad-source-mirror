@@ -486,7 +486,7 @@ std::string KIBIS_MODEL::SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex, bo
 
     if( aDriver && HasPullup() )
     {
-        result += m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIEBUFF, true, PU, supply );
+        result += m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIEBUFF, false, PU, supply );
         result += "VmeasPU POWER " + PU_PWR + " 0\n";
         result += "BKU POWER " + DIE + " i=( -i(VmeasPU) * v(KU) )\n";
     }
@@ -726,7 +726,7 @@ std::string KIBIS_PIN::addDie( KIBIS_MODEL& aModel, const KIBIS_PARAMETER& aPara
         simul += aModel.m_pulldown.Spice( aIndex * 4 + 3, DIE, PD_GND, false, PD, supply );
 
     if( aModel.HasPullup() )
-        simul += aModel.m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIE, true, PU, supply );
+        simul += aModel.m_pullup.Spice( aIndex * 4 + 4, PU_PWR, DIE, false, PU, supply );
 
     return simul;
 }
