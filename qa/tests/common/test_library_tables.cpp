@@ -82,6 +82,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
         wxString filename;
         wxString expected_error;
         size_t expected_rows;
+        bool check_formatted = true;
     };
 
     std::vector<TESTCASE> cases = {
@@ -89,6 +90,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
         { .filename = "fp-lib-table", .expected_rows = 146 },
         { .filename = "nested-symbols", .expected_rows = 6 },
         { .filename = "cycle", .expected_rows = 2 },
+        { .filename = "sym-hand-edited", .expected_rows = 2, .check_formatted = false },
         { .filename = "corrupted", .expected_error = "Syntax error at line 6, column 9" },
         { .filename = "truncated", .expected_error = "Syntax error at line 11, column 1" }
     };
@@ -96,7 +98,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
     wxFileName fn( KI_TEST::GetTestDataRootDir(), wxEmptyString );
     fn.AppendDir( "libraries" );
 
-    for( const auto& [filename, expected_error, expected_rows] : cases )
+    for( const auto& [filename, expected_error, expected_rows, check_formatted] : cases )
     {
         BOOST_TEST_CONTEXT( filename )
         {
@@ -114,7 +116,7 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
                                                      expected_error, table.ErrorDescription() ) );
 
             // Non-parsed tables can't be formatted
-            if( !table.IsOk() )
+            if( !table.IsOk() || !check_formatted )
                 continue;
 
             std::ifstream inFp;

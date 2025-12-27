@@ -105,14 +105,14 @@ struct TABLE_VERSION : seq<
 struct HIDDEN_MARKER : seq< LPAREN, KEYWORDS::HIDDEN, RPAREN > {};
 struct DISABLED_MARKER : seq< LPAREN, KEYWORDS::DISABLED, RPAREN > {};
 
+struct LIB_ROW_MEMBER : sor< LIB_PROPERTY, HIDDEN_MARKER, DISABLED_MARKER > {};
+
 // (lib (name ...)(type ...)...)
 struct LIB_ROW : if_must<
         pad< LPAREN, space >,
         KEYWORDS::LIB,
         plus< space >,
-        plus< pad< LIB_PROPERTY, space > >,
-        pad_opt<HIDDEN_MARKER, space>,
-        pad_opt<DISABLED_MARKER, space>,
+        plus< pad< LIB_ROW_MEMBER, space > >,
         pad< RPAREN, space>
         > {};
 

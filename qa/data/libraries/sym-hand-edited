@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Valve")(type "KiCad")(uri "${KICAD7_SYMBOL_DIR}/Valve.kicad_sym")(options "")(descr "Valve symbols")(disabled)(hidden))
+  (lib (name "Video")(type "KiCad")(uri "${KICAD7_SYMBOL_DIR}/Video.kicad_sym")(options "")(descr "Video symbols")(hidden)(disabled))
+)
