@@ -20,18 +20,37 @@
 #include <singleton.h>
 #include <bs_thread_pool.hpp>
 #include <gal/opengl/gl_context_mgr.h>
+#include <thread_pool.h>
 
 
 KICAD_SINGLETON::~KICAD_SINGLETON()
 {
-    // This will wait for all threads to finish and then join them to the main thread
-    delete m_ThreadPool;
+    // Shutdown() should have been called before static destruction.
+    // If not, we still try to clean up, but this may crash on macOS
+    // during static destruction due to condition variable issues.
+    Shutdown();
+}
 
-    m_ThreadPool = nullptr;
 
-    m_GLContextManager->DeleteAll();
-    delete m_GLContextManager;
-    m_GLContextManager = nullptr;
+void KICAD_SINGLETON::Shutdown()
+{
+    // This will wait for all threads to finish and then join them to the main thread.
+    // Must be called before static destruction begins to avoid crashes on macOS.
+    if( m_ThreadPool )
+    {
+        delete m_ThreadPool;
+        m_ThreadPool = nullptr;
+
+        // Clear the cached thread pool pointer to prevent dangling reference
+        InvalidateKiCadThreadPool();
+    }
+
+    if( m_GLContextManager )
+    {
+        m_GLContextManager->DeleteAll();
+        delete m_GLContextManager;
+        m_GLContextManager = nullptr;
+    }
 }
 
 

@@ -26,6 +26,7 @@
 #include <thread_pool.h>
 
 static thread_pool* tp = nullptr;
+static bool         tp_owned = false;  // True if we created the thread pool ourselves
 
 thread_pool& GetKiCadThreadPool()
 {
@@ -36,6 +37,7 @@ thread_pool& GetKiCadThreadPool()
     if( PGM_BASE* pgm = PgmOrNull() )
     {
         tp = &pgm->GetThreadPool();
+        tp_owned = false;
         return *tp;
     }
 
@@ -43,6 +45,20 @@ thread_pool& GetKiCadThreadPool()
     // so we need to create our own thread pool
     int num_threads = std::max( 0, ADVANCED_CFG::GetCfg().m_MaximumThreads );
     tp = new thread_pool( num_threads );
+    tp_owned = true;
 
     return *tp;
+}
+
+
+void InvalidateKiCadThreadPool()
+{
+    // If we own the thread pool (scripting context), delete it
+    if( tp && tp_owned )
+    {
+        delete tp;
+    }
+
+    tp = nullptr;
+    tp_owned = false;
 }
