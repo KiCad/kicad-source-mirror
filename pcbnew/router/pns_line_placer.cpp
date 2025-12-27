@@ -1850,10 +1850,24 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
             if( !( line.ContainsLink( seg ) ) && line.SegmentCount() )
             {
+                // Don't remove locked tracks
+                bool hasLockedSegment = false;
                 for( LINKED_ITEM* ss : line.Links() )
-                    toErase.insert( ss );
+                {
+                    if( ss->IsLocked() )
+                    {
+                        hasLockedSegment = true;
+                        break;
+                    }
+                }
 
-                removedCount++;
+                if( !hasLockedSegment )
+                {
+                    for( LINKED_ITEM* ss : line.Links() )
+                        toErase.insert( ss );
+
+                    removedCount++;
+                }
             }
         }
 
