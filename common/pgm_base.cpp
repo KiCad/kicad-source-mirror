@@ -186,6 +186,13 @@ void PGM_BASE::Destroy()
 #ifdef _MSC_VER
     winrt::uninit_apartment();
 #endif
+
+    // Shut down the thread pool explicitly here, before static destruction begins.
+    // On macOS, if the thread pool destructor runs during static destruction
+    // (via __cxa_finalize_ranges), the condition variables may be in an invalid state,
+    // causing a crash. By destroying the thread pool here, we ensure it's cleaned up
+    // while the C++ runtime is still in a valid state.
+    m_singleton.Shutdown();
 }
 
 

@@ -42,6 +42,16 @@ public:
 
     ~KICAD_SINGLETON();
 
+    /**
+     * Explicitly shut down and destroy the thread pool and GL context manager.
+     *
+     * This must be called before static destruction begins to avoid crashes on macOS
+     * where the thread pool destructor tries to wait on condition variables during
+     * static destruction, after other statics have already been destroyed.
+     *
+     * After calling Shutdown(), the destructor becomes a no-op.
+     */
+    void Shutdown();
 
     void Init();
 

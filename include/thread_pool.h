@@ -39,5 +39,14 @@ using thread_pool = BS::priority_thread_pool;
  */
 APIEXPORT thread_pool& GetKiCadThreadPool();
 
+/**
+ * Invalidate the cached thread pool pointer.
+ *
+ * This must be called after the thread pool owned by PGM_BASE is destroyed
+ * (via KICAD_SINGLETON::Shutdown()) to prevent dangling pointer access.
+ * Any subsequent calls to GetKiCadThreadPool() will re-initialize the cache.
+ */
+APIEXPORT void InvalidateKiCadThreadPool();
+
 
 #endif /* INCLUDE_THREAD_POOL_H_ */
