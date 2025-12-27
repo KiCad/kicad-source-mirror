@@ -586,7 +586,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
     if( aBBox )
     {
-        aBBox->Merge( aPosition - VECTOR2I( cursor.x * scaleFactor.x, ascender * abs( scaleFactor.y ) ) );
+        aBBox->Merge( aPosition - VECTOR2I( 0, ascender * abs( scaleFactor.y ) ) );
         aBBox->Merge( aPosition + VECTOR2I( cursor.x * scaleFactor.x, descender * abs( scaleFactor.y ) ) );
     }
 
