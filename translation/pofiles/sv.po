@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"PO-Revision-Date: 2025-12-27 21:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -24313,7 +24313,7 @@ msgstr "Uppdatera designblock från urval"
 
 #: eeschema/tools/sch_actions.cpp:159
 msgid "Set design block schematic to current selection"
-msgstr "Sätt desigblockets kretsschema till det aktuella urvalet"
+msgstr "Använd aktuellt urval som desigblockets kretsschema"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:542
 msgid "Delete Design Block"
