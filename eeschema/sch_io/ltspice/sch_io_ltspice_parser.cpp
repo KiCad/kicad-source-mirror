@@ -1055,6 +1055,13 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         else if( symbolName.StartsWith( wxS( "BI" ) ) )
             setupBehavioral( wxS( "I" ), wxS( "=" ) );
     }
+    else if( prefix == wxS( "T" ) )
+    {
+        aSymbol->SetValueFieldText( wxS( "${Sim.Params}" ) );
+
+        addField( wxS( "Sim.Device" ), wxS( "TLINE" ) );
+        addField( wxS( "Sim.Params" ), value );
+    }
     else if( prefix == wxS( "V" ) || symbolName == wxS( "I" ) )
     {
         addField( wxS( "Sim.Device" ), wxS( "SPICE" ) );
