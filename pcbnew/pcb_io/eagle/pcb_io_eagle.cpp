@@ -394,8 +394,11 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                 [&]( const std::shared_ptr<NETCLASS>& netclass )
                 {
                     // If Eagle has a clearance matrix then we'll build custom rules from that.
-                    // Netclasses should just be the board minimum clearance.
-                    netclass->SetClearance( KiROUND( bds.m_MinClearance ) );
+                    // For classes with a clearance-to-default, use that; otherwise use board minimum.
+                    if( !netclass->HasClearance() )
+                    {
+                        netclass->SetClearance( KiROUND( bds.m_MinClearance ) );
+                    }
 
                     if( netclass->GetTrackWidth() == INT_MAX )
                         netclass->SetTrackWidth( defaults.GetTrackWidth() );
@@ -2646,6 +2649,14 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
         eClasses.emplace_back( eClass );
         m_classMap[ eClass.number ] = netclass;
 
+        // Set netclass clearance to the clearance-to-default-class value
+        auto clearanceToDefaultIt = eClass.clearanceMap.find( wxT( "0" ) );
+
+        if( clearanceToDefaultIt != eClass.clearanceMap.end() )
+        {
+            netclass->SetClearance( clearanceToDefaultIt->second.ToPcbUnits() );
+        }
+
         // Get next class
         classNode = classNode->GetNext();
     }
@@ -2656,6 +2667,9 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
     {
         for( std::pair<const wxString&, ECOORD> entry : eClass.clearanceMap )
         {
+            if( entry.first == wxT( "0" ) )
+                continue;
+
             if( m_classMap[ entry.first ] != nullptr )
             {
                 wxString rule;
