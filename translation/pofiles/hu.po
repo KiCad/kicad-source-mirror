@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-27 21:56+0000\n"
+"PO-Revision-Date: 2025-12-28 23:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -3087,8 +3087,9 @@ msgid "Locked"
 msgstr "Zárolt"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
+#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr ""
+msgstr "Megakadályozza a csoport mozgatását a vásznon"
 
 #: common/dialogs/dialog_group_properties_base.cpp:52
 msgid "Group members:"
@@ -12446,7 +12447,7 @@ msgstr "(hiányzó fájl)"
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "A kiválasztott BOM generáló szkript %s nem található."
+msgstr "A kiválasztott anyagjegyzék generáló szkript %s nem található."
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -12871,7 +12872,6 @@ msgid "Update symbols matching library identifier:"
 msgstr "Érvénytelen rajzjel könyvtár azonosító"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:79
-#, fuzzy
 msgid "New library identifier:"
 msgstr "Új könyvtári azonosító:"
 
@@ -13033,9 +13033,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "KiCad rajzjel könyvtár fájl (*.lib)"
+msgstr "Adatbázis könyvtár beállítások"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, fuzzy, c-format
@@ -13048,7 +13047,7 @@ msgid "Available Candidates for %s "
 msgstr "Lehetséges jelöltek %s részére "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "Candidates count %d "
 msgstr "Lehetséges jelöltek száma %d "
 
@@ -13068,7 +13067,7 @@ msgid "Invalid symbol library identifier"
 msgstr "Érvénytelen rajzjel könyvtár azonosító"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol %s from library %s.\n"
 "\n"
@@ -14514,9 +14513,8 @@ msgid "Clear cell"
 msgstr "Cella törlése"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Legutóbbi Excellon fúrófájl megnyitása"
+msgstr "Törli a cella tartalmát"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
 msgid "Create Derived Symbol"
@@ -14552,9 +14550,8 @@ msgstr "Frissítés"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:387
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:435
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "Összes cseréje"
+msgstr "Bal panel összecsukása"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:552
 #, fuzzy, c-format
@@ -14632,21 +14629,19 @@ msgid "Symbol Name"
 msgstr "Rajzjel név"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1045
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Nem kerül a BOM listára"
+msgstr "Kihagyás az anyagjegyzékből"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1046
 #: eeschema/sch_sheet.cpp:1754 eeschema/sch_symbol.cpp:3572
 msgid "Exclude From Simulation"
-msgstr "Alkatrész kihagyása a szimulációból"
+msgstr "Kihagyás a szimulációból"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1047
 #: eeschema/sch_sheet.cpp:1751 eeschema/sch_symbol.cpp:1232
 #: eeschema/sch_symbol.cpp:3569
-#, fuzzy
 msgid "Exclude From Board"
-msgstr "Nem kerül a panelre"
+msgstr "Kihagyás a panelról"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/symbol_editor/symbol_editor.cpp:1737
@@ -14660,9 +14655,8 @@ msgstr "Lokális táp szimbólum"
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
 #: eeschema/fields_data_model.cpp:57
-#, fuzzy
 msgid "BOM Name"
-msgstr "Alap név"
+msgstr "Anyagjegyzék név"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:57
@@ -14900,9 +14894,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:167
-#, fuzzy
 msgid "Define as power symbol"
-msgstr "Rajzjel tápszimbólumként történő használata"
+msgstr "Definiálás tápszimbólumként"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid ""
@@ -14911,9 +14904,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Rajzjel tápszimbólumként történő használata"
+msgstr "Definiálás lokális tápszimbólumként"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:179
 msgid ""
@@ -15301,7 +15293,6 @@ msgstr "Grafikus stílus:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:251
-#, fuzzy
 msgid "Common to all &units in symbol"
 msgstr "Közös az összes részegységre"
 
@@ -15663,11 +15654,11 @@ msgid ""
 "This setting can be changed from the \"Preferences\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
-"Letiltja ezt az eszközt?\n"
-"Nincsenek változtatások.\n"
+"Elrejtsük ezt az eszközt?\n"
 "\n"
-"Ez a beállítás módosítható a \\\"Rajzjelkönyvtárak\\\" párbeszédablakban,\n"
-"és az eszköz manuálisan aktiválható a \\\"Eszközök\\\" menüben."
+"\n"
+"Ez a beállítás módosítható a \"Beállítások\" ablakban,\n"
+"és az eszköz manuálisan aktiválható a \"Eszközök\" menüben."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -16357,14 +16348,12 @@ msgid "Max time step:"
 msgstr "Időlépés:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
-#, fuzzy
 msgid "(optional; default min{tstep, (tstop-tstart)/50})"
-msgstr "(opcionális; alapértelmezetten 0)"
+msgstr "(opcionális; alapértelmezett min{tstep, (tstop-tstart)/50})"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
-#, fuzzy
 msgid "Use initial conditions"
-msgstr "Angolszász mértékegységek használata"
+msgstr "Kezdeti feltételek használata"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
 msgid "Input signals:"
@@ -17116,9 +17105,8 @@ msgstr "Alternatív hozzárendelés"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:492
 #: eeschema/lib_symbol.cpp:319 eeschema/symbol_editor/symbol_edit_frame.h:47
 #: eeschema/tools/sch_edit_tool.cpp:167
-#, fuzzy
 msgid "Standard"
-msgstr "Alapértelmezett"
+msgstr "Standard"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:144
 #, fuzzy
@@ -17312,7 +17300,7 @@ msgstr "A(z) \"%s\" fájl biztonsági mentése a(z) \"%s\" fájlba."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:489
 #: eeschema/dialogs/dialog_symbol_remap.cpp:505
 #: eeschema/dialogs/dialog_symbol_remap.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
 msgstr "A(z) \"%s\" fájl biztonsági mentése sikertelen.\n"
 
@@ -17456,9 +17444,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:590
 #: pcbnew/dialogs/dialog_text_properties.cpp:589
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Szöveg tulajdonságok"
+msgstr "Szöveg tulajdonságok szerkesztése"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
 msgid "Background fill"
@@ -17602,17 +17589,14 @@ msgid "User-defined Signals"
 msgstr "Felhasználó által megadott kezdőpont"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Vezetékek"
+msgstr "Vezeték/busz"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Buszok migrálása"
+msgstr "Vezetékek/buszok"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
-#, fuzzy
 msgid "Wire/bus width:"
 msgstr "Vezeték/busz szélesség:"
 
@@ -17622,7 +17606,6 @@ msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr "Kapcsolási rajz tervező"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
-#, fuzzy
 msgid "Wire & Bus Properties"
 msgstr "Vezeték & Busz tulajdonságok"
 
@@ -17688,9 +17671,8 @@ msgstr "Rajzjel szerkesztő"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:252
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:802
-#, fuzzy
 msgid "Color Preview"
-msgstr "Színválasztó"
+msgstr "Szín előnézet"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:443
 msgid "/path/to/sheet"
