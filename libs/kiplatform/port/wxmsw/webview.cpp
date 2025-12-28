@@ -28,12 +28,17 @@
 #include <json_common.h>
 
 #include <windows.h>
-#include <wrl/client.h>
-#include <wrl/event.h>
-#include <WebView2.h>
+
+// WebView2 does not exist when compiling on msys2/mingw. So disable cookies management
+// not buildable on msys2 (there are also compil issues with client.h and event.h)
+#if !defined(__MINGW32__)
+    #include <wrl/client.h>
+    #include <wrl/event.h>
+    #include <WebView2.h>
 
 using Microsoft::WRL::ComPtr;
 using Microsoft::WRL::Callback;
+#endif
 
 namespace KIPLATFORM::WEBVIEW
 {
@@ -47,6 +52,9 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
     if( !nativeBackend )
         return false;
+#if defined(__MINGW32__)
+    return false;
+#else
 
     ICoreWebView2* coreWebView = static_cast<ICoreWebView2*>( nativeBackend );
 
@@ -190,6 +198,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
     file.Write( jsonStr.c_str(), jsonStr.size() );
 
     return true;
+#endif
 }
 
 
@@ -205,6 +214,10 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
 
     if( !nativeBackend )
         return false;
+
+#if defined(__MINGW32__)
+    return false;
+#else
 
     ICoreWebView2* coreWebView = static_cast<ICoreWebView2*>( nativeBackend );
 
@@ -286,6 +299,7 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
     }
 
     return true;
+#endif
 }
 
 bool DeleteCookies( wxWebView* aWebView )
@@ -297,6 +311,9 @@ bool DeleteCookies( wxWebView* aWebView )
 
     if( !nativeBackend )
         return false;
+#if defined(__MINGW32__)
+    return false;
+#else
 
     ICoreWebView2* coreWebView = static_cast<ICoreWebView2*>( nativeBackend );
 
@@ -323,6 +340,7 @@ bool DeleteCookies( wxWebView* aWebView )
     }
 
     return true;
+#endif
 }
 
 } // namespace KIPLATFORM::WEBVIEW
