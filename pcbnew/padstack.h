@@ -301,6 +301,12 @@ public:
     static int Compare( const PADSTACK* aPadstackRef, const PADSTACK* aPadstackCmp );
 
     /**
+     * Check if the padstack has an explicit definition for the given layer.
+     * This is useful for detecting if a layer removal will cause data loss.
+     */
+    bool HasExplicitDefinitionForLayer( PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Return a measure of how likely the other object is to represent the same
      * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
      */

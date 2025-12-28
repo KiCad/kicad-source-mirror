@@ -263,6 +263,11 @@ public:
     }
     const VECTOR2I& GetSize( PCB_LAYER_ID aLayer ) const { return m_padStack.Size( aLayer ); }
 
+    bool HasExplicitDefinitionForLayer( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.HasExplicitDefinitionForLayer( aLayer );
+    }
+
     // These accessors are for the properties panel, which does not have the ability to deal with
     // custom padstacks where the properties can vary by layer.  The properties should be disabled
     // in the GUI when the padstack mode is set to anything other than NORMAL, but so that the code

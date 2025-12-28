@@ -1349,6 +1349,12 @@ int PADSTACK::Compare( const PADSTACK* aLeft, const PADSTACK* aRight )
 }
 
 
+bool PADSTACK::HasExplicitDefinitionForLayer( PCB_LAYER_ID aLayer ) const
+{
+    return m_copperProps.count( aLayer ) > 0;
+}
+
+
 double PADSTACK::Similarity( const PADSTACK& aOther ) const
 {
     // TODO: Implement similarity

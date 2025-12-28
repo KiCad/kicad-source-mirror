@@ -38,6 +38,7 @@
 #include <pcb_track.h>
 #include <panel_setup_layers.h>
 #include <board_stackup_manager/panel_board_stackup.h>
+#include <dialogs/dialog_items_list.h>
 
 #include <wx/choicdlg.h>
 #include <wx/msgdlg.h>
@@ -888,11 +889,64 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     if( !removedLayers.empty() )
     {
-        if( !IsOK( parent, _( "Items have been found on removed layers. This operation will "
-                              "delete all items from removed layers and cannot be undone.\n"
-                              "Do you wish to continue?" ) ) )
+        std::vector<BOARD_ITEM*> items;
+        std::vector<wxString>    itemDescriptions;
+
+        for( PCB_LAYER_ID layer : removedLayers )
         {
-            return false;
+            PCB_LAYER_COLLECTOR collector;
+            collector.SetLayerId( layer );
+            collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
+
+            for( int i = 0; i < collector.GetCount(); i++ )
+            {
+                BOARD_ITEM* item = collector[i];
+
+                if( item->Type() == PCB_FOOTPRINT_T || item->GetParentFootprint() )
+                    continue;
+
+                items.push_back( item );
+                itemDescriptions.push_back( item->GetItemDescription( m_frame, true ) );
+            }
+
+            for( FOOTPRINT* footprint : m_pcb->Footprints() )
+            {
+                for( PAD* pad : footprint->Pads() )
+                {
+                    if( pad->HasExplicitDefinitionForLayer( layer ) )
+                    {
+                        items.push_back( pad );
+                        itemDescriptions.push_back( wxString::Format( _( "Pad %s of %s on %s" ),
+                                                                      pad->GetNumber(),
+                                                                      footprint->GetReference(),
+                                                                      m_pcb->GetLayerName( layer ) ) );
+                    }
+                }
+            }
+        }
+
+        if( !items.empty() )
+        {
+            DIALOG_ITEMS_LIST dlg( parent, _( "Warning" ),
+                                   _( "Items have been found on removed layers. This operation will "
+                                      "delete all items from removed layers and cannot be undone." ),
+                                   _( "Show Details" ) );
+
+            dlg.AddItems( itemDescriptions );
+
+            dlg.SetSelectionCallback(
+                    [&]( int index )
+                    {
+                        if( index >= 0 && index < (int) items.size() )
+                        {
+                            m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
+                            m_frame->GetToolManager()->RunAction( ACTIONS::selectItem, static_cast<EDA_ITEM*>( items[index] ) );
+                            m_frame->GetCanvas()->Refresh();
+                        }
+                    } );
+
+            if( dlg.ShowModal() != wxID_OK )
+                return false;
         }
     }
 
@@ -991,8 +1045,31 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 
     for( PCB_LAYER_ID layer_id : curLayers )
     {
-        if( !newLayers[layer_id] && m_pcb->HasItemsOnLayer( layer_id ) )
-            removedLayers.push_back( layer_id );
+        if( !newLayers[layer_id] )
+        {
+            bool hasItems = m_pcb->HasItemsOnLayer( layer_id );
+
+            if( !hasItems )
+            {
+                // Check for pads with custom properties on this layer
+                for( FOOTPRINT* footprint : m_pcb->Footprints() )
+                {
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( pad->HasExplicitDefinitionForLayer( layer_id ) )
+                        {
+                            hasItems = true;
+                            break;
+                        }
+                    }
+                    if( hasItems )
+                        break;
+                }
+            }
+
+            if( hasItems )
+                removedLayers.push_back( layer_id );
+        }
     }
 
     return removedLayers;

@@ -108,6 +108,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_reference_image_properties_base.cpp
     dialogs/dialog_import_settings.cpp
     dialogs/dialog_import_settings_base.cpp
+    dialogs/dialog_items_list.cpp
     dialogs/dialog_imported_layers_base.cpp
     dialogs/dialog_map_layers.cpp
     dialogs/dialog_rule_area_properties.cpp
