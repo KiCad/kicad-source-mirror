@@ -79,6 +79,15 @@ T isqrt(T x)
 
 SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
+    // Handle zero-length segments (points) specially.
+    // The Intersects() check below doesn't handle this case correctly because
+    // the cross product with a zero vector is always zero, causing false positives.
+    if( A == B )
+        return aSeg.SquaredDistance( A );
+
+    if( aSeg.A == aSeg.B )
+        return SquaredDistance( aSeg.A );
+
     if( Intersects( aSeg ) )
         return 0;
 

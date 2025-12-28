@@ -293,6 +293,24 @@ static const std::vector<SEG_SEG_DISTANCE_CASE> seg_seg_dist_cases = {
         { { -20, 0 }, { -2, 0 } },
         2,
     },
+    {
+        "Zero-length segment A",
+        { { 0, 0 }, { 0, 0 } },
+        { { 10, 0 }, { 20, 0 } },
+        10,
+    },
+    {
+        "Zero-length segment B",
+        { { 10, 0 }, { 20, 0 } },
+        { { 0, 0 }, { 0, 0 } },
+        10,
+    },
+    {
+        "Both zero-length",
+        { { 0, 0 }, { 0, 0 } },
+        { { 10, 0 }, { 10, 0 } },
+        10,
+    },
 };
 // clang-format on
 
