@@ -21,15 +21,16 @@ class UP_DOWN_TREE;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
+#include <wx/stattext.h>
 #include <wx/choice.h>
-#include <wx/treectrl.h>
 #include <wx/sizer.h>
+#include <wx/treectrl.h>
+#include <widgets/split_button.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <widgets/split_button.h>
 #include <wx/listctrl.h>
 #include <wx/panel.h>
 
@@ -45,12 +46,13 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 	protected:
 		wxCheckBox* m_customToolbars;
 		wxStaticLine* m_staticline1;
+		wxStaticText* m_toolbarChoiceLabel;
 		wxChoice* m_tbChoice;
 		UP_DOWN_TREE* m_toolbarTree;
-		STD_BITMAP_BUTTON* m_btnToolDelete;
+		SPLIT_BUTTON* m_insertButton;
 		STD_BITMAP_BUTTON* m_btnToolMoveUp;
 		STD_BITMAP_BUTTON* m_btnToolMoveDown;
-		SPLIT_BUTTON* m_insertButton;
+		STD_BITMAP_BUTTON* m_btnToolDelete;
 		STD_BITMAP_BUTTON* m_btnAddTool;
 		wxListCtrl* m_actionsList;
 
@@ -60,9 +62,9 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 		virtual void onTbChoiceSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTreeBeginLabelEdit( wxTreeEvent& event ) { event.Skip(); }
 		virtual void onTreeEndLabelEdit( wxTreeEvent& event ) { event.Skip(); }
-		virtual void onToolDelete( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onToolMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onToolMoveDown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onToolDelete( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnAddAction( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onListItemActivated( wxListEvent& event ) { event.Skip(); }
 

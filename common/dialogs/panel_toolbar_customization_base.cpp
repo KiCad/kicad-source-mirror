@@ -18,10 +18,10 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_customToolbars = new wxCheckBox( this, wxID_ANY, _("Customize toolbars"), wxDefaultPosition, wxDefaultSize, 0 );
-	bPanelSizer->Add( m_customToolbars, 0, wxALL, 5 );
+	bPanelSizer->Add( m_customToolbars, 0, wxALL, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bPanelSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bPanelSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* m_customizeControls;
 	m_customizeControls = new wxFlexGridSizer( 1, 3, 0, 0 );
@@ -31,52 +31,62 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	m_customizeControls->SetFlexibleDirection( wxHORIZONTAL );
 	m_customizeControls->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bLeftCol;
+	bLeftCol = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bToolbarSizer;
+	bToolbarSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_toolbarChoiceLabel = new wxStaticText( this, wxID_ANY, _("Toolbar:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolbarChoiceLabel->Wrap( -1 );
+	bToolbarSizer->Add( m_toolbarChoiceLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxArrayString m_tbChoiceChoices;
 	m_tbChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_tbChoiceChoices, 0 );
 	m_tbChoice->SetSelection( 0 );
-	bSizer8->Add( m_tbChoice, 0, wxALL|wxEXPAND, 5 );
+	bToolbarSizer->Add( m_tbChoice, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bLeftCol->Add( bToolbarSizer, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_toolbarTree = new UP_DOWN_TREE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_LINES );
-	bSizer11->Add( m_toolbarTree, 1, wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_toolbarTree, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer10->Add( bSizer11, 1, wxEXPAND, 5 );
+	bSizer10->Add( bMargins, 1, wxEXPAND|wxBOTTOM, 3 );
 
 
-	bSizer8->Add( bSizer10, 1, wxEXPAND, 5 );
+	bLeftCol->Add( bSizer10, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerToolbarBtns;
 	bSizerToolbarBtns = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnToolDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerToolbarBtns->Add( m_btnToolDelete, 0, wxALL, 5 );
+	m_insertButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Insert separator" ), wxDefaultPosition );
+	bSizerToolbarBtns->Add( m_insertButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 	m_btnToolMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerToolbarBtns->Add( m_btnToolMoveUp, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
+	bSizerToolbarBtns->Add( m_btnToolMoveUp, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
 	m_btnToolMoveDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerToolbarBtns->Add( m_btnToolMoveDown, 0, wxALL, 5 );
+	bSizerToolbarBtns->Add( m_btnToolMoveDown, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerToolbarBtns->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizerToolbarBtns->Add( 20, 0, 0, 0, 5 );
 
-	m_insertButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Insert separator" ), wxDefaultPosition );
-	bSizerToolbarBtns->Add( m_insertButton, 0, wxALL, 5 );
-
-
-	bSizer8->Add( bSizerToolbarBtns, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_btnToolDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerToolbarBtns->Add( m_btnToolDelete, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 
-	m_customizeControls->Add( bSizer8, 1, wxEXPAND, 5 );
+	bLeftCol->Add( bSizerToolbarBtns, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_customizeControls->Add( bLeftCol, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
@@ -100,7 +110,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	bSizer9->Add( m_actionsList, 0, wxALL|wxEXPAND, 5 );
 
 
-	m_customizeControls->Add( bSizer9, 1, wxEXPAND, 5 );
+	m_customizeControls->Add( bSizer9, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bPanelSizer->Add( m_customizeControls, 1, wxEXPAND, 5 );
@@ -115,9 +125,9 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	m_tbChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTbChoiceSelect ), NULL, this );
 	m_toolbarTree->Connect( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeBeginLabelEdit ), NULL, this );
 	m_toolbarTree->Connect( wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeEndLabelEdit ), NULL, this );
-	m_btnToolDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );
 	m_btnToolMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveUp ), NULL, this );
 	m_btnToolMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveDown ), NULL, this );
+	m_btnToolDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );
 	m_btnAddTool->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onBtnAddAction ), NULL, this );
 	m_actionsList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onListItemActivated ), NULL, this );
 }
@@ -130,9 +140,9 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::~PANEL_TOOLBAR_CUSTOMIZATION_BASE()
 	m_tbChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTbChoiceSelect ), NULL, this );
 	m_toolbarTree->Disconnect( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeBeginLabelEdit ), NULL, this );
 	m_toolbarTree->Disconnect( wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeEndLabelEdit ), NULL, this );
-	m_btnToolDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );
 	m_btnToolMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveUp ), NULL, this );
 	m_btnToolMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveDown ), NULL, this );
+	m_btnToolDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );
 	m_btnAddTool->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onBtnAddAction ), NULL, this );
 	m_actionsList->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onListItemActivated ), NULL, this );
 

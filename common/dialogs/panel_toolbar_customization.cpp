@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <settings/app_settings.h>
 #include <tool/ui/toolbar_configuration.h>
+#include <widgets/split_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/up_down_tree.h>
 
@@ -123,6 +124,7 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
                                                           const std::vector<ACTION_TOOLBAR_CONTROL*>& aControls ) :
         PANEL_TOOLBAR_CUSTOMIZATION_BASE( aParent ),
         m_actionImageList( nullptr ),
+        m_treeImageList( nullptr ),
         m_appSettings( aCfg ),
         m_appTbSettings( aTbSettings ),
         m_currentToolbar( TOOLBAR_LOC::TOP_MAIN )
@@ -166,6 +168,7 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
 PANEL_TOOLBAR_CUSTOMIZATION::~PANEL_TOOLBAR_CUSTOMIZATION()
 {
     delete m_actionImageList;
+    delete m_treeImageList;
 }
 
 
@@ -343,7 +346,11 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
 {
     m_toolbarTree->DeleteAllItems();
+#ifdef __WXMAC__
+    m_toolbarTree->SetImageList( m_treeImageList );
+#else
     m_toolbarTree->SetImageList( m_actionImageList );
+#endif
 
     const auto& it = m_toolbars.find( m_currentToolbar );
 
@@ -471,6 +478,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 {
     // Clear all existing information for the actions
     delete m_actionImageList;
+    delete m_treeImageList;
     m_actionImageListMap.clear();
     m_actionImageBundleVector.clear();
 
@@ -509,6 +517,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     m_actionImageList = new wxImageList( logicSize, logicSize, true,
                                          static_cast<int>( m_availableTools.size() ) );
 
+    m_treeImageList = new wxImageList( logicSize * 2, logicSize * 2, true,
+                                       static_cast<int>( m_availableTools.size() ) );
+
     // Populate the various image lists for the action icons, and the actual control
     int itemIdx = 0;
 
@@ -525,6 +536,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         if( tool->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
             int idx = m_actionImageList->Add( toBitmap( tool->GetIcon() ) );
+            m_treeImageList->Add( toBitmap( tool->GetIcon() ) );
 
             // If the image list throws away the image, then we shouldn't show the image anywhere.
             // TODO: Make sure all images have all possible sizes so the image list doesn't get grumpy.

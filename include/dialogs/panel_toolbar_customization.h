@@ -102,6 +102,7 @@ protected:
 
 protected:
     wxImageList*               m_actionImageList;
+    wxImageList*               m_treeImageList;             // Only used on Mac
     wxVector<wxBitmapBundle>   m_actionImageBundleVector;
     std::map<std::string, int> m_actionImageListMap;
 
