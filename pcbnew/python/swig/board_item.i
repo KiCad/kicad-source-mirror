@@ -36,6 +36,11 @@
 %include eda_units.h
 %include units_provider.h
 
+%include pcb_barcode.h
+%{
+#include <pcb_barcode.h>
+%}
+
 %rename(Get) operator       BOARD_ITEM*;
 
 %inline
@@ -63,6 +68,7 @@ class PCB_TRACK;
 class PCB_VIA;
 class PCB_ARC;
 class ZONE;
+class PCB_BARCODE;
 class PCB_TARGET;
 class PCB_TABLE;
 class PCB_REFERENCE_IMAGE;
@@ -90,9 +96,11 @@ static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
+static PCB_BARCODE*          Cast_to_PCB_BARCODE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* );
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
+
 
 #ifdef __cplusplus
 }   // extern "C"
@@ -117,6 +125,7 @@ static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* );
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* );
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* );
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
+static PCB_BARCODE*          Cast_to_PCB_BARCODE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* );
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
@@ -168,6 +177,8 @@ static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* );
             return Cast_to_PCB_REFERENCE_IMAGE(self)
         elif ct=="ZONE":
             return Cast_to_ZONE(self)
+        elif ct=="BARCODE":
+            return Cast_to_PCB_BARCODE(self)
         else:
             raise TypeError("Unsupported drawing class: %s" % ct)
 
@@ -216,6 +227,7 @@ static PCB_TRACK*            Cast_to_PCB_TRACK( BOARD_ITEM* self )            { 
 static PCB_VIA*              Cast_to_PCB_VIA( BOARD_ITEM* self )              { return dynamic_cast<PCB_VIA *>(self);             }
 static PCB_ARC*              Cast_to_PCB_ARC( BOARD_ITEM* self )              { return dynamic_cast<PCB_ARC *>(self);             }
 static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
+static PCB_BARCODE*          Cast_to_PCB_BARCODE( BOARD_ITEM* self )          { return dynamic_cast<PCB_BARCODE*>(self);              }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
 static PCB_TABLE*            Cast_to_PCB_TABLE( BOARD_ITEM* self )            { return dynamic_cast<PCB_TABLE*>(self);            }
 static PCB_REFERENCE_IMAGE*  Cast_to_PCB_REFERENCE_IMAGE( BOARD_ITEM* self )  { return dynamic_cast<PCB_REFERENCE_IMAGE*>(self);  }
