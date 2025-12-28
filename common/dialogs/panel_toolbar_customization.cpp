@@ -26,8 +26,8 @@
 #include <bitmaps.h>
 #include <settings/app_settings.h>
 #include <tool/ui/toolbar_configuration.h>
-#include <widgets/split_button.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/up_down_tree.h>
 
 #include <magic_enum.hpp>
 #include <wx/listctrl.h>
@@ -157,7 +157,7 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
     // This is the button only press for the browse button instead of the menu
     m_insertButton->Bind( wxEVT_BUTTON, &PANEL_TOOLBAR_CUSTOMIZATION::onSeparatorPress, this );
 
-    // TODO (ISM): Enable moving up/down and draging
+    // TODO (ISM): Enable draging
     m_btnToolMoveDown->Enable( false );
     m_btnToolMoveUp->Enable( false );
 }
@@ -686,9 +686,8 @@ void PANEL_TOOLBAR_CUSTOMIZATION::enableToolbarControls( bool enable )
     m_btnAddTool->Enable( enable );
     m_btnToolDelete->Enable( enable );
 
-    // TODO (ISM): Enable moving up/down
-    //m_btnToolMoveDown->Enable( enable );
-    //m_btnToolMoveUp->Enable( enable );
+    m_btnToolMoveDown->Enable( enable );
+    m_btnToolMoveUp->Enable( enable );
     m_actionsList->Enable( enable );
     m_insertButton->Enable( enable );
 }
@@ -720,13 +719,13 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onToolDelete( wxCommandEvent& event )
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onToolMoveUp( wxCommandEvent& event )
 {
-
+    m_toolbarTree->MoveItemUp( m_toolbarTree->GetSelection() );
 }
 
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onToolMoveDown( wxCommandEvent& event )
 {
-
+    m_toolbarTree->MoveItemDown( m_toolbarTree->GetSelection() );
 }
 
 

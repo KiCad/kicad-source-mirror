@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
+class UP_DOWN_TREE;
 
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
@@ -45,7 +46,7 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_customToolbars;
 		wxStaticLine* m_staticline1;
 		wxChoice* m_tbChoice;
-		wxTreeCtrl* m_toolbarTree;
+		UP_DOWN_TREE* m_toolbarTree;
 		STD_BITMAP_BUTTON* m_btnToolDelete;
 		STD_BITMAP_BUTTON* m_btnToolMoveUp;
 		STD_BITMAP_BUTTON* m_btnToolMoveDown;

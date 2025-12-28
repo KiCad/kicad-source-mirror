@@ -562,6 +562,7 @@ set( COMMON_WIDGET_SRCS
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
     widgets/unit_binder.cpp
+    widgets/up_down_tree.cpp
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
     widgets/wx_aui_art_providers.cpp

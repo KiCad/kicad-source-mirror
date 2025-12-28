@@ -36,6 +36,31 @@ class wxImageList;
 class APP_SETTINGS_BASE;
 class TOOL_ACTION;
 
+
+/**
+ * Navigation hierarchy tree control.
+ *
+ * wxTreeCtrl must be subclassed to implement the OnCompareItems method
+ * to sort according to page numbers.
+ */
+class TOOLBAR_TREE : public wxTreeCtrl
+{
+public:
+    TOOLBAR_TREE( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize, long style = wxTR_DEFAULT_STYLE ) :
+            wxTreeCtrl( parent, id, pos, size, style )
+    {
+    }
+
+    int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
+
+private:
+    // Need to use wxRTTI macros in order for OnCompareItems to work properly
+    // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
+    wxDECLARE_ABSTRACT_CLASS( TOOLBAR_TREE );
+};
+
+
 class PANEL_TOOLBAR_CUSTOMIZATION : public PANEL_TOOLBAR_CUSTOMIZATION_BASE
 {
 public:
