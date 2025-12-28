@@ -73,6 +73,7 @@ protected:
     void onTreeBeginLabelEdit( wxTreeEvent& event ) override;
     void onTreeEndLabelEdit( wxTreeEvent& event ) override;
     void onTbChoiceSelect( wxCommandEvent& event ) override;
+    void onListItemActivated( wxListEvent& event ) override;
 
 protected:
     wxImageList*               m_actionImageList;

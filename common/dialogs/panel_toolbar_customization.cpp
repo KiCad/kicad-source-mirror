@@ -846,3 +846,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onTbChoiceSelect( wxCommandEvent& event )
         populateToolbarTree();
     }
 }
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::onListItemActivated( wxListEvent& event )
+{
+    wxCommandEvent dummy;
+    onBtnAddAction( dummy );
+}

@@ -63,6 +63,7 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 		virtual void onToolMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onToolMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnAddAction( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onListItemActivated( wxListEvent& event ) { event.Skip(); }
 
 
 	public:

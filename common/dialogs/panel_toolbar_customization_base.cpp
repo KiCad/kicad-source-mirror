@@ -118,6 +118,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	m_btnToolMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveUp ), NULL, this );
 	m_btnToolMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveDown ), NULL, this );
 	m_btnAddTool->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onBtnAddAction ), NULL, this );
+	m_actionsList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onListItemActivated ), NULL, this );
 }
 
 PANEL_TOOLBAR_CUSTOMIZATION_BASE::~PANEL_TOOLBAR_CUSTOMIZATION_BASE()
@@ -132,5 +133,6 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::~PANEL_TOOLBAR_CUSTOMIZATION_BASE()
 	m_btnToolMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveUp ), NULL, this );
 	m_btnToolMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolMoveDown ), NULL, this );
 	m_btnAddTool->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onBtnAddAction ), NULL, this );
+	m_actionsList->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onListItemActivated ), NULL, this );
 
 }
