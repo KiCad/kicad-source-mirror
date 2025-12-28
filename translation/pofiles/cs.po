@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-11-23 09:07+0000\n"
+"PO-Revision-Date: 2025-12-28 23:00+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -8820,9 +8820,8 @@ msgstr ""
 "%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Uložit změny do knihovny"
+msgstr "Uložit změny do vnořené tabulky knihoven?"
 
 #: common/lib_tree_model_adapter.cpp:142 common/lib_tree_model_adapter.cpp:145
 #: common/lib_tree_model_adapter.cpp:163 common/lib_tree_model_adapter.cpp:165
