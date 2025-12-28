@@ -10,14 +10,17 @@ set( PLATFORM_COMPILE_DEFS "" )
 if( KICAD_WX_PORT STREQUAL osx )
     set( PLATFORM_SRCS
         port/wxosx/ui.mm
+        port/wxosx/webview.mm
         )
 elseif( KICAD_WX_PORT STREQUAL msw )
     set( PLATFORM_SRCS
         port/wxmsw/ui.cpp
+        port/wxmsw/webview.cpp
         )
 elseif( KICAD_WX_PORT STREQUAL gtk )
     set( PLATFORM_SRCS
         port/wxgtk/ui.cpp
+        port/wxgtk/webview.cpp
         )
 
     find_package(PkgConfig REQUIRED)
@@ -60,6 +63,7 @@ if( APPLE )
         "-framework CoreData"
         "-framework Foundation"
         "-framework PDFKit"
+        "-framework WebKit"
         )
 elseif( WIN32 )
     list( APPEND PLATFORM_SRCS
@@ -112,6 +116,7 @@ endif()
 
 include_directories(
     ${INC_AFTER}
+    ${CMAKE_SOURCE_DIR}/include
     )
 
 add_library( kiplatform STATIC
@@ -128,6 +133,8 @@ target_include_directories( kiplatform PUBLIC
 
 target_link_libraries( kiplatform
     core
+    kimath
+    nlohmann_json
     ${wxWidgets_LIBRARIES}
     ${PLATFORM_LIBS}
     )

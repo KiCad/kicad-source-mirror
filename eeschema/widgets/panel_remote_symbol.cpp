@@ -72,6 +72,7 @@
 #include <wx/filefn.h>
 #include <wx/intl.h>
 #include <wx/log.h>
+#include <wx/menu.h>
 #include <wx/mstream.h>
 #include <wx/sizer.h>
 #include <wx/strconv.h>
@@ -82,6 +83,9 @@
 #include <wx/uri.h>
 #include <wx/utils.h>
 #include <zstd.h>
+
+#include <kiplatform/webview.h>
+#include <paths.h>
 
 
 namespace
@@ -529,7 +533,37 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
 
     RefreshDataSources();
 
+    // Load saved cookies after data sources are ready
+    LoadCookies();
+
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "PANEL_REMOTE_SYMBOL constructed (frame=%p)", (void*)aParent );
+}
+
+
+PANEL_REMOTE_SYMBOL::~PANEL_REMOTE_SYMBOL()
+{
+    // Save cookies before destruction
+    SaveCookies();
+}
+
+
+void PANEL_REMOTE_SYMBOL::SaveCookies()
+{
+    if( !m_webView || !m_webView->GetWebView() )
+        return;
+
+    wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
+    KIPLATFORM::WEBVIEW::SaveCookies( m_webView->GetWebView(), cookieFile.GetFullPath() );
+}
+
+
+void PANEL_REMOTE_SYMBOL::LoadCookies()
+{
+    if( !m_webView || !m_webView->GetWebView() )
+        return;
+
+    wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
+    KIPLATFORM::WEBVIEW::LoadCookies( m_webView->GetWebView(), cookieFile.GetFullPath() );
 }
 
 
@@ -597,11 +631,38 @@ void PANEL_REMOTE_SYMBOL::onDataSourceChanged( wxCommandEvent& aEvent )
 
 void PANEL_REMOTE_SYMBOL::onConfigure( wxCommandEvent& aEvent )
 {
-    DIALOG_REMOTE_SYMBOL_CONFIG dlg( this );
+    wxMenu menu;
+    menu.Append( 1, _( "Configure..." ) );
+    menu.Append( 2, _( "Clear Cookies" ) );
 
-    dlg.ShowModal();
+    // Position the menu below the button
+    wxPoint pos = m_configButton->GetPosition();
+    pos.y += m_configButton->GetSize().GetHeight();
 
-    RefreshDataSources();
+    int selection = GetPopupMenuSelectionFromUser( menu, pos );
+
+    if( selection == 1 )
+    {
+        DIALOG_REMOTE_SYMBOL_CONFIG dlg( this );
+
+        dlg.ShowModal();
+
+        RefreshDataSources();
+    }
+    else if( selection == 2 )
+    {
+        if( m_webView && m_webView->GetWebView() )
+        {
+            KIPLATFORM::WEBVIEW::DeleteCookies( m_webView->GetWebView() );
+
+            wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
+
+            if( cookieFile.FileExists() )
+                wxRemoveFile( cookieFile.GetFullPath() );
+
+            m_webView->GetWebView()->Reload();
+        }
+    }
 }
 
 
@@ -1339,6 +1400,12 @@ bool PANEL_REMOTE_SYMBOL::ensureSymbolLibraryEntry( const wxFileName& aLibraryFi
         return false;
     }
 
+    // Notify adapters about the new library table entry
+    if( aGlobalTable )
+        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+    else
+        manager.ProjectChanged();
+
     return true;
 }
 
@@ -1394,6 +1461,12 @@ bool PANEL_REMOTE_SYMBOL::ensureFootprintLibraryEntry( const wxFileName& aLibrar
         aError = _( "Failed to save the footprint library table." );
         return false;
     }
+
+    // Notify adapters about the new library table entry
+    if( aGlobalTable )
+        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    else
+        manager.ProjectChanged();
 
     return true;
 }
@@ -1614,18 +1687,83 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     savedId.SetLibItemName( libItemName );
     downloadedSymbol->SetLibId( savedId );
 
+    // Check if an identical symbol already exists (content-based deduplication)
+    std::string newChecksum = HashBuffer( aPayload );
+    std::string existingChecksum;
+
+    if( ComputeSymbolChecksum( nullptr, outFile, libItemName, existingChecksum )
+        && existingChecksum == newChecksum )
+    {
+        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                    "receiveSymbol: symbol %s already exists with same content, skipping save",
+                    libItemName.ToUTF8().data() );
+
+        // Symbol exists with same content - still need to place it if requested
+        if( placeAfterDownload )
+        {
+            wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                        "receiveSymbol: placing existing symbol (nickname=%s libItem=%s)",
+                        nickname.ToUTF8().data(), libItemName.ToUTF8().data() );
+            return placeDownloadedSymbol( nickname, libItemName, aError );
+        }
+
+        return true;
+    }
+
+    // Check if symbol with same name exists but different content - add numeric suffix
+    wxString finalLibItemName = libItemName;
+
+    if( !existingChecksum.empty() && existingChecksum != newChecksum )
+    {
+        int suffix = 1;
+
+        while( true )
+        {
+            finalLibItemName = AppendNumericSuffix( libItemName, suffix++ );
+            std::string candidateChecksum;
+
+            if( !ComputeSymbolChecksum( nullptr, outFile, finalLibItemName, candidateChecksum ) )
+            {
+                // No existing symbol with this name, use it
+                break;
+            }
+
+            if( candidateChecksum == newChecksum )
+            {
+                // Found existing symbol with same content
+                wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                            "receiveSymbol: symbol %s exists with same content as %s, skipping",
+                            finalLibItemName.ToUTF8().data(), libItemName.ToUTF8().data() );
+
+                if( placeAfterDownload )
+                    return placeDownloadedSymbol( nickname, finalLibItemName, aError );
+
+                return true;
+            }
+        }
+
+        downloadedSymbol->SetName( finalLibItemName );
+        savedId.SetLibItemName( finalLibItemName );
+        downloadedSymbol->SetLibId( savedId );
+
+        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                    "receiveSymbol: renamed symbol from %s to %s due to content difference",
+                    libItemName.ToUTF8().data(), finalLibItemName.ToUTF8().data() );
+    }
+
     if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true )
             != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
         aError = _( "Unable to save the downloaded symbol." );
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
                     "receiveSymbol: failed to save symbol %s to library %s",
-                    libItemName.ToUTF8().data(), nickname.ToUTF8().data() );
+                    finalLibItemName.ToUTF8().data(), nickname.ToUTF8().data() );
         return false;
     }
 
     // SaveSymbol transfers ownership to the cache, so release our unique_ptr
     downloadedSymbol.release();
+    libItemName = finalLibItemName;
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
                 "receiveSymbol: saved symbol %s into library %s", libItemName.ToUTF8().data(),
@@ -1702,7 +1840,8 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
 
     footprintName = sanitizeFileComponent( footprintName, sanitizedPrefix() + wxS( "_footprint" ) );
 
-    wxString libNickname = sanitizedPrefix() + wxS( "_fp_" ) + footprintName;
+    // Use a single shared footprint library instead of per-footprint libraries
+    wxString libNickname = sanitizedPrefix() + wxS( "_footprints" );
 
     wxFileName libDir = fpRoot;
     libDir.AppendDir( libNickname + wxS( ".pretty" ) );
@@ -1713,13 +1852,64 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
         return false;
     }
 
-    wxString fileName = footprintName;
+    // Build file path for the footprint
+    auto footprintPathFor = [&]( const wxString& aName ) -> wxFileName
+    {
+        wxFileName fn( libDir );
+        fn.SetFullName( aName + wxS( ".kicad_mod" ) );
+        return fn;
+    };
 
-    if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
-        fileName += wxS( ".kicad_mod" );
+    // Compute checksum of the new footprint
+    std::string newChecksum = HashBuffer( aPayload );
 
-    wxFileName outFile( libDir );
-    outFile.SetFullName( fileName );
+    // Check if an identical footprint already exists
+    wxFileName existingFile = footprintPathFor( footprintName );
+    std::string existingChecksum;
+
+    if( HashFile( existingFile, existingChecksum ) && existingChecksum == newChecksum )
+    {
+        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                    "receiveFootprint: footprint %s already exists with same content, skipping",
+                    footprintName.ToUTF8().data() );
+        return true;
+    }
+
+    // Check if footprint with same name exists but different content - add numeric suffix
+    wxString finalFootprintName = footprintName;
+
+    if( !existingChecksum.empty() && existingChecksum != newChecksum )
+    {
+        int suffix = 1;
+
+        while( true )
+        {
+            finalFootprintName = AppendNumericSuffix( footprintName, suffix++ );
+            std::string candidateChecksum;
+            wxFileName candidateFile = footprintPathFor( finalFootprintName );
+
+            if( !HashFile( candidateFile, candidateChecksum ) )
+            {
+                // No existing footprint with this name, use it
+                break;
+            }
+
+            if( candidateChecksum == newChecksum )
+            {
+                // Found existing footprint with same content
+                wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                            "receiveFootprint: footprint %s exists with same content, skipping",
+                            finalFootprintName.ToUTF8().data() );
+                return true;
+            }
+        }
+
+        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
+                    "receiveFootprint: renamed footprint from %s to %s due to content difference",
+                    footprintName.ToUTF8().data(), finalFootprintName.ToUTF8().data() );
+    }
+
+    wxFileName outFile = footprintPathFor( finalFootprintName );
 
     if( !writeBinaryFile( outFile, aPayload, aError ) )
         return false;

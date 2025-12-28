@@ -51,10 +51,17 @@ class PANEL_REMOTE_SYMBOL : public wxPanel
 {
 public:
     explicit PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent );
+    ~PANEL_REMOTE_SYMBOL();
 
     void RefreshDataSources();
     bool HasDataSources() const;
     void BindWebViewLoaded();
+
+    /// Store WebView cookies to settings for persistence across sessions
+    void SaveCookies();
+
+    /// Restore WebView cookies from settings
+    void LoadCookies();
 
 private:
     void onDataSourceChanged( wxCommandEvent& aEvent );
