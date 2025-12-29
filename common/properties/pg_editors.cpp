@@ -330,13 +330,21 @@ wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPrope
     editor->SetPosition( aPos );
     editor->SetSize( aSize );
 
+    // Capture property name instead of pointer to avoid dangling pointer if grid is rebuilt
+    wxString propName = colorProp->GetName();
+
     editor->Bind( COLOR_SWATCH_CHANGED,
                   [=]( wxCommandEvent& aEvt )
                   {
-                      wxVariant val;
-                      auto data = new COLOR4D_VARIANT_DATA( editor->GetSwatchColor() );
-                      val.SetData( data );
-                      aGrid->ChangePropertyValue( colorProp, val );
+                      wxPGProperty* prop = aGrid->GetPropertyByName( propName );
+
+                      if( prop )
+                      {
+                          wxVariant val;
+                          auto data = new COLOR4D_VARIANT_DATA( editor->GetSwatchColor() );
+                          val.SetData( data );
+                          aGrid->ChangePropertyValue( prop, val );
+                      }
                   } );
 
 #if wxCHECK_VERSION( 3, 3, 0 )
@@ -349,7 +357,11 @@ wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPrope
                 [=]()
                 {
                     editor->GetNewSwatchColor();
-                    aGrid->DrawItem( aProperty );
+
+                    wxPGProperty* prop = aGrid->GetPropertyByName( propName );
+
+                    if( prop )
+                        aGrid->DrawItem( prop );
                 } );
     }
 
