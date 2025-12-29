@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-28 23:00+0000\n"
+"PO-Revision-Date: 2025-12-30 11:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -17432,9 +17432,8 @@ msgstr "Meglévő könyvtár hozzáadása a táblázathoz"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Könyvtár visszaállítása"
+msgstr "Könyvtárak visszaállítása"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 msgid "Project Field Name Templates"
@@ -17597,9 +17596,9 @@ msgid "Symbol library was not updated\n"
 msgstr "A rajzjel könyvtár nem lett frissítve\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1188 pcbnew/pcbnew_jobs_handler.cpp:2036
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "DRC szabálysértések megengedése"
+msgstr "Szabálysértések száma: %d\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1203
 #, c-format
@@ -17748,9 +17747,9 @@ msgid "Pins of type %s and %s are connected"
 msgstr "%s és %s típusú lábak vannak összekötve"
 
 #: eeschema/erc/erc.cpp:1203
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "A(z) %s láb (%s) %s-el és %s-el is össze van kötve"
+msgstr "A(z) %s láb %s-el és %s-el is össze van kötve"
 
 #: eeschema/erc/erc.cpp:1424
 #, c-format
@@ -18310,9 +18309,9 @@ msgid "Import Schematic"
 msgstr "Kapcsolási rajz importálása"
 
 #: eeschema/files-io.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "Elégtelen jogosultság a(z) \"%s\" fájl olvasásához."
 
 #: eeschema/files-io.cpp:722
 #, c-format
@@ -18548,7 +18547,6 @@ msgstr "Paraméterek importálása"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:127
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:49
-#, fuzzy
 msgid "Import scale:"
 msgstr "Importálási méretarány:"
 
@@ -18567,25 +18565,24 @@ msgid "Import Vector Graphics File"
 msgstr "Vektorgrafikus fájl importálása"
 
 #: eeschema/lib_symbol.cpp:310 eeschema/sch_symbol.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s"
 msgstr "%s részegység"
 
 #: eeschema/lib_symbol.cpp:594 eeschema/sch_sheet.cpp:312
 #: eeschema/sch_symbol.cpp:1564
 msgid "Excluded from BOM"
-msgstr "Nem kerül az anyagjegyzékbe"
+msgstr "Anyagjegyzékből kihagyva"
 
 #: eeschema/lib_symbol.cpp:599 eeschema/sch_sheet.cpp:321
 #: eeschema/sch_symbol.cpp:1573
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Nem kerül a panelre"
+msgstr "Panelről kihagyva"
 
 #: eeschema/lib_symbol.cpp:604 eeschema/sch_sheet.cpp:330
 #: eeschema/sch_symbol.cpp:1582
 msgid "Excluded from simulation"
-msgstr "Szimulációból kihagyni"
+msgstr "Szimulációból kihagyva"
 
 #: eeschema/lib_symbol.cpp:609 eeschema/sch_sheet.cpp:339
 #: eeschema/sch_sheet.cpp:900 eeschema/sch_symbol.cpp:1591
@@ -24139,9 +24136,8 @@ msgid "Set the exclude from simulation attribute"
 msgstr "Gyártáshoz szükséges attribútumok"
 
 #: eeschema/tools/sch_actions.cpp:987
-#, fuzzy
 msgid "Exclude from Board"
-msgstr "Nem kerül a panelre"
+msgstr "Kihagyás a panelról"
 
 #: eeschema/tools/sch_actions.cpp:988
 #, fuzzy
