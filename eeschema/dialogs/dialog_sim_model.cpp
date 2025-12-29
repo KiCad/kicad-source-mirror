@@ -388,7 +388,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
     SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name, false );
 
-    if( isIbisLoaded() )
+    if( isIbisLoaded() && !m_libraryModelsMgr.GetModels().empty() )
     {
         int      idx = 0;
         wxString sel = m_modelListBox->GetStringSelection();
@@ -843,14 +843,21 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
     {
-        if( m_libraryModelsMgr.GetModels().empty() )
-        {
-            if( m_modelListBox->GetSelection() != wxNOT_FOUND )
-                m_modelListBox->SetSelection( wxNOT_FOUND );
+        m_libraryModelsMgr.Clear();
 
-            if( m_modelListBox->GetCount() )
-                m_modelListBox->Clear();
-        }
+        if( m_modelListBox->GetSelection() != wxNOT_FOUND )
+            m_modelListBox->SetSelection( wxNOT_FOUND );
+
+        if( m_modelListBox->GetCount() )
+            m_modelListBox->Clear();
+
+        wxArrayString emptyArray;
+        m_pinModelCombobox->Set( emptyArray );
+        m_pinCombobox->Set( emptyArray );
+        m_pinModelCombobox->SetSelection( -1 );
+        m_pinCombobox->SetSelection( -1 );
+        m_waveformChoice->Clear();
+        m_prevLibrary.Clear();
 
         return false;
     }
