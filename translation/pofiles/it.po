@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-27 21:56+0000\n"
+"PO-Revision-Date: 2025-12-30 01:00+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -45189,15 +45189,17 @@ msgstr "Calcolo del ritardo non riuscito"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1189
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1291
-#, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "Lo spazio piste deve essere maggiore di 0."
+msgstr ""
+"Lo spazio coppia differenziale deve essere maggiore di 0 per calcolarne la "
+"larghezza"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1196
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1298
-#, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
-msgstr "La larghezza della linea deve essere >0 per un cerchio non pieno."
+msgstr ""
+"La larghezza deve essere maggiore di 0 per calcolare lo spazio coppia "
+"differenziale"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1203
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1305
@@ -45208,19 +45210,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1248
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1349
-#, fuzzy
 msgid "Diff pair gap calculation failed"
-msgstr "Risoluzione spazio coppia diff.le per:"
+msgstr "Calcolo coppia differenziale fallito"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
-msgstr "Documento singolo"
+msgstr "Singolo"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target Impedance:"
-msgstr "Aree obiettivo:"
+msgstr "Impedenza obiettivo:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
@@ -45231,53 +45230,44 @@ msgid "Enable Time Domain Tuning"
 msgstr "Abilita la regolazione nel dominio del tempo"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:98
-#, fuzzy
 msgid "Track Propagation"
-msgstr "Incrocio di piste"
+msgstr "Propagazione piste"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:120
-#, fuzzy
 msgid "Signal Layer"
-msgstr "Strato segnale a"
+msgstr "Strato segnale"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:121
-#, fuzzy
 msgid "Top Reference"
-msgstr "Riferimento"
+msgstr "Riferimento cima"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:122
-#, fuzzy
 msgid "Bottom Reference"
-msgstr "Riferimento"
+msgstr "Riferimento fondo"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:124
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Spazio coppia diff.le: %s"
+msgstr "Spazio coppia diff.le"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:125
-#, fuzzy
 msgid "Unit Delay"
-msgstr "Ritardo net"
+msgstr "Ritardo unità"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:163
-#, fuzzy
 msgid "Via Propagation"
-msgstr "Proprietà via"
+msgstr "Propagazione via"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:175
-#, fuzzy
 msgid "Global Unit Delay:"
-msgstr "Cancellazioni globali"
+msgstr "Ritardo unità globale:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:182
 msgid "ps/cm"
 msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:189
-#, fuzzy
 msgid "Via Delay Overrides:"
-msgstr "Scavalcamenti ritardi via"
+msgstr "Imposizioni ritardi via:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:209
 msgid "Signal Layer From"
@@ -45297,23 +45287,20 @@ msgstr "Strato via a"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
-msgstr ""
+msgstr "Scostamenti riempimenti tratteggiati zone"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "Proprietà predefinite per i nuovi oggetti dimensione"
+msgstr "Proprietà predefinite per nuove zone"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:235
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:341
-#, fuzzy
 msgid "Chamfer:"
-msgstr "Smusso"
+msgstr "Smusso:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:240
-#, fuzzy
 msgid "Fillet:"
-msgstr "Stondamento"
+msgstr "Stondo:"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:392
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -45321,9 +45308,8 @@ msgstr ""
 "I raggi dei raccordi termici non possono essere meno della larghezza minima."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:449
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "Tutti gli strati definiti dall'utente sono già stati aggiunti."
+msgstr "Tutti gli strati zona già imposti."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:472
 msgid "<no net> will result in an isolated copper island."
@@ -45388,29 +45374,24 @@ msgid "Width of copper in thermal reliefs."
 msgstr "Larghezza rame nei raccordi termici."
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:142
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "Imposizioni clearance && connessioni piazzole"
+msgstr "Clearance && connessioni piazzole"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:182
-#, fuzzy
 msgid "Display Overrides"
-msgstr "Scavalcamenti ritardi via"
+msgstr "Imposizioni schermo"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:193
-#, fuzzy
 msgid "Hatched fill"
-msgstr "Tratteggiato"
+msgstr "Riempimento tratteggiato"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:259
-#, fuzzy
 msgid "Hatch offset overrides:"
-msgstr "Scavalcamenti ritardi via"
+msgstr "Imposizioni scostamenti tratteggio:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:320
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "Tratteggiato"
+msgstr "Riempimento tratteggiato"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Remove islands:"
@@ -45499,23 +45480,23 @@ msgstr "netclass '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:458 pcbnew/drc/drc_engine.cpp:484
 #: pcbnew/drc/drc_engine.cpp:502 pcbnew/drc/drc_engine.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "tuning profile '%s'"
-msgstr "Estrazione file \"%s\"."
+msgstr "profilo regolazione '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
-msgstr "area proibita '%s'"
+msgstr "area proibita di %s"
 
 #: pcbnew/drc/drc_engine.cpp:589
 msgid "keepout area"
 msgstr "area proibita"
 
 #: pcbnew/drc/drc_engine.cpp:597
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
-msgstr "area proibita '%s'"
+msgstr "area proibita '%s' di %s"
 
 #: pcbnew/drc/drc_engine.cpp:603
 #, c-format
@@ -45602,9 +45583,9 @@ msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "Imposizione locale su %s; clearance relativo pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1202
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "Controllo asserzione \"%s\"."
+msgstr "Controllo asserzione '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1206 pcbnew/drc/drc_engine.cpp:1872
 msgid "Assertion passed."
@@ -45650,9 +45631,9 @@ msgid "Checking %s solder mask expansion: %s."
 msgstr "Controllo %s espansione maschera saldatura: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1267
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
-msgstr "Controllo %s clearance assoluto pastasalda: %s."
+msgstr "Controllo %s clearance assoluta pastasalda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1273
 #, c-format
@@ -45788,9 +45769,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Regola incondizionale applicata; scavalca i vincoli precedenti."
 
 #: pcbnew/drc/drc_engine.cpp:1583 pcbnew/drc/drc_engine.cpp:1900
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Controllo condizioni regola \"%s\"."
+msgstr "Controllo condizioni regola '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1593
 msgid "Constraint applied."
@@ -45857,9 +45838,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s larghezza raggio termico: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1866
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "Controllo asserzione regola \"%s\"."
+msgstr "Controllo asserzione regola '%s'."
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2050
 msgid "Electrical"
@@ -46038,9 +46019,8 @@ msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "L'impronta non corrisponde ai filtri impronta del simbolo"
 
 #: pcbnew/drc/drc_item.cpp:209
-#, fuzzy
 msgid "Footprint field does not match symbol field"
-msgstr "Attributi impronta non corrispondenti al simbolo"
+msgstr "Campo impronta non corrisponde al campo simbolo"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint not found in libraries"
@@ -46073,9 +46053,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "Serigrafia ritagliata dal bordo scheda"
 
 #: pcbnew/drc/drc_item.cpp:253
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "Serigrafia sovrapposta"
+msgstr "Clearance serigrafia"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
@@ -46126,9 +46105,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Testo non specchiato sullo strato retro"
 
 #: pcbnew/drc/drc_item.cpp:306
-#, fuzzy
 msgid "Missing tuning profile"
-msgstr "Valore minimo mancante."
+msgstr "Profilo regolazione mancante"
 
 #: pcbnew/drc/drc_item.cpp:310
 #, fuzzy
