@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-28 23:00+0000\n"
+"PO-Revision-Date: 2025-12-30 01:00+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -18576,9 +18576,8 @@ msgstr "Meglévő könyvtár hozzáadása a táblázathoz"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Könyvtár visszaállítása"
+msgstr "Könyvtárak visszaállítása"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 msgid "Project Field Name Templates"
@@ -18629,7 +18628,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:137 pcbnew/pcbnew_jobs_handler.cpp:284
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr ""
+msgstr "A HPGL-lel történő ábrázolás nem támogatott a KiCad 10.0 verziója óta."
 
 #: eeschema/eeschema_jobs_handler.cpp:209
 msgid "Failed to load schematic\n"
@@ -18640,6 +18639,7 @@ msgstr "Nem sikerült betölteni a kapcsolási rajzot\n"
 #: kicad/cli/command_sch_export_plot.cpp:130 pcbnew/pcbnew_jobs_handler.cpp:272
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
 msgstr ""
+"A HPGL-lel történő ábrázolás nem támogatott a KiCad 10.0 verziója óta.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:327
 #: eeschema/eeschema_jobs_handler.cpp:473
@@ -18745,9 +18745,9 @@ msgid "Symbol library was not updated\n"
 msgstr "A rajzjel könyvtár nem lett frissítve\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1183 pcbnew/pcbnew_jobs_handler.cpp:2380
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "DRC szabálysértések megengedése"
+msgstr "Szabálysértések száma: %d\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1197
 #, c-format
@@ -18917,14 +18917,14 @@ msgid "Pins of type %s and %s are connected"
 msgstr "%s és %s típusú lábak vannak összekötve"
 
 #: eeschema/erc/erc.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "A(z) %s láb (%s) %s-el és %s-el is össze van kötve"
+msgstr "A(z) %s láb %s-el és %s-el is össze van kötve"
 
 #: eeschema/erc/erc.cpp:1274
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "A(z) %s láb (%s) %s-el és %s-el is össze van kötve"
+msgstr "A(z) %s láb nincs leföldelve"
 
 #: eeschema/erc/erc.cpp:1529
 #, c-format
@@ -19196,9 +19196,8 @@ msgid "Invalid connection between bus and net items"
 msgstr "Érvénytelen csatlakozás busz és vezeték között"
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "A könyvtár fájlt nem lehet megnyitni."
+msgstr "Föld láb nincs leföldelve"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
@@ -19327,7 +19326,7 @@ msgstr "A(z) '%s' kapcsolási rajz nem létezik. Szeretné létrehozni?"
 
 #: eeschema/files-io.cpp:166
 msgid "Create Schematic"
-msgstr "Kapcsolási rajz Létrehozás"
+msgstr "Kapcsolási rajz létrehozása"
 
 #: eeschema/files-io.cpp:167
 msgid "Load Schematic"
@@ -19472,9 +19471,9 @@ msgid "Import Schematic"
 msgstr "Kapcsolási rajz importálása"
 
 #: eeschema/files-io.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "Elégtelen jogosultság a(z) \"%s\" fájl olvasásához."
 
 #: eeschema/files-io.cpp:921
 #, c-format
@@ -19642,7 +19641,6 @@ msgstr "Paraméterek importálása"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:127
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:49
-#, fuzzy
 msgid "Import scale:"
 msgstr "Importálási méretarány:"
 
@@ -19661,25 +19659,24 @@ msgid "Import Vector Graphics File"
 msgstr "Vektorgrafikus fájl importálása"
 
 #: eeschema/lib_symbol.cpp:306 eeschema/sch_symbol.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s"
 msgstr "%s részegység"
 
 #: eeschema/lib_symbol.cpp:593 eeschema/sch_label.cpp:867
 #: eeschema/sch_sheet.cpp:287 eeschema/sch_symbol.cpp:1722
 msgid "Excluded from BOM"
-msgstr "Nem kerül az anyagjegyzékbe"
+msgstr "Anyagjegyzékből kihagyva"
 
 #: eeschema/lib_symbol.cpp:598 eeschema/sch_label.cpp:880
 #: eeschema/sch_sheet.cpp:296 eeschema/sch_symbol.cpp:1731
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Nem kerül a panelre"
+msgstr "Panelről kihagyva"
 
 #: eeschema/lib_symbol.cpp:603 eeschema/sch_label.cpp:893
 #: eeschema/sch_sheet.cpp:305 eeschema/sch_symbol.cpp:1740
 msgid "Excluded from simulation"
-msgstr "Szimulációból kihagyni"
+msgstr "Szimulációból kihagyva"
 
 #: eeschema/lib_symbol.cpp:608 eeschema/sch_label.cpp:906
 #: eeschema/sch_sheet.cpp:314 eeschema/sch_sheet.cpp:893
@@ -19810,7 +19807,6 @@ msgid "Show Pin Number"
 msgstr "Lábszámozás megjelenítése"
 
 #: eeschema/lib_symbol.cpp:2114
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "Lábnév megjelenítése"
 
@@ -19829,9 +19825,8 @@ msgid "Exclude from Simulation"
 msgstr "Alkatrész kihagyása a szimulációból"
 
 #: eeschema/lib_symbol.cpp:2131 eeschema/tools/sch_actions.cpp:1079
-#, fuzzy
 msgid "Exclude from Board"
-msgstr "Nem kerül a panelre"
+msgstr "Kihagyás a panelról"
 
 #: eeschema/lib_symbol.cpp:2134 eeschema/tools/sch_actions.cpp:1067
 msgid "Exclude from Bill of Materials"
