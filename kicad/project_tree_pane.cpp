@@ -2133,6 +2133,21 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         return;
     }
 
+    std::unique_lock<std::mutex> gitLock( m_TreeProject->GitCommon()->GetMutex(),
+                                          std::try_to_lock );
+
+    if( !gitLock.owns_lock() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Failed to acquire git action mutex" ) );
+        return;
+    }
+
+    if( m_TreeProject->GitCommon()->IsCancelled() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Cancelled" ) );
+        return;
+    }
+
     // Get Current Branch
     wxFileName         rootFilename( Prj().GetProjectFullName() );
     wxString           repoWorkDir( git_repository_workdir( repo ) );
@@ -2726,13 +2741,22 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
                     return;
                 }
 
+                if( gitCommon->IsCancelled() )
+                {
+                    wxLogTrace( traceGit, "onGitSyncTimer: Cancelled" );
+                    return;
+                }
+
                 GIT_PULL_HANDLER handler( gitCommon );
                 handler.PerformFetch();
 
-                CallAfter( [this]()
+                if( !gitCommon->IsCancelled() )
                 {
-                    gitStatusTimerHandler();
-                } );
+                    CallAfter( [this]()
+                    {
+                        gitStatusTimerHandler();
+                    } );
+                }
             } );
 
     if( gitSettings.updatInterval > 0 )
@@ -2746,6 +2770,11 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
 void PROJECT_TREE_PANE::gitStatusTimerHandler()
 {
+    KIGIT_COMMON* gitCommon = m_TreeProject ? m_TreeProject->GitCommon() : nullptr;
+
+    if( !gitCommon || gitCommon->IsCancelled() )
+        return;
+
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();
 

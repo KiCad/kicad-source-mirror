@@ -26,6 +26,7 @@
 
 #include <git/kicad_git_errors.h>
 
+#include <atomic>
 #include <git2.h>
 #include <mutex>
 #include <set>
@@ -138,6 +139,12 @@ public:
 
     int HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername );
 
+    bool IsCancelled() const { return m_cancel.load(); }
+
+    void SetCancelled( bool aCancel ) { m_cancel.store( aCancel ); }
+
+    std::mutex& GetMutex() { return m_gitActionMutex; }
+
     static wxString GetLastGitError()
     {
         const git_error* error = git_error_last();
@@ -173,6 +180,8 @@ private:
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
     bool m_secretFetched;
+
+    std::atomic<bool> m_cancel{ false };
 
     // Create a dummy flag to tell if we have tested ssh agent credentials separately
     // from the ssh key credentials
