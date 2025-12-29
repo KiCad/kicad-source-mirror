@@ -63,7 +63,7 @@ void UP_DOWN_TREE::MoveItemUp( const wxTreeItemId& aItem )
 {
     prepareForSort( aItem );
     m_sortMap[aItem] = m_sortMap[aItem] - 3;
-    SortChildren( wxGenericTreeCtrl::GetItemParent( aItem ) );
+    SortChildren( GetItemParent( aItem ) );
 }
 
 
@@ -71,7 +71,7 @@ void UP_DOWN_TREE::MoveItemDown( const wxTreeItemId& aItem )
 {
     prepareForSort( aItem );
     m_sortMap[aItem] = m_sortMap[aItem] + 3;
-    SortChildren( wxGenericTreeCtrl::GetItemParent( aItem ) );
+    SortChildren( GetItemParent( aItem ) );
 }
 
 
