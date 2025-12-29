@@ -205,6 +205,7 @@ void ACTION_TOOLBAR_PALETTE::onCharHook( wxKeyEvent& aEvent )
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                                 long style ) :
         wxAuiToolBar( parent, id, pos, size, style ),
+        m_parent( parent ),
         m_paletteTimer( nullptr ),
         m_auiManager( nullptr ),
         m_toolManager( parent->GetToolManager() ),
@@ -599,6 +600,14 @@ void ACTION_TOOLBAR::ClearToolbar()
     m_toolCancellable.clear();
     m_toolKinds.clear();
     m_toolActions.clear();
+
+    for( int id : m_controlIDs )
+    {
+        m_parent->ClearToolbarControl( id );
+        DestroyTool( id );
+    }
+
+    m_controlIDs.clear();
 
     // Remove the actual tools from the toolbar
     Clear();

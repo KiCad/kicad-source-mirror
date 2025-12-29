@@ -84,16 +84,19 @@ public:
                   || aType == TOOLBAR_ITEM_TYPE::TB_GROUP );
     }
 
-    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, TOOL_ACTION* aAction ) :
-        m_type( aType ),
-        m_action( aAction ),
-        m_size( 0 )
+    void SetAction( TOOL_ACTION* aAction ) { m_action = aAction; }
+    TOOL_ACTION* GetAction() const
     {
-        wxASSERT( aType == TOOLBAR_ITEM_TYPE::TOOL );
+        wxASSERT( m_type == TOOLBAR_ITEM_TYPE::TOOL );
+        return m_action;
     }
 
-    void SetAction( TOOL_ACTION* aAction ) { m_action = aAction; }
-    TOOL_ACTION* GetAction() const         { return m_action; }
+    void SetControl( ACTION_TOOLBAR_CONTROL* aControl ) { m_control = aControl; }
+    ACTION_TOOLBAR_CONTROL* GetControl() const
+    {
+        wxASSERT( m_type == TOOLBAR_ITEM_TYPE::CONTROL );
+        return m_control;
+    }
 
     void SetName( const wxString& aName ) { m_name = aName; }
     const wxString& GetName() const       { return m_name; }
@@ -107,8 +110,9 @@ private:
     // Item type
     TOOLBAR_ITEM_TYPE m_type;
 
-    // Tool properties
-    TOOL_ACTION* m_action;
+    // Tool properties (can be one or the other, but never both)
+    TOOL_ACTION*            m_action;
+    ACTION_TOOLBAR_CONTROL* m_control;
 
     // Spacer properties
     int m_size;
@@ -127,7 +131,8 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
         m_treeImageList( nullptr ),
         m_appSettings( aCfg ),
         m_appTbSettings( aTbSettings ),
-        m_currentToolbar( TOOLBAR_LOC::TOP_MAIN )
+        m_currentToolbar( TOOLBAR_LOC::TOP_MAIN ),
+        m_firstControlId( -1 )
 {
     // Copy the tools and controls into the internal maps
     for( auto& tool : aTools )
@@ -292,7 +297,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
             break;
 
         case TOOLBAR_ITEM_TYPE::CONTROL:
-            config.AppendControl( tbData->GetName().ToStdString() );
+            config.AppendControl( tbData->GetControl()->GetName() );
             break;
 
         case TOOLBAR_ITEM_TYPE::TOOL:
@@ -376,7 +381,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
         {
             // Add a separator
             TOOLBAR_TREE_ITEM_DATA* sepTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SEPARATOR );
-            m_toolbarTree->AppendItem( root, "Separator", -1, -1, sepTreeItem );
+            m_toolbarTree->AppendItem( root, _( "Separator" ), -1, -1, sepTreeItem );
             break;
         }
 
@@ -385,33 +390,41 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
             // Add a spacer
             TOOLBAR_TREE_ITEM_DATA* spacerTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SPACER );
             spacerTreeItem->SetSize( item.m_Size );
-            m_toolbarTree->AppendItem( root, wxString::Format( "Spacer: %i", item.m_Size ), -1, -1,
+            m_toolbarTree->AppendItem( root, wxString::Format( _( "Spacer: %i" ), item.m_Size ), -1, -1,
                                        spacerTreeItem );
             break;
         }
 
         case TOOLBAR_ITEM_TYPE::CONTROL:
         {
+            auto controlIter = m_availableControls.find( item.m_ControlName );
+
+            if( controlIter == m_availableControls.end() )
+            {
+                wxASSERT_MSG( false, wxString::Format( "Unable to find control %s", item.m_ControlName ) );
+                continue;
+            }
+
             // Add a control
             TOOLBAR_TREE_ITEM_DATA* controlTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::CONTROL );
-            controlTreeItem->SetName( item.m_ControlName );
-            m_toolbarTree->AppendItem( root, item.m_ControlName, -1, -1, controlTreeItem );
+            controlTreeItem->SetControl( controlIter->second );
+            m_toolbarTree->AppendItem( root, controlIter->second->GetUiName(), -1, -1, controlTreeItem );
             break;
         }
 
         case TOOLBAR_ITEM_TYPE::TOOL:
         {
             // Add a tool
-            auto toolMap = m_availableTools.find( item.m_ActionName );
+            auto toolIter = m_availableTools.find( item.m_ActionName );
 
-            if( toolMap == m_availableTools.end() )
+            if( toolIter == m_availableTools.end() )
             {
                 wxASSERT_MSG( false, wxString::Format( "Unable to find tool %s", item.m_ActionName ) );
                 continue;
             }
 
             TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
-            toolTreeItem->SetAction( toolMap->second );
+            toolTreeItem->SetAction( toolIter->second );
 
             int  imgIdx = -1;
             auto imgMap = m_actionImageListMap.find( item.m_ActionName );
@@ -419,7 +432,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
             if( imgMap != m_actionImageListMap.end() )
                 imgIdx = imgMap->second;
 
-            m_toolbarTree->AppendItem( root, toolMap->second->GetFriendlyName(), imgIdx, -1, toolTreeItem );
+            m_toolbarTree->AppendItem( root, toolIter->second->GetFriendlyName(), imgIdx, -1, toolTreeItem );
             break;
         }
 
@@ -452,8 +465,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
                 if( imgMap != m_actionImageListMap.end() )
                     imgIdx = imgMap->second;
 
-                m_toolbarTree->AppendItem( groupId, toolMap->second->GetFriendlyName(),
-                                           imgIdx, -1, toolTreeItem );
+                m_toolbarTree->AppendItem( groupId, toolMap->second->GetFriendlyName(), imgIdx, -1, toolTreeItem );
             }
 
             break;
@@ -552,6 +564,18 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         m_actionsList->InsertItem( item );
     }
 
+    m_firstControlId = itemIdx;
+
+    for( const auto& [k, control] : m_availableControls )
+    {
+        wxListItem item;
+        item.SetText( control->GetUiName() );
+        item.SetData( static_cast<void*>( control ) );
+        item.SetId( itemIdx++ );
+
+        m_actionsList->InsertItem( item );
+    }
+
     m_actionsList->SetSmallImages( m_actionImageBundleVector );
 
     // This must be done after adding everything to the list to make the columns wide enough
@@ -561,8 +585,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress( wxCommandEvent& aEvent )
 {
-    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TB_GROUP,
-                                                                   _( "Group" ) );
+    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TB_GROUP, _( "Group" ) );
 
     wxTreeItemId newItem;
     wxTreeItemId selItem = m_toolbarTree->GetSelection();
@@ -629,7 +652,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onSpacerPress( wxCommandEvent& aEvent )
         newItem = m_toolbarTree->InsertItem( parent, selItem, label, -1, -1, treeItem );
     }
     else
+    {
         newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), label, -1, -1, treeItem );
+    }
 
     if( newItem.IsOk() )
     {
@@ -663,12 +688,11 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onSeparatorPress( wxCommandEvent& aEvent )
             }
         }
 
-        newItem = m_toolbarTree->InsertItem( parent, selItem, "Separator", -1, -1, treeItem );
+        newItem = m_toolbarTree->InsertItem( parent, selItem, _( "Separator" ), -1, -1, treeItem );
     }
     else
     {
-        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), "Separator", -1, -1,
-                                             treeItem );
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), _( "Separator" ), -1, -1, treeItem );
     }
 
     if( newItem.IsOk() )
@@ -751,21 +775,33 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
         return;
 
     // This is needed because GetItemData returns a wxUIntPtr, which is actually size_t...
-    void*        v      = ( void* ) m_actionsList->GetItemData( actionIdx );
-    TOOL_ACTION* action = static_cast<TOOL_ACTION*>( v );
+    void*                   v       = ( void* ) m_actionsList->GetItemData( actionIdx );
+    TOOL_ACTION*            action  = nullptr;
+    ACTION_TOOLBAR_CONTROL* control = nullptr;
+
+    if( actionIdx < (int) m_firstControlId )
+        action = static_cast<TOOL_ACTION*>( v );
+    else
+        control = static_cast<ACTION_TOOLBAR_CONTROL*>( v );
 
     // Build the item to add
-    TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
+    TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( action ? TOOLBAR_ITEM_TYPE::TOOL
+                                                                              : TOOLBAR_ITEM_TYPE::CONTROL );
     toolTreeItem->SetAction( action );
+    toolTreeItem->SetControl( control );
 
-    int  imgIdx = -1;
-    auto imgMap = m_actionImageListMap.find( action->GetName() );
+    int imgIdx = -1;
 
-    if( imgMap != m_actionImageListMap.end() )
-        imgIdx = imgMap->second;
+    if( action )
+    {
+        auto imgMap = m_actionImageListMap.find( action->GetName() );
+
+        if( imgMap != m_actionImageListMap.end() )
+            imgIdx = imgMap->second;
+    }
 
     // Actually add the item
-    wxString     label   = action->GetFriendlyName();
+    wxString     label   = action ? action->GetFriendlyName() : control->GetUiName();
     wxTreeItemId selItem = m_toolbarTree->GetSelection();
     wxTreeItemId newItem;
 
@@ -789,8 +825,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
     else
     {
         // Insert at the root level if there is no selection
-        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), label, imgIdx, -1,
-                                             toolTreeItem );
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), label, imgIdx, -1, toolTreeItem );
     }
 
     if( newItem.IsOk() )

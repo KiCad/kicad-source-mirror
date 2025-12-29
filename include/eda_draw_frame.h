@@ -470,6 +470,8 @@ public:
 
     wxWindow* GetToolCanvas() const override { return GetCanvas(); }
 
+    void ClearToolbarControl( int aId ) override;
+
     /**
      * Return a reference to the gal rendering options used by GAL for rendering.
      */
@@ -533,7 +535,7 @@ public:
      * @param aCfg is the settings to read the plugin ordering from.
      */
     static std::vector<const PLUGIN_ACTION*> GetOrderedPluginActions( PLUGIN_ACTION_SCOPE aScope,
-        APP_SETTINGS_BASE* aCfg );
+                                                                      APP_SETTINGS_BASE* aCfg );
 
     /**
      * Append actions from API plugins to the given toolbar.

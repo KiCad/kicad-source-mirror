@@ -626,6 +626,8 @@ public:
         return Close( aForce );
     }
 
+    virtual void ClearToolbarControl( int aId ) { }
+
     /**
      * Update the UI in response to a change in the system colors.
      */

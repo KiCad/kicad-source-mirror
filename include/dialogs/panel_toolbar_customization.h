@@ -118,6 +118,7 @@ protected:
 
     std::map<std::string, TOOL_ACTION*>            m_availableTools;
     std::map<std::string, ACTION_TOOLBAR_CONTROL*> m_availableControls;
+    int                                            m_firstControlId;
 };
 
  #endif /* PANEL_TOOLBAR_CUSTOMIZATION_H_ */

@@ -235,6 +235,16 @@ void EDA_DRAW_FRAME::configureToolbars()
 }
 
 
+void EDA_DRAW_FRAME::ClearToolbarControl( int aId )
+{
+    switch( aId )
+    {
+    case ID_ON_GRID_SELECT: m_gridSelectBox = nullptr; break;
+    case ID_ON_ZOOM_SELECT: m_zoomSelectBox = nullptr; break;
+    }
+}
+
+
 void EDA_DRAW_FRAME::ReleaseFile()
 {
     if( m_file_checker )

@@ -400,7 +400,8 @@ protected:
 
 protected:
     // Timer used to determine when the palette should be opened after a group item is pressed
-    wxTimer* m_paletteTimer;
+    EDA_BASE_FRAME*         m_parent;
+    wxTimer*                m_paletteTimer;
 
     wxAuiManager*           m_auiManager;
     TOOL_MANAGER*           m_toolManager;
