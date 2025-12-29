@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-27 21:56+0000\n"
+"PO-Revision-Date: 2025-12-30 01:00+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -22446,7 +22446,6 @@ msgid "The submodel mode is missing."
 msgstr "Delmodellläget saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
-#, fuzzy
 msgid " is not a recognised submodel mode."
 msgstr " är inte ett erkänt läge för submodell."
 
