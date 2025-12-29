@@ -71,7 +71,7 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 561,333 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_TOOLBAR_CUSTOMIZATION_BASE();
 

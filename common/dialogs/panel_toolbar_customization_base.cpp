@@ -118,6 +118,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
+	bPanelSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::OnUpdateUI ) );
