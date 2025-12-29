@@ -2055,6 +2055,23 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         return;
     }
 
+    // Acquire the git action mutex to synchronize with EmptyTreePrj() shutdown.
+    // This ensures the repository isn't freed while we're using it.
+    std::unique_lock<std::mutex> gitLock( m_TreeProject->GitCommon()->m_gitActionMutex, std::try_to_lock );
+
+    if( !gitLock.owns_lock() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Failed to acquire git action mutex" ) );
+        return;
+    }
+
+    // Check if cancellation was requested (e.g., during shutdown)
+    if( m_TreeProject->GitCommon()->IsCancelled() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Cancelled" ) );
+        return;
+    }
+
     GIT_STATUS_HANDLER statusHandler( m_TreeProject->GitCommon() );
 
     // Set up pathspec for project files
@@ -2351,10 +2368,19 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
             return;
         }
 
+        // Check if cancellation was requested (e.g., during shutdown)
+        if( gitCommon->IsCancelled() )
+        {
+            wxLogTrace( traceGit, "onGitSyncTimer: Cancelled" );
+            return;
+        }
+
         GIT_PULL_HANDLER handler( gitCommon );
         handler.PerformFetch();
 
-        CallAfter( [this]() { gitStatusTimerHandler(); } );
+        // Only schedule the follow-up work if not cancelled
+        if( !gitCommon->IsCancelled() )
+            CallAfter( [this]() { gitStatusTimerHandler(); } );
     } );
 
     if( gitSettings.updatInterval > 0 )
@@ -2368,6 +2394,12 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
 void PROJECT_TREE_PANE::gitStatusTimerHandler()
 {
+    // Check if git is still available and not cancelled before spawning background work
+    KIGIT_COMMON* gitCommon = m_TreeProject ? m_TreeProject->GitCommon() : nullptr;
+
+    if( !gitCommon || gitCommon->IsCancelled() )
+        return;
+
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();
 
