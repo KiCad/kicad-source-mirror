@@ -645,6 +645,11 @@ void KIWAY::ClearFileHistory()
 
 void KIWAY::ProjectChanged()
 {
+    // Skip project change notifications during application shutdown to avoid
+    // clearing savers and re-registering them unnecessarily
+    if( PgmOrNull() && Pgm().m_Quitting )
+        return;
+
     APP_MONITOR::AddNavigationBreadcrumb( "Changing project", "kiway.projectchanged" );
 
     LocalHistory().ClearAllSavers();

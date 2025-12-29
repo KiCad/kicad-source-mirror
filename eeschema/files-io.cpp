@@ -759,10 +759,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
     ProcessEventLocally( changedEvt );
 
-    if( !differentProject && Kiface().IsSingle() )
+    if( !differentProject )
     {
-        // If we didn't reload the project, we still want to send the notification so that
-        // things that are supposed to happen on project load can happen again on reload
+        // If we didn't reload the project, we still need to call ProjectChanged() to ensure
+        // frame-specific initialization happens (like registering the autosave saver).
+        // When running under the project manager, KIWAY::ProjectChanged() was called before
+        // this frame existed, so we need to call our own ProjectChanged() now.
         ProjectChanged();
     }
 

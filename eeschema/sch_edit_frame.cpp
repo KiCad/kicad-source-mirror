@@ -1198,6 +1198,10 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
+    // Unregister the autosave saver before any cleanup that might invalidate m_schematic
+    if( m_schematic )
+        Kiway().LocalHistory().UnregisterSaver( m_schematic );
+
     SCH_BASE_FRAME::doCloseWindow();
 
     SCH_SHEET_LIST sheetlist = Schematic().Hierarchy();

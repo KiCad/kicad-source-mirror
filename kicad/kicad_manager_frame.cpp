@@ -140,6 +140,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                           const wxPoint& pos, const wxSize&   size ) :
         EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         KICAD_MANAGER_FRAME_NAME, &::Kiway, unityScale ),
+        m_openSavedWindows( false ),
+        m_restoredFromHistory( false ),
         m_active_project( false ),
         m_showHistoryPanel( false ),
         m_leftWin( nullptr ),
@@ -765,6 +767,10 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
                 Kiway().LocalHistory().EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit );
         }
 
+        // Unregister the project saver before unloading the project to prevent
+        // dangling references
+        Kiway().LocalHistory().UnregisterSaver( &Prj() );
+
         mgr.UnloadProject( &Prj() );
     }
 
@@ -864,7 +870,19 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
         wxString head = Kiway().LocalHistory().GetHeadHash( Prj().GetProjectPath() );
         if( wxMessageBox( _( "A newer local history snapshot is available. Restore it?" ),
                           _( "Restore" ), wxYES_NO | wxICON_QUESTION, this ) == wxYES )
+        {
             Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), head, this );
+        }
+        else
+        {
+            // User declined to restore - commit the current on-disk state and tag it
+            // so we don't prompt again on next load
+            if( Kiway().LocalHistory().CommitFullProjectSnapshot( Prj().GetProjectPath(),
+                                                                  wxS( "Declined restore" ) ) )
+            {
+                Kiway().LocalHistory().TagSave( Prj().GetProjectPath(), wxS( "project" ) );
+            }
+        }
     }
 
     // Save history & window state to disk now.  Don't wait around for a crash.
@@ -1285,6 +1303,20 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
     // clear file states regardless if we opened windows or not due to setting
     Prj().GetLocalSettings().ClearFileState();
 
+    // After restore from history, mark open editors as dirty so user is prompted to save
+    if( m_restoredFromHistory )
+    {
+        m_restoredFromHistory = false;
+
+        // Mark schematic editor as dirty if open
+        if( KIWAY_PLAYER* schFrame = Kiway().Player( FRAME_SCH, false ) )
+            schFrame->OnModify();
+
+        // Mark PCB editor as dirty if open
+        if( KIWAY_PLAYER* pcbFrame = Kiway().Player( FRAME_PCB_EDITOR, false ) )
+            pcbFrame->OnModify();
+    }
+
     KICAD_SETTINGS* settings = kicadSettings();
 
     if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::PBOOL::DISABLED
@@ -1369,7 +1401,11 @@ void KICAD_MANAGER_FRAME::RestoreCommitFromHistory( const wxString& aHash )
     if( !Kiway().PlayersClose( true ) )
         return;
 
-    Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), aHash, this );
+    if( Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), aHash, this ) )
+    {
+        m_restoredFromHistory = true;  // Mark editors dirty when they reopen
+    }
+
     m_leftWin->ReCreateTreePrj();
     m_openSavedWindows = true;
     m_historyPane->RefreshHistory( Prj().GetProjectPath() );

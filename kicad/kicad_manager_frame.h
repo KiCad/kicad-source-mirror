@@ -233,6 +233,7 @@ private:
 
 private:
     bool                  m_openSavedWindows;
+    bool                  m_restoredFromHistory;  ///< Set after restore to mark editors dirty
     int                   m_leftWinWidth;
     bool                  m_active_project;
     bool                  m_showHistoryPanel;
