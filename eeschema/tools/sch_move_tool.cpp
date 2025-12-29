@@ -336,13 +336,12 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
                 // Update our cache of the connected items.
 
-                // First, re-attach our drag labels to the original line being re-merged.
-                for( EDA_ITEM* candidate : m_lineConnectionCache[bendLine] )
+                // Re-attach drag labels from lines being deleted to the surviving line.
+                // This prevents dangling pointers when bendLine/foundLine are deleted below.
+                for( auto& [label, info] : m_specialCaseLabels )
                 {
-                    SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( candidate );
-
-                    if( label && m_specialCaseLabels.count( label ) )
-                        m_specialCaseLabels[label].attachedLine = line;
+                    if( info.attachedLine == bendLine || info.attachedLine == foundLine )
+                        info.attachedLine = line;
                 }
 
                 m_lineConnectionCache[line] = m_lineConnectionCache[bendLine];
