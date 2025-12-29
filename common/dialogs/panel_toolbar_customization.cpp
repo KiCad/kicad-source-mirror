@@ -442,8 +442,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
             TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TB_GROUP );
             groupTreeItem->SetName( item.m_GroupName );
 
-            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1,
-                                                              groupTreeItem );
+            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1, groupTreeItem );
 
             // Add the elements below the group
             for( const TOOLBAR_ITEM& groupItem : item.m_GroupItems )

@@ -833,14 +833,6 @@ public:
     int m_GitIconRefreshInterval;
 
     /**
-     * Enable the UI to configure toolbars.
-     *
-     * Setting name: "ConfigurableToolbars"
-     * Default value: false
-     */
-    bool m_ConfigurableToolbars;
-
-    /**
      * Set the maximum number of characters that can be pasted without warning.  Long
      * text strings can cause the application to freeze for a long time and are probably
      * not what the user intended.

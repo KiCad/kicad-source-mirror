@@ -135,7 +135,6 @@ static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
 static const wxChar SimulatorMultiRunCombinationLimit[] = wxT( "SimulatorMultiRunCombinationLimit" );
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
-static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
@@ -320,8 +319,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_SimulatorMultiRunCombinationLimit = 12;
 
     m_GitIconRefreshInterval = 10000;
-
-    m_ConfigurableToolbars = false;
 
     m_MaxPastedTextLength = 100;
 
@@ -622,11 +619,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                           &m_SimulatorMultiRunCombinationLimit,
                                                           m_SimulatorMultiRunCombinationLimit, 1, 100 ) );
 
-    m_entries.push_back( std::make_unique<PARAM_CFG_INT>(
-            true, AC_KEYS::GitIconRefreshInterval, &m_GitIconRefreshInterval, m_GitIconRefreshInterval, 0, 100000 ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ConfigurableToolbars, &m_ConfigurableToolbars,
-                                                           m_ConfigurableToolbars ) );
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::GitIconRefreshInterval,
+                                                          &m_GitIconRefreshInterval, m_GitIconRefreshInterval, 0, 100000 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MaxPastedTextLength, &m_MaxPastedTextLength,
                                                           m_MaxPastedTextLength, 0, 100000 ) );
@@ -634,11 +628,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PNSProcessClusterTimeout,
                                                           &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
 
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>(
-            true, AC_KEYS::ImportSkipComponentBodies, &m_ImportSkipComponentBodies, m_ImportSkipComponentBodies ) );
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipComponentBodies,
+                                                           &m_ImportSkipComponentBodies, m_ImportSkipComponentBodies ) );
 
-    m_entries.push_back(
-            std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI, &m_ScreenDPI, m_ScreenDPI, 50, 500 ) );
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI, &m_ScreenDPI, m_ScreenDPI, 50, 500 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableVariantsUI, &m_EnableVariantsUI,
                                                            m_EnableVariantsUI ) );
