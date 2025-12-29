@@ -1897,23 +1897,44 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             wxCHECK2( currentScreen, continue );
 
+            // First get the library symbol from the clipboard (if available)
+            auto clipIt = tempScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
+            LIB_SYMBOL* clipLibSymbol = ( clipIt != tempScreen->GetLibSymbols().end() )
+                                                ? clipIt->second
+                                                : nullptr;
+
+            // Then check the current screen
             auto it = currentScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
             auto end = currentScreen->GetLibSymbols().end();
 
-            if( it == end )
-            {
-                // If can't find library definition in the design, use the pasted library
-                it = tempScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
-                end = tempScreen->GetLibSymbols().end();
-            }
-
             LIB_SYMBOL* libSymbol = nullptr;
 
-            if( it != end )
+            if( it != end && clipLibSymbol )
+            {
+                // Both exist - check if power types match. If they differ (e.g., one is
+                // local power and the other is global power), use the clipboard version
+                // to preserve the copied symbol's power type.
+                if( clipLibSymbol->IsLocalPower() != it->second->IsLocalPower()
+                    || clipLibSymbol->IsGlobalPower() != it->second->IsGlobalPower() )
+                {
+                    libSymbol = new LIB_SYMBOL( *clipLibSymbol );
+                }
+                else
+                {
+                    libSymbol = new LIB_SYMBOL( *it->second );
+                }
+            }
+            else if( it != end )
             {
                 libSymbol = new LIB_SYMBOL( *it->second );
-                symbol->SetLibSymbol( libSymbol );
             }
+            else if( clipLibSymbol )
+            {
+                libSymbol = new LIB_SYMBOL( *clipLibSymbol );
+            }
+
+            if( libSymbol )
+                symbol->SetLibSymbol( libSymbol );
 
             // If the symbol is already in the schematic we have to always keep the annotations. The exception
             // is if the user has chosen to remove them.
