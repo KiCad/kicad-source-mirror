@@ -550,6 +550,29 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
         return false;
     }
 
+    // Handle zero-length segments (points) specially.
+    // The intersects() check below doesn't handle this case correctly because
+    // the cross product with a zero vector is always zero, causing false positives.
+    if( A == B )
+    {
+        int dist = aSeg.Distance( A );
+
+        if( aActual )
+            *aActual = dist;
+
+        return dist == 0 || dist < aClearance;
+    }
+
+    if( aSeg.A == aSeg.B )
+    {
+        int dist = Distance( aSeg.A );
+
+        if( aActual )
+            *aActual = dist;
+
+        return dist == 0 || dist < aClearance;
+    }
+
     // Check for exact intersection first
     if( intersects( aSeg, false, false ) )
     {
