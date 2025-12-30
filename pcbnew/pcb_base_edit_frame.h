@@ -255,6 +255,8 @@ public:
 
     void HighlightSelectionFilter( const PCB_SELECTION_FILTER_OPTIONS& aOptions );
 
+    void ClearToolbarControl( int aId ) override;
+
 protected:
     void configureToolbars() override;
 

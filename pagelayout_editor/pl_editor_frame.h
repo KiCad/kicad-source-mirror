@@ -240,6 +240,8 @@ public:
 
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
+    void ClearToolbarControl( int aId ) override;
+
 protected:
     bool saveCurrentPageLayout();
 

@@ -116,6 +116,8 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    void ClearToolbarControl( int aId ) override;
+
 protected:
     void configureToolbars() override;
 

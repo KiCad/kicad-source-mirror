@@ -120,10 +120,14 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 }
 
 
-ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::trackWidth( "control.PCBTrackWidth", _( "Track width selector" ),
-                                                                _( "Control to select the track width" ) );
-ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter( "control.PCBViaDia", _( "Via diameter selector" ),
-                                                                 _( "Control to select the via diameter" ) );
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::trackWidth( "control.PCBTrackWidth",
+                                                                _( "Track width selector" ),
+                                                                _( "Control to select the track width" ),
+                                                                { FRAME_PCB_EDITOR } );
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter( "control.PCBViaDia",
+                                                                 _( "Via diameter selector" ),
+                                                                 _( "Control to select the via diameter" ),
+                                                                 { FRAME_PCB_EDITOR } );
 
 
 std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
@@ -380,40 +384,40 @@ void PCB_EDIT_FRAME::configureToolbars()
 
     // Box to display and choose track widths
     auto trackWidthSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelTrackWidthBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_SelTrackWidthBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                                   wxDefaultPosition, wxDefaultSize, 0, nullptr );
-            }
+                if( !m_SelTrackWidthBox )
+                {
+                    m_SelTrackWidthBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                                       wxDefaultPosition, wxDefaultSize, 0, nullptr );
+                }
 
-            m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
-                                               "width can be overridden by the board minimum width, or by "
-                                               "the width of an existing track if the 'Use Existing Track "
-                                               "Width' feature is enabled." ) );
+                m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
+                                                   "width can be overridden by the board minimum width, or by "
+                                                   "the width of an existing track if the 'Use Existing Track "
+                                                   "Width' feature is enabled." ) );
 
-            UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
+                UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
 
-            aToolbar->Add( m_SelTrackWidthBox );
-        };
+                aToolbar->Add( m_SelTrackWidthBox );
+            };
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::trackWidth, trackWidthSelectorFactory );
 
 
     // Box to display and choose vias diameters
     auto viaDiaSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelViaSizeBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_SelViaSizeBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                                wxDefaultPosition, wxDefaultSize, 0, nullptr );
-            }
+                if( !m_SelViaSizeBox )
+                {
+                    m_SelViaSizeBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                                    wxDefaultPosition, wxDefaultSize, 0, nullptr );
+                }
 
-            UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
-            aToolbar->Add( m_SelViaSizeBox );
-        };
+                UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
+                aToolbar->Add( m_SelViaSizeBox );
+            };
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter, viaDiaSelectorFactory );
 
@@ -421,34 +425,46 @@ void PCB_EDIT_FRAME::configureToolbars()
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
     // control
     auto pluginControlFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            // Add scripting console and API plugins
-            bool scriptingAvailable = SCRIPTING::IsWxAvailable();
-
-            #ifdef KICAD_IPC_API
-            bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
-                    !Pgm().GetPluginManager().GetActionsForScope( PluginActionScope() ).empty();
-            #else
-            bool haveApiPlugins = false;
-            #endif
-
-            if( scriptingAvailable || haveApiPlugins )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                aToolbar->AddScaledSeparator( aToolbar->GetParent() );
+                // Add scripting console and API plugins
+                bool scriptingAvailable = SCRIPTING::IsWxAvailable();
 
-                if( scriptingAvailable )
+#ifdef KICAD_IPC_API
+                bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server
+                                        && !Pgm().GetPluginManager().GetActionsForScope( PluginActionScope() ).empty();
+#else
+                bool haveApiPlugins = false;
+#endif
+
+                if( scriptingAvailable || haveApiPlugins )
                 {
-                    aToolbar->Add( PCB_ACTIONS::showPythonConsole );
-                    addActionPluginTools( aToolbar );
-                }
+                    aToolbar->AddScaledSeparator( aToolbar->GetParent() );
 
-                if( haveApiPlugins )
-                    AddApiPluginTools( aToolbar );
-            }
-        };
+                    if( scriptingAvailable )
+                    {
+                        aToolbar->Add( PCB_ACTIONS::showPythonConsole );
+                        addActionPluginTools( aToolbar );
+                    }
+
+                    if( haveApiPlugins )
+                        AddApiPluginTools( aToolbar );
+                }
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::ipcScripting, pluginControlFactory );
+}
+
+
+void PCB_EDIT_FRAME::ClearToolbarControl( int aId )
+{
+    PCB_BASE_EDIT_FRAME::ClearToolbarControl( aId );
+
+    switch( aId )
+    {
+    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH: m_SelTrackWidthBox = nullptr; break;
+    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:    m_SelViaSizeBox = nullptr;    break;
+    }
 }
 
 

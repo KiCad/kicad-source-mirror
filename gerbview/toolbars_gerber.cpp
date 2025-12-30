@@ -130,45 +130,44 @@ void GERBVIEW_FRAME::configureToolbars()
 
     // Register factories for the various toolbar controls
     auto layerBoxFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelLayerBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( aToolbar,
-                                                            ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                                            wxDefaultPosition, wxDefaultSize, 0, nullptr );
-            }
+                if( !m_SelLayerBox )
+                {
+                    m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( aToolbar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+                                                                wxDefaultPosition, wxDefaultSize, 0, nullptr );
+                }
 
-            m_SelLayerBox->Resync();
-            aToolbar->Add( m_SelLayerBox );
+                m_SelLayerBox->Resync();
+                aToolbar->Add( m_SelLayerBox );
 
-            // UI update handler for the control
-            aToolbar->Bind( wxEVT_UPDATE_UI,
-                            [this]( wxUpdateUIEvent& aEvent )
-                                {
-                                    if( m_SelLayerBox->GetCount() )
+                // UI update handler for the control
+                aToolbar->Bind( wxEVT_UPDATE_UI,
+                                [this]( wxUpdateUIEvent& aEvent )
                                     {
-                                        if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
-                                            m_SelLayerBox->SetSelection( GetActiveLayer() );
-                                    }
-                                },
-                            m_SelLayerBox->GetId() );
-        };
+                                        if( m_SelLayerBox->GetCount() )
+                                        {
+                                            if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
+                                                m_SelLayerBox->SetSelection( GetActiveLayer() );
+                                        }
+                                    },
+                                m_SelLayerBox->GetId() );
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::layerSelector, layerBoxFactory );
 
 
     auto textInfoFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_TextInfo )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_TextInfo = new wxTextCtrl( aToolbar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString,
-                                            wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-            }
+                if( !m_TextInfo )
+                {
+                    m_TextInfo = new wxTextCtrl( aToolbar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString,
+                                                wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+                }
 
-            aToolbar->Add( m_TextInfo );
-        };
+                aToolbar->Add( m_TextInfo );
+            };
 
     RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo, textInfoFactory );
 
@@ -177,112 +176,134 @@ void GERBVIEW_FRAME::configureToolbars()
     // (note, when the m_tbTopAux is recreated, tools are deleted, but controls
     // are not deleted: they are just no longer managed by the toolbar
     auto componentBoxFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelComponentBox )
-                m_SelComponentBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+            [this]( ACTION_TOOLBAR* aToolbar )
+            {
+                if( !m_SelComponentBox )
+                    m_SelComponentBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
 
-            if( !m_cmpText )
-                m_cmpText = new wxStaticText( aToolbar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
+                if( !m_cmpText )
+                    m_cmpText = new wxStaticText( aToolbar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
 
-            m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
-            m_cmpText->SetLabel( _( "Cmp:" ) + wxS( " " ) );     // can change when changing the language
+                m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
+                m_cmpText->SetLabel( _( "Cmp:" ) + wxS( " " ) );     // can change when changing the language
 
-            updateComponentListSelectBox();
+                updateComponentListSelectBox();
 
-            aToolbar->Add( m_cmpText );
-            aToolbar->Add( m_SelComponentBox );
-        };
+                aToolbar->Add( m_cmpText );
+                aToolbar->Add( m_SelComponentBox );
+            };
 
     RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::componentHighlight, componentBoxFactory );
 
 
     // Creates choice box to display net names and highlight selected:
     auto netBoxFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelNetnameBox )
-            m_SelNetnameBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+            [this]( ACTION_TOOLBAR* aToolbar )
+            {
+                if( !m_SelNetnameBox )
+                m_SelNetnameBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
 
-            if( !m_netText )
-                m_netText = new wxStaticText( aToolbar, wxID_ANY, _( "Net:" ) );
+                if( !m_netText )
+                    m_netText = new wxStaticText( aToolbar, wxID_ANY, _( "Net:" ) );
 
-            m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
-            m_netText->SetLabel( _( "Net:" ) );     // can change when changing the language
+                m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
+                m_netText->SetLabel( _( "Net:" ) );     // can change when changing the language
 
-            updateNetnameListSelectBox();
+                updateNetnameListSelectBox();
 
-            aToolbar->Add( m_netText );
-            aToolbar->Add( m_SelNetnameBox );
-        };
+                aToolbar->Add( m_netText );
+                aToolbar->Add( m_SelNetnameBox );
+            };
 
     RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight, netBoxFactory );
 
 
     // Creates choice box to display aperture attributes and highlight selected:
     auto appertureBoxFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelAperAttributesBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_SelAperAttributesBox = new wxChoice( aToolbar,
-                                                       ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-            }
+                if( !m_SelAperAttributesBox )
+                    m_SelAperAttributesBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
 
-            if( !m_apertText )
-                m_apertText = new wxStaticText( aToolbar, wxID_ANY, _( "Attr:" ) );
+                if( !m_apertText )
+                    m_apertText = new wxStaticText( aToolbar, wxID_ANY, _( "Attr:" ) );
 
-            m_SelAperAttributesBox->SetToolTip( _( "Highlight items with this aperture attribute" ) );
-            m_apertText->SetLabel( _( "Attr:" ) ); // can change when changing the language
+                m_SelAperAttributesBox->SetToolTip( _( "Highlight items with this aperture attribute" ) );
+                m_apertText->SetLabel( _( "Attr:" ) ); // can change when changing the language
 
-            updateAperAttributesSelectBox();
+                updateAperAttributesSelectBox();
 
-            aToolbar->Add( m_apertText );
-            aToolbar->Add( m_SelAperAttributesBox );
-        };
+                aToolbar->Add( m_apertText );
+                aToolbar->Add( m_SelAperAttributesBox );
+            };
 
     RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight, appertureBoxFactory );
 
 
     // D-code selection
     auto dcodeSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_DCodeSelector )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_DCodeSelector = new DCODE_SELECTION_BOX( aToolbar,
-                                                        ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
-                                                        wxDefaultPosition, wxSize( 150, -1 ) );
-            }
+                if( !m_DCodeSelector )
+                {
+                    m_DCodeSelector = new DCODE_SELECTION_BOX( aToolbar, ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                                                               wxDefaultPosition, wxSize( 150, -1 ) );
+                }
 
-            if( !m_dcodeText )
-                m_dcodeText = new wxStaticText( aToolbar, wxID_ANY, _( "DCode:" ) );
+                if( !m_dcodeText )
+                    m_dcodeText = new wxStaticText( aToolbar, wxID_ANY, _( "DCode:" ) );
 
-            m_dcodeText->SetLabel( _( "DCode:" ) );
+                m_dcodeText->SetLabel( _( "DCode:" ) );
 
-            updateDCodeSelectBox();
+                updateDCodeSelectBox();
 
-            aToolbar->Add( m_dcodeText );
-            aToolbar->Add( m_DCodeSelector );
-        };
+                aToolbar->Add( m_dcodeText );
+                aToolbar->Add( m_DCodeSelector );
+            };
 
     RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector, dcodeSelectorFactory );
 }
 
-ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo( "control.TextInfo", _( "Text info entry" ),
-                                                                   _( "Text info entry" ) );
+
+void GERBVIEW_FRAME::ClearToolbarControl( int aId )
+{
+    EDA_DRAW_FRAME::ClearToolbarControl( aId );
+
+    switch( aId )
+    {
+    case ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER:     m_SelLayerBox = nullptr;          break;
+    case ID_TOOLBARH_GERBER_DATA_TEXT_BOX:             m_TextInfo = nullptr;             break;
+    case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:            m_SelComponentBox = nullptr;      break;
+    case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:            m_SelNetnameBox = nullptr;        break;
+    case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE: m_SelAperAttributesBox = nullptr; break;
+    case ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE:       m_DCodeSelector = nullptr;        break;
+    }
+}
+
+
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo( "control.TextInfo",
+                                                                   _( "Text info entry" ),
+                                                                   _( "Text info entry" ),
+                                                                   { FRAME_GERBER } );
 ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::componentHighlight( "control.ComponentHighlight",
                                                                              _( "Component highlight" ),
-                                                                             _( "Highlight items belonging to this component" ) );
-ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight( "control.NetHighlight", _( "Net highlight" ),
-                                                                       _( "Highlight items belonging to this net" ) );
-ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight( "control.AppertureHighlight", _( "Aperture highlight" ),
-                                                                             _( "Highlight items with this aperture attribute" ));
-ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector( "control.GerberDcodeSelector", _( "DCode Selector" ),
-                                                                        _( "Select all items with the selected DCode" ) );
+                                                                             _( "Highlight items belonging to this component" ),
+                                                                             { FRAME_GERBER } );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight( "control.NetHighlight",
+                                                                       _( "Net highlight" ),
+                                                                       _( "Highlight items belonging to this net" ),
+                                                                       { FRAME_GERBER } );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight( "control.AppertureHighlight",
+                                                                             _( "Aperture highlight" ),
+                                                                             _( "Highlight items with this aperture attribute" ),
+                                                                             { FRAME_GERBER } );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector( "control.GerberDcodeSelector",
+                                                                        _( "DCode selector" ),
+                                                                        _( "Select all items with the selected DCode" ),
+                                                                        { FRAME_GERBER } );
 
 
-#define NO_SELECTION_STRING _("<No selection>")
+#define NO_SELECTION_STRING _( "<No selection>" )
 
 
 void GERBVIEW_FRAME::updateDCodeSelectBox()

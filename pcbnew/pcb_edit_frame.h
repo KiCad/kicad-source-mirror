@@ -690,6 +690,8 @@ public:
      */
     bool DoAutoSave();
 
+    void ClearToolbarControl( int aId ) override;
+
     DECLARE_EVENT_TABLE()
 
 protected:

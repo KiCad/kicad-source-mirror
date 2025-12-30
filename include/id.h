@@ -110,8 +110,9 @@ enum main_id
     ID_LANGUAGE_CHOICE_END,
 
     ID_ON_ZOOM_SELECT,
-
     ID_ON_GRID_SELECT,
+    ID_ON_OVERRIDE_LOCKS,
+    ID_ON_LAYER_SELECT,
 
     // Popup Menu (mouse Right button) (id consecutifs)
 

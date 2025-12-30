@@ -226,7 +226,7 @@ void EDA_DRAW_FRAME::configureToolbars()
             [this]( ACTION_TOOLBAR* aToolbar )
             {
                 if( !m_overrideLocksCb )
-                    m_overrideLocksCb = new wxCheckBox( aToolbar, wxID_ANY, _( "Override locks" ) );
+                    m_overrideLocksCb = new wxCheckBox( aToolbar, ID_ON_OVERRIDE_LOCKS, _( "Override locks" ) );
 
                 aToolbar->Add( m_overrideLocksCb );
             };
@@ -239,8 +239,9 @@ void EDA_DRAW_FRAME::ClearToolbarControl( int aId )
 {
     switch( aId )
     {
-    case ID_ON_GRID_SELECT: m_gridSelectBox = nullptr; break;
-    case ID_ON_ZOOM_SELECT: m_zoomSelectBox = nullptr; break;
+    case ID_ON_GRID_SELECT:    m_gridSelectBox = nullptr;   break;
+    case ID_ON_ZOOM_SELECT:    m_zoomSelectBox = nullptr;   break;
+    case ID_ON_OVERRIDE_LOCKS: m_overrideLocksCb = nullptr; break;
     }
 }
 

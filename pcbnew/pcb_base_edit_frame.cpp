@@ -52,6 +52,7 @@
 
 #include <widgets/kistatusbar.h>
 #include <widgets/wx_aui_utils.h>
+#include <id.h>
 
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -380,44 +381,55 @@ void PCB_BASE_EDIT_FRAME::configureToolbars()
 
     // Layer selector
     auto layerSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelLayerBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( aToolbar, wxID_ANY );
-                m_SelLayerBox->SetBoardFrame( this );
-            }
+                if( !m_SelLayerBox )
+                {
+                    m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( aToolbar, ID_ON_LAYER_SELECT );
+                    m_SelLayerBox->SetBoardFrame( this );
+                }
 
-            m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
-            m_SelLayerBox->Resync();
+                m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
+                m_SelLayerBox->Resync();
 
-            aToolbar->Add( m_SelLayerBox );
+                aToolbar->Add( m_SelLayerBox );
 
-            // UI update handler for the control
-            aToolbar->Bind( wxEVT_UPDATE_UI,
-                            [this]( wxUpdateUIEvent& aEvent )
-                                {
-                                    if( m_SelLayerBox->GetCount()
-                                        && ( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() ) )
+                // UI update handler for the control
+                aToolbar->Bind( wxEVT_UPDATE_UI,
+                                [this]( wxUpdateUIEvent& aEvent )
                                     {
-                                        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
-                                    }
-                                },
-                            m_SelLayerBox->GetId() );
+                                        if( m_SelLayerBox->GetCount()
+                                            && ( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() ) )
+                                        {
+                                            m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
+                                        }
+                                    },
+                                m_SelLayerBox->GetId() );
 
-            // Event handler to respond to the user interacting with the control
-            aToolbar->Bind( wxEVT_COMBOBOX,
-                            [this]( wxCommandEvent& aEvent )
-                                {
-                                    SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+                // Event handler to respond to the user interacting with the control
+                aToolbar->Bind( wxEVT_COMBOBOX,
+                                [this]( wxCommandEvent& aEvent )
+                                    {
+                                        SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
-                                    if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
-                                        GetCanvas()->Refresh();
-                                },
-                            m_SelLayerBox->GetId() );
-        };
+                                        if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
+                                            GetCanvas()->Refresh();
+                                    },
+                                m_SelLayerBox->GetId() );
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::layerSelector, layerSelectorFactory );
+}
+
+
+void PCB_BASE_EDIT_FRAME::ClearToolbarControl( int aId )
+{
+    PCB_BASE_FRAME::ClearToolbarControl( aId );
+
+    switch( aId )
+    {
+    case ID_ON_LAYER_SELECT: m_SelLayerBox = nullptr; break;
+    }
 }
 
 

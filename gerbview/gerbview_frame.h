@@ -446,6 +446,8 @@ public:
         return m_gerberLayout->ViewBBox();
     }
 
+    void ClearToolbarControl( int aId ) override;
+
     DECLARE_EVENT_TABLE()
 
 protected:

@@ -169,34 +169,47 @@ void SYMBOL_EDIT_FRAME::configureToolbars()
     SCH_BASE_FRAME::configureToolbars();
 
     auto unitDisplayFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_unitSelectBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_unitSelectBox = new wxComboBox( aToolbar, ID_LIBEDIT_SELECT_UNIT_NUMBER,
-                                                  wxEmptyString, wxDefaultPosition,
-                                                  wxSize( LISTBOX_WIDTH, -1 ), 0,
-                                                  nullptr, wxCB_READONLY );
-            }
+                if( !m_unitSelectBox )
+                {
+                    m_unitSelectBox = new wxComboBox( aToolbar, ID_LIBEDIT_SELECT_UNIT_NUMBER,
+                                                      wxEmptyString, wxDefaultPosition,
+                                                      wxSize( LISTBOX_WIDTH, -1 ), 0,
+                                                      nullptr, wxCB_READONLY );
+                }
 
-            aToolbar->Add( m_unitSelectBox );
-        };
+                aToolbar->Add( m_unitSelectBox );
+            };
 
     auto bodyDisplayFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_bodyStyleSelectBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_bodyStyleSelectBox = new wxComboBox( aToolbar, ID_LIBEDIT_SELECT_BODY_STYLE,
-                                                       wxEmptyString, wxDefaultPosition,
-                                                       wxSize( LISTBOX_WIDTH, -1 ), 0,
-                                                       nullptr, wxCB_READONLY );
-            }
+                if( !m_bodyStyleSelectBox )
+                {
+                    m_bodyStyleSelectBox = new wxComboBox( aToolbar, ID_LIBEDIT_SELECT_BODY_STYLE,
+                                                           wxEmptyString, wxDefaultPosition,
+                                                           wxSize( LISTBOX_WIDTH, -1 ), 0,
+                                                           nullptr, wxCB_READONLY );
+                }
 
-            aToolbar->Add( m_bodyStyleSelectBox );
-        };
+                aToolbar->Add( m_bodyStyleSelectBox );
+            };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitDisplayFactory );
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector, bodyDisplayFactory );
 }
+
+
+void SYMBOL_EDIT_FRAME::ClearToolbarControl( int aId )
+{
+    SCH_BASE_FRAME::ClearToolbarControl( aId );
+
+    switch( aId )
+    {
+    case ID_LIBEDIT_SELECT_UNIT_NUMBER: m_unitSelectBox = nullptr;      break;
+    case ID_LIBEDIT_SELECT_BODY_STYLE:  m_bodyStyleSelectBox = nullptr; break;
+    }
+}
+
 

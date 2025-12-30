@@ -119,5 +119,7 @@ void CVPCB_MAINFRAME::configureToolbars()
 }
 
 
-ACTION_TOOLBAR_CONTROL CVPCB_ACTION_TOOLBAR_CONTROLS::footprintFilter( "control.FootprintFilters", _( "Footprint filters" ),
-                                                                       _( "Footprint filtering controls" ) );
+ACTION_TOOLBAR_CONTROL CVPCB_ACTION_TOOLBAR_CONTROLS::footprintFilter( "control.FootprintFilters",
+                                                                       _( "Footprint filters" ),
+                                                                       _( "Footprint filtering controls" ),
+                                                                       { FRAME_CVPCB } );

@@ -236,7 +236,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
                 actions.push_back( action );
 
-            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList( FRAME_FOOTPRINT_EDITOR ) )
                 controls.push_back( control );
 
             return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
@@ -307,7 +307,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
                 actions.push_back( action );
 
-            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList( FRAME_PCB_EDITOR ) )
                 controls.push_back( control );
 
             return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
@@ -336,7 +336,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
                 actions.push_back( action );
 
-            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList( FRAME_PCB_DISPLAY3D ) )
                 controls.push_back( control );
 
             return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );

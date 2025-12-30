@@ -249,6 +249,20 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 }
 
 
+std::list<ACTION_TOOLBAR_CONTROL*> ACTION_TOOLBAR::GetCustomControlList( FRAME_T aContext )
+{
+    std::list<ACTION_TOOLBAR_CONTROL*> controls;
+
+    for( ACTION_TOOLBAR_CONTROL* control : GetAllCustomControls() )
+    {
+        if( control->SupportedFor( aContext ) )
+            controls.push_back( control );
+    }
+
+    return controls;
+}
+
+
 void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 {
     wxASSERT( GetParent() );
@@ -1055,24 +1069,58 @@ void ACTION_TOOLBAR::RefreshBitmaps()
 /*
  * Common controls for the toolbar
  */
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::gridSelect( "control.GridSelector", _( "Grid Selector" ),
-                                                            _( "Grid Selection box" ) );
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::gridSelect( "control.GridSelector",
+                                                            _( "Grid selector" ),
+                                                            _( "Grid Selection box" ),
+                                                            { FRAME_SCH,
+                                                              FRAME_SCH_SYMBOL_EDITOR,
+                                                              FRAME_SCH_VIEWER,
+                                                              FRAME_PCB_EDITOR,
+                                                              FRAME_FOOTPRINT_EDITOR,
+                                                              FRAME_FOOTPRINT_VIEWER,
+                                                              FRAME_GERBER,
+                                                              FRAME_PL_EDITOR } );
 
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::zoomSelect( "control.ZoomSelector", _( "Zoom Selector" ),
-                                                            _( "Zoom Selection box" ) );
 
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::ipcScripting( "control.IPCPlugin", _( "IPC/Scripting plugins" ),
-                                                              _( "Region to hold the IPC/Scripting action buttons" ) );
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::zoomSelect( "control.ZoomSelector",
+                                                            _( "Zoom selector" ),
+                                                            _( "Zoom Selection box" ),
+                                                            { FRAME_SCH,
+                                                              FRAME_SCH_SYMBOL_EDITOR,
+                                                              FRAME_SCH_VIEWER,
+                                                              FRAME_PCB_EDITOR,
+                                                              FRAME_FOOTPRINT_EDITOR,
+                                                              FRAME_FOOTPRINT_VIEWER,
+                                                              FRAME_GERBER,
+                                                              FRAME_PL_EDITOR } );
 
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::layerSelector( "control.LayerSelector", _( "Layer selector" ),
-                                                               _( "Control to select the layer" ) );
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::ipcScripting( "control.IPCPlugin",
+                                                              _( "IPC/Scripting plugins" ),
+                                                              _( "Region to hold the IPC/Scripting action buttons" ),
+                                                              { FRAME_SCH,
+                                                                FRAME_PCB_EDITOR } );
 
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::unitSelector( "control.UnitSelector", _( "Symbol unit selector" ),
-                                                              _( "Displays the current unit" ) );
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::layerSelector( "control.LayerSelector",
+                                                               _( "Layer selector" ),
+                                                               _( "Control to select the layer" ),
+                                                               { FRAME_PCB_EDITOR,
+                                                                 FRAME_FOOTPRINT_EDITOR,
+                                                                 FRAME_FOOTPRINT_VIEWER,
+                                                                 FRAME_GERBER } );
+
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::unitSelector( "control.UnitSelector",
+                                                              _( "Symbol unit selector" ),
+                                                              _( "Displays the current unit" ),
+                                                              { FRAME_SCH_SYMBOL_EDITOR,
+                                                                FRAME_SCH_VIEWER } );
 
 ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::bodyStyleSelector( "control.BodyStyleSelector",
                                                                    _( "Symbol body style selector" ),
-                                                                   _( "Displays the current body style" ) );
+                                                                   _( "Displays the current body style" ),
+                                                                   { FRAME_SCH_SYMBOL_EDITOR,
+                                                                     FRAME_SCH_VIEWER } );
 
-ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::overrideLocks( "control.OverrideLocks", _( "Override locks" ),
-                                                               _( "Allow moving of locked items with the mouse" ) );
+ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::overrideLocks( "control.OverrideLocks",
+                                                               _( "Override locks" ),
+                                                               _( "Allow moving of locked items with the mouse" ),
+                                                               { FRAME_PCB_EDITOR } );

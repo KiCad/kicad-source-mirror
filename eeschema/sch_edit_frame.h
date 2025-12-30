@@ -887,6 +887,8 @@ public:
         return PLUGIN_ACTION_SCOPE::SCHEMATIC;
     }
 
+    void ClearToolbarControl( int aId ) override;
+
     DECLARE_EVENT_TABLE()
 
 protected:

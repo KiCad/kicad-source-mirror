@@ -115,53 +115,69 @@ void PL_EDITOR_FRAME::configureToolbars()
     EDA_DRAW_FRAME::configureToolbars();
 
     auto originSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_originSelectBox )
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                m_originSelectBox = new wxChoice( aToolbar, ID_SELECT_COORDINATE_ORIGIN,
-                                                  wxDefaultPosition, wxDefaultSize, 5, m_originChoiceList );
-            }
+                if( !m_originSelectBox )
+                {
+                    m_originSelectBox = new wxChoice( aToolbar, ID_SELECT_COORDINATE_ORIGIN,
+                                                      wxDefaultPosition, wxDefaultSize, 5, m_originChoiceList );
+                }
 
-            m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
-            m_originSelectBox->SetSelection( m_originSelectChoice );
+                m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
+                m_originSelectBox->SetSelection( m_originSelectChoice );
 
-            aToolbar->Add(  m_originSelectBox );
-        };
+                aToolbar->Add(  m_originSelectBox );
+            };
 
     RegisterCustomToolbarControlFactory( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector, originSelectorFactory );
 
 
     auto pageSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            wxString pageList[5] =
+            [this]( ACTION_TOOLBAR* aToolbar )
             {
-                _("Page 1"),
-                _("Other pages")
+                wxString pageList[5] =
+                {
+                    _("Page 1"),
+                    _("Other pages")
+                };
+
+                if( !m_pageSelectBox )
+                {
+                    m_pageSelectBox = new wxChoice( aToolbar, ID_SELECT_PAGE_NUMBER,
+                                                    wxDefaultPosition, wxDefaultSize, 2, pageList );
+                }
+
+                m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
+                                               "which are not on all page are displayed") );
+                m_pageSelectBox->SetSelection( 0 );
+
+                aToolbar->Add( m_pageSelectBox );
             };
-
-            if( !m_pageSelectBox )
-            {
-                m_pageSelectBox = new wxChoice( aToolbar, ID_SELECT_PAGE_NUMBER,
-                                                wxDefaultPosition, wxDefaultSize, 2, pageList );
-            }
-
-            m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
-                                           "which are not on all page are displayed") );
-            m_pageSelectBox->SetSelection( 0 );
-
-            aToolbar->Add( m_pageSelectBox );
-        };
 
     RegisterCustomToolbarControlFactory( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect, pageSelectorFactory );
 }
 
 
-ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector( "control.OriginSelector", _( "Origin Selector" ),
-                                                                          _( "Select the origin of the status bar coordinates" ) );
-ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect( "control.PageSelect", _( "Page Selector" ),
-                                                                      _( "Select the page to simulate item displays" ));
+void PL_EDITOR_FRAME::ClearToolbarControl( int aId )
+{
+    EDA_DRAW_FRAME::ClearToolbarControl( aId );
+
+    switch( aId )
+    {
+    case ID_SELECT_COORDINATE_ORIGIN: m_originSelectBox = nullptr; break;
+    case ID_SELECT_PAGE_NUMBER:       m_pageSelectBox = nullptr;   break;
+    }
+}
+
+
+ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector( "control.OriginSelector",
+                                                                          _( "Origin selector" ),
+                                                                          _( "Select the origin of the status bar coordinates" ),
+                                                                          { FRAME_PL_EDITOR } );
+ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect( "control.PageSelect",
+                                                                      _( "Page selector" ),
+                                                                      _( "Select the page to simulate item displays" ),
+                                                                      { FRAME_PL_EDITOR } );
 
 
 

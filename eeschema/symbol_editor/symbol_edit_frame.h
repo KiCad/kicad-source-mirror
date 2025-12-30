@@ -405,6 +405,8 @@ public:
     ///< Restore the empty editor screen, without any symbol or library selected.
     void emptyScreen();
 
+    void ClearToolbarControl( int aId ) override;
+
 protected:
     void configureToolbars() override;
     void setupUIConditions() override;
