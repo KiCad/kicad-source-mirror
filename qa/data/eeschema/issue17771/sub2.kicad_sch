@@ -1,0 +1,480 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "0f851e8f-c07f-4364-b42b-87d124bb42fe")
+	(paper "A5")
+	(lib_symbols
+		(symbol "Mechanical:TST-01025"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "TP"
+				(at 3.81 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TST-01025"
+				(at 2.54 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.27 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 2.54 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Test point, 25mils"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "tp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TP_25"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TST-01025_0_1"
+				(circle
+					(center 2.54 0)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "TST-01025_1_1"
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(junction
+		(at 99.06 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6b295bf6-2e23-494e-b9bc-ae89ad2dd3f3")
+	)
+	(bus_entry
+		(at 88.9 49.53)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "098c4c6b-b7e8-40d7-b0e3-9b273cb99800")
+	)
+	(bus_entry
+		(at 99.06 54.61)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13f36f65-005a-437d-ae91-1bce083a43d3")
+	)
+	(bus_entry
+		(at 91.44 55.88)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5236c7da-1da6-4a63-b271-58a8f7858284")
+	)
+	(bus_entry
+		(at 99.06 58.42)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8be9d15d-370f-41b0-93e6-b89d5357d5db")
+	)
+	(wire
+		(pts
+			(xy 91.44 55.88) (xy 96.52 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04fb5bef-01d6-420e-845f-2911c2bb906d")
+	)
+	(wire
+		(pts
+			(xy 96.52 52.07) (xy 102.87 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14309b91-fe9c-4e41-b7ff-742f72e02c48")
+	)
+	(bus
+		(pts
+			(xy 68.58 49.53) (xy 88.9 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34aec895-dbc7-4361-a158-f8c51107709c")
+	)
+	(wire
+		(pts
+			(xy 91.44 52.07) (xy 96.52 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "390a96e7-7c03-4c4c-b60a-99874bf574e4")
+	)
+	(bus
+		(pts
+			(xy 99.06 54.61) (xy 99.06 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c6c919c-42d2-4e07-9598-ac0004b86f4a")
+	)
+	(bus
+		(pts
+			(xy 99.06 63.5) (xy 104.14 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83c822ef-fef4-4ba3-b167-e848758c6362")
+	)
+	(bus
+		(pts
+			(xy 99.06 58.42) (xy 99.06 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d74b00df-21e3-4862-8bcd-84bf8a51fc66")
+	)
+	(wire
+		(pts
+			(xy 96.52 55.88) (xy 102.87 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e029451b-b4f8-4731-9936-2db9ae625caf")
+	)
+	(bus
+		(pts
+			(xy 88.9 49.53) (xy 88.9 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e404df6c-589d-4e1e-9e3d-a967947c9bad")
+	)
+	(bus
+		(pts
+			(xy 88.9 63.5) (xy 99.06 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ede3e47c-e424-404e-b093-6277050175f8")
+	)
+	(label "Y.Z1"
+		(at 96.52 52.07 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "11d8c704-97c7-4204-8490-88635fa826b1")
+	)
+	(label "Y{C}"
+		(at 93.98 63.5 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2acb4c17-48ce-434e-8ebe-cd20af85c625")
+	)
+	(label "Y.Z2"
+		(at 96.52 55.88 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e6b4a7e1-fffc-4ac2-8971-de559b0668d3")
+	)
+	(hierarchical_label "{B}"
+		(shape input)
+		(at 68.58 49.53 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "eabb4747-5d3a-4c62-a2e7-ab5d5d6933e5")
+	)
+	(symbol
+		(lib_id "Mechanical:TST-01025")
+		(at 102.87 55.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "50034e64-5ec3-4269-9ead-698c864f9807")
+		(property "Reference" "TP302"
+			(at 106.68 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TST-01025"
+			(at 105.41 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 101.6 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 105.41 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Test point, 25mils"
+			(at 102.87 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d436bd80-3fb7-4db2-9257-48052476a6d6")
+		)
+		(instances
+			(project "issue17771"
+				(path "/d9f38ef5-2741-42a5-b9f1-8ecb1cdb29f5/646c9f9f-0bca-47c1-b111-bccee7653836/4fea18b4-6b3d-4acc-a71b-7ee31c8961ac"
+					(reference "TP302")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:TST-01025")
+		(at 102.87 52.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "559c442d-219d-4fe6-8996-24c1a2d9cdcb")
+		(property "Reference" "TP301"
+			(at 106.68 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TST-01025"
+			(at 105.41 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 101.6 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 105.41 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Test point, 25mils"
+			(at 102.87 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "58113eea-dbba-4823-aa5c-9a2719884ee0")
+		)
+		(instances
+			(project "issue17771"
+				(path "/d9f38ef5-2741-42a5-b9f1-8ecb1cdb29f5/646c9f9f-0bca-47c1-b111-bccee7653836/4fea18b4-6b3d-4acc-a71b-7ee31c8961ac"
+					(reference "TP301")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 104.14 59.69)
+		(size 21.59 7.62)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "38a5c293-46d2-4c74-939b-43575208aa56")
+		(property "Sheetname" "sub3"
+			(at 104.14 58.9784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sub3.kicad_sch"
+			(at 104.14 67.8946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "V{C}" input
+			(at 104.14 63.5 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "26062b64-82da-4dd7-aec1-914a8f72b622")
+		)
+		(instances
+			(project "issue17771"
+				(path "/d9f38ef5-2741-42a5-b9f1-8ecb1cdb29f5/646c9f9f-0bca-47c1-b111-bccee7653836/4fea18b4-6b3d-4acc-a71b-7ee31c8961ac"
+					(page "4")
+				)
+			)
+		)
+	)
+)
