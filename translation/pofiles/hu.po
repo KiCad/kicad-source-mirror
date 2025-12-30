@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-30 01:00+0000\n"
+"PO-Revision-Date: 2025-12-31 05:05+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -4123,9 +4123,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Alapértelmezett PDF olvadó kiválasztása"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Renderelési idő %.3f sec"
+msgstr "Renderelő motor"
 
 #: common/dialogs/panel_common_settings_base.cpp:35
 msgid "Accelerated Graphics"
@@ -4335,9 +4334,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "A nagy kontrasztú fényerő-szabályozási mód tényezője:"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
-#, fuzzy
 msgid "Scaling"
-msgstr "Méretarány:"
+msgstr "Méretarány"
 
 #: common/dialogs/panel_common_settings_base.cpp:314
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4591,11 +4589,12 @@ msgstr "Hiba a fájl mentése közben"
 #: common/dialogs/panel_design_block_lib_table.cpp:794
 #: eeschema/dialogs/panel_sym_lib_table.cpp:728
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:820
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Hiba történt a projekt specifikus könyvtártáblázat mentése során."
+msgstr ""
+"Hiba történt a projekt specifikus könyvtártáblázat mentése során:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:886
 msgid "Design Block Libraries"
@@ -4646,9 +4645,8 @@ msgstr ""
 "láthatóak."
 
 #: common/dialogs/panel_embedded_files.cpp:57
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Másolás Referenciaponthoz"
+msgstr "Beágyazott referencia másolása"
 
 #: common/dialogs/panel_embedded_files.cpp:58
 msgid "Copy the reference for this embedded file"
@@ -4711,9 +4709,8 @@ msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:433
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Válassza ki az IDF exportálási fájl nevét"
+msgstr "Válasszon egy mappát a fájlok exportálásához"
 
 #: common/dialogs/panel_embedded_files.cpp:463
 #, c-format
@@ -4742,9 +4739,8 @@ msgid "Failed to write file '%s'."
 msgstr "Nem sikerült írni a(z) \"%s\" fájlba."
 
 #: common/dialogs/panel_embedded_files_base.cpp:37
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Másolás Referenciaponthoz"
+msgstr "Beágyazott referencia"
 
 #: common/dialogs/panel_embedded_files_base.cpp:59
 msgid "Add embedded file"
@@ -4980,9 +4976,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Művelet | Alapértelmezett gyorsbillentyű | Leírás"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "Helytelen (negatív) sarokméret"
+msgstr "A méretaránynak pozitívnak kell lennie."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
