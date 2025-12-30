@@ -339,6 +339,7 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetAllBusLabels() const
         {
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         {
             CONNECTION_TYPE type = item->Connection( &m_sheet )->Type();
 
@@ -368,6 +369,7 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetVectorBusLabels() const
         {
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         {
             SCH_CONNECTION* label_conn = item->Connection( &m_sheet );
 
@@ -1733,6 +1735,10 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 
             for( const auto& conn : dummy.Members() )
             {
+                // Only create subgraphs for NET members, not nested buses
+                if( !conn->IsNet() )
+                    continue;
+
                 wxString name = conn->FullLocalName();
 
                 CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
@@ -2398,12 +2404,19 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     if( jj == m_net_name_to_subgraphs_map.end() )
                         continue;
 
-                    for( CONNECTION_SUBGRAPH* old_sg : jj->second )
+                    // Copy the vector to avoid iterator invalidation when recaching
+                    std::vector<CONNECTION_SUBGRAPH*> old_subgraphs = jj->second;
+
+                    for( CONNECTION_SUBGRAPH* old_sg : old_subgraphs )
                     {
                         while( old_sg->m_absorbed )
                             old_sg = old_sg->m_absorbed_by;
 
+                        wxString old_sg_name = old_sg->m_driver_connection->Name();
                         old_sg->m_driver_connection->Clone( *conn );
+
+                        if( old_sg_name != old_sg->m_driver_connection->Name() )
+                            recacheSubgraphName( old_sg, old_sg_name );
                     }
                 }
             }

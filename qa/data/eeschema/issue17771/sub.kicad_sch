@@ -1,0 +1,123 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "f0c49bd6-2e02-4b2f-930b-02eed8be70b4")
+	(paper "A5")
+	(lib_symbols)
+	(bus_alias "C"
+		(members "Z1" "Z2")
+	)
+	(bus
+		(pts
+			(xy 66.04 38.1) (xy 83.82 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0dfae872-6c53-45bc-82b2-ed11d9428d61")
+	)
+	(bus
+		(pts
+			(xy 29.21 30.48) (xy 55.88 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "822f0772-ab48-465a-a892-c53efd9a8ac0")
+	)
+	(wire
+		(pts
+			(xy 40.64 45.72) (xy 59.69 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b3f075b-384b-4c74-a276-3bab1e4416bb")
+	)
+	(label "W.X.Y.Z1"
+		(at 40.64 45.72 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "43ab9f4e-bffd-4f38-8e4c-5a8158f5dcce")
+	)
+	(label "W.X{B}"
+		(at 66.04 38.1 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "44de4467-8bf7-4cb9-b79a-35fdbd12ecd7")
+	)
+	(hierarchical_label "W{A}"
+		(shape input)
+		(at 29.21 30.48 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "08953d6c-47b6-49de-a15a-56a961ca498e")
+	)
+	(sheet
+		(at 83.82 27.94)
+		(size 30.48 19.05)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "4fea18b4-6b3d-4acc-a71b-7ee31c8961ac")
+		(property "Sheetname" "sub2"
+			(at 83.82 27.2284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sub2.kicad_sch"
+			(at 83.82 47.5746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "{B}" input
+			(at 83.82 38.1 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "7a6b7b66-5fae-487b-af2f-8095095aba85")
+		)
+		(instances
+			(project "issue17771"
+				(path "/d9f38ef5-2741-42a5-b9f1-8ecb1cdb29f5/646c9f9f-0bca-47c1-b111-bccee7653836"
+					(page "3")
+				)
+			)
+		)
+	)
+)
