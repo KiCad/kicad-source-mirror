@@ -81,6 +81,7 @@ set( QA_EESCHEMA_SRCS
     test_ee_item.cpp
     test_incremental_netlister.cpp
     test_legacy_power_symbols.cpp
+    test_history_autosave_legacy.cpp
     test_sch_commit.cpp
     test_shape_corner_radius.cpp
     test_sch_group.cpp

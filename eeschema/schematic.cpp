@@ -2162,7 +2162,12 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<wxStrin
         wxString rel = absPath.Mid( projPath.length() );
 
         // Destination mirrors project-relative path under .history
-        wxFileName dst( historyRootPath, rel );
+        wxFileName dst( rel );
+
+        if( dst.IsRelative() )
+            dst.MakeAbsolute( historyRootPath );
+        else
+            dst.SetPath( historyRootPath );
 
         // Ensure destination directory exists
         wxFileName dstDir( dst );
