@@ -473,6 +473,11 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( fileName.GetFullPath() );
 
+        // For project import (empty filename), this sheet becomes the virtual root.
+        // Set niluuid before SetTopLevelSheets() so ensureVirtualRoot() recognizes it.
+        if( aFileName.empty() )
+            const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
+
         aSchematic->SetTopLevelSheets( { m_rootSheet } );
 
         SCH_SHEET_PATH sheetpath;
@@ -487,7 +492,10 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         screen->SetFileName( aFileName );
         m_rootSheet->SetScreen( screen );
-        const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
+
+        // For single-file import, use the screen's UUID for the root sheet
+        if( !aFileName.empty() )
+            const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
     m_sheetPath.push_back( m_rootSheet );
@@ -506,6 +514,19 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         LoadSchematicProject( aSchematic, aProperties );
     else
         ParseAltiumSch( aFileName );
+
+    if( aFileName.empty() )
+    {
+        std::vector<SCH_SHEET*> topLevelSheets;
+
+        for( SCH_ITEM* item : rootScreen->Items().OfType( SCH_SHEET_T ) )
+            topLevelSheets.push_back( static_cast<SCH_SHEET*>( item ) );
+
+        if( !topLevelSheets.empty() )
+            aSchematic->SetTopLevelSheets( topLevelSheets );
+
+        m_rootSheet = &aSchematic->Root();
+    }
 
     if( m_reporter )
     {
