@@ -170,7 +170,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_netNavigatorMenuNetName(),
         m_highlightedConnChanged( false ),
         m_designBlocksPane( nullptr ),
-        m_remoteSymbolPane( nullptr )
+        m_remoteSymbolPane( nullptr ),
+        m_currentVariantCtrl( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( &Prj() );
