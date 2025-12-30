@@ -181,16 +181,10 @@ int BOARD_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
 
     switch( mode )
     {
-    case LEADER_MODE::DIRECT:
-        f->SelectLeftToolbarAction( PCB_ACTIONS::lineModeFree );
-        break;
-    case LEADER_MODE::DEG90:
-        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode90 );
-        break;
-    case LEADER_MODE::DEG45:
+    case LEADER_MODE::DIRECT: f->SelectToolbarAction( PCB_ACTIONS::lineModeFree ); break;
+    case LEADER_MODE::DEG90:  f->SelectToolbarAction( PCB_ACTIONS::lineMode90 );   break;
     default:
-        f->SelectLeftToolbarAction( PCB_ACTIONS::lineMode45 );
-        break;
+    case LEADER_MODE::DEG45:  f->SelectToolbarAction( PCB_ACTIONS::lineMode45 );   break;
     }
 
     return 0;

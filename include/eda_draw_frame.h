@@ -553,6 +553,8 @@ protected:
 
     void unitsChangeRefresh() override;
 
+    void setupUIConditions() override;
+
     void setupUnits( APP_SETTINGS_BASE* aCfg );
 
     void updateStatusBarWidths();

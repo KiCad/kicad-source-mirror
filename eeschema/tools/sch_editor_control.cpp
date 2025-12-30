@@ -2890,10 +2890,10 @@ int SCH_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
     // Update the left toolbar Line modes group icon to match current mode
     switch( static_cast<LINE_MODE>( m_frame->eeconfig()->m_Drawing.line_mode ) )
     {
-    case LINE_MODE::LINE_MODE_FREE: m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineModeFree ); break;
-    case LINE_MODE::LINE_MODE_90:   m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineMode90 );   break;
+    case LINE_MODE::LINE_MODE_FREE: m_frame->SelectToolbarAction( SCH_ACTIONS::lineModeFree ); break;
+    case LINE_MODE::LINE_MODE_90:   m_frame->SelectToolbarAction( SCH_ACTIONS::lineMode90 );   break;
     default:
-    case LINE_MODE::LINE_MODE_45:   m_frame->SelectLeftToolbarAction( SCH_ACTIONS::lineMode45 );   break;
+    case LINE_MODE::LINE_MODE_45:   m_frame->SelectToolbarAction( SCH_ACTIONS::lineMode45 );   break;
     }
 
     return 0;

@@ -79,6 +79,7 @@
 
 #include <wx/snglinst.h>
 #include <wx/fdrepdlg.h>
+#include <tool/editor_conditions.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
@@ -325,6 +326,14 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
     UpdateStatusBar();
     UpdateMsgPanel();
     UpdateProperties();
+
+    switch( GetUserUnits() )
+    {
+    default:
+    case EDA_UNITS::MM:   SelectToolbarAction( ACTIONS::millimetersUnits ); break;
+    case EDA_UNITS::INCH: SelectToolbarAction( ACTIONS::inchesUnits );      break;
+    case EDA_UNITS::MILS: SelectToolbarAction( ACTIONS::milsUnits );        break;
+    }
 }
 
 
@@ -783,8 +792,7 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
 }
 
 
-wxStatusBar* EDA_DRAW_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
-                                                const wxString& name )
+wxStatusBar* EDA_DRAW_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
     return new KISTATUSBAR( number, this, id, KISTATUSBAR::STYLE_FLAGS::WARNING_ICON );
 }
@@ -881,8 +889,7 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower,
-                                     int aPadding )
+void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding )
 {
     if( m_messagePanel && !m_isClosing )
         m_messagePanel->AppendMessage( aTextUpper, aTextLower, aPadding );
@@ -908,8 +915,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( const std::vector<MSG_PANEL_ITEM>& aList )
 }
 
 
-void EDA_DRAW_FRAME::SetMsgPanel( const wxString& aTextUpper, const wxString& aTextLower,
-                                  int aPadding )
+void EDA_DRAW_FRAME::SetMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding )
 {
     if( m_messagePanel && !m_isClosing )
     {
@@ -1303,6 +1309,21 @@ COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings( bool aForceRefresh ) const
 }
 
 
+void EDA_DRAW_FRAME::setupUIConditions()
+{
+    EDA_BASE_FRAME::setupUIConditions();
+
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    EDITOR_CONDITIONS cond( this );
+
+    wxASSERT( mgr );
+
+    mgr->SetConditions( ACTIONS::millimetersUnits, ACTION_CONDITIONS().Check( cond.Units( EDA_UNITS::MM ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,      ACTION_CONDITIONS().Check( cond.Units( EDA_UNITS::INCH ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,        ACTION_CONDITIONS().Check( cond.Units( EDA_UNITS::MILS ) ) );
+}
+
+
 void EDA_DRAW_FRAME::setupUnits( APP_SETTINGS_BASE* aCfg )
 {
     COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>();
@@ -1378,8 +1399,7 @@ void EDA_DRAW_FRAME::onActivate( wxActivateEvent& aEvent )
 }
 
 
-bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName,
-                                            BITMAP_TYPE aBitmapType )
+bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TYPE aBitmapType )
 {
     bool retv = true;
 
@@ -1478,9 +1498,8 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
         if( !IsPluginActionButtonVisible( *action, config() ) )
             continue;
 
-        const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
-                                             ? action->icon_dark
-                                             : action->icon_light;
+        const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk() ? action->icon_dark
+                                                                                               : action->icon_light;
 
         wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, icon, action->name );
 

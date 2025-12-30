@@ -872,19 +872,15 @@ void FOOTPRINT_CHOOSER_FRAME::setupUIConditions()
     // clang-format off
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::toggleGrid,           CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::cursorSmallCrosshairs,    CHECK( cond.CursorSmallCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursorFullCrosshairs,     CHECK( cond.CursorFullCrosshairs() ) );
-    mgr->SetConditions( ACTIONS::cursor45Crosshairs,       CHECK( cond.Cursor45Crosshairs() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,            CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::cursorSmallCrosshairs, CHECK( cond.CursorSmallCrosshairs() ) );
+    mgr->SetConditions( ACTIONS::cursorFullCrosshairs,  CHECK( cond.CursorFullCrosshairs() ) );
+    mgr->SetConditions( ACTIONS::cursor45Crosshairs,    CHECK( cond.Cursor45Crosshairs() ) );
 
-    mgr->SetConditions( ACTIONS::millimetersUnits,     CHECK( cond.Units( EDA_UNITS::MM ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,          CHECK( cond.Units( EDA_UNITS::INCH ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,            CHECK( cond.Units( EDA_UNITS::MILS ) ) );
-
-    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,   CHECK( cond.PadNumbersDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::textOutlines,     CHECK( !cond.TextFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,    CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,    CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,      CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,  CHECK( !cond.GraphicsFillDisplay() ) );
 
 #undef CHECK
     // clang-format on
