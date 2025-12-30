@@ -1,11 +1,12 @@
 {
   "api": {
     "enable_server": false,
-    "interpreter_path": ""
+    "interpreter_path": "/usr/bin/python3"
   },
   "appearance": {
     "grid_striping": false,
     "hicontrast_dimming_factor": 0.800000011920929,
+    "icon_theme": 2,
     "show_scrollbars": false,
     "text_editor_zoom": 0,
     "toolbar_icon_size": 24,
@@ -32,7 +33,9 @@
   "git": {
     "authorEmail": "",
     "authorName": "",
+    "enableGit": true,
     "repositories": null,
+    "updatInterval": 5,
     "useDefaultAuthor": true
   },
   "graphics": {
@@ -87,6 +90,6 @@
     "pdf_viewer_name": "",
     "text_editor": "/usr/bin/open -e",
     "use_system_pdf_viewer": true,
-    "working_dir": ""
+    "working_dir": "/home/seth/code/kicad/kicad-v9/qa/tests"
   }
 }

@@ -1,0 +1,82 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "a762d6aa-3004-4a46-aea9-50946c64404d")
+	(paper "A5")
+	(lib_symbols)
+	(bus
+		(pts
+			(xy 85.09 63.5) (xy 116.84 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f299d1f-167a-4453-8dda-a71a2e7358c0")
+	)
+	(label "A[0..3]"
+		(at 85.09 63.5 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9de6d7de-3ec2-4598-a28c-3f8dc8deddfc")
+	)
+	(sheet
+		(at 116.84 55.88)
+		(size 19.05 13.97)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "3a95e766-3c8c-4bb3-9c77-13854beaa270")
+		(property "Sheetname" "test"
+			(at 116.84 55.1684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "test.kicad_sch"
+			(at 116.84 70.4346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "A[0..3]" input
+			(at 116.84 63.5 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "ae8a5931-853a-4934-b9ff-4848e3b8359e")
+		)
+		(instances
+			(project "issue18606"
+				(path "/a762d6aa-3004-4a46-aea9-50946c64404d"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

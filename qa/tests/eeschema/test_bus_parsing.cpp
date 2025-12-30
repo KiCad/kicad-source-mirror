@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE( ParsesFormattedVectorBus )
     std::vector<wxString> members;
 
     BOOST_CHECK( NET_SETTINGS::ParseBusVector( wxS( "D_{[1..2]}" ), &name, &members ) );
-    BOOST_CHECK_EQUAL( name, wxS( "D" ) );
+    BOOST_CHECK_EQUAL( name, wxString( wxS( "D" ) ) );
 
     std::vector<wxString> expected = { wxS( "D1" ), wxS( "D2" ) };
 
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE( ParsesFormattedGroupWithVectorMember )
     std::vector<wxString> members;
 
     BOOST_CHECK( NET_SETTINGS::ParseBusGroup( wxS( "MEM{D_{[1..2]} ~{LATCH}}" ), &name, &members ) );
-    BOOST_CHECK_EQUAL( name, wxS( "MEM" ) );
+    BOOST_CHECK_EQUAL( name, wxString( wxS( "MEM" ) ) );
 
     std::vector<wxString> expected = { wxS( "D[1..2]" ), wxS( "LATCH" ) };
 
