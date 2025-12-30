@@ -620,7 +620,10 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         // Create a temporary sheet for recursion testing to prevent a possible recursion error.
         std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &schematic );
-        *tmpSheet->GetField( FIELD_T::SHEET_NAME ) = m_fields->GetField( FIELD_T::SHEET_NAME );
+
+        if( SCH_FIELD* srcField = m_fields->GetField( FIELD_T::SHEET_NAME ) )
+            *tmpSheet->GetField( FIELD_T::SHEET_NAME ) = *srcField;
+
         tmpSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( sheetFileName.GetFullPath() );
         tmpSheet->SetScreen( useScreen );
 
