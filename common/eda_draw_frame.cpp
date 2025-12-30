@@ -785,7 +785,7 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
 wxStatusBar* EDA_DRAW_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
                                                 const wxString& name )
 {
-    return new KISTATUSBAR( number, this, id, KISTATUSBAR::STYLE_FLAGS::NONE_STYLE );
+    return new KISTATUSBAR( number, this, id, KISTATUSBAR::STYLE_FLAGS::WARNING_ICON );
 }
 
 

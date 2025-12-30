@@ -34,6 +34,7 @@
 #include <wx_filename.h>
 #include <libraries/library_table.h>
 #include <libraries/symbol_library_adapter.h>
+#include <reporter.h>
 #include <wx/dir.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
@@ -70,8 +71,8 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
-    // Show the font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     SCH_SHEET* rootSheet = nullptr;
 
@@ -240,8 +241,8 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
     wxFileName csafn;
     wxString   fplibname = "cadstarpcblib";
 
-    // Suppress font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     if( aProperties && aProperties->contains( "csa" ) )
     {
@@ -321,4 +322,3 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
     m_cachefplibname = fplibname;
     m_cacheTimestamp = timestamp;
 }
-

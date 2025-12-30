@@ -68,6 +68,13 @@ void fontconfig::FONTCONFIG::SetReporter( REPORTER* aReporter )
 }
 
 
+REPORTER* fontconfig::FONTCONFIG::GetReporter()
+{
+    std::lock_guard lock( g_fontConfigMutex );
+    return s_reporter;
+}
+
+
 /**
  * This is simply a wrapper to call FcInit() with SEH for Windows.
  *

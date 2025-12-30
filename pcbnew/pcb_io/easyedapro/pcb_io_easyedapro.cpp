@@ -109,7 +109,8 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     if( m_progressReporter )
     {
@@ -380,7 +381,8 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
                                              const wxString& aFootprintName, bool aKeepUUID,
                                              const std::map<std::string, UTF8>* aProperties )
 {
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     PCB_IO_EASYEDAPRO_PARSER parser( nullptr, nullptr );
     FOOTPRINT*            footprint = nullptr;

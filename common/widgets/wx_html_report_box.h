@@ -20,6 +20,7 @@
 #ifndef WX_HTML_REPORT_BOX_H
 #define WX_HTML_REPORT_BOX_H
 
+#include <kicommon.h>
 #include <reporter.h>
 #include <vector>
 #include <widgets/html_window.h>
@@ -28,7 +29,7 @@
 /**
  * A slimmed down version of #WX_HTML_REPORT_PANEL
  */
-class WX_HTML_REPORT_BOX : public HTML_WINDOW, public REPORTER
+class KICOMMON_API WX_HTML_REPORT_BOX : public HTML_WINDOW, public REPORTER
 {
 public:
     WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id = wxID_ANY,

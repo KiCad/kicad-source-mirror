@@ -81,6 +81,13 @@ public:
      */
     static void SetReporter( REPORTER* aReporter );
 
+    /**
+     * Get the current reporter used for font substitution warnings.
+     *
+     * @return The current reporter, or nullptr if not set.
+     */
+    static REPORTER* GetReporter();
+
 private:
     std::map<std::string, FONTINFO> m_fontInfoCache;
     wxString                        m_fontCacheLastLang;

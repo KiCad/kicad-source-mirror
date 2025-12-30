@@ -67,6 +67,7 @@
 #include <tools/sch_navigate_tool.h>
 #include <trace_helpers.h>
 #include <widgets/filedlg_import_non_kicad.h>
+#include <widgets/kistatusbar.h>
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <local_history.h>
@@ -163,9 +164,14 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     m_infoBar->Dismiss();
 
+    if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+        statusBar->ClearLoadWarningMessages();
+
     WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create Schematic" )
                                                         : _( "Load Schematic" ), 1,
                                            PR_CAN_ABORT );
+    WX_STRING_REPORTER loadReporter;
+    LOAD_INFO_REPORTER_SCOPE loadReporterScope( &loadReporter );
 
     bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
 
@@ -404,6 +410,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             CreateDefaultScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
+            // Show any messages collected before the failure
+            if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+                statusBar->SetLoadWarningMessages( loadReporter.GetMessages() );
+
             msg.Printf( _( "Failed to load '%s'." ), fullFileName );
             SetMsgPanel( wxEmptyString, msg );
 
@@ -431,6 +441,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             sheetList.SetInitialPageNumbers();
 
         UpdateFileHistory( fullFileName );
+
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( loadReporter.GetMessages() );
 
         SCH_SCREENS schematic( Schematic().Root() );
 
@@ -1418,6 +1431,12 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     wxCommandEvent changingEvt( EDA_EVT_SCHEMATIC_CHANGING );
     ProcessEventLocally( changingEvt );
 
+    if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+        statusBar->ClearLoadWarningMessages();
+
+    WX_STRING_REPORTER loadReporter;
+    LOAD_INFO_REPORTER_SCOPE loadReporterScope( &loadReporter );
+
     std::unique_ptr<SCHEMATIC> newSchematic = std::make_unique<SCHEMATIC>( &Prj() );
 
     switch( fileType )
@@ -1554,6 +1573,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         }
 
         updateTitle();
+
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( loadReporter.GetMessages() );
+
         break;
     }
 

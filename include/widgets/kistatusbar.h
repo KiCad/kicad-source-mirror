@@ -27,6 +27,8 @@
 
 #include <kicommon.h>
 #include <optional>
+#include <vector>
+#include <widgets/report_severity.h>
 
 class wxGauge;
 class wxButton;
@@ -42,6 +44,16 @@ class BITMAP_BUTTON;
  * Background notifications button (FIELD_OFFSET_NOTIFICATION_BUTTON  offset id)
  */
 
+/**
+ * Structure to store a load message with its severity.
+ */
+struct LOAD_MESSAGE
+{
+    wxString  message;
+    SEVERITY  severity;
+};
+
+
 class KICOMMON_API KISTATUSBAR : public wxStatusBar
 {
 public:
@@ -50,6 +62,7 @@ public:
         NONE_STYLE        = 0x00,
         NOTIFICATION_ICON = 0x01,
         CANCEL_BUTTON     = 0x02,
+        WARNING_ICON      = 0x04,
     };
 
     static constexpr auto DEFAULT_STYLE =
@@ -100,16 +113,21 @@ public:
      */
     void SetNotificationCount( int aCount );
 
+    void SetLoadWarningMessages( const wxString& aMessages );
+    void ClearLoadWarningMessages();
+
 private:
     void onSize( wxSizeEvent& aEvent );
     void onBackgroundProgressClick( wxMouseEvent& aEvent );
     void onNotificationsIconClick( wxCommandEvent& aEvent );
+    void onLoadWarningsIconClick( wxCommandEvent& aEvent );
 
     enum class FIELD
     {
         BGJOB_LABEL,
         BGJOB_GAUGE,
         BGJOB_CANCEL,
+        WARNING,
         NOTIFICATION
     };
 
@@ -120,6 +138,8 @@ private:
     wxButton*      m_backgroundStopButton;
     wxStaticText*  m_backgroundTxt;
     BITMAP_BUTTON* m_notificationsButton;
+    BITMAP_BUTTON* m_warningButton;
+    std::vector<LOAD_MESSAGE> m_loadWarningMessages;
     int            m_normalFieldsCount;
     STYLE_FLAGS    m_styleFlags;
 };

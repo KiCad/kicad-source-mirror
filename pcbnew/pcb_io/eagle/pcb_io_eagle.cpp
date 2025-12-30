@@ -325,7 +325,8 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 {
     wxXmlNode*      doc;
 
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     init( aProperties );
 
@@ -3198,7 +3199,8 @@ long long PCB_IO_EAGLE::GetLibraryTimestamp( const wxString& aPath ) const
 
 void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
 {
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     try
     {

@@ -56,6 +56,7 @@
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
 #include <font/fontconfig.h>
+#include <reporter.h>
 #include <geometry/ellipse.h>
 #include <geometry/shape_utils.h>
 #include <string_utils.h>
@@ -456,8 +457,8 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     fileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
     m_schematic = aSchematic;
 
-    // Show the font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
     std::unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
@@ -4723,8 +4724,8 @@ long long SCH_IO_ALTIUM::getLibraryTimestamp( const wxString& aLibraryPath ) con
 void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString& aLibraryPath,
                                          const std::map<std::string, UTF8>* aProperties )
 {
-    // Suppress font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     if( m_libCache.count( aLibraryPath ) )
     {

@@ -174,6 +174,7 @@ set( KICOMMON_SRCS
 
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp
+    dialogs/dialog_HTML_reporter_base.cpp
     dialogs/panel_startwizard_libraries_base.cpp
     dialogs/panel_startwizard_privacy_base.cpp
     dialogs/panel_startwizard_settings_base.cpp
@@ -195,6 +196,7 @@ set( KICOMMON_SRCS
     widgets/wx_grid.cpp
     widgets/wx_html_report_panel.cpp
     widgets/wx_html_report_panel_base.cpp
+    widgets/wx_html_report_box.cpp
 
     database/database_lib_settings.cpp
 
@@ -455,7 +457,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_group_properties.cpp
     dialogs/dialog_group_properties_base.cpp
     dialogs/dialog_hotkey_list.cpp
-    dialogs/dialog_HTML_reporter_base.cpp
     dialogs/dialog_import_choose_project.cpp
     dialogs/dialog_import_choose_project_base.cpp
     dialogs/dialog_multi_unit_entry.cpp
@@ -572,7 +573,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_combobox.cpp
     widgets/wx_dataviewctrl.cpp
     widgets/wx_ellipsized_static_text.cpp
-    widgets/wx_html_report_box.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp
     widgets/wx_progress_reporters.cpp

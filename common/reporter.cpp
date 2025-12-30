@@ -28,6 +28,7 @@
 #include <mutex>
 #include <macros.h>
 #include <reporter.h>
+#include <font/fontconfig.h>
 #include <string_utils.h>
 #include <widgets/wx_infobar.h>
 #include <wx/crt.h>
@@ -196,6 +197,71 @@ REPORTER& WXLOG_REPORTER::GetInstance()
         s_wxLogReporter = new WXLOG_REPORTER();
 
     return *s_wxLogReporter;
+}
+
+
+REPORTER& LOAD_INFO_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
+{
+    REPORTER::Report( aMsg, aSeverity );
+
+    REPORTER* target = m_redirectTarget;
+
+    if( !target )
+        target = &WXLOG_REPORTER::GetInstance();
+
+    target->Report( aMsg, aSeverity );
+
+    return *this;
+}
+
+
+LOAD_INFO_REPORTER& LOAD_INFO_REPORTER::GetInstance()
+{
+    static LOAD_INFO_REPORTER s_loadInfoReporter;
+    std::lock_guard lock( g_logReporterMutex );
+
+    return s_loadInfoReporter;
+}
+
+
+void LOAD_INFO_REPORTER::SetRedirectTarget( REPORTER* aReporter )
+{
+    std::lock_guard lock( g_logReporterMutex );
+    m_redirectTarget = aReporter;
+}
+
+
+REPORTER* LOAD_INFO_REPORTER::GetRedirectTarget() const
+{
+    std::lock_guard lock( g_logReporterMutex );
+    return m_redirectTarget;
+}
+
+
+LOAD_INFO_REPORTER_SCOPE::LOAD_INFO_REPORTER_SCOPE( REPORTER* aReporter ) :
+        m_reporter( LOAD_INFO_REPORTER::GetInstance() ),
+        m_previousReporter( m_reporter.GetRedirectTarget() )
+{
+    m_reporter.SetRedirectTarget( aReporter );
+}
+
+
+LOAD_INFO_REPORTER_SCOPE::~LOAD_INFO_REPORTER_SCOPE()
+{
+    m_reporter.SetRedirectTarget( m_previousReporter );
+}
+
+
+FONTCONFIG_REPORTER_SCOPE::FONTCONFIG_REPORTER_SCOPE( REPORTER* aReporter ) :
+        m_previousReporter( fontconfig::FONTCONFIG::GetReporter() )
+{
+    fontconfig::FONTCONFIG::SetReporter( aReporter );
+}
+
+
+FONTCONFIG_REPORTER_SCOPE::~FONTCONFIG_REPORTER_SCOPE()
+{
+    fontconfig::FONTCONFIG::SetReporter( m_previousReporter );
 }
 
 

@@ -35,6 +35,7 @@
 #include <wx/xml/xml.h>
 
 #include <font/fontconfig.h>
+#include <reporter.h>
 #include <io/eagle/eagle_parser.h>
 #include <lib_id.h>
 #include <progress_reporter.h>
@@ -351,8 +352,8 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
-    // Show the font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     m_filename = aFileName;
     m_schematic = aSchematic;
@@ -538,8 +539,8 @@ long long SCH_IO_EAGLE::getLibraryTimestamp( const wxString& aLibraryPath ) cons
 
 void SCH_IO_EAGLE::ensureLoadedLibrary( const wxString& aLibraryPath )
 {
-    // Suppress font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     if( m_eagleLibs.find( m_libName ) != m_eagleLibs.end() )
     {

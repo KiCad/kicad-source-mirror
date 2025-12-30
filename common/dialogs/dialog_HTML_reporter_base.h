@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <kicommon.h>
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
@@ -29,7 +30,7 @@ class WX_HTML_REPORT_BOX;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_HTML_REPORTER
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_HTML_REPORTER : public DIALOG_SHIM
+class KICOMMON_API DIALOG_HTML_REPORTER : public DIALOG_SHIM
 {
 	private:
 

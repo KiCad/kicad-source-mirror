@@ -279,6 +279,56 @@ public:
 };
 
 
+class KICOMMON_API LOAD_INFO_REPORTER : public REPORTER
+{
+public:
+    LOAD_INFO_REPORTER()
+    { }
+
+    virtual ~LOAD_INFO_REPORTER()
+    { }
+
+    static LOAD_INFO_REPORTER& GetInstance();
+
+    REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    void SetRedirectTarget( REPORTER* aReporter );
+    REPORTER* GetRedirectTarget() const;
+
+private:
+    REPORTER* m_redirectTarget = nullptr;
+};
+
+
+class KICOMMON_API LOAD_INFO_REPORTER_SCOPE
+{
+public:
+    explicit LOAD_INFO_REPORTER_SCOPE( REPORTER* aReporter );
+    ~LOAD_INFO_REPORTER_SCOPE();
+
+private:
+    LOAD_INFO_REPORTER& m_reporter;
+    REPORTER*           m_previousReporter;
+};
+
+
+/**
+ * RAII class to set and restore the fontconfig reporter.
+ *
+ * Ensures the fontconfig reporter is properly reset even if an exception occurs
+ * during file loading operations.
+ */
+class KICOMMON_API FONTCONFIG_REPORTER_SCOPE
+{
+public:
+    explicit FONTCONFIG_REPORTER_SCOPE( REPORTER* aReporter );
+    ~FONTCONFIG_REPORTER_SCOPE();
+
+private:
+    REPORTER* m_previousReporter;
+};
+
+
 class KICOMMON_API REDIRECT_REPORTER : public REPORTER
 {
 public:

@@ -61,6 +61,7 @@
 #include <sch_textbox.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
+#include <reporter.h>
 
 using namespace TSCHEMATIC_T;
 
@@ -104,8 +105,8 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
 
     wxFileName fn = aFileName;
 
-    // Show the font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( &WXLOG_REPORTER::GetInstance() );
+    // Collect the font substitution warnings (RAII - automatically reset on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     // Unfortunately child sheet file names the legacy schematic file format are not fully
     // qualified and are always appended to the project path.  The aFileName attribute must
@@ -1596,8 +1597,8 @@ void SCH_IO_KICAD_SEXPR::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& a
 void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
                                    const std::map<std::string, UTF8>* aProperties )
 {
-    // Suppress font substitution warnings
-    fontconfig::FONTCONFIG::SetReporter( nullptr );
+    // Suppress font substitution warnings (RAII - automatically restored on scope exit)
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
