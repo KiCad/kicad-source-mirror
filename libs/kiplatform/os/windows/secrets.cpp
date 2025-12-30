@@ -31,11 +31,14 @@ namespace KIPLATFORM
         {
             wxString display = aService + wxS( ":" ) + aKey;
 
+            // Store the UTF-8 string in a variable to keep it alive during the API call
+            wxScopedCharBuffer utf8Secret = aSecret.utf8_str();
+
             CREDENTIALW cred = { 0 };
             cred.Type = CRED_TYPE_GENERIC;
             cred.TargetName = (LPWSTR) display.wc_str();
-            cred.CredentialBlobSize = (DWORD) aSecret.size();
-            cred.CredentialBlob = (LPBYTE) aSecret.utf8_str().data();
+            cred.CredentialBlobSize = (DWORD) utf8Secret.length();
+            cred.CredentialBlob = (LPBYTE) utf8Secret.data();
             cred.Persist = CRED_PERSIST_ENTERPRISE;
 
             return CredWriteW( &cred, 0 );
