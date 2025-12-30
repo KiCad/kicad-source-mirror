@@ -270,15 +270,15 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
     //rebuildConnectivity
     board->BuildConnectivity();
 
-    if( TOOL_MANAGER* manger = GetManager() )
-        manger->PostEvent( EVENTS::ConnectivityChangedEvent );
+    if( TOOL_MANAGER* manager = GetManager() )
+        manager->PostEvent( EVENTS::ConnectivityChangedEvent );
 
     editFrame->GetCanvas()->RedrawRatsnest();
 
     if( dialogResult == ZONE_MANAGER_REPOUR )
     {
-        if( TOOL_MANAGER* manger = GetManager() )
-            manger->PostAction( PCB_ACTIONS::zoneFillAll );
+        if( TOOL_MANAGER* manager = GetManager() )
+            manager->PostAction( PCB_ACTIONS::zoneFillAll );
     }
 
     return 0;
