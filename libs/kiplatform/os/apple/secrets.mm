@@ -23,11 +23,16 @@
 
 bool KIPLATFORM::SECRETS::StoreSecret(const wxString& aService, const wxString& aKey, const wxString& aValue)
 {
+    // Store UTF-8 strings in variables to keep them alive during API calls
+    wxScopedCharBuffer utf8Service = aService.utf8_str();
+    wxScopedCharBuffer utf8Key = aKey.utf8_str();
+    wxScopedCharBuffer utf8Value = aValue.utf8_str();
+
     // Create a query for the secret
     CFMutableDictionaryRef query = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
-    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, aService.utf8_str().data(), kCFStringEncodingUTF8));
-    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, aKey.utf8_str().data(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, utf8Service.data(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, utf8Key.data(), kCFStringEncodingUTF8));
 
     // Try to find the existing item
     OSStatus status = SecItemCopyMatching(query, NULL);
@@ -35,14 +40,14 @@ bool KIPLATFORM::SECRETS::StoreSecret(const wxString& aService, const wxString& 
     if (status == errSecItemNotFound)
     {
         // Add the new secret to the keychain
-        CFDictionarySetValue(query, kSecValueData, CFDataCreate(NULL, (const UInt8*)aValue.utf8_str().data(), aValue.length()));
+        CFDictionarySetValue(query, kSecValueData, CFDataCreate(NULL, (const UInt8*)utf8Value.data(), utf8Value.length()));
         status = SecItemAdd(query, NULL);
     }
     else if (status == errSecSuccess)
     {
         // Update the existing secret in the keychain
         CFMutableDictionaryRef updateQuery = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        CFDictionarySetValue(updateQuery, kSecValueData, CFDataCreate(NULL, (const UInt8*)aValue.utf8_str().data(), aValue.length()));
+        CFDictionarySetValue(updateQuery, kSecValueData, CFDataCreate(NULL, (const UInt8*)utf8Value.data(), utf8Value.length()));
         status = SecItemUpdate(query, updateQuery);
         CFRelease(updateQuery);
     }
@@ -54,11 +59,15 @@ bool KIPLATFORM::SECRETS::StoreSecret(const wxString& aService, const wxString& 
 
 bool KIPLATFORM::SECRETS::GetSecret(const wxString& aService, const wxString& aKey, wxString& aValue)
 {
+    // Store UTF-8 strings in variables to keep them alive during API calls
+    wxScopedCharBuffer utf8Service = aService.utf8_str();
+    wxScopedCharBuffer utf8Key = aKey.utf8_str();
+
     // Create a query for the secret
     CFMutableDictionaryRef query = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
-    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, aService.utf8_str().data(), kCFStringEncodingUTF8));
-    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, aKey.utf8_str().data(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, utf8Service.data(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, utf8Key.data(), kCFStringEncodingUTF8));
     CFDictionarySetValue(query, kSecReturnData, kCFBooleanTrue); // Return the secret data
 
     // Retrieve the secret from the keychain
