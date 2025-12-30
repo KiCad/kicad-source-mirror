@@ -103,6 +103,14 @@ void SCH_SYMBOL_VARIANT::InitializeAttributes( const SCH_SYMBOL& aSymbol )
 }
 
 
+void SCH_SHEET_VARIANT::InitializeAttributes( const SCH_SHEET& aSheet )
+{
+    m_DNP = aSheet.GetDNP();
+    m_ExcludedFromBOM = aSheet.GetExcludedFromBOM();
+    m_ExcludedFromSim = aSheet.GetExcludedFromSim();
+}
+
+
 namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const

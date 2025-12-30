@@ -96,6 +96,16 @@ public:
     const SCH_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
+     * Return a field in this sheet.
+     *
+     * @param aFieldName is the canonical name of the field.
+     *
+     * @return Both non-const and const versions return nullptr if the field is not found.
+     */
+    SCH_FIELD* GetField( const wxString& aFieldName );
+    const SCH_FIELD* GetField( const wxString& aFieldName ) const;
+
+    /**
      * Return the next ordinal for a user field for this sheet
      */
     int GetNextFieldOrdinal() const;
@@ -106,6 +116,24 @@ public:
      * @param aFields are the fields to set in this symbol.
      */
     void SetFields( const std::vector<SCH_FIELD>& aFields );
+
+    /**
+     * Add an optional @aField to the list of fields.
+     *
+     * If @aField already exists in the field list, it replaces the existing field.  If @aField does not exist,
+     * it is added to the field list.
+     *
+     * @note This has no affect if @aField is the sheet file name or sheet name fields.
+     *
+     * @param aField is the field to add.
+     */
+    void AddOptionalField( const SCH_FIELD& aField );
+
+    void SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath = nullptr,
+                       const wxString& aVariantName = wxEmptyString );
+
+    wxString GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath = nullptr,
+                           const wxString& aVariantName = wxEmptyString ) const;
 
     wxString GetShownName( bool aAllowExtraText ) const
     {
@@ -409,16 +437,9 @@ public:
      * Set or clear the exclude from simulation flag.
      */
     void SetExcludedFromSim( bool aExcludeFromSim, const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) override
-    {
-        m_excludedFromSim = aExcludeFromSim;
-    }
-
+                             const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) const override
-    {
-        return m_excludedFromSim;
-    }
+                             const wxString& aVariantName = wxEmptyString ) const override;
 
     bool GetExcludedFromSimProp() const;
     void SetExcludedFromSimProp( bool aEnable );
@@ -427,16 +448,9 @@ public:
      * Set or clear the exclude from schematic bill of materials flag.
      */
     void SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) override
-    {
-        m_excludedFromBOM = aExcludeFromBOM;
-    }
-
+                             const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) const override
-    {
-        return m_excludedFromBOM;
-    }
+                             const wxString& aVariantName = wxEmptyString ) const override;
 
     bool GetExcludedFromBOMProp() const;
     void SetExcludedFromBOMProp( bool aEnable );
@@ -451,9 +465,9 @@ public:
      * Set or clear the 'Do Not Populate' flags
      */
     bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
-                 const wxString& aVariantName = wxEmptyString ) const override { return m_DNP; }
+                 const wxString& aVariantName = wxEmptyString ) const override;
     void SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance = nullptr,
-                 const wxString& aVariantName = wxEmptyString ) override { m_DNP = aDNP; }
+                 const wxString& aVariantName = wxEmptyString ) override;
     bool GetDNPProp() const;
     void SetDNPProp( bool aEnable );
 
@@ -508,6 +522,9 @@ public:
     void RemoveInstance( const KIID_PATH& aInstancePath );
 
     void AddInstance( const SCH_SHEET_INSTANCE& aInstance );
+
+    void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SHEET_VARIANT& aVariant );
+    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName );
 
     /**
      * Check if the instance data of this sheet has any changes compared to \a aOther.
@@ -580,6 +597,12 @@ protected:
 
     bool getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
                       bool aTestFromEnd = false ) const;
+
+    SCH_SHEET_INSTANCE* getInstance( const KIID_PATH& aPath );
+    const SCH_SHEET_INSTANCE* getInstance( const KIID_PATH& aPath ) const;
+
+    SCH_SHEET_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) { return getInstance( aPath.Path() ); }
+    const SCH_SHEET_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) const { return getInstance( aPath.Path() ); }
 
     /**
      * Renumber the sheet pins in the sheet.

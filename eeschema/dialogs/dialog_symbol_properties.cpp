@@ -400,6 +400,10 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
     QueueEvent( evt );
 
+    // Remind user that they are editing the current variant.
+    if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
+        SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Variant" ) );
+
     finishDialogSettings();
 }
 
@@ -434,6 +438,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    const SCHEMATIC& schematic = GetParent()->Schematic();
+    SCH_SHEET_PATH& sheetPath = schematic.CurrentSheet();
+    wxString variantName = schematic.GetCurrentVariant();
+    std::optional<SCH_SYMBOL_VARIANT> variant = m_symbol->GetVariant( sheetPath, variantName );
     std::set<wxString> defined;
 
     // Push a copy of each field into m_updateFields
@@ -443,8 +451,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
         // change offset to be symbol-relative
         field.Offset( -m_symbol->GetPosition() );
-
-        field.SetText( m_symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() ) );
+        field.SetText( schematic.ConvertKIIDsToRefs( m_symbol->GetFieldText( field.GetName(), &sheetPath,
+                                                                             variantName ) ) );
 
         defined.insert( field.GetName() );
         m_fields->push_back( field );
@@ -452,7 +460,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Add in any template fieldnames not yet defined:
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-            GetParent()->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+         schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
@@ -471,7 +479,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         // Ensure symbol unit is the currently selected unit (mandatory in complex hierarchies)
         // from the current sheet path, because it can be modified by previous calculations
-        m_symbol->SetUnit( m_symbol->GetUnitSelection( &GetParent()->GetCurrentSheet() ) );
+        m_symbol->SetUnit( m_symbol->GetUnitSelection( &sheetPath ) );
 
         for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
             m_unitChoice->Append( m_symbol->GetUnitDisplayName( ii, false ) );
@@ -539,10 +547,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 );  break;
     }
 
-    m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim() );
-    m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM() );
+    m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim( &sheetPath, variantName ) );
+    m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM( &sheetPath, variantName ) );
     m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
-    m_cbDNP->SetValue( m_symbol->GetDNP( &GetParent()->GetCurrentSheet() ) );
+    m_cbDNP->SetValue( m_symbol->GetDNP( &sheetPath, variantName ) );
 
     if( m_part )
     {
@@ -694,7 +702,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     SCH_COMMIT  commit( GetParent() );
     SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+    SCH_SHEET_PATH currentSheet = GetParent()->Schematic().CurrentSheet();
+    wxString currentVariant = GetParent()->Schematic().GetCurrentVariant();
     bool        replaceOnCurrentScreen;
+
     wxCHECK( currentScreen, false );
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
@@ -740,13 +751,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // change all field positions from relative to absolute
     for( SCH_FIELD& field : *m_fields )
-    {
         field.Offset( m_symbol->GetPosition() );
-        field.SetText( m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() ) );
-    }
 
-    SCH_FIELDS& fields = m_symbol->GetFields();
-    fields.clear();
+    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
 
     for( SCH_FIELD& field : *m_fields )
     {
@@ -757,31 +764,40 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
 
-        fields.push_back( field );
-    }
+        // The const version of GetField() is used to prevent a new field from automatically being created.
+        const SCH_FIELD* existingField = m_symbol->GetField( fieldName );
+        SCH_FIELD* tmp;
 
-    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
+        if( !existingField )
+        {
+            tmp = m_symbol->GetField( fieldName );
+            *tmp = field;
+        }
+        else
+        {
+            wxString defaultText = m_symbol->Schematic()->ConvertRefsToKIIDs( existingField->GetText() );
+            tmp = const_cast<SCH_FIELD*>( existingField );
 
-    for( SCH_FIELD& field : fields )
-    {
+            *tmp = field;
+
+            if( !currentVariant.IsEmpty() )
+            {
+                // Restore the default field text for existing fields.
+                tmp->SetText( defaultText, &currentSheet );
+
+                tmp->SetText( m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() ),
+                              &currentSheet, currentVariant );
+            }
+        }
+
         if( !field.IsMandatory() )
             field.SetOrdinal( ordinal++ );
     }
 
-    // Reference has a specific initialization, depending on the current active sheet
-    // because for a given symbol, in a complex hierarchy, there are more than one
-    // reference.
-    m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->GetField( FIELD_T::REFERENCE )->GetText() );
-
-    // Similar for Value and Footprint, except that the GUI behavior is that they are kept
-    // in sync between multiple instances.
-    m_symbol->SetValueFieldText( m_fields->GetField( FIELD_T::VALUE )->GetText() );
-    m_symbol->SetFootprintFieldText(  m_fields->GetField( FIELD_T::FOOTPRINT )->GetText() );
-
-    m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked() );
-    m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
+    m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked(), &currentSheet, currentVariant );
+    m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
-    m_symbol->SetDNP( m_cbDNP->IsChecked(), &GetParent()->GetCurrentSheet() );
+    m_symbol->SetDNP( m_cbDNP->IsChecked(), &currentSheet, currentVariant );
 
     // Update any assignments
     if( m_dataModel )
@@ -798,7 +814,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
     // in sync in multi-unit parts.
-    m_symbol->SyncOtherUnits( GetParent()->GetCurrentSheet(), commit, nullptr );
+    m_symbol->SyncOtherUnits( currentSheet, commit, nullptr );
 
     if( replaceOnCurrentScreen )
         currentScreen->Append( m_symbol );

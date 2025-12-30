@@ -144,7 +144,7 @@ private:
     void onRenameVariant( wxCommandEvent& aEvent ) override;
     void onVariantSelectionChange( wxCommandEvent& aEvent ) override;
 
-    std::set<wxString> getSelectedVariants() const;
+    wxString getSelectedVariant() const;
 
 private:
     std::map<wxString, BOM_PRESET>     m_bomPresets;

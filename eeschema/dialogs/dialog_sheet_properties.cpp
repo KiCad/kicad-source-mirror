@@ -125,6 +125,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+    wxString variantName = m_frame->Schematic().GetCurrentVariant();
+
     // Push a copy of each field into m_updateFields
     for( SCH_FIELD& field : m_sheet->GetFields() )
     {
@@ -139,6 +142,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
             field_copy.SetText( filename );
         }
 #endif
+
+        if( !field_copy.IsMandatory() )
+            field_copy.SetText( m_sheet->GetFieldText( field.GetName(), &instance, variantName ) );
 
         // change offset to be symbol-relative
         field_copy.Offset( -m_sheet->GetPosition() );
@@ -167,15 +173,13 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     m_borderSwatch->SetSwatchBackground( canvas );
     m_backgroundSwatch->SetSwatchBackground( canvas );
 
-    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
-    instance.push_back( m_sheet );
-
-    m_pageNumberTextCtrl->ChangeValue( instance.GetPageNumber() );
-
-    m_cbExcludeFromSim->SetValue( m_sheet->GetExcludedFromSim() );
-    m_cbExcludeFromBom->SetValue( m_sheet->GetExcludedFromBOM() );
+    m_cbExcludeFromSim->SetValue( m_sheet->GetExcludedFromSim( &instance, variantName ) );
+    m_cbExcludeFromBom->SetValue( m_sheet->GetExcludedFromBOM( &instance, variantName ) );
     m_cbExcludeFromBoard->SetValue( m_sheet->GetExcludedFromBoard() );
-    m_cbDNP->SetValue( m_sheet->GetDNP() );
+    m_cbDNP->SetValue( m_sheet->GetDNP( &instance, variantName ) );
+
+    instance.push_back( m_sheet );
+    m_pageNumberTextCtrl->ChangeValue( instance.GetPageNumber() );
 
     return true;
 }
@@ -362,6 +366,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( positioningChanged( m_fields, m_sheet ) )
         m_sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
+    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+    wxString variantName = m_frame->Schematic().GetCurrentVariant();
+
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
         SCH_FIELD& field = m_fields->at( ii );
@@ -375,9 +382,31 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             m_fields->erase( m_fields->begin() + ii );
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
-    }
 
-    m_sheet->SetFields( *m_fields );
+        SCH_FIELD* existingField = m_sheet->GetField( fieldName );
+        SCH_FIELD* tmp;
+
+        if( !existingField )
+        {
+            m_sheet->AddOptionalField( field );
+        }
+        else
+        {
+            wxString defaultText = m_sheet->Schematic()->ConvertRefsToKIIDs( existingField->GetText() );
+            tmp = const_cast<SCH_FIELD*>( existingField );
+
+            *tmp = field;
+
+            if( !variantName.IsEmpty() )
+            {
+                // Restore the default field text for existing fields.
+                tmp->SetText( defaultText, &instance );
+
+                tmp->SetText( m_sheet->Schematic()->ConvertRefsToKIIDs( field.GetText() ),
+                              &instance, variantName );
+            }
+        }
+    }
 
     m_sheet->SetBorderWidth( m_borderWidth.GetIntValue() );
 
@@ -404,12 +433,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     m_sheet->SetBorderColor( m_borderSwatch->GetSwatchColor() );
     m_sheet->SetBackgroundColor( m_backgroundSwatch->GetSwatchColor() );
 
-    m_sheet->SetExcludedFromSim( m_cbExcludeFromSim->GetValue() );
-    m_sheet->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue() );
+    m_sheet->SetExcludedFromSim( m_cbExcludeFromSim->GetValue(), &instance, variantName );
+    m_sheet->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue(), &instance, variantName );
     m_sheet->SetExcludedFromBoard( m_cbExcludeFromBoard->GetValue() );
-    m_sheet->SetDNP( m_cbDNP->GetValue() );
-
-    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+    m_sheet->SetDNP( m_cbDNP->GetValue(), &instance, variantName );
 
     instance.push_back( m_sheet );
 

@@ -693,6 +693,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->MigrateSimModels();
+
+            Schematic().LoadVariants();
+            UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
         }
 
         // After the schematic is successfully loaded, we load the drawing sheet.

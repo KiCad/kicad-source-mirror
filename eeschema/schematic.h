@@ -461,6 +461,14 @@ public:
     void AddVariant( const wxString& aVariantName ) { m_variantNames.emplace( aVariantName ); }
 
     /**
+     * This is a throw away method for variant testing.
+     *
+     * Once the schematic loading is properly fixed due to SetRoot() method breakage, this method should
+     * be removed.
+     */
+    void LoadVariants();
+
+    /**
      * True if a SCHEMATIC exists, false if not
      */
     static bool m_IsSchematicExists;

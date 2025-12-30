@@ -188,17 +188,64 @@ wxString SCH_FIELD::GetShownName() const
 }
 
 
-wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
+wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth,
+                                  const wxString& aVariantName ) const
 {
     // Use local depth counter so each text element starts fresh
     int depth = 0;
 
-    wxString variantName;
+    std::function<bool( wxString* )> libSymbolResolver = [&]( wxString* token ) -> bool
+    {
+        LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
+        return symbol->ResolveTextVar( token, depth + 1 );
+    };
 
-    if( SCHEMATIC* schematic = Schematic() )
-        variantName = schematic->GetCurrentVariant();
+    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+        return symbol->ResolveTextVar( aPath, token, depth + 1 );
+    };
 
-    wxString text = getUnescapedText( aPath, variantName );
+    std::function<bool( wxString* )> schematicResolver = [&]( wxString* token ) -> bool
+    {
+        if( !aPath )
+            return false;
+
+        if( SCHEMATIC* schematic = Schematic() )
+            return schematic->ResolveTextVar( aPath, token, depth + 1 );
+
+        return false;
+    };
+
+    std::function<bool( wxString* )> sheetResolver = [&]( wxString* token ) -> bool
+    {
+        if( !aPath )
+            return false;
+
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+
+        SCHEMATIC*     schematic = Schematic();
+        SCH_SHEET_PATH path = *aPath;
+        path.push_back( sheet );
+
+        bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
+
+        if( schematic )
+            retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
+
+        return retval;
+    };
+
+    std::function<bool( wxString* )> labelResolver = [&]( wxString* token ) -> bool
+    {
+        if( !aPath )
+            return false;
+
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        return label->ResolveTextVar( aPath, token, depth + 1 );
+    };
+
+    wxString text = getUnescapedText( aPath, aVariantName );
 
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
@@ -222,10 +269,13 @@ wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
     if( SCHEMATIC* schematic = Schematic() )
     {
         const SCH_SHEET_PATH& currentSheet = schematic->CurrentSheet();
+        wxString variantName = schematic->GetCurrentVariant();
+
         wxLogTrace( traceSchFieldRendering,
-                    "GetShownText (no path arg): field=%s, current sheet path='%s', size=%zu, empty=%d", GetName(),
-                    currentSheet.Path().AsString(), currentSheet.size(), currentSheet.empty() ? 1 : 0 );
-        return GetShownText( &currentSheet, aAllowExtraText, aDepth );
+                    "GetShownText (no path arg): field=%s, current sheet path='%s', variant='%s', size=%zu, empty=%d",
+                    GetName(), currentSheet.Path().AsString(), variantName, currentSheet.size(),
+                    currentSheet.empty() ? 1 : 0 );
+        return GetShownText( &currentSheet, aAllowExtraText, aDepth, variantName );
     }
     else
         return GetShownText( nullptr, aAllowExtraText, aDepth );
@@ -1035,6 +1085,77 @@ void SCH_FIELD::SetText( const wxString& aText )
 }
 
 
+void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, const wxString& aVariantName )
+{
+    wxCHECK( aPath && m_parent, /* void */ );
+
+    // Don't allow modification of text value of generated fields.
+    if( m_isGeneratedField )
+        return;
+
+    wxString tmp = aText;
+
+    if( IsMandatory() )
+        tmp = aText.Strip( wxString::both ) ;
+
+    switch( m_parent->Type() )
+    {
+    case SCH_SYMBOL_T:
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxCHECK( symbol, /* void */ );
+        symbol->SetFieldText( GetName(), aText, aPath, aVariantName );
+        break;
+    }
+
+    case SCH_SHEET_T:
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+        wxCHECK( sheet, /* void */ );
+        sheet->SetFieldText( GetName(), aText, aPath, aVariantName );
+        break;
+    }
+
+    default:
+        SCH_FIELD::SetText( aText );
+        break;
+    }
+}
+
+
+wxString SCH_FIELD::GetText( const SCH_SHEET_PATH* aPath, const wxString& aVariantName ) const
+{
+    wxString retv;
+
+    wxCHECK( aPath && m_parent, retv );
+
+    switch( m_parent->Type() )
+    {
+    case SCH_SYMBOL_T:
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxCHECK( symbol, retv );
+        retv = symbol->GetFieldText( GetName(), aPath, aVariantName );
+        break;
+    }
+
+    case SCH_SHEET_T:
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+        wxCHECK( sheet, retv );
+        retv = sheet->GetFieldText( GetName(), aPath, aVariantName );
+        break;
+    }
+
+    default:
+        retv = GetText();
+        break;
+    }
+
+    return retv;
+}
+
+
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( m_parent && m_parent->IsType( labelTypes ) )
@@ -1160,7 +1281,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     wxString text;
 
     if( Schematic() )
-        text = GetShownText( &Schematic()->CurrentSheet(), true );
+        text = GetShownText( &Schematic()->CurrentSheet(), true, 0, Schematic()->GetCurrentVariant() );
     else
         text = GetShownText( true );
 

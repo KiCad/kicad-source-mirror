@@ -935,6 +935,38 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList,
 }
 
 
+bool SCH_REFERENCE::GetSymbolDNP( const wxString& aVariant ) const
+{
+    wxCHECK( m_rootSymbol, false );
+
+    return m_rootSymbol->GetDNP( &m_sheetPath, aVariant );
+}
+
+
+bool SCH_REFERENCE::GetSymbolExcludedFromBOM( const wxString& aVariant ) const
+{
+    wxCHECK( m_rootSymbol, false );
+
+    return m_rootSymbol->GetExcludedFromBOM( &m_sheetPath, aVariant );
+}
+
+
+bool SCH_REFERENCE::GetSymbolExcludedFromSim( const wxString& aVariant ) const
+{
+    wxCHECK( m_rootSymbol, false );
+
+    return m_rootSymbol->GetExcludedFromSim( &m_sheetPath, aVariant );
+}
+
+
+bool SCH_REFERENCE::GetSymbolExcludedFromBoard() const
+{
+    wxCHECK( m_rootSymbol, false );
+
+    return m_rootSymbol->GetExcludedFromBoard();
+}
+
+
 wxString SCH_REFERENCE::formatRefStr( int aNumber ) const
 {
     // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
@@ -943,6 +975,38 @@ wxString SCH_REFERENCE::formatRefStr( int aNumber ) const
         return wxString::Format( "0%d", aNumber );
 
     return wxString::Format( "%d", aNumber );
+}
+
+
+void SCH_REFERENCE::SetSymbolDNP( bool aEnable, const wxString& aVariant )
+{
+    wxCHECK( m_rootSymbol, /* void */ );
+
+    m_rootSymbol->SetDNP( aEnable, &m_sheetPath, aVariant );
+}
+
+
+void SCH_REFERENCE::SetSymbolExcludedFromBOM( bool aEnable, const wxString& aVariant )
+{
+    wxCHECK( m_rootSymbol, /* void */ );
+
+    m_rootSymbol->SetExcludedFromBOM( aEnable, &m_sheetPath, aVariant );
+}
+
+
+void SCH_REFERENCE::SetSymbolExcludedFromSim( bool aEnable, const wxString& aVariant )
+{
+    wxCHECK( m_rootSymbol, /* void */ );
+
+    m_rootSymbol->SetExcludedFromSim( aEnable, &m_sheetPath, aVariant );
+}
+
+
+void SCH_REFERENCE::SetSymbolExcludedFromBoard( bool aEnable )
+{
+    wxCHECK( m_rootSymbol, /* void */ );
+
+    m_rootSymbol->SetExcludedFromBoard( aEnable );
 }
 
 

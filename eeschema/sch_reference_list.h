@@ -231,6 +231,16 @@ public:
         m_numRefStr = formatRefStr( aNum );
     }
 
+    bool GetSymbolDNP( const wxString& aVariant = wxEmptyString ) const;
+    bool GetSymbolExcludedFromBOM( const wxString& aVariant = wxEmptyString ) const;
+    bool GetSymbolExcludedFromSim( const wxString& aVariant = wxEmptyString ) const;
+    bool GetSymbolExcludedFromBoard() const;
+
+    void SetSymbolDNP( bool aEnable, const wxString& aVariant = wxEmptyString );
+    void SetSymbolExcludedFromBOM( bool aEnable, const wxString& aVariant = wxEmptyString );
+    void SetSymbolExcludedFromSim( bool aEnable, const wxString& aVariant = wxEmptyString );
+    void SetSymbolExcludedFromBoard( bool aEnable );
+
 private:
     wxString formatRefStr( int aNumber ) const;
 

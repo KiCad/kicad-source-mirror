@@ -468,6 +468,11 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
         *token = m_project->GetProjectName();
         return true;
     }
+    else if( token->IsSameAs( wxT( "VARIANTNAME" ) ) )
+    {
+        *token = m_currentVariant;
+        return true;
+    }
 
     // aSheetPath->LastScreen() can be null during schematic loading
     if( aSheetPath->LastScreen() && aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
@@ -2109,6 +2114,17 @@ void SCHEMATIC::DeleteVariant( const wxString& aVariantName )
     SCH_SCREENS allScreens( m_rootSheet );
 
     allScreens.DeleteVariant( aVariantName );
+}
+
+
+void SCHEMATIC::LoadVariants()
+{
+    if( m_rootSheet->GetScreen() )
+    {
+        SCH_SCREENS        screens( m_rootSheet );
+        std::set<wxString> variantNames = screens.GetVariantNames();
+        m_variantNames.insert( variantNames.begin(), variantNames.end() );
+    }
 }
 
 

@@ -143,7 +143,7 @@ public:
                                    bool aIncludeUnit = false ) const = 0;
 
     virtual const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                     bool aAllowExtraText ) const = 0;
+                                     bool aAllowExtraText, const wxString& aVaraintName = wxEmptyString ) const = 0;
 
     virtual void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) const = 0;
 
@@ -190,7 +190,7 @@ public:
      * Set or clear the exclude from schematic bill of materials flag.
      */
     virtual void SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) override
+                                     const wxString& aVariantName = wxEmptyString ) override
     {
         m_excludedFromBOM = aExcludeFromBOM;
     }

@@ -113,6 +113,12 @@ public:
 
     void SetText( const wxString& aText ) override;
 
+    void SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, const wxString& aVariantName = wxEmptyString );
+
+    virtual const wxString& GetText() const override { return EDA_TEXT::GetText(); }
+
+    wxString GetText( const SCH_SHEET_PATH* aPath, const wxString& aVariantName = wxEmptyString ) const;
+
     FIELD_T GetId() const { return m_id; }
 
     int GetOrdinal() const
@@ -131,7 +137,8 @@ public:
      * with the ${} stripped.
      */
     wxString GetShownName() const;
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0 ) const;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0,
+                           const wxString& aVariantName = wxEmptyString ) const;
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 

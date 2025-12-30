@@ -129,13 +129,13 @@ struct SCH_SYMBOL_INSTANCE
 class SCH_SHEET_VARIANT : public VARIANT
 {
 public:
-    SCH_SHEET_VARIANT() :
-        VARIANT()
+    SCH_SHEET_VARIANT( const wxString& aName = wxEmptyString ) :
+        VARIANT( aName )
     {}
 
     virtual ~SCH_SHEET_VARIANT() = default;
 
-    void InitializeAttributes( const SCH_SHEET& aSymbol );
+    void InitializeAttributes( const SCH_SHEET& aSheet );
 };
 
 

@@ -3377,12 +3377,35 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
                                 case T_field:
                                 {
-                                    NeedSYMBOL();
-                                    wxString fieldName = FromUTF8();
-                                    NeedRIGHT();
-                                    NeedSYMBOL();
-                                    wxString fieldValue = FromUTF8();
-                                    NeedRIGHT();
+                                    wxString fieldName;
+                                    wxString fieldValue;
+
+                                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                                    {
+                                        if( token != T_LEFT )
+                                            Expecting( T_LEFT );
+
+                                        token = NextTok();
+
+                                        switch( token )
+                                        {
+                                        case T_name:
+                                            NeedSYMBOL();
+                                            fieldName = FromUTF8();
+                                            NeedRIGHT();
+                                            break;
+
+                                        case T_value:
+                                            NeedSYMBOL();
+                                            fieldValue = FromUTF8();
+                                            NeedRIGHT();
+                                            break;
+
+                                        default:
+                                            Expecting( "name or value" );
+                                        }
+                                    }
+
                                     variant.m_Fields[fieldName] = fieldValue;
                                     break;
                                 }
@@ -3394,7 +3417,6 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                                 instance.m_Variants[variant.m_Name] = variant;
                             }
 
-                            NeedRIGHT();
                             break;
                         }
 
@@ -3806,12 +3828,35 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
 
                                 case T_field:
                                 {
-                                    NeedSYMBOL();
-                                    wxString fieldName = FromUTF8();
-                                    NeedRIGHT();
-                                    NeedSYMBOL();
-                                    wxString fieldValue = FromUTF8();
-                                    NeedRIGHT();
+                                    wxString fieldName;
+                                    wxString fieldValue;
+
+                                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                                    {
+                                        if( token != T_LEFT )
+                                            Expecting( T_LEFT );
+
+                                        token = NextTok();
+
+                                        switch( token )
+                                        {
+                                        case T_name:
+                                            NeedSYMBOL();
+                                            fieldName = FromUTF8();
+                                            NeedRIGHT();
+                                            break;
+
+                                        case T_value:
+                                            NeedSYMBOL();
+                                            fieldValue = FromUTF8();
+                                            NeedRIGHT();
+                                            break;
+
+                                        default:
+                                            Expecting( "name or value" );
+                                        }
+                                    }
+
                                     variant.m_Fields[fieldName] = fieldValue;
                                     break;
                                 }
@@ -3823,7 +3868,6 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                                 instance.m_Variants[variant.m_Name] = variant;
                             }
 
-                            NeedRIGHT();
                             break;
                         }
 

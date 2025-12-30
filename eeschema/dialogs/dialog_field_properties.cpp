@@ -144,9 +144,16 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 
     // show text variable cross-references in a human-readable format
     if( aField->Schematic() )
-        m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
+    {
+        const SCH_SHEET_PATH& sheetPath = aField->Schematic()->CurrentSheet();
+        wxString variant = aField->Schematic()->GetCurrentVariant();
+
+        m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText( &sheetPath, variant ) );
+    }
     else
+    {
         m_text = aField->GetText();
+    }
 
     m_font = m_field->GetFont();
     m_isItalic = aField->IsItalic();
@@ -581,7 +588,17 @@ void DIALOG_FIELD_PROPERTIES::updateText( SCH_FIELD* aField )
 
 void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField )
 {
-    aField->SetText( m_text );
+    if( aField->Schematic() )
+    {
+        const SCH_SHEET_PATH& sheetPath = aField->Schematic()->CurrentSheet();
+        wxString variant = aField->Schematic()->GetCurrentVariant();
+
+        aField->SetText( m_text, &sheetPath, variant );
+    }
+    else
+    {
+        aField->SetText( m_text );
+    }
 
     updateText( aField );
 
@@ -605,6 +622,18 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
+    bool            fieldTextSet = false;
+    SCH_SHEET_PATH  sheetPath;
+    wxString        variantName;
+
+    // convert any text variable cross-references to their UUIDs
+    m_text = aField->Schematic()->ConvertRefsToKIIDs( m_text );
+
+    if( aField->Schematic() )
+    {
+        sheetPath = aField->Schematic()->CurrentSheet();
+        variantName = aField->Schematic()->GetCurrentVariant();
+    }
 
     if( parent && parent->Type() == SCH_SYMBOL_T )
     {
@@ -612,6 +641,10 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
 
         if( m_fieldId == FIELD_T::REFERENCE )
             symbol->SetRef( aSheetPath, m_text );
+        else
+            symbol->SetFieldText( aField->GetName(), m_text, &sheetPath, variantName );
+
+        fieldTextSet = true;
 
         // Set the unit selection in multiple units per package
         if( m_unitChoice->IsShown() )
@@ -619,6 +652,16 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
             int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;
             symbol->SetUnitSelection( aSheetPath, unit_selection );
             symbol->SetUnit( unit_selection );
+        }
+    }
+    else if( parent && parent->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( parent );
+
+        if( !aField->IsMandatory() )
+        {
+            sheet->SetFieldText( aField->GetName(), m_text, &sheetPath, variantName );
+            fieldTextSet = true;
         }
     }
     else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
@@ -648,16 +691,15 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
     if( aField->GetEffectiveVertJustify() != m_verticalJustification )
         positioningModified = true;
 
-    // convert any text variable cross-references to their UUIDs
-    m_text = aField->Schematic()->ConvertRefsToKIIDs( m_text );
-
     // Changing a sheetname need to update the hierarchy navigator
     bool needUpdateHierNav = false;
 
     if( m_fieldId == FIELD_T::SHEET_NAME )
         needUpdateHierNav = m_text != aField->GetText();
 
-    aField->SetText( m_text );
+    if( !fieldTextSet )
+        aField->SetText( m_text );
+
     updateText( aField );
     aField->SetPosition( m_position );
 

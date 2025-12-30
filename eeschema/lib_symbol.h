@@ -356,7 +356,8 @@ public:
         return GetReferenceField().GetText();
     }
 
-    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath, bool aAllowExtraText ) const override
+    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+                             const wxString& aVariantName = wxEmptyString ) const override
     {
         return GetValueField().GetText();
     }

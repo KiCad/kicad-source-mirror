@@ -476,9 +476,10 @@ public:
      * @return the value for the instance on the given sheet.
      */
     const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                             bool aAllowExtraText ) const override;
+                             bool aAllowExtraText, const wxString& aVariantName = wxEmptyString ) const override;
 
-    void SetValueFieldText( const wxString& aValue );
+    void SetValueFieldText( const wxString& aValue, const SCH_SHEET_PATH* aInstance = nullptr,
+                            const wxString& aVariantName = wxEmptyString );
 
     const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
                                           bool aAllowExtraText ) const;
@@ -496,18 +497,24 @@ public:
 
     wxString GetValueProp() const
     {
-        return GetValue( false, &Schematic()->CurrentSheet(), false );
+        return GetValue( false, &Schematic()->CurrentSheet(), false, Schematic()->GetCurrentVariant() );
     }
 
-    void SetValueProp( const wxString& aRef )
+    void SetValueProp( const wxString& aValue )
     {
-        SetValueFieldText( aRef );
+        SetValueFieldText( aValue,  &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
     int GetUnitProp() const
     {
         return GetUnitSelection( &Schematic()->CurrentSheet() );
     }
+
+    void SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath = nullptr,
+                       const wxString& aVariantName = wxEmptyString );
+
+    wxString GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath = nullptr,
+                           const wxString& aVariantName = wxEmptyString ) const;
 
     void SetUnitProp( int aUnit )
     {
@@ -678,44 +685,40 @@ public:
                          const wxString& aVariantName = wxEmptyString ) override;
     virtual bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
                          const wxString& aVariantName = wxEmptyString ) const override;
-    void SetDNP( bool aEnable, const SCH_SHEET_PATH& aInstance, const std::vector<wxString>& aVariantNames );
 
-    bool GetDNPProp() const { return GetDNP( nullptr, Schematic()->GetCurrentVariant() ); }
+    bool GetDNPProp() const { return GetDNP( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() ); }
 
-    void SetDNPProp( bool aEnable ) { SetDNP( aEnable, nullptr, Schematic()->GetCurrentVariant() ); }
+    void SetDNPProp( bool aEnable ) { SetDNP( aEnable, &Schematic()->CurrentSheet(),
+                                              Schematic()->GetCurrentVariant() ); }
 
     void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) const override;
-    void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH& aInstance,
-                             const std::vector<wxString>& aVariantNames );
 
     bool GetExcludedFromBOMProp() const
     {
-        return GetExcludedFromBOM( nullptr, Schematic()->GetCurrentVariant() );
+        return GetExcludedFromBOM( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
     void SetExcludedFromBOMProp( bool aEnable )
     {
-        SetExcludedFromBOM( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+        SetExcludedFromBOM( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
     void SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) const override;
-    void SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH& aInstance,
-                             const std::vector<wxString>& aVariantNames );
 
     bool GetExcludedFromSimProp() const
     {
-        return GetExcludedFromSim( nullptr, Schematic()->GetCurrentVariant() );
+        return GetExcludedFromSim( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
     void SetExcludedFromSimProp( bool aEnable )
     {
-        SetExcludedFromSim( aEnable, nullptr, Schematic()->GetCurrentVariant() );
+        SetExcludedFromSim( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
     /**
@@ -911,6 +914,12 @@ private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
     void Init( const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
+
+    SCH_SYMBOL_INSTANCE* getInstance( const KIID_PATH& aPath );
+    const SCH_SYMBOL_INSTANCE* getInstance( const KIID_PATH& aPath ) const;
+
+    SCH_SYMBOL_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) { return getInstance( aPath.Path() ); }
+    const SCH_SYMBOL_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) const { return getInstance( aPath.Path() ); }
 
 private:
     VECTOR2I    m_pos;

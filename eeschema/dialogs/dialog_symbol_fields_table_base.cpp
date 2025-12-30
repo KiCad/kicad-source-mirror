@@ -138,7 +138,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_staticText9->Wrap( -1 );
 	bMargins2->Add( m_staticText9, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
 
-	m_variantListBox = new wxListBox( m_variantsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_variantListBox = new wxListBox( m_variantsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB|wxLB_SINGLE );
 	bMargins2->Add( m_variantListBox, 1, wxEXPAND|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizer14;

@@ -320,6 +320,8 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
         selectedVariant = m_currentVariantCtrl->GetString( selection );
 
     Schematic().SetCurrentVariant( selectedVariant );
+    UpdateProperties();
+    HardRedraw();
 }
 
 
@@ -328,7 +330,9 @@ void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
     if( !m_currentVariantCtrl )
         return;
 
-    int newSelection = m_currentVariantCtrl->FindString( aVariantName );
+    wxString name = aVariantName.IsEmpty() ? GetDefaultVariantName() : aVariantName;
+
+    int newSelection = m_currentVariantCtrl->FindString( name );
 
     if( newSelection == wxNOT_FOUND )
         return;
@@ -340,7 +344,7 @@ void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
     if( currentSelection != wxNOT_FOUND )
         selectedString = m_currentVariantCtrl->GetString( currentSelection );
 
-    if( selectedString != aVariantName )
+    if( selectedString != name )
     {
         m_currentVariantCtrl->SetSelection( newSelection );
         Schematic().SetCurrentVariant( aVariantName );

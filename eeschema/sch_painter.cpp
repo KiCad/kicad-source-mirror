@@ -2660,19 +2660,25 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     std::optional<SCH_SHEET_PATH> optSheetPath;
 
+    wxString variantName;
+
     if( m_schematic )
     {
         optSheetPath = m_schematic->CurrentSheet();
+        variantName = m_schematic->GetCurrentVariant();
         wxLogTrace( traceSchPainter,
-                   "SCH_PAINTER::draw symbol %s: Current sheet path='%s', size=%zu, empty=%d",
-                   aSymbol->m_Uuid.AsString(),
-                   optSheetPath->Path().AsString(),
-                   optSheetPath->size(),
-                   optSheetPath->empty() ? 1 : 0 );
+                    "SCH_PAINTER::draw symbol %s: Current sheet path='%s', variant='%s', size=%zu, empty=%d",
+                    aSymbol->m_Uuid.AsString(),
+                    variantName.IsEmpty() ? GetDefaultVariantName() : variantName,
+                    optSheetPath->Path().AsString(),
+                    optSheetPath->size(),
+                    optSheetPath->empty() ? 1 : 0 );
     }
 
-    bool DNP = aSymbol->GetDNP( nullptr );
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSymbol->GetExcludedFromSim( nullptr );
+    SCH_SHEET_PATH* sheetPath = optSheetPath ? &optSheetPath.value() : nullptr;
+    bool DNP = aSymbol->GetDNP( sheetPath, variantName );
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSymbol->GetExcludedFromSim( sheetPath,
+                                                                                                      variantName );
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
@@ -3260,8 +3266,10 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDim
 
 void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
+    SCH_SHEET_PATH currentPath = aSheet->Schematic()->CurrentSheet();
+    wxString currentVariant = aSheet->Schematic()->GetCurrentVariant();
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool DNP = aSheet->GetDNP();
+    bool DNP = aSheet->GetDNP( &currentPath, currentVariant );
     bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
                                 && aSheet->GetExcludedFromSim();
 

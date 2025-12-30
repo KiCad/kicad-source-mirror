@@ -263,6 +263,20 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     m_variantListBox->Set( parent->Schematic().GetVariantNamesForUI() );
 
+    if( !m_parent->Schematic().GetCurrentVariant().IsEmpty() )
+    {
+        int toSelect = m_variantListBox->FindString( m_parent->Schematic().GetCurrentVariant() );
+
+        if( toSelect == wxNOT_FOUND )
+            m_variantListBox->SetSelection( 0 );
+        else
+            m_variantListBox->SetSelection( toSelect );
+    }
+    else
+    {
+        m_variantListBox->SetSelection( 0 );
+    }
+
     if( !ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
         m_splitter_left->Unsplit( m_variantsPanel );
 
@@ -553,7 +567,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 
 bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 {
-    if( !wxDialog::TransferDataFromWindow() )
+    if( !wxDialog::TransferDataToWindow() )
         return false;
 
     TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
@@ -644,11 +658,11 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
         return true;
     }
 
-    std::set<wxString> selectedVariantNames;
     SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
+    wxString       currentVariant = m_parent->Schematic().GetCurrentVariant();
 
-    m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, selectedVariantNames );
+    m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, currentVariant );
 
     if( !commit.Empty() )
     {
@@ -676,7 +690,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
             return;
     }
 
-    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser, getSelectedVariants() );
+    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser, m_parent->Schematic().GetCurrentVariant() );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
@@ -1940,7 +1954,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
     // Basically, we apply the BOM preset to the data model and then
     // update our UI to reflect resulting the data model state, not the preset.
-    m_dataModel->ApplyBomPreset( aPreset, getSelectedVariants() );
+    m_dataModel->ApplyBomPreset( aPreset, m_parent->Schematic().GetCurrentVariant() );
 
     // BOM Presets can add, but not remove, columns, so make sure the view controls
     // grid has all of them before starting
@@ -2481,7 +2495,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ), getSelectedVariants() );
+            m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ),
+                                           m_parent->Schematic().GetCurrentVariant() );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
@@ -2498,7 +2513,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
                     AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
             }
 
-            m_dataModel->UpdateReferences( refs, getSelectedVariants() );
+            m_dataModel->UpdateReferences( refs, m_parent->Schematic().GetCurrentVariant() );
         }
     }
 
@@ -2618,99 +2633,99 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
 {
-    wxArrayInt selections;
+    int selection = m_variantListBox->GetSelection();
 
     // An empty or default selection cannot be deleted.
-    if( ( m_variantListBox->GetSelections( selections ) == 0 ) || ( selections[0] == 0 ) )
+    if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
     {
         wxBell();
         return;
     }
 
-    wxArrayString ctrlContents = m_variantListBox->GetStrings();
-
-    for( int selection : selections )
-    {
-        wxString variantName = m_variantListBox->GetString( selection );
-        ctrlContents.Remove( variantName );
-        m_parent->Schematic().DeleteVariant( variantName );
-    }
-
-    m_variantListBox->Set( ctrlContents );
+    wxString variantName = m_variantListBox->GetString( selection );
+    m_variantListBox->SetSelection( selection - 1 );
+    m_variantListBox->Delete( selection );
+    m_parent->Schematic().DeleteVariant( variantName );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
 {
-    wxArrayInt selections;
+    // wxArrayInt selections;
 
-    // Only allow renaming a single selection that is not the default.
-    if( ( m_variantListBox->GetSelections( selections ) != 1 ) || ( selections[0] == 0 ) )
-    {
-        wxBell();
-        return;
-    }
+    // // Only allow renaming a single selection that is not the default.
+    // if( ( m_variantListBox->GetSelections( selections ) != 1 ) || ( selections[0] == 0 ) )
+    // {
+    //     wxBell();
+    //     return;
+    // }
 
-    wxArrayString ctrlContents = m_variantListBox->GetStrings();
-    wxString oldVariantName = ctrlContents[selections[0]];
+    // wxArrayString ctrlContents = m_variantListBox->GetStrings();
+    // wxString oldVariantName = ctrlContents[selections[0]];
 
-    wxTextEntryDialog dlg( this, _( "Add new variant name:" ), _( "New Variant" ), oldVariantName,
-                           wxOK | wxCANCEL | wxCENTER );
+    // wxTextEntryDialog dlg( this, _( "Add new variant name:" ), _( "New Variant" ), oldVariantName,
+    //                        wxOK | wxCANCEL | wxCENTER );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+    // if( dlg.ShowModal() == wxID_CANCEL )
+    //     return;
 
-    wxString newVariantName = dlg.GetValue();
+    // wxString newVariantName = dlg.GetValue();
 
-    if( newVariantName.IsEmpty() || ( newVariantName == oldVariantName ) || ( newVariantName == ctrlContents[0] ) )
-    {
-        wxBell();
-        return;
-    }
+    // if( newVariantName.IsEmpty() || ( newVariantName == oldVariantName ) || ( newVariantName == ctrlContents[0] ) )
+    // {
+    //     wxBell();
+    //     return;
+    // }
 
-    ctrlContents.Remove( m_variantListBox->GetString( selections[0] ) );
-    ctrlContents.Add( newVariantName );
-    ctrlContents.Sort( SortVariantNames );
-    m_variantListBox->Set( ctrlContents );
+    // ctrlContents.Remove( m_variantListBox->GetString( selections[0] ) );
+    // ctrlContents.Add( newVariantName );
+    // ctrlContents.Sort( SortVariantNames );
+    // m_variantListBox->Set( ctrlContents );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEvent )
 {
-    std::set<wxString> selectedVariants = getSelectedVariants();
-
-    m_dataModel->UpdateReferences( m_symbolsList, selectedVariants );
+    wxString currentVariant;
+    wxString selectedVariant = getSelectedVariant();
 
     if( m_parent )
     {
-        wxString selectedVariant = GetDefaultVariantName();
+        currentVariant = m_parent->Schematic().GetCurrentVariant();
 
-        // Selecting more than one variant in the schematic editor doesn't make any sense.  Select the first
-        // variant in the table editor dialog as the variant to show in the schematic editor.
-        if( selectedVariants.size() >= 1 )
-            selectedVariant = *selectedVariants.cbegin();
+        if( currentVariant != selectedVariant )
+            m_parent->SetCurrentVariant( selectedVariant );
+    }
 
-        m_parent->SetCurrentVariant( selectedVariant );
+    if( currentVariant != selectedVariant )
+    {
+        if( m_grid->CommitPendingChanges( true ) )
+        {
+            m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
+            m_dataModel->RebuildRows();
+
+            if( m_nbPages->GetSelection() == 1 )
+                PreviewRefresh();
+            else
+                m_grid->ForceRefresh();
+
+            syncBomFmtPresetSelection();
+        }
+        else
+        {
+        }
     }
 }
 
 
-std::set<wxString> DIALOG_SYMBOL_FIELDS_TABLE::getSelectedVariants() const
+wxString DIALOG_SYMBOL_FIELDS_TABLE::getSelectedVariant() const
 {
-    std::set<wxString> retv;
+    wxString retv;
 
-    wxArrayInt selections;
+    int selection = m_variantListBox->GetSelection();
 
-    if( m_variantListBox->GetSelections( selections ) )
-    {
-        for( int selection : selections )
-        {
-            if( selection == 0 )
-                continue;
+    if( ( selection == wxNOT_FOUND ) || ( m_variantListBox->GetString( selection ) == GetDefaultVariantName() ) )
+        return retv;
 
-            retv.emplace( m_variantListBox->GetString( selection ) );
-        }
-    }
-
-    return retv;
+    return m_variantListBox->GetString( selection );
 }

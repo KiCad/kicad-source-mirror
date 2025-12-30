@@ -27,17 +27,36 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include "eeschema_test_utils.h"
 
 // Code under test
 #include <sch_symbol.h>
-
 #include <sch_edit_frame.h>
+#include <wildcards_and_files_ext.h>
 
-class TEST_SCH_SYMBOL_FIXTURE
+
+class TEST_SCH_SYMBOL_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 public:
-    TEST_SCH_SYMBOL_FIXTURE()
+    SCH_SYMBOL* GetFirstSymbol()
     {
+        if( !m_schematic )
+            return nullptr;
+
+        SCH_SCREEN* screen = m_schematic->RootScreen();
+
+        if( !screen )
+            return nullptr;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol )
+                return symbol;
+        }
+
+        return nullptr;
     }
 
     ///< #SCH_SYMBOL object with no extra data set.
@@ -74,6 +93,52 @@ BOOST_AUTO_TEST_CASE( Orientation )
     m_symbol.SetTransform( TRANSFORM() );
     m_symbol.SetOrientation( SYM_ORIENT_270 );
     t = m_symbol.GetTransform();
+}
+
+
+/**
+ * Test symbol variant handling.
+ */
+BOOST_AUTO_TEST_CASE( SchSymbolVariantTest )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_CHECK( symbol );
+
+    // Test for an empty (non-existant) variant.
+    wxString                          variantName = wxS( "Variant1" );
+    std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( !variant );
+
+    // Test DNP property variant.
+    BOOST_CHECK( !symbol->GetDNP() );
+    symbol->SetDNP( true, &m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], variantName ) );
+
+    // Test exclude from BOM property variant.
+    BOOST_CHECK( !symbol->GetExcludedFromBOM() );
+    symbol->SetExcludedFromBOM( true, &m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( symbol->GetExcludedFromBOM( &m_schematic->Hierarchy()[0], variantName ) );
+
+    // Test exclude from simulation property variant.
+    BOOST_CHECK( !symbol->GetExcludedFromSim() );
+    symbol->SetExcludedFromSim( true, &m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( symbol->GetExcludedFromSim( &m_schematic->Hierarchy()[0], variantName ) );
+
+    // Test a value field variant change.
+    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
+                                                                   false, 0 ) == wxS( "1K" ) );
+    symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "10K" ), &m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
+                                                                   false, 0, variantName ) == wxS( "10K" ) );
+    // BOOST_CHECK( symbol->GetFieldText( FIELD_T::VALUE, &m_schematic->Hierarchy()[0], variantName ) == wxS( "10K" ) );
 }
 
 
