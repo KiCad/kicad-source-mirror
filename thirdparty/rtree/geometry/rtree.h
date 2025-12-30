@@ -1961,7 +1961,7 @@ bool RTREE_QUAL::Search( const Node* a_node, const Rect* a_rect, int& a_foundCou
         {
             if( Overlap( a_rect, &a_node->m_branch[index].m_rect ) )
             {
-                DATATYPE& id = a_node->m_branch[index].m_data;
+                const DATATYPE& id = a_node->m_branch[index].m_data;
                 ++a_foundCount;
 
                 if( a_callback && !a_callback( id ) )

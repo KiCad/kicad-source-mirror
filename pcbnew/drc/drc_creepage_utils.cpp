@@ -2285,6 +2285,33 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
     std::mutex                               nodes_lock;
     thread_pool&                             tp = GetKiCadThreadPool();
 
+    TRACK_RTREE trackIndex;
+    std::vector<CREEPAGE_TRACK_ENTRY*> trackEntries; // For cleanup
+
+    if( aLayer != Edge_Cuts )
+    {
+        for( PCB_TRACK* track : m_board.Tracks() )
+        {
+            if( track && track->Type() == KICAD_T::PCB_TRACE_T && track->IsOnLayer( aLayer ) )
+            {
+                std::shared_ptr<SHAPE> sh = track->GetEffectiveShape();
+
+                if( sh && sh->Type() == SHAPE_TYPE::SH_SEGMENT )
+                {
+                    CREEPAGE_TRACK_ENTRY* entry = new CREEPAGE_TRACK_ENTRY();
+                    entry->segment = SEG( track->GetStart(), track->GetEnd() );
+                    entry->layer = aLayer;
+
+                    BOX2I bbox = track->GetBoundingBox();
+                    int   minCoords[2] = { bbox.GetX(), bbox.GetY() };
+                    int   maxCoords[2] = { bbox.GetRight(), bbox.GetBottom() };
+                    trackIndex.Insert( minCoords, maxCoords, entry );
+                    trackEntries.push_back( entry );
+                }
+            }
+        }
+    }
+
     std::copy_if( m_nodes.begin(), m_nodes.end(), std::back_inserter( nodes ),
                   [&]( std::shared_ptr<GRAPH_NODE> gn )
                   {
@@ -2300,7 +2327,9 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
               } );
 
     // Build parent -> net -> nodes mapping for efficient filtering
+    // Also cache bounding boxes for early spatial filtering
     std::unordered_map<const BOARD_ITEM*, std::unordered_map<int, std::vector<std::shared_ptr<GRAPH_NODE>>>> parent_net_groups;
+    std::unordered_map<const BOARD_ITEM*, BOX2I> parent_bboxes;
     std::vector<const BOARD_ITEM*> parent_keys;
 
     for( const auto& gn : nodes )
@@ -2308,47 +2337,180 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
         const BOARD_ITEM* parent = gn->m_parent->GetParent();
 
         if( parent_net_groups[parent].empty() )
+        {
             parent_keys.push_back( parent );
+            if( parent )
+                parent_bboxes[parent] = parent->GetBoundingBox();
+        }
 
         parent_net_groups[parent][gn->m_net].push_back( gn );
     }
 
-    // Generate work items: compare nodes between different parents only
-    struct WorkItem {
-        std::shared_ptr<GRAPH_NODE> node1, node2;
-    };
-    std::vector<WorkItem> work_items;
+    // Generate work items using parent-level spatial indexing
+    std::vector<std::pair<std::shared_ptr<GRAPH_NODE>, std::shared_ptr<GRAPH_NODE>>> work_items;
 
-    for( size_t i = 0; i < parent_keys.size(); ++i )
+    // Use RTree for spatial indexing of parent bounding boxes
+    // Expand each bbox by maxWeight to find potentially overlapping parents
+
+    int64_t maxDist = static_cast<int64_t>( aMaxWeight );
+
+    struct ParentEntry
     {
-        for( size_t j = i + 1; j < parent_keys.size(); ++j )
+        const BOARD_ITEM* parent;
+        BOX2I             bbox;
+    };
+
+    RTree<ParentEntry*, int, 2, double> parentIndex;
+    std::vector<ParentEntry>            parentEntries;
+
+    // Build list of non-null parents first
+    for( const auto* parent : parent_keys )
+    {
+        if( parent )
         {
-            const auto& group1_nets = parent_net_groups[parent_keys[i]];
-            const auto& group2_nets = parent_net_groups[parent_keys[j]];
+            ParentEntry entry;
+            entry.parent = parent;
+            entry.bbox = parent_bboxes[parent];
+            parentEntries.push_back( entry );
+        }
+    }
 
-            for( const auto& [net1, nodes1] : group1_nets )
-            {
-                for( const auto& [net2, nodes2] : group2_nets )
-                {
-                    // Skip if same net and both nets have only conductive nodes
-                    if( net1 == net2 )
+    // Insert into RTree
+    for( ParentEntry& entry : parentEntries )
+    {
+        int minCoords[2] = { entry.bbox.GetLeft(), entry.bbox.GetTop() };
+        int maxCoords[2] = { entry.bbox.GetRight(), entry.bbox.GetBottom() };
+        parentIndex.Insert( minCoords, maxCoords, &entry );
+    }
+
+    // Parallelize parent pair search using thread pool
+    std::mutex work_items_lock;
+
+    auto searchParent = [&]( size_t start_idx, size_t end_idx ) -> bool
+    {
+        for( size_t i = start_idx; i < end_idx; ++i )
+        {
+            const ParentEntry& entry1 = parentEntries[i];
+            const BOARD_ITEM*  parent1 = entry1.parent;
+            BOX2I              bbox1 = entry1.bbox;
+
+            std::vector<std::pair<std::shared_ptr<GRAPH_NODE>, std::shared_ptr<GRAPH_NODE>>>
+                    localWorkItems;
+
+            // Search for parents within maxDist of bbox1
+            int searchMin[2] = { bbox1.GetLeft() - (int) maxDist,
+                                 bbox1.GetTop() - (int) maxDist };
+            int searchMax[2] = { bbox1.GetRight() + (int) maxDist,
+                                 bbox1.GetBottom() + (int) maxDist };
+
+            parentIndex.Search( searchMin, searchMax,
+                    [&]( ParentEntry* entry2 ) -> bool
                     {
-                        bool all_conductive_1 = std::all_of( nodes1.begin(), nodes1.end(),
-                            []( const auto& n ) { return n->m_parent->IsConductive(); } );
-                        bool all_conductive_2 = std::all_of( nodes2.begin(), nodes2.end(),
-                            []( const auto& n ) { return n->m_parent->IsConductive(); } );
+                        const BOARD_ITEM* parent2 = entry2->parent;
 
-                        if( all_conductive_1 && all_conductive_2 )
-                            continue;
-                    }
+                        // Only process if parent1 < parent2 to avoid duplicates
+                        if( parent1 >= parent2 )
+                            return true;
 
-                    // Add all node pairs from these net groups
-                    for( const auto& gn1 : nodes1 )
-                        for( const auto& gn2 : nodes2 )
-                            work_items.push_back( { gn1, gn2 } );
-                }
+                        // Precise bbox distance check
+                        BOX2I bbox2 = entry2->bbox;
+
+                        int64_t bboxDistX = 0;
+
+                        if( bbox2.GetLeft() > bbox1.GetRight() )
+                            bboxDistX = bbox2.GetLeft() - bbox1.GetRight();
+                        else if( bbox1.GetLeft() > bbox2.GetRight() )
+                            bboxDistX = bbox1.GetLeft() - bbox2.GetRight();
+
+                        int64_t bboxDistY = 0;
+
+                        if( bbox2.GetTop() > bbox1.GetBottom() )
+                            bboxDistY = bbox2.GetTop() - bbox1.GetBottom();
+                        else if( bbox1.GetTop() > bbox2.GetBottom() )
+                            bboxDistY = bbox1.GetTop() - bbox2.GetBottom();
+
+                        int64_t bboxDistSq = bboxDistX * bboxDistX + bboxDistY * bboxDistY;
+
+                        if( bboxDistSq > maxDist * maxDist )
+                            return true;
+
+                        // Get nodes for both parents (thread-safe reads from const map)
+                        auto it1 = parent_net_groups.find( parent1 );
+                        auto it2 = parent_net_groups.find( parent2 );
+
+                        if( it1 == parent_net_groups.end() || it2 == parent_net_groups.end() )
+                            return true;
+
+                        for( const auto& [net1, nodes1] : it1->second )
+                        {
+                            for( const auto& [net2, nodes2] : it2->second )
+                            {
+                                // Skip same net if both are conductive
+                                if( net1 == net2 && !nodes1.empty() && !nodes2.empty() )
+                                {
+                                    if( nodes1[0]->m_parent->IsConductive()
+                                        && nodes2[0]->m_parent->IsConductive() )
+                                        continue;
+                                }
+
+                                for( const auto& gn1 : nodes1 )
+                                {
+                                    for( const auto& gn2 : nodes2 )
+                                    {
+                                        VECTOR2I pos1 = gn1->m_parent->GetPos();
+                                        VECTOR2I pos2 = gn2->m_parent->GetPos();
+                                        int      r1 = gn1->m_parent->GetRadius();
+                                        int      r2 = gn2->m_parent->GetRadius();
+
+                                        int64_t centerDistSq =
+                                                ( pos1 - pos2 ).SquaredEuclideanNorm();
+                                        double threshold = aMaxWeight + r1 + r2;
+                                        double thresholdSq = threshold * threshold;
+
+                                        if( (double) centerDistSq > thresholdSq )
+                                            continue;
+
+                                        localWorkItems.push_back( { gn1, gn2 } );
+                                    }
+                                }
+                            }
+                        }
+
+                        return true;
+                    } );
+
+            // Merge local results into global
+            if( !localWorkItems.empty() )
+            {
+                std::lock_guard<std::mutex> lock( work_items_lock );
+                work_items.insert( work_items.end(), localWorkItems.begin(),
+                                   localWorkItems.end() );
             }
         }
+
+        return true;
+    };
+
+    // Use thread pool if there are enough parents
+    if( parentEntries.size() > 100 && tp.get_tasks_total() < tp.get_thread_count() - 4 )
+    {
+        auto ret = tp.parallelize_loop( parentEntries.size(), searchParent );
+
+        for( size_t ii = 0; ii < ret.size(); ii++ )
+        {
+            std::future<bool>& r = ret[ii];
+
+            if( !r.valid() )
+                continue;
+
+            while( r.wait_for( std::chrono::milliseconds( 100 ) ) != std::future_status::ready )
+            {
+            }
+        }
+    }
+    else
+    {
+        searchParent( 0, parentEntries.size() );
     }
 
     auto processWorkItems = [&]( size_t start_idx, size_t end_idx ) -> bool
@@ -2364,7 +2526,7 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
                 };
 
                 if( !pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
-                                { false, true }, m_minGrooveWidth ) )
+                                 { false, true }, m_minGrooveWidth, &trackIndex ) )
                     continue;
 
                 std::shared_ptr<GRAPH_NODE> connect1 = gn1, connect2 = gn2;
@@ -2401,6 +2563,7 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
                 AddConnection( connect1, connect2, pc );
             }
         }
+
         return true;
     };
 
@@ -2421,9 +2584,15 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
             if( !r.valid() )
                 continue;
 
-            while( r.wait_for( std::chrono::milliseconds( 100 ) ) != std::future_status::ready ){}
+            while( r.wait_for( std::chrono::milliseconds( 100 ) ) != std::future_status::ready )
+            {
+            }
         }
     }
+
+    // Clean up track entries
+    for( CREEPAGE_TRACK_ENTRY* entry : trackEntries )
+        delete entry;
 }
 
 
