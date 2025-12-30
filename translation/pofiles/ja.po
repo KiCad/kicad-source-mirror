@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-25 17:00+0000\n"
+"PO-Revision-Date: 2025-12-30 11:00+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -21864,8 +21864,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
-"<b>Warning: リファレンス接頭辞</b><br>'%s' で終わる接頭辞は、シンボル ライブ"
-"ラリに保存すると問題が発生する可能性があります"
+"<b>Warning: リファレンス接頭辞</b><br>'%s' で終わる接頭辞は、シンボル "
+"ライブラリに保存すると問題を引き起こす可能性があります"
 
 #: eeschema/symbol_checker.cpp:216
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -47261,11 +47261,11 @@ msgstr "配線幅とビアのサイズを変更するための設定ダイアロ
 
 #: pcbnew/router/router_tool.cpp:191
 msgid "Switch Track Posture"
-msgstr "配線の姿勢を変更"
+msgstr "配線の姿勢を切り替え"
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Switches posture of the currently routed track."
-msgstr "現在の配線パターンの姿勢を変更します。"
+msgstr "現在配線されている配線の姿勢を切り替えます。"
 
 #: pcbnew/router/router_tool.cpp:199
 msgid "Track Corner Mode"
