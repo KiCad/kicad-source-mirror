@@ -2776,9 +2776,30 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
 
     auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph )
     {
+        // Sort bus neighbors by name to ensure deterministic processing order.
+        // When multiple bus members (e.g., A0, A1, A2, A3) all connect to the same
+        // shorted net in a child sheet, the first one processed "wins" and sets
+        // the net name. Sorting ensures the alphabetically-first name is chosen.
+        std::vector<std::shared_ptr<SCH_CONNECTION>> sortedMembers;
+
         for( const auto& kv : aParentGraph->m_bus_neighbors )
+            sortedMembers.push_back( kv.first );
+
+        std::sort( sortedMembers.begin(), sortedMembers.end(),
+                   []( const std::shared_ptr<SCH_CONNECTION>& a,
+                       const std::shared_ptr<SCH_CONNECTION>& b )
+                   {
+                       return a->Name() < b->Name();
+                   } );
+
+        for( const std::shared_ptr<SCH_CONNECTION>& member_conn : sortedMembers )
         {
-            for( CONNECTION_SUBGRAPH* neighbor : kv.second )
+            const auto& kv_it = aParentGraph->m_bus_neighbors.find( member_conn );
+
+            if( kv_it == aParentGraph->m_bus_neighbors.end() )
+                continue;
+
+            for( CONNECTION_SUBGRAPH* neighbor : kv_it->second )
             {
                 // May have been absorbed but won't have been deleted
                 while( neighbor->m_absorbed )
@@ -2789,12 +2810,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                 // Now member may be out of date, since we just cloned the
                 // connection from higher up in the hierarchy.  We need to
                 // figure out what the actual new connection is.
-                SCH_CONNECTION* member = matchBusMember( parent, kv.first.get() );
+                SCH_CONNECTION* member = matchBusMember( parent, member_conn.get() );
 
                 if( !member )
                 {
                     // Try harder: we might match on a secondary driver
-                    for( CONNECTION_SUBGRAPH* sg : kv.second )
+                    for( CONNECTION_SUBGRAPH* sg : kv_it->second )
                     {
                         if( sg->m_multiple_drivers )
                         {
@@ -2819,7 +2840,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                 if( !member )
                 {
                     wxLogTrace( ConnTrace, wxS( "Could not match bus member %s in %s" ),
-                                kv.first->Name(), parent->Name() );
+                                member_conn->Name(), parent->Name() );
                     continue;
                 }
 

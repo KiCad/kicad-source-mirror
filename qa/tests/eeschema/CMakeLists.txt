@@ -74,6 +74,7 @@ set( QA_EESCHEMA_SRCS
     test_junction_helpers.cpp
     test_junction_place.cpp
     test_bus_entry_concurrency.cpp
+    test_bus_net_name_determinism.cpp
     test_bus_parsing.cpp
     test_label_bounding_box.cpp
     test_lib_part.cpp
