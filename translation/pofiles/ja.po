@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-30 01:00+0000\n"
+"PO-Revision-Date: 2025-12-31 05:04+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -52635,11 +52635,11 @@ msgstr "配線幅とビアのサイズを変更するための設定ダイアロ
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Switch Track Posture"
-msgstr "配線の姿勢を変更"
+msgstr "配線の姿勢を切り替え"
 
 #: pcbnew/router/router_tool.cpp:193
 msgid "Switches posture of the currently routed track."
-msgstr "現在の配線パターンの姿勢を変更します。"
+msgstr "現在配線されている配線の姿勢を切り替えます。"
 
 #: pcbnew/router/router_tool.cpp:201
 msgid "Track Corner Mode Switch"
