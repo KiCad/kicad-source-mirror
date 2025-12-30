@@ -1224,7 +1224,7 @@ bool checkForLockedFiles( const wxString& aProjectPath, std::vector<wxString>& a
             }
             else if( fullPath.FileExists()
                      && filename.StartsWith( FILEEXT::LockFilePrefix )
-                     && filename.EndsWith( wxS( "." ) + FILEEXT::LockFileExtension ) )
+                     && filename.EndsWith( wxString( wxS( "." ) ) + FILEEXT::LockFileExtension ) )
             {
                 // Reconstruct the original filename from the lock file name
                 // Lock files are: ~<original>.<ext>.lck -> need to get <original>.<ext>
