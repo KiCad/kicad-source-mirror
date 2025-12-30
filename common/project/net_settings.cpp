@@ -1042,13 +1042,21 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         if( aBus[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aBus[i-1] ) )
+            {
                 braceNesting++;
+
+                if( !prefix.IsEmpty() )
+                    prefix.RemoveLast();
+
+                continue;
+            }
             else
                 return false;
         }
         else if( aBus[i] == '}' )
         {
             braceNesting--;
+            continue;
         }
 
         if( aBus[i] == ' ' || aBus[i] == ']' )
@@ -1111,6 +1119,9 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         if( aBus[i] == '}' )
         {
             braceNesting--;
+        }
+        else if( aBus[i] == '+' || aBus[i] == '-' || aBus[i] == 'P' || aBus[i] == 'N' )
+        {
             suffix += aBus[i];
         }
         else
@@ -1164,7 +1175,14 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
         if( aGroup[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
+            {
                 braceNesting++;
+
+                if( !prefix.IsEmpty() )
+                    prefix.RemoveLast();
+
+                continue;
+            }
             else
                 break;
         }
@@ -1197,7 +1215,14 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
         if( aGroup[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
+            {
                 braceNesting++;
+
+                if( !tmp.IsEmpty() )
+                    tmp.RemoveLast();
+
+                continue;
+            }
             else
                 return false;
         }
@@ -1206,6 +1231,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             if( braceNesting )
             {
                 braceNesting--;
+                continue;
             }
             else
             {
