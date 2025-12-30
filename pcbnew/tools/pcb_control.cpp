@@ -49,6 +49,7 @@
 #include <geometry/shape_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
+#include <pad.h>
 #include <layer_pairs.h>
 #include <pcb_group.h>
 #include <pcb_layer_presentation.h>
@@ -2393,8 +2394,87 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     {
         if( msgItems.empty() )
         {
-            msgItems.emplace_back( _( "Selected Items" ),
-                                   wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+            // Count items by type
+            std::map<KICAD_T, int> typeCounts;
+
+            for( EDA_ITEM* item : selection )
+                typeCounts[item->Type()]++;
+
+            // Check if all items are the same type
+            bool allSameType = ( typeCounts.size() == 1 );
+            KICAD_T commonType = allSameType ? typeCounts.begin()->first : NOT_USED;
+
+            if( allSameType )
+            {
+                // Show "Type: N" for homogeneous selections
+                wxString typeName = selection.Front()->GetFriendlyName();
+                msgItems.emplace_back( typeName,
+                                       wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+
+                // For pads, show common properties
+                if( commonType == PCB_PAD_T )
+                {
+                    std::set<wxString> layers;
+                    std::set<PAD_SHAPE> shapes;
+                    std::set<VECTOR2I>  sizes;
+
+                    for( EDA_ITEM* item : selection )
+                    {
+                        PAD* pad = static_cast<PAD*>( item );
+                        layers.insert( pad->LayerMaskDescribe() );
+                        shapes.insert( pad->GetShape( PADSTACK::ALL_LAYERS ) );
+                        sizes.insert( pad->GetSize( PADSTACK::ALL_LAYERS ) );
+                    }
+
+                    if( layers.size() == 1 )
+                        msgItems.emplace_back( _( "Layer" ), *layers.begin() );
+
+                    if( shapes.size() == 1 )
+                    {
+                        PAD* firstPad = static_cast<PAD*>( selection.Front() );
+                        msgItems.emplace_back( _( "Pad Shape" ),
+                                               firstPad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
+                    }
+
+                    if( sizes.size() == 1 )
+                    {
+                        VECTOR2I size = *sizes.begin();
+                        msgItems.emplace_back( _( "Pad Size" ),
+                            wxString::Format( wxT( "%s x %s" ),
+                                              m_frame->MessageTextFromValue( size.x ),
+                                              m_frame->MessageTextFromValue( size.y ) ) );
+                    }
+                }
+            }
+            else
+            {
+                // Show type breakdown for mixed selections
+                wxString breakdown;
+
+                for( const auto& [type, count] : typeCounts )
+                {
+                    if( !breakdown.IsEmpty() )
+                        breakdown += wxT( ", " );
+
+                    // Get friendly name from first item of this type
+                    wxString typeName;
+
+                    for( EDA_ITEM* item : selection )
+                    {
+                        if( item->Type() == type )
+                        {
+                            typeName = item->GetFriendlyName();
+                            break;
+                        }
+                    }
+
+                    breakdown += wxString::Format( wxT( "%s: %d" ), typeName, count );
+                }
+
+                msgItems.emplace_back( _( "Selected Items" ),
+                                       wxString::Format( wxT( "%d (%s)" ),
+                                                         selection.GetSize(), breakdown ) );
+            }
 
             if( m_isBoardEditor )
             {
@@ -2484,10 +2564,13 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
         if( selection.GetSize() >= 2 && selection.GetSize() < 100 )
         {
+            LSET enabledLayers = m_frame->GetBoard()->GetEnabledLayers();
             LSET enabledCopper = LSET::AllCuMask( m_frame->GetBoard()->GetCopperLayerCount() );
             bool areaValid = true;
+            bool hasCopper = false;
+            bool hasNonCopper = false;
 
-            std::map<PCB_LAYER_ID, SHAPE_POLY_SET> copperPolys;
+            std::map<PCB_LAYER_ID, SHAPE_POLY_SET> layerPolys;
             SHAPE_POLY_SET                         holes;
 
             std::function<void( EDA_ITEM* )> accumulateArea;
@@ -2511,10 +2594,17 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                         {
                             boardItem->RunOnChildren( accumulateArea, RECURSE_MODE::NO_RECURSE );
 
-                            for( PCB_LAYER_ID layer : LSET( boardItem->GetLayerSet() & enabledCopper ) )
+                            LSET itemLayers = boardItem->GetLayerSet() & enabledLayers;
+
+                            for( PCB_LAYER_ID layer : itemLayers )
                             {
-                                boardItem->TransformShapeToPolySet( copperPolys[layer], layer, 0,
+                                boardItem->TransformShapeToPolySet( layerPolys[layer], layer, 0,
                                                                     ARC_LOW_DEF, ERROR_INSIDE );
+
+                                if( enabledCopper.Contains( layer ) )
+                                    hasCopper = true;
+                                else
+                                    hasNonCopper = true;
                             }
 
                             if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->HasHole() )
@@ -2543,13 +2633,26 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             {
                 double area = 0.0;
 
-                for( auto& [layer, copperPoly] : copperPolys )
+                for( auto& [layer, layerPoly] : layerPolys )
                 {
-                    copperPoly.BooleanSubtract( holes );
-                    area += copperPoly.Area();
+                    // Only subtract holes from copper layers
+                    if( enabledCopper.Contains( layer ) )
+                        layerPoly.BooleanSubtract( holes );
+
+                    area += layerPoly.Area();
                 }
 
-                msgItems.emplace_back( _( "Selected 2D Copper Area" ),
+                // Choose appropriate label based on what layers are involved
+                wxString areaLabel;
+
+                if( hasCopper && !hasNonCopper )
+                    areaLabel = _( "Selected 2D Copper Area" );
+                else if( !hasCopper && hasNonCopper )
+                    areaLabel = _( "Selected 2D Area" );
+                else
+                    areaLabel = _( "Selected 2D Total Area" );
+
+                msgItems.emplace_back( areaLabel,
                                        m_frame->MessageTextFromValue( area, true, EDA_DATA_TYPE::AREA ) );
             }
         }
