@@ -1,0 +1,22 @@
+(version 1)
+
+(rule ReduceClearanceSameClass
+   (constraint clearance (min 0.2mm))
+   (condition "A.NetClass == B.NetClass")
+)
+
+(rule BasicInsulationCreepage
+   (constraint creepage (min 20mm))
+   (condition "A.hasNetclass('BI') && !B.hasNetclass('BI')")
+)
+
+(rule ReinforcedToBasicInsulationCreepage
+   (constraint creepage (min 20mm))
+   (condition "A.hasNetclass('RI') && B.hasNetclass('BI')")
+)
+
+(rule ReinforcedInsulationCreepage
+   (constraint creepage (min 40mm))
+   (condition "A.hasNetclass('RI') && !B.hasNetclass('RI')")
+)
+

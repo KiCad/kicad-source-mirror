@@ -43,12 +43,23 @@
 
 
 #include <geometry/shape_circle.h>
+#include <geometry/rtree.h>
 
+
+// Simple wrapper for track segment data in the RTree
+struct CREEPAGE_TRACK_ENTRY
+{
+    SEG      segment;
+    PCB_LAYER_ID layer;
+};
+
+using TRACK_RTREE = RTree<CREEPAGE_TRACK_ENTRY*, int, 2, double>;
 
 extern bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
                                     const std::vector<BOARD_ITEM*>&       aBe,
                                     const std::vector<const BOARD_ITEM*>& aDontTestAgainst,
                                     int                                   aMinGrooveWidth );
+
 
 struct PATH_CONNECTION
 {
@@ -64,11 +75,21 @@ struct PATH_CONNECTION
     /** @brief Test if a path is valid
      *
      * Check if a paths intersects the board edge or a track
+     *
+     * @param aBoard The board (used as fallback if no track index provided)
+     * @param aLayer The layer to check
+     * @param aBoardEdges Board edge items
+     * @param aIgnoreForTest Items to ignore in intersection tests
+     * @param aOutline Board outline polygon
+     * @param aTestLocalConcavity Concavity test flags
+     * @param aMinGrooveWidth Minimum groove width
+     * @param aTrackIndex Optional spatial index for tracks (if nullptr, falls back to linear search)
      */
     bool isValid( const BOARD& aBoard, PCB_LAYER_ID aLayer,
                   const std::vector<BOARD_ITEM*>&       aBoardEdges,
                   const std::vector<const BOARD_ITEM*>& aIgnoreForTest, SHAPE_POLY_SET* aOutline,
-                  const std::pair<bool, bool>& aTestLocalConcavity, int aMinGrooveWidth ) const
+                  const std::pair<bool, bool>& aTestLocalConcavity, int aMinGrooveWidth,
+                  TRACK_RTREE* aTrackIndex = nullptr ) const
     {
         if( !aOutline )
             return true; // We keep the segment if there is a problem
@@ -82,8 +103,10 @@ struct PATH_CONNECTION
         VECTOR2I midPoint = ( a1 + a2 ) / 2;
         int      tolerance = 100;
 
-        if( !( aOutline->Contains( midPoint, -1, tolerance )
-               || aOutline->PointOnEdge( midPoint, tolerance ) ) )
+        bool contained = aOutline->Contains( midPoint, -1, tolerance )
+                         || aOutline->PointOnEdge( midPoint, tolerance );
+
+        if( !contained )
             return false;
 
         if( false && ( aTestLocalConcavity.first || aTestLocalConcavity.second ) )
@@ -113,25 +136,60 @@ struct PATH_CONNECTION
                 return false;
         }
 
-        SEG segPath( a1, a2 );
-
         if( aLayer != Edge_Cuts )
         {
-            for( PCB_TRACK* track : aBoard.Tracks() )
+            SEG segPath( a1, a2 );
+
+            // Prefer RTree search if available
+            if( aTrackIndex )
             {
-                if( !track )
-                    continue;
+                // Calculate bounding box of the path segment
+                int minX = std::min( (int) a1.x, (int) a2.x );
+                int minY = std::min( (int) a1.y, (int) a2.y );
+                int maxX = std::max( (int) a1.x, (int) a2.x );
+                int maxY = std::max( (int) a1.y, (int) a2.y );
 
-                if( track->Type() == KICAD_T::PCB_TRACE_T && track->IsOnLayer( aLayer ) )
+                int searchMin[2] = { minX, minY };
+                int searchMax[2] = { maxX, maxY };
+
+                bool intersects = false;
+
+                aTrackIndex->Search( searchMin, searchMax,
+                        [&]( CREEPAGE_TRACK_ENTRY* entry ) -> bool
+                        {
+                            if( entry && entry->layer == aLayer )
+                            {
+                                if( segPath.Intersects( entry->segment ) )
+                                {
+                                    intersects = true;
+                                    return false; // Stop searching
+                                }
+                            }
+                            return true; // Continue searching
+                        } );
+
+                if( intersects )
+                    return false;
+            }
+            else
+            {
+                // Fallback to linear search if no index provided
+                for( PCB_TRACK* track : aBoard.Tracks() )
                 {
-                    std::shared_ptr<SHAPE> sh = track->GetEffectiveShape();
+                    if( !track )
+                        continue;
 
-                    if( sh && sh->Type() == SHAPE_TYPE::SH_SEGMENT )
+                    if( track->Type() == KICAD_T::PCB_TRACE_T && track->IsOnLayer( aLayer ) )
                     {
-                        SEG segTrack( track->GetStart(), track->GetEnd() );
+                        std::shared_ptr<SHAPE> sh = track->GetEffectiveShape();
 
-                        if( segPath.Intersects( segTrack ) )
-                            return false;
+                        if( sh && sh->Type() == SHAPE_TYPE::SH_SEGMENT )
+                        {
+                            SEG segTrack( track->GetStart(), track->GetEnd() );
+
+                            if( segPath.Intersects( segTrack ) )
+                                return false;
+                        }
                     }
                 }
             }
