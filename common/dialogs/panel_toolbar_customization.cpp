@@ -498,8 +498,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     m_actionsList->DeleteAllColumns();
     m_actionsList->InsertColumn( 0, "", wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE );
 
-    // Prepare the image list (taken from project_tree.cpp)
-    int logicSize = 24 * GetDPIScaleFactor() / GetContentScaleFactor(); // Cross-platform way
+    // Prepare the image list (based on project_tree.cpp)
+    int defSize = 24;
+    int logicSize = defSize * GetDPIScaleFactor() / GetContentScaleFactor(); // Cross-platform way
     int physSize = ToPhys( logicSize ); // aka *GetContentScaleFactor()
 
     if( physSize >= 64 )
@@ -516,17 +517,27 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
     logicSize = physSize / bmpsf;
 
-    auto toBitmap =
-            [&]( BITMAPS aBmps )
-            {
-                wxBitmap bmp = KiBitmap( aBmps, physSize );
-                bmp.SetScaleFactor( bmpsf );
-                wxASSERT(bmp.IsOk());
-                return bmp;
-            };
+    auto toBitmap = [&]( BITMAPS aBmps )
+    {
+#if wxCHECK_VERSION( 3, 3, 0 )
+        wxSize reqSize( physSize, physSize );
+#else
+        wxSize reqSize( logicSize, logicSize );
+#endif
 
-    m_actionImageList = new wxImageList( logicSize, logicSize, true,
-                                         static_cast<int>( m_availableTools.size() ) );
+        wxBitmapBundle bnd = KiBitmapBundle( aBmps, defSize );
+        wxBitmap       bmp = bnd.GetBitmap( reqSize );
+
+        wxASSERT( bmp.IsOk() );
+        return bmp;
+    };
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    m_actionImageList = new wxImageList( physSize, physSize, true, static_cast<int>( m_availableTools.size() ) );
+#else
+    m_actionImageList = new wxImageList( logicSize, logicSize, true, static_cast<int>( m_availableTools.size() ) );
+#endif
+
 
 #ifdef __WXMAC__
     m_treeImageList = new wxImageList( logicSize * 2, logicSize * 2, true,
@@ -548,9 +559,17 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
         if( tool->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
-            int idx = m_actionImageList->Add( toBitmap( tool->GetIcon() ) );
+            wxBitmap bmp = toBitmap( tool->GetIcon() );
+
+#ifndef __WXMAC__
+            wxASSERT_MSG( bmp.GetSize() == m_actionImageList->GetSize(),
+                          wxString::Format( "Wrong bitmap size for tool %s, expected %d, got %d", k,
+                                            m_actionImageList->GetSize().GetHeight(), bmp.GetHeight() ) );
+#endif
+
+            int idx = m_actionImageList->Add( bmp );
 #ifdef __WXMAC__
-            m_treeImageList->Add( toBitmap( tool->GetIcon() ) );
+            m_treeImageList->Add( bmp );
 #endif
 
             // If the image list throws away the image, then we shouldn't show the image anywhere.
