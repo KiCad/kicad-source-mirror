@@ -528,8 +528,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     m_actionImageList = new wxImageList( logicSize, logicSize, true,
                                          static_cast<int>( m_availableTools.size() ) );
 
+#ifdef __WXMAC__
     m_treeImageList = new wxImageList( logicSize * 2, logicSize * 2, true,
                                        static_cast<int>( m_availableTools.size() ) );
+#endif
 
     // Populate the various image lists for the action icons, and the actual control
     int itemIdx = 0;
@@ -547,7 +549,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         if( tool->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
             int idx = m_actionImageList->Add( toBitmap( tool->GetIcon() ) );
+#ifdef __WXMAC__
             m_treeImageList->Add( toBitmap( tool->GetIcon() ) );
+#endif
 
             // If the image list throws away the image, then we shouldn't show the image anywhere.
             // TODO: Make sure all images have all possible sizes so the image list doesn't get grumpy.
