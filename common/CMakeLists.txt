@@ -562,6 +562,7 @@ set( COMMON_WIDGET_SRCS
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
+    widgets/margin_offset_binder.cpp
     widgets/unit_binder.cpp
     widgets/up_down_tree.cpp
     widgets/widget_save_restore.cpp

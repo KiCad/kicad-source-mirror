@@ -28,6 +28,7 @@
 #include <vector>
 #include <pcb_fields_grid_table.h>
 #include <widgets/unit_binder.h>
+#include <widgets/margin_offset_binder.h>
 #include <footprint.h>
 #include <dialog_footprint_properties_fp_editor_base.h>
 
@@ -105,8 +106,7 @@ private:
 
     UNIT_BINDER                m_netClearance;
     UNIT_BINDER                m_solderMask;
-    UNIT_BINDER                m_solderPaste;
-    UNIT_BINDER                m_solderPasteRatio;
+    MARGIN_OFFSET_BINDER       m_solderPaste;
 
     wxControl*                 m_delayedFocusCtrl;
     NOTEBOOK_PAGES             m_delayedFocusPage;

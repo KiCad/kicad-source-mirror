@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -1020,13 +1020,15 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_maskMarginUnits->Wrap( -1 );
 	fgClearancesGridSizer->Add( m_maskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_pasteMarginLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginLabel->Wrap( -1 );
-	m_pasteMarginLabel->SetToolTip( _("This is the local clearance between this pad and the solder paste.\nIf 0, the footprint value or the global value is used.\nThe final clearance value is the sum of this value and the clearance value ratio.\nA negative value means a smaller mask size than pad size.") );
+	m_pasteMarginLabel->SetToolTip( _("Solder paste clearance relative to pad size.\nEnter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).\nThis value can be superseded by local values for a footprint or a pad.") );
 
 	fgClearancesGridSizer->Add( m_pasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_pasteMarginCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginCtrl->SetToolTip( _("Local solder paste clearance for this pad.\nEnter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).\nIf blank, the footprint or global value is used.") );
+
 	fgClearancesGridSizer->Add( m_pasteMarginCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_pasteMarginUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -1059,7 +1061,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_nonCopperNote->Wrap( -1 );
 	bNoteSizer->Add( m_nonCopperNote, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_staticTextInfoPaste = new wxStaticText( notePanel, wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPaste = new wxStaticText( notePanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
 	bNoteSizer->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 

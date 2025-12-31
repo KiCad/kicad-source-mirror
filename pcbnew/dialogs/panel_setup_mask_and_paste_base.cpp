@@ -147,14 +147,14 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasteMarginLabel->Wrap( -1 );
-	m_pasteMarginLabel->SetToolTip( _("Global absolute clearance between pads and the solder paste.\nNegative clearance means solder paste area smaller than the pad (typical for solder paste clearance).\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the relative clearance value.") );
+	m_pasteMarginLabel->SetToolTip( _("Solder paste clearance relative to pad size.\nEnter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).\nThis value can be superseded by local values for a footprint or a pad.") );
 
 	gbSizer2->Add( m_pasteMarginLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_pasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_pasteMarginCtrl->SetToolTip( _("Global absolute clearance between pads and the solder paste.\nNegative clearance means solder paste area smaller than the pad (typical for solder paste clearance).\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the relative clearance value.") );
+	m_pasteMarginCtrl->SetToolTip( _("Solder paste clearance relative to pad size.\nEnter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).\nThis value can be superseded by local values for a footprint or a pad.") );
 
 	gbSizer2->Add( m_pasteMarginCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -183,7 +183,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	bSizer3->Add( 0, 0, 2, wxEXPAND, 5 );
 
-	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, _("Note: Solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
 	bSizer3->Add( m_staticTextInfoPaste, 0, wxALL|wxEXPAND, 5 );
 

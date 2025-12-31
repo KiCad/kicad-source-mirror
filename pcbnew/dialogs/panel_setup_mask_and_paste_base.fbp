@@ -1472,7 +1472,7 @@
                     <property name="gripper">0</property>
                     <property name="hidden">0</property>
                     <property name="id">wxID_ANY</property>
-                    <property name="label">Solder paste absolute clearance:</property>
+                    <property name="label">Solder paste clearance:</property>
                     <property name="markup">0</property>
                     <property name="max_size"></property>
                     <property name="maximize_button">0</property>
@@ -1494,7 +1494,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Global absolute clearance between pads and the solder paste.&#x0A;Negative clearance means solder paste area smaller than the pad (typical for solder paste clearance).&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the relative clearance value.</property>
+                    <property name="tooltip">Solder paste clearance relative to pad size.&#x0A;Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).&#x0A;This value can be superseded by local values for a footprint or a pad.</property>
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
@@ -1558,7 +1558,7 @@
                     <property name="style"></property>
                     <property name="subclass"></property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip">Global absolute clearance between pads and the solder paste.&#x0A;Negative clearance means solder paste area smaller than the pad (typical for solder paste clearance).&#x0A;This value can be superseded by local values for a footprint or a pad.&#x0A;Final clearance value is the sum of this value and the relative clearance value.</property>
+                    <property name="tooltip">Solder paste clearance relative to pad size.&#x0A;Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e.g., -0.1mm - 5%).&#x0A;This value can be superseded by local values for a footprint or a pad.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>
@@ -1877,7 +1877,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Note: Solder paste clearances (absolute and relative) are added to determine the final clearance.</property>
+                <property name="label"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
                 <property name="maximize_button">0</property>

@@ -27,6 +27,7 @@
 
 #include <board.h>
 #include <widgets/unit_binder.h>
+#include <widgets/margin_offset_binder.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_setup_mask_and_paste_base.h>
 
@@ -44,8 +45,7 @@ private:
     UNIT_BINDER             m_maskExpansion;
     UNIT_BINDER             m_maskMinWidth;
     UNIT_BINDER             m_maskToCopperClearance;
-    UNIT_BINDER             m_pasteMargin;
-    UNIT_BINDER             m_pasteMarginRatio;
+    MARGIN_OFFSET_BINDER    m_pasteMargin;
 
 public:
     PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );

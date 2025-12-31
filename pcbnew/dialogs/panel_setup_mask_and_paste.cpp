@@ -35,18 +35,25 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
         m_maskMinWidth( aFrame, m_maskMinWidthLabel, m_maskMinWidthCtrl, m_maskMinWidthUnits ),
         m_maskToCopperClearance( aFrame, m_maskToCopperClearanceLabel, m_maskToCopperClearanceCtrl,
                                  m_maskToCopperClearanceUnits ),
-        m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
-        m_pasteMarginRatio( aFrame, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl, m_pasteMarginRatioUnits )
+        m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits )
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
     m_staticTextInfoPaste->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
-    m_pasteMargin.SetNegativeZero();
+    // Update label text and tooltip for combined offset + ratio field
+    m_pasteMarginLabel->SetLabel( _( "Solder paste clearance:" ) );
+    m_pasteMarginLabel->SetToolTip( _( "Solder paste clearance relative to pad size.\n"
+                                       "Enter an absolute value (e.g., -0.1mm), a percentage "
+                                       "(e.g., -5%), or both (e.g., -0.1mm - 5%).\n"
+                                       "This value can be superseded by local values for a "
+                                       "footprint or a pad." ) );
 
-    m_pasteMarginRatio.SetUnits( EDA_UNITS::PERCENT );
-    m_pasteMarginRatio.SetNegativeZero();
+    // Hide the old ratio controls - they're no longer needed
+    m_pasteMarginRatioLabel->Show( false );
+    m_pasteMarginRatioCtrl->Show( false );
+    m_pasteMarginRatioUnits->Show( false );
 }
 
 
@@ -58,8 +65,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
     m_tentViasFront->SetValue( m_BrdSettings->m_TentViasFront );
     m_tentViasBack->SetValue( m_BrdSettings->m_TentViasBack );
 
-    m_pasteMargin.SetValue( m_BrdSettings->m_SolderPasteMargin );
-    m_pasteMarginRatio.SetDoubleValue( m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
+    m_pasteMargin.SetOffsetValue( m_BrdSettings->m_SolderPasteMargin );
+    m_pasteMargin.SetRatioValue( m_BrdSettings->m_SolderPasteMarginRatio );
 
     m_allowBridges->SetValue( m_BrdSettings->m_AllowSoldermaskBridgesInFPs );
 
@@ -76,8 +83,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
     m_BrdSettings->m_TentViasFront = m_tentViasFront->GetValue();
     m_BrdSettings->m_TentViasBack = m_tentViasBack->GetValue();
 
-    m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetIntValue();
-    m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;
+    m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetOffsetValue().value_or( 0 );
+    m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMargin.GetRatioValue().value_or( 0.0 );
 
     m_BrdSettings->m_AllowSoldermaskBridgesInFPs = m_allowBridges->GetValue();
 

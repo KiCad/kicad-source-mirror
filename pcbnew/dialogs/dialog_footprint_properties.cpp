@@ -63,7 +63,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
         m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
-        m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl, m_PasteMarginRatioUnits ),
         m_returnValue( FP_PROPS_CANCEL ),
         m_initialized( false )
 {
@@ -132,10 +131,17 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         SetInitialFocus( m_NetClearanceCtrl );
     }
 
-    m_solderPaste.SetNegativeZero();
+    // Update label text and tooltip for combined offset + ratio field
+    m_SolderPasteMarginLabel->SetLabel( _( "Solder paste clearance:" ) );
+    m_SolderPasteMarginLabel->SetToolTip( _( "Local solder paste clearance for this footprint.\n"
+                                             "Enter an absolute value (e.g., -0.1mm), a percentage "
+                                             "(e.g., -5%), or both (e.g., -0.1mm - 5%).\n"
+                                             "If blank, the global value is used." ) );
 
-    m_solderPasteRatio.SetUnits( EDA_UNITS::PERCENT );
-    m_solderPasteRatio.SetNegativeZero();
+    // Hide the old ratio controls - they're no longer needed
+    m_PasteMarginRatioLabel->Show( false );
+    m_PasteMarginRatioCtrl->Show( false );
+    m_PasteMarginRatioUnits->Show( false );
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -301,15 +307,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     else
         m_solderMask.SetValue( wxEmptyString );
 
-    if( m_footprint->GetLocalSolderPasteMargin().has_value() )
-        m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin().value() );
-    else
-        m_solderPaste.SetValue( wxEmptyString );
-
-    if( m_footprint->GetLocalSolderPasteMarginRatio().has_value() )
-        m_solderPasteRatio.SetDoubleValue( m_footprint->GetLocalSolderPasteMarginRatio().value() * 100.0 );
-    else
-        m_solderPasteRatio.SetValue( wxEmptyString );
+    m_solderPaste.SetOffsetValue( m_footprint->GetLocalSolderPasteMargin() );
+    m_solderPaste.SetRatioValue( m_footprint->GetLocalSolderPasteMarginRatio() );
 
     m_allowSolderMaskBridges->SetValue( m_footprint->AllowSolderMaskBridges() );
 
@@ -585,15 +584,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     else
         m_footprint->SetLocalSolderMaskMargin( m_solderMask.GetValue() );
 
-    if( m_solderPaste.IsNull() )
-        m_footprint->SetLocalSolderPasteMargin( {} );
-    else
-        m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetValue() );
-
-    if( m_solderPasteRatio.IsNull() )
-        m_footprint->SetLocalSolderPasteMarginRatio( {} );
-    else
-        m_footprint->SetLocalSolderPasteMarginRatio( m_solderPasteRatio.GetDoubleValue() / 100.0 );
+    m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetOffsetValue() );
+    m_footprint->SetLocalSolderPasteMarginRatio( m_solderPaste.GetRatioValue() );
 
     switch( m_ZoneConnectionChoice->GetSelection() )
     {

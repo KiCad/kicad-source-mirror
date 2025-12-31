@@ -32,6 +32,7 @@
 #include <pcb_fields_grid_table.h>
 #include <footprint.h>
 #include <widgets/unit_binder.h>
+#include <widgets/margin_offset_binder.h>
 
 
 class PCB_EDIT_FRAME;
@@ -91,8 +92,7 @@ private:
 
     UNIT_BINDER                      m_netClearance;
     UNIT_BINDER                      m_solderMask;
-    UNIT_BINDER                      m_solderPaste;
-    UNIT_BINDER                      m_solderPasteRatio;
+    MARGIN_OFFSET_BINDER             m_solderPaste;
 
     wxString                         m_delayedErrorMessage;
     wxGrid*                          m_delayedFocusGrid;

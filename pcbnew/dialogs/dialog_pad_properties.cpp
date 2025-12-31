@@ -142,7 +142,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
         m_maskMargin( aParent, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_pasteMargin( aParent, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
-        m_pasteMarginRatio( aParent, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl, m_pasteMarginRatioUnits ),
         m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits ),
         m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
         m_spokeAngle( aParent, m_spokeAngleLabel, m_spokeAngleCtrl, m_spokeAngleUnits ),
@@ -230,10 +229,17 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_spokeAngle.SetUnits( EDA_UNITS::DEGREES );
     m_spokeAngle.SetPrecision( 3 );
 
-    m_pasteMargin.SetNegativeZero();
+    // Update label text and tooltip for combined offset + ratio field
+    m_pasteMarginLabel->SetLabel( _( "Solder paste clearance:" ) );
+    m_pasteMarginLabel->SetToolTip( _( "Local solder paste clearance for this pad.\n"
+                                       "Enter an absolute value (e.g., -0.1mm), a percentage "
+                                       "(e.g., -5%), or both (e.g., -0.1mm - 5%).\n"
+                                       "If blank, the footprint or global value is used." ) );
 
-    m_pasteMarginRatio.SetUnits( EDA_UNITS::PERCENT );
-    m_pasteMarginRatio.SetNegativeZero();
+    // Hide the old ratio controls - they're no longer needed
+    m_pasteMarginRatioLabel->Show( false );
+    m_pasteMarginRatioCtrl->Show( false );
+    m_pasteMarginRatioUnits->Show( false );
 
     m_padToDieDelay.SetUnits( EDA_UNITS::PS );
     m_padToDieDelay.SetDataType( EDA_DATA_TYPE::TIME );
@@ -741,15 +747,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_maskMargin.ChangeValue( wxEmptyString );
 
-    if( m_previewPad->GetLocalSolderPasteMargin().has_value() )
-        m_pasteMargin.ChangeValue( m_previewPad->GetLocalSolderPasteMargin().value() );
-    else
-        m_pasteMargin.ChangeValue( wxEmptyString );
-
-    if( m_previewPad->GetLocalSolderPasteMarginRatio().has_value() )
-        m_pasteMarginRatio.ChangeDoubleValue( m_previewPad->GetLocalSolderPasteMarginRatio().value() * 100.0 );
-    else
-        m_pasteMarginRatio.ChangeValue( wxEmptyString );
+    m_pasteMargin.SetOffsetValue( m_previewPad->GetLocalSolderPasteMargin() );
+    m_pasteMargin.SetRatioValue( m_previewPad->GetLocalSolderPasteMarginRatio() );
 
     if( m_previewPad->GetLocalThermalSpokeWidthOverride().has_value() )
         m_spokeWidth.ChangeValue( m_previewPad->GetLocalThermalSpokeWidthOverride().value() );
@@ -1956,15 +1955,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     else
         aPad->SetLocalSolderMaskMargin( m_maskMargin.GetIntValue() );
 
-    if( m_pasteMargin.IsNull() )
-        aPad->SetLocalSolderPasteMargin( {} );
-    else
-        aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetIntValue() );
-
-    if( m_pasteMarginRatio.IsNull() )
-        aPad->SetLocalSolderPasteMarginRatio( {} );
-    else
-        aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
+    aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetOffsetValue() );
+    aPad->SetLocalSolderPasteMarginRatio( m_pasteMargin.GetRatioValue() );
 
     if( m_spokeWidth.IsNull() )
         aPad->SetLocalThermalSpokeWidthOverride( {} );
