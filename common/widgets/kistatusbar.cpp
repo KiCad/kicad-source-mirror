@@ -193,7 +193,12 @@ void KISTATUSBAR::HideBackgroundProgressBar()
 
 void KISTATUSBAR::SetBackgroundProgress( int aAmount )
 {
-    m_backgroundProgressBar->SetValue( aAmount );
+    int value = m_backgroundProgressBar->GetRange();
+
+    if( value <= aAmount )
+        value = aAmount;
+
+    m_backgroundProgressBar->SetValue( value );
 }
 
 
