@@ -2383,8 +2383,12 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             }
             else
             {
+                wxString activeUrl;
+
                 strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
-                            aText->GetFontMetrics(), aText->GetRolloverPos() );
+                            aText->GetFontMetrics(), aText->GetRolloverPos(), &activeUrl );
+
+                aText->SetActiveUrl( activeUrl );
             }
 
             const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
@@ -2784,7 +2788,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     // is drawn (to avoid draw artifacts).
     if( DNP && aLayer == LAYER_DEVICE )
     {
-        COLOR4D marker_color = m_schSettings.GetLayerColor( LAYER_DNP_MARKER );
+        COLOR4D  marker_color = m_schSettings.GetLayerColor( LAYER_DNP_MARKER );
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
         BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
@@ -3321,8 +3325,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         BOX2I    bbox = aSheet->GetBodyBoundingBox();
         BOX2I    pins = aSheet->GetBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(),
-                                    pins.GetEnd().y - bbox.GetEnd().y ) );
+                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
         int      strokeWidth = 3 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );

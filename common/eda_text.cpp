@@ -51,6 +51,7 @@
 #include <geometry/shape_poly_set.h>
 #include <properties/property_validators.h>
 #include <ctl_flags.h>
+#include <markup_parser.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/common/types/base_types.pb.h>
@@ -972,6 +973,29 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
 
     GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(), GetVertJustify(),
                  penWidth, IsItalic(), IsBold(), font, getFontMetrics() );
+}
+
+
+bool recursiveDescent( const std::unique_ptr<MARKUP::NODE>& aNode )
+{
+    if( aNode->isURL() )
+        return true;
+
+    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
+    {
+        if( recursiveDescent( child ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool EDA_TEXT::containsURL() const
+{
+    wxString showntext = GetShownText( false );
+    MARKUP::MARKUP_PARSER markupParser( TO_UTF8( showntext ) );
+    return recursiveDescent( markupParser.Parse() );
 }
 
 

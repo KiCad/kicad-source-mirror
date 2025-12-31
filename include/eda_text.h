@@ -444,6 +444,8 @@ protected:
     void printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                              const COLOR4D& aColor, const wxString& aText, const VECTOR2I& aPos );
 
+    bool containsURL() const;
+
 protected:
     /**
      * A hyperlink URL.  If empty, this text object is not a hyperlink.

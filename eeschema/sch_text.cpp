@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "markup_parser.h"
 #include <advanced_config.h>
 #include <base_units.h>
 #include <pgm_base.h>
@@ -46,6 +47,7 @@
 #include <core/kicad_algo.h>
 #include <tools/sch_navigate_tool.h>
 #include <trigo.h>
+#include <markup_parser.h>
 
 
 SCH_TEXT::SCH_TEXT( const VECTOR2I& aPos, const wxString& aText, SCH_LAYER_ID aLayer, KICAD_T aType ) :
@@ -358,12 +360,26 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
 }
 
 
+bool SCH_TEXT::HasHypertext() const
+{
+    return HasHyperlink() || containsURL();
+}
+
+
+bool SCH_TEXT::HasHoveredHypertext() const
+{
+    return !m_activeUrl.IsEmpty();
+}
+
+
 void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMousePos ) const
 {
-    wxCHECK_MSG( HasHyperlink(), /* void */, wxT( "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" ) );
-
     SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
-    navTool->HypertextCommand( m_hyperlink );
+
+    if( HasHyperlink() )
+        navTool->HypertextCommand( m_hyperlink );
+    else if( !m_activeUrl.IsEmpty() )
+        navTool->HypertextCommand( m_activeUrl );
 }
 
 

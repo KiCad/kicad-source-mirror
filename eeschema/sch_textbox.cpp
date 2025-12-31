@@ -313,29 +313,9 @@ bool SCH_TEXTBOX::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) cons
 }
 
 
-bool recursiveDescent( const std::unique_ptr<MARKUP::NODE>& aNode )
-{
-    if( aNode->isURL() )
-        return true;
-
-    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
-    {
-        if( recursiveDescent( child ) )
-            return true;
-    }
-
-    return false;
-}
-
-
 bool SCH_TEXTBOX::HasHypertext() const
 {
-    if( HasHyperlink() )
-        return true;
-
-    wxString showntext = GetShownText( false );
-    MARKUP::MARKUP_PARSER markupParser( TO_UTF8( showntext ) );
-    return recursiveDescent( markupParser.Parse() );
+    return HasHyperlink() || containsURL();
 }
 
 
