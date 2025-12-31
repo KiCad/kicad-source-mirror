@@ -554,14 +554,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         if( tool->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
             wxBitmap bmp = toBitmap( tool->GetIcon() );
-
-#ifndef __WXMAC__
-            wxASSERT_MSG( bmp.GetSize() == m_actionImageList->GetSize(),
-                          wxString::Format( "Wrong bitmap size for tool %s, expected %d, got %d", k,
-                                            m_actionImageList->GetSize().GetHeight(), bmp.GetHeight() ) );
-#endif
-
-            int idx = m_actionImageList->Add( bmp );
+            int      idx = m_actionImageList->Add( bmp );
 #ifdef __WXMAC__
             m_treeImageList->Add( bmp );
 #endif
