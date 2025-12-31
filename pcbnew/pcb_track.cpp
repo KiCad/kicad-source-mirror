@@ -1875,27 +1875,40 @@ PCB_VIA::ValidateViaParameters( std::optional<int> aDiameter,
     return std::nullopt;
 }
 
+
 bool PCB_VIA::IsMicroVia() const
 {
-    return std::abs( static_cast<int>( Padstack().Drill().start )
-                     - static_cast<int>( Padstack().Drill().end ) ) == 2;
+    return m_viaType == VIATYPE::MICROVIA;
 }
+
 
 bool PCB_VIA::IsBlindVia() const
 {
-    if( IsMicroVia() )
-        return false;
+    // We don't actually have an GUI or file tokens to differentiate these, so we have to look at
+    // the layers.
+    if( m_viaType == VIATYPE::BLIND || m_viaType == VIATYPE::BURIED )
+    {
+        bool startOuter = Padstack().Drill().start == F_Cu || Padstack().Drill().start == B_Cu;
+        bool endOuter = Padstack().Drill().end == F_Cu || Padstack().Drill().end == B_Cu;
 
-    bool startOuter = Padstack().Drill().start == F_Cu || Padstack().Drill().start == B_Cu;
-    bool endOuter = Padstack().Drill().end == F_Cu || Padstack().Drill().end == B_Cu;
+        return startOuter ^ endOuter;
+    }
 
-    return startOuter ^ endOuter;
+    return false;
 }
+
 
 bool PCB_VIA::IsBuriedVia() const
 {
-    return Padstack().Drill().start != F_Cu && Padstack().Drill().start != B_Cu
-            && Padstack().Drill().end != F_Cu && Padstack().Drill().end != B_Cu;
+    // We don't actually have an GUI or file tokens to differentiate these, so we have to look at
+    // the layers.
+    if( m_viaType == VIATYPE::BLIND || m_viaType == VIATYPE::BURIED )
+    {
+        return Padstack().Drill().start != F_Cu && Padstack().Drill().start != B_Cu
+                && Padstack().Drill().end != F_Cu && Padstack().Drill().end != B_Cu;
+    }
+
+    return false;
 }
 
 
