@@ -364,12 +364,20 @@ FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, 
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
-        if( FOOTPRINT* footprint = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), aName ) )
+        try
         {
-            LIB_ID id = footprint->GetFPID();
-            id.SetLibNickname( ( *lib )->row->Nickname() );
-            footprint->SetFPID( id );
-            return footprint;
+            if( FOOTPRINT* footprint = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), aName ) )
+            {
+                LIB_ID id = footprint->GetFPID();
+                id.SetLibNickname( ( *lib )->row->Nickname() );
+                footprint->SetFPID( id );
+                return footprint;
+            }
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogTrace( traceLibraries, "LoadFootprint: error loading %s:%s: %s",
+                        aNickname, aName, ioe.What() );
         }
     }
     else

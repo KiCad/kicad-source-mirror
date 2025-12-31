@@ -45,6 +45,7 @@
 #include <pgm_base.h>
 #include <libraries/symbol_library_adapter.h>
 #include <widgets/sch_design_block_pane.h>
+#include <widgets/kistatusbar.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
 
@@ -1089,12 +1090,25 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_RELOAD_LIB:
+    {
         if( m_designBlocksPane && m_designBlocksPane->IsShown() )
         {
             m_designBlocksPane->RefreshLibs();
             SyncView();
         }
+
+        // Show any symbol library load errors in the status bar
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+        {
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+            wxString errors = adapter->GetLibraryLoadErrors();
+
+            if( !errors.IsEmpty() )
+                statusBar->SetLoadWarningMessages( errors );
+        }
+
         break;
+    }
 
     default:;
 

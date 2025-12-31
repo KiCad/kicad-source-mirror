@@ -641,7 +641,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             // Update all symbol library links for all sheets.
-            schematic.UpdateSymbolLinks();
+            schematic.UpdateSymbolLinks( &loadReporter );
 
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();

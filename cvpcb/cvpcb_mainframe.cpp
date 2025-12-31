@@ -43,6 +43,7 @@
 #include <tool/editor_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
+#include <widgets/kistatusbar.h>
 #include <widgets/wx_progress_reporters.h>
 
 #include <cvpcb_association.h>
@@ -908,7 +909,10 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     m_FootprintsList->ReadFootprintFiles( adapter, nullptr, &progressReporter );
 
     if( m_FootprintsList->GetErrorCount() )
-        m_FootprintsList->DisplayErrors( this );
+    {
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( m_FootprintsList->GetErrorMessages() );
+    }
 
     return true;
 }

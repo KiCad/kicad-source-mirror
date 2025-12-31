@@ -50,11 +50,14 @@
 #include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
+#include <string_utils.h>
 #include <trace_helpers.h>
 #include <thread_pool.h>
 #include <kiface_ids.h>
+#include <widgets/kistatusbar.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <wx/ffile.h>
+#include <wx/tokenzr.h>
 #include <wildcards_and_files_ext.h>
 
 #include <schematic.h>
@@ -482,6 +485,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
     if( m_libraryPreloadInProgress.load() )
         return;
 
+    Pgm().ClearLibraryLoadMessages();
+
     m_libraryPreloadBackgroundJob =
             Pgm().GetBackgroundJobMonitor().Create( _( "Loading Symbol Libraries" ) );
 
@@ -529,6 +534,26 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             }
 
             adapter->BlockUntilLoaded();
+
+            // Collect library load errors for async reporting
+            wxString errors = adapter->GetLibraryLoadErrors();
+
+            wxLogTrace( traceLibraries, "eeschema PreloadLibraries: errors.IsEmpty()=%d, length=%zu",
+                        errors.IsEmpty(), errors.length() );
+
+            std::vector<LOAD_MESSAGE> messages =
+                    ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+
+            if( !messages.empty() )
+            {
+                wxLogTrace( traceLibraries, "  -> collected %zu messages, calling AddLibraryLoadMessages",
+                            messages.size() );
+                Pgm().AddLibraryLoadMessages( messages );
+            }
+            else
+            {
+                wxLogTrace( traceLibraries, "  -> no errors from symbol libraries" );
+            }
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();

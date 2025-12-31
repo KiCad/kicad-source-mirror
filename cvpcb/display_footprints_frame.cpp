@@ -308,7 +308,8 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayErrorMessage( this, _( "Error loading footprint" ), ioe.What() );
+        aReporter.Report( wxString::Format( _( "Error loading footprint: %s" ), ioe.What() ),
+                          RPT_SEVERITY_ERROR );
         return nullptr;
     }
 

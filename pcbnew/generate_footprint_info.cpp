@@ -23,6 +23,7 @@
 #include <string_utils.h>
 #include <footprint.h>
 #include <footprint_library_adapter.h>
+#include <trace_helpers.h>
 #include <wx/log.h>
 
 
@@ -126,7 +127,8 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( _( "Error loading footprint %s from library '%s'." ) + wxS( "\n%s" ),
+            // Log to trace instead of error to avoid popup dialogs
+            wxLogTrace( traceLibraries, "Error loading footprint %s from library '%s': %s",
                         m_lib_id.GetLibItemName().wx_str(),
                         m_lib_id.GetLibNickname().wx_str(),
                         ioe.What() );

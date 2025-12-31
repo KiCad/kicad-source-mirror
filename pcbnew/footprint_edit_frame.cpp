@@ -70,6 +70,7 @@
 #include <tools/pcb_group_tool.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/kistatusbar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
@@ -1151,7 +1152,10 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
     progressReporter.Show( false );
 
     if( GFootprintList.GetErrorCount() )
-        GFootprintList.DisplayErrors( this );
+    {
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( GFootprintList.GetErrorMessages() );
+    }
 
     m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, footprints );
     auto adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );

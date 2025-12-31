@@ -27,6 +27,7 @@
 
 #include <kicommon.h>
 #include <optional>
+#include <mutex>
 #include <vector>
 #include <widgets/report_severity.h>
 
@@ -116,11 +117,23 @@ public:
     void SetLoadWarningMessages( const wxString& aMessages );
     void ClearLoadWarningMessages();
 
+    /**
+     * Add warning/error messages thread-safely.
+     * Can be called from any thread. UI update is deferred to main thread.
+     */
+    void AddLoadWarningMessages( const std::vector<LOAD_MESSAGE>& aMessages );
+
+    /**
+     * Get current message count (thread-safe).
+     */
+    size_t GetLoadWarningCount() const;
+
 private:
     void onSize( wxSizeEvent& aEvent );
     void onBackgroundProgressClick( wxMouseEvent& aEvent );
     void onNotificationsIconClick( wxCommandEvent& aEvent );
     void onLoadWarningsIconClick( wxCommandEvent& aEvent );
+    void updateWarningUI();  ///< Update warning button visibility and badge (main thread only)
 
     enum class FIELD
     {
@@ -139,6 +152,7 @@ private:
     wxStaticText*  m_backgroundTxt;
     BITMAP_BUTTON* m_notificationsButton;
     BITMAP_BUTTON* m_warningButton;
+    mutable std::mutex m_loadWarningMutex;  ///< Protects m_loadWarningMessages
     std::vector<LOAD_MESSAGE> m_loadWarningMessages;
     int            m_normalFieldsCount;
     STYLE_FLAGS    m_styleFlags;

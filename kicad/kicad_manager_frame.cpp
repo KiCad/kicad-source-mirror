@@ -172,6 +172,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     CreateStatusBar( 2 );
     Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+    Pgm().RegisterLibraryLoadStatusBar( (KISTATUSBAR*) GetStatusBar() );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
     // Give an icon
@@ -324,6 +325,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 
     Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+    Pgm().UnregisterLibraryLoadStatusBar( (KISTATUSBAR*) GetStatusBar() );
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -383,7 +385,10 @@ void KICAD_MANAGER_FRAME::onNotebookPageCloseRequest( wxAuiNotebookEvent& evt )
 wxStatusBar* KICAD_MANAGER_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
                                                      const wxString& name )
 {
-    return new KISTATUSBAR( number, this, id );
+    return new KISTATUSBAR( number, this, id,
+                            static_cast<KISTATUSBAR::STYLE_FLAGS>(
+                                    KISTATUSBAR::NOTIFICATION_ICON | KISTATUSBAR::CANCEL_BUTTON
+                                    | KISTATUSBAR::WARNING_ICON ) );
 }
 
 

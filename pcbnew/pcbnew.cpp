@@ -62,7 +62,12 @@
 #include <panel_3D_raytracing_options.h>
 #include <project_pcb.h>
 #include <python_scripting.h>
+#include <string_utils.h>
 #include <thread_pool.h>
+#include <trace_helpers.h>
+#include <widgets/kistatusbar.h>
+
+#include <wx/tokenzr.h>
 
 #include "invoke_pcb_dialog.h"
 #include <wildcards_and_files_ext.h>
@@ -611,6 +616,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
     if( m_libraryPreloadInProgress.load() )
         return;
 
+    Pgm().ClearLibraryLoadMessages();
+
     m_libraryPreloadBackgroundJob =
             Pgm().GetBackgroundJobMonitor().Create( _( "Loading Footprint Libraries" ) );
 
@@ -659,8 +666,46 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             adapter->BlockUntilLoaded();
 
+            // Collect and report library load errors from adapter
+            wxString errors = adapter->GetLibraryLoadErrors();
+
+            wxLogTrace( traceLibraries, "pcbnew PreloadLibraries: adapter errors.IsEmpty()=%d, length=%zu",
+                        errors.IsEmpty(), errors.length() );
+
+            if( !errors.IsEmpty() )
+            {
+                std::vector<LOAD_MESSAGE> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+
+                wxLogTrace( traceLibraries, "  -> adapter: collected %zu messages", messages.size() );
+
+                if( !messages.empty() )
+                    Pgm().AddLibraryLoadMessages( messages );
+            }
+            else
+            {
+                wxLogTrace( traceLibraries, "  -> no errors from footprint adapter" );
+            }
+
             // TODO: Remove once fp-info-cache isn't a thing
             GFootprintList.ReadFootprintFiles( adapter, nullptr, reporter.get() );
+
+            // Also collect errors from GFootprintList
+            wxLogTrace( traceLibraries, "  -> GFootprintList.GetErrorCount()=%u", GFootprintList.GetErrorCount() );
+
+            if( GFootprintList.GetErrorCount() > 0 )
+            {
+                std::vector<LOAD_MESSAGE> messages =
+                        ExtractLibraryLoadErrors( GFootprintList.GetErrorMessages(), RPT_SEVERITY_ERROR );
+
+                wxLogTrace( traceLibraries, "  -> GFootprintList: collected %zu messages", messages.size() );
+
+                if( !messages.empty() )
+                    Pgm().AddLibraryLoadMessages( messages );
+            }
+            else
+            {
+                wxLogTrace( traceLibraries, "  -> no errors from GFootprintList" );
+            }
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();

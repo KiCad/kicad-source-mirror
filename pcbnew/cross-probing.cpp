@@ -57,6 +57,9 @@
 #include <trace_helpers.h>
 #include <netlist_reader/netlist_reader.h>
 #include <widgets/pcb_design_block_pane.h>
+#include <widgets/kistatusbar.h>
+#include <project_pcb.h>
+#include <footprint_library_adapter.h>
 #include <wx/log.h>
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -726,8 +729,21 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_RELOAD_LIB:
+    {
         m_designBlocksPane->RefreshLibs();
+
+        // Show any footprint library load errors in the status bar
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+        {
+            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+            wxString errors = adapter->GetLibraryLoadErrors();
+
+            if( !errors.IsEmpty() )
+                statusBar->SetLoadWarningMessages( errors );
+        }
+
         break;
+    }
 
     // many many others.
     default:

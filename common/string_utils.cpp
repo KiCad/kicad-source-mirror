@@ -33,6 +33,7 @@
 #include <fmt/core.h>
 #include <macros.h>
 #include <string_utils.h>
+#include <widgets/kistatusbar.h>
 #include <wx_filename.h>
 #include <fmt/chrono.h>
 #include <wx/log.h>
@@ -1779,5 +1780,35 @@ int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
         return 1;
 
     return StrNumCmp( aLhs, aRhs );
+}
+
+
+std::vector<LOAD_MESSAGE> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity )
+{
+    std::vector<LOAD_MESSAGE> messages;
+
+    if( aErrorString.IsEmpty() )
+        return messages;
+
+    // Errors are separated by newlines. We want to keep:
+    // - Lines starting with "Library '" (library-level errors)
+    // - Lines containing "Expecting" (file error location)
+    // And strip:
+    // - Lines starting with "from " (internal code location info)
+    wxStringTokenizer tokenizer( aErrorString, wxS( "\n" ), wxTOKEN_STRTOK );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString line = tokenizer.GetNextToken();
+
+        // Skip internal code location lines (e.g., "from pcb_io_kicad_sexpr_parser.cpp : ...")
+        if( line.StartsWith( wxS( "from " ) ) )
+            continue;
+
+        if( line.StartsWith( wxS( "Library '" ) ) || line.Contains( wxS( "Expecting" ) ) )
+            messages.push_back( { line, static_cast<SEVERITY>( aSeverity ) } );
+    }
+
+    return messages;
 }
 

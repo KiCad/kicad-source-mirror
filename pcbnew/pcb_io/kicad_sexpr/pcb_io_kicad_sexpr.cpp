@@ -190,6 +190,17 @@ void FP_CACHE::Load()
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_footprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
+
+                // Collect any non-fatal parse warnings
+                for( const wxString& warning : parser.GetParseWarnings() )
+                {
+                    if( !cacheError.IsEmpty() )
+                        cacheError += wxT( "\n\n" );
+
+                    cacheError += wxString::Format( _( "Warning in file '%s'" ) + '\n',
+                                                    fn.GetFullPath() );
+                    cacheError += warning;
+                }
             }
             catch( const IO_ERROR& ioe )
             {

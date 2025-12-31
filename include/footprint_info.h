@@ -226,6 +226,11 @@ public:
         return error;
     }
 
+    void PushError( std::unique_ptr<IO_ERROR> aError )
+    {
+        m_errors.move_push( std::move( aError ) );
+    }
+
     /**
      * Read all the footprints provided by the combination of aTable and aNickname.
      *
@@ -242,6 +247,12 @@ public:
                                      PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
 
     void DisplayErrors( wxTopLevelWindow* aCaller = nullptr );
+
+    /**
+     * Returns all accumulated errors as a newline-separated string for display in the
+     * status bar. This consumes the errors (pops them from the queue).
+     */
+    wxString GetErrorMessages();
 
     FOOTPRINT_LIBRARY_ADAPTER* GetAdapter() const { return m_adapter; }
 

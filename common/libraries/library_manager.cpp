@@ -1040,6 +1040,26 @@ std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibrary
 }
 
 
+wxString LIBRARY_MANAGER_ADAPTER::GetLibraryLoadErrors() const
+{
+    wxString errors;
+
+    for( const auto& [nickname, status] : GetLibraryStatuses() )
+    {
+        if( status.load_status == LOAD_STATUS::LOAD_ERROR && status.error )
+        {
+            if( !errors.IsEmpty() )
+                errors += wxS( "\n" );
+
+            errors += wxString::Format( _( "Library '%s': %s" ),
+                                         nickname, status.error->message );
+        }
+    }
+
+    return errors;
+}
+
+
 void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname,
                                                   LIBRARY_TABLE_SCOPE aScope )
 {

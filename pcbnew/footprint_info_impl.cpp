@@ -45,19 +45,31 @@ void FOOTPRINT_INFO_IMPL::load()
     FOOTPRINT_LIBRARY_ADAPTER* adapter = m_owner->GetAdapter();
     wxCHECK( adapter, /* void */ );
 
-    std::unique_ptr<FOOTPRINT> footprint( adapter->LoadFootprint( m_nickname, m_fpname, false ) );
-
-    if( footprint == nullptr ) // Should happen only with malformed/broken libraries
+    try
     {
+        std::unique_ptr<FOOTPRINT> footprint( adapter->LoadFootprint( m_nickname, m_fpname, false ) );
+
+        if( footprint == nullptr ) // Should happen only with malformed/broken libraries
+        {
+            m_pad_count = 0;
+            m_unique_pad_count = 0;
+        }
+        else
+        {
+            m_pad_count = footprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
+            m_unique_pad_count = footprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
+            m_keywords = footprint->GetKeywords();
+            m_doc = footprint->GetLibDescription();
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        // Store error in the owner's error list for later display
+        if( m_owner )
+            m_owner->PushError( std::make_unique<IO_ERROR>( ioe ) );
+
         m_pad_count = 0;
         m_unique_pad_count = 0;
-    }
-    else
-    {
-        m_pad_count = footprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
-        m_unique_pad_count = footprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
-        m_keywords = footprint->GetKeywords();
-        m_doc = footprint->GetLibDescription();
     }
 
     m_loaded = true;

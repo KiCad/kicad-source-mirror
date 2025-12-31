@@ -39,6 +39,7 @@
 #include <bitmaps.h>
 #include <reporter.h>
 #include <dialog_HTML_reporter_base.h>
+#include <trace_helpers.h>
 #include <wx/dcclient.h>
 
 
@@ -316,42 +317,106 @@ void KISTATUSBAR::SetNotificationCount( int aCount )
 
 void KISTATUSBAR::SetLoadWarningMessages( const wxString& aMessages )
 {
-    m_loadWarningMessages.clear();
-
-    wxStringTokenizer tokenizer( aMessages, wxS( "\n" ), wxTOKEN_STRTOK );
-
-    while( tokenizer.HasMoreTokens() )
     {
-        LOAD_MESSAGE msg;
-        msg.message = tokenizer.GetNextToken();
-        msg.severity = RPT_SEVERITY_WARNING;  // Default to warning for font substitutions
-        m_loadWarningMessages.push_back( msg );
-    }
+        std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+        m_loadWarningMessages.clear();
 
-    if( m_warningButton )
-    {
-        m_warningButton->Show( !m_loadWarningMessages.empty() );
+        wxStringTokenizer tokenizer( aMessages, wxS( "\n" ), wxTOKEN_STRTOK );
 
-        if( !m_loadWarningMessages.empty() )
+        while( tokenizer.HasMoreTokens() )
         {
-            m_warningButton->SetToolTip(
-                    wxString::Format( _( "View %zu load message(s)" ),
-                                      m_loadWarningMessages.size() ) );
+            LOAD_MESSAGE msg;
+            msg.message = tokenizer.GetNextToken();
+            msg.severity = RPT_SEVERITY_WARNING;  // Default to warning for font substitutions
+            m_loadWarningMessages.push_back( msg );
         }
-
-        Layout();
-        Refresh();
     }
+
+    updateWarningUI();
+}
+
+
+void KISTATUSBAR::AddLoadWarningMessages( const std::vector<LOAD_MESSAGE>& aMessages )
+{
+    wxLogTrace( traceLibraries, "KISTATUSBAR::AddLoadWarningMessages: this=%p, count=%zu",
+                this, aMessages.size() );
+
+    if( aMessages.empty() )
+        return;
+
+    {
+        std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+        m_loadWarningMessages.insert( m_loadWarningMessages.end(), aMessages.begin(), aMessages.end() );
+        wxLogTrace( traceLibraries, "  -> total messages now=%zu", m_loadWarningMessages.size() );
+    }
+
+    // Update UI on main thread
+    wxLogTrace( traceLibraries, "  -> calling CallAfter for updateWarningUI" );
+    CallAfter( [this]() { updateWarningUI(); } );
+}
+
+
+size_t KISTATUSBAR::GetLoadWarningCount() const
+{
+    std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+    return m_loadWarningMessages.size();
+}
+
+
+void KISTATUSBAR::updateWarningUI()
+{
+    wxLogTrace( traceLibraries, "KISTATUSBAR::updateWarningUI: this=%p, m_warningButton=%p",
+                this, m_warningButton );
+
+    if( !m_warningButton )
+    {
+        wxLogTrace( traceLibraries, "  -> no warning button, returning early" );
+        return;
+    }
+
+    size_t messageCount;
+    {
+        std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+        messageCount = m_loadWarningMessages.size();
+    }
+
+    wxLogTrace( traceLibraries, "  -> message count=%zu, showing button=%s",
+                messageCount, messageCount > 0 ? "true" : "false" );
+
+    m_warningButton->Show( messageCount > 0 );
+
+    if( messageCount > 0 )
+    {
+        m_warningButton->SetToolTip( wxString::Format( _( "View %zu load message(s)" ), messageCount ) );
+
+        // Show count badge on the warning button
+        m_warningButton->SetShowBadge( true );
+        wxString badgeText = messageCount > 99
+                ? wxString( "99+" )
+                : wxString::Format( wxS( "%zu" ), messageCount );
+        m_warningButton->SetBadgeText( badgeText );
+
+        wxLogTrace( traceLibraries, "  -> badge set to '%s'", badgeText );
+    }
+
+    Layout();
+    Refresh();
+    wxLogTrace( traceLibraries, "  -> Layout and Refresh complete" );
 }
 
 
 void KISTATUSBAR::ClearLoadWarningMessages()
 {
-    m_loadWarningMessages.clear();
+    {
+        std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+        m_loadWarningMessages.clear();
+    }
 
     if( m_warningButton )
     {
         m_warningButton->Hide();
+        m_warningButton->SetShowBadge( false );
+        m_warningButton->SetBadgeText( wxEmptyString );
         Layout();
         Refresh();
     }
@@ -360,12 +425,19 @@ void KISTATUSBAR::ClearLoadWarningMessages()
 
 void KISTATUSBAR::onLoadWarningsIconClick( wxCommandEvent& aEvent )
 {
-    if( m_loadWarningMessages.empty() )
+    // Copy messages under lock to avoid holding lock during modal dialog
+    std::vector<LOAD_MESSAGE> messages;
+    {
+        std::lock_guard<std::mutex> lock( m_loadWarningMutex );
+        messages = m_loadWarningMessages;
+    }
+
+    if( messages.empty() )
         return;
 
     DIALOG_HTML_REPORTER dlg( GetParent(), wxID_ANY, _( "Load Messages" ) );
 
-    for( const LOAD_MESSAGE& msg : m_loadWarningMessages )
+    for( const LOAD_MESSAGE& msg : messages )
         dlg.m_Reporter->Report( msg.message, msg.severity );
 
     dlg.m_Reporter->Flush();

@@ -138,6 +138,22 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 }
 
 
+wxString FOOTPRINT_LIST::GetErrorMessages()
+{
+    wxString messages;
+
+    while( std::unique_ptr<IO_ERROR> error = PopError() )
+    {
+        if( !messages.IsEmpty() )
+            messages += wxS( "\n" );
+
+        messages += error->Problem();
+    }
+
+    return messages;
+}
+
+
 static FOOTPRINT_LIST* get_instance_from_id( KIWAY& aKiway, int aId )
 {
     void* ptr = nullptr;

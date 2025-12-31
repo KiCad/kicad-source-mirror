@@ -36,6 +36,7 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <widgets/kistatusbar.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
 #include <widgets/wx_aui_utils.h>
@@ -492,7 +493,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     if( fp_info_list->GetErrorCount() )
     {
-        fp_info_list->DisplayErrors( this );
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( fp_info_list->GetErrorMessages() );
 
         // For footprint libraries that support one footprint per file, there may have been
         // valid footprints read so show the footprints that loaded properly.

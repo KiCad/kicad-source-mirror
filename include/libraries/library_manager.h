@@ -148,6 +148,9 @@ public:
     /// Returns a list of all library nicknames and their status (even if they failed to load)
     std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
 
+    /// Returns all library load errors as newline-separated strings for display
+    wxString GetLibraryLoadErrors() const;
+
     void ReloadLibraryEntry( const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 

@@ -45,6 +45,7 @@
 #include <kiface_base.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
+#include <widgets/kistatusbar.h>
 
 // When a new footprint is selected, a custom event is sent, for instance to update
 // 3D viewer. So define a FP_SELECTION_EVENT event
@@ -79,7 +80,11 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     delete progressReporter;
 
     if( GFootprintList.GetErrorCount() )
-        GFootprintList.DisplayErrors( aParent );
+    {
+        // Show errors in status bar instead of popup dialog
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( aFrame->GetStatusBar() ) )
+            statusBar->SetLoadWarningMessages( GFootprintList.GetErrorMessages() );
+    }
 
     m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, footprints );
     FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( m_adapter.get() );

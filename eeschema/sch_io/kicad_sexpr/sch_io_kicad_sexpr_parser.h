@@ -113,6 +113,12 @@ public:
 
     int GetParsedRequiredVersion() const { return m_requiredVersion; }
 
+    /**
+     * Return any non-fatal parse warnings that occurred during parsing.
+     * These are errors that were handled gracefully but should be reported to the user.
+     */
+    const std::vector<wxString>& GetParseWarnings() const { return m_parseWarnings; }
+
 private:
     // Group membership info refers to other Uuids in the file.
     // We don't want to rely on group declarations being last in the file, so
@@ -276,6 +282,8 @@ private:
     int                m_maxError;
 
     std::vector<GROUP_INFO> m_groupInfos;
+
+    std::vector<wxString>   m_parseWarnings;    ///< Non-fatal warnings collected during parsing
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

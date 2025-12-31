@@ -31,7 +31,6 @@
 #include <kidialog.h>
 #include <core/arraydim.h>
 #include <thread_pool.h>
-#include <dialog_HTML_reporter_base.h>
 #include <gestfich.h>
 #include <local_history.h>
 #include <pcb_edit_frame.h>
@@ -623,7 +622,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                                      std::placeholders::_1 ) );
         }
 
-        DIALOG_HTML_REPORTER errorReporter( this );
         bool failedLoad = false;
 
         try
@@ -660,8 +658,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // measure the time to load a BOARD.
             int64_t startTime = GetRunningMicroSecs();
 #endif
+            // Use loadReporter for import issues - they will be shown in the status bar
+            // warning icon instead of a modal dialog
             if( config()->m_System.show_import_issues )
-                pi->SetReporter( errorReporter.m_Reporter );
+                pi->SetReporter( &loadReporter );
             else
                 pi->SetReporter( &NULL_REPORTER::GetInstance() );
 
@@ -717,12 +717,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // cause any issues on macOS and Windows.  If it does, it will have to be conditionally
         // compiled.
         Raise();
-
-        if( errorReporter.m_Reporter->HasMessage() )
-        {
-            errorReporter.m_Reporter->Flush(); // Build HTML messages
-            errorReporter.ShowModal();
-        }
 
         // Skip (possibly expensive) connectivity build here; we build it below after load
         SetBoard( loadedBoard, false, &progressReporter );
