@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-30 11:00+0000\n"
+"PO-Revision-Date: 2025-12-31 23:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -4941,9 +4941,8 @@ msgstr ""
 "láthatóak."
 
 #: common/dialogs/panel_embedded_files.cpp:56
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Másolás Referenciaponthoz"
+msgstr "Beágyazott referencia másolása"
 
 #: common/dialogs/panel_embedded_files.cpp:57
 msgid "Copy the reference for this embedded file"
@@ -4998,9 +4997,8 @@ msgid "Select a file to embed"
 msgstr "Válassza ki a beágyazandó fájlt"
 
 #: common/dialogs/panel_embedded_files.cpp:425
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Válassza ki az IDF exportálási fájl nevét"
+msgstr "Válasszon egy mappát a fájlok exportálásához"
 
 #: common/dialogs/panel_embedded_files.cpp:457
 #, c-format
@@ -5027,9 +5025,8 @@ msgid "Failed to write file '%s'."
 msgstr "Nem sikerült írni a(z) \"%s\" fájlba."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Másolás Referenciaponthoz"
+msgstr "Beágyazott referencia"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5872,9 +5869,8 @@ msgid "File could not be opened."
 msgstr "Nem sikerült megnyitni a fájlt."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "A(z) \"%s\" fájl bizonyos része(i) nem olvasható(ak)"
+msgstr "A rajzlap nem lett teljesen betöltve."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1037
 msgid "Ran out of memory."
@@ -7062,7 +7058,7 @@ msgstr ""
 "újabb."
 
 #: common/exceptions.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -7070,13 +7066,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"A KiCAD nem tudja megnyitni ezt a fájlt,\n"
-"\"mivel azt a program egy újabb verziójával hozták létre.\n"
-"A megnyitásához frissítenie kell a KiCAD programot egy újabb verzióra.\n"
-"A KiCAD minimum %s verziója szükséges a fájl megnyitásához.\n"
+"A KiCad nem tudja megnyitni ezt a fájlt, mivel azt a program egy újabb "
+"verziójával hozták létre.\n"
 "\n"
-"Teljes hibalista:\n"
-"%s"
+"A megnyitásához frissítenie kell a KiCad-et legalább a(z) %s verzióra (fájl "
+"formátum %s vagy későbbi)."
 
 #: common/exceptions.cpp:153
 msgid "Full error text:"
@@ -7362,7 +7356,7 @@ msgstr "Nem sikerült megnyitni az alkatrésztársítót"
 #: common/git/kicad_git_common.cpp:867
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "%u / %u objektum fogadva"
 
 #: common/git/kicad_git_common.cpp:896
 #, c-format
@@ -8067,9 +8061,8 @@ msgid "Schematic PythonBOM export"
 msgstr "Kapcsolási rajz: PythonBOM exportálása"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "A NYÁK-tervből származó szín használata"
+msgstr "DRC futtatása"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 #, fuzzy
@@ -8078,7 +8071,7 @@ msgstr "3D beállítások"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "NYÁK: DRC futtatása"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, fuzzy, c-format
@@ -9148,9 +9141,8 @@ msgid "Unselect All"
 msgstr "Kijelölés megszüntetése"
 
 #: common/tool/actions.cpp:263
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Válassza ki könyvtárat a mentéshez"
+msgstr "Képernyőn lévő elemek kijelölésének megszüntetése"
 
 #: common/tool/actions.cpp:269
 msgid "Paste Special..."
@@ -9211,14 +9203,12 @@ msgid "Right-justify fields and text items"
 msgstr "Mezők és szöveg elemek jobbra igazítása"
 
 #: common/tool/actions.cpp:328
-#, fuzzy
 msgid "Expand All"
-msgstr "Frissítés"
+msgstr "Összes kibontása"
 
 #: common/tool/actions.cpp:334
-#, fuzzy
 msgid "Collapse All"
-msgstr "Összes cseréje"
+msgstr "Összes összecsukása"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3144
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
@@ -9588,9 +9578,8 @@ msgid "Performs left mouse button double-click"
 msgstr ""
 
 #: common/tool/actions.cpp:793
-#, fuzzy
 msgid "Pin Library"
-msgstr "Könyvtár"
+msgstr "Könyvtár rögzítése"
 
 #: common/tool/actions.cpp:794
 msgid "Keep the library at the top of the list"
@@ -10214,9 +10203,8 @@ msgid "No default footprint"
 msgstr "Nincs alapértelmezett alkatrészrajzolat"
 
 #: common/widgets/gal_options_panel_base.cpp:19
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Renderelési idő %.3f sec"
+msgstr "Renderelő motor"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 #, fuzzy
@@ -10557,9 +10545,9 @@ msgid "Save Report File"
 msgstr "Jelentésfájl mentése"
 
 #: common/widgets/wx_html_report_panel.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nem lehet írni a '%s' napló fájlt."
+msgstr "Nem lehet írni a '%s' jelentés fájlt."
 
 #: common/widgets/wx_html_report_panel.cpp:391
 msgid "File save error"
@@ -10871,9 +10859,8 @@ msgstr ""
 "Alkatrész %s: a(z) %s alkatrészrajzolat nem található egyik könyvtárban sem."
 
 #: cvpcb/auto_associate.cpp:309
-#, fuzzy
 msgid "CvPcb Warning"
-msgstr "Alkatrésztársító \"ERC\" figyelmeztetés"
+msgstr "CvPcb figyelmeztetés"
 
 #: cvpcb/cvpcb.cpp:190
 #, fuzzy
@@ -10904,9 +10891,8 @@ msgstr "Hiba történt a globális alkatrészrajzolat könyvtártáblázatban"
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
-#, fuzzy
 msgid "Assign Footprints"
-msgstr "Alkatrészrajzolat hozzárendelés"
+msgstr "Alkatrészrajzolat hozzárendelése"
 
 #: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1246
 msgid "Footprint Libraries"
@@ -11535,9 +11521,9 @@ msgid "Design block library '%s' deleted"
 msgstr "Terv blokk könyvtár \"%s\" törölve"
 
 #: eeschema/design_block_utils.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Alkatrészrajzolat törlése a könyvtárból"
+msgstr "Töröljük a(z) \"%s\" terv blokkot a(z) \"%s\" könyvtárból?"
 
 #: eeschema/design_block_utils.cpp:539
 #, c-format
