@@ -44,6 +44,7 @@
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <dialogs/dialog_update_symbol_fields.h>
 #include <view/view_controls.h>
+#include <view/view.h>
 #include <richio.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_textbox.h>
@@ -52,6 +53,297 @@
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
 #include <trace_helpers.h>
+#include <plotters/plotters_pslike.h>
+#include <sch_painter.h>
+#include <sch_plotter.h>
+#include <locale_io.h>
+#include <gal/gal_print.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <zoom_defines.h>
+#include <wx/ffile.h>
+#include <wx/mstream.h>
+
+
+namespace
+{
+constexpr double clipboardPpi = 96.0;
+constexpr int    clipboardMaxBitmapSize = 4096;
+constexpr double clipboardBboxInflation = 0.02;
+
+
+void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
+                     const wxMemoryBuffer& aBuffer )
+{
+    if( aBuffer.GetDataLen() == 0 )
+        return;
+
+    CLIPBOARD_MIME_DATA entry;
+    entry.m_mimeType = aMimeType;
+    entry.m_data = aBuffer;
+    aMimeData.push_back( entry );
+}
+
+
+bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
+{
+    wxFFile file( aFileName, wxS( "rb" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    wxFileOffset size = file.Length();
+
+    if( size <= 0 )
+        return false;
+
+    void* data = aBuffer.GetWriteBuf( size );
+
+    if( file.Read( data, size ) != static_cast<size_t>( size ) )
+    {
+        aBuffer.UngetWriteBuf( 0 );
+        return false;
+    }
+
+    aBuffer.UngetWriteBuf( size );
+    return true;
+}
+
+
+bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
+                      int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
+{
+    if( !aSymbol )
+        return false;
+
+    SCH_RENDER_SETTINGS renderSettings;
+    renderSettings.LoadColors( aFrame->GetColorSettings() );
+    renderSettings.SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
+
+    std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
+    plotter->SetRenderSettings( &renderSettings );
+
+    PAGE_INFO pageInfo = aFrame->GetScreen()->GetPageSettings();
+    pageInfo.SetWidthMils( schIUScale.IUToMils( aBBox.GetWidth() ) );
+    pageInfo.SetHeightMils( schIUScale.IUToMils( aBBox.GetHeight() ) );
+
+    plotter->SetPageSettings( pageInfo );
+    plotter->SetColorMode( true );
+
+    VECTOR2I plot_offset = aBBox.GetOrigin();
+    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, 1.0, false );
+    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+
+    wxFileName tempFile( wxFileName::CreateTempFileName( wxS( "kicad_symbol_svg" ) ) );
+
+    if( !plotter->OpenFile( tempFile.GetFullPath() ) )
+    {
+        wxRemoveFile( tempFile.GetFullPath() );
+        return false;
+    }
+
+    LOCALE_IO     toggle;
+    SCH_PLOT_OPTS plotOpts;
+
+    plotter->StartPlot( wxT( "1" ) );
+
+    constexpr bool background = true;
+    aSymbol->Plot( plotter.get(), background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+    aSymbol->Plot( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+    aSymbol->PlotFields( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+
+    plotter->EndPlot();
+    plotter.reset();
+
+    bool ok = loadFileToBuffer( tempFile.GetFullPath(), aBuffer );
+    wxRemoveFile( tempFile.GetFullPath() );
+    return ok;
+}
+
+
+wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
+                              int aUnit, int aBodyStyle, int aWidth, int aHeight,
+                              double aViewScale, const wxColour& aBgColor )
+{
+    if( !aSymbol )
+        return wxImage();
+
+    wxBitmap bitmap( aWidth, aHeight, 24 );
+    wxMemoryDC dc;
+    dc.SelectObject( bitmap );
+    dc.SetBackground( wxBrush( aBgColor ) );
+    dc.Clear();
+
+    KIGFX::GAL_DISPLAY_OPTIONS options;
+    options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
+    std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
+
+    if( !galPrint )
+        return wxImage();
+
+    KIGFX::GAL* gal = galPrint->GetGAL();
+    KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
+    std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
+    std::unique_ptr<KIGFX::VIEW> view = std::make_unique<KIGFX::VIEW>();
+
+    // For symbol editor, we don't have a full schematic context
+    // but SCH_PAINTER can still work for rendering individual items
+    view->SetGAL( gal );
+    view->SetPainter( painter.get() );
+    view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
+    view->SetScale( 1.0 );
+    gal->SetWorldUnitLength( SCH_WORLD_UNIT );
+
+    // Clone items and add to view
+    std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
+
+    for( SCH_ITEM& item : aSymbol->GetDrawItems() )
+    {
+        if( aUnit && item.GetUnit() && item.GetUnit() != aUnit )
+            continue;
+
+        if( aBodyStyle && item.GetBodyStyle() && item.GetBodyStyle() != aBodyStyle )
+            continue;
+
+        SCH_ITEM* clone = static_cast<SCH_ITEM*>( item.Clone() );
+        clonedItems.emplace_back( clone );
+        view->Add( clone );
+    }
+
+    SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
+    dstSettings->LoadColors( aFrame->GetColorSettings() );
+    dstSettings->SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
+    dstSettings->SetIsPrinting( true );
+
+    COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0,
+                       aBgColor.Blue() / 255.0, 1.0 );
+    dstSettings->SetBackgroundColor( bgColor4D );
+
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
+    {
+        view->SetLayerVisible( i, true );
+        view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+    }
+
+    view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
+
+    double ppi = clipboardPpi;
+    double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
+    VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
+
+    galPrint->SetSheetSize( pageSizeIn );
+    galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
+
+    double zoomFactor = aViewScale * inch2Iu / ppi;
+
+    gal->SetLookAtPoint( aBBox.Centre() );
+    gal->SetZoomFactor( zoomFactor );
+    gal->SetClearColor( bgColor4D );
+    gal->ClearScreen();
+
+    view->UseDrawPriority( true );
+
+    {
+        KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+        view->Redraw();
+    }
+
+    dc.SelectObject( wxNullBitmap );
+    return bitmap.ConvertToImage();
+}
+
+
+bool plotSymbolToPng( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
+                      int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
+{
+    if( !aSymbol )
+        return false;
+
+    VECTOR2I size = aBBox.GetSize();
+
+    if( size.x <= 0 || size.y <= 0 )
+        return false;
+
+    // Use the current view scale to match what the user sees on screen
+    double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
+    int    bitmapWidth = KiROUND( size.x * viewScale );
+    int    bitmapHeight = KiROUND( size.y * viewScale );
+
+    // Clamp to maximum size while preserving aspect ratio
+    if( bitmapWidth > clipboardMaxBitmapSize || bitmapHeight > clipboardMaxBitmapSize )
+    {
+        double scaleDown = (double) clipboardMaxBitmapSize / std::max( bitmapWidth, bitmapHeight );
+        bitmapWidth = KiROUND( bitmapWidth * scaleDown );
+        bitmapHeight = KiROUND( bitmapHeight * scaleDown );
+        viewScale *= scaleDown;
+    }
+
+    if( bitmapWidth <= 0 || bitmapHeight <= 0 )
+        return false;
+
+    // Render twice with different backgrounds for alpha computation
+    wxImage imageOnWhite = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle,
+                                                  bitmapWidth, bitmapHeight, viewScale, *wxWHITE );
+    wxImage imageOnBlack = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle,
+                                                  bitmapWidth, bitmapHeight, viewScale, *wxBLACK );
+
+    if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
+        return false;
+
+    // Create output image with alpha channel
+    wxImage result( bitmapWidth, bitmapHeight );
+    result.InitAlpha();
+
+    unsigned char* rgbWhite = imageOnWhite.GetData();
+    unsigned char* rgbBlack = imageOnBlack.GetData();
+    unsigned char* rgbResult = result.GetData();
+    unsigned char* alphaResult = result.GetAlpha();
+
+    int pixelCount = bitmapWidth * bitmapHeight;
+
+    for( int i = 0; i < pixelCount; ++i )
+    {
+        int idx = i * 3;
+
+        int rW = rgbWhite[idx], gW = rgbWhite[idx + 1], bW = rgbWhite[idx + 2];
+        int rB = rgbBlack[idx], gB = rgbBlack[idx + 1], bB = rgbBlack[idx + 2];
+
+        // Alpha computation: α = 1 - (white - black) / 255
+        int diffR = rW - rB;
+        int diffG = gW - gB;
+        int diffB = bW - bB;
+        int avgDiff = ( diffR + diffG + diffB ) / 3;
+
+        int alpha = 255 - avgDiff;
+        alpha = std::max( 0, std::min( 255, alpha ) );
+        alphaResult[i] = static_cast<unsigned char>( alpha );
+
+        if( alpha > 0 )
+        {
+            rgbResult[idx] = static_cast<unsigned char>( std::min( 255, rB * 255 / alpha ) );
+            rgbResult[idx + 1] = static_cast<unsigned char>( std::min( 255, gB * 255 / alpha ) );
+            rgbResult[idx + 2] = static_cast<unsigned char>( std::min( 255, bB * 255 / alpha ) );
+        }
+        else
+        {
+            rgbResult[idx] = 0;
+            rgbResult[idx + 1] = 0;
+            rgbResult[idx + 2] = 0;
+        }
+    }
+
+    wxMemoryOutputStream stream;
+
+    if( !result.SaveFile( stream, wxBITMAP_TYPE_PNG ) )
+        return false;
+
+    size_t dataSize = stream.GetOutputStreamBuffer()->GetBufferSize();
+    aBuffer.AppendData( stream.GetOutputStreamBuffer()->GetBufferStart(), dataSize );
+
+    return true;
+}
+
+}  // namespace
+
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
         SCH_TOOL_BASE( "eeschema.SymbolEditTool" )
@@ -1259,7 +1551,75 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     std::string prettyData = formatter.GetString();
     KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
 
-    if( SaveClipboard( prettyData ) )
+    // Generate SVG and PNG for multi-format clipboard
+    std::vector<CLIPBOARD_MIME_DATA> mimeData;
+
+    // Get the bounding box for just the selected items
+    BOX2I bbox;
+
+    for( EDA_ITEM* item : selection )
+    {
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+        if( bbox.GetWidth() == 0 && bbox.GetHeight() == 0 )
+            bbox = schItem->GetBoundingBox();
+        else
+            bbox.Merge( schItem->GetBoundingBox() );
+    }
+
+    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+    {
+        bbox.Inflate( bbox.GetWidth() * clipboardBboxInflation,
+                      bbox.GetHeight() * clipboardBboxInflation );
+
+        // Create a temporary symbol with just the selected items for plotting
+        LIB_SYMBOL* plotSymbol = new LIB_SYMBOL( *symbol );
+
+        // Mark unselected items as deleted in the plot copy
+        for( SCH_ITEM& item : plotSymbol->GetDrawItems() )
+        {
+            if( item.Type() == SCH_FIELD_T )
+                continue;
+
+            // Find matching item in selection by position/type
+            bool found = false;
+
+            for( EDA_ITEM* selItem : selection )
+            {
+                SCH_ITEM* selSchItem = static_cast<SCH_ITEM*>( selItem );
+
+                if( selSchItem->Type() == item.Type()
+                    && selSchItem->GetPosition() == item.GetPosition() )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if( !found )
+                item.SetFlags( STRUCT_DELETED );
+        }
+
+        // Now copy only the non-deleted items to a clean symbol for plotting
+        LIB_SYMBOL* cleanSymbol = new LIB_SYMBOL( *plotSymbol );
+        delete plotSymbol;
+
+        int unit = m_frame->GetUnit();
+        int bodyStyle = m_frame->GetBodyStyle();
+
+        wxMemoryBuffer svgBuffer;
+
+        if( plotSymbolToSvg( m_frame, cleanSymbol, bbox, unit, bodyStyle, svgBuffer ) )
+            appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
+
+        wxMemoryBuffer pngBuffer;
+
+        if( plotSymbolToPng( m_frame, cleanSymbol, bbox, unit, bodyStyle, pngBuffer ) )
+            appendMimeData( mimeData, wxS( "image/png" ), pngBuffer );
+
+        delete cleanSymbol;
+    }
+
+    if( SaveClipboard( prettyData, mimeData ) )
         return 0;
     else
         return -1;

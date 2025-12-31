@@ -699,6 +699,17 @@ public:
      */
     virtual void EndBlock( void* aData ) override;
 
+    /**
+     * Start a new named layer group in the SVG output.
+     * @param aLayerName The name/id for the layer group
+     */
+    void StartLayer( const wxString& aLayerName );
+
+    /**
+     * End the current layer group in the SVG output.
+     */
+    void EndLayer();
+
     virtual void Text( const VECTOR2I&        aPos,
                        const COLOR4D&         aColor,
                        const wxString&        aText,

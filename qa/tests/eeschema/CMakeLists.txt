@@ -112,6 +112,8 @@ set( QA_EESCHEMA_SRCS
     test_update_items_connectivity.cpp
     test_symbol_library.cpp
     test_symbol_embedded_files.cpp
+    test_symbol_clipboard_export.cpp
+    test_schematic_clipboard_export.cpp
 )
 
 if( WIN32 )

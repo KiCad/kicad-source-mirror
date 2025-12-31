@@ -343,6 +343,28 @@ void SVG_PLOTTER::EndBlock( void* aData )
 }
 
 
+void SVG_PLOTTER::StartLayer( const wxString& aLayerName )
+{
+    // Close any pending graphics context group
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
+
+    // Start a new named layer group with inkscape-compatible layer attributes
+    fmt::print( m_outputFile, "<g id=\"{}\" inkscape:label=\"{}\" inkscape:groupmode=\"layer\">\n",
+                TO_UTF8( aLayerName ), TO_UTF8( aLayerName ) );
+}
+
+
+void SVG_PLOTTER::EndLayer()
+{
+    // Close any pending graphics context group first
+    fmt::print( m_outputFile, "</g>\n" );
+    // Then close the layer group
+    fmt::print( m_outputFile, "</g>\n" );
+    m_graphics_changed = true; // Force new graphics context on next draw
+}
+
+
 void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
     uint32_t red = (uint32_t) ( 255.0 * r );
@@ -764,6 +786,7 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
                 "  xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
                 "  xmlns=\"http://www.w3.org/2000/svg\"\n"
                 "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
+                "  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n"
                 "  version=\"1.1\"\n";
 
     // Write header.
