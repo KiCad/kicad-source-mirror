@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-18 16:28+0000\n"
+"PO-Revision-Date: 2025-12-31 23:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -42475,9 +42475,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Controllo clearance grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Controllo clearance grafiche in rame..."
+msgstr "Controllo clearance tra fori e grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
