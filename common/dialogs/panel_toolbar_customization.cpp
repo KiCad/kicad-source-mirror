@@ -519,14 +519,8 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
     auto toBitmap = [&]( BITMAPS aBmps )
     {
-#if wxCHECK_VERSION( 3, 3, 0 )
-        wxSize reqSize( physSize, physSize );
-#else
-        wxSize reqSize( logicSize, logicSize );
-#endif
-
         wxBitmapBundle bnd = KiBitmapBundle( aBmps, defSize );
-        wxBitmap       bmp = bnd.GetBitmap( reqSize );
+        wxBitmap       bmp = bnd.GetBitmap( wxSize( physSize, physSize ) );
 
         wxASSERT( bmp.IsOk() );
         return bmp;
