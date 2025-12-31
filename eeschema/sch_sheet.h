@@ -523,8 +523,13 @@ public:
 
     void AddInstance( const SCH_SHEET_INSTANCE& aInstance );
 
+    void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
+
     void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SHEET_VARIANT& aVariant );
-    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName );
+    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
+    {
+        DeleteVariant( aInstance.Path(), aVariantName );
+    }
 
     /**
      * Check if the instance data of this sheet has any changes compared to \a aOther.

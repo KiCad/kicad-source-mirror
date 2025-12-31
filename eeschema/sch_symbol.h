@@ -899,9 +899,15 @@ public:
     /// Return the component classes this symbol belongs in.
     std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
 
+    void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
+
     std::optional<SCH_SYMBOL_VARIANT> GetVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName ) const;
     void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_VARIANT& aVariant );
-    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName );
+
+    void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
+    {
+        DeleteVariant( aInstance.Path(), aVariantName );
+    }
 
     bool operator==( const SCH_ITEM& aOther ) const override;
 

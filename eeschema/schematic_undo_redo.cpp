@@ -249,6 +249,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> bulkChangedItems;
     std::set<SCH_TABLE*>   changedTables;
+    bool                   updateVariantCtrl = false;
     bool                   dirtyConnectivity = false;
     bool                   rebuildHierarchyNavigator = false;
     bool                   refreshHierarchy = false;
@@ -420,7 +421,12 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     {
                         refreshHierarchy = true;
                     }
+
+                    updateVariantCtrl = true;
                 }
+
+                if( schItem->Type() == SCH_SYMBOL_T )
+                    updateVariantCtrl = true;
 
                 schItem->SwapItemData( itemCopy );
 
@@ -539,6 +545,12 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     // Update the hierarchy navigator when there are sheet changes.
     if( rebuildHierarchyNavigator )
         UpdateHierarchyNavigator();
+
+    if( updateVariantCtrl && m_schematic )
+    {
+        m_schematic->LoadVariants();
+        UpdateVariantSelectionCtrl( m_schematic->GetVariantNamesForUI() );
+    }
 }
 
 

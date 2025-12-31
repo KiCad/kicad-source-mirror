@@ -456,7 +456,7 @@ public:
      *
      * @param aVariantName is the name of the variant to remove.
      */
-    void DeleteVariant( const wxString& aVariantName );
+    void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 
     void AddVariant( const wxString& aVariantName ) { m_variantNames.emplace( aVariantName ); }
 

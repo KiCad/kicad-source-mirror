@@ -3048,9 +3048,16 @@ void SCH_EDIT_FRAME::RemoveVariant()
     if( variantName.IsEmpty() )
         return;
 
-    Schematic().DeleteVariant( variantName );
+    SCH_COMMIT commit( this );
+    Schematic().DeleteVariant( variantName, &commit );
 
-    int selected = m_currentVariantCtrl->GetSelection();
+    if( !commit.Empty() )
+    {
+        commit.Push( wxString::Format( wxS( "Delete variant '%s'" ), variantName ) );
+        OnModify();
+    }
+
+    int      selected = m_currentVariantCtrl->GetSelection();
     wxString tmp;
 
     if( selected != wxNOT_FOUND )

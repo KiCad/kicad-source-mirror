@@ -1839,15 +1839,15 @@ void SCH_SHEET::AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SHEET_VAR
 }
 
 
-void SCH_SHEET::DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
+void SCH_SHEET::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName )
 {
-    SCH_SHEET_INSTANCE instance;
+    SCH_SHEET_INSTANCE* instance = getInstance( aPath );
 
     // The instance path must already exist.
-    if( !getInstance( instance, aInstance.Path() ) || !instance.m_Variants.contains( aVariantName ) )
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
         return;
 
-    instance.m_Variants.erase( aVariantName );
+    instance->m_Variants.erase( aVariantName );
 }
 
 

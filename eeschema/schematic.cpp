@@ -2107,13 +2107,15 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
 }
 
 
-void SCHEMATIC::DeleteVariant( const wxString& aVariantName )
+void SCHEMATIC::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit )
 {
     wxCHECK( m_rootSheet, /* void */ );
 
     SCH_SCREENS allScreens( m_rootSheet );
 
-    allScreens.DeleteVariant( aVariantName );
+    allScreens.DeleteVariant( aVariantName, aCommit );
+
+    m_variantNames.erase( aVariantName );
 }
 
 

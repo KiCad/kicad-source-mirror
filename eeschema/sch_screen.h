@@ -54,6 +54,7 @@
 class BUS_ALIAS;
 class EDA_ITEM;
 class LIB_SYMBOL;
+class SCH_COMMIT;
 class SCH_PIN;
 class SCH_SYMBOL;
 class SCH_LINE;
@@ -628,7 +629,7 @@ public:
 
     std::set<wxString> GetVariantNames() const;
 
-    void DeleteVariant( const wxString& aVariantName );
+    void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
@@ -869,7 +870,7 @@ public:
 
     std::set<wxString> GetVariantNames() const;
 
-    void DeleteVariant( const wxString& aVariantName );
+    void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

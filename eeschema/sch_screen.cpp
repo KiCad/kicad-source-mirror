@@ -45,6 +45,7 @@
 #include <libraries/legacy_symbol_library.h>
 #include <connection_graph.h>
 #include <junction_helpers.h>
+#include <sch_commit.h>
 #include <sch_pin.h>
 #include <sch_symbol.h>
 #include <sch_group.h>
@@ -1857,13 +1858,13 @@ std::set<wxString> SCH_SCREEN::GetVariantNames() const
 }
 
 
-void SCH_SCREEN::DeleteVariant( const wxString& aVariantName )
+void SCH_SCREEN::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit )
 {
     wxCHECK( !aVariantName.IsEmpty(), /* void */ );
 
-    for( const SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
-        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         wxCHECK2( symbol, continue );
 
@@ -1872,13 +1873,18 @@ void SCH_SCREEN::DeleteVariant( const wxString& aVariantName )
         for( SCH_SYMBOL_INSTANCE& instance : symbolInstances )
         {
             if( instance.m_Variants.contains( aVariantName ) )
-                instance.m_Variants.erase( aVariantName );
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                symbol->DeleteVariant( instance.m_Path, aVariantName );
+            }
         }
     }
 
-    for( const SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
     {
-        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( item );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
         wxCHECK2( sheet, continue );
 
@@ -1887,7 +1893,12 @@ void SCH_SCREEN::DeleteVariant( const wxString& aVariantName )
         for( SCH_SHEET_INSTANCE& instance : sheetInstances )
         {
             if( instance.m_Variants.contains( aVariantName ) )
-                instance.m_Variants.erase( aVariantName );
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                sheet->DeleteVariant( instance.m_Path, aVariantName );
+            }
         }
     }
 }
@@ -2340,10 +2351,10 @@ std::set<wxString> SCH_SCREENS::GetVariantNames() const
 }
 
 
-void SCH_SCREENS::DeleteVariant( const wxString& aVariantName )
+void SCH_SCREENS::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit )
 {
     wxCHECK( !aVariantName.IsEmpty(), /* void */ );
 
     for( SCH_SCREEN* screen : m_screens )
-        screen->DeleteVariant( aVariantName );
+        screen->DeleteVariant( aVariantName, aCommit );
 }

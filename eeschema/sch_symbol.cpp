@@ -3401,15 +3401,15 @@ void SCH_SYMBOL::AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_V
 }
 
 
-void SCH_SYMBOL::DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
+void SCH_SYMBOL::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName )
 {
-    SCH_SYMBOL_INSTANCE instance;
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
 
     // The instance path must already exist.
-    if( !GetInstance( instance, aInstance.Path() ) || !instance.m_Variants.contains( aVariantName ) )
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
         return;
 
-    instance.m_Variants.erase( aVariantName );
+    instance->m_Variants.erase( aVariantName );
 }
 
 
