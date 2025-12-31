@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-30 01:00+0000\n"
+"PO-Revision-Date: 2025-12-31 12:17+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -46109,13 +46109,12 @@ msgid "Missing tuning profile"
 msgstr "Profilo regolazione mancante"
 
 #: pcbnew/drc/drc_item.cpp:310
-#, fuzzy
 msgid "Tuning profile track geometries"
-msgstr "Nome profilo di regolazione già in uso"
+msgstr "Geometrie piste del profilo di regolazione"
 
 #: pcbnew/drc/drc_item.cpp:314
 msgid "Track connected to post-machined or backdrilled layer"
-msgstr ""
+msgstr "Pista collegata allo strato post-lavorato o retroforato"
 
 #: pcbnew/drc/drc_item.cpp:516
 #, c-format
@@ -46152,9 +46151,8 @@ msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr "La parolachiave '%s' è deprecata.  Usare '%s' in alternativa."
 
 #: pcbnew/drc/drc_rule_parser.cpp:119
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "Variabile testo non risolta"
+msgstr "Variabile testo non risolta."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
 #, c-format
@@ -46187,9 +46185,8 @@ msgid "Missing ')'."
 msgstr "\")\" mancante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:198 pcbnew/drc/drc_rule_parser.cpp:264
-#, fuzzy
 msgid "version number"
-msgstr "Numero versione mancante."
+msgstr "numero versione"
 
 #: pcbnew/drc/drc_rule_parser.cpp:208 pcbnew/drc/drc_rule_parser.cpp:274
 #: pcbnew/drc/drc_rule_parser.cpp:355 pcbnew/drc/drc_rule_parser.cpp:418
@@ -46212,9 +46209,8 @@ msgstr "Impossibile analizzare l'espressione '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:338 pcbnew/drc/drc_rule_parser.cpp:412
 #: pcbnew/drc/drc_rule_parser.cpp:682
-#, fuzzy
 msgid "quoted expression"
-msgstr "Espressione malformata"
+msgstr "espressione virgolettata"
 
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "'layer' keyword already present."
@@ -46243,9 +46239,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "La regola ha già un vincolo '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:659
-#, fuzzy
 msgid "number"
-msgstr "Numero"
+msgstr "numero"
 
 #: pcbnew/drc/drc_rule_parser.cpp:670
 msgid "Missing assertion expression."
@@ -46332,9 +46327,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Controllo clearance grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:157
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Controllo clearance grafiche in rame..."
+msgstr "Controllo clearance tra fori e grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:165
 msgid "Checking copper zone clearances..."
@@ -46422,9 +46416,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Controllo vincoli proibite e disabilitazioni..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:167
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "Serigrafia ritagliata dal bordo scheda"
+msgstr "Serigrafia fuori dal bordo scheda"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:243
 msgid "Checking copper to board edge clearances..."
@@ -46601,34 +46594,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s primitive forme diversa sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s diverso."
+msgstr "testo %s diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "%s dimensione tratteggio diversa."
+msgstr "larghezza %s diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
-msgstr "%s nome diverso."
+msgstr "altezza %s diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "%s dimensione foro diversa."
+msgstr "dimensione testo %s diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s angoli diversi."
+msgstr "codice %s diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "%s livello smussatura tratteggio diverso."
+msgstr "livello correzione errore %s diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:581
 #, c-format
@@ -46761,19 +46754,17 @@ msgid "%s corners differ."
 msgstr "%s angoli diversi."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:689
-#, fuzzy
 msgid "Footprint stackup mode differs."
-msgstr "Tipi impronte diversi."
+msgstr "Modalità stackup impronta diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:695
-#, fuzzy
 msgid "Footprint layers differ."
-msgstr "I filtri impronte differiscono."
+msgstr "Strati impronte diversi."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "Il nome impronta non può contenere '%s'."
+msgstr "L'impronta ha %lu strati non sulla scheda: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:738
 #, c-format
@@ -46794,9 +46785,8 @@ msgid "'%s' settings differ."
 msgstr "'%s' impostazioni diverse."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:821
-#, fuzzy
 msgid "Footprint stackup differs."
-msgstr "Tipi impronte diversi."
+msgstr "Stackup impronta diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:839
 msgid "Pad clearance overridden."
@@ -46830,9 +46820,8 @@ msgid "%s differs."
 msgstr "%s diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:965
-#, fuzzy
 msgid "Barcode count differs."
-msgstr "Conteggio piazzole diverso."
+msgstr "Codice a barre diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:992
 msgid "Pad count differs."
@@ -46855,14 +46844,14 @@ msgid "Checking board footprints against library..."
 msgstr "Controllo impronte scheda rispetto alla libreria..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
-msgstr "Libreria impronte '%s' non trovata in '%s'."
+msgstr "Libreria impronte '%s' non trovata in '%s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1157
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
-msgstr "I'impronta '%s' non corrisponde alla copia nella libreria '%s'."
+msgstr "I'impronta '%s' non corrisponde alla copia nella libreria '%s'"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:118
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:129
@@ -46917,9 +46906,9 @@ msgid "Checking length constraints..."
 msgstr "Controllo vincoli di lunghezza..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "%s (gap %s)"
-msgstr "%s (pagina %s)"
+msgstr "%s (distanza %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:219
 msgid "(Suspicious items found on Edge.Cuts layer)"
@@ -46951,9 +46940,8 @@ msgid "Checking assertions..."
 msgstr "Controllo asserzioni..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:593
-#, fuzzy
 msgid "Checking for missing tuning profiles..."
-msgstr "Controllo problemi collegamenti impronte..."
+msgstr "Controllo profili di regolazione mancanti..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -46974,57 +46962,56 @@ msgid "Missing footprint %s (%s)"
 msgstr "Impronta mancante %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)"
-msgstr "(%s) non corrisponde al valore del simbolo (%s)."
+msgstr "(%s) non corrisponde al valore del simbolo (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)"
-msgstr "%s non corrisponde all'impronta data dal simbolo (%s)."
+msgstr "%s non corrisponde all'impronta data dal simbolo (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)"
-msgstr "%s non corrisponde ai filtri impronte simbolo (%s)."
+msgstr "%s non corrisponde ai filtri impronte simbolo (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ"
-msgstr "'%s' impostazioni diverse."
+msgstr "'%s' impostazioni diverse"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Impronta mancante"
+msgstr "Campo simbolo '%s' mancante nell'impronta"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "Il campo '%s' è diverso: %s; %s."
+msgstr "Il campo '%s' è diverso(CS: '%s', Schema: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:271
-#, fuzzy
 msgid "No corresponding pin found in schematic"
-msgstr "Nessun pin corrispondente trovato nello schema."
+msgstr "Nessun pin corrispondente trovato nello schema"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "Pad missing net given by schematic (%s)"
-msgstr "Alla piazzola manca il collegamento dato dallo schema (%s)."
+msgstr "Alla piazzola manca il collegamento dato dallo schema (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
 msgstr ""
 "Il collegamento piazzola (%s) non corrisponde il collegamento dato dallo "
-"schema (%s)."
+"schema (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "No pad found for pin %s in schematic"
-msgstr "Nessuna piazzola trovata per il pin %s nello schema."
+msgstr "Nessuna piazzola trovata per il pin %s nello schema"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:363
 msgid "Checking PCB to schematic parity..."
@@ -47171,9 +47158,8 @@ msgid "Edit Zone Properties"
 msgstr "Modifica proprietà zona"
 
 #: pcbnew/exporters/export_d356.cpp:413
-#, fuzzy
 msgid "Do not export unconnected pads"
-msgstr "Divide in segmenti non connessi"
+msgstr "No esportare piazzole non connesse"
 
 #: pcbnew/exporters/export_d356.cpp:443 pcbnew/tools/pcb_actions.cpp:1295
 msgid "Generate IPC-D-356 netlist file"
@@ -47193,9 +47179,8 @@ msgid "Save Footprint Association File"
 msgstr "Salva file di associazione impronte"
 
 #: pcbnew/exporters/export_gencad.cpp:45
-#, fuzzy
 msgid "Export to GenCAD"
-msgstr "Esporta GenCAD..."
+msgstr "Esporta per GenCAD"
 
 #: pcbnew/exporters/export_gencad_writer.cpp:1088
 #: pcbnew/exporters/export_hyperlynx.cpp:296
@@ -47254,14 +47239,14 @@ msgid "Created file '%s'."
 msgstr "Creato file '%s'."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "Errore nello scrivere il file '%s'."
+msgstr "Errore creando il file rapporto forature '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Created drill report file '%s'"
-msgstr "Impossibile scrivere il rapporto nel file '%s'."
+msgstr "Creato file rapporto forature '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
@@ -47353,24 +47338,22 @@ msgid "OCC error adding pad/via polygon."
 msgstr "Errore OCC durante l'aggiunta del poligono piazzola/via."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy
 msgid "Failed to create counterbore cylinder shape"
-msgstr "Fallita creazione firma autore: %s"
+msgstr "Impossibile creare la forma del cilindro allargato"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "Eccezione OCC durante la creazione del bordo %d: %s"
+msgstr "Eccezione OCC creando l'allargamento: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "Fallita creazione forma prismatica"
+msgstr "Fallita creazione forma a cono svasata"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "Eccezione OCC durante la creazione del bordo %d: %s"
+msgstr "Eccezione OCC creando la svasatura: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1663
 #, c-format
@@ -47567,10 +47550,10 @@ msgstr "Impossibile trasferire i dati del modello dal file '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3907
 #: pcbnew/exporters/step/step_pcb_model.cpp:3954
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
 msgstr ""
-"Assemblamento C.S. non valido; impossibile creare il file risultati '%s'.\n"
+"Assemblamento CS non valido; impossibile creare il file risultati '%s'.\n"
 
 #: pcbnew/files.cpp:155
 msgid "All KiCad Board Files"
@@ -47656,9 +47639,8 @@ msgstr ""
 
 #: pcbnew/files.cpp:801 pcbnew/footprint_libraries_utils.cpp:462
 #: pcbnew/footprint_libraries_utils.cpp:1141 pcbnew/tools/pcb_control.cpp:147
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "Crea libreria di impronte"
+msgstr "Nuova libreria impronte"
 
 #: pcbnew/files.cpp:824
 #, c-format
@@ -47830,19 +47812,16 @@ msgid "Footprint Chooser"
 msgstr "Selezione impronte"
 
 #: pcbnew/footprint_chooser_frame.cpp:150
-#, fuzzy
 msgid "Show/hide description panel"
-msgstr "Mostra/nascondi il pannello ricerca"
+msgstr "Mostra/nascondi pannello descrizione"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
-#, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "Mostra/nascondi il pannello ricerca"
+msgstr "Mostra/nascondi pannello vista 3D"
 
 #: pcbnew/footprint_chooser_frame.cpp:168
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "Mostra i valori delle impronte"
+msgstr "Mostra/nascondi pannello vista impronte"
 
 #: pcbnew/footprint_chooser_frame.cpp:176
 msgid "Show 3D viewer in own window"
@@ -48003,14 +47982,12 @@ msgid "No footprints to export!"
 msgstr "Nessuna impronta da esportare!"
 
 #: pcbnew/footprint_libraries_utils.cpp:650
-#, fuzzy
 msgid "Export Footprints"
-msgstr "Esporta impronta"
+msgstr "Esporta impronte"
 
 #: pcbnew/footprint_libraries_utils.cpp:650
-#, fuzzy
 msgid "Export footprints to library:"
-msgstr "Esporta l'impronta all'editor"
+msgstr "Esporta impronte nella libreria:"
 
 #: pcbnew/footprint_libraries_utils.cpp:651
 #, fuzzy
