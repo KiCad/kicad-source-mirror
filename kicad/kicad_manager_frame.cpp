@@ -762,6 +762,24 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
                 mgr.SaveProject();
         }
 
+        // Ensure the Last_Save tag is at HEAD before closing. This handles the case where
+        // autosave commits were made after the last explicit save - without this, the next
+        // project load would offer to restore the autosave state, which is incorrect after
+        // a clean close.
+        wxString projPath = Prj().GetProjectPath();
+
+        if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
+        {
+            if( Kiway().LocalHistory().HeadNewerThanLastSave( projPath ) )
+            {
+                // Commit the current on-disk state and tag it so Last_Save matches HEAD
+                if( Kiway().LocalHistory().CommitFullProjectSnapshot( projPath, wxS( "Close" ) ) )
+                {
+                    Kiway().LocalHistory().TagSave( projPath, wxS( "project" ) );
+                }
+            }
+        }
+
         m_active_project = false;
         // Enforce local history size limit (if enabled) once all pending saves/backups are done.
         if( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Backup.enabled )
