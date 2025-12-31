@@ -2473,6 +2473,39 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
 
         m_board->Add( zone.release(), ADD_MODE::APPEND );
     }
+    else if( aElem.is_teardrop )
+    {
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+        if( linechain.PointCount() < 3 )
+        {
+            // Polygons with less than 3 points are not supported in KiCad.
+            return;
+        }
+
+        std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
+
+        zone->SetPosition( aElem.outline.at( 0 ).position );
+        zone->Outline()->AddOutline( linechain );
+
+        HelperSetZoneLayers( *zone, aElem.layer );
+        zone->SetNetCode( GetNetCode( aElem.net ) );
+        zone->SetTeardropAreaType( TEARDROP_TYPE::TD_UNSPECIFIED );
+        zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER );
+
+        SHAPE_POLY_SET fill;
+        fill.Append( linechain );
+        fill.Fracture();
+
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            zone->SetFilledPolysList( klayer, fill );
+
+        zone->SetIsFilled( true );
+        zone->SetNeedRefill( false );
+
+        m_board->Add( zone.release(), ADD_MODE::APPEND );
+    }
     else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
     {
         PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );

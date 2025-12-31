@@ -1219,6 +1219,7 @@ AREGION6::AREGION6( ALTIUM_BINARY_PARSER& aReader, bool aExtendedVertices )
 
     uint8_t flags1 = aReader.Read<uint8_t>();
     is_locked      = ( flags1 & 0x04 ) == 0;
+    is_teardrop    = ( flags1 & 0x10 ) != 0;
 
     uint8_t flags2 = aReader.Read<uint8_t>();
     is_keepout     = flags2 == 2;

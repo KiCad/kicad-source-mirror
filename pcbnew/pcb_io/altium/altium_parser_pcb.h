@@ -556,6 +556,7 @@ struct ARULE6
 struct AREGION6
 {
     bool is_locked;
+    bool is_teardrop;
     bool is_keepout;
 
     bool is_shapebased;
