@@ -3270,12 +3270,13 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDim
 
 void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
-    SCH_SHEET_PATH currentPath = aSheet->Schematic()->CurrentSheet();
-    wxString currentVariant = aSheet->Schematic()->GetCurrentVariant();
+    bool DNP = false;
+
+    if( m_schematic )
+        DNP = aSheet->GetDNP( &m_schematic->CurrentSheet(), m_schematic->GetCurrentVariant() );
+
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool DNP = aSheet->GetDNP( &currentPath, currentVariant );
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
-                                && aSheet->GetExcludedFromSim();
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSheet->GetExcludedFromSim();
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
