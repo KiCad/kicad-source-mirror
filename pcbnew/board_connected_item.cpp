@@ -125,10 +125,20 @@ int BOARD_CONNECTED_ITEM::GetNetCode() const
 // std::shared_ptr stuff shows up large in performance profiling.
 NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetClass() const
 {
+    // Static fallback netclass for items without a valid board (e.g., during DRC evaluation
+    // of dummy items, or items not yet added to a board).
+    static std::shared_ptr<NETCLASS> fallbackNetclass = std::make_shared<NETCLASS>( NETCLASS::Default );
+
     if( m_netinfo && m_netinfo->GetNetClass() )
         return m_netinfo->GetNetClass();
-    else
-        return GetBoard()->GetDesignSettings().m_NetSettings->GetDefaultNetclass().get();
+
+    if( const BOARD* board = GetBoard() )
+    {
+        if( board->GetDesignSettings().m_NetSettings )
+            return board->GetDesignSettings().m_NetSettings->GetDefaultNetclass().get();
+    }
+
+    return fallbackNetclass.get();
 }
 
 

@@ -1314,7 +1314,7 @@ static void hasNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 BOARD_CONNECTED_ITEM* bcItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
                 NETCLASS*             netclass = bcItem->GetEffectiveNetClass();
 
-                if( netclass->ContainsNetclassWithName( arg->AsString() ) )
+                if( netclass && netclass->ContainsNetclassWithName( arg->AsString() ) )
                     return 1.0;
 
                 return 0.0;
@@ -1353,7 +1353,7 @@ static void hasExactNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 BOARD_CONNECTED_ITEM* bcItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
                 NETCLASS*             netclass = bcItem->GetEffectiveNetClass();
 
-                if( netclass->GetName() == arg->AsString() )
+                if( netclass && netclass->GetName() == arg->AsString() )
                     return 1.0;
 
                 return 0.0;
