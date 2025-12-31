@@ -1147,14 +1147,49 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 continue;
             }
 
-            // We put thermal reliefs on all connected items in a hatch fill zone as a way of
-            // guaranteeing that they connect to the webbing.  (The thermal gap is the hatch
-            // gap minus the pad/via size, making it impossible for the pad/via to be isolated
-            // within the center of a hole.)
+            // For hatch zones, respect the zone connection type just like solid zones
+            // Pads with THERMAL connection get thermal rings; FULL connections get no knockout;
+            // NONE connections get handled later in buildCopperItemClearances.
             if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
             {
-                aThermalConnectionPads.push_back( pad );
-                addKnockout( pad, aLayer, getHatchFillThermalClearance( aZone, pad, aLayer ), holes );
+                constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
+                connection = constraint.m_ZoneConnection;
+
+                if( connection == ZONE_CONNECTION::THERMAL && !pad->CanFlashLayer( aLayer ) )
+                    connection = ZONE_CONNECTION::NONE;
+
+                switch( connection )
+                {
+                case ZONE_CONNECTION::THERMAL:
+                {
+                    padShape = pad->GetEffectiveShape( aLayer, FLASHING::ALWAYS_FLASHED );
+
+                    if( aFill.Collide( padShape.get(), 0 ) )
+                    {
+                        // Get the thermal relief gap
+                        constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad,
+                                                                  aZone, aLayer );
+                        int thermalGap = constraint.GetValue().Min();
+
+                        // Knock out the thermal gap only - the thermal ring will be added separately
+                        aThermalConnectionPads.push_back( pad );
+                        addKnockout( pad, aLayer, thermalGap, holes );
+                    }
+
+                    break;
+                }
+
+                case ZONE_CONNECTION::NONE:
+                    // Will be handled by buildCopperItemClearances
+                    aNoConnectionPads.push_back( pad );
+                    break;
+
+                case ZONE_CONNECTION::FULL:
+                default:
+                    // No knockout - pad connects directly to the hatch
+                    break;
+                }
+
                 continue;
             }
 
@@ -1220,9 +1255,8 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
         }
     }
 
-    // We put thermal reliefs on all connected items in a hatch fill zone as a way of guaranteeing
-    // that they connect to the webbing.  (The thermal gap is the hatch gap minus the pad/via size,
-    // making it impossible for the pad/via to be isolated within the center of a hole.)
+    // For hatch zones, vias also get proper thermal treatment. They always use thermal connection
+    // since vias don't have zone connection settings like pads do.
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         for( PCB_TRACK* track : m_board->Tracks() )
@@ -1288,8 +1322,12 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 if( noConnection )
                     continue;
 
+                // Use proper thermal gap from DRC constraints
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, via, aZone, aLayer );
+                int thermalGap = constraint.GetValue().Min();
+
                 aThermalConnectionPads.push_back( via );
-                addKnockout( via, aLayer, getHatchFillThermalClearance( aZone, via, aLayer ), holes );
+                addKnockout( via, aLayer, thermalGap, holes );
             }
         }
     }
@@ -1937,6 +1975,21 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         return false;
 
     /* -------------------------------------------------------------------------------------
+     * For hatch zones, add thermal rings around pads with thermal relief.
+     * The rings are clipped to the zone boundary and provide the connection point
+     * for the hatch webbing instead of connecting directly to the pad.
+     */
+
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    {
+        buildHatchZoneThermalRings( aZone, aLayer, aSmoothedOutline, thermalConnectionPads, aFillPolys );
+        DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In2_Cu, wxT( "plus-thermal-rings" ) );
+    }
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return false;
+
+    /* -------------------------------------------------------------------------------------
      * Knockout electrical clearances.
      */
 
@@ -2331,17 +2384,47 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             circular = true;
         }
 
-        // Thermal connections in a hatched zone are based on the hatch.  Their primary function is to
-        // guarantee that pads/vias connect to the webbing.  (The thermal gap is the hatch gap width minus
-        // the pad/via size, making it impossible for the pad/via to be isolated within the center of a
-        // hole.)
+        // For hatch zones, use proper DRC constraints for thermal gap and spoke width,
+        // just like solid zones. This ensures consistent thermal relief appearance and
+        // respects pad-specific thermal spoke settings.
         if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         {
-            spoke_w = aZone->GetHatchThickness();
-            thermalReliefGap = getHatchFillThermalClearance( aZone, item, aLayer );
+            if( pad )
+            {
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad,
+                                                        aZone, aLayer );
+                thermalReliefGap = constraint.GetValue().Min();
 
-            if( thermalReliefGap < 0 )
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad,
+                                                        aZone, aLayer );
+                spoke_w = constraint.GetValue().Opt();
+
+                int spoke_max_allowed_w = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
+                spoke_w = std::clamp( spoke_w, constraint.Value().Min(), constraint.Value().Max() );
+                spoke_w = std::min( spoke_w, spoke_max_allowed_w );
+
+                if( spoke_w < aZone->GetMinThickness() )
+                    continue;
+            }
+            else if( via )
+            {
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, via,
+                                                        aZone, aLayer );
+                thermalReliefGap = constraint.GetValue().Min();
+
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, via,
+                                                        aZone, aLayer );
+                spoke_w = constraint.GetValue().Opt();
+
+                spoke_w = std::min( spoke_w, via->GetWidth( aLayer ) );
+
+                if( spoke_w < aZone->GetMinThickness() )
+                    continue;
+            }
+            else
+            {
                 continue;
+            }
         }
         else if( pad )
         {
@@ -2557,9 +2640,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         {
             EDA_ANGLE thermalSpokeAngle;
 
-            if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
-                thermalSpokeAngle = aZone->GetHatchOrientation();
-            else if( pad )
+            // Use pad's thermal spoke angle for both solid and hatch zones.
+            // This ensures custom thermal spoke templates are respected.
+            if( pad )
                 thermalSpokeAngle = pad->GetThermalSpokeAngle();
 
             BOX2I     spokesBox;
@@ -2626,6 +2709,115 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     for( size_t ii = 0; ii < aSpokesList.size(); ++ii )
         aSpokesList[ii].GenerateBBoxCache();
+}
+
+
+void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                              const SHAPE_POLY_SET& aSmoothedOutline,
+                                              const std::vector<BOARD_ITEM*>& aThermalConnectionPads,
+                                              SHAPE_POLY_SET& aFillPolys )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    DRC_CONSTRAINT         constraint;
+
+    for( BOARD_ITEM* item : aThermalConnectionPads )
+    {
+        if( !item->IsOnLayer( aLayer ) )
+            continue;
+
+        PAD*     pad = nullptr;
+        PCB_VIA* via = nullptr;
+        bool     isCircular = false;
+        int      thermalGap = 0;
+        int      spokeWidth = 0;
+        VECTOR2I position;
+        int      padRadius = 0;
+
+        if( item->Type() == PCB_PAD_T )
+        {
+            pad = static_cast<PAD*>( item );
+            VECTOR2I padSize = pad->GetSize( aLayer );
+            position = pad->ShapePos( aLayer );
+
+            isCircular = ( pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
+                           || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL && padSize.x == padSize.y ) );
+
+            if( isCircular )
+                padRadius = std::max( padSize.x, padSize.y ) / 2;
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone, aLayer );
+            thermalGap = constraint.GetValue().Min();
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, aZone, aLayer );
+            spokeWidth = constraint.GetValue().Opt();
+
+            // Clamp spoke width to pad size
+            int spokeMaxWidth = std::min( padSize.x, padSize.y );
+            spokeWidth = std::min( spokeWidth, spokeMaxWidth );
+        }
+        else if( item->Type() == PCB_VIA_T )
+        {
+            via = static_cast<PCB_VIA*>( item );
+            position = via->GetPosition();
+            isCircular = true;
+            padRadius = via->GetWidth( aLayer ) / 2;
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, via, aZone, aLayer );
+            thermalGap = constraint.GetValue().Min();
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, via, aZone, aLayer );
+            spokeWidth = constraint.GetValue().Opt();
+
+            // Clamp spoke width to via diameter
+            spokeWidth = std::min( spokeWidth, padRadius * 2 );
+        }
+        else
+        {
+            continue;
+        }
+
+        // Don't create a ring if spoke width is too small
+        if( spokeWidth < aZone->GetMinThickness() )
+            continue;
+
+        SHAPE_POLY_SET thermalRing;
+
+        if( isCircular )
+        {
+            // For circular pads/vias: create an arc ring
+            // Ring inner radius = pad radius + thermal gap
+            // Ring width = spoke width
+            int ringInnerRadius = padRadius + thermalGap;
+            int ringWidth = spokeWidth;
+
+            TransformRingToPolygon( thermalRing, position, ringInnerRadius + ringWidth / 2,
+                                    ringWidth, m_maxError, ERROR_OUTSIDE );
+        }
+        else
+        {
+            // For non-circular pads: create ring by inflating pad to outer radius,
+            // then subtracting pad inflated to inner radius
+            SHAPE_POLY_SET outerShape;
+            SHAPE_POLY_SET innerShape;
+
+            // Outer ring edge = pad + thermal gap + spoke width
+            pad->TransformShapeToPolygon( outerShape, aLayer, thermalGap + spokeWidth,
+                                          m_maxError, ERROR_OUTSIDE );
+
+            // Inner ring edge = pad + thermal gap (this is already knocked out)
+            pad->TransformShapeToPolygon( innerShape, aLayer, thermalGap,
+                                          m_maxError, ERROR_OUTSIDE );
+
+            thermalRing = outerShape;
+            thermalRing.BooleanSubtract( innerShape );
+        }
+
+        // Clip the thermal ring to the zone boundary so it doesn't overflow
+        thermalRing.BooleanIntersection( aSmoothedOutline );
+
+        // Add the thermal ring to the fill
+        aFillPolys.BooleanAdd( thermalRing );
+    }
 }
 
 

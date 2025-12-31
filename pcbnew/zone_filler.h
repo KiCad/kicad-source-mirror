@@ -105,6 +105,16 @@ private:
                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
+     * Build thermal rings for pads in hatch zones.
+     * For circular pads, creates an arc ring; for other shapes, creates an inflated ring.
+     * Rings are clipped to the zone boundary.
+     */
+    void buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                     const SHAPE_POLY_SET& aSmoothedOutline,
+                                     const std::vector<BOARD_ITEM*>& aThermalConnectionPads,
+                                     SHAPE_POLY_SET& aFillPolys );
+
+    /**
      * Create strands of zero-width between elements of SHAPE_POLY_SET that are within
      * aDistance of each other.  When we inflate these strands, they will create minimum
      * width bands
