@@ -33,6 +33,7 @@ set( QA_COMMON_SRCS
     test_array_axis.cpp
     test_base_set.cpp
     test_bitmap_base.cpp
+    test_clipboard.cpp
     test_collector.cpp
     test_color4d.cpp
     test_commit.cpp

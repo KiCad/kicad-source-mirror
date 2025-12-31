@@ -26,9 +26,16 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <wx/buffer.h>
+#include <wx/string.h>
 
 class wxImage;
-class wxString;
+
+struct CLIPBOARD_MIME_DATA
+{
+    wxString       m_mimeType;
+    wxMemoryBuffer m_data;
+};
 
 /**
  * Store information to the system clipboard.
@@ -38,6 +45,18 @@ class wxString;
  * @return False if error occurred.
  */
 bool SaveClipboard( const std::string& aTextUTF8 );
+
+/**
+ * Store information to the system clipboard with additional MIME types.
+ *
+ * Creates a composite clipboard object with text as the primary format and additional
+ * custom MIME type data.  When aMimeData is empty, falls back to SaveClipboard(aTextUTF8).
+ *
+ * @param aTextUTF8 is the text to store, expected UTF8 encoding.  Stored as primary text format.
+ * @param aMimeData is additional data to store by MIME type (e.g., image/svg+xml, image/png).
+ * @return False if error occurred.
+ */
+bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MIME_DATA>& aMimeData );
 
 /**
  * Store tabular data to the system clipboard.

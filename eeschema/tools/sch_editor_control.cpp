@@ -25,6 +25,7 @@
 #include "tools/sch_editor_control.h"
 
 #include <clipboard.h>
+#include <algorithm>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <design_block.h>
@@ -40,6 +41,7 @@
 #include <project_rescue.h>
 #include <erc/erc.h>
 #include <invoke_sch_dialog.h>
+#include <locale_io.h>
 #include <string_utils.h>
 #include <kiway.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
@@ -48,6 +50,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <project_sch.h>
+#include <settings/color_settings.h>
 #include <richio.h>
 #include <sch_design_block_pane.h>
 #include <sch_edit_frame.h>
@@ -84,6 +87,14 @@
 #include <io/kicad/kicad_io_utils.h>
 #include <libraries/symbol_library_adapter.h>
 #include <printing/dialog_print.h>
+#include <plotters/plotters_pslike.h>
+#include <view/view.h>
+#include <zoom_defines.h>
+#include <gal/gal_print.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <wx/ffile.h>
+#include <wx/filefn.h>
+#include <wx/mstream.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -96,6 +107,321 @@
  * @ingroup trace_env_vars
  */
 static const wxChar traceSchPaste[] = wxT( "KICAD_SCH_PASTE" );
+
+namespace
+{
+constexpr double clipboardPpi = 96.0;
+constexpr int    clipboardMaxBitmapSize = 4096;
+constexpr double clipboardBboxInflation = 0.02;  // Small padding around selection
+
+void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
+                     const wxMemoryBuffer& aBuffer )
+{
+    if( aBuffer.GetDataLen() == 0 )
+        return;
+
+    CLIPBOARD_MIME_DATA entry;
+    entry.m_mimeType = aMimeType;
+    entry.m_data = aBuffer;
+    aMimeData.push_back( entry );
+}
+
+
+bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
+{
+    wxFFile file( aFileName, wxS( "rb" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    wxFileOffset size = file.Length();
+
+    if( size <= 0 )
+        return false;
+
+    void* data = aBuffer.GetWriteBuf( size );
+
+    if( file.Read( data, size ) != static_cast<size_t>( size ) )
+    {
+        aBuffer.UngetWriteBuf( 0 );
+        return false;
+    }
+
+    aBuffer.UngetWriteBuf( size );
+    return true;
+}
+
+
+std::vector<SCH_ITEM*> collectSelectionItems( const SCH_SELECTION& aSelection )
+{
+    std::vector<SCH_ITEM*> items;
+    items.reserve( aSelection.GetSize() );
+
+    for( EDA_ITEM* item : aSelection.GetItems() )
+    {
+        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
+
+        if( schItem )
+            items.push_back( schItem );
+    }
+
+    return items;
+}
+
+
+BOX2I expandedSelectionBox( const SCH_SELECTION& aSelection )
+{
+    BOX2I bbox = aSelection.GetBoundingBox();
+
+    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+        bbox.Inflate( bbox.GetWidth() * clipboardBboxInflation,
+                      bbox.GetHeight() * clipboardBboxInflation );
+
+    return bbox;
+}
+
+
+bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
+                         wxMemoryBuffer& aBuffer )
+{
+    SCH_RENDER_SETTINGS renderSettings;
+    renderSettings.LoadColors( aFrame->GetColorSettings() );
+    renderSettings.SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
+    renderSettings.SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
+
+    std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
+    plotter->SetRenderSettings( &renderSettings );
+
+    PAGE_INFO pageInfo = aFrame->GetScreen()->GetPageSettings();
+    pageInfo.SetWidthMils( schIUScale.IUToMils( aBBox.GetWidth() ) );
+    pageInfo.SetHeightMils( schIUScale.IUToMils( aBBox.GetHeight() ) );
+
+    plotter->SetPageSettings( pageInfo );
+    plotter->SetColorMode( true );
+
+    VECTOR2I plot_offset = aBBox.GetOrigin();
+    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, 1.0, false );
+    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+
+    wxFileName tempFile( wxFileName::CreateTempFileName( wxS( "kicad_svg" ) ) );
+
+    if( !plotter->OpenFile( tempFile.GetFullPath() ) )
+    {
+        wxRemoveFile( tempFile.GetFullPath() );
+        return false;
+    }
+
+    LOCALE_IO     toggle;
+    SCH_PLOT_OPTS plotOpts;
+    plotOpts.m_plotHopOver = aFrame->Schematic().Settings().m_HopOverScale > 0.0;
+
+    plotter->StartPlot( wxT( "1" ) );
+    aFrame->GetScreen()->Plot( plotter.get(), plotOpts, collectSelectionItems( aSelection ) );
+    plotter->EndPlot();
+    plotter.reset();
+
+    bool ok = loadFileToBuffer( tempFile.GetFullPath(), aBuffer );
+    wxRemoveFile( tempFile.GetFullPath() );
+    return ok;
+}
+
+
+/**
+ * Helper to render selection to a bitmap with a specific background color.
+ * Used for dual-buffer alpha computation.
+ */
+wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
+                                 const BOX2I& aBBox, int aWidth, int aHeight, double aViewScale,
+                                 const wxColour& aBgColor )
+{
+    VECTOR2I size = aBBox.GetSize();
+
+    wxBitmap bitmap( aWidth, aHeight, 24 );
+    wxMemoryDC dc;
+    dc.SelectObject( bitmap );
+    dc.SetBackground( wxBrush( aBgColor ) );
+    dc.Clear();
+
+    KIGFX::GAL_DISPLAY_OPTIONS options;
+    options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
+    std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
+
+    if( !galPrint )
+        return wxImage();
+
+    KIGFX::GAL* gal = galPrint->GetGAL();
+    KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
+    std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
+    std::unique_ptr<KIGFX::VIEW> view = std::make_unique<KIGFX::VIEW>();
+
+    painter->SetSchematic( &aFrame->Schematic() );
+    view->SetGAL( gal );
+    view->SetPainter( painter.get() );
+    view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
+    view->SetScale( 1.0 );
+    gal->SetWorldUnitLength( SCH_WORLD_UNIT );
+
+    // Clone items and add to view
+    std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
+    clonedItems.reserve( aSelection.GetSize() );
+
+    for( EDA_ITEM* item : aSelection.GetItems() )
+    {
+        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
+
+        if( !schItem )
+            continue;
+
+        SCH_ITEM* clone = static_cast<SCH_ITEM*>( schItem->Clone() );
+        clonedItems.emplace_back( clone );
+        view->Add( clone );
+    }
+
+    SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
+    *dstSettings = *aFrame->GetRenderSettings();
+    dstSettings->m_ShowPinsElectricalType = false;
+    dstSettings->LoadColors( aFrame->GetColorSettings( false ) );
+    dstSettings->SetLayerColor( LAYER_DRAWINGSHEET,
+                                dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
+    dstSettings->SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
+    dstSettings->SetIsPrinting( true );
+
+    COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0,
+                       aBgColor.Blue() / 255.0, 1.0 );
+    dstSettings->SetBackgroundColor( bgColor4D );
+
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
+    {
+        view->SetLayerVisible( i, true );
+        view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+    }
+
+    view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
+
+    // Set up page size to match the output bitmap dimensions at our target ppi.
+    // This ensures the content will be centered in the bitmap.
+    double ppi = clipboardPpi;
+    double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
+    VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
+
+    galPrint->SetSheetSize( pageSizeIn );
+    galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
+
+    // Calculate zoom factor so bbox content fills the page centered.
+    // The zoom maps from IU to page coordinates, scaling by viewScale.
+    double zoomFactor = aViewScale * inch2Iu / ppi;
+
+    gal->SetLookAtPoint( aBBox.Centre() );
+    gal->SetZoomFactor( zoomFactor );
+    gal->SetClearColor( bgColor4D );
+    gal->ClearScreen();
+
+    view->UseDrawPriority( true );
+
+    {
+        KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+        view->Redraw();
+    }
+
+    dc.SelectObject( wxNullBitmap );
+    return bitmap.ConvertToImage();
+}
+
+
+bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
+                         wxMemoryBuffer& aBuffer )
+{
+    VECTOR2I size = aBBox.GetSize();
+
+    if( size.x <= 0 || size.y <= 0 )
+        return false;
+
+    // Use the current view scale to match what the user sees on screen
+    double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
+    int    bitmapWidth = KiROUND( size.x * viewScale );
+    int    bitmapHeight = KiROUND( size.y * viewScale );
+
+    // Clamp to maximum size while preserving aspect ratio
+    if( bitmapWidth > clipboardMaxBitmapSize || bitmapHeight > clipboardMaxBitmapSize )
+    {
+        double scaleDown = (double) clipboardMaxBitmapSize / std::max( bitmapWidth, bitmapHeight );
+        bitmapWidth = KiROUND( bitmapWidth * scaleDown );
+        bitmapHeight = KiROUND( bitmapHeight * scaleDown );
+        viewScale *= scaleDown;
+    }
+
+    if( bitmapWidth <= 0 || bitmapHeight <= 0 )
+        return false;
+
+    // Render twice with different backgrounds for alpha computation.
+    // This dual-buffer technique computes true alpha by comparing renders on white vs black:
+    // - On white: result_w = α*F + (1-α)*255
+    // - On black: result_b = α*F
+    // Therefore: α = 1 - (result_w - result_b)/255
+    wxImage imageOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
+                                                    bitmapHeight, viewScale, *wxWHITE );
+    wxImage imageOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
+                                                    bitmapHeight, viewScale, *wxBLACK );
+
+    if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
+        return false;
+
+    // Create output image with alpha channel
+    wxImage result( bitmapWidth, bitmapHeight );
+    result.InitAlpha();
+
+    unsigned char* rgbWhite = imageOnWhite.GetData();
+    unsigned char* rgbBlack = imageOnBlack.GetData();
+    unsigned char* rgbResult = result.GetData();
+    unsigned char* alphaResult = result.GetAlpha();
+
+    int pixelCount = bitmapWidth * bitmapHeight;
+
+    for( int i = 0; i < pixelCount; ++i )
+    {
+        int idx = i * 3;
+
+        // Get RGB values from both renders
+        int rW = rgbWhite[idx], gW = rgbWhite[idx + 1], bW = rgbWhite[idx + 2];
+        int rB = rgbBlack[idx], gB = rgbBlack[idx + 1], bB = rgbBlack[idx + 2];
+
+        // Alpha computation: α = 1 - (white - black) / 255
+        // Use average of channels for stability with anti-aliasing
+        int diffR = rW - rB;
+        int diffG = gW - gB;
+        int diffB = bW - bB;
+        int avgDiff = ( diffR + diffG + diffB ) / 3;
+
+        int alpha = 255 - avgDiff;
+        alpha = std::max( 0, std::min( 255, alpha ) );
+        alphaResult[i] = static_cast<unsigned char>( alpha );
+
+        if( alpha > 0 )
+        {
+            // Recover foreground color: F = black_result / α
+            // Scale by 255/alpha to convert from premultiplied to straight alpha
+            rgbResult[idx] = static_cast<unsigned char>( std::min( 255, rB * 255 / alpha ) );
+            rgbResult[idx + 1] = static_cast<unsigned char>( std::min( 255, gB * 255 / alpha ) );
+            rgbResult[idx + 2] = static_cast<unsigned char>( std::min( 255, bB * 255 / alpha ) );
+        }
+        else
+        {
+            // Fully transparent - color doesn't matter
+            rgbResult[idx] = 0;
+            rgbResult[idx + 1] = 0;
+            rgbResult[idx + 2] = 0;
+        }
+    }
+
+    wxMemoryOutputStream stream;
+
+    if( !result.SaveFile( stream, wxBITMAP_TYPE_PNG ) )
+        return false;
+
+    aBuffer.AppendData( stream.GetOutputStreamBuffer()->GetBufferStart(), stream.GetSize() );
+    return true;
+}
+} // namespace
 
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
@@ -1364,6 +1690,35 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     std::string prettyData = formatter.GetString();
     KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
 
+    std::vector<CLIPBOARD_MIME_DATA> mimeData;
+
+    if( !aUseDuplicateClipboard )
+    {
+        CLIPBOARD_MIME_DATA kicadData;
+        kicadData.m_mimeType = wxS( "application/kicad" );
+        kicadData.m_data.AppendData( prettyData.data(), prettyData.size() );
+        mimeData.push_back( kicadData );
+
+        BOX2I selectionBox = expandedSelectionBox( selection );
+
+        if( selectionBox.GetWidth() > 0 && selectionBox.GetHeight() > 0 )
+        {
+            wxMemoryBuffer svgBuffer;
+
+            if( plotSelectionToSvg( m_frame, selection, selectionBox, svgBuffer ) )
+                appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
+            else
+                wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
+
+            wxMemoryBuffer pngBuffer;
+
+            if( plotSelectionToPng( m_frame, selection, selectionBox, pngBuffer ) )
+                appendMimeData( mimeData, wxS( "image/png" ), pngBuffer );
+            else
+                wxLogTrace( traceSchPaste, wxS( "Failed to generate PNG for clipboard" ) );
+        }
+    }
+
     if( selection.IsHover() )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -1373,7 +1728,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         return true;
     }
 
-    return SaveClipboard( prettyData );
+    return SaveClipboard( prettyData, mimeData );
 }
 
 
@@ -1642,28 +1997,30 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     SCH_SHEET tempSheet;
 
-    std::unique_ptr<wxImage> clipImg = GetImageFromClipboard();
-
-    if( !aEvent.IsAction( &ACTIONS::duplicate ) && clipImg )
-    {
-        // Just image data
-        auto bitmap = std::make_unique<SCH_BITMAP>();
-
-        bool ok = bitmap->GetReferenceImage().SetImage( *clipImg );
-
-        if( !ok )
-            return 0;
-
-        return m_toolMgr->RunAction( SCH_ACTIONS::placeImage, bitmap.release() );
-    }
-
+    // Priority for paste:
+    // 1. application/kicad format (handled by GetClipboardUTF8 which checks this first)
+    // 2. Text data that can be parsed as KiCad S-expressions
+    // 3. Bitmap/image data (fallback only if no valid text content)
     if( aEvent.IsAction( &ACTIONS::duplicate ) )
         content = m_duplicateClipboard;
     else
         content = GetClipboardUTF8();
 
+    // Only fall back to image data if there's no text content
     if( content.empty() )
+    {
+        std::unique_ptr<wxImage> clipImg = GetImageFromClipboard();
+
+        if( clipImg )
+        {
+            auto bitmap = std::make_unique<SCH_BITMAP>();
+
+            if( bitmap->GetReferenceImage().SetImage( *clipImg ) )
+                return m_toolMgr->RunAction( SCH_ACTIONS::placeImage, bitmap.release() );
+        }
+
         return 0;
+    }
 
     if( aEvent.IsAction( &ACTIONS::duplicate ) )
         eventPos = getViewControls()->GetCursorPosition( false );

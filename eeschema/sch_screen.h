@@ -259,6 +259,16 @@ public:
     void Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const;
 
     /**
+     * Plot selected schematic objects to \a aPlotter.
+     *
+     * @param[in] aPlotter The plotter object to plot to.
+     * @param[in] aPlotOpts The plot options to use.
+     * @param[in] aItems The items to plot.
+     */
+    void Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
+               const std::vector<SCH_ITEM*>& aItems ) const;
+
+    /**
      * Remove \a aItem from the schematic associated with this screen.
      *
      * @note The removed item is not deleted.  It is only unlinked from the item list.

@@ -892,13 +892,26 @@ void SCH_SCREEN::SetConnectivityDirty()
 
 void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 {
+    std::vector<SCH_ITEM*> items;
+    items.reserve( Items().size() );
+
+    for( SCH_ITEM* item : Items() )
+        items.push_back( item );
+
+    Plot( aPlotter, aPlotOpts, items );
+}
+
+
+void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
+                       const std::vector<SCH_ITEM*>& aItems ) const
+{
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector<SCH_ITEM*>   junctions;
     std::vector<SCH_ITEM*>   bitmaps;
     std::vector<SCH_SYMBOL*> symbols;
     std::vector<SCH_ITEM*>   other;
 
-    for( SCH_ITEM* item : Items() )
+    for( SCH_ITEM* item : aItems )
     {
         if( item->IsMoving() )
             continue;

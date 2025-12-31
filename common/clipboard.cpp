@@ -27,6 +27,7 @@
 #include <wx/dataobj.h>
 #include <wx/image.h>
 #include <wx/log.h>
+#include <wx/mstream.h>
 #include <wx/string.h>
 #include <wx/sstream.h>
 
@@ -55,6 +56,67 @@ bool SaveClipboard( const std::string& aTextUTF8 )
 }
 
 
+bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MIME_DATA>& aMimeData )
+{
+    if( aMimeData.empty() )
+        return SaveClipboard( aTextUTF8 );
+
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+    if( wxTheClipboard->Open() )
+    {
+        wxDataObjectComposite* data = new wxDataObjectComposite();
+        data->Add( new wxTextDataObject( wxString( aTextUTF8.c_str(), wxConvUTF8 ) ), true );
+
+        for( const CLIPBOARD_MIME_DATA& entry : aMimeData )
+        {
+            // Skip entries with no data
+            if( entry.m_data.GetDataLen() == 0 )
+                continue;
+
+            // For PNG data, add as wxBitmapDataObject for compatibility with image
+            // applications like GIMP that expect standard bitmap clipboard format.
+            // We use wxBitmapDataObject instead of custom format because it's more
+            // widely supported and avoids clipboard format query issues.
+            if( entry.m_mimeType == wxS( "image/png" ) )
+            {
+                wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
+                wxImage image;
+
+                if( image.LoadFile( stream, wxBITMAP_TYPE_PNG ) && image.IsOk() )
+                {
+                    data->Add( new wxBitmapDataObject( wxBitmap( image ) ) );
+                }
+
+                // Don't also add as custom format - wxBitmapDataObject is sufficient
+                // for image apps, and adding both can cause clipboard query issues
+                continue;
+            }
+
+            // Add custom format data - note that on GTK, custom MIME types may not work
+            // with all applications (they often become wxDF_PRIVATE internally), but they
+            // work for KiCad-to-KiCad transfers.
+            // We allocate and set data in a way that ensures the object is fully initialized.
+            wxDataFormat format( entry.m_mimeType );
+            wxCustomDataObject* custom = new wxCustomDataObject( format );
+
+            // Allocate buffer first, then copy data - this ensures proper initialization
+            custom->Alloc( entry.m_data.GetDataLen() );
+            custom->SetData( entry.m_data.GetDataLen(), entry.m_data.GetData() );
+            data->Add( custom );
+        }
+
+        wxTheClipboard->SetData( data );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+        wxTheClipboard->Close();
+
+        return true;
+    }
+
+    return false;
+}
+
+
 std::string GetClipboardUTF8()
 {
     std::string result;
@@ -63,6 +125,18 @@ std::string GetClipboardUTF8()
 
     if( wxTheClipboard->Open() )
     {
+        if( wxTheClipboard->IsSupported( wxDataFormat( wxS( "application/kicad" ) ) ) )
+        {
+            wxCustomDataObject data( wxDataFormat( wxS( "application/kicad" ) ) );
+
+            if( wxTheClipboard->GetData( data ) )
+            {
+                result.assign( static_cast<const char*>( data.GetData() ), data.GetSize() );
+                wxTheClipboard->Close();
+                return result;
+            }
+        }
+
         if( wxTheClipboard->IsSupported( wxDF_TEXT )
             || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
         {
