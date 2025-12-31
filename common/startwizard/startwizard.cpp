@@ -90,8 +90,8 @@ public:
         wxStaticText* helpLabel = new wxStaticText( this, -1, _( "For help, please visit " ) );
         wxString docsUrl = wxString::Format( "https://go.kicad.org/docs/%s", GetMajorMinorVersion() );
         wxHyperlinkCtrl* helpLink = new wxHyperlinkCtrl( this, -1, wxT( "docs.kicad.org" ), docsUrl );
-        helpSizer->Add( helpLabel, 0, wxEXPAND | wxLEFT | wxTOP | wxBOTTOM, 5 );
-        helpSizer->Add( helpLink, 0, wxEXPAND | wxRIGHT | wxTOP | wxBOTTOM, 5 );
+        helpSizer->Add( helpLabel, 0, wxLEFT | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 5 );
+        helpSizer->Add( helpLink, 0, wxRIGHT | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 5 );
         m_mainSizer->Add( helpSizer, 0, wxEXPAND, 5 );
 
         SetSizerAndFit( m_mainSizer );
