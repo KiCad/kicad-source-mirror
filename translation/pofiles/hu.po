@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 05:05+0000\n"
+"PO-Revision-Date: 2025-12-31 12:17+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -5854,9 +5854,8 @@ msgid "<b>The following global library tables need to be created:</b>"
 msgstr "<b>Az alábbi globális könyvtár táblázatokat létre kell hozni:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Hogyan szeretné beállítani a KiCad-et?"
+msgstr "Hogyan szeretné, hogy a KiCad létrehozza őket?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
