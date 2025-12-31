@@ -271,12 +271,28 @@ void GERBVIEW_FRAME::ClearToolbarControl( int aId )
 
     switch( aId )
     {
-    case ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER:     m_SelLayerBox = nullptr;          break;
-    case ID_TOOLBARH_GERBER_DATA_TEXT_BOX:             m_TextInfo = nullptr;             break;
-    case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:            m_SelComponentBox = nullptr;      break;
-    case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:            m_SelNetnameBox = nullptr;        break;
-    case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE: m_SelAperAttributesBox = nullptr; break;
-    case ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE:       m_DCodeSelector = nullptr;        break;
+    case ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER:
+        m_SelLayerBox = nullptr;
+        break;
+    case ID_TOOLBARH_GERBER_DATA_TEXT_BOX:
+        m_TextInfo = nullptr;
+        break;
+    case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:
+        m_SelComponentBox = nullptr;
+        m_cmpText = nullptr;
+        break;
+    case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
+        m_SelNetnameBox = nullptr;
+        m_netText = nullptr;
+        break;
+    case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:
+        m_SelAperAttributesBox = nullptr;
+        m_apertText = nullptr;
+        break;
+    case ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE:
+        m_DCodeSelector = nullptr;
+        m_dcodeText = nullptr;
+        break;
     }
 }
 
