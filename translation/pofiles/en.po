@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-23 05:02+0300\n"
+"POT-Creation-Date: 2026-01-01 20:30+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3513,11 +3513,21 @@ msgstr "Insert spacer"
 msgid "Insert group"
 msgstr "Insert group"
 
+msgid "Separator"
+msgstr "Separator"
+
+#, c-format
+msgid "Spacer: %i"
+msgstr "Spacer: %i"
+
 msgid "Group"
 msgstr "Group"
 
 msgid "Customize toolbars"
 msgstr "Customize toolbars"
+
+msgid "Toolbar:"
+msgstr "Toolbar:"
 
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
@@ -5366,6 +5376,10 @@ msgid "Library not found in library table"
 msgstr "Library not found in library table"
 
 #, c-format
+msgid "Library '%s': %s"
+msgstr "Library '%s': %s"
+
+#, c-format
 msgid "Library %s not found"
 msgstr "Library %s not found"
 
@@ -5419,6 +5433,12 @@ msgstr ""
 "Choosing 'Keep All Files' will restore the selected commit but retain any "
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
+
+msgid "Cannot restore - the following files are open by another user:"
+msgstr "Cannot restore - the following files are open by another user:"
+
+msgid "Restore Failed"
+msgstr "Restore Failed"
 
 msgid "Select snapshot"
 msgstr "Select snapshot"
@@ -5773,14 +5793,14 @@ msgstr "Close %s"
 msgid "Quit %s"
 msgstr "Quit %s"
 
-msgid "Grid Selector"
-msgstr "Grid Selector"
+msgid "Grid selector"
+msgstr "Grid selector"
 
 msgid "Grid Selection box"
 msgstr "Grid Selection box"
 
-msgid "Zoom Selector"
-msgstr "Zoom Selector"
+msgid "Zoom selector"
+msgstr "Zoom selector"
 
 msgid "Zoom Selection box"
 msgstr "Zoom Selection box"
@@ -6816,6 +6836,16 @@ msgstr "Select a File"
 msgid "Select Path"
 msgstr "Select Path"
 
+msgid "View load messages"
+msgstr "View load messages"
+
+#, c-format
+msgid "View %zu load message(s)"
+msgstr "View %zu load message(s)"
+
+msgid "Load Messages"
+msgstr "Load Messages"
+
 msgid "Sort by Best Match"
 msgstr "Sort by Best Match"
 
@@ -7316,8 +7346,9 @@ msgstr "Library '%s' is not in the footprint library table."
 msgid "Footprint '%s' not found."
 msgstr "Footprint '%s' not found."
 
-msgid "Error loading footprint"
-msgstr "Error loading footprint"
+#, c-format
+msgid "Error loading footprint: %s"
+msgstr "Error loading footprint: %s"
 
 #, c-format
 msgid "Footprint: %s"
@@ -10554,6 +10585,9 @@ msgstr "Base Name"
 msgid "Alternate Assignment"
 msgstr "Alternate Assignment"
 
+msgid " Variant"
+msgstr " Variant"
+
 msgid "Standard"
 msgstr "Standard"
 
@@ -12448,9 +12482,9 @@ msgid "Panels"
 msgstr "Panels"
 
 msgid ""
-"Install a remote symbol server using the Plugin and Content Manger to enable"
+"Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"Install a remote symbol server using the Plugin and Content Manger to enable"
+"Install a remote symbol server using the Plugin and Content Manager to enable"
 
 msgid "Variants"
 msgstr "Variants"
@@ -13426,8 +13460,40 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Symbol library folder '%s' cannot be deleted."
 
 #, c-format
+msgid ""
+"Library '%s' loaded with errors:\n"
+"\n"
+msgstr ""
+"Library '%s' loaded with errors:\n"
+"\n"
+
+msgid "The library cannot be saved until these errors are fixed manually."
+msgstr "The library cannot be saved until these errors are fixed manually."
+
+#, c-format
 msgid "Unable to read file '%s'"
 msgstr "Unable to read file '%s'"
+
+msgid ""
+"\n"
+"\n"
+"The library cannot be saved until these errors are fixed manually."
+msgstr ""
+"\n"
+"\n"
+"The library cannot be saved until these errors are fixed manually."
+
+#, c-format
+msgid ""
+"Cannot save library '%s' because it had a parse error during loading.\n"
+"\n"
+"Saving would permanently lose symbols that could not be loaded.\n"
+"Please fix the library file manually before saving."
+msgstr ""
+"Cannot save library '%s' because it had a parse error during loading.\n"
+"\n"
+"Saving would permanently lose symbols that could not be loaded.\n"
+"Please fix the library file manually before saving."
 
 #, c-format
 msgid "Cannot create symbol library path '%s'."
@@ -13436,6 +13502,14 @@ msgstr "Cannot create symbol library path '%s'."
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
 msgstr "No parent for extended symbol %s found in library '%s'"
+
+#, c-format
+msgid ""
+"Error parsing symbol at line %d: %s\n"
+"Skipping symbol and continuing."
+msgstr ""
+"Error parsing symbol at line %d: %s\n"
+"Skipping symbol and continuing."
 
 #, c-format
 msgid "Cannot parse %s as a symbol"
@@ -16369,6 +16443,10 @@ msgstr "Cannot import symbol library '%s'."
 msgid "Symbol library file '%s' is empty."
 msgstr "Symbol library file '%s' is empty."
 
+#, c-format
+msgid "Error deleting symbol %s from library '%s'."
+msgstr "Error deleting symbol %s from library '%s'."
+
 msgid "Symbol not found."
 msgstr "Symbol not found."
 
@@ -16444,11 +16522,11 @@ msgstr "Associate selected sheet pin and hierarchical label using the pin name"
 msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Break sheet pin and hierarchical label association(s)"
 
-msgid "Current Variant"
-msgstr "Current Variant"
+msgid "Current variant"
+msgstr "Current variant"
 
-msgid "Control to select the current schematic variant"
-msgstr "Control to select the current schematic variant"
+msgid "Selects the current schematic variant"
+msgstr "Selects the current schematic variant"
 
 msgid "Line modes"
 msgstr "Line modes"
@@ -18366,6 +18444,12 @@ msgstr "Configure remote data sources."
 msgid "No remote data sources are currently installed."
 msgstr "No remote data sources are currently installed."
 
+msgid "Configure..."
+msgstr "Configure..."
+
+msgid "Clear Cookies"
+msgstr "Clear Cookies"
+
 #, c-format
 msgid "No configuration JSON found for '%s'."
 msgstr "No configuration JSON found for '%s'."
@@ -19222,8 +19306,8 @@ msgstr "Net highlight"
 msgid "Aperture highlight"
 msgstr "Aperture highlight"
 
-msgid "DCode Selector"
-msgstr "DCode Selector"
+msgid "DCode selector"
+msgstr "DCode selector"
 
 msgid "Select all items with the selected DCode"
 msgstr "Select all items with the selected DCode"
@@ -22120,14 +22204,14 @@ msgstr ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 
-msgid "Origin Selector"
-msgstr "Origin Selector"
+msgid "Origin selector"
+msgstr "Origin selector"
 
 msgid "Select the origin of the status bar coordinates"
 msgstr "Select the origin of the status bar coordinates"
 
-msgid "Page Selector"
-msgstr "Page Selector"
+msgid "Page selector"
+msgstr "Page selector"
 
 msgid "Select the page to simulate item displays"
 msgstr "Select the page to simulate item displays"
@@ -26486,6 +26570,20 @@ msgstr "Footprint Checker"
 msgid "3D Models"
 msgstr "3D Models"
 
+msgid "Solder paste clearance:"
+msgstr "Solder paste clearance:"
+
+msgid ""
+"Local solder paste clearance for this footprint.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"If blank, the global value is used."
+msgstr ""
+"Local solder paste clearance for this footprint.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"If blank, the global value is used."
+
 msgid ""
 "Locked footprints cannot be freely moved or oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
@@ -26605,23 +26703,16 @@ msgstr ""
 msgid "Allow bridged solder mask apertures between pads"
 msgstr "Allow bridged solder mask apertures between pads"
 
-msgid "Solder paste absolute clearance:"
-msgstr "Solder paste absolute clearance:"
-
 msgid ""
-"This is the local clearance between pads and the solder paste for this "
-"footprint.\n"
-"This value can be superseded by a pad local values.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller stencil aperture size than pad size."
+"Solder paste clearance relative to pad size.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"This is the local clearance between pads and the solder paste for this "
-"footprint.\n"
-"This value can be superseded by a pad local values.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller stencil aperture size than pad size."
+"Solder paste clearance relative to pad size.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"This value can be superseded by local values for a footprint or a pad."
 
 msgid "Solder paste relative clearance:"
 msgstr "Solder paste relative clearance:"
@@ -26650,13 +26741,6 @@ msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-
-msgid ""
-"Note: solder paste clearances (absolute and relative) are added to determine "
-"the final clearance."
-msgstr ""
-"Note: solder paste clearances (absolute and relative) are added to determine "
-"the final clearance."
 
 msgid "Pad Connections"
 msgstr "Pad Connections"
@@ -26768,23 +26852,6 @@ msgstr ""
 "This is the local clearance between pads and the solder mask for \n"
 "this footprint.\n"
 "If 0, the global value is used.\n"
-"This value can be overridden on a pad-by-pad basis in the Local\n"
-"Clearance and Settings tab of Pad Properties."
-
-msgid ""
-"This is the local clearance between pads and the solder paste for\n"
-"this footprint.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller stencil aperture size than pad size.\n"
-"This value can be overridden on a pad-by-pad basis in the Local\n"
-"Clearance and Settings tab of Pad Properties."
-msgstr ""
-"This is the local clearance between pads and the solder paste for\n"
-"this footprint.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller stencil aperture size than pad size.\n"
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 
@@ -27840,6 +27907,17 @@ msgstr "Pad Properties"
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "Default Pad Properties for Add Pad Tool"
 
+msgid ""
+"Local solder paste clearance for this pad.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"If blank, the footprint or global value is used."
+msgstr ""
+"Local solder paste clearance for this pad.\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
+"If blank, the footprint or global value is used."
+
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Footprint %s (%s), %s, rotated %g deg"
@@ -28186,19 +28264,6 @@ msgid ""
 msgstr ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
-
-msgid ""
-"This is the local clearance between this pad and the solder paste.\n"
-"If 0, the footprint value or the global value is used.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller mask size than pad size."
-msgstr ""
-"This is the local clearance between this pad and the solder paste.\n"
-"If 0, the footprint value or the global value is used.\n"
-"The final clearance value is the sum of this value and the clearance value "
-"ratio.\n"
-"A negative value means a smaller mask size than pad size."
 
 msgid ""
 "This is the local clearance ratio in percent between this pad and the solder "
@@ -30045,14 +30110,19 @@ msgstr ""
 "These items will be no longer accessible\n"
 "Do you wish to continue?"
 
+#, c-format
+msgid "Pad %s of %s on %s"
+msgstr "Pad %s of %s on %s"
+
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
-"items from removed layers and cannot be undone.\n"
-"Do you wish to continue?"
+"items from removed layers and cannot be undone."
 msgstr ""
 "Items have been found on removed layers. This operation will delete all "
-"items from removed layers and cannot be undone.\n"
-"Do you wish to continue?"
+"items from removed layers and cannot be undone."
+
+msgid "Show Details"
+msgstr "Show Details"
 
 msgid "Layer must have a name."
 msgstr "Layer must have a name."
@@ -30166,21 +30236,6 @@ msgid "Solder Paste Settings"
 msgstr "Solder Paste Settings"
 
 msgid ""
-"Global absolute clearance between pads and the solder paste.\n"
-"Negative clearance means solder paste area smaller than the pad (typical for "
-"solder paste clearance).\n"
-"This value can be superseded by local values for a footprint or a pad.\n"
-"Final clearance value is the sum of this value and the relative clearance "
-"value."
-msgstr ""
-"Global absolute clearance between pads and the solder paste.\n"
-"Negative clearance means solder paste area smaller than the pad (typical for "
-"solder paste clearance).\n"
-"This value can be superseded by local values for a footprint or a pad.\n"
-"Final clearance value is the sum of this value and the relative clearance "
-"value."
-
-msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
 "A value of 10 means the clearance value is 10 percent of the pad size.\n"
@@ -30194,13 +30249,6 @@ msgstr ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
-
-msgid ""
-"Note: Solder paste clearances (absolute and relative) are added to determine "
-"the final clearance."
-msgstr ""
-"Note: Solder paste clearances (absolute and relative) are added to determine "
-"the final clearance."
 
 msgid "Cancel Changes?"
 msgstr "Cancel Changes?"
@@ -33790,10 +33838,6 @@ msgstr "no wizard selected"
 msgid "Couldn't reload footprint wizard"
 msgstr "Couldn't reload footprint wizard"
 
-#, c-format
-msgid "Error loading footprint %s from library '%s'."
-msgstr "Error loading footprint %s from library '%s'."
-
 msgid "too long"
 msgstr "too long"
 
@@ -34593,10 +34637,6 @@ msgstr "NPTH pad of %s"
 
 msgid "NPTH pad"
 msgstr "NPTH pad"
-
-#, c-format
-msgid "Pad %s of %s on %s"
-msgstr "Pad %s of %s on %s"
 
 #, c-format
 msgid "Pad on %s"
@@ -36175,6 +36215,10 @@ msgid "Footprint library '%s' is read only."
 msgstr "Footprint library '%s' is read only."
 
 #, c-format
+msgid "Warning in file '%s'"
+msgstr "Warning in file '%s'"
+
+#, c-format
 msgid "unknown pad type: %d"
 msgstr "unknown pad type: %d"
 
@@ -36350,6 +36394,22 @@ msgid ""
 msgstr ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
+
+#, c-format
+msgid ""
+"Component '%s' has non-ASCII characters in its designator; converted to '%s' "
+"for ODB++ export."
+msgstr ""
+"Component '%s' has non-ASCII characters in its designator; converted to '%s' "
+"for ODB++ export."
+
+#, c-format
+msgid ""
+"Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
+"for ODB++ export."
+msgstr ""
+"Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
+"for ODB++ export."
 
 msgid "Failed to add component data"
 msgstr "Failed to add component data"
@@ -40340,6 +40400,9 @@ msgstr "Resolved Edge Clearance"
 msgid "Resolved Margin Clearance"
 msgstr "Resolved Margin Clearance"
 
+msgid "Pad Size"
+msgstr "Pad Size"
+
 msgid "Selected Items"
 msgstr "Selected Items"
 
@@ -40348,6 +40411,12 @@ msgstr "Selected 2D Length"
 
 msgid "Selected 2D Copper Area"
 msgstr "Selected 2D Copper Area"
+
+msgid "Selected 2D Area"
+msgstr "Selected 2D Area"
+
+msgid "Selected 2D Total Area"
+msgstr "Selected 2D Total Area"
 
 msgid "Place Board Characteristics"
 msgstr "Place Board Characteristics"
@@ -41375,6 +41444,9 @@ msgstr "Building zone fills..."
 msgid "Removing isolated copper islands..."
 msgstr "Removing isolated copper islands..."
 
+msgid "Refilling zones after island removal..."
+msgstr "Refilling zones after island removal..."
+
 msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr "Prototype zone fill enabled. Disable setting and refill?"
 
@@ -41546,6 +41618,127 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Grid Selector"
+#~ msgstr "Grid Selector"
+
+#~ msgid "Zoom Selector"
+#~ msgstr "Zoom Selector"
+
+#~ msgid "Error loading footprint"
+#~ msgstr "Error loading footprint"
+
+#~ msgid ""
+#~ "Install a remote symbol server using the Plugin and Content Manger to "
+#~ "enable"
+#~ msgstr ""
+#~ "Install a remote symbol server using the Plugin and Content Manger to "
+#~ "enable"
+
+#~ msgid "Current Variant"
+#~ msgstr "Current Variant"
+
+#~ msgid "Control to select the current schematic variant"
+#~ msgstr "Control to select the current schematic variant"
+
+#~ msgid "DCode Selector"
+#~ msgstr "DCode Selector"
+
+#~ msgid "Origin Selector"
+#~ msgstr "Origin Selector"
+
+#~ msgid "Page Selector"
+#~ msgstr "Page Selector"
+
+#~ msgid "Solder paste absolute clearance:"
+#~ msgstr "Solder paste absolute clearance:"
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder paste for this "
+#~ "footprint.\n"
+#~ "This value can be superseded by a pad local values.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance between pads and the solder paste for this "
+#~ "footprint.\n"
+#~ "This value can be superseded by a pad local values.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size."
+
+#~ msgid ""
+#~ "Note: solder paste clearances (absolute and relative) are added to "
+#~ "determine the final clearance."
+#~ msgstr ""
+#~ "Note: solder paste clearances (absolute and relative) are added to "
+#~ "determine the final clearance."
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder paste for\n"
+#~ "this footprint.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+#~ msgstr ""
+#~ "This is the local clearance between pads and the solder paste for\n"
+#~ "this footprint.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+
+#~ msgid ""
+#~ "This is the local clearance between this pad and the solder paste.\n"
+#~ "If 0, the footprint value or the global value is used.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance between this pad and the solder paste.\n"
+#~ "If 0, the footprint value or the global value is used.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size."
+
+#~ msgid ""
+#~ "Items have been found on removed layers. This operation will delete all "
+#~ "items from removed layers and cannot be undone.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "Items have been found on removed layers. This operation will delete all "
+#~ "items from removed layers and cannot be undone.\n"
+#~ "Do you wish to continue?"
+
+#~ msgid ""
+#~ "Global absolute clearance between pads and the solder paste.\n"
+#~ "Negative clearance means solder paste area smaller than the pad (typical "
+#~ "for solder paste clearance).\n"
+#~ "This value can be superseded by local values for a footprint or a pad.\n"
+#~ "Final clearance value is the sum of this value and the relative clearance "
+#~ "value."
+#~ msgstr ""
+#~ "Global absolute clearance between pads and the solder paste.\n"
+#~ "Negative clearance means solder paste area smaller than the pad (typical "
+#~ "for solder paste clearance).\n"
+#~ "This value can be superseded by local values for a footprint or a pad.\n"
+#~ "Final clearance value is the sum of this value and the relative clearance "
+#~ "value."
+
+#~ msgid ""
+#~ "Note: Solder paste clearances (absolute and relative) are added to "
+#~ "determine the final clearance."
+#~ msgstr ""
+#~ "Note: Solder paste clearances (absolute and relative) are added to "
+#~ "determine the final clearance."
+
+#, c-format
+#~ msgid "Error loading footprint %s from library '%s'."
+#~ msgstr "Error loading footprint %s from library '%s'."
 
 #~ msgid "Variants:"
 #~ msgstr "Variants:"
@@ -91498,9 +91691,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Surface mount"
 #~ msgstr "Surface mount"
-
-#~ msgid "Solder paste clearance:"
-#~ msgstr "Solder paste clearance:"
 
 #~ msgid "Solder paste ratio clearance:"
 #~ msgstr "Solder paste ratio clearance:"
