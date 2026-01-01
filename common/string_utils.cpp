@@ -41,6 +41,7 @@
 #include <wx/tokenzr.h>
 #include <libeval/numeric_evaluator.h>
 #include "locale_io.h"
+#include <wx/event.h>
 
 
 /**

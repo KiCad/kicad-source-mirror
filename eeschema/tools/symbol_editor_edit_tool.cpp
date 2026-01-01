@@ -62,6 +62,7 @@
 #include <zoom_defines.h>
 #include <wx/ffile.h>
 #include <wx/mstream.h>
+#include <wx/dcmemory.h>
 
 
 namespace
@@ -855,9 +856,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( aEvent.IsAction( &SCH_ACTIONS::symbolProperties ) )
         {
             LIB_ID treeLibId = m_frame->GetTreeLIBID();
-            
+
             // Check if the selected symbol in tree is different from the currently loaded one
-            if( treeLibId.IsValid() && 
+            if( treeLibId.IsValid() &&
                 ( !m_frame->GetCurSymbol() || m_frame->GetCurSymbol()->GetLibId() != treeLibId ) )
             {
                 // Edit properties directly from library buffer without loading to canvas
@@ -1016,19 +1017,19 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolPropertiesFromLibrary( const LIB_ID& aLi
     LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
     wxString libName = aLibId.GetLibNickname();
     wxString symbolName = aLibId.GetLibItemName();
-    
+
     // Get the symbol from the library buffer (without loading it into the editor)
     LIB_SYMBOL* bufferedSymbol = libMgr.GetBufferedSymbol( symbolName, libName );
-    
+
     if( !bufferedSymbol )
         return;
-    
+
     // Create a copy to work with
     LIB_SYMBOL tempSymbol( *bufferedSymbol );
-    
+
     m_toolMgr->RunAction( ACTIONS::cancelInteractive );
     m_toolMgr->RunAction( ACTIONS::selectionClear );
-    
+
     DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, &tempSymbol );
 
     // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
@@ -1037,13 +1038,13 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolPropertiesFromLibrary( const LIB_ID& aLi
     // the QUASIMODAL macros here.
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
-    
+
     // Update the buffered symbol with the changes
     libMgr.UpdateSymbol( &tempSymbol, libName );
-    
+
     // Mark the library as modified
     libMgr.SetSymbolModified( symbolName, libName );
-    
+
     // Update the tree view
     wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( aLibId );
     m_frame->UpdateLibraryTree( treeItem, &tempSymbol );

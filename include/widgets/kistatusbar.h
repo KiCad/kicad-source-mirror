@@ -30,6 +30,7 @@
 #include <mutex>
 #include <vector>
 #include <widgets/report_severity.h>
+#include <wx/statusbr.h>
 
 class wxGauge;
 class wxButton;
