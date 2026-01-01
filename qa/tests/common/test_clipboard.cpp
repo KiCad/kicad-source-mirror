@@ -20,6 +20,7 @@
 #include <boost/test/unit_test.hpp>
 #include <clipboard.h>
 #include <wx/clipbrd.h>
+#include <wx/display.h>
 #include <wx/image.h>
 #include <wx/string.h>
 #include <wx/filename.h>
@@ -34,16 +35,10 @@
  */
 static bool IsDisplayAvailable()
 {
-#ifdef __linux__
-    // Check DISPLAY environment variable - if not set, we're headless
-    const char* display = std::getenv( "DISPLAY" );
-    const char* wayland = std::getenv( "WAYLAND_DISPLAY" );
-
-    if( ( display == nullptr || display[0] == '\0' )
-        && ( wayland == nullptr || wayland[0] == '\0' ) )
-    {
-        return false;
-    }
+#ifdef __WXGTK__
+    // On GTK, check if wxWidgets can actually see displays.
+    // Just having DISPLAY environment variable set isn't enough
+    return wxDisplay::GetCount() > 0;
 
 #endif
     return true;
