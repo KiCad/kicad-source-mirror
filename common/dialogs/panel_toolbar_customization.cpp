@@ -128,7 +128,6 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
                                                           const std::vector<ACTION_TOOLBAR_CONTROL*>& aControls ) :
         PANEL_TOOLBAR_CUSTOMIZATION_BASE( aParent ),
         m_actionImageList( nullptr ),
-        m_treeImageList( nullptr ),
         m_appSettings( aCfg ),
         m_appTbSettings( aTbSettings ),
         m_currentToolbar( TOOLBAR_LOC::TOP_MAIN ),
@@ -173,7 +172,6 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
 PANEL_TOOLBAR_CUSTOMIZATION::~PANEL_TOOLBAR_CUSTOMIZATION()
 {
     delete m_actionImageList;
-    delete m_treeImageList;
 }
 
 
@@ -351,11 +349,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
 {
     m_toolbarTree->DeleteAllItems();
-#ifdef __WXMAC__
-    m_toolbarTree->SetImageList( m_treeImageList );
-#else
     m_toolbarTree->SetImageList( m_actionImageList );
-#endif
 
     const auto& it = m_toolbars.find( m_currentToolbar );
 
@@ -489,7 +483,6 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 {
     // Clear all existing information for the actions
     delete m_actionImageList;
-    delete m_treeImageList;
     m_actionImageListMap.clear();
     m_actionImageBundleVector.clear();
 
@@ -526,16 +519,11 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         return bmp;
     };
 
-#if wxCHECK_VERSION( 3, 3, 0 )
+// Our private Mac wxWidgets branch still reports as 3.2, but has some 3.3 bug fixes pulled in....
+#if wxCHECK_VERSION( 3, 3, 0 ) || defined( __WXMAC__ )
     m_actionImageList = new wxImageList( physSize, physSize, true, static_cast<int>( m_availableTools.size() ) );
 #else
     m_actionImageList = new wxImageList( logicSize, logicSize, true, static_cast<int>( m_availableTools.size() ) );
-#endif
-
-
-#ifdef __WXMAC__
-    m_treeImageList = new wxImageList( logicSize * 2, logicSize * 2, true,
-                                       static_cast<int>( m_availableTools.size() ) );
 #endif
 
     // Populate the various image lists for the action icons, and the actual control
@@ -555,9 +543,6 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         {
             wxBitmap bmp = toBitmap( tool->GetIcon() );
             int      idx = m_actionImageList->Add( bmp );
-#ifdef __WXMAC__
-            m_treeImageList->Add( bmp );
-#endif
 
             // If the image list throws away the image, then we shouldn't show the image anywhere.
             // TODO: Make sure all images have all possible sizes so the image list doesn't get grumpy.
