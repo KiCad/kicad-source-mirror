@@ -2059,8 +2059,15 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 
     std::set<EDA_ITEM*, decltype( timestamp_cmp )> unique_stamps( timestamp_cmp );
 
+    // Collect ALL items from all screens to detect duplicate UUIDs.
+    // This is essential for design blocks where multiple instances of the same content
+    // are placed on the same sheet - each instance needs unique UUIDs for items like
+    // wires, junctions, and groups, not just symbols and sheets.
     for( SCH_SCREEN* screen : m_screens )
-        screen->GetHierarchicalItems( &items );
+    {
+        for( SCH_ITEM* item : screen->Items() )
+            items.push_back( item );
+    }
 
     if( items.size() < 2 )
         return 0;
