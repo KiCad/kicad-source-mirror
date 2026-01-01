@@ -140,6 +140,72 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundle( BITMAPS aBitmapId, int aMinHeight 
 }
 
 
+// Better scaling algorithm, taken from wx 3.3
+static wxImage resampleImage( const wxImage& aImg, int aWidth, int aHeight )
+{
+    wxImage image;
+    int     old_width = aImg.GetWidth();
+    int     old_height = aImg.GetHeight();
+
+    // When downscaling, use bilinear algorithm for shrinking to an
+    // integer multiple of the target size and then box average by the
+    // integer part.
+    if( aWidth <= old_width && aHeight <= old_height )
+    {
+        const double shrinkFactorX = double( old_width ) / aWidth;
+        const double shrinkFactorY = double( old_height ) / aHeight;
+
+        const int shrinkInt( wxMin( shrinkFactorX, shrinkFactorY ) );
+
+        image = aImg.ResampleBilinear( aWidth * shrinkInt, aHeight * shrinkInt );
+        if( shrinkInt != 1 )
+            image = image.ResampleBox( aWidth, aHeight );
+    }
+    else // Use box average algorithm for upscaling.
+    {
+        image = aImg.ResampleBox( aWidth, aHeight );
+    }
+
+    return image;
+}
+
+
+wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeight )
+{
+    wxVector<wxBitmap> bmps;
+    bool               hasDefSize = false;
+    int                largestHeight = 0;
+    wxImage            largestImage;
+
+    for( const BITMAP_INFO& info : m_bitmapInfoCache[aBitmapId] )
+    {
+        if( info.theme != m_theme )
+            continue;
+
+        if( aDefHeight > 0 && info.height < aDefHeight )
+            continue;
+
+        if( info.height == aDefHeight )
+            hasDefSize = true;
+
+        wxImage img = getImage( info.id, info.height );
+
+        if( info.height > largestHeight )
+        {
+            largestHeight = info.height;
+            largestImage = img;
+        }
+
+        bmps.push_back( wxBitmap( img ) );
+    }
+
+    if( aDefHeight > 0 && !hasDefSize )
+        bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
+
+    return wxBitmapBundle::FromBitmaps( bmps );
+}
+
+
 wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId )
 {
     wxVector<wxBitmap> bmps;

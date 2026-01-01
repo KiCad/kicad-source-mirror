@@ -58,6 +58,15 @@ KICOMMON_API wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
 
 KICOMMON_API wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap, int aMinHeight = -1 );
 
+/**
+ * Constructs and returns a bitmap bundle for the given icon ID, with the default
+ * bitmap size being aDefHeight. Rescaling is applied if no bitmap of that size
+ * is available.
+ * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
+ * @param aDefHeight is the desired height of the default bitmap in the bundle.
+ */
+KICOMMON_API wxBitmapBundle KiBitmapBundleDef( BITMAPS aBitmap, int aDefHeight );
+
 KICOMMON_API wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
 
 /**

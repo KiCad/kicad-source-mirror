@@ -66,7 +66,16 @@ public:
      * some icons may be reused between controls at different intended sizes.
      */
     wxBitmapBundle GetBitmapBundle( BITMAPS aBitmapId, int aMinHeight = -1 );
-     
+
+    /**
+     * Constructs and returns a bitmap bundle for the given icon ID, with the default
+     * bitmap size being aDefHeight. Rescaling is applied if no bitmap of that size
+     * is available.
+     * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
+     * @param aDefHeight is the desired height of the default bitmap in the bundle.
+     */
+    wxBitmapBundle GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeight );
+
     /**
      * Constructs and returns a bitmap bundle for the given icon ID, with the bitmaps
      * converted to disabled state according to the current UI theme.

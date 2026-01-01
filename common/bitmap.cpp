@@ -113,6 +113,12 @@ wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap, int aMinHeight )
 }
 
 
+wxBitmapBundle KiBitmapBundleDef( BITMAPS aBitmap, int aDefHeight )
+{
+    return GetBitmapStore()->GetBitmapBundleDef( aBitmap, aDefHeight );
+}
+
+
 wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap )
 {
     return GetBitmapStore()->GetDisabledBitmapBundle( aBitmap );

@@ -101,7 +101,6 @@ protected:
     void onListItemActivated( wxListEvent& event ) override;
 
 protected:
-    wxImageList*               m_actionImageList;
     wxVector<wxBitmapBundle>   m_actionImageBundleVector;
     std::map<std::string, int> m_actionImageListMap;
 

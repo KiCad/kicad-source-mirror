@@ -127,7 +127,6 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
                                                           const std::vector<TOOL_ACTION*>& aTools,
                                                           const std::vector<ACTION_TOOLBAR_CONTROL*>& aControls ) :
         PANEL_TOOLBAR_CUSTOMIZATION_BASE( aParent ),
-        m_actionImageList( nullptr ),
         m_appSettings( aCfg ),
         m_appTbSettings( aTbSettings ),
         m_currentToolbar( TOOLBAR_LOC::TOP_MAIN ),
@@ -171,7 +170,6 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
 
 PANEL_TOOLBAR_CUSTOMIZATION::~PANEL_TOOLBAR_CUSTOMIZATION()
 {
-    delete m_actionImageList;
 }
 
 
@@ -349,7 +347,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
 {
     m_toolbarTree->DeleteAllItems();
-    m_toolbarTree->SetImageList( m_actionImageList );
+    m_toolbarTree->SetImages( m_actionImageBundleVector );
 
     const auto& it = m_toolbars.find( m_currentToolbar );
 
@@ -481,8 +479,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
 
 void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 {
+    const int c_defSize = 24; // Default icon size for toolbar actions
+
     // Clear all existing information for the actions
-    delete m_actionImageList;
     m_actionImageListMap.clear();
     m_actionImageBundleVector.clear();
 
@@ -491,42 +490,6 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     m_actionsList->DeleteAllColumns();
     m_actionsList->InsertColumn( 0, "", wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE );
 
-    // Prepare the image list (based on project_tree.cpp)
-    int defSize = 24;
-    int logicSize = defSize * GetDPIScaleFactor() / GetContentScaleFactor(); // Cross-platform way
-    int physSize = ToPhys( logicSize ); // aka *GetContentScaleFactor()
-
-    if( physSize >= 64 )
-        physSize = 64;
-    else if( physSize >= 48 )
-        physSize = 48;
-    else if( physSize >= 32 )
-        physSize = 32;
-    else
-        physSize = 24;
-
-    logicSize = std::min( logicSize, physSize );
-    int bmpsf = std::max( 1, physSize / logicSize );
-
-    logicSize = physSize / bmpsf;
-
-    auto toBitmap = [&]( BITMAPS aBmps )
-    {
-        wxBitmapBundle bnd = KiBitmapBundle( aBmps, defSize );
-        wxBitmap       bmp = bnd.GetBitmap( wxSize( physSize, physSize ) );
-
-        wxASSERT( bmp.IsOk() );
-        return bmp;
-    };
-
-// Our private Mac wxWidgets branch still reports as 3.2, but has some 3.3 bug fixes pulled in....
-#if wxCHECK_VERSION( 3, 3, 0 ) || defined( __WXMAC__ )
-    m_actionImageList = new wxImageList( physSize, physSize, true, static_cast<int>( m_availableTools.size() ) );
-#else
-    m_actionImageList = new wxImageList( logicSize, logicSize, true, static_cast<int>( m_availableTools.size() ) );
-#endif
-
-    // Populate the various image lists for the action icons, and the actual control
     int itemIdx = 0;
 
     for( const auto& [k, tool] : m_availableTools )
@@ -541,18 +504,11 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
         if( tool->GetIcon() != BITMAPS::INVALID_BITMAP )
         {
-            wxBitmap bmp = toBitmap( tool->GetIcon() );
-            int      idx = m_actionImageList->Add( bmp );
+            int imgIdx = m_actionImageBundleVector.size();
+            m_actionImageBundleVector.push_back( KiBitmapBundleDef( tool->GetIcon(), c_defSize ) );
+            m_actionImageListMap.emplace( tool->GetName(), imgIdx );
 
-            // If the image list throws away the image, then we shouldn't show the image anywhere.
-            // TODO: Make sure all images have all possible sizes so the image list doesn't get grumpy.
-            if( idx != -1 )
-            {
-                m_actionImageBundleVector.push_back( KiBitmapBundle( tool->GetIcon() ) );
-                m_actionImageListMap.emplace( tool->GetName(), idx );
-
-                item.SetImage( idx );
-            }
+            item.SetImage( imgIdx );
         }
 
         m_actionsList->InsertItem( item );
