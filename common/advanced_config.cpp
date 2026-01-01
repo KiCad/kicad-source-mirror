@@ -142,6 +142,7 @@ static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
 static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
 static const wxChar HistoryLockStaleTimeout[] = wxT( "HistoryLockStaleTimeout" );
+static const wxChar ZoneFillIterativeRefill[] = wxT( "ZoneFillIterativeRefill" );
 
 } // namespace AC_KEYS
 
@@ -332,6 +333,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_EnableUseAuiPerspective = false;
     m_HistoryLockStaleTimeout = 300; // 5 minutes default
+    m_ZoneFillIterativeRefill = false;
 
     loadFromConfigFile();
 }
@@ -642,6 +644,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::HistoryLockStaleTimeout,
                                                           &m_HistoryLockStaleTimeout, m_HistoryLockStaleTimeout, 10,
                                                           86400 ) ); // 10 seconds to 24 hours
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ZoneFillIterativeRefill,
+                                                           &m_ZoneFillIterativeRefill, m_ZoneFillIterativeRefill ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

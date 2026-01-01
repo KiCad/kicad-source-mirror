@@ -26,13 +26,14 @@
 #ifndef ZONE_FILLER_H
 #define ZONE_FILLER_H
 
+#include <map>
 #include <vector>
 #include <zone.h>
+#include <geometry/shape_poly_set.h>
 
 class PROGRESS_REPORTER;
 class BOARD;
 class COMMIT;
-class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 
 
@@ -74,7 +75,15 @@ private:
 
     void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                     const std::vector<PAD*>& aNoConnectionPads,
-                                    SHAPE_POLY_SET& aHoles );
+                                    SHAPE_POLY_SET& aHoles,
+                                    bool aIncludeZoneClearances = true );
+
+    /**
+     * Build clearance knockout holes for higher-priority zones on different nets.
+     * Separated from buildCopperItemClearances to allow caching before zone knockouts.
+     */
+    void buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                          SHAPE_POLY_SET& aHoles );
 
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       SHAPE_POLY_SET& aRawFill );
@@ -145,6 +154,13 @@ private:
     bool addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                  SHAPE_POLY_SET& aFillPolys );
 
+    /**
+     * Refill a zone from cached pre-knockout fill.
+     * Used during iterative refill to avoid recomputing thermal reliefs and copper clearances.
+     * Only re-applies the higher-priority zone knockout with updated fills.
+     */
+    bool refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys );
+
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists
     bool                  m_brdOutlinesValid;   // true if m_boardOutline is well-formed
@@ -155,6 +171,10 @@ private:
     int                   m_worstClearance;
 
     bool                  m_debugZoneFiller;
+
+    // Cache of pre-knockout fills for iterative refill optimization (issue 21746)
+    // Key: (zone pointer, layer), Value: fill polygon before higher-priority zone knockout
+    std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preKnockoutFillCache;
 };
 
 #endif

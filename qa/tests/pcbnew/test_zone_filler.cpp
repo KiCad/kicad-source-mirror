@@ -33,6 +33,8 @@
 #include <zone.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
+#include <geometry/shape_poly_set.h>
+#include <advanced_config.h>
 
 
 struct ZONE_FILL_TEST_FIXTURE
@@ -337,4 +339,74 @@ BOOST_FIXTURE_TEST_CASE( RegressionNetTie, ZONE_FILL_TEST_FIXTURE )
             }
         }
     }
+}
+
+
+/**
+ * Test for issue 21746: Lower priority zones should fill areas where higher priority
+ * zones have isolated islands that get removed.
+ *
+ * The test board has:
+ * - A VDD zone with priority 1 (higher priority)
+ * - A GND zone with priority 0 (lower priority, default)
+ *
+ * The VDD zone only connects to a small area, creating an isolated island that should
+ * be removed. The GND zone should then fill that area.
+ *
+ * With the bug, GND is knocked out by VDD before VDD's isolated island is removed,
+ * leaving GND mostly empty.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionZonePriorityIsolatedIslands, ZONE_FILL_TEST_FIXTURE )
+{
+    // Enable iterative refill to fix issue 21746
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue21746/issue21746", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    // Find the GND zone
+    ZONE* gndZone = nullptr;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetNetname() == "GND" )
+        {
+            gndZone = zone;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( gndZone != nullptr, "GND zone not found in test board" );
+
+    // Calculate board outline area
+    SHAPE_POLY_SET boardOutline;
+    bool hasOutline = m_board->GetBoardPolygonOutlines( boardOutline, true );
+    BOOST_REQUIRE_MESSAGE( hasOutline, "Board outline not found" );
+
+    double boardArea = 0.0;
+
+    for( int i = 0; i < boardOutline.OutlineCount(); i++ )
+        boardArea += boardOutline.Outline( i ).Area();
+
+    // Get GND zone filled area
+    gndZone->CalculateFilledArea();
+    double gndFilledArea = gndZone->GetFilledArea();
+
+    // The GND zone should fill at least 25% of the board area
+    // With the bug, it fills almost nothing because VDD knocks it out
+    double fillRatio = gndFilledArea / boardArea;
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Board area: %.2f mm², GND filled area: %.2f mm², "
+                                          "Fill ratio: %.1f%%",
+                                          boardArea / 1e6, gndFilledArea / 1e6,
+                                          fillRatio * 100.0 ) );
+
+    BOOST_CHECK_MESSAGE( fillRatio >= 0.25,
+                         wxString::Format( "GND zone fill ratio %.1f%% is less than expected 25%%. "
+                                           "This indicates issue 21746 - lower priority zones not "
+                                           "filling areas where higher priority isolated islands "
+                                           "were removed.",
+                                           fillRatio * 100.0 ) );
 }

@@ -908,6 +908,20 @@ public:
      */
     int m_HistoryLockStaleTimeout;
 
+    /**
+     * Enable iterative zone filling to handle isolated islands in higher priority zones.
+     *
+     * When enabled, zones are filled in priority batches. After each batch, isolated islands
+     * are identified and removed, then lower priority zones are refilled to occupy the newly
+     * available space. This fixes issue 21746 where lower priority zones incorrectly knock
+     * out areas that should fill after higher priority zone islands are removed.
+     *
+     * Setting name: "ZoneFillIterativeRefill"
+     * Valid values: true or false
+     * Default value: false
+     */
+    bool m_ZoneFillIterativeRefill;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 
