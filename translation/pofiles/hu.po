@@ -5,7 +5,7 @@
 # Balázs Meskó <meskobalazs@mailbox.org>, 2024.
 # Flórián Fuszkó <florianf47@gmail.com>, 2024.
 # Gergo Kamaras <kamaras.gergo@gmail.com>, 2025.
-# Sárkány Lőrinc <lsarkany@gmail.com>, 2025.
+# Sárkány Lőrinc <lsarkany@gmail.com>, 2025, 2026.
 # iamPeter <lopert.peter.otto@gmail.com>, 2025.
 # Elek Zoltán <moncsa58@gmail.com>, 2025.
 # Viktor Döme <domevik@gmail.com>, 2025.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 12:17+0000\n"
+"PO-Revision-Date: 2026-01-01 13:37+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -5805,9 +5805,8 @@ msgid "Pan and Rotate"
 msgstr "Mozgatás és nagyítás"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Animáció sebessége:"
+msgstr "Forgatás sebessége:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
 #, fuzzy
@@ -5871,6 +5870,9 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"A könyvtár táblázatokat az előző lépésben kiválasztott verzióból fogjuk "
+"importálni.  Azon táblázatokat, amelyeket nem tudunk importálni, az "
+"alapértelmezett KiCad könyvtárakkal fogjuk létrehozni."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
 msgid "Start with no libraries"
@@ -5883,6 +5885,10 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"A beépített könyvtár táblázatok nem találhatóak az elvárt helyen. Ez "
+"általában azt jelenti, hogy a KiCad-et a könyvtárak nélkül telepítette. "
+"Folytathatja a beállítást, de a könyvtárakat külön telepítenie kell majd, "
+"hogy elérhetőek legyenek."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -5893,6 +5899,8 @@ msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Engedélyezi a csatlakozást az internethez, hogy frissítéseket keressünk a "
+"KiCad-hez és a Plugin és tartalomkezelőn keresztül telepített csomagokhoz?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1333
@@ -6003,9 +6011,8 @@ msgid "Insert separator"
 msgstr "Elválasztó beszúrása"
 
 #: common/dialogs/panel_toolbar_customization.cpp:149
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Beszúrás"
+msgstr "Távolságtartó beszúrása"
 
 #: common/dialogs/panel_toolbar_customization.cpp:150
 msgid "Insert group"
@@ -6054,9 +6061,8 @@ msgid "File could not be opened."
 msgstr "Nem sikerült megnyitni a fájlt."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
-#, fuzzy
 msgid "Drawing sheet was not fully read."
-msgstr "A(z) \"%s\" fájl bizonyos része(i) nem olvasható(ak)"
+msgstr "A rajzlap nem lett teljesen betöltve."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1037
 msgid "Ran out of memory."
@@ -7285,7 +7291,7 @@ msgstr ""
 "újabb."
 
 #: common/exceptions.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -7293,13 +7299,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"A KiCAD nem tudja megnyitni ezt a fájlt,\n"
-"\"mivel azt a program egy újabb verziójával hozták létre.\n"
-"A megnyitásához frissítenie kell a KiCAD programot egy újabb verzióra.\n"
-"A KiCAD minimum %s verziója szükséges a fájl megnyitásához.\n"
+"A KiCad nem tudja megnyitni ezt a fájlt, mivel azt a program egy újabb "
+"verziójával hozták létre.\n"
 "\n"
-"Teljes hibalista:\n"
-"%s"
+"A megnyitásához frissítenie kell a KiCad-et legalább a(z) %s verzióra (fájl "
+"formátum %s vagy későbbi)."
 
 #: common/exceptions.cpp:153
 msgid "Full error text:"
@@ -7424,7 +7428,7 @@ msgstr "Fájl nem olvasható: '%s'"
 #: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "%u / %u objektum fogadva"
 
 #: common/git/kicad_git_common.cpp:907
 #, c-format
@@ -8422,9 +8426,8 @@ msgid "Schematic PythonBOM export"
 msgstr "Kapcsolási rajz: PythonBOM exportálása"
 
 #: common/jobs/job_pcb_drc.cpp:42
-#, fuzzy
 msgid "Perform DRC"
-msgstr "A NYÁK-tervből származó szín használata"
+msgstr "DRC futtatása"
 
 #: common/jobs/job_pcb_drc.cpp:48 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 #, fuzzy
@@ -8433,7 +8436,7 @@ msgstr "3D beállítások"
 
 #: common/jobs/job_pcb_drc.cpp:52
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "NYÁK: DRC futtatása"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, fuzzy, c-format
@@ -10007,9 +10010,8 @@ msgid "Unselect All"
 msgstr "Kijelölés megszüntetése"
 
 #: common/tool/actions.cpp:376
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Válassza ki könyvtárat a mentéshez"
+msgstr "Képernyőn lévő elemek kijelölésének megszüntetése"
 
 #: common/tool/actions.cpp:382
 msgid "Paste Special..."
@@ -10070,14 +10072,12 @@ msgid "Right-justify fields and text items"
 msgstr "Mezők és szöveg elemek jobbra igazítása"
 
 #: common/tool/actions.cpp:442 eeschema/sch_edit_frame.cpp:2636
-#, fuzzy
 msgid "Expand All"
-msgstr "Frissítés"
+msgstr "Összes kibontása"
 
 #: common/tool/actions.cpp:448 eeschema/sch_edit_frame.cpp:2637
-#, fuzzy
 msgid "Collapse All"
-msgstr "Összes cseréje"
+msgstr "Összes összecsukása"
 
 #: common/tool/actions.cpp:456 eeschema/tools/sch_tool_base.h:239
 #: pcbnew/tools/edit_tool.cpp:3406
@@ -10506,9 +10506,8 @@ msgid "Performs left mouse button double-click"
 msgstr ""
 
 #: common/tool/actions.cpp:954
-#, fuzzy
 msgid "Pin Library"
-msgstr "Könyvtár"
+msgstr "Könyvtár rögzítése"
 
 #: common/tool/actions.cpp:955
 msgid "Keep the library at the top of the list"
@@ -11189,9 +11188,9 @@ msgid "Design block library '%s' deleted"
 msgstr "Terv blokk könyvtár \"%s\" törölve"
 
 #: common/widgets/design_block_pane.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Alkatrészrajzolat törlése a könyvtárból"
+msgstr "Töröljük a(z) \"%s\" terv blokkot a(z) \"%s\" könyvtárból?"
 
 #: common/widgets/design_block_pane.cpp:365
 #, c-format
@@ -11497,9 +11496,9 @@ msgid "Save Report File"
 msgstr "Jelentésfájl mentése"
 
 #: common/widgets/wx_html_report_panel.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nem lehet írni a '%s' napló fájlt."
+msgstr "Nem lehet írni a '%s' jelentés fájlt."
 
 #: common/widgets/wx_html_report_panel.cpp:331
 msgid "File save error"
@@ -11813,15 +11812,13 @@ msgstr ""
 "Alkatrész %s: a(z) %s alkatrészrajzolat nem található egyik könyvtárban sem."
 
 #: cvpcb/auto_associate.cpp:300
-#, fuzzy
 msgid "CvPcb Warning"
-msgstr "Alkatrésztársító \"ERC\" figyelmeztetés"
+msgstr "CvPcb figyelmeztetés"
 
 #: cvpcb/cvpcb_mainframe.cpp:70 cvpcb/cvpcb_mainframe.cpp:85
 #: cvpcb/menubar.cpp:51
-#, fuzzy
 msgid "Assign Footprints"
-msgstr "Alkatrészrajzolat hozzárendelés"
+msgstr "Alkatrészrajzolat hozzárendelése"
 
 #: cvpcb/cvpcb_mainframe.cpp:120 pcbnew/dialogs/panel_fp_lib_table.cpp:911
 msgid "Footprint Libraries"
@@ -12673,20 +12670,20 @@ msgstr ""
 "KiCad will attempt to add an appropriate extension to the command line "
 "automatically, but an extension may need to be added by hand.\n"
 "\n"
-"Python is the recommended tool for BOM generator scripts, but other tools "
-"can also be used.\n"
+"Az anyagjegyzéket generáló szkriptek javasolt nyelve a Python, de más "
+"eszközök is használhatóak.\n"
 "\n"
 "## Example command lines for Python scripts\n"
 "\n"
-"The command line format for a Python script is of the form:\n"
+"A Python szkript parancssorból történő meghívása:\n"
 "\n"
 "```\n"
 "python <szkript fájlnév> <bemeneti fájlnév> <kimeneti fájlnév>\n"
 "```\n"
 "\n"
-"Windows alatt, ha a kívánt CSV generátor szkript `C:"
-"\\Users\\felhasználónév\\kicad\\saját_python_szkriptem.py`, a parancssorból "
-"való meghívása:\n"
+"Windows alatt, ha a kívánt CSV generátor szkript `C:\\Users\\f"
+"elhasználónév\\kicad\\saját_python_szkriptem.py`, a parancssorból való "
+"meghívása:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\felhasználónév\\kicad\\saját_python_szkriptem.py "
@@ -12697,8 +12694,8 @@ msgstr ""
 "saját_python_szkriptem.py`, a parancssorból való meghívása:\n"
 "\n"
 "```\n"
-"python /home/felhasználónév/kicad/saját_python_szkriptem.py \"%I\" \"%O."
-"csv\"\n"
+"python /home/felhasználónév/kicad/saját_python_szkriptem.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Javasoljuk, hogy az argumentumokat tegye idézőjelbe (`\"`), arra az esetre, "
@@ -12818,9 +12815,8 @@ msgid "*** symbol not found ***"
 msgstr "*** rajzjel nem található ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:620
-#, fuzzy
 msgid "*** new symbol has too few units ***"
-msgstr "*** alkatrészrajzolat nem található ***"
+msgstr "*** túl kevés részegység az új rajzjelben ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:874
 #, c-format
@@ -12835,12 +12831,12 @@ msgstr "%s rajzjelek frissítése (\"%s\" --> \"%s\")"
 #: eeschema/dialogs/dialog_change_symbols.cpp:891
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "%s szimbólum lecserélése erről: '%s' erre: '%s'"
+msgstr "%s rajzjel lecserélése (\"%s\" -> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "%s érték módosítása (\"%s\" -> \"%s\")"
+msgstr "%s rajzjelek lecserélése (\"%s\" -> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
 msgid "Update all symbols in schematic"
