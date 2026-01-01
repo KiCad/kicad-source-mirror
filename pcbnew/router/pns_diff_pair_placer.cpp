@@ -386,8 +386,11 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
         if( m_shove->HeadsModified( 1 ))
             nLine = m_shove->GetModifiedHead(1);
 
-        if( !m_currentNode->CheckColliding( &m_currentTrace.PLine() ) &&
-            !m_currentNode->CheckColliding( &m_currentTrace.NLine() ) )
+        // Update m_currentTrace with the shoved shapes so FixRoute() commits correct geometry
+        m_currentTrace.SetShape( pLine.CLine(), nLine.CLine() );
+
+        if( !m_currentNode->CheckColliding( &pLine ) &&
+            !m_currentNode->CheckColliding( &nLine ) )
         {
             m_fitOk = true;
         }
