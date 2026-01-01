@@ -76,6 +76,30 @@ wxString GenLegalNetName( const wxString& aStr )
 }
 
 
+wxString GenLegalComponentName( const wxString& aStr )
+{
+    wxString out;
+    out.reserve( aStr.length() );
+
+    for( size_t ii = 0; ii < aStr.Len(); ++ii )
+    {
+        wxUniChar ch = aStr[ii];
+
+        // ODB++ component names must be printable ASCII (33-126), no spaces or semicolons
+        if( ch >= 33 && ch <= 126 && ch != ';' )
+        {
+            out.append( 1, static_cast<char>( ch.IsAscii() ? ch.GetValue() : '_' ) );
+        }
+        else
+        {
+            out.append( 1, '_' ); // Replace invalid characters with underscore
+        }
+    }
+
+    return out;
+}
+
+
 // The names of these ODB++ entities must comply with
 // the rules for legal entity names:
 // product, model, step, layer, symbol, and attribute.

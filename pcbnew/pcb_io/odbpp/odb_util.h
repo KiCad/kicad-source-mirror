@@ -76,6 +76,8 @@ wxString GenODBString( const wxString& aStr );
 
 wxString GenLegalNetName( const wxString& aStr );
 
+wxString GenLegalComponentName( const wxString& aStr );
+
 wxString GenLegalEntityName( const wxString& aStr );
 
 void RemoveWhitespace( wxString& aStr );
