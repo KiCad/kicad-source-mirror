@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 23:01+0000\n"
+"PO-Revision-Date: 2026-01-01 13:37+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -10069,7 +10069,7 @@ msgstr "Impronta non trovata."
 #: pcbnew/footprint_edit_frame.cpp:1138
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "Caricamento librerie di impronte"
+msgstr "Caricamento librerie impronte"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -16552,7 +16552,7 @@ msgstr "Piazza a&utomaticamente campi simbolo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:248
 msgid "A&llow field autoplace to change justification"
-msgstr "Permette all'autopiazzamento campi di modificare la giustificazione"
+msgstr "Permette a&ll'autopiazzamento campi di modificare la giustificazione"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:251
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -46877,9 +46877,11 @@ msgid "Generating BOM section"
 msgstr "Generazione sezione DIBA"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1260
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Impronta '%s' non trovata nella libreria '%s'."
+msgstr ""
+"Impronta %s non trovata nel dizionario; i dati DIBA possono essere "
+"incompleti."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1276
 #, c-format
@@ -46892,10 +46894,8 @@ msgid "Generating CAD data"
 msgstr "Generazione dati CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2119
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"Contorno scheda mancante o malformato. Eseguire DRC per un'analisi completa."
+msgstr "Contorno scheda mancante o malformato.  Eseguire un DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2501
 msgid ""
@@ -46937,9 +46937,8 @@ msgid "Saving file"
 msgstr "Salvataggio file"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3280
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Impossibile salvare file su buffer"
+msgstr "Impossibile salvare dati IPC-2581 su buffer."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -47791,18 +47790,21 @@ msgstr "Errore nel caricamento delle librerie impronte del progetto."
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Errore nella prima fase di inizializzazione del modulo Python '%s' tramite "
+"l'API Python C."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Console degli script"
+msgstr "Inizializzazione script"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Seconda fase di inizializzazione del modulo Python '%s' tramite l'API Python "
+"C, non riuscita."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
