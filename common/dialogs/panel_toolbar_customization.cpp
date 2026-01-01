@@ -33,6 +33,7 @@
 #include <magic_enum.hpp>
 #include <wx/listctrl.h>
 #include <wx/menu.h>
+#include <widgets/ui_common.h>
 
 // Simple IDs for the split button menu
 enum
@@ -145,14 +146,14 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
     m_btnToolMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_btnAddTool->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
-    m_insertButton->SetLabel( _( "Insert separator" ) );
+    m_insertButton->SetLabel( _( "Insert Separator" ) );
     //m_insertButton->SetWidthPadding( 4 );
 
     // Populate the browse library options
     wxMenu* insertMenu = m_insertButton->GetSplitButtonMenu();
 
-    insertMenu->Append( ID_SPACER_MENU, _( "Insert spacer" ) );
-    insertMenu->Append( ID_GROUP_MENU, _( "Insert group" ) );
+    insertMenu->Append( ID_SPACER_MENU, _( "Insert Spacer" ) );
+    insertMenu->Append( ID_GROUP_MENU, _( "Insert Group" ) );
 
     insertMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_TOOLBAR_CUSTOMIZATION::onSpacerPress,
                       this, ID_SPACER_MENU );
@@ -490,6 +491,8 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     m_actionsList->DeleteAllColumns();
     m_actionsList->InsertColumn( 0, "", wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE );
 
+    wxFont listFont = KIUI::GetInfoFont( this );
+
     int itemIdx = 0;
 
     for( const auto& [k, tool] : m_availableTools )
@@ -499,6 +502,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
         wxListItem item;
         item.SetText( tool->GetFriendlyName() );
+        item.SetFont( listFont );
         item.SetData( static_cast<void*>( tool ) );
         item.SetId( itemIdx++ );
 
@@ -520,6 +524,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
     {
         wxListItem item;
         item.SetText( control->GetUiName() );
+        item.SetFont( listFont );
         item.SetData( static_cast<void*>( control ) );
         item.SetId( itemIdx++ );
 
