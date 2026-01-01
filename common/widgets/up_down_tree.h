@@ -46,6 +46,10 @@ private:
 
 private:
     std::map<wxTreeItemId, int> m_sortMap;
+
+    // Need to use wxRTTI macros in order for OnCompareItems to work properly
+    // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
+    wxDECLARE_ABSTRACT_CLASS( UP_DOWN_TREE );
 };
 
 
