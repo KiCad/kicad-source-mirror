@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-23 05:02+0300\n"
+"POT-Creation-Date: 2026-01-01 20:31+0300\n"
 "PO-Revision-Date: 2026-01-01 13:37+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
@@ -25080,7 +25080,8 @@ msgstr "\"%s\" busz megnevezés tagjai"
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1067
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
+msgstr ""
+"Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, fuzzy, c-format
@@ -46528,7 +46529,8 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2524
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr "%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
+msgstr ""
+"%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2601
 #, c-format
