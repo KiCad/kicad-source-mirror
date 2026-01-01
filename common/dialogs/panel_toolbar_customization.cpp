@@ -514,6 +514,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
             item.SetImage( imgIdx );
         }
+        else
+        {
+            item.SetImage( -1 ); // Required on MSW
+        }
 
         m_actionsList->InsertItem( item );
     }
@@ -527,6 +531,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
         item.SetFont( listFont );
         item.SetData( static_cast<void*>( control ) );
         item.SetId( itemIdx++ );
+        item.SetImage( -1 ); // Required on MSW
 
         m_actionsList->InsertItem( item );
     }
