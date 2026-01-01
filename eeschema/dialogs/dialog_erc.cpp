@@ -49,7 +49,7 @@
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <wx/msgdlg.h>
-#include <wx/wupdlock.h>
+#include <sch_edit_tool.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
@@ -1041,7 +1041,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     // Freeze to avoid repainting the dialog, which can cause a RePaint()
     // of the screen as well
-    wxWindowUpdateLocker updateLock( this );
+    Freeze();
 
     m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
@@ -1049,6 +1049,8 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 
     SCH_SCREENS screens( m_parent->Schematic().Root() );
     screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, aIncludeExclusions );
+
+    Thaw();
 }
 
 
