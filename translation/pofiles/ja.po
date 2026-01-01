@@ -6,7 +6,7 @@
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023, 2024, 2025.
-# 2tama3 <2tama3@gmail.com>, 2023, 2024, 2025.
+# 2tama3 <2tama3@gmail.com>, 2023, 2024, 2025, 2026.
 # SubaruArai <subaruletian.arai@minebea.com>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024, 2025.
 # Yutaro Urata2 <yutarourata03@gmail.com>, 2024.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 05:04+0000\n"
+"PO-Revision-Date: 2026-01-01 13:36+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -1808,7 +1808,7 @@ msgstr "画像ファイル"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:443
 msgid "Create Drawing Sheet File"
-msgstr "図面シート ファイルを作成"
+msgstr "図面用紙 ファイルを作成"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:490
@@ -2037,7 +2037,7 @@ msgstr "Postscript (.ps ファイル)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:191
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "図面シート (.kicad_wks ファイル)"
+msgstr "図面用紙 (.kicad_wks ファイル)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
@@ -3102,7 +3102,7 @@ msgstr "インポートするプロジェクトを選択"
 
 #: common/dialogs/dialog_page_settings.cpp:83
 msgid "Preview Settings"
-msgstr "設定をプレビュー"
+msgstr "ページ プレビューの設定"
 
 #: common/dialogs/dialog_page_settings.cpp:84
 msgid "Preview Paper"
@@ -3134,7 +3134,7 @@ msgstr "タイトル ブロック"
 #: pcbnew/pcbnew_jobs_handler.cpp:2725
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "図面シート '%s' の読み込み中にエラー。"
+msgstr "図面用紙 '%s' の読み込み中にエラー。"
 
 #: common/dialogs/dialog_page_settings.cpp:646
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -3148,7 +3148,7 @@ msgstr "横向き"
 
 #: common/dialogs/dialog_page_settings.cpp:707 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr "図面シート ファイル"
+msgstr "図面用紙 ファイル"
 
 #: common/dialogs/dialog_page_settings.cpp:744
 #, c-format
@@ -3156,7 +3156,7 @@ msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
-"図面シート '%s' の読み込み中にエラー。\n"
+"図面用紙 '%s' の読み込み中にエラー。 \n"
 "%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
@@ -3212,7 +3212,7 @@ msgstr "他のシートへエクスポート"
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:246
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Drawing Sheet"
-msgstr "図面シート"
+msgstr "図面用紙"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:49
@@ -3497,7 +3497,7 @@ msgstr "モノクロ"
 #: common/dialogs/dialog_print_generic_base.cpp:52
 #: eeschema/printing/dialog_print_base.cpp:33
 msgid "Print drawing sheet"
-msgstr "図面シートを印刷"
+msgstr "図面用紙を印刷"
 
 #: common/dialogs/dialog_print_generic_base.cpp:54
 msgid "Print Frame references."
@@ -5978,7 +5978,7 @@ msgstr "ファイルを開くことができませんでした。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1010
 msgid "Drawing sheet was not fully read."
-msgstr "図面シートを完全には読み取れませんでした。"
+msgstr "図面用紙を完全には読み取れませんでした。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1037
 msgid "Ran out of memory."
@@ -6048,7 +6048,7 @@ msgstr "画像"
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
 msgid "Error writing drawing sheet file"
-msgstr "図面シート ファイルの書き込み中にエラー"
+msgstr "図面用紙 ファイルの書き込み中にエラー"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
@@ -6056,7 +6056,7 @@ msgstr "1ページ目のみ"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Subsequent Pages"
-msgstr "以降のページ"
+msgstr "次ページ目以降に"
 
 #: common/drawing_sheet/ds_draw_item.cpp:149
 msgid "All Pages"
@@ -6316,7 +6316,7 @@ msgstr "Excellon オプション"
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:576
 msgid "Drawing Sheet Editor"
-msgstr "図面シート エディター"
+msgstr "図面用紙 エディター"
 
 #: common/eda_base_frame.cpp:1482
 msgid "Packages and Updates"
@@ -8543,7 +8543,7 @@ msgstr "ハイライトを選択"
 
 #: common/layer_id.cpp:117 common/layer_id.cpp:147
 msgid "Drawing sheet"
-msgstr "図面シート"
+msgstr "図面用紙"
 
 #: common/layer_id.cpp:119
 msgid "Operating point voltages"
@@ -11311,7 +11311,7 @@ msgstr "KiCad デザインブロック ライブラリ パス"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "Drawing sheet files"
-msgstr "図面シート ファイル"
+msgstr "図面用紙 ファイル"
 
 #: common/wildcards_and_files_ext.cpp:388
 msgid "KiCad symbol footprint link files"
@@ -14913,11 +14913,11 @@ msgstr "A"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 #: pcbnew/dialogs/dialog_plot_base.cpp:81
 msgid "Plot drawing sheet"
-msgstr "図面シートを描画"
+msgstr "図面用紙を描画"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:69
 msgid "Plot the drawing sheet border and title block"
-msgstr "図面シートの境界線とタイトル ブロックを描画"
+msgstr "図面用紙の境界とタイトル ブロックを描画"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/printing/dialog_print_base.cpp:46
@@ -15491,7 +15491,7 @@ msgstr "シート ファイルに相対パスを使用しますか？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:306
 msgid "Sheet File Path"
-msgstr "図面シート ファイルのパス"
+msgstr "図面用紙 ファイルのパス"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:309
 msgid ""
@@ -18227,11 +18227,11 @@ msgstr "未接続"
 #: pcbnew/drc/drc_test_provider_misc.cpp:408
 #: pcbnew/drc/drc_test_provider_misc.cpp:428
 msgid " (in drawing sheet)"
-msgstr " (図面シート内)"
+msgstr " (図面用紙内)"
 
 #: eeschema/erc/erc.cpp:428
 msgid "Unresolved text variable in drawing sheet"
-msgstr "図面シート上のテキスト変数が未解決"
+msgstr "図面用紙上のテキスト変数が未解決"
 
 #: eeschema/erc/erc.cpp:482
 #, c-format
@@ -27620,7 +27620,7 @@ msgstr "Dコードを表示"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 #: pcbnew/dialogs/panel_edit_options_base.cpp:431
 msgid "Show page limits"
-msgstr "ページの境界を表示"
+msgstr "ページの限界を表示"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:50
 msgid "Drawing Mode"
@@ -28509,11 +28509,11 @@ msgstr "(x,y) グリッドのドットを表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:138
 msgid "Show drawing sheet border and title block"
-msgstr "図面シートの境界線とタイトル ブロックを表示"
+msgstr "図面用紙の境界とタイトル ブロックを表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
 msgid "Show drawing sheet page limits"
-msgstr "図面シートのページの境界を表示"
+msgstr "図面用紙のページの限界を表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "PCB Background"
@@ -28691,8 +28691,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
-"図面シートへのパスを指定します。設定するとプロジェクトで定義している図面シー"
-"トをオーバーライドします"
+"図面用紙へのパスを指定します。設定するとプロジェクトで定義している図面用紙を"
+"オーバーライドします"
 
 #: kicad/cli/command.cpp:186
 msgid ""
@@ -29147,7 +29147,7 @@ msgstr "ドリル/配置ファイルの原点を使ってプロット"
 #: kicad/cli/command_pcb_export_pdf.cpp:55
 #: kicad/cli/command_pcb_export_ps.cpp:59
 msgid "Include the border and title block"
-msgstr "境界線とタイトル ブロックを含める"
+msgstr "境界とタイトル ブロックを含める"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:88
 msgid "Output units, valid options: mm, in"
@@ -29442,7 +29442,7 @@ msgstr "ページを基板に合わせる"
 #: kicad/cli/command_pcb_export_svg.cpp:97
 #: kicad/cli/command_sch_export_plot.cpp:68
 msgid "No drawing sheet"
-msgstr "図面シートを含めない"
+msgstr "図面用紙を含めない"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -30126,8 +30126,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"回路図とプリント基板デザインで使われる図面シートの枠線とタイトル ブロックを編"
-"集します"
+"回路図とプリント基板デザインで使われる図面用紙の枠線とタイトル ブロックを編集"
+"します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -30345,7 +30345,7 @@ msgid ""
 "Use the Project Manager tree or launch Schematic and PCB editors to begin "
 "designing."
 msgstr ""
-"プロジェクト マネージャーのツリーを使うか、回路図エディターと基板エディターを"
+"プロジェクト マネージャーのツリーを使うか、回路図エディターとPCBエディターを"
 "起動して設計を開始します。"
 
 #: kicad/dialogs/template_default_html.h:137
@@ -31549,7 +31549,7 @@ msgstr "ビットマップ画像を回路図または PCB のコンポーネン�
 
 #: kicad/tools/kicad_manager_actions.cpp:179
 msgid "Edit drawing sheet borders and title block"
-msgstr "図面シートの境界線とタイトル ブロックを編集"
+msgstr "図面用紙の境界とタイトル ブロックを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:188
 msgid "Run Plugin and Content Manager"
@@ -31834,11 +31834,11 @@ msgstr "新規アイテム"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
 msgid "Print Drawing Sheet"
-msgstr "図面シートを印刷"
+msgstr "図面用紙を印刷"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "図面シートの印刷中にエラーが発生しました。"
+msgstr "図面用紙の印刷中にエラーが発生しました。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
 msgid "Printing"
@@ -31890,7 +31890,7 @@ msgstr "1ページ目のみ"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
-msgstr "以降のページのみ"
+msgstr "次ページ目以降に"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:161
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:469
@@ -32015,7 +32015,7 @@ msgstr "全般 オプション"
 
 #: pagelayout_editor/files.cpp:65 pagelayout_editor/files.cpp:109
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "現在の図面シートは変更されています。 保存しますか?"
+msgstr "現在の図面用紙は変更されています。 保存しますか?"
 
 #: pagelayout_editor/files.cpp:81
 #, c-format
@@ -32024,7 +32024,7 @@ msgstr "ファイル '%s' を読み込みました"
 
 #: pagelayout_editor/files.cpp:131
 msgid "Append Existing Drawing Sheet"
-msgstr "既存の図面シートを追加"
+msgstr "既存の図面用紙を追加"
 
 #: pagelayout_editor/files.cpp:142 pagelayout_editor/files.cpp:168
 #, c-format
@@ -32038,7 +32038,7 @@ msgstr "ファイル '%s' を挿入しました"
 
 #: pagelayout_editor/files.cpp:158
 msgid "Open Drawing Sheet"
-msgstr "図面シートを開く"
+msgstr "図面用紙を開く"
 
 #: pagelayout_editor/files.cpp:184 pcbnew/router/router_tool.cpp:721
 #, c-format
@@ -32047,7 +32047,7 @@ msgstr "'%s' に書き込めません。"
 
 #: pagelayout_editor/files.cpp:198
 msgid "Save Drawing Sheet As"
-msgstr "図面シートを別名で保存"
+msgstr "図面用紙を別名で保存"
 
 #: pagelayout_editor/files.cpp:273
 msgid "Layout file is read only."
@@ -32055,7 +32055,7 @@ msgstr "レイアウト ファイルは読み込み専用です。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:105
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad 図面シート エディター"
+msgstr "KiCad 図面用紙 エディター"
 
 #: pagelayout_editor/pl_editor_frame.cpp:170
 msgid "coord origin: Right Bottom page corner"
@@ -32067,7 +32067,7 @@ msgstr "プリンター情報の初期化エラー"
 
 #: pagelayout_editor/pl_editor_frame.cpp:574
 msgid "[no drawing sheet loaded]"
-msgstr "[図面シートが読み込まれていません]"
+msgstr "[図面用紙が読み込まれていません]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:785
 #, c-format
@@ -32076,11 +32076,11 @@ msgstr "原点位置: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:903
 msgid "New drawing sheet file is unsaved"
-msgstr "新しい図面シート ファイルは保存されていません"
+msgstr "新しい図面用紙 ファイルは保存されていません"
 
 #: pagelayout_editor/pl_editor_frame.cpp:907
 msgid "Drawing sheet changes are unsaved"
-msgstr "図面シートの変更は保存されていません"
+msgstr "図面用紙の変更は保存されていません"
 
 #: pagelayout_editor/pl_editor_frame.cpp:954
 msgid "Page Width"
@@ -32153,11 +32153,11 @@ msgstr "ビットマップを配置"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid "Append Existing Drawing Sheet..."
-msgstr "既存の図面シートを追加..."
+msgstr "既存の図面用紙を追加..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "現在のファイルに既存の図面シート ファイルを追加"
+msgstr "現在のファイルに既存の図面用紙 ファイルを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
@@ -52452,7 +52452,7 @@ msgstr "python フットプリント ウィザード コードの例外"
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:210
 #, c-format
 msgid "Error loading drawing sheet '%s': %s"
-msgstr "図面シート '%s' の読み込み中にエラー:%s"
+msgstr "図面用紙 '%s' の読み込み中にエラー:%s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:524
 msgid ""
@@ -55359,7 +55359,7 @@ msgstr "ゾーンを外形線で描画"
 
 #: pcbnew/tools/pcb_actions.cpp:1734
 msgid "Show only zone boundaries"
-msgstr "ゾーンの境界線のみ表示"
+msgstr "ゾーンの境界のみ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1741
 msgid "Draw Zone Fill Fracture Borders"
@@ -56592,7 +56592,7 @@ msgstr "基板のエリアに影を表示する"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
-msgstr "図面シートの境界線とタイトル ブロックを表示"
+msgstr "図面用紙の境界とタイトル ブロックを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:378
 msgid "No Layers"
@@ -57721,7 +57721,7 @@ msgstr "EDAスイート"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr "回路図設計と基板レイアウトのためのツール群"
+msgstr "回路図設計と回路基板レイアウトのためのツール群"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
@@ -57749,7 +57749,7 @@ msgstr "KiCad PCBエディター (スタンドアロン)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr "基板レイアウト エディター"
+msgstr "PCBエディター"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
@@ -57813,7 +57813,7 @@ msgstr "KiCad 回路図シンボル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad 図面シート"
+msgstr "KiCad 図面用紙"
 
 #~ msgid "Variants:"
 #~ msgstr "バリアント:"
