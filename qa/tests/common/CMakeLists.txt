@@ -87,6 +87,9 @@ set( QA_COMMON_SRCS
     io/cadstar/test_cadstar_archive_parser.cpp
 
     view/test_zoom_controller.cpp
+
+    # GAL tests
+    test_gal_xor_mode.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )

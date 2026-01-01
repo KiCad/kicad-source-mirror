@@ -69,6 +69,9 @@ using namespace KIGFX::BUILTIN_FONT;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 
+// Trace mask for XOR/difference mode debugging
+static const wxChar* const traceGalXorMode = wxT( "KICAD_GAL_XOR_MODE" );
+
 static wxGLAttributes getGLAttribs()
 {
     wxGLAttributes attribs;
@@ -2146,33 +2149,64 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
 
 void OPENGL_GAL::StartDiffLayer()
 {
+    wxLogTrace( traceGalXorMode, wxT( "OPENGL_GAL::StartDiffLayer() called" ) );
+    wxLogTrace( traceGalXorMode, wxT( "StartDiffLayer(): m_tempBuffer=%u" ), m_tempBuffer );
+
     m_currentManager->EndDrawing();
 
     if( m_tempBuffer )
     {
+        wxLogTrace( traceGalXorMode, wxT( "StartDiffLayer(): setting target to TARGET_TEMP" ) );
         SetTarget( TARGET_TEMP );
         ClearTarget( TARGET_TEMP );
+
+        // ClearTarget restores the previous compositor buffer, so we need to explicitly
+        // set the compositor to render to m_tempBuffer for the layer drawing
+        m_compositor->SetBuffer( m_tempBuffer );
+        wxLogTrace( traceGalXorMode, wxT( "StartDiffLayer(): TARGET_TEMP set and cleared, compositor buffer=%u" ),
+                    m_tempBuffer );
+    }
+    else
+    {
+        wxLogTrace( traceGalXorMode, wxT( "StartDiffLayer(): WARNING - no temp buffer!" ) );
     }
 }
 
 
 void OPENGL_GAL::EndDiffLayer()
 {
+    wxLogTrace( traceGalXorMode, wxT( "OPENGL_GAL::EndDiffLayer() called" ) );
+    wxLogTrace( traceGalXorMode, wxT( "EndDiffLayer(): m_tempBuffer=%u, m_mainBuffer=%u" ),
+                m_tempBuffer, m_mainBuffer );
+
     if( m_tempBuffer )
     {
-        glBlendEquation( GL_MAX );
-        m_currentManager->EndDrawing();
-        glBlendEquation( GL_FUNC_ADD );
+        wxLogTrace( traceGalXorMode, wxT( "EndDiffLayer(): using temp buffer path" ) );
 
-        m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer );
+        // End drawing to the temp buffer
+        m_currentManager->EndDrawing();
+
+        wxLogTrace( traceGalXorMode, wxT( "EndDiffLayer(): calling DrawBufferDifference" ) );
+
+        // Use difference compositing for true XOR/difference mode:
+        // - Where only one layer has content: shows that layer's color
+        // - Where both layers overlap with identical content: cancels out (black)
+        // - Where layers overlap with different content: shows the absolute difference
+        m_compositor->DrawBufferDifference( m_tempBuffer, m_mainBuffer );
+
+        wxLogTrace( traceGalXorMode, wxT( "EndDiffLayer(): DrawBufferDifference returned" ) );
     }
     else
     {
+        wxLogTrace( traceGalXorMode, wxT( "EndDiffLayer(): NO temp buffer, using fallback path" ) );
+
         // Fall back to imperfect alpha blending on single buffer
         glBlendFunc( GL_SRC_ALPHA, GL_ONE );
         m_currentManager->EndDrawing();
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
+
+    wxLogTrace( traceGalXorMode, wxT( "OPENGL_GAL::EndDiffLayer() complete" ) );
 }
 
 

@@ -35,11 +35,17 @@
 
 #include <gal/color4d.h>
 
+#include <glsl_xor_diff_frag.h>
+#include <glsl_xor_diff_vert.h>
+
 #include <cassert>
 #include <memory>
 #include <stdexcept>
 #include <wx/log.h>
 #include <wx/debug.h>
+
+// Trace mask for XOR/difference mode debugging
+static const wxChar* const traceGalXorMode = wxT( "KICAD_GAL_XOR_MODE" );
 
 using namespace KIGFX;
 
@@ -49,7 +55,11 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
         m_mainFbo( 0 ),
         m_depthBuffer( 0 ),
         m_curFbo( DIRECT_RENDERING ),
-        m_currentAntialiasingMode( GAL_ANTIALIASING_MODE::AA_NONE )
+        m_currentAntialiasingMode( GAL_ANTIALIASING_MODE::AA_NONE ),
+        m_differenceShader( 0 ),
+        m_diffSrcTexUniform( -1 ),
+        m_diffDstTexUniform( -1 ),
+        m_differenceShaderInitialized( false )
 {
     m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
 }
@@ -398,6 +408,14 @@ void OPENGL_COMPOSITOR::clean()
     if( glDeleteRenderbuffersEXT )
         glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
 
+    // Clean up difference shader
+    if( m_differenceShaderInitialized && m_differenceShader != 0 )
+    {
+        glDeleteProgram( m_differenceShader );
+        m_differenceShader = 0;
+        m_differenceShaderInitialized = false;
+    }
+
     m_initialized = false;
 }
 
@@ -411,6 +429,7 @@ int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
     }
 }
 
+
 VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
 {
     switch( m_currentAntialiasingMode )
@@ -418,4 +437,270 @@ VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
     case GAL_ANTIALIASING_MODE::AA_HIGHQUALITY: return VECTOR2D( 0.5, -0.5 );
     default:                                      return VECTOR2D( 0, 0 );
     }
+}
+
+
+bool OPENGL_COMPOSITOR::initDifferenceShader()
+{
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader() called, initialized=%d" ),
+                m_differenceShaderInitialized );
+
+    if( m_differenceShaderInitialized )
+    {
+        wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): already initialized, returning" ) );
+        return true;
+    }
+
+    const char* vertexShaderSrc = BUILTIN_SHADERS::glsl_xor_diff_vert.c_str();
+    const char* fragmentShaderSrc = BUILTIN_SHADERS::glsl_xor_diff_frag.c_str();
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): creating shaders" ) );
+    wxLogTrace( traceGalXorMode, wxT( "Vertex shader source:\n%s" ), vertexShaderSrc );
+    wxLogTrace( traceGalXorMode, wxT( "Fragment shader source:\n%s" ), fragmentShaderSrc );
+
+    GLuint vertexShader = glCreateShader( GL_VERTEX_SHADER );
+    GLuint fragmentShader = glCreateShader( GL_FRAGMENT_SHADER );
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): vertexShader=%u, fragmentShader=%u" ),
+                vertexShader, fragmentShader );
+
+    // Compile vertex shader
+    glShaderSource( vertexShader, 1, &vertexShaderSrc, nullptr );
+    glCompileShader( vertexShader );
+
+    GLint compiled;
+    glGetShaderiv( vertexShader, GL_COMPILE_STATUS, &compiled );
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): vertex shader compile status=%d" ), compiled );
+
+    if( !compiled )
+    {
+        GLint logLen;
+        glGetShaderiv( vertexShader, GL_INFO_LOG_LENGTH, &logLen );
+
+        if( logLen > 0 )
+        {
+            char* log = new char[logLen];
+            glGetShaderInfoLog( vertexShader, logLen, nullptr, log );
+            wxLogTrace( traceGalXorMode, wxT( "Vertex shader compile error:\n%s" ), log );
+            delete[] log;
+        }
+
+        glDeleteShader( vertexShader );
+        glDeleteShader( fragmentShader );
+        return false;
+    }
+
+    // Compile fragment shader
+    glShaderSource( fragmentShader, 1, &fragmentShaderSrc, nullptr );
+    glCompileShader( fragmentShader );
+
+    glGetShaderiv( fragmentShader, GL_COMPILE_STATUS, &compiled );
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): fragment shader compile status=%d" ), compiled );
+
+    if( !compiled )
+    {
+        GLint logLen;
+        glGetShaderiv( fragmentShader, GL_INFO_LOG_LENGTH, &logLen );
+
+        if( logLen > 0 )
+        {
+            char* log = new char[logLen];
+            glGetShaderInfoLog( fragmentShader, logLen, nullptr, log );
+            wxLogTrace( traceGalXorMode, wxT( "Fragment shader compile error:\n%s" ), log );
+            delete[] log;
+        }
+
+        glDeleteShader( vertexShader );
+        glDeleteShader( fragmentShader );
+        return false;
+    }
+
+    // Create and link program
+    m_differenceShader = glCreateProgram();
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): created program=%u" ), m_differenceShader );
+
+    glAttachShader( m_differenceShader, vertexShader );
+    glAttachShader( m_differenceShader, fragmentShader );
+    glLinkProgram( m_differenceShader );
+
+    GLint linked;
+    glGetProgramiv( m_differenceShader, GL_LINK_STATUS, &linked );
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): link status=%d" ), linked );
+
+    // Clean up shader objects (they're now part of the program)
+    glDeleteShader( vertexShader );
+    glDeleteShader( fragmentShader );
+
+    if( !linked )
+    {
+        GLint logLen;
+        glGetProgramiv( m_differenceShader, GL_INFO_LOG_LENGTH, &logLen );
+
+        if( logLen > 0 )
+        {
+            char* log = new char[logLen];
+            glGetProgramInfoLog( m_differenceShader, logLen, nullptr, log );
+            wxLogTrace( traceGalXorMode, wxT( "Shader program link error:\n%s" ), log );
+            delete[] log;
+        }
+
+        glDeleteProgram( m_differenceShader );
+        m_differenceShader = 0;
+        return false;
+    }
+
+    // Get uniform locations
+    m_diffSrcTexUniform = glGetUniformLocation( m_differenceShader, "srcTex" );
+    m_diffDstTexUniform = glGetUniformLocation( m_differenceShader, "dstTex" );
+
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): srcTexUniform=%d, dstTexUniform=%d" ),
+                m_diffSrcTexUniform, m_diffDstTexUniform );
+
+    m_differenceShaderInitialized = true;
+    wxLogTrace( traceGalXorMode, wxT( "initDifferenceShader(): SUCCESS" ) );
+    return true;
+}
+
+
+void OPENGL_COMPOSITOR::drawFullScreenQuad()
+{
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+    glLoadIdentity();
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    glBegin( GL_TRIANGLES );
+    glTexCoord2f( 0.0f, 1.0f );
+    glVertex2f( -1.0f, 1.0f );
+    glTexCoord2f( 0.0f, 0.0f );
+    glVertex2f( -1.0f, -1.0f );
+    glTexCoord2f( 1.0f, 1.0f );
+    glVertex2f( 1.0f, 1.0f );
+
+    glTexCoord2f( 1.0f, 1.0f );
+    glVertex2f( 1.0f, 1.0f );
+    glTexCoord2f( 0.0f, 0.0f );
+    glVertex2f( -1.0f, -1.0f );
+    glTexCoord2f( 1.0f, 0.0f );
+    glVertex2f( 1.0f, -1.0f );
+    glEnd();
+
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+    glPopMatrix();
+}
+
+
+void OPENGL_COMPOSITOR::DrawBufferDifference( unsigned int aSourceHandle, unsigned int aDestHandle )
+{
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference() called: src=%u, dst=%u" ),
+                aSourceHandle, aDestHandle );
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): initialized=%d, usedBuffers=%u" ),
+                m_initialized, usedBuffers() );
+
+    wxCHECK( m_initialized && aSourceHandle != 0 && aSourceHandle <= usedBuffers(), /* void */ );
+    wxCHECK( aDestHandle != 0 && aDestHandle <= usedBuffers(), /* void */ );
+
+    // Initialize shader on first use
+    if( !initDifferenceShader() )
+    {
+        wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): shader init FAILED, falling back" ) );
+        // Fallback to regular DrawBuffer if shader fails
+        DrawBuffer( aSourceHandle, aDestHandle );
+        return;
+    }
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): shader initialized OK" ) );
+
+    // Get the texture targets directly from the buffers
+    GLuint srcTexture = m_buffers[aSourceHandle - 1].textureTarget;
+    GLuint dstTexture = m_buffers[aDestHandle - 1].textureTarget;
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): srcTexture=%u, dstTexture=%u" ),
+                srcTexture, dstTexture );
+
+    // We only need to copy the destination since we're writing to it.
+    // The source can be read directly via texture sampling
+    VECTOR2I dims = m_buffers[aDestHandle - 1].dimensions;
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): buffer dims=%dx%d" ), dims.x, dims.y );
+
+    // Create temp texture for destination copy (we can't read and write same texture)
+    GLuint dstTempTex;
+    glGenTextures( 1, &dstTempTex );
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): created dstTempTex=%u" ), dstTempTex );
+
+    glActiveTexture( GL_TEXTURE1 );
+    glBindTexture( GL_TEXTURE_2D, dstTempTex );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, dims.x, dims.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
+    checkGlError( "allocating dst temp texture", __FILE__, __LINE__ );
+
+    // Copy destination buffer to temp texture
+    bindFb( m_mainFbo );
+    GLenum destAttachment = m_buffers[aDestHandle - 1].attachmentPoint;
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): dest attachment point=0x%X" ), destAttachment );
+
+    glReadBuffer( destAttachment );
+    checkGlError( "setting read buffer for dst copy", __FILE__, __LINE__ );
+
+    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, dims.x, dims.y );
+    checkGlError( "copying dest to temp texture", __FILE__, __LINE__ );
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): copied dest buffer to dstTempTex" ) );
+
+    // Set up for rendering with difference shader
+    SetBuffer( aDestHandle );
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_BLEND );
+
+    // Use the difference shader
+    glUseProgram( m_differenceShader );
+    checkGlError( "using difference shader program", __FILE__, __LINE__ );
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): activated shader program=%u" ),
+                m_differenceShader );
+
+    // Bind source texture to unit 0
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): binding srcTexture=%u to unit 0" ), srcTexture );
+
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, srcTexture );
+    glUniform1i( m_diffSrcTexUniform, 0 );
+    checkGlError( "binding source texture for XOR mode", __FILE__, __LINE__ );
+
+    // Bind destination copy to unit 1
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): binding dstTempTex=%u to unit 1" ), dstTempTex );
+
+    glActiveTexture( GL_TEXTURE1 );
+    glBindTexture( GL_TEXTURE_2D, dstTempTex );
+    glUniform1i( m_diffDstTexUniform, 1 );
+    checkGlError( "binding dest texture for XOR mode", __FILE__, __LINE__ );
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): drawing fullscreen quad" ) );
+
+    // Important: Set GL_TEXTURE0 as active before drawing so that glTexCoord2f
+    // sets gl_MultiTexCoord0 (which the vertex shader reads), not gl_MultiTexCoord1
+    glActiveTexture( GL_TEXTURE0 );
+
+    // Draw the fullscreen quad
+    drawFullScreenQuad();
+    checkGlError( "drawing fullscreen quad for XOR mode", __FILE__, __LINE__ );
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): cleanup" ) );
+
+    // Cleanup
+    glUseProgram( 0 );
+    glDeleteTextures( 1, &dstTempTex );
+
+    glActiveTexture( GL_TEXTURE0 );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    wxLogTrace( traceGalXorMode, wxT( "DrawBufferDifference(): COMPLETE" ) );
 }

@@ -991,7 +991,7 @@ void CAIRO_GAL::StartDiffLayer()
 
 void CAIRO_GAL::EndDiffLayer()
 {
-    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer, CAIRO_OPERATOR_ADD );
+    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer, CAIRO_OPERATOR_DIFFERENCE );
 }
 
 
