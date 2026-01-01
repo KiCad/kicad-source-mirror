@@ -338,6 +338,13 @@ extern KICOMMON_API const wxChar* const traceLibraries;
  */
 extern KICOMMON_API const wxChar* const traceSchMove;
 
+/**
+ * Flag to enable tracing of circular symbol inheritance detection.
+ *
+ * Use "KICAD_SYMBOL_INHERITANCE" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSymbolInheritance;
+
 ///@}
 
 /**

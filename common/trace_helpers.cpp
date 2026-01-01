@@ -72,6 +72,7 @@ const wxChar* const tracePdfPlotter = wxT( "KICAD_PDF_PLOTTER" );
 const wxChar* const traceSnap = wxT( "KICAD_SNAP" );
 const wxChar* const traceLibraries = wxT( "KICAD_LIBRARIES" );
 const wxChar* const traceSchMove = wxT( "KICAD_SCH_MOVE" );
+const wxChar* const traceSymbolInheritance = wxT( "KICAD_SYMBOL_INHERITANCE" );
 
 wxString dump( const wxArrayString& aArray )
 {

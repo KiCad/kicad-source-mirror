@@ -46,14 +46,66 @@
 #include <advanced_config.h>
 
 
+/**
+ * Helper to safely get the root symbol, detecting and logging circular inheritance.
+ *
+ * @param aSymbol The symbol to start from
+ * @param aCallerName Name of the calling function for logging
+ * @return The root symbol, or the input symbol if a cycle is detected or no parent exists
+ */
+static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol,
+                                                       const char* aCallerName )
+{
+    std::set<const LIB_SYMBOL*> visited;
+    visited.insert( aSymbol );
+
+    std::shared_ptr<LIB_SYMBOL> current = aSymbol->SharedPtr();
+    std::shared_ptr<LIB_SYMBOL> parent = aSymbol->GetParent().lock();
+
+    while( parent )
+    {
+        if( visited.count( parent.get() ) )
+        {
+            // Build chain description for logging
+            wxString chain = aSymbol->GetName();
+
+            for( const LIB_SYMBOL* sym : visited )
+            {
+                if( sym != aSymbol )
+                    chain += wxT( " -> " ) + sym->GetName();
+            }
+
+            chain += wxT( " -> " ) + parent->GetName() + wxT( " (CYCLE)" );
+
+            wxLogTrace( traceSymbolInheritance,
+                        wxT( "%s: Circular inheritance detected in symbol '%s' (lib: %s). "
+                             "Chain: %s" ),
+                        aCallerName, aSymbol->GetName(),
+                        aSymbol->GetLibId().GetLibNickname().wx_str(), chain );
+
+            // Return current (last valid symbol before cycle)
+            return current;
+        }
+
+        visited.insert( parent.get() );
+        current = parent;
+        parent = parent->GetParent().lock();
+    }
+
+    return current;
+}
+
+
 wxString LIB_SYMBOL::GetShownDescription( int aDepth ) const
 {
     wxString shownText = GetDescriptionField().GetShownText( false, aDepth );
 
     if( shownText.IsEmpty() && IsDerived() )
     {
-        if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-            shownText = parent->GetShownDescription( aDepth );
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            shownText = root->GetDescriptionField().GetShownText( false, aDepth );
     }
 
     return shownText;
@@ -282,19 +334,59 @@ LIB_SYMBOL* LIB_SYMBOL::GetDummy()
 
 unsigned LIB_SYMBOL::GetInheritanceDepth() const
 {
-    if( const std::shared_ptr<LIB_SYMBOL> parent = GetParent().lock() )
-        return parent->GetInheritanceDepth() + 1;
+    unsigned depth = 0;
+    std::set<const LIB_SYMBOL*> visited;
+    visited.insert( this );
 
-    return 0;
+    std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
+
+    while( parent )
+    {
+        // Cycle detected - parent chain points back to an already visited symbol
+        if( visited.count( parent.get() ) )
+        {
+            wxLogTrace( traceSymbolInheritance,
+                        wxT( "GetInheritanceDepth: Circular inheritance detected in symbol '%s' "
+                             "(lib: %s)" ),
+                        m_name, m_libId.GetLibNickname().wx_str() );
+            break;
+        }
+
+        visited.insert( parent.get() );
+        depth++;
+        parent = parent->m_parent.lock();
+    }
+
+    return depth;
 }
 
 
 std::shared_ptr<LIB_SYMBOL> LIB_SYMBOL::GetRootSymbol() const
 {
-    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->GetRootSymbol();
+    std::set<const LIB_SYMBOL*> visited;
+    visited.insert( this );
 
-    return m_me;
+    std::shared_ptr<LIB_SYMBOL> current = m_me;
+    std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
+
+    while( parent )
+    {
+        // Cycle detected - parent chain points back to an already visited symbol
+        if( visited.count( parent.get() ) )
+        {
+            wxLogTrace( traceSymbolInheritance,
+                        wxT( "GetRootSymbol: Circular inheritance detected in symbol '%s' "
+                             "(lib: %s)" ),
+                        m_name, m_libId.GetLibNickname().wx_str() );
+            break;
+        }
+
+        visited.insert( parent.get() );
+        current = parent;
+        parent = parent->m_parent.lock();
+    }
+
+    return current;
 }
 
 
@@ -338,9 +430,36 @@ void LIB_SYMBOL::SetName( const wxString& aName )
 void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
 {
     if( aParent )
+    {
+        // Prevent circular inheritance by checking if aParent is derived from this symbol
+        std::set<const LIB_SYMBOL*> visited;
+        visited.insert( this );
+
+        std::shared_ptr<LIB_SYMBOL> ancestor = aParent->SharedPtr();
+
+        while( ancestor )
+        {
+            if( visited.count( ancestor.get() ) )
+            {
+                wxLogTrace( traceSymbolInheritance,
+                            wxT( "SetParent: Rejecting parent '%s' for symbol '%s' - would create "
+                                 "circular inheritance (lib: %s)" ),
+                            aParent->GetName(), m_name, m_libId.GetLibNickname().wx_str() );
+
+                // Don't set the parent - it would create circular inheritance
+                return;
+            }
+
+            visited.insert( ancestor.get() );
+            ancestor = ancestor->m_parent.lock();
+        }
+
         m_parent = aParent->SharedPtr();
+    }
     else
+    {
         m_parent.reset();
+    }
 }
 
 
@@ -350,16 +469,88 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
 
     if( IsDerived() )
     {
+        // Build parent chain with cycle detection - collect from this symbol up to root
+        std::vector<const LIB_SYMBOL*> parentChain;
+        std::set<const LIB_SYMBOL*> visited;
+        visited.insert( this );
+
         std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
 
         wxCHECK_MSG( parent, retv, wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
-        // Copy the parent.
-        if( parent->IsDerived() )
-            retv = parent->Flatten();
-        else
-            retv = std::make_unique<LIB_SYMBOL>( *parent.get() );
+        while( parent )
+        {
+            // Cycle detected - parent chain points back to an already visited symbol
+            if( visited.count( parent.get() ) )
+            {
+                wxLogTrace( traceSymbolInheritance,
+                            wxT( "Flatten: Circular inheritance detected in symbol '%s' (lib: %s)" ),
+                            m_name, m_libId.GetLibNickname().wx_str() );
+                break;
+            }
 
+            visited.insert( parent.get() );
+            parentChain.push_back( parent.get() );
+            parent = parent->m_parent.lock();
+        }
+
+        // Start with the root (last in chain) and work down
+        if( !parentChain.empty() )
+        {
+            retv = std::make_unique<LIB_SYMBOL>( *parentChain.back() );
+
+            // Apply each derived symbol's overrides from root down (skip the root itself)
+            for( int i = static_cast<int>( parentChain.size() ) - 2; i >= 0; --i )
+            {
+                const LIB_SYMBOL* derived = parentChain[i];
+
+                // Overwrite parent's mandatory fields for fields which are defined in derived.
+                for( FIELD_T fieldId : MANDATORY_FIELDS )
+                {
+                    if( !derived->GetField( fieldId )->GetText().IsEmpty() )
+                        *retv->GetField( fieldId ) = *derived->GetField( fieldId );
+                }
+
+                // Grab all the rest of derived symbol fields.
+                for( const SCH_ITEM& item : derived->m_drawings[SCH_FIELD_T] )
+                {
+                    const SCH_FIELD* field = static_cast<const SCH_FIELD*>( &item );
+
+                    if( field->IsMandatory() )
+                        continue;
+
+                    SCH_FIELD* newField = new SCH_FIELD( *field );
+                    newField->SetParent( retv.get() );
+
+                    SCH_FIELD* parentField = retv->GetField( field->GetName() );
+
+                    if( !parentField )
+                    {
+                        retv->AddDrawItem( newField );
+                    }
+                    else
+                    {
+                        retv->RemoveDrawItem( parentField );
+                        retv->AddDrawItem( newField );
+                    }
+                }
+
+                if( !derived->m_keyWords.IsEmpty() )
+                    retv->SetKeyWords( derived->m_keyWords );
+
+                if( !derived->m_fpFilters.IsEmpty() )
+                    retv->SetFPFilters( derived->m_fpFilters );
+            }
+        }
+        else
+        {
+            // Cycle detected at immediate parent level - just copy this symbol
+            retv = std::make_unique<LIB_SYMBOL>( *this );
+            retv->m_parent.reset();
+            return retv;
+        }
+
+        // Now apply this symbol's overrides (the original "this" symbol)
         retv->m_name = m_name;
         retv->SetLibId( m_libId );
 
@@ -395,8 +586,12 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
             }
         }
 
-        retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
-        retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
+        // Use this symbol's keywords/filters if set, otherwise keep inherited ones
+        if( !m_keyWords.IsEmpty() )
+            retv->SetKeyWords( m_keyWords );
+
+        if( !m_fpFilters.IsEmpty() )
+            retv->SetFPFilters( m_fpFilters );
 
         for( const auto& file : EmbeddedFileMap() )
         {
@@ -404,9 +599,13 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
             retv->AddFile( newFile );
         }
 
-        retv->SetExcludedFromSim( parent->GetExcludedFromSim() );
-        retv->SetExcludedFromBOM( parent->GetExcludedFromBOM() );
-        retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
+        // Get excluded flags from the immediate parent (first in chain)
+        if( !parentChain.empty() )
+        {
+            retv->SetExcludedFromSim( parentChain.front()->GetExcludedFromSim() );
+            retv->SetExcludedFromBOM( parentChain.front()->GetExcludedFromBOM() );
+            retv->SetExcludedFromBoard( parentChain.front()->GetExcludedFromBoard() );
+        }
 
         retv->m_parent.reset();
     }
@@ -430,8 +629,13 @@ const wxString LIB_SYMBOL::GetLibraryName() const
 
 bool LIB_SYMBOL::IsLocalPower() const
 {
-    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->IsLocalPower();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->IsLocalPower();
+    }
 
     return m_options == ENTRY_LOCAL_POWER;
 }
@@ -439,10 +643,15 @@ bool LIB_SYMBOL::IsLocalPower() const
 
 void LIB_SYMBOL::SetLocalPower()
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+    if( IsDerived() )
     {
-        parent->SetLocalPower();
-        return;
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+        {
+            root->SetLocalPower();
+            return;
+        }
     }
 
     m_options = ENTRY_LOCAL_POWER;
@@ -451,8 +660,13 @@ void LIB_SYMBOL::SetLocalPower()
 
 bool LIB_SYMBOL::IsGlobalPower() const
 {
-    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->IsGlobalPower();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->IsGlobalPower();
+    }
 
     return m_options == ENTRY_GLOBAL_POWER;
 }
@@ -466,10 +680,15 @@ bool LIB_SYMBOL::IsPower() const
 
 void LIB_SYMBOL::SetGlobalPower()
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+    if( IsDerived() )
     {
-        parent->SetGlobalPower();
-        return;
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+        {
+            root->SetGlobalPower();
+            return;
+        }
     }
 
     m_options = ENTRY_GLOBAL_POWER;
@@ -478,8 +697,13 @@ void LIB_SYMBOL::SetGlobalPower()
 
 bool LIB_SYMBOL::IsNormal() const
 {
-    if( const std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->IsNormal();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->IsNormal();
+    }
 
     return m_options == ENTRY_NORMAL;
 }
@@ -487,10 +711,15 @@ bool LIB_SYMBOL::IsNormal() const
 
 void LIB_SYMBOL::SetNormal()
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+    if( IsDerived() )
     {
-        parent->SetNormal();
-        return;
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+        {
+            root->SetNormal();
+            return;
+        }
     }
 
     m_options = ENTRY_NORMAL;
@@ -780,8 +1009,13 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 
 std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->GetGraphicalPins( aUnit, aBodyStyle );
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->GetGraphicalPins( aUnit, aBodyStyle );
+    }
 
     std::vector<SCH_PIN*> pins;
 
@@ -1005,8 +1239,13 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle, bool aIgn
 {
     BOX2I bBox; // Start with a fresh BOX2I so the Merge algorithm works
 
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        bBox = parent->GetUnitBoundingBox( aUnit, aBodyStyle, aIgnoreHiddenFields, aIgnoreLabelsOnInvisiblePins );
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            bBox = root->GetUnitBoundingBox( aUnit, aBodyStyle, aIgnoreHiddenFields, aIgnoreLabelsOnInvisiblePins );
+    }
 
     for( const SCH_ITEM& item : m_drawings )
     {
@@ -1317,8 +1556,13 @@ bool LIB_SYMBOL::HasLegacyAlternateBodyStyle() const
             return true;
     }
 
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->HasLegacyAlternateBodyStyle();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->HasLegacyAlternateBodyStyle();
+    }
 
     return false;
 }
@@ -1326,8 +1570,13 @@ bool LIB_SYMBOL::HasLegacyAlternateBodyStyle() const
 
 int LIB_SYMBOL::GetMaxPinNumber() const
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->GetMaxPinNumber();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->GetMaxPinNumber();
+    }
 
     int maxPinNumber = 0;
 
@@ -1471,8 +1720,13 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
 int LIB_SYMBOL::GetUnitCount() const
 {
-    if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
-        return parent->GetUnitCount();
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->GetUnitCount();
+    }
 
     return m_unitCount;
 }
@@ -2007,10 +2261,24 @@ const EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles() const
 
 void LIB_SYMBOL::AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack ) const
 {
+    std::set<const LIB_SYMBOL*> visited;
+    visited.insert( this );
+
     std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
 
     while( parent )
     {
+        // Cycle detected - parent chain points back to an already visited symbol
+        if( visited.count( parent.get() ) )
+        {
+            wxLogTrace( traceSymbolInheritance,
+                        wxT( "AppendParentEmbeddedFiles: Circular inheritance detected in "
+                             "symbol '%s' (lib: %s)" ),
+                        m_name, m_libId.GetLibNickname().wx_str() );
+            break;
+        }
+
+        visited.insert( parent.get() );
         aStack.push_back( parent->GetEmbeddedFiles() );
         parent = parent->GetParent().lock();
     }

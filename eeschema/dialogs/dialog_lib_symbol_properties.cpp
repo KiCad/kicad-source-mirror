@@ -389,9 +389,21 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
                     return StrNumCmp( a, b, true );
                 } );
 
-        // Do allow an inherited symbol to be derived from itself.
+        // Don't allow a symbol to be derived from itself
         if( symbolNames.Index( m_libEntry->GetName() ) != wxNOT_FOUND )
             symbolNames.Remove( m_libEntry->GetName() );
+
+        // Don't allow a symbol to be derived from any of its descendants (would create
+        // circular inheritance)
+        wxArrayString descendants;
+        m_Parent->GetLibManager().GetDerivedSymbolNames( m_libEntry->GetName(), libName,
+                                                         descendants );
+
+        for( const wxString& descendant : descendants )
+        {
+            if( symbolNames.Index( descendant ) != wxNOT_FOUND )
+                symbolNames.Remove( descendant );
+        }
 
         m_inheritanceSelectCombo->Append( symbolNames );
 
