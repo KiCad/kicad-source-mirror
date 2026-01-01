@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 23:01+0000\n"
+"PO-Revision-Date: 2026-01-01 13:37+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -11918,9 +11918,8 @@ msgid "*** symbol not found ***"
 msgstr "*** rajzjel nem található ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:620
-#, fuzzy
 msgid "*** new symbol has too few units ***"
-msgstr "*** alkatrészrajzolat nem található ***"
+msgstr "*** túl kevés részegység az új rajzjelben ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:890
 #, c-format
@@ -11935,12 +11934,12 @@ msgstr "%s rajzjelek frissítése (\"%s\" --> \"%s\")"
 #: eeschema/dialogs/dialog_change_symbols.cpp:907
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "%s szimbólum lecserélése erről: '%s' erre: '%s'"
+msgstr "%s rajzjel lecserélése (\"%s\" -> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "%s érték módosítása (\"%s\" -> \"%s\")"
+msgstr "%s rajzjelek lecserélése (\"%s\" -> \"%s\")"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
 msgid "Update all symbols in schematic"
