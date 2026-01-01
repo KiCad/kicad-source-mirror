@@ -19,6 +19,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <widgets/text_ctrl_eval.h>
 #include <wx/spinbutt.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -41,30 +42,30 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 
 	protected:
 		wxStaticText* m_staticText1;
-		wxTextCtrl* xscale;
+		TEXT_CTRL_EVAL* xscale;
 		wxSpinButton* m_spinXscale;
 		wxStaticText* m_staticText2;
-		wxTextCtrl* yscale;
+		TEXT_CTRL_EVAL* yscale;
 		wxSpinButton* m_spinYscale;
 		wxStaticText* m_staticText3;
-		wxTextCtrl* zscale;
+		TEXT_CTRL_EVAL* zscale;
 		wxSpinButton* m_spinZscale;
 		wxStaticText* m_staticText11;
-		wxTextCtrl* xrot;
+		TEXT_CTRL_EVAL* xrot;
 		wxSpinButton* m_spinXrot;
 		wxStaticText* m_staticText21;
-		wxTextCtrl* yrot;
+		TEXT_CTRL_EVAL* yrot;
 		wxSpinButton* m_spinYrot;
 		wxStaticText* m_staticText31;
-		wxTextCtrl* zrot;
+		TEXT_CTRL_EVAL* zrot;
 		wxSpinButton* m_spinZrot;
 		wxStaticText* m_staticText12;
-		wxTextCtrl* xoff;
+		TEXT_CTRL_EVAL* xoff;
 		wxSpinButton* m_spinXoffset;
 		wxStaticText* m_staticText22;
 		wxSpinButton* m_spinYoffset;
 		wxStaticText* m_staticText32;
-		wxTextCtrl* zoff;
+		TEXT_CTRL_EVAL* zoff;
 		wxSpinButton* m_spinZoffset;
 		wxSlider* m_opacity;
 		wxStaticText* m_previewLabel;
@@ -105,7 +106,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 
 
 	public:
-		wxTextCtrl* yoff;
+		TEXT_CTRL_EVAL* yoff;
 
 		PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
