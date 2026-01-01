@@ -25,11 +25,50 @@
 #include <wx/filename.h>
 #include <wx/mstream.h>
 #include <vector>
+#include <cstdlib>
+
+/**
+ * Check if a display is available for clipboard operations.
+ * On Linux/GTK, clipboard operations require a display connection.
+ * In headless CI environments, this is not available.
+ */
+static bool IsDisplayAvailable()
+{
+#ifdef __linux__
+    // Check DISPLAY environment variable - if not set, we're headless
+    const char* display = std::getenv( "DISPLAY" );
+    const char* wayland = std::getenv( "WAYLAND_DISPLAY" );
+
+    if( ( display == nullptr || display[0] == '\0' )
+        && ( wayland == nullptr || wayland[0] == '\0' ) )
+    {
+        return false;
+    }
+
+#endif
+    return true;
+}
+
+/**
+ * Macro to skip clipboard tests in headless environments.
+ * This prevents GTK assertions when no display is available.
+ */
+#define SKIP_IF_HEADLESS()                                                                    \
+    do                                                                                        \
+    {                                                                                         \
+        if( !IsDisplayAvailable() )                                                           \
+        {                                                                                     \
+            BOOST_TEST_MESSAGE( "Skipping test - no display available (headless environment)" ); \
+            return;                                                                           \
+        }                                                                                     \
+    } while( 0 )
 
 BOOST_AUTO_TEST_SUITE( ClipboardTests )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_BasicText )
 {
+    SKIP_IF_HEADLESS();
+
     std::string testText = "Basic clipboard test";
     bool result = SaveClipboard( testText );
 
@@ -43,6 +82,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_BasicText )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_EmptyString )
 {
+    SKIP_IF_HEADLESS();
+
     std::string emptyText = "";
     bool result = SaveClipboard( emptyText );
 
@@ -55,6 +96,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_EmptyString )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_UTF8Characters )
 {
+    SKIP_IF_HEADLESS();
+
     std::string utf8Text = "Héllo Wörld! 你好 🚀";
     bool result = SaveClipboard( utf8Text );
 
@@ -67,6 +110,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_UTF8Characters )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_LargeText )
 {
+    SKIP_IF_HEADLESS();
+
     std::string largeText( 10000, 'A' );
     largeText += "END";
     bool result = SaveClipboard( largeText );
@@ -80,6 +125,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_LargeText )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_SpecialCharacters )
 {
+    SKIP_IF_HEADLESS();
+
     std::string specialText = "Line1\nLine2\tTabbed\r\nWindows newline";
     bool result = SaveClipboard( specialText );
 
@@ -92,6 +139,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_SpecialCharacters )
 
 BOOST_AUTO_TEST_CASE( GetClipboardUTF8_EmptyClipboard )
 {
+    SKIP_IF_HEADLESS();
+
     // Clear clipboard first
     if( wxTheClipboard->Open() )
     {
@@ -105,6 +154,8 @@ BOOST_AUTO_TEST_CASE( GetClipboardUTF8_EmptyClipboard )
 
 BOOST_AUTO_TEST_CASE( GetClipboardUTF8_NonTextData )
 {
+    SKIP_IF_HEADLESS();
+
     // This test verifies behavior when clipboard contains non-text data
     // Implementation depends on system behavior - may return empty string
     std::string result = GetClipboardUTF8();
@@ -114,6 +165,8 @@ BOOST_AUTO_TEST_CASE( GetClipboardUTF8_NonTextData )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_SimpleGrid )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> testData = {
         { wxS("A1"), wxS("B1"), wxS("C1") },
         { wxS("A2"), wxS("B2"), wxS("C2") },
@@ -144,6 +197,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_SimpleGrid )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_EmptyGrid )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> emptyData;
     bool result = SaveTabularDataToClipboard( emptyData );
 
@@ -161,6 +216,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_EmptyGrid )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_SingleCell )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> singleCell = {
         { wxS("OnlyCell") }
     };
@@ -183,6 +240,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_SingleCell )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_WithCommas )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> dataWithCommas = {
         { wxS("Value, with comma"), wxS("Normal") },
         { wxS("Another, comma"), wxS("Also normal") }
@@ -212,6 +271,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_WithCommas )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_WithQuotes )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> dataWithQuotes = {
         { wxS("\"Quoted value\""), wxS("Normal") },
         { wxS("Value with \"inner\" quotes"), wxS("Plain") }
@@ -234,6 +295,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_WithQuotes )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_WithNewlines )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> dataWithNewlines = {
         { wxS("Line1\nLine2"), wxS("Normal") },
         { wxS("Single line"), wxS("Another\nmultiline") }
@@ -256,6 +319,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_WithNewlines )
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_IrregularGrid )
 {
+    SKIP_IF_HEADLESS();
+
     std::vector<std::vector<wxString>> irregularData = {
         { wxS("A1"), wxS("B1"), wxS("C1"), wxS("D1") },
         { wxS("A2"), wxS("B2") },
@@ -286,6 +351,8 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_IrregularGrid )
 
 BOOST_AUTO_TEST_CASE( GetTabularDataFromClipboard_InvalidData )
 {
+    SKIP_IF_HEADLESS();
+
     // Save non-tabular text to clipboard
     std::string invalidText = "This is not tabular data\nJust some text";
     SaveClipboard( invalidText );
@@ -300,6 +367,8 @@ BOOST_AUTO_TEST_CASE( GetTabularDataFromClipboard_InvalidData )
 
 BOOST_AUTO_TEST_CASE( GetImageFromClipboard_NoImage )
 {
+    SKIP_IF_HEADLESS();
+
     // Clear clipboard
     if( wxTheClipboard->Open() )
     {
@@ -313,6 +382,8 @@ BOOST_AUTO_TEST_CASE( GetImageFromClipboard_NoImage )
 
 BOOST_AUTO_TEST_CASE( GetImageFromClipboard_TextInClipboard )
 {
+    SKIP_IF_HEADLESS();
+
     // Put text in clipboard
     SaveClipboard( "This is text, not an image" );
 
@@ -322,6 +393,8 @@ BOOST_AUTO_TEST_CASE( GetImageFromClipboard_TextInClipboard )
 
 BOOST_AUTO_TEST_CASE( Clipboard_MultipleSaveOperations )
 {
+    SKIP_IF_HEADLESS();
+
     // Test multiple sequential save operations
     std::vector<std::string> testStrings = {
         "First string",
@@ -343,6 +416,8 @@ BOOST_AUTO_TEST_CASE( Clipboard_MultipleSaveOperations )
 
 BOOST_AUTO_TEST_CASE( Clipboard_ConcurrentAccess )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that clipboard operations are properly synchronized
     std::string testText1 = "Concurrent test 1";
     std::string testText2 = "Concurrent test 2";
@@ -359,6 +434,8 @@ BOOST_AUTO_TEST_CASE( Clipboard_ConcurrentAccess )
 
 BOOST_AUTO_TEST_CASE( Clipboard_FlushBehavior )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that Flush() allows data to persist after the application
     std::string persistentText = "This should persist after flush";
     bool result = SaveClipboard( persistentText );
@@ -373,6 +450,8 @@ BOOST_AUTO_TEST_CASE( Clipboard_FlushBehavior )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_EmptyMimeDataFallsBack )
 {
+    SKIP_IF_HEADLESS();
+
     // When MIME data is empty, should fall back to basic SaveClipboard
     std::string testText = "Fallback test with empty MIME data";
     std::vector<CLIPBOARD_MIME_DATA> emptyMimeData;
@@ -388,6 +467,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_EmptyMimeDataFallsBack )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_KicadFormat )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that application/kicad MIME type is prioritized when reading
     std::string textData = "Plain text representation";
     std::string kicadData = "KiCad native format data";
@@ -410,6 +491,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_KicadFormat )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_MultipleMimeTypes )
 {
+    SKIP_IF_HEADLESS();
+
     // Test saving with multiple MIME types
     std::string textData = "Text for clipboard";
     std::string kicadData = "KiCad data for clipboard";
@@ -445,6 +528,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_MultipleMimeTypes )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_NoKicadFormat )
 {
+    SKIP_IF_HEADLESS();
+
     // When no application/kicad format, should fall back to text
     std::string textData = "Text for clipboard without kicad format";
     std::string svgData = "<svg></svg>";
@@ -467,6 +552,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_NoKicadFormat )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_UTF8InKicadFormat )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that UTF8 characters are preserved in KiCad MIME format
     std::string textData = "Plain text";
     std::string kicadData = "KiCad data with UTF8: 你好世界 🔧";
@@ -488,6 +575,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_UTF8InKicadFormat )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_SExpressionRoundTrip )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that S-expression data (like schematic content) round-trips correctly
     // This simulates the actual copy/paste flow for schematic elements
     std::string sExprData =
@@ -517,6 +606,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_SExpressionRoundTrip )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_EmptyDataSkipped )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that entries with empty data are skipped without error
     std::string textData = "Text with empty MIME entries";
 
@@ -545,6 +636,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_EmptyDataSkipped )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_WithMimeData_PngHandledAsBitmap )
 {
+    SKIP_IF_HEADLESS();
+
     // Test that PNG data is handled correctly (converted to bitmap format)
     // Note: This test verifies the function doesn't crash with PNG data
     // Full bitmap round-trip testing requires a display connection
