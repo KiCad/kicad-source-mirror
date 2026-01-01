@@ -182,13 +182,10 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeig
         if( info.theme != m_theme )
             continue;
 
-        if( aDefHeight > 0 && info.height < aDefHeight )
-            continue;
+        wxImage img = getImage( info.id, info.height );
 
         if( info.height == aDefHeight )
             hasDefSize = true;
-
-        wxImage img = getImage( info.id, info.height );
 
         if( info.height > largestHeight )
         {
@@ -196,10 +193,11 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeig
             largestImage = img;
         }
 
-        bmps.push_back( wxBitmap( img ) );
+        if( info.height >= aDefHeight )
+            bmps.push_back( wxBitmap( img ) );
     }
 
-    if( aDefHeight > 0 && !hasDefSize )
+    if( !hasDefSize )
         bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
 
     return wxBitmapBundle::FromBitmaps( bmps );
