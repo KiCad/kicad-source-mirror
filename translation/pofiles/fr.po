@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 20:30+0300\n"
-"PO-Revision-Date: 2025-12-11 10:24+0100\n"
+"POT-Creation-Date: 2026-01-01 18:34+0100\n"
+"PO-Revision-Date: 2026-01-01 17:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -4703,6 +4703,8 @@ msgstr "Sélectionner un fichier à intégrer"
 #: common/dialogs/panel_embedded_files.cpp:391
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"Les fichiers intégrés hérités d'un symbole parent ne peuvent pas être "
+"supprimés."
 
 #: common/dialogs/panel_embedded_files.cpp:433
 msgid "Select a directory to export files"
@@ -6003,14 +6005,13 @@ msgstr "Insérer groupe"
 #: common/dialogs/panel_toolbar_customization.cpp:376
 #: common/dialogs/panel_toolbar_customization.cpp:641
 #: common/dialogs/panel_toolbar_customization.cpp:645
-#, fuzzy
 msgid "Separator"
-msgstr "Séparateurs de Lignes"
+msgstr "Séparateur"
 
 #: common/dialogs/panel_toolbar_customization.cpp:385
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "Espaceur : %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:538 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:338 pcbnew/pcb_group.cpp:392
@@ -6023,9 +6024,8 @@ msgid "Customize toolbars"
 msgstr "Personnaliser les barres d'outils"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Toolbars"
+msgstr "Toolbar:"
 
 #: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:511
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -8913,12 +8913,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -8979,9 +8977,9 @@ msgid "Library not found in library table"
 msgstr "Librairie introuvable dans la table des librairies"
 
 #: common/libraries/library_manager.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Librairie: "
+msgstr "Librairie '%s' : %s"
 
 #: common/libraries/library_manager.cpp:1235
 #, c-format
@@ -9060,11 +9058,12 @@ msgstr ""
 #: common/local_history.cpp:1692
 msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
+"Impossible de restaurer - les fichiers suivants sont ouverts par un autre "
+"utilisateur :"
 
 #: common/local_history.cpp:1694
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Échec de la fusion"
+msgstr "Echec de la Restauration"
 
 #: common/local_history.cpp:1891
 msgid "Select snapshot"
@@ -9599,18 +9598,16 @@ msgid "Quit %s"
 msgstr "Quitter %s"
 
 #: common/tool/action_toolbar.cpp:1073
-#, fuzzy
 msgid "Grid selector"
-msgstr "Sélecteur de Grille"
+msgstr "Sélecteur de grille"
 
 #: common/tool/action_toolbar.cpp:1074
 msgid "Grid Selection box"
 msgstr "Boite de Sélection Grille"
 
 #: common/tool/action_toolbar.cpp:1086
-#, fuzzy
 msgid "Zoom selector"
-msgstr "Sélecteur de Zoom"
+msgstr "Sélecteur de zoom"
 
 #: common/tool/action_toolbar.cpp:1087
 msgid "Zoom Selection box"
@@ -11095,19 +11092,17 @@ msgid "Select Path"
 msgstr "Sélection Chemin"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Pas de messages de sortie"
+msgstr "Afficher les messages de chargement"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "Afficher %zu message(s) de chargement"
 
 #: common/widgets/kistatusbar.cpp:438
-#, fuzzy
 msgid "Load Messages"
-msgstr "Messages"
+msgstr "Charger Messages"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11815,9 +11810,9 @@ msgid "Footprint '%s' not found."
 msgstr "Empreinte '%s' non trouvée."
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Erreur de chargement de l'empreinte"
+msgstr "Erreur lors du chargement de l'empreinte : %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:1868
 #, c-format
@@ -16477,6 +16472,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -16695,9 +16691,8 @@ msgid "View presets:"
 msgstr "Préréglages de vues:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "Parité Schématique"
+msgstr "Variantes schématiques :"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -16775,9 +16770,8 @@ msgid "Alternate Assignment"
 msgstr "Affectation Alternative"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:405
-#, fuzzy
 msgid " Variant"
-msgstr "Variantes"
+msgstr "Variante"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:500
 #: eeschema/lib_symbol.cpp:411 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -19508,12 +19502,11 @@ msgid "Panels"
 msgstr "Panneaux"
 
 #: eeschema/menubar.cpp:196
-#, fuzzy
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"Installer un serveur de symboles distant à l'aide du gestionnaire de plugins "
-"et de contenu pour activer"
+"Installer un serveur de symboles distant à l'aide du Gestionnaire de Plugins "
+"et de Contenu pour activer"
 
 #: eeschema/menubar.cpp:335
 msgid "Variants"
@@ -20011,9 +20004,8 @@ msgstr ""
 #: eeschema/sch_design_block_utils.cpp:433
 #: eeschema/sch_design_block_utils.cpp:589
 #: pcbnew/pcb_design_block_utils.cpp:463 pcbnew/pcb_design_block_utils.cpp:538
-#, fuzzy
 msgid "Set Group Design Block Link"
-msgstr "Tracer Feuille du Bloc de Conception"
+msgstr "Ajuster le Lien du bloc de Conception du Groupe"
 
 #: eeschema/sch_edit_frame.cpp:184
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -20902,15 +20894,19 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Le répertoire librairie de symboles '%s' ne peut pas être supprimé."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "La librairie '%s' existe déjà."
+msgstr ""
+"Librairie '%s' chargée avec des erreurs :\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"La librairie ne peut être sauvée tant que ces erreurs n'ont pas été "
+"corrigées manuellement."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:146
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:360
@@ -20925,6 +20921,10 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"La librairie ne peut être sauvée tant que ces erreurs n'ont pas été "
+"corrigées manuellement."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -20934,6 +20934,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Impossible d'enregistrer la librairie '%s' en raison d'une erreur d'analyse "
+"lors du chargement.\n"
+"\n"
+"L'enregistrement entraînerait la perte définitive des symboles qui n'ont pas "
+"pu être chargés.\n"
+"Veuillez corriger manuellement le fichier librairie avant de l'enregistrer."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:226
 #, c-format
@@ -20952,6 +20958,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Erreur d'analyse du symbole à la ligne %d : %s\n"
+"Ignore le symbole et continue."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:310
 #, c-format
@@ -23005,11 +23013,10 @@ msgid " submodels are not yet supported."
 msgstr " Les sous-modèles ne sont pas encore pris en charge."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
-#, fuzzy
 msgid "Triggered mode dynamic clamp submodels are not yet supported."
 msgstr ""
-"Ignore le code-barre sur la couche Altium %d (pas pris en charge "
-"actuellement)."
+"Le verrouillage dynamique en mode déclenché des sous-modèles n'est pas "
+"encore pris en charge."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:813
 msgid "Checking Header..."
@@ -24638,9 +24645,9 @@ msgid "Symbol library file '%s' is empty."
 msgstr "Le fichier librairie de symboles '%s' est vide."
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "Erreur lors du chargement du symbole %s de la librairie %s."
+msgstr "Erreur lors de la suppression du symbole %s de la librairie '%s'."
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24747,14 +24754,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Briser association(s) de label hiérarchique et de feuille"
 
 #: eeschema/toolbars_sch_editor.cpp:50
-#, fuzzy
 msgid "Current variant"
-msgstr "Variante Courante"
+msgstr "Variante courante"
 
 #: eeschema/toolbars_sch_editor.cpp:51
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "Commande pour sélectionner la variante schématique en cours"
+msgstr "Sélection de la variante schématique en cours"
 
 #: eeschema/toolbars_sch_editor.cpp:81 pcbnew/toolbars_footprint_editor.cpp:64
 #: pcbnew/toolbars_pcb_editor.cpp:154
@@ -25060,24 +25065,20 @@ msgid "Create a new design block from the current selection"
 msgstr "Créer un nouveau bloc de conception à partir de la sélection actuelle"
 
 #: eeschema/tools/sch_actions.cpp:151
-#, fuzzy
 msgid "Update Design Block from Current Sheet"
-msgstr "Créer un nouveau bloc de conception à partir de la feuille actuelle"
+msgstr "Mettre à jour le Bloc de Conception à partir de la Feuille Actuelle"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Ajouter le bloc de conception sélectionné à la feuille actuelle"
+msgstr "Ajuster le bloc de conception schématique à la feuille actuelle"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:534
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "Mise à Jour Librairies de Blocs de Conception"
+msgstr "Mettre à jour le Bloc de Conception à partir de la Sélection"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "Créer un nouveau bloc de conception à partir de la sélection actuelle"
+msgstr "Ajuster le bloc de conception schématique à la feuille actuelle"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:541
 msgid "Delete Design Block"
@@ -25828,9 +25829,8 @@ msgid "Edit a table of fields from all symbols in the schematic"
 msgstr "Editer une table des champs de tous les symboles de la schématique"
 
 #: eeschema/tools/sch_actions.cpp:1106
-#, fuzzy
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Editer Liens des Symboles vers Librairie..."
+msgstr "Modification Groupée des Liens de Librairies de Symboles..."
 
 #: eeschema/tools/sch_actions.cpp:1107
 msgid "Edit a table of links between schematic and library symbols"
@@ -27354,14 +27354,12 @@ msgid "(page %s)"
 msgstr "(page %s)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:222
-#, fuzzy
 msgid "Missing payload data."
-msgstr "Mot clé manquant."
+msgstr "Données de \"payload\" manquantes."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:230
-#, fuzzy
 msgid "Failed to decode base64 payload."
-msgstr "Impossible de lire un mot."
+msgstr "Échec du décodage de la \"payload\" base64."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:252
 #, c-format
@@ -27370,7 +27368,7 @@ msgstr "Compression non prise en charge '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:258
 msgid "Compressed payload was empty."
-msgstr ""
+msgstr "La \"payload\" compressée était vide."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:273
 #, c-format
@@ -27379,7 +27377,7 @@ msgstr "Échec de la décompression ZSTD : %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:365
 msgid "Payload was empty."
-msgstr ""
+msgstr "La \"payload\" était vide."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:376
 #: eeschema/widgets/panel_remote_symbol.cpp:1627
@@ -27404,20 +27402,18 @@ msgid "Failed to write '%s'."
 msgstr "Impossible d'écrire  '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:406
-#, fuzzy
 msgid "Symbol payload was empty."
-msgstr "Le fichier librairie de symboles '%s' est vide."
+msgstr "La \"payload\" du symbole était vide."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:414
 #: eeschema/widgets/panel_remote_symbol.cpp:424
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Impossible de créer le fichier temporaire '%s'.</b>"
+msgstr ""
+"Impossible de créer un fichier temporaire pour la \"payload\" du symbole."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:431
-#, fuzzy
 msgid "Failed to write the temporary symbol payload."
-msgstr "Échec de l'écriture de l'arbre : %s"
+msgstr "Échec de l'écriture de la \"payload\" du symbole temporaire."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:443
 #: eeschema/widgets/panel_remote_symbol.cpp:2164
@@ -27426,12 +27422,12 @@ msgstr "Impossible d'accéder au plugin de symboles KiCad."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:466
 msgid "Symbol payload did not include the expected symbol."
-msgstr ""
+msgstr "La \"payload\" du symbole ne comprenait pas le symbole attendu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Impossible de fusionner les polygones sélectionnés."
+msgstr "Impossible de décoder la \"payload\" du symbole : %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:500
 msgid "Select which remote data source to query."
@@ -27446,14 +27442,12 @@ msgid "No remote data sources are currently installed."
 msgstr "Aucune source de données distante n'est actuellement installée."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "Configurer les Chemins..."
+msgstr "Configurer..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "Effacer la Couleur"
+msgstr "Effacer Cookies"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -27480,14 +27474,12 @@ msgid "Missing login URL for remote authentication."
 msgstr "URL de connexion manquante pour l'authentification à distance."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1004
-#, fuzzy
 msgid "Unable to start the local login listener."
-msgstr "Impossible de soustraire les polygones sélectionnés."
+msgstr "Impossible de démarrer le programme d'écoute de connexion locale."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1013
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "Impossible de créer le répertoire de sauvegarde '%s'\n"
+msgstr "Échec de l'attribution d'un port de rappel pour le login."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1135
 #, c-format
@@ -27509,9 +27501,8 @@ msgid "Command '%s' is not supported."
 msgstr "La commande '%s' n'est pas prise en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1299
-#, fuzzy
 msgid "Unable to store payload."
-msgstr "Impossible d'ouvrir le fichier"
+msgstr "Impossible de stocker le \"payload\"."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1315
 #: eeschema/widgets/panel_remote_symbol.cpp:1611
@@ -27583,9 +27574,8 @@ msgid "Unsupported transfer mode '%s'."
 msgstr "Mode de transfert non pris en charge '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1597
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[pas de symbole chargé]"
+msgstr "Type de \"payload\" de symbole non pris en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1603
 msgid "No schematic editor is available to store symbols."
@@ -27604,17 +27594,16 @@ msgid "Unable to save the downloaded symbol."
 msgstr "Impossible de sauver le symbole téléchargé."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1818
-#, fuzzy
 msgid "Unsupported footprint payload type."
-msgstr "Aucune empreinte chargée."
+msgstr "Type de \"payload\" d'empreinte non pris en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1961
 msgid "Unsupported 3D model payload type."
-msgstr ""
+msgstr "Type de \"payload\" de modèle 3D non pris en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2025
 msgid "Unsupported SPICE payload type."
-msgstr ""
+msgstr "Type de \"payload\" SPICE non pris en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2077
 #, c-format
@@ -28733,7 +28722,6 @@ msgid "Aperture highlight"
 msgstr "Surbrillance aperture"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "Sélecteur DCode"
 
@@ -32156,14 +32144,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Désarchiver les fichiers du projet à partir d'une archive zip"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Révéler le répertoire de projet dans le \"Finder\""
+msgstr "Afficher le projet dans le Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Révéler le répertoire de projet dans le \"Finder\""
+msgstr "Ouvrir le dossier du projet dans le Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -32714,18 +32700,16 @@ msgstr ""
 "qui ne sont pas sur toutes les pages sont affichés"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:174
-#, fuzzy
 msgid "Origin selector"
-msgstr "Sélecteur d'Origine"
+msgstr "Sélecteur d'origine"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:175
 msgid "Select the origin of the status bar coordinates"
 msgstr "Sélection origine des coordonnées de la barre d'état"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:178
-#, fuzzy
 msgid "Page selector"
-msgstr "Sélecteur de Page"
+msgstr "Sélecteur de page"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:179
 msgid "Select the page to simulate item displays"
@@ -36302,8 +36286,8 @@ msgstr "(pas d'ID de librairie)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
-"Différence des liens de librairie : %s attend '%s' mais le candidat %s est « "
-"%s »."
+"Différence des liens de librairie : %s attend '%s' mais le candidat %s est "
+"« %s »."
 
 #: pcbnew/connectivity/topo_match.cpp:725
 #, c-format
@@ -38887,9 +38871,8 @@ msgstr "Modèles 3D"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Marge absolue masque pâte à souder:"
+msgstr "Marge pâte à souder:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -38901,6 +38884,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"Marge locale de la pâte à souder pour cette empreinte.\n"
+"Entrez une valeur absolue (par exemple, -0,1 mm), un pourcentage (par "
+"exemple, -5 %) ou les deux (par exemple, -0,1 mm - 5 %).\n"
+"Si ce champ est laissé vide, la valeur globale est utilisée."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:283
 msgid ""
@@ -39113,6 +39100,11 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"Marge de la pâte à souder par rapport à la taille du pad.\n"
+"Entrez une valeur absolue (par exemple, -0,1 mm), un pourcentage (par "
+"exemple, -5 %) ou les deux (par exemple, -0,1 mm - 5 %).\n"
+"Cette valeur peut être remplacée par des valeurs locales pour une empreinte "
+"ou un pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:374
@@ -40244,9 +40236,8 @@ msgid "Filter tracks by width:"
 msgstr "Filtrer pistes par largeur :"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "Filtrer vias par taille :"
+msgstr "Filtrer vias par diamètre :"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -40643,9 +40634,8 @@ msgid "Target areas:"
 msgstr "Surfaces cibles:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "Tracer Zone à Règle"
+msgstr "Zone à Règles Cible"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -40933,6 +40923,11 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"Marge locale de la pâte à souder pour ce pad.\n"
+"Entrez une valeur absolue (par exemple, -0,1 mm), un pourcentage (par "
+"exemple, -5 %) ou les deux (par exemple, -0,1 mm - 5 %).\n"
+"Si ce champ est laissé vide, la valeur globale ou celle de l'empreinte est "
+"utilisée."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:679
 #, c-format
@@ -40960,6 +40955,8 @@ msgid ""
 "Switching to non-circular hole will disable backdrills and post-machining. "
 "Continue?"
 msgstr ""
+"Le passage à un trou non circulaire désactivera les backdrills et le post-"
+"usinage. Continuer ?"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1247
 #, c-format
@@ -41440,21 +41437,21 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1115
 msgid "Hole post machining"
-msgstr ""
+msgstr "Trou Post-usinage"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3236
 msgid "Countersink"
-msgstr "Countersink"
+msgstr "Contre-perçage"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
 msgid "Counterbore"
-msgstr "Counterbore"
+msgstr "Lamage"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1316
@@ -41470,9 +41467,8 @@ msgstr "Les deux"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Top backdrill must-cut:"
-msgstr "Pas de marque"
+msgstr "Backdrill dessus devant couper:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1244
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1249
@@ -41484,9 +41480,8 @@ msgstr "Le backdrill doit traverser cette couche"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1275
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
-#, fuzzy
 msgid "Bottom backdrill must-cut:"
-msgstr "Sérigraphie Dessous"
+msgstr "Backdrill dessous devant couper:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1453
 msgid "Preview pad in sketch mode"
@@ -42753,7 +42748,7 @@ msgstr "Caractéristiques de protection:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
 msgid "Hole post-machining"
-msgstr ""
+msgstr "Trou Post-usinage"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 msgid "Add teardrops on via's track connections"
@@ -43994,20 +43989,16 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s de %s sur %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"Des éléments ont été trouvés sur des couches enlevées. \n"
-"Cette opération supprimera tous les éléments appartenant aux couches "
-"supprimées et ne peut être annulée. \n"
-"Voulez-vous continuer ?"
+"Des éléments ont été trouvés sur des couches supprimées. Cette opération "
+"supprimera tous les éléments des couches supprimées et ne peut être annulée."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
-msgstr "Voir Détails"
+msgstr "Montrer Détails"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1003
 msgid "Layer must have a name."
@@ -46631,7 +46622,7 @@ msgstr "Réglage des géométries des profils de piste"
 
 #: pcbnew/drc/drc_item.cpp:314
 msgid "Track connected to post-machined or backdrilled layer"
-msgstr ""
+msgstr "Piste connectée à une couche post-usinée ou \"backdrilled\""
 
 #: pcbnew/drc/drc_item.cpp:516
 #, c-format
@@ -47861,24 +47852,22 @@ msgid "OCC error adding pad/via polygon."
 msgstr "Erreur OCC lors de l'ajout d'un polygone de pad/via."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1206
-#, fuzzy
 msgid "Failed to create counterbore cylinder shape"
-msgstr "Échec de la création de la signature de l'auteur : %s"
+msgstr "Échec de la création de la forme cylindrique du lamage"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1221
 #, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "Exception OCC en création d'un \"counterbore\" : %s"
+msgstr "Exception OCC en création d'un lamage : %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1361
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "Impossible de créer une forme prismatique"
+msgstr "Échec de la création de la forme conique de contre-perçage"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1376
 #, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "Exception OCC en création d'un \"countersink\" : %s"
+msgstr "Exception OCC en création d'un contre-perçage: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1663
 #, c-format
@@ -49858,9 +49847,8 @@ msgid "Undefined"
 msgstr "Non défini"
 
 #: pcbnew/pad.cpp:3234
-#, fuzzy
 msgid "Not post-machined"
-msgstr "Non spécifié"
+msgstr "Non Post-usiné"
 
 #: pcbnew/pad.cpp:3247
 msgid "No backdrill"
@@ -49883,9 +49871,8 @@ msgid "Front, back and connected layers"
 msgstr "Dessus, dessous et couches connectées"
 
 #: pcbnew/pad.cpp:3318
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "Propriétés des Pins"
+msgstr "Propriétés Post-usinage"
 
 #: pcbnew/pad.cpp:3319
 msgid "Backdrill Properties"
@@ -49924,13 +49911,12 @@ msgid "Hole Size Y"
 msgstr "Taille Trou Y"
 
 #: pcbnew/pad.cpp:3424
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "Positionnement"
+msgstr "Post-usinage Dessus"
 
 #: pcbnew/pad.cpp:3437
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "Taille Post-usinage Dessus"
 
 #: pcbnew/pad.cpp:3455
 msgid "Top Counterbore Depth"
@@ -49942,11 +49928,11 @@ msgstr "Angle de Contre-Perçage Dessus"
 
 #: pcbnew/pad.cpp:3489
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "Post-usinage Dessous"
 
 #: pcbnew/pad.cpp:3502
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "Taille Post-usinage Dessous"
 
 #: pcbnew/pad.cpp:3520
 msgid "Bottom Counterbore Depth"
@@ -49967,9 +49953,8 @@ msgstr "Taille du Backdrill Dessous"
 #: pcbnew/pad.cpp:3574 pcbnew/pcb_track.cpp:3218
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
-#, fuzzy
 msgid "Bottom Backdrill Must-Cut"
-msgstr "Sérigraphie Dessous"
+msgstr "Backdrill Dessous Devant Couper"
 
 #: pcbnew/pad.cpp:3591 pcbnew/pcb_track.cpp:3230
 msgid "Top Backdrill Size"
@@ -49978,9 +49963,8 @@ msgstr "Taille Backdrill Dessus"
 #: pcbnew/pad.cpp:3608 pcbnew/pcb_track.cpp:3242
 #: pcbnew/widgets/pcb_properties_panel.cpp:564
 #: pcbnew/widgets/pcb_properties_panel.cpp:568
-#, fuzzy
 msgid "Top Backdrill Must-Cut"
-msgstr "Couches de Dessous"
+msgstr "Backdrill Dessus Devant Couper"
 
 #: pcbnew/pad.cpp:3626
 msgid "Fabrication Property"
@@ -51708,9 +51692,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "La librairie d'empreintes '%s' est en lecture seule."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "Impossible d'ouvrir le  fichier '%s'"
+msgstr "Avertissement dans le fichier '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1567
 #, c-format
@@ -51936,6 +51920,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Le composant '%s' contient des caractères non ASCII dans sa référence ; "
+"converti en '%s' pour l'exportation ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -51943,6 +51929,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Le composant '%s' a une référence ambigue après conversion ; renommé '%s' "
+"pour l'exportation ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1129
 msgid "Failed to add component data"
@@ -52943,38 +52931,36 @@ msgid "Filling"
 msgstr "Rempli"
 
 #: pcbnew/pcb_track.cpp:3254
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "Couverture sur dessus"
+msgstr "Post-usinage Dessous"
 
 #: pcbnew/pcb_track.cpp:3257
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "Taille Post-usinage Dessus"
 
 #: pcbnew/pcb_track.cpp:3268
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "Profondeur Post-usinage Dessus"
 
 #: pcbnew/pcb_track.cpp:3279
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "Angle Post-usinage Dessus"
 
 #: pcbnew/pcb_track.cpp:3290
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "Couverture sur dessous"
+msgstr "Post-usinage Dessous"
 
 #: pcbnew/pcb_track.cpp:3293
 msgid "Back Post-machining Size"
-msgstr ""
+msgstr "Taille Post-usinage Arrière"
 
 #: pcbnew/pcb_track.cpp:3304
 msgid "Back Post-machining Depth"
-msgstr ""
+msgstr "Profondeur Post-usinage Arrière"
 
 #: pcbnew/pcb_track.cpp:3315
 msgid "Back Post-machining Angle"
-msgstr ""
+msgstr "Angle Post-usinage Arrière"
 
 #: pcbnew/pcbexpr_evaluator.cpp:689
 msgid "must be mm, in, mil, deg, fs, or ps"
@@ -53234,6 +53220,7 @@ msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr "Le traçage HPGL n'est plus supporté depuis KiCad 10.0"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:104
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:105
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
@@ -53243,10 +53230,13 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:107
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:120
 msgid "Scripting init"
 msgstr "Init des scripts"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:119
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
@@ -53256,6 +53246,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:220
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:237
 #, c-format
 msgid "Unable to open plugin directory '%s'."
 msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
@@ -53264,15 +53256,21 @@ msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:228
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:237
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:243
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:221
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:229
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:238
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:244
 msgid "Plugin Directory"
 msgstr "Répertoire Plugin"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:226
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:227
 #, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Le répertoire de plugins '%s' n'existe pas.  Le créer ?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:242
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:243
 #, c-format
 msgid "Unable to create plugin directory '%s'."
 msgstr "Impossible de créer le répertoire de plugins '%s'."
@@ -55306,28 +55304,24 @@ msgstr ""
 "Appliquer la disposition des blocs de conception liés au groupe sélectionné"
 
 #: pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Sauver PCB actuel en tant que Bloc de Conception..."
+msgstr "Sauver PCB en tant que Bloc de Conception..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
 msgstr "Créer un nouveau bloc de conception à partir du PCB actuel"
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Mise à Jour Librairies de Blocs de Conception"
+msgstr "Mettre à Jour le Bloc de Conception à partir du PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Ajouter le bloc de conception sélectionné au PCB actuel"
+msgstr "Ajuster le bloc de conception de PCB au PCB actuel"
 
 #: pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Créer un nouveau bloc de conception à partir de la sélection actuelle"
+msgstr "Ajuster le bloc de conception de PCB a la sélection actuelle"
 
 #: pcbnew/tools/pcb_actions.cpp:559
 msgid "Open in Footprint Editor"
@@ -57147,9 +57141,8 @@ msgid "Resolved Margin Clearance"
 msgstr "Isolation Couche \"margin\" Résolue"
 
 #: pcbnew/tools/pcb_control.cpp:2442
-#, fuzzy
 msgid "Pad Size"
-msgstr "Dim Page"
+msgstr "Dim Pad"
 
 #: pcbnew/tools/pcb_control.cpp:2474
 msgid "Selected Items"
@@ -57164,14 +57157,12 @@ msgid "Selected 2D Copper Area"
 msgstr "Surface Cuivre 2D Sélectionnée"
 
 #: pcbnew/tools/pcb_control.cpp:2651
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "Surface Cuivre 2D Sélectionnée"
+msgstr "Surface 2D Sélectionnée"
 
 #: pcbnew/tools/pcb_control.cpp:2653
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "Surface Cuivre 2D Sélectionnée"
+msgstr "Surface totale 2D Sélectionnée"
 
 #: pcbnew/tools/pcb_control.cpp:2711
 msgid "Place Board Characteristics"
@@ -58569,9 +58560,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Suppression des îlots de cuivre isolés..."
 
 #: pcbnew/zone_filler.cpp:888
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Re-remplir les zones après les changements effectués sur le PCB"
+msgstr "Re-remplissage des zones après suppression des îlots..."
 
 #: pcbnew/zone_filler.cpp:1195
 msgid "Prototype zone fill enabled. Disable setting and refill?"
@@ -58804,6 +58794,10 @@ msgstr "Symbole Schématique KiCad"
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
 
+#, c-format
+#~ msgid "Error loading footprint %s from library '%s'."
+#~ msgstr "Erreur lors du chargement de l'empreinte %s de la librairie '%s'."
+
 #~ msgid ""
 #~ "This is the local clearance between pads and the solder paste for this "
 #~ "footprint.\n"
@@ -58878,13 +58872,6 @@ msgstr "Feuille de Dessin KiCad"
 #~ "Remarque : les marges de pâte de soudure (absolue et relative) sont "
 #~ "ajoutées pour déterminer la marge finale."
 
-#, c-format
-#~ msgid "Error loading footprint %s from library '%s'."
-#~ msgstr "Erreur lors du chargement de l'empreinte %s de la librairie '%s'."
-
-#~ msgid "Variants:"
-#~ msgstr "Variantes :"
-
 #~ msgid "Save Current Sheet to Design Block..."
 #~ msgstr "Sauver Feuille Courante dans Bloc de Conception..."
 
@@ -58902,6 +58889,9 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Add current board to design block"
 #~ msgstr "Ajouter le PCB actuel au bloc de conception"
+
+#~ msgid "Variants:"
+#~ msgstr "Variantes :"
 
 #~ msgid "Browse…"
 #~ msgstr "Examiner..."
