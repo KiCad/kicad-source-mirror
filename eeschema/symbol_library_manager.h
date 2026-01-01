@@ -115,6 +115,9 @@ public:
      */
     bool DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf );
 
+    /// Return the deleted symbol buffers that need to be removed from the library file.
+    const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetDeletedBuffers() const { return m_deleted; }
+
     void ClearDeletedBuffer() { m_deleted.clear(); }
 
     /// Save stored modifications using a plugin. aBuffer decides whether the changes

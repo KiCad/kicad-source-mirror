@@ -161,7 +161,29 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         destination.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
         if( res && original == destination )
+        {
+            // Delete symbols that were removed from the buffer before clearing the deleted list
+            for( const std::shared_ptr<SYMBOL_BUFFER>& deletedBuf : libBuf.GetDeletedBuffers() )
+            {
+                wxCHECK2( deletedBuf, continue );
+
+                const wxString& originalName = deletedBuf->GetOriginal().GetName();
+
+                try
+                {
+                    if( pi->LoadSymbol( aFileName, originalName ) )
+                        pi->DeleteSymbol( aFileName, originalName, &properties );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxLogError( _( "Error deleting symbol %s from library '%s'." ) + wxS( "\n%s" ),
+                                UnescapeString( originalName ), aFileName, ioe.What() );
+                    res = false;
+                }
+            }
+
             libBuf.ClearDeletedBuffer();
+        }
     }
     else
     {

@@ -29,6 +29,10 @@
 #include <symbol_library_manager.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <sch_field.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_io/sch_io_mgr.h>
+
+#include <wx/filename.h>
 
 class SYMBOL_LIBRARY_MANAGER_TEST_FIXTURE
 {
@@ -214,6 +218,141 @@ BOOST_AUTO_TEST_CASE( NewSymbolCreation )
     }
 
     BOOST_CHECK( found );
+}
+
+
+/**
+ * Test that LIB_BUFFER correctly deletes symbols from the library file when saved.
+ *
+ * This test verifies the fix for the bug where deleting a derived symbol from the symbol
+ * editor tree and saving would result in the symbol reappearing as a non-derived symbol
+ * when the library was reloaded. The root cause was that SaveBuffer only saved existing
+ * symbols but never called DeleteSymbol on the plugin for symbols in the m_deleted list.
+ */
+BOOST_AUTO_TEST_CASE( DeletedSymbolsAreRemovedFromFile )
+{
+    // Create a temporary directory and library file
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( tempDir );
+    wxFileName::Mkdir( tempDir );
+    wxString libPath = wxFileName( tempDir, wxS( "test_lib.kicad_sym" ) ).GetFullPath();
+
+    // Step 1: Create a library with a parent and derived symbol using the plugin directly
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        plugin->CreateLibrary( libPath );
+
+        // Create parent symbol
+        std::unique_ptr<LIB_SYMBOL> parentSymbol = std::make_unique<LIB_SYMBOL>( wxS( "Parent" ) );
+        parentSymbol->GetValueField().SetText( wxS( "Parent" ) );
+        parentSymbol->GetReferenceField().SetText( wxS( "U" ) );
+
+        LIB_SYMBOL* parentPtr = parentSymbol.get();
+        plugin->SaveSymbol( libPath, new LIB_SYMBOL( *parentSymbol ) );
+
+        // Create derived symbol
+        std::unique_ptr<LIB_SYMBOL> derivedSymbol = std::make_unique<LIB_SYMBOL>( wxS( "Derived" ) );
+        derivedSymbol->GetValueField().SetText( wxS( "Derived" ) );
+        derivedSymbol->SetParent( parentPtr );
+
+        plugin->SaveSymbol( libPath, new LIB_SYMBOL( *derivedSymbol ) );
+        plugin->SaveLibrary( libPath );
+    }
+
+    // Step 2: Verify both symbols exist in the library
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        LIB_SYMBOL* parent = plugin->LoadSymbol( libPath, wxS( "Parent" ) );
+        LIB_SYMBOL* derived = plugin->LoadSymbol( libPath, wxS( "Derived" ) );
+
+        BOOST_REQUIRE( parent != nullptr );
+        BOOST_REQUIRE( derived != nullptr );
+        BOOST_CHECK( derived->IsDerived() );
+    }
+
+    // Step 3: Load symbols into LIB_BUFFER and delete the derived symbol
+    LIB_BUFFER libBuffer( wxS( "TestLibrary" ) );
+
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        LIB_SYMBOL* loadedParent = plugin->LoadSymbol( libPath, wxS( "Parent" ) );
+        LIB_SYMBOL* loadedDerived = plugin->LoadSymbol( libPath, wxS( "Derived" ) );
+
+        BOOST_REQUIRE( loadedParent != nullptr );
+        BOOST_REQUIRE( loadedDerived != nullptr );
+
+        // Set up parent relationship
+        loadedDerived->SetParent( loadedParent );
+
+        // Create buffers (parent first, then derived)
+        libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( *loadedParent ),
+                                std::make_unique<SCH_SCREEN>() );
+
+        std::unique_ptr<LIB_SYMBOL> derivedCopy = std::make_unique<LIB_SYMBOL>( *loadedDerived );
+        derivedCopy->SetParent( libBuffer.GetSymbol( wxS( "Parent" ) ) );
+        libBuffer.CreateBuffer( std::move( derivedCopy ), std::make_unique<SCH_SCREEN>() );
+    }
+
+    // Verify buffer state before deletion
+    BOOST_CHECK_EQUAL( libBuffer.GetBuffers().size(), 2 );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "Parent" ) ) != nullptr );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "Derived" ) ) != nullptr );
+
+    // Delete the derived symbol from the buffer
+    std::shared_ptr<SYMBOL_BUFFER> derivedBuf = libBuffer.GetBuffer( wxS( "Derived" ) );
+    BOOST_REQUIRE( derivedBuf != nullptr );
+
+    bool deleteResult = libBuffer.DeleteBuffer( *derivedBuf );
+    BOOST_CHECK( deleteResult );
+
+    // Verify buffer state after deletion
+    BOOST_CHECK_EQUAL( libBuffer.GetBuffers().size(), 1 );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "Parent" ) ) != nullptr );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "Derived" ) ) == nullptr );
+
+    // Step 4: Save the library using the same pattern as SYMBOL_LIBRARY_MANAGER::SaveLibrary
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
+
+        // Save remaining buffers (just Parent)
+        for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : libBuffer.GetBuffers() )
+        {
+            libBuffer.SaveBuffer( *symbolBuf, libPath, &*plugin, true );
+        }
+
+        // Delete symbols that were removed from the buffer (this is the fix for the bug)
+        for( const std::shared_ptr<SYMBOL_BUFFER>& deletedBuf : libBuffer.GetDeletedBuffers() )
+        {
+            const wxString& originalName = deletedBuf->GetOriginal().GetName();
+
+            if( plugin->LoadSymbol( libPath, originalName ) )
+                plugin->DeleteSymbol( libPath, originalName, &properties );
+        }
+
+        plugin->SaveLibrary( libPath );
+        libBuffer.ClearDeletedBuffer();
+    }
+
+    // Step 5: Reload the library and verify the derived symbol is gone
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+        LIB_SYMBOL* parent = plugin->LoadSymbol( libPath, wxS( "Parent" ) );
+        LIB_SYMBOL* derived = plugin->LoadSymbol( libPath, wxS( "Derived" ) );
+
+        BOOST_CHECK( parent != nullptr );
+        // This is the actual check for the bug - the derived symbol should be deleted
+        BOOST_CHECK_MESSAGE( derived == nullptr,
+                             "Derived symbol should have been deleted from the library file" );
+    }
+
+    // Cleanup
+    if( wxFileName::DirExists( tempDir ) )
+    {
+        wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+    }
 }
 
 
