@@ -3583,7 +3583,7 @@ static struct SCH_SYMBOL_DESC
                                                          &SYMBOL::GetShowPinNumbers ) )
                 .SetAvailableFunc( hasLibPart );
 
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ), &SYMBOL::SetShowPinNames,
+         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ), &SYMBOL::SetShowPinNames,
                                                          &SYMBOL::GetShowPinNames ) )
                 .SetAvailableFunc( hasLibPart );
 
@@ -3659,9 +3659,13 @@ static struct SCH_SYMBOL_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Board" ), &SYMBOL::SetExcludedFromBoard,
+        // This property is created in lib_symbol.cpp as SYMBOL property, so do not recreate it
+        #if 0
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Board" ),
+                                                         &SYMBOL::SetExcludedFromBoard,
                                                          &SYMBOL::GetExcludedFromBoard ),
                              groupAttributes );
+        #endif
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
                                                              &SCH_SYMBOL::SetExcludedFromSimProp,
                                                              &SCH_SYMBOL::GetExcludedFromSimProp ),
