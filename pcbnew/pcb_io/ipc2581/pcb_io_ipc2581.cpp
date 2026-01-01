@@ -2164,6 +2164,9 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     fp->SetParentGroup( nullptr );
     fp->SetPosition( { 0, 0 } );
     fp->SetOrientation( ANGLE_0 );
+    // Normalize package geometry to the unflipped footprint coordinate system.
+    if( fp->IsFlipped() )
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
     size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
     wxString name = genString( wxString::Format( "%s_%zu",
@@ -2450,7 +2453,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 EDA_ANGLE pad_angle = pad->GetFPRelativeOrientation().Normalize();
 
                 if( fp->IsFlipped() )
-                    pad_angle = ( pad_angle.Invert() - ANGLE_180 ).Normalize();
+                    pad_angle = pad_angle.Invert().Normalize();
 
                 if( pad_angle != ANGLE_0 )
                     xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
@@ -2530,7 +2533,7 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
             EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
 
             if( fp->IsFlipped() )
-                fp_angle = ( fp_angle.Invert() - ANGLE_180 ).Normalize();
+                fp_angle = fp_angle.Invert().Normalize();
 
             if( fp_angle != ANGLE_0 )
                 addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
