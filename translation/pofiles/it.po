@@ -2,7 +2,7 @@
 # Ing. Angelo Aliberti <microrf@tiscali.it>, 2005.
 # Michele Petrecca <michelinux@alice.it>, 2005, 2006.
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
-# Marco Ciampa <ciampix@posteo.net>, 2014-2024, 2025.
+# Marco Ciampa <ciampix@posteo.net>, 2014-2024, 2025, 2026.
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2024, 2025.
@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 05:02+0300\n"
-"PO-Revision-Date: 2025-12-31 12:17+0000\n"
+"PO-Revision-Date: 2026-01-01 13:36+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -6071,7 +6071,7 @@ msgstr "Destra"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr "Cima principale"
+msgstr "Principale superiore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
 msgid "Top auxiliary"
@@ -17646,7 +17646,7 @@ msgstr "Piazza a&utomaticamente campi simbolo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:294
 msgid "A&llow field autoplace to change justification"
-msgstr "Permette all'autopiazzamento campi di modificare la giustificazione"
+msgstr "Permette a&ll'autopiazzamento campi di modificare la giustificazione"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:297
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -35196,7 +35196,7 @@ msgstr "Via ciechi:"
 
 #: pcbnew/board_statistics_report.cpp:119
 msgid "Buried vias:"
-msgstr "Via coperti/interni:"
+msgstr "Via sepolti:"
 
 #: pcbnew/board_statistics_report.cpp:120
 msgid "Micro vias:"
@@ -40263,8 +40263,8 @@ msgid ""
 "Switching to non-circular hole will disable backdrills and post-machining. "
 "Continue?"
 msgstr ""
-"Passando a un foro non circolare verranno disattivate le forature posteriori "
-"e la post-lavorazione. Continuare?"
+"Passando a un foro non circolare verranno disattivate le retroforature e la "
+"post-lavorazione. Continuare?"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1248
 #, c-format
@@ -40792,7 +40792,7 @@ msgstr "Entrambi"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1240
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
 msgid "Top backdrill must-cut:"
-msgstr "Profondità retroforatura fronte:"
+msgstr "Must-cut retroforatura fronte:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1247
@@ -40805,7 +40805,7 @@ msgstr "La retroforatura deve passare attraverso questo strato"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
 msgid "Bottom backdrill must-cut:"
-msgstr "Profondità retroforatura retro:"
+msgstr "Must-cut retroforatura retro:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1451
 msgid "Preview pad in sketch mode"
@@ -47990,9 +47990,8 @@ msgid "Export footprints to library:"
 msgstr "Esporta impronte nella libreria:"
 
 #: pcbnew/footprint_libraries_utils.cpp:651
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "Aggiornare tutte le impronte per riferirsi a %s?"
+msgstr "Aggiorna impronte scheda per connettere a impronte esportate"
 
 #: pcbnew/footprint_libraries_utils.cpp:843
 #: pcbnew/footprint_viewer_frame.cpp:745
@@ -48290,9 +48289,8 @@ msgid "Please select a valid layer."
 msgstr "Selezionare uno strato valido."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:53
-#, fuzzy
 msgid "1.0"
-msgstr "10"
+msgstr "1,0"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
 msgid "DXF default line width:"
@@ -48304,9 +48302,8 @@ msgstr ""
 "Usata quando gli elementi DXF nel file non hanno uno spessore impostato"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:65
-#, fuzzy
 msgid "0.2"
-msgstr "0.0"
+msgstr "0,2"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -48372,9 +48369,8 @@ msgid "Footprints [%u items]"
 msgstr "Impronte [%u elementi]"
 
 #: pcbnew/load_select_footprint.cpp:331
-#, fuzzy
 msgid "Save Footprint Library As"
-msgstr "Crea libreria di impronte"
+msgstr "Salva libreria impronta come"
 
 #: pcbnew/load_select_footprint.cpp:360
 #, c-format
@@ -48404,9 +48400,8 @@ msgid "Create a PNG file from the current view"
 msgstr "Crea un file PNG dalla vista corrente"
 
 #: pcbnew/menubar_footprint_editor.cpp:114 pcbnew/menubar_pcb_editor.cpp:185
-#, fuzzy
 msgid "&Select"
-msgstr "Seleziona"
+msgstr "&Seleziona"
 
 #: pcbnew/menubar_footprint_editor.cpp:153 pcbnew/menubar_pcb_editor.cpp:245
 msgid "&Drawing Mode"
@@ -48449,9 +48444,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
-msgstr "Impronta..."
+msgstr "Impronte..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Fabrication Outputs"
@@ -48513,7 +48507,6 @@ msgid "Add Microwave Inductor"
 msgstr "Aggiungi induttore per microonde"
 
 #: pcbnew/microwave/microwave_inductor.cpp:367
-#, fuzzy
 msgid "Length of track:"
 msgstr "Lunghezza pista:"
 
@@ -48534,7 +48527,6 @@ msgid "Requested length can't be represented"
 msgstr "Lunghezza richiesta non rappresentabile"
 
 #: pcbnew/microwave/microwave_inductor.cpp:406
-#, fuzzy
 msgid "Component value:"
 msgstr "Valore componente:"
 
@@ -48825,24 +48817,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Aggiorna %s gruppi di piazzola ponticelli"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:876
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "Rimuovi %s dal gruppo \"%s\"."
+msgstr "Rimuovi %s dal gruppo '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "Rimosso %s dal gruppo \"%s\"."
+msgstr "Rimosso %s dal gruppo '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "Aggiungi %s al gruppo \"%s\"."
+msgstr "Aggiungi %s al gruppo '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s group '%s'."
-msgstr "Aggiunto %s al gruppo \"%s\"."
+msgstr "Aggiunto %s al gruppo '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1021
 #, c-format
@@ -48887,14 +48879,14 @@ msgid "Connected %s pin %s to %s."
 msgstr "Connesso %s pin %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s unit metadata."
-msgstr "Aggiorna %s campi."
+msgstr "Aggiorna metadati unità %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s unit metadata."
-msgstr "Aggiornati %s campi"
+msgstr "Aggiornati metadati unità %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1281
 #, c-format
@@ -48937,9 +48929,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "La zona rame \"%s\" non ha piazzole connesse."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1443
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "La zona rame su strato \"%s\" a (%s, %s) non ha piazzole connesse."
+msgstr ""
+"Zona rame su strato %s in (%s, %s) senza piazzole connesse al collegamento "
+"\"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1479
 #, c-format
@@ -49092,9 +49086,8 @@ msgid "Castellated"
 msgstr "Dentellati"
 
 #: pcbnew/pad.cpp:1838
-#, fuzzy
 msgid "Press-fit"
-msgstr "Reimpostazioni"
+msgstr "Press-fit"
 
 #: pcbnew/pad.cpp:1871
 msgid "Length in Package"
@@ -49199,23 +49192,20 @@ msgid "('heatsink' pads are normally plated)"
 msgstr "(le piazzole di 'dissipazione' sono normalmente metallizzate)"
 
 #: pcbnew/pad.cpp:2768
-#, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr "(la proprietà dentellata è per piazzole PTH)"
+msgstr "(le piazzole 'dentellate' solitamente sono PTH)"
 
 #: pcbnew/pad.cpp:2771
 msgid "('BGA' property is for SMD pads)"
 msgstr "(la proprietà BGA è per piazzole SMD)"
 
 #: pcbnew/pad.cpp:2774
-#, fuzzy
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(la proprietà 'meccanica' è per piazzole PTH)"
+msgstr "(le piazzole 'meccaniche' solitamente sono PTH)"
 
 #: pcbnew/pad.cpp:2779
-#, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
-msgstr "(la proprietà 'meccanica' è per piazzole PTH)"
+msgstr "(le piazzole 'press-fit' solitamente sono PTH con fori tondi)"
 
 #: pcbnew/pad.cpp:2796
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -49336,51 +49326,44 @@ msgid "Mechanical pad"
 msgstr "Piazzola meccanica"
 
 #: pcbnew/pad.cpp:3219
-#, fuzzy
 msgid "Press-fit pad"
-msgstr "Stampa pagina %d"
+msgstr "Piazzola press-fit"
 
 #: pcbnew/pad.cpp:3222
-#, fuzzy
 msgid "Undefined"
-msgstr "Indefinito!"
+msgstr "Indefinito"
 
 #: pcbnew/pad.cpp:3234
-#, fuzzy
 msgid "Not post-machined"
-msgstr "Non specificato"
+msgstr "Non post-lavorato"
 
 #: pcbnew/pad.cpp:3247
-#, fuzzy
 msgid "No backdrill"
-msgstr "Nessuna foratura"
+msgstr "No retroforatura"
 
 #: pcbnew/pad.cpp:3248
-#, fuzzy
 msgid "Backdrill bottom"
-msgstr "Margine inferiore"
+msgstr "Retroforatura retro"
 
 #: pcbnew/pad.cpp:3249
 msgid "Backdrill top"
-msgstr ""
+msgstr "Retroforatura fronte"
 
 #: pcbnew/pad.cpp:3250
 msgid "Backdrill both"
-msgstr ""
+msgstr "Retroforatura frente/retro"
 
 #: pcbnew/pad.cpp:3269
 msgid "Front, back and connected layers"
 msgstr "Fronte, retro, e strati connessi"
 
 #: pcbnew/pad.cpp:3318
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "Proprietà piedino"
+msgstr "Proprietà post-lavorazione"
 
 #: pcbnew/pad.cpp:3319
-#, fuzzy
 msgid "Backdrill Properties"
-msgstr "Proprietà bordo"
+msgstr "Proprietà retroforature"
 
 #: pcbnew/pad.cpp:3321
 msgid "Pad Type"
@@ -49415,64 +49398,60 @@ msgid "Hole Size Y"
 msgstr "Dimensione Y foro"
 
 #: pcbnew/pad.cpp:3424
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "Posizionamento"
+msgstr "Post-lavorazione fronte"
 
 #: pcbnew/pad.cpp:3437
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "Dimensione post-lavorazione fronte"
 
 #: pcbnew/pad.cpp:3455
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "Profondità allargamento fronte"
 
 #: pcbnew/pad.cpp:3472
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "Angolo svasatura fronte"
 
 #: pcbnew/pad.cpp:3489
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "Post-lavorazione retro"
 
 #: pcbnew/pad.cpp:3502
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "Dimensione post-lavorazione retro"
 
 #: pcbnew/pad.cpp:3520
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "Profondità allargamento retro"
 
 #: pcbnew/pad.cpp:3537
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "Angolo allargamento retro"
 
 #: pcbnew/pad.cpp:3554 pcbnew/pcb_track.cpp:3190
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "Modalità piena"
+msgstr "Modalità retroforatura"
 
 #: pcbnew/pad.cpp:3557 pcbnew/pcb_track.cpp:3193
-#, fuzzy
 msgid "Bottom Backdrill Size"
-msgstr "Serigrafia sotto"
+msgstr "Dimensione retroforatura retro"
 
 #: pcbnew/pad.cpp:3574 pcbnew/pcb_track.cpp:3205
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
-#, fuzzy
 msgid "Bottom Backdrill Must-Cut"
-msgstr "Master pad sotto"
+msgstr "Must-cut retroforatura retro"
 
 #: pcbnew/pad.cpp:3591 pcbnew/pcb_track.cpp:3217
 msgid "Top Backdrill Size"
-msgstr ""
+msgstr "Dimensione retroforatura fronte"
 
 #: pcbnew/pad.cpp:3608 pcbnew/pcb_track.cpp:3229
 #: pcbnew/widgets/pcb_properties_panel.cpp:564
 #: pcbnew/widgets/pcb_properties_panel.cpp:568
 msgid "Top Backdrill Must-Cut"
-msgstr ""
+msgstr "Must-cut retroforatura fronte"
 
 #: pcbnew/pad.cpp:3626
 msgid "Fabrication Property"
@@ -49491,9 +49470,9 @@ msgid "Thermal Relief Gap"
 msgstr "Spazio raccordi termici"
 
 #: pcbnew/pcb_barcode.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode '%s' on %s"
-msgstr "Piazzola %s su %s"
+msgstr "Codice a barre %s su %s"
 
 #: pcbnew/pcb_barcode.cpp:714
 msgid "CODE_39"
@@ -49520,38 +49499,32 @@ msgid "L (Low)"
 msgstr "L (Basso)"
 
 #: pcbnew/pcb_barcode.cpp:726 pcbnew/pcb_barcode.cpp:782
-#, fuzzy
 msgid "M (Medium)"
-msgstr "Media"
+msgstr "M (Medio)"
 
 #: pcbnew/pcb_barcode.cpp:727 pcbnew/pcb_barcode.cpp:783
 msgid "Q (Quartile)"
 msgstr "Q (Quartile)"
 
 #: pcbnew/pcb_barcode.cpp:728 pcbnew/pcb_barcode.cpp:787
-#, fuzzy
 msgid "H (High)"
-msgstr "Alto"
+msgstr "A (Alto)"
 
 #: pcbnew/pcb_barcode.cpp:742
-#, fuzzy
 msgid "Show Text"
-msgstr "Mostra pista"
+msgstr "Mostra testo"
 
 #: pcbnew/pcb_barcode.cpp:760
-#, fuzzy
 msgid "Barcode Type"
-msgstr "Tipo piazzola"
+msgstr "Tipo codice a barre"
 
 #: pcbnew/pcb_barcode.cpp:795
-#, fuzzy
 msgid "Margin X"
-msgstr "Margin"
+msgstr "X margine"
 
 #: pcbnew/pcb_barcode.cpp:799
-#, fuzzy
 msgid "Margin Y"
-msgstr "Margin"
+msgstr "Y margine"
 
 #: pcbnew/pcb_base_edit_frame.cpp:391 pcbnew/toolbars_footprint_editor.cpp:204
 #: pcbnew/toolbars_pcb_editor.cpp:589
@@ -49559,9 +49532,8 @@ msgid "+/- to switch"
 msgstr "+/- per commutare"
 
 #: pcbnew/pcb_base_edit_frame.cpp:443
-#, fuzzy
 msgid "Edit Vertices"
-msgstr "Modifica proprietà"
+msgstr "Modifica vertici"
 
 #: pcbnew/pcb_base_frame.cpp:1199
 msgid ""
@@ -50027,23 +49999,23 @@ msgstr ""
 "La piazzola %s dell'impronta %s ha un foro quadrato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3410
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Caricando la libreria '%s':\n"
-"Impronta %s piazzola %s ha una rotazione del foro di %f gradi. KiCad "
-"supporta solo rotazioni di 90 gradi."
+"Caricamento libreria '%s':\n"
+"Impronta %s piazzola %s con rotazione del foro di %d gradi. KiCad supporta "
+"solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3425
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"La piazzola %s dell'impronta %s ha una rotazione del foro di %f gradi. KiCad "
+"La piazzola %s dell'impronta %s con rotazione del foro di %d gradi. KiCad "
 "supporta solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3445
@@ -50061,18 +50033,18 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
 msgstr ""
 "Errore caricando la libreria '%s':\n"
-"Impronta %s piazzola %s usa una forma piazzola sconosciuta."
+"L'impronta %s piazzola %s usa una forma piazzola sconosciuta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3537
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
-msgstr "Impronta %s piazzola %s usa una forma piazzola sconosciuta."
+msgstr "L'impronta %s piazzola %s usa una forma piazzola sconosciuta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3639
 #, c-format
@@ -50121,7 +50093,7 @@ msgstr ""
 "supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3878
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "La piazzola non rame %s usa una forma piazzola sconosciuta."
 
@@ -51031,9 +51003,11 @@ msgid "Generating BOM section"
 msgstr "Generazione sezione DIBA"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "Impronta '%s' non trovata nella libreria '%s'."
+msgstr ""
+"Impronta %s non trovata nel dizionario; i dati DIBA possono essere "
+"incompleti."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1320
 #, c-format
@@ -51046,10 +51020,8 @@ msgid "Generating CAD data"
 msgstr "Generazione dati CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2477
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
-msgstr ""
-"Contorno scheda mancante o malformato. Eseguire DRC per un'analisi completa."
+msgstr "Contorno scheda mancante o malformato.  Eseguire un DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2859
 msgid ""
@@ -51091,9 +51063,8 @@ msgid "Saving file"
 msgstr "Salvataggio file"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3726
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Impossibile salvare file su buffer"
+msgstr "Impossibile salvare dati IPC-2581 su buffer."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:650
 #, c-format
@@ -51128,14 +51099,14 @@ msgstr "Nome NETCLASS '%s' duplicato."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2513
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2524
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZAux for CZONE_CONTAINER '%s'"
-msgstr "Errato ZAux per CZONE_CONTAINER \"%s\""
+msgstr "Errato ZAux per CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2539
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
-msgstr "Errato ZSmoothing per CZONE_CONTAINER \"%s\""
+msgstr "Errato ZSmoothing per CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2591
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8167
@@ -51147,9 +51118,9 @@ msgstr ""
 "Le zone a riempimento verranno convertite il meglio possibile."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2617
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER '%s'"
-msgstr "Errata opzione piazzola ZClearance per CZONE_CONTAINER \"%s\""
+msgstr "Errata opzione piazzola ZClearance per CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2913
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2952
@@ -51510,9 +51481,8 @@ msgstr ""
 "dell'editor dei C.S. .\n"
 
 #: pcbnew/pcb_point.cpp:166
-#, fuzzy
 msgid "PCB Point"
-msgstr "Origine C. S."
+msgstr "Punto CS"
 
 #: pcbnew/pcb_reference_image.cpp:357
 msgid "Associated Layer"
@@ -51551,14 +51521,14 @@ msgid "Pad Primitives"
 msgstr "Primitiva piazzola"
 
 #: pcbnew/pcb_table.cpp:535
-#, fuzzy, c-format
+#, c-format
 msgid "%d column table"
-msgstr "Tabella colonne %d"
+msgstr "Tabella %d colonne"
 
 #: pcbnew/pcb_tablecell.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Table cell %s"
-msgstr "Cella tabella %s"
+msgstr "Cella %s tabella"
 
 #: pcbnew/pcb_target.cpp:152
 msgid "PCB Target"
@@ -51885,26 +51855,26 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_textbox.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
-msgstr "Riquadro di testo C.S. '%s' su %s"
+msgstr "Riquadro di testo CS '%s' su %s"
 
 #: pcbnew/pcb_textbox.cpp:841
 msgid "Border Properties"
 msgstr "Proprietà bordo"
 
 #: pcbnew/pcb_track.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Blind via %s on %s"
-msgstr "Via cieco/sepolto %s su %s"
+msgstr "Via cieco %s su %s"
 
 #: pcbnew/pcb_track.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Buried via %s on %s"
-msgstr "Via cieco/sepolto %s su %s"
+msgstr "Via sepolto %s su %s"
 
 #: pcbnew/pcb_track.cpp:177
-#, fuzzy, c-format
+#, c-format
 msgid "Micro via %s on %s"
 msgstr "Microvia %s su %s"
 
@@ -51918,9 +51888,8 @@ msgid "removed annular ring"
 msgstr "anello rimosso"
 
 #: pcbnew/pcb_track.cpp:1759
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "Selettore diametro via"
+msgstr "Diametro via troppo piccolo."
 
 #: pcbnew/pcb_track.cpp:1766
 msgid "Via drill is too small."
@@ -51931,36 +51900,32 @@ msgid "No via hole size defined."
 msgstr "Nessuna dimensione foro via definita."
 
 #: pcbnew/pcb_track.cpp:1780
-#, fuzzy
 msgid "No via diameter defined."
-msgstr "Nessuna dimensione foro via definita."
+msgstr "Nessun diametro via definito."
 
 #: pcbnew/pcb_track.cpp:1788
 msgid "Via hole size must be smaller than via diameter"
 msgstr "La dimensione del foro del via deve essere minore del diametro del via"
 
 #: pcbnew/pcb_track.cpp:1808
-#, fuzzy
 msgid "Via layer must be a copper layer."
-msgstr "Se si desidera lo strato retro in rame"
+msgstr "Lo strato via deve essere in rame."
 
 #: pcbnew/pcb_track.cpp:1820
 msgid "Via layer is outside the board stack."
-msgstr ""
+msgstr "Lo strato via è esterno alla pila della scheda."
 
 #: pcbnew/pcb_track.cpp:1838
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Gli strati di inizio e di fine via non possono essere uguali"
 
 #: pcbnew/pcb_track.cpp:1847
-#, fuzzy
 msgid "Backdrill diameter is too small."
-msgstr "Selettore diametro via"
+msgstr "Diametro retroforatura troppo piccolo."
 
 #: pcbnew/pcb_track.cpp:1863
-#, fuzzy
 msgid "Tertiary backdrill diameter is too small."
-msgstr "Selettore diametro via"
+msgstr "Diametro terziario retroforatura troppo piccolo."
 
 #: pcbnew/pcb_track.cpp:2282
 msgid "Track (arc)"
@@ -51988,14 +51953,12 @@ msgid "Micro Via"
 msgstr "Microvia"
 
 #: pcbnew/pcb_track.cpp:2395
-#, fuzzy
 msgid "Blind Via"
-msgstr "Via cieco/sepolto"
+msgstr "Via cieco"
 
 #: pcbnew/pcb_track.cpp:2396
-#, fuzzy
 msgid "Buried Via"
-msgstr "Via coperti/interni:"
+msgstr "Via sepolto"
 
 #: pcbnew/pcb_track.cpp:2397
 msgid "Through Via"
@@ -52023,9 +51986,8 @@ msgstr "Pista %s su %s, lung. %s"
 #: pcbnew/pcb_track.cpp:2846 pcbnew/pcb_track.cpp:2852
 #: pcbnew/pcb_track.cpp:2858 pcbnew/pcb_track.cpp:2864
 #: pcbnew/pcb_track.cpp:2870
-#, fuzzy
 msgid "From board stackup"
-msgstr "Stackup scheda"
+msgstr "Dallo stackup scheda"
 
 #: pcbnew/pcb_track.cpp:2847
 msgid "Tented"
@@ -52112,38 +52074,36 @@ msgid "Filling"
 msgstr "Riempimento"
 
 #: pcbnew/pcb_track.cpp:3241
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "Tenting fronte"
+msgstr "Post-lavorazione fronte"
 
 #: pcbnew/pcb_track.cpp:3244
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "Dimensione post-lavorazione fronte"
 
 #: pcbnew/pcb_track.cpp:3255
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "Profondità post-lavorazione fronte"
 
 #: pcbnew/pcb_track.cpp:3266
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "Angolo post-lavorazione fronte"
 
 #: pcbnew/pcb_track.cpp:3277
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "Tenting posteriore"
+msgstr "Post-lavorazione retro"
 
 #: pcbnew/pcb_track.cpp:3280
 msgid "Back Post-machining Size"
-msgstr ""
+msgstr "Dimensione post-lavorazione retro"
 
 #: pcbnew/pcb_track.cpp:3291
 msgid "Back Post-machining Depth"
-msgstr ""
+msgstr "Profondità post-lavorazione retro"
 
 #: pcbnew/pcb_track.cpp:3302
 msgid "Back Post-machining Angle"
-msgstr ""
+msgstr "Angolo post-lavorazione retro"
 
 #: pcbnew/pcbexpr_evaluator.cpp:689
 msgid "must be mm, in, mil, deg, fs, or ps"
@@ -52221,18 +52181,17 @@ msgstr ""
 "hasComponentClass()"
 
 #: pcbnew/pcbnew.cpp:615 pcbnew/pcbnew.cpp:627
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "Carica librerie impronte"
+msgstr "Caricamento librerie impronte"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:438
 msgid "Failed to load board\n"
 msgstr "Impossibile caricare scheda\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Nome strato \"%s\" non valido\n"
+msgstr "Nome strato '%s' non valido\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:541 pcbnew/pcbnew_jobs_handler.cpp:621
 #: pcbnew/pcbnew_jobs_handler.cpp:665
@@ -52281,9 +52240,9 @@ msgid "Error writing file '%s'.\n"
 msgstr "Errore nello scrivere il file '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Scritti dati posizionali retro in '%s'.\n"
+msgstr "Scritte statistiche scheda in '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1869 pcbnew/pcbnew_jobs_handler.cpp:1943
 #, c-format
@@ -52358,14 +52317,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Salvato rapporto DRC su %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2417
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Caricamento scheda\n"
+msgstr "Scheda salvata\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2421
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Impossibile caricare scheda\n"
+msgstr "Impossibile salvare la scheda.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2521
 #, c-format
@@ -52389,9 +52346,8 @@ msgid "Successfully saved board file using the latest format\n"
 msgstr "File scheda salvato correttamente utilizzando il formato più recente\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2652
-#, fuzzy
 msgid "Board file was not updated\n"
-msgstr "Libreria di simboli non aggiornata\n"
+msgstr "File scheda non aggiornato\n"
 
 #: pcbnew/pcbnew_printout.cpp:100
 msgid "Multiple Layers"
@@ -52406,42 +52362,44 @@ msgstr "La tracciatura HPGL non è più supportata a partire da KiCad 10.0"
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Errore nella prima fase di inizializzazione del modulo Python '%s' tramite "
+"l'API Python C."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
-#, fuzzy
 msgid "Scripting init"
-msgstr "Console degli script"
+msgstr "Inizializzazione script"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Seconda fase di inizializzazione del modulo Python '%s' tramite l'API Python "
+"C, non riuscita."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile aprire la cartella plugin '%s'."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:220
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:228
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:237
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:243
-#, fuzzy
 msgid "Plugin Directory"
-msgstr "Apri cartella plugin"
+msgstr "Cartella plugin"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "La cartella '%s' non esiste"
+msgstr "La cartella plugin '%s' non esiste.  Crearla?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile creare la cartella plugin '%s'."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -52669,9 +52627,8 @@ msgid "Switches posture of the currently routed track."
 msgstr "Commuta la postura della pista sbrogliata correntemente."
 
 #: pcbnew/router/router_tool.cpp:201
-#, fuzzy
 msgid "Track Corner Mode Switch"
-msgstr "Modalità vertici piste"
+msgstr "Commutatore modalità vertici piste"
 
 #: pcbnew/router/router_tool.cpp:202
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -52679,48 +52636,36 @@ msgstr ""
 "Commuta tra vertici a punta/arrotondati e 45°/90° durante lo sbroglio piste."
 
 #: pcbnew/router/router_tool.cpp:210
-#, fuzzy
 msgid "Track Corner Mode 45"
-msgstr "Modalità vertici piste"
+msgstr "Modalità 45 vertici piste"
 
 #: pcbnew/router/router_tool.cpp:211
-#, fuzzy
 msgid "Switch to 45° corner when routing tracks."
-msgstr ""
-"Commuta tra vertici a punta/arrotondati e 45°/90° durante lo sbroglio piste."
+msgstr "Commuta vertici a 45° nello lo sbroglio piste."
 
 #: pcbnew/router/router_tool.cpp:217
-#, fuzzy
 msgid "Track Corner Mode 90"
-msgstr "Modalità vertici piste"
+msgstr "Modalità 90 vertici piste"
 
 #: pcbnew/router/router_tool.cpp:218
-#, fuzzy
 msgid "Switch to 90° corner when routing tracks."
-msgstr ""
-"Commuta tra vertici a punta/arrotondati e 45°/90° durante lo sbroglio piste."
+msgstr "Commuta vertici a 90° nello sbroglio piste."
 
 #: pcbnew/router/router_tool.cpp:224
-#, fuzzy
 msgid "Track Corner Mode Arc 45"
-msgstr "Modalità vertici piste"
+msgstr "Modalità Arc 45 vertici piste"
 
 #: pcbnew/router/router_tool.cpp:225
-#, fuzzy
 msgid "Switch to arc 45° corner when routing tracks."
-msgstr ""
-"Commuta tra vertici a punta/arrotondati e 45°/90° durante lo sbroglio piste."
+msgstr "Commuta vertici arrotondati a 45° nello sbroglio piste."
 
 #: pcbnew/router/router_tool.cpp:231
-#, fuzzy
 msgid "Track Corner Mode Arc 90"
-msgstr "Modalità vertici piste"
+msgstr "Modalità Arc 90 vertici piste"
 
 #: pcbnew/router/router_tool.cpp:232
-#, fuzzy
 msgid "Switch to arc 90° corner when routing tracks."
-msgstr ""
-"Commuta tra vertici a punta/arrotondati e 45°/90° durante lo sbroglio piste."
+msgstr "Commuta vertici arrotondati a 90° nello sbroglio piste."
 
 #: pcbnew/router/router_tool.cpp:255
 msgid "Select Track/Via Width"
@@ -53020,9 +52965,8 @@ msgid "Track tuning tools"
 msgstr "Strumenti di regolazione piste"
 
 #: pcbnew/toolbars_pcb_editor.cpp:235
-#, fuzzy
 msgid "PCB origins and points"
-msgstr "Origine C. S."
+msgstr "Origine e punti del CS"
 
 #: pcbnew/toolbars_pcb_editor.cpp:391
 msgid ""
@@ -53528,9 +53472,8 @@ msgstr ""
 "vincoli di 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1299
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
-msgstr "Seleziona un elemento per rapporto risoluzione vincoli."
+msgstr "Seleziona un singolo elemento per un rapporto risoluzione vincoli."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1332
 #, c-format
@@ -53688,9 +53631,8 @@ msgid "Select Via Size"
 msgstr "Seleziona dimensione via"
 
 #: pcbnew/tools/drawing_tool.cpp:344
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "Blocca a O, V e 45 gradi"
+msgstr "Vincola a O o V"
 
 #: pcbnew/tools/drawing_tool.cpp:385 pcbnew/tools/drawing_tool.cpp:2574
 msgid "Draw Line"
@@ -53717,14 +53659,12 @@ msgid "Draw Bezier"
 msgstr "Disegna bezier"
 
 #: pcbnew/tools/drawing_tool.cpp:917
-#, fuzzy
 msgid "Place point"
-msgstr "Piazza pin"
+msgstr "Piazza punto"
 
 #: pcbnew/tools/drawing_tool.cpp:1539
-#, fuzzy
 msgid "Draw Barcode"
-msgstr "Disegna un cerchio"
+msgstr "Disegna codice a barre"
 
 #: pcbnew/tools/drawing_tool.cpp:1820
 msgid "Draw Dimension"
@@ -53747,29 +53687,24 @@ msgid "Place via"
 msgstr "Piazza via"
 
 #: pcbnew/tools/drc_tool.cpp:313
-#, fuzzy
 msgid "Edit Footprint Properties..."
-msgstr "Modifica proprietà impronta"
+msgstr "Modifica proprietà impronte..."
 
 #: pcbnew/tools/drc_tool.cpp:318
-#, fuzzy
 msgid "Edit Pad Properties..."
-msgstr "Modifica proprietà piazzola"
+msgstr "Modifica proprietà piazzole..."
 
 #: pcbnew/tools/drc_tool.cpp:328
-#, fuzzy
 msgid "Edit Dimension Properties..."
-msgstr "Modifica proprietà dimensioni"
+msgstr "Modifica proprietà dimensioni..."
 
 #: pcbnew/tools/drc_tool.cpp:330
-#, fuzzy
 msgid "Edit Field Properties..."
-msgstr "Modifica proprietà etichetta"
+msgstr "Modifica proprietà campi..."
 
 #: pcbnew/tools/drc_tool.cpp:332
-#, fuzzy
 msgid "Edit Text Properties..."
-msgstr "Modifica proprietà testo"
+msgstr "Modifica proprietà testi..."
 
 #: pcbnew/tools/edit_tool.cpp:169
 msgid "Shape Modification"
@@ -53780,9 +53715,9 @@ msgid "Swap Gate Nets..."
 msgstr "Scambia collegamenti porte..."
 
 #: pcbnew/tools/edit_tool.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Swap with %s"
-msgstr "Unità"
+msgstr "Scambia con %s"
 
 #: pcbnew/tools/edit_tool.cpp:952
 #, c-format
@@ -53929,14 +53864,12 @@ msgstr ""
 "piazzole non selezionate."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "Piazzole metallizzate:"
+msgstr "Piazzole non selezionate:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "Rimuovi piazzole inutilizzate"
+msgstr "Ignora piazzole non selezionate"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 msgid "Swap All Connected Pads"
@@ -53944,9 +53877,8 @@ msgstr "Scambia tutte le piazzole collegate"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:315
 #: pcbnew/tools/edit_tool_move_fct.cpp:350 pcbnew/tools/pcb_actions.cpp:704
-#, fuzzy
 msgid "Swap Pad Nets"
-msgstr "Mostra collegamenti senza piazzole"
+msgstr "Scambia collegamenti piazzole"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
