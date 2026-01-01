@@ -223,8 +223,20 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
         titleDirList.emplace_back( _( "System Templates" ), templatePath );
     }
 
+    // Use last used template if available, otherwise fall back to default
+    wxFileName templateToSelect = defaultTemplate;
+
+    if( !settings->m_LastUsedTemplate.IsEmpty() )
+    {
+        wxFileName lastUsed;
+        lastUsed.AssignDir( settings->m_LastUsedTemplate );
+
+        if( lastUsed.DirExists() )
+            templateToSelect = lastUsed;
+    }
+
     DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos, settings->m_TemplateWindowSize,
-                                 titleDirList, defaultTemplate );
+                                 titleDirList, templateToSelect );
 
     int result = ps.ShowModal();
 
@@ -340,6 +352,11 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
         DisplayErrorMessage( m_frame, _( "A problem occurred creating new project from template." ), errorMsg );
         return -1;
     }
+
+    // Save the last used template path for pre-selection next time
+    wxFileName templateDir = selectedTemplate->GetHtmlFile();
+    templateDir.RemoveLastDir();  // Remove "meta" directory
+    settings->m_LastUsedTemplate = templateDir.GetPath();
 
     m_frame->CreateNewProject( fn.GetFullPath() );
     m_frame->LoadProject( fn );

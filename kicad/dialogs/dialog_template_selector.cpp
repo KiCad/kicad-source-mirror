@@ -501,6 +501,16 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     if( m_defaultWidget )
         m_defaultWidget->Select();
 
+    // Make OK button the default so Enter triggers it
+    m_sdbSizerOK->SetDefault();
+
+    // Handle Enter key in the template path text control to trigger OK
+    m_tcTemplatePath->Bind( wxEVT_TEXT_ENTER,
+                            [this]( wxCommandEvent& )
+                            {
+                                EndModal( wxID_OK );
+                            } );
+
     // Set welcome HTML after dialog is fully constructed
     CallAfter(
             [this]()

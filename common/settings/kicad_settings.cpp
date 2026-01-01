@@ -65,6 +65,8 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back( new PARAM<wxSize>( "template.window.size", &m_TemplateWindowSize,
                                               wxDefaultSize ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "template.last_used", &m_LastUsedTemplate, "" ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",
             [&]() -> nlohmann::json
