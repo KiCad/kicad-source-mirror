@@ -182,7 +182,8 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel, const std::vec
 }
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                             bool aResolve, int aDepth, REPORTER& aReporter )
+                                             bool aResolve, int aDepth, REPORTER& aReporter,
+                                             const wxString& aMergedSimPins )
 {
     // Note: currently this creates a resolved model (all Kicad variables references are resolved
     // before building the model).
@@ -203,7 +204,12 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         else if( field.GetId() == FIELD_T::VALUE || field.GetName().StartsWith( wxS( "Sim." ) ) )
         {
             fields.emplace_back( &aSymbol, FIELD_T::USER, field.GetName() );
-            fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth ) );
+
+            // For multi-unit symbols, use merged Sim.Pins from all units if provided
+            if( !aMergedSimPins.IsEmpty() && field.GetName() == SIM_PINS_FIELD )
+                fields.back().SetText( aMergedSimPins );
+            else
+                fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth ) );
         }
     }
 

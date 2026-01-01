@@ -147,6 +147,20 @@ protected:
 private:
     void readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                       std::set<std::string>& aRefNames );
+
+    /**
+     * Collect merged Sim.Pins from all units of a multi-unit symbol.
+     *
+     * For multi-unit symbols, each unit may have its own partial Sim.Pins mapping. This method
+     * finds all units with the same reference and merges their Sim.Pins fields into a single
+     * combined mapping.
+     *
+     * @param aSymbol The symbol to collect pins for
+     * @param aSheet The sheet path for the symbol
+     * @return The merged Sim.Pins string, or empty string if symbol is not multi-unit
+     */
+    wxString collectMergedSimPins( SCH_SYMBOL& aSymbol, const SCH_SHEET_PATH& aSheet );
+
     void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                     REPORTER& aReporter );
     void readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,

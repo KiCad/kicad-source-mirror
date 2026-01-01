@@ -46,6 +46,7 @@
 #include <paths.h>
 #include <wx/dir.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 #include <locale_io.h>
 #include "markup_parser.h"
 
@@ -408,6 +409,81 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 }
 
 
+wxString NETLIST_EXPORTER_SPICE::collectMergedSimPins( SCH_SYMBOL& aSymbol,
+                                                        const SCH_SHEET_PATH& aSheet )
+{
+    // Only process multi-unit symbols
+    if( !aSymbol.GetLibSymbolRef() || aSymbol.GetLibSymbolRef()->GetUnitCount() <= 1 )
+        return wxEmptyString;
+
+    wxString                                   ref = aSymbol.GetRef( &aSheet );
+    std::vector<std::pair<wxString, wxString>> pinList;
+    std::set<wxString>                         pinNumbers;
+
+    // Helper to parse and collect pin mappings from a Sim.Pins field value
+    auto parsePins = [&]( const wxString& aPins )
+    {
+        wxStringTokenizer tokenizer( aPins, wxS( " \t\r\n" ), wxTOKEN_STRTOK );
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            wxString token = tokenizer.GetNextToken();
+            int      pos = token.Find( wxS( '=' ) );
+
+            if( pos == wxNOT_FOUND )
+                continue;
+
+            wxString pinNumber = token.Left( pos );
+            wxString modelPin = token.Mid( pos + 1 );
+
+            // Only add if we haven't seen this pin number before
+            if( pinNumbers.insert( pinNumber ).second )
+                pinList.emplace_back( pinNumber, modelPin );
+        }
+    };
+
+    // First, parse pins from the current symbol
+    if( SCH_FIELD* pinsField = aSymbol.GetField( SIM_PINS_FIELD ) )
+        parsePins( pinsField->GetShownText( &aSheet, false ) );
+
+    // Then, find all other units with the same reference and collect their Sim.Pins
+    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* other = static_cast<SCH_SYMBOL*>( item );
+
+            if( other == &aSymbol )
+                continue;
+
+            if( other->GetRef( &sheet ) != ref )
+                continue;
+
+            if( SCH_FIELD* pinsField = other->GetField( SIM_PINS_FIELD ) )
+                parsePins( pinsField->GetShownText( &sheet, false ) );
+        }
+    }
+
+    // If no pins were collected or only from current symbol, return empty
+    // (let the normal processing handle it)
+    if( pinList.empty() )
+        return wxEmptyString;
+
+    // Build the merged Sim.Pins string
+    wxString merged;
+
+    for( const auto& [pinNumber, modelPin] : pinList )
+    {
+        if( !merged.IsEmpty() )
+            merged += wxS( " " );
+
+        merged += pinNumber + wxS( "=" ) + modelPin;
+    }
+
+    return merged;
+}
+
+
 void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                           SPICE_ITEM& aItem, std::set<std::string>& aRefNames )
 {
@@ -421,7 +497,11 @@ void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                         SPICE_ITEM& aItem, REPORTER& aReporter )
 {
-    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aReporter );
+    // For multi-unit symbols, collect merged Sim.Pins from all units
+    wxString mergedSimPins = collectMergedSimPins( aSymbol, aSheet );
+
+    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aReporter,
+                                                                mergedSimPins );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;
