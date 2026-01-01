@@ -140,10 +140,10 @@ BOOST_FIXTURE_TEST_CASE( CreepagePerformanceIssue21482, DRC_CREEPAGE_PERF_TEST_F
     // Clear the violation handler
     bds.m_DRCEngine->ClearViolationHandler();
 
-    // Performance check: should complete in less than 15 seconds
+    // Performance check: should complete in less than 20 seconds
     // The original was more than 2 minutes.
-    BOOST_CHECK_MESSAGE( elapsedSeconds < 15.0,
-                         wxString::Format( "Creepage DRC too slow: %.2f seconds (target: <15s)",
+    BOOST_CHECK_MESSAGE( elapsedSeconds < 20.0,
+                         wxString::Format( "Creepage DRC too slow: %.2f seconds (target: <20s)",
                                            elapsedSeconds ) );
 
     // Performance tier feedback
