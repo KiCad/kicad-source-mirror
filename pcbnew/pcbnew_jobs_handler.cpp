@@ -1100,7 +1100,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
-    if( plotAllLayersOneFile && pdfJob->GetConfiguredOutputPath().IsEmpty() )
+    const bool outputIsSingle = plotAllLayersOneFile || pdfJob->m_pdfSingle;
+
+    if( outputIsSingle && pdfJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -1114,13 +1116,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pdfJob, *m_reporter );
 
-    // ensure this is set for this one gen mode
-    if( plotAllLayersOneFile )
-        plotOpts.m_PDFSingle = true;
-
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    if( !PATHS::EnsurePathExists( outPath, plotAllLayersOneFile ) )
+    if( !PATHS::EnsurePathExists( outPath, outputIsSingle ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1143,7 +1141,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     }
 
     if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
-                          pdfJob->m_plotOnAllLayersSequence, false, plotAllLayersOneFile,
+                          pdfJob->m_plotOnAllLayersSequence, false, outputIsSingle,
                           layerName, sheetName, sheetPath ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;

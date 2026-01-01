@@ -51,6 +51,7 @@ set( QA_PCBNEW_SRCS
     test_prettifier.cpp
     test_libeval_compiler.cpp
     test_reference_image_load.cpp
+    test_pdf_output_path.cpp
     test_shape_corner_radius.cpp
     test_pcb_grid_helper.cpp
     test_save_load.cpp
