@@ -624,7 +624,10 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     std::unique_ptr<SCH_SYMBOL> newSymbol = std::make_unique<SCH_SYMBOL>( *symbol );
     const SCH_SHEET_PATH&       sheetPath = m_frame->GetCurrentSheet();
 
-    newSymbol->SetUnitSelection( &sheetPath, nextMissing );
+    // Use SetUnitSelection(int) to update ALL instance references at once.
+    // This is important for shared sheets where the same screen is used by multiple
+    // sheet instances - we want the new symbol unit to appear correctly on all instances.
+    newSymbol->SetUnitSelection( nextMissing );
     newSymbol->SetUnit( nextMissing );
     newSymbol->SetRefProp( symbol->GetRef( &sheetPath, false ) );
 
