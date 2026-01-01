@@ -32,7 +32,8 @@ SCH_IO_LIB_CACHE::SCH_IO_LIB_CACHE( const wxString& aFullPathAndFileName ) :
     m_libFileName( aFullPathAndFileName ),
     m_fileModTime( 0 ),
     m_isWritable( true ),
-    m_isModified( false )
+    m_isModified( false ),
+    m_hasParseError( false )
 {
     m_libType = SCH_LIB_TYPE::LT_EESCHEMA;
 }

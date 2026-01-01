@@ -258,6 +258,17 @@ private:
 
     void resolveGroups( SCH_SCREEN* aParent );
 
+    /**
+     * Skip tokens until we reach the end of the current S-expression block.
+     *
+     * This is used for error recovery when parsing fails mid-symbol.
+     * The parser will consume tokens until the matching closing parenthesis
+     * is found, allowing parsing to continue with the next symbol.
+     *
+     * @param aDepth The initial nesting depth (1 = inside one open paren)
+     */
+    void skipToBlockEnd( int aDepth = 1 );
+
 private:
     int      m_requiredVersion;   ///< Set to the symbol library file version required.
     wxString m_generatorVersion;

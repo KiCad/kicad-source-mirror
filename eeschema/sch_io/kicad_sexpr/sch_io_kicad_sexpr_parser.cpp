@@ -248,8 +248,25 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 
             m_unit = 1;
             m_bodyStyle = 1;
-            LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
-            aSymbolLibMap[symbol->GetName()] = symbol;
+
+            try
+            {
+                LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
+                aSymbolLibMap[symbol->GetName()] = symbol;
+            }
+            catch( const IO_ERROR& e )
+            {
+                // Record the error and skip to the end of this symbol block
+                wxString warning = wxString::Format(
+                        _( "Error parsing symbol at line %d: %s\nSkipping symbol and continuing." ),
+                        CurLineNumber(), e.What() );
+                m_parseWarnings.push_back( warning );
+
+                // Skip to the end of this symbol's S-expression block
+                // We're already past T_symbol, so we're inside the symbol definition
+                skipToBlockEnd( 1 );
+            }
+
             break;
         }
 
@@ -5182,4 +5199,22 @@ void SCH_IO_KICAD_SEXPR_PARSER::resolveGroups( SCH_SCREEN* aParent )
     }
 
     aParent->GroupsSanityCheck( true );
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::skipToBlockEnd( int aDepth )
+{
+    // Skip tokens until we exit the current S-expression block.
+    // This is used for error recovery when parsing fails mid-symbol.
+    while( aDepth > 0 )
+    {
+        T token = NextTok();
+
+        if( token == T_EOF )
+            break;
+        else if( token == T_LEFT )
+            aDepth++;
+        else if( token == T_RIGHT )
+            aDepth--;
+    }
 }

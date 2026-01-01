@@ -81,6 +81,21 @@ public:
 
     void SetModified( bool aModified = true ) { m_isModified = aModified; }
 
+    /**
+     * @return true if the library had a parse error during loading.
+     *
+     * When a parse error occurs, only symbols before the error are loaded.
+     * Saving a library in this state would permanently lose symbols after the error.
+     */
+    bool HasParseError() const { return m_hasParseError; }
+
+    /**
+     * Set the parse error state.
+     *
+     * @param aHasError true if the library had a parse error during loading.
+     */
+    void SetParseError( bool aHasError = true ) { m_hasParseError = aHasError; }
+
     wxString GetLogicalName() const { return m_libFileName.GetName(); }
 
     void SetFileName( const wxString& aFileName ) { m_libFileName = aFileName; }
@@ -101,6 +116,7 @@ protected:
     LIB_SYMBOL_MAP    m_symbols;      // Map of names of #LIB_SYMBOL pointers.
     bool              m_isWritable;
     bool              m_isModified;
+    bool              m_hasParseError; // True if library had parse error during load.
     SCH_LIB_TYPE      m_libType;      // Is this cache a symbol or symbol library.
 };
 

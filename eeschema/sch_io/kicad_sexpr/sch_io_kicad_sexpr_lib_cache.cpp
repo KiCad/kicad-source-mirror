@@ -73,9 +73,30 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
         SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
 
         parser.ParseLib( m_symbols );
+
         SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
         updateParentSymbolLinks();
         IncrementModifyHash();
+
+        // Check if there were any parse warnings (symbols that failed to parse).
+        // If so, mark the library as having parse errors and throw to notify the user.
+        // The library has loaded all valid symbols, but saving would lose the bad ones.
+        const std::vector<wxString>& warnings = parser.GetParseWarnings();
+
+        if( !warnings.empty() )
+        {
+            SetParseError( true );
+
+            wxString errorMsg = wxString::Format(
+                    _( "Library '%s' loaded with errors:\n\n" ), m_libFileName.GetFullPath() );
+
+            for( const wxString& warning : warnings )
+                errorMsg += warning + wxT( "\n\n" );
+
+            errorMsg += _( "The library cannot be saved until these errors are fixed manually." );
+
+            THROW_IO_ERROR( errorMsg );
+        }
     }
     else
     {
@@ -102,9 +123,23 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 
                     parser.ParseLib( m_symbols );
                     SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
+
+                    // Collect any parse warnings from this file
+                    for( const wxString& warning : parser.GetParseWarnings() )
+                    {
+                        SetParseError( true );
+
+                        if( !errorCache.IsEmpty() )
+                            errorCache += wxT( "\n\n" );
+
+                        errorCache += warning;
+                    }
                 }
                 catch( const IO_ERROR& ioe )
                 {
+                    // Mark that we had a parse error - saving would lose symbols
+                    SetParseError( true );
+
                     if( !errorCache.IsEmpty() )
                         errorCache += wxT( "\n\n" );
 
@@ -114,7 +149,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
             } while( dir.GetNext( &libFileName ) );
 
             if( !errorCache.IsEmpty() )
+            {
+                errorCache += _( "\n\nThe library cannot be saved until these errors are fixed manually." );
                 THROW_IO_ERROR( errorCache );
+            }
         }
 
         updateParentSymbolLinks();
@@ -131,6 +169,18 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 {
     if( !m_isModified )
         return;
+
+    // If the library had a parse error during loading, we cannot safely save it.
+    // Only symbols before the parse error were loaded, so saving would permanently
+    // lose all symbols after the error point. See issue #22241.
+    if( HasParseError() )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "Cannot save library '%s' because it had a parse error during loading.\n\n"
+                   "Saving would permanently lose symbols that could not be loaded.\n"
+                   "Please fix the library file manually before saving." ),
+                m_libFileName.GetFullPath() ) );
+    }
 
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
