@@ -1583,8 +1583,6 @@ std::vector<PATH_CONNECTION> CU_SHAPE_ARC::Paths( const BE_SHAPE_POINT& aS2, dou
         CU_SHAPE_CIRCLE circle( nearestPoint, width / 2 );
         return circle.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
     }
-
-    return result;
 }
 
 

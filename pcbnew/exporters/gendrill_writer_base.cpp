@@ -1205,7 +1205,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
         totalHoleCount = printToolSummary( outFp, true );
         fmt::print( outFp, "    Total unplated holes count {}\n", totalHoleCount );
     }
-    catch( const std::system_error& e )
+    catch( const std::system_error& )
     {
         writeError = true;
     }
