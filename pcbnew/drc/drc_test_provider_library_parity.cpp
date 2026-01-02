@@ -83,7 +83,7 @@ public:
                 return diff;                                \
         } while (0)
 
-#define EPSILON 2
+#define EPSILON 10
 #define TEST_PT( a, b, msg )                                \
         do {                                                \
             if( abs( a.x - b.x ) > EPSILON                  \
@@ -99,7 +99,7 @@ public:
                 return diff;                                \
         } while (0)
 
-#define EPSILON_D 0.000002
+#define EPSILON_D 0.000010
 #define TEST_D( a, b, msg )                                 \
         do {                                                \
             if( abs( a - b ) > EPSILON_D )                  \
@@ -822,11 +822,12 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
         if( IsFlipped() != temp->IsFlipped() )
             temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
 
-        if( GetOrientation() != temp->GetOrientation() )
-            temp->SetOrientation( GetOrientation() );
-
+        // Set position first before rotating to minimize rounding errors.
         if( GetPosition() != temp->GetPosition() )
             temp->SetPosition( GetPosition() );
+
+        if( GetOrientation() != temp->GetOrientation() )
+            temp->SetOrientation( GetOrientation() );
     }
 
     for( BOARD_ITEM* item : temp->GraphicalItems() )
