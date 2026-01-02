@@ -1191,7 +1191,16 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     {
         if( layerPair.second == PCB_LAYER_ID::UNDEFINED_LAYER )
         {
-            wxFAIL_MSG( wxT( "Unexpected Layer ID" ) );
+            // Layer mapping handler returned UNDEFINED_LAYER - skip this layer
+            // This can happen for layers that don't have a KiCad equivalent
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( _( "Layer '%s' could not be mapped and "
+                                                         "will be skipped." ),
+                                                      layerPair.first ),
+                                    RPT_SEVERITY_WARNING );
+            }
+
             continue;
         }
 
@@ -1290,6 +1299,21 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "Classes6 stream is not fully parsed" ) );
+
+    // Now that all netclasses and pattern assignments are set up, resolve the pattern
+    // assignments to direct netclass assignments on each net.
+    std::shared_ptr<NET_SETTINGS> netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+    for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+    {
+        if( net->GetNetCode() > 0 )
+        {
+            std::shared_ptr<NETCLASS> netclass = netSettings->GetEffectiveNetClass( net->GetNetname() );
+
+            if( netclass )
+                net->SetNetClass( netclass );
+        }
+    }
 
     m_board->m_LegacyNetclassesLoaded = true;
 }
