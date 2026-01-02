@@ -102,6 +102,28 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aDat
     SetSize( size );
 
     GetSizer()->Fit( this ); // Needed on Ubuntu/Unity to display the dialog
+
+    // Set up tab order for proper keyboard navigation.
+    // This is needed because wxComboBox on GTK has issues with Tab key navigation.
+    m_tabOrder = {
+        m_comboFind,
+        m_comboReplace,
+        m_radioForward,
+        m_radioBackward,
+        m_checkMatchCase,
+        m_checkWholeWord,
+        m_checkRegexMatch,
+        m_cbSearchPins,
+        m_cbSearchHiddenFields,
+        m_cbCurrentSheetOnly,
+        m_cbSelectedOnly,
+        m_cbReplaceReferences,
+        m_cbSearchNetNames,
+        m_buttonFind,
+        m_buttonReplace,
+        m_buttonReplaceAll,
+        m_buttonCancel
+    };
 }
 
 

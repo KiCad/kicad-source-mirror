@@ -1512,7 +1512,10 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 
         for( size_t i = 0; i < m_tabOrder.size(); ++i )
         {
-            if( m_tabOrder[i] == currentWindow )
+            // Check for exact match or if currentWindow is a child of the control
+            // (e.g., the text entry inside a wxComboBox)
+            if( m_tabOrder[i] == currentWindow
+                || ( currentWindow && m_tabOrder[i]->IsDescendant( currentWindow ) ) )
             {
                 currentIdx = (int) i;
                 break;
@@ -1522,6 +1525,17 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         if( currentIdx >= 0 )
         {
             advance( currentIdx );
+
+            // Skip hidden or disabled controls
+            int startIdx = currentIdx;
+
+            while( !m_tabOrder[currentIdx]->IsShown() || !m_tabOrder[currentIdx]->IsEnabled() )
+            {
+                advance( currentIdx );
+
+                if( currentIdx == startIdx )
+                    break;  // Avoid infinite loop if all controls are hidden
+            }
 
             //todo: We don't currently have non-textentry dialog boxes but this will break if
             // we add them.
