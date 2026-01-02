@@ -1676,7 +1676,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
         if( currentReference.IsEmpty() || aResetPrefix )
             GetField( REFERENCE_FIELD )->SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
         else
-            GetField( REFERENCE_FIELD)->SetText( UTIL::GetRefDesUnannotated( currentReference ) );
+            GetField( REFERENCE_FIELD )->SetText( UTIL::GetRefDesUnannotated( currentReference ) );
     }
 }
 
