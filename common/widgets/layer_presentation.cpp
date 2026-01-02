@@ -24,10 +24,11 @@
 #include "widgets/layer_presentation.h"
 
 #include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/dcmemory.h>
+#include <wx/graphics.h>
 
 #include <gal/color4d.h>
-
 
 using namespace KIGFX;
 
@@ -70,105 +71,82 @@ void LAYER_PRESENTATION::DrawColorSwatch( wxBitmap& aLayerbmp, int aLayer ) cons
 }
 
 
-static constexpr unsigned BM_LAYERICON_SIZE = 24;
-static const char         s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] = {
-    // 0 = draw pixel with white
-    // 1 = draw pixel with black
-    // 2 = draw pixel with top layer from router pair
-    // 3 = draw pixel with bottom layer from router pair
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-};
-
-static COLOR4D ICON_WHITE{ 0.86, 0.86, 0.86, 1.0 };
-static COLOR4D ICON_BLACK{ 0.28, 0.28, 0.28, 1.0 };
-
-
-std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D& aBgColor,
-                                                                   const COLOR4D& aTopColor,
-                                                                   const COLOR4D& aBottomColor,
-                                                                   int aScale )
+// Helper function to create a single bitmap at a specific size using vector graphics
+static wxBitmap createLayerPairBitmapAtSize( const COLOR4D& aTopColor, const COLOR4D& aBottomColor, int aSize )
 {
-    auto layerPairBitmap = std::make_unique<wxBitmap>( BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
+    double scale = aSize / 24.0;
 
-    // Draw the icon, with colors according to the router's layer pair
-    wxMemoryDC iconDC;
-    iconDC.SelectObject( *layerPairBitmap );
-    wxBrush brush;
-    wxPen   pen;
-    int     buttonColor = -1;
+    wxBitmap bitmap( aSize, aSize );
+    wxMemoryDC memDC;
+    memDC.SelectObject( bitmap );
 
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( aBgColor.WithAlpha( 1.0 ).ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
+    wxGraphicsContext* gc = wxGraphicsContext::Create( memDC );
+    if( !gc )
+        return bitmap;
 
-    for( unsigned ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
-    {
-        for( unsigned jj = 0; jj < BM_LAYERICON_SIZE; jj++ )
-        {
-            if( s_BitmapLayerIcon[ii][jj] != buttonColor )
-            {
-                switch( s_BitmapLayerIcon[ii][jj] )
-                {
-                default:
-                case 0: pen.SetColour( ICON_WHITE.ToColour() ); break;
-                case 1: pen.SetColour( ICON_BLACK.ToColour() ); break;
-                case 2: pen.SetColour( aTopColor.ToColour() ); break;
-                case 3: pen.SetColour( aBottomColor.ToColour() ); break;
-                }
+    gc->SetAntialiasMode( wxANTIALIAS_DEFAULT );
 
-                buttonColor = s_BitmapLayerIcon[ii][jj];
-                iconDC.SetPen( pen );
-            }
+    int sepTopX = aSize - aSize / 3;
+    int sepTopY = -1;
+    int sepBotX = aSize / 3 - 1;
+    int sepBotY = aSize;
 
-            iconDC.DrawPoint( jj, ii );
-        }
-    }
+    // Draw left quadrilateral (top layer)
+    wxGraphicsPath topPath = gc->CreatePath();
+    topPath.MoveToPoint( 0, 0 );
+    topPath.AddLineToPoint( sepTopX, 0 );
+    topPath.AddLineToPoint( sepBotX, aSize );
+    topPath.AddLineToPoint( 0, aSize );
+    topPath.CloseSubpath();
 
-    // Deselect the bitmap from the DC in order to delete the MemoryDC safely without
-    // deleting the bitmap
-    iconDC.SelectObject( wxNullBitmap );
+    wxBrush topBrush( aTopColor.WithAlpha( 1.0 ).ToColour() );
+    gc->SetBrush( topBrush );
+    gc->SetPen( *wxTRANSPARENT_PEN );
+    gc->DrawPath( topPath );
 
-    // Scale the bitmap
-    wxImage image = layerPairBitmap->ConvertToImage();
+    // Draw right quadrilateral (bottom layer)
+    wxGraphicsPath bottomPath = gc->CreatePath();
+    bottomPath.MoveToPoint( sepTopX, 0 );
+    bottomPath.AddLineToPoint( aSize, 0 );
+    bottomPath.AddLineToPoint( aSize, aSize );
+    bottomPath.AddLineToPoint( sepBotX, aSize );
+    bottomPath.CloseSubpath();
 
-    // "NEAREST" causes less mixing of colors
-    image.Rescale( aScale * image.GetWidth() / 4, aScale * image.GetHeight() / 4,
-                   wxIMAGE_QUALITY_NEAREST );
+    wxBrush bottomBrush( aBottomColor.WithAlpha( 1.0 ).ToColour() );
+    gc->SetBrush( bottomBrush );
+    gc->DrawPath( bottomPath );
 
-    return std::make_unique<wxBitmap>( image );
+    // Draw separator line with white outline and black center
+    wxPen whiteLine( *wxWHITE, 3 * scale );
+    gc->SetPen( whiteLine );
+    gc->StrokeLine( sepTopX, sepTopY, sepBotX, sepBotY );
+
+    wxPen blackLine( *wxBLACK, 1 * scale );
+    gc->SetPen( blackLine );
+    gc->StrokeLine( sepTopX, sepTopY, sepBotX, sepBotY );
+
+    delete gc;
+    memDC.SelectObject( wxNullBitmap );
+
+    return bitmap;
 }
 
 
-std::unique_ptr<wxBitmap> LAYER_PRESENTATION::CreateLayerPairIcon( int aLeftLayer, int aRightLayer,
-                                                                   int aScale ) const
+wxBitmapBundle LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D& aTopColor, const COLOR4D& aBottomColor, int aDefSize )
 {
-    const COLOR4D bgColor = getLayerColor( LAYER_PCB_BACKGROUND );
+    wxVector<wxBitmap> bitmaps;
+
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize ) );
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 2 ) );
+
+    return wxBitmapBundle::FromBitmaps( bitmaps );
+}
+
+
+wxBitmapBundle LAYER_PRESENTATION::CreateLayerPairIcon( int aLeftLayer, int aRightLayer, int aDefSize ) const
+{
     const COLOR4D topColor = getLayerColor( aLeftLayer );
     const COLOR4D bottomColor = getLayerColor( aRightLayer );
 
-    return CreateLayerPairIcon( bgColor, topColor, bottomColor, aScale );
+    return CreateLayerPairIcon( topColor, bottomColor, aDefSize );
 }

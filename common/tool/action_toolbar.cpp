@@ -628,16 +628,20 @@ void ACTION_TOOLBAR::ClearToolbar()
 }
 
 
-void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap )
+void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmapBundle& aBitmap )
 {
     int toolId = aAction.GetUIId();
-    wxAuiToolBar::SetToolBitmap( toolId, aBitmap );
 
     // Set the disabled bitmap: we use the disabled bitmap version of aBitmap.
     wxAuiToolBarItem* tb_item = wxAuiToolBar::FindTool( toolId );
 
-    if( tb_item )
-        tb_item->SetDisabledBitmap( aBitmap.ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
+    if( !tb_item )
+        return;
+
+    wxBitmap bm = aBitmap.GetBitmapFor( this );
+
+    tb_item->SetBitmap( aBitmap );
+    tb_item->SetDisabledBitmap( bm.ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
 }
 
 

@@ -28,6 +28,7 @@
 #include <layer_ids.h>
 
 class wxBitmap;
+class wxBitmapBundle;
 
 using KIGFX::COLOR4D;
 
@@ -59,17 +60,14 @@ public:
     /**
      * Create a layer pair "side-by-side swatch" icon
      */
-    static std::unique_ptr<wxBitmap> CreateLayerPairIcon( const KIGFX::COLOR4D& aBgColor,
-                                                          const KIGFX::COLOR4D& aTopColor,
-                                                          const KIGFX::COLOR4D& aBottomColor,
-                                                          int                   aScale );
+    static wxBitmapBundle CreateLayerPairIcon( const COLOR4D& aTopColor, const COLOR4D& aBottomColor,
+                                               int aDefSize = 24 );
 
     /**
      * Create a layer pair "side-by-side swatch" icon for the given
      * layer pair with the style of this presentation.
      */
-    std::unique_ptr<wxBitmap> CreateLayerPairIcon( int aLeftLayer, int aRightLayer,
-                                                   int aScale ) const;
+    wxBitmapBundle CreateLayerPairIcon( int aLeftLayer, int aRightLayer, int aDefSize = 24 ) const;
 };
 
 #endif // LAYER_PRESENTATION_H

@@ -65,7 +65,7 @@
 
 
 /* Data to build the layer pair indicator button */
-static std::unique_ptr<wxBitmap> LayerPairBitmap;
+static wxBitmapBundle LayerPairBitmap;
 
 
 void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
@@ -105,15 +105,13 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    if( change || !LayerPairBitmap )
+    if( change || !LayerPairBitmap.IsOk() )
     {
-        const int scale = ( requested_scale <= 0 ) ? KiIconScale( this ) : requested_scale;
-        LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( background_color, top_color,
-                                                                   bottom_color, scale );
+        LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( top_color, bottom_color );
 
         if( m_tbTopAux )
         {
-            m_tbTopAux->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
+            m_tbTopAux->SetToolBitmap( PCB_ACTIONS::selectLayerPair, LayerPairBitmap );
             m_tbTopAux->Refresh();
         }
     }

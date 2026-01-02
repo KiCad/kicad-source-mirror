@@ -84,7 +84,7 @@ public:
     wxGridCellRenderer* Clone() const override;
 
 private:
-    const wxBitmap& m_icon;
+    wxBitmap m_icon;
 };
 
 //---- Grid helpers: custom wxGridCellRenderer that renders just an icon from wxArtprovider -

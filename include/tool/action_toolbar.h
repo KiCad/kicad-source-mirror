@@ -322,7 +322,7 @@ public:
      *
      * Not icon-based because we use it for the custom-drawn layer pair bitmap.
      */
-    void SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap );
+    void SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmapBundle& aBitmap );
 
     /**
      * Apply the default toggle action.
