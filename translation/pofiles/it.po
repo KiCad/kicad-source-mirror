@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-01 13:37+0000\n"
+"PO-Revision-Date: 2026-01-02 21:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -52627,9 +52627,8 @@ msgid "Filled Area"
 msgstr "Area piena"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Area regola"
+msgstr "Area contorno"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
