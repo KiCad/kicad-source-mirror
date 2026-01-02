@@ -320,9 +320,12 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         wxString pattern = entry["pattern"].get<wxString>();
                         wxString netclass = entry["netclass"].get<wxString>();
 
-                        m_netClassPatternAssignments.push_back(
-                                { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ),
-                                  netclass } );
+                        // Expand bus patterns so individual bus member nets can be matched
+                        ForEachBusMember( pattern,
+                                          [&]( const wxString& memberPattern )
+                                          {
+                                              addSinglePatternAssignment( memberPattern, netclass );
+                                          } );
                     }
                 }
             },
@@ -578,6 +581,21 @@ bool NET_SETTINGS::HasNetclassLabelAssignment( const wxString& netName ) const
 
 void NET_SETTINGS::SetNetclassPatternAssignment( const wxString& pattern, const wxString& netclass )
 {
+    // Expand bus patterns (vector buses and bus groups) to individual member patterns.
+    // This is necessary because the regex/wildcard matchers interpret brackets and braces
+    // as special characters, not as bus notation.
+    ForEachBusMember( pattern,
+                      [&]( const wxString& memberPattern )
+                      {
+                          addSinglePatternAssignment( memberPattern, netclass );
+                      } );
+
+    ClearAllCaches();
+}
+
+
+void NET_SETTINGS::addSinglePatternAssignment( const wxString& pattern, const wxString& netclass )
+{
     // Avoid exact duplicates - these shouldn't cause problems, due to later de-duplication
     // but they are unnecessary.
     for( auto& assignment : m_netClassPatternAssignments )
@@ -589,8 +607,6 @@ void NET_SETTINGS::SetNetclassPatternAssignment( const wxString& pattern, const 
     // No assignment, add a new one
     m_netClassPatternAssignments.push_back(
             { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ), netclass } );
-
-    ClearAllCaches();
 }
 
 
@@ -755,6 +771,44 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     // Handle zero resolved netclasses
     if( resolvedNetclasses.size() == 0 )
     {
+        // For bus patterns, check if all members share the same netclass.
+        // If they do, the bus inherits that netclass for coloring purposes.
+        std::shared_ptr<NETCLASS> sharedNetclass;
+        bool                      allSameNetclass = true;
+        bool                      isBusPattern = false;
+
+        ForEachBusMember( aNetName,
+                          [&]( const wxString& member )
+                          {
+                              // If ForEachBusMember gives us back the same name, it's not a bus.
+                              // Skip to avoid infinite recursion.
+                              if( member == aNetName )
+                                  return;
+
+                              isBusPattern = true;
+
+                              if( !allSameNetclass )
+                                  return;
+
+                              std::shared_ptr<NETCLASS> memberNc = GetEffectiveNetClass( member );
+
+                              if( !sharedNetclass )
+                              {
+                                  sharedNetclass = memberNc;
+                              }
+                              else if( memberNc->GetName() != sharedNetclass->GetName() )
+                              {
+                                  allSameNetclass = false;
+                              }
+                          } );
+
+        if( isBusPattern && allSameNetclass && sharedNetclass
+            && sharedNetclass->GetName() != NETCLASS::Default )
+        {
+            m_effectiveNetclassCache[aNetName] = sharedNetclass;
+            return sharedNetclass;
+        }
+
         m_effectiveNetclassCache[aNetName] = m_defaultNetClass;
 
         return m_defaultNetClass;
@@ -1292,4 +1346,29 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     }
 
     return false;
+}
+
+
+void NET_SETTINGS::ForEachBusMember( const wxString&                              aBusPattern,
+                                     const std::function<void( const wxString& )>& aFunction )
+{
+    std::vector<wxString> members;
+
+    if( ParseBusVector( aBusPattern, nullptr, &members ) )
+    {
+        // Vector bus: call function for each expanded member
+        for( const wxString& member : members )
+            aFunction( member );
+    }
+    else if( ParseBusGroup( aBusPattern, nullptr, &members ) )
+    {
+        // Bus group: recursively expand each member (which may itself be a vector or group)
+        for( const wxString& member : members )
+            ForEachBusMember( member, aFunction );
+    }
+    else
+    {
+        // Not a bus pattern: call function with the original pattern
+        aFunction( aBusPattern );
+    }
 }

@@ -22,10 +22,11 @@
 #ifndef KICAD_NET_SETTINGS_H
 #define KICAD_NET_SETTINGS_H
 
-#include <vector>
-#include <set>
-#include <memory>
+#include <functional>
 #include <map>
+#include <memory>
+#include <set>
+#include <vector>
 
 #include <netclass.h>
 #include <settings/nested_settings.h>
@@ -182,6 +183,21 @@ public:
     static bool ParseBusGroup( const wxString& aGroup, wxString* name,
                                std::vector<wxString>* aMemberList );
 
+    /**
+     * Call a function for each member of an expanded bus pattern.
+     *
+     * Handles both vector buses (e.g., "IN[0..7]" -> "IN0", "IN1", ..., "IN7") and
+     * bus groups (e.g., "PCI{A[0..1] B}" -> "A0", "A1", "B"). For nested buses,
+     * recursively expands all levels.
+     *
+     * If the pattern is not a bus, calls the function once with the original pattern.
+     *
+     * @param aBusPattern the bus pattern to expand (e.g., "DATA[0..7]" or "BUS{A B[0..1]}")
+     * @param aFunction function to call for each expanded member net name
+     */
+    static void ForEachBusMember( const wxString&                        aBusPattern,
+                                  const std::function<void( const wxString& )>& aFunction );
+
 private:
     bool migrateSchema0to1();
     bool migrateSchema1to2();
@@ -204,6 +220,9 @@ private:
     /// @brief Adds any missing fields to the given netclass from the default netclass
     /// @returns true if any fields were added from the default netclass
     bool addMissingDefaults( NETCLASS* nc ) const;
+
+    /// @brief Adds a single pattern assignment without bus expansion (internal helper)
+    void addSinglePatternAssignment( const wxString& pattern, const wxString& netclass );
 
     /// @brief The default netclass
     std::shared_ptr<NETCLASS> m_defaultNetClass;
