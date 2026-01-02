@@ -472,16 +472,20 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
     SCHEMATIC& schematic = m_frame->Schematic();
     SCH_SHEET& root = schematic.Root();
 
-    // Save the current sheet path so we can restore it if the user cancels
+    // Save original sheet path to restore if user cancels
     SCH_SHEET_PATH originalSheet = m_frame->GetCurrentSheet();
+    bool wasOnSubsheet = ( m_frame->GetCurrentSheet().Last() != &root );
 
-    if( m_frame->GetCurrentSheet().Last() != &root )
+    // Navigate to root sheet first (needed for proper reload), but don't repaint yet
+    if( wasOnSubsheet )
     {
-        SCH_SHEET_PATH rootSheetPath;
-        rootSheetPath.push_back( &root );
+        // Use the properly constructed root sheet path from the hierarchy
+        // (manually pushing root creates a path with empty KIID which causes assertions)
+        SCH_SHEET_PATH rootSheetPath = schematic.Hierarchy().at( 0 );
 
-        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
-        wxSafeYield();
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
+                                                               &rootSheetPath );
+        // Don't call wxSafeYield() here - avoid repainting the root sheet before the dialog
     }
 
     wxString msg;
@@ -489,8 +493,8 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 
     if( !IsOK( m_frame, msg ) )
     {
-        // Restore the original sheet if the user cancels
-        if( m_frame->GetCurrentSheet() != originalSheet )
+        // User cancelled - navigate back to original sheet
+        if( wasOnSubsheet )
         {
             m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
                                                                    &originalSheet );
