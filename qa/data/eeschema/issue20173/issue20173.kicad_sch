@@ -1,0 +1,67 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "21e8e9f8-d4f3-4be5-903f-68da096527c8")
+	(paper "A4")
+	(lib_symbols)
+	(text "- look into subsheet CH1 - find symbols R1, R2, R3, R4, D1, D2\n- back to root sheet\n- copy/paste (CTRL+C, CTRL+V) the subsheet to get a second instance of that subsheet\n- look again into subsheet CH1 - still looks good\n- switch to subsheet CH2 - references R5...R8, D3, D4 - looks also good\n- no switch back to original subsheet CH1: suddenly we have there the same references as in subsheet CH2!\n- run ERC: get a ton of \"duplicate references\" errors"
+		(exclude_from_sim no)
+		(at 17.78 30.48 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+			)
+			(justify left)
+		)
+		(uuid "8e1ac652-de72-4718-891f-f676745884c5")
+	)
+	(sheet
+		(at 48.26 49.53)
+		(size 67.31 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "5c8e081e-c918-45c7-9d6e-0c91e6f2b219")
+		(property "Sheetname" "ch1"
+			(at 48.26 48.8184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Kicad 9 - multi channel test.kicad_sch"
+			(at 48.26 75.5146 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "issue20173"
+				(path "/21e8e9f8-d4f3-4be5-903f-68da096527c8"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

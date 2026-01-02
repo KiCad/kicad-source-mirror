@@ -1665,16 +1665,19 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( aSheetPath );
 
-    // These 2 changes do not work in complex hierarchy.
-    // When a clear annotation is made, the calling function must call a
-    // UpdateAllScreenReferences for the active sheet.
-    // But this call cannot made here.
-    wxString currentReference = m_fields[REFERENCE_FIELD].GetText();
+    // Only modify the REFERENCE field text when clearing ALL annotations (aSheetPath is NULL).
+    // When clearing for a specific sheet path, we must preserve the field text because it serves
+    // as a fallback for GetRef() when instances for other sheet paths are looked up.
+    // See issue #20173: modifying field text here corrupts references in shared screens.
+    if( !aSheetPath )
+    {
+        wxString currentReference = GetField( REFERENCE_FIELD )->GetText();
 
-    if( currentReference.IsEmpty() || aResetPrefix )
-        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
-    else
-        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( currentReference ) );
+        if( currentReference.IsEmpty() || aResetPrefix )
+            GetField( REFERENCE_FIELD )->SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
+        else
+            GetField( REFERENCE_FIELD)->SetText( UTIL::GetRefDesUnannotated( currentReference ) );
+    }
 }
 
 
