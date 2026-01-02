@@ -234,8 +234,6 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
                                  const BOX2I& aBBox, int aWidth, int aHeight, double aViewScale,
                                  const wxColour& aBgColor )
 {
-    VECTOR2I size = aBBox.GetSize();
-
     wxBitmap bitmap( aWidth, aHeight, 24 );
     wxMemoryDC dc;
     dc.SelectObject( bitmap );

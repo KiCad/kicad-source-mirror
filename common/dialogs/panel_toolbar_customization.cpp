@@ -58,18 +58,21 @@ public:
     TOOLBAR_TREE_ITEM_DATA() :
         m_type( TOOLBAR_ITEM_TYPE::SEPARATOR ),     // Init m_type to something
         m_action( nullptr ),
+        m_control( nullptr ),
         m_size( 0 )
     { }
 
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType ) :
         m_type( aType ),
         m_action( nullptr ),
+        m_control( nullptr ),
         m_size( 0 )
     { }
 
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, int aSize ) :
         m_type( aType ),
         m_action( nullptr ),
+        m_control( nullptr ),
         m_size( aSize )
     {
         wxASSERT( aType == TOOLBAR_ITEM_TYPE::SPACER );
@@ -78,6 +81,7 @@ public:
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, wxString aName ) :
         m_type( aType ),
         m_action( nullptr ),
+        m_control( nullptr ),
         m_size( 0 ),
         m_name( aName )
     {

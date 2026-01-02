@@ -677,10 +677,10 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
                                     ClearModify();
 
                                     // Get rid of the save-will-update-board-only (or any other dismissable warning)
-                                    WX_INFOBAR* infobar = GetInfoBar();
+                                    WX_INFOBAR* loc_infobar = GetInfoBar();
 
-                                    if( infobar->IsShownOnScreen() && infobar->HasCloseButton() )
-                                        infobar->Dismiss();
+                                    if( loc_infobar->IsShownOnScreen() && loc_infobar->HasCloseButton() )
+                                        loc_infobar->Dismiss();
 
                                     GetCanvas()->ForceRefresh();
                                     SyncLibraryTree( true );

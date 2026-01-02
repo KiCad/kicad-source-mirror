@@ -56,7 +56,8 @@ class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER
 public:
     DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
             DRC_TEST_PROVIDER(),
-            m_largestEdgeClearance( 0 )
+            m_largestEdgeClearance( 0 ),
+            m_epsilon( 0 )
     {}
 
     virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE() = default;

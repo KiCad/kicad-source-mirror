@@ -182,7 +182,7 @@ protected:
         DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T fileType = DESIGN_BLOCK_IO_MGR::EnumFromStr( tableRow.Type() );
         if( fileType == DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_UNKNOWN )
             return wxEmptyString;
-        
+
         const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedDesignBlockFiles.at( fileType );
 
         if( pluginDesc.m_IsFile )
@@ -443,8 +443,6 @@ WX_GRID* PANEL_DESIGN_BLOCK_LIB_TABLE::get_grid( int aPage ) const
 
 bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
 {
-    wxString msg;
-
     for( int page = 0 ; page < (int) m_notebook->GetPageCount(); ++page )
     {
         WX_GRID* grid = get_grid( page );
@@ -557,7 +555,6 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
 
     for( int row : rowsToMigrate )
     {
-        wxString   libName = cur_grid()->GetCellValue( row, COL_NICKNAME );
         wxString   relPath = cur_grid()->GetCellValue( row, COL_URI );
         wxString   resolvedPath = ExpandEnvVarSubstitutions( relPath, m_project );
         wxFileName legacyLib( resolvedPath );
@@ -880,9 +877,6 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
 
 void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    wxString                projectTablePath = aKiway->Prj().DesignBlockLibTblName();
-    wxString                msg;
-
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Design Block Libraries" ) );
 
     dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj() ) );

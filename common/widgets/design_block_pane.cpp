@@ -378,7 +378,6 @@ bool DESIGN_BLOCK_PANE::EditDesignBlockProperties( const LIB_ID& aLibId )
         return false;
 
     wxString libname = aLibId.GetLibNickname();
-    wxString dbname = aLibId.GetLibItemName();
 
     if( !m_frame->Prj().DesignBlockLibs()->IsDesignBlockLibWritable( libname ) )
     {

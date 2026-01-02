@@ -778,8 +778,6 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 
 void SCH_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
     if( SYMBOL* symbol = GetParentSymbol() )
     {
         if( symbol->IsMultiUnit() )

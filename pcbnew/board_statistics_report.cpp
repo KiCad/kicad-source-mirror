@@ -45,6 +45,10 @@ BOARD_STATISTICS_DATA::BOARD_STATISTICS_DATA() :
         boardArea( 0.0 ),
         frontCopperArea( 0.0 ),
         backCopperArea( 0.0 ),
+        frontFootprintCourtyardArea( 0.0 ),
+        backFootprintCourtyardArea( 0.0 ),
+        frontFootprintDensity( 0.0 ),
+        backFootprintDensity( 0.0 ),
         minClearanceTrackToTrack( std::numeric_limits<int>::max() ),
         minTrackWidth( std::numeric_limits<int>::max() ),
         minDrillSize( std::numeric_limits<int>::max() ),
@@ -344,7 +348,7 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
         }
     }
 
-    // deal with overlapping courtyards (if people are ignoring DRC or something) 
+    // deal with overlapping courtyards (if people are ignoring DRC or something)
     // and such through simplify
     frontShapesForArea.Simplify();
     backShapesForArea.Simplify();
