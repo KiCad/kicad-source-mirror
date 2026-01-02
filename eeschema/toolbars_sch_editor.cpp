@@ -33,8 +33,10 @@
 #include <eeschema_id.h>
 #include <pgm_base.h>
 #include <python_scripting.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <widgets/hierarchy_pane.h>
@@ -64,6 +66,14 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
+              .WithContextMenu(
+                      []( TOOL_MANAGER* aToolMgr )
+                      {
+                          SCH_SELECTION_TOOL* selTool = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
+                          auto               menu = std::make_unique<ACTION_MENU>( false, selTool );
+                          menu->Add( ACTIONS::gridProperties );
+                          return menu;
+                      } )
               .AppendAction( ACTIONS::toggleGridOverrides )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
                             .AddAction( ACTIONS::inchesUnits )
@@ -93,12 +103,6 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
             config.AppendAction( ACTIONS::toggleBoundingBoxes );
 
-        /* TODO (ISM): Handle context menus
-        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        gridMenu->Add( ACTIONS::gridProperties );
-        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-        */
         break;
 
     case TOOLBAR_LOC::RIGHT:

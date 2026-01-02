@@ -21,12 +21,14 @@
  */
 
 #include <tool/actions.h>
+#include <tool/action_menu.h>
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <bitmaps.h>
 #include <lset.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <pcb_layer_box_selector.h>
@@ -49,6 +51,15 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
 
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
+              .WithContextMenu(
+                      []( TOOL_MANAGER* aToolMgr )
+                      {
+                          PCB_SELECTION_TOOL* selTool = aToolMgr->GetTool<PCB_SELECTION_TOOL>();
+                          auto                menu = std::make_unique<ACTION_MENU>( false, selTool );
+                          menu->Add( ACTIONS::gridProperties );
+                          menu->Add( ACTIONS::gridOrigin );
+                          return menu;
+                      } )
               .AppendAction( ACTIONS::toggleGridOverrides )
               .AppendAction( PCB_ACTIONS::togglePolarCoords )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
@@ -79,14 +90,6 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
               .AppendAction( ACTIONS::showLibraryTree )
               .AppendAction( PCB_ACTIONS::showLayersManager )
               .AppendAction( ACTIONS::showProperties );
-
-        /* TODO (ISM): Implement context menus
-        PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
-        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        gridMenu->Add( ACTIONS::gridProperties );
-        gridMenu->Add( ACTIONS::gridOrigin );
-        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-    */
         break;
 
     case TOOLBAR_LOC::RIGHT:
@@ -101,6 +104,16 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::drawLine )
               .AppendAction( PCB_ACTIONS::drawArc )
+              .WithContextMenu(
+                      []( TOOL_MANAGER* aToolMgr )
+                      {
+                          PCB_SELECTION_TOOL* selTool = aToolMgr->GetTool<PCB_SELECTION_TOOL>();
+                          auto menu = std::make_unique<ACTION_MENU>( false, selTool );
+                          menu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+                          menu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+                          menu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
+                          return menu;
+                      } )
               .AppendAction( PCB_ACTIONS::drawRectangle )
               .AppendAction( PCB_ACTIONS::drawCircle )
               .AppendAction( PCB_ACTIONS::drawPolygon )
@@ -122,24 +135,6 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
               .AppendAction( PCB_ACTIONS::setAnchor )
               .AppendAction( ACTIONS::gridSetOrigin )
               .AppendAction( ACTIONS::measureTool );
-
-        /* TODO (ISM): Implement context menus
-        PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
-
-        auto makeArcMenu =
-                [&]()
-                {
-                    std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
-
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
-
-                    return arcMenu;
-                };
-
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
-    */
         break;
 
     case TOOLBAR_LOC::TOP_MAIN:

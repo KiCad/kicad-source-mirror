@@ -41,6 +41,7 @@
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <tool/ui/toolbar_configuration.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_aui_art_providers.h>
 
@@ -332,6 +333,17 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
                 group->SetDefaultAction( *defaultTool );
 
             AddGroup( std::move( group ) );
+
+            // Look up and attach context menu if one is registered for this group
+            auto menuFactory = TOOLBAR_CONTEXT_MENU_REGISTRY::GetGroupMenuFactory( groupName );
+
+            if( menuFactory && m_toolManager )
+            {
+                // Register the menu for each action in the group
+                for( const TOOL_ACTION* grpAction : tools )
+                    AddToolContextMenu( *grpAction, menuFactory( m_toolManager ) );
+            }
+
             break;
         }
 
@@ -363,6 +375,13 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
             }
 
             Add( *action );
+
+            // Look up and attach context menu if one is registered for this action
+            auto factory = TOOLBAR_CONTEXT_MENU_REGISTRY::GetMenuFactory( item.m_ActionName );
+
+            if( factory && m_toolManager )
+                AddToolContextMenu( *action, factory( m_toolManager ) );
+
             break;
         }
         }

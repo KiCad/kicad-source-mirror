@@ -20,8 +20,10 @@
  */
 
 #include <bitmaps.h>
+#include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/pl_actions.h>
 #include <tools/pl_selection_tool.h>
 #include <wx/choice.h>
@@ -44,17 +46,18 @@ std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_TOOLBAR_SETTINGS::DefaultToolbarC
 
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
+              .WithContextMenu(
+                      []( TOOL_MANAGER* aToolMgr )
+                      {
+                          PL_SELECTION_TOOL* selTool = aToolMgr->GetTool<PL_SELECTION_TOOL>();
+                          auto               menu = std::make_unique<ACTION_MENU>( false, selTool );
+                          menu->Add( ACTIONS::gridProperties );
+                          return menu;
+                      } )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
                             .AddAction( ACTIONS::millimetersUnits )
                             .AddAction( ACTIONS::inchesUnits )
                             .AddAction( ACTIONS::milsUnits ) );
-
-        /* TODO: Implement context menus
-        PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
-        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        gridMenu->Add( ACTIONS::gridProperties );
-        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-        */
         break;
 
     case TOOLBAR_LOC::RIGHT:

@@ -32,6 +32,7 @@
 #include <settings/parameters.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_action.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 
 enum class TOOLBAR_ITEM_TYPE
 {
@@ -89,6 +90,51 @@ public:
     std::vector<TOOLBAR_ITEM> m_GroupItems;
 };
 
+// Forward declaration for use in TOOLBAR_ITEM_REF
+class TOOLBAR_GROUP_CONFIG;
+
+/**
+ * Helper class returned by TOOLBAR_CONFIGURATION::AppendAction() to allow
+ * chaining of context menu registration.
+ */
+class KICOMMON_API TOOLBAR_ITEM_REF
+{
+public:
+    TOOLBAR_ITEM_REF( class TOOLBAR_CONFIGURATION& aParent, TOOLBAR_ITEM& aItem ) :
+            m_parent( aParent ),
+            m_item( aItem )
+    {
+    }
+
+    /**
+     * Associate a context menu factory with this action.
+     *
+     * The factory is registered globally so JSON-loaded configurations
+     * will also get this menu.
+     *
+     * @param aFactory Factory function that creates the context menu
+     * @return Reference to parent configuration for continued chaining
+     */
+    TOOLBAR_CONFIGURATION& WithContextMenu(
+            TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory );
+
+    /// Allow implicit conversion back to TOOLBAR_CONFIGURATION for chaining
+    operator TOOLBAR_CONFIGURATION&() { return m_parent; }
+
+    // Forwarding methods to allow continued chaining after WithContextMenu or directly
+    TOOLBAR_ITEM_REF AppendAction( const std::string& aActionName );
+    TOOLBAR_ITEM_REF AppendAction( const TOOL_ACTION& aAction );
+    TOOLBAR_CONFIGURATION& AppendSeparator();
+    TOOLBAR_CONFIGURATION& AppendSpacer( int aSize );
+    TOOLBAR_CONFIGURATION& AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup );
+    TOOLBAR_CONFIGURATION& AppendControl( const std::string& aControlName );
+    TOOLBAR_CONFIGURATION& AppendControl( const ACTION_TOOLBAR_CONTROL& aControl );
+
+private:
+    TOOLBAR_CONFIGURATION& m_parent;
+    TOOLBAR_ITEM&          m_item;
+};
+
 class KICOMMON_API TOOLBAR_GROUP_CONFIG
 {
 public:
@@ -115,6 +161,25 @@ public:
         return *this;
     }
 
+    /**
+     * Associate a context menu factory with this group.
+     *
+     * The menu will be available for all actions in the group.
+     * The factory is registered globally so JSON-loaded configurations
+     * will also get this menu.
+     *
+     * @param aFactory Factory function that creates the context menu
+     * @return Reference for continued chaining
+     */
+    TOOLBAR_GROUP_CONFIG& AddContextMenu(
+            TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory )
+    {
+        // Register the factory globally using the group name
+        TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory(
+                m_groupName.ToStdString(), std::move( aFactory ) );
+        return *this;
+    }
+
     std::vector<TOOLBAR_ITEM> GetGroupItems() const
     {
         return m_groupItems;
@@ -134,16 +199,16 @@ public:
     TOOLBAR_CONFIGURATION() {}
     virtual ~TOOLBAR_CONFIGURATION() {}
 
-    TOOLBAR_CONFIGURATION& AppendAction( const std::string& aActionName )
+    TOOLBAR_ITEM_REF AppendAction( const std::string& aActionName )
     {
         m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aActionName );
-        return *this;
+        return TOOLBAR_ITEM_REF( *this, m_toolbarItems.back() );
     }
 
-    TOOLBAR_CONFIGURATION& AppendAction( const TOOL_ACTION& aAction )
+    TOOLBAR_ITEM_REF AppendAction( const TOOL_ACTION& aAction )
     {
         m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aAction.GetName() );
-        return *this;
+        return TOOLBAR_ITEM_REF( *this, m_toolbarItems.back() );
     }
 
     TOOLBAR_CONFIGURATION& AppendSeparator()

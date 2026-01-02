@@ -171,6 +171,7 @@ set( KICOMMON_SRCS
 
     # This is basically a settings object, but for the toolbar
     tool/ui/toolbar_configuration.cpp
+    tool/ui/toolbar_context_menu_registry.cpp
 
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp

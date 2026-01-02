@@ -43,11 +43,14 @@
 #include <router/pns_routing_settings.h>
 #include <router/router_tool.h>
 #include <settings/color_settings.h>
+#include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <tool/common_tools.h>
 #include <tool/tool_manager.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <widgets/layer_box_selector.h>
@@ -137,6 +140,18 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
     {
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
+              .WithContextMenu(
+                  []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
+                  {
+                      PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
+                      std::unique_ptr<ACTION_MENU> menu =
+                              std::make_unique<ACTION_MENU>( false, selTool );
+
+                      menu->Add( ACTIONS::gridProperties );
+                      menu->Add( ACTIONS::gridOrigin );
+
+                      return menu;
+                  } )
               .AppendAction( ACTIONS::toggleGridOverrides )
               .AppendAction( PCB_ACTIONS::togglePolarCoords )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
@@ -185,13 +200,6 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( PCB_ACTIONS::showLayersManager )
               .AppendAction( ACTIONS::showProperties );
 
-        /* TODO (ISM): Support context menus in toolbars
-        PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
-        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        gridMenu->Add( ACTIONS::gridProperties );
-        gridMenu->Add( ACTIONS::gridOrigin );
-        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-        */
         break;
 
     case TOOLBAR_LOC::RIGHT:
@@ -204,18 +212,58 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( PCB_ACTIONS::placeFootprint )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Track routing tools" ) )
                             .AddAction( PCB_ACTIONS::routeSingleTrack )
-                            .AddAction( PCB_ACTIONS::routeDiffPair ) )
+                            .AddAction( PCB_ACTIONS::routeDiffPair )
+                            .AddContextMenu(
+                                []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
+                                {
+                                    PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
+                                    std::unique_ptr<ACTION_MENU> menu =
+                                            std::make_unique<ACTION_MENU>( false, selTool );
+
+                                    menu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
+                                    menu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
+                                    menu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+                                    menu->AppendSeparator();
+                                    menu->Add( PCB_ACTIONS::routerSettingsDialog );
+
+                                    return menu;
+                                } ) )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Track tuning tools" ) )
                             .AddAction( PCB_ACTIONS::tuneSingleTrack )
                             .AddAction( PCB_ACTIONS::tuneDiffPair )
                             .AddAction( PCB_ACTIONS::tuneSkew ) )
               .AppendAction( PCB_ACTIONS::drawVia )
               .AppendAction( PCB_ACTIONS::drawZone )
+              .WithContextMenu(
+                  []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
+                  {
+                      PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
+                      std::unique_ptr<ACTION_MENU> menu =
+                              std::make_unique<ACTION_MENU>( false, selTool );
+
+                      menu->Add( PCB_ACTIONS::zoneFillAll );
+                      menu->Add( PCB_ACTIONS::zoneUnfillAll );
+
+                      return menu;
+                  } )
               .AppendAction( PCB_ACTIONS::drawRuleArea );
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::drawLine )
               .AppendAction( PCB_ACTIONS::drawArc )
+              .WithContextMenu(
+                  []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
+                  {
+                      PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
+                      std::unique_ptr<ACTION_MENU> menu =
+                              std::make_unique<ACTION_MENU>( false, selTool );
+
+                      menu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK  );
+                      menu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK  );
+                      menu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK  );
+
+                      return menu;
+                  } )
               .AppendAction( PCB_ACTIONS::drawRectangle )
               .AppendAction( PCB_ACTIONS::drawCircle )
               .AppendAction( PCB_ACTIONS::drawPolygon )
@@ -240,49 +288,6 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AppendAction( PCB_ACTIONS::placePoint )
               .AppendAction( ACTIONS::measureTool );
 
-        /* TODO (ISM): Support context menus
-        PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
-
-        auto makeArcMenu =
-                [&]()
-                {
-                    std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
-
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
-                    arcMenu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
-
-                    return arcMenu;
-                };
-
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
-
-        auto makeRouteMenu =
-                [&]()
-                {
-                    std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
-
-                    routeMenu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
-                    routeMenu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
-                    routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
-
-                    routeMenu->AppendSeparator();
-                    routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
-
-                    return routeMenu;
-                };
-
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
-
-        std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
-        zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
-
-        std::unique_ptr<ACTION_MENU> lineMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
-    */
         break;
 
     case TOOLBAR_LOC::TOP_MAIN:

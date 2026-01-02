@@ -27,6 +27,7 @@
 
 #include <tool/action_toolbar.h>
 #include <tool/ui/toolbar_configuration.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 
 ///! Update the schema version whenever a migration is required
 const int toolbarSchemaVersion = 1;
@@ -213,4 +214,57 @@ std::optional<TOOLBAR_CONFIGURATION> TOOLBAR_SETTINGS::GetStoredToolbarConfig( T
 
     // Return a nullopt if no toolbar is configured
     return std::nullopt;
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::WithContextMenu(
+        TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory )
+{
+    // Register the factory globally so JSON configs get the same menu
+    TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterMenuFactory( m_item.m_ActionName, std::move( aFactory ) );
+    return m_parent;
+}
+
+
+// Forwarding methods for TOOLBAR_ITEM_REF to enable chaining
+
+TOOLBAR_ITEM_REF TOOLBAR_ITEM_REF::AppendAction( const std::string& aActionName )
+{
+    return m_parent.AppendAction( aActionName );
+}
+
+
+TOOLBAR_ITEM_REF TOOLBAR_ITEM_REF::AppendAction( const TOOL_ACTION& aAction )
+{
+    return m_parent.AppendAction( aAction );
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::AppendSeparator()
+{
+    return m_parent.AppendSeparator();
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::AppendSpacer( int aSize )
+{
+    return m_parent.AppendSpacer( aSize );
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup )
+{
+    return m_parent.AppendGroup( aGroup );
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::AppendControl( const std::string& aControlName )
+{
+    return m_parent.AppendControl( aControlName );
+}
+
+
+TOOLBAR_CONFIGURATION& TOOLBAR_ITEM_REF::AppendControl( const ACTION_TOOLBAR_CONTROL& aControl )
+{
+    return m_parent.AppendControl( aControl );
 }

@@ -30,8 +30,10 @@
 #include <symbol_editor_settings.h>
 #include <symbol_library_manager.h>
 #include <toolbars_symbol_editor.h>
+#include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
+#include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <widgets/sch_properties_panel.h>
@@ -58,6 +60,14 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
 
     case TOOLBAR_LOC::LEFT:
         config.AppendAction( ACTIONS::toggleGrid )
+              .WithContextMenu(
+                      []( TOOL_MANAGER* aToolMgr )
+                      {
+                          SCH_SELECTION_TOOL* selTool = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
+                          auto               menu = std::make_unique<ACTION_MENU>( false, selTool );
+                          menu->Add( ACTIONS::gridProperties );
+                          return menu;
+                      } )
               .AppendAction( ACTIONS::toggleGridOverrides )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Units" ) )
                             .AddAction( ACTIONS::millimetersUnits )
@@ -80,13 +90,6 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
         config.AppendSeparator()
               .AppendAction( ACTIONS::showLibraryTree )
               .AppendAction( ACTIONS::showProperties );
-
-        /* TODO: Implement context menus
-        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-        gridMenu->Add( ACTIONS::gridProperties );
-        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-        */
         break;
 
     case TOOLBAR_LOC::RIGHT:
