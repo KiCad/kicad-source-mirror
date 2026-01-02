@@ -743,7 +743,16 @@ public:
         return false;
     }
 
-    bool CompareGeometry( const SHAPE_LINE_CHAIN& aOther ) const;
+    /**
+     * Compare this line chain with another one.
+     *
+     * @param aOther is the other line chain to compare with.
+     * @param aCyclicalCompare if true, will consider line chains equal even if they start at different points
+     * @param aEpsilon tolerance for point difference
+     *
+     * @return true if both line chains have the same points
+     */
+    bool CompareGeometry( const SHAPE_LINE_CHAIN& aOther, bool aCyclicalCompare = false, int aEpsilon = 0 ) const;
 
     void Move( const VECTOR2I& aVector ) override
     {

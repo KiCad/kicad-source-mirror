@@ -222,12 +222,24 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         break;
 
     case SHAPE_T::POLY:
+    {
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
 
-        for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST_PT( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
+        for( int poly = 0; poly < static_cast<int>( a->GetPolyShape().CPolygons().size() ); poly++ )
+        {
+            const SHAPE_POLY_SET::POLYGON aPolygon = a->GetPolyShape().CPolygon( poly );
+            const SHAPE_POLY_SET::POLYGON  bPolygon = b->GetPolyShape().CPolygon( poly );
+
+            if( aPolygon.size() == 0 || bPolygon.size() == 0
+                || !aPolygon[0].CompareGeometry( bPolygon[0], true, EPSILON ) )
+            {
+                diff = true;
+                return diff;
+            }
+        }
 
         break;
+    }
 
     default:
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
@@ -522,12 +534,54 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
         break;
 
     case SHAPE_T::POLY:
+    {
         TEST( curr_shape.GetPolyShape().TotalVertices(), ref_shape.GetPolyShape().TotalVertices(), "" );
 
-        for( int ii = 0; ii < curr_shape.GetPolyShape().TotalVertices(); ++ii )
-            TEST_PT( curr_shape.GetPolyShape().CVertex( ii ), ref_shape.GetPolyShape().CVertex( ii ), "" );
+        if( curr_shape.GetPolyShape().TotalVertices() == ref_shape.GetPolyShape().TotalVertices() )
+        {
+            std::vector<VECTOR2I> aVerts;
+            std::vector<VECTOR2I> bVerts;
 
+            aVerts.reserve( curr_shape.GetPolyShape().TotalVertices() );
+            bVerts.reserve( ref_shape.GetPolyShape().TotalVertices() );
+
+            for( int i = 0; i < curr_shape.GetPolyShape().TotalVertices(); ++i )
+                aVerts.push_back( curr_shape.GetPolyShape().CVertex( i ) );
+
+            for( int i = 0; i < ref_shape.GetPolyShape().TotalVertices(); ++i )
+                bVerts.push_back( ref_shape.GetPolyShape().CVertex( i ) );
+
+            // compute centroids
+            auto centroid = []( const std::vector<VECTOR2I>& pts )
+            {
+                double sx = 0.0, sy = 0.0;
+                for( const auto& p : pts ) { sx += p.x; sy += p.y; }
+                return std::pair<double,double>( sx / pts.size(), sy / pts.size() );
+            };
+
+            auto aC = centroid( aVerts );
+            auto bC = centroid( bVerts );
+
+            auto angleCmp = []( const std::pair<double,double>& c, const VECTOR2I& p1, const VECTOR2I& p2 )
+            {
+                double a1 = atan2( p1.y - c.second, p1.x - c.first );
+                double a2 = atan2( p2.y - c.second, p2.x - c.first );
+                return a1 < a2;
+            };
+
+            // sort by angle around centroid so that cyclic vertex order doesn't matter
+            std::sort( aVerts.begin(), aVerts.end(), [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
+                       { return angleCmp( aC, p1, p2 ); } );
+            std::sort( bVerts.begin(), bVerts.end(), [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
+                       { return angleCmp( bC, p1, p2 ); } );
+
+            for( size_t i = 0; i < aVerts.size(); ++i )
+            {
+                TEST_PT( aVerts[i], bVerts[i], "" );
+            }
+        }
         break;
+    }
 
     default:
         UNIMPLEMENTED_FOR( curr_shape.SHAPE_T_asString() );
@@ -630,9 +684,13 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 
     bool cornersDiffer = false;
 
-    for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
+    for( int poly = 0; poly < static_cast<int>( a->Outline()->CPolygons().size() ); poly++ )
     {
-        if( a->Outline()->CVertex( ii ) != b->Outline()->CVertex( ii ) )
+        const SHAPE_POLY_SET::POLYGON aPolygon = a->Outline()->CPolygon( poly );
+        const SHAPE_POLY_SET::POLYGON bPolygon = b->Outline()->CPolygon( poly );
+
+        if( aPolygon.size() == 0 || bPolygon.size() == 0
+            || !aPolygon[0].CompareGeometry( bPolygon[0], true, EPSILON ) )
         {
             diff = true;
             cornersDiffer = true;

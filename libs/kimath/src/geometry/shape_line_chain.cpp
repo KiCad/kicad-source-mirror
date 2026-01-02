@@ -2352,20 +2352,76 @@ const std::string SHAPE_LINE_CHAIN::Format( bool aCplusPlus ) const
 }
 
 
-bool SHAPE_LINE_CHAIN::CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const
+bool SHAPE_LINE_CHAIN::CompareGeometry( const SHAPE_LINE_CHAIN& aOther,
+                                        bool                    aCyclicalCompare,
+                                        int aEpsilon ) const
 {
-    SHAPE_LINE_CHAIN a(*this), b( aOther );
+    SHAPE_LINE_CHAIN a( *this ), b( aOther );
     a.Simplify();
     b.Simplify();
 
     if( a.m_points.size() != b.m_points.size() )
         return false;
 
-    for( int i = 0; i < a.PointCount(); i++ )
+    if( aCyclicalCompare )
     {
-        if( a.CPoint( i ) != b.CPoint( i ) )
-            return false;
+        std::vector<VECTOR2I> aVerts = a.m_points;
+        std::vector<VECTOR2I> bVerts = b.m_points;
+
+        auto centroid = []( const std::vector<VECTOR2I>& pts )
+        {
+            double sx = 0.0, sy = 0.0;
+            for( const auto& p : pts )
+            {
+                sx += p.x;
+                sy += p.y;
+            }
+            return std::pair<double, double>( sx / pts.size(), sy / pts.size() );
+        };
+
+        auto aC = centroid( aVerts );
+        auto bC = centroid( bVerts );
+
+        auto angleCmp =
+                []( const std::pair<double, double>& c, const VECTOR2I& p1, const VECTOR2I& p2 )
+        {
+            double a1 = atan2( p1.y - c.second, p1.x - c.first );
+            double a2 = atan2( p2.y - c.second, p2.x - c.first );
+            return a1 < a2;
+        };
+
+        // sort by angle around centroid so that cyclic vertex order doesn't matter
+        std::sort( aVerts.begin(), aVerts.end(),
+                   [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
+                   {
+                       return angleCmp( aC, p1, p2 );
+                   } );
+
+        std::sort( bVerts.begin(), bVerts.end(),
+                   [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
+                   {
+                       return angleCmp( bC, p1, p2 );
+                   } );
+
+        for( size_t i = 0; i < aVerts.size(); i++ )
+        {
+            if( abs( aVerts[i].x - bVerts[i].x ) > aEpsilon
+                || abs( aVerts[i].y - bVerts[i].y ) > aEpsilon )
+                return false;
+        }
+
     }
+    else
+    {
+        for( int i = 0; i < a.PointCount(); i++ )
+        {
+            if( abs( a.CPoint( i ).x - b.CPoint( i ).x ) > aEpsilon
+                || abs( a.CPoint( i ).y - b.CPoint( i ).y ) > aEpsilon )
+                return false;
+        }
+    }
+
+
 
     return true;
 }
