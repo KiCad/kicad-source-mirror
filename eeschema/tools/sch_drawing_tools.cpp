@@ -805,11 +805,15 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         if( item->Type() == SCH_LINE_T )
                             item->SetFlags( STARTPOINT | ENDPOINT );
 
-                        if( placeAsGroup )
-                            group->AddItem( item );
+                        if( !item->GetParentGroup() )
+                        {
+                            if( placeAsGroup )
+                                group->AddItem( item );
+
+                            newItems.emplace_back( item );
+                        }
 
                         commit.Added( item, screen );
-                        newItems.emplace_back( item );
                     }
                     else
                     {
@@ -858,7 +862,10 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                             item->SetFlags( STARTPOINT | ENDPOINT );
                     }
 
-                    selectionTool->AddItemsToSel( &newItems, true );
+                    if( placeAsGroup )
+                        selectionTool->AddItemToSel( group );
+                    else
+                        selectionTool->AddItemsToSel( &newItems, true );
                 }
 
                 // Start moving selection, cancel undoes the insertion
@@ -877,6 +884,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                     commit.Revert();
                 }
 
+                selectionTool->RebuildSelection();
                 m_frame->UpdateHierarchyNavigator();
 
                 return placed;
