@@ -193,6 +193,7 @@ set( KICOMMON_SRCS
     widgets/report_severity.cpp
     widgets/std_bitmap_button.cpp
     widgets/ui_common.cpp
+    widgets/up_down_tree.cpp
     widgets/wx_grid.cpp
     widgets/wx_html_report_panel.cpp
     widgets/wx_html_report_panel_base.cpp
@@ -564,7 +565,6 @@ set( COMMON_WIDGET_SRCS
     widgets/text_ctrl_eval.cpp
     widgets/margin_offset_binder.cpp
     widgets/unit_binder.cpp
-    widgets/up_down_tree.cpp
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
     widgets/wx_aui_art_providers.cpp

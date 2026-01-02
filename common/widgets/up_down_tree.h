@@ -24,10 +24,11 @@
 #pragma once
 
 #include <map>
+#include <kicommon.h>
 #include <wx/treectrl.h>
 
 
-class UP_DOWN_TREE : public wxTreeCtrl
+class KICOMMON_API UP_DOWN_TREE : public wxTreeCtrl
 {
 public:
     UP_DOWN_TREE( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
