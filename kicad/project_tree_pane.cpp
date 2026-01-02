@@ -663,8 +663,9 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
     bool prjOpened = fn.FileExists();
 
-    // Bind the git repository to the project tree (if it exists)
-    if( Pgm().GetCommonSettings()->m_Git.enableGit )
+    // Bind the git repository to the project tree (if it exists and not disabled for this project)
+    if( Pgm().GetCommonSettings()->m_Git.enableGit
+        && !Prj().GetLocalSettings().m_GitIntegrationDisabled )
     {
         m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
 
@@ -801,7 +802,9 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_has_repo    = m_TreeProject->GetGitRepo() != nullptr;
     bool vcs_can_commit  = hasChangedFiles();
     bool vcs_can_init    = !vcs_has_repo;
-    bool vcs_can_remove = vcs_has_repo && git_name.StartsWith( prj_name ); // This means the .git is a subdirectory of the project
+    bool gitIntegrationDisabled = Prj().GetLocalSettings().m_GitIntegrationDisabled;
+    // Allow toggling if: repo exists in project, OR integration is disabled (to re-enable it)
+    bool vcs_can_remove = ( vcs_has_repo && git_name.StartsWith( prj_name ) ) || gitIntegrationDisabled;
     bool vcs_can_fetch   = vcs_has_repo && git->HasPushAndPullRemote();
     bool vcs_can_push    = vcs_can_fetch && git->HasLocalCommits();
     bool vcs_can_pull    = vcs_can_fetch;
@@ -1050,8 +1053,17 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
         vcs_submenu->AppendSeparator();
 
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Remove Version Control" ),
-                             _( "Delete all version control files from the project directory." ) );
+        if( gitIntegrationDisabled )
+        {
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Enable Git Integration" ),
+                                 _( "Re-enable Git integration for this project" ) );
+        }
+        else
+        {
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Disable Git Integration" ),
+                                 _( "Disable Git integration for this project" ) );
+        }
+
         vcs_menuitem->Enable( vcs_can_remove );
 
         popup_menu.AppendSeparator();
@@ -1931,51 +1943,61 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 {
-    git_repository* repo = m_TreeProject->GetGitRepo();
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
-    if( !repo
-      || !IsOK( wxGetTopLevelParent( this ),
-                _( "Are you sure you want to remove Git tracking from this project?" ) ) )
+    // Toggle the Git integration disabled preference
+    localSettings.m_GitIntegrationDisabled = !localSettings.m_GitIntegrationDisabled;
+
+    wxLogTrace( traceGit, wxS( "onGitRemoveVCS: Git integration %s" ),
+                localSettings.m_GitIntegrationDisabled ? wxS( "disabled" ) : wxS( "enabled" ) );
+
+    if( localSettings.m_GitIntegrationDisabled )
     {
-        return;
-    }
+        // Disabling Git integration - clear the repo reference and item states
+        m_TreeProject->SetGitRepo( nullptr );
+        m_gitIconsInitialized = false;
 
-    // Remove the VCS (git) from the project directory
-    git_repository_free( repo );
-    m_TreeProject->SetGitRepo( nullptr );
+        // Clear all item states to remove git status icons
+        std::stack<wxTreeItemId> items;
+        items.push( m_TreeProject->GetRootItem() );
 
-    // Remove the .git directory
-    wxFileName fn( m_Parent->GetProjectFileName() );
-    fn.AppendDir( ".git" );
-
-    wxString errors;
-
-    if( !RmDirRecursive( fn.GetPath(), &errors ) )
-    {
-        DisplayErrorMessage( m_parent, _( "Failed to remove Git directory" ), errors );
-    }
-
-    // Clear all item states
-    std::stack<wxTreeItemId> items;
-    items.push( m_TreeProject->GetRootItem() );
-
-    while( !items.empty() )
-    {
-        wxTreeItemId current = items.top();
-        items.pop();
-
-        // Process the current item
-        m_TreeProject->SetItemState( current, wxTREE_ITEMSTATE_NONE );
-
-        wxTreeItemIdValue cookie;
-        wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
-
-        while( child.IsOk() )
+        while( !items.empty() )
         {
-            items.push( child );
-            child = m_TreeProject->GetNextChild( current, cookie );
+            wxTreeItemId current = items.top();
+            items.pop();
+
+            m_TreeProject->SetItemState( current, wxTREE_ITEMSTATE_NONE );
+
+            wxTreeItemIdValue cookie;
+            wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
+
+            while( child.IsOk() )
+            {
+                items.push( child );
+                child = m_TreeProject->GetNextChild( current, cookie );
+            }
         }
     }
+    else
+    {
+        // Re-enabling Git integration - try to find and connect to the repository
+        git_repository* repo = nullptr;
+        wxString        dir = Prj().GetProjectPath();
+
+        if( git_repository_open( &repo, dir.mb_str() ) == 0 )
+            m_TreeProject->SetGitRepo( repo );
+        else
+            m_TreeProject->SetGitRepo( nullptr );
+
+        if( m_TreeProject->GetGitRepo() )
+        {
+            m_TreeProject->GitCommon()->SetUsername( localSettings.m_GitRepoUsername );
+            m_TreeProject->GitCommon()->SetSSHKey( localSettings.m_GitSSHKey );
+        }
+    }
+
+    // Save the preference to the project local settings file
+    localSettings.SaveToFile( Prj().GetProjectPath() );
 }
 
 

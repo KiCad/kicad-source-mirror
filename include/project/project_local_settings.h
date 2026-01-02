@@ -153,6 +153,9 @@ public:
     wxString m_GitRepoType;
     wxString m_GitSSHKey;
 
+    /// If true, KiCad will not use Git integration for this project even if a .git directory exists
+    bool m_GitIntegrationDisabled;
+
 private:
     /// A link to the owning project
     PROJECT* m_project;
