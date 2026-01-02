@@ -54206,13 +54206,12 @@ msgid "Copied to %d Rule Areas."
 msgstr "Copiato in %d aree regole."
 
 #: pcbnew/tools/multichannel_tool.cpp:1287
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
-"Impossibile generare automaticamente aree di posizionamento perché lo schema "
-"ha solo uno o nessuno foglio gerarchico o classe di componenti."
+"Impossibile auto-generare aree di posizionamento perché lo schema ha solo "
+"uno o nessun foglio gerarchico, gruppo, o classe di componenti."
 
 #: pcbnew/tools/multichannel_tool.cpp:1451
 msgid "Auto-generate placement rule areas"
@@ -54306,9 +54305,8 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Crea piste dalle linee grafiche selezionate"
 
 #: pcbnew/tools/pcb_actions.cpp:98
-#, fuzzy
 msgid "Create Outsets from Selection..."
-msgstr "Crea outset dalla selezione"
+msgstr "Crea outset dalla selezione..."
 
 #: pcbnew/tools/pcb_actions.cpp:99
 msgid "Create outset lines from the selected item"
@@ -54317,12 +54315,12 @@ msgstr "Crea linee outset dagli elementi selezionati"
 #: pcbnew/tools/pcb_actions.cpp:167
 #, fuzzy
 msgid "Add Barcode"
-msgstr "Aggiungi piazzola"
+msgstr "Aggiungi codice a barre"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 #, fuzzy
 msgid "Add a barcode"
-msgstr "Aggiungi una piazzola"
+msgstr "Aggiunge un codice a barre"
 
 #: pcbnew/tools/pcb_actions.cpp:177
 msgid "Add Board Characteristics"
@@ -54343,12 +54341,12 @@ msgstr "Aggiungi tabella stack-up scheda su uno strato grafico"
 #: pcbnew/tools/pcb_actions.cpp:194
 #, fuzzy
 msgid "Place Point"
-msgstr "Piazza pin"
+msgstr "Piazza punto"
 
 #: pcbnew/tools/pcb_actions.cpp:195
 #, fuzzy
 msgid "Add reference/snap points"
-msgstr "Punto di riferimento griglia:"
+msgstr "Aggiunti punti di riferimento/magnetismo"
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Place Reference Images"
@@ -54503,17 +54501,17 @@ msgstr "Aggiungi blocco progetto selezionato alla scheda corrente"
 #: pcbnew/tools/pcb_actions.cpp:490
 #, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Librerie blocchi progetto"
+msgstr "Applica blocco progetto"
 
 #: pcbnew/tools/pcb_actions.cpp:491
 #, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Piazza il blocco progetto collegato al gruppo selezionato"
+msgstr "Applica il blocco progetto collegato al gruppo selezionato"
 
 #: pcbnew/tools/pcb_actions.cpp:513
 #, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Salva la scheda corrente come blocco progetto..."
+msgstr "Salva scheda come blocco progetto..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
@@ -54522,17 +54520,17 @@ msgstr "Crea un nuovo blocco progetto dalla scheda corrente"
 #: pcbnew/tools/pcb_actions.cpp:527
 #, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Aggiorna librerie blocchi progetto"
+msgstr "Aggiorna blocco progetto dalla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:528
 #, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Aggiungi blocco progetto selezionato alla scheda corrente"
+msgstr "Imposta il blocco progetto alla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:535
 #, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Crea un nuovo blocco progetto dalla selezione corrente"
+msgstr "Imposta il blocco progetto alla selezione corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:559
 msgid "Open in Footprint Editor"
@@ -54557,7 +54555,7 @@ msgstr "Sposta gli elementi selezionati uno per uno"
 #: pcbnew/tools/pcb_actions.cpp:602
 #, fuzzy
 msgid "Move with Reference..."
-msgstr "Sposta con il riferimento"
+msgstr "Sposta con il riferimento..."
 
 #: pcbnew/tools/pcb_actions.cpp:603
 msgid "Moves the selected item(s) with a specified starting point"
@@ -54566,7 +54564,7 @@ msgstr "Sposta gli elementi selezionati con un punto di partenza specificato"
 #: pcbnew/tools/pcb_actions.cpp:611
 #, fuzzy
 msgid "Copy with Reference..."
-msgstr "Copia con il riferimento"
+msgstr "Copia con il riferimento..."
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -54693,7 +54691,7 @@ msgstr "Semplifica i contorni dei poligoni, rimuovendo i punti superflui"
 #: pcbnew/tools/pcb_actions.cpp:786
 #, fuzzy
 msgid "Edit Vertices..."
-msgstr "Caricamento netclass..."
+msgstr "Modifica vertici..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
 msgid "Edit polygon vertices using a table"
@@ -54805,12 +54803,12 @@ msgstr "Proprietà impronta..."
 #: pcbnew/tools/pcb_actions.cpp:938
 #, fuzzy
 msgid "Pad Table..."
-msgstr "Tabella pin..."
+msgstr "Tabella piazzole..."
 
 #: pcbnew/tools/pcb_actions.cpp:939
 #, fuzzy
 msgid "Displays pad table for bulk editing of pads"
-msgstr "Mostra la tabella pin per la modifica in blocco"
+msgstr "Mostra la tabella piazzole per la modifica in blocco"
 
 #: pcbnew/tools/pcb_actions.cpp:946
 msgid "Show the footprint checker window"
@@ -55077,7 +55075,7 @@ msgstr "Importa un file scheda da altre applicazioni"
 #: pcbnew/tools/pcb_actions.cpp:1215
 #, fuzzy
 msgid "Export Footprints..."
-msgstr "Esporta impronta"
+msgstr "Esporta impronte..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
 #, fuzzy
@@ -55085,8 +55083,8 @@ msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Aggiunge le impronte usate sulla scheda ad una libreria impronte esistente\n"
-"(senza rimuovere le altre impronte presenti da questa libreria)"
+"Aggiungi le impronte dalla scheda a una libreria impronte nuova o esistente\n"
+"(senza rimuovere le altre impronte da questa libreria)"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Board Setup..."
@@ -55227,7 +55225,7 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1348
 #, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Seleziona modello 3D"
+msgstr "Raggruppa e incorpora modelli 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Collect footprint 3D models and embed them into the board"
@@ -55305,7 +55303,7 @@ msgstr "Blocca o sblocca gli elementi selezionati"
 #: pcbnew/tools/pcb_actions.cpp:1478 pcbnew/tools/pcb_actions.cpp:1488
 #, fuzzy
 msgid "Line Modes"
-msgstr "Modalità di stampa"
+msgstr "Modalità linee"
 
 #: pcbnew/tools/pcb_actions.cpp:1500
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -55828,12 +55826,12 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:2319
 #, fuzzy
 msgid "Interactive Offset Tool"
-msgstr "Strumento di cancellazione interattivo"
+msgstr "Strumento di scostamento interattivo"
 
 #: pcbnew/tools/pcb_actions.cpp:2320
 #, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
-msgstr "Sposta gli elementi selezionati di un valore esatto"
+msgstr "Strumento interattivo per lo spostamento di elementi di valori esatti"
 
 #: pcbnew/tools/pcb_actions.cpp:2342
 msgid ""
@@ -56244,7 +56242,7 @@ msgstr "Esporta l'impronta all'editor"
 #: pcbnew/tools/pcb_control.cpp:150 pcbnew/tools/pcb_control.cpp:180
 #, fuzzy
 msgid "Add Footprint Library"
-msgstr "Crea libreria di impronte"
+msgstr "Aggiungi libreria di impronte"
 
 #: pcbnew/tools/pcb_control.cpp:304
 msgid "Don't show again"
@@ -56305,7 +56303,7 @@ msgstr "Il blocco progetto %s non ha un file scheda."
 #: pcbnew/tools/pcb_control.cpp:1591
 #, fuzzy, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Il nome %s è riservato, e non può essere usato."
+msgstr "L'impronta %s è bloccata e non può essere piazzata."
 
 #: pcbnew/tools/pcb_control.cpp:1993
 msgid "Error loading board."
@@ -56395,7 +56393,7 @@ msgstr "Inserisci tabella stack-up scheda"
 #: pcbnew/tools/pcb_control.cpp:2821
 #, fuzzy
 msgid "Embed 3D Models"
-msgstr "Incorpora modello"
+msgstr "Incorpora modelli 3D"
 
 #: pcbnew/tools/pcb_control.cpp:2822
 #, c-format
@@ -56600,87 +56598,70 @@ msgid "From rules"
 msgstr "Dalle regole"
 
 #: pcbnew/via_protection_ui_mixin.h:119
-#, fuzzy
 msgid "Type I-a (tented top)"
-msgstr "Tipo I a (tented sopra)"
+msgstr "Tipo I-a (tented sopra)"
 
 #: pcbnew/via_protection_ui_mixin.h:120
-#, fuzzy
 msgid "Type I-b (tented both sides)"
-msgstr "Tipo I b (tented entrambi i lati)"
+msgstr "Tipo I-b (tented entrambi i lati)"
 
 #: pcbnew/via_protection_ui_mixin.h:121
-#, fuzzy
 msgid "Type I-a (tented bottom)"
-msgstr "Tipo I b (tented sotto)"
+msgstr "Tipo I-a (tented sotto)"
 
 #: pcbnew/via_protection_ui_mixin.h:122
-#, fuzzy
 msgid "Type II-a (covered and tented top)"
-msgstr "Tipo II a (coperto e tented sopra)"
+msgstr "Tipo II-a (coperto e tented sopra)"
 
 #: pcbnew/via_protection_ui_mixin.h:123
-#, fuzzy
 msgid "Type II-b (covered and tented both sides)"
-msgstr "Tipo II b (coperto e tented entrambi i lati)"
+msgstr "Tipo II-b (coperto e tented entrambi i lati)"
 
 #: pcbnew/via_protection_ui_mixin.h:124
-#, fuzzy
 msgid "Type II-a (covered and tented bottom)"
-msgstr "Tipo II a (coperto e tented sotto)"
+msgstr "Tipo II-a (coperto e tented sotto)"
 
 #: pcbnew/via_protection_ui_mixin.h:125
-#, fuzzy
 msgid "Type III-a (plugged top)"
-msgstr "Tipo III a (plugged sopra)"
+msgstr "Tipo III-a (plugged sopra)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
-#, fuzzy
 msgid "Type III-b (plugged both sides)"
-msgstr "Tipo III b (plugged entrambi i lati)"
+msgstr "Tipo III-b (plugged entrambi i lati)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
-#, fuzzy
 msgid "Type III-a (plugged bottom)"
-msgstr "Tipo III a (plugged sotto)"
+msgstr "Tipo III-a (plugged sotto)"
 
 #: pcbnew/via_protection_ui_mixin.h:128
-#, fuzzy
 msgid "Type IV-a (plugged and tented top)"
-msgstr "Tipo IV a (plugged e tented sopra)"
+msgstr "Tipo IV-a (plugged e tented sopra)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
-#, fuzzy
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "Tipo IV b (plugged e tented entrambi i lati)"
+msgstr "Tipo IV-b (plugged e tented entrambi i lati)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
-#, fuzzy
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "Tipo IV a (plugged e tented sotto)"
+msgstr "Tipo IV-a (plugged e tented sotto)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
-#, fuzzy
 msgid "Type V (filled )"
 msgstr "Tipo V (riempito)"
 
 #: pcbnew/via_protection_ui_mixin.h:132
-#, fuzzy
 msgid "Type VI-a (filled and tented top)"
-msgstr "Tipo VI a (riempito e tented sopra)"
+msgstr "Tipo VI-a (riempito e tented sopra)"
 
 #: pcbnew/via_protection_ui_mixin.h:133
-#, fuzzy
 msgid "Type VI-b (filled and tented both sides)"
-msgstr "Tipo VI b (riempito e tented entrambi i lati)"
+msgstr "Tipo VI-b (riempito e tented entrambi i lati)"
 
 #: pcbnew/via_protection_ui_mixin.h:134
-#, fuzzy
 msgid "Type VI-a (filled and tented bottom)"
-msgstr "Tipo VI a (riempito e tented sotto)"
+msgstr "Tipo VI-a (riempito e tented sotto)"
 
 #: pcbnew/via_protection_ui_mixin.h:135
-#, fuzzy
 msgid "Type VII (filled and capped)"
 msgstr "Tipo VII (riempito e capped)"
 
@@ -56761,9 +56742,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Mostra origine impronte e testi con una crocetta"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "Mostra origine impronte e testi con una crocetta"
+msgstr "Mostra punti di magnetismo espliciti come crocette"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Locked Item Shadow"
@@ -57590,9 +57570,8 @@ msgid "No Net"
 msgstr "No net"
 
 #: pcbnew/widgets/search_handlers.cpp:579
-#, fuzzy
 msgid "Drills"
-msgstr "File forature"
+msgstr "Forature"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
@@ -57603,9 +57582,8 @@ msgid "Y coord"
 msgstr "Coord Y"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "Modifica testo"
+msgstr "Modifica vertice"
 
 #: pcbnew/zone.cpp:862
 msgid "No vias"
@@ -57645,9 +57623,8 @@ msgid "Filled Area"
 msgstr "Area piena"
 
 #: pcbnew/zone.cpp:964
-#, fuzzy
 msgid "Outline Area"
-msgstr "Area regola"
+msgstr "Area contorno"
 
 #: pcbnew/zone.cpp:976
 msgid "Corner Count"
@@ -57691,7 +57668,7 @@ msgid "Rule Area %s"
 msgstr "Area regole %s"
 
 #: pcbnew/zone.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
 msgstr "Area regole '%s' %s"
 
@@ -57854,14 +57831,12 @@ msgid "Zone Manager"
 msgstr "Gestore zone"
 
 #: pcbnew/zone_settings.h:279
-#, fuzzy
 msgid "Offset X"
-msgstr "Scostamento X:"
+msgstr "X scostamento"
 
 #: pcbnew/zone_settings.h:280
-#, fuzzy
 msgid "Offset Y"
-msgstr "Scostamento Y:"
+msgstr "Y scostamento"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
