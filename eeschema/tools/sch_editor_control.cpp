@@ -472,6 +472,9 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
     SCHEMATIC& schematic = m_frame->Schematic();
     SCH_SHEET& root = schematic.Root();
 
+    // Save the current sheet path so we can restore it if the user cancels
+    SCH_SHEET_PATH originalSheet = m_frame->GetCurrentSheet();
+
     if( m_frame->GetCurrentSheet().Last() != &root )
     {
         SCH_SHEET_PATH rootSheetPath;
@@ -485,7 +488,17 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
     msg.Printf( _( "Revert '%s' (and all sub-sheets) to last version saved?" ), schematic.GetFileName() );
 
     if( !IsOK( m_frame, msg ) )
+    {
+        // Restore the original sheet if the user cancels
+        if( m_frame->GetCurrentSheet() != originalSheet )
+        {
+            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
+                                                                   &originalSheet );
+            wxSafeYield();
+        }
+
         return false;
+    }
 
     SCH_SCREENS screenList( schematic.Root() );
 
