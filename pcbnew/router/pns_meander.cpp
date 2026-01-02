@@ -719,6 +719,10 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
     int minAmpl = MinAmplitude();
     int maxAmpl = std::max( st.m_maxAmplitude, minAmpl );
 
+    // Calculate minimum acceptable corner radius for visible rounding.
+    // Use at least 1/4 of track width to ensure curves aren't too sharp.
+    int minCornerRadius = m_width / 4;
+
     for( int ampl = maxAmpl; ampl >= minAmpl; ampl -= st.m_step )
     {
         m_amplitude = ampl;
@@ -739,6 +743,11 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
         m_side = aSide;
 
         updateBaseSegment();
+
+        // Reject configurations that would result in nearly-square corners (issue #8629).
+        // m_meanCornerRadius is set by genMeanderShape() to the actual corner radius used.
+        if( m_meanCornerRadius < minCornerRadius )
+            continue;
 
         if( m_placer->CheckFit( this ) )
             return true;
@@ -766,7 +775,10 @@ void MEANDER_SHAPE::Resize( int aAmpl )
     if( aAmpl < 0 )
         return;
 
-    m_amplitude = aAmpl;
+    // Ensure amplitude doesn't go below minimum needed for proper corner radii (issue #8629)
+    int minAmpl = MinAmplitude();
+
+    m_amplitude = std::max( aAmpl, minAmpl );
 
     Recalculate();
 }
