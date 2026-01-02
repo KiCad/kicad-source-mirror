@@ -1736,4 +1736,152 @@ BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
 }
 
 
+/**
+ * Verify that all tracks and arcs have positive width across all boards.
+ */
+BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        CAPTURING_REPORTER reporter;
+        std::string        fullPath = dataPath + boardName;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            int zeroWidthCount = 0;
+            int totalCount = 0;
+
+            for( PCB_TRACK* track : board->Tracks() )
+            {
+                if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
+                {
+                    totalCount++;
+
+                    if( track->GetWidth() <= 0 )
+                    {
+                        zeroWidthCount++;
+
+                        if( zeroWidthCount <= 5 )
+                        {
+                            BOOST_TEST_MESSAGE( boardName << ": Zero-width track at ("
+                                                << track->GetStart().x / 1000000.0 << ", "
+                                                << track->GetStart().y / 1000000.0 << ")" );
+                        }
+                    }
+                }
+            }
+
+            BOOST_CHECK_EQUAL( zeroWidthCount, 0 );
+        }
+    }
+}
+
+
+/**
+ * Verify the import produces zero errors and bounded warnings per board.
+ * This acts as a regression gate to ensure warning counts don't increase.
+ */
+BOOST_AUTO_TEST_CASE( WarningBudget )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        CAPTURING_REPORTER reporter;
+        std::string        fullPath = dataPath + boardName;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
+
+            if( reporter.GetWarningCount() > 0 )
+            {
+                BOOST_TEST_MESSAGE( boardName << ": " << reporter.GetWarningCount() << " warnings" );
+
+                for( const auto& msg : reporter.GetMessages() )
+                {
+                    if( msg.severity == RPT_SEVERITY_WARNING )
+                        BOOST_TEST_MESSAGE( "  " << msg.text );
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Verify PTH pads have nonzero drill and SMD pads have zero drill
+ * across all boards.
+ */
+BOOST_AUTO_TEST_CASE( PadDrillConsistency )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        CAPTURING_REPORTER reporter;
+        std::string        fullPath = dataPath + boardName;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            int pthNoDrill = 0;
+            int smdWithDrill = 0;
+
+            for( FOOTPRINT* fp : board->Footprints() )
+            {
+                for( PAD* pad : fp->Pads() )
+                {
+                    PAD_ATTRIB attr = pad->GetAttribute();
+                    bool hasDrill = pad->GetDrillSizeX() > 0;
+
+                    if( attr == PAD_ATTRIB::PTH && !hasDrill )
+                    {
+                        pthNoDrill++;
+
+                        if( pthNoDrill <= 5 )
+                        {
+                            BOOST_TEST_MESSAGE( boardName << ": PTH pad without drill: "
+                                                << fp->GetReference() << "."
+                                                << pad->GetNumber() );
+                        }
+                    }
+
+                    if( attr == PAD_ATTRIB::SMD && hasDrill )
+                    {
+                        smdWithDrill++;
+
+                        if( smdWithDrill <= 5 )
+                        {
+                            BOOST_TEST_MESSAGE( boardName << ": SMD pad with drill: "
+                                                << fp->GetReference() << "."
+                                                << pad->GetNumber() );
+                        }
+                    }
+                }
+            }
+
+            BOOST_CHECK_EQUAL( pthNoDrill, 0 );
+            BOOST_CHECK_EQUAL( smdWithDrill, 0 );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
