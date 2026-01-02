@@ -2881,6 +2881,17 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                     // Recurse onto this neighbor in case it needs to re-propagate
                     neighbor->m_dirty = true;
                     propagateToNeighbors( neighbor, aForce );
+
+                    // After hierarchy propagation, the neighbor's connection may have been
+                    // updated to a higher-priority driver (e.g., a power symbol discovered
+                    // through hierarchical sheet pins). If so, update the bus member to match.
+                    // This ensures that net names propagate correctly through bus connections
+                    // that span hierarchical boundaries (issue #18119).
+                    if( neighbor_conn->Name() != member->Name() )
+                    {
+                        member->Clone( *neighbor_conn );
+                        stale_bus_members.insert( member );
+                    }
                 }
             }
         }
