@@ -47,6 +47,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_ShapeOpacity( 1.0 ),
         m_ImageOpacity( 0.6 ),
         m_PcbSelectionFilter(),
+        m_GitIntegrationDisabled( false ),
         m_project( aProject ),
         m_wasMigrated( false )
 // clang-format on: suggestion is less readable.
@@ -211,6 +212,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM<wxString>( "git.repo_type", &m_GitRepoType, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "git.ssh_key", &m_GitSSHKey, "" ) );
+
+    m_params.emplace_back( new PARAM<bool>( "git.integration_disabled", &m_GitIntegrationDisabled, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "net_inspector_panel.filter_text",
                                                 &m_NetInspectorPanel.filter_text, "" ) );
