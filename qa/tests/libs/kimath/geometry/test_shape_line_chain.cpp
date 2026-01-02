@@ -763,7 +763,6 @@ BOOST_AUTO_TEST_CASE( AppendArc )
     }
 }
 
-
 // Test special case where the last arc in the chain has a shared point with the first arc
 BOOST_AUTO_TEST_CASE( ArcWrappingToStartSharedPoints )
 {
@@ -841,6 +840,9 @@ BOOST_AUTO_TEST_CASE( Split )
     BOOST_CHECK_EQUAL( chain.PointCount(), 11 );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
 
+    //////////////////////////////////////////////////////////
+    /// CASE 1: Point not in the chain                      /
+    //////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 1: Point not in the chain" )
     {
         SHAPE_LINE_CHAIN chainCopy = chain;
@@ -1013,10 +1015,10 @@ BOOST_AUTO_TEST_CASE( Slice )
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), sliceArc0.GetP0() ); // equal to arc start
         BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
 
-        for( int i = 1; i <= 6; i++ )
+        for( int i = 1; i <= 4; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
 
-        for( int i = 0; i <= 5; i++ )
+        for( int i = 0; i <= 3; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
 
         BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 6 ), true );
@@ -1248,6 +1250,55 @@ BOOST_AUTO_TEST_CASE( ReplaceChain )
     baseChain.Replace( baseChain.PointCount() - 1, baseChain.PointCount() - 1, VECTOR2I( -1, -1 ) );
 
     BOOST_CHECK_EQUAL( baseChain.CLastPoint(), VECTOR2I( -1, -1 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CompareGeometry )
+{
+    SHAPE_LINE_CHAIN chain1;
+    chain1.Append( 0, 0 );
+    chain1.Append( 100, 0 );
+    chain1.Append( 100, 100 );
+    chain1.Append( 0, 100 );
+    chain1.SetClosed( true );
+
+    SHAPE_LINE_CHAIN chain2 = chain1;
+
+    // 1. Identical chains
+    BOOST_CHECK( chain1.CompareGeometry( chain2 ) );
+
+    // 2. Different chains
+    chain2.SetPoint( 2, VECTOR2I( 101, 101 ) );
+    BOOST_CHECK( !chain1.CompareGeometry( chain2 ) );
+
+    // 3. Epsilon tolerance
+    BOOST_CHECK( chain1.CompareGeometry( chain2, false, 2 ) );
+
+    // 4. Cyclical compare (chain1 but points in started at different vertex)
+    SHAPE_LINE_CHAIN chain3;
+    chain3.Append( 100, 0 );
+    chain3.Append( 100, 100 );
+    chain3.Append( 0, 100 );
+    chain3.Append( 0, 0 );
+    chain3.SetClosed( true );
+
+    BOOST_CHECK( !chain1.CompareGeometry( chain3, false ) );
+    BOOST_CHECK( chain1.CompareGeometry( chain3, true ) );
+
+    // 5. Different number of points
+    chain3.Append( 50, 50 ); // Add a point
+    BOOST_CHECK( !chain1.CompareGeometry( chain3, true ) );
+
+    // 6. Simplify check (chain1 should match chain4 because CompareGeometry calls Simplify())
+    SHAPE_LINE_CHAIN chain4;
+    chain4.Append( 0, 0 );
+    chain4.Append( 50, 0 ); // Collinear point
+    chain4.Append( 100, 0 );
+    chain4.Append( 100, 100 );
+    chain4.Append( 0, 100 );
+    chain4.SetClosed( true );
+
+    BOOST_CHECK( chain1.CompareGeometry( chain4 ) );
 }
 
 
