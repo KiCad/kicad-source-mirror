@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-01 13:37+0000\n"
+"PO-Revision-Date: 2026-01-02 21:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -1736,9 +1736,8 @@ msgid "Errors"
 msgstr "Hibák"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Csere és következő keresése"
+msgstr "Lecseréljük a betöltött fájlt?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -2285,12 +2284,10 @@ msgid "KiCad forum - "
 msgstr "KiCad fórum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:177
-#, fuzzy
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "A teljes KiCad EDA Suite kiadása a"
+msgstr "A teljes KiCad EDA Suite a"
 
 #: common/dialog_about/AboutDialog_main.cpp:179
-#, fuzzy
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr ""
 "GNU General Public License (GPL) 3. vagy későbbi licencének oltalma alá "
@@ -2435,9 +2432,8 @@ msgid "&Report Bug"
 msgstr "Hiba &Bejelentése"
 
 #: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1234
-#, fuzzy
 msgid "Report a problem with KiCad"
-msgstr "Hibajelentés küldése a KiCad-nak"
+msgstr "A KiCad hibájának bejelentése"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1227
 msgid "Donate"
@@ -3213,17 +3209,16 @@ msgid "Landscape"
 msgstr "Fekvő"
 
 #: common/dialogs/dialog_page_settings.cpp:803 pagelayout_editor/files.cpp:59
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Rajzolási mód"
+msgstr "Rajzlap fájl"
 
 #: common/dialogs/dialog_page_settings.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
 msgstr ""
-"Hiba a netlista betöltésekor.\n"
+"Hiba a(z) \"%s\" rajzlap betöltésekor.\n"
 "%s"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
@@ -4065,9 +4060,8 @@ msgid "Remote Tracking"
 msgstr "Vezetősáv huzalozása"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Frisitendő mezők"
+msgstr "Frissítés gyakorisága:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4489,15 +4483,16 @@ msgid "File history size:"
 msgstr "Fájltörténet mérete:"
 
 #: common/dialogs/panel_common_settings_base.cpp:358
-#, fuzzy
 msgid "3D cache file duration:"
-msgstr "3D modell keresési útvonal beállítása"
+msgstr "3D gyorsítótár fájlok élettartama:"
 
 #: common/dialogs/panel_common_settings_base.cpp:363
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"A megadott értéknél régebbi gyorsítótár fájlok törlődnek.\n"
+"Ha 0, akkor az összes fájlt megtartjuk"
 
 #: common/dialogs/panel_common_settings_base.cpp:367
 msgid "days"
@@ -5434,9 +5429,8 @@ msgstr "KiCad frissítések keresése induláskor"
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
 #: kicad/pcm/dialogs/dialog_pcm.cpp:215
 #: kicad/tools/kicad_manager_actions.cpp:196
-#, fuzzy
 msgid "Plugin and Content Manager"
-msgstr "Beépülő modul és tartalomkezelő"
+msgstr "Plugin- és tartalomkezelő"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:50
 msgid "Check for package updates on startup"
@@ -12373,9 +12367,9 @@ msgid "Change severity to Warning for all '%s' violations"
 msgstr "DRC szabálysértések megengedése"
 
 #: eeschema/dialogs/dialog_erc.cpp:716 pcbnew/dialogs/dialog_drc.cpp:772
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore all '%s' violations"
-msgstr "DRC szabálysértések megengedése"
+msgstr "Összes \"%s\" szabálysértés figyelmen kívül hagyása"
 
 #: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:773
 msgid "Violations will not be checked or reported"
@@ -12417,9 +12411,8 @@ msgstr "Láb Ütközési Térkép"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
 #: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:988
 #: pcbnew/dialogs/dialog_drc.cpp:1030
-#, fuzzy
 msgid "Violation Severity"
-msgstr "Szabálysértések besorolása"
+msgstr "Szabálysértés súlyossága"
 
 #: eeschema/dialogs/dialog_erc.cpp:882
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
@@ -12431,9 +12424,9 @@ msgid "Formatting"
 msgstr "Formátum"
 
 #: eeschema/dialogs/dialog_erc.cpp:1087 pcbnew/dialogs/dialog_gendrill.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "A(z) \"%s\" naplófájl létrehozva\n"
+msgstr "A(z) \"%s\" jelentésfájl létrehozva."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
@@ -12484,15 +12477,14 @@ msgstr "Teszt Futtatás..."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:441
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:167
-#, fuzzy
 msgid "a page"
 msgstr "egy oldal"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:89
 #: pcbnew/dialogs/dialog_drc_base.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Szabálysértés (%s)"
+msgstr "Szabálysértések (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:97
 #: pcbnew/dialogs/dialog_drc_base.cpp:146
@@ -12520,7 +12512,6 @@ msgid "Delete Marker"
 msgstr "Kijelölt Törlése"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
-#, fuzzy
 msgid "Electrical Rules Checker"
 msgstr "Elektromos szabályellenőrző (ERC)"
 
@@ -12617,9 +12608,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:395
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Szimulátor parancs:"
+msgstr "Külső szimulátor parancs futtatása:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:397
 msgid ""
@@ -12694,19 +12684,16 @@ msgid "Output path:"
 msgstr "Kimenet"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "Exportolás..."
+msgstr "Exportáló hozzáadása..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:62
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "Sarok eltávolítása"
+msgstr "Exportáló eltávolítása"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "Generátor parancssori kódja:"
+msgstr "Exportáló parancssori kódja:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
 msgid "Browse Scripts..."
@@ -12904,9 +12891,8 @@ msgid "Edit Text and Graphics"
 msgstr "Szöveg és grafika szerkesztése"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
-#, fuzzy
 msgid "Other symbol fields"
-msgstr "Rajzjel mezők szerkesztése"
+msgstr "Egyéb rajzjel mezők"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 #, fuzzy
@@ -12924,9 +12910,8 @@ msgid "Label fields"
 msgstr "Címke mezők"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
-#, fuzzy
 msgid "Sheet titles"
-msgstr "Lap címke"
+msgstr "Lap címek"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 #, fuzzy
@@ -13026,9 +13011,8 @@ msgstr "Vízszintes igazítás:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:299
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:313
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
-#, fuzzy
 msgid "(fields only)"
-msgstr "(mező)"
+msgstr "(csak mezők)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 msgid "V Align:"
@@ -13068,9 +13052,8 @@ msgstr "Csomópont színe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:127
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:104
-#, fuzzy
 msgid "Edit Text and Graphic Properties"
-msgstr "Rajzjel és szövegmező tulajdonságok szerkesztése"
+msgstr "Szöveg és grafika tulajdonságok szerkesztése"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:33
 #, fuzzy
@@ -13110,11 +13093,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Ibis értelmező log"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Ibis értelmező"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:78
 #: eeschema/dialogs/dialog_image_properties_base.h:56
@@ -13455,9 +13438,8 @@ msgstr "Lábszámozás"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
 #: eeschema/sch_pin.cpp:2135
-#, fuzzy
 msgid "Electrical Type"
-msgstr "ElektromosTípus"
+msgstr "Elektromos típus"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:91
@@ -13489,7 +13471,6 @@ msgstr "Lábnév szövegméret"
 #: eeschema/dialogs/dialog_sim_model.cpp:626 eeschema/sch_item.cpp:586
 #: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:3011
 #: eeschema/symbol_editor/symbol_editor.cpp:1753
-#, fuzzy
 msgid "Unit"
 msgstr "Részegység"
 
@@ -13804,9 +13785,8 @@ msgid "Fields must have a name."
 msgstr "A mezőnél nincs név megadva."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:408
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Nincs megadva alkatrészrajzolat"
+msgstr "Származtatott rajzjelhez választani kell egy szülőt"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:420
 msgid "Delete extra units from symbol?"
@@ -13836,9 +13816,9 @@ msgid "Edit Symbol Properties"
 msgstr "Rajzjel tulajdonságok"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Ez a fájl már meg van nyitva."
+msgstr "Ez a mező örökölve lett innen: \"%s\"."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:624
 #, c-format
@@ -13928,15 +13908,13 @@ msgid "Pin Text Options"
 msgstr "Láb Megnevezés Beállítások"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
-#, fuzzy
 msgid "Show pin number"
 msgstr "Lábszámozás megjelenítése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:179
-#, fuzzy
 msgid "Show or hide pin numbers"
-msgstr "Láb számozás megjelenítése / elrejtése"
+msgstr "Lábszámozás megjelenítése / elrejtése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin name"
@@ -14198,9 +14176,8 @@ msgid "Number text si&ze:"
 msgstr "Lábszámozás szövegméret:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
-#, fuzzy
 msgid "Electrical type:"
-msgstr "Típus:"
+msgstr "Elektromos típus:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 #, fuzzy
@@ -14215,7 +14192,7 @@ msgstr "Grafikus stílus:"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:220
 msgid "Common to all &units in symbol"
-msgstr "Közös az összes részegységre"
+msgstr "Közös a rajzjel összes részegységére"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:223
@@ -14360,9 +14337,8 @@ msgstr "Bevásárlólista (BOM) létrehozása a jelenlegi kapcsolási rajzból"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
 #: pcbnew/dialogs/dialog_plot_base.cpp:34
-#, fuzzy
 msgid "Output directory:"
-msgstr "Célmappa:"
+msgstr "Kimeneti mappa:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
@@ -15902,7 +15878,6 @@ msgid "Group symbols"
 msgstr "Rajzjelek csoportosítása"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:112
-#, fuzzy
 msgid "Group symbols together based on common properties"
 msgstr "Alkatrészek csoportosítása a közös tulajdonságok alapján"
 
@@ -40020,9 +39995,8 @@ msgid "Add teardrops on via's track connections"
 msgstr "Zónák újrakitöltése"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
-#, fuzzy
 msgid "Maximum track width:"
-msgstr "Minimális vezetősáv szélesség:"
+msgstr "Maximális vezetősáv szélesség:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 msgid "Tracks which are similar in size to the via do not need teardrops."
@@ -40030,16 +40004,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:514
 msgid "(as a percentage of pad/via/track size)"
-msgstr ""
+msgstr "(forrszem/via/vezetősáv méretének százalékában)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:162
 msgid "Track & Via Properties"
 msgstr "Vezetősáv és Via tulajdonságok"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "Előre definiált vezetősáv és via méretek"
+msgstr "Vezetősáv és via méretek"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
 #, fuzzy
@@ -40108,9 +40081,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:367
-#, fuzzy
 msgid "Corner style:"
-msgstr "Vonalstílus"
+msgstr "Sarok stílus:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -40161,9 +40133,8 @@ msgid "Unused Pads"
 msgstr "Feldolgozott rétegek"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Alkatrészrajzolat frissítése"
+msgstr "Alkatrészrajzolatok frissítése"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
 #, fuzzy
