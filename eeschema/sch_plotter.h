@@ -68,6 +68,8 @@ struct SCH_PLOT_OPTS
 
     wxString       m_outputDirectory;
     wxString       m_outputFile;
+    wxString       m_variant;
+
     // has meaning only with DXF plotter: set DXF units in DXF file
     DXF_UNITS      m_DXF_File_Unit;
 

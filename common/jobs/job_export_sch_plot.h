@@ -53,6 +53,7 @@ public:
     wxString              m_filename;
     wxString              m_drawingSheet;
     wxString              m_defaultFont;
+    wxString              m_variant;
 
     bool                  m_plotAll;
     bool                  m_plotDrawingSheet;

@@ -49,7 +49,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_outputPath;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxBoxSizer* m_optionsSizer;
+		wxBoxSizer* m_formatVariantSize;
 		wxRadioBox* m_plotFormatOpt;
+		wxChoice* m_variantChoiceCtrl;
 		wxStaticText* m_staticText4;
 		wxChoice* m_paperSizeOption;
 		wxCheckBox* m_plotDrawingSheet;

@@ -78,6 +78,8 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "bom_format_preset_name",
                                                     &m_bomFmtPresetName,
                                                     m_bomFmtPresetName ) );
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
 }
 
 

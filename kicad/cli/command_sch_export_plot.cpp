@@ -55,6 +55,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
     addCommonArgs( true, true, false, aOutputIsDir );
     addDrawingSheetArg();
     addDefineArg();
+    addVariantsArg();
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
@@ -190,6 +191,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         plotJob->m_PDFMetadata = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_METADATA );
     }
 
+    plotJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, plotJob.get() );
 
     return exitCode;

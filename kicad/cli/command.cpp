@@ -35,7 +35,7 @@ CLI::COMMAND::COMMAND( const std::string& aName ) :
         m_hasDrawingSheetArg( false ),
         m_hasDefineArg( false ),
         m_outputArgExpectsDir( false ),
-        m_hasVariantsArg( false )
+        m_hasVariantArg( false )
 
 {
     m_argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
@@ -98,14 +98,13 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
         }
     }
 
-    if( m_hasVariantsArg )
+    if( m_hasVariantArg )
     {
-        auto variantNames = m_argParser.get<std::vector<std::string>>( ARG_VARIANTS );
+        auto variantName = m_argParser.get<std::string>( ARG_VARIANT );
 
-        for( const std::string& variantName : variantNames )
-            m_argVariantNames.emplace( variantName );
+        m_argVariantName = From_UTF8( variantName );
 
-        if( m_argVariantNames.empty() )
+        if( m_argVariantName.IsEmpty() )
             return EXIT_CODES::ERR_ARGS;
     }
 
@@ -192,13 +191,12 @@ void CLI::COMMAND::addDefineArg()
 
 void CLI::COMMAND::addVariantsArg()
 {
-    m_hasVariantsArg = true;
+    m_hasVariantArg = true;
 
-    m_argParser.add_argument( ARG_VARIANTS )
-            .default_value( std::set<std::string>() )
+    m_argParser.add_argument( ARG_VARIANT )
+            .default_value( std::string() )
             .append()
             .help( UTF8STDSTR(
-                    _( "List of variant names to output.\n"
-                       "When no --variants arguement is provided the default variant is output.\n"
-                       "To output all variants use '--variants=all'" ) ) );
+                    _( "The variant name to output.\n"
+                       "When no --variant argument is provided the default variant is output." ) ) );
 }

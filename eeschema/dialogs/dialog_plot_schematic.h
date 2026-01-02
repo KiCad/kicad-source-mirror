@@ -64,6 +64,8 @@ private:
 
     void plotSchematic( bool aPlotAll );
 
+    wxString getSelectedVariant() const;
+
     /**
      * Determine the best absolute path to plot files given the contents of the path
      * edit control.

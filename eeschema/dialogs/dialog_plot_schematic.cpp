@@ -92,6 +92,10 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
         m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
+    m_variantChoiceCtrl->Append( m_editFrame->Schematic().GetVariantNamesForUI() );
+    m_variantChoiceCtrl->Select( 0 );
+
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -306,8 +310,9 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_plotAll = true;
         m_job->SetConfiguredOutputPath( m_outputPath->GetValue() );
         m_job->m_theme = getColorSettings()->GetName();
+        m_job->m_variant = getSelectedVariant();
 
-        event.Skip();   // Allow normal close action
+        event.Skip(); // Allow normal close action
     }
 }
 
@@ -339,7 +344,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
 
     // Select the DXF file unit
     plotOpts.m_DXF_File_Unit = m_DXF_plotUnits->GetSelection() == 0 ? DXF_UNITS::INCH : DXF_UNITS::MM;
-
+    plotOpts.m_variant = getSelectedVariant();
     schPlotter->Plot( getPlotFileFormat(), plotOpts, &renderSettings, &m_MessagesBox->Reporter() );
 
     if( getPlotFileFormat() == PLOT_FORMAT::PDF && m_openFileAfterPlot->GetValue() )
@@ -424,4 +429,16 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
     }
 
     return path;
+}
+
+
+wxString DIALOG_PLOT_SCHEMATIC::getSelectedVariant() const
+{
+    wxString variant;
+    int      selection = m_variantChoiceCtrl->GetSelection();
+
+    if( ( selection != 0 ) && ( selection != wxNOT_FOUND ) )
+        variant = m_variantChoiceCtrl->GetString( selection );
+
+    return variant;
 }

@@ -24,7 +24,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_outputPathLabel = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPathLabel->Wrap( -1 );
-	bSizerDir->Add( m_outputPathLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDir->Add( m_outputPathLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPath->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the schematic main file location.") );
@@ -39,11 +39,21 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
 
+	m_formatVariantSize = new wxBoxSizer( wxVERTICAL );
+
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 1 );
-	m_optionsSizer->Add( m_plotFormatOpt, 0, wxALIGN_TOP|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_formatVariantSize->Add( m_plotFormatOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	wxArrayString m_variantChoiceCtrlChoices;
+	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
+	m_variantChoiceCtrl->SetSelection( 0 );
+	m_formatVariantSize->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT, 5 );
+
+
+	m_optionsSizer->Add( m_formatVariantSize, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbOptions;
 	sbOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
@@ -56,7 +66,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_staticText4 = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Page size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	gbSizer1->Add( m_staticText4, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticText4, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_paperSizeOptionChoices[] = { _("Schematic size"), _("A4"), _("A") };
 	int m_paperSizeOptionNChoices = sizeof( m_paperSizeOptionChoices ) / sizeof( wxString );
@@ -73,7 +83,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxStaticText* bOutputModeLabel;
 	bOutputModeLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	bOutputModeLabel->Wrap( -1 );
-	gbSizer1->Add( bOutputModeLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( bOutputModeLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and White") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
@@ -83,7 +93,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_colorThemeLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Color theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorThemeLabel->Wrap( -1 );
-	gbSizer1->Add( m_colorThemeLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_colorThemeLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxArrayString m_colorThemeChoices;
 	m_colorTheme = new wxChoice( sbOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorThemeChoices, 0 );
@@ -99,12 +109,12 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_lineWidthLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Minimum line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_lineWidthLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_lineWidthLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_lineWidthCtrl = new wxTextCtrl( sbOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
 
-	gbSizer1->Add( m_lineWidthCtrl, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_lineWidthCtrl, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_lineWidthUnits = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthUnits->Wrap( -1 );
@@ -116,7 +126,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	sbOptions->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	m_optionsSizer->Add( sbOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_optionsSizer->Add( sbOptions, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bOptionsRight;
 	bOptionsRight = new wxBoxSizer( wxVERTICAL );
@@ -126,7 +136,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_plotPDFPropertyPopups = new wxCheckBox( m_sizerPDFOptions->GetStaticBox(), wxID_ANY, _("Generate property popups"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFPropertyPopups->SetValue(true);
-	m_sizerPDFOptions->Add( m_plotPDFPropertyPopups, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sizerPDFOptions->Add( m_plotPDFPropertyPopups, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_plotPDFHierarchicalLinks = new wxCheckBox( m_sizerPDFOptions->GetStaticBox(), wxID_ANY, _("Generate clickable links for hierarchical elements"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFHierarchicalLinks->SetValue(true);
@@ -139,7 +149,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_sizerPDFOptions->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( m_sizerPDFOptions, 0, wxEXPAND|wxALL, 5 );
+	bOptionsRight->Add( m_sizerPDFOptions, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_SizerDxfOption = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
 
@@ -148,13 +158,13 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_staticTextDXF = new wxStaticText( m_SizerDxfOption->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDXF->Wrap( -1 );
-	bSizerDxf->Add( m_staticTextDXF, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDxf->Add( m_staticTextDXF, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 8 );
 
 	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
 	m_DXF_plotUnits = new wxChoice( m_SizerDxfOption->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DXF_plotUnitsNChoices, m_DXF_plotUnitsChoices, 0 );
 	m_DXF_plotUnits->SetSelection( 0 );
-	bSizerDxf->Add( m_DXF_plotUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDxf->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_SizerDxfOption->Add( bSizerDxf, 1, wxEXPAND, 5 );
@@ -170,13 +180,13 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_otherOptions->Add( m_openFileAfterPlot, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( m_otherOptions, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bOptionsRight->Add( m_otherOptions, 1, wxEXPAND|wxTOP, 5 );
 
 
-	m_optionsSizer->Add( bOptionsRight, 1, wxEXPAND, 5 );
+	m_optionsSizer->Add( bOptionsRight, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 
-	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerMsgPanel;
 	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
@@ -187,7 +197,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerMsgPanel->Add( m_MessagesBox, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSizerMsgPanel, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

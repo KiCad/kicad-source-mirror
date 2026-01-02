@@ -35,7 +35,7 @@
 #define ARG_DRAWING_SHEET "--drawing-sheet"
 #define ARG_DEFINE_VAR_SHORT "-D"
 #define ARG_DEFINE_VAR_LONG "--define-var"
-#define ARG_VARIANTS "--variants"
+#define ARG_VARIANT "--variant"
 
 namespace CLI
 {
@@ -151,16 +151,16 @@ protected:
     std::map<wxString, wxString>    m_argDefineVars;
 
     /**
-     * Whether or not the input arguement for variant names was added for parsing.
+     * Whether or not the input argument for variant names was added for parsing.
      */
-    bool                     m_hasVariantsArg;
+    bool                     m_hasVariantArg;
 
     /**
-     * A set of variant names to output.
+     * The name of the variant to output.
      *
-     * An empty set indicates the default variant only.
+     * An empty string indicates the default variant.
      */
-    std::set<wxString>       m_argVariantNames;
+    wxString                 m_argVariantName;
 };
 
 }

@@ -875,6 +875,8 @@ wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_OPTS& aPlotOpts,
 void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
                         SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
+    wxString oldVariant = m_schematic->GetCurrentVariant();
+    m_schematic->SetCurrentVariant( aPlotOpts.m_variant );
     m_colorSettings = ::GetColorSettings( aPlotOpts.m_theme );
 
     switch( aPlotFormat )
@@ -886,4 +888,6 @@ void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
     case PLOT_FORMAT::SVG:  createSVGFiles( aPlotOpts, aRenderSettings, aReporter );  break;
     case PLOT_FORMAT::HPGL: /* no longer supported */                                 break;
     }
+
+    m_schematic->SetCurrentVariant( oldVariant );
 }

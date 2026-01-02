@@ -1557,6 +1557,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
                 m_job->m_fieldsGroupBy.emplace_back( modelField.name );
         }
 
+        m_job->m_variant = getSelectedVariant();
+
         EndModal( wxID_OK );
     }
     else

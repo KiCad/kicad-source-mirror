@@ -35,6 +35,7 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate a Bill of Materials (BOM)" ) ) );
     addCommonArgs( true, true, false, false );
+    addVariantsArg();
 
     // Preset options
     m_argParser.add_argument( ARG_PRESET )
@@ -165,6 +166,7 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     bomJob->m_sortAsc = m_argParser.get<bool>( ARG_SORT_ASC );
     bomJob->m_filterString = From_UTF8( m_argParser.get<std::string>( ARG_FILTER ).c_str() );
     bomJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
+    bomJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM ) )
         wxFprintf( stdout, DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_WARNING );

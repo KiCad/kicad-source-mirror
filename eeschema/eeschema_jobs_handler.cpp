@@ -352,10 +352,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_theme = aPlotJob->m_theme;
     plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
     plotOpts.m_plotHopOver = aPlotJob->m_show_hop_over;
+    plotOpts.m_variant = aPlotJob->m_variant;
 
     // Always export dxf in mm by kicad-cli (similar to Pcbnew)
     plotOpts.m_DXF_File_Unit = DXF_UNITS::MM;
 
+    sch->SetCurrentVariant( plotOpts.m_variant );
     schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 
     if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
@@ -496,6 +498,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
+    sch->SetCurrentVariant( aBomJob->m_variant );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -533,7 +536,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
         dataModel.AddColumn( GetCanonicalFieldName( fieldId ),
-                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), false, {} );
+                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), false, aBomJob->m_variant );
     }
 
     // User field names in symbols second
@@ -551,7 +554,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     for( const wxString& fieldName : userFieldNames )
-        dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, {} );
+        dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, aBomJob->m_variant );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
@@ -560,7 +563,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
         {
             dataModel.AddColumn( templateFieldname.m_Name, GetGeneratedFieldDisplayName( templateFieldname.m_Name ),
-                                 false, {} );
+                                 false, aBomJob->m_variant );
         }
     }
 
@@ -673,7 +676,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         preset.excludeDNP = aBomJob->m_excludeDNP;
     }
 
-    dataModel.ApplyBomPreset( preset, {} );
+    dataModel.ApplyBomPreset( preset, aBomJob->m_variant );
 
     if( aBomJob->GetConfiguredOutputPath().IsEmpty() )
     {
