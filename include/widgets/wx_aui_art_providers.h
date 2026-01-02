@@ -28,7 +28,9 @@ class WX_AUI_TOOLBAR_ART : public wxAuiDefaultToolBarArt
 public:
     WX_AUI_TOOLBAR_ART() :
             wxAuiDefaultToolBarArt()
-    {}
+    {
+        saturateHighlightColor();
+    }
 
     virtual ~WX_AUI_TOOLBAR_ART() = default;
 
@@ -43,6 +45,11 @@ public:
      */
     void DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                      const wxRect& aRect ) override;
+
+    void UpdateColoursFromSystem() override;
+
+private:
+    void saturateHighlightColor();
 };
 
 

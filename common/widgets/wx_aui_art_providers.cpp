@@ -29,6 +29,7 @@
 #include <settings/common_settings.h>
 #include <widgets/panel_notebook_base.h>
 #include <widgets/wx_aui_art_providers.h>
+#include <gal/color4d.h>
 
 #if wxCHECK_VERSION( 3, 3, 0 )
 wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxReadOnlyDC& aDc, wxWindow* aWindow,
@@ -187,6 +188,21 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     {
         aDc.DrawText( aItem.GetLabel(), textX, textY );
     }
+}
+
+
+void WX_AUI_TOOLBAR_ART::saturateHighlightColor()
+{
+    // Use a slightly stronger highlight colour over grey toolbar backgrounds
+    KIGFX::COLOR4D highlight( m_highlightColour );
+    m_highlightColour = highlight.Saturate( 0.6 ).ToColour();
+}
+
+
+void WX_AUI_TOOLBAR_ART::UpdateColoursFromSystem()
+{
+    wxAuiDefaultToolBarArt::UpdateColoursFromSystem();
+    saturateHighlightColor();
 }
 
 
