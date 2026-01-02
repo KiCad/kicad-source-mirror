@@ -312,4 +312,59 @@ BOOST_AUTO_TEST_CASE( NonBusPatternsStillWork )
 }
 
 
+/**
+ * Test that ClearCacheForNet properly invalidates cached netclass lookups.
+ *
+ * This is related to issue 17891: when a net name changes, the cache for both
+ * old and new net names must be cleared so that netclass assignments are
+ * correctly updated.
+ */
+BOOST_AUTO_TEST_CASE( NetclassCacheInvalidation )
+{
+    LoadSchematic( SchematicQAPath( "issue16915" ) );
+
+    std::shared_ptr<NET_SETTINGS>& netSettings =
+            m_schematic->Project().GetProjectFile().m_NetSettings;
+
+    // Initial lookup - should get "Input" netclass from the pattern "/IN[0..7]"
+    std::shared_ptr<NETCLASS> nc = netSettings->GetEffectiveNetClass( "/IN0" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Input" ) );
+
+    // Verify the lookup is cached
+    BOOST_CHECK( netSettings->HasEffectiveNetClass( "/IN0" ) );
+
+    // Clear the cache for this specific net
+    netSettings->ClearCacheForNet( "/IN0" );
+
+    // Cache should be cleared
+    BOOST_CHECK( !netSettings->HasEffectiveNetClass( "/IN0" ) );
+
+    // Looking up again should still return "Input" (pattern still matches)
+    nc = netSettings->GetEffectiveNetClass( "/IN0" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Input" ) );
+
+    // Now add a pattern that matches a renamed net
+    // Simulate: net was "/OLD_NET", now it's "/NEW_NET"
+    netSettings->SetNetclassPatternAssignment( wxS( "/OLD_NET" ), wxS( "Input" ) );
+    netSettings->SetNetclassPatternAssignment( wxS( "/NEW_NET" ), wxS( "Output" ) );
+
+    // Look up both - they should get different netclasses
+    nc = netSettings->GetEffectiveNetClass( "/OLD_NET" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Input" ) );
+
+    nc = netSettings->GetEffectiveNetClass( "/NEW_NET" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Output" ) );
+
+    // Clear all caches (simulating what happens on major connectivity changes)
+    netSettings->ClearAllCaches();
+
+    // Both should be recalculated correctly
+    nc = netSettings->GetEffectiveNetClass( "/OLD_NET" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Input" ) );
+
+    nc = netSettings->GetEffectiveNetClass( "/NEW_NET" );
+    BOOST_CHECK_EQUAL( nc->GetName(), wxS( "Output" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

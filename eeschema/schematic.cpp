@@ -1898,6 +1898,27 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                 affectedNets.insert( conn->Name() );
         }
 
+        // For label items, also capture the old net name from the linked item (original state).
+        // This ensures cache is cleared for both old and new net names when a label is renamed.
+        for( const CHANGED_ITEM& changedItem : changed_connectable_items )
+        {
+            if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( changedItem.item ) )
+            {
+                const wxString& driverName = label->GetCachedDriverName();
+
+                if( !driverName.IsEmpty() )
+                    affectedNets.insert( driverName );
+            }
+
+            if( SCH_LABEL_BASE* linkedLabel = dynamic_cast<SCH_LABEL_BASE*>( changedItem.linked_item ) )
+            {
+                const wxString& driverName = linkedLabel->GetCachedDriverName();
+
+                if( !driverName.IsEmpty() )
+                    affectedNets.insert( driverName );
+            }
+        }
+
         // Reset resolved netclass cache for this connection
         for( const wxString& netName : affectedNets )
             netSettings->ClearCacheForNet( netName );
