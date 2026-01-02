@@ -1,4 +1,4 @@
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
@@ -15991,9 +15991,8 @@ msgid "View presets:"
 msgstr "პრესეტების გადახედვა:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "სქემატური მინიჭება"
+msgstr "სქემის ვარიანტები:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -51122,7 +51121,7 @@ msgstr "მიბმული დიზაინის ბლოკის გა
 #: pcbnew/tools/pcb_actions.cpp:513
 #, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "მიბმული დიზაინის ბლოკის მოთავსება"
+msgstr "დაფის შენახვა დიზაინის ბლოკის სახით..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
