@@ -140,8 +140,7 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
         try     // Kicad frame was not available, try to start it
         {
             if( KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH ) )
-                kiface->CreateKiWindow( m_frame, DIALOG_DESIGN_BLOCK_LIBRARY_TABLE,
-                                        &m_frame->Kiway() );
+                kiface->CreateKiWindow( m_frame, DIALOG_DESIGN_BLOCK_LIBRARY_TABLE, &m_frame->Kiway() );
         }
         catch( ... )
         {
@@ -267,13 +266,9 @@ int COMMON_CONTROL::ShowProjectManager( const TOOL_EVENT& aEvent )
     EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_frame->Kiway().GetTop() );
 
     if( top && top->GetFrameType() == KICAD_MAIN_FRAME_T )
-    {
         showFrame( top );
-    }
     else
-    {
         wxMessageDialog( m_frame, _( "Can not switch to project manager in stand-alone mode." ) );
-    }
 
     return 0;
 }

@@ -129,8 +129,7 @@ ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertica
 
     m_panel->SetSizer( m_mainSizer );
 
-    Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( ACTION_TOOLBAR_PALETTE::onCharHook ),
-             nullptr, this );
+    Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( ACTION_TOOLBAR_PALETTE::onCharHook ), nullptr, this );
 }
 
 
@@ -395,8 +394,7 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
     int toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString,
-             KiBitmapBundle( aAction.GetIcon(),
-                             Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
+             KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
              KiDisabledBitmapBundle( aAction.GetIcon() ),
              aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
              aAction.GetButtonTooltip(), wxEmptyString, nullptr );
@@ -412,8 +410,7 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
     int toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString,
-             KiBitmapBundle( aAction.GetIcon(),
-                             Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
+             KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
              KiDisabledBitmapBundle( aAction.GetIcon() ), wxITEM_NORMAL,
              aAction.GetButtonTooltip(), wxEmptyString, nullptr );
 
@@ -444,8 +441,7 @@ void ACTION_TOOLBAR::Add( wxControl* aControl, const wxString& aLabel )
 }
 
 
-void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction,
-                                         std::unique_ptr<ACTION_MENU> aMenu )
+void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, std::unique_ptr<ACTION_MENU> aMenu )
 {
     int toolId = aAction.GetUIId();
 
@@ -474,8 +470,7 @@ void ACTION_TOOLBAR::AddGroup( std::unique_ptr<ACTION_GROUP> aGroup )
 
     // Add the main toolbar item representing the group
     AddTool( groupId, wxEmptyString,
-             KiBitmapBundle( defaultAction->GetIcon(),
-                             Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
+             KiBitmapBundle( defaultAction->GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
              KiDisabledBitmapBundle( defaultAction->GetIcon() ),
              isToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
              wxEmptyString, wxEmptyString, nullptr );
@@ -534,8 +529,7 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
 
     // Update the item information
     item->SetShortHelp( aAction.GetButtonTooltip() );
-    item->SetBitmap( KiBitmapBundle( aAction.GetIcon(),
-                                     Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ) );
+    item->SetBitmap( KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ) );
     item->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
 
     // Register a new handler with the new UI conditions
