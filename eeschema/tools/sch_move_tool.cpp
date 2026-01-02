@@ -1247,8 +1247,7 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
             {
                 if( schItem->IsGroupableType() && !schItem->GetParentGroup() )
                 {
-                    aCommit->Modify( enteredGroup, m_frame->GetScreen(),
-                                     RECURSE_MODE::NO_RECURSE );
+                    aCommit->Modify( enteredGroup, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
                     enteredGroup->AddItem( schItem );
                 }
             }
@@ -1538,11 +1537,9 @@ bool SCH_MOVE_TOOL::handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT*
     else if( aEvent->IsAction( &ACTIONS::increment ) )
     {
         if( aEvent->HasParameter() )
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
-                                             aEvent->Parameter<ACTIONS::INCREMENT>() );
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, aEvent->Parameter<ACTIONS::INCREMENT>() );
         else
-            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit,
-                                             ACTIONS::INCREMENT{ 1, 0 } );
+            m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, ACTIONS::INCREMENT{ 1, 0 } );
 
         updateStoredPositions( aSelection );
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -1635,6 +1632,7 @@ void SCH_MOVE_TOOL::updateStoredPositions( const SCH_SELECTION& aSelection )
     // positions that moveItem() uses, particularly for sheet pins which rely on them
     // for constraint calculations.
     int itemCount = 0;
+
     for( EDA_ITEM* item : aSelection )
     {
         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
@@ -1849,8 +1847,7 @@ void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
 }
 
 
-void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint,
-                                       EDA_ITEMS& aList )
+void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
     EE_RTREE::EE_TYPE itemsOverlapping = items.Overlapping( aOriginalItem->GetBoundingBox() );
