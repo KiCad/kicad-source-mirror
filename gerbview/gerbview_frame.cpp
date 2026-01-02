@@ -623,11 +623,11 @@ void GERBVIEW_FRAME::UpdateXORLayers()
             view->SetLayerTarget( GERBER_DRAW_LAYER( i ), target );
 
         // We want the last visible layer, but deprioritize the active layer unless it's the
-        // only layer
-        if( ( lastVisibleLayer == -1 )
-            || ( view->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) && i != GetActiveLayer() ) )
+        // only layer.  We must check visibility first to avoid selecting hidden layers.
+        if( view->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) )
         {
-            lastVisibleLayer = i;
+            if( lastVisibleLayer == -1 || i != GetActiveLayer() )
+                lastVisibleLayer = i;
         }
     }
 
