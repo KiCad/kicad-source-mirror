@@ -77,7 +77,7 @@ void SCH_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
                     {
                         VIEW::Update( child, aUpdateFlags );
                     },
-                    RECURSE_MODE::NO_RECURSE );
+                    RECURSE_MODE::RECURSE );
         }
     }
 
