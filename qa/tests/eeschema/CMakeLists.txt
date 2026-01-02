@@ -65,6 +65,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_wire_bus_entry.cpp
 
     test_connectivity_algo.cpp
+    test_issue18119_bus_hierarchy.cpp
     test_issue20173_paste_subsheet.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp

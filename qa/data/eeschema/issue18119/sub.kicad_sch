@@ -1,0 +1,169 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "b2559754-c13c-4608-bb3c-4b4cb7a53679")
+	(paper "A4")
+	(lib_symbols)
+	(junction
+		(at 139.7 105.41)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "04460258-65e4-45b5-a5dc-25833a03c716")
+	)
+	(bus_entry
+		(at 139.7 107.95)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8dbe36c-5960-4cbc-b212-9d320dd09621")
+	)
+	(bus_entry
+		(at 139.7 102.87)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d87e389e-30ac-4402-afbf-554a78431972")
+	)
+	(bus
+		(pts
+			(xy 139.7 102.87) (xy 139.7 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03e27a45-5fda-4875-ac17-63ece7da60fd")
+	)
+	(bus
+		(pts
+			(xy 139.7 105.41) (xy 139.7 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66ce02b6-e1fe-4dca-b92c-5afac989345b")
+	)
+	(bus
+		(pts
+			(xy 139.7 101.6) (xy 139.7 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71f12c20-eefc-4541-abd4-a3e035962d51")
+	)
+	(bus
+		(pts
+			(xy 139.7 107.95) (xy 139.7 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d1929b1-6414-4122-ad48-fc8085dfa079")
+	)
+	(wire
+		(pts
+			(xy 142.24 110.49) (xy 154.94 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a123ed93-4eb6-41c4-9ee4-5613b62945b8")
+	)
+	(wire
+		(pts
+			(xy 142.24 105.41) (xy 154.94 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cff79864-f7bd-49d5-961a-d1e52f0f7085")
+	)
+	(bus
+		(pts
+			(xy 127 105.41) (xy 139.7 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e54a14ef-ca12-4c43-83f4-b6321f353d23")
+	)
+	(label "SUB_BUS0"
+		(at 142.24 105.41 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0d6cd68d-c260-49ae-ab49-0dc14da6556b")
+	)
+	(label "SUB_BUS1"
+		(at 142.24 110.49 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0dc555b2-95b2-4870-9392-1039c7ccfafb")
+	)
+	(label "SUB_BUS[0..1]"
+		(at 139.7 101.6 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "76459a3d-6ee4-44fc-b8ae-db0bb88ba243")
+	)
+	(hierarchical_label "OUT_0"
+		(shape output)
+		(at 154.94 105.41 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1e74f22e-12b6-4aff-a864-9ba5b52ddb78")
+	)
+	(hierarchical_label "SUB_BUS[0..1]"
+		(shape input)
+		(at 127 105.41 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2d8656bd-762c-4c71-a9ce-a9aae95652bf")
+	)
+	(hierarchical_label "OUT_1"
+		(shape output)
+		(at 154.94 110.49 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4b623e0d-0140-47a0-b30b-c072a18787c3")
+	)
+)
