@@ -45,7 +45,6 @@ class PROJECT_TREE : public wxTreeCtrl
 
 private:
     PROJECT_TREE_PANE*            m_projectTreePane;
-    wxImageList*                  m_imageList;
     wxImageList*                  m_statusImageList;
     std::unique_ptr<KIGIT_COMMON> m_gitCommon;
 
