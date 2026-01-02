@@ -40,21 +40,21 @@ TOOLBAR_CONTEXT_MENU_REGISTRY::getGroupMenus()
 }
 
 
-void TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterMenuFactory( const std::string& aActionName,
-                                                          MENU_FACTORY aFactory )
+KICOMMON_API void TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterMenuFactory( const std::string& aActionName,
+                                                                      MENU_FACTORY aFactory )
 {
     getActionMenus()[aActionName] = std::move( aFactory );
 }
 
 
-void TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory( const std::string& aGroupName,
-                                                               MENU_FACTORY aFactory )
+KICOMMON_API void TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory( const std::string& aGroupName,
+                                                                           MENU_FACTORY aFactory )
 {
     getGroupMenus()[aGroupName] = std::move( aFactory );
 }
 
 
-TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
+KICOMMON_API TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
 TOOLBAR_CONTEXT_MENU_REGISTRY::GetMenuFactory( const std::string& aActionName )
 {
     auto& menus = getActionMenus();
@@ -67,7 +67,7 @@ TOOLBAR_CONTEXT_MENU_REGISTRY::GetMenuFactory( const std::string& aActionName )
 }
 
 
-TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
+KICOMMON_API TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
 TOOLBAR_CONTEXT_MENU_REGISTRY::GetGroupMenuFactory( const std::string& aGroupName )
 {
     auto& menus = getGroupMenus();

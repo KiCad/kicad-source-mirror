@@ -29,6 +29,8 @@
 #include <memory>
 #include <string>
 
+#include <kicommon.h>
+
 class ACTION_MENU;
 class TOOL_MANAGER;
 
