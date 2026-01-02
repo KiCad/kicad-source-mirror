@@ -166,6 +166,53 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
 
             for( i = i + 2; i < sourceLen; ++i )
             {
+                // Skip over escape markers - don't count their braces
+                // This prevents <<<ESC_DOLLAR:X} from interfering with outer brace counting
+                if( i + 14 <= sourceLen && aSource.Mid( i, 14 ) == wxT( "<<<ESC_DOLLAR:" ) )
+                {
+                    token.append( wxT( "<<<ESC_DOLLAR:" ) );
+                    i += 14;
+
+                    // Copy contents until matching closing brace (tracking nested braces)
+                    int markerBraceCount = 1;
+
+                    while( i < sourceLen && markerBraceCount > 0 )
+                    {
+                        if( aSource[i] == '{' )
+                            markerBraceCount++;
+                        else if( aSource[i] == '}' )
+                            markerBraceCount--;
+
+                        token.append( aSource[i] );
+                        i++;
+                    }
+
+                    i--; // Adjust for outer loop increment
+                    continue;
+                }
+                else if( i + 10 <= sourceLen && aSource.Mid( i, 10 ) == wxT( "<<<ESC_AT:" ) )
+                {
+                    token.append( wxT( "<<<ESC_AT:" ) );
+                    i += 10;
+
+                    // Copy contents until matching closing brace (tracking nested braces)
+                    int markerBraceCount = 1;
+
+                    while( i < sourceLen && markerBraceCount > 0 )
+                    {
+                        if( aSource[i] == '{' )
+                            markerBraceCount++;
+                        else if( aSource[i] == '}' )
+                            markerBraceCount--;
+
+                        token.append( aSource[i] );
+                        i++;
+                    }
+
+                    i--; // Adjust for outer loop increment
+                    continue;
+                }
+
                 if( aSource[i] == '{' )
                 {
                     braceDepth++;
@@ -174,6 +221,7 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                 else if( aSource[i] == '}' )
                 {
                     braceDepth--;
+
                     if( braceDepth == 0 )
                         break; // Found the matching closing brace
                     else
