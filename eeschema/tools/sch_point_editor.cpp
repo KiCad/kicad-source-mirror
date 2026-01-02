@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
 #include <symbol_editor/symbol_editor_settings.h>
@@ -784,8 +785,6 @@ public:
             m_sheet( aSheet ),
             m_screen( aScreen )
     {
-        m_noConnects = m_sheet.GetNoConnects();
-
         // Find all wires connected to sheet pins and store their connections
         for( SCH_SHEET_PIN* pin : m_sheet.GetPins() )
         {
@@ -902,17 +901,6 @@ public:
         if( m_sheet.GetSize() != sheetNewSize )
             m_sheet.Resize( sheetNewSize );
 
-        // Update no-connects to follow their sheet pins
-        for( auto& [sheetPin, noConnect] : m_noConnects )
-        {
-            if( noConnect->GetPosition() != sheetPin->GetTextPos() )
-            {
-                aCommit.Modify( noConnect, &m_screen );
-                noConnect->SetPosition( sheetPin->GetTextPos() );
-                aUpdatedItems.push_back( noConnect );
-            }
-        }
-
         // Update connected wires to follow their sheet pins
         for( auto& [pin, line, endpoint] : m_connectedWires )
         {
@@ -939,9 +927,8 @@ public:
     }
 
 private:
-    SCH_SHEET&                                m_sheet;
-    SCH_SCREEN&                               m_screen;
-    std::map<SCH_SHEET_PIN*, SCH_NO_CONNECT*> m_noConnects;
+    SCH_SHEET&  m_sheet;
+    SCH_SCREEN& m_screen;
     std::vector<std::tuple<SCH_SHEET_PIN*, SCH_LINE*, int>> m_connectedWires;
 };
 

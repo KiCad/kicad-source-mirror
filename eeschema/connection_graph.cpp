@@ -2783,9 +2783,27 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                 if( neighbor_name == member->Name() )
                     continue;
 
-                // Was this neighbor already updated from a different sheet?  Don't rename it again
+                // Was this neighbor already updated from a different sheet?  Don't rename it again,
+                // unless this same parent bus updated it and the bus member name has since changed
+                // (which can happen when a bus member is renamed via stale member update, issue #18299).
                 if( neighbor_conn->Sheet() != neighbor->m_sheet )
-                    continue;
+                {
+                    // If the neighbor's connection sheet doesn't match this parent bus's sheet,
+                    // it was updated by a different bus entirely. Don't override.
+                    if( neighbor_conn->Sheet() != parent->Sheet() )
+                        continue;
+
+                    // If the neighbor's connection sheet matches this parent bus's sheet but
+                    // the names differ, check if the neighbor's current name still matches
+                    // a member of this bus. If it does, the neighbor was updated by a different
+                    // member of this same bus and we should preserve that (determinism).
+                    // If it doesn't match any member, the bus member was renamed and we should update.
+                    SCH_CONNECTION temp( nullptr, neighbor->m_sheet );
+                    temp.ConfigureFromLabel( neighbor_name );
+
+                    if( matchBusMember( parent, &temp ) )
+                        continue;
+                }
 
                 // Safety check against infinite recursion
                 wxCHECK2_MSG( neighbor_conn->IsNet(), continue,
