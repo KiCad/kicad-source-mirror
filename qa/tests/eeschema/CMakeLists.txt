@@ -69,6 +69,7 @@ set( QA_EESCHEMA_SRCS
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
     test_issue18119_bus_hierarchy.cpp
+    test_issue18299_bus_member_rename.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp
     test_eagle_plugin.cpp

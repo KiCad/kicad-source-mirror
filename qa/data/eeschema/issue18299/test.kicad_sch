@@ -1,0 +1,146 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "290ea578-b262-42be-95fe-3ab10a1a235b")
+	(paper "A5")
+	(lib_symbols)
+	(bus_alias "a"
+		(members "a" "b" "c")
+	)
+	(bus_entry
+		(at 104.14 59.69)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a31f00f-51b5-4761-a53c-08dc0bc6e2cf")
+	)
+	(bus_entry
+		(at 100.33 59.69)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9007874c-b9eb-4610-a467-3cc76f84cfd0")
+	)
+	(wire
+		(pts
+			(xy 102.87 62.23) (xy 102.87 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2572d2e1-3b53-4ef1-9872-6d508406a9c7")
+	)
+	(bus
+		(pts
+			(xy 100.33 59.69) (xy 104.14 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8710ff94-211b-4ccb-afff-db1dec396d5e")
+	)
+	(wire
+		(pts
+			(xy 106.68 62.23) (xy 114.3 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9bb99e82-aa01-4a17-bbec-34149751e36b")
+	)
+	(wire
+		(pts
+			(xy 102.87 64.77) (xy 114.3 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c7fb3b8-ac07-415b-8b97-6fd4181be86a")
+	)
+	(bus
+		(pts
+			(xy 88.9 59.69) (xy 100.33 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6133a5e-5399-40b5-85c1-73b59b0614fe")
+	)
+	(bus
+		(pts
+			(xy 104.14 59.69) (xy 107.95 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c561c3c1-166c-41d6-bb6b-b689770b2904")
+	)
+	(label "{a}"
+		(at 91.44 59.69 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a499ed48-ec37-4bf9-9446-01b65fbb727f")
+	)
+	(label "a"
+		(at 110.49 62.23 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cae16f4a-dab7-43d0-8d1f-ae9b099d0b1f")
+	)
+	(label "b"
+		(at 102.87 64.77 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "efb544a5-4e91-4400-a43d-68a4d1a5e2f3")
+	)
+	(hierarchical_label "b"
+		(shape input)
+		(at 114.3 64.77 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "40446e11-1653-4147-8cd1-799b05933432")
+	)
+	(hierarchical_label "{a}"
+		(shape input)
+		(at 88.9 59.69 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "73832671-3211-48b3-b1bc-2ed4154a1c27")
+	)
+)
