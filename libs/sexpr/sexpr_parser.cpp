@@ -62,7 +62,21 @@ namespace SEXPR
 
         // the filename is not always a UTF7 string, so do not use ifstream
         // that do not work with unicode chars.
+        #if defined(  __MINGW32__ )
+        // On msys2 currently using From_UTF8( defined in string_utils.cpp) creates a link
+        // issue. (From_UTF8() undefined symbol). So redefine it here (duplicate) for now.
+        wxString fname( wxString::FromUTF8( aFileName.c_str() ) );
+
+        if( fname.IsEmpty() )  // happens when aString is not a valid UTF8 sequence
+        {
+            fname = wxConvCurrent->cMB2WC( aFileName.c_str() );    // try to use locale conversion
+
+            if( fname.IsEmpty() )
+                fname = wxString::From8BitData( aFileName.c_str() );    // try to use native string
+        }
+        #else
         wxString fname( From_UTF8( aFileName.c_str() ) );
+        #endif
         wxFFile file( fname, "rb" );
         size_t length = file.Length();
 
