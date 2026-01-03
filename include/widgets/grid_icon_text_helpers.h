@@ -103,8 +103,8 @@ public:
     wxGridCellRenderer* Clone() const override;
 
 private:
-    int      m_status;
-    wxBitmap m_bitmap;
+    int            m_status;
+    wxBitmapBundle m_bitmap;
 };
 
 

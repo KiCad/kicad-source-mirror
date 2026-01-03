@@ -208,14 +208,13 @@ GRID_CELL_STATUS_ICON_RENDERER::GRID_CELL_STATUS_ICON_RENDERER( int aStatus ) :
 {
     if( m_status != 0 )
     {
-        m_bitmap = wxArtProvider::GetBitmap( wxArtProvider::GetMessageBoxIconId( m_status ),
-                                             wxART_BUTTON );
+        m_bitmap = wxArtProvider::GetBitmapBundle( wxArtProvider::GetMessageBoxIconId( m_status ), wxART_BUTTON );
     }
     else
     {
         // Dummy bitmap for size
-        m_bitmap = wxArtProvider::GetBitmap(
-                wxArtProvider::GetMessageBoxIconId( wxICON_INFORMATION ), wxART_BUTTON );
+        m_bitmap = wxArtProvider::GetBitmapBundle( wxArtProvider::GetMessageBoxIconId( wxICON_INFORMATION ),
+                                                   wxART_BUTTON );
     }
 }
 
@@ -233,9 +232,12 @@ void GRID_CELL_STATUS_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr,
     // Draw icon
     if( ( m_status != 0 ) && m_bitmap.IsOk() )
     {
-        aDC.DrawBitmap( m_bitmap,
-                        rect.GetLeft() + ( rect.GetWidth() - m_bitmap.GetWidth() ) / 2,
-                        rect.GetTop() + ( rect.GetHeight() - m_bitmap.GetHeight() ) / 2,
+        wxSize logicSize = aGrid.FromDIP( m_bitmap.GetDefaultSize() );
+        wxSize physSize = aGrid.ToPhys( logicSize );
+
+        aDC.DrawBitmap( m_bitmap.GetBitmap( physSize ),
+                        rect.GetLeft() + ( rect.GetWidth() - logicSize.GetWidth() ) / 2,
+                        rect.GetTop() + ( rect.GetHeight() - logicSize.GetHeight() ) / 2,
                         true );
     }
 }
@@ -244,7 +246,10 @@ void GRID_CELL_STATUS_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr,
 wxSize GRID_CELL_STATUS_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                                     int row, int col )
 {
-    return wxSize( m_bitmap.GetWidth() + 6, m_bitmap.GetHeight() + 4 );
+    wxSize size = m_bitmap.GetDefaultSize();
+    size.IncBy( 6, 4 );
+
+    return grid.FromDIP( size );
 }
 
 
