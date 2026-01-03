@@ -24,7 +24,6 @@
 #include "convert/allegro_parser.h"
 
 #include <cstring>
-#include <iostream>  // TOOD remove
 
 #include <wx/sstream.h>
 #include <wx/log.h>
