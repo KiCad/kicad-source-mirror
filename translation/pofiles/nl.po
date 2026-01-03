@@ -18,15 +18,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2025-09-13 10:02+0000\n"
-"Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
+"PO-Revision-Date: 2026-01-04 00:01+0000\n"
+"Last-Translator: Herman van der Vaart <vaarttuig@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -7515,9 +7515,9 @@ msgstr "API-antwoord:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API-antwoord:  %s"
+msgstr "%s"
 
 #: common/http_lib/http_lib_connection.cpp:360
 #, c-format
