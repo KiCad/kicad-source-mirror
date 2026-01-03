@@ -39,7 +39,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
         m_parentTool( aParentTool )
 {
     m_board = aFrame->GetBoard();
-    m_detailsIcon = KiBitmap( BITMAPS::help, 16 );
+    m_detailsIcon = KiBitmapBundleDef( BITMAPS::help, 16 );
 
     m_raGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_raGrid ) ) );
     m_raGrid->ClearGrid();

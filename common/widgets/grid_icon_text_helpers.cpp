@@ -154,7 +154,7 @@ wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& 
 }
 
 
-GRID_CELL_ICON_RENDERER::GRID_CELL_ICON_RENDERER( const wxBitmap& icon ) :
+GRID_CELL_ICON_RENDERER::GRID_CELL_ICON_RENDERER( const wxBitmapBundle& icon ) :
     m_icon( icon )
 {
 }
@@ -172,9 +172,12 @@ void GRID_CELL_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& 
     // Draw icon
     if( m_icon.IsOk() )
     {
-        aDC.DrawBitmap( m_icon,
-                        rect.GetLeft() + ( rect.GetWidth() - m_icon.GetWidth() ) / 2,
-                        rect.GetTop() + ( rect.GetHeight() - m_icon.GetHeight() ) / 2,
+        wxSize logicSize = aGrid.FromDIP( m_icon.GetDefaultSize() );
+        wxSize physSize = aGrid.ToPhys( logicSize );
+
+        aDC.DrawBitmap( m_icon.GetBitmap( physSize ),
+                        rect.GetLeft() + ( rect.GetWidth() - logicSize.GetWidth() ) / 2,
+                        rect.GetTop() + ( rect.GetHeight() - logicSize.GetHeight() ) / 2,
                         true );
     }
 }
@@ -183,7 +186,10 @@ void GRID_CELL_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& 
 wxSize GRID_CELL_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                              int row, int col )
 {
-    return wxSize( m_icon.GetWidth() + 6, m_icon.GetHeight() + 4 );
+    wxSize size = m_icon.GetDefaultSize();
+    size.IncBy( 6, 4 );
+
+    return grid.FromDIP( size );
 }
 
 

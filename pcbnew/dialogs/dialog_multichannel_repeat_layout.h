@@ -25,7 +25,7 @@
 #define __DIALOG_MULTICHANNEL_REPEAT_LAYOUT__
 
 #include <vector>
-#include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <board.h>
 #include <widgets/unit_binder.h>
 
@@ -60,9 +60,9 @@ private:
     void OnGridCellLeftClick( wxGridEvent& aEvent );
 
     std::vector<TABLE_ENTRY> m_targetRAs;
-    MULTICHANNEL_TOOL* m_parentTool;
-    BOARD* m_board;
-    wxBitmap m_detailsIcon;
+    MULTICHANNEL_TOOL*       m_parentTool;
+    BOARD*                   m_board;
+    wxBitmapBundle           m_detailsIcon;
 };
 
 #endif

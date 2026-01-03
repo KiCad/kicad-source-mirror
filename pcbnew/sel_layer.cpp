@@ -445,8 +445,7 @@ private:
         // Set the color swatch
         wxBitmapBundle swatch = m_layerPresentation.CreateLayerPairIcon( layerPair.GetLayerA(), layerPair.GetLayerB() );
 
-        m_grid.SetCellRenderer( aRow, (int) COLNUMS::SWATCH,
-                                new GRID_CELL_ICON_RENDERER( swatch.GetBitmap( swatch.GetDefaultSize() ) ) );
+        m_grid.SetCellRenderer( aRow, (int) COLNUMS::SWATCH, new GRID_CELL_ICON_RENDERER( swatch ) );
 
         m_grid.SetReadOnly( aRow, (int) COLNUMS::SWATCH );
         m_grid.SetReadOnly( aRow, (int) COLNUMS::LAYERNAMES );
