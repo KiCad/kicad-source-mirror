@@ -398,7 +398,7 @@ BOOST_FIXTURE_TEST_CASE( RegressionZonePriorityIsolatedIslands, ZONE_FILL_TEST_F
     // With the bug, it fills almost nothing because VDD knocks it out
     double fillRatio = gndFilledArea / boardArea;
 
-    BOOST_TEST_MESSAGE( wxString::Format( "Board area: %.2f mm², GND filled area: %.2f mm², "
+    BOOST_TEST_MESSAGE( wxString::Format( "Board area: %.2f sq mm, GND filled area: %.2f sq mm, "
                                           "Fill ratio: %.1f%%",
                                           boardArea / 1e6, gndFilledArea / 1e6,
                                           fillRatio * 100.0 ) );
