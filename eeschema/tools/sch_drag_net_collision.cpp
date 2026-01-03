@@ -641,7 +641,17 @@ SCH_DRAG_NET_COLLISION_MONITOR::collectDisconnectedMarkers( const SCH_SELECTION&
         VECTOR2I pointA = pointsA[ connection.indexA ];
         VECTOR2I pointB = pointsB[ connection.indexB ];
 
-        if( pointA == pointB )
+        // Check if the connection is still valid. Points match exactly.
+        bool stillConnected = ( pointA == pointB );
+
+        // For lines, connection is valid if the point is anywhere on the line
+        if( !stillConnected && itemB->IsType( { SCH_LINE_T } ) && itemB->HitTest( pointA, 0 ) )
+            stillConnected = true;
+
+        if( !stillConnected && itemA->IsType( { SCH_LINE_T } ) && itemA->HitTest( pointB, 0 ) )
+            stillConnected = true;
+
+        if( stillConnected )
             continue;
 
         bool relevant = itemA->IsSelected() || aSelection.Contains( itemA )
