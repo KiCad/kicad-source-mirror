@@ -31,6 +31,7 @@
 #include <symbol_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol_library_manager.h>
+#include <dialogs/dialog_import_symbol_select.h>
 #include <wx/filename.h>
 #include <wx/filedlg.h>
 #include <string_utils.h>
@@ -74,17 +75,16 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
                      + fileFiltersStr;
 
-    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, fileFiltersStr,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog fileDlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, fileFiltersStr,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( fileDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName fn( dlg.GetPath() );
+    wxFileName fn( fileDlg.GetPath() );
 
     m_mruPath = fn.GetPath();
 
-    wxArrayString symbols;
     SCH_IO_MGR::SCH_FILE_T piType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
     if( piType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
@@ -94,55 +94,68 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
         return;
     }
 
+    DIALOG_IMPORT_SYMBOL_SELECT selectDlg( this, fn.GetFullPath(), libName, piType );
+
+    if( selectDlg.ShowModal() != wxID_OK )
+        return;
+
+    std::vector<wxString> selectedSymbols = selectDlg.GetSelectedSymbols();
+
+    if( selectedSymbols.empty() )
+        return;
+
+    const auto& conflictResolutions = selectDlg.GetConflictResolutions();
+
+    // Load and import each selected symbol
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( piType ) );
+    wxString firstImported;
+    int importedCount = 0;
+    int skippedCount = 0;
 
-    // TODO dialog to select the symbol to be imported if there is more than one
-    try
+    for( const wxString& symbolName : selectedSymbols )
     {
-        pi->EnumerateSymbolLib( symbols, fn.GetFullPath() );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        msg.Printf( _( "Cannot import symbol library '%s'." ), fn.GetFullPath() );
-        DisplayErrorMessage( this, msg, ioe.What() );
-        return;
-    }
-    catch( const XML_PARSER_ERROR& ioe )
-    {
-        msg.Printf( _( "Cannot import symbol library '%s'." ), fn.GetFullPath() );
-        DisplayErrorMessage( this, msg, ioe.what() );
-        return;
-    }
+        auto conflictIt = conflictResolutions.find( symbolName );
 
-    if( symbols.empty() )
-    {
-        msg.Printf( _( "Symbol library file '%s' is empty." ), fn.GetFullPath() );
-        DisplayError( this,  msg );
-        return;
-    }
+        if( conflictIt != conflictResolutions.end()
+            && conflictIt->second == CONFLICT_RESOLUTION::SKIP )
+        {
+            skippedCount++;
+            continue;
+        }
 
-    wxString symbolName = symbols[0];
-    LIB_SYMBOL* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
+        try
+        {
+            LIB_SYMBOL* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
-    entry->SetName( EscapeString( entry->GetName(), CTX_LIBID ) );
+            if( entry )
+            {
+                entry->SetName( EscapeString( entry->GetName(), CTX_LIBID ) );
+                m_libMgr->UpdateSymbol( entry, libName );
 
-    if( m_libMgr->SymbolNameInUse( entry->GetName(), libName ) )
-    {
-        msg.Printf( _( "Symbol %s already exists in library '%s'." ),
-                    UnescapeString( symbolName ),
-                    libName );
+                if( firstImported.IsEmpty() )
+                    firstImported = entry->GetName();
 
-        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        errorDlg.SetOKLabel( _( "Overwrite" ) );
-        errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-        if( errorDlg.ShowModal() == wxID_CANCEL )
-            return;
+                importedCount++;
+            }
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Cannot import symbol '%s': %s" ), symbolName, ioe.What() );
+            DisplayErrorMessage( this, msg );
+        }
     }
 
-    m_libMgr->UpdateSymbol( entry, libName );
-    SyncLibraries( false );
-    LoadSymbol( entry->GetName(), libName, 1 );
+    if( importedCount > 0 )
+    {
+        SyncLibraries( false );
+        LoadSymbol( firstImported, libName, 1 );
+
+        if( skippedCount > 0 )
+        {
+            msg.Printf( _( "Imported %d symbol(s), skipped %d." ), importedCount, skippedCount );
+            DisplayInfoMessage( this, msg );
+        }
+    }
 }
 
 

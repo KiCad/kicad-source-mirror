@@ -115,6 +115,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_image_properties.cpp
     dialogs/dialog_image_properties_base.cpp
     dialogs/dialog_increment_annotations_base.cpp
+    dialogs/dialog_import_symbol_select.cpp
+    dialogs/dialog_import_symbol_select_base.cpp
     dialogs/dialog_junction_props.cpp
     dialogs/dialog_junction_props_base.cpp
     dialogs/dialog_label_properties.cpp
@@ -421,6 +423,7 @@ set( EESCHEMA_SRCS
     symbol.cpp
     symbol_checker.cpp
     symbol_chooser_frame.cpp
+    symbol_import_manager.cpp
 
     symbol_library_manager.cpp
     symbol_tree_model_adapter.cpp

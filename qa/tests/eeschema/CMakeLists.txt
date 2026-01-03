@@ -107,6 +107,7 @@ set( QA_EESCHEMA_SRCS
     test_save_load_schematic.cpp
     test_legacy_load.cpp
     test_symbol_library_manager.cpp
+    test_symbol_import_manager.cpp
     test_stacked_pin_nomenclature.cpp
     test_stacked_pin_conversion.cpp
     test_pin_stacked_layout.cpp

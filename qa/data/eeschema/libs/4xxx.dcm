@@ -1,0 +1,291 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 14528
+D Monostable
+K CMOS
+F https://www.onsemi.com/pub/Collateral/MC14528B-D.PDF
+$ENDCMP
+#
+$CMP 14529
+D Dual 4 to 1 Multiplexer
+K CMOS MUX MUX4
+F http://www.alldatasheet.com/datasheet-pdf/pdf/97272/HITACHI/HD14529B.html
+$ENDCMP
+#
+$CMP 14538
+D Monostable
+K CMOS
+F https://www.onsemi.com/pub/Collateral/MC14538B-D.PDF
+$ENDCMP
+#
+$CMP 4001
+D Quad Nor 2 inputs
+K CMOS Nor2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4000bms-01bms-02bms-25bms.pdf
+$ENDCMP
+#
+$CMP 4002
+D Dual  4 input NOR gate
+K CMOS Nor4
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4000bms-01bms-02bms-25bms.pdf
+$ENDCMP
+#
+$CMP 40106
+D Hex Schmitt trigger inverter
+K CMOS
+F https://assets.nexperia.com/documents/data-sheet/HEF40106B.pdf
+$ENDCMP
+#
+$CMP 4009
+D Hex Buffer Inverter
+K CMOS INV BUFFER high sink, VCC and VDD sep. VDD>VI>VCC!
+F http://www.sycelectronica.com.ar/semiconductores/CD4009.pdf
+$ENDCMP
+#
+$CMP 4010
+D Hex Buffer
+K CMOS BUFFER high sink, VCC and VDD sep. VDD>VI>VCC! 
+F http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf
+$ENDCMP
+#
+$CMP 4011
+D Quad Nand 2 inputs
+K CMOS Nand2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4011bms-12bms-23bms.pdf
+$ENDCMP
+#
+$CMP 4012
+D Dual 4 inputs Nand
+K CMOS Nand4
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4011bms-12bms-23bms.pdf
+$ENDCMP
+#
+$CMP 4013
+D Dual D  FlipFlop, Set & reset
+K CMOS DFF
+F http://www.onsemi.com/pub/Collateral/MC14013B-D.PDF
+$ENDCMP
+#
+$CMP 4016
+D Quad Analog Switches
+K CMOS SWITCH
+F http://www.ti.com/lit/ds/symlink/cd4016b.pdf
+$ENDCMP
+#
+$CMP 4017
+D Johnson Counter ( 10 outputs )
+K CNT CNT10
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4017bms-22bms.pdf
+$ENDCMP
+#
+$CMP 4020
+D Binary counter 14 stages (asynchronous)
+K CMOS CNT CNT14
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4020bms-24bms-40bms.pdf
+$ENDCMP
+#
+$CMP 4021
+D 8-bit static shift register
+K shift register SR PISO
+F https://assets.nexperia.com/documents/data-sheet/HEF4021B.pdf
+$ENDCMP
+#
+$CMP 4022
+D Johnson Counter (8 states)
+K CMOS CNT CNT8
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4017bms-22bms.pdf
+$ENDCMP
+#
+$CMP 4023
+D Triple Nand 3 inputs
+K CMOS Nand3
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4011bms-12bms-23bms.pdf
+$ENDCMP
+#
+$CMP 4025
+D Triple Nor 3 inputs
+K CMOS Nor3
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4000bms-01bms-02bms-25bms.pdf
+$ENDCMP
+#
+$CMP 4027
+D Dual JK FlipFlop, set & reset
+K CMOS JK JKFF
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4027bms.pdf
+$ENDCMP
+#
+$CMP 4028
+D Decoder 4 to 10 lines
+K CMOS DECOD DECOD10
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4028bms.pdf
+$ENDCMP
+#
+$CMP 4029
+D Up/Down Counter
+K CMOS COUNTER
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4029bms.pdf
+$ENDCMP
+#
+$CMP 4040
+D Binary Counter 12 stages (Asynchronous)
+K CMOS CNT CNT12
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4020bms-24bms-40bms.pdf
+$ENDCMP
+#
+$CMP 4046
+D Phase Comp & VCO
+K CMOS PLL
+F https://assets.nexperia.com/documents/data-sheet/HEF4046B.pdf
+$ENDCMP
+#
+$CMP 4047
+D Monostable/Astable Multivibrator
+K CMOS monostable astable multivibrator
+F https://www.ti.com/lit/ds/symlink/cd4047b.pdf
+$ENDCMP
+#
+$CMP 4049
+D Hex Buffer Inverter
+K CMOS BUFFER
+F http://www.intersil.com/content/dam/intersil/documents/cd40/cd4049ubms.pdf
+$ENDCMP
+#
+$CMP 4050
+D Hex Buffer
+K CMOS BUFFER
+F http://www.intersil.com/content/dam/intersil/documents/cd40/cd4050bms.pdf
+$ENDCMP
+#
+$CMP 4051
+D Analog Multiplexer 8 to 1 lins
+K CMOS MUX MUX8
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4051bms-52bms-53bms.pdf
+$ENDCMP
+#
+$CMP 4052
+D Dual Analog Multiplexer 4 to 1 line
+K CMOS MUX MUX4
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4051bms-52bms-53bms.pdf
+$ENDCMP
+#
+$CMP 4053
+D Triple analog Multiplexer 2 to 1 line
+K CMOS MUX MUX2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4051bms-52bms-53bms.pdf
+$ENDCMP
+#
+$CMP 4056
+D BCD to 7-Segment Decoder/Driver, Strobed-Latch Function
+K CMOS LCD 7-segment decoder driver
+F http://www.ti.com/lit/ds/symlink/cd4056b.pdf
+$ENDCMP
+#
+$CMP 4066
+D Quad Analog Switches
+K CMOS SWITCH
+F http://www.ti.com/lit/ds/symlink/cd4066b.pdf
+$ENDCMP
+#
+$CMP 4069
+D Hex inverter
+K CMOS NOT
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf
+$ENDCMP
+#
+$CMP 4070
+D Quad Xor 2 inputs
+K CMOS XOR2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4070bms-77bms.pdf
+$ENDCMP
+#
+$CMP 4071
+D Quad Or 2 inputs
+K CMOS OR2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4071bms-72bms-75bms.pdf
+$ENDCMP
+#
+$CMP 4072
+D Dual 4 input OR gate
+K CMOS OR4
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4071bms-72bms-75bms.pdf
+$ENDCMP
+#
+$CMP 4073
+D Triple And 3 inputs
+K CMOS And3
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4073bms-81bms-82bms.pdf
+$ENDCMP
+#
+$CMP 4075
+D Triple Or 3 inputs
+K CMOS Or3
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4071bms-72bms-75bms.pdf
+$ENDCMP
+#
+$CMP 4077
+D Quad Xnor 2 inputs
+K CMOS XOR XNOR XNOR2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4076bms.pdf
+$ENDCMP
+#
+$CMP 4081
+D Quad And 2 inputs
+K CMOS And2
+F http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4073bms-81bms-82bms.pdf
+$ENDCMP
+#
+$CMP 4098
+D Dual Monostable Multivibrator
+K CMOS monostable multivibrator
+F http://www.ti.com/lit/ds/symlink/cd4098b.pdf
+$ENDCMP
+#
+$CMP 4504
+D CMOS Hex Voltage-Level Shifter for TTL-to-CMOS or CMOS-to-CMOS, DIP-16/SOIC-16/TSSOP-16
+K Level-shifter
+F http://www.ti.com/lit/ds/symlink/cd4504b.pdf
+$ENDCMP
+#
+$CMP 4510
+D 4 bits programmable counter
+K CMOS CNT CNT4
+F http://pdf.datasheetcatalog.com/datasheets/150/109581_DS.pdf
+$ENDCMP
+#
+$CMP 4518
+D Dual BCD Up-Counter
+K CMOS
+F http://www.intersil.com/content/dam/Intersil/documents/cd45/cd4518bms-20bms.pdf
+$ENDCMP
+#
+$CMP 4520
+D Dual Binary Up-Counter
+K CMOS
+F http://www.intersil.com/content/dam/Intersil/documents/cd45/cd4518bms-20bms.pdf
+$ENDCMP
+#
+$CMP 4528
+D Monostable
+K CMOS
+F http://datasheet.octopart.com/CD4528BCN-Fairchild-datasheet-143503.pdf
+$ENDCMP
+#
+$CMP 4538
+D Monostable
+K CMOS
+F https://assets.nexperia.com/documents/data-sheet/HEF4538B.pdf
+$ENDCMP
+#
+$CMP 4543
+D BCD to 7-segment latch/decoder/driver
+K CMOS 7-segment latch decoder driver
+F http://www.ti.com/lit/ds/symlink/cd4543b.pdf
+$ENDCMP
+#
+$CMP HEF4093B
+D Quad 2-Input NAND Schmitt Trigger, SOIC-14
+K NAND2
+F https://assets.nexperia.com/documents/data-sheet/HEF4093B.pdf
+$ENDCMP
+#
+#End Doc Library
