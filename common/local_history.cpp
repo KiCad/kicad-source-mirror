@@ -308,7 +308,15 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     wxString hist = historyPath( aProjectPath );
 
     if( !wxDirExists( hist ) )
-        wxMkdir( hist );
+    {
+        if( wxIsWritable( aProjectPath ) )
+        {
+            if( !wxMkdir( hist ) )
+            {
+                return false;
+            }
+        }
+    }
 
     git_repository* rawRepo = nullptr;
     bool isNewRepo = false;
