@@ -13,6 +13,7 @@
 # Stefan De Raedemaeker <stefandr.dev@gmail.com>, 2024, 2025.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Robin Janssens <robin@robinjanssens.net>, 2025.
+# Herman van der Vaart <vaarttuig@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
@@ -27,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -7838,9 +7839,9 @@ msgstr "API-antwoord:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API-antwoord:  %s"
+msgstr "%s"
 
 #: common/http_lib/http_lib_connection.cpp:391
 #, c-format
