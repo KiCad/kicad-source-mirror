@@ -29,6 +29,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <sch_commit.h>
+#include <sch_group.h>
 #include <erc/erc_settings.h>
 #include <sch_reference_list.h>
 #include <tools/sch_selection.h>
@@ -199,6 +200,21 @@ std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelect
         case SCH_SYMBOL_T:
             symbols.insert( static_cast<SCH_SYMBOL*>( item ) );
             break;
+
+        case SCH_GROUP_T:
+        {
+            SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+            group->RunOnChildren(
+                    [&symbols]( SCH_ITEM* aChild )
+                    {
+                        if( aChild->Type() == SCH_SYMBOL_T )
+                            symbols.insert( static_cast<SCH_SYMBOL*>( aChild ) );
+                    },
+                    RECURSE_MODE::RECURSE );
+
+            break;
+        }
 
         default:
             break;
