@@ -311,6 +311,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 DIALOG_FIELD_PROPERTIES::~DIALOG_FIELD_PROPERTIES()
 {
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 }
 
 

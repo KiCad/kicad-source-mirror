@@ -175,6 +175,7 @@ DIALOG_TEXTBOX_PROPERTIES::~DIALOG_TEXTBOX_PROPERTIES()
     Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ), nullptr, this );
 
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 
     if( m_helpWindow )
         m_helpWindow->Destroy();

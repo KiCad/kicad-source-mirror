@@ -145,6 +145,7 @@ DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
     Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ), nullptr, this );
 
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 
     if( m_helpWindow )
         m_helpWindow->Destroy();

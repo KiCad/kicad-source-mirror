@@ -215,6 +215,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
 DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 {
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 
     if( m_helpWindow )
         m_helpWindow->Destroy();

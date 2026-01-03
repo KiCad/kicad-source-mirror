@@ -72,6 +72,7 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
 DIALOG_EXECUTECOMMAND_JOB_SETTINGS::~DIALOG_EXECUTECOMMAND_JOB_SETTINGS()
 {
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 
     // Delete the GRID_TRICKS.
     m_path_subs_grid->PopEventHandler( true );

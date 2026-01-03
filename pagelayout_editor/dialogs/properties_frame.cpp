@@ -150,6 +150,7 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 PROPERTIES_FRAME::~PROPERTIES_FRAME()
 {
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 }
 
 

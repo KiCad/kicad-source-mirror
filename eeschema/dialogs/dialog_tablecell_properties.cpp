@@ -121,6 +121,7 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
 DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
 {
     delete m_scintillaTricks;
+    m_scintillaTricks = nullptr;
 
     if( m_helpWindow )
         m_helpWindow->Destroy();
