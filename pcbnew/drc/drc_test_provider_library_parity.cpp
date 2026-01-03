@@ -537,47 +537,15 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
     {
         TEST( curr_shape.GetPolyShape().TotalVertices(), ref_shape.GetPolyShape().TotalVertices(), "" );
 
-        if( curr_shape.GetPolyShape().TotalVertices() == ref_shape.GetPolyShape().TotalVertices() )
+        for( int poly = 0; poly < static_cast<int>( curr_shape.GetPolyShape().CPolygons().size() ); poly++ )
         {
-            std::vector<VECTOR2I> aVerts;
-            std::vector<VECTOR2I> bVerts;
-
-            aVerts.reserve( curr_shape.GetPolyShape().TotalVertices() );
-            bVerts.reserve( ref_shape.GetPolyShape().TotalVertices() );
-
-            for( int i = 0; i < curr_shape.GetPolyShape().TotalVertices(); ++i )
-                aVerts.push_back( curr_shape.GetPolyShape().CVertex( i ) );
-
-            for( int i = 0; i < ref_shape.GetPolyShape().TotalVertices(); ++i )
-                bVerts.push_back( ref_shape.GetPolyShape().CVertex( i ) );
-
-            // compute centroids
-            auto centroid = []( const std::vector<VECTOR2I>& pts )
+            const SHAPE_POLY_SET::POLYGON curr_polygon = curr_shape.GetPolyShape().CPolygon( poly );
+            const SHAPE_POLY_SET::POLYGON ref_polygon  = ref_shape.GetPolyShape().CPolygon( poly );
+            if( curr_polygon.size() == 0 || ref_polygon.size() == 0
+                || !curr_polygon[0].CompareGeometry( ref_polygon[0], true, EPSILON ) )
             {
-                double sx = 0.0, sy = 0.0;
-                for( const auto& p : pts ) { sx += p.x; sy += p.y; }
-                return std::pair<double,double>( sx / pts.size(), sy / pts.size() );
-            };
-
-            auto aC = centroid( aVerts );
-            auto bC = centroid( bVerts );
-
-            auto angleCmp = []( const std::pair<double,double>& c, const VECTOR2I& p1, const VECTOR2I& p2 )
-            {
-                double a1 = atan2( p1.y - c.second, p1.x - c.first );
-                double a2 = atan2( p2.y - c.second, p2.x - c.first );
-                return a1 < a2;
-            };
-
-            // sort by angle around centroid so that cyclic vertex order doesn't matter
-            std::sort( aVerts.begin(), aVerts.end(), [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
-                       { return angleCmp( aC, p1, p2 ); } );
-            std::sort( bVerts.begin(), bVerts.end(), [&]( const VECTOR2I& p1, const VECTOR2I& p2 )
-                       { return angleCmp( bC, p1, p2 ); } );
-
-            for( size_t i = 0; i < aVerts.size(); ++i )
-            {
-                TEST_PT( aVerts[i], bVerts[i], "" );
+                diff = true;
+                return diff;
             }
         }
         break;
