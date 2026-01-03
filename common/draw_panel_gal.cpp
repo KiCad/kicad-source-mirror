@@ -631,6 +631,12 @@ void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
 
     m_viewControls->CancelDrag();
 
+    // Reset the tool dispatcher's button state when focus is lost. This prevents
+    // the dispatcher from thinking the button is still pressed when focus returns,
+    // which can cause selection and drag operations to stop working.
+    if( m_eventDispatcher )
+        m_eventDispatcher->ResetState();
+
     aEvent.Skip();
 }
 
