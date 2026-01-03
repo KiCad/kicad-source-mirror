@@ -1169,6 +1169,108 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     for( ZONE* zone : aZones )
         zone->CalculateFilledArea();
 
+    // Second pass: Re-evaluate via flashing based on actual filled polygons.
+    // The first pass (before filling) marks vias as ZLO_FORCE_FLASHED if they're within the
+    // zone outline. However, if the fill doesn't actually reach the via (due to obstacles like
+    // tracks), we should not flash the via. See https://gitlab.com/kicad/code/kicad/-/issues/22010
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        PCB_VIA*  via = static_cast<PCB_VIA*>( track );
+        VECTOR2I  center = via->GetPosition();
+        int       holeRadius = via->GetDrillValue() / 2;
+        int       netcode = via->GetNetCode();
+        LSET      layers = via->GetLayerSet() & boardCuMask;
+
+        for( PCB_LAYER_ID layer : layers )
+        {
+            if( via->GetZoneLayerOverride( layer ) != ZLO_FORCE_FLASHED )
+                continue;
+
+            bool zoneReachesVia = false;
+
+            for( ZONE* zone : m_board->Zones() )
+            {
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( zone->GetNetCode() != netcode )
+                    continue;
+
+                if( !zone->IsOnLayer( layer ) )
+                    continue;
+
+                if( !zone->HasFilledPolysForLayer( layer ) )
+                    continue;
+
+                const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( layer );
+
+                if( fill->IsEmpty() )
+                    continue;
+
+                // Check if the filled zone reaches the via hole. Use holeRadius as reach distance
+                // to match the pre-fill check logic.
+                if( fill->Contains( center, -1, holeRadius ) )
+                {
+                    zoneReachesVia = true;
+                    break;
+                }
+            }
+
+            if( !zoneReachesVia )
+                via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+        }
+    }
+
+    // Same logic for pads
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            VECTOR2I center = pad->GetPosition();
+            int      netcode = pad->GetNetCode();
+            LSET     layers = pad->GetLayerSet() & boardCuMask;
+
+            for( PCB_LAYER_ID layer : layers )
+            {
+                if( pad->GetZoneLayerOverride( layer ) != ZLO_FORCE_FLASHED )
+                    continue;
+
+                bool zoneReachesPad = false;
+
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->GetIsRuleArea() )
+                        continue;
+
+                    if( zone->GetNetCode() != netcode )
+                        continue;
+
+                    if( !zone->IsOnLayer( layer ) )
+                        continue;
+
+                    if( !zone->HasFilledPolysForLayer( layer ) )
+                        continue;
+
+                    const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( layer );
+
+                    if( fill->IsEmpty() )
+                        continue;
+
+                    if( fill->Contains( center ) )
+                    {
+                        zoneReachesPad = true;
+                        break;
+                    }
+                }
+
+                if( !zoneReachesPad )
+                    pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
+            }
+        }
+    }
 
     if( aCheck )
     {
