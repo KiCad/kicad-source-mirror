@@ -19,6 +19,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/log.h>
+
+#include <chrono>
+#include <stack>
+
+#include <advanced_config.h>
+
 #include "pns_line.h"
 #include "pns_segment.h"
 #include "pns_arc.h"
@@ -200,68 +207,136 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int a
 }
 
 
-TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aJoint, LINKED_ITEM* aPrev,
+TOPOLOGY::PATH_RESULT TOPOLOGY::followBranch( const JOINT* aStartJoint, LINKED_ITEM* aPrev,
                                               std::set<ITEM*>& aVisited,
                                               bool aFollowLockedSegments )
 {
+    using clock = std::chrono::steady_clock;
+
     PATH_RESULT best;
+    best.m_end = aStartJoint;
 
-    ITEM* via = nullptr;
-    ITEM_SET links( aJoint->CLinks() );
+    const int timeoutMs = ADVANCED_CFG::GetCfg().m_FollowBranchTimeout;
+    auto startTime = clock::now();
 
-    for( ITEM* link : links )
+    // State for iterative DFS: current joint, previous item, accumulated path items,
+    // accumulated length, and the set of visited joints for this path
+    struct STATE
     {
-        if( link->OfKind( ITEM::VIA_T ) && !aVisited.contains( link ) )
-            via = link;
-    }
+        const JOINT*            joint;
+        LINKED_ITEM*            prev;
+        ITEM_SET                pathItems;
+        int                     pathLength;
+        std::set<const JOINT*>  visitedJoints;
+        ITEM*                   via;
+    };
 
-    for( ITEM* link : links )
+    std::stack<STATE> stateStack;
+
+    // Initialize with starting state
+    STATE initial;
+    initial.joint = aStartJoint;
+    initial.prev = aPrev;
+    initial.pathLength = 0;
+    initial.visitedJoints.insert( aStartJoint );
+    initial.via = nullptr;
+
+    stateStack.push( std::move( initial ) );
+
+    while( !stateStack.empty() )
     {
-        if( link->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
-            && link != aPrev && !aVisited.contains( link ) )
+        // Check timeout
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                clock::now() - startTime ).count();
+
+        if( elapsed > timeoutMs )
         {
+            wxLogTrace( wxT( "PNS_TUNE" ),
+                        wxT( "followBranch: timeout after %lld ms, returning best path found" ),
+                        elapsed );
+            break;
+        }
+
+        STATE current = std::move( stateStack.top() );
+        stateStack.pop();
+
+        const JOINT* joint = current.joint;
+        ITEM_SET links( joint->CLinks() );
+
+        // Check for via at this joint
+        ITEM* via = nullptr;
+
+        for( ITEM* link : links )
+        {
+            if( link->OfKind( ITEM::VIA_T ) && !aVisited.contains( link ) )
+            {
+                via = link;
+                break;
+            }
+        }
+
+        // Find all unvisited branches from this joint
+        bool foundBranch = false;
+
+        for( ITEM* link : links )
+        {
+            if( !link->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+                continue;
+
+            if( link == current.prev )
+                continue;
+
+            if( aVisited.contains( link ) )
+                continue;
+
             LINE l = m_world->AssembleLine( static_cast<LINKED_ITEM*>( link ), nullptr,
                                             false, aFollowLockedSegments );
 
-            if( l.CPoint( 0 ) != aJoint->Pos() )
+            if( l.CPoint( 0 ) != joint->Pos() )
                 l.Reverse();
 
-            const JOINT* next = m_world->FindJoint( l.CPoint( -1 ), &l );
+            const JOINT* nextJoint = m_world->FindJoint( l.CPoint( -1 ), &l );
 
-            for( LINKED_ITEM* ll : l.Links() )
-                aVisited.insert( ll );
+            // Skip if we've already visited this joint in the current path
+            if( current.visitedJoints.count( nextJoint ) )
+                continue;
 
+            foundBranch = true;
+
+            // Build new state for this branch
+            STATE nextState;
+            nextState.joint = nextJoint;
+            nextState.prev = l.Links().back();
+            nextState.pathItems = current.pathItems;
+            nextState.pathLength = current.pathLength + l.CLine().Length();
+            nextState.visitedJoints = current.visitedJoints;
+            nextState.visitedJoints.insert( nextJoint );
+            nextState.via = via;
+
+            // Add via and line to path
             if( via )
-                aVisited.insert( via );
+                nextState.pathItems.Add( via );
 
-            PATH_RESULT sub = followBranch( next, l.Links().back(), aVisited, aFollowLockedSegments );
+            nextState.pathItems.Add( l );
 
-            ITEM_SET tmp;
-            if( via )
-                tmp.Add( via );
-            tmp.Add( l );
-            for( ITEM* it : sub.m_items )
-                tmp.Add( it );
+            stateStack.push( std::move( nextState ) );
+        }
 
-            int len = l.CLine().Length() + sub.m_length;
-
-            if( len > best.m_length )
+        // If no branches found, this is a terminal joint - check if it's the best path
+        if( !foundBranch )
+        {
+            if( current.pathLength > best.m_length )
             {
-                best.m_length = len;
-                best.m_end = sub.m_end;
-                best.m_items = tmp;
+                best.m_length = current.pathLength;
+                best.m_end = joint;
+                best.m_items = current.pathItems;
             }
-
-            for( LINKED_ITEM* ll : l.Links() )
-                aVisited.erase( ll );
-
-            if( via )
-                aVisited.erase( via );
         }
     }
 
-    if( !best.m_end )
-        best.m_end = aJoint;
+    wxLogTrace( wxT( "PNS_TUNE" ),
+                wxT( "followBranch: completed with best path length=%d, %d items" ),
+                best.m_length, best.m_items.Size() );
 
     return best;
 }

@@ -113,7 +113,7 @@ private:
         PATH_RESULT() : m_end( nullptr ), m_length( 0 ) {}
     };
 
-    PATH_RESULT followBranch( const JOINT* aJoint, LINKED_ITEM* aPrev,
+    PATH_RESULT followBranch( const JOINT* aStartJoint, LINKED_ITEM* aPrev,
                               std::set<ITEM*>& aVisited, bool aFollowLockedSegments );
 
     ITEM_SET followTrivialPath( LINE* aLine, const JOINT** aTerminalJointA,
