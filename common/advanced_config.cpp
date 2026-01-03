@@ -137,6 +137,7 @@ static const wxChar SimulatorMultiRunCombinationLimit[] = wxT( "SimulatorMultiRu
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
 static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
+static const wxChar FollowBranchTimeout[] = wxT( "FollowBranchTimeoutMs" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
@@ -324,6 +325,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MaxPastedTextLength = 100;
 
     m_PNSProcessClusterTimeout = 100; // Default: 100 ms
+    m_FollowBranchTimeout = 500; // Default: 500 ms
 
     m_ImportSkipComponentBodies = false;
 
@@ -629,6 +631,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PNSProcessClusterTimeout,
                                                           &m_PNSProcessClusterTimeout, 100, 10, 10000 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::FollowBranchTimeout,
+                                                          &m_FollowBranchTimeout, 500, 50, 5000 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipComponentBodies,
                                                            &m_ImportSkipComponentBodies, m_ImportSkipComponentBodies ) );

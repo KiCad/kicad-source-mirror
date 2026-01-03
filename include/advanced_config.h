@@ -852,6 +852,18 @@ public:
     int m_PNSProcessClusterTimeout;
 
     /**
+     * Timeout for the PNS router's followBranch path search, in milliseconds.
+     *
+     * This limits how long the router will spend searching for the longest path
+     * through a complex track topology before returning the best path found so far.
+     *
+     * Setting name: "FollowBranchTimeoutMs"
+     * Valid values: 50 to 5000
+     * Default value: 500
+     */
+    int m_FollowBranchTimeout;
+
+    /**
      * Skip importing component bodies when importing some format files, such as Altium.
      *
      * This can be used to drastically speed up the import when testing
