@@ -101,11 +101,7 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
     if( m_hasVariantArg )
     {
         auto variantName = m_argParser.get<std::string>( ARG_VARIANT );
-
         m_argVariantName = From_UTF8( variantName );
-
-        if( m_argVariantName.IsEmpty() )
-            return EXIT_CODES::ERR_ARGS;
     }
 
     return doPerform( aKiway );
@@ -195,7 +191,6 @@ void CLI::COMMAND::addVariantsArg()
 
     m_argParser.add_argument( ARG_VARIANT )
             .default_value( std::string() )
-            .append()
             .help( UTF8STDSTR(
                     _( "The variant name to output.\n"
                        "When no --variant argument is provided the default variant is output." ) ) );
