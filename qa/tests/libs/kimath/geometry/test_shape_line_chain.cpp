@@ -1302,4 +1302,204 @@ BOOST_AUTO_TEST_CASE( CompareGeometry )
 }
 
 
+/**
+ * Test for issue #22597: Simplify with tolerance should reduce a polygon
+ * created from a rotated rounded rectangle (many small line segments approximating arcs).
+ * This polygon has 164 points that form a rounded rectangle rotated 45 degrees.
+ */
+BOOST_AUTO_TEST_CASE( SimplifyWithToleranceIssue22597 )
+{
+    SHAPE_LINE_CHAIN chain;
+
+    // All 164 points from the reproduction case in issue #22597.
+    // Coordinates are in nanometers (KiCad internal units).
+    chain.Append( VECTOR2I( 135095398, 233618441 ) );
+    chain.Append( VECTOR2I( 135024554, 233546880 ) );
+    chain.Append( VECTOR2I( 134887999, 233398857 ) );
+    chain.Append( VECTOR2I( 134757514, 233245455 ) );
+    chain.Append( VECTOR2I( 134633313, 233086923 ) );
+    chain.Append( VECTOR2I( 134515595, 232923519 ) );
+    chain.Append( VECTOR2I( 134404553, 232755507 ) );
+    chain.Append( VECTOR2I( 134300366, 232583161 ) );
+    chain.Append( VECTOR2I( 134203203, 232406759 ) );
+    chain.Append( VECTOR2I( 134113222, 232226587 ) );
+    chain.Append( VECTOR2I( 134030567, 232042939 ) );
+    chain.Append( VECTOR2I( 133955377, 231856111 ) );
+    chain.Append( VECTOR2I( 133887768, 231666408 ) );
+    chain.Append( VECTOR2I( 133827854, 231474135 ) );
+    chain.Append( VECTOR2I( 133775731, 231279607 ) );
+    chain.Append( VECTOR2I( 133731482, 231083137 ) );
+    chain.Append( VECTOR2I( 133695180, 230885045 ) );
+    chain.Append( VECTOR2I( 133666884, 230685652 ) );
+    chain.Append( VECTOR2I( 133646639, 230485281 ) );
+    chain.Append( VECTOR2I( 133634480, 230284257 ) );
+    chain.Append( VECTOR2I( 133630425, 230082907 ) );
+    chain.Append( VECTOR2I( 133634480, 229881557 ) );
+    chain.Append( VECTOR2I( 133646639, 229680533 ) );
+    chain.Append( VECTOR2I( 133666884, 229480162 ) );
+    chain.Append( VECTOR2I( 133695180, 229280769 ) );
+    chain.Append( VECTOR2I( 133731482, 229082677 ) );
+    chain.Append( VECTOR2I( 133775731, 228886207 ) );
+    chain.Append( VECTOR2I( 133827854, 228691679 ) );
+    chain.Append( VECTOR2I( 133887768, 228499406 ) );
+    chain.Append( VECTOR2I( 133955377, 228309703 ) );
+    chain.Append( VECTOR2I( 134030567, 228122875 ) );
+    chain.Append( VECTOR2I( 134113222, 227939227 ) );
+    chain.Append( VECTOR2I( 134203203, 227759055 ) );
+    chain.Append( VECTOR2I( 134300366, 227582653 ) );
+    chain.Append( VECTOR2I( 134404553, 227410307 ) );
+    chain.Append( VECTOR2I( 134515595, 227242295 ) );
+    chain.Append( VECTOR2I( 134633313, 227078891 ) );
+    chain.Append( VECTOR2I( 134757514, 226920359 ) );
+    chain.Append( VECTOR2I( 134887999, 226766957 ) );
+    chain.Append( VECTOR2I( 135024554, 226618934 ) );
+    chain.Append( VECTOR2I( 135095398, 226547373 ) );
+    chain.Append( VECTOR2I( 148530427, 213112344 ) );
+    chain.Append( VECTOR2I( 148601988, 213041500 ) );
+    chain.Append( VECTOR2I( 148750011, 212904945 ) );
+    chain.Append( VECTOR2I( 148903413, 212774460 ) );
+    chain.Append( VECTOR2I( 149061945, 212650259 ) );
+    chain.Append( VECTOR2I( 149225349, 212532541 ) );
+    chain.Append( VECTOR2I( 149393361, 212421499 ) );
+    chain.Append( VECTOR2I( 149565707, 212317312 ) );
+    chain.Append( VECTOR2I( 149742109, 212220149 ) );
+    chain.Append( VECTOR2I( 149922281, 212130168 ) );
+    chain.Append( VECTOR2I( 150105929, 212047514 ) );
+    chain.Append( VECTOR2I( 150292757, 211972323 ) );
+    chain.Append( VECTOR2I( 150482460, 211904715 ) );
+    chain.Append( VECTOR2I( 150674733, 211844800 ) );
+    chain.Append( VECTOR2I( 150869261, 211792677 ) );
+    chain.Append( VECTOR2I( 151065731, 211748428 ) );
+    chain.Append( VECTOR2I( 151263823, 211712126 ) );
+    chain.Append( VECTOR2I( 151463216, 211683830 ) );
+    chain.Append( VECTOR2I( 151710655, 211863478 ) );  // Suspicious point
+    chain.Append( VECTOR2I( 151864611, 211651426 ) );
+    chain.Append( VECTOR2I( 152065961, 211647371 ) );
+    chain.Append( VECTOR2I( 152267311, 211651426 ) );
+    chain.Append( VECTOR2I( 152468335, 211663586 ) );
+    chain.Append( VECTOR2I( 152668706, 211683830 ) );
+    chain.Append( VECTOR2I( 152868099, 211712126 ) );
+    chain.Append( VECTOR2I( 153066191, 211748428 ) );
+    chain.Append( VECTOR2I( 153262661, 211792677 ) );
+    chain.Append( VECTOR2I( 153457189, 211844800 ) );
+    chain.Append( VECTOR2I( 153649462, 211904715 ) );
+    chain.Append( VECTOR2I( 153839165, 211972323 ) );
+    chain.Append( VECTOR2I( 154025993, 212047514 ) );
+    chain.Append( VECTOR2I( 154209641, 212130168 ) );
+    chain.Append( VECTOR2I( 154389813, 212220149 ) );
+    chain.Append( VECTOR2I( 154566215, 212317312 ) );
+    chain.Append( VECTOR2I( 154738561, 212421499 ) );
+    chain.Append( VECTOR2I( 154906573, 212532541 ) );
+    chain.Append( VECTOR2I( 155069977, 212650259 ) );
+    chain.Append( VECTOR2I( 155228509, 212774460 ) );
+    chain.Append( VECTOR2I( 155381911, 212904945 ) );
+    chain.Append( VECTOR2I( 155529934, 213041500 ) );
+    chain.Append( VECTOR2I( 155601495, 213112344 ) );
+    chain.Append( VECTOR2I( 160551242, 218062092 ) );
+    chain.Append( VECTOR2I( 160622086, 218133653 ) );
+    chain.Append( VECTOR2I( 160758641, 218281676 ) );
+    chain.Append( VECTOR2I( 160889126, 218435078 ) );
+    chain.Append( VECTOR2I( 161013327, 218593610 ) );
+    chain.Append( VECTOR2I( 161131045, 218757014 ) );
+    chain.Append( VECTOR2I( 161242087, 218925026 ) );
+    chain.Append( VECTOR2I( 161346274, 219097372 ) );
+    chain.Append( VECTOR2I( 161443437, 219273774 ) );
+    chain.Append( VECTOR2I( 161533418, 219453946 ) );
+    chain.Append( VECTOR2I( 161616072, 219637594 ) );
+    chain.Append( VECTOR2I( 161691263, 219824422 ) );
+    chain.Append( VECTOR2I( 161758871, 220014125 ) );
+    chain.Append( VECTOR2I( 161818786, 220206398 ) );
+    chain.Append( VECTOR2I( 161870909, 220400926 ) );
+    chain.Append( VECTOR2I( 161915158, 220597396 ) );
+    chain.Append( VECTOR2I( 161951460, 220795488 ) );
+    chain.Append( VECTOR2I( 161979756, 220994881 ) );
+    chain.Append( VECTOR2I( 162000000, 221195252 ) );
+    chain.Append( VECTOR2I( 162012160, 221396276 ) );
+    chain.Append( VECTOR2I( 162016215, 221597626 ) );
+    chain.Append( VECTOR2I( 162012160, 221798976 ) );
+    chain.Append( VECTOR2I( 162000000, 222000000 ) );
+    chain.Append( VECTOR2I( 161979756, 222200371 ) );
+    chain.Append( VECTOR2I( 161951460, 222399764 ) );
+    chain.Append( VECTOR2I( 161915158, 222597856 ) );
+    chain.Append( VECTOR2I( 161870909, 222794326 ) );
+    chain.Append( VECTOR2I( 161818786, 222988854 ) );
+    chain.Append( VECTOR2I( 161758871, 223181127 ) );
+    chain.Append( VECTOR2I( 161691263, 223370830 ) );
+    chain.Append( VECTOR2I( 161616072, 223557658 ) );
+    chain.Append( VECTOR2I( 161533418, 223741306 ) );
+    chain.Append( VECTOR2I( 161443437, 223921478 ) );
+    chain.Append( VECTOR2I( 161346274, 224097880 ) );
+    chain.Append( VECTOR2I( 161242087, 224270226 ) );
+    chain.Append( VECTOR2I( 161131045, 224438238 ) );
+    chain.Append( VECTOR2I( 161013327, 224601642 ) );
+    chain.Append( VECTOR2I( 160889126, 224760174 ) );
+    chain.Append( VECTOR2I( 160758641, 224913576 ) );
+    chain.Append( VECTOR2I( 160622086, 225061599 ) );
+    chain.Append( VECTOR2I( 160551242, 225133160 ) );
+    chain.Append( VECTOR2I( 147116213, 238568188 ) );
+    chain.Append( VECTOR2I( 147044657, 238639037 ) );
+    chain.Append( VECTOR2I( 146896633, 238775592 ) );
+    chain.Append( VECTOR2I( 146743231, 238906077 ) );
+    chain.Append( VECTOR2I( 146584699, 239030279 ) );
+    chain.Append( VECTOR2I( 146421295, 239147996 ) );
+    chain.Append( VECTOR2I( 146253283, 239259039 ) );
+    chain.Append( VECTOR2I( 146080936, 239363226 ) );
+    chain.Append( VECTOR2I( 145904534, 239460389 ) );
+    chain.Append( VECTOR2I( 145724362, 239550371 ) );
+    chain.Append( VECTOR2I( 145540714, 239633024 ) );
+    chain.Append( VECTOR2I( 145353886, 239708216 ) );
+    chain.Append( VECTOR2I( 145164182, 239775824 ) );
+    chain.Append( VECTOR2I( 144971909, 239835739 ) );
+    chain.Append( VECTOR2I( 144777380, 239887863 ) );
+    chain.Append( VECTOR2I( 144580910, 239932111 ) );
+    chain.Append( VECTOR2I( 144382818, 239968413 ) );
+    chain.Append( VECTOR2I( 144183424, 239996709 ) );
+    chain.Append( VECTOR2I( 143983053, 240016953 ) );
+    chain.Append( VECTOR2I( 143782029, 240029113 ) );
+    chain.Append( VECTOR2I( 143580679, 240033169 ) );
+    chain.Append( VECTOR2I( 143379329, 240029113 ) );
+    chain.Append( VECTOR2I( 143178305, 240016953 ) );
+    chain.Append( VECTOR2I( 142977934, 239996709 ) );
+    chain.Append( VECTOR2I( 142778540, 239968413 ) );
+    chain.Append( VECTOR2I( 142580448, 239932111 ) );
+    chain.Append( VECTOR2I( 142383978, 239887863 ) );
+    chain.Append( VECTOR2I( 142189449, 239835739 ) );
+    chain.Append( VECTOR2I( 141997176, 239775824 ) );
+    chain.Append( VECTOR2I( 141807472, 239708216 ) );
+    chain.Append( VECTOR2I( 141620644, 239633024 ) );
+    chain.Append( VECTOR2I( 141436996, 239550371 ) );
+    chain.Append( VECTOR2I( 141256824, 239460389 ) );
+    chain.Append( VECTOR2I( 141080422, 239363226 ) );
+    chain.Append( VECTOR2I( 140908075, 239259039 ) );
+    chain.Append( VECTOR2I( 140740063, 239147996 ) );
+    chain.Append( VECTOR2I( 140576659, 239030279 ) );
+    chain.Append( VECTOR2I( 140418127, 238906077 ) );
+    chain.Append( VECTOR2I( 140264725, 238775592 ) );
+    chain.Append( VECTOR2I( 140116701, 238639037 ) );
+    chain.Append( VECTOR2I( 140045145, 238568188 ) );
+
+    chain.SetClosed( true );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    int originalPointCount = chain.PointCount();
+    BOOST_CHECK_EQUAL( originalPointCount, 164 );
+
+    // With 2mm tolerance (2000000 nm), the many small segments approximating arcs
+    // should be simplified significantly. A properly working algorithm should
+    // reduce the point count substantially.
+    chain.Simplify( 2000000 );
+
+    int simplifiedCount = chain.PointCount();
+    BOOST_TEST_MESSAGE( "Simplified point count: " << simplifiedCount );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_LT( simplifiedCount, originalPointCount );
+
+    // The polygon is a rotated rounded rectangle with 4 corners.
+    // A 2mm tolerance should reduce it to approximately 4-8 points.
+    // If it's only slightly reduced, there may be an issue.
+    BOOST_CHECK_LE( simplifiedCount, 20 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

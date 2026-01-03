@@ -61,6 +61,7 @@ set( QA_PCBNEW_SRCS
     test_multichannel.cpp
     test_zone.cpp
     test_zone_filler.cpp
+    test_poly_simplify.cpp
 
     drc/test_custom_rule_severities.cpp
     drc/test_drc_backdrill_postmachining.cpp
