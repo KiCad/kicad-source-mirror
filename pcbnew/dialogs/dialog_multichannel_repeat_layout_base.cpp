@@ -89,7 +89,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 	// Label Appearance
 
 	// Cell Defaults
-	m_raGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_raGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_raGrid->SetMinSize( wxSize( 500,100 ) );
 
 	fgSizer3->Add( m_raGrid, 1, wxALL|wxEXPAND, 5 );
