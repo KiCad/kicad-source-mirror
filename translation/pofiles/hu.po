@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-02 21:01+0000\n"
+"PO-Revision-Date: 2026-01-04 00:01+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -37410,7 +37410,6 @@ msgstr "Vezetősáv és Via tulajdonságok beállítása"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:33
 #: pcbnew/drc/drc_engine.cpp:1491
-#, fuzzy
 msgid "footprint"
 msgstr "alkatrészrajzolat"
 
@@ -40039,9 +40038,8 @@ msgid "Target length:"
 msgstr "Megcélzott hossz:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
-#, fuzzy
 msgid "Override custom rules"
-msgstr "Rejtett szövegek"
+msgstr "Egyedi szabályok felülírása"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
@@ -40128,9 +40126,8 @@ msgid "Keep &outside layers"
 msgstr "Viák kizárása"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:57
-#, fuzzy
 msgid "Unused Pads"
-msgstr "Feldolgozott rétegek"
+msgstr "Használatlan forrszemek"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid "Update Footprints"
@@ -40233,9 +40230,8 @@ msgid "Top/bottom"
 msgstr "Alul/Felül"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:103
-#, fuzzy
 msgid "Allow free pads"
-msgstr "Mikrohullámú funkció hozzáadása"
+msgstr "Forrszemek szabad mozgatása"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:104
 msgid ""
@@ -40476,22 +40472,18 @@ msgid "Do not show"
 msgstr "Ne jelenítse meg"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads"
 msgstr "Megjelenítés a forrszemeken"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on tracks"
 msgstr "Megjelenítés a vezetősávokon"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads & tracks"
 msgstr "Megjelenítés a forrszemeken és vezetősávokon"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:59
-#, fuzzy
 msgid "Show pad numbers"
 msgstr "Forrszem sorszámok megjelenítése"
 
@@ -40612,14 +40604,12 @@ msgid "Select which origin is used for X,Y coordinate display."
 msgstr "Válassza ki, melyik mértékegység jelenjen meg"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases right"
-msgstr "Térköz növelése"
+msgstr "Pozitív irány jobbra"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases left"
-msgstr "Vonalszélesség növelése"
+msgstr "Pozitív irány balra"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
@@ -40630,14 +40620,12 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases up"
-msgstr "Térköz növelése"
+msgstr "Pozitív irány felfelé"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases down"
-msgstr "Térköz növelése"
+msgstr "Pozitív irány lefelé"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
@@ -40672,7 +40660,7 @@ msgstr "Forrszemek kizárása"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:29
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "DRC hibát generál, ha egy forrszem belóg erre a területre"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:33
 #, fuzzy
@@ -40738,7 +40726,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
-#, fuzzy
 msgid "Minimum track width:"
 msgstr "Minimális vezetősáv szélesség:"
 
@@ -40824,9 +40811,8 @@ msgid "Holes"
 msgstr "Furatok"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
-#, fuzzy
 msgid "Minimum through hole:"
-msgstr "Minimális forrszem furat:"
+msgstr "Minimális átmenő furat:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -40900,9 +40886,8 @@ msgid "Arc/Circle Approximated by Segments"
 msgstr "Ív/kör szegmensek"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
-#, fuzzy
 msgid "Maximum allowed deviation:"
-msgstr "Maximális megengedett eltérés"
+msgstr "Maximális megengedett eltérés:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid ""
@@ -41014,7 +40999,6 @@ msgstr "Nincs alapértelmezett alkatrészrajzolat"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:87
 #: pcbnew/dialogs/panel_setup_layers.cpp:293
-#, fuzzy
 msgid "Off-board, testing"
 msgstr "Panelen kívüli, tesztelés"
 
@@ -41025,7 +41009,6 @@ msgstr "Műszaki réteg a felső oldalon"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:107
 #: pcbnew/dialogs/panel_setup_layers.cpp:275
-#, fuzzy
 msgid "Off-board, manufacturing"
 msgstr "Panelen kívüli, gyártás"
 
@@ -41042,7 +41025,6 @@ msgstr "Ragasztó réteg a felső oldalon"
 #: pcbnew/dialogs/panel_setup_layers.cpp:221
 #: pcbnew/dialogs/panel_setup_layers.cpp:239
 #: pcbnew/dialogs/panel_setup_layers.cpp:257
-#, fuzzy
 msgid "On-board, non-copper"
 msgstr "Panelen, nem vezető"
 
@@ -41217,9 +41199,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1018
-#, fuzzy
 msgid "Inner Layers to Be Deleted"
-msgstr "Törlendő elemek:"
+msgstr "Törlendő belső rétegek"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1053
 msgid "All user-defined layers have already been added."
@@ -41396,9 +41377,8 @@ msgid "Design rules cannot be added without a project"
 msgstr "Tervezési szabályok nem adhatók hozzá projekt nélkül"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
-msgstr "Tervezési szabályellenőrző"
+msgstr "DRC szabályok"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
@@ -41411,6 +41391,11 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Dokumentáció\n"
+"\n"
+"A teljes dokumentáció elérhető itt: [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -41985,9 +41970,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "Új grafikai elem alapértelmezett tulajdonságai:"
+msgstr "Kerek alakzatok alapértelmezett tulajdonságai"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 #, fuzzy
@@ -41995,9 +41979,8 @@ msgid "Allow teardrop to span two track segments"
 msgstr "Furat túl közel van egy vezetősávhoz"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "Új grafikai elem alapértelmezett tulajdonságai:"
+msgstr "Szögletes alakzatok alapértelmezett tulajdonságai"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -42049,7 +42032,6 @@ msgid "Hole"
 msgstr "Furat"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
 msgstr "Differenciális jelvezeték"
 
@@ -42222,9 +42204,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "lokális távolságtartás és szigetelési távolság beállítások"
 
 #: pcbnew/drc/drc_engine.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Zóna minimális szélesség érték"
+msgstr "%s minimális vastagság: %s."
 
 #: pcbnew/drc/drc_engine.cpp:932
 #, fuzzy, c-format
@@ -42418,7 +42400,7 @@ msgstr "Megkötés:"
 
 #: pcbnew/drc/drc_engine.cpp:1325 pcbnew/drc/drc_engine.cpp:1609
 msgid "Rule applied."
-msgstr ""
+msgstr "Szabály alkalmazva."
 
 #: pcbnew/drc/drc_engine.cpp:1330
 msgid "Rule applied; overrides previous constraints."
@@ -42429,9 +42411,8 @@ msgid "Membership not satisfied; constraint ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1339 pcbnew/drc/drc_engine.cpp:1614
-#, fuzzy
 msgid "Condition not satisfied; rule ignored."
-msgstr "Ismétlődő rétegnevek nem engedélyezettek."
+msgstr "Feltétel nem teljesült; szabály figyelmen kívül hagyva."
 
 #: pcbnew/drc/drc_engine.cpp:1364
 #, fuzzy, c-format
@@ -42455,9 +42436,8 @@ msgstr "Csatlakozás típusa:"
 
 #: pcbnew/drc/drc_engine.cpp:1507 pcbnew/drc/drc_engine.cpp:1524
 #: pcbnew/drc/drc_engine.cpp:1541 pcbnew/zone.cpp:616 pcbnew/zone.h:193
-#, fuzzy
 msgid "zone"
-msgstr "Zóna hozzáadása"
+msgstr "zóna"
 
 #: pcbnew/drc/drc_engine.cpp:1519
 #, fuzzy, c-format
@@ -42527,7 +42507,6 @@ msgid "Creepage violation"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
 #: pcbnew/drc/drc_item.cpp:77
-#, fuzzy
 msgid "Tracks crossing"
 msgstr "Egymást keresztező vezetősávok"
 
@@ -42581,14 +42560,12 @@ msgid "Copper connection too narrow"
 msgstr "A rézcsatlakozás túl keskeny"
 
 #: pcbnew/drc/drc_item.cpp:121
-#, fuzzy
 msgid "Track width"
 msgstr "Vezetősáv szélessége"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Track angle"
-msgstr "Körív nyílásszög:"
+msgstr "Vezetősáv szög"
 
 #: pcbnew/drc/drc_item.cpp:129
 #, fuzzy
@@ -42606,9 +42583,8 @@ msgid "Hole size out of range"
 msgstr "Furat kívül esik a tartományon"
 
 #: pcbnew/drc/drc_item.cpp:141
-#, fuzzy
 msgid "Via diameter"
-msgstr "Átvezetőforrpont átmérő"
+msgstr "Via átmérő"
 
 #: pcbnew/drc/drc_item.cpp:145
 #, fuzzy
@@ -42666,9 +42642,8 @@ msgid "Duplicate footprints"
 msgstr "Ismétlődő alkatrészrajzolatok"
 
 #: pcbnew/drc/drc_item.cpp:189
-#, fuzzy
 msgid "Missing footprint"
-msgstr "Hiányzó alkatrészrajzolatok"
+msgstr "Hiányzó alkatrészrajzolat"
 
 #: pcbnew/drc/drc_item.cpp:193
 #, fuzzy
