@@ -252,6 +252,19 @@ void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
 {
     wxCHECK2( !aLibSymbol || aLibSymbol->IsRoot(), aLibSymbol = nullptr );
 
+    // Before destroying the old lib symbol, save pin alternates from the lib pins into each
+    // SCH_PIN's own storage.  Otherwise UpdatePins() would access dangling m_libPin pointers
+    // when trying to look up alternate definitions for renamed alternates.
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        if( pin->GetLibPin() )
+        {
+            std::map<wxString, SCH_PIN::ALT> alts = pin->GetAlternates();
+            pin->SetLibPin( nullptr );
+            pin->GetAlternates() = std::move( alts );
+        }
+    }
+
     m_part.reset( aLibSymbol );
     UpdatePins();
 }
@@ -305,6 +318,7 @@ wxString SCH_SYMBOL::GetDatasheet() const
 void SCH_SYMBOL::UpdatePins()
 {
     std::map<wxString, wxString>            altPinMap;
+    std::map<wxString, SCH_PIN::ALT>        altPinDefs;
     std::map<wxString, std::set<SCH_PIN*>>  pinUuidMap;
     std::set<SCH_PIN*>                      unassignedSchPins;
     std::set<SCH_PIN*>                      unassignedLibPins;
@@ -316,7 +330,13 @@ void SCH_SYMBOL::UpdatePins()
         unassignedSchPins.insert( pin.get() );
 
         if( !pin->GetAlt().IsEmpty() )
+        {
             altPinMap[ pin->GetNumber() ] = pin->GetAlt();
+            auto altDefIt = pin->GetAlternates().find( pin->GetAlt() );
+
+            if( altDefIt != pin->GetAlternates().end() )
+                altPinDefs[ pin->GetNumber() ] = altDefIt->second;
+        }
 
         pin->SetLibPin( nullptr );
     }
@@ -356,7 +376,29 @@ void SCH_SYMBOL::UpdatePins()
         auto iii = altPinMap.find( libPin->GetNumber() );
 
         if( iii != altPinMap.end() )
-            pin->SetAlt( iii->second );
+        {
+            wxString altName = iii->second;
+
+            if( pin->GetAlternates().find( altName ) == pin->GetAlternates().end() )
+            {
+                auto defIt = altPinDefs.find( libPin->GetNumber() );
+
+                if( defIt != altPinDefs.end() )
+                {
+                    for( const auto& [name, alt] : pin->GetAlternates() )
+                    {
+                        if( alt.m_Shape == defIt->second.m_Shape
+                                && alt.m_Type == defIt->second.m_Type )
+                        {
+                            altName = name;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            pin->SetAlt( altName );
+        }
 
         m_pinMap[ libPin ] = pin;
     }
@@ -389,7 +431,29 @@ void SCH_SYMBOL::UpdatePins()
         auto iii = altPinMap.find( libPin->GetNumber() );
 
         if( iii != altPinMap.end() )
-            pin->SetAlt( iii->second );
+        {
+            wxString altName = iii->second;
+
+            if( pin->GetAlternates().find( altName ) == pin->GetAlternates().end() )
+            {
+                auto defIt = altPinDefs.find( libPin->GetNumber() );
+
+                if( defIt != altPinDefs.end() )
+                {
+                    for( const auto& [name, alt] : pin->GetAlternates() )
+                    {
+                        if( alt.m_Shape == defIt->second.m_Shape
+                                && alt.m_Type == defIt->second.m_Type )
+                        {
+                            altName = name;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            pin->SetAlt( altName );
+        }
     }
 
     // If we have any pins left in the symbol that were not found in the library, remove them.
@@ -2600,6 +2664,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             SCH_PIN* symbolPin = GetPin( libPins[ i ] );
             SCH_PIN* tempPin = tempPins[ i ];
 
+            if( !symbolPin )
+                continue;
+
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
             tempPin->SetShape( symbolPin->GetShape() );
@@ -2722,6 +2789,9 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
         {
             SCH_PIN* symbolPin = GetPin( libPins[ i ] );
             SCH_PIN* tempPin = tempPins[ i ];
+
+            if( !symbolPin )
+                continue;
 
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
