@@ -27,6 +27,7 @@
 #define ZONE_FILLER_H
 
 #include <map>
+#include <mutex>
 #include <vector>
 #include <zone.h>
 #include <geometry/shape_poly_set.h>
@@ -175,6 +176,7 @@ private:
     // Cache of pre-knockout fills for iterative refill optimization (issue 21746)
     // Key: (zone pointer, layer), Value: fill polygon before higher-priority zone knockout
     std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preKnockoutFillCache;
+    mutable std::mutex                                             m_cacheMutex;
 };
 
 #endif

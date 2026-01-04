@@ -360,7 +360,11 @@ BOOST_FIXTURE_TEST_CASE( RegressionZonePriorityIsolatedIslands, ZONE_FILL_TEST_F
 {
     // Enable iterative refill to fix issue 21746
     ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
     cfg.m_ZoneFillIterativeRefill = true;
+
+    // Restore config at end of scope to avoid polluting other tests
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } } guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
 
     KI_TEST::LoadBoard( m_settingsManager, "issue21746/issue21746", m_board );
 

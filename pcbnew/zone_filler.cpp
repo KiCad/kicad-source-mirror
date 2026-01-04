@@ -2651,7 +2651,11 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // At this point, the fill has NOT been knocked out by higher-priority zones on different nets
     if( iterativeRefill )
     {
-        m_preKnockoutFillCache[{ aZone, aLayer }] = aFillPolys;
+        {
+            std::lock_guard<std::mutex> lock( m_cacheMutex );
+            m_preKnockoutFillCache[{ aZone, aLayer }] = aFillPolys;
+        }
+
         BOX2I cacheBBox = aFillPolys.BBox();
 
         wxLogTrace( traceZoneFiller,
@@ -3499,20 +3503,24 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys )
 {
     auto cacheKey = std::make_pair( static_cast<const ZONE*>( aZone ), aLayer );
-    auto it = m_preKnockoutFillCache.find( cacheKey );
 
-    if( it == m_preKnockoutFillCache.end() )
     {
-        wxLogTrace( traceZoneFiller, wxT( "Cache miss for zone %s layer %d (cache size: %zu)" ),
-                    aZone->GetNetname(), static_cast<int>( aLayer ), m_preKnockoutFillCache.size() );
-        return false;
+        std::lock_guard<std::mutex> lock( m_cacheMutex );
+        auto it = m_preKnockoutFillCache.find( cacheKey );
+
+        if( it == m_preKnockoutFillCache.end() )
+        {
+            wxLogTrace( traceZoneFiller, wxT( "Cache miss for zone %s layer %d (cache size: %zu)" ),
+                        aZone->GetNetname(), static_cast<int>( aLayer ), m_preKnockoutFillCache.size() );
+            return false;
+        }
+
+        wxLogTrace( traceZoneFiller, wxT( "Cache hit for zone %s layer %d: pre-knockout %d outlines" ),
+                    aZone->GetNetname(), static_cast<int>( aLayer ), it->second.OutlineCount() );
+
+        // Restore the cached pre-knockout fill
+        aFillPolys = it->second;
     }
-
-    wxLogTrace( traceZoneFiller, wxT( "Cache hit for zone %s layer %d: pre-knockout %d outlines" ),
-                aZone->GetNetname(), static_cast<int>( aLayer ), it->second.OutlineCount() );
-
-    // Restore the cached pre-knockout fill
-    aFillPolys = it->second;
 
     // Subtract the FILLED area of higher-priority zones (with clearance for different nets).
     // For same-net zones: subtract the filled area directly
