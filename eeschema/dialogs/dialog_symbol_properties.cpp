@@ -764,14 +764,13 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
 
-        // The const version of GetField() is used to prevent a new field from automatically being created.
         const SCH_FIELD* existingField = m_symbol->GetField( fieldName );
         SCH_FIELD* tmp;
 
         if( !existingField )
         {
-            tmp = m_symbol->GetField( fieldName );
-            *tmp = field;
+            tmp = m_symbol->AddField( field );
+            tmp->SetParent( m_symbol );
         }
         else
         {

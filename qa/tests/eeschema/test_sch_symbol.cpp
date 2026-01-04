@@ -142,4 +142,47 @@ BOOST_AUTO_TEST_CASE( SchSymbolVariantTest )
 }
 
 
+/**
+ * Test field addition and retrieval by name.
+ * Verifies that GetField(wxString) returns null for non-existent fields and that
+ * AddField properly creates new fields (fix for issue #22628).
+ */
+BOOST_AUTO_TEST_CASE( FieldAdditionByName )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString newFieldName = wxS( "Sim.Library" );
+
+    // GetField by name should return null for non-existent field
+    const SCH_FIELD* existing = symbol->GetField( newFieldName );
+    BOOST_CHECK( existing == nullptr );
+
+    // Create a field to add
+    SCH_FIELD newField( symbol, FIELD_T::USER, newFieldName );
+    newField.SetText( wxS( "test_model.lib" ) );
+
+    // AddField should add the field and return a valid pointer
+    SCH_FIELD* addedField = symbol->AddField( newField );
+    BOOST_REQUIRE( addedField != nullptr );
+
+    // After setting the parent, verify the field is correctly configured
+    addedField->SetParent( symbol );
+    BOOST_CHECK( addedField->GetParent() == symbol );
+
+    // Now GetField should find the newly added field
+    const SCH_FIELD* found = symbol->GetField( newFieldName );
+    BOOST_REQUIRE( found != nullptr );
+    BOOST_CHECK( found->GetText() == wxS( "test_model.lib" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
