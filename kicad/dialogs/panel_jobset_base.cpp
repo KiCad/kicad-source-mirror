@@ -77,7 +77,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	sbJobs->Add( bJobsButtons, 0, wxEXPAND|wxLEFT|wxRIGHT, 3 );
 
 
-	bSizerUpper->Add( sbJobs, 7, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( sbJobs, 3, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbDestinations;
 	sbDestinations = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Destinations") ), wxVERTICAL );
@@ -102,7 +102,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	sbDestinations->Add( bOutputButtons, 0, wxEXPAND|wxLEFT, 3 );
 
 
-	bSizerUpper->Add( sbDestinations, 4, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( sbDestinations, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
@@ -128,6 +128,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	// Connect Events
 	m_jobsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_JOBSET_BASE::OnGridCellChange ), NULL, this );
@@ -201,15 +202,12 @@ PANEL_DESTINATION_BASE::PANEL_DESTINATION_BASE( wxWindow* parent, wxWindowID id,
 	bSizerButtons->Add( m_buttonDelete, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerButtons->Add( 10, 0, 1, wxEXPAND, 5 );
 
 	m_buttonGenerate = new wxButton( this, wxID_ANY, _("Generate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonGenerate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerButtons->Add( m_buttonGenerate, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_buttonOpenOutput = new wxButton( this, wxID_ANY, _("Open Output"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOpenOutput->Enable( false );
-	m_buttonOpenOutput->SetToolTip( _("Open the generated output") );
-
+	m_buttonOpenOutput = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerButtons->Add( m_buttonOpenOutput, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 

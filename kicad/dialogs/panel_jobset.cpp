@@ -47,6 +47,7 @@
 #include <jobs/job_special_execute.h>
 #include <jobs/job_special_copyfiles.h>
 #include <dialogs/dialog_executecommand_job_settings.h>
+#include <common.h>
 
 
 extern KICOMMON_API
@@ -178,6 +179,7 @@ public:
     {
         m_buttonProperties->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
         m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+        m_buttonOpenOutput->SetBitmap( KiBitmapBundle( BITMAPS::small_new_window ) );
 
 #if  _WIN32
         // BORDER_RAISED/SUNKEN look pretty on every platform but Windows
@@ -198,7 +200,6 @@ public:
 
         m_pathInfo->SetFont( KIUI::GetSmallInfoFont( this ) );
         UpdatePathInfo( aDestination->GetPathInfo() );
-        m_buttonOpenOutput->Enable( false );
         UpdateStatus();
     }
 
@@ -215,7 +216,6 @@ public:
         destination->m_lastRunSuccess = std::nullopt;
         destination->m_lastResolvedOutputPath = std::nullopt;
         m_statusBitmap->SetBitmap( wxNullBitmap );
-        m_buttonOpenOutput->Enable( false );
     }
 
     void UpdateStatus()
@@ -244,10 +244,6 @@ public:
         }
 
         m_buttonGenerate->Enable( !m_jobsFile->GetJobsForDestination( destination ).empty() );
-        bool enableOpenOutput =
-                destination->m_lastRunSuccess.value_or( false ) && destination->m_lastResolvedOutputPath.has_value();
-
-        m_buttonOpenOutput->Enable( enableOpenOutput );
     }
 
     void UpdatePathInfo( const wxString& aMsg )
@@ -293,10 +289,20 @@ public:
         JOBSET_DESTINATION* destination = GetDestination();
         wxCHECK( destination, /*void*/ );
 
-        if( !destination->m_lastResolvedOutputPath.has_value() )
-            return;
+        wxString resolvedPath;
 
-        const wxString& resolvedPath = destination->m_lastResolvedOutputPath.value();
+        if( destination->m_lastResolvedOutputPath.has_value() )
+        {
+            resolvedPath = destination->m_lastResolvedOutputPath.value();
+        }
+        else
+        {
+            resolvedPath = ExpandTextVars( destination->GetPathInfo(), &m_frame->Prj() );
+            resolvedPath = ExpandEnvVarSubstitutions( resolvedPath, &m_frame->Prj() );
+
+            if( resolvedPath.StartsWith( "~" ) )
+                resolvedPath.Replace( "~", wxGetHomeDir(), false );
+        }
 
         if( resolvedPath.IsEmpty() )
             return;

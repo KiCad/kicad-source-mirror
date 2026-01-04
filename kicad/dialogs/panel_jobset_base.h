@@ -71,7 +71,7 @@ class PANEL_JOBSET_BASE : public PANEL_NOTEBOOK_BASE
 
 	public:
 
-		PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_JOBSET_BASE();
 
@@ -92,7 +92,7 @@ class PANEL_DESTINATION_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_buttonProperties;
 		STD_BITMAP_BUTTON* m_buttonDelete;
 		wxButton* m_buttonGenerate;
-		wxButton* m_buttonOpenOutput;
+		STD_BITMAP_BUTTON* m_buttonOpenOutput;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRightDown( wxMouseEvent& event ) { event.Skip(); }
