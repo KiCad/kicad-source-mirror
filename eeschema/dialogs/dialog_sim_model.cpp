@@ -1137,7 +1137,12 @@ SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
         wxString sel = m_modelListBox->GetStringSelection();
 
         if( m_modelListBoxEntryToLibraryIdx.contains( sel ) )
-            return m_libraryModelsMgr.GetModels().at( m_modelListBoxEntryToLibraryIdx.at( sel ) ).get();
+        {
+            int idx = m_modelListBoxEntryToLibraryIdx.at( sel );
+
+            if( idx >= 0 && idx < (int) m_libraryModelsMgr.GetModels().size() )
+                return m_libraryModelsMgr.GetModels().at( idx ).get();
+        }
     }
     else
     {
