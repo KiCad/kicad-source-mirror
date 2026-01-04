@@ -27,6 +27,8 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_text.h>
+#include <pcb_field.h>
 #include <footprint.h>
 #include <zone.h>
 #include <drc/drc_item.h>
@@ -216,6 +218,115 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
         int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone );
 
         BOOST_ASSERT( result >= 0 );
+    }
+}
+
+
+/**
+ * Test that repeat layout copies footprint properties including field visibility,
+ * text positions, and 3D models (issue 22548).
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesFootprintProperties, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22548/issue22548", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Found %d rule areas",
+                                          static_cast<int>( ruleData->m_areas.size() ) ) );
+
+    BOOST_CHECK( ruleData->m_areas.size() >= 2 );
+
+    if( ruleData->m_areas.size() < 2 )
+        return;
+
+    RULE_AREA* refArea = nullptr;
+    RULE_AREA* targetArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_ruleName.Contains( wxT( "Channel 0" ) ) )
+            refArea = &ra;
+        else if( ra.m_ruleName.Contains( wxT( "Channel 1" ) ) )
+            targetArea = &ra;
+    }
+
+    if( !refArea || !targetArea )
+    {
+        BOOST_TEST_MESSAGE( "Could not find Channel 0 and Channel 1 rule areas, skipping test" );
+        return;
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Reference area: %s, Target area: %s",
+                                          refArea->m_ruleName, targetArea->m_ruleName ) );
+
+    FOOTPRINT* refFP = nullptr;
+    FOOTPRINT* targetFP = nullptr;
+
+    for( FOOTPRINT* fp : refArea->m_components )
+    {
+        if( fp->GetReference().StartsWith( wxT( "U2" ) ) )
+        {
+            refFP = fp;
+            break;
+        }
+    }
+
+    for( FOOTPRINT* fp : targetArea->m_components )
+    {
+        if( fp->GetReference().StartsWith( wxT( "U4" ) ) )
+        {
+            targetFP = fp;
+            break;
+        }
+    }
+
+    if( !refFP || !targetFP )
+    {
+        BOOST_TEST_MESSAGE( "Could not find matching footprints in the rule areas, skipping test" );
+        return;
+    }
+
+    PCB_FIELD* refValueField = refFP->GetField( FIELD_T::VALUE );
+    bool refValueVisible = refValueField ? refValueField->IsVisible() : true;
+
+    std::vector<FP_3DMODEL> refModels = refFP->Models();
+
+    mtTool->CheckRACompatibility( refArea->m_zone );
+
+    ruleData->m_compatMap[targetArea].m_doCopy = true;
+    ruleData->m_options.m_copyPlacement = true;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone );
+
+    BOOST_CHECK( result >= 0 );
+
+    PCB_FIELD* targetValueField = targetFP->GetField( FIELD_T::VALUE );
+
+    if( targetValueField && refValueField )
+    {
+        BOOST_CHECK_EQUAL( targetValueField->IsVisible(), refValueVisible );
+        BOOST_TEST_MESSAGE( wxString::Format( "Value field visibility: ref=%d, target=%d",
+                                              refValueVisible, targetValueField->IsVisible() ) );
+    }
+
+    BOOST_CHECK_EQUAL( targetFP->Models().size(), refModels.size() );
+
+    if( !refModels.empty() )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "3D models: ref=%d, target=%d",
+                                              static_cast<int>( refModels.size() ),
+                                              static_cast<int>( targetFP->Models().size() ) ) );
     }
 }
 

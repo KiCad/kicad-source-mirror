@@ -37,6 +37,7 @@
 #include <geometry/shape_utils.h>
 #include <pcb_group.h>
 #include <footprint.h>
+#include <pcb_text.h>
 #include <component_classes/component_class.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/topo_match.h>
@@ -1139,6 +1140,39 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targetField->Move( disp );
                 targetField->SetIsKnockout( refField->IsKnockout() );
             }
+
+            // Copy non-field text items (user-added text on the footprint)
+            for( BOARD_ITEM* refItem : refFP->GraphicalItems() )
+            {
+                if( refItem->Type() != PCB_TEXT_T )
+                    continue;
+
+                PCB_TEXT* refText = static_cast<PCB_TEXT*>( refItem );
+
+                for( BOARD_ITEM* targetItem : targetFP->GraphicalItems() )
+                {
+                    if( targetItem->Type() != PCB_TEXT_T )
+                        continue;
+
+                    PCB_TEXT* targetText = static_cast<PCB_TEXT*>( targetItem );
+
+                    // Match text items by their text content
+                    if( targetText->GetText() == refText->GetText() )
+                    {
+                        targetText->SetLayer( refText->GetLayer() );
+                        targetText->SetVisible( refText->IsVisible() );
+                        targetText->SetAttributes( refText->GetAttributes() );
+                        targetText->SetPosition( refText->GetPosition() );
+                        targetText->Rotate( VECTOR2( 0, 0 ), rot );
+                        targetText->Move( disp );
+                        targetText->SetIsKnockout( refText->IsKnockout() );
+                        break;
+                    }
+                }
+            }
+
+            // Copy 3D model settings
+            targetFP->Models() = refFP->Models();
 
             aCompatData.m_affectedItems.insert( targetFP );
             aCompatData.m_groupableItems.insert( targetFP );
