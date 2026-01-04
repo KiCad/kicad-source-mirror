@@ -114,6 +114,13 @@ public:
      */
     SCH_SHEET_LIST Hierarchy() const;
 
+    /**
+     * Check if the hierarchy has been built.
+     *
+     * @return true if RefreshHierarchy() has been called and the hierarchy is populated.
+     */
+    bool HasHierarchy() const { return !m_hierarchy.empty(); }
+
     void RefreshHierarchy();
 
     SCH_ITEM* ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr,

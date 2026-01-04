@@ -233,6 +233,11 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 {
     wxWindowUpdateLocker updateLock( this );
 
+    // If hierarchy hasn't been built yet (e.g., during frame construction before schematic
+    // is loaded), just return. The tree will be updated later when the schematic is loaded.
+    if( !m_frame->Schematic().HasHierarchy() )
+        return;
+
     bool eventsWereBound = m_events_bound;
 
     if( eventsWereBound )
