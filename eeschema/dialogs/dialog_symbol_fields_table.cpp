@@ -249,8 +249,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } ) );
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
-    LoadFieldNames();   // loads rows into m_viewControlsDataModel and columns into m_dataModel
-
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
@@ -569,6 +567,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
+
+    LoadFieldNames();   // loads rows into m_viewControlsDataModel and columns into m_dataModel
 
     TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
     SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
