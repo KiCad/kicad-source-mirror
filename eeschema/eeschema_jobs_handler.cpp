@@ -547,12 +547,20 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     // Build our data model
     FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
 
-    // Mandatory fields + quantity virtual field first
+    // Mandatory fields first
     for( int fieldId : MANDATORY_FIELDS )
     {
         dataModel.AddColumn( GetCanonicalFieldName( fieldId ),
                              GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );
     }
+
+    // Generated/virtual fields (e.g. ${QUANTITY}, ${ITEM_NUMBER}) present only in the fields table
+    dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,
+                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ),
+                         false );
+    dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE,
+                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ),
+                         false );
 
     // User field names in symbols second
     std::set<wxString> userFieldNames;
