@@ -1,0 +1,360 @@
+(kicad_sch
+	(version 20251028)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "2df99424-3ec8-4199-9fb2-3c6b227d48da")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Amplifier_Current:AD8202"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -7.62 10.795 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right)
+				)
+			)
+			(property "Value" "AD8202"
+				(at -7.62 8.89 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.27 -8.89 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/AD8202.pdf"
+				(at 16.51 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "28V High Common-Mode Voltage, Single-Supply Difference Amplifier, 10V/V x 2V/V adjustable gain, bandwidth 50kHz, Vcc=3.5V~12V, unidirectional, SOIC-8/MSOP-8"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "highside HS current sense amplifier linear buffered monitor preamp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOIC*P1.27mm* MSOP*P0.65mm*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "AD8202_0_1"
+				(rectangle
+					(start -7.62 7.62)
+					(end 7.62 -7.62)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "AD8202_1_1"
+				(pin output line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "A2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 -5.08 0)
+					(length 2.54)
+					(name "+Vs"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -5.08 10.16 270)
+					(length 2.54)
+					(name "+IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -10.16 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 2.54 -7.62 90)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 5.08 10.16 270)
+					(length 2.54)
+					(name "-IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Current:AD8202")
+		(at 78.74 90.17 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "332417c3-083f-45c3-8864-77f87a531b47")
+		(property "Reference" "U"
+			(at 91.44 83.7498 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AD8202"
+			(at 91.44 86.2898 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:MSOP-8_3x3mm_P0.65mm"
+			(at 80.01 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/AD8202.pdf"
+			(at 95.25 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "28V High Common-Mode Voltage, Single-Supply Difference Amplifier, 10V/V x 2V/V adjustable gain, bandwidth 50kHz, Vcc=3.5V~12V, unidirectional, SOIC-8/MSOP-8"
+			(at 78.74 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "6"
+			(uuid "aff01b20-918e-4dbc-9e12-d44428a1911f")
+		)
+		(pin "5"
+			(uuid "53f793f1-206b-473f-9e6b-6ff2fe9ea347")
+		)
+		(pin "7"
+			(uuid "6c3d17dd-8785-4f22-8a36-a6b70326b8df")
+		)
+		(pin "8"
+			(uuid "56a50de0-936b-4a7f-8e92-a03726796507")
+		)
+		(pin "2"
+			(uuid "6234c796-c750-4466-bf98-c5effb2d7d6d")
+		)
+		(pin "4"
+			(uuid "3b7f8d90-4ead-45e1-bd92-0b3f18bb0447")
+		)
+		(pin "3"
+			(uuid "34b9cf6c-b6e2-4de6-9ec4-5f86a7f8881f")
+		)
+		(pin "1"
+			(uuid "ff8d81c0-90b5-43e6-8d84-187bf16ffdf4")
+		)
+		(instances
+			(project "issue22548"
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d/9a5bd077-975b-414a-88ba-4221b115b1c7"
+					(reference "U4")
+					(unit 1)
+				)
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d/a77155fd-1957-46d2-ac1a-b27901b04dcd"
+					(reference "U2")
+					(unit 1)
+				)
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d/ab8db4c4-1287-4f5b-a249-db22a183314e"
+					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+)

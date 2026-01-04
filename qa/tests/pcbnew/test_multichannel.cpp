@@ -255,15 +255,15 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesFootprintProperties, MULTICHANNEL_TES
 
     for( RULE_AREA& ra : ruleData->m_areas )
     {
-        if( ra.m_ruleName.Contains( wxT( "Channel 0" ) ) )
+        if( ra.m_ruleName.Contains( wxT( "Untitled Sheet/" ) ) )
             refArea = &ra;
-        else if( ra.m_ruleName.Contains( wxT( "Channel 1" ) ) )
+        else if( ra.m_ruleName.Contains( wxT( "Untitled Sheet1/" ) ) )
             targetArea = &ra;
     }
 
     if( !refArea || !targetArea )
     {
-        BOOST_TEST_MESSAGE( "Could not find Channel 0 and Channel 1 rule areas, skipping test" );
+        BOOST_TEST_MESSAGE( "Could not find Untitled Sheet and Untitled Sheet1 rule areas, skipping test" );
         return;
     }
 
@@ -275,7 +275,7 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesFootprintProperties, MULTICHANNEL_TES
 
     for( FOOTPRINT* fp : refArea->m_components )
     {
-        if( fp->GetReference().StartsWith( wxT( "U2" ) ) )
+        if( fp->GetReference().StartsWith( wxT( "U1" ) ) )
         {
             refFP = fp;
             break;
@@ -284,7 +284,7 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesFootprintProperties, MULTICHANNEL_TES
 
     for( FOOTPRINT* fp : targetArea->m_components )
     {
-        if( fp->GetReference().StartsWith( wxT( "U4" ) ) )
+        if( fp->GetReference().StartsWith( wxT( "U2" ) ) )
         {
             targetFP = fp;
             break;

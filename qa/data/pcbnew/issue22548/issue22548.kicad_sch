@@ -1,0 +1,198 @@
+(kicad_sch
+	(version 20251028)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "7fe6ec1a-dc34-4dba-837c-22c45a91916d")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 85.09 87.63)
+		(size 27.94 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "2b0d004f-d396-4ca7-ab33-b0faeee3d7ff")
+		(property "Sheetname" "Untitled Sheet"
+			(at 85.09 86.9184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 85.09 111.0746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project ""
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 200.66 87.63)
+		(size 27.94 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "9a5bd077-975b-414a-88ba-4221b115b1c7")
+		(property "Sheetname" "Untitled Sheet3"
+			(at 200.66 86.9184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 200.66 111.0746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "issue22548"
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 124.46 87.63)
+		(size 27.94 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a77155fd-1957-46d2-ac1a-b27901b04dcd")
+		(property "Sheetname" "Untitled Sheet1"
+			(at 124.46 86.9184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 124.46 111.0746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "issue22548"
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 160.02 88.9)
+		(size 27.94 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ab8db4c4-1287-4f5b-a249-db22a183314e")
+		(property "Sheetname" "Untitled Sheet2"
+			(at 160.02 88.1884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 160.02 112.3446 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "issue22548"
+				(path "/7fe6ec1a-dc34-4dba-837c-22c45a91916d"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
