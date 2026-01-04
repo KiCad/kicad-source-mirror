@@ -203,3 +203,51 @@ def test_sch_export_erc( kitest,
         assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
 
     kitest.add_attachment( str( output_filepath ) )
+
+
+@pytest.mark.parametrize("test_file,output_fn,expected_headers,cli_args",
+                            [
+                             # Default fields include ${QUANTITY} and ${DNP}
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_default.csv",
+                              ["Refs", "Value", "Footprint", "Qty", "DNP"], []),
+                             # Explicit fields with ${QUANTITY}
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_quantity.csv",
+                              ["Refs", "Value", "Qty"],
+                              ["--fields", "Reference,Value,${QUANTITY}", "--labels", "Refs,Value,Qty"]),
+                             # Explicit fields with ${ITEM_NUMBER}
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_item_number.csv",
+                              ["#", "Refs", "Value"],
+                              ["--fields", "${ITEM_NUMBER},Reference,Value", "--labels", "#,Refs,Value"]),
+                             ])
+def test_sch_export_bom( kitest,
+                         test_file: str,
+                         output_fn: str,
+                         expected_headers: List[str],
+                         cli_args: List[str] ):
+    """Test BOM export with various field configurations, including virtual fields like ${QUANTITY}."""
+    input_file = kitest.get_data_file_path( test_file )
+
+    output_filepath = kitest.get_output_path( "cli/" ).joinpath( output_fn )
+
+    command = [utils.kicad_cli(), "sch", "export", "bom"]
+    command.extend( cli_args )
+    command.append( "-o" )
+    command.append( str( output_filepath ) )
+    command.append( input_file )
+
+    stdout, stderr, exitcode = utils.run_and_capture( command )
+
+    assert exitcode == 0, f"BOM export failed with exit code {exitcode}: {stderr}"
+    assert output_filepath.exists(), f"Output file not created: {output_filepath}"
+
+    # Read the BOM file and verify headers
+    with open( output_filepath, 'r' ) as f:
+        first_line = f.readline().strip()
+
+    # Parse the CSV header (removing quotes)
+    actual_headers = [h.strip().strip('"') for h in first_line.split(',')]
+
+    for expected in expected_headers:
+        assert expected in actual_headers, f"Expected header '{expected}' not found in BOM output. Got: {actual_headers}"
+
+    kitest.add_attachment( str( output_filepath ) )
