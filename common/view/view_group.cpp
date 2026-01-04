@@ -128,6 +128,12 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         if( aView->IsHiddenOnOverlay( item ) )
             continue;
 
+        // Skip items that are still visible on their cached layers. These items have their
+        // selection color applied through the GPU cache and don't need to be redrawn here.
+        // This significantly improves zoom/pan performance with large selections.
+        if( isSelection && !aView->IsHidden( item ) )
+            continue;
+
         std::vector<int> layers = item->ViewGetLayers();
 
         for( auto layer : layers )

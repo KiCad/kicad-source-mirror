@@ -3631,24 +3631,35 @@ void SCH_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGrou
                         if( aMode == SELECTED )
                         {
                             aChild->SetSelected();
-                            getView()->Hide( aChild, true );
                         }
                         else if( aMode == BRIGHTENED )
                         {
                             aChild->SetBrightened();
+                            getView()->Hide( aChild, true );
                         }
                     },
                     RECURSE_MODE::NO_RECURSE );
         }
     }
 
-    if( aGroup && aMode != BRIGHTENED )
+    // For SELECTED mode, keep items visible on their cached layers for better zoom/pan
+    // performance. Only hide items for BRIGHTENED mode where overlay z-ordering matters.
+    if( aGroup && aMode == BRIGHTENED )
         getView()->Hide( aItem, true );
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
-        getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+    {
+        if( aMode == SELECTED )
+            getView()->Update( aItem->GetParent(), KIGFX::COLOR );
+        else
+            getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+    }
 
-    getView()->Update( aItem, KIGFX::REPAINT );
+    // For selection, we only need to update the cached color since the geometry doesn't change.
+    if( aMode == SELECTED )
+        getView()->Update( aItem, KIGFX::COLOR );
+    else
+        getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 
@@ -3657,16 +3668,17 @@ void SCH_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGr
     if( aMode == SELECTED )
     {
         aItem->ClearSelected();
+
         // Lines need endpoints cleared here
         if( aItem->Type() == SCH_LINE_T )
             aItem->ClearFlags( STARTPOINT | ENDPOINT );
-
-        if( aMode != BRIGHTENED )
-            getView()->Hide( aItem, false );
     }
     else if( aMode == BRIGHTENED )
     {
         aItem->ClearBrightened();
+
+        // Only unhide if we previously hid (which is only for BRIGHTENED mode now)
+        getView()->Hide( aItem, false );
     }
 
     if( aGroup )
@@ -3682,11 +3694,11 @@ void SCH_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGr
                     if( aMode == SELECTED )
                     {
                         aChild->ClearSelected();
-                        getView()->Hide( aChild, false );
                     }
                     else if( aMode == BRIGHTENED )
                     {
                         aChild->ClearBrightened();
+                        getView()->Hide( aChild, false );
                     }
 
                     if( aGroup )
@@ -3696,9 +3708,18 @@ void SCH_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGr
     }
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
-        getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+    {
+        if( aMode == SELECTED )
+            getView()->Update( aItem->GetParent(), KIGFX::COLOR );
+        else
+            getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+    }
 
-    getView()->Update( aItem, KIGFX::REPAINT );
+    // For selection, we only need to update the cached color since the geometry doesn't change.
+    if( aMode == SELECTED )
+        getView()->Update( aItem, KIGFX::COLOR );
+    else
+        getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 

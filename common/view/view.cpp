@@ -1668,6 +1668,14 @@ bool VIEW::IsHiddenOnOverlay( const VIEW_ITEM* aItem ) const
 }
 
 
+bool VIEW::IsHidden( const VIEW_ITEM* aItem ) const
+{
+    const VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
+
+    return viewData && ( viewData->m_flags & HIDDEN );
+}
+
+
 bool VIEW::HasItem( const VIEW_ITEM* aItem ) const
 {
     const VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
