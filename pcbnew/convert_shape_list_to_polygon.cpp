@@ -373,6 +373,9 @@ static std::map<int, std::vector<int>> buildContourHierarchy( const std::vector<
 
     for( size_t ii = 0; ii < aContours.size(); ++ii )
     {
+        if( aContours[ii].PointCount() < 1 )  // malformed/empty SHAPE_LINE_CHAIN
+            continue;
+
         VECTOR2I         firstPt = aContours[ii].GetPoint( 0 );
         std::vector<int> parents;
 

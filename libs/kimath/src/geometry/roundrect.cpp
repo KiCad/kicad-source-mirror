@@ -88,6 +88,16 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
 
     const int w = m_rect.GetWidth();
     const int h = m_rect.GetHeight();
+
+    // Handle non normalized rect (i.e. w or h < 0 )
+    if( w < 0 || h < 0 )
+    {
+        ROUNDRECT norm_rr( m_rect, m_radius, true );    // build a normalized ROUNDRECT (w,h >= 0)
+        norm_rr.TransformToPolygon( aBuffer, aMaxError );
+        return;
+    }
+
+    // This code works fine only with normalized rect (i.e. w or h >= 0 )
     const int x_edge = m_rect.GetWidth() - 2 * m_radius;
     const int y_edge = m_rect.GetHeight() - 2 * m_radius;
 

@@ -1385,6 +1385,9 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         return false;
 
     case SHAPE_T::POLY:
+        if( m_poly.OutlineCount() < 1 )     // empty poly
+            return false;
+
         if( IsFilledForHitTesting() )
         {
             if( !m_poly.COutline( 0 ).IsClosed() )
