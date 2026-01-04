@@ -323,7 +323,10 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     element->SetFlag( wxSTRETCH_MASK );
 
     if( IsShownOnScreen() )
-        sizer->Layout();
+    {
+        Layout();
+        sizer->Fit( this );
+    }
 }
 
 
@@ -336,7 +339,10 @@ void WX_INFOBAR::AddButton( wxHyperlinkCtrl* aHypertextButton )
     sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
 
     if( IsShownOnScreen() )
-        sizer->Layout();
+    {
+        Layout();
+        sizer->Fit( this );
+    }
 }
 
 
