@@ -1785,10 +1785,7 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 }
 
 
-/**
- * Condition to check if a point editor can add a corner to the given item.
- */
-static bool canAddCorner( const EDA_ITEM& aItem )
+bool PCB_POINT_EDITOR::CanAddCorner( const EDA_ITEM& aItem )
 {
     const KICAD_T type = aItem.Type();
 
@@ -1806,14 +1803,10 @@ static bool canAddCorner( const EDA_ITEM& aItem )
 }
 
 
-/**
- * Condition to check if a point editor can add a chamfer to a corner of the given item
- */
-static bool canChamferCorner( const EDA_ITEM& aItem )
+bool PCB_POINT_EDITOR::CanChamferCorner( const EDA_ITEM& aItem )
 {
     const auto type = aItem.Type();
 
-    // Works only for zones and polygons
     if( type == PCB_ZONE_T )
         return true;
 
@@ -1881,26 +1874,6 @@ bool PCB_POINT_EDITOR::Init()
 
     wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
-    const auto addCornerCondition =
-            []( const SELECTION& aSelection ) -> bool
-            {
-                const EDA_ITEM* item = aSelection.Front();
-                return ( item != nullptr ) && canAddCorner( *item );
-            };
-
-    const auto addChamferCondition =
-            []( const SELECTION& aSelection ) -> bool
-            {
-                const EDA_ITEM* item = aSelection.Front();
-                return ( item != nullptr ) && canChamferCorner( *item );
-            };
-
-    const auto removeCornerCondition =
-            [this]( const SELECTION& aSelection ) -> bool
-            {
-                return PCB_POINT_EDITOR::removeCornerCondition( aSelection );
-            };
-
     const auto arcIsEdited =
             []( const SELECTION& aSelection ) -> bool
             {
@@ -1913,12 +1886,7 @@ bool PCB_POINT_EDITOR::Init()
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
 
-    // clang-format off
-    menu.AddItem( PCB_ACTIONS::pointEditorAddCorner,        S_C::Count( 1 ) && addCornerCondition );
-    menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,     S_C::Count( 1 ) && removeCornerCondition );
-    menu.AddItem( PCB_ACTIONS::pointEditorChamferCorner,    S_C::Count( 1 ) && addChamferCondition );
-    menu.AddItem( PCB_ACTIONS::cycleArcEditMode,            S_C::Count( 1 ) && arcIsEdited );
-    // clang-format on
+    menu.AddItem( PCB_ACTIONS::cycleArcEditMode, S_C::Count( 1 ) && arcIsEdited );
 
     return true;
 }
@@ -2889,7 +2857,7 @@ static std::pair<bool, SHAPE_POLY_SET::VERTEX_INDEX> findVertex( SHAPE_POLY_SET&
 }
 
 
-bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
+bool PCB_POINT_EDITOR::CanRemoveCorner( const SELECTION& )
 {
     if( !m_editPoints || !m_editedPoint )
         return false;
@@ -2953,7 +2921,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     const VECTOR2I&      cursorPos = getViewControls()->GetCursorPosition();
 
     // called without an active edited polygon
-    if( !item || !canAddCorner( *item ) )
+    if( !item || !CanAddCorner( *item ) )
         return 0;
 
     PCB_SHAPE* graphicItem = dynamic_cast<PCB_SHAPE*>( item );

@@ -783,8 +783,8 @@ TOOL_ACTION PCB_ACTIONS::simplifyPolygons( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::editVertices( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.editVertices" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Edit Vertices..." ) )
-        .Tooltip( _( "Edit polygon vertices using a table" ) )
+        .FriendlyName( _( "Edit Corners..." ) )
+        .Tooltip( _( "Edit polygon corners using a table" ) )
         .Icon( BITMAPS::edit ) );
 
 TOOL_ACTION PCB_ACTIONS::healShapes( TOOL_ACTION_ARGS()

@@ -79,7 +79,7 @@ using namespace std::placeholders;
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
-static bool itemHasEditableVertices( BOARD_ITEM* aItem )
+static bool itemHasEditableCorners( BOARD_ITEM* aItem )
 {
     if( !aItem )
         return false;
@@ -103,13 +103,13 @@ static bool itemHasEditableVertices( BOARD_ITEM* aItem )
     return false;
 }
 
-static bool selectionHasEditableVertices( const SELECTION& aSelection )
+static bool selectionHasEditableCorners( const SELECTION& aSelection )
 {
     if( aSelection.GetSize() != 1 )
         return false;
 
     BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aSelection.Front() );
-    return itemHasEditableVertices( item );
+    return itemHasEditableCorners( item );
 }
 
 static const std::vector<KICAD_T> padTypes = { PCB_PAD_T };
@@ -195,26 +195,62 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
         return pt_tool && pt_tool->HasMidpoint();
     };
 
+    auto canAddCornerCondition = []( const SELECTION& aSelection )
+    {
+        const EDA_ITEM* item = aSelection.Front();
+
+        return item && PCB_POINT_EDITOR::CanAddCorner( *item );
+    };
+
+    auto canChamferCornerCondition = []( const SELECTION& aSelection )
+    {
+        const EDA_ITEM* item = aSelection.Front();
+
+        return item && PCB_POINT_EDITOR::CanChamferCorner( *item );
+    };
+
+    auto canRemoveCornerCondition = [aTool]( const SELECTION& aSelection )
+    {
+        PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+
+        return pt_tool && pt_tool->CanRemoveCorner( aSelection );
+    };
+
     // clang-format off
-    menu->AddItem( PCB_ACTIONS::healShapes,              SELECTION_CONDITIONS::HasTypes( healShapesTypes ) );
-    menu->AddItem( PCB_ACTIONS::simplifyPolygons,        SELECTION_CONDITIONS::HasTypes( polygonSimplifyTypes ) );
-    menu->AddItem( PCB_ACTIONS::filletLines,             SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu->AddItem( PCB_ACTIONS::chamferLines,            SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu->AddItem( PCB_ACTIONS::dogboneCorners,          SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu->AddItem( PCB_ACTIONS::extendLines,             SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
-                                                             && SELECTION_CONDITIONS::Count( 2 ) );
-    menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,   hasCornerCondition );
-    menu->AddItem( PCB_ACTIONS::pointEditorMoveMidpoint, hasMidpointCondition );
+
+    // Shape cleanup
+    menu->AddItem( PCB_ACTIONS::healShapes,       SELECTION_CONDITIONS::HasTypes( healShapesTypes ) );
+    menu->AddItem( PCB_ACTIONS::simplifyPolygons, SELECTION_CONDITIONS::HasTypes( polygonSimplifyTypes ) );
+
+    menu->AddSeparator( SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+
+    // Shape corner modifications
+    menu->AddItem( PCB_ACTIONS::filletLines,    SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::chamferLines,   SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::dogboneCorners, SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::extendLines,    SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
+                                                    && SELECTION_CONDITIONS::Count( 2 ) );
+
+    menu->AddSeparator( SELECTION_CONDITIONS::Count( 1 ) );
+
+    // Point editor corner operations
+    menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,    hasCornerCondition );
+    menu->AddItem( PCB_ACTIONS::pointEditorMoveMidpoint,  hasMidpointCondition );
+    menu->AddItem( PCB_ACTIONS::pointEditorAddCorner,     SELECTION_CONDITIONS::Count( 1 ) && canAddCornerCondition );
+    menu->AddItem( PCB_ACTIONS::pointEditorRemoveCorner,  SELECTION_CONDITIONS::Count( 1 ) && canRemoveCornerCondition );
+    menu->AddItem( PCB_ACTIONS::pointEditorChamferCorner, SELECTION_CONDITIONS::Count( 1 ) && canChamferCornerCondition );
+    menu->AddItem( PCB_ACTIONS::editVertices,             selectionHasEditableCorners );
 
     menu->AddSeparator( SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
-                        && SELECTION_CONDITIONS::MoreThan( 1 ) );
+                            && SELECTION_CONDITIONS::MoreThan( 1 ) );
 
-    menu->AddItem( PCB_ACTIONS::mergePolygons,           SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
-                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
-    menu->AddItem( PCB_ACTIONS::subtractPolygons,        SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
-                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
-    menu->AddItem( PCB_ACTIONS::intersectPolygons,       SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
-                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
+    // Polygon boolean operations
+    menu->AddItem( PCB_ACTIONS::mergePolygons,     SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                       && SELECTION_CONDITIONS::MoreThan( 1 ) );
+    menu->AddItem( PCB_ACTIONS::subtractPolygons,  SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                       && SELECTION_CONDITIONS::MoreThan( 1 ) );
+    menu->AddItem( PCB_ACTIONS::intersectPolygons, SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                       && SELECTION_CONDITIONS::MoreThan( 1 ) );
     // clang-format on
 
     return menu;
@@ -664,7 +700,6 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
-    menu.AddItem( PCB_ACTIONS::editVertices,      selectionHasEditableVertices );
 
     menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes )
                                                       && !inFootprintEditor );
@@ -2336,7 +2371,7 @@ int EDIT_TOOL::EditVertices( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
-    if( !selectionHasEditableVertices( selection ) )
+    if( !selectionHasEditableCorners( selection ) )
     {
         wxBell();
         return 0;

@@ -69,6 +69,21 @@ public:
     bool HasMidpoint() { return HasPoint() && dynamic_cast<EDIT_LINE*>( m_editedPoint ); }
     bool HasCorner()   { return HasPoint() && !HasMidpoint() && ( !m_editPoints || m_editPoints->GetParent()->Type() != PCB_GROUP_T ); }
 
+    /**
+     * Check if a corner can be added to the given item (zones, polys, segments, arcs).
+     */
+    static bool CanAddCorner( const EDA_ITEM& aItem );
+
+    /**
+     * Check if a corner of the given item can be chamfered (zones, polys only).
+     */
+    static bool CanChamferCorner( const EDA_ITEM& aItem );
+
+    /**
+     * Condition to display "Remove Corner" context menu entry.
+     */
+    bool CanRemoveCorner( const SELECTION& aSelection );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;
@@ -109,9 +124,6 @@ private:
 
     ///< Return a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
-
-    ///< Condition to display "Remove corner" context menu entry.
-    bool removeCornerCondition( const SELECTION& aSelection );
 
     /// TOOL_ACTION handlers
     int movePoint( const TOOL_EVENT& aEvent );
