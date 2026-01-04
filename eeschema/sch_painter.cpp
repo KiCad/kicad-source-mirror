@@ -2754,6 +2754,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
         SCH_PIN* tempPin = tempPins[ i ];
 
+        if( !symbolPin )
+            continue;
+
         tempPin->ClearFlags();
         tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
                                                         // IS_SHOWN_AS_BITMAP
@@ -2776,6 +2779,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     {
         SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
         SCH_PIN* tempPin = tempPins[ i ];
+
+        if( !symbolPin )
+            continue;
 
         symbolPin->ClearFlags();
         tempPin->ClearFlags( IS_DANGLING );             // Clear this temporary flag

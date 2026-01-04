@@ -3012,6 +3012,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             SCH_PIN* symbolPin = GetPin( libPins[i] );
             SCH_PIN* tempPin = tempPins[i];
 
+            if( !symbolPin )
+                continue;
+
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
             tempPin->SetShape( symbolPin->GetShape() );
@@ -3197,6 +3200,9 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
         {
             SCH_PIN* symbolPin = GetPin( libPins[i] );
             SCH_PIN* tempPin = tempPins[i];
+
+            if( !symbolPin )
+                continue;
 
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );

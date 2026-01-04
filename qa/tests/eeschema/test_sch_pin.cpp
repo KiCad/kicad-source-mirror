@@ -214,4 +214,75 @@ BOOST_AUTO_TEST_CASE( AlternatePinRenameUpdates )
     BOOST_CHECK( updatedPin->GetAlternates().count( wxS( "ALT1" ) ) == 0 );
 }
 
+
+/**
+ * Test for issue #22566 - changing to a symbol with fewer pins should not crash
+ */
+BOOST_AUTO_TEST_CASE( ChangeSymbolFewerPinsNoCrash )
+{
+    // Create a symbol with multiple pins (pins 1, 2, 3)
+    LIB_SYMBOL* multiPinPart = new LIB_SYMBOL( "multi_pin_part", nullptr );
+
+    SCH_PIN* pin1 = new SCH_PIN( multiPinPart );
+    pin1->SetNumber( "1" );
+    pin1->SetName( "PIN1" );
+    pin1->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+    pin1->SetPosition( VECTOR2I( 0, 0 ) );
+    multiPinPart->AddDrawItem( pin1 );
+
+    SCH_PIN* pin2 = new SCH_PIN( multiPinPart );
+    pin2->SetNumber( "2" );
+    pin2->SetName( "PIN2" );
+    pin2->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+    pin2->SetPosition( VECTOR2I( 100, 0 ) );
+    multiPinPart->AddDrawItem( pin2 );
+
+    SCH_PIN* pin3 = new SCH_PIN( multiPinPart );
+    pin3->SetNumber( "3" );
+    pin3->SetName( "PIN3" );
+    pin3->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+    pin3->SetPosition( VECTOR2I( 200, 0 ) );
+    multiPinPart->AddDrawItem( pin3 );
+
+    SCH_SHEET_PATH path;
+    SCH_SYMBOL* symbol = new SCH_SYMBOL( *multiPinPart, multiPinPart->GetLibId(), &path, 0, 0,
+                                          VECTOR2I( 0, 0 ) );
+    symbol->SetRef( &path, "U1" );
+    symbol->UpdatePins();
+
+    BOOST_CHECK_EQUAL( symbol->GetPins( &path ).size(), 3 );
+
+    // Create a symbol with only one pin (pin 1)
+    LIB_SYMBOL* singlePinPart = new LIB_SYMBOL( "single_pin_part", nullptr );
+
+    SCH_PIN* newPin1 = new SCH_PIN( singlePinPart );
+    newPin1->SetNumber( "1" );
+    newPin1->SetName( "NEW_PIN1" );
+    newPin1->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
+    newPin1->SetPosition( VECTOR2I( 0, 0 ) );
+    singlePinPart->AddDrawItem( newPin1 );
+
+    // Change to the single-pin symbol - this should not crash
+    symbol->SetLibSymbol( singlePinPart->Flatten().release() );
+
+    // Verify the symbol now has only one pin
+    BOOST_CHECK_EQUAL( symbol->GetPins( &path ).size(), 1 );
+
+    // Verify GetPin returns the correct pin for the new lib pin
+    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetPins();
+    BOOST_CHECK_EQUAL( libPins.size(), 1 );
+
+    SCH_PIN* schPin = symbol->GetPin( libPins[0] );
+    BOOST_CHECK( schPin != nullptr );
+
+    if( schPin )
+    {
+        BOOST_CHECK_EQUAL( schPin->GetNumber(), "1" );
+    }
+
+    delete symbol;
+    delete multiPinPart;
+    delete singlePinPart;
+}
+
 BOOST_AUTO_TEST_SUITE_END()
