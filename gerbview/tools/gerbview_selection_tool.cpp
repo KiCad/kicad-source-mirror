@@ -414,9 +414,9 @@ void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem )
     int layer = static_cast<GERBER_DRAW_ITEM*>( aItem )->GetLayer();
     m_frame->SetActiveLayer( layer, true );
 
-    // Keep item visible on cached layer and update its color for better zoom/pan performance
+    // Hide the original item, so it is shown only on overlay
     aItem->SetSelected();
-    getView()->Update( aItem, KIGFX::COLOR );
+    getView()->Hide( aItem, true );
 
     getView()->Update( &m_selection );
 }
@@ -424,9 +424,10 @@ void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem )
 
 void GERBVIEW_SELECTION_TOOL::unselectVisually( EDA_ITEM* aItem )
 {
-    // Update the cached color back to normal
+    // Restore original item visibility
     aItem->ClearSelected();
-    getView()->Update( aItem, KIGFX::COLOR );
+    getView()->Hide( aItem, false );
+    getView()->Update( aItem, KIGFX::ALL );
 
     getView()->Update( &m_selection );
 }

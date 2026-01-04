@@ -119,10 +119,8 @@ void PCB_TEST_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, boo
     else if( aMode == BRIGHTENED )
         aItem->SetBrightened();
 
-    // For SELECTED mode, keep items visible on their cached layers for better performance.
-    // Only hide items for BRIGHTENED mode where overlay z-ordering matters.
-    if( aUsingOverlay && aMode == BRIGHTENED )
-        view()->Hide( aItem, true );
+    if( aUsingOverlay && aMode != BRIGHTENED )
+        view()->Hide( aItem, true ); // Hide the original item, so it is shown only on overlay
 
     if( aItem->IsBOARD_ITEM() )
     {
@@ -140,12 +138,7 @@ void PCB_TEST_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION
         aGroup->Remove( aItem );
 
     unhighlightInternal( aItem, aMode, aGroup != nullptr );
-
-    // For selection, we only need to update the cached color since the geometry doesn't change.
-    if( aMode == SELECTED )
-        view()->Update( aItem, KIGFX::COLOR );
-    else
-        view()->Update( aItem, KIGFX::REPAINT );
+    view()->Update( aItem, KIGFX::REPAINT );
 
     // Many selections are very temporal and updating the display each time just creates noise.
     if( aMode == BRIGHTENED )
@@ -160,9 +153,11 @@ void PCB_TEST_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, b
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
 
-    // Only unhide if we previously hid (which is only for BRIGHTENED mode now)
-    if( aUsingOverlay && aMode == BRIGHTENED )
-        view()->Hide( aItem, false );
+    if( aUsingOverlay && aMode != BRIGHTENED )
+    {
+        view()->Hide( aItem, false ); // Restore original item visibility...
+        view()->Update( aItem );      // ... and make sure it's redrawn un-selected
+    }
 
     if( aItem->IsBOARD_ITEM() )
     {
@@ -180,12 +175,7 @@ void PCB_TEST_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* 
         aGroup->Add( aItem );
 
     highlightInternal( aItem, aMode, aGroup != nullptr );
-
-    // For selection, we only need to update the cached color since the geometry doesn't change.
-    if( aMode == SELECTED )
-        view()->Update( aItem, KIGFX::COLOR );
-    else
-        view()->Update( aItem, KIGFX::REPAINT );
+    view()->Update( aItem, KIGFX::REPAINT );
 }
 
 

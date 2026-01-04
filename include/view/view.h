@@ -150,12 +150,6 @@ public:
     bool IsHiddenOnOverlay( const VIEW_ITEM* aItem ) const;
 
     /**
-     * Check if an item has been temporarily hidden from its cached layer.
-     * Items may be hidden when drawn on an overlay instead.
-     */
-    bool IsHidden( const VIEW_ITEM* aItem ) const;
-
-    /**
      * Indicates whether or not the given item has been added to the view.
      */
     bool HasItem( const VIEW_ITEM* aItem ) const;
