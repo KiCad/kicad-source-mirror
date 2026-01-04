@@ -1565,4 +1565,20 @@ BOOST_AUTO_TEST_CASE( Fets )
 }
 
 
+// Test that loading an invalid binary file does not crash. (Issue #22189)
+// When a binary file like an OrCAD .olb is selected instead of a valid SPICE library,
+// the parser should not crash but report an error gracefully.
+BOOST_AUTO_TEST_CASE( InvalidBinaryFile )
+{
+    LOCALE_IO toggle;
+
+    // This should not throw an exception or crash
+    BOOST_CHECK_NO_THROW( LoadLibrary( "invalid_binary" ) );
+
+    // The library should have no valid models since it's not a valid SPICE file
+    const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
+    BOOST_CHECK_EQUAL( models.size(), 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

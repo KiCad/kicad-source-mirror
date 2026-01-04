@@ -24,6 +24,7 @@
 
 #include "sim/spice_library_parser.h"
 
+#include <stdexcept>
 #include <utility>
 
 #include <thread_pool.h>
@@ -111,6 +112,12 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
     catch( const tao::pegtl::parse_error& e )
     {
         aReporter.Report( e.what(), RPT_SEVERITY_ERROR );
+    }
+    catch( const std::out_of_range& e )
+    {
+        aReporter.Report( wxString::Format( _( "Error parsing SPICE library '%s': %s" ),
+                                            aFilePath, e.what() ),
+                          RPT_SEVERITY_ERROR );
     }
 }
 
