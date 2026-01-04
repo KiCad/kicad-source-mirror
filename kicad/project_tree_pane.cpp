@@ -497,7 +497,11 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         }
         else
         {
-            PROJECT_TREE_ITEM*    parentTreeItem = GetItemIdData( aParent );
+            PROJECT_TREE_ITEM* parentTreeItem = GetItemIdData( aParent );
+
+            if( !parentTreeItem )
+                return wxTreeItemId();
+
             wxDir                 parentDir( parentTreeItem->GetDir() );
             std::vector<wxString> projects = getProjects( parentDir );
 
@@ -1968,13 +1972,17 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         }
     }
 
-    if (!m_gitCurrentBranchName.empty())
+    if( !m_gitCurrentBranchName.empty() )
     {
         wxTreeItemId kid = m_TreeProject->GetRootItem();
         PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
-        wxString filename = wxFileNameFromPath( rootItem->GetFileName() );
-        m_TreeProject->SetItemText( kid, filename + " [" + m_gitCurrentBranchName + "]" );
-        m_gitIconsInitialized = true;
+
+        if( rootItem )
+        {
+            wxString filename = wxFileNameFromPath( rootItem->GetFileName() );
+            m_TreeProject->SetItemText( kid, filename + " [" + m_gitCurrentBranchName + "]" );
+            m_gitIconsInitialized = true;
+        }
     }
 
     wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Git status icons updated" ) );
