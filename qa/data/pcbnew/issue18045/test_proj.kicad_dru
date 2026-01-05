@@ -1,0 +1,9 @@
+(version 1)
+(rule "Skew"
+	(constraint skew (min -1mm) (opt 0mm) (max 1mm))
+	(condition "A.isCoupledDiffPair()")
+)
+(rule "Length"
+	(constraint length (min 40mm) (opt 45mm) (max 50mm))
+	(condition "A.NetName == '/TEST1*'")
+)
