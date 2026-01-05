@@ -1402,7 +1402,9 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             for( SCH_PIN* pin : symbol->GetPins() )
             {
-                if( SCH_CONNECTION* pin_conn = pin->Connection() )
+                SCH_CONNECTION* pin_conn = pin->Connection();
+
+                if( pin_conn )
                 {
                     if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
                     {
@@ -1415,19 +1417,26 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                         redrawItem = symbol;
                     }
                 }
+                else if( pin->IsBrightened() )
+                {
+                    pin->ClearBrightened();
+                    redrawItem = symbol;
+                }
             }
 
             if( symbol->IsPower() && symbol->GetPins().size() )
             {
-                if( SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection() )
+                SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection();
+
+                for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
                 {
-                    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
+                    SCH_FIELD* field = symbol->GetField( id );
+
+                    if( !field->IsVisible() )
+                        continue;
+
+                    if( pinConn )
                     {
-                        SCH_FIELD* field = symbol->GetField( id );
-
-                        if( !field->IsVisible() )
-                            continue;
-
                         if( !field->IsBrightened() && connNames.count( pinConn->Name() ) )
                         {
                             field->SetBrightened();
@@ -1438,6 +1447,11 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                             field->ClearBrightened();
                             redrawItem = symbol;
                         }
+                    }
+                    else if( field->IsBrightened() )
+                    {
+                        field->ClearBrightened();
+                        redrawItem = symbol;
                     }
                 }
             }
@@ -1450,7 +1464,9 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             {
                 wxCHECK2( pin, continue );
 
-                if( SCH_CONNECTION* pin_conn = pin->Connection() )
+                SCH_CONNECTION* pin_conn = pin->Connection();
+
+                if( pin_conn )
                 {
                     if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
                     {
@@ -1463,11 +1479,18 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                         redrawItem = sheet;
                     }
                 }
+                else if( pin->IsBrightened() )
+                {
+                    pin->ClearBrightened();
+                    redrawItem = sheet;
+                }
             }
         }
         else
         {
-            if( SCH_CONNECTION* itemConn = item->Connection() )
+            SCH_CONNECTION* itemConn = item->Connection();
+
+            if( itemConn )
             {
                 if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
                 {
@@ -1479,6 +1502,11 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                     item->ClearBrightened();
                     redrawItem = item;
                 }
+            }
+            else if( item->IsBrightened() )
+            {
+                item->ClearBrightened();
+                redrawItem = item;
             }
         }
 
