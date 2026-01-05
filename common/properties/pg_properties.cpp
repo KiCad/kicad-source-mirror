@@ -414,9 +414,22 @@ wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant,
 wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant, int aArgFlags ) const
 #endif
 {
-    wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONGLONG, wxEmptyString );
+    wxLongLongNative areaIU;
 
-    wxLongLongNative areaIU = aVariant.GetLongLong();
+    if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
+    {
+        areaIU = aVariant.GetLongLong();
+    }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        areaIU = wxLongLongNative( aVariant.GetLong() );
+    }
+    else
+    {
+        wxFAIL_MSG( wxString::Format( wxS( "Unexpected variant type in PGPROPERTY_AREA: %s" ),
+                                      aVariant.GetType() ) );
+        return wxEmptyString;
+    }
 
     return m_parentFrame->StringFromValue( areaIU.ToDouble(), true, EDA_DATA_TYPE::AREA );
 }
