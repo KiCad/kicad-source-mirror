@@ -40044,23 +40044,22 @@ msgid "No footprint for automated placement."
 msgstr "Nincs alkatrészrajzolat az automatikus elhelyezéshez."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
 msgstr "Alkatrész pozíció fájl: \"%s\"."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:546
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
-"Alkatrészrajzolat naplófájl létrehozva:\n"
-"\"%s\""
+"Alkatrészrajzolat jelentésfájl létrehozva:\n"
+"\"%s\"."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:547
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:568
-#, fuzzy
 msgid "Footprint Report"
 msgstr "Alkatrészrajzolat jelentés"
 
@@ -40138,7 +40137,6 @@ msgid "Excellon"
 msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:62
-#, fuzzy
 msgid ""
 "Not recommended.\n"
 "Used mostly by users who make the boards themselves."
@@ -40198,12 +40196,11 @@ msgstr "Abszolút"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:164
 msgid "Zeros:"
-msgstr ""
+msgstr "Nullák:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:168
-#, fuzzy
 msgid "Decimal format (recommended)"
-msgstr "Decimális formátum"
+msgstr "Decimális formátum (ajánlott)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:168
 msgid "Suppress leading zeros"
@@ -40342,9 +40339,8 @@ msgid "Unlocked tracks"
 msgstr "Szabad vezetősávok"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "Zárolt elemek"
+msgstr "Zárolt viák"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
 #, fuzzy
@@ -40352,9 +40348,9 @@ msgid "Unlocked vias"
 msgstr "Szabad vezetősávok"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Current layer (%s) only"
-msgstr "Csak az aktuális réteg"
+msgstr "Csak az aktuális réteg (%s)"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:107
 msgid "Layer Filter"
@@ -40615,12 +40611,10 @@ msgid "Set Teardrops"
 msgstr "Címke hozzáadása"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:129
-#, fuzzy
 msgid "Text items"
 msgstr "Szöveges elemek"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:130
-#, fuzzy
 msgid "Graphic items"
 msgstr "Grafikai elemek"
 
@@ -40705,19 +40699,16 @@ msgid "Set to layer default values:"
 msgstr "Beállítás a réteg alapértelmezett értékére:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:36
-#, fuzzy
 msgid "PCB graphic items"
-msgstr "Grafikai elemek"
+msgstr "NYÁK grafikai elemek"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
-#, fuzzy
 msgid "PCB text items"
-msgstr "Szöveg elemek"
+msgstr "NYÁK szöveg elemek"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Alkatrészrajzolat szöveg elemei"
+msgstr "Egyéb alkatrészrajzolat mezők"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 #, fuzzy
@@ -40787,24 +40778,20 @@ msgstr "Alkatrészrajzolat betöltése az aktuális nyáktervről"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:90
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:144
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Ismeretlen eljárás"
+msgstr "Ismeretlen választás"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
-msgstr "Microfuratok"
+msgstr "Mikroviák"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:111
-#, fuzzy
 msgid "Filter tracks by width:"
-msgstr "Elemek szűrése vezeték szerint:"
+msgstr "Vezetősávok szűrése szélesség szerint:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "Viák szűrése méret szerint:"
+msgstr "Viák szűrése átmérő szerint:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -41575,9 +41562,8 @@ msgstr "felső oldal"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1009
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1444
-#, fuzzy
 msgid "Inner Layers"
-msgstr "nem réteg"
+msgstr "Belső rétegek"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1211
 msgid ""
@@ -41598,17 +41584,17 @@ msgstr "Hiba: furatszerelt forrszem esetén a furat nem lehet nulla méretű."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1613
 #, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Forrszem tulajdonságok"
+msgstr "Forrszem tulajdonságok hibák"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1614
 #, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "Forrszem tulajdonságok"
+msgstr "Forrszem tulajdonságok figyelmeztetések"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1794
 #, fuzzy
 msgid "Edit Pad Properties"
-msgstr "Láb tulajdonságok"
+msgstr "Forrszem tulajdonságok szerkesztése"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1832
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
@@ -41630,14 +41616,14 @@ msgstr "Forrszem X méret:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:446
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2386
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2413
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1594
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1623
 msgid "Depth:"
-msgstr ""
+msgstr "Mélység:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -41683,9 +41669,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:298
-#, fuzzy
 msgid "Edit layer:"
-msgstr "Befejező réteg:"
+msgstr "Réteg szerkesztése:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:123
 msgid "Pad shape:"
@@ -41895,14 +41880,12 @@ msgid "Drafting notes"
 msgstr "Megjegyzések"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:598
-#, fuzzy
 msgid "E.C.O.1"
-msgstr "ECO 1"
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:601
-#, fuzzy
 msgid "E.C.O.2"
-msgstr "ECO 2"
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:607
 #, fuzzy
@@ -42023,7 +42006,6 @@ msgid "Zone knockout:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:897
-#, fuzzy
 msgid "Pad shape"
 msgstr "Forrszem alakja"
 
@@ -42131,9 +42113,8 @@ msgstr "Szám"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3235
-#, fuzzy
 msgid "Counterbore"
-msgstr "Szám"
+msgstr "Süllyesztés"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1316
@@ -42146,7 +42127,7 @@ msgstr "Pici átvezetőfurat átmérő"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1228
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
-msgstr ""
+msgstr "Mindkettő"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1242
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -42266,9 +42247,8 @@ msgid "Gerber"
 msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:48
-#, fuzzy
 msgid "Open output directory"
-msgstr "Célmappa:"
+msgstr "Kimeneti mappa megnyitása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:87
 #, fuzzy
@@ -42354,9 +42334,8 @@ msgid ""
 msgstr "Segédtengely kezdőpontjának használata plottoláshoz"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
-#, fuzzy
 msgid "Mirrored plot"
-msgstr "Plottolás tükrözve"
+msgstr "Tükrözött ábra"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 #, fuzzy
@@ -42550,9 +42529,8 @@ msgid "Single document"
 msgstr "Meglévő dokumentum megnyitása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "Export selected layers into a single DXF"
-msgstr "A kijelölt sokszögek egyesítése egyetlen sokszöggé"
+msgstr "Kiválasztott rétegek exportálása egyetlen DXF-be"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "SVG Options"
@@ -42691,7 +42669,6 @@ msgid "Walk around"
 msgstr "Akadályok körbejárása"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:82
-#, fuzzy
 msgid "Remove redundant tracks"
 msgstr "Redundáns vezetősávok eltávolítása"
 
@@ -42909,21 +42886,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "NYÁK gyártása"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "NYÁK-terv beküldése gyártásba"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:35
-#, fuzzy
 msgid "Change Pads on Current Footprint"
 msgstr "Forrszemek módosítása az aktuális alkatrészrajzolaton"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:36
-#, fuzzy
 msgid "Change Pads on Identical Footprints"
-msgstr "Forrszemek módosítása az azonos alkatrészrajzolatokon"
+msgstr "Forrszemek módosítása azonos alkatrészrajzolatokon"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 #, fuzzy
@@ -43069,9 +43044,8 @@ msgid "Lights Intensity"
 msgstr "Aktuális gyorsbillentyű:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
-#, fuzzy
 msgid "Camera:"
-msgstr "Kamera Beállítások"
+msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
 #, fuzzy
@@ -43372,9 +43346,8 @@ msgid "Parent footprint description"
 msgstr "Szülő alkatrészrajzolat leírása"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:486
-#, fuzzy
 msgid "Edit Text Box Properties"
-msgstr "Szövegdoboz tulajdonságok"
+msgstr "Szövegdoboz tulajdonságok szerkesztése"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
 msgid "Border width:"
@@ -44122,9 +44095,8 @@ msgid "Internal Layers"
 msgstr "Belső rétegek"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "Új alkatrészrajzolatok alapértelmezett értékei:"
+msgstr "Új alkatrészrajzolatok alapértelmezett értékei"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
 #, fuzzy
