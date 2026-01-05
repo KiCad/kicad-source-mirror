@@ -51,7 +51,6 @@ public:
      */
     void UpdateClonedZones();
 
-    std::vector<ZONE*>& GetOriginalZoneList()                            { return m_originalZoneList; }
     std::vector<ZONE*>& GetClonedZoneList()                              { return m_clonedZoneList; }
     std::unordered_map<ZONE*, std::shared_ptr<ZONE>>& GetZonesCloneMap() { return m_zonesCloneMap; }
 
@@ -60,5 +59,4 @@ private:
     std::unordered_map<ZONE*, std::shared_ptr<ZONE_SETTINGS>> m_zoneSettings;     // clone : current settings
     std::unordered_map<ZONE*, std::pair<unsigned, unsigned>>  m_zonePriorities;   // clone : initial pri, current pri
     std::vector<ZONE*>                                        m_clonedZoneList;
-    std::vector<ZONE*>                                        m_originalZoneList;
 };

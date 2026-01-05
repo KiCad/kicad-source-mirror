@@ -380,27 +380,30 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
     BOARD* board = m_pcbFrame->GetBoard();
     board->IncrementTimeStamp();
 
-    auto commit = std::make_unique<BOARD_COMMIT>( m_pcbFrame );
-    m_filler = std::make_unique<ZONE_FILLER>( board, commit.get() );
+    // Save the original zones before swapping so we can restore them later
+    ZONES originalZones = board->Zones();
+
+    // Do not use a commit here since we're operating on cloned zones that are not owned by the
+    // board. Using a commit would create undo entries pointing to the clones, which would cause
+    // corruption when the commit is destroyed.
+    m_filler = std::make_unique<ZONE_FILLER>( board, nullptr );
     auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5, PR_CAN_ABORT );
     m_filler->SetProgressReporter( reporter.get() );
 
     // TODO: replace these const_cast calls with a different solution that avoids mutating the
-    // container of the board.  This is relatively safe as-is because the original zones list is
+    // container of the board. This is relatively safe as-is because the original zones list is
     // swapped back in below, but still should be changed to avoid invalidating the board state
     // in case this code is refactored to be a non-modal dialog in the future.
     const_cast<ZONES&>( board->Zones() ) = m_zoneSettingsBag.GetClonedZoneList();
 
-    //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by
-    //       the pcb frame.
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
 
     m_zonePreviewNotebook->OnZoneSelectionChanged( m_panelZoneProperties->GetZone() );
 
-    //NOTE - The connectivity MUST be rebuilt to remove stale pointers to cloned zones in case of
-    //       a cancel.
-    const_cast<ZONES&>( board->Zones() ) = m_zoneSettingsBag.GetOriginalZoneList();
+    // Restore the original zones. The connectivity MUST be rebuilt to remove stale pointers to
+    // cloned zones in case of a cancel.
+    const_cast<ZONES&>( board->Zones() ) = originalZones;
     board->BuildConnectivity();
 
     m_isFillingZones = false;
