@@ -58,37 +58,20 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) 
 
     SetEvtHandlerEnabled( false );
 
-#ifdef __WXMAC__
-    // HiDPI-aware API; will be generally available in wxWidgets 3.4
+    const int                c_iconSize = 16;
     wxVector<wxBitmapBundle> images;
 
-    images.push_back( KiBitmapBundle( BITMAPS::info ) );              // INFORMATION
-    images.push_back( KiBitmapBundle( BITMAPS::recent ) );            // VERSION
-    images.push_back( KiBitmapBundle( BITMAPS::preference ) );        // DEVELOPERS
-    images.push_back( KiBitmapBundle( BITMAPS::editor ) );            // DOCWRITERS
-    images.push_back( KiBitmapBundle( BITMAPS::library ) );           // LIBRARIANS
-    images.push_back( KiBitmapBundle( BITMAPS::color_materials ) );   // ARTISTS
-    images.push_back( KiBitmapBundle( BITMAPS::language ) );          // TRANSLATORS
-    images.push_back( KiBitmapBundle( BITMAPS::zip ) );               // PACKAGERS
-    images.push_back( KiBitmapBundle( BITMAPS::tools ) );             // LICENSE
+    images.push_back( KiBitmapBundleDef( BITMAPS::info, c_iconSize ) );              // INFORMATION
+    images.push_back( KiBitmapBundleDef( BITMAPS::recent, c_iconSize ) );            // VERSION
+    images.push_back( KiBitmapBundleDef( BITMAPS::preference, c_iconSize ) );        // DEVELOPERS
+    images.push_back( KiBitmapBundleDef( BITMAPS::editor, c_iconSize ) );            // DOCWRITERS
+    images.push_back( KiBitmapBundleDef( BITMAPS::library, c_iconSize ) );           // LIBRARIANS
+    images.push_back( KiBitmapBundleDef( BITMAPS::color_materials, c_iconSize ) );   // ARTISTS
+    images.push_back( KiBitmapBundleDef( BITMAPS::language, c_iconSize ) );          // TRANSLATORS
+    images.push_back( KiBitmapBundleDef( BITMAPS::zip, c_iconSize ) );               // PACKAGERS
+    images.push_back( KiBitmapBundleDef( BITMAPS::tools, c_iconSize ) );             // LICENSE
 
     m_notebook->SetImages( images );
-#else
-    // TODO: Change these to 16x16 versions when available
-    m_images = new wxImageList( 24, 24, false, 9 );
-
-    m_images->Add( KiBitmap( BITMAPS::info ) );              // INFORMATION
-    m_images->Add( KiBitmap( BITMAPS::recent ) );            // VERSION
-    m_images->Add( KiBitmap( BITMAPS::preference ) );        // DEVELOPERS
-    m_images->Add( KiBitmap( BITMAPS::editor ) );            // DOCWRITERS
-    m_images->Add( KiBitmap( BITMAPS::library ) );           // LIBRARIANS
-    m_images->Add( KiBitmap( BITMAPS::color_materials ) );   // ARTISTS
-    m_images->Add( KiBitmap( BITMAPS::language ) );          // TRANSLATORS
-    m_images->Add( KiBitmap( BITMAPS::zip ) );               // PACKAGERS
-    m_images->Add( KiBitmap( BITMAPS::tools ) );             // LICENSE
-
-    m_notebook->SetImageList( m_images );
-#endif
 
     if( m_info.GetAppIcon().IsOk() )
     {
