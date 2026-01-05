@@ -278,6 +278,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     if( !ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
         m_splitter_left->Unsplit( m_variantsPanel );
 
+    if( m_job )
+        SetTitle( m_job->GetSettingsDialogTitle() );
+
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
@@ -517,8 +520,6 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 
     if( m_job )
     {
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
         preset.name = m_job->m_bomPresetName;
         preset.excludeDNP = m_job->m_excludeDNP;
         preset.filterString = m_job->m_filterString;
@@ -1103,9 +1104,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent 
 
     switch( aEvent.GetCol() )
     {
-    case DISPLAY_NAME_COLUMN:
+    case LABEL_COLUMN:
     {
-        wxString label = m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN );
+        wxString label = m_viewControlsDataModel->GetValue( row, LABEL_COLUMN );
         wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
         int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
 
@@ -1316,7 +1317,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnPageChanged( wxNotebookEvent& event )
 {
-    PreviewRefresh();
+    if( m_dataModel->GetColsCount() )
+        PreviewRefresh();
 }
 
 
@@ -2384,7 +2386,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
         m_schSettings.m_BomPresets = presets;
     }
 
-    if( m_schSettings.m_BomSettings != m_dataModel->GetBomSettings() )
+    if( m_schSettings.m_BomSettings != m_dataModel->GetBomSettings() && !m_job )
     {
         modified = true;
         m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
@@ -2405,7 +2407,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
         m_schSettings.m_BomFmtPresets = fmts;
     }
 
-    if( m_schSettings.m_BomFmtSettings != GetCurrentBomFmtSettings() )
+    if( m_schSettings.m_BomFmtSettings != GetCurrentBomFmtSettings() && !m_job )
     {
         modified = true;
         m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();

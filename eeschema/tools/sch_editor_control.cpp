@@ -2930,8 +2930,6 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
     // Bring it to the top if already open.  Dual monitor users need this.
     dlg->Raise();
 
-    dlg->ShowEditTab();
-
     return 0;
 }
 
