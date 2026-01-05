@@ -126,8 +126,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
             continue;
         }
 
-        std::optional<const LIBRARY_TABLE_ROW*> rowResult =
-                manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, lib );
+        std::optional<const LIBRARY_TABLE_ROW*> rowResult = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, lib );
 
         wxCHECK2( rowResult, continue );
 
@@ -178,8 +177,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
     {
         m_check_pending_libraries_timer = std::make_unique<wxTimer>( aFrame );
 
-        wxLogTrace( traceLibraries, "%zu pending libraries, starting lazy load...",
-                    m_pending_load_libraries.size() );
+        wxLogTrace( traceLibraries, "%zu pending libraries, starting lazy load...", m_pending_load_libraries.size() );
 
         aFrame->Bind( wxEVT_TIMER,
                 [&, aFrame]( wxTimerEvent& )
@@ -210,14 +208,12 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool pinned )
 {
-    SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE type =
-            ( GetFilter() != nullptr ) ? SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::POWER_ONLY
-                                       : SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::ALL_SYMBOLS;
-    std::vector<LIB_SYMBOL*>    symbols = m_adapter->GetSymbols( aLibNickname, type );
-    std::vector<LIB_TREE_ITEM*> comp_list;
-
-    std::optional<const LIBRARY_TABLE_ROW*> row =
-            Pgm().GetLibraryManager().GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibNickname );
+    SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE     type = GetFilter() ? SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::POWER_ONLY
+                                                               : SYMBOL_LIBRARY_ADAPTER::SYMBOL_TYPE::ALL_SYMBOLS;
+    std::vector<LIB_SYMBOL*>                symbols = m_adapter->GetSymbols( aLibNickname, type );
+    std::optional<const LIBRARY_TABLE_ROW*> row = Pgm().GetLibraryManager().GetRow( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                                                    aLibNickname );
+    std::vector<LIB_TREE_ITEM*>             comp_list;
 
     if( row && symbols.size() > 0 )
     {

@@ -39,8 +39,7 @@
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
-                                           SYMBOL_LIBRARY_MANAGER* aLibMgr )
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr )
 {
     auto* adapter = new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aParent, aLibMgr );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
@@ -138,8 +137,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, libName )
                             || alg::contains( project.m_PinnedSymbolLibs, libName );
 
-            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, ( *optRow )->Description(),
-                                                                pinned );
+            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, ( *optRow )->Description(), pinned );
 
             updateLibrary( lib_node );
         }

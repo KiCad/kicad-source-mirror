@@ -243,8 +243,7 @@ void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( const LIB_ID& aLibId, int aUnit )
 }
 
 
-LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName,
-                                                                 const wxString& aDesc,
+LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
                                                                  bool pinned )
 {
     LIB_TREE_NODE_LIBRARY& lib_node = m_tree.AddLib( aNodeName, aDesc );
@@ -255,8 +254,7 @@ LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString&
 }
 
 
-LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName,
-                                                             const wxString& aDesc,
+LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
                                                              const std::vector<LIB_TREE_ITEM*>& aItemList,
                                                              bool pinned, bool presorted )
 {

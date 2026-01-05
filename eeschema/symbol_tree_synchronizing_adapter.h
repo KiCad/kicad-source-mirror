@@ -24,8 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H
-#define SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H
+#pragma once
 
 #include <lib_tree_model_adapter.h>
 #include <map>
@@ -36,13 +35,11 @@ class SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_TREE_SYNCHRONIZING_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
-    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SYMBOL_EDIT_FRAME* aParent,
-                                                           SYMBOL_LIBRARY_MANAGER* aLibs );
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
-    void Sync( const wxString& aForceRefresh,
-               std::function<void( int, int, const wxString&)> aProgressCallback );
+    void Sync( const wxString& aForceRefresh, std::function<void( int, int, const wxString&)> aProgressCallback );
 
     int GetLibrariesCount() const override;
 
@@ -59,13 +56,10 @@ protected:
 
     LIB_TREE_NODE::PTR_VECTOR::iterator deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
 
-    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
-                   unsigned int aCol ) const override;
-    bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
-                  wxDataViewItemAttr& aAttr ) const override;
+    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem, unsigned int aCol ) const override;
+    bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol, wxDataViewItemAttr& aAttr ) const override;
 
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
-                                       SYMBOL_LIBRARY_MANAGER* aLibMgr );
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
@@ -79,5 +73,3 @@ protected:
     /// #SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization.
     int                     m_lastSyncHash;
 };
-
-#endif /* SYMBOL_TREE_SYNCHRONIZING_ADAPTER_H */
