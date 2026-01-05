@@ -205,6 +205,11 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
             aLibNode.AddItem( symbol );
     }
 
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
+
+    for( const wxString& column : adapter->GetAvailableExtraFields( aLibNode.m_Name ) )
+        addColumnIfNecessary( column );
+
     aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libHashes[aLibNode.m_Name] = m_libMgr->GetLibraryHash( aLibNode.m_Name );
 }
