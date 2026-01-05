@@ -16,12 +16,15 @@
 PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
 	m_copperZoneInfoBar = new WX_INFOBAR( this );
 	m_copperZoneInfoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
 	m_copperZoneInfoBar->SetEffectDuration( 500 );
-	bMainSizer->Add( m_copperZoneInfoBar, 0, wxBOTTOM|wxEXPAND, 5 );
+	bSizer8->Add( m_copperZoneInfoBar, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bPropertiesSizer;
 	bPropertiesSizer = new wxBoxSizer( wxVERTICAL );
@@ -51,7 +54,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bPropertiesSizer->Add( gbSizer8, 0, wxEXPAND|wxALL, 5 );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearancesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -139,7 +142,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_clearancesPanel->SetSizer( bClearancesSizer );
 	m_clearancesPanel->Layout();
 	bClearancesSizer->Fit( m_clearancesPanel );
-	m_notebook->AddPage( m_clearancesPanel, _("Clearances && Pad Connections"), true );
+	m_notebook->AddPage( m_clearancesPanel, _("Clearances && Pad Connections"), false );
 	m_displayOverridesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bDisplayOverridesSizer;
 	bDisplayOverridesSizer = new wxBoxSizer( wxVERTICAL );
@@ -191,7 +194,8 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbSizerHatchedFill->SetEmptyCellSize( wxSize( -1,10 ) );
 
 	m_cbHatched = new wxCheckBox( m_hatchedFillPanel, wxID_ANY, _("Hatched fill"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerHatchedFill->Add( m_cbHatched, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_cbHatched->SetValue(true);
+	gbSizerHatchedFill->Add( m_cbHatched, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT, 5 );
 
 	m_staticTextGrindOrient = new wxStaticText( m_hatchedFillPanel, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrindOrient->Wrap( -1 );
@@ -250,9 +254,6 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bHatchedFillSizer->Add( gbSizerHatchedFill, 0, wxALL, 5 );
 
-
-	bHatchedFillSizer->Add( 15, 0, 0, wxEXPAND, 5 );
-
 	wxBoxSizer* bSizerOffsetOverrides;
 	bSizerOffsetOverrides = new wxBoxSizer( wxVERTICAL );
 
@@ -261,7 +262,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerOffsetOverrides->Add( m_offsetOverridesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerOffsetOverrides->Add( 0, 2, 0, 0, 5 );
+	bSizerOffsetOverrides->Add( 0, 0, 0, 0, 5 );
 
 	m_layerSpecificOverrides = new WX_GRID( m_hatchedFillPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -299,13 +300,13 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAddCustomLayer = new STD_BITMAP_BUTTON( m_hatchedFillPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSizer->Add( m_bpAddCustomLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonSizer->Add( m_bpAddCustomLayer, 0, wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_bpDeleteCustomLayer = new STD_BITMAP_BUTTON( m_hatchedFillPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSizer->Add( m_bpDeleteCustomLayer, 0, wxBOTTOM|wxRIGHT, 5 );
+	bButtonSizer->Add( m_bpDeleteCustomLayer, 0, wxRIGHT, 5 );
 
 
 	bSizerOffsetOverrides->Add( bButtonSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -317,16 +318,13 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_hatchedFillPanel->SetSizer( bHatchedFillSizer );
 	m_hatchedFillPanel->Layout();
 	bHatchedFillSizer->Fit( m_hatchedFillPanel );
-	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), false );
+	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), true );
 
 	bPropertiesSizer->Add( m_notebook, 1, wxEXPAND|wxALL, 5 );
 
-
-	bPropertiesSizer->Add( 0, 10, 0, wxEXPAND, 5 );
-
-	gbSizerGeneralProps = new wxGridBagSizer( 10, 5 );
+	gbSizerGeneralProps = new wxGridBagSizer( 5, 5 );
 	gbSizerGeneralProps->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizerGeneralProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	gbSizerGeneralProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_cornerSmoothingLabel = new wxStaticText( this, wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerSmoothingLabel->Wrap( -1 );
@@ -336,14 +334,14 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
 	m_cornerSmoothingChoice = new wxChoice( this, ID_CORNER_SMOOTHING, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
 	m_cornerSmoothingChoice->SetSelection( 1 );
-	gbSizerGeneralProps->Add( m_cornerSmoothingChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	gbSizerGeneralProps->Add( m_cornerSmoothingChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
 	m_cornerRadiusLabel = new wxStaticText( this, wxID_ANY, _("Chamfer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusLabel->Wrap( -1 );
 	gbSizerGeneralProps->Add( m_cornerRadiusLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_cornerRadiusCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerGeneralProps->Add( m_cornerRadiusCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerGeneralProps->Add( m_cornerRadiusCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_cornerRadiusUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusUnits->Wrap( -1 );
@@ -359,26 +357,32 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_cbRemoveIslandsNChoices = sizeof( m_cbRemoveIslandsChoices ) / sizeof( wxString );
 	m_cbRemoveIslands = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbRemoveIslandsNChoices, m_cbRemoveIslandsChoices, 0 );
 	m_cbRemoveIslands->SetSelection( 0 );
-	gbSizerGeneralProps->Add( m_cbRemoveIslands, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 2 );
+	gbSizerGeneralProps->Add( m_cbRemoveIslands, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
 	m_islandThresholdLabel = new wxStaticText( this, wxID_ANY, _("Area limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdLabel->Wrap( -1 );
 	m_islandThresholdLabel->SetToolTip( _("Isolated islands smaller than this will be removed") );
 
-	gbSizerGeneralProps->Add( m_islandThresholdLabel, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	gbSizerGeneralProps->Add( m_islandThresholdLabel, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 10 );
 
 	m_tcIslandThreshold = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerGeneralProps->Add( m_tcIslandThreshold, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerGeneralProps->Add( m_tcIslandThreshold, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_islandThresholdUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdUnits->Wrap( -1 );
-	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 
-	bPropertiesSizer->Add( gbSizerGeneralProps, 0, wxEXPAND|wxTOP, 5 );
+	gbSizerGeneralProps->AddGrowableCol( 1 );
+	gbSizerGeneralProps->AddGrowableCol( 3 );
+
+	bPropertiesSizer->Add( gbSizerGeneralProps, 0, wxALL|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bPropertiesSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( bPropertiesSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bMainSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

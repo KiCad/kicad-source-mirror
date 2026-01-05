@@ -68,7 +68,7 @@
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
           <property name="flag">wxEXPAND</property>
-          <property name="proportion">1</property>
+          <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
             <property name="name">m_sizerTop</property>
@@ -129,7 +129,7 @@
                 <property name="show">1</property>
                 <property name="size"></property>
                 <property name="splitmode">wxSPLIT_VERTICAL</property>
-                <property name="style">wxSP_3DSASH|wxSP_LIVE_UPDATE</property>
+                <property name="style">wxSP_LIVE_UPDATE</property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
                 <property name="tooltip"></property>
@@ -203,11 +203,11 @@
                           <property name="name">m_leftColumn</property>
                           <property name="orient">wxVERTICAL</property>
                           <property name="permission">none</property>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="false">
+                            <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
                               <property name="name">searchSizer</property>
                               <property name="orient">wxHORIZONTAL</property>
@@ -456,11 +456,11 @@
                               <event name="OnLeftUp">OnViewZonesOverviewOnLeftUp</event>
                             </object>
                           </object>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxTOP</property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="false">
+                            <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
                               <property name="name">m_sizerZoneOP</property>
                               <property name="orient">wxHORIZONTAL</property>
@@ -689,22 +689,22 @@
                           <property name="name">m_rightColumn</property>
                           <property name="orient">wxVERTICAL</property>
                           <property name="permission">protected</property>
-                          <object class="sizeritem" expanded="true">
+                          <object class="sizeritem" expanded="false">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="true">
+                            <property name="proportion">1</property>
+                            <object class="wxBoxSizer" expanded="false">
                               <property name="minimum_size"></property>
                               <property name="name">m_sizerProperties</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="permission">protected</property>
                             </object>
                           </object>
-                          <object class="sizeritem" expanded="true">
+                          <object class="sizeritem" expanded="false">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="true">
+                            <object class="wxBoxSizer" expanded="false">
                               <property name="minimum_size"></property>
                               <property name="name">m_sizerPreview</property>
                               <property name="orient">wxVERTICAL</property>
@@ -730,7 +730,7 @@
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">protected</property>
             <object class="sizeritem" expanded="true">
-              <property name="border">10</property>
+              <property name="border">5</property>
               <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxCheckBox" expanded="true">

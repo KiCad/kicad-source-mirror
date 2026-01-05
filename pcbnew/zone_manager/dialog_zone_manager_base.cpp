@@ -19,7 +19,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	m_sizerTop = new wxBoxSizer( wxHORIZONTAL );
 
-	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
 	m_splitter->SetSashGravity( 0.3 );
 	m_splitter->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_ZONE_MANAGER_BASE::m_splitterOnIdle ), NULL, this );
 
@@ -90,7 +90,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerProperties = new wxBoxSizer( wxVERTICAL );
 
 
-	m_rightColumn->Add( m_sizerProperties, 0, wxEXPAND, 5 );
+	m_rightColumn->Add( m_sizerProperties, 1, wxEXPAND, 5 );
 
 	m_sizerPreview = new wxBoxSizer( wxVERTICAL );
 
@@ -108,14 +108,14 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerTop->Add( m_splitter, 1, wxEXPAND, 5 );
 
 
-	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_sizerTop, 0, wxEXPAND, 5 );
 
 	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_checkRepour = new wxCheckBox( this, wxID_ANY, _("Refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkRepour->SetToolTip( _("Refill zones after changes made on board") );
 
-	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	m_sizerBottom->Add( 100, 0, 1, wxEXPAND, 5 );

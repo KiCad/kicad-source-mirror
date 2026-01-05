@@ -96,18 +96,18 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
     Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED,
-            [this]( wxNotebookEvent& aEvent )
-            {
-                Layout();
-            },
-            m_zonePreviewNotebook->GetId() );
+          [this]( wxNotebookEvent& aEvent )
+          {
+              Layout();
+          },
+          m_zonePreviewNotebook->GetId() );
+
+    //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
+    FitCanvasToScreen();
 
     Layout();
     m_MainBoxSizer->Fit( this );
     finishDialogSettings();
-
-    //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
-    FitCanvasToScreen();
 }
 
 

@@ -60,6 +60,8 @@ public:
 
         m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, aZone->Clone( aLayer ), aLayer, this, aOpts, aGalType );
         GetSizer()->Add( m_canvas, 1, wxEXPAND );
+        Layout();
+        GetSizer()->Fit( this );
     }
 
     int  GetLayer() const { return m_layer; }
@@ -95,6 +97,9 @@ ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME*
     }
 
     AssignImageList( imageList );
+
+    Layout();
+    GetSizer()->Fit( this );
 }
 
 
