@@ -373,14 +373,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     int       count = 0;
     int       ii = 0;
 
-    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(),
+    forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
                 count++;
                 return true;
             } );
 
-    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(),
+    forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
                 bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
@@ -413,6 +413,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 case PCB_VIA_T:
                     layersToTest = static_cast<PCB_VIA*>( item )->Padstack().UniqueLayers();
+                    break;
+
+                case PCB_ZONE_T:
+                    for( PCB_LAYER_ID layer : item->GetLayerSet() )
+                        layersToTest.push_back( layer );
+
                     break;
 
                 default:
