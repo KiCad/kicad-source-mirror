@@ -3654,20 +3654,56 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
     // create a new shape within the destination and set the assembly tool to point to it
     TDF_Label d_targetLabel = d_assy->NewShape();
 
+    auto copyLabel = [&]( TDF_Label& d_label, const TDF_Label& s_label ) -> bool
+    {
+        // TDocStd_XLinkTool::Copy requires the source to be "self-contained", meaning it has
+        // no external references. Some STEP files (e.g. from Fusion 360 with linked components)
+        // may contain internal references that violate this constraint. In such cases, we fall
+        // back to extracting just the geometric shape without the full XDE document structure.
+        if( TDF_Tool::IsSelfContained( s_label ) )
+        {
+            TDocStd_XLinkTool link;
+            link.Copy( d_label, s_label );
+            return true;
+        }
+        else
+        {
+            // The source label is not self-contained. Extract the shape directly.
+            TopoDS_Shape shape = s_assy->GetShape( s_label );
+
+            if( shape.IsNull() )
+                return false;
+
+            // Add the shape directly without the XDE structure. This loses some metadata
+            // like colors and names, but allows the model to be successfully transferred.
+            d_assy->SetShape( d_label, shape );
+
+            m_reporter->Report( wxT( "Model contains non-self-contained data; some metadata may be lost." ),
+                                RPT_SEVERITY_INFO );
+            return true;
+        }
+    };
+
     if( frshapes.Size() == 1 )
     {
-        TDocStd_XLinkTool link;
-        link.Copy( d_targetLabel, frshapes.First() );
+        if( !copyLabel( d_targetLabel, frshapes.First() ) )
+        {
+            m_reporter->Report( wxT( "Failed to transfer model." ), RPT_SEVERITY_ERROR );
+            return TDF_Label();
+        }
     }
     else
     {
-        // Rare case
+        // Rare case with multiple free shapes
         for( TDF_Label& s_shapeLabel : frshapes )
         {
             TDF_Label d_component = d_assy->NewShape();
 
-            TDocStd_XLinkTool link;
-            link.Copy( d_component, s_shapeLabel );
+            if( !copyLabel( d_component, s_shapeLabel ) )
+            {
+                m_reporter->Report( wxT( "Failed to transfer model component." ), RPT_SEVERITY_ERROR );
+                return TDF_Label();
+            }
 
             d_assy->AddComponent( d_targetLabel, d_component, TopLoc_Location() );
         }
