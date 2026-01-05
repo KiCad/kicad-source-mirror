@@ -2178,13 +2178,6 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     m_preview.Clear();
     m_view->Add( &m_preview );
 
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
-                controls->ShowCursor( true );
-            };
-
     auto applyCommonSettings =
             [&]( PCB_TUNING_PATTERN* aPattern )
             {
@@ -2254,12 +2247,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 }
             };
 
-    // Set initial cursor
-    setCursor();
-
     while( TOOL_EVENT* evt = Wait() )
     {
-        setCursor();
         VECTOR2D cursorPos = controls->GetMousePosition();
 
         if( evt->IsCancelInteractive() || evt->IsActivate()
