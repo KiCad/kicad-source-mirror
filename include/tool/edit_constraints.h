@@ -36,6 +36,17 @@ class EDIT_LINE;
 class EDIT_POINTS;
 
 
+/**
+ * Mode for polygon line edge constraints. Determines what happens to the dragged line's
+ * length when moving perpendicular to the line.
+ */
+enum class POLYGON_LINE_MODE
+{
+    CONVERGING,    ///< Adjacent lines converge/diverge, dragged line length changes
+    FIXED_LENGTH   ///< Dragged line maintains its length, adjacent lines adjust angles
+};
+
+
 enum GRID_CONSTRAINT_TYPE
 {
     IGNORE_GRID,
@@ -233,20 +244,38 @@ private:
 
 
 /**
- * #EDIT_CONSTRAINT for 3 segments: dragged and two adjacent ones, enforcing to keep their slopes
- * and allows only to change ending points. Applied to zones.
+ * #EDIT_CONSTRAINT for polygon line dragging. The line center moves perpendicular to the line
+ * itself. Two modes control what happens to the line length:
+ *   - CONVERGING: Adjacent lines maintain angles, dragged line length changes
+ *   - FIXED_LENGTH: Dragged line maintains length, adjacent lines adjust angles
  */
 class EC_CONVERGING : public EDIT_CONSTRAINT<EDIT_LINE>
 {
 public:
-    EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints );
+    EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints,
+                   POLYGON_LINE_MODE aMode = POLYGON_LINE_MODE::CONVERGING );
 
     virtual ~EC_CONVERGING();
 
     /// @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) override;
 
+    /// Get the current constraint mode
+    POLYGON_LINE_MODE GetMode() const { return m_mode; }
+
+    /// Set the constraint mode (allows switching between converging and fixed-length)
+    void SetMode( POLYGON_LINE_MODE aMode ) { m_mode = aMode; }
+
 private:
+    /// Apply converging mode: find intersections with adjacent lines
+    void applyConverging( EDIT_LINE& aHandle );
+
+    /// Apply fixed-length mode: maintain line length, adjust adjacent line angles
+    void applyFixedLength( EDIT_LINE& aHandle );
+
+    /// Constraint mode
+    POLYGON_LINE_MODE m_mode;
+
     /// Constraint for origin side segment.
     std::unique_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_originSideConstraint;
 
@@ -262,6 +291,15 @@ private:
 
     /// Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
+
+    /// Original center position of the line
+    VECTOR2I m_originalCenter;
+
+    /// Perpendicular direction to the dragged segment (for constraining movement)
+    VECTOR2I m_perpVector;
+
+    /// Original half-length of the line (for fixed-length mode)
+    double m_halfLength;
 
     /// Flags to indicate when dragged and neighbouring lines are (almost) collinear.
     bool m_originCollinear;

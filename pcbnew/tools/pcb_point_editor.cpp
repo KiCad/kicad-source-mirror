@@ -2290,6 +2290,44 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 updateSnapLineDirections();
             }
 
+            // For polygon lines, Ctrl temporarily toggles between CONVERGING and FIXED_LENGTH modes
+            EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
+            bool       ctrlHeld = evt->Modifier( MD_CTRL );
+
+            if( line )
+            {
+                bool isPoly = false;
+
+                switch( item->Type() )
+                {
+                case PCB_ZONE_T:
+                    isPoly = true;
+                    break;
+
+                case PCB_SHAPE_T:
+                    isPoly = static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY;
+                    break;
+
+                default:
+                    break;
+                }
+
+                if( isPoly )
+                {
+                    EC_CONVERGING* constraint =
+                            dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+
+                    if( constraint )
+                    {
+                        POLYGON_LINE_MODE targetMode = ctrlHeld ? POLYGON_LINE_MODE::FIXED_LENGTH
+                                                                : POLYGON_LINE_MODE::CONVERGING;
+
+                        if( constraint->GetMode() != targetMode )
+                            constraint->SetMode( targetMode );
+                    }
+                }
+            }
+
             // Keep point inside of limits with some padding
             VECTOR2I pos = GetClampedCoords<double, int>( evt->Position(), COORDS_PADDING );
             LSET     snapLayers;
@@ -2372,12 +2410,59 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->SetPosition( pos );
                 m_altConstraint->Apply( grid );
                 constraintSnapped = true;
+
+                // For constrained lines (like zone edges), try to snap to nearby anchors
+                // that lie on the constraint line
+                if( grid.GetSnap() && !snapLayers.empty() )
+                {
+                    VECTOR2I constrainedPos = m_editedPoint->GetPosition();
+                    VECTOR2I snapPos = grid.BestSnapAnchor( constrainedPos, snapLayers,
+                                                            grid.GetItemGrid( item ), { item } );
+
+                    if( snapPos != constrainedPos )
+                    {
+                        m_editedPoint->SetPosition( snapPos );
+                        m_altConstraint->Apply( grid );
+                        VECTOR2I projectedPos = m_editedPoint->GetPosition();
+                        const int snapTolerance = KiROUND( getView()->ToWorld( 5 ) );
+
+                        if( ( projectedPos - snapPos ).EuclideanNorm() > snapTolerance )
+                            m_editedPoint->SetPosition( constrainedPos );
+                    }
+                }
             }
             else if( !m_angleSnapActive && m_editedPoint->IsConstrained() )
             {
                 m_editedPoint->SetPosition( pos );
                 m_editedPoint->ApplyConstraint( grid );
                 constraintSnapped = true;
+
+                // For constrained lines (like zone edges), try to snap to nearby anchors
+                // that lie on the constraint line. First get the constrained position, then
+                // look for snap anchors and verify they're on the constraint line.
+                if( grid.GetSnap() && !snapLayers.empty() )
+                {
+                    VECTOR2I constrainedPos = m_editedPoint->GetPosition();
+                    VECTOR2I snapPos = grid.BestSnapAnchor( constrainedPos, snapLayers,
+                                                            grid.GetItemGrid( item ), { item } );
+
+                    // If we found a snap anchor different from the constrained position,
+                    // check if setting the point there and reapplying the constraint
+                    // results in a position close to the snap point
+                    if( snapPos != constrainedPos )
+                    {
+                        m_editedPoint->SetPosition( snapPos );
+                        m_editedPoint->ApplyConstraint( grid );
+                        VECTOR2I projectedPos = m_editedPoint->GetPosition();
+
+                        // If the projection is close to the snap anchor, use it
+                        // Otherwise revert to the original constrained position
+                        const int snapTolerance = KiROUND( getView()->ToWorld( 5 ) );
+
+                        if( ( projectedPos - snapPos ).EuclideanNorm() > snapTolerance )
+                            m_editedPoint->SetPosition( constrainedPos );
+                    }
+                }
             }
             else if( !m_angleSnapActive && m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
@@ -2782,12 +2867,12 @@ void PCB_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
 void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
 {
-    if( aEnabled )
-    {
-        EDA_ITEM*  parent = m_editPoints->GetParent();
-        EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
-        bool       isPoly;
+    EDA_ITEM*  parent = m_editPoints ? m_editPoints->GetParent() : nullptr;
+    EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
+    bool       isPoly = false;
 
+    if( parent )
+    {
         switch( parent->Type() )
         {
         case PCB_ZONE_T:
@@ -2799,14 +2884,22 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
             break;
 
         default:
-            isPoly = false;
             break;
         }
+    }
 
+    if( aEnabled )
+    {
         if( line && isPoly )
         {
-            EC_CONVERGING* altConstraint = new EC_CONVERGING( *line, *m_editPoints );
-            m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*) altConstraint );
+            // For polygon lines, toggle the mode on the existing constraint rather than
+            // creating a new one. This preserves the original reference positions.
+            EC_CONVERGING* constraint = dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+
+            if( constraint )
+                constraint->SetMode( POLYGON_LINE_MODE::FIXED_LENGTH );
+
+            // Don't set m_altConstraint - we're modifying the line's own constraint
         }
         else
         {
@@ -2821,6 +2914,15 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
     }
     else
     {
+        if( line && isPoly )
+        {
+            // Restore the line's constraint to CONVERGING mode
+            EC_CONVERGING* constraint = dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+
+            if( constraint )
+                constraint->SetMode( POLYGON_LINE_MODE::CONVERGING );
+        }
+
         m_altConstraint.reset();
     }
 }

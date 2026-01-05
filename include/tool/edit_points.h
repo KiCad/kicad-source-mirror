@@ -156,7 +156,7 @@ public:
      *
      * @return True is point is constrained, false otherwise.
      */
-    inline bool IsConstrained() const
+    virtual bool IsConstrained() const
     {
         return m_constraint != nullptr;
     }
@@ -281,6 +281,14 @@ public:
     EDIT_CONSTRAINT<EDIT_LINE>* GetConstraint() const
     {
         return m_constraint.get();
+    }
+
+    /**
+     * Check if line is constrained.
+     */
+    bool IsConstrained() const override
+    {
+        return m_constraint != nullptr;
     }
 
     /**
