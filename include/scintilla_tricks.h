@@ -58,6 +58,8 @@ protected:
 
     int firstNonWhitespace( int aLine, int* aWhitespaceCount = nullptr );
 
+    bool isIMECompositionActive() const;
+
     virtual void onCharHook( wxKeyEvent& aEvent );
     void onChar( wxStyledTextEvent& aEvent );
     void onModified( wxStyledTextEvent& aEvent );

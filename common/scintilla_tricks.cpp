@@ -22,6 +22,8 @@
  */
 
 
+#include <algorithm>
+
 #include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <widgets/wx_grid.h>
@@ -174,6 +176,29 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
 }
 
 
+bool SCINTILLA_TRICKS::isIMECompositionActive() const
+{
+    // Check if any of the IME indicators (32-35) are active at or near the current position.
+    // Scintilla uses these indicators to mark text during IME composition in inline mode.
+    // We check a range around the caret position because the caret may be at the edge of
+    // the composition region.
+    int pos = m_te->GetCurrentPos();
+    int checkStart = std::max( 0, pos - 10 );
+    int checkEnd = std::min( m_te->GetTextLength(), pos + 10 );
+
+    for( int indicator = wxSTC_INDIC_IME; indicator <= wxSTC_INDIC_IME_MAX; ++indicator )
+    {
+        for( int checkPos = checkStart; checkPos <= checkEnd; ++checkPos )
+        {
+            if( m_te->IndicatorValueAt( indicator, checkPos ) != 0 )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 void SCINTILLA_TRICKS::onChar( wxStyledTextEvent& aEvent )
 {
     m_onCharAddedFn( aEvent );
@@ -217,6 +242,14 @@ void SCINTILLA_TRICKS::onModified( wxStyledTextEvent& aEvent )
 
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
+    // During IME composition, let keys like Enter, Space, and Tab pass through to the IME
+    // so it can use them for candidate selection and confirmation.
+    if( isIMECompositionActive() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     auto findGridTricks =
             [&]() -> GRID_TRICKS*
             {
