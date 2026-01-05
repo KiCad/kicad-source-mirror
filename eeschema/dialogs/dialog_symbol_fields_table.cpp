@@ -278,69 +278,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     if( !ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
         m_splitter_left->Unsplit( m_variantsPanel );
 
-    // Load our BOM view presets
-    SetUserBomPresets( m_schSettings.m_BomPresets );
-
-    BOM_PRESET preset = m_schSettings.m_BomSettings;
-
-    if( m_job )
-    {
-        SetTitle( m_job->GetSettingsDialogTitle() );
-
-        preset.name = m_job->m_bomPresetName;
-        preset.excludeDNP = m_job->m_excludeDNP;
-        preset.filterString = m_job->m_filterString;
-        preset.sortAsc = m_job->m_sortAsc;
-        preset.sortField = m_job->m_sortField;
-        preset.groupSymbols = ( m_job->m_fieldsGroupBy.size() > 0 );
-
-        preset.fieldsOrdered.clear();
-
-        size_t i = 0;
-
-        for( const wxString& fieldName : m_job->m_fieldsOrdered )
-        {
-            BOM_FIELD field;
-            field.name = fieldName;
-            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-            field.groupBy = alg::contains( m_job->m_fieldsGroupBy, field.name );
-
-            if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
-                field.label = m_job->m_fieldsLabels[i];
-            else if( IsGeneratedField( field.name ) )
-                field.label = GetGeneratedFieldDisplayName( field.name );
-            else
-                field.label = field.name;
-
-            preset.fieldsOrdered.emplace_back( field );
-            i++;
-        }
-    }
-
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
-
-    ApplyBomPreset( preset );
-    syncBomPresetSelection();
-
-    // Load BOM export format presets
-    SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
-    BOM_FMT_PRESET fmtPreset = m_schSettings.m_BomFmtSettings;
-
-    if( m_job )
-    {
-        fmtPreset.name = m_job->m_bomFmtPresetName;
-        fmtPreset.fieldDelimiter = m_job->m_fieldDelimiter;
-        fmtPreset.keepLineBreaks = m_job->m_keepLineBreaks;
-        fmtPreset.keepTabs = m_job->m_keepTabs;
-        fmtPreset.refDelimiter = m_job->m_refDelimiter;
-        fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
-        fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
-    }
-
-    ApplyBomFmtPreset( fmtPreset );
-    syncBomFmtPresetSelection();
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
@@ -569,6 +509,66 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
         return false;
 
     LoadFieldNames();   // loads rows into m_viewControlsDataModel and columns into m_dataModel
+
+    // Load our BOM view presets
+    SetUserBomPresets( m_schSettings.m_BomPresets );
+
+    BOM_PRESET preset = m_schSettings.m_BomSettings;
+
+    if( m_job )
+    {
+        SetTitle( m_job->GetSettingsDialogTitle() );
+
+        preset.name = m_job->m_bomPresetName;
+        preset.excludeDNP = m_job->m_excludeDNP;
+        preset.filterString = m_job->m_filterString;
+        preset.sortAsc = m_job->m_sortAsc;
+        preset.sortField = m_job->m_sortField;
+        preset.groupSymbols = ( m_job->m_fieldsGroupBy.size() > 0 );
+
+        preset.fieldsOrdered.clear();
+
+        size_t i = 0;
+
+        for( const wxString& fieldName : m_job->m_fieldsOrdered )
+        {
+            BOM_FIELD field;
+            field.name = fieldName;
+            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
+            field.groupBy = alg::contains( m_job->m_fieldsGroupBy, field.name );
+
+            if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
+                field.label = m_job->m_fieldsLabels[i];
+            else if( IsGeneratedField( field.name ) )
+                field.label = GetGeneratedFieldDisplayName( field.name );
+            else
+                field.label = field.name;
+
+            preset.fieldsOrdered.emplace_back( field );
+            i++;
+        }
+    }
+
+    ApplyBomPreset( preset );
+    syncBomPresetSelection();
+
+    // Load BOM export format presets
+    SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
+    BOM_FMT_PRESET fmtPreset = m_schSettings.m_BomFmtSettings;
+
+    if( m_job )
+    {
+        fmtPreset.name = m_job->m_bomFmtPresetName;
+        fmtPreset.fieldDelimiter = m_job->m_fieldDelimiter;
+        fmtPreset.keepLineBreaks = m_job->m_keepLineBreaks;
+        fmtPreset.keepTabs = m_job->m_keepTabs;
+        fmtPreset.refDelimiter = m_job->m_refDelimiter;
+        fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
+        fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
+    }
+
+    ApplyBomFmtPreset( fmtPreset );
+    syncBomFmtPresetSelection();
 
     TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
     SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
