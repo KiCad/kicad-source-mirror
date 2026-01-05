@@ -29,6 +29,7 @@
 
 #include <wx/image.h>
 #include <wx/log.h>
+#include <wx/dcclient.h>
 
 #include <gal/cairo/cairo_gal.h>
 #include <gal/cairo/cairo_compositor.h>
@@ -1676,6 +1677,10 @@ void CAIRO_GAL::setCompositor()
 
 void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
 {
+    // A wxPaintDC must be created in wxEVT_PAINT handlers. Without this, the system keeps
+    // sending paint events because it thinks the window still needs to be painted, causing
+    // high CPU usage in fallback mode (Cairo).
+    wxPaintDC dc( this );
     PostPaint( aEvent );
 }
 
