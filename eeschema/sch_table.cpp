@@ -241,10 +241,10 @@ bool SCH_TABLE::operator<( const SCH_ITEM& aItem ) const
         return m_cells.size() < other.m_cells.size();
 
     if( GetPosition().x != other.GetPosition().x )
-        return GetPosition().x < GetPosition().x;
+        return GetPosition().x < other.GetPosition().x;
 
-    if( GetPosition().y != GetPosition().y )
-        return GetPosition().y < GetPosition().y;
+    if( GetPosition().y != other.GetPosition().y )
+        return GetPosition().y < other.GetPosition().y;
 
     return m_cells[0] < other.m_cells[0];
 }
