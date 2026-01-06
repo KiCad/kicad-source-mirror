@@ -27,6 +27,7 @@
 #include "convert_basic_shapes_to_polygon.h"
 
 #include <kiplatform/ui.h>
+#include <kiway.h>
 #include <tools/edit_tool.h>
 #include <tools/board_inspection_tool.h>
 #include <router/router_tool.h>
@@ -197,13 +198,6 @@ int PCB_CONTROL::IterateFootprint( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
         static_cast<FOOTPRINT_VIEWER_FRAME*>( m_frame )->SelectAndViewFootprint( aEvent.Parameter<FPVIEWER_CONSTANTS>() );
 
-    return 0;
-}
-
-
-int PCB_CONTROL::Quit( const TOOL_EVENT& aEvent )
-{
-    m_frame->Close( false );
     return 0;
 }
 
@@ -2833,7 +2827,6 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
     Go( &PCB_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
     Go( &PCB_CONTROL::Print,                ACTIONS::print.MakeEvent() );
-    Go( &PCB_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
 
     // Footprint library actions
     Go( &PCB_CONTROL::SaveFpToBoard,        PCB_ACTIONS::saveFpToBoard.MakeEvent() );

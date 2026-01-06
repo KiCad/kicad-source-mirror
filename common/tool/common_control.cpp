@@ -190,6 +190,18 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_CONTROL::Quit( const TOOL_EVENT& aEvent )
+{
+    m_frame->CallAfter(
+            [this]()
+            {
+                m_frame->Kiway().OnKiCadExit();
+            } );
+
+    return 0;
+}
+
+
 class TERMINATE_HANDLER : public wxProcess
 {
 public:
@@ -414,6 +426,8 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 
 void COMMON_CONTROL::setTransitions()
 {
+    Go( &COMMON_CONTROL::Quit,               ACTIONS::quit.MakeEvent() );
+
     Go( &COMMON_CONTROL::OpenPreferences,    ACTIONS::openPreferences.MakeEvent() );
     Go( &COMMON_CONTROL::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
     Go( &COMMON_CONTROL::ShowLibraryTable,   ACTIONS::showSymbolLibTable.MakeEvent() );

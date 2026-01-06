@@ -648,13 +648,6 @@ int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
-{
-    m_frame->Close( false );
-    return 0;
-}
-
-
 int SCH_EDITOR_CONTROL::CrossProbeToPcb( const TOOL_EVENT& aEvent )
 {
     doCrossProbeSchToPcb( aEvent, false );
@@ -3514,7 +3507,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::PageSetup,               ACTIONS::pageSettings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Print,                   ACTIONS::print.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Plot,                    ACTIONS::plot.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::Quit,                    ACTIONS::quit.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::RescueSymbols,           SCH_ACTIONS::rescueSymbols.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::RemapSymbols,            SCH_ACTIONS::remapSymbols.MakeEvent() );

@@ -48,15 +48,7 @@ int BITMAP2CMP_CONTROL::Open( const TOOL_EVENT& aEvent )
 }
 
 
-int BITMAP2CMP_CONTROL::Close( const TOOL_EVENT& aEvent )
-{
-    m_frame->Close();
-    return 0;
-}
-
-
 void BITMAP2CMP_CONTROL::setTransitions()
 {
     Go( &BITMAP2CMP_CONTROL::Open,                   ACTIONS::open.MakeEvent() );
-    Go( &BITMAP2CMP_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
 }

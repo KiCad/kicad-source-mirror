@@ -651,8 +651,6 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::ExportPlotToClipboard,  SCH_ACTIONS::exportPlotToClipboard.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ExportPlotToSchematic,  SCH_ACTIONS::exportPlotToSchematic.MakeEvent() );
 
-    Go( &SIMULATOR_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
-
     Go( &SIMULATOR_CONTROL::ToggleSimConsolePanel,  SCH_ACTIONS::toggleSimConsole.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleSimSidePanel,     SCH_ACTIONS::toggleSimSidePanel.MakeEvent() );
 

@@ -51,6 +51,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
+#include <tool/common_control.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_control.h>
 #include <tools/pcb_actions.h>
@@ -146,6 +147,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );  // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new FOOTPRINT_WIZARD_TOOLS );
     m_toolManager->InitTools();
 

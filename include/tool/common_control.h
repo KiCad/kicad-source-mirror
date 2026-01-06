@@ -50,6 +50,7 @@ public:
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
 
     int ShowPlayer( const TOOL_EVENT& aEvent );
+    int Quit( const TOOL_EVENT& aEvent );
     int Execute( const TOOL_EVENT& aEvent );
     int ShowProjectManager( const TOOL_EVENT& aEvent );
 

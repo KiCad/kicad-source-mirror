@@ -34,7 +34,6 @@
 #include <attenuators/attenuator_classes.h>
 #include <pcb_calculator_frame.h>
 #include <pcb_calculator_settings.h>
-#include <pcb_calculator_control.h>
 
 #include <calculator_panels/panel_rf_attenuators.h>
 #include <calculator_panels/panel_board_class.h>
@@ -109,7 +108,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
-    m_toolManager->RegisterTool( new PCB_CALCULATOR_CONTROL );
     m_toolManager->InitTools();
 
     ReCreateMenuBar();
@@ -155,11 +153,7 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 
 void PCB_CALCULATOR_FRAME::OnExit( wxCommandEvent& aEvent )
 {
-    if( aEvent.GetId() == wxID_EXIT )
-        Kiway().OnKiCadExit();
-
-    if( aEvent.GetId() == wxID_CLOSE || Kiface().IsSingle() )
-        Close( false );
+    Close( false );
 }
 
 
