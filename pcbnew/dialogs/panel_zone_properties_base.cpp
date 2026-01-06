@@ -54,7 +54,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bPropertiesSizer->Add( gbSizer8, 0, wxEXPAND|wxALL, 5 );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT, 5 );
+	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearancesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -328,7 +328,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_cornerSmoothingLabel = new wxStaticText( this, wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerSmoothingLabel->Wrap( -1 );
-	gbSizerGeneralProps->Add( m_cornerSmoothingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizerGeneralProps->Add( m_cornerSmoothingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
 	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
@@ -347,11 +347,11 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_cornerRadiusUnits->Wrap( -1 );
 	gbSizerGeneralProps->Add( m_cornerRadiusUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticText40 = new wxStaticText( this, wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText40->Wrap( -1 );
-	m_staticText40->SetToolTip( _("Choose what to do with unconnected copper islands") );
+	m_removeIslandsLabel = new wxStaticText( this, wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeIslandsLabel->Wrap( -1 );
+	m_removeIslandsLabel->SetToolTip( _("Choose what to do with unconnected copper islands") );
 
-	gbSizerGeneralProps->Add( m_staticText40, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizerGeneralProps->Add( m_removeIslandsLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_cbRemoveIslandsChoices[] = { _("Always"), _("Never"), _("Below area limit") };
 	int m_cbRemoveIslandsNChoices = sizeof( m_cbRemoveIslandsChoices ) / sizeof( wxString );
@@ -370,16 +370,16 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_islandThresholdUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdUnits->Wrap( -1 );
-	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
+	gbSizerGeneralProps->Add( m_islandThresholdUnits, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 
 	gbSizerGeneralProps->AddGrowableCol( 1 );
 	gbSizerGeneralProps->AddGrowableCol( 3 );
 
-	bPropertiesSizer->Add( gbSizerGeneralProps, 0, wxALL|wxEXPAND, 5 );
+	bPropertiesSizer->Add( gbSizerGeneralProps, 0, wxALL|wxEXPAND, 10 );
 
 
-	bSizer8->Add( bPropertiesSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( bPropertiesSizer, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bSizer8, 1, wxEXPAND, 5 );

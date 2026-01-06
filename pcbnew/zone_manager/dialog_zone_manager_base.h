@@ -29,6 +29,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/splitter.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,6 +57,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_rightColumn;
 		wxBoxSizer* m_sizerProperties;
 		wxBoxSizer* m_sizerPreview;
+		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerBottom;
 		wxCheckBox* m_checkRepour;
 		wxButton* m_updateDisplayedZones;

@@ -132,7 +132,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+              <property name="flag">wxEXPAND</property>
               <property name="proportion">1</property>
               <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size"></property>
@@ -423,7 +423,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxRIGHT</property>
+                  <property name="flag">wxRIGHT|wxLEFT</property>
                   <property name="proportion">0</property>
                   <object class="wxCheckBox" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -3316,7 +3316,7 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">5</property>
+                  <property name="border">10</property>
                   <property name="flag">wxALL|wxEXPAND</property>
                   <property name="proportion">0</property>
                   <object class="wxGridBagSizer" expanded="true">
@@ -3334,7 +3334,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">0</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                       <property name="row">0</property>
                       <property name="rowspan">1</property>
                       <object class="wxStaticText" expanded="true">
@@ -3666,7 +3666,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">0</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                       <property name="row">1</property>
                       <property name="rowspan">1</property>
                       <object class="wxStaticText" expanded="true">
@@ -3707,7 +3707,7 @@
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_staticText40</property>
+                        <property name="name">m_removeIslandsLabel</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -3933,7 +3933,7 @@
                       <property name="border">5</property>
                       <property name="colspan">1</property>
                       <property name="column">4</property>
-                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT</property>
+                      <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN</property>
                       <property name="row">1</property>
                       <property name="rowspan">1</property>
                       <object class="wxStaticText" expanded="true">

@@ -110,7 +110,7 @@ class PANEL_ZONE_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_cornerRadiusLabel;
 		wxTextCtrl* m_cornerRadiusCtrl;
 		wxStaticText* m_cornerRadiusUnits;
-		wxStaticText* m_staticText40;
+		wxStaticText* m_removeIslandsLabel;
 		wxChoice* m_cbRemoveIslands;
 		wxStaticText* m_islandThresholdLabel;
 		wxTextCtrl* m_tcIslandThreshold;

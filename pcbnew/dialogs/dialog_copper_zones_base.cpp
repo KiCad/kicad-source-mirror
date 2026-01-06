@@ -42,7 +42,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_sizerRight = new wxBoxSizer( wxVERTICAL );
 
 
-	bMainSizer->Add( m_sizerRight, 1, wxEXPAND, 5 );
+	bMainSizer->Add( m_sizerRight, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	m_MainBoxSizer->Add( bMainSizer, 1, wxEXPAND|wxLEFT, 5 );

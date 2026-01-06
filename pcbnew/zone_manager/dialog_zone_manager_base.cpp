@@ -19,7 +19,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	m_sizerTop = new wxBoxSizer( wxHORIZONTAL );
 
-	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_splitter->SetSashGravity( 0.3 );
 	m_splitter->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_ZONE_MANAGER_BASE::m_splitterOnIdle ), NULL, this );
 
@@ -72,7 +72,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerZoneOP->Add( m_btnMoveDown, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	m_leftColumn->Add( m_sizerZoneOP, 0, wxEXPAND|wxTOP, 5 );
+	m_leftColumn->Add( m_sizerZoneOP, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	listPanelSizer->Add( m_leftColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -90,15 +90,15 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerProperties = new wxBoxSizer( wxVERTICAL );
 
 
-	m_rightColumn->Add( m_sizerProperties, 1, wxEXPAND, 5 );
+	m_rightColumn->Add( m_sizerProperties, 0, wxEXPAND, 5 );
 
 	m_sizerPreview = new wxBoxSizer( wxVERTICAL );
 
 
-	m_rightColumn->Add( m_sizerPreview, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_rightColumn->Add( m_sizerPreview, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	zonePanelSizer->Add( m_rightColumn, 1, wxEXPAND, 5 );
+	zonePanelSizer->Add( m_rightColumn, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_zonePanel->SetSizer( zonePanelSizer );
@@ -108,7 +108,10 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerTop->Add( m_splitter, 1, wxEXPAND, 5 );
 
 
-	m_MainBoxSizer->Add( m_sizerTop, 0, wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_MainBoxSizer->Add( m_staticline1, 0, wxEXPAND, 5 );
 
 	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 

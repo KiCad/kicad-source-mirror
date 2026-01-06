@@ -279,13 +279,13 @@ void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
             m_settings->SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
 
         m_cbRemoveIslands->SetSelection( 1 );
-        m_staticText40->Enable( false );
+        m_removeIslandsLabel->Enable( false );
         m_cbRemoveIslands->Enable( false );
     }
     else if( !m_cbRemoveIslands->IsEnabled() )
     {
         m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
-        m_staticText40->Enable( true );
+        m_removeIslandsLabel->Enable( true );
         m_cbRemoveIslands->Enable( true );
     }
 
