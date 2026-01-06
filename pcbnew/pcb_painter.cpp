@@ -253,6 +253,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
             aLayer = aLayer - LAYER_ZONE_START;
     }
 
+    // Points use the LAYER_POINTS color for their virtual per-layer layers
+    if( IsPointsLayer( aLayer ) )
+        aLayer = LAYER_POINTS;
+
     // Pad and via copper and clearance outlines take their color from the copper layer
     if( IsPadCopperLayer( aLayer ) )
     {
@@ -3101,10 +3105,10 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const PCB_POINT* aPoint, int aLayer )
 {
-    // aLayer will be the virtual zone layer (LAYER_ZONE_START, ... in GAL_LAYER_ID)
+    // aLayer will be the virtual point layer (LAYER_POINT_START, ... in GAL_LAYER_ID).
     // This is used for draw ordering in the GAL.
-    // The color for the point comes from the associated copper layer ( aLayer - LAYER_POINT_START )
-    // and the visibility comes from the combination of that copper layer and LAYER_POINT
+    // The cross color comes from LAYER_POINTS and the ring color follows the point's board layer.
+    // Visibility comes from the combination of that board layer and LAYER_POINTS.
 
     double size = (double)aPoint->GetSize() / 2;
 

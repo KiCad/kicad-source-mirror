@@ -49,6 +49,7 @@ set( QA_PCBNEW_SRCS
     test_pad_flashing.cpp
     test_pad_numbering.cpp
     test_prettifier.cpp
+    test_pcb_render_settings.cpp
     test_libeval_compiler.cpp
     test_reference_image_load.cpp
     test_pdf_output_path.cpp
