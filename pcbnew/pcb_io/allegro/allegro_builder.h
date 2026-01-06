@@ -32,6 +32,7 @@
 #include <board.h>
 #include <reporter.h>
 #include <progress_reporter.h>
+#include <pcb_io/common/plugin_common_layer_mapping.h>
 
 
 class BOARD;
@@ -51,7 +52,9 @@ class LAYER_MAPPER;
 class BOARD_BUILDER
 {
 public:
-    BOARD_BUILDER( const BRD_DB& aBrdDb, BOARD& aBoard, REPORTER& aReporter, PROGRESS_REPORTER* aProgressReporter );
+    BOARD_BUILDER( const BRD_DB& aBrdDb, BOARD& aBoard, REPORTER& aReporter,
+                   PROGRESS_REPORTER* aProgressReporter,
+                   const LAYER_MAPPING_HANDLER& aLayerMappingHandler );
     ~BOARD_BUILDER();
 
     bool BuildBoard();
@@ -111,6 +114,7 @@ private:
     std::unique_ptr<FOOTPRINT>               buildFootprint( const BLK_0x2D& aFpInstance );
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
+    std::unique_ptr<ZONE>                    buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode );
 
     void cacheFontDefs();
     void setupLayers();
@@ -131,10 +135,11 @@ private:
      */
     const BLK_0x07* getFpInstRef( const BLK_0x2D& aFpInstance ) const;
 
-    const BRD_DB&      m_brdDb;
-    BOARD&             m_board;
-    REPORTER&          m_reporter;
-    PROGRESS_REPORTER* m_progressReporter;
+    const BRD_DB&         m_brdDb;
+    BOARD&                m_board;
+    REPORTER&             m_reporter;
+    PROGRESS_REPORTER*    m_progressReporter;
+    LAYER_MAPPING_HANDLER m_layerMappingHandler;
 
     // Cached list of font defs in the 0x36 node
     std::vector<const BLK_0x36::FontDef_X08*> m_fontDefList;

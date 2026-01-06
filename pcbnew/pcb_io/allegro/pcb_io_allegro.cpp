@@ -122,7 +122,8 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 1 parse complete, starting Phase 2 board construction" );
 
     // Import Phase 2: turn the C++ structs into the KiCad BOARD
-    ALLEGRO::BOARD_BUILDER builder( *brdDb, *m_board, *m_reporter, m_progressReporter );
+    ALLEGRO::BOARD_BUILDER builder( *brdDb, *m_board, *m_reporter, m_progressReporter,
+                                    m_layer_mapping_handler );
 
     const bool phase2Ok = builder.BuildBoard();
 

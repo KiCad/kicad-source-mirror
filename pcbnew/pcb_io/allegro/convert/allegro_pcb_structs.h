@@ -342,6 +342,7 @@ struct LAYER_INFO
     enum SUBCLASS
     {
         // BOARD_GEOMETRY
+        BGEOM_OUTLINE = 0xEA,
         BGEOM_DIMENSION = 0xF9,
 
         // COMPONENT_VALUE / DEVICE_TYPE / USER_PART_NUMBER
