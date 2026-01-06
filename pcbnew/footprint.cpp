@@ -168,6 +168,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_embedFonts       = aFootprint.m_embedFonts;
     m_variants         = aFootprint.m_variants;
 
+    m_componentClassCacheProxy->SetStaticComponentClass(
+            aFootprint.m_componentClassCacheProxy->GetStaticComponentClass() );
+
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
     // Copy fields
@@ -904,6 +907,9 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     m_initial_comments = aOther.m_initial_comments;
 
+    m_componentClassCacheProxy->SetStaticComponentClass(
+            aOther.m_componentClassCacheProxy->GetStaticComponentClass() );
+
     // Clear the other item's containers since this is a move
     aOther.m_fields.clear();
     aOther.Pads().clear();
@@ -1043,6 +1049,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     m_initial_comments = aOther.m_initial_comments ?
                             new wxArrayString( *aOther.m_initial_comments ) : nullptr;
+
+    m_componentClassCacheProxy->SetStaticComponentClass(
+            aOther.m_componentClassCacheProxy->GetStaticComponentClass() );
 
     EMBEDDED_FILES::operator=( aOther );
 

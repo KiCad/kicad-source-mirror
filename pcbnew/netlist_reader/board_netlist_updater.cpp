@@ -215,7 +215,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent, const 
 }
 
 
-void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
+bool BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
 {
     wxString         curClassName, newClassName;
     COMPONENT_CLASS* newClass = nullptr;
@@ -237,7 +237,16 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     }
 
     if( curClassName == newClassName )
-        return;
+        return false;
+
+    // Create a copy for undo if the footprint has not been added during this update
+    FOOTPRINT* copy = nullptr;
+
+    if( !m_isDryRun && !m_commit.GetStatus( aFootprint ) )
+    {
+        copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
+        copy->SetParentGroup( nullptr );
+    }
 
     wxString msg;
 
@@ -291,6 +300,11 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     }
 
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+    if( copy )
+        m_commit.Modified( aFootprint, copy );
+
+    return true;
 }
 
 
