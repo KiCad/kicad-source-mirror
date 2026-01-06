@@ -1648,22 +1648,32 @@ class SHAPE_GROUP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
     SHAPE_GROUP_POINT_EDIT_BEHAVIOR( PCB_GROUP& aGroup ) :
-            m_group( aGroup )
+            m_group( &aGroup ),
+            m_parent( &aGroup )
     {
-        // Store original line widths as doubles for better scaling precision
-        for( BOARD_ITEM* item : m_group.GetBoardItems() )
+        for( BOARD_ITEM* item : aGroup.GetBoardItems() )
         {
             if( item->Type() == PCB_SHAPE_T )
             {
                 PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+                m_shapes.push_back( shape );
                 m_originalWidths[shape] = static_cast<double>( shape->GetWidth() );
             }
         }
     }
 
+    SHAPE_GROUP_POINT_EDIT_BEHAVIOR( std::vector<PCB_SHAPE*> aShapes, BOARD_ITEM* aParent ) :
+            m_group( nullptr ),
+            m_shapes( std::move( aShapes ) ),
+            m_parent( aParent )
+    {
+        for( PCB_SHAPE* shape : m_shapes )
+            m_originalWidths[shape] = static_cast<double>( shape->GetWidth() );
+    }
+
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
-        BOX2I bbox = m_group.GetBoundingBox();
+        BOX2I bbox = getBoundingBox();
         VECTOR2I tl = bbox.GetOrigin();
         VECTOR2I br = bbox.GetEnd();
 
@@ -1681,7 +1691,7 @@ public:
 
     bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
-        BOX2I bbox = m_group.GetBoundingBox();
+        BOX2I bbox = getBoundingBox();
         VECTOR2I tl = bbox.GetOrigin();
         VECTOR2I br = bbox.GetEnd();
 
@@ -1696,18 +1706,29 @@ public:
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
-        BOX2I oldBox = m_group.GetBoundingBox();
+        BOX2I oldBox = getBoundingBox();
         VECTOR2I oldCenter = oldBox.Centre();
 
         if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
         {
             VECTOR2I delta = aPoints.Point( RECT_CENTER ).GetPosition() - oldCenter;
 
-            aCommit.Modify( &m_group, nullptr, RECURSE_MODE::RECURSE );
-            m_group.Move( delta );
+            if( m_group )
+            {
+                aCommit.Modify( m_group, nullptr, RECURSE_MODE::RECURSE );
+                m_group->Move( delta );
+            }
+            else
+            {
+                for( PCB_SHAPE* shape : m_shapes )
+                {
+                    aCommit.Modify( shape );
+                    shape->Move( delta );
+                }
+            }
 
-            for( BOARD_ITEM* item : m_group.GetBoardItems() )
-                aUpdatedItems.push_back( item );
+            for( PCB_SHAPE* shape : m_shapes )
+                aUpdatedItems.push_back( shape );
 
             UpdatePoints( aPoints );
             return;
@@ -1724,12 +1745,8 @@ public:
         double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
         double scale = ( sx + sy ) / 2.0;
 
-        for( BOARD_ITEM* item : m_group.GetBoardItems() )
+        for( PCB_SHAPE* shape : m_shapes )
         {
-            if( item->Type() != PCB_SHAPE_T )
-                continue;
-
-            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
             aCommit.Modify( shape );
             shape->Move( -oldCenter );
             shape->Scale( scale );
@@ -1742,7 +1759,6 @@ public:
             }
             else
             {
-                // Shouldn't happen, but just in case
                 shape->SetWidth( KiROUND( shape->GetWidth() * scale ) );
             }
 
@@ -1752,8 +1768,23 @@ public:
         UpdatePoints( aPoints );
     }
 
+    BOARD_ITEM* GetParent() const { return m_parent; }
+
 private:
-    PCB_GROUP& m_group;
+    BOX2I getBoundingBox() const
+    {
+        BOX2I bbox;
+
+        for( const PCB_SHAPE* shape : m_shapes )
+            bbox.Merge( shape->GetBoundingBox() );
+
+        return bbox;
+    }
+
+private:
+    PCB_GROUP*                             m_group;
+    std::vector<PCB_SHAPE*>                m_shapes;
+    BOARD_ITEM*                            m_parent;
     std::unordered_map<PCB_SHAPE*, double> m_originalWidths;
 };
 
@@ -2120,8 +2151,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const PCB_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || selection.Front()->GetEditFlags() || !selection.Front()->IsBOARD_ITEM() )
+    if( selection.Size() == 0 )
         return 0;
+
+    for( EDA_ITEM* selItem : selection )
+    {
+        if( selItem->GetEditFlags() || !selItem->IsBOARD_ITEM() )
+            return 0;
+    }
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
@@ -2138,8 +2175,47 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     std::vector<std::unique_ptr<BOARD_ITEM>> clones;
 
     m_editorBehavior.reset();
-    // Will also make the edit behavior if supported
-    m_editPoints = makePoints( item );
+
+    if( selection.Size() > 1 )
+    {
+        // Multi-selection: check if all items are shapes
+        std::vector<PCB_SHAPE*> shapes;
+        bool allShapes = true;
+        bool anyLocked = false;
+
+        for( EDA_ITEM* selItem : selection )
+        {
+            if( selItem->Type() == PCB_SHAPE_T )
+            {
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( selItem );
+                shapes.push_back( shape );
+
+                if( shape->IsLocked() )
+                    anyLocked = true;
+            }
+            else
+            {
+                allShapes = false;
+            }
+        }
+
+        if( allShapes && shapes.size() > 1 && !anyLocked )
+        {
+            m_editorBehavior = std::make_unique<SHAPE_GROUP_POINT_EDIT_BEHAVIOR>(
+                    std::move( shapes ), item );
+            m_editPoints = std::make_shared<EDIT_POINTS>( item );
+            m_editorBehavior->MakePoints( *m_editPoints );
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        // Single selection: use existing makePoints logic
+        m_editPoints = makePoints( item );
+    }
 
     if( !m_editPoints )
         return 0;
