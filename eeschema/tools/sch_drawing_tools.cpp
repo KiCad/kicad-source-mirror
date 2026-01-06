@@ -3389,6 +3389,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 m_frame->AddToScreen( sheet );
                 c.Added( sheet, m_frame->GetScreen() );
 
+                // Refresh the hierarchy so the new sheet and its symbols are found during annotation.
+                // The cached hierarchy was built before this sheet was added.
+                m_frame->Schematic().RefreshHierarchy();
+
                 // This convoluted logic means we always annotate unless we are drawing a copy/design block
                 // and the user has explicitly requested we keep the annotations via checkbox
 
