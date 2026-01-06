@@ -296,29 +296,34 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
         }
     }
 
-    // Collect all the sets that must be annotated together.
-    switch( aAnnotateScope )
+    // Collect all the sets that must be annotated together. When resetting annotations, we skip
+    // this step because we want fresh groupings based on symbol placement, not the potentially
+    // incorrect groupings from existing reference designators.
+    if( !aResetAnnotation )
     {
-    case ANNOTATE_ALL:
-        sheets.GetMultiUnitSymbols( lockedSymbols );
-        break;
+        switch( aAnnotateScope )
+        {
+        case ANNOTATE_ALL:
+            sheets.GetMultiUnitSymbols( lockedSymbols );
+            break;
 
-    case ANNOTATE_CURRENT_SHEET:
-        currentSheet.GetMultiUnitSymbols( lockedSymbols );
+        case ANNOTATE_CURRENT_SHEET:
+            currentSheet.GetMultiUnitSymbols( lockedSymbols );
 
-        if( aRecursive )
-            subSheets.GetMultiUnitSymbols( lockedSymbols );
+            if( aRecursive )
+                subSheets.GetMultiUnitSymbols( lockedSymbols );
 
-        break;
+            break;
 
-    case ANNOTATE_SELECTION:
-        for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol );
+        case ANNOTATE_SELECTION:
+            for( SCH_SYMBOL* symbol : selectedSymbols )
+                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol );
 
-        if( aRecursive )
-            selectedSheets.GetMultiUnitSymbols( lockedSymbols );
+            if( aRecursive )
+                selectedSheets.GetMultiUnitSymbols( lockedSymbols );
 
-        break;
+            break;
+        }
     }
 
     // Store previous annotations for building info messages
