@@ -172,14 +172,7 @@ public:
     std::vector<COMPONENT*> &Components() { return m_components; }
 
 private:
-    void sortByPinCount()
-    {
-        std::sort( m_components.begin(), m_components.end(),
-                   []( COMPONENT* a, COMPONENT* b )
-                   {
-                       return a->GetPinCount() > b->GetPinCount();
-                   } );
-    }
+    void sortByPinCount();
 
 
     std::vector<COMPONENT*> findMatchingComponents( CONNECTION_GRAPH* aRefGraph,
