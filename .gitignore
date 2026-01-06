@@ -138,6 +138,9 @@ i18n_status.csv
 qa/data/**/*.csv
 qa/data/**/*.spice
 
+# Unignore variant test comparison files
+!qa/data/cli/variants/*.bom.csv
+
 # Don't actually ignore any of these files, since we need them in the tree
 !resources/linux/icons/hicolor/**/**/*
 !resources/linux/icons-nightly/hicolor/**/**/*

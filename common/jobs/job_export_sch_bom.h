@@ -55,7 +55,9 @@ public:
     bool                  m_sortAsc;
     wxString              m_filterString;
     bool                  m_excludeDNP;
-    wxString              m_variant;
+
+    // Variant names to export. Empty vector means default variant only.
+    std::vector<wxString> m_variantNames;
 };
 
 #endif

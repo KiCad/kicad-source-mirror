@@ -74,6 +74,7 @@ public:
             m_excludedFromSim( false ),
             m_excludedFromBOM( false ),
             m_excludedFromBoard( false ),
+            m_excludedFromPosFiles( false ),
             m_DNP( false )
     { }
 
@@ -85,6 +86,7 @@ public:
             m_excludedFromSim( base.m_excludedFromSim ),
             m_excludedFromBOM( base.m_excludedFromBOM ),
             m_excludedFromBoard( base.m_excludedFromBoard ),
+            m_excludedFromPosFiles( base.m_excludedFromPosFiles ),
             m_DNP( base.m_DNP )
     { }
 
@@ -92,14 +94,15 @@ public:
     {
         SCH_ITEM::operator=( aItem );
 
-        m_pinNameOffset     = aItem.m_pinNameOffset;
-        m_showPinNames      = aItem.m_showPinNames;
-        m_showPinNumbers    = aItem.m_showPinNumbers;
+        m_pinNameOffset       = aItem.m_pinNameOffset;
+        m_showPinNames        = aItem.m_showPinNames;
+        m_showPinNumbers      = aItem.m_showPinNumbers;
 
-        m_excludedFromSim   = aItem.m_excludedFromSim;
-        m_excludedFromBOM   = aItem.m_excludedFromBOM;
-        m_excludedFromBoard = aItem.m_excludedFromBoard;
-        m_DNP               = aItem.m_DNP;
+        m_excludedFromSim     = aItem.m_excludedFromSim;
+        m_excludedFromBOM     = aItem.m_excludedFromBOM;
+        m_excludedFromBoard   = aItem.m_excludedFromBoard;
+        m_excludedFromPosFiles = aItem.m_excludedFromPosFiles;
+        m_DNP                 = aItem.m_DNP;
 
         return *this;
     };
@@ -204,8 +207,32 @@ public:
     /**
      * Set or clear exclude from board netlist flag.
      */
-    void SetExcludedFromBoard( bool aExcludeFromBoard ) override { m_excludedFromBoard = aExcludeFromBoard; }
-    bool GetExcludedFromBoard() const override { return m_excludedFromBoard; }
+    void SetExcludedFromBoard( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromBoard = aExclude;
+    }
+
+    bool GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromBoard;
+    }
+
+    /**
+     * Set or clear exclude from position files flag.
+     */
+    void SetExcludedFromPosFiles( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                                  const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromPosFiles = aExclude;
+    }
+
+    bool GetExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance = nullptr,
+                                  const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromPosFiles;
+    }
 
     /**
      * Set or clear the 'Do Not Populate' flag.
@@ -247,6 +274,7 @@ protected:
     bool          m_excludedFromSim;
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
+    bool          m_excludedFromPosFiles;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
 
     int           m_previewUnit = 1;

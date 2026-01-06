@@ -300,7 +300,12 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
     if( selectionIndex != wxNOT_FOUND )
         currentSelection = m_currentVariantCtrl->GetString( selectionIndex );
 
-    m_currentVariantCtrl->Set( aVariantNames );
+    // Add all variant names, a separator, and "Add New Variant..." at the end
+    wxArrayString contents = aVariantNames;
+    contents.Add( wxS( "---" ) );
+    contents.Add( _( "Add New Variant..." ) );
+
+    m_currentVariantCtrl->Set( contents );
 
     selectionIndex = m_currentVariantCtrl->FindString( currentSelection );
 
@@ -317,15 +322,119 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
         return;
 
     int selection = m_currentVariantCtrl->GetSelection();
+    int count = m_currentVariantCtrl->GetCount();
 
+    if( selection == wxNOT_FOUND || count == 0 )
+        return;
+
+    // "Add New Variant..." is always the last item, separator is second-to-last
+    if( selection == count - 1 )
+    {
+        // Restore previous selection before showing dialog
+        int previousSelection = m_currentVariantCtrl->FindString(
+                Schematic().GetCurrentVariant().IsEmpty() ? GetDefaultVariantName()
+                                                          : Schematic().GetCurrentVariant() );
+
+        if( previousSelection != wxNOT_FOUND )
+            m_currentVariantCtrl->SetSelection( previousSelection );
+
+        ShowAddVariantDialog();
+        return;
+    }
+
+    // Separator line - ignore selection
+    if( selection == count - 2 )
+    {
+        int previousSelection = m_currentVariantCtrl->FindString(
+                Schematic().GetCurrentVariant().IsEmpty() ? GetDefaultVariantName()
+                                                          : Schematic().GetCurrentVariant() );
+
+        if( previousSelection != wxNOT_FOUND )
+            m_currentVariantCtrl->SetSelection( previousSelection );
+
+        return;
+    }
+
+    wxString selectedString = m_currentVariantCtrl->GetString( selection );
     wxString selectedVariant;
 
-    if( ( selection != wxNOT_FOUND ) && ( m_currentVariantCtrl->GetString( selection ) != GetDefaultVariantName() ) )
-        selectedVariant = m_currentVariantCtrl->GetString( selection );
+    if( selectedString != GetDefaultVariantName() )
+        selectedVariant = selectedString;
 
     Schematic().SetCurrentVariant( selectedVariant );
     UpdateProperties();
     HardRedraw();
+}
+
+
+bool SCH_EDIT_FRAME::ShowAddVariantDialog()
+{
+    // Create a dialog with both name and description fields
+    wxDialog dlg( this, wxID_ANY, _( "New Variant" ), wxDefaultPosition, wxDefaultSize,
+                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    // Name field
+    wxStaticText* nameLabel = new wxStaticText( &dlg, wxID_ANY, _( "Variant name:" ) );
+    mainSizer->Add( nameLabel, 0, wxALL | wxEXPAND, 5 );
+
+    wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY );
+    mainSizer->Add( nameCtrl, 0, wxALL | wxEXPAND, 5 );
+
+    // Description field
+    wxStaticText* descLabel = new wxStaticText( &dlg, wxID_ANY, _( "Description (optional):" ) );
+    mainSizer->Add( descLabel, 0, wxALL | wxEXPAND, 5 );
+
+    wxTextCtrl* descCtrl = new wxTextCtrl( &dlg, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                           wxSize( 300, 60 ), wxTE_MULTILINE );
+    mainSizer->Add( descCtrl, 1, wxALL | wxEXPAND, 5 );
+
+    // Buttons
+    wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();
+    btnSizer->AddButton( new wxButton( &dlg, wxID_OK ) );
+    btnSizer->AddButton( new wxButton( &dlg, wxID_CANCEL ) );
+    btnSizer->Realize();
+    mainSizer->Add( btnSizer, 0, wxALL | wxALIGN_RIGHT, 5 );
+
+    dlg.SetSizer( mainSizer );
+    dlg.Fit();
+    dlg.Centre();
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return false;
+
+    wxString variantName = nameCtrl->GetValue().Trim().Trim( false );
+    wxString variantDesc = descCtrl->GetValue().Trim().Trim( false );
+
+    // Empty strings and duplicate variant names are not allowed.
+    if( variantName.IsEmpty() )
+    {
+        GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
+                                       10000, wxICON_ERROR );
+        return false;
+    }
+
+    if( Schematic().GetVariantNames().contains( variantName ) )
+    {
+        GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
+                                                         variantName ),
+                                       10000, wxICON_ERROR );
+        return false;
+    }
+
+    // Add variant to the schematic
+    Schematic().AddVariant( variantName );
+
+    if( !variantDesc.IsEmpty() )
+        Schematic().SetVariantDescription( variantName, variantDesc );
+
+    // Update the variant selector and select the new variant
+    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+    SetCurrentVariant( variantName );
+    UpdateProperties();
+    HardRedraw();
+    return true;
 }
 
 

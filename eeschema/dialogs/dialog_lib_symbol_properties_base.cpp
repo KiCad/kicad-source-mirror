@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -261,6 +261,9 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	m_excludeFromBoardCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerAttributes->Add( m_excludeFromBoardCheckBox, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_excludeFromPosFilesCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from position files"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerAttributes->Add( m_excludeFromPosFilesCheckBox, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerRightCol->Add( sbSizerAttributes, 1, wxEXPAND|wxALL, 5 );
@@ -606,6 +609,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_excludeFromSimCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBomCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBoardCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromPosFilesCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_unitSpinCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlKillFocus ), NULL, this );
 	m_unitSpinCtrl->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrl ), NULL, this );
 	m_unitSpinCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlText ), NULL, this );
@@ -651,6 +655,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_excludeFromSimCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBomCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBoardCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromPosFilesCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_unitSpinCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlKillFocus ), NULL, this );
 	m_unitSpinCtrl->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrl ), NULL, this );
 	m_unitSpinCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnUnitSpinCtrlText ), NULL, this );

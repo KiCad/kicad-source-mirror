@@ -67,6 +67,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxListBox* m_variantListBox;
 		STD_BITMAP_BUTTON* m_addVariantButton;
 		STD_BITMAP_BUTTON* m_renameVariantButton;
+		STD_BITMAP_BUTTON* m_copyVariantButton;
 		STD_BITMAP_BUTTON* m_deleteVariantButton;
 		wxPanel* m_rightPanel;
 		wxNotebook* m_nbPages;
@@ -117,6 +118,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void onVariantSelectionChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAddVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRenameVariant( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCopyVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteVariant( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }

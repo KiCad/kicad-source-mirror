@@ -55,7 +55,8 @@ JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
     m_spiceSaveAllVoltages( false ),
     m_spiceSaveAllCurrents( false ),
     m_spiceSaveAllDissipations( false ),
-    m_spiceSaveAllEvents( false )
+    m_spiceSaveAllEvents( false ),
+    m_variantNames()
 {
     m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &format, format ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_voltages", &m_spiceSaveAllVoltages,

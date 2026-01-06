@@ -417,6 +417,11 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             NeedRIGHT();
             break;
 
+        case T_in_pos_files:
+            symbol->SetExcludedFromPosFiles( !parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_duplicate_pin_numbers_are_jumpers:
             symbol->SetDuplicatePinNumbersAreJumpers( parseBool() );
             NeedRIGHT();
@@ -3211,6 +3216,11 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_in_pos_files:
+            symbol->SetExcludedFromPosFiles( !parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_dnp:
             symbol->SetDNP( parseBool() );
             NeedRIGHT();
@@ -3392,6 +3402,16 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                                     NeedRIGHT();
                                     break;
 
+                                case T_on_board:
+                                    variant.m_ExcludedFromBoard = !parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_in_pos_files:
+                                    variant.m_ExcludedFromPosFiles = !parseBool();
+                                    NeedRIGHT();
+                                    break;
+
                                 case T_field:
                                 {
                                     wxString fieldName;
@@ -3428,7 +3448,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                                 }
 
                                 default:
-                                    Expecting( "dnp, exclude_from_sim, field, in_bom, or name" );
+                                    Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, or on_board" );
                                 }
 
                                 instance.m_Variants[variant.m_Name] = variant;
@@ -3843,6 +3863,16 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                                     NeedRIGHT();
                                     break;
 
+                                case T_on_board:
+                                    variant.m_ExcludedFromBoard = !parseBool();
+                                    NeedRIGHT();
+                                    break;
+
+                                case T_in_pos_files:
+                                    variant.m_ExcludedFromPosFiles = !parseBool();
+                                    NeedRIGHT();
+                                    break;
+
                                 case T_field:
                                 {
                                     wxString fieldName;
@@ -3879,7 +3909,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                                 }
 
                                 default:
-                                    Expecting( "dnp, exclude_from_sim, field, in_bom, or name" );
+                                    Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, or on_board" );
                                 }
 
                                 instance.m_Variants[variant.m_Name] = variant;

@@ -1089,7 +1089,6 @@ void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, con
 {
     wxCHECK( aPath && m_parent, /* void */ );
 
-    // Don't allow modification of text value of generated fields.
     if( m_isGeneratedField )
         return;
 

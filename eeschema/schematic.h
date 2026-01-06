@@ -465,7 +465,53 @@ public:
      */
     void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 
-    void AddVariant( const wxString& aVariantName ) { m_variantNames.emplace( aVariantName ); }
+    void AddVariant( const wxString& aVariantName );
+
+    /**
+     * Rename a variant from @a aOldName to @a aNewName.
+     *
+     * This updates the variant name in all symbols and sheets throughout the schematic.
+     *
+     * @param aOldName is the current name of the variant to rename.
+     * @param aNewName is the new name for the variant.
+     * @param aCommit is an optional SCH_COMMIT for undo/redo support.
+     */
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                        SCH_COMMIT* aCommit = nullptr );
+
+    /**
+     * Copy a variant from @a aSourceVariant to @a aNewVariant.
+     *
+     * This creates a new variant with data copied from the source variant for all
+     * symbols and sheets throughout the schematic.
+     *
+     * @param aSourceVariant is the name of the variant to copy from.
+     * @param aNewVariant is the name of the new variant to create.
+     * @param aCommit is an optional SCH_COMMIT for undo/redo support.
+     */
+    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                      SCH_COMMIT* aCommit = nullptr );
+
+    /**
+     * Return the set of variant names (without the default placeholder).
+     */
+    const std::set<wxString>& GetVariantNames() const { return m_variantNames; }
+
+    /**
+     * Return the description for a variant.
+     *
+     * @param aVariantName is the name of the variant.
+     * @return the description or an empty string if the variant has no description.
+     */
+    wxString GetVariantDescription( const wxString& aVariantName ) const;
+
+    /**
+     * Set the description for a variant.
+     *
+     * @param aVariantName is the name of the variant.
+     * @param aDescription is the description to set.
+     */
+    void SetVariantDescription( const wxString& aVariantName, const wxString& aDescription );
 
     /**
      * This is a throw away method for variant testing.

@@ -1851,6 +1851,39 @@ void SCH_SHEET::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantN
 }
 
 
+void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
+                               const wxString& aNewName )
+{
+    SCH_SHEET_INSTANCE* instance = getInstance( aPath );
+
+    // The instance path must already exist and contain the old variant.
+    if( !instance || !instance->m_Variants.contains( aOldName ) )
+        return;
+
+    // Get the variant data, update the name, and re-insert with new key
+    SCH_SHEET_VARIANT variant = instance->m_Variants[aOldName];
+    variant.m_Name = aNewName;
+    instance->m_Variants.erase( aOldName );
+    instance->m_Variants.insert( std::make_pair( aNewName, variant ) );
+}
+
+
+void SCH_SHEET::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,
+                             const wxString& aNewVariant )
+{
+    SCH_SHEET_INSTANCE* instance = getInstance( aPath );
+
+    // The instance path must already exist and contain the source variant.
+    if( !instance || !instance->m_Variants.contains( aSourceVariant ) )
+        return;
+
+    // Copy the variant data with a new name
+    SCH_SHEET_VARIANT variant = instance->m_Variants[aSourceVariant];
+    variant.m_Name = aNewVariant;
+    instance->m_Variants.insert( std::make_pair( aNewVariant, variant ) );
+}
+
+
 void SCH_SHEET::SetDNP( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
     if( !aInstance || aVariantName.IsEmpty() )
@@ -2114,7 +2147,7 @@ static struct SCH_SHEET_DESC
         const wxString groupAttributes = _HKI( "Attributes" );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Board" ),
-                    &SCH_SHEET::SetExcludedFromBoard, &SCH_SHEET::GetExcludedFromBoard ),
+                    &SCH_SHEET::SetExcludedFromBoardProp, &SCH_SHEET::GetExcludedFromBoardProp ),
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Simulation" ),
                     &SCH_SHEET::SetExcludedFromSimProp, &SCH_SHEET::GetExcludedFromSimProp ),

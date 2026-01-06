@@ -486,6 +486,14 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetExcludedFromBoard( false );
 
+    // Include in position files support tests.
+    testPart.SetExcludedFromPosFiles( true );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
+    testPart.SetExcludedFromPosFiles( false );
+    m_part_no_data.SetExcludedFromPosFiles( true );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
+    m_part_no_data.SetExcludedFromPosFiles( false );
+
     // Show pin names flag comparison tests.
     m_part_no_data.SetShowPinNames( false );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );

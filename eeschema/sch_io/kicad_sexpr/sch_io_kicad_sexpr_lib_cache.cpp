@@ -330,6 +330,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
         KICAD_FORMAT::FormatBool( &aFormatter, "exclude_from_sim",  aSymbol->GetExcludedFromSim() );
         KICAD_FORMAT::FormatBool( &aFormatter, "in_bom", !aSymbol->GetExcludedFromBOM() );
         KICAD_FORMAT::FormatBool( &aFormatter, "on_board", !aSymbol->GetExcludedFromBoard() );
+        KICAD_FORMAT::FormatBool( &aFormatter, "in_pos_files", !aSymbol->GetExcludedFromPosFiles() );
 
         KICAD_FORMAT::FormatBool( &aFormatter, "duplicate_pin_numbers_are_jumpers",
                                   aSymbol->GetDuplicatePinNumbersAreJumpers() );

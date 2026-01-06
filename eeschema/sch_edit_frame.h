@@ -267,6 +267,13 @@ public:
 
     void SetCurrentVariant( const wxString& aVariantName );
 
+    /**
+     * Show a dialog to create a new variant with name and description.
+     *
+     * @return true if a variant was created, false if cancelled or invalid input
+     */
+    bool ShowAddVariantDialog();
+
     void onVariantSelected( wxCommandEvent& aEvent );
 
     /**

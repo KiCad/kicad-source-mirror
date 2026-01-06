@@ -182,6 +182,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 
     plotJob->m_drawingSheet = m_argDrawingSheet;
     plotJob->SetVarOverrides( m_argDefineVars );
+    plotJob->m_variantNames = m_argVariantNames;
 
     // PDF local options
     if( m_plotFormat == SCH_PLOT_FORMAT::PDF )
@@ -191,7 +192,6 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         plotJob->m_PDFMetadata = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_METADATA );
     }
 
-    plotJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, plotJob.get() );
 
     return exitCode;

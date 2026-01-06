@@ -262,6 +262,46 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 m_refDesTracker->Deserialize( aData );
             }, {} ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "variants",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const auto& [name, description] : m_VariantDescriptions )
+                {
+                    nlohmann::json entry;
+                    entry["name"] = name;
+
+                    if( !description.IsEmpty() )
+                        entry["description"] = description;
+
+                    ret.push_back( entry );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                m_VariantDescriptions.clear();
+
+                if( aJson.is_array() )
+                {
+                    for( const auto& entry : aJson )
+                    {
+                        if( entry.contains( "name" ) )
+                        {
+                            wxString name = entry["name"].get<wxString>();
+                            wxString desc;
+
+                            if( entry.contains( "description" ) )
+                                desc = entry["description"].get<wxString>();
+
+                            m_VariantDescriptions[name] = desc;
+                        }
+                    }
+                }
+            }, nlohmann::json::array() ) );
+
     registerMigration( 0, 1,
             [&]() -> bool
             {

@@ -100,6 +100,8 @@ void SCH_SYMBOL_VARIANT::InitializeAttributes( const SCH_SYMBOL& aSymbol )
     m_DNP = aSymbol.GetDNP();
     m_ExcludedFromBOM = aSymbol.GetExcludedFromBOM();
     m_ExcludedFromSim = aSymbol.GetExcludedFromSim();
+    m_ExcludedFromBoard = aSymbol.GetExcludedFromBoard();
+    m_ExcludedFromPosFiles = aSymbol.GetExcludedFromPosFiles();
 }
 
 
@@ -108,6 +110,8 @@ void SCH_SHEET_VARIANT::InitializeAttributes( const SCH_SHEET& aSheet )
     m_DNP = aSheet.GetDNP();
     m_ExcludedFromBOM = aSheet.GetExcludedFromBOM();
     m_ExcludedFromSim = aSheet.GetExcludedFromSim();
+    m_ExcludedFromBoard = aSheet.GetExcludedFromBoard();
+    m_ExcludedFromPosFiles = false;  // Sheets don't have position files exclusion
 }
 
 
@@ -299,11 +303,41 @@ bool SCH_SHEET_PATH::GetExcludedFromSim() const
 }
 
 
+bool SCH_SHEET_PATH::GetExcludedFromSim( const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return GetExcludedFromSim();
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromSim( this, aVariantName ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_SHEET_PATH::GetExcludedFromBOM() const
 {
     for( SCH_SHEET* sheet : m_sheets )
     {
         if( sheet->GetExcludedFromBOM() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_PATH::GetExcludedFromBOM( const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return GetExcludedFromBOM();
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromBOM( this, aVariantName ) )
             return true;
     }
 
@@ -328,6 +362,21 @@ bool SCH_SHEET_PATH::GetDNP() const
     for( SCH_SHEET* sheet : m_sheets )
     {
         if( sheet->GetDNP() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_PATH::GetDNP( const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return GetDNP();
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetDNP( this, aVariantName ) )
             return true;
     }
 

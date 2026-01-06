@@ -68,6 +68,9 @@ public:
     bool                  m_PDFHierarchicalLinks;
     bool                  m_PDFMetadata;
     wxString              m_theme;
+
+    // Variant names to export. Empty vector means default variant only.
+    std::vector<wxString> m_variantNames;
 };
 
 

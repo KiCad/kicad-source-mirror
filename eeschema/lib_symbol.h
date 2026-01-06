@@ -507,6 +507,19 @@ public:
         SetExcludedFromBOM( aExclude );
     }
 
+    bool GetExcludedFromBoardProp() const
+    {
+        return GetExcludedFromBoard();
+    }
+
+    void SetExcludedFromBoardProp( bool aExclude )
+    {
+        SetExcludedFromBoard( aExclude );
+    }
+
+    bool GetExcludedFromPosFilesProp() const { return GetExcludedFromPosFiles(); }
+    void SetExcludedFromPosFilesProp( bool aExclude ) { SetExcludedFromPosFiles( aExclude ); }
+
     std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
     EMBEDDED_FILES* GetEmbeddedFiles() override;

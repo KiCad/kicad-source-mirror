@@ -677,6 +677,13 @@ void SCH_SYMBOL::SetRefProp( const wxString& aRef )
 }
 
 
+void SCH_SYMBOL::SetValueProp( const wxString& aValue )
+{
+    wxString currentVariant = Schematic()->GetCurrentVariant();
+    SetValueFieldText( aValue, &Schematic()->CurrentSheet(), currentVariant );
+}
+
+
 void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     KIID_PATH path = sheet->Path();
@@ -734,7 +741,10 @@ void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFiel
         break;
 
     default:
-        if( aFieldText != field->GetText( aPath ) ) // Do not set the variant unless it's different than the default.
+    {
+        wxString defaultText = field->GetText( aPath );
+
+        if( aFieldText != defaultText )
         {
             if( aVariantName.IsEmpty() )
             {
@@ -762,6 +772,7 @@ void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFiel
         }
 
         break;
+    }
     }
 }
 
@@ -1061,6 +1072,124 @@ bool SCH_SYMBOL::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxSt
 }
 
 
+void SCH_SYMBOL::SetExcludedFromBoard( bool aEnable, const SCH_SHEET_PATH* aInstance,
+                                       const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_excludedFromBoard = aEnable;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE* instance = getInstance( *aInstance );
+
+    wxCHECK_MSG( instance, /* void */,
+                 wxString::Format( wxS( "Cannot set exclude from board for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        m_excludedFromBoard = aEnable;
+    }
+    else
+    {
+        if( instance->m_Variants.contains( aVariantName )
+          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromBoard ) )
+        {
+            instance->m_Variants[aVariantName].m_ExcludedFromBoard = aEnable;
+        }
+        else
+        {
+            SCH_SYMBOL_VARIANT variant( aVariantName );
+
+            variant.InitializeAttributes( *this );
+            variant.m_ExcludedFromBoard = aEnable;
+            AddVariant( *aInstance, variant );
+        }
+    }
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance,
+                                       const wxString& aVariantName ) const
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+        return m_excludedFromBoard;
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    if( !GetInstance( instance, aInstance->Path() ) )
+        return m_excludedFromBoard;
+
+    if( aVariantName.IsEmpty() )
+        return m_excludedFromBoard;
+    else if( instance.m_Variants.contains( aVariantName ) )
+        return instance.m_Variants[aVariantName].m_ExcludedFromBoard;
+
+    // If variant is not defined yet, return default exclude from board setting.
+    return m_excludedFromBoard;
+}
+
+
+void SCH_SYMBOL::SetExcludedFromPosFiles( bool aEnable, const SCH_SHEET_PATH* aInstance,
+                                          const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_excludedFromPosFiles = aEnable;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE* instance = getInstance( *aInstance );
+
+    wxCHECK_MSG( instance, /* void */,
+                 wxString::Format( wxS( "Cannot set exclude from pos files for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( aVariantName.IsEmpty() )
+    {
+        m_excludedFromPosFiles = aEnable;
+    }
+    else
+    {
+        if( instance->m_Variants.contains( aVariantName )
+          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromPosFiles ) )
+        {
+            instance->m_Variants[aVariantName].m_ExcludedFromPosFiles = aEnable;
+        }
+        else
+        {
+            SCH_SYMBOL_VARIANT variant( aVariantName );
+
+            variant.InitializeAttributes( *this );
+            variant.m_ExcludedFromPosFiles = aEnable;
+            AddVariant( *aInstance, variant );
+        }
+    }
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance,
+                                          const wxString& aVariantName ) const
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+        return m_excludedFromPosFiles;
+
+    SCH_SYMBOL_INSTANCE instance;
+
+    if( !GetInstance( instance, aInstance->Path() ) )
+        return m_excludedFromPosFiles;
+
+    if( aVariantName.IsEmpty() )
+        return m_excludedFromPosFiles;
+    else if( instance.m_Variants.contains( aVariantName ) )
+        return instance.m_Variants[aVariantName].m_ExcludedFromPosFiles;
+
+    // If variant is not defined yet, return default exclude from position files setting.
+    return m_excludedFromPosFiles;
+}
+
+
 void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 {
     for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
@@ -1084,7 +1213,11 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
     if( variant && variant->m_Fields.contains( GetField( FIELD_T::VALUE )->GetName() ) )
         return variant->m_Fields[GetField( FIELD_T::VALUE )->GetName()];
 
-    return wxEmptyString;
+    // Fall back to default value when variant doesn't have an override
+    if( aResolve )
+        return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aAllowExtraText );
+
+    return GetField( FIELD_T::VALUE )->GetText();
 }
 
 
@@ -1097,18 +1230,23 @@ void SCH_SYMBOL::SetValueFieldText( const wxString& aValue, const SCH_SHEET_PATH
         return;
     }
 
-    std::optional variant = GetVariant( *aInstance, aVariantName );
+    SCH_SYMBOL_INSTANCE* instance = getInstance( *aInstance );
 
-    if( variant )
+    wxCHECK( instance, /* void */ );
+
+    wxString fieldName = GetField( FIELD_T::VALUE )->GetName();
+
+    if( instance->m_Variants.contains( aVariantName ) )
     {
-        variant->m_Fields[GetField( FIELD_T::VALUE )->GetName()] = aValue;
+        instance->m_Variants[aVariantName].m_Fields[fieldName] = aValue;
     }
     else
     {
         SCH_SYMBOL_VARIANT newVariant( aVariantName );
 
-        newVariant.m_Fields[GetField( FIELD_T::VALUE )->GetName()] = aValue;
-        AddVariant( *aInstance, newVariant );
+        newVariant.InitializeAttributes( *this );
+        newVariant.m_Fields[fieldName] = aValue;
+        instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
     }
 }
 
@@ -1592,6 +1730,13 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
+    return ResolveTextVar( aPath, token, wxEmptyString, aDepth );
+}
+
+
+bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                                 const wxString& aVariantName, int aDepth ) const
+{
     static wxRegEx operatingPoint( wxT( "^"
                                         "OP"
                                         "(:[^.]*)?"     // pin
@@ -1697,9 +1842,23 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         if( token->IsSameAs( fieldName, false ) )
         {
             if( field.GetId() == FIELD_T::REFERENCE )
+            {
                 *token = GetRef( aPath, true );
+            }
+            else if( !aVariantName.IsEmpty() )
+            {
+                // Check for variant-specific field value
+                std::optional<SCH_SYMBOL_VARIANT> variant = GetVariant( *aPath, aVariantName );
+
+                if( variant && variant->m_Fields.contains( fieldName ) )
+                    *token = variant->m_Fields.at( fieldName );
+                else
+                    *token = field.GetShownText( aPath, false, aDepth + 1 );
+            }
             else
+            {
                 *token = field.GetShownText( aPath, false, aDepth + 1 );
+            }
 
             return true;
         }
@@ -3422,6 +3581,39 @@ void SCH_SYMBOL::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariant
 }
 
 
+void SCH_SYMBOL::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
+                                const wxString& aNewName )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    // The instance path must already exist and contain the old variant.
+    if( !instance || !instance->m_Variants.contains( aOldName ) )
+        return;
+
+    // Get the variant data, update the name, and re-insert with new key
+    SCH_SYMBOL_VARIANT variant = instance->m_Variants[aOldName];
+    variant.m_Name = aNewName;
+    instance->m_Variants.erase( aOldName );
+    instance->m_Variants.insert( std::make_pair( aNewName, variant ) );
+}
+
+
+void SCH_SYMBOL::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,
+                              const wxString& aNewVariant )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    // The instance path must already exist and contain the source variant.
+    if( !instance || !instance->m_Variants.contains( aSourceVariant ) )
+        return;
+
+    // Copy the variant data with a new name
+    SCH_SYMBOL_VARIANT variant = instance->m_Variants[aSourceVariant];
+    variant.m_Name = aNewVariant;
+    instance->m_Variants.insert( std::make_pair( aNewVariant, variant ) );
+}
+
+
 bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )
@@ -3668,13 +3860,6 @@ static struct SCH_SYMBOL_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        // This property is created in lib_symbol.cpp as SYMBOL property, so do not recreate it
-        #if 0
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Board" ),
-                                                         &SYMBOL::SetExcludedFromBoard,
-                                                         &SYMBOL::GetExcludedFromBoard ),
-                             groupAttributes );
-        #endif
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
                                                              &SCH_SYMBOL::SetExcludedFromSimProp,
                                                              &SCH_SYMBOL::GetExcludedFromSimProp ),
@@ -3683,7 +3868,16 @@ static struct SCH_SYMBOL_DESC
                                                              &SCH_SYMBOL::SetExcludedFromBOMProp,
                                                              &SCH_SYMBOL::GetExcludedFromBOMProp ),
                              groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ), &SCH_SYMBOL::SetDNPProp,
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Board" ),
+                                                             &SCH_SYMBOL::SetExcludedFromBoardProp,
+                                                             &SCH_SYMBOL::GetExcludedFromBoardProp ),
+                             groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Position Files" ),
+                                                             &SCH_SYMBOL::SetExcludedFromPosFilesProp,
+                                                             &SCH_SYMBOL::GetExcludedFromPosFilesProp ),
+                             groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ),
+                                                             &SCH_SYMBOL::SetDNPProp,
                                                              &SCH_SYMBOL::GetDNPProp ),
                              groupAttributes );
     }

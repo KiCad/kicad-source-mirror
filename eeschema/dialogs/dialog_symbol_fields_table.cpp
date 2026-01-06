@@ -210,6 +210,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_addVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+    m_copyVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::copy ) );
 
     m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
@@ -275,6 +276,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
         m_variantListBox->SetSelection( 0 );
     }
 
+    updateVariantButtonStates();
+
     if( !ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
         m_splitter_left->Unsplit( m_variantsPanel );
 
@@ -284,6 +287,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
     m_hash_key = TO_UTF8( GetTitle() );
+
+    // Set the current variant for highlighting variant-specific field values
+    m_dataModel->SetCurrentVariant( m_parent->Schematic().GetCurrentVariant() );
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
@@ -1559,7 +1565,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
                 m_job->m_fieldsGroupBy.emplace_back( modelField.name );
         }
 
-        m_job->m_variant = getSelectedVariant();
+        wxString selectedVariant = getSelectedVariant();
+
+        if( !selectedVariant.IsEmpty() )
+            m_job->m_variantNames.push_back( selectedVariant );
 
         EndModal( wxID_OK );
     }
@@ -2614,24 +2623,26 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHE
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
 {
-    wxTextEntryDialog dlg( this, _( "Add new variant name:" ), _( "New Variant" ), wxEmptyString,
-                           wxOK | wxCANCEL | wxCENTER );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( !m_parent->ShowAddVariantDialog() )
         return;
 
-    // Empty strings and duplicate variant names are not allowed.
-    if( dlg.GetValue().IsEmpty() || ( m_variantListBox->FindString( dlg.GetValue() ) != wxNOT_FOUND ) )
-    {
-        wxBell();
-        return;
-    }
+    wxArrayString ctrlContents;
+    ctrlContents.Add( GetDefaultVariantName() );
 
-    wxArrayString ctrlContents = m_variantListBox->GetStrings();
+    for( const wxString& variant : m_parent->Schematic().GetVariantNames() )
+        ctrlContents.Add( variant );
 
-    ctrlContents.Add( dlg.GetValue() );
     ctrlContents.Sort( SortVariantNames );
     m_variantListBox->Set( ctrlContents );
+
+    wxString currentVariant = m_parent->Schematic().GetCurrentVariant();
+    int      newSelection = m_variantListBox->FindString(
+                currentVariant.IsEmpty() ? GetDefaultVariantName() : currentVariant );
+
+    if( newSelection != wxNOT_FOUND )
+        m_variantListBox->SetSelection( newSelection );
+
+    updateVariantButtonStates();
 }
 
 
@@ -2642,49 +2653,152 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     // An empty or default selection cannot be deleted.
     if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
     {
-        wxBell();
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot delete the default variant." ),
+                                                 10000, wxICON_ERROR );
         return;
     }
 
     wxString variantName = m_variantListBox->GetString( selection );
-    m_variantListBox->SetSelection( selection - 1 );
     m_variantListBox->Delete( selection );
     m_parent->Schematic().DeleteVariant( variantName );
+
+    int newSelection = std::max( 0, selection - 1 );
+    m_variantListBox->SetSelection( newSelection );
+
+    wxString selectedVariant = getSelectedVariant();
+    m_parent->SetCurrentVariant( selectedVariant );
+
+    if( m_grid->CommitPendingChanges( true ) )
+    {
+        m_dataModel->SetCurrentVariant( selectedVariant );
+        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
+        m_dataModel->RebuildRows();
+
+        if( m_nbPages->GetSelection() == 1 )
+            PreviewRefresh();
+        else
+            m_grid->ForceRefresh();
+    }
+
+    updateVariantButtonStates();
+    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
 {
-    // wxArrayInt selections;
+    int selection = m_variantListBox->GetSelection();
 
-    // // Only allow renaming a single selection that is not the default.
-    // if( ( m_variantListBox->GetSelections( selections ) != 1 ) || ( selections[0] == 0 ) )
-    // {
-    //     wxBell();
-    //     return;
-    // }
+    // An empty or default selection cannot be renamed.
+    if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot rename the default variant." ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
 
-    // wxArrayString ctrlContents = m_variantListBox->GetStrings();
-    // wxString oldVariantName = ctrlContents[selections[0]];
+    wxString oldVariantName = m_variantListBox->GetString( selection );
 
-    // wxTextEntryDialog dlg( this, _( "Add new variant name:" ), _( "New Variant" ), oldVariantName,
-    //                        wxOK | wxCANCEL | wxCENTER );
+    wxTextEntryDialog dlg( this, _( "Enter new variant name:" ), _( "Rename Variant" ),
+                           oldVariantName, wxOK | wxCANCEL | wxCENTER );
 
-    // if( dlg.ShowModal() == wxID_CANCEL )
-    //     return;
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
 
-    // wxString newVariantName = dlg.GetValue();
+    wxString newVariantName = dlg.GetValue().Trim().Trim( false );
 
-    // if( newVariantName.IsEmpty() || ( newVariantName == oldVariantName ) || ( newVariantName == ctrlContents[0] ) )
-    // {
-    //     wxBell();
-    //     return;
-    // }
+    // Empty name is not allowed.
+    if( newVariantName.IsEmpty() )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
 
-    // ctrlContents.Remove( m_variantListBox->GetString( selections[0] ) );
-    // ctrlContents.Add( newVariantName );
-    // ctrlContents.Sort( SortVariantNames );
-    // m_variantListBox->Set( ctrlContents );
+    // Same name - nothing to do
+    if( newVariantName == oldVariantName )
+        return;
+
+    // Duplicate name is not allowed.
+    if( m_variantListBox->FindString( newVariantName ) != wxNOT_FOUND )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
+                                                                   newVariantName ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
+
+    m_parent->Schematic().RenameVariant( oldVariantName, newVariantName );
+
+    wxArrayString ctrlContents = m_variantListBox->GetStrings();
+    ctrlContents.Remove( oldVariantName );
+    ctrlContents.Add( newVariantName );
+    ctrlContents.Sort( SortVariantNames );
+    m_variantListBox->Set( ctrlContents );
+
+    int newSelection = m_variantListBox->FindString( newVariantName );
+
+    if( newSelection != wxNOT_FOUND )
+        m_variantListBox->SetSelection( newSelection );
+
+    updateVariantButtonStates();
+    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
+{
+    int selection = m_variantListBox->GetSelection();
+
+    // An empty or default selection cannot be copied.
+    if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot copy the default variant." ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
+
+    wxString sourceVariantName = m_variantListBox->GetString( selection );
+
+    wxTextEntryDialog dlg( this, _( "Enter name for the copied variant:" ), _( "Copy Variant" ),
+                           sourceVariantName + wxS( "_copy" ), wxOK | wxCANCEL | wxCENTER );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString newVariantName = dlg.GetValue().Trim().Trim( false );
+
+    // Empty name is not allowed.
+    if( newVariantName.IsEmpty() )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
+
+    // Duplicate name is not allowed.
+    if( m_variantListBox->FindString( newVariantName ) != wxNOT_FOUND )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
+                                                                   newVariantName ),
+                                                 10000, wxICON_ERROR );
+        return;
+    }
+
+    m_parent->Schematic().CopyVariant( sourceVariantName, newVariantName );
+
+    wxArrayString ctrlContents = m_variantListBox->GetStrings();
+    ctrlContents.Add( newVariantName );
+    ctrlContents.Sort( SortVariantNames );
+    m_variantListBox->Set( ctrlContents );
+
+    int newSelection = m_variantListBox->FindString( newVariantName );
+
+    if( newSelection != wxNOT_FOUND )
+        m_variantListBox->SetSelection( newSelection );
+
+    updateVariantButtonStates();
+    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
 }
 
 
@@ -2692,6 +2806,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 {
     wxString currentVariant;
     wxString selectedVariant = getSelectedVariant();
+
+    updateVariantButtonStates();
 
     if( m_parent )
     {
@@ -2705,6 +2821,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
     {
         if( m_grid->CommitPendingChanges( true ) )
         {
+            // Update the data model's current variant for field highlighting
+            m_dataModel->SetCurrentVariant( selectedVariant );
+
             m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
             m_dataModel->RebuildRows();
 
@@ -2719,6 +2838,19 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
         {
         }
     }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::updateVariantButtonStates()
+{
+    int selection = m_variantListBox->GetSelection();
+
+    // Copy, rename, and delete are only enabled for non-default variant selections
+    bool canModify = ( selection != wxNOT_FOUND ) && ( selection != 0 );
+
+    m_copyVariantButton->Enable( canModify );
+    m_renameVariantButton->Enable( canModify );
+    m_deleteVariantButton->Enable( canModify );
 }
 
 

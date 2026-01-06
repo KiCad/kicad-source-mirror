@@ -396,6 +396,12 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
+            if( symbol->ResolveExcludedFromPosFiles() )
+            {
+                xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
+            }
+
             if( symbol->ResolveDNP() || sheet.GetDNP() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );

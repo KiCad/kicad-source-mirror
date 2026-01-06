@@ -458,8 +458,20 @@ public:
     /**
      * Set or clear exclude from board netlist flag.
      */
-    void SetExcludedFromBoard( bool aExcludeFromBoard ) override { m_excludedFromBoard = aExcludeFromBoard; }
-    bool GetExcludedFromBoard() const override { return m_excludedFromBoard; }
+    void SetExcludedFromBoard( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromBoard = aExclude;
+    }
+
+    bool GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromBoard;
+    }
+
+    bool GetExcludedFromBoardProp() const { return GetExcludedFromBoard(); }
+    void SetExcludedFromBoardProp( bool aExclude ) { SetExcludedFromBoard( aExclude ); }
 
     /**
      * Set or clear the 'Do Not Populate' flags
@@ -525,10 +537,27 @@ public:
 
     void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
 
+    void RenameVariant( const KIID_PATH& aPath, const wxString& aOldName, const wxString& aNewName );
+
+    void CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,
+                      const wxString& aNewVariant );
+
     void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SHEET_VARIANT& aVariant );
     void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
     {
         DeleteVariant( aInstance.Path(), aVariantName );
+    }
+
+    void RenameVariant( const SCH_SHEET_PATH& aInstance, const wxString& aOldName,
+                        const wxString& aNewName )
+    {
+        RenameVariant( aInstance.Path(), aOldName, aNewName );
+    }
+
+    void CopyVariant( const SCH_SHEET_PATH& aInstance, const wxString& aSourceVariant,
+                      const wxString& aNewVariant )
+    {
+        CopyVariant( aInstance.Path(), aSourceVariant, aNewVariant );
     }
 
     /**

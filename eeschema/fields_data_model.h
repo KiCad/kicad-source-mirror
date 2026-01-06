@@ -332,6 +332,20 @@ public:
 
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }
 
+    /**
+     * Set the current variant name for highlighting purposes.
+     *
+     * When a variant is set, cells that differ from the default (non-variant) value
+     * will be highlighted.
+     *
+     * @param aVariantName The name of the current variant, or empty string for default.
+     */
+    void SetCurrentVariant( const wxString& aVariantName ) { m_currentVariant = aVariantName; }
+    const wxString& GetCurrentVariant() const { return m_currentVariant; }
+
+    void SetVariantNames( const std::vector<wxString>& aVariantNames ) { m_variantNames = aVariantNames; }
+    const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
+
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
@@ -344,6 +358,17 @@ private:
     bool     isAttribute( const wxString& aFieldName );
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );
+
+    /**
+     * Get the default (non-variant) value for a field.
+     *
+     * This retrieves the field value as it would appear without any variant override.
+     *
+     * @param aRef The symbol reference.
+     * @param aFieldName The name of the field.
+     * @return The default field value.
+     */
+    wxString getDefaultFieldValue( const SCH_REFERENCE& aRef, const wxString& aFieldName );
 
     /**
      * Set the attribute value.
@@ -388,6 +413,8 @@ protected:
     bool               m_includeExcluded;
     bool               m_rebuildsEnabled;
     wxGridCellAttr*    m_urlEditor;
+    wxString                m_currentVariant;  ///< Current variant name for highlighting
+    std::vector<wxString>   m_variantNames;    ///< Variant names for multi-variant DNP filtering
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;

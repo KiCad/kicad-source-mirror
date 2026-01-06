@@ -91,8 +91,17 @@ public:
     /**
      * Set or clear exclude from board netlist flag.
      */
-    void SetExcludedFromBoard( bool aExcludeFromBoard ) override { m_excludedFromBoard = aExcludeFromBoard; }
-    bool GetExcludedFromBoard() const override { return m_excludedFromBoard; }
+    void SetExcludedFromBoard( bool aExclude, const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) override
+    {
+        m_excludedFromBoard = aExclude;
+    }
+
+    bool GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) const override
+    {
+        return m_excludedFromBoard;
+    }
 
     /**
      * Set or clear the 'Do Not Populate' flag.

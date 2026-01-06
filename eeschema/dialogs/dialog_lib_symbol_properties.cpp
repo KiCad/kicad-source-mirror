@@ -339,6 +339,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_excludeFromSimCheckBox->SetValue( m_libEntry->GetExcludedFromSim() );
     m_excludeFromBomCheckBox->SetValue( m_libEntry->GetExcludedFromBOM() );
     m_excludeFromBoardCheckBox->SetValue( m_libEntry->GetExcludedFromBoard() );
+    m_excludeFromPosFilesCheckBox->SetValue( m_libEntry->GetExcludedFromPosFiles() );
 
     m_ShowPinNumButt->SetValue( m_libEntry->GetShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->GetShowPinNames() );
@@ -685,6 +686,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetExcludedFromSim( m_excludeFromSimCheckBox->GetValue() );
     m_libEntry->SetExcludedFromBOM( m_excludeFromBomCheckBox->GetValue() );
     m_libEntry->SetExcludedFromBoard( m_excludeFromBoardCheckBox->GetValue() );
+    m_libEntry->SetExcludedFromPosFiles( m_excludeFromPosFilesCheckBox->GetValue() );
 
     m_libEntry->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
     m_libEntry->SetShowPinNames( m_ShowPinNameButt->GetValue() );
@@ -1185,9 +1187,11 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromSimCheckBox->SetValue( true );
         m_excludeFromBomCheckBox->SetValue( true );
         m_excludeFromBoardCheckBox->SetValue( true );
+        m_excludeFromPosFilesCheckBox->SetValue( true );
         m_excludeFromBomCheckBox->Enable( false );
         m_excludeFromBoardCheckBox->Enable( false );
         m_excludeFromSimCheckBox->Enable( false );
+        m_excludeFromPosFilesCheckBox->Enable( false );
         m_spiceFieldsButton->Show( false );
         m_OptionLocalPower->Enable( true );
     }
@@ -1196,6 +1200,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromBomCheckBox->Enable( true );
         m_excludeFromBoardCheckBox->Enable( true );
         m_excludeFromSimCheckBox->Enable( true );
+        m_excludeFromPosFilesCheckBox->Enable( true );
         m_spiceFieldsButton->Show( true );
         m_OptionLocalPower->Enable( false );
     }

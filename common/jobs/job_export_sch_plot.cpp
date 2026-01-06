@@ -53,7 +53,8 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
         m_PDFPropertyPopups( true ),
         m_PDFHierarchicalLinks( true ),
         m_PDFMetadata( true ),
-        m_theme()
+        m_theme(),
+        m_variantNames()
 {
     m_params.emplace_back( new JOB_PARAM<SCH_PLOT_FORMAT>( "format",
             &m_plotFormat, m_plotFormat ) );

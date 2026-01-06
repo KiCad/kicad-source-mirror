@@ -550,6 +550,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim( &sheetPath, variantName ) );
     m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM( &sheetPath, variantName ) );
     m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
+    m_cbExcludeFromPosFiles->SetValue( m_symbol->GetExcludedFromPosFiles() );
     m_cbDNP->SetValue( m_symbol->GetDNP( &sheetPath, variantName ) );
 
     if( m_part )
@@ -784,8 +785,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                 // Restore the default field text for existing fields.
                 tmp->SetText( defaultText, &currentSheet );
 
-                tmp->SetText( m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() ),
-                              &currentSheet, currentVariant );
+                wxString variantText = m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() );
+                tmp->SetText( variantText, &currentSheet, currentVariant );
             }
         }
 
@@ -796,6 +797,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
+    m_symbol->SetExcludedFromPosFiles( m_cbExcludeFromPosFiles->IsChecked() );
     m_symbol->SetDNP( m_cbDNP->IsChecked(), &currentSheet, currentVariant );
 
     // Update any assignments

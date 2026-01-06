@@ -1,7 +1,8 @@
 {
   "ERC": {
     "crossprobe": true,
-    "scroll_on_crossprobe": true
+    "scroll_on_crossprobe": true,
+    "show_all_errors": false
   },
   "annotation": {
     "automatic": true,
@@ -174,6 +175,7 @@
     "scope": 0,
     "selection_mode": 0,
     "sidebar_collapsed": false,
+    "variant_sash_pos": 500,
     "width": 0
   },
   "find_replace": {

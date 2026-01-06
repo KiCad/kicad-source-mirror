@@ -79,6 +79,7 @@ instances
 inverted
 inverted_clock
 in_bom
+in_pos_files
 iref
 italic
 jumper_pin_groups

@@ -2129,6 +2129,15 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
+
+        if( m_excludedFromPosFiles != aRhs.m_excludedFromPosFiles )
+        {
+            retv = ( m_excludedFromPosFiles ) ? -1 : 1;
+            REPORT( _( "Exclude from position files settings differ." ) );
+
+            if( !aReporter )
+                return retv;
+        }
     }
 
     if( !aReporter )
@@ -2221,6 +2230,9 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
         similarity *= 0.9;
 
     if( m_excludedFromSim != other.m_excludedFromSim )
+        similarity *= 0.9;
+
+    if( m_excludedFromPosFiles != other.m_excludedFromPosFiles )
         similarity *= 0.9;
 
     if( m_flags != other.m_flags )
@@ -2396,12 +2408,17 @@ static struct LIB_SYMBOL_DESC
                                                              &LIB_SYMBOL::SetExcludedFromSimProp,
                                                              &LIB_SYMBOL::GetExcludedFromSimProp ),
                              groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude from Board" ), &SYMBOL::SetExcludedFromBoard,
-                                                         &SYMBOL::GetExcludedFromBoard ),
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Exclude from Board" ),
+                                                             &LIB_SYMBOL::SetExcludedFromBoardProp,
+                                                             &LIB_SYMBOL::GetExcludedFromBoardProp ),
                              groupAttributes );
         propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Exclude from Bill of Materials" ),
                                                              &LIB_SYMBOL::SetExcludedFromBOMProp,
                                                              &LIB_SYMBOL::GetExcludedFromBOMProp ),
+                             groupAttributes );
+        propMgr.AddProperty( new PROPERTY<LIB_SYMBOL, bool>( _HKI( "Exclude from Position Files" ),
+                                                             &LIB_SYMBOL::SetExcludedFromPosFilesProp,
+                                                             &LIB_SYMBOL::GetExcludedFromPosFilesProp ),
                              groupAttributes );
 
         const wxString groupUnits = _HKI( "Units and Body Styles" );

@@ -98,10 +98,23 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
         }
     }
 
-    if( m_hasVariantArg )
+    if( m_hasVariantArg && m_argParser.is_used( ARG_VARIANT ) )
     {
-        auto variantName = m_argParser.get<std::string>( ARG_VARIANT );
-        m_argVariantName = From_UTF8( variantName );
+        auto variantNames = m_argParser.get<std::vector<std::string>>( ARG_VARIANT );
+
+        for( const auto& name : variantNames )
+            m_argVariantNames.push_back( From_UTF8( name ) );
+
+        if( m_argVariantNames.size() > 1 && m_hasOutputArg && !m_argOutput.IsEmpty() )
+        {
+            if( !m_argOutput.Contains( wxS( "${VARIANT}" ) ) )
+            {
+                wxFprintf( stderr,
+                           _( "When specifying multiple variants, the output path must contain "
+                              "${VARIANT} to generate separate output files for each variant.\n" ) );
+                return EXIT_CODES::ERR_ARGS;
+            }
+        }
     }
 
     return doPerform( aKiway );
@@ -190,8 +203,12 @@ void CLI::COMMAND::addVariantsArg()
     m_hasVariantArg = true;
 
     m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string() )
+            .default_value( std::vector<std::string>() )
+            .append()
             .help( UTF8STDSTR(
-                    _( "The variant name to output.\n"
+                    _( "The variant name(s) to output, can be used multiple times to specify "
+                       "multiple variants.\n"
+                       "When specifying multiple variants, use ${VARIANT} in the output path to "
+                       "generate separate files for each variant.\n"
                        "When no --variant argument is provided the default variant is output." ) ) );
 }

@@ -418,6 +418,8 @@ void SCHEMATIC::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "FILENAME" ) );
     add( wxT( "FILEPATH" ) );
     add( wxT( "PROJECTNAME" ) );
+    add( wxT( "VARIANT" ) );
+    add( wxT( "VARIANT_DESC" ) );
 
     if( !CurrentSheet().empty() )
         CurrentSheet().LastScreen()->GetTitleBlock().GetContextualTextVars( aVars );
@@ -468,9 +470,14 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
         *token = m_project->GetProjectName();
         return true;
     }
-    else if( token->IsSameAs( wxT( "VARIANTNAME" ) ) )
+    else if( token->IsSameAs( wxT( "VARIANTNAME" ) ) || token->IsSameAs( wxT( "VARIANT" ) ) )
     {
         *token = m_currentVariant;
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "VARIANT_DESC" ) ) )
+    {
+        *token = GetVariantDescription( m_currentVariant );
         return true;
     }
 
@@ -737,6 +744,18 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
         sheetPath = Hierarchy().GetSheetPathByKIIDPath( path ).value_or( sheetPath );
     }
 
+    // Parse optional variant name from syntax ${REF:FIELD:VARIANT}
+    // remainder is "FIELD" or "FIELD:VARIANT"
+    wxString variantName;
+    wxString fieldName = remainder;
+    int      colonPos = remainder.Find( ':' );
+
+    if( colonPos != wxNOT_FOUND )
+    {
+        fieldName = remainder.Left( colonPos );
+        variantName = remainder.Mid( colonPos + 1 );
+    }
+
     // Note: We don't expand nested variables or evaluate math expressions here.
     // The multi-pass loop in GetShownText handles all variable and expression resolution
     // before cross-references are resolved. This ensures table cell variables like ${ROW}
@@ -746,17 +765,16 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     {
         SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
 
-        bool resolved = refSymbol->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 );
+        bool resolved = refSymbol->ResolveTextVar( &sheetPath, &fieldName, variantName, aDepth + 1 );
 
         if( resolved )
         {
-            *token = std::move( remainder );
+            *token = std::move( fieldName );
         }
         else
         {
             // Field/function not found on symbol
-            *token =
-                    wxString::Format( wxT( "<Unresolved: %s:%s>" ), refSymbol->GetRef( &sheetPath, false ), remainder );
+            *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ), refSymbol->GetRef( &sheetPath, false ), fieldName );
         }
 
         return true;
@@ -818,17 +836,17 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 
         if( foundSymbol )
         {
-            bool resolved = foundSymbol->ResolveTextVar( &foundPath, &remainder, aDepth + 1 );
+            bool resolved = foundSymbol->ResolveTextVar( &foundPath, &fieldName, variantName, aDepth + 1 );
 
             if( resolved )
             {
-                *token = std::move( remainder );
+                *token = std::move( fieldName );
             }
             else
             {
                 // Field/function not found on symbol
                 *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ), foundSymbol->GetRef( &foundPath, false ),
-                                           remainder );
+                                           fieldName );
             }
 
             return true;
@@ -2128,6 +2146,18 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
 }
 
 
+void SCHEMATIC::AddVariant( const wxString& aVariantName )
+{
+    m_variantNames.emplace( aVariantName );
+
+    // Ensure the variant is registered in the project file
+    auto& descriptions = Settings().m_VariantDescriptions;
+
+    if( descriptions.find( aVariantName ) == descriptions.end() )
+        descriptions[aVariantName] = wxEmptyString;
+}
+
+
 void SCHEMATIC::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit )
 {
     wxCHECK( m_rootSheet, /* void */ );
@@ -2137,6 +2167,76 @@ void SCHEMATIC::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit
     allScreens.DeleteVariant( aVariantName, aCommit );
 
     m_variantNames.erase( aVariantName );
+    Settings().m_VariantDescriptions.erase( aVariantName );
+}
+
+
+void SCHEMATIC::RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                               SCH_COMMIT* aCommit )
+{
+    wxCHECK( m_rootSheet, /* void */ );
+    wxCHECK( !aOldName.IsEmpty() && !aNewName.IsEmpty(), /* void */ );
+    wxCHECK( m_variantNames.contains( aOldName ), /* void */ );
+
+    m_variantNames.erase( aOldName );
+    m_variantNames.insert( aNewName );
+
+    auto& descriptions = Settings().m_VariantDescriptions;
+
+    if( descriptions.count( aOldName ) )
+    {
+        descriptions[aNewName] = descriptions[aOldName];
+        descriptions.erase( aOldName );
+    }
+
+    if( m_currentVariant == aOldName )
+        m_currentVariant = aNewName;
+
+    SCH_SCREENS allScreens( m_rootSheet );
+    allScreens.RenameVariant( aOldName, aNewName, aCommit );
+}
+
+
+void SCHEMATIC::CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                             SCH_COMMIT* aCommit )
+{
+    wxCHECK( m_rootSheet, /* void */ );
+    wxCHECK( !aSourceVariant.IsEmpty() && !aNewVariant.IsEmpty(), /* void */ );
+    wxCHECK( m_variantNames.contains( aSourceVariant ), /* void */ );
+    wxCHECK( !m_variantNames.contains( aNewVariant ), /* void */ );
+
+    AddVariant( aNewVariant );
+
+    auto& descriptions = Settings().m_VariantDescriptions;
+
+    if( descriptions.count( aSourceVariant ) )
+        descriptions[aNewVariant] = descriptions[aSourceVariant];
+
+    SCH_SCREENS allScreens( m_rootSheet );
+    allScreens.CopyVariant( aSourceVariant, aNewVariant, aCommit );
+}
+
+
+wxString SCHEMATIC::GetVariantDescription( const wxString& aVariantName ) const
+{
+    const auto& descriptions = Settings().m_VariantDescriptions;
+    auto it = descriptions.find( aVariantName );
+
+    if( it != descriptions.end() )
+        return it->second;
+
+    return wxEmptyString;
+}
+
+
+void SCHEMATIC::SetVariantDescription( const wxString& aVariantName, const wxString& aDescription )
+{
+    auto& descriptions = Settings().m_VariantDescriptions;
+
+    if( aDescription.IsEmpty() )
+        descriptions.erase( aVariantName );
+    else
+        descriptions[aVariantName] = aDescription;
 }
 
 
@@ -2147,6 +2247,15 @@ void SCHEMATIC::LoadVariants()
         SCH_SCREENS        screens( m_rootSheet );
         std::set<wxString> variantNames = screens.GetVariantNames();
         m_variantNames.insert( variantNames.begin(), variantNames.end() );
+
+        // Register any unknown variants to the project file with empty descriptions
+        auto& descriptions = Settings().m_VariantDescriptions;
+
+        for( const wxString& name : variantNames )
+        {
+            if( descriptions.find( name ) == descriptions.end() )
+                descriptions[name] = wxEmptyString;
+        }
     }
 }
 

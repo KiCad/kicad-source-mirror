@@ -142,7 +142,10 @@ private:
     void onAddVariant( wxCommandEvent& aEvent ) override;
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
     void onRenameVariant( wxCommandEvent& aEvent ) override;
+    void onCopyVariant( wxCommandEvent& aEvent ) override;
     void onVariantSelectionChange( wxCommandEvent& aEvent ) override;
+
+    void updateVariantButtonStates();
 
     wxString getSelectedVariant() const;
 

@@ -306,14 +306,31 @@ bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance,
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromBoard() const
+bool SCH_ITEM::ResolveExcludedFromBoard( const SCH_SHEET_PATH* aInstance,
+                                         const wxString& aVariantName ) const
 {
-    if( GetExcludedFromBoard() )
+    if( GetExcludedFromBoard( aInstance, aVariantName ) )
         return true;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
-        if( area->GetExcludedFromBoard() )
+        if( area->GetExcludedFromBoard( aInstance, aVariantName ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_ITEM::ResolveExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance,
+                                            const wxString& aVariantName ) const
+{
+    if( GetExcludedFromPosFiles( aInstance, aVariantName ) )
+        return true;
+
+    for( SCH_RULE_AREA* area : m_rule_areas_cache )
+    {
+        if( area->GetExcludedFromPosFiles( aInstance, aVariantName ) )
             return true;
     }
 

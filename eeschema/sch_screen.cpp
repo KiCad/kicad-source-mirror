@@ -1904,6 +1904,100 @@ void SCH_SCREEN::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommi
 }
 
 
+void SCH_SCREEN::RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                                SCH_COMMIT* aCommit )
+{
+    wxCHECK( !aOldName.IsEmpty() && !aNewName.IsEmpty(), /* void */ );
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+        for( SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+        {
+            if( instance.m_Variants.contains( aOldName ) )
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                symbol->RenameVariant( instance.m_Path, aOldName, aNewName );
+            }
+        }
+    }
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        wxCHECK2( sheet, continue );
+
+        std::vector<SCH_SHEET_INSTANCE> sheetInstances = sheet->GetInstances();
+
+        for( SCH_SHEET_INSTANCE& instance : sheetInstances )
+        {
+            if( instance.m_Variants.contains( aOldName ) )
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                sheet->RenameVariant( instance.m_Path, aOldName, aNewName );
+            }
+        }
+    }
+}
+
+
+void SCH_SCREEN::CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                              SCH_COMMIT* aCommit )
+{
+    wxCHECK( !aSourceVariant.IsEmpty() && !aNewVariant.IsEmpty(), /* void */ );
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+        for( SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+        {
+            if( instance.m_Variants.contains( aSourceVariant ) )
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                symbol->CopyVariant( instance.m_Path, aSourceVariant, aNewVariant );
+            }
+        }
+    }
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        wxCHECK2( sheet, continue );
+
+        std::vector<SCH_SHEET_INSTANCE> sheetInstances = sheet->GetInstances();
+
+        for( SCH_SHEET_INSTANCE& instance : sheetInstances )
+        {
+            if( instance.m_Variants.contains( aSourceVariant ) )
+            {
+                if( aCommit )
+                    aCommit->Modify( item, this );
+
+                sheet->CopyVariant( instance.m_Path, aSourceVariant, aNewVariant );
+            }
+        }
+    }
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -2364,4 +2458,24 @@ void SCH_SCREENS::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aComm
 
     for( SCH_SCREEN* screen : m_screens )
         screen->DeleteVariant( aVariantName, aCommit );
+}
+
+
+void SCH_SCREENS::RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                                 SCH_COMMIT* aCommit )
+{
+    wxCHECK( !aOldName.IsEmpty() && !aNewName.IsEmpty(), /* void */ );
+
+    for( SCH_SCREEN* screen : m_screens )
+        screen->RenameVariant( aOldName, aNewName, aCommit );
+}
+
+
+void SCH_SCREENS::CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                               SCH_COMMIT* aCommit )
+{
+    wxCHECK( !aSourceVariant.IsEmpty() && !aNewVariant.IsEmpty(), /* void */ );
+
+    for( SCH_SCREEN* screen : m_screens )
+        screen->CopyVariant( aSourceVariant, aNewVariant, aCommit );
 }

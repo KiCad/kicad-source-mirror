@@ -736,6 +736,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", aSymbol->GetExcludedFromSim() );
     KICAD_FORMAT::FormatBool( m_out, "in_bom", !aSymbol->GetExcludedFromBOM() );
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSymbol->GetExcludedFromBoard() );
+    KICAD_FORMAT::FormatBool( m_out, "in_pos_files", !aSymbol->GetExcludedFromPosFiles() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aSymbol->GetDNP() );
 
     AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
@@ -908,6 +909,12 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
                         if( variant.m_ExcludedFromBOM != aSymbol->GetExcludedFromBOM() )
                             KICAD_FORMAT::FormatBool( m_out, "in_bom", variant.m_ExcludedFromBOM );
+
+                        if( variant.m_ExcludedFromBoard != aSymbol->GetExcludedFromBoard() )
+                            KICAD_FORMAT::FormatBool( m_out, "on_board", !variant.m_ExcludedFromBoard );
+
+                        if( variant.m_ExcludedFromPosFiles != aSymbol->GetExcludedFromPosFiles() )
+                            KICAD_FORMAT::FormatBool( m_out, "in_pos_files", !variant.m_ExcludedFromPosFiles );
 
                         for( const auto&[fname, fvalue] : variant.m_Fields )
                         {

@@ -631,6 +631,12 @@ public:
 
     void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                        SCH_COMMIT* aCommit = nullptr );
+
+    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                      SCH_COMMIT* aCommit = nullptr );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
@@ -871,6 +877,12 @@ public:
     std::set<wxString> GetVariantNames() const;
 
     void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
+
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName,
+                        SCH_COMMIT* aCommit = nullptr );
+
+    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
+                      SCH_COMMIT* aCommit = nullptr );
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

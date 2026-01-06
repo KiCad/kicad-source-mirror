@@ -51,6 +51,8 @@ public:
         m_Name( aName ),
         m_ExcludedFromSim( false ),
         m_ExcludedFromBOM( false ),
+        m_ExcludedFromBoard( false ),
+        m_ExcludedFromPosFiles( false ),
         m_DNP( false )
     {
     }
@@ -58,8 +60,11 @@ public:
     virtual ~VARIANT() = default;
 
     wxString                     m_Name;
+    wxString                     m_Description;
     bool                         m_ExcludedFromSim;
     bool                         m_ExcludedFromBOM;
+    bool                         m_ExcludedFromBoard;
+    bool                         m_ExcludedFromPosFiles;
     bool                         m_DNP;
     std::map<wxString, wxString> m_Fields;
 };
@@ -71,9 +76,7 @@ public:
  * Schematic symbol variants are a set of field and/or properties differentials against the default symbol
  * values.  Each symbol instance may contain 0 or more variants.
  *
- * @note The two exceptions to this are the #REFERENCE field and the #SYMBOL::m_excludeFromBoard property.
- *       Changing either of these would effectively be a new board.  They are immutable and will always
- *       be the symbol default value.
+ * @note The #REFERENCE field is immutable across variants. Changing it would effectively be a new board.
  */
 class SCH_SYMBOL_VARIANT : public VARIANT
 {
@@ -110,6 +113,8 @@ struct SCH_SYMBOL_INSTANCE
     bool m_DNP = false;
     bool m_ExcludedFromBOM = false;
     bool m_ExcludedFromSim = false;
+    bool m_ExcludedFromBoard = false;
+    bool m_ExcludedFromPosFiles = false;
 
     /// A list of symbol variants.
     std::map<wxString, SCH_SYMBOL_VARIANT> m_Variants;
@@ -154,6 +159,8 @@ struct SCH_SHEET_INSTANCE
     bool m_DNP = false;
     bool m_ExcludedFromBOM = false;
     bool m_ExcludedFromSim = false;
+    bool m_ExcludedFromBoard = false;
+    bool m_ExcludedFromPosFiles = false;
 
     /// A list of sheet variants.
     std::map<wxString, SCH_SHEET_VARIANT> m_Variants;
@@ -354,9 +361,12 @@ public:
     SCH_SCREEN* LastScreen() const;
 
     bool GetExcludedFromSim() const;
+    bool GetExcludedFromSim( const wxString& aVariantName ) const;
     bool GetExcludedFromBOM() const;
+    bool GetExcludedFromBOM( const wxString& aVariantName ) const;
     bool GetExcludedFromBoard() const;
     bool GetDNP() const;
+    bool GetDNP( const wxString& aVariantName ) const;
 
     /**
      * Fetch a SCH_ITEM by ID.

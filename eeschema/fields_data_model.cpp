@@ -354,15 +354,86 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 
 wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
+    wxGridCellAttr* attr = nullptr;
+
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
             || IsURL( GetValue( m_rows[aRow], aCol ) ) )
     {
         if( m_urlEditor )
         {
             m_urlEditor->IncRef();
-            return enhanceAttr( m_urlEditor, aRow, aCol, aKind );
+            attr = m_urlEditor;
         }
     }
+
+    // Highlight cells that differ from default when viewing a variant
+    if( !m_currentVariant.IsEmpty() && aRow >= 0 && aRow < (int) m_rows.size()
+            && aCol >= 0 && aCol < (int) m_cols.size() )
+    {
+        const wxString& fieldName = m_cols[aCol].m_fieldName;
+
+        // Skip Reference and generated fields (like ${QUANTITY}) for highlighting
+        if( !ColIsReference( aCol ) && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
+        {
+            const DATA_MODEL_ROW& row = m_rows[aRow];
+
+            // Check if any symbol in this row has a variant-specific value
+            bool hasVariantDifference = false;
+
+            for( const SCH_REFERENCE& ref : row.m_Refs )
+            {
+                wxString defaultValue = getDefaultFieldValue( ref, fieldName );
+
+                KIID_PATH symbolKey = KIID_PATH();
+
+                if( const SCH_SYMBOL* symbol = ref.GetSymbol() )
+                {
+                    symbolKey = ref.GetSheetPath().Path();
+                    symbolKey.push_back( symbol->m_Uuid );
+                }
+
+                // Get the current value from the data store
+                wxString currentValue;
+
+                if( m_dataStore.contains( symbolKey ) && m_dataStore[symbolKey].contains( fieldName ) )
+                    currentValue = m_dataStore[symbolKey][fieldName];
+
+                if( currentValue != defaultValue )
+                {
+                    hasVariantDifference = true;
+                    break;
+                }
+            }
+
+            if( hasVariantDifference )
+            {
+                if( !attr )
+                {
+                    attr = new wxGridCellAttr();
+                }
+                else
+                {
+                    // Clone so we don't modify the shared URL editor attr
+                    wxGridCellAttr* newAttr = attr->Clone();
+                    attr->DecRef();
+                    attr = newAttr;
+                }
+
+                // Use a subtle highlight color that works in both light and dark themes
+                // Light yellow in light mode, darker yellow-ish in dark mode
+                wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+                bool isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
+
+                if( isDark )
+                    attr->SetBackgroundColour( wxColour( 80, 80, 40 ) );  // Dark gold/brown
+                else
+                    attr->SetBackgroundColour( wxColour( 255, 255, 200 ) );  // Light yellow
+            }
+        }
+    }
+
+    if( attr )
+        return enhanceAttr( attr, aRow, aCol, aKind );
 
     return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
 }
@@ -784,6 +855,38 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& 
 }
 
 
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
+                                                               const wxString& aFieldName )
+{
+    const SCH_SYMBOL* symbol = aRef.GetSymbol();
+
+    if( !symbol )
+        return wxEmptyString;
+
+    // For attributes, get the default (non-variant) value
+    if( isAttribute( aFieldName ) )
+        return getAttributeValue( aRef, aFieldName, wxEmptyString );
+
+    // For regular fields, get the text without variant override
+    if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
+    {
+        if( field->IsPrivate() )
+            return wxEmptyString;
+
+        // Get the field text with empty variant name (default value)
+        wxString value = symbol->Schematic()->ConvertKIIDsToRefs(
+                field->GetText( &aRef.GetSheetPath(), wxEmptyString ) );
+        return value;
+    }
+
+    // For generated fields, return the field name itself
+    if( IsGeneratedField( aFieldName ) )
+        return aFieldName;
+
+    return wxEmptyString;
+}
+
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
                                                        const wxString& aAttributeName,
                                                        const wxString& aValue,
@@ -855,16 +958,56 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         if( !m_filter.IsEmpty() && !matcher.Find( ref.GetFullRef().Lower() ) )
             continue;
 
-        if( m_excludeDNP && ( ref.GetSymbol()->GetDNP( &ref.GetSheetPath() )
-                              || ref.GetSheetPath().GetDNP() ) )
+        if( m_excludeDNP )
         {
-            continue;
+            bool isDNP = false;
+
+            if( !m_variantNames.empty() )
+            {
+                for( const wxString& variantName : m_variantNames )
+                {
+                    if( ref.GetSymbol()->GetDNP( &ref.GetSheetPath(), variantName )
+                        || ref.GetSheetPath().GetDNP( variantName ) )
+                    {
+                        isDNP = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                isDNP = ref.GetSymbol()->GetDNP( &ref.GetSheetPath(), m_currentVariant )
+                        || ref.GetSheetPath().GetDNP( m_currentVariant );
+            }
+
+            if( isDNP )
+                continue;
         }
 
-        if( !m_includeExcluded && ( ref.GetSymbol()->GetExcludedFromBOM()
-                                    || ref.GetSheetPath().GetExcludedFromBOM() ) )
+        if( !m_includeExcluded )
         {
-            continue;
+            bool isExcluded = false;
+
+            if( !m_variantNames.empty() )
+            {
+                for( const wxString& variantName : m_variantNames )
+                {
+                    if( ref.GetSymbol()->GetExcludedFromBOM( &ref.GetSheetPath(), variantName )
+                        || ref.GetSheetPath().GetExcludedFromBOM( variantName ) )
+                    {
+                        isExcluded = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                isExcluded = ref.GetSymbol()->GetExcludedFromBOM( &ref.GetSheetPath(), m_currentVariant )
+                             || ref.GetSheetPath().GetExcludedFromBOM( m_currentVariant );
+            }
+
+            if( isExcluded )
+                continue;
         }
 
         // Check if the symbol if on the current sheet or, in the sheet path somewhere
@@ -1210,6 +1353,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset, c
     SetFilter( aPreset.filterString );
     SetExcludeDNP( aPreset.excludeDNP );
     SetIncludeExcludedFromBOM( aPreset.includeExcludedFromBOM );
+    SetCurrentVariant( aVariantName );
 
     RebuildRows();
 }

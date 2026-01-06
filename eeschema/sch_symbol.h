@@ -361,9 +361,22 @@ public:
     /**
      * Resolve any references to system tokens supported by the symbol.
      *
+     * @param aPath the sheet path for context.
+     * @param token the token to resolve (modified in place with the result).
      * @param aDepth a counter to limit recursion and circular references.
      */
     bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth = 0 ) const;
+
+    /**
+     * Resolve any references to system tokens supported by the symbol with variant support.
+     *
+     * @param aPath the sheet path for context.
+     * @param token the token to resolve (modified in place with the result).
+     * @param aVariantName optional variant name to resolve field values for a specific variant.
+     * @param aDepth a counter to limit recursion and circular references.
+     */
+    bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
+                         const wxString& aVariantName, int aDepth = 0 ) const;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -500,10 +513,7 @@ public:
         return GetValue( false, &Schematic()->CurrentSheet(), false, Schematic()->GetCurrentVariant() );
     }
 
-    void SetValueProp( const wxString& aValue )
-    {
-        SetValueFieldText( aValue,  &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    void SetValueProp( const wxString& aValue );  // Implemented in sch_symbol.cpp for tracing
 
     int GetUnitProp() const
     {
@@ -721,6 +731,36 @@ public:
         SetExcludedFromSim( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
+    void SetExcludedFromBoard( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) override;
+    bool GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance = nullptr,
+                               const wxString& aVariantName = wxEmptyString ) const override;
+
+    bool GetExcludedFromBoardProp() const
+    {
+        return GetExcludedFromBoard( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromBoardProp( bool aEnable )
+    {
+        SetExcludedFromBoard( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromPosFiles( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
+                                  const wxString& aVariantName = wxEmptyString ) override;
+    bool GetExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance = nullptr,
+                                  const wxString& aVariantName = wxEmptyString ) const override;
+
+    bool GetExcludedFromPosFilesProp() const
+    {
+        return GetExcludedFromPosFiles( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
+
+    void SetExcludedFromPosFilesProp( bool aEnable )
+    {
+        SetExcludedFromPosFiles( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
+
     /**
      * SCH_SYMBOLs don't currently support embedded files, but their LIB_SYMBOL counterparts
      * do.
@@ -901,12 +941,29 @@ public:
 
     void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
 
+    void RenameVariant( const KIID_PATH& aPath, const wxString& aOldName, const wxString& aNewName );
+
+    void CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,
+                      const wxString& aNewVariant );
+
     std::optional<SCH_SYMBOL_VARIANT> GetVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName ) const;
     void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_VARIANT& aVariant );
 
     void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
     {
         DeleteVariant( aInstance.Path(), aVariantName );
+    }
+
+    void RenameVariant( const SCH_SHEET_PATH& aInstance, const wxString& aOldName,
+                        const wxString& aNewName )
+    {
+        RenameVariant( aInstance.Path(), aOldName, aNewName );
+    }
+
+    void CopyVariant( const SCH_SHEET_PATH& aInstance, const wxString& aSourceVariant,
+                      const wxString& aNewVariant )
+    {
+        CopyVariant( aInstance.Path(), aSourceVariant, aNewVariant );
     }
 
     bool operator==( const SCH_ITEM& aOther ) const override;

@@ -139,6 +139,7 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     // Basic options
     bomJob->m_filename = m_argInput;
     bomJob->SetConfiguredOutputPath( m_argOutput );
+    bomJob->m_variantNames = m_argVariantNames;
 
     bomJob->m_bomPresetName = From_UTF8( m_argParser.get<std::string>( ARG_PRESET ).c_str() );
     bomJob->m_bomFmtPresetName = From_UTF8( m_argParser.get<std::string>( ARG_FMT_PRESET ).c_str() );
@@ -166,7 +167,6 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     bomJob->m_sortAsc = m_argParser.get<bool>( ARG_SORT_ASC );
     bomJob->m_filterString = From_UTF8( m_argParser.get<std::string>( ARG_FILTER ).c_str() );
     bomJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
-    bomJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM ) )
         wxFprintf( stdout, DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_WARNING );

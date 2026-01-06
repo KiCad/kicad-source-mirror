@@ -156,11 +156,11 @@ protected:
     bool                     m_hasVariantArg;
 
     /**
-     * The name of the variant to output.
+     * The list of variant names to output.
      *
-     * An empty string indicates the default variant.
+     * An empty vector indicates the default variant.
      */
-    wxString                 m_argVariantName;
+    std::vector<wxString>    m_argVariantNames;
 };
 
 }

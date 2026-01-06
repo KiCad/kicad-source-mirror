@@ -140,6 +140,96 @@ def test_sch_export_pdf( kitest,
     kitest.add_attachment( str( output_filepath ) )
 
 
+@pytest.mark.parametrize("test_file,output_fn,compare_fn,line_skip_count,cli_args",
+                            [("cli/variants/variants.kicad_sch", "variants_default.bom.csv", "cli/variants/variants_default.bom.csv", 0,
+                              ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                             ("cli/variants/variants.kicad_sch", "variants_v1.bom.csv", "cli/variants/variants_v1.bom.csv", 0,
+                              ["--variant", "Variant 1", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                             ("cli/variants/variants.kicad_sch", "variants_v2.bom.csv", "cli/variants/variants_v2.bom.csv", 0,
+                              ["--variant", "Variant2", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                             ])
+def test_sch_export_bom_variants( kitest,
+                         test_file: str,
+                         output_fn: str,
+                         compare_fn: str,
+                         line_skip_count: int,
+                         cli_args: List[str] ):
+    """Test BOM export with variant support and DNP exclusion"""
+    input_file = kitest.get_data_file_path( test_file )
+    compare_filepath = kitest.get_data_file_path( compare_fn )
+
+    output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
+
+    command = [utils.kicad_cli(), "sch", "export", "bom"]
+    command.extend( cli_args )
+    command.append( "-o" )
+    command.append( str( output_filepath ) )
+    command.append( input_file )
+
+    stdout, stderr, exitcode = utils.run_and_capture( command )
+
+    assert exitcode == 0
+    assert stderr == ''
+
+    assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+
+    kitest.add_attachment( str( output_filepath ) )
+
+
+def test_sch_export_bom_multi_variant_requires_placeholder( kitest ):
+    """Test that multiple variants require ${VARIANT} in output path"""
+    input_file = kitest.get_data_file_path( "cli/variants/variants.kicad_sch" )
+
+    output_filepath = kitest.get_output_path( "cli/" ).joinpath( "multi_variant_fail.csv" )
+
+    command = [utils.kicad_cli(), "sch", "export", "bom"]
+    command.extend( ["--variant", "Variant 1", "--variant", "Variant2"] )
+    command.extend( ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"] )
+    command.append( "-o" )
+    command.append( str( output_filepath ) )
+    command.append( input_file )
+
+    stdout, stderr, exitcode = utils.run_and_capture( command )
+
+    assert exitcode == 1
+    assert "VARIANT" in stderr
+
+
+def test_sch_export_bom_multi_variant_with_placeholder( kitest ):
+    """Test BOM export with multiple variants using ${VARIANT} placeholder"""
+    input_file = kitest.get_data_file_path( "cli/variants/variants.kicad_sch" )
+
+    output_dir = kitest.get_output_path( "cli/" )
+    output_pattern = str( output_dir.joinpath( "bom_${VARIANT}.csv" ) )
+
+    command = [utils.kicad_cli(), "sch", "export", "bom"]
+    command.extend( ["--variant", "Variant 1", "--variant", "Variant2"] )
+    command.extend( ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"] )
+    command.append( "-o" )
+    command.append( output_pattern )
+    command.append( input_file )
+
+    stdout, stderr, exitcode = utils.run_and_capture( command )
+
+    assert exitcode == 0
+    assert stderr == ''
+
+    v1_path = output_dir.joinpath( "bom_Variant 1.csv" )
+    v2_path = output_dir.joinpath( "bom_Variant2.csv" )
+
+    assert v1_path.exists(), f"Expected output file {v1_path} not found"
+    assert v2_path.exists(), f"Expected output file {v2_path} not found"
+
+    v1_compare = kitest.get_data_file_path( "cli/variants/variants_v1.bom.csv" )
+    v2_compare = kitest.get_data_file_path( "cli/variants/variants_v2.bom.csv" )
+
+    assert utils.textdiff_files( v1_compare, str( v1_path ), 0 )
+    assert utils.textdiff_files( v2_compare, str( v2_path ), 0 )
+
+    kitest.add_attachment( str( v1_path ) )
+    kitest.add_attachment( str( v2_path ) )
+
+
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.pythonbom", 6, [])
                              ])
