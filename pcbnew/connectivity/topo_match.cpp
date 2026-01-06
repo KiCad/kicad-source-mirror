@@ -294,11 +294,11 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
         }
     }
 
-    auto padSimilarity=[]( COMPONENT*a, COMPONENT*b ) -> double
+    auto padSimilarity = []( COMPONENT* a, COMPONENT* b ) -> double
     {
-        int n=0;
+        int n = 0;
 
-        for(int i=0;i<a->m_pins.size();i++)
+        for( size_t i = 0; i < a->m_pins.size(); i++ )
         {
             PIN* pa = a->m_pins[i];
             PIN* pb = b->m_pins[i];
@@ -307,15 +307,21 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
                 n++;
         }
 
-        return (double)n / (double) a->m_pins.size();
+        return (double) n / (double) a->m_pins.size();
     };
 
+    std::sort( matches.begin(), matches.end(),
+               [&]( COMPONENT* a, COMPONENT* b ) -> bool
+               {
+                   double simA = padSimilarity( aRef, a );
+                   double simB = padSimilarity( aRef, b );
 
-    std::sort(matches.begin(), matches.end(), [&] ( COMPONENT*a, COMPONENT*b ) -> int
-    {
-        return padSimilarity( aRef,a ) > padSimilarity( aRef, b );
-    }
-);
+                   if( simA != simB )
+                       return simA > simB;
+
+                   return a->GetParent()->GetReferenceAsString()
+                          < b->GetParent()->GetReferenceAsString();
+               } );
 
     if( matches.empty() )
     {
@@ -337,6 +343,19 @@ void COMPONENT::sortPinsByName()
                []( PIN* a, PIN* b )
                {
                    return a->GetReference() < b->GetReference();
+               } );
+}
+
+
+void CONNECTION_GRAPH::sortByPinCount()
+{
+    std::sort( m_components.begin(), m_components.end(),
+               []( COMPONENT* a, COMPONENT* b )
+               {
+                   if( a->GetPinCount() != b->GetPinCount() )
+                       return a->GetPinCount() > b->GetPinCount();
+
+                   return a->GetParent()->GetReferenceAsString() < b->GetParent()->GetReferenceAsString();
                } );
 }
 
