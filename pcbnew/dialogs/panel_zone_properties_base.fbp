@@ -3043,7 +3043,7 @@
                                 <property name="flag"></property>
                                 <property name="proportion">0</property>
                                 <object class="spacer" expanded="false">
-                                  <property name="height">0</property>
+                                  <property name="height">2</property>
                                   <property name="permission">protected</property>
                                   <property name="width">0</property>
                                 </object>

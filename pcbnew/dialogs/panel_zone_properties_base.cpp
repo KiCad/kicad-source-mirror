@@ -262,7 +262,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerOffsetOverrides->Add( m_offsetOverridesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerOffsetOverrides->Add( 0, 0, 0, 0, 5 );
+	bSizerOffsetOverrides->Add( 0, 2, 0, 0, 5 );
 
 	m_layerSpecificOverrides = new WX_GRID( m_hatchedFillPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
