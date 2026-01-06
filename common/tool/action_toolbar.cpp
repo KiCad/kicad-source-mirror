@@ -1106,6 +1106,7 @@ ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::zoomSelect( "control.ZoomSelecto
                                                               FRAME_SCH_SYMBOL_EDITOR,
                                                               FRAME_SCH_VIEWER,
                                                               FRAME_PCB_EDITOR,
+                                                              FRAME_PCB_DISPLAY3D,
                                                               FRAME_FOOTPRINT_EDITOR,
                                                               FRAME_FOOTPRINT_VIEWER,
                                                               FRAME_GERBER,
