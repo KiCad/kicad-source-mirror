@@ -33,6 +33,9 @@
       - build/linux/qa/**/*.log
       - build/linux/qa/**/output/*
       - build/linux/qa/**/*.xml
+      - build/linux/qa/*_metrics.txt
     reports:
       junit:
         - build/linux/qa/**/*.xml
+      metrics:
+        - build/linux/qa/*_metrics.txt

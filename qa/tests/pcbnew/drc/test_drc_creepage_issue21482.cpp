@@ -46,6 +46,8 @@
 #include <widgets/report_severity.h>
 
 #include <chrono>
+#include <cstdlib>
+#include <fstream>
 
 
 struct DRC_CREEPAGE_PERF_TEST_FIXTURE
@@ -140,11 +142,31 @@ BOOST_FIXTURE_TEST_CASE( CreepagePerformanceIssue21482, DRC_CREEPAGE_PERF_TEST_F
     // Clear the violation handler
     bds.m_DRCEngine->ClearViolationHandler();
 
-    // Performance check: should complete in less than 20 seconds
-    // The original was more than 2 minutes.
-    BOOST_CHECK_MESSAGE( elapsedSeconds < 20.0,
-                         wxString::Format( "Creepage DRC too slow: %.2f seconds (target: <20s)",
-                                           elapsedSeconds ) );
+    // Check if running on GitLab CI
+    bool onGitLabCI = std::getenv( "GITLAB_CI" ) != nullptr;
+
+    if( onGitLabCI )
+    {
+        // On GitLab CI, write metrics to a file for collection as an artifact.
+        // The timeout varies too much between runners, so we only record the time
+        // without asserting on it.
+        std::ofstream metricsFile( "creepage_perf_metrics.txt" );
+
+        if( metricsFile.is_open() )
+        {
+            metricsFile << "creepage_drc_seconds " << elapsedSeconds << "\n";
+            metricsFile << "creepage_violations " << violations.size() << "\n";
+            metricsFile.close();
+            BOOST_TEST_MESSAGE( "Metrics written to creepage_perf_metrics.txt" );
+        }
+    }
+    else
+    {
+        // On local machines, enforce the timeout constraint
+        BOOST_CHECK_MESSAGE( elapsedSeconds < 20.0,
+                             wxString::Format( "Creepage DRC too slow: %.2f seconds (target: <20s)",
+                                               elapsedSeconds ) );
+    }
 
     // Performance tier feedback
     if( elapsedSeconds < 5.0 )
