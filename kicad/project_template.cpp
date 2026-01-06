@@ -250,9 +250,12 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
         name.Replace( basename, aNewProjectPath.GetName() );
         destFile.SetName( name );
 
-        // Replace the template path with the project path.
+        // Replace the template path with the project path, also renaming any subdirectories
+        // that contain the template basename.
         wxString path = destFile.GetPathWithSep();
         path.Replace( m_basePath.GetPathWithSep(), aNewProjectPath.GetPathWithSep() );
+        path.Replace( SEP + basename + SEP, SEP + aNewProjectPath.GetName() + SEP );
+        path.Replace( SEP + basename + wxS( "-" ), SEP + aNewProjectPath.GetName() + wxS( "-" ) );
         destFile.SetPath( path );
 
         aDestFiles.push_back( destFile );
@@ -320,10 +323,12 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
         destFile.SetName( currname );
 
-        // Replace the template path with the project path for the new project creation
-        // but keep the sub directory name, if exists
+        // Replace the template path with the project path for the new project creation,
+        // also renaming any subdirectories that contain the template basename.
         wxString destpath = destFile.GetPathWithSep();
         destpath.Replace( m_basePath.GetPathWithSep(), aNewProjectPath.GetPathWithSep() );
+        destpath.Replace( SEP + basename + SEP, SEP + aNewProjectPath.GetName() + SEP );
+        destpath.Replace( SEP + basename + wxS( "-" ), SEP + aNewProjectPath.GetName() + wxS( "-" ) );
 
         // Check to see if the path already exists, if not attempt to create it here.
         if( !wxFileName::DirExists( destpath ) )

@@ -91,6 +91,10 @@ set( QA_COMMON_SRCS
 
     # GAL tests
     test_gal_xor_mode.cpp
+
+    # Project template tests (source included directly since it's from kicad executable)
+    test_project_template.cpp
+    ${CMAKE_SOURCE_DIR}/kicad/project_template.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
@@ -128,6 +132,7 @@ target_link_libraries( qa_common
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/kicad
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
