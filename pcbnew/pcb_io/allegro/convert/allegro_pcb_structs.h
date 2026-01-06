@@ -332,6 +332,7 @@ struct LAYER_INFO
         VIA_CLASS = 0x12,
         VIA_KEEPOUT = 0x13,
         ANTI_ETCH = 0x14,
+        BOUNDARY = 0x15,
     };
 
     /**
@@ -955,6 +956,11 @@ struct BLK_0x1C_PADSTACK
     uint32_t m_Key;
     uint32_t m_Next;
     uint32_t m_PadStr;
+
+    /**
+     * In < V172, this is the drill diameter in internal coordinates.
+     * In >= V172, the drill diameter moved to m_DrillArr[DRILL_DIAMETER].
+     */
     uint32_t m_Drill;
     uint32_t m_Unknown2;
     uint32_t m_PadPath;
@@ -985,7 +991,13 @@ struct BLK_0x1C_PADSTACK
     // Or just padding (?)
     COND_GE<FMT_VER::V_172, uint16_t> m_Unknown11;
 
-    std::array<uint32_t, 8> m_UnknownArr8;
+    /**
+     * In >= V172, elements [4] and [7] hold drill dimensions:
+     *   [4] = drill diameter (or width for oblong drills)
+     *   [7] = drill height for oblong drills (0 for round)
+     * All values are in internal coordinate units (mils * divisor).
+     */
+    std::array<uint32_t, 8> m_DrillArr;
 
     COND_GE<FMT_VER::V_172, std::array<uint32_t, 28>> m_UnknownArr28;
 

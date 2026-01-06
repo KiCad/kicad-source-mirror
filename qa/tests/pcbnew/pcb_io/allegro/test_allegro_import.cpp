@@ -1000,6 +1000,64 @@ BOOST_AUTO_TEST_CASE( Individual_BeagleBone )
 
 
 /**
+ * Verify that the outermost (largest area) zone on each copper layer of BeagleBone Black
+ * is assigned the GND_EARTH net. Allegro stores these as BOUNDARY shapes with net pointers
+ * resolved through the Ptr7 -> 0x2C TABLE -> 0x37 -> 0x1B NET chain.
+ */
+BOOST_AUTO_TEST_CASE( BeagleBone_OutermostZoneNets )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    const std::vector<wxString> expectedLayers = { wxS( "TOP" ), wxS( "LYR2_GND" ),
+                                                   wxS( "LYR5_PWR" ), wxS( "BOTTOM" ) };
+
+    for( const wxString& layerName : expectedLayers )
+    {
+        BOOST_TEST_CONTEXT( "Outermost zone on " << layerName )
+        {
+            PCB_LAYER_ID layerId = board->GetLayerID( layerName );
+
+            BOOST_REQUIRE_MESSAGE( layerId != UNDEFINED_LAYER,
+                                   "Layer " << layerName << " should exist" );
+
+            const ZONE* largest = nullptr;
+            double      largestArea = 0;
+
+            for( const ZONE* zone : board->Zones() )
+            {
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( zone->GetNetCode() == 0 )
+                    continue;
+
+                if( !zone->GetLayerSet().Contains( layerId ) )
+                    continue;
+
+                BOX2I  bbox = zone->GetBoundingBox();
+                double area = static_cast<double>( bbox.GetWidth() )
+                              * static_cast<double>( bbox.GetHeight() );
+
+                if( area > largestArea )
+                {
+                    largestArea = area;
+                    largest = zone;
+                }
+            }
+
+            BOOST_REQUIRE_MESSAGE( largest != nullptr,
+                                   "Should find a netted copper zone on " << layerName );
+            BOOST_CHECK_EQUAL( largest->GetNetname(), wxString( wxS( "GND_EARTH" ) ) );
+        }
+    }
+}
+
+
+/**
  * Test 8851_HW-U1-VCU118_REV2-0_071417.brd individually.
  * This is a large, complex board that may take longer to load.
  */
@@ -1469,7 +1527,8 @@ BOOST_AUTO_TEST_CASE( ArcConnectivity )
  * most recent A! header.
  */
 /**
- * A single zone polygon from the .alg export, representing an ETCH shape on a copper layer.
+ * A single zone polygon from the .alg export, representing a BOUNDARY shape (zone outline)
+ * on a copper layer.
  */
 struct ALG_ZONE_POLYGON
 {
@@ -1626,7 +1685,7 @@ struct ALG_REFERENCE_DATA
                 //   0=S, 1=CLASS, 2=SUBCLASS, 3=RECORD_TAG, 4=GRAPHIC_DATA_NAME,
                 //   5=GRAPHIC_DATA_NUMBER, 6..15=GRAPHIC_DATA_1..10,
                 //   16=PIN_NUMBER, ..., 23=NET_NAME
-                if( fields.size() < 16 || fields[1] != wxT( "ETCH" ) )
+                if( fields.size() < 16 || fields[1] != wxT( "BOUNDARY" ) )
                     break;
 
                 wxString closureType = fields[15];
@@ -2511,21 +2570,21 @@ BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
             std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
             BOOST_REQUIRE( board );
 
-            int boardCopperZones = 0;
+            size_t boardCopperZoneLayers = 0;
 
             for( const ZONE* zone : board->Zones() )
             {
                 if( !zone->GetIsRuleArea() )
-                    boardCopperZones++;
+                    boardCopperZoneLayers += ( zone->GetLayerSet() & LSET::AllCuMask() ).count();
             }
 
             size_t algZoneCount = algData.zonePolygons.size();
 
             BOOST_TEST_MESSAGE( brdFile << ": .alg has " << algZoneCount
-                                << " zone polygons, board has " << boardCopperZones
-                                << " copper zones" );
+                                << " zone polygons, board has " << boardCopperZoneLayers
+                                << " copper zone-layers" );
 
-            BOOST_CHECK_EQUAL( static_cast<size_t>( boardCopperZones ), algZoneCount );
+            BOOST_CHECK_EQUAL( static_cast<size_t>( boardCopperZoneLayers ), algZoneCount );
         }
     }
 }
@@ -2575,8 +2634,14 @@ BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
 
             for( const ZONE* zone : board->Zones() )
             {
-                if( !zone->GetIsRuleArea() )
-                    boardLayerCounts[board->GetLayerName( zone->GetFirstLayer() )]++;
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                {
+                    if( IsCopperLayer( layer ) )
+                        boardLayerCounts[board->GetLayerName( layer )]++;
+                }
             }
 
             BOOST_TEST_MESSAGE( brdFile << " layer distribution:" );
@@ -2646,12 +2711,17 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
 
             for( const ZONE* zone : board->Zones() )
             {
-                if( !zone->GetIsRuleArea() )
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                BOX2I  bbox = zone->GetBoundingBox();
+                double area = static_cast<double>( bbox.GetWidth() )
+                              * static_cast<double>( bbox.GetHeight() );
+
+                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 {
-                    BOX2I  bbox = zone->GetBoundingBox();
-                    double area = static_cast<double>( bbox.GetWidth() )
-                                  * static_cast<double>( bbox.GetHeight() );
-                    boardAreas[board->GetLayerName( zone->GetFirstLayer() )].push_back( area );
+                    if( IsCopperLayer( layer ) )
+                        boardAreas[board->GetLayerName( layer )].push_back( area );
                 }
             }
 
@@ -2704,6 +2774,39 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
             }
         }
     }
+}
+
+
+/**
+ * Verify that footprint J1 in BeagleBone_Black_RevC imports at 180 degrees orientation.
+ * This catches a bug where EDA_ANGLE was constructed without DEGREES_T, causing the
+ * rotation value to be misinterpreted.
+ */
+BOOST_AUTO_TEST_CASE( FootprintOrientation )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    BOOST_REQUIRE( board );
+
+    FOOTPRINT* j1 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() == wxT( "J1" ) )
+        {
+            j1 = fp;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( j1 != nullptr, "Footprint J1 must exist in BeagleBone_Black_RevC" );
+
+    EDA_ANGLE orientation = j1->GetOrientation();
+    BOOST_TEST_MESSAGE( "J1 orientation: " << orientation.AsDegrees() << " degrees" );
+    BOOST_CHECK_CLOSE( orientation.AsDegrees(), 90.0, 0.1 );
 }
 
 

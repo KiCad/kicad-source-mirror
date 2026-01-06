@@ -116,6 +116,12 @@ private:
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
     std::unique_ptr<ZONE>                    buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode );
 
+    /**
+     * Resolve the net code for a BOUNDARY shape by following the pointer chain:
+     * BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 array -> first entry -> 0x1B NET
+     */
+    int resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const;
+
     void cacheFontDefs();
     void setupLayers();
     void createNets();

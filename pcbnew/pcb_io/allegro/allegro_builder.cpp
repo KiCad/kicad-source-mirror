@@ -307,6 +307,7 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::CLASS::VIA_CLASS,        wxS( "Via Class" ) },
         { LAYER_INFO::CLASS::VIA_KEEPOUT,      wxS( "Via Keepout" ) },
         { LAYER_INFO::CLASS::ANTI_ETCH,        wxS( "Anti Etch" ) },
+        { LAYER_INFO::CLASS::BOUNDARY,         wxS( "Boundary" ) },
     };
 
     static const std::unordered_map<uint8_t, wxString> s_SubclassNames = {
@@ -449,6 +450,38 @@ public:
             inputLayers.push_back( desc );
         }
 
+        // Add non-ETCH custom layers so they appear in the layer mapping dialog
+        const std::vector<CUSTOM_LAYER>* etchList = m_ClassCustomLayerLists[LAYER_INFO::CLASS::ETCH];
+        int nextAutoUser = 0;
+
+        for( const auto& [classId, layerList] : m_ClassCustomLayerLists )
+        {
+            if( classId == LAYER_INFO::CLASS::ETCH || layerList == etchList )
+                continue;
+
+            for( size_t si = 0; si < layerList->size(); ++si )
+            {
+                const LAYER_INFO li{ classId, static_cast<uint8_t>( si ) };
+
+                // Skip entries already covered by s_LayerKiMap
+                if( s_LayerKiMap.count( li ) )
+                    continue;
+
+                INPUT_LAYER_DESC desc;
+                desc.Name = layerInfoDisplayName( li );
+
+                if( layerList->at( si ).m_Name.length() > 0 )
+                    desc.Name = layerList->at( si ).m_Name;
+
+                desc.AutoMapLayer = getNthUserLayer( nextAutoUser++ );
+                desc.PermittedLayers = LSET::AllLayersMask();
+                desc.Required = false;
+                inputLayers.push_back( desc );
+
+                m_customLayerDialogNames[li] = desc.Name;
+            }
+        }
+
         std::map<wxString, PCB_LAYER_ID> resolvedMapping = m_layerMappingHandler( inputLayers );
 
         // Apply copper layer mapping
@@ -475,6 +508,18 @@ public:
             if( it != resolvedMapping.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER )
             {
                 m_staticLayerOverrides[layerInfo] = it->second;
+            }
+        }
+
+        // Apply custom layer mapping from the handler result
+        for( const auto& [layerInfo, dialogName] : m_customLayerDialogNames )
+        {
+            auto it = resolvedMapping.find( dialogName );
+
+            if( it != resolvedMapping.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER )
+            {
+                m_customLayerToKiMap[layerInfo] = it->second;
+                m_board.SetLayerName( it->second, dialogName );
             }
         }
     }
@@ -655,6 +700,12 @@ private:
      * Overrides for the static s_LayerKiMap entries, populated by the layer mapping handler.
      */
     std::unordered_map<LAYER_INFO, PCB_LAYER_ID> m_staticLayerOverrides;
+
+    /**
+     * Names used in the layer mapping dialog for custom (non-ETCH, non-static) layers.
+     * Populated during FinalizeLayers(), consumed when applying the handler result.
+     */
+    std::unordered_map<LAYER_INFO, wxString> m_customLayerDialogNames;
 
     /**
      * A record of what we _failed_ to map.
@@ -1121,6 +1172,9 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
     std::vector<std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>> copperLayers( aPadstack.m_LayerCount );
 
+    // Thermal relief gap from antipad/pad size difference on the first layer that has both.
+    std::optional<int> thermalGap;
+
     const wxString& padStackName = m_brdDb.GetString( aPadstack.m_PadStr );
 
     wxLogTrace( traceAllegroBuilder, "Building pad '%s' with %u layers", padStackName, aPadstack.m_LayerCount );
@@ -1369,7 +1423,24 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             layerCuProps->clearance = clearanceX;
         }
 
-        // TODO thermal
+        if( thermalComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL && !thermalGap.has_value() )
+        {
+            // The thermal gap is the clearance between the pad copper and the surrounding zone.
+            // We derive it from the antipad-to-pad size difference.
+            if( antiPadComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL && padComp.m_W > 0 )
+            {
+                int gap = scale( ( antiPadComp.m_W - padComp.m_W ) / 2 );
+
+                if( gap > 0 )
+                    thermalGap = gap;
+            }
+
+            wxLogTrace( traceAllegroBuilder,
+                        "Padstack %s: thermal relief type=%d, gap=%snm",
+                        padStackName, thermalComp.m_Type,
+                        thermalGap.has_value() ? wxString::Format( "%d", thermalGap.value() )
+                                               : wxString( "N/A" ) );
+        }
 
         // TODO keepouts
     }
@@ -1445,9 +1516,26 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
     }
 
-    // SMD if there is no drill or only one copper layer
-    int drillNm = scale( static_cast<int>( aPadstack.m_Drill ) );
-    bool isSmd = ( drillNm == 0 ) || ( aPadstack.m_LayerCount == 1 );
+    // The drill diameter field moved between format versions.
+    // In < V172, it's in the padstack header's m_Drill field.
+    // In >= V172, it's in m_DrillArr[4] (width) and m_DrillArr[7] (height, 0 for round).
+    int drillW = 0;
+    int drillH = 0;
+
+    if( m_brdDb.m_FmtVer >= FMT_VER::V_172 )
+    {
+        drillW = scale( static_cast<int>( aPadstack.m_DrillArr[4] ) );
+        drillH = scale( static_cast<int>( aPadstack.m_DrillArr[7] ) );
+    }
+    else
+    {
+        drillW = scale( static_cast<int>( aPadstack.m_Drill ) );
+    }
+
+    if( drillH == 0 )
+        drillH = drillW;
+
+    bool isSmd = ( drillW == 0 ) || ( aPadstack.m_LayerCount == 1 );
 
     if( isSmd )
     {
@@ -1455,7 +1543,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     }
     else
     {
-        padStack.Drill().size = VECTOR2I( drillNm, drillNm );
+        padStack.Drill().size = VECTOR2I( drillW, drillH );
     }
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( &aFp );
@@ -1473,6 +1561,9 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         pad->SetAttribute( PAD_ATTRIB::PTH );
         pad->SetLayerSet( PAD::PTHMask() );
     }
+
+    if( thermalGap.has_value() )
+        pad->SetThermalGap( thermalGap.value() );
 
     padItems.push_back( std::move( pad ) );
 
@@ -1527,15 +1618,10 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     wxLogTrace( traceAllegroBuilder, "  Footprint reference: '%s'", refDesStr );
 
     const VECTOR2I  fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
-    const EDA_ANGLE rotation{ aFpInstance.m_Rotation / 1000. };
+    const EDA_ANGLE rotation{ aFpInstance.m_Rotation / 1000., DEGREES_T };
 
     fp->SetPosition( fpPos );
     fp->SetOrientation( rotation );
-
-    if( aFpInstance.m_Layer != 0 )
-    {
-        fp->Flip( fpPos, FLIP_DIRECTION::TOP_BOTTOM );
-    }
 
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_brdDb };
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
@@ -1638,7 +1724,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
             if( item->Type() == PCB_PAD_T )
             {
                 PAD* pad = static_cast<PAD*>( item.get() );
-                pad->SetOrientation( padRotation );
+                pad->SetOrientation( padRotation - rotation );
             }
 
             item->Move( padPos );
@@ -1646,6 +1732,12 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
         }
     }
 
+    // Flip AFTER adding all children so that graphics, text, and pads all get
+    // their layers and positions mirrored correctly for bottom-layer footprints
+    if( aFpInstance.m_Layer != 0 )
+    {
+        fp->Flip( fpPos, FLIP_DIRECTION::TOP_BOTTOM );
+    }
 
     return fp;
 }
@@ -1653,6 +1745,15 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildTrack( const BLK_0x05_TRACK& aTrackBlock, int aNetCode )
 {
     std::vector<std::unique_ptr<BOARD_ITEM>> items;
+
+    // Anti-etch tracks are thermal relief patterns generated by Allegro.
+    // These are handled by pad-level thermal relief properties instead.
+    if( aTrackBlock.m_Layer.m_Class == LAYER_INFO::CLASS::ANTI_ETCH )
+    {
+        wxLogTrace( traceAllegroBuilder, "Skipping ANTI_ETCH track (class=%#04x, subclass=%#04x)",
+                    aTrackBlock.m_Layer.m_Class, aTrackBlock.m_Layer.m_Subclass );
+        return items;
+    }
 
     const PCB_LAYER_ID layer = getLayer( aTrackBlock.m_Layer );
 
@@ -1768,11 +1869,12 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
 
     int viaDrill = 0;
 
-    if( viaPadstack->m_Drill > 0 )
-    {
-        viaDrill = scale( static_cast<int>( viaPadstack->m_Drill ) );
-    }
+    if( m_brdDb.m_FmtVer >= FMT_VER::V_172 )
+        viaDrill = scale( static_cast<int>( viaPadstack->m_DrillArr[4] ) );
     else
+        viaDrill = scale( static_cast<int>( viaPadstack->m_Drill ) );
+
+    if( viaDrill == 0 )
     {
         viaDrill = viaWidth / 2;
         wxLogTrace( traceAllegroBuilder, "Via at (%d, %d): no drill in padstack, using fallback %d",
@@ -1823,8 +1925,6 @@ void BOARD_BUILDER::createTracks()
                 continue;
             }
 
-            // std::cout << wxString::Format("Net assignment" ) << std::endl;
-
             const auto& assign = static_cast<const BLOCK<BLK_0x04_NET_ASSIGNMENT>&>( *assignBlock ).GetData();
 
             // Walk the 0x05/0x32/... list
@@ -1832,8 +1932,6 @@ void BOARD_BUILDER::createTracks()
             for( const BLOCK_BASE* connItemBlock : connWalker )
             {
                 const uint8_t connType = connItemBlock->GetBlockType();
-
-                // std::cout << wxString::Format(" Object %#04x key %#010x", connType, connItemBlock->GetKey() ) << std::endl;
 
                 // One connected item can be multiple KiCad objects, e.g.
                 // 0x05 track -> list of segments/arcs
@@ -1863,14 +1961,9 @@ void BOARD_BUILDER::createTracks()
                 }
                 case 0x28:
                 {
-                    const BLK_0x28_SHAPE& shapeData =
-                            static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *connItemBlock ).GetData();
-
-                    std::unique_ptr<ZONE> zone = buildZone( shapeData, netCode );
-
-                    if( zone )
-                        m_board.Add( zone.release(), ADD_MODE::APPEND );
-
+                    // 0x28 shapes on the net chain are copper fills (computed copper).
+                    // Zone outlines (BOUNDARY class) are imported from m_LL_Shapes in createZones().
+                    // KiCad recomputes fills from zone outlines, so fills are not imported.
                     break;
                 }
                 case 0x2E:
@@ -2046,7 +2139,8 @@ void BOARD_BUILDER::createBoardOutline()
 
 std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode )
 {
-    bool isCopperZone = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ETCH );
+    bool isCopperZone = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ETCH
+                          || aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY );
     bool isRouteKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
     bool isViaKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
 
@@ -2054,7 +2148,18 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
 
     if( isCopperZone )
     {
-        layer = getLayer( aShape.m_Layer );
+        // BOUNDARY shares the ETCH layer list, so resolve subclass via ETCH class
+        if( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY )
+        {
+            LAYER_INFO etchLayer{};
+            etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
+            etchLayer.m_Subclass = aShape.m_Layer.m_Subclass;
+            layer = getLayer( etchLayer );
+        }
+        else
+        {
+            layer = getLayer( aShape.m_Layer );
+        }
     }
     else
     {
@@ -2063,8 +2168,8 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
 
     if( isCopperZone && layer == UNDEFINED_LAYER )
     {
-        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - unmapped ETCH layer subclass=%#02x",
-                    aShape.m_Key, aShape.m_Layer.m_Subclass );
+        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - unmapped copper layer class=%#02x subclass=%#02x",
+                    aShape.m_Key, aShape.m_Layer.m_Class, aShape.m_Layer.m_Subclass );
         return nullptr;
     }
 
@@ -2140,7 +2245,6 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
     outline.SetClosed( true );
 
     auto zone = std::make_unique<ZONE>( &m_board );
-    zone->SetNetCode( aNetcode );
     zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 
     if( isCopperZone )
@@ -2159,25 +2263,158 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
         zone->SetDoNotAllowFootprints( false );
     }
 
+    // Set net code AFTER layer assignment. SetNetCode checks IsOnCopperLayer() and
+    // forces net=0 if the zone isn't on a copper layer yet.
+    zone->SetNetCode( aNetcode );
+
     zone->AddPolygon( outline );
     return zone;
 }
 
 
+int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
+{
+    // Follow pointer chain: BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 -> m_Ptrs[0] -> 0x1B NET
+    uint32_t ptr7Key = 0;
+
+    if( aShape.m_Ptr7.has_value() )
+        ptr7Key = aShape.m_Ptr7.value();
+    else if( aShape.m_Ptr7_16x.has_value() )
+        ptr7Key = aShape.m_Ptr7_16x.value();
+
+    if( ptr7Key == 0 )
+        return NETINFO_LIST::UNCONNECTED;
+
+    const BLK_0x2C_TABLE* tbl = expectBlockByKey<BLK_0x2C_TABLE>( ptr7Key, 0x2C );
+
+    if( !tbl )
+        return NETINFO_LIST::UNCONNECTED;
+
+    const BLK_0x37* ptrArray = expectBlockByKey<BLK_0x37>( tbl->m_Ptr1, 0x37 );
+
+    if( !ptrArray || ptrArray->m_Count == 0 )
+        return NETINFO_LIST::UNCONNECTED;
+
+    uint32_t netKey = ptrArray->m_Ptrs[0];
+    auto it = m_netCache.find( netKey );
+
+    if( it != m_netCache.end() )
+    {
+        wxLogTrace( traceAllegroBuilder, "  Resolved BOUNDARY %#010x -> net '%s' (code %d)",
+                    aShape.m_Key, it->second->GetNetname(), it->second->GetNetCode() );
+        return it->second->GetNetCode();
+    }
+
+    wxLogTrace( traceAllegroBuilder, "  BOUNDARY %#010x: net key %#010x not in cache", aShape.m_Key, netKey );
+    return NETINFO_LIST::UNCONNECTED;
+}
+
+
 void BOARD_BUILDER::createZones()
 {
-    wxLogTrace( traceAllegroBuilder, "Creating keepout zones from 0x28 shapes in LL_0x24_0x28" );
+    wxLogTrace( traceAllegroBuilder, "Creating zones from m_LL_Shapes and m_LL_0x24_0x28" );
 
+    int boundaryCount = 0;
+    int mergedCount = 0;
     int keepoutCount = 0;
 
-    const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
+    std::vector<std::unique_ptr<ZONE>> boundaryZones;
+
+    // Walk m_LL_Shapes to find BOUNDARY shapes (zone outlines).
+    // BOUNDARY shapes use class 0x15 with copper layer subclass indices.
+    const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_Shapes, m_brdDb );
 
     for( const BLOCK_BASE* block : shapeWalker )
     {
         if( block->GetBlockType() != 0x28 )
             continue;
 
-        const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+        const BLK_0x28_SHAPE& shapeData =
+                static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+
+        if( shapeData.m_Layer.m_Class != LAYER_INFO::CLASS::BOUNDARY )
+            continue;
+
+        int netCode = resolveShapeNet( shapeData );
+
+        std::unique_ptr<ZONE> zone = buildZone( shapeData, netCode );
+
+        if( zone )
+        {
+            wxLogTrace( traceAllegroBuilder, "  Zone %#010x net=%d layer=%s (subclass=%#04x)",
+                        shapeData.m_Key, netCode,
+                        m_board.GetLayerName( zone->GetFirstLayer() ),
+                        shapeData.m_Layer.m_Subclass );
+
+            zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+            boundaryZones.push_back( std::move( zone ) );
+            boundaryCount++;
+        }
+    }
+
+    // Merge zones with identical outlines and same net into multi-layer zones.
+    // Allegro often defines the same zone outline on multiple copper layers (e.g.
+    // a ground pour spanning all layers). KiCad represents this as a single zone
+    // with multiple fill layers.
+    std::vector<bool> merged( boundaryZones.size(), false );
+
+    for( size_t i = 0; i < boundaryZones.size(); i++ )
+    {
+        if( merged[i] )
+            continue;
+
+        ZONE*                     primary = boundaryZones[i].get();
+        const SHAPE_LINE_CHAIN&   primaryOutline = primary->Outline()->COutline( 0 );
+        LSET                      layers = primary->GetLayerSet();
+
+        for( size_t j = i + 1; j < boundaryZones.size(); j++ )
+        {
+            if( merged[j] )
+                continue;
+
+            ZONE* candidate = boundaryZones[j].get();
+
+            if( candidate->GetNetCode() != primary->GetNetCode() )
+                continue;
+
+            const SHAPE_LINE_CHAIN& candidateOutline = candidate->Outline()->COutline( 0 );
+
+            if( primaryOutline.CompareGeometry( candidateOutline ) )
+            {
+                layers |= candidate->GetLayerSet();
+                merged[j] = true;
+                mergedCount++;
+
+                wxLogTrace( traceAllegroBuilder, "  Merging zone on %s into zone on %s (net %d)",
+                            m_board.GetLayerName( candidate->GetFirstLayer() ),
+                            m_board.GetLayerName( primary->GetFirstLayer() ),
+                            primary->GetNetCode() );
+            }
+        }
+
+        if( layers != primary->GetLayerSet() )
+            primary->SetLayerSet( layers );
+
+        m_board.Add( boundaryZones[i].release(), ADD_MODE::APPEND );
+    }
+
+    if( mergedCount > 0 )
+    {
+        wxLogTrace( traceAllegroBuilder,
+                    "  Merged %d zones into multi-layer zones (%d zones remain from %d)",
+                    mergedCount, boundaryCount - mergedCount, boundaryCount );
+    }
+
+    // Walk m_LL_0x24_0x28 for keepout shapes
+    const LL_WALKER keepoutWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
+
+    for( const BLOCK_BASE* block : keepoutWalker )
+    {
+        if( block->GetBlockType() != 0x28 )
+            continue;
+
+        const BLK_0x28_SHAPE& shapeData =
+                static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
 
         bool isRouteKeepout = ( shapeData.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
         bool isViaKeepout = ( shapeData.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
@@ -2186,7 +2423,8 @@ void BOARD_BUILDER::createZones()
             continue;
 
         wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x",
-                    isRouteKeepout ? "ROUTE_KEEPOUT" : "VIA_KEEPOUT", shapeData.m_Key );
+                    isRouteKeepout ? wxS( "ROUTE_KEEPOUT" ) : wxS( "VIA_KEEPOUT" ),
+                    shapeData.m_Key );
 
         std::unique_ptr<ZONE> zone = buildZone( shapeData, NETINFO_LIST::UNCONNECTED );
 
@@ -2197,7 +2435,9 @@ void BOARD_BUILDER::createZones()
         }
     }
 
-    wxLogTrace( traceAllegroBuilder, "Created %d keepout areas from LL_0x24_0x28", keepoutCount );
+    wxLogTrace( traceAllegroBuilder,
+                "Created %d zone outlines (%d merged), %d keepout areas",
+                boundaryCount - mergedCount, mergedCount, keepoutCount );
 }
 
 

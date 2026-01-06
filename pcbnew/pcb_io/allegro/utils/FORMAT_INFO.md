@@ -1,6 +1,10 @@
 # Allegro PCB file format
 
-The Cadeance Allegro file format is a binary format. It is composed of:
+> **Note**: The primary format reference is `../FORMAT.md`. This file contains
+> earlier working notes that remain useful for their detail on linking
+> mechanisms and net/footprint structure.
+
+The Cadence Allegro file format is a binary format. It is composed of:
 
 * A fixed header structure
 * A table of string data

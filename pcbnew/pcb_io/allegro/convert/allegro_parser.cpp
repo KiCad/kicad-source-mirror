@@ -950,7 +950,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     data.m_LayerCount = aStream.ReadU16();
     ReadCond( aStream, aVer, data.m_Unknown11 );
 
-    ReadArrayU32( aStream, data.m_UnknownArr8 );
+    ReadArrayU32( aStream, data.m_DrillArr );
 
     ReadCond( aStream, aVer, data.m_UnknownArr28 );
     ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
