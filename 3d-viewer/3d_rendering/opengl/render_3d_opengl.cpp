@@ -1009,6 +1009,7 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
         return;
 
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+    const wxString currentVariant = m_boardAdapter.GetBoard()->GetCurrentVariant();
 
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
@@ -1029,8 +1030,12 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
 
         if( !fp->Models().empty() )
         {
-            if( m_boardAdapter.IsFootprintShown( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
+            if( m_boardAdapter.IsFootprintShown( fp ) )
             {
+                // Skip 3D models for footprints that are DNP in the current variant
+                if( fp->GetDNPForVariant( currentVariant ) )
+                    continue;
+
                 const bool isFlipped = fp->IsFlipped();
 
                 if( aGetTop == !isFlipped || aGetBot == isFlipped )

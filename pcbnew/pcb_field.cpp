@@ -29,6 +29,7 @@
 #include <pcb_painter.h>
 #include <api/board/board_types.pb.h>
 #include <string_utils.h>
+#include <board.h>
 
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, FIELD_T aFieldId, const wxString& aName ) :
@@ -117,6 +118,64 @@ wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 wxString PCB_FIELD::GetCanonicalName() const
 {
     return GetName( true );
+}
+
+
+wxString PCB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
+{
+    wxUnusedVar( aAllowExtraText );
+
+    const FOOTPRINT* parentFootprint = GetParentFootprint();
+    const BOARD*     board = GetBoard();
+    wxString         text;
+    bool             hasVariantOverride = false;
+
+    if( parentFootprint && board )
+    {
+        const wxString& variantName = board->GetCurrentVariant();
+
+        if( !variantName.IsEmpty() && variantName.CmpNoCase( GetDefaultVariantName() ) != 0 )
+        {
+            if( const FOOTPRINT_VARIANT* variant = parentFootprint->GetVariant( variantName ) )
+            {
+                if( variant->HasFieldValue( GetName() ) )
+                {
+                    text = parentFootprint->GetFieldValueForVariant( variantName, GetName() );
+                    hasVariantOverride = true;
+                }
+            }
+        }
+    }
+
+    if( !hasVariantOverride )
+        text = GetText();
+
+    text = UnescapeString( text );
+
+    std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
+    {
+        if( token->IsSameAs( wxT( "LAYER" ) ) )
+        {
+            *token = GetLayerName();
+            return true;
+        }
+
+        if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
+
+        if( board && board->ResolveTextVar( token, aDepth + 1 ) )
+            return true;
+
+        return false;
+    };
+
+    if( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) )
+        text = ResolveTextVars( text, &resolver, aDepth );
+
+    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+
+    return text;
 }
 
 

@@ -335,6 +335,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
     bool onFrontFab = ( LSET( { F_Fab } ) & aLayerMask ).any();
     bool onBackFab  = ( LSET( { B_Fab } ) & aLayerMask ).any();
     bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();
+    const wxString variantName = aBoard->GetCurrentVariant();
 
     // Plot edge layer and graphic items
     for( const BOARD_ITEM* item : aBoard->Drawings() )
@@ -351,6 +352,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
     // Plot footprint pads
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
+        const bool dnp = footprint->GetDNPForVariant( variantName );
+
         aPlotter->StartBlock( nullptr );
 
         for( PAD* pad : footprint->Pads() )
@@ -631,7 +634,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 plotPadLayer( layer );
         }
 
-        if( footprint->IsDNP()
+        if( dnp
                 && !itemplotter.GetHideDNPFPsOnFabLayers()
                 && itemplotter.GetCrossoutDNPFPsOnFabLayers()
                 && (   ( onFrontFab && footprint->GetLayer() == F_Cu )

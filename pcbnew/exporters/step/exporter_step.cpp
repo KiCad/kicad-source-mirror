@@ -485,7 +485,8 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
         return hasdata;
     }
 
-    if( ( aFootprint->GetAttributes() & FP_DNP ) && !m_params.m_IncludeDNP )
+    if( aFootprint->GetDNPForVariant( m_board ? m_board->GetCurrentVariant() : wxString() )
+            && !m_params.m_IncludeDNP )
     {
         return hasdata;
     }

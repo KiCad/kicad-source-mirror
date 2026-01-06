@@ -737,8 +737,40 @@ void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFiel
         break;
 
     case FIELD_T::FOOTPRINT:
-        SetFootprintFieldText( aFieldText );
+    {
+        wxString defaultText = GetFootprintFieldText( false, nullptr, false );
+
+        if( aFieldText != defaultText )
+        {
+            if( aVariantName.IsEmpty() )
+            {
+                SetFootprintFieldText( aFieldText );
+            }
+            else
+            {
+                wxCHECK( aPath, /* void */ );
+
+                SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
+
+                wxCHECK( instance, /* void */ );
+
+                if( instance->m_Variants.contains( aVariantName ) )
+                {
+                    instance->m_Variants[aVariantName].m_Fields[aFieldName] = aFieldText;
+                }
+                else
+                {
+                    SCH_SYMBOL_VARIANT newVariant( aVariantName );
+
+                    newVariant.InitializeAttributes( *this );
+                    newVariant.m_Fields[aFieldName] = aFieldText;
+                    instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
+                }
+            }
+        }
+
         break;
+    }
 
     default:
     {
@@ -794,8 +826,18 @@ wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, const SCH_SHEET_P
         break;
 
     case FIELD_T::FOOTPRINT:
+        if( !aVariantName.IsEmpty() && aPath )
+        {
+            const SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
+
+            if( instance && instance->m_Variants.contains( aVariantName )
+              && instance->m_Variants.at( aVariantName ).m_Fields.contains( aFieldName ) )
+            {
+                return instance->m_Variants.at( aVariantName ).m_Fields.at( aFieldName );
+            }
+        }
+
         return GetFootprintFieldText( false, nullptr, false );
-        break;
 
     default:
         if( aVariantName.IsEmpty() )

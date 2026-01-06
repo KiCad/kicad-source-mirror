@@ -484,6 +484,8 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "PROJECTNAME" ) );
     add( wxT( "DRC_ERROR <message_text>" ) );
     add( wxT( "DRC_WARNING <message_text>" ) );
+    add( wxT( "VARIANT" ) );
+    add( wxT( "VARIANT_DESC" ) );
 
     GetTitleBlock().GetContextualTextVars( aVars );
 
@@ -554,6 +556,16 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
     {
         wxFileName fn( GetFileName() );
         *token = fn.GetFullPath();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "VARIANT" ) ) )
+    {
+        *token = GetCurrentVariant();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "VARIANT_DESC" ) ) )
+    {
+        *token = GetVariantDescription( GetCurrentVariant() );
         return true;
     }
     else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && GetProject() )
@@ -2452,6 +2464,179 @@ void BOARD::SynchronizeProperties()
 {
     if( m_project && !m_project->IsNullProject() )
         SetProperties( m_project->GetTextVars() );
+}
+
+
+static wxString FindVariantNameCaseInsensitive( const std::vector<wxString>& aNames,
+                                                const wxString& aVariantName )
+{
+    for( const wxString& name : aNames )
+    {
+        if( name.CmpNoCase( aVariantName ) == 0 )
+            return name;
+    }
+
+    return wxEmptyString;
+}
+
+
+void BOARD::SetCurrentVariant( const wxString& aVariant )
+{
+    if( aVariant.IsEmpty() || aVariant.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        m_currentVariant.Clear();
+        return;
+    }
+
+    wxString actualName = FindVariantNameCaseInsensitive( m_variantNames, aVariant );
+
+    if( actualName.IsEmpty() )
+        m_currentVariant.Clear();
+    else
+        m_currentVariant = actualName;
+}
+
+
+bool BOARD::HasVariant( const wxString& aVariantName ) const
+{
+    return !FindVariantNameCaseInsensitive( m_variantNames, aVariantName ).IsEmpty();
+}
+
+
+void BOARD::AddVariant( const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty()
+        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0
+        || HasVariant( aVariantName ) )
+        return;
+
+    m_variantNames.push_back( aVariantName );
+}
+
+
+void BOARD::DeleteVariant( const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return;
+
+    auto it = std::find_if( m_variantNames.begin(), m_variantNames.end(),
+                            [&]( const wxString& name )
+                            {
+                                return name.CmpNoCase( aVariantName ) == 0;
+                            } );
+
+    if( it != m_variantNames.end() )
+    {
+        wxString actualName = *it;
+        m_variantNames.erase( it );
+        m_variantDescriptions.erase( actualName );
+
+        // Clear current variant if it was the deleted one
+        if( m_currentVariant.CmpNoCase( aVariantName ) == 0 )
+            m_currentVariant.Clear();
+
+        // Remove variant from all footprints
+        for( FOOTPRINT* fp : m_footprints )
+            fp->DeleteVariant( actualName );
+    }
+}
+
+
+void BOARD::RenameVariant( const wxString& aOldName, const wxString& aNewName )
+{
+    if( aNewName.IsEmpty() || aNewName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return;
+
+    auto it = std::find_if( m_variantNames.begin(), m_variantNames.end(),
+                            [&]( const wxString& name )
+                            {
+                                return name.CmpNoCase( aOldName ) == 0;
+                            } );
+
+    if( it != m_variantNames.end() )
+    {
+        wxString actualOldName = *it;
+
+        // Check if new name already exists (case-insensitive) and isn't the same variant
+        wxString existingName = FindVariantNameCaseInsensitive( m_variantNames, aNewName );
+
+        if( !existingName.IsEmpty() && existingName.CmpNoCase( actualOldName ) != 0 )
+            return;
+
+        if( actualOldName == aNewName )
+            return;
+
+        *it = aNewName;
+
+        // Transfer description
+        auto descIt = m_variantDescriptions.find( actualOldName );
+
+        if( descIt != m_variantDescriptions.end() )
+        {
+            if( !descIt->second.IsEmpty() )
+                m_variantDescriptions[aNewName] = descIt->second;
+
+            m_variantDescriptions.erase( descIt );
+        }
+
+        // Update current variant if it was the renamed one
+        if( m_currentVariant.CmpNoCase( aOldName ) == 0 )
+            m_currentVariant = aNewName;
+
+        // Rename variant in all footprints
+        for( FOOTPRINT* fp : m_footprints )
+            fp->RenameVariant( actualOldName, aNewName );
+    }
+}
+
+
+wxString BOARD::GetVariantDescription( const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return wxEmptyString;
+
+    wxString actualName = FindVariantNameCaseInsensitive( m_variantNames, aVariantName );
+
+    if( actualName.IsEmpty() )
+        return wxEmptyString;
+
+    auto it = m_variantDescriptions.find( actualName );
+
+    if( it != m_variantDescriptions.end() )
+        return it->second;
+
+    return wxEmptyString;
+}
+
+
+void BOARD::SetVariantDescription( const wxString& aVariantName, const wxString& aDescription )
+{
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return;
+
+    wxString actualName = FindVariantNameCaseInsensitive( m_variantNames, aVariantName );
+
+    if( actualName.IsEmpty() )
+        return;
+
+    if( aDescription.IsEmpty() )
+        m_variantDescriptions.erase( actualName );
+    else
+        m_variantDescriptions[actualName] = aDescription;
+}
+
+
+wxArrayString BOARD::GetVariantNamesForUI() const
+{
+    wxArrayString names;
+    names.Add( GetDefaultVariantName() );
+
+    for( const wxString& name : m_variantNames )
+        names.Add( name );
+
+    names.Sort( SortVariantNames );
+
+    return names;
 }
 
 

@@ -83,6 +83,14 @@ private:
     void parseGroup();
 
     /**
+     * Parse a variant section
+     *   (variant (name "VariantName") (description "Description"))
+     *
+     * and add it to the netlist variant registry
+     */
+    void parseVariant();
+
+    /**
      * Read the section "libparts" in the netlist:
      * (libparts
      *   (libpart (lib device) (part C)

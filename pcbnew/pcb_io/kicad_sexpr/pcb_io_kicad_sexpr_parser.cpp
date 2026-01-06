@@ -504,6 +504,164 @@ std::pair<wxString, wxString> PCB_IO_KICAD_SEXPR_PARSER::parseBoardProperty()
 }
 
 
+void PCB_IO_KICAD_SEXPR_PARSER::parseVariants()
+{
+    // (variants
+    //   (variant (name "VariantA") (description "Description A"))
+    //   (variant (name "VariantB") (description "Description B"))
+    // )
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        if( token == T_variant )
+        {
+            wxString variantName;
+            wxString description;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_name:
+                    NeedSYMBOL();
+                    variantName = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_description:
+                    NeedSYMBOL();
+                    description = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "name or description" );
+                }
+            }
+
+            if( !variantName.IsEmpty() )
+            {
+                m_board->AddVariant( variantName );
+
+                if( !description.IsEmpty() )
+                    m_board->SetVariantDescription( variantName, description );
+            }
+        }
+        else
+        {
+            Expecting( T_variant );
+        }
+    }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintVariant( FOOTPRINT* aFootprint )
+{
+    // (variant (name "VariantA") (dnp yes) (exclude_from_bom yes) (exclude_from_pos_files yes)
+    //   (field (name "Value") (value "100nF")))
+    wxString variantName;
+    bool     hasDnp = false;
+    bool     dnp = false;
+    bool     hasExcludeFromBOM = false;
+    bool     excludeFromBOM = false;
+    bool     hasExcludeFromPosFiles = false;
+    bool     excludeFromPosFiles = false;
+    std::vector<std::pair<wxString, wxString>> fields;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_name:
+            NeedSYMBOL();
+            variantName = FromUTF8();
+            NeedRIGHT();
+            break;
+
+        case T_dnp:
+            dnp = parseMaybeAbsentBool( true );
+            hasDnp = true;
+            break;
+
+        case T_exclude_from_bom:
+            excludeFromBOM = parseMaybeAbsentBool( true );
+            hasExcludeFromBOM = true;
+            break;
+
+        case T_exclude_from_pos_files:
+            excludeFromPosFiles = parseMaybeAbsentBool( true );
+            hasExcludeFromPosFiles = true;
+            break;
+
+        case T_field:
+        {
+            wxString fieldName;
+            wxString fieldValue;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                if( token == T_name )
+                {
+                    NeedSYMBOL();
+                    fieldName = FromUTF8();
+                    NeedRIGHT();
+                }
+                else if( token == T_value )
+                {
+                    NeedSYMBOL();
+                    fieldValue = FromUTF8();
+                    NeedRIGHT();
+                }
+                else
+                {
+                    Expecting( "name or value" );
+                }
+            }
+
+            if( !fieldName.IsEmpty() )
+                fields.emplace_back( fieldName, fieldValue );
+
+            break;
+        }
+
+        default:
+            Expecting( "name, dnp, exclude_from_bom, exclude_from_pos_files, or field" );
+        }
+    }
+
+    if( variantName.IsEmpty() )
+        return;
+
+    FOOTPRINT_VARIANT* variant = aFootprint->AddVariant( variantName );
+
+    if( !variant )
+        return;
+
+    if( hasDnp )
+        variant->SetDNP( dnp );
+
+    if( hasExcludeFromBOM )
+        variant->SetExcludedFromBOM( excludeFromBOM );
+
+    if( hasExcludeFromPosFiles )
+        variant->SetExcludedFromPosFiles( excludeFromPosFiles );
+
+    for( const auto& [fieldName, fieldValue] : fields )
+        variant->SetFieldValue( fieldName, fieldValue );
+}
+
+
 void PCB_IO_KICAD_SEXPR_PARSER::parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* tdParams )
 {
     tdParams->m_Enabled = false;
@@ -1041,6 +1199,10 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_property:
             properties.insert( parseBoardProperty() );
+            break;
+
+        case T_variants:
+            parseVariants();
             break;
 
         case T_net:
@@ -5338,6 +5500,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             break;
         }
+
+        case T_variant:
+            parseFootprintVariant( footprint.get() );
+            break;
 
         default:
             Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, "

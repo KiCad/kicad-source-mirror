@@ -25,6 +25,7 @@
  */
 #include <magic_enum.hpp>
 
+#include <algorithm>
 #include <unordered_set>
 
 #include <wx/log.h>
@@ -165,6 +166,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
                                                        : nullptr;
 
     m_embedFonts       = aFootprint.m_embedFonts;
+    m_variants         = aFootprint.m_variants;
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -800,6 +802,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
+    m_variants      = std::move( aOther.m_variants );
 
     m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
     m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
@@ -938,6 +941,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
+    m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
+    m_jumperPadGroups                = aOther.m_jumperPadGroups;
+    m_variants                       = aOther.m_variants;
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -1124,7 +1130,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( PCB_FIELD* field = GetField( *token ) )
     {
-        *token = field->GetText();
+        *token = field->GetShownText( false, aDepth + 1 );
         return true;
     }
 
@@ -1132,6 +1138,184 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
 
     return false;
+}
+
+
+// ============================================================================
+// Variant Support Implementation
+// ============================================================================
+
+const FOOTPRINT_VARIANT* FOOTPRINT::GetVariant( const wxString& aVariantName ) const
+{
+    auto it = m_variants.find( aVariantName );
+
+    return it != m_variants.end() ? &it->second : nullptr;
+}
+
+
+FOOTPRINT_VARIANT* FOOTPRINT::GetVariant( const wxString& aVariantName )
+{
+    auto it = m_variants.find( aVariantName );
+
+    return it != m_variants.end() ? &it->second : nullptr;
+}
+
+
+void FOOTPRINT::SetVariant( const FOOTPRINT_VARIANT& aVariant )
+{
+    if( aVariant.GetName().IsEmpty()
+        || aVariant.GetName().CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        return;
+    }
+
+    auto it = m_variants.find( aVariant.GetName() );
+
+    if( it != m_variants.end() )
+    {
+        FOOTPRINT_VARIANT updated = aVariant;
+        updated.SetName( it->first );
+        it->second = std::move( updated );
+        return;
+    }
+
+    m_variants.emplace( aVariant.GetName(), aVariant );
+}
+
+
+FOOTPRINT_VARIANT* FOOTPRINT::AddVariant( const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty()
+        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        wxASSERT_MSG( false, wxT( "Variant name cannot be empty or default." ) );
+        return nullptr;
+    }
+
+    auto it = m_variants.find( aVariantName );
+
+    if( it != m_variants.end() )
+        return &it->second;
+
+    FOOTPRINT_VARIANT variant( aVariantName );
+    variant.SetDNP( IsDNP() );
+    variant.SetExcludedFromBOM( IsExcludedFromBOM() );
+    variant.SetExcludedFromPosFiles( IsExcludedFromPosFiles() );
+
+    auto inserted = m_variants.emplace( aVariantName, std::move( variant ) );
+    return &inserted.first->second;
+}
+
+
+void FOOTPRINT::DeleteVariant( const wxString& aVariantName )
+{
+    m_variants.erase( aVariantName );
+}
+
+
+void FOOTPRINT::RenameVariant( const wxString& aOldName, const wxString& aNewName )
+{
+    if( aNewName.IsEmpty()
+        || aNewName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        return;
+    }
+
+    auto it = m_variants.find( aOldName );
+
+    if( it == m_variants.end() )
+        return;
+
+    auto existingIt = m_variants.find( aNewName );
+
+    if( existingIt != m_variants.end() && existingIt != it )
+        return;
+
+    if( it->first == aNewName )
+        return;
+
+    FOOTPRINT_VARIANT variant = it->second;
+    variant.SetName( aNewName );
+    m_variants.erase( it );
+    m_variants.emplace( aNewName, std::move( variant ) );
+}
+
+
+bool FOOTPRINT::HasVariant( const wxString& aVariantName ) const
+{
+    return m_variants.find( aVariantName ) != m_variants.end();
+}
+
+
+bool FOOTPRINT::GetDNPForVariant( const wxString& aVariantName ) const
+{
+    // Empty variant name means default
+    if( aVariantName.IsEmpty()
+        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return IsDNP();
+
+    const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
+
+    if( variant )
+        return variant->GetDNP();
+
+    // Fall back to default if variant doesn't exist
+    return IsDNP();
+}
+
+
+bool FOOTPRINT::GetExcludedFromBOMForVariant( const wxString& aVariantName ) const
+{
+    // Empty variant name means default
+    if( aVariantName.IsEmpty()
+        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return IsExcludedFromBOM();
+
+    const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
+
+    if( variant )
+        return variant->GetExcludedFromBOM();
+
+    // Fall back to default if variant doesn't exist
+    return IsExcludedFromBOM();
+}
+
+
+bool FOOTPRINT::GetExcludedFromPosFilesForVariant( const wxString& aVariantName ) const
+{
+    // Empty variant name means default
+    if( aVariantName.IsEmpty()
+        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return IsExcludedFromPosFiles();
+
+    const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
+
+    if( variant )
+        return variant->GetExcludedFromPosFiles();
+
+    // Fall back to default if variant doesn't exist
+    return IsExcludedFromPosFiles();
+}
+
+
+wxString FOOTPRINT::GetFieldValueForVariant( const wxString& aVariantName,
+                                              const wxString& aFieldName ) const
+{
+    // Check variant-specific override first
+    if( !aVariantName.IsEmpty()
+        && aVariantName.CmpNoCase( GetDefaultVariantName() ) != 0 )
+    {
+        const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
+
+        if( variant && variant->HasFieldValue( aFieldName ) )
+            return variant->GetFieldValue( aFieldName );
+    }
+
+    // Fall back to default field value
+    if( const PCB_FIELD* field = GetField( aFieldName ) )
+        return field->GetText();
+
+    return wxString();
 }
 
 

@@ -96,7 +96,7 @@ public:
     /**
      * Test if footprint should be displayed in relation to attributes and the flags.
      */
-    bool IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const;
+    bool IsFootprintShown( const FOOTPRINT* aFootprint ) const;
 
     /**
      * Set current board to be rendered.

@@ -1450,8 +1450,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // Add footprints tech layers - objects
+            const bool     isPasteLayer = ( layer == F_Paste || layer == B_Paste );
+            const wxString currentVariant = m_board->GetCurrentVariant();
+
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
+                // Skip paste layers for footprints that are DNP in the current variant
+                bool skipForVariantDNP = isPasteLayer && footprint->GetDNPForVariant( currentVariant );
+
                 if( layer == F_SilkS || layer == B_SilkS )
                 {
                     int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
@@ -1464,12 +1470,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         buildPadOutlineAsSegments( pad, layer, layerContainer, linewidth );
                     }
                 }
-                else
+                else if( !skipForVariantDNP )
                 {
                     addPads( footprint, layerContainer, layer );
                 }
 
-                addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
+                if( !skipForVariantDNP )
+                    addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
             }
 
             // Draw non copper zones

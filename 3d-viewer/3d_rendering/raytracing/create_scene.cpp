@@ -1907,12 +1907,18 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
         return;
     }
 
+    const wxString currentVariant = m_boardAdapter.GetBoard()->GetCurrentVariant();
+
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
         if( !fp->Models().empty()
-          && m_boardAdapter.IsFootprintShown( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
+          && m_boardAdapter.IsFootprintShown( fp ) )
         {
+            // Skip 3D models for footprints that are DNP in the current variant
+            if( fp->GetDNPForVariant( currentVariant ) )
+                continue;
+
             double zpos = m_boardAdapter.GetFootprintZPos( fp->IsFlipped() );
 
             VECTOR2I pos = fp->GetPosition();

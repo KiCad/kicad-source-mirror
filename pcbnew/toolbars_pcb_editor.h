@@ -28,6 +28,7 @@ class PCB_ACTION_TOOLBAR_CONTROLS : public ACTION_TOOLBAR_CONTROLS
 public:
     static ACTION_TOOLBAR_CONTROL trackWidth;
     static ACTION_TOOLBAR_CONTROL viaDiameter;
+    static ACTION_TOOLBAR_CONTROL currentVariant;
 };
 
 /**

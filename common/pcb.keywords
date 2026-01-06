@@ -101,6 +101,7 @@ data
 date
 defaults
 descr
+description
 die_delay
 die_length
 dielectric_constraints
@@ -137,6 +138,7 @@ face
 false
 feature1
 feature2
+field
 fill
 fill_segments
 filled_polygon
@@ -399,6 +401,8 @@ uvia_min_size
 uvia_size
 uvias_allowed
 value
+variant
+variants
 version
 via
 vias

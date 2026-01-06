@@ -20,6 +20,7 @@
 #include <wx/string.h>
 #include <wx/debug.h>
 #include <wx/grid.h>
+#include <wx/settings.h>
 #include <common.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>

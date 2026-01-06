@@ -64,13 +64,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB
 
     for( FOOTPRINT* footprint : m_pcb->Footprints() )
     {
-        if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
+        if( footprint->GetExcludedFromPosFilesForVariant( m_variant ) )
              continue;
 
-        if( aExcludeDNP && ( footprint->GetAttributes() & FP_DNP ) )
+        if( aExcludeDNP && footprint->GetDNPForVariant( m_variant ) )
             continue;
 
-        if( aExcludeBOM && ( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) )
+        if( aExcludeBOM && footprint->GetExcludedFromBOMForVariant( m_variant ) )
             continue;
 
         if( footprint->GetLayer() == aLayer )

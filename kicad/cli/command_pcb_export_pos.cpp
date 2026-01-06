@@ -38,6 +38,7 @@
 #define ARG_EXCLUDE_FOOTPRINTS_TH "--exclude-fp-th"
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_GERBER_BOARD_EDGE "--gerber-board-edge"
+#define ARG_VARIANT "--variant"
 
 
 CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() :
@@ -86,6 +87,12 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() :
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
             .help( UTF8STDSTR( _( "Include board edge layer (Gerber only)" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_VARIANT )
+            .default_value( std::string( "" ) )
+            .help( UTF8STDSTR( _( "Board variant for variant-aware filtering (DNP, BOM, position "
+                                  "file exclusions)" ) ) )
+            .metavar( "VARIANT" );
 }
 
 
@@ -110,6 +117,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     aPosJob->m_useDrillPlaceFileOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
     aPosJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
     aPosJob->m_gerberBoardEdge = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
+    aPosJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
 
     wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
 

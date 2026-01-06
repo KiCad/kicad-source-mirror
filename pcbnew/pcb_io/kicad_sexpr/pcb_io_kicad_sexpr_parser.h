@@ -330,6 +330,9 @@ private:
 
     std::pair<wxString, wxString> parseBoardProperty();
 
+    void parseVariants();
+    void parseFootprintVariant( FOOTPRINT* aFootprint );
+
     /**
      * Parses possible outline points and stores them into \p aPoly.  This accepts points
      * for DRAWSEGMENT polygons, EDGEMODULE polygons and ZONE_CONTAINER polygons.  Points

@@ -59,6 +59,12 @@ public:
     }
 
     /**
+     * Set the variant name for variant-aware filtering.
+     * When set, DNP, BOM, and position file exclusion will check variant-specific status.
+     */
+    void SetVariant( const wxString& aVariant ) { m_variant = aVariant; }
+
+    /**
      * Create an pnp gerber file.
      *
      * @param aFullFilename is the full filename.
@@ -106,6 +112,8 @@ private:
     bool         m_plotPad1Marker;       // True to plot a flashed marker shape at pad 1 position
     bool         m_plotOtherPadsMarker;  // True to plot a marker shape at other pads position
                                          // This is a flashed 0 sized round pad
+
+    wxString     m_variant;          // Variant name for variant-aware filtering
 };
 
 #endif  //  #ifndef PLACEFILE_GERBER_WRITER_H

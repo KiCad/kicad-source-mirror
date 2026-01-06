@@ -710,6 +710,31 @@ void PCB_IO_KICAD_SEXPR::formatProperties( const BOARD* aBoard ) const
 }
 
 
+void PCB_IO_KICAD_SEXPR::formatVariants( const BOARD* aBoard ) const
+{
+    const std::vector<wxString>& variantNames = aBoard->GetVariantNames();
+
+    if( variantNames.empty() )
+        return;
+
+    m_out->Print( "(variants" );
+
+    for( const wxString& variantName : variantNames )
+    {
+        m_out->Print( "(variant (name %s)", m_out->Quotew( variantName ).c_str() );
+
+        wxString description = aBoard->GetVariantDescription( variantName );
+
+        if( !description.IsEmpty() )
+            m_out->Print( "(description %s)", m_out->Quotew( description ).c_str() );
+
+        m_out->Print( ")" );
+    }
+
+    m_out->Print( ")" );
+}
+
+
 void PCB_IO_KICAD_SEXPR::formatHeader( const BOARD* aBoard ) const
 {
     formatGeneral( aBoard );
@@ -722,6 +747,9 @@ void PCB_IO_KICAD_SEXPR::formatHeader( const BOARD* aBoard ) const
 
     // Properties
     formatProperties( aBoard );
+
+    // Variants
+    formatVariants( aBoard );
 }
 
 
@@ -1413,6 +1441,43 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     // Save groups.
     for( BOARD_ITEM* group : sorted_groups )
         Format( group );
+
+    // Save variants.
+    const bool baseDnp = aFootprint->IsDNP();
+    const bool baseExcludedFromBOM = aFootprint->IsExcludedFromBOM();
+    const bool baseExcludedFromPosFiles = aFootprint->IsExcludedFromPosFiles();
+
+    for( const auto& [variantName, variant] : aFootprint->GetVariants() )
+    {
+        m_out->Print( "(variant (name %s)", m_out->Quotew( variantName ).c_str() );
+
+        if( variant.GetDNP() != baseDnp )
+            KICAD_FORMAT::FormatBool( m_out, "dnp", variant.GetDNP() );
+
+        if( variant.GetExcludedFromBOM() != baseExcludedFromBOM )
+            KICAD_FORMAT::FormatBool( m_out, "exclude_from_bom", variant.GetExcludedFromBOM() );
+
+        if( variant.GetExcludedFromPosFiles() != baseExcludedFromPosFiles )
+        {
+            KICAD_FORMAT::FormatBool( m_out, "exclude_from_pos_files",
+                                      variant.GetExcludedFromPosFiles() );
+        }
+
+        for( const auto& [fieldName, fieldValue] : variant.GetFields() )
+        {
+            const PCB_FIELD* baseField = aFootprint->GetField( fieldName );
+            const wxString baseValue = baseField ? baseField->GetText() : wxString();
+
+            if( fieldValue == baseValue )
+                continue;
+
+            m_out->Print( "(field (name %s) (value %s))",
+                          m_out->Quotew( fieldName ).c_str(),
+                          m_out->Quotew( fieldValue ).c_str() );
+        }
+
+        m_out->Print( ")" );
+    }
 
     KICAD_FORMAT::FormatBool( m_out, "embedded_fonts",
                               aFootprint->GetEmbeddedFiles()->GetAreFontsEmbedded() );

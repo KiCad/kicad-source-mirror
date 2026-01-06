@@ -407,7 +407,8 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
     if( ( !(aFootprint->GetAttributes() & (FP_THROUGH_HOLE|FP_SMD)) ) && !aIncludeUnspecified )
         return;
 
-    if( aFootprint->IsDNP() && !aIncludeDNP )
+    if( aFootprint->GetDNPForVariant( aPcb ? aPcb->GetCurrentVariant() : wxString() )
+            && !aIncludeDNP )
         return;
 
     // add any valid models to the library item list

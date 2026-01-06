@@ -272,27 +272,35 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer,
 }
 
 
-bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
+bool BOARD_ADAPTER::IsFootprintShown( const FOOTPRINT* aFootprint ) const
 {
     if( m_IsPreviewer )     // In panel Preview, footprints are always shown, of course
         return true;
 
-    if( aFPAttributes & FP_EXCLUDE_FROM_POS_FILES )
+    if( !aFootprint )
+        return false;
+
+    const wxString variantName = m_board ? m_board->GetCurrentVariant() : wxString();
+    const bool     excludedFromPos = aFootprint->GetExcludedFromPosFilesForVariant( variantName );
+    const bool     dnp = aFootprint->GetDNPForVariant( variantName );
+    const auto     attributes = static_cast<FOOTPRINT_ATTR_T>( aFootprint->GetAttributes() );
+
+    if( excludedFromPos )
     {
         if( !m_Cfg->m_Render.show_footprints_not_in_posfile )
             return false;
     }
 
-    if( aFPAttributes & FP_DNP )
+    if( dnp )
     {
         if( !m_Cfg->m_Render.show_footprints_dnp )
             return false;
     }
 
-    if( aFPAttributes & FP_SMD )
+    if( attributes & FP_SMD )
         return m_Cfg->m_Render.show_footprints_insert;
 
-    if( aFPAttributes & FP_THROUGH_HOLE )
+    if( attributes & FP_THROUGH_HOLE )
         return m_Cfg->m_Render.show_footprints_normal;
 
     return m_Cfg->m_Render.show_footprints_virtual;

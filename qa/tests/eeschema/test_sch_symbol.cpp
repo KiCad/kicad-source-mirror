@@ -685,6 +685,136 @@ BOOST_AUTO_TEST_CASE( SetFieldTextAndSetValueFieldTextConsistency )
 
 
 /**
+ * Test variant name handling in eeschema.
+ * Note: Unlike PCB, eeschema variant lookups are currently case-sensitive.
+ */
+BOOST_AUTO_TEST_CASE( VariantNameHandling )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString variantName = wxS( "ProductionVariant" );
+
+    // Add variant with specific casing
+    m_schematic->AddVariant( variantName );
+
+    // Set DNP on variant
+    symbol->SetDNP( true, &m_schematic->Hierarchy()[0], variantName );
+
+    // Verify with exact case - this should work
+    BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], wxS( "ProductionVariant" ) ) );
+
+    // Verify variant exists
+    BOOST_CHECK( m_schematic->GetVariantNames().contains( wxS( "ProductionVariant" ) ) );
+
+    // Set and get current variant
+    m_schematic->SetCurrentVariant( variantName );
+    BOOST_CHECK_EQUAL( m_schematic->GetCurrentVariant(), variantName );
+
+    // Unknown variant should return base DNP (false)
+    BOOST_CHECK( !symbol->GetDNP( &m_schematic->Hierarchy()[0], wxS( "NonExistentVariant" ) ) );
+}
+
+
+/**
+ * Test variant deletion clears symbol variant data.
+ */
+BOOST_AUTO_TEST_CASE( VariantDeletionCascade )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString variantName = wxS( "DeleteMe" );
+
+    // Add variant and set properties
+    m_schematic->AddVariant( variantName );
+    symbol->SetDNP( true, &m_schematic->Hierarchy()[0], variantName );
+    symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "DeletedValue" ), &m_schematic->Hierarchy()[0], variantName );
+
+    // Verify data is set
+    BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], variantName ) );
+    std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK( variant.has_value() );
+
+    // Delete the variant
+    m_schematic->DeleteVariant( variantName );
+
+    // Variant should no longer exist at schematic level
+    BOOST_CHECK( !m_schematic->GetVariantNames().contains( variantName ) );
+
+    // After deletion, querying DNP for non-existent variant should return base value
+    BOOST_CHECK( !symbol->GetDNP( &m_schematic->Hierarchy()[0], variantName ) );
+}
+
+
+/**
+ * Test variant field values with unicode and special characters.
+ */
+BOOST_AUTO_TEST_CASE( VariantFieldUnicodeAndSpecialChars )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString variantName = wxS( "UnicodeTest" );
+    m_schematic->AddVariant( variantName );
+
+    // Test Unicode characters in field values
+    wxString unicodeValue = wxS( "1kΩ ±5% 日本語" );
+    symbol->GetField( FIELD_T::VALUE )->SetText( unicodeValue, &m_schematic->Hierarchy()[0], variantName );
+
+    wxString retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
+                                                                            false, 0, variantName );
+    BOOST_CHECK_EQUAL( retrieved, unicodeValue );
+
+    // Test special characters
+    wxString specialChars = wxS( "R<1K>\"test\"'value'" );
+    symbol->GetField( FIELD_T::VALUE )->SetText( specialChars, &m_schematic->Hierarchy()[0], variantName );
+
+    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
+                                                                   false, 0, variantName );
+    BOOST_CHECK_EQUAL( retrieved, specialChars );
+
+    // Test empty string
+    symbol->GetField( FIELD_T::VALUE )->SetText( wxEmptyString, &m_schematic->Hierarchy()[0], variantName );
+    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
+                                                                   false, 0, variantName );
+    BOOST_CHECK( retrieved.IsEmpty() );
+
+    // Test description with unicode
+    wxString unicodeDesc = wxS( "Variante für Produktion — 测试" );
+    m_schematic->SetVariantDescription( variantName, unicodeDesc );
+    BOOST_CHECK_EQUAL( m_schematic->GetVariantDescription( variantName ), unicodeDesc );
+}
+
+
+/**
  * Test variant-specific field dereferencing via ${REF:FIELD:VARIANT} syntax.
  */
 BOOST_AUTO_TEST_CASE( VariantSpecificFieldDereferencing )
@@ -745,6 +875,102 @@ BOOST_AUTO_TEST_CASE( VariantSpecificFieldDereferencing )
     resolved = symbol->ResolveTextVar( &m_schematic->Hierarchy()[0], &token, wxEmptyString, 0 );
     BOOST_CHECK( resolved );
     BOOST_CHECK_EQUAL( token, defaultValue );
+}
+
+
+/**
+ * Test footprint field variant support.
+ * Verifies that editing the footprint field when a variant is active creates a variant-specific
+ * override instead of modifying the base footprint value.
+ */
+BOOST_AUTO_TEST_CASE( FootprintFieldVariantSupport )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString variantName = wxS( "FootprintVariant" );
+    wxString baseFootprint = wxS( "Resistor_SMD:R_0805_2012Metric" );
+    wxString variantFootprint = wxS( "Resistor_SMD:R_0402_1005Metric" );
+    wxString fieldName = symbol->GetField( FIELD_T::FOOTPRINT )->GetName();
+
+    // Set a base footprint first
+    symbol->SetFootprintFieldText( baseFootprint );
+    BOOST_CHECK_EQUAL( symbol->GetFootprintFieldText( false, nullptr, false ), baseFootprint );
+
+    // Add the variant
+    m_schematic->AddVariant( variantName );
+
+    // Set a different footprint for the variant using SetFieldText
+    symbol->SetFieldText( fieldName, variantFootprint, &m_schematic->Hierarchy()[0], variantName );
+
+    // Verify base footprint is unchanged
+    wxString retrievedBase = symbol->GetFootprintFieldText( false, nullptr, false );
+    BOOST_CHECK_EQUAL( retrievedBase, baseFootprint );
+
+    // Verify GetFieldText with no variant returns base footprint
+    wxString retrievedDefault = symbol->GetFieldText( fieldName, &m_schematic->Hierarchy()[0], wxEmptyString );
+    BOOST_CHECK_EQUAL( retrievedDefault, baseFootprint );
+
+    // Verify GetFieldText with variant returns variant-specific footprint
+    wxString retrievedVariant = symbol->GetFieldText( fieldName, &m_schematic->Hierarchy()[0], variantName );
+    BOOST_CHECK_EQUAL( retrievedVariant, variantFootprint );
+
+    // Verify that the variant data structure contains the footprint override
+    std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( m_schematic->Hierarchy()[0], variantName );
+    BOOST_REQUIRE( variant.has_value() );
+    BOOST_CHECK( variant->m_Fields.contains( fieldName ) );
+    BOOST_CHECK_EQUAL( variant->m_Fields.at( fieldName ), variantFootprint );
+}
+
+
+/**
+ * Test that setting footprint to same value as base when variant is active does not create an
+ * unnecessary override entry.
+ */
+BOOST_AUTO_TEST_CASE( FootprintFieldVariantNoOpWhenSame )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    wxString variantName = wxS( "NoOpTest" );
+    wxString baseFootprint = wxS( "Resistor_SMD:R_0805_2012Metric" );
+    wxString fieldName = symbol->GetField( FIELD_T::FOOTPRINT )->GetName();
+
+    // Set a base footprint first
+    symbol->SetFootprintFieldText( baseFootprint );
+
+    // Add the variant
+    m_schematic->AddVariant( variantName );
+
+    // Set the same footprint value for the variant
+    symbol->SetFieldText( fieldName, baseFootprint, &m_schematic->Hierarchy()[0], variantName );
+
+    // Verify that no variant override was created since the value is the same
+    std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( m_schematic->Hierarchy()[0], variantName );
+
+    // Either no variant was created, or it exists but doesn't have a footprint override
+    if( variant.has_value() )
+    {
+        BOOST_CHECK( !variant->m_Fields.contains( fieldName ) );
+    }
 }
 
 

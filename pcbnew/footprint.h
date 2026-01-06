@@ -46,6 +46,7 @@
 #include <pcb_field.h>
 #include <functional>
 #include <math/vector3.h>
+#include <case_insensitive_map.h>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -130,6 +131,85 @@ public:
                 && m_Filename == aOther.m_Filename
                 && m_Show == aOther.m_Show;
     }
+};
+
+
+/**
+ * Variant information for a footprint.
+ *
+ * Footprint variants store per-variant overrides for DNP, exclusion flags, and field values.
+ * These are synchronized with SCH_SYMBOL_VARIANT during Update PCB from Schematic operations.
+ */
+class FOOTPRINT_VARIANT
+{
+public:
+    FOOTPRINT_VARIANT( const wxString& aName = wxEmptyString ) :
+            m_name( aName ),
+            m_dnp( false ),
+            m_excludedFromBOM( false ),
+            m_excludedFromPosFiles( false )
+    {
+    }
+
+    wxString GetName() const { return m_name; }
+    void SetName( const wxString& aName ) { m_name = aName; }
+
+    bool GetDNP() const { return m_dnp; }
+    void SetDNP( bool aDNP ) { m_dnp = aDNP; }
+
+    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
+    void SetExcludedFromBOM( bool aExclude ) { m_excludedFromBOM = aExclude; }
+
+    bool GetExcludedFromPosFiles() const { return m_excludedFromPosFiles; }
+    void SetExcludedFromPosFiles( bool aExclude ) { m_excludedFromPosFiles = aExclude; }
+
+    /**
+     * Get a field value override for this variant.
+     * @param aFieldName The name of the field.
+     * @return The field value, or empty string if not overridden or overridden to empty.
+     */
+    wxString GetFieldValue( const wxString& aFieldName ) const
+    {
+        auto it = m_fields.find( aFieldName );
+
+        if( it != m_fields.end() )
+            return it->second;
+
+        return wxString();
+    }
+
+    /**
+     * Set a field value override for this variant.
+     * @param aFieldName The name of the field.
+     * @param aValue The value to set.
+     */
+    void SetFieldValue( const wxString& aFieldName, const wxString& aValue )
+    {
+        m_fields[aFieldName] = aValue;
+    }
+
+    bool HasFieldValue( const wxString& aFieldName ) const
+    {
+        return m_fields.find( aFieldName ) != m_fields.end();
+    }
+
+    const std::map<wxString, wxString>& GetFields() const { return m_fields; }
+
+    bool operator==( const FOOTPRINT_VARIANT& aOther ) const
+    {
+        return m_name == aOther.m_name
+                && m_dnp == aOther.m_dnp
+                && m_excludedFromBOM == aOther.m_excludedFromBOM
+                && m_excludedFromPosFiles == aOther.m_excludedFromPosFiles
+                && m_fields == aOther.m_fields;
+    }
+
+private:
+    wxString                     m_name;
+    bool                         m_dnp;
+    bool                         m_excludedFromBOM;
+    bool                         m_excludedFromPosFiles;
+    std::map<wxString, wxString> m_fields;  ///< Field value overrides for this variant
 };
 
 
@@ -795,6 +875,105 @@ public:
             m_attributes &= ~FP_DNP;
     }
 
+    // =====================================================================
+    // Variant Support
+    // =====================================================================
+
+    /**
+     * Get a variant by name.
+     * @param aVariantName The name of the variant.
+     * @return Pointer to the variant, or nullptr if not found.
+     */
+    const FOOTPRINT_VARIANT* GetVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get a mutable variant by name.
+     * @param aVariantName The name of the variant.
+     * @return Pointer to the variant, or nullptr if not found.
+     */
+    FOOTPRINT_VARIANT* GetVariant( const wxString& aVariantName );
+
+    /**
+     * Add or update a variant.
+     * @param aVariant The variant to add or update.
+     */
+    void SetVariant( const FOOTPRINT_VARIANT& aVariant );
+
+    /**
+     * Add a new variant with the given name.
+     * @param aVariantName The name of the variant to add.
+     * @return Reference to the newly created variant.
+     */
+    FOOTPRINT_VARIANT* AddVariant( const wxString& aVariantName );
+
+    /**
+     * Delete a variant by name.
+     * @param aVariantName The name of the variant to delete.
+     */
+    void DeleteVariant( const wxString& aVariantName );
+
+    /**
+     * Rename a variant.
+     * @param aOldName The current name of the variant.
+     * @param aNewName The new name for the variant.
+     */
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName );
+
+    /**
+     * Check if a variant exists.
+     * @param aVariantName The name of the variant.
+     * @return true if the variant exists.
+     */
+    bool HasVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get all variants.
+     * @return Map of variant name to variant data.
+     */
+    const CASE_INSENSITIVE_MAP<FOOTPRINT_VARIANT>& GetVariants() const { return m_variants; }
+
+    /**
+     * Get the DNP status for a specific variant.
+     *
+     * If the variant doesn't exist, returns the default DNP status.
+     *
+     * @param aVariantName The variant name (empty for default).
+     * @return true if DNP is set for the specified variant.
+     */
+    bool GetDNPForVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get the exclude-from-BOM status for a specific variant.
+     *
+     * If the variant doesn't exist, returns the default exclude-from-BOM status.
+     *
+     * @param aVariantName The variant name (empty for default).
+     * @return true if excluded from BOM for the specified variant.
+     */
+    bool GetExcludedFromBOMForVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get the exclude-from-position-files status for a specific variant.
+     *
+     * If the variant doesn't exist, returns the default exclude-from-position-files status.
+     *
+     * @param aVariantName The variant name (empty for default).
+     * @return true if excluded from position files for the specified variant.
+     */
+    bool GetExcludedFromPosFilesForVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get a field value for a specific variant.
+     *
+     * If the variant doesn't exist or doesn't override the field, returns the default field value.
+     *
+     * @param aVariantName The variant name (empty for default).
+     * @param aFieldName The field name.
+     * @return The field value for the specified variant.
+     */
+    wxString GetFieldValueForVariant( const wxString& aVariantName,
+                                      const wxString& aFieldName ) const;
+
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
 
@@ -1122,6 +1301,9 @@ private:
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     int             m_fileFormatVersionAtLoad;
+
+    /// Variant data for this footprint, keyed by variant name
+    CASE_INSENSITIVE_MAP<FOOTPRINT_VARIANT> m_variants;
 
     // Bounding box caching strategy:
     // While we attempt to notice the low-hanging fruit operations and update the bounding boxes

@@ -69,6 +69,8 @@ public:
     UNITS    m_units;
     FORMAT   m_format;
     bool     m_gerberBoardEdge;
+
+    wxString m_variant;         ///< Variant name for variant-aware filtering
 };
 
 #endif

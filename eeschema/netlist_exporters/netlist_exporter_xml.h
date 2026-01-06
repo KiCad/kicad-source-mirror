@@ -110,6 +110,11 @@ protected:
     XNODE* makeGroups();
 
     /**
+     * @return a sub-tree holding all the design variants.
+     */
+    XNODE* makeVariants();
+
+    /**
      * Fill out a project "design" header into an XML node.
      * @return the design header
      */

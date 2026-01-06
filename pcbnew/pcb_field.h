@@ -105,6 +105,8 @@ public:
      */
     wxString GetCanonicalName() const;
 
+    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
+
     void SetName( const wxString& aName ) { m_name = aName; }
 
     FIELD_T GetId() const { return m_id; }

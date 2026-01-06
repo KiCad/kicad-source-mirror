@@ -79,7 +79,10 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
         xroot->AddChild( makeSymbols( aCtl ) );
 
         if( aCtl & GNL_OPT_KICAD )
+        {
             xroot->AddChild( makeGroups() );
+            xroot->AddChild( makeVariants() );
+        }
     }
 
     if( aCtl & GNL_PARTS )
@@ -408,6 +411,106 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
             }
 
+            SCH_SYMBOL_INSTANCE instance;
+
+            if( symbol->GetInstance( instance, sheet.Path() ) && !instance.m_Variants.empty() )
+            {
+                const bool baseDnp = symbol->GetDNP( &sheet );
+                const bool baseExcludedFromBOM = symbol->GetExcludedFromBOM( &sheet );
+                const bool baseExcludedFromSim = symbol->GetExcludedFromSim( &sheet );
+                const bool baseExcludedFromPosFiles = symbol->GetExcludedFromPosFiles( &sheet );
+                XNODE*     xvariants = nullptr;
+
+                for( const auto& [variantName, variant] : instance.m_Variants )
+                {
+                    XNODE* xvariant = node( wxT( "variant" ) );
+                    bool   hasVariantData = false;
+
+                    xvariant->AddAttribute( wxT( "name" ), variantName );
+
+                    if( variant.m_DNP != baseDnp )
+                    {
+                        XNODE* xvarprop = node( wxT( "property" ) );
+                        xvarprop->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), variant.m_DNP ? wxT( "1" ) : wxT( "0" ) );
+                        xvariant->AddChild( xvarprop );
+                        hasVariantData = true;
+                    }
+
+                    if( variant.m_ExcludedFromBOM != baseExcludedFromBOM )
+                    {
+                        XNODE* xvarprop = node( wxT( "property" ) );
+                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromBOM ? wxT( "1" ) : wxT( "0" ) );
+                        xvariant->AddChild( xvarprop );
+                        hasVariantData = true;
+                    }
+
+                    if( variant.m_ExcludedFromSim != baseExcludedFromSim )
+                    {
+                        XNODE* xvarprop = node( wxT( "property" ) );
+                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromSim ? wxT( "1" ) : wxT( "0" ) );
+                        xvariant->AddChild( xvarprop );
+                        hasVariantData = true;
+                    }
+
+                    if( variant.m_ExcludedFromPosFiles != baseExcludedFromPosFiles )
+                    {
+                        XNODE* xvarprop = node( wxT( "property" ) );
+                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromPosFiles ? wxT( "1" ) : wxT( "0" ) );
+                        xvariant->AddChild( xvarprop );
+                        hasVariantData = true;
+                    }
+
+                    if( !variant.m_Fields.empty() )
+                    {
+                        XNODE* xfields = nullptr;
+
+                        for( const auto& [fieldName, fieldValue] : variant.m_Fields )
+                        {
+                            const wxString baseValue =
+                                    symbol->GetFieldText( fieldName, &sheet, wxEmptyString );
+
+                            if( fieldValue == baseValue )
+                                continue;
+
+                            if( !xfields )
+                                xfields = node( wxT( "fields" ) );
+
+                            wxString resolvedValue = fieldValue;
+
+                            if( m_resolveTextVars )
+                                resolvedValue = symbol->ResolveText( fieldValue, &sheet );
+
+                            XNODE* xfield = node( wxT( "field" ), UnescapeString( resolvedValue ) );
+                            xfield->AddAttribute( wxT( "name" ), UnescapeString( fieldName ) );
+                            xfields->AddChild( xfield );
+                            hasVariantData = true;
+                        }
+
+                        if( xfields )
+                            xvariant->AddChild( xfields );
+                    }
+
+                    if( hasVariantData )
+                    {
+                        if( !xvariants )
+                            xvariants = node( wxT( "variants" ) );
+
+                        xvariants->AddChild( xvariant );
+                    }
+                    else
+                    {
+                        delete xvariant;
+                    }
+                }
+
+                if( xvariants )
+                    xcomp->AddChild( xvariants );
+            }
+
             if( const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef() )
             {
                 if( part->GetKeyWords().size() )
@@ -574,6 +677,28 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
     m_schematic->SetCurrentSheet( currentSheet );
 
     return xcomps;
+}
+
+
+XNODE* NETLIST_EXPORTER_XML::makeVariants()
+{
+    XNODE* xvariants = node( wxT( "variants" ) );
+
+    std::set<wxString> variantNames = m_schematic->GetVariantNames();
+
+    for( const wxString& variantName : variantNames )
+    {
+        XNODE* xvariant;
+        xvariants->AddChild( xvariant = node( wxT( "variant" ) ) );
+        xvariant->AddAttribute( wxT( "name" ), variantName );
+
+        wxString description = m_schematic->GetVariantDescription( variantName );
+
+        if( !description.IsEmpty() )
+            xvariant->AddAttribute( wxT( "description" ), description );
+    }
+
+    return xvariants;
 }
 
 

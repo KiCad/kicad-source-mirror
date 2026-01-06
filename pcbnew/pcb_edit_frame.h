@@ -168,6 +168,19 @@ public:
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aShowNetclass, bool aShowEdit );
 
     /**
+     * Update the variant selection dropdown with the current board's variant names.
+     *
+     * If the currently selected variant is no longer available, the default (no variant)
+     * will be selected.
+     */
+    void UpdateVariantSelectionCtrl();
+
+    /**
+     * Event handler for variant selection changes in the toolbar.
+     */
+    void onVariantSelected( wxCommandEvent& aEvent );
+
+    /**
      * Return the angle used for rotate operations.
      */
     EDA_ANGLE GetRotationAngle() const override;
@@ -818,6 +831,7 @@ protected:
 public:
     wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
+    wxChoice* m_currentVariantCtrl;      // a choice box to display and select current variant
 
     bool m_show_layer_manager_tools;
     bool m_show_search;

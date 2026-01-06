@@ -1848,6 +1848,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                                                   aPosJob->m_useDrillPlaceFileOrigin,
                                                   aPosJob->m_negateBottomX );
 
+                    // Set variant for variant-aware DNP/BOM/position file filtering
+                    exporter.SetVariant( aPosJob->m_variant );
+
                     std::string data = exporter.GenPositionData();
                     fputs( data.c_str(), file );
                     fclose( file );
@@ -1926,6 +1929,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
+
+        // Set variant for variant-aware DNP/BOM/position file filtering
+        exporter.SetVariant( aPosJob->m_variant );
+
         PCB_LAYER_ID            gbrLayer = F_Cu;
         wxString                outPath_base = outPath;
 

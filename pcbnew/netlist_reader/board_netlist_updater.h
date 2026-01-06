@@ -109,6 +109,7 @@ private:
     VECTOR2I estimateFootprintInsertionPosition();
 
     FOOTPRINT* addNewFootprint( COMPONENT* aComponent );
+    FOOTPRINT* addNewFootprint( COMPONENT* aComponent, const LIB_ID& aFootprintId );
 
     FOOTPRINT* replaceFootprint( NETLIST& aNetlist, FOOTPRINT* aFootprint,
                                  COMPONENT* aNewComponent );
@@ -122,6 +123,10 @@ private:
     void updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
     bool updateComponentUnits( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
+
+    void applyComponentVariants( COMPONENT* aComponent,
+                                 const std::vector<FOOTPRINT*>& aFootprints,
+                                 const LIB_ID& aBaseFpid );
 
     void cacheCopperZoneConnections();
 

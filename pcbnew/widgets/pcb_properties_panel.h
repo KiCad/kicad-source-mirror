@@ -51,6 +51,7 @@ public:
 protected:
     void rebuildProperties( const SELECTION& aSelection ) override;
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
+    bool getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, wxVariant& aValue ) override;
 
     PROPERTY_BASE* getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const;
 

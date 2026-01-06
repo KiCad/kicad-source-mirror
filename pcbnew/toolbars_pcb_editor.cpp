@@ -129,6 +129,10 @@ ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter( "control.PCBVia
                                                                  _( "Via diameter selector" ),
                                                                  _( "Control to select the via diameter" ),
                                                                  { FRAME_PCB_EDITOR } );
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::currentVariant( "control.PCBCurrentVariant",
+                                                                    _( "Current variant" ),
+                                                                    _( "Control to select the current variant" ),
+                                                                    { FRAME_PCB_EDITOR } );
 
 
 std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
@@ -349,6 +353,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendSeparator();
         config.AppendAction( PCB_ACTIONS::showEeschema );
 
+        if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
+            config.AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant );
+
         config.AppendControl( ACTION_TOOLBAR_CONTROLS::ipcScripting );
 
         break;
@@ -424,6 +431,29 @@ void PCB_EDIT_FRAME::configureToolbars()
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter, viaDiaSelectorFactory );
 
+    if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
+    {
+        // Variant selection drop down control on main tool bar
+        auto variantSelectionCtrlFactory =
+                [this]( ACTION_TOOLBAR* aToolbar )
+                {
+                    if( !m_currentVariantCtrl )
+                    {
+                        m_currentVariantCtrl = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VARIANT_SELECT,
+                                                             wxDefaultPosition, wxDefaultSize, 0, nullptr );
+                    }
+
+                    m_currentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
+
+                    UpdateVariantSelectionCtrl();
+
+                    aToolbar->Add( m_currentVariantCtrl );
+                };
+
+        RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant,
+                                             variantSelectionCtrlFactory );
+    }
+
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
     // control
@@ -465,9 +495,62 @@ void PCB_EDIT_FRAME::ClearToolbarControl( int aId )
 
     switch( aId )
     {
-    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH: m_SelTrackWidthBox = nullptr; break;
-    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:    m_SelViaSizeBox = nullptr;    break;
+    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:   m_SelTrackWidthBox = nullptr;   break;
+    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:      m_SelViaSizeBox = nullptr;      break;
+    case ID_AUX_TOOLBAR_PCB_VARIANT_SELECT: m_currentVariantCtrl = nullptr; break;
     }
+}
+
+
+void PCB_EDIT_FRAME::UpdateVariantSelectionCtrl()
+{
+    if( !m_currentVariantCtrl )
+        return;
+
+    if( !GetBoard() )
+        return;
+
+    wxArrayString variantNames = GetBoard()->GetVariantNamesForUI();
+
+    m_currentVariantCtrl->Set( variantNames );
+
+    int selectionIndex = 0;
+    wxString currentVariant = GetBoard()->GetCurrentVariant();
+
+    if( !currentVariant.IsEmpty() )
+    {
+        int foundIndex = m_currentVariantCtrl->FindString( currentVariant );
+
+        if( foundIndex != wxNOT_FOUND )
+            selectionIndex = foundIndex;
+    }
+
+    if( m_currentVariantCtrl->GetCount() > 0 )
+        m_currentVariantCtrl->SetSelection( selectionIndex );
+}
+
+
+void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
+{
+    if( !m_currentVariantCtrl )
+        return;
+
+    int selection = m_currentVariantCtrl->GetSelection();
+
+    if( selection == wxNOT_FOUND || selection == 0 )
+    {
+        // "<Default>" selected - clear the current variant
+        GetBoard()->SetCurrentVariant( wxEmptyString );
+    }
+    else
+    {
+        wxString selectedVariant = m_currentVariantCtrl->GetString( selection );
+        GetBoard()->SetCurrentVariant( selectedVariant );
+    }
+
+    // Refresh the view and properties panel to show the new variant state
+    UpdateProperties();
+    GetCanvas()->Refresh();
 }
 
 

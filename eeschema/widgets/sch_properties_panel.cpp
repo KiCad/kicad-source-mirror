@@ -71,15 +71,24 @@ public:
         SCH_SYMBOL* symbol = reinterpret_cast<SCH_SYMBOL*>( obj );
         SCH_FIELD*  field = symbol->GetField( m_name );
 
+        wxString variantName;
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+
+        if( symbol->Schematic() )
+        {
+            variantName = symbol->Schematic()->GetCurrentVariant();
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+        }
+
         if( !field )
         {
             SCH_FIELD newField( symbol, FIELD_T::USER, m_name );
-            newField.SetText( value );
+            newField.SetText( value, sheetPath, variantName );
             symbol->AddField( newField );
         }
         else
         {
-            field->SetText( value );
+            field->SetText( value, sheetPath, variantName );
         }
     }
 
@@ -89,9 +98,29 @@ public:
         const SCH_FIELD*  field = symbol->GetField( m_name );
 
         if( field )
-            return wxAny( field->GetText() );
+        {
+            wxString variantName;
+            const SCH_SHEET_PATH* sheetPath = nullptr;
+
+            if( symbol->Schematic() )
+            {
+                variantName = symbol->Schematic()->GetCurrentVariant();
+                sheetPath = &symbol->Schematic()->CurrentSheet();
+            }
+
+            wxString text;
+
+            if( !variantName.IsEmpty() && sheetPath )
+                text = field->GetText( sheetPath, variantName );
+            else
+                text = field->GetText();
+
+            return wxAny( text );
+        }
         else
+        {
             return wxAny( MISSING_FIELD_SENTINEL );
+        }
     }
 
 private:
@@ -383,6 +412,30 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
         }
 
+        // Editing field text in the schematic when a variant is active must use variant-aware
+        // SetText to properly store the value as a variant override.
+        if( item->Type() == SCH_FIELD_T
+                && m_frame->IsType( FRAME_SCH )
+                && property->Name() == wxT( "Text" ) )
+        {
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParentSymbol() );
+
+            if( symbol && symbol->Schematic() )
+            {
+                wxString variantName = symbol->Schematic()->GetCurrentVariant();
+
+                if( !variantName.IsEmpty() )
+                {
+                    changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+                    field->SetText( newValue.GetString(), &symbol->Schematic()->CurrentSheet(),
+                                    variantName );
+                    symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+                    continue;
+                }
+            }
+        }
+
         if( item->Type() == SCH_TABLECELL_T )
             changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );
         else
@@ -413,6 +466,33 @@ void SCH_PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
     PROPERTIES_PANEL::OnLanguageChanged( aEvent );
 
     aEvent.Skip();
+}
+
+
+bool SCH_PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, wxVariant& aValue )
+{
+    // For SCH_FIELD "Text" property, return the variant-aware value when a variant is active
+    if( aItem->Type() == SCH_FIELD_T
+            && m_frame->IsType( FRAME_SCH )
+            && aProperty->Name() == wxT( "Text" ) )
+    {
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( aItem );
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( field->GetParentSymbol() );
+
+        if( symbol && symbol->Schematic() )
+        {
+            wxString variantName = symbol->Schematic()->GetCurrentVariant();
+
+            if( !variantName.IsEmpty() )
+            {
+                wxString text = field->GetText( &symbol->Schematic()->CurrentSheet(), variantName );
+                aValue = wxVariant( text );
+                return true;
+            }
+        }
+    }
+
+    return PROPERTIES_PANEL::getItemValue( aItem, aProperty, aValue );
 }
 
 

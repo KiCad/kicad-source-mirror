@@ -140,9 +140,15 @@ VECTOR2I BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
 
 FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 {
+    return addNewFootprint( aComponent, aComponent->GetFPID() );
+}
+
+
+FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent, const LIB_ID& aFootprintId )
+{
     wxString msg;
 
-    if( aComponent->GetFPID().empty() )
+    if( aFootprintId.empty() )
     {
         msg.Printf( _( "Cannot add %s (no footprint assigned)." ),
                     aComponent->GetReference() );
@@ -151,13 +157,13 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
         return nullptr;
     }
 
-    FOOTPRINT* footprint = m_frame->LoadFootprint( aComponent->GetFPID() );
+    FOOTPRINT* footprint = m_frame->LoadFootprint( aFootprintId );
 
     if( footprint == nullptr )
     {
         msg.Printf( _( "Cannot add %s (footprint '%s' not found)." ),
                     aComponent->GetReference(),
-                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
+                    EscapeHTML( aFootprintId.Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
@@ -170,7 +176,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
     {
         msg.Printf( _( "Add %s (footprint '%s')." ),
                     aComponent->GetReference(),
-                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
+                    EscapeHTML( aFootprintId.Format().wx_str() ) );
 
         delete footprint;
         footprint = nullptr;
@@ -200,7 +206,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
 
         msg.Printf( _( "Added %s (footprint '%s')." ),
                     aComponent->GetReference(),
-                    EscapeHTML( aComponent->GetFPID().Format().wx_str() ) );
+                    EscapeHTML( aFootprintId.Format().wx_str() ) );
     }
 
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -1268,6 +1274,226 @@ bool BOARD_NETLIST_UPDATER::updateComponentUnits( FOOTPRINT* aFootprint, COMPONE
 }
 
 
+void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
+                                                    const std::vector<FOOTPRINT*>& aFootprints,
+                                                    const LIB_ID& aBaseFpid )
+{
+    const auto& variants = aComponent->GetVariants();
+
+    if( variants.empty() )
+        return;
+
+    if( aBaseFpid.empty() )
+        return;
+
+    const wxString footprintFieldName = GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+
+    struct VARIANT_INFO
+    {
+        wxString                 name;
+        const COMPONENT_VARIANT* variant;
+        LIB_ID                   activeFpid;
+    };
+
+    std::vector<VARIANT_INFO> variantInfo;
+    variantInfo.reserve( variants.size() );
+
+    for( const auto& [variantName, variant] : variants )
+    {
+        LIB_ID activeFpid = aBaseFpid;
+
+        auto fieldIt = variant.m_fields.find( footprintFieldName );
+
+        if( fieldIt != variant.m_fields.end() && !fieldIt->second.IsEmpty() )
+        {
+            LIB_ID parsedId;
+
+            if( parsedId.Parse( fieldIt->second, true ) >= 0 )
+            {
+                wxString msg;
+                msg.Printf( _( "Invalid footprint ID '%s' for variant '%s' on %s." ),
+                            EscapeHTML( fieldIt->second ),
+                            variantName,
+                            aComponent->GetReference() );
+                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                ++m_errorCount;
+            }
+            else
+            {
+                activeFpid = parsedId;
+            }
+        }
+
+        variantInfo.push_back( { variantName, &variant, activeFpid } );
+    }
+
+    for( FOOTPRINT* footprint : aFootprints )
+    {
+        if( !footprint )
+            continue;
+
+        FOOTPRINT* copy = nullptr;
+
+        if( !m_isDryRun && !m_commit.GetStatus( footprint ) )
+        {
+            copy = static_cast<FOOTPRINT*>( footprint->Clone() );
+            copy->SetParentGroup( nullptr );
+        }
+
+        bool changed = false;
+
+        for( const VARIANT_INFO& info : variantInfo )
+        {
+            const COMPONENT_VARIANT& variant = *info.variant;
+
+            // During dry run, just read current state. During actual run, create variant if needed.
+            const FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
+
+            // Apply explicit overrides from schematic, or reset to base footprint value
+            // if there's no explicit override. This applies to both active and non-active
+            // footprints to match the schematic's inheritance model where unset attributes
+            // inherit from the base.
+            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : footprint->IsDNP();
+            bool currentDnp = currentVariant ? currentVariant->GetDNP() : footprint->IsDNP();
+
+            if( currentDnp != targetDnp )
+            {
+                wxString msg;
+
+                if( m_isDryRun )
+                {
+                    msg.Printf( targetDnp ? _( "Add %s:%s 'Do not place' variant attribute." )
+                                          : _( "Remove %s:%s 'Do not place' variant attribute." ),
+                                footprint->GetReference(), info.name );
+                }
+                else
+                {
+                    msg.Printf( targetDnp ? _( "Added %s:%s 'Do not place' variant attribute." )
+                                          : _( "Removed %s:%s 'Do not place' variant attribute." ),
+                                footprint->GetReference(), info.name );
+
+                    FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name );
+
+                    if( fpVariant )
+                        fpVariant->SetDNP( targetDnp );
+                }
+
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                changed = true;
+            }
+
+            bool targetExcludedFromBOM = variant.m_hasExcludedFromBOM
+                                                 ? variant.m_excludedFromBOM
+                                                 : footprint->IsExcludedFromBOM();
+            bool currentExcludedFromBOM = currentVariant ? currentVariant->GetExcludedFromBOM()
+                                                         : footprint->IsExcludedFromBOM();
+
+            if( currentExcludedFromBOM != targetExcludedFromBOM )
+            {
+                wxString msg;
+
+                if( m_isDryRun )
+                {
+                    msg.Printf( targetExcludedFromBOM
+                                        ? _( "Add %s:%s 'exclude from BOM' variant attribute." )
+                                        : _( "Remove %s:%s 'exclude from BOM' variant attribute." ),
+                                footprint->GetReference(), info.name );
+                }
+                else
+                {
+                    msg.Printf( targetExcludedFromBOM
+                                        ? _( "Added %s:%s 'exclude from BOM' variant attribute." )
+                                        : _( "Removed %s:%s 'exclude from BOM' variant attribute." ),
+                                footprint->GetReference(), info.name );
+
+                    FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name );
+
+                    if( fpVariant )
+                        fpVariant->SetExcludedFromBOM( targetExcludedFromBOM );
+                }
+
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                changed = true;
+            }
+
+            bool targetExcludedFromPosFiles = variant.m_hasExcludedFromPosFiles
+                                                      ? variant.m_excludedFromPosFiles
+                                                      : footprint->IsExcludedFromPosFiles();
+            bool currentExcludedFromPosFiles = currentVariant
+                                                       ? currentVariant->GetExcludedFromPosFiles()
+                                                       : footprint->IsExcludedFromPosFiles();
+
+            if( currentExcludedFromPosFiles != targetExcludedFromPosFiles )
+            {
+                wxString msg;
+
+                if( m_isDryRun )
+                {
+                    msg.Printf( targetExcludedFromPosFiles
+                                        ? _( "Add %s:%s 'exclude from position files' variant attribute." )
+                                        : _( "Remove %s:%s 'exclude from position files' variant attribute." ),
+                                footprint->GetReference(), info.name );
+                }
+                else
+                {
+                    msg.Printf( targetExcludedFromPosFiles
+                                        ? _( "Added %s:%s 'exclude from position files' variant attribute." )
+                                        : _( "Removed %s:%s 'exclude from position files' variant attribute." ),
+                                footprint->GetReference(), info.name );
+
+                    FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name );
+
+                    if( fpVariant )
+                        fpVariant->SetExcludedFromPosFiles( targetExcludedFromPosFiles );
+                }
+
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                changed = true;
+            }
+
+            for( const auto& [fieldName, fieldValue] : variant.m_fields )
+            {
+                if( fieldName.CmpNoCase( footprintFieldName ) == 0 )
+                    continue;
+
+                bool hasCurrentValue = currentVariant && currentVariant->HasFieldValue( fieldName );
+                wxString currentValue = hasCurrentValue ? currentVariant->GetFieldValue( fieldName )
+                                                        : wxString();
+
+                if( currentValue != fieldValue )
+                {
+                    wxString msg;
+
+                    if( m_isDryRun )
+                    {
+                        msg.Printf( _( "Change %s:%s field '%s' to '%s'." ),
+                                    footprint->GetReference(), info.name, fieldName, fieldValue );
+                    }
+                    else
+                    {
+                        msg.Printf( _( "Changed %s:%s field '%s' to '%s'." ),
+                                    footprint->GetReference(), info.name, fieldName, fieldValue );
+
+                        FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name );
+
+                        if( fpVariant )
+                            fpVariant->SetFieldValue( fieldName, fieldValue );
+                    }
+
+                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    changed = true;
+                }
+            }
+        }
+
+        if( !m_isDryRun && changed && copy )
+            m_commit.Modified( footprint, copy );
+        else
+            delete copy;
+    }
+}
+
+
 void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
 {
     for( ZONE* zone : m_board->Zones() )
@@ -1609,6 +1835,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     COMPONENT* component = nullptr;
     wxString   msg;
     std::unordered_set<wxString> sheetPaths;
+    std::unordered_set<FOOTPRINT*> usedFootprints;
 
     m_errorCount = 0;
     m_warningCount = 0;
@@ -1647,7 +1874,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     EscapeHTML( component->GetFPID().Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-        int matchCount = 0;
+        const LIB_ID& baseFpid = component->GetFPID();
+        const bool    hasBaseFpid = !baseFpid.empty();
+        std::vector<FOOTPRINT*> matchingFootprints;
 
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
@@ -1673,30 +1902,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
 
             if( match )
-            {
-                FOOTPRINT* tmp = footprint;
-
-                if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
-                    tmp = replaceFootprint( aNetlist, footprint, component );
-
-                if( !tmp )
-                    tmp = footprint;
-
-                if( tmp )
-                {
-                    footprintMap[ component ] = tmp;
-
-                    updateFootprintParameters( tmp, component );
-                    updateFootprintGroup( tmp, component );
-                    updateComponentPadConnections( tmp, component );
-                    updateComponentClass( tmp, component );
-                    updateComponentUnits( tmp, component );
-
-                    sheetPaths.insert( footprint->GetSheetname() );
-                }
-
-                matchCount++;
-            }
+                matchingFootprints.push_back( footprint );
 
             if( footprint == lastPreexistingFootprint )
             {
@@ -1705,30 +1911,151 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
         }
 
-        if( matchCount == 0 )
+        std::vector<LIB_ID> expectedFpids;
+        std::unordered_set<wxString> expectedFpidKeys;
+
+        auto addExpectedFpid =
+                [&]( const LIB_ID& aFpid )
+                {
+                    if( aFpid.empty() )
+                        return;
+
+                    wxString key = aFpid.Format();
+
+                    if( expectedFpidKeys.insert( key ).second )
+                        expectedFpids.push_back( aFpid );
+                };
+
+        addExpectedFpid( baseFpid );
+
+        const wxString footprintFieldName = GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+
+        for( const auto& [variantName, variant] : component->GetVariants() )
         {
-            FOOTPRINT* footprint = addNewFootprint( component );
+            auto fieldIt = variant.m_fields.find( footprintFieldName );
+
+            if( fieldIt == variant.m_fields.end() || fieldIt->second.IsEmpty() )
+                continue;
+
+            LIB_ID parsedId;
+
+            if( parsedId.Parse( fieldIt->second, true ) >= 0 )
+            {
+                msg.Printf( _( "Invalid footprint ID '%s' for variant '%s' on %s." ),
+                            EscapeHTML( fieldIt->second ),
+                            variantName,
+                            component->GetReference() );
+                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+                ++m_errorCount;
+                continue;
+            }
+
+            addExpectedFpid( parsedId );
+        }
+
+        auto isExpectedFpid =
+                [&]( const LIB_ID& aFpid ) -> bool
+                {
+                    if( aFpid.empty() )
+                        return false;
+
+                    return expectedFpidKeys.count( aFpid.Format() ) > 0;
+                };
+
+        auto takeMatchingFootprint =
+                [&]( const LIB_ID& aFpid ) -> FOOTPRINT*
+                {
+                    for( FOOTPRINT* footprint : matchingFootprints )
+                    {
+                        if( usedFootprints.count( footprint ) )
+                            continue;
+
+                        if( footprint->GetFPID() == aFpid )
+                            return footprint;
+                    }
+
+                    return nullptr;
+                };
+
+        std::vector<FOOTPRINT*> componentFootprints;
+        componentFootprints.reserve( expectedFpids.size() );
+        FOOTPRINT* baseFootprint = nullptr;
+
+        if( hasBaseFpid )
+            baseFootprint = takeMatchingFootprint( baseFpid );
+        else if( !matchingFootprints.empty() )
+            baseFootprint = matchingFootprints.front();
+
+        if( !baseFootprint && m_replaceFootprints && !matchingFootprints.empty() )
+        {
+            FOOTPRINT* replaceCandidate = nullptr;
+
+            for( FOOTPRINT* footprint : matchingFootprints )
+            {
+                if( usedFootprints.count( footprint ) )
+                    continue;
+
+                if( isExpectedFpid( footprint->GetFPID() ) )
+                    continue;
+
+                replaceCandidate = footprint;
+                break;
+            }
+
+            if( replaceCandidate )
+            {
+                FOOTPRINT* replaced = replaceFootprint( aNetlist, replaceCandidate, component );
+
+                if( replaced )
+                    baseFootprint = replaced;
+                else
+                    baseFootprint = replaceCandidate;
+            }
+        }
+
+        if( !baseFootprint && hasBaseFpid )
+            baseFootprint = addNewFootprint( component, baseFpid );
+
+        if( baseFootprint )
+        {
+            componentFootprints.push_back( baseFootprint );
+            usedFootprints.insert( baseFootprint );
+            footprintMap[ component ] = baseFootprint;
+        }
+
+        for( const LIB_ID& fpid : expectedFpids )
+        {
+            if( fpid == baseFpid )
+                continue;
+
+            FOOTPRINT* footprint = takeMatchingFootprint( fpid );
+
+            if( !footprint )
+                footprint = addNewFootprint( component, fpid );
 
             if( footprint )
             {
-                footprintMap[ component ] = footprint;
-
-                updateFootprintParameters( footprint, component );
-                updateFootprintGroup( footprint, component );
-                updateComponentPadConnections( footprint, component );
-                updateComponentClass( footprint, component );
-                updateComponentUnits( footprint, component );
-
-                sheetPaths.insert( footprint->GetSheetname() );
+                componentFootprints.push_back( footprint );
+                usedFootprints.insert( footprint );
             }
         }
-        else if( matchCount > 1 )
+
+        for( FOOTPRINT* footprint : componentFootprints )
         {
-            msg.Printf( _( "Multiple footprints found for %s." ),
-                        component->GetReference() );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            m_errorCount++;
+            if( !footprint )
+                continue;
+
+            updateFootprintParameters( footprint, component );
+            updateFootprintGroup( footprint, component );
+            updateComponentPadConnections( footprint, component );
+            updateComponentClass( footprint, component );
+            updateComponentUnits( footprint, component );
+
+            sheetPaths.insert( footprint->GetSheetname() );
         }
+
+        if( !componentFootprints.empty() )
+            applyComponentVariants( component, componentFootprints, baseFpid );
     }
 
     updateCopperZoneNets( aNetlist );
@@ -1745,13 +2072,40 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         if( ( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
             doDelete = false;
 
-        if( m_lookupByTimestamp )
-            component = aNetlist.GetComponentByPath( footprint->GetPath() );
-        else
-            component = aNetlist.GetComponentByReference( footprint->GetReference() );
+        bool isStaleVariantFootprint = false;
 
-        if( component && component->GetProperties().count( wxT( "exclude_from_board" ) ) == 0 )
+        if( usedFootprints.count( footprint ) )
+        {
             matched = true;
+        }
+        else
+        {
+            if( m_lookupByTimestamp )
+                component = aNetlist.GetComponentByPath( footprint->GetPath() );
+            else
+                component = aNetlist.GetComponentByReference( footprint->GetReference() );
+
+            if( component && component->GetProperties().count( wxT( "exclude_from_board" ) ) == 0 )
+            {
+                // When replace footprints is enabled and a component has variant footprints,
+                // footprints matching by reference but not in usedFootprints are stale variant
+                // footprints that should be replaced/removed.
+                if( m_replaceFootprints && !component->GetVariants().empty() )
+                {
+                    matched = false;
+                    isStaleVariantFootprint = true;
+                }
+                else
+                {
+                    matched = true;
+                }
+            }
+        }
+
+        // Stale variant footprints should be deleted when m_replaceFootprints is enabled,
+        // regardless of m_deleteUnusedFootprints setting.
+        if( isStaleVariantFootprint )
+            doDelete = true;
 
         if( doDelete && !matched && footprint->IsLocked() && !m_overrideLocks )
         {
@@ -1820,6 +2174,91 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
 
         m_board->RemoveUnusedNets( &m_commit );
+
+        // Update board variant registry from netlist
+        const std::vector<wxString>& netlistVariants = aNetlist.GetVariantNames();
+
+        if( !netlistVariants.empty() || !m_board->GetVariantNames().empty() )
+        {
+            m_reporter->Report( _( "Updating design variants..." ), RPT_SEVERITY_INFO );
+
+            auto findBoardVariantName =
+                    [&]( const wxString& aVariantName ) -> wxString
+                    {
+                        for( const wxString& name : m_board->GetVariantNames() )
+                        {
+                            if( name.CmpNoCase( aVariantName ) == 0 )
+                                return name;
+                        }
+
+                        return wxEmptyString;
+                    };
+
+            std::vector<wxString> updatedVariantNames;
+            updatedVariantNames.reserve( netlistVariants.size() );
+
+            for( const wxString& variantName : netlistVariants )
+            {
+                wxString actualName = findBoardVariantName( variantName );
+
+                if( actualName.IsEmpty() )
+                {
+                    m_board->AddVariant( variantName );
+                    actualName = findBoardVariantName( variantName );
+
+                    if( !actualName.IsEmpty() )
+                    {
+                        msg.Printf( _( "Added variant '%s'." ), actualName );
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    }
+                }
+
+                if( actualName.IsEmpty() )
+                    continue;
+
+                // Update description if changed
+                wxString newDescription = aNetlist.GetVariantDescription( variantName );
+                wxString oldDescription = m_board->GetVariantDescription( actualName );
+
+                if( newDescription != oldDescription )
+                {
+                    m_board->SetVariantDescription( actualName, newDescription );
+                    msg.Printf( _( "Updated description for variant '%s'." ), actualName );
+                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                }
+
+                updatedVariantNames.push_back( actualName );
+            }
+
+            std::vector<wxString> variantsToRemove;
+
+            for( const wxString& existingName : m_board->GetVariantNames() )
+            {
+                bool found = false;
+
+                for( const wxString& variantName : netlistVariants )
+                {
+                    if( existingName.CmpNoCase( variantName ) == 0 )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if( !found )
+                    variantsToRemove.push_back( existingName );
+            }
+
+            for( const wxString& variantName : variantsToRemove )
+            {
+                m_board->DeleteVariant( variantName );
+                msg.Printf( _( "Removed variant '%s'." ), variantName );
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
+
+            if( !updatedVariantNames.empty() )
+                m_board->SetVariantNames( updatedVariantNames );
+        }
 
         // When new footprints are added, the automatic zone refill is disabled because:
         // * it creates crashes when calculating dynamic ratsnests if auto refill is enabled.

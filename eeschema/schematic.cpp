@@ -2123,6 +2123,8 @@ wxArrayString SCHEMATIC::GetVariantNamesForUI() const
     for( const wxString& name : m_variantNames )
         variantNames.Add( name );
 
+    variantNames.Sort( SortVariantNames );
+
     return variantNames;
 }
 

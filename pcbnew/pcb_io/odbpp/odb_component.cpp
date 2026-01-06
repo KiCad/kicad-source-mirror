@@ -21,6 +21,8 @@
 #include <wx/regex.h>
 #include <wx/log.h>
 
+#include <board.h>
+
 #include "odb_component.h"
 #include "odb_util.h"
 #include "hash_eda.h"
@@ -97,10 +99,10 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
         wxString key = field->GetName();
         ODB::RemoveWhitespace( key );
-        comp.m_prp[key] = wxString::Format( "'%s'", field->GetText() );
+        comp.m_prp[key] = wxString::Format( "'%s'", field->GetShownText( false ) );
     }
 
-    if( aFp->IsDNP() )
+    if( aFp->GetDNPForVariant( aFp->GetBoard() ? aFp->GetBoard()->GetCurrentVariant() : wxString() ) )
     {
         AddSystemAttribute( comp, ODB_ATTR::NO_POP{ true } );
     }

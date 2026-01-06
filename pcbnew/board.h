@@ -400,6 +400,31 @@ public:
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
 
+    // Variant system
+    wxString GetCurrentVariant() const { return m_currentVariant; }
+    void SetCurrentVariant( const wxString& aVariant );
+
+    const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
+    void SetVariantNames( const std::vector<wxString>& aNames ) { m_variantNames = aNames; }
+
+    bool HasVariant( const wxString& aVariantName ) const;
+    void AddVariant( const wxString& aVariantName );
+    void DeleteVariant( const wxString& aVariantName );
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName );
+
+    wxString GetVariantDescription( const wxString& aVariantName ) const;
+    void SetVariantDescription( const wxString& aVariantName, const wxString& aDescription );
+
+    /**
+     * Return the variant names for UI display.
+     *
+     * This returns a list suitable for populating UI controls, with the default variant
+     * included and the names sorted using the SortVariantNames helper.
+     *
+     * @return List of variant names including the default entry.
+     */
+    wxArrayString GetVariantNamesForUI() const;
+
     void GetContextualTextVars( wxArrayString* aVars ) const;
     bool ResolveTextVar( wxString* token, int aDepth ) const;
 
@@ -1475,6 +1500,11 @@ private:
     PCB_PLOT_PARAMS     m_plotOptions;
     PROJECT*            m_project;                  // project this board is a part of
     EDA_UNITS           m_userUnits;
+
+    // Variant system
+    wxString                        m_currentVariant;        // Currently active variant (empty = default)
+    std::vector<wxString>           m_variantNames;          // All variant names in the board
+    std::map<wxString, wxString>    m_variantDescriptions;   // Descriptions for each variant
 
     /**
      * All of the board design settings are stored as a JSON object inside the project file.  The

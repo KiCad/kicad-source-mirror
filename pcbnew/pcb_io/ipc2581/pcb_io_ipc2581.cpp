@@ -1328,7 +1328,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
         // TODO: The options are "ELECTRICAL", "MECHANICAL", "PROGRAMMABLE", "DOCUMENT", "MATERIAL"
         //      We need to figure out how to determine this.
-        if( entry->m_pads == 0 || fp_it->GetAttributes() & FP_EXCLUDE_FROM_BOM )
+        const wxString variantName = m_board ? m_board->GetCurrentVariant() : wxString();
+
+        if( entry->m_pads == 0 || fp_it->GetExcludedFromBOMForVariant( variantName ) )
             entry->m_type = "DOCUMENT";
         else
             entry->m_type = "ELECTRICAL";
@@ -1336,8 +1338,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         // Use the footprint's Description field if it exists
         const PCB_FIELD* descField = fp_it->GetField( FIELD_T::DESCRIPTION );
 
-        if( descField && !descField->GetText().IsEmpty() )
-            entry->m_description = descField->GetText();
+        if( descField && !descField->GetShownText( false ).IsEmpty() )
+            entry->m_description = descField->GetShownText( false );
 
         auto[ bom_iter, inserted ] = bom_entries.insert( std::move( entry ) );
 
@@ -1347,7 +1349,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         REFDES refdes;
         refdes.m_name = componentName( fp_it );
         refdes.m_pkg = fp->GetFPID().GetLibItemName().wx_str();
-        refdes.m_populate = !fp->IsDNP() && !( fp->GetAttributes() & FP_EXCLUDE_FROM_BOM );
+        refdes.m_populate = !fp->GetDNPForVariant( variantName )
+                && !fp->GetExcludedFromBOMForVariant( variantName );
         refdes.m_layer = m_layer_name_map[fp_it->GetLayer()];
 
         ( *bom_iter )->m_refdes->push_back( refdes );
@@ -1362,7 +1365,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
             if( prop->IsMandatory() && !prop->IsValue() )
                 continue;
 
-            ( *bom_iter )->m_props->emplace( prop->GetName(), prop->GetText() );
+            ( *bom_iter )->m_props->emplace( prop->GetName(), prop->GetShownText( false ) );
         }
     }
 

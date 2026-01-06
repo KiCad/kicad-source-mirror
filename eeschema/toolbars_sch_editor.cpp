@@ -46,6 +46,7 @@
 #include <widgets/sch_search_pane.h>
 #include <toolbars_sch_editor.h>
 #include <wx/choice.h>
+#include <wx/stattext.h>
 
 
 ACTION_TOOLBAR_CONTROL SCH_ACTION_TOOLBAR_CONTROLS::currentVariant( "control.currentVariant",
@@ -407,7 +408,7 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
     wxString variantName = nameCtrl->GetValue().Trim().Trim( false );
     wxString variantDesc = descCtrl->GetValue().Trim().Trim( false );
 
-    // Empty strings and duplicate variant names are not allowed.
+    // Empty strings, reserved names, and duplicate variant names are not allowed.
     if( variantName.IsEmpty() )
     {
         GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
@@ -415,12 +416,25 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
         return false;
     }
 
-    if( Schematic().GetVariantNames().contains( variantName ) )
+    // Check for reserved name (case-insensitive)
+    if( variantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
     {
-        GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                         variantName ),
+        GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
+                                                         GetDefaultVariantName() ),
                                        10000, wxICON_ERROR );
         return false;
+    }
+
+    // Check for duplicate variant names (case-insensitive)
+    for( const wxString& existingName : Schematic().GetVariantNames() )
+    {
+        if( existingName.CmpNoCase( variantName ) == 0 )
+        {
+            GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
+                                                             existingName ),
+                                           10000, wxICON_ERROR );
+            return false;
+        }
     }
 
     // Add variant to the schematic

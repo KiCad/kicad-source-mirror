@@ -90,7 +90,7 @@ protected:
      * Precondition: aItem is known to have property aProperty
      * @return true if conversion succeeded
      */
-    bool getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, wxVariant& aValue );
+    virtual bool getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, wxVariant& aValue );
 
     /**
      * Processes a selection and determines whether the given property should be available or not

@@ -88,6 +88,12 @@ public:
      */
     int GetFootprintCount() { return m_fpCount; }
 
+    /**
+     * Set the variant name for variant-aware DNP filtering.
+     * When set, DNP exclusion will check the variant-specific DNP status.
+     */
+    void SetVariant( const wxString& aVariant ) { m_variant = aVariant; }
+
     // Use standard board side name. do not translate them,
     // they are keywords in place file
     static std::string GetFrontSideName() { return std::string( "top" ); }
@@ -107,6 +113,7 @@ private:
     bool     m_negateBottomX;   // true to negate X coordinate on bottom side
     int      m_fpCount;         // Number of footprints in list, for info
     VECTOR2I m_place_Offset;    // Offset for coordinates in generated data.
+    wxString m_variant;         // Variant name for variant-aware DNP filtering
 };
 
 #endif      // #ifndef EXPORT_FOOTPRINTS_PLACEFILE_H

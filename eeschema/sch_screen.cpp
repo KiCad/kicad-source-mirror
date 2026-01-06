@@ -2355,6 +2355,10 @@ void SCH_SCREENS::BuildClientSheetPathList()
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::BuildClientSheetPathList" );
 
+    // Don't build until we have a hierarchy to work with.  This can be called before the hierarchy is built.
+    if( !sch->HasHierarchy() )
+        return;
+
     for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
         curr_screen->GetClientSheetPaths().clear();
 

@@ -157,6 +157,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     Compile_Ratsnest( true );
 
+    UpdateVariantSelectionCtrl();
+
     GetCanvas()->Refresh();
 }
 

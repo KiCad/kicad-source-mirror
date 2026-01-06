@@ -124,6 +124,41 @@ const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName ) const
 }
 
 
+const COMPONENT_VARIANT* COMPONENT::GetVariant( const wxString& aVariantName ) const
+{
+    auto it = m_variants.find( aVariantName );
+
+    return it != m_variants.end() ? &it->second : nullptr;
+}
+
+
+COMPONENT_VARIANT* COMPONENT::GetVariant( const wxString& aVariantName )
+{
+    auto it = m_variants.find( aVariantName );
+
+    return it != m_variants.end() ? &it->second : nullptr;
+}
+
+
+void COMPONENT::AddVariant( const COMPONENT_VARIANT& aVariant )
+{
+    if( aVariant.m_name.IsEmpty() )
+        return;
+
+    auto it = m_variants.find( aVariant.m_name );
+
+    if( it != m_variants.end() )
+    {
+        COMPONENT_VARIANT updated = aVariant;
+        updated.m_name = it->first;
+        it->second = std::move( updated );
+        return;
+    }
+
+    m_variants.emplace( aVariant.m_name, aVariant );
+}
+
+
 void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
     int nl = aNestLevel;
@@ -162,6 +197,60 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 
         if( m_properties.count( "exclude_from_bom" ) )
             aOut->Print( nl + 1, "(property (name \"exclude_from_bom\"))\n" );
+
+        if( !m_variants.empty() )
+        {
+            aOut->Print( nl + 1, "(variants" );
+
+            for( const auto& [variantName, variant] : m_variants )
+            {
+                aOut->Print( nl + 2, "\n(variant (name %s)",
+                             aOut->Quotew( variantName ).c_str() );
+
+                if( variant.m_hasDnp )
+                {
+                    aOut->Print( 0, " (property (name \"dnp\") (value %s))",
+                                 aOut->Quotew( variant.m_dnp ? wxT( "1" ) : wxT( "0" ) ).c_str() );
+                }
+
+                if( variant.m_hasExcludedFromBOM )
+                {
+                    aOut->Print( 0, " (property (name \"exclude_from_bom\") (value %s))",
+                                 aOut->Quotew( variant.m_excludedFromBOM ? wxT( "1" ) : wxT( "0" ) ).c_str() );
+                }
+
+                if( variant.m_hasExcludedFromSim )
+                {
+                    aOut->Print( 0, " (property (name \"exclude_from_sim\") (value %s))",
+                                 aOut->Quotew( variant.m_excludedFromSim ? wxT( "1" ) : wxT( "0" ) ).c_str() );
+                }
+
+                if( variant.m_hasExcludedFromPosFiles )
+                {
+                    aOut->Print( 0, " (property (name \"exclude_from_pos_files\") (value %s))",
+                                 aOut->Quotew( variant.m_excludedFromPosFiles ? wxT( "1" ) : wxT( "0" ) ).c_str() );
+                }
+
+                if( !variant.m_fields.empty() )
+                {
+                    aOut->Print( 0, "\n" );
+                    aOut->Print( nl + 3, "(fields" );
+
+                    for( const auto& [fieldName, fieldValue] : variant.m_fields )
+                    {
+                        aOut->Print( nl + 4, "\n(field (name %s) %s)",
+                                     aOut->Quotew( fieldName ).c_str(),
+                                     aOut->Quotew( fieldValue ).c_str() );
+                    }
+
+                    aOut->Print( 0, ")" );
+                }
+
+                aOut->Print( 0, ")" );
+            }
+
+            aOut->Print( 0, ")\n" );
+        }
     }
 
     if( !( aCtl & CTL_OMIT_FILTERS ) && m_footprintFilters.GetCount() )

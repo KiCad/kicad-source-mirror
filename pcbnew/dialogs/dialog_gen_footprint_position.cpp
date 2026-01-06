@@ -284,6 +284,10 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     // Create the Front and Top side placement files. Gerber P&P files are always separated.
     // Not also they include all footprints
     PLACEFILE_GERBER_WRITER exporter( brd );
+
+    // Set the current variant for variant-aware DNP/BOM/position file filtering
+    exporter.SetVariant( brd->GetCurrentVariant() );
+
     wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
     int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue(),
@@ -353,6 +357,10 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), OnlySMD(), ExcludeAllTH(), ExcludeDNP(),
                                       ExcludeBOM(), topSide, bottomSide, useCSVfmt, useAuxOrigin,
                                       negateBottomX );
+
+        // Set the current variant for variant-aware DNP/BOM/position file filtering
+        exporter.SetVariant( brd->GetCurrentVariant() );
+
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0 )
@@ -506,6 +514,10 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
     PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aExcludeDNP,
                                   aExcludeBOM, aTopSide, aBottomSide, aFormatCSV, aUseAuxOrigin,
                                   aNegateBottomX );
+
+    // Set the current variant for variant-aware DNP/BOM/position file filtering
+    exporter.SetVariant( GetBoard()->GetCurrentVariant() );
+
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
@@ -559,6 +571,10 @@ int BOARD_EDITOR_CONTROL::GenFootprintsReport( const TOOL_EVENT& aEvent )
                                   false,        // aFormatCSV
                                   true,         // aUseAuxOrigin
                                   false );      // aNegateBottomX
+
+    // Set the current variant for variant-aware filtering
+    exporter.SetVariant( board->GetCurrentVariant() );
+
     data = exporter.GenReportData();
 
     fputs( data.c_str(), rptfile );

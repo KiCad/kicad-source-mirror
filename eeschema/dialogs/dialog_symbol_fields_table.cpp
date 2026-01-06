@@ -2715,17 +2715,30 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
         return;
     }
 
-    // Same name - nothing to do
+    // Reserved name is not allowed (case-insensitive).
+    if( newVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor(
+                wxString::Format( _( "'%s' is a reserved variant name." ), GetDefaultVariantName() ),
+                10000, wxICON_ERROR );
+        return;
+    }
+
+    // Same name (exact match) - nothing to do
     if( newVariantName == oldVariantName )
         return;
 
-    // Duplicate name is not allowed.
-    if( m_variantListBox->FindString( newVariantName ) != wxNOT_FOUND )
+    // Duplicate name is not allowed (case-insensitive).
+    for( const wxString& existingName : m_parent->Schematic().GetVariantNames() )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                                   newVariantName ),
-                                                 10000, wxICON_ERROR );
-        return;
+        if( existingName.CmpNoCase( newVariantName ) == 0
+            && existingName.CmpNoCase( oldVariantName ) != 0 )
+        {
+            m_parent->GetInfoBar()->ShowMessageFor(
+                    wxString::Format( _( "Variant '%s' already exists." ), existingName ),
+                    10000, wxICON_ERROR );
+            return;
+        }
     }
 
     m_parent->Schematic().RenameVariant( oldVariantName, newVariantName );

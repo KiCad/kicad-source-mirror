@@ -139,7 +139,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                 continue;
         }
 
-        if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
+        if( footprint->GetExcludedFromPosFilesForVariant( m_variant ) )
             continue;
 
         if( m_onlySMD && !( footprint->GetAttributes() & FP_SMD ) )
@@ -148,10 +148,10 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         if( m_excludeAllTH && footprint->HasThroughHolePads() )
             continue;
 
-        if( m_excludeDNP && ( footprint->GetAttributes() & FP_DNP ) )
+        if( m_excludeDNP && footprint->GetDNPForVariant( m_variant ) )
             continue;
 
-        if( m_excludeBOM && ( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) )
+        if( m_excludeBOM && footprint->GetExcludedFromBOMForVariant( m_variant ) )
             continue;
 
         m_fpCount++;
