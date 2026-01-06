@@ -1047,6 +1047,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     wxString   upperTxt;
     wxString   lowerTxt;
 
+    // On Windows, ensure the target file is writeable by clearing problematic attributes like
+    // hidden or read-only. This can happen when files are synced via cloud services.
+    if( pcbFileName.FileExists() )
+        KIPLATFORM::IO::MakeWriteable( pcbFileName.GetFullPath() );
+
     try
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
@@ -1126,6 +1131,11 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     SaveProjectLocalSettings();
 
     GetBoard()->SynchronizeNetsAndNetClasses( false );
+
+    // On Windows, ensure the target file is writeable by clearing problematic attributes like
+    // hidden or read-only. This can happen when files are synced via cloud services.
+    if( pcbFileName.FileExists() )
+        KIPLATFORM::IO::MakeWriteable( pcbFileName.GetFullPath() );
 
     try
     {

@@ -794,6 +794,11 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
+    // On Windows, ensure the target file is writeable by clearing problematic attributes like
+    // hidden or read-only. This can happen when files are synced via cloud services.
+    if( schematicFileName.FileExists() )
+        KIPLATFORM::IO::MakeWriteable( schematicFileName.GetFullPath() );
+
     try
     {
         pi->SaveSchematicFile( schematicFileName.GetFullPath(), aSheet, &Schematic() );
