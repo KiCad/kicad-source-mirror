@@ -94,6 +94,11 @@ wxArrayString GetFootprints(const wxString& aNickName);
 %}
 
 
+// Tell SWIG that the caller owns the PCB_IO* returned by FindPlugin and is
+// responsible for deleting it. This fixes memory leaks in Python wrapper
+// functions like FootprintLoad that call GetPluginForPath -> FindPlugin.
+%newobject PCB_IO_MGR::FindPlugin;
+
 %include <pcb_io/pcb_io_mgr.h>
 %include <pcb_io/pcb_io.h>
 
