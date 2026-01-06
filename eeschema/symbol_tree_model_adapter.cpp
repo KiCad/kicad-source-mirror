@@ -120,7 +120,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
 
     for( const wxString& lib : toLoad )
     {
-        if( !m_adapter->GetLibraryStatus( lib ) )
+        std::optional<LIB_STATUS> status = m_adapter->GetLibraryStatus( lib );
+
+        if( !status || status->load_status != LOAD_STATUS::LOADED )
         {
             m_pending_load_libraries.insert( lib );
             continue;

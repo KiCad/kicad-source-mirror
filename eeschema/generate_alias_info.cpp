@@ -66,7 +66,10 @@ public:
         wxCHECK_RET( m_libs, "Symbol library manager adapter pointer is not valid" );
 
         if( !m_lib_id.IsValid() )
+        {
+            ClearPlaceholders();
             return;
+        }
 
         try
         {
@@ -78,6 +81,7 @@ public:
                         m_lib_id.GetLibItemName().wx_str(),
                         m_lib_id.GetLibNickname().wx_str(),
                         ioe.What() );
+            ClearPlaceholders();
             return;
         }
 
@@ -88,6 +92,10 @@ public:
             SetHtmlDesc();
             SetHtmlKeywords();
             SetHtmlFieldTable();
+        }
+        else
+        {
+            ClearPlaceholders();
         }
     }
 
@@ -251,6 +259,15 @@ protected:
         }
 
         m_html.Replace( wxS( "__FIELDS__" ), fieldtable );
+    }
+
+    void ClearPlaceholders()
+    {
+        m_html.Replace( wxS( "__NAME__" ), wxEmptyString );
+        m_html.Replace( wxS( "__ALIASOF__" ), wxEmptyString );
+        m_html.Replace( wxS( "__DESC__" ), wxEmptyString );
+        m_html.Replace( wxS( "__KEY__" ), wxEmptyString );
+        m_html.Replace( wxS( "__FIELDS__" ), wxEmptyString );
     }
 
 private:
