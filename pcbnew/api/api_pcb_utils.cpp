@@ -30,6 +30,7 @@
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <zone.h>
@@ -58,6 +59,16 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
             return nullptr;
 
         return std::make_unique<PAD>( footprint );
+    }
+
+    case PCB_FIELD_T:
+    {
+        FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aContainer );
+
+        if( !footprint )
+            return nullptr;
+
+        return std::make_unique<PCB_FIELD>( footprint, FIELD_T::USER );
     }
 
     case PCB_FOOTPRINT_T:
