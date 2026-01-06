@@ -132,10 +132,12 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
     // the graphics in the KiCad drawing area.
     else if( aImporter.GetImportOffsetMM() == VECTOR2D( 0, 0 ) )
     {
-        if( boundingBox.GetRight() > std::numeric_limits<int>::max()
-            || boundingBox.GetBottom() > std::numeric_limits<int>::max()
-            || boundingBox.GetLeft() < std::numeric_limits<int>::min()
-            || boundingBox.GetTop() < std::numeric_limits<int>::min() )
+        double iuFactor = aImporter.GetMillimeterToIuFactor();
+
+        if( boundingBox.GetRight() * iuFactor > std::numeric_limits<int>::max()
+            || boundingBox.GetBottom() * iuFactor > std::numeric_limits<int>::max()
+            || boundingBox.GetLeft() * iuFactor < std::numeric_limits<int>::min()
+            || boundingBox.GetTop() * iuFactor < std::numeric_limits<int>::min() )
         {
             VECTOR2D offset = boundingBox.GetOrigin();
             aImporter.SetImportOffsetMM( -offset );

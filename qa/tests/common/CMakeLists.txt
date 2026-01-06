@@ -68,6 +68,9 @@ set( QA_COMMON_SRCS
     io/cadstar/test_cadstar_archive_parser.cpp
 
     view/test_zoom_controller.cpp
+
+    # Graphics import tests
+    test_graphics_importer_buffer.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
