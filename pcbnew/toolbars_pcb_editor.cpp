@@ -495,8 +495,8 @@ void PCB_EDIT_FRAME::ClearToolbarControl( int aId )
 
     switch( aId )
     {
-    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:   m_SelTrackWidthBox = nullptr;   break;
-    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:      m_SelViaSizeBox = nullptr;      break;
+    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:    m_SelTrackWidthBox = nullptr;   break;
+    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:       m_SelViaSizeBox = nullptr;      break;
     case ID_AUX_TOOLBAR_PCB_VARIANT_SELECT: m_currentVariantCtrl = nullptr; break;
     }
 }
