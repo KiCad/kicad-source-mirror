@@ -580,13 +580,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Attribute fields (boolean flags on symbols)
     dataModel.AddColumn( wxS( "${DNP}" ), GetGeneratedFieldDisplayName( wxS( "${DNP}" ) ),
-                         false, aBomJob->m_variant );
+                         false, currentVariant );
     dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOM}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOM}" ) ),
-                         false, aBomJob->m_variant );
+                         false, currentVariant );
     dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOARD}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOARD}" ) ),
-                         false, aBomJob->m_variant );
+                         false, currentVariant );
     dataModel.AddColumn( wxS( "${EXCLUDE_FROM_SIM}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_SIM}" ) ),
-                         false, aBomJob->m_variant );
+                         false, currentVariant );
 
     // User field names in symbols second
     std::set<wxString> userFieldNames;
