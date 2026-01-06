@@ -92,6 +92,9 @@ set( QA_COMMON_SRCS
     # GAL tests
     test_gal_xor_mode.cpp
 
+    # Graphics import tests
+    test_graphics_importer_buffer.cpp
+
     # Project template tests (source included directly since it's from kicad executable)
     test_project_template.cpp
     ${CMAKE_SOURCE_DIR}/kicad/project_template.cpp
