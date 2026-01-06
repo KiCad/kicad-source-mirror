@@ -115,7 +115,7 @@ private:
 
     bool updateComponentPadConnections( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
-    void updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
+    bool updateComponentClass( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
     void cacheCopperZoneConnections();
 
