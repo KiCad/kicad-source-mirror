@@ -118,18 +118,22 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
 bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
 {
     DWORD attrs = GetFileAttributesW( aFilePath.wc_str() );
-    
+
     if( attrs == INVALID_FILE_ATTRIBUTES )
         return false;
-    
-    // Remove read-only attribute if present
-    if( attrs & FILE_ATTRIBUTE_READONLY )
+
+    // Remove read-only and hidden attributes if present. Both of these can prevent file
+    // operations on Windows. Hidden files in particular can cause issues when files are
+    // synced via cloud services like OneDrive.
+    DWORD attrsToRemove = FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN;
+
+    if( attrs & attrsToRemove )
     {
-        attrs &= ~FILE_ATTRIBUTE_READONLY;
+        attrs &= ~attrsToRemove;
         return SetFileAttributesW( aFilePath.wc_str(), attrs ) != 0;
     }
-    
-    return true; // Already writeable
+
+    return true;
 }
 
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
