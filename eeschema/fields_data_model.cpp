@@ -265,6 +265,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
     }
 
     m_cols.erase( m_cols.begin() + aCol );
+
+    if( wxGrid* grid = GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_COLS_DELETED, aCol, 1 );
+        grid->ProcessTableMessage( msg );
+    }
 }
 
 
