@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,6 @@ class WX_INFOBAR;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -61,7 +60,9 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;
 		wxStaticBitmap* annotate_right_down_bitmap;
-		wxRadioBox* m_rbOptions;
+		wxRadioButton* m_rbKeep_Annotations;
+		wxRadioButton* m_rbReset_Annotations;
+		wxCheckBox* m_checkRegroupUnits;
 		wxRadioButton* m_rbFirstFree;
 		wxTextCtrl* m_textNumberAfter;
 		wxRadioButton* m_rbSheetX100;

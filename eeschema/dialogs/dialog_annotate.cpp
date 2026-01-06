@@ -131,16 +131,17 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     // We still save/restore to config (instead of letting DIALOG_SHIM do it) because we also
     // allow editing of these settings in preferences.
 
-    SCHEMATIC_SETTINGS& schSettings = m_Parent->Schematic().Settings();
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-    schSettings.m_AnnotateMethod = m_rbOptions->GetSelection();
+    cfg->m_AnnotatePanel.options = m_rbReset_Annotations->GetValue() ? 1 : 0;
 
     if( m_rbScope_Schematic->IsEnabled() )
     {
         cfg->m_AnnotatePanel.scope = GetScope();
         cfg->m_AnnotatePanel.recursive = m_checkRecursive->GetValue();
     }
+
+    cfg->m_AnnotatePanel.regroup_units = m_checkRegroupUnits->GetValue();
 
     int sort = GetSortOrder();
     int method = GetAnnotateAlgo();
@@ -194,7 +195,12 @@ bool DIALOG_ANNOTATE::TransferDataToWindow()
         m_checkRecursive->SetValue( cfg->m_AnnotatePanel.recursive );
     }
 
-    m_rbOptions->SetSelection( cfg->m_AnnotatePanel.options );
+    bool resetAnnotation = cfg->m_AnnotatePanel.options >= 1;
+    m_rbReset_Annotations->SetValue( resetAnnotation );
+    m_rbKeep_Annotations->SetValue( !resetAnnotation );
+
+    m_checkRegroupUnits->SetValue( cfg->m_AnnotatePanel.regroup_units );
+    m_checkRegroupUnits->Enable( cfg->m_AnnotatePanel.options >= 1 );
 
     if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parentFrame ) )
     {
@@ -243,8 +249,12 @@ void DIALOG_ANNOTATE::OnAnnotateClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(), m_checkRecursive->GetValue(),
-                               GetStartNumber(), m_rbOptions->GetSelection() >= 1, true, reporter );
+    bool resetAnnotation = m_rbReset_Annotations->GetValue();
+    bool regroupUnits = resetAnnotation && m_checkRegroupUnits->GetValue();
+
+    m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(),
+                               m_checkRecursive->GetValue(), GetStartNumber(), resetAnnotation,
+                               regroupUnits, true, reporter );
 
     commit.Push( _( "Annotate" ) );
 
@@ -263,6 +273,8 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 
 void DIALOG_ANNOTATE::OnOptionChanged( wxCommandEvent& event )
 {
+    m_checkRegroupUnits->Enable( m_rbReset_Annotations->GetValue() );
+
     m_sdbSizer1OK->Enable( true );
     m_sdbSizer1OK->SetDefault();
 }

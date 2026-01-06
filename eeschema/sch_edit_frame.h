@@ -387,7 +387,7 @@ public:
     void AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
                           ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
                           bool aRecursive, int aStartNumber, bool aResetAnnotation,
-                          bool aRepairTimestamps, REPORTER& aReporter );
+                          bool aRegroupUnits, bool aRepairTimestamps, REPORTER& aReporter );
 
     /**
      * Check for annotation errors.

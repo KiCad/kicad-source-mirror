@@ -478,6 +478,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "annotation.recursive",
             &m_AnnotatePanel.recursive, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "annotation.regroup_units",
+            &m_AnnotatePanel.regroup_units, false ) );
+
     m_params.emplace_back( new PARAM<int>( "annotation.scope",
             &m_AnnotatePanel.scope, 0, 0, 2 ) );
 

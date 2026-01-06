@@ -852,7 +852,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
                                                   (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
                                                   (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true /* recursive */,
-                                                  schSettings.m_AnnotateStartNum, false, false, reporter );
+                                                  schSettings.m_AnnotateStartNum, false, false, false, reporter );
                     }
 
                     // Annotation will clear selection, so we need to restore it
@@ -3411,6 +3411,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                                               true,   /* recursive */
                                               schSettings.m_AnnotateStartNum,
                                               true,   /* reset */
+                                              false,  /* regroup */
                                               false,  /* repair */
                                               reporter );
                 }
