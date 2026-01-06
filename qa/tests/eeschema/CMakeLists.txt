@@ -90,6 +90,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_sheet_path.cpp
     test_sch_sheet_list.cpp
     test_sch_symbol.cpp
+    test_sch_table.cpp
     test_schematic.cpp
     test_symbol_library_manager.cpp
     test_symbol_embedded_files.cpp
