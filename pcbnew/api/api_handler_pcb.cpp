@@ -511,9 +511,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
             // can't use CopyFrom on them either.
             if( boardItem->Type() == PCB_FOOTPRINT_T  || boardItem->Type() == PCB_GROUP_T )
             {
+                // Save group membership before removal, since Remove() severs the relationship
+                PCB_GROUP* parentGroup = dynamic_cast<PCB_GROUP*>( boardItem->GetParentGroup() );
+
                 commit->Remove( boardItem );
                 item->Serialize( newItem );
-                commit->Add( item.release() );
+
+                BOARD_ITEM* newBoardItem = item.release();
+                commit->Add( newBoardItem );
+
+                // Restore group membership for the newly added item
+                if( parentGroup )
+                    parentGroup->AddItem( newBoardItem );
             }
             else
             {
