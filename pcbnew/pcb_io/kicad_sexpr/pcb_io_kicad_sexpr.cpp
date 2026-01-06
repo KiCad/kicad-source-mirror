@@ -1225,6 +1225,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 
     for( const PCB_FIELD* field : aFootprint->GetFields() )
     {
+        if( !field )
+            continue;
+
         m_out->Print( "(property %s %s",
                       m_out->Quotew( field->GetCanonicalName() ).c_str(),
                       m_out->Quotew( field->GetText() ).c_str() );

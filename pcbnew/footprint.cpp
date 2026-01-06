@@ -887,7 +887,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     for( PCB_POINT* point : m_points )
         delete point;
 
-    m_groups.clear();
+    m_points.clear();
 
     for( PCB_POINT* point : aOther.Points() )
         Add( point );
@@ -948,6 +948,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
     // Copy fields
+    for( PCB_FIELD* field : m_fields )
+        delete field;
+
     m_fields.clear();
 
     for( PCB_FIELD* field : aOther.m_fields )
@@ -958,6 +961,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy pads
+    for( PAD* pad : m_pads )
+        delete pad;
+
     m_pads.clear();
 
     for( PAD* pad : aOther.Pads() )
@@ -968,6 +974,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy zones
+    for( ZONE* zone : m_zones )
+        delete zone;
+
     m_zones.clear();
 
     for( ZONE* zone : aOther.Zones() )
@@ -984,6 +993,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy drawings
+    for( BOARD_ITEM* item : m_drawings )
+        delete item;
+
     m_drawings.clear();
 
     for( BOARD_ITEM* item : aOther.GraphicalItems() )
@@ -994,6 +1006,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     }
 
     // Copy groups
+    for( PCB_GROUP* group : m_groups )
+        delete group;
+
     m_groups.clear();
 
     for( PCB_GROUP* group : aOther.Groups() )
@@ -1007,7 +1022,10 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
         Add( newGroup );
     }
 
-    // Copy drawings
+    // Copy points
+    for( PCB_POINT* point : m_points )
+        delete point;
+
     m_points.clear();
 
     for( PCB_POINT* point : aOther.Points() )
