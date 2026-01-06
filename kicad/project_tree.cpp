@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <git/kicad_git_common.h>
 #include <wx/settings.h>
+#include <wx/dcmemory.h>
 
 #include "project_tree_item.h"
 #include "project_tree_pane.h"
@@ -67,40 +68,70 @@ PROJECT_TREE::~PROJECT_TREE()
 
 void PROJECT_TREE::LoadIcons()
 {
-    const int c_fileDefSize = 24;
+    const int c_fileDefSize = 22;
     const int c_gitDefSize = 16;
 
+    auto getBundle = [&]( BITMAPS aBmp, int aDefSize )
+    {
+#ifdef __WXMSW__
+        // Add padding to bitmaps because MSW is the only platform that doesn't get it automatically
+        const int          c_padding = 1;
+        wxVector<wxBitmap> bmps;
+
+        for( double scale : { 1.0, 1.25, 1.5, 1.75, 2.0, 3.0 } )
+        {
+            int            size = aDefSize * scale;
+            int            paddedSize = size + c_padding * 2 * scale;
+            wxBitmapBundle scaled = KiBitmapBundleDef( aBmp, size );
+            wxBitmap       bmp = scaled.GetBitmap( wxDefaultSize );
+            wxBitmap       padded( paddedSize, paddedSize, 32 );
+
+            {
+                wxMemoryDC dc( padded );
+                dc.Clear();
+                dc.DrawBitmap( bmp, c_padding * scale, c_padding * scale );
+            }
+
+            bmps.push_back( padded );
+        }
+
+        return wxBitmapBundle::FromBitmaps( bmps );
+#else
+        return KiBitmapBundleDef( aBmp, aDefSize );
+#endif
+    };
+
     wxVector<wxBitmapBundle> images;
-    images.push_back( KiBitmapBundleDef( BITMAPS::project, c_fileDefSize ) );                // TREE_LEGACY_PROJECT
-    images.push_back( KiBitmapBundleDef( BITMAPS::project_kicad, c_fileDefSize ) );          // TREE_JSON_PROJECT
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_eeschema_24, c_fileDefSize ) );       // TREE_LEGACY_SCHEMATIC
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_eeschema_24, c_fileDefSize ) );       // TREE_SEXPR_SCHEMATIC
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_pcbnew_24, c_fileDefSize ) );         // TREE_LEGACY_PCB
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_pcbnew_24, c_fileDefSize ) );         // TREE_SEXPR_PCB
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_gerbview_24, c_fileDefSize ) );       // TREE_GERBER
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_gerber_job, c_fileDefSize ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_html, c_fileDefSize ) );              // TREE_HTML
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_pdf, c_fileDefSize ) );               // TREE_PDF
-    images.push_back( KiBitmapBundleDef( BITMAPS::editor, c_fileDefSize ) );                 // TREE_TXT
-    images.push_back( KiBitmapBundleDef( BITMAPS::editor, c_fileDefSize ) );                 // TREE_MD
-    images.push_back( KiBitmapBundleDef( BITMAPS::netlist, c_fileDefSize ) );                // TREE_NET
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_cir, c_fileDefSize ) );               // TREE_NET_SPICE
-    images.push_back( KiBitmapBundleDef( BITMAPS::unknown, c_fileDefSize ) );                // TREE_UNKNOWN
-    images.push_back( KiBitmapBundleDef( BITMAPS::directory, c_fileDefSize ) );              // TREE_DIRECTORY
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_cvpcb_24, c_fileDefSize ) );          // TREE_CMP_LINK
-    images.push_back( KiBitmapBundleDef( BITMAPS::tools, c_fileDefSize ) );                  // TREE_REPORT
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_pos, c_fileDefSize ) );               // TREE_POS
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_NC (similar TREE_DRILL)
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
-    images.push_back( KiBitmapBundleDef( BITMAPS::file_svg, c_fileDefSize ) );               // TREE_SVG
-    images.push_back( KiBitmapBundleDef( BITMAPS::icon_pagelayout_editor_24, c_fileDefSize ) ); // TREE_PAGE_LAYOUT_DESCR
-    images.push_back( KiBitmapBundleDef( BITMAPS::module, c_fileDefSize ) );                 // TREE_FOOTPRINT_FILE
-    images.push_back( KiBitmapBundleDef( BITMAPS::library, c_fileDefSize ) );                // TREE_SCHEMATIC_LIBFILE
-    images.push_back( KiBitmapBundleDef( BITMAPS::library, c_fileDefSize ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
-    images.push_back( KiBitmapBundleDef( BITMAPS::editor, c_fileDefSize ) );                 // DESIGN_RULES
-    images.push_back( KiBitmapBundleDef( BITMAPS::zip, c_fileDefSize ) );                    // ZIP_ARCHIVE
-    images.push_back( KiBitmapBundleDef( BITMAPS::editor, c_fileDefSize ) );                 // JOBSET_FILE
+    images.push_back( getBundle( BITMAPS::project, c_fileDefSize ) );                // TREE_LEGACY_PROJECT
+    images.push_back( getBundle( BITMAPS::project_kicad, c_fileDefSize ) );          // TREE_JSON_PROJECT
+    images.push_back( getBundle( BITMAPS::icon_eeschema_24, c_fileDefSize ) );       // TREE_LEGACY_SCHEMATIC
+    images.push_back( getBundle( BITMAPS::icon_eeschema_24, c_fileDefSize ) );       // TREE_SEXPR_SCHEMATIC
+    images.push_back( getBundle( BITMAPS::icon_pcbnew_24, c_fileDefSize ) );         // TREE_LEGACY_PCB
+    images.push_back( getBundle( BITMAPS::icon_pcbnew_24, c_fileDefSize ) );         // TREE_SEXPR_PCB
+    images.push_back( getBundle( BITMAPS::icon_gerbview_24, c_fileDefSize ) );       // TREE_GERBER
+    images.push_back( getBundle( BITMAPS::file_gerber_job, c_fileDefSize ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
+    images.push_back( getBundle( BITMAPS::file_html, c_fileDefSize ) );              // TREE_HTML
+    images.push_back( getBundle( BITMAPS::file_pdf, c_fileDefSize ) );               // TREE_PDF
+    images.push_back( getBundle( BITMAPS::editor, c_fileDefSize ) );                 // TREE_TXT
+    images.push_back( getBundle( BITMAPS::editor, c_fileDefSize ) );                 // TREE_MD
+    images.push_back( getBundle( BITMAPS::netlist, c_fileDefSize ) );                // TREE_NET
+    images.push_back( getBundle( BITMAPS::file_cir, c_fileDefSize ) );               // TREE_NET_SPICE
+    images.push_back( getBundle( BITMAPS::unknown, c_fileDefSize ) );                // TREE_UNKNOWN
+    images.push_back( getBundle( BITMAPS::directory, c_fileDefSize ) );              // TREE_DIRECTORY
+    images.push_back( getBundle( BITMAPS::icon_cvpcb_24, c_fileDefSize ) );          // TREE_CMP_LINK
+    images.push_back( getBundle( BITMAPS::tools, c_fileDefSize ) );                  // TREE_REPORT
+    images.push_back( getBundle( BITMAPS::file_pos, c_fileDefSize ) );               // TREE_POS
+    images.push_back( getBundle( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL
+    images.push_back( getBundle( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_NC (similar TREE_DRILL)
+    images.push_back( getBundle( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
+    images.push_back( getBundle( BITMAPS::file_svg, c_fileDefSize ) );               // TREE_SVG
+    images.push_back( getBundle( BITMAPS::icon_pagelayout_editor_24, c_fileDefSize ) ); // TREE_PAGE_LAYOUT_DESCR
+    images.push_back( getBundle( BITMAPS::module, c_fileDefSize ) );                 // TREE_FOOTPRINT_FILE
+    images.push_back( getBundle( BITMAPS::library, c_fileDefSize ) );                // TREE_SCHEMATIC_LIBFILE
+    images.push_back( getBundle( BITMAPS::library, c_fileDefSize ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
+    images.push_back( getBundle( BITMAPS::editor, c_fileDefSize ) );                 // DESIGN_RULES
+    images.push_back( getBundle( BITMAPS::zip, c_fileDefSize ) );                    // ZIP_ARCHIVE
+    images.push_back( getBundle( BITMAPS::editor, c_fileDefSize ) );                 // JOBSET_FILE
 
     SetImages( images );
 
