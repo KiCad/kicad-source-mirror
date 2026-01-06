@@ -59,8 +59,7 @@ void DIALOG_SCH_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
     fn.SetExt( FILEEXT::ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
-                      FILEEXT::ProjectFileWildcard(),
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+                      FILEEXT::ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK )
         m_filePathCtrl->SetValue( dlg.GetPath() );
