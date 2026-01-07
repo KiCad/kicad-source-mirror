@@ -25,6 +25,7 @@
 #include <dialogs/dialog_configure_paths.h>
 
 #include <algorithm>
+#include <set>
 
 #include <bitmaps.h>
 #include <confirm.h>
@@ -35,6 +36,7 @@
 #include <filename_resolver.h>
 #include <env_vars.h>
 #include <grid_tricks.h>
+#include <libraries/library_manager.h>
 #include <pgm_base.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/grid_text_helpers.h>
@@ -42,6 +44,7 @@
 #include <widgets/wx_grid.h>
 
 #include <wx/dirdlg.h>
+#include <wx/regex.h>
 
 
 enum TEXT_VAR_GRID_COLUMNS
@@ -129,6 +132,54 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
 
         if( m_curdir.IsEmpty() && !path.StartsWith( "${" ) && !path.StartsWith( "$(" ) )
             m_curdir = path;
+    }
+
+    // Scan library tables for environment variables that are used but not in envVars.
+    // This allows users to see and manage obsolete versioned variables (e.g., KICAD8_FOOTPRINT_DIR)
+    // that may still be referenced in library tables from older KiCad versions.
+    wxRegEx envVarRegex( wxS( ".*?(\\$\\{(.+?)\\})|(\\$\\((.+?)\\)).*?" ), wxRE_ADVANCED );
+    std::set<wxString> foundEnvVars;
+
+    LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+
+    for( LIBRARY_TABLE_TYPE tableType : { LIBRARY_TABLE_TYPE::SYMBOL,
+                                          LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                          LIBRARY_TABLE_TYPE::DESIGN_BLOCK } )
+    {
+        for( LIBRARY_TABLE_SCOPE scope : { LIBRARY_TABLE_SCOPE::GLOBAL,
+                                           LIBRARY_TABLE_SCOPE::PROJECT } )
+        {
+            std::vector<LIBRARY_TABLE_ROW*> rows = libMgr.Rows( tableType, scope, true );
+
+            for( const LIBRARY_TABLE_ROW* row : rows )
+            {
+                wxString uri = row->URI();
+
+                while( envVarRegex.Matches( uri ) )
+                {
+                    wxString envvar = envVarRegex.GetMatch( uri, 2 );
+
+                    if( envvar.IsEmpty() )
+                        envvar = envVarRegex.GetMatch( uri, 4 );
+
+                    if( !envvar.IsEmpty() )
+                        foundEnvVars.insert( envvar );
+
+                    uri.Replace( envVarRegex.GetMatch( uri, 0 ), wxEmptyString );
+                }
+            }
+        }
+    }
+
+    for( const wxString& envvar : foundEnvVars )
+    {
+        if( envVars.count( envvar ) == 0 && envvar != PROJECT_VAR_NAME )
+        {
+            wxString value;
+            bool isExternal = wxGetEnv( envvar, &value );
+
+            AppendEnvVar( envvar, value, isExternal );
+        }
     }
 
     return true;
