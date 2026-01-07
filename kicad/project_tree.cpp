@@ -68,8 +68,13 @@ PROJECT_TREE::~PROJECT_TREE()
 
 void PROJECT_TREE::LoadIcons()
 {
+#ifdef __WXMAC__
+    const int c_fileDefSize = 18;
+    const int c_gitDefSize = 16;
+#else
     const int c_fileDefSize = 22;
     const int c_gitDefSize = 16;
+#endif
 
     auto getBundle = [&]( BITMAPS aBmp, int aDefSize )
     {
