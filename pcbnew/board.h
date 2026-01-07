@@ -730,6 +730,15 @@ public:
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
+    /**
+     * Invalidate the clearance cache for a specific item.
+     *
+     * Called by items when properties that could affect clearance change.
+     *
+     * @param aUuid the UUID of the item to invalidate.
+     */
+    void InvalidateClearanceCache( const KIID& aUuid );
+
     BOARD_STACKUP GetStackupOrDefault() const;
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
