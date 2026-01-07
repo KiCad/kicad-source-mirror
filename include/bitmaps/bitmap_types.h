@@ -67,7 +67,9 @@ KICOMMON_API wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap, int aMinHeight = -1
  */
 KICOMMON_API wxBitmapBundle KiBitmapBundleDef( BITMAPS aBitmap, int aDefHeight );
 
-KICOMMON_API wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
+KICOMMON_API wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap, int aMinHeight = -1 );
+
+KICOMMON_API wxBitmapBundle KiDisabledBitmapBundleDef( BITMAPS aBitmap, int aDefHeight );
 
 /**
  * Wipes out the scaled bitmap cache so that the icon theme can be changed.

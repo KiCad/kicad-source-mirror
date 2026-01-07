@@ -136,19 +136,17 @@ ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertica
 
 void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 {
-    int            size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
-    wxBitmapBundle normalBmp = KiBitmapBundle( aAction.GetIcon(), size );
+    int            iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+    wxBitmapBundle normalBmp = KiBitmapBundleDef( aAction.GetIcon(), iconSize );
 
     int bmpWidth = normalBmp.GetPreferredBitmapSizeFor( this ).GetWidth();
     int padding = ( m_buttonSize.GetWidth() - bmpWidth ) / 2;
-    wxSize bmSize( size, size );
-    bmSize *= KIPLATFORM::UI::GetContentScaleFactor( m_parent );
 
     BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
 
     button->SetIsToolbarButton();
     button->SetBitmap( normalBmp );
-    button->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
+    button->SetDisabledBitmap( KiDisabledBitmapBundleDef( aAction.GetIcon(), iconSize ) );
     button->SetPadding( padding );
     button->SetToolTip( aAction.GetButtonTooltip() );
     button->AcceptDragInAsClick();
@@ -223,6 +221,23 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
     Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ), nullptr, this );
 
     Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( ACTION_TOOLBAR::onThemeChanged ), this );
+
+    Bind( wxEVT_DPI_CHANGED,
+          [&]( wxDPIChangedEvent& aEvent )
+          {
+#ifdef __WXMSW__
+              // Update values which are normally only initialized in wxAuiToolBar::Create
+              // FromDIP is no-op on backends other than wxMSW
+              m_toolPacking = FromDIP( 2 );
+              m_toolBorderPadding = FromDIP( 3 );
+
+              wxSize margin_lt = FromDIP( wxSize( 5, 5 ) );
+              wxSize margin_rb = FromDIP( wxSize( 2, 2 ) );
+              SetMargins( margin_lt.x, margin_lt.y, margin_rb.x, margin_rb.y );
+#endif
+
+              aEvent.Skip();
+          } );
 }
 
 
@@ -411,10 +426,11 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
                   wxS( "aIsCancellable requires aIsToggleEntry" ) );
 
     int toolId = aAction.GetUIId();
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
     AddTool( toolId, wxEmptyString,
-             KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
-             KiDisabledBitmapBundle( aAction.GetIcon() ),
+             KiBitmapBundleDef( aAction.GetIcon(), iconSize ),
+             KiDisabledBitmapBundleDef( aAction.GetIcon(), iconSize ),
              aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
              aAction.GetButtonTooltip(), wxEmptyString, nullptr );
 
@@ -427,11 +443,12 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
 void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 {
     int toolId = aAction.GetUIId();
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
     AddTool( toolId, wxEmptyString,
-             KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
-             KiDisabledBitmapBundle( aAction.GetIcon() ), wxITEM_NORMAL,
-             aAction.GetButtonTooltip(), wxEmptyString, nullptr );
+             KiBitmapBundleDef( aAction.GetIcon(), iconSize ),
+             KiDisabledBitmapBundleDef( aAction.GetIcon(), iconSize ),
+             wxITEM_NORMAL, aAction.GetButtonTooltip(), wxEmptyString, nullptr );
 
     m_toolKinds[ toolId ] = false;
     m_toolActions[ toolId ] = &aAction;
@@ -470,8 +487,9 @@ void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, std::unique
 
 void ACTION_TOOLBAR::AddGroup( std::unique_ptr<ACTION_GROUP> aGroup )
 {
-    int                groupId       = aGroup->GetUIId();
+    int                groupId = aGroup->GetUIId();
     const TOOL_ACTION* defaultAction = aGroup->GetDefaultAction();
+    int                iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
     wxASSERT( GetParent() );
     wxASSERT( defaultAction );
@@ -489,10 +507,9 @@ void ACTION_TOOLBAR::AddGroup( std::unique_ptr<ACTION_GROUP> aGroup )
 
     // Add the main toolbar item representing the group
     AddTool( groupId, wxEmptyString,
-             KiBitmapBundle( defaultAction->GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
-             KiDisabledBitmapBundle( defaultAction->GetIcon() ),
-             isToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
-             wxEmptyString, wxEmptyString, nullptr );
+             KiBitmapBundleDef( defaultAction->GetIcon(), iconSize ),
+             KiDisabledBitmapBundleDef( defaultAction->GetIcon(), iconSize ),
+             isToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL, wxEmptyString, wxEmptyString, nullptr );
 
     // Select the default action
     doSelectAction( m_actionGroups[ groupId ].get(), *defaultAction );
@@ -546,10 +563,12 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
     if( !item )
         return;
 
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+
     // Update the item information
     item->SetShortHelp( aAction.GetButtonTooltip() );
-    item->SetBitmap( KiBitmapBundle( aAction.GetIcon(), Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ) );
-    item->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
+    item->SetBitmap( KiBitmapBundleDef( aAction.GetIcon(), iconSize ) );
+    item->SetDisabledBitmap( KiDisabledBitmapBundleDef( aAction.GetIcon(), iconSize ) );
 
     // Register a new handler with the new UI conditions
     if( m_toolManager )
@@ -1071,13 +1090,14 @@ void ACTION_TOOLBAR::onThemeChanged( wxSysColourChangedEvent &aEvent )
 
 void ACTION_TOOLBAR::RefreshBitmaps()
 {
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+
     for( const std::pair<int, const TOOL_ACTION*> pair : m_toolActions )
     {
         wxAuiToolBarItem* tool = FindTool( pair.first );
 
-        tool->SetBitmap( KiBitmapBundle( pair.second->GetIcon(),
-                                         Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ) );
-        tool->SetDisabledBitmap( KiDisabledBitmapBundle( pair.second->GetIcon() ) );
+        tool->SetBitmap( KiBitmapBundleDef( pair.second->GetIcon(), iconSize ) );
+        tool->SetDisabledBitmap( KiDisabledBitmapBundleDef( pair.second->GetIcon(), iconSize ) );
     }
 
     Refresh();

@@ -212,7 +212,7 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeig
 }
 
 
-wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId )
+wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId, int aMinHeight )
 {
     wxVector<wxBitmap> bmps;
 
@@ -221,10 +221,55 @@ wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId )
         if( info.theme != m_theme )
             continue;
 
+        if( aMinHeight > 0 && info.height < aMinHeight )
+            continue;
+
         wxBitmap bmp( getImage( info.id, info.height )
                               .ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
         bmps.push_back( bmp );
     }
+
+    return wxBitmapBundle::FromBitmaps( bmps );
+}
+
+
+wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundleDef( BITMAPS aBitmapId, int aDefHeight )
+{
+    wxVector<wxBitmap> bmps;
+    std::set<int>      sizes;
+    int                largestHeight = 0;
+    wxImage            largestImage;
+
+    for( const BITMAP_INFO& info : m_bitmapInfoCache[aBitmapId] )
+    {
+        if( info.theme != m_theme )
+            continue;
+
+        wxImage img = getImage( info.id, info.height ).ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 );
+
+        if( info.height > largestHeight )
+        {
+            largestHeight = info.height;
+            largestImage = img;
+        }
+
+        if( info.height >= aDefHeight )
+        {
+            sizes.emplace( info.height );
+            bmps.push_back( wxBitmap( img ) );
+        }
+    }
+
+    if( !sizes.contains( aDefHeight ) )
+        bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
+
+#ifdef __WXOSX__
+    // OSX doesn't align text in trees properly when 2x bitmaps are not provided, apparently
+    int size2x = aDefHeight * 2;
+
+    if( !sizes.contains( size2x ) )
+        bmps.push_back( wxBitmap( resampleImage( largestImage, size2x, size2x ) ) );
+#endif
 
     return wxBitmapBundle::FromBitmaps( bmps );
 }

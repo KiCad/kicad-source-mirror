@@ -40,16 +40,12 @@ wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
 #endif
 {
     // Based on the upstream wxWidgets implementation, but simplified for our application
-    int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
-
-#ifdef __WXMSW__
-    size *= KIPLATFORM::UI::GetContentScaleFactor( aWindow );
-#endif
+    int size = aWindow->FromDIP( Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size );
 
     int width = size;
     int height = size;
 
-    if( m_flags & wxAUI_TB_TEXT )
+    if( ( m_flags & wxAUI_TB_TEXT ) && !aItem.GetLabel().empty() )
     {
         aDc.SetFont( m_font );
         int tx, ty;
@@ -65,7 +61,7 @@ wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
                 width = wxMax( width, tx + aWindow->FromDIP( 6 ) );
             }
         }
-        else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT && !aItem.GetLabel().empty() )
+        else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
         {
             width += aWindow->FromDIP( 3 ); // space between left border and bitmap
             width += aWindow->FromDIP( 3 ); // space between bitmap and text
@@ -92,12 +88,10 @@ wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
 void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                                      const wxRect& aRect )
 {
-    // Taken from upstream implementation; modified to respect tool size
-    wxSize bmpSize = GetToolSize( aDc, aWindow, aItem );
-
+    // Taken from upstream implementation
     int textWidth = 0, textHeight = 0;
 
-    if( m_flags & wxAUI_TB_TEXT )
+    if( ( m_flags & wxAUI_TB_TEXT ) && !aItem.GetLabel().empty() )
     {
         aDc.SetFont( m_font );
 
@@ -111,15 +105,8 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
 
-    double scale = KIPLATFORM::UI::GetPixelScaleFactor( aWindow );
-    const wxBitmapBundle& bundle = ( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-                                   ? aItem.GetDisabledBitmapBundle()
-                                   : aItem.GetBitmapBundle();
-    wxBitmap bmp = bundle.GetBitmap( bmpSize * scale );
-
-    // wxBitmapBundle::GetBitmap thinks we need this rescaled to match the base size, which we don't
-    if( bmp.IsOk() )
-        bmp.SetScaleFactor( scale );
+    const wxBitmap& bmp = aItem.GetCurrentBitmapFor( aWindow );
+    const wxSize    bmpSize = bmp.IsOk() ? bmp.GetLogicalSize() : wxSize( 0, 0 );
 
     if( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
     {
