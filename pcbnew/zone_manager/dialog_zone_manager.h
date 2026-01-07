@@ -103,8 +103,6 @@ private:
 
     void OnIdle( wxIdleEvent& aEvent );
 
-    void FitCanvasToScreen();
-
 private:
     PCB_BASE_FRAME*                       m_pcbFrame;
     ZONE_SETTINGS_BAG                     m_zoneSettingsBag;
@@ -113,7 +111,6 @@ private:
     ZONE_PREVIEW_NOTEBOOK*                m_zonePreviewNotebook;
     std::optional<unsigned>               m_priorityDragIndex;
     std::unique_ptr<ZONE_FILLER>          m_filler;
-    bool                                  m_needZoomGAL;
     bool                                  m_isFillingZones;
     bool                                  m_zoneFillComplete;
 };

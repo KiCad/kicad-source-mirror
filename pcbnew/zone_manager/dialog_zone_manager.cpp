@@ -52,7 +52,6 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
         m_pcbFrame( aParent ),
         m_zoneSettingsBag( aParent->GetBoard() ),
         m_priorityDragIndex( {} ),
-        m_needZoomGAL( true ),
         m_isFillingZones( false ),
         m_zoneFillComplete( false )
 {
@@ -102,9 +101,6 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
           },
           m_zonePreviewNotebook->GetId() );
 
-    //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
-    FitCanvasToScreen();
-
     Layout();
     m_MainBoxSizer->Fit( this );
     finishDialogSettings();
@@ -112,12 +108,6 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
 
 
 DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
-
-
-void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
-{
-    m_zonePreviewNotebook->FitCanvasToScreen();
-}
 
 
 bool DIALOG_ZONE_MANAGER::TransferDataToWindow()
@@ -190,19 +180,12 @@ void DIALOG_ZONE_MANAGER::OnIdle( wxIdleEvent& aEvent )
     WXUNUSED( aEvent )
     m_viewZonesOverview->SetFocus();
     Unbind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
-
-    if( !m_needZoomGAL )
-        return;
-
-    m_needZoomGAL = false;
-    FitCanvasToScreen();
 }
 
 
 void DIALOG_ZONE_MANAGER::onDialogResize( wxSizeEvent& event )
 {
     event.Skip();
-    FitCanvasToScreen();
 }
 
 

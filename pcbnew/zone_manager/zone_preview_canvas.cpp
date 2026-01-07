@@ -123,6 +123,13 @@ ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID
 
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
 
+    Bind( wxEVT_SIZE,
+          [this]( wxSizeEvent& aEvent )
+          {
+              ZoomFitScreen();
+              aEvent.Skip();
+          } );
+
     StartDrawing();
     RequestRefresh();
 }
