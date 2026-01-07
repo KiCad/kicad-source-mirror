@@ -210,7 +210,7 @@ private:
 
     void addLocationNode( wxXmlNode* aContentNode, const PCB_SHAPE& aShape );
 
-    void addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape );
+    void addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape, bool aInline = false );
 
     void addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAYER_ID aLayer );
 

@@ -935,13 +935,14 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
 }
 
 
-void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape )
+void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape, bool aInline )
 {
     size_t hash = shapeHash( aShape );
     auto iter = m_user_shape_dict.find( hash );
     wxString name;
 
-    if( iter != m_user_shape_dict.end() )
+    // When not inline, check for existing shape in dictionary and reference it
+    if( !aInline && iter != m_user_shape_dict.end() )
     {
         wxXmlNode* shape_node = appendNode( aContentNode, "UserPrimitiveRef" );
         addAttribute( shape_node,  "id", iter->second );
@@ -952,6 +953,43 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
     {
     case SHAPE_T::CIRCLE:
     {
+        if( aInline )
+        {
+            // For inline shapes (e.g., in Marking elements), output geometry directly as a
+            // Polyline with two arcs forming a circle
+            int radius = aShape.GetRadius();
+            int width = aShape.GetStroke().GetWidth();
+            LINE_STYLE dash = aShape.GetStroke().GetLineStyle();
+
+            wxXmlNode* polyline_node = appendNode( aContentNode, "Polyline" );
+
+            // Create a circle using two semicircular arcs
+            // Start at the rightmost point of the circle
+            VECTOR2I center = aShape.GetCenter();
+            VECTOR2I start( center.x + radius, center.y );
+            VECTOR2I mid( center.x - radius, center.y );
+
+            wxXmlNode* begin_node = appendNode( polyline_node, "PolyBegin" );
+            addXY( begin_node, start );
+
+            // First arc from start to mid (top semicircle)
+            wxXmlNode* arc1_node = appendNode( polyline_node, "PolyStepCurve" );
+            addXY( arc1_node, mid );
+            addXY( arc1_node, center, "centerX", "centerY" );
+            addAttribute( arc1_node, "clockwise", "true" );
+
+            // Second arc from mid back to start (bottom semicircle)
+            wxXmlNode* arc2_node = appendNode( polyline_node, "PolyStepCurve" );
+            addXY( arc2_node, start );
+            addXY( arc2_node, center, "centerX", "centerY" );
+            addAttribute( arc2_node, "clockwise", "true" );
+
+            if( width > 0 )
+                addLineDesc( polyline_node, width, dash, true );
+
+            break;
+        }
+
         name = wxString::Format( "UCIRCLE_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
         int diameter = aShape.GetRadius() * 2.0;
@@ -983,6 +1021,36 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 
     case SHAPE_T::RECTANGLE:
     {
+        if( aInline )
+        {
+            // For inline shapes, output as a Polyline with the rectangle corners
+            int stroke_width = aShape.GetStroke().GetWidth();
+            LINE_STYLE dash = aShape.GetStroke().GetLineStyle();
+
+            wxXmlNode* polyline_node = appendNode( aContentNode, "Polyline" );
+
+            // Get the rectangle corners. Use GetRectCorners for proper handling
+            std::vector<VECTOR2I> corners = aShape.GetRectCorners();
+
+            wxXmlNode* begin_node = appendNode( polyline_node, "PolyBegin" );
+            addXY( begin_node, corners[0] );
+
+            for( size_t i = 1; i < corners.size(); ++i )
+            {
+                wxXmlNode* step_node = appendNode( polyline_node, "PolyStepSegment" );
+                addXY( step_node, corners[i] );
+            }
+
+            // Close the rectangle
+            wxXmlNode* close_node = appendNode( polyline_node, "PolyStepSegment" );
+            addXY( close_node, corners[0] );
+
+            if( stroke_width > 0 )
+                addLineDesc( polyline_node, stroke_width, dash, true );
+
+            break;
+        }
+
         name = wxString::Format( "URECT_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
 
@@ -1027,6 +1095,46 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 
     case SHAPE_T::POLY:
     {
+        if( aInline )
+        {
+            // For inline shapes, output as Polyline elements directly
+            const SHAPE_POLY_SET& poly_set = aShape.GetPolyShape();
+            int stroke_width = aShape.GetStroke().GetWidth();
+            LINE_STYLE dash = aShape.GetStroke().GetLineStyle();
+
+            for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
+            {
+                const SHAPE_LINE_CHAIN& outline = poly_set.Outline( ii );
+
+                if( outline.PointCount() < 2 )
+                    continue;
+
+                wxXmlNode* polyline_node = appendNode( aContentNode, "Polyline" );
+                const std::vector<VECTOR2I>& pts = outline.CPoints();
+
+                wxXmlNode* begin_node = appendNode( polyline_node, "PolyBegin" );
+                addXY( begin_node, pts[0] );
+
+                for( size_t jj = 1; jj < pts.size(); ++jj )
+                {
+                    wxXmlNode* step_node = appendNode( polyline_node, "PolyStepSegment" );
+                    addXY( step_node, pts[jj] );
+                }
+
+                // Close the polygon if needed
+                if( pts.size() > 2 && pts.front() != pts.back() )
+                {
+                    wxXmlNode* close_node = appendNode( polyline_node, "PolyStepSegment" );
+                    addXY( close_node, pts[0] );
+                }
+
+                if( stroke_width > 0 )
+                    addLineDesc( polyline_node, stroke_width, dash, true );
+            }
+
+            break;
+        }
+
         name = wxString::Format( "UPOLY_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
 
@@ -1120,7 +1228,8 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
         wxFAIL;
     }
 
-    if( !name.empty() )
+    // Only add UserPrimitiveRef when not in inline mode and a dictionary entry was created
+    if( !aInline && !name.empty() )
     {
         wxXmlNode* shape_node = appendNode( aContentNode, "UserPrimitiveRef" );
         addAttribute( shape_node,  "id", name );
@@ -2375,7 +2484,9 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                     if( !is_abs )
                         addLocationNode( output_node, *static_cast<PCB_SHAPE*>( item ) );
 
-                    addShape( output_node, *static_cast<PCB_SHAPE*>( item ) );
+                    // When in Marking context (!is_abs), use inline geometry to avoid
+                    // unresolved UserPrimitiveRef errors in validators like Vu2581
+                    addShape( output_node, *static_cast<PCB_SHAPE*>( item ), !is_abs );
 
                     break;
                 }
