@@ -76,11 +76,11 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     COLOR4D    top_color, bottom_color, background_color;
     bool       change = aForceRebuild;
 
-    int requested_scale = KiIconScale( this );
+    int icon_size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
-    if( m_prevIconVal.previous_requested_scale != requested_scale )
+    if( m_prevIconVal.previous_icon_size != icon_size )
     {
-        m_prevIconVal.previous_requested_scale = requested_scale;
+        m_prevIconVal.previous_icon_size = icon_size;
         change = true;
     }
 
@@ -100,17 +100,9 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    background_color = GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
-
-    if( m_prevIconVal.previous_background_color != background_color )
-    {
-        m_prevIconVal.previous_background_color = background_color;
-        change = true;
-    }
-
     if( change || !LayerPairBitmap.IsOk() )
     {
-        LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( top_color, bottom_color );
+        LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( top_color, bottom_color, icon_size );
 
         if( m_tbTopAux )
         {

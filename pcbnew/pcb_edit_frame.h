@@ -713,13 +713,13 @@ protected:
      */
     struct LAYER_TOOLBAR_ICON_VALUES
     {
-        int     previous_requested_scale;
+        int     previous_icon_size;
         COLOR4D previous_Route_Layer_TOP_color;
         COLOR4D previous_Route_Layer_BOTTOM_color;
         COLOR4D previous_background_color;
 
         LAYER_TOOLBAR_ICON_VALUES()
-                : previous_requested_scale( 0 ),
+                : previous_icon_size( 0 ),
                   previous_Route_Layer_TOP_color( COLOR4D::UNSPECIFIED ),
                   previous_Route_Layer_BOTTOM_color( COLOR4D::UNSPECIFIED ),
                   previous_background_color( COLOR4D::UNSPECIFIED )

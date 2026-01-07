@@ -74,8 +74,6 @@ void LAYER_PRESENTATION::DrawColorSwatch( wxBitmap& aLayerbmp, int aLayer ) cons
 // Helper function to create a single bitmap at a specific size using vector graphics
 static wxBitmap createLayerPairBitmapAtSize( const COLOR4D& aTopColor, const COLOR4D& aBottomColor, int aSize )
 {
-    double scale = aSize / 24.0;
-
     wxBitmap bitmap( aSize, aSize );
     wxMemoryDC memDC;
     memDC.SelectObject( bitmap );
@@ -116,12 +114,14 @@ static wxBitmap createLayerPairBitmapAtSize( const COLOR4D& aTopColor, const COL
     gc->SetBrush( bottomBrush );
     gc->DrawPath( bottomPath );
 
+    int lineScale = std::max( 1, wxRound( aSize / 24.0 ) );
+
     // Draw separator line with white outline and black center
-    wxPen whiteLine( *wxWHITE, 3 * scale );
+    wxPen whiteLine( *wxWHITE, 3 * lineScale );
     gc->SetPen( whiteLine );
     gc->StrokeLine( sepTopX, sepTopY, sepBotX, sepBotY );
 
-    wxPen blackLine( *wxBLACK, 1 * scale );
+    wxPen blackLine( *wxBLACK, 1 * lineScale );
     gc->SetPen( blackLine );
     gc->StrokeLine( sepTopX, sepTopY, sepBotX, sepBotY );
 
@@ -137,7 +137,11 @@ wxBitmapBundle LAYER_PRESENTATION::CreateLayerPairIcon( const COLOR4D& aTopColor
     wxVector<wxBitmap> bitmaps;
 
     bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize ) );
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 1.3334 ) );
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 1.5 ) );
     bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 2 ) );
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 2.6667 ) );
+    bitmaps.push_back( createLayerPairBitmapAtSize( aTopColor, aBottomColor, aDefSize * 3 ) );
 
     return wxBitmapBundle::FromBitmaps( bitmaps );
 }

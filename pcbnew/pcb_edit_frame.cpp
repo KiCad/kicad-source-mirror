@@ -2900,6 +2900,8 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aFlags );
 
+    PrepareLayerIndicator();
+
     GetAppearancePanel()->OnColorThemeChanged();
 
     SetElementVisibility( LAYER_RATSNEST, GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
