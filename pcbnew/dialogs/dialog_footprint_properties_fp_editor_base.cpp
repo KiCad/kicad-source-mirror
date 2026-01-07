@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,8 +96,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_PanelPropertiesBoxSizer->Add( sbSizerTexts, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer141;
-	bSizer141 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bColumns;
+	bColumns = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticBoxSizer* sbMetadataSizer;
+	sbMetadataSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Metadata") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerFPID;
 	fgSizerFPID = new wxFlexGridSizer( 4, 2, 3, 0 );
@@ -106,30 +109,36 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	fgSizerFPID->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	wxStaticText* staticFPNameLabel;
-	staticFPNameLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Footprint name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticFPNameLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Footprint name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticFPNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_FootprintNameCtrl = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_FootprintNameCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxLEFT, 5 );
 
 	wxStaticText* staticDescriptionLabel;
-	staticDescriptionLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticDescriptionLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticDescriptionLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_TOP, 5 );
 
-	m_DocCtrl = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_DocCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_DocCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerFPID->Add( m_DocCtrl, 0, wxEXPAND|wxLEFT, 5 );
 
-	staticKeywordsLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticKeywordsLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticKeywordsLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_KeywordCtrl = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_KeywordCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer141->Add( fgSizerFPID, 1, wxEXPAND|wxBOTTOM, 10 );
+	sbMetadataSizer->Add( fgSizerFPID, 1, wxEXPAND, 10 );
+
+
+	bColumns->Add( sbMetadataSizer, 1, wxEXPAND|wxALL, 5 );
+
+
+	bColumns->Add( 5, 0, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbAttributesSizer;
 	sbAttributesSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
@@ -163,10 +172,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	sbAttributesSizer->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer141->Add( sbAttributesSizer, 0, wxEXPAND|wxLEFT, 5 );
+	bColumns->Add( sbAttributesSizer, 0, wxEXPAND|wxALL, 5 );
 
 
-	m_PanelPropertiesBoxSizer->Add( bSizer141, 0, wxEXPAND, 5 );
+	m_PanelPropertiesBoxSizer->Add( bColumns, 0, wxEXPAND, 5 );
 
 
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
