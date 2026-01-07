@@ -563,10 +563,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 {
-    // When creating a new pad (in FP editor) we can use a new pad number
-    // or the last entered pad number
-    // neednewPadNumber = true to create a new pad number, false to use the last
-    // entered pad number
+    // When creating a new pad (in FP editor) we can use a new pad number or the last entered pad number
+    // neednewPadNumber = true to create a new pad number, false to use the last entered pad number
     static bool neednewPadNumber;
 
     if( !m_isFootprintEditor )

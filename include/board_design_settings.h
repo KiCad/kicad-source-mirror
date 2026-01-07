@@ -107,10 +107,10 @@
 #define MAXIMUM_LINE_WIDTH_MM         100.0   // max line width entered in a dialog
 
 // Default pad properties
-#define DEFAULT_PAD_WIDTH_MM 2.54         // master pad width
-#define DEFAULT_PAD_HEIGTH_MM 1.27        // master pad height
-#define DEFAULT_PAD_DRILL_DIAMETER_MM 0.8 // master pad drill diameter for PTH
-#define DEFAULT_PAD_RR_RADIUS_RATIO 0.15  // master pad corner radius ratio
+#define DEFAULT_PAD_WIDTH_MM          2.54
+#define DEFAULT_PAD_HEIGTH_MM         1.27
+#define DEFAULT_PAD_DRILL_DIAMETER_MM 0.8
+#define DEFAULT_PAD_RR_RADIUS_RATIO   0.15
 
 /**
  * Container to handle a stock of specific vias each with unique diameter and drill sizes

@@ -74,25 +74,23 @@ using KIGFX::PCB_RENDER_SETTINGS;
 
 
 PAD::PAD( FOOTPRINT* parent ) :
-    BOARD_CONNECTED_ITEM( parent, PCB_PAD_T ),
-    m_padStack( this )
+        BOARD_CONNECTED_ITEM( parent, PCB_PAD_T ),
+        m_padStack( this )
 {
     VECTOR2I& drill = m_padStack.Drill().size;
-    m_padStack.SetSize( { EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ),
-                          EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ) },
+    m_padStack.SetSize( { EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ), EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ) },
                         PADSTACK::ALL_LAYERS );
     drill.x = drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
-    m_lengthPadToDie      = 0;
+    m_lengthPadToDie = 0;
     m_delayPadToDie = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
         m_pos = GetParent()->GetPosition();
 
     SetShape( F_Cu, PAD_SHAPE::CIRCLE );          // Default pad shape is PAD_CIRCLE.
-    SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE ); // Default shape for custom shaped pads
-                                                  // is PAD_CIRCLE.
+    SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE ); // Default anchor shape for custom shaped pads is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );     // Default pad drill shape is a circle.
-    m_attribute           = PAD_ATTRIB::PTH;      // Default pad type is plated through hole
+    m_attribute = PAD_ATTRIB::PTH;                // Default pad type is plated through hole
     SetProperty( PAD_PROP::NONE );                // no special fabrication property
 
     // Parameters for round rect only:
@@ -118,8 +116,8 @@ PAD::PAD( FOOTPRINT* parent ) :
 
 
 PAD::PAD( const PAD& aOther ) :
-    BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T ),
-    m_padStack( this )
+        BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T ),
+        m_padStack( this )
 {
     PAD::operator=( aOther );
 
