@@ -78,6 +78,8 @@ void FOOTPRINT_INFO_IMPL::load()
 
 void FOOTPRINT_LIST_IMPL::Clear()
 {
+    std::unique_lock<std::mutex> lock( m_loadInProgress );
+
     m_list.clear();
     m_list_timestamp = 0;
 }
