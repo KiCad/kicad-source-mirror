@@ -27,6 +27,7 @@
 
 #include <bitmaps.h>
 #include <wx/tooltip.h>
+#include <wx/uiaction.h>
 #include <grid_tricks.h>
 #include <confirm.h>
 #include <kiface_base.h>
@@ -393,12 +394,49 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     Bind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
     Bind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
 
+#ifdef __WXGTK__
+    // On GTK, the first keypress after dialog activation is consumed by the grid.
+    // Work around by simulating Shift key presses which primes GTK keyboard handling
+    // without affecting the grid selection, then open the cell editor.
+    Bind( wxEVT_ACTIVATE,
+          [this]( wxActivateEvent& aEvent )
+          {
+              aEvent.Skip();
+
+              if( aEvent.GetActive() )
+              {
+                  CallAfter(
+                          [this]()
+                          {
+                              // Simulate Shift key to prime GTK keyboard handling
+                              // Shift alone doesn't affect grid selection
+                              wxUIActionSimulator sim;
+                              sim.KeyDown( WXK_SHIFT );
+                              sim.KeyUp( WXK_SHIFT );
+                              sim.KeyDown( WXK_SHIFT );
+                              sim.KeyUp( WXK_SHIFT );
+
+                              // Now open cell editor for immediate editing
+                              wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
+                              evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
+                              QueueEvent( evt );
+
+                              evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
+                              evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
+                              QueueEvent( evt );
+                          } );
+              }
+          } );
+#else
+    // On non-GTK platforms, just open the cell editor directly
     wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
     QueueEvent( evt );
+
     evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
     QueueEvent( evt );
+#endif
 
     // Remind user that they are editing the current variant.
     if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
