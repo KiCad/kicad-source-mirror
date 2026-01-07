@@ -30,6 +30,7 @@
 
 #include <wx/log.h>
 
+#include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <board_design_settings.h>
 #include <board_commit.h>
@@ -1087,6 +1088,13 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 void BOARD::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
     *m_designSettings = aSettings;
+}
+
+
+void BOARD::InvalidateClearanceCache( const KIID& aUuid )
+{
+    if( m_designSettings && m_designSettings->m_DRCEngine )
+        m_designSettings->m_DRCEngine->InvalidateClearanceCache( aUuid );
 }
 
 

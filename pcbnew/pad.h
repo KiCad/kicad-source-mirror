@@ -556,7 +556,7 @@ public:
         m_polyDirty[ERROR_OUTSIDE] = true;
     }
 
-    void SetLayerSet( const LSET& aLayers ) override   { m_padStack.SetLayerSet( aLayers ); SetDirty(); }
+    void SetLayerSet( const LSET& aLayers ) override;
     LSET GetLayerSet() const override           { return m_padStack.LayerSet(); }
 
     void SetAttribute( PAD_ATTRIB aAttribute );

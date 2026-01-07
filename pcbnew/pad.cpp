@@ -1355,6 +1355,10 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
             SetNetCode( NETINFO_LIST::UNCONNECTED );
             break;
         }
+
+        // Invalidate clearance cache since pad type affects constraint evaluation
+        if( BOARD* board = GetBoard() )
+            board->InvalidateClearanceCache( m_Uuid );
     }
 
     SetDirty();
@@ -1581,29 +1585,21 @@ std::optional<int> PAD::GetClearanceOverrides( wxString* aSource ) const
 }
 
 
+void PAD::SetLayerSet( const LSET& aLayers )
+{
+    m_padStack.SetLayerSet( aLayers );
+    SetDirty();
+
+    // Invalidate clearance cache since layer set can affect clearance rules
+    if( BOARD* board = GetBoard() )
+        board->InvalidateClearanceCache( m_Uuid );
+}
+
+
 int PAD::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    DRC_CONSTRAINT c;
-
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
-    {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        if( GetAttribute() == PAD_ATTRIB::NPTH )
-            c = bds.m_DRCEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, this, nullptr, aLayer );
-        else
-            c = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT, this, nullptr, aLayer );
-    }
-
-    if( c.Value().HasMin() )
-    {
-        if( aSource )
-            *aSource = c.GetName();
-
-        return c.Value().Min();
-    }
-
-    return 0;
+    // The NPTH vs regular pad logic is handled in DRC_ENGINE::GetCachedOwnClearance
+    return BOARD_CONNECTED_ITEM::GetOwnClearance( aLayer, aSource );
 }
 
 

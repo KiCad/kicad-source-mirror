@@ -26,6 +26,7 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <connectivity/connectivity_data.h>
 #include <lset.h>
 #include <properties/property_validators.h>
@@ -41,6 +42,16 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype 
     m_netinfo( NETINFO_LIST::OrphanedItem() )
 {
     m_localRatsnestVisible = true;
+}
+
+
+void BOARD_CONNECTED_ITEM::SetLayer( PCB_LAYER_ID aLayer )
+{
+    BOARD_ITEM::SetLayer( aLayer );
+
+    // Invalidate clearance cache since layer can affect clearance rules
+    if( BOARD* board = GetBoard() )
+        board->InvalidateClearanceCache( m_Uuid );
 }
 
 
@@ -88,27 +99,20 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     if( !aNoAssert )
         wxASSERT( m_netinfo );
 
+    // Invalidate clearance cache since net can affect clearance rules
+    if( board )
+        board->InvalidateClearanceCache( m_Uuid );
+
     return ( m_netinfo != nullptr );
 }
 
 
 int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    DRC_CONSTRAINT constraint;
-
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        constraint = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT, this, nullptr, aLayer );
-    }
-
-    if( constraint.Value().HasMin() )
-    {
-        if( aSource )
-            *aSource = constraint.GetName();
-
-        return constraint.Value().Min();
+        return bds.m_DRCEngine->GetCachedOwnClearance( this, aLayer, aSource );
     }
 
     return 0;
@@ -215,7 +219,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
 
         // Replace layer property as the properties panel will set a restriction for copper layers
         // only for BOARD_CONNECTED_ITEM that we don't want to apply to BOARD_ITEM
-        auto layer = new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, PCB_LAYER_ID, BOARD_ITEM>(
+        auto layer = new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, PCB_LAYER_ID>(
                 _HKI( "Layer" ),
                 &BOARD_CONNECTED_ITEM::SetLayer, &BOARD_CONNECTED_ITEM::GetLayer );
         layer->SetChoices( layerEnum.Choices() );

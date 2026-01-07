@@ -752,6 +752,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     }
 
     m_constraintMap.clear();
+    m_ownClearanceCache.clear();
 
     m_board->IncrementTimeStamp();  // Clear board-level caches
 
@@ -2220,4 +2221,69 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
     }
 
     return matches;
+}
+
+
+int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
+                                       wxString* aSource )
+{
+    DRC_OWN_CLEARANCE_CACHE_KEY key{ aItem->m_Uuid, aLayer };
+
+    auto it = m_ownClearanceCache.find( key );
+
+    if( it != m_ownClearanceCache.end() )
+    {
+        // Cache hit. We don't cache the source string since it's rarely requested
+        // and caching it would add complexity.
+        return it->second;
+    }
+
+    // Cache miss - evaluate the constraint
+    DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
+
+    if( aItem->Type() == PCB_PAD_T )
+    {
+        const PAD* pad = static_cast<const PAD*>( aItem );
+
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+            constraintType = HOLE_CLEARANCE_CONSTRAINT;
+    }
+
+    DRC_CONSTRAINT constraint = EvalRules( constraintType, aItem, nullptr, aLayer );
+
+    int clearance = 0;
+
+    if( constraint.Value().HasMin() )
+    {
+        clearance = constraint.Value().Min();
+
+        if( aSource )
+            *aSource = constraint.GetName();
+    }
+
+    // Store in cache
+    m_ownClearanceCache[key] = clearance;
+
+    return clearance;
+}
+
+
+void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
+{
+    // Remove all entries for this item (across all layers)
+    auto it = m_ownClearanceCache.begin();
+
+    while( it != m_ownClearanceCache.end() )
+    {
+        if( it->first.m_uuid == aUuid )
+            it = m_ownClearanceCache.erase( it );
+        else
+            ++it;
+    }
+}
+
+
+void DRC_ENGINE::ClearClearanceCache()
+{
+    m_ownClearanceCache.clear();
 }
