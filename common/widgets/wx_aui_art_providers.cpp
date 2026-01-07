@@ -88,43 +88,46 @@ wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
 void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                                      const wxRect& aRect )
 {
-    // Taken from upstream implementation
-    int textWidth = 0, textHeight = 0;
-
-    if( ( m_flags & wxAUI_TB_TEXT ) && !aItem.GetLabel().empty() )
-    {
-        aDc.SetFont( m_font );
-
-        int tx, ty;
-
-        aDc.GetTextExtent( wxT( "ABCDHgj" ), &tx, &textHeight );
-        textWidth = 0;
-        aDc.GetTextExtent( aItem.GetLabel(), &textWidth, &ty );
-    }
-
+    // Based on upstream implementation
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
 
     const wxBitmap& bmp = aItem.GetCurrentBitmapFor( aWindow );
     const wxSize    bmpSize = bmp.IsOk() ? bmp.GetLogicalSize() : wxSize( 0, 0 );
 
-    if( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
+    if( ( m_flags & wxAUI_TB_TEXT ) && !aItem.GetLabel().empty() )
+    {
+        aDc.SetFont( m_font );
+
+        int textWidth = 0, textHeight = 0;
+        int tx, ty;
+
+        aDc.GetTextExtent( wxT( "ABCDHgj" ), &tx, &textHeight );
+        aDc.GetTextExtent( aItem.GetLabel(), &textWidth, &ty );
+
+        if( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
+        {
+            bmpX = aRect.x + ( aRect.width / 2 ) - ( bmpSize.x / 2 );
+
+            bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) - ( bmpSize.y / 2 );
+
+            textX = aRect.x + ( aRect.width / 2 ) - ( textWidth / 2 ) + 1;
+            textY = aRect.y + aRect.height - textHeight - 1;
+        }
+        else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
+        {
+            bmpX = aRect.x + aWindow->FromDIP( 3 );
+
+            bmpY = aRect.y + ( aRect.height / 2 ) - ( bmpSize.y / 2 );
+
+            textX = bmpX + aWindow->FromDIP( 3 ) + bmpSize.x;
+            textY = aRect.y + ( aRect.height / 2 ) - ( textHeight / 2 );
+        }
+    }
+    else
     {
         bmpX = aRect.x + ( aRect.width / 2 ) - ( bmpSize.x / 2 );
-
-        bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) - ( bmpSize.y / 2 );
-
-        textX = aRect.x + ( aRect.width / 2 ) - ( textWidth / 2 ) + 1;
-        textY = aRect.y + aRect.height - textHeight - 1;
-    }
-    else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
-    {
-        bmpX = aRect.x + aWindow->FromDIP( 3 );
-
         bmpY = aRect.y + ( aRect.height / 2 ) - ( bmpSize.y / 2 );
-
-        textX = bmpX + aWindow->FromDIP( 3 ) + bmpSize.x;
-        textY = aRect.y + ( aRect.height / 2 ) - ( textHeight / 2 );
     }
 
     bool isThemeDark = KIPLATFORM::UI::IsDarkTheme();
