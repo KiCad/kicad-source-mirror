@@ -650,7 +650,7 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
 
     for( const auto& [ colName, colPtr ] : m_colNameMap )
     {
-        if( colPtr == m_columns[0] )
+        if( colPtr == m_columns[0] || colPtr == nullptr )
             continue;
 
         wxASSERT( m_colWidths.count( colName ) );
