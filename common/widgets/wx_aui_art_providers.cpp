@@ -193,9 +193,11 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
 
 void WX_AUI_TOOLBAR_ART::saturateHighlightColor()
 {
+#ifdef __WXOSX__
     // Use a slightly stronger highlight colour over grey toolbar backgrounds
     KIGFX::COLOR4D highlight( m_highlightColour );
     m_highlightColour = highlight.Saturate( 0.6 ).ToColour();
+#endif
 }
 
 
