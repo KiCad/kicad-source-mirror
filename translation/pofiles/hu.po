@@ -29525,9 +29525,8 @@ msgid "Shows help message and exits"
 msgstr ""
 
 #: kicad/cli/command_fp.h:31
-#, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "Alkatrészrajzolat könyvtárak betöltése"
+msgstr "Alkatrészrajzolat és alkatrészrajzolat könyvtárak"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 #, fuzzy
@@ -46657,7 +46656,6 @@ msgid "Via is not connected or connected on only one layer"
 msgstr "\"Nem csatlakoztatott\" jelölés hozzáadása"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Track has unconnected end"
 msgstr "A vezetősáv vége nem csatlakozik"
 
@@ -46667,7 +46665,6 @@ msgid "Hole clearance violation"
 msgstr "Furat távolság megsértése"
 
 #: pcbnew/drc/drc_item.cpp:109
-#, fuzzy
 msgid "Drilled hole too close to other hole"
 msgstr "Furatok túl közel vannak egymáshoz"
 
@@ -46690,9 +46687,8 @@ msgid "Track angle"
 msgstr "Vezetősáv szög"
 
 #: pcbnew/drc/drc_item.cpp:129
-#, fuzzy
 msgid "Track segment length"
-msgstr "Vezetősáv szegmensek"
+msgstr "Vezetősáv szegmens hossza"
 
 #: pcbnew/drc/drc_item.cpp:133
 #, fuzzy
@@ -46749,17 +46745,14 @@ msgid "NPTH inside courtyard"
 msgstr "Forrszem kizárt területen belül"
 
 #: pcbnew/drc/drc_item.cpp:177
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Elem egy letiltott rétegen"
+msgstr "Elem egy letiltott vezető rétegen"
 
 #: pcbnew/drc/drc_item.cpp:181
-#, fuzzy
 msgid "Board has malformed outline"
-msgstr "A NYÁK panel körvonala hibás vagy hiányzik"
+msgstr "A panel körvonala hibás"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Duplicate footprints"
 msgstr "Ismétlődő alkatrészrajzolatok"
 
@@ -46793,9 +46786,8 @@ msgid "Footprint field does not match symbol field"
 msgstr "Alkatrészrajzolat szerkesztő - létrehozás/szerkesztés"
 
 #: pcbnew/drc/drc_item.cpp:213
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "A rajzjel nem található a(z) \"%s\"-ben!"
+msgstr "Az alkatrészrajzolat nem található a könyvtárakban"
 
 #: pcbnew/drc/drc_item.cpp:217
 #, fuzzy
@@ -46867,9 +46859,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Differenciális jelvezeték hosszának hangolása"
 
 #: pcbnew/drc/drc_item.cpp:286
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "A(z) \"%s\" alkatrészrajzolat azonosító nem érvényes."
+msgstr "Az alkatrészrajzolat érvénytelen"
 
 #: pcbnew/drc/drc_item.cpp:290
 #, fuzzy
@@ -46883,11 +46874,11 @@ msgstr "Hiba: furatszerelt forrszem esetén a furat nem lehet nulla méretű."
 
 #: pcbnew/drc/drc_item.cpp:298
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Tükrözött szöveg a felső rétegen"
 
 #: pcbnew/drc/drc_item.cpp:302
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Nem tükrözött szöveg az alsó rétegen"
 
 #: pcbnew/drc/drc_item.cpp:306
 #, fuzzy
@@ -46955,9 +46946,8 @@ msgid "Missing '('."
 msgstr "Hiányzó '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:174 pcbnew/drc/drc_rule_parser.cpp:240
-#, fuzzy
 msgid "Missing version statement."
-msgstr "Hiányzó alkatrészrajzolatok"
+msgstr "Hiányzó verziószám."
 
 #: pcbnew/drc/drc_rule_parser.cpp:186 pcbnew/drc/drc_rule_parser.cpp:252
 msgid "Missing version number."
@@ -46995,9 +46985,9 @@ msgid "Missing condition expression."
 msgstr "Hiányzó alkatrészrajzolatok"
 
 #: pcbnew/drc/drc_rule_parser.cpp:331 pcbnew/drc/drc_rule_parser.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "Nem sikerült betölteni a(z) \"%s\" képet"
+msgstr "Nem sikerült értelmezni a kifejezést: \"%s\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:338 pcbnew/drc/drc_rule_parser.cpp:412
 #: pcbnew/drc/drc_rule_parser.cpp:682
@@ -47283,9 +47273,9 @@ msgid "(%s min %s; actual %s)"
 msgstr "Valós méret"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "Forrszem %s\t"
+msgstr "Forrszem %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:246
 #, fuzzy, c-format
@@ -47670,9 +47660,8 @@ msgid "No project loaded, skipping library parity tests."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1036
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Hiba történt az alkatrészrajzolat könyvtártáblázat betöltése során"
+msgstr "Alkatrészrajzolat könyvtár táblázat betöltése..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1046
 #, fuzzy
@@ -48050,15 +48039,12 @@ msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:176
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"A fájl a Hyperlynx által nem támogatott forrszem alakzatokat tartalmaz.\n"
-"Csak ovális, négyszögletes és kör alakú forrszemeket használhat.\n"
-"A nem támogatott alakzatok ovális forszemekké lettek átalakítva az "
-"exportálás során."
+"A fájl a Hyperlynx által nem támogatott alakú forrszemeket tartalmaz. "
+"Támogatott alakok: ovális, négyszög, lekerekített négyszög és kör."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:180
 msgid "They have been exported as oval pads."
@@ -48129,6 +48115,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Nem sikerült hozzáadni %s 3D modelljét.\n"
+"Fájl nem található: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:591
 #, c-format
@@ -48136,6 +48124,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
+"Nem sikerült hozzáadni %s 3D modelljét.\n"
+"OpenCASCADE hiba: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1169
 #, fuzzy
@@ -48169,11 +48159,13 @@ msgstr ""
 "** Hiba a(z) %s fájl exportálása közben. Exportálás megszakítva **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1302
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Újratöltési idő %.3f sec"
+msgstr ""
+"\n"
+"Exportálási idő %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:664
 msgid "** Got problems while fusing shapes **"
@@ -48413,7 +48405,7 @@ msgstr "Kimeneti mappa \"%s\" nem hozható létre."
 #: pcbnew/files.cpp:156
 #, fuzzy
 msgid "All KiCad Board Files"
-msgstr "Nem KiCad nyákterv fájl importálása"
+msgstr "Összes KiCad NYÁK-terv fájl"
 
 #: pcbnew/files.cpp:184
 msgid "Open Board File"
@@ -48463,12 +48455,12 @@ msgstr "A(z) \"%s\" nyákterv fájl már meg van nyitva."
 #: pcbnew/files.cpp:510
 #, fuzzy
 msgid "The current PCB has been modified.  Save changes?"
-msgstr "A nyákterv módosult. Menti a módosításokat?"
+msgstr "A NYÁK-terv módosult. Menti a módosításokat?"
 
 #: pcbnew/files.cpp:531
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "A(z) \"%s\" panel nem létezik. Szeretné létrehozni?"
+msgstr "A(z) \"%s\" NYÁK-terv nem létezik. Szeretné létrehozni?"
 
 #: pcbnew/files.cpp:543
 msgid "Create PCB"
@@ -48486,9 +48478,7 @@ msgstr "Hiba a(z) \"%s\" NYÁK betöltése közben."
 #: pcbnew/files.cpp:697
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Hiba a nyákterv betöltése közben:\n"
-"%s"
+msgstr "Elfogyott a memória a(z) \"%s\" NYÁK-terv betöltése közben"
 
 #: pcbnew/files.cpp:764 pcbnew/pcb_edit_frame.cpp:1510
 #, fuzzy
@@ -48499,7 +48489,7 @@ msgstr "Nem sikerült megnyitni a konfigurációs fájlt"
 #: pcbnew/footprint_libraries_utils.cpp:1141 pcbnew/tools/pcb_control.cpp:148
 #, fuzzy
 msgid "New Footprint Library"
-msgstr "Alkatrészrajzolat (footprint) könyvtár létrehozása"
+msgstr "Új alkatrészrajzolat könyvtár"
 
 #: pcbnew/files.cpp:829
 #, fuzzy, c-format
@@ -48528,7 +48518,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1042 pcbnew/files.cpp:1128
 #: pcbnew/pcb_design_block_utils.cpp:112 pcbnew/pcbnew_jobs_handler.cpp:2658
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
@@ -48656,7 +48646,6 @@ msgid "Exclude From Position Files"
 msgstr "Kizárás a pozíciófájlokból"
 
 #: pcbnew/footprint.cpp:4532 pcbnew/pad.cpp:3644
-#, fuzzy
 msgid "Overrides"
 msgstr "Felülír"
 
@@ -53359,7 +53348,7 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:2410
 #, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "DRC hibajelentés mentése ide: %s\n"
+msgstr "DRC hibajelentés elmentve ide: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2417
 #, fuzzy
@@ -53371,13 +53360,13 @@ msgid "Failed to save board.\n"
 msgstr "Nem sikerült menteni a panelt.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2521
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
-"%s"
+"Hiba a(z) \"%s\" IPC-2581 fájl generálása közben.\n"
+"Nem sikerült átnevezni a(z) \"%s\" ideiglenes fájlt."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2567
 msgid "Successfully created IPC-D-356 file\n"
@@ -53392,9 +53381,8 @@ msgid "Successfully saved board file using the latest format\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2652
-#, fuzzy
 msgid "Board file was not updated\n"
-msgstr "A rajzjel könyvtár nem lett frissítve\n"
+msgstr "A panel fájl nem lett frissítve\n"
 
 #: pcbnew/pcbnew_printout.cpp:100
 #, fuzzy
@@ -53403,7 +53391,7 @@ msgstr "Több réteg"
 
 #: pcbnew/plot_board_layers.cpp:1269
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
-msgstr ""
+msgstr "HPGL ábrázolás nem támogatott a KiCad 10.0-s verziója óta"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:104
 #, c-format
@@ -53442,9 +53430,9 @@ msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "A(z) \"%s\" plugin mappa nem létezik. Szeretné létrehozni?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Kimeneti mappa \"%s\" nem hozható létre."
+msgstr "Nem sikerült létrehozni a(z) \"%s\" plugin mappát."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #, fuzzy
@@ -55380,7 +55368,6 @@ msgid "Renumber Pads"
 msgstr "Forrszemek újraszámozása"
 
 #: pcbnew/tools/pad_tool.cpp:703
-#, fuzzy
 msgid "Place pad"
 msgstr "Forrszem elhelyezése"
 
@@ -55702,7 +55689,7 @@ msgstr "Új terv blokk létrehozása a kijelölésből"
 #: pcbnew/tools/pcb_actions.cpp:559
 #, fuzzy
 msgid "Open in Footprint Editor"
-msgstr "Megnyitás Alkatrészrajzolat szerkesztőben"
+msgstr "Megnyitás az Alkatrészrajzolat Szerkesztőben"
 
 #: pcbnew/tools/pcb_actions.cpp:575
 #, fuzzy
@@ -55815,7 +55802,7 @@ msgstr "Ugrás a következő elemre"
 #: pcbnew/tools/pcb_actions.cpp:734
 #, fuzzy
 msgid "Change Track Width"
-msgstr "Vezetősáv szélesség módosítása"
+msgstr "Vezetősáv szélességének módosítása"
 
 #: pcbnew/tools/pcb_actions.cpp:735
 #, fuzzy
@@ -55840,7 +55827,7 @@ msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 #: pcbnew/tools/pcb_actions.cpp:760
 #, fuzzy
 msgid "Fillet Lines..."
-msgstr "Ívelt Vonalak"
+msgstr "Élek lekerekítése..."
 
 #: pcbnew/tools/pcb_actions.cpp:761
 #, fuzzy
@@ -55850,7 +55837,7 @@ msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 #: pcbnew/tools/pcb_actions.cpp:767
 #, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Letörés mérete:"
+msgstr "Élek letörése..."
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Cut away corners between selected lines"
@@ -55941,7 +55928,7 @@ msgstr "Alkatrészrajzolat exportálása a szerkesztőbe"
 #: pcbnew/tools/pcb_actions.cpp:882
 #, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Alkatrészrajzolat Duplázása"
+msgstr "Alkatrészrajzolat megkettőzése"
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Rename Footprint..."
@@ -56103,9 +56090,7 @@ msgstr "Globális törlések..."
 #: pcbnew/tools/pcb_actions.cpp:1046
 #, fuzzy
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr ""
-"Vezetősávok, alkatrészek és grafikai elemek törlése a panelről kijelölés "
-"alapján"
+msgstr "Vezetősávok, alkatrészek és grafikai elemek törlése a panelről"
 
 #: pcbnew/tools/pcb_actions.cpp:1052
 msgid "Cleanup Tracks & Vias..."
@@ -56181,7 +56166,7 @@ msgstr "Forrszem tulajdonságok másolása alapértelmezettként"
 #: pcbnew/tools/pcb_actions.cpp:1116
 #, fuzzy
 msgid "Copy current pad's properties"
-msgstr "Forrszem tulajdonságok másolása"
+msgstr "Aktuális forrszem tulajdonságainak másolása"
 
 #: pcbnew/tools/pcb_actions.cpp:1122
 #, fuzzy
@@ -56196,7 +56181,7 @@ msgstr "Aktuális forrszem tulajdonságainak lecserélése a korábban másoltra
 #: pcbnew/tools/pcb_actions.cpp:1129
 #, fuzzy
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Forrszem tulajdonságok klónozása más forrszemekre..."
+msgstr "Forrszem tulajdonságok átvitele más forrszemekre..."
 
 #: pcbnew/tools/pcb_actions.cpp:1130
 #, fuzzy
@@ -56206,7 +56191,7 @@ msgstr "Forrszem tulajdonságok klónozása"
 #: pcbnew/tools/pcb_actions.cpp:1136
 #, fuzzy
 msgid "Renumber Pads..."
-msgstr "Forrszemek átszámozása..."
+msgstr "Forrszemek újraszámozása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 #, fuzzy
@@ -56234,7 +56219,7 @@ msgstr "Egyedi alakú forrszem felbontása egyszerű grafikai elemekre"
 #: pcbnew/tools/pcb_actions.cpp:1162
 #, fuzzy
 msgid "Finish Pad Edit"
-msgstr "Forrszem Szerkesztés Vége"
+msgstr "Forrszem szerkesztés vége"
 
 #: pcbnew/tools/pcb_actions.cpp:1163
 msgid "Regroups all touching graphic shapes into the edited pad"
@@ -56278,17 +56263,17 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1208
 #, fuzzy
 msgid "Non-KiCad Board File..."
-msgstr "Nem KiCad NYÁK terv fájl importálása..."
+msgstr "Nem KiCad NYÁK terv fájl..."
 
 #: pcbnew/tools/pcb_actions.cpp:1209
 #, fuzzy
 msgid "Import board file from other applications"
-msgstr "Egy másik alkalmazás által létrehozott nyákterv importálása"
+msgstr "Másik alkalmazás által létrehozott panel importálása"
 
 #: pcbnew/tools/pcb_actions.cpp:1215
 #, fuzzy
 msgid "Export Footprints..."
-msgstr "Alkatrészrajzolat exportálása..."
+msgstr "Alkatrészrajzolatok exportálása..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
 #, fuzzy
@@ -56302,7 +56287,7 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:1223
 #, fuzzy
 msgid "Board Setup..."
-msgstr "NYÁK Panel beállítások..."
+msgstr "Panel beállítások..."
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 #, fuzzy
@@ -56511,7 +56496,7 @@ msgstr "Zóna duplikálása másik rétegre..."
 #: pcbnew/tools/pcb_actions.cpp:1422
 #, fuzzy
 msgid "Place Footprints"
-msgstr "Alkatrészrajzolat elhelyezés"
+msgstr "Alkatrészrajzolatok elhelyezése"
 
 #: pcbnew/tools/pcb_actions.cpp:1431
 #, fuzzy
