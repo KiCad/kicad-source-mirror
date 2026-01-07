@@ -23,6 +23,8 @@
 #include <mmh3_hash.h>
 #include <embedded_files.h>
 
+#include <wx/wfstream.h>
+
 #include <random>
 using magic_enum::iostream_operators::operator<<;
 
@@ -136,5 +138,82 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_ChecksumError )
     result = EMBEDDED_FILES::DecompressAndDecode(file);
     BOOST_CHECK_EQUAL(result, EMBEDDED_FILES::RETURN_CODE::CHECKSUM_ERROR);
 }
+
+
+BOOST_AUTO_TEST_CASE( ComputeFileHash_MatchesEmbeddedHash )
+{
+    // Create a temp file with known content
+    wxFileName tempFile = wxFileName::CreateTempFileName( wxS( "kicad_embed_test" ) );
+    std::string data = "Test file content for hash computation";
+
+    {
+        wxFFileOutputStream out( tempFile.GetFullPath() );
+        BOOST_REQUIRE( out.IsOk() );
+        out.Write( data.data(), data.size() );
+    }
+
+    // Compute hash via ComputeFileHash
+    std::string computedHash;
+    EMBEDDED_FILES::RETURN_CODE result = EMBEDDED_FILES::ComputeFileHash( tempFile, computedHash );
+    BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::OK );
+    BOOST_CHECK( !computedHash.empty() );
+
+    // Embed the same file and verify hashes match
+    EMBEDDED_FILES files;
+    EMBEDDED_FILES::EMBEDDED_FILE* embedded = files.AddFile( tempFile, false );
+    BOOST_REQUIRE( embedded != nullptr );
+    BOOST_CHECK_EQUAL( computedHash, embedded->data_hash );
+
+    // Clean up
+    wxRemoveFile( tempFile.GetFullPath() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ComputeFileHash_DifferentContent )
+{
+    // Create two temp files with different content
+    wxFileName tempFile1 = wxFileName::CreateTempFileName( wxS( "kicad_embed_test1" ) );
+    wxFileName tempFile2 = wxFileName::CreateTempFileName( wxS( "kicad_embed_test2" ) );
+    std::string data1 = "Content version 1";
+    std::string data2 = "Content version 2";
+
+    {
+        wxFFileOutputStream out1( tempFile1.GetFullPath() );
+        BOOST_REQUIRE( out1.IsOk() );
+        out1.Write( data1.data(), data1.size() );
+    }
+
+    {
+        wxFFileOutputStream out2( tempFile2.GetFullPath() );
+        BOOST_REQUIRE( out2.IsOk() );
+        out2.Write( data2.data(), data2.size() );
+    }
+
+    // Compute hashes for both files
+    std::string hash1, hash2;
+    BOOST_CHECK_EQUAL( EMBEDDED_FILES::ComputeFileHash( tempFile1, hash1 ),
+                       EMBEDDED_FILES::RETURN_CODE::OK );
+    BOOST_CHECK_EQUAL( EMBEDDED_FILES::ComputeFileHash( tempFile2, hash2 ),
+                       EMBEDDED_FILES::RETURN_CODE::OK );
+
+    // Hashes should be different
+    BOOST_CHECK_NE( hash1, hash2 );
+
+    // Clean up
+    wxRemoveFile( tempFile1.GetFullPath() );
+    wxRemoveFile( tempFile2.GetFullPath() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ComputeFileHash_NonExistentFile )
+{
+    wxFileName nonExistent( wxS( "/nonexistent/path/file.txt" ) );
+    std::string hash;
+
+    EMBEDDED_FILES::RETURN_CODE result = EMBEDDED_FILES::ComputeFileHash( nonExistent, hash );
+    BOOST_CHECK_EQUAL( result, EMBEDDED_FILES::RETURN_CODE::FILE_NOT_FOUND );
+    BOOST_CHECK( hash.empty() );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

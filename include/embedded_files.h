@@ -223,6 +223,15 @@ public:
     static RETURN_CODE  DecompressAndDecode( EMBEDDED_FILE& aFile );
 
     /**
+     * Compute the hash of a file on disk without fully embedding it.
+     *
+     * @param aFileName is the path to the file to hash.
+     * @param aHash is the output string to store the computed hash.
+     * @return OK on success, FILE_NOT_FOUND if file cannot be read.
+     */
+    static RETURN_CODE ComputeFileHash( const wxFileName& aFileName, std::string& aHash );
+
+    /**
      * Returns the embedded file with the given name or nullptr if it does not exist.
      */
     EMBEDDED_FILE* GetEmbeddedFile( const wxString& aName ) const

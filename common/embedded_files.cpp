@@ -325,6 +325,39 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
 }
 
 
+EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::ComputeFileHash( const wxFileName& aFileName,
+                                                             std::string& aHash )
+{
+    wxFFileInputStream file( aFileName.GetFullPath() );
+
+    if( !file.IsOk() )
+        return RETURN_CODE::FILE_NOT_FOUND;
+
+    wxFileOffset length = file.GetLength();
+    std::vector<char> data( length );
+
+    if( !data.data() )
+        return RETURN_CODE::OUT_OF_MEMORY;
+
+    char* dataPtr = data.data();
+    wxFileOffset totalRead = 0;
+
+    while( !file.Eof() && totalRead < length )
+    {
+        file.Read( dataPtr, length - totalRead );
+        size_t bytesRead = file.LastRead();
+        dataPtr += bytesRead;
+        totalRead += bytesRead;
+    }
+
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( data );
+    aHash = hash.digest().ToString();
+
+    return RETURN_CODE::OK;
+}
+
+
 // Parsing method
 void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
 {
