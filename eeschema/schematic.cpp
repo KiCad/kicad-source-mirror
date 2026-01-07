@@ -332,7 +332,8 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
     for( SCH_SHEET* sheet : aSheets )
     {
-        if( sheet )
+        // Skip null sheets and virtual roots (which have niluuid)
+        if( sheet && sheet->m_Uuid != niluuid )
             validSheets.push_back( sheet );
     }
 

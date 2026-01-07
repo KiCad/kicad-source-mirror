@@ -473,18 +473,23 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( fileName.GetFullPath() );
 
-        // For project import (empty filename), this sheet becomes the virtual root.
-        // Set niluuid before SetTopLevelSheets() so ensureVirtualRoot() recognizes it.
+        // For project imports (empty filename), the root sheet becomes the virtual root
+        // container. Don't call SetTopLevelSheets yet - that will happen after
+        // LoadSchematicProject populates the sheet hierarchy.
         if( aFileName.empty() )
+        {
             const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
+        }
+        else
+        {
+            // For single-file imports, set as top-level sheet immediately and assign
+            // a placeholder page number that will be updated if we find a pageNumber record.
+            aSchematic->SetTopLevelSheets( { m_rootSheet } );
 
-        aSchematic->SetTopLevelSheets( { m_rootSheet } );
-
-        SCH_SHEET_PATH sheetpath;
-        sheetpath.push_back( m_rootSheet );
-
-        // We'll update later if we find a pageNumber record for it.
-        sheetpath.SetPageNumber( "#" );
+            SCH_SHEET_PATH sheetpath;
+            sheetpath.push_back( m_rootSheet );
+            sheetpath.SetPageNumber( "#" );
+        }
     }
 
     if( !m_rootSheet->GetScreen() )
@@ -520,7 +525,18 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         std::vector<SCH_SHEET*> topLevelSheets;
 
         for( SCH_ITEM* item : rootScreen->Items().OfType( SCH_SHEET_T ) )
-            topLevelSheets.push_back( static_cast<SCH_SHEET*>( item ) );
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            // Skip the temporary root sheet itself if it somehow ended up in its own screen
+            if( sheet != m_rootSheet )
+                topLevelSheets.push_back( sheet );
+        }
+
+        // Remove sheets from the temporary root screen before transferring ownership
+        // to the schematic. Otherwise the screen destructor will delete them.
+        for( SCH_SHEET* sheet : topLevelSheets )
+            rootScreen->Remove( sheet );
 
         if( !topLevelSheets.empty() )
             aSchematic->SetTopLevelSheets( topLevelSheets );
