@@ -321,7 +321,7 @@ public:
      *
      * @param aPtr Pass the std::current_exception() from within the catch block.
      */
-    void HandleException( std::exception_ptr aPtr );
+    void HandleException( std::exception_ptr aPtr, bool aUnhandled = false );
 
     /**
      * A common assert handler to be used between single_top and kicad.

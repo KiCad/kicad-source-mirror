@@ -511,7 +511,7 @@ struct APP_KICAD : public wxApp
         return true;
     }
 
-    int  OnExit()           override
+    int OnExit() override
     {
         program.OnPgmExit();
 
@@ -521,7 +521,8 @@ struct APP_KICAD : public wxApp
         return wxApp::OnExit();
     }
 
-    int OnRun()             override
+
+    int OnRun() override
     {
         try
         {
@@ -534,6 +535,13 @@ struct APP_KICAD : public wxApp
 
         return -1;
     }
+
+
+    void OnUnhandledException() override
+    {
+        Pgm().HandleException( std::current_exception(), true );
+    }
+
 
     int FilterEvent( wxEvent& aEvent ) override
     {

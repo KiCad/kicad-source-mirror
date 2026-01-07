@@ -805,7 +805,7 @@ bool PGM_BASE::IsGUI()
 }
 
 
-void PGM_BASE::HandleException( std::exception_ptr aPtr )
+void PGM_BASE::HandleException( std::exception_ptr aPtr, bool aUnhandled )
 {
     try
     {
@@ -815,6 +815,12 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
     catch( const IO_ERROR& ioe )
     {
         wxLogError( ioe.What() );
+
+        if( aUnhandled )
+        {
+            // Log this IO_ERROR escaped our usual uses (bad)
+            APP_MONITOR::SENTRY::Instance()->LogException( ioe.What() );
+        }
     }
     catch( const std::exception& e )
     {
@@ -825,7 +831,13 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
     }
     catch( ... )
     {
+        // We really shouldn't have these but just in case...
         wxLogError( wxT( "Unhandled exception of unknown type" ) );
+
+        if( aUnhandled )
+        {
+            APP_MONITOR::SENTRY::Instance()->LogException( "Unhandled exception of unknown type" );
+        }
     }
 }
 

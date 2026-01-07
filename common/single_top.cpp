@@ -45,6 +45,7 @@
 #include <kiway.h>
 #include <build_version.h>
 #include <pgm_base.h>
+#include <app_monitor.h>
 #include <kiway_player.h>
 #include <macros.h>
 #include <confirm.h>
@@ -276,6 +277,11 @@ struct APP_SINGLE_TOP : public wxApp
         }
 
         return Event_Skip;
+    }
+
+    void OnUnhandledException() override
+    {
+        Pgm().HandleException( std::current_exception(), true );
     }
 
 #if defined( DEBUG )
