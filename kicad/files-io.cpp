@@ -38,12 +38,10 @@
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxFileName projFileName = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
+    wxString filename = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
 
-    if( !projFileName.FileExists() )
-        return;
-
-    LoadProject( projFileName );
+    if( !filename.IsEmpty() )
+        LoadProject( wxFileName( filename ) );
 }
 
 

@@ -1383,10 +1383,10 @@ void SCH_EDIT_FRAME::UpdateHierarchySelection()
 
 void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 {
-    wxString fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
 
-    if( fn.size() )
-        OpenProjectFiles( std::vector<wxString>( 1, fn ) );
+    if( !filename.IsEmpty() )
+        OpenProjectFiles( std::vector<wxString>( 1, filename ) );
 }
 
 

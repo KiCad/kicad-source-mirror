@@ -1255,22 +1255,23 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type, FI
     int baseId = aFileHistory->GetBaseId();
 
     wxASSERT( cmdId >= baseId && cmdId < baseId + (int) aFileHistory->GetCount() );
+    int i = cmdId - baseId;
 
-    unsigned i = cmdId - baseId;
+    wxString fn = aFileHistory->GetHistoryFile( i );
 
-    if( i < aFileHistory->GetCount() )
+    if( !wxFileName::FileExists( fn ) )
     {
-        wxString fn = aFileHistory->GetHistoryFile( i );
+        wxMessageDialog dlg( this, wxString::Format( _( "File '%s' was not found.\n" ), fn ), _( "Error" ),
+                             wxYES_NO | wxYES_DEFAULT | wxICON_ERROR | wxCENTER );
 
-        if( wxFileName::FileExists( fn ) )
-        {
-            return fn;
-        }
-        else
-        {
-            DisplayErrorMessage( this, wxString::Format( _( "File '%s' was not found." ), fn ) );
+        dlg.SetExtendedMessage( _( "Do you want to remove it from list of recently opened files?" ) );
+        dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove" ) ),
+                            wxMessageDialog::ButtonLabel( _( "Keep" ) ) );
+
+        if( dlg.ShowModal() == wxID_YES )
             aFileHistory->RemoveFileFromHistory( i );
-        }
+
+        fn.Clear();
     }
 
     // Update the menubar to update the file history menu
@@ -1280,7 +1281,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type, FI
         GetMenuBar()->Refresh();
     }
 
-    return wxEmptyString;
+    return fn;
 }
 
 

@@ -248,17 +248,17 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
 
 void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxString fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
 
-    if( !!fn )
+    if( !filename.IsEmpty() )
     {
-        if( !wxFileName::IsFileReadable( fn ) )
+        if( !wxFileName::IsFileReadable( filename ) )
         {
-            if( !AskLoadBoardFileName( this, &fn, KICTL_KICAD_ONLY ) )
+            if( !AskLoadBoardFileName( this, &filename, KICTL_KICAD_ONLY ) )
                 return;
         }
 
-        OpenProjectFiles( std::vector<wxString>( 1, fn ), KICTL_KICAD_ONLY );
+        OpenProjectFiles( std::vector<wxString>( 1, filename ), KICTL_KICAD_ONLY );
     }
 }
 

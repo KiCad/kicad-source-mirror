@@ -58,7 +58,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 
     filename = GetFileFromHistory( event.GetId(), _( "Drawing Sheet File" ) );
 
-    if( filename != wxEmptyString )
+    if( !filename.IsEmpty() )
     {
         if( IsContentModified() )
         {

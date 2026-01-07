@@ -48,14 +48,10 @@
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
-    wxString fn;
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Gerber files" ) );
 
-    fn = GetFileFromHistory( event.GetId(), _( "Gerber files" ) );
-
-    if( !fn.IsEmpty() )
-    {
-        LoadGerberFiles( fn );
-    }
+    if( !filename.IsEmpty() )
+        LoadGerberFiles( filename );
 }
 
 void GERBVIEW_FRAME::OnClearGbrFileHistory( wxCommandEvent& aEvent )
@@ -66,14 +62,10 @@ void GERBVIEW_FRAME::OnClearGbrFileHistory( wxCommandEvent& aEvent )
 
 void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
 {
-    wxString fn;
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Drill files" ), &m_drillFileHistory );
 
-    fn = GetFileFromHistory( event.GetId(), _( "Drill files" ), &m_drillFileHistory );
-
-    if( !fn.IsEmpty() )
-    {
-        LoadExcellonFiles( fn );
-    }
+    if( !filename.IsEmpty() )
+        LoadExcellonFiles( filename );
 }
 
 
@@ -91,13 +83,10 @@ void GERBVIEW_FRAME::OnClearDrlFileHistory( wxCommandEvent& aEvent )
 
 void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 {
-    wxString filename;
-    filename = GetFileFromHistory( event.GetId(), _( "Zip files" ), &m_zipFileHistory );
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Zip files" ), &m_zipFileHistory );
 
     if( !filename.IsEmpty() )
-    {
         LoadZipArchiveFile( filename );
-    }
 }
 
 
