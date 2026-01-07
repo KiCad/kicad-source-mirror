@@ -763,6 +763,7 @@ BOOST_AUTO_TEST_CASE( AppendArc )
     }
 }
 
+
 // Test special case where the last arc in the chain has a shared point with the first arc
 BOOST_AUTO_TEST_CASE( ArcWrappingToStartSharedPoints )
 {
@@ -840,9 +841,6 @@ BOOST_AUTO_TEST_CASE( Split )
     BOOST_CHECK_EQUAL( chain.PointCount(), 11 );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
 
-    //////////////////////////////////////////////////////////
-    /// CASE 1: Point not in the chain                      /
-    //////////////////////////////////////////////////////////
     BOOST_TEST_CONTEXT( "Case 1: Point not in the chain" )
     {
         SHAPE_LINE_CHAIN chainCopy = chain;
@@ -980,10 +978,10 @@ BOOST_AUTO_TEST_CASE( Slice )
                            expectedSliceArc0.GetP0() ); // equal to arc start
         BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
 
-        for( int i = 1; i <= 4; i++ )
+        for( int i = 1; i <= 6; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
 
-        for( int i = 0; i <= 3; i++ )
+        for( int i = 0; i <= 5; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
 
         BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 4 ), true );
