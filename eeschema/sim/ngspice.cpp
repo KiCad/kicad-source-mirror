@@ -44,6 +44,16 @@
 #include <stdexcept>
 #include <algorithm>
 
+#include <signal.h>
+#ifdef __WINDOWS__
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#else
+#include <pthread.h>
+#endif
+
 
 /**
  * Flag to enable debug output of Ngspice simulator.
@@ -332,6 +342,10 @@ bool NGSPICE::LoadNetlist( const std::string& aNetlist )
 bool NGSPICE::Run()
 {
     LOCALE_IO toggle;               // ngspice works correctly only with C locale
+
+    // Install signal handlers to catch ngspice crashes in the background thread
+    installSignalHandlers();
+
     return Command( "bg_run" );     // bg_* commands execute in a separate thread
 }
 
@@ -339,12 +353,51 @@ bool NGSPICE::Run()
 bool NGSPICE::Stop()
 {
     LOCALE_IO c_locale;             // ngspice works correctly only with C locale
-    return Command( "bg_halt" );    // bg_* commands execute in a separate thread
+    bool      result = Command( "bg_halt" );    // bg_* commands execute in a separate thread
+
+    // Restore signal handlers when simulation is stopped
+    restoreSignalHandlers();
+
+    return result;
 }
 
 
 bool NGSPICE::IsRunning()
 {
+    // Check if ngspice crashed while running in the background
+    if( s_crashed.load() )
+    {
+        int signal = s_crashSignal.load();
+        s_crashed.store( false );
+        s_crashSignal.store( 0 );
+        m_error = true;
+
+        // Restore signal handlers after a crash
+        restoreSignalHandlers();
+
+        // Report the crash to the user
+        if( m_reporter )
+        {
+            wxString signalName;
+
+            switch( signal )
+            {
+            case SIGSEGV: signalName = wxT( "SIGSEGV (segmentation fault)" ); break;
+            case SIGABRT: signalName = wxT( "SIGABRT (abort)" ); break;
+            case SIGFPE:  signalName = wxT( "SIGFPE (floating point exception)" ); break;
+            case SIGILL:  signalName = wxT( "SIGILL (illegal instruction)" ); break;
+            default:      signalName = wxString::Format( wxT( "signal %d" ), signal ); break;
+            }
+
+            m_reporter->Report( wxString::Format(
+                    _( "Simulation crashed (%s). This is usually caused by a bug in ngspice "
+                       "or an invalid netlist. The simulator will be reset." ),
+                    signalName ) );
+        }
+
+        return false;
+    }
+
     // No need to use C locale here
     return m_ngSpice_Running();
 }
@@ -700,6 +753,10 @@ int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
 
+    // Restore signal handlers when simulation finishes
+    if( aFinished )
+        sim->restoreSignalHandlers();
+
     if( sim->m_reporter )
         sim->m_reporter->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
 
@@ -735,3 +792,188 @@ void NGSPICE::Clean()
 
 
 bool NGSPICE::m_initialized = false;
+
+std::atomic<bool> NGSPICE::s_crashed( false );
+std::atomic<int>  NGSPICE::s_crashSignal( 0 );
+NGSPICE*          NGSPICE::s_currentInstance = nullptr;
+
+#ifndef __WINDOWS__
+static struct sigaction s_oldSigSegv;
+static struct sigaction s_oldSigAbrt;
+static struct sigaction s_oldSigFpe;
+static bool             s_signalHandlersInstalled = false;
+static pthread_t        s_mainThread;
+
+
+void NGSPICE::signalHandler( int aSignal )
+{
+    // Only handle signals from background threads, not the main thread.
+    // This is a safety check to prevent catching crashes from the main application.
+    if( pthread_equal( pthread_self(), s_mainThread ) )
+    {
+        // This is the main thread, re-raise with the original handler
+        struct sigaction* oldAction = nullptr;
+
+        switch( aSignal )
+        {
+        case SIGSEGV: oldAction = &s_oldSigSegv; break;
+        case SIGABRT: oldAction = &s_oldSigAbrt; break;
+        case SIGFPE:  oldAction = &s_oldSigFpe; break;
+        default: break;
+        }
+
+        if( oldAction && oldAction->sa_handler != SIG_DFL && oldAction->sa_handler != SIG_IGN )
+        {
+            oldAction->sa_handler( aSignal );
+        }
+        else
+        {
+            // Restore default handler and re-raise
+            signal( aSignal, SIG_DFL );
+            raise( aSignal );
+        }
+
+        return;
+    }
+
+    // We're in a background thread (likely ngspice's simulation thread).
+    // Mark that ngspice crashed so the main thread can handle it.
+    s_crashed.store( true );
+    s_crashSignal.store( aSignal );
+
+    if( s_currentInstance )
+        s_currentInstance->m_error = true;
+
+    // Terminate just this thread. pthread_exit is not technically async-signal-safe, but
+    // it's the best option we have for terminating the ngspice thread without bringing
+    // down the whole process. Since the thread state is already corrupted from the crash,
+    // this is a best-effort recovery.
+    pthread_exit( nullptr );
+}
+
+
+void NGSPICE::installSignalHandlers()
+{
+    if( s_signalHandlersInstalled )
+        return;
+
+    s_mainThread = pthread_self();
+    s_currentInstance = this;
+    s_crashed.store( false );
+    s_crashSignal.store( 0 );
+
+    struct sigaction newAction;
+    newAction.sa_handler = signalHandler;
+    sigemptyset( &newAction.sa_mask );
+    newAction.sa_flags = 0;
+
+    sigaction( SIGSEGV, &newAction, &s_oldSigSegv );
+    sigaction( SIGABRT, &newAction, &s_oldSigAbrt );
+    sigaction( SIGFPE, &newAction, &s_oldSigFpe );
+
+    s_signalHandlersInstalled = true;
+}
+
+
+void NGSPICE::restoreSignalHandlers()
+{
+    if( !s_signalHandlersInstalled )
+        return;
+
+    sigaction( SIGSEGV, &s_oldSigSegv, nullptr );
+    sigaction( SIGABRT, &s_oldSigAbrt, nullptr );
+    sigaction( SIGFPE, &s_oldSigFpe, nullptr );
+
+    s_currentInstance = nullptr;
+    s_signalHandlersInstalled = false;
+}
+#else
+static bool  s_exceptionHandlersInstalled = false;
+static PVOID s_vectoredHandler = nullptr;
+static DWORD s_mainThreadId = 0;
+
+long __stdcall NGSPICE::sehHandler( _EXCEPTION_POINTERS* aException )
+{
+    if( !aException || !aException->ExceptionRecord )
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    if( GetCurrentThreadId() == s_mainThreadId )
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    int signal = 0;
+
+    switch( aException->ExceptionRecord->ExceptionCode )
+    {
+    case EXCEPTION_ACCESS_VIOLATION:
+    case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
+    case EXCEPTION_DATATYPE_MISALIGNMENT:
+    case EXCEPTION_STACK_OVERFLOW:
+        signal = SIGSEGV;
+        break;
+    case EXCEPTION_ILLEGAL_INSTRUCTION:
+    case EXCEPTION_PRIV_INSTRUCTION:
+        signal = SIGILL;
+        break;
+    case EXCEPTION_INT_DIVIDE_BY_ZERO:
+    case EXCEPTION_INT_OVERFLOW:
+    case EXCEPTION_FLT_DIVIDE_BY_ZERO:
+    case EXCEPTION_FLT_INVALID_OPERATION:
+    case EXCEPTION_FLT_OVERFLOW:
+    case EXCEPTION_FLT_UNDERFLOW:
+    case EXCEPTION_FLT_INEXACT_RESULT:
+    case EXCEPTION_FLT_STACK_CHECK:
+        signal = SIGFPE;
+        break;
+    default:
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+
+    s_crashed.store( true );
+    s_crashSignal.store( signal );
+
+    if( s_currentInstance )
+        s_currentInstance->m_error = true;
+
+    // Best-effort termination of the crashing thread to keep KiCad alive.
+    if( aException->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW )
+        TerminateThread( GetCurrentThread(), 1 );
+    else
+        ExitThread( 1 );
+
+    return EXCEPTION_CONTINUE_EXECUTION;
+}
+
+// Windows implementations
+void NGSPICE::signalHandler( int aSignal )
+{
+    wxUnusedVar( aSignal );
+}
+
+
+void NGSPICE::installSignalHandlers()
+{
+    if( s_exceptionHandlersInstalled )
+        return;
+
+    s_mainThreadId = GetCurrentThreadId();
+    s_currentInstance = this;
+    s_crashed.store( false );
+    s_crashSignal.store( 0 );
+
+    s_vectoredHandler = AddVectoredExceptionHandler( 1, &NGSPICE::sehHandler );
+    s_exceptionHandlersInstalled = ( s_vectoredHandler != nullptr );
+}
+
+
+void NGSPICE::restoreSignalHandlers()
+{
+    if( s_exceptionHandlersInstalled )
+    {
+        RemoveVectoredExceptionHandler( s_vectoredHandler );
+        s_vectoredHandler = nullptr;
+        s_exceptionHandlersInstalled = false;
+    }
+
+    s_currentInstance = nullptr;
+}
+#endif

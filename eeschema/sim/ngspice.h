@@ -37,6 +37,12 @@
 
 #include <enum_vector.h>
 
+#include <atomic>
+
+#if defined(__WINDOWS__)
+struct _EXCEPTION_POINTERS;
+#endif
+
 // We have an issue here where NGSPICE incorrectly used bool for years
 // and defined it to be int when in C-mode.  We cannot adjust the function
 // signatures without re-writing sharedspice.h for KiCad.
@@ -188,12 +194,30 @@ private:
     // Assure ngspice is in a valid state and reinitializes it if need be.
     void validate();
 
+    // Install signal handlers to catch ngspice crashes
+    void installSignalHandlers();
+
+    // Restore original signal handlers
+    void restoreSignalHandlers();
+
+    // Signal handler for crashes
+    static void signalHandler( int aSignal );
+
+#if defined(__WINDOWS__)
+    // Structured exception handler for Windows crashes
+    static long __stdcall sehHandler( struct _EXCEPTION_POINTERS* aException );
+#endif
+
 private:
     bool        m_error;            ///< Error flag indicating that ngspice needs to be reloaded.
 
     static bool m_initialized;      ///< Ngspice should be initialized only once.
 
     std::string m_netlist;          ///< Current netlist
+
+    static std::atomic<bool>    s_crashed;          ///< Set by signal handler when ngspice crashes.
+    static std::atomic<int>     s_crashSignal;      ///< Signal that caused the crash.
+    static NGSPICE*             s_currentInstance;  ///< Instance that is currently running ngspice.
 };
 
 #endif /* NGSPICE_H */
