@@ -110,7 +110,7 @@ bool PAD_TOOL::Init()
 
         if( m_isFootprintEditor )
         {
-            menu.AddItem( PCB_ACTIONS::padTable,        SELECTION_CONDITIONS::ShowAlways, 400 );
+            menu.AddItem( PCB_ACTIONS::padTable,           SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::enumeratePads,      SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::recombinePad,       recombineCondition, 400 );
             menu.AddItem( PCB_ACTIONS::explodePad,         explodeCondition, 400 );
@@ -593,36 +593,6 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             pad->ImportSettingsFrom( *master );
 
-            // If the footprint type and master pad type directly conflict then make some
-            // adjustments.  Otherwise assume the user set what they wanted.
-            // Note also a HEATSINK pad (thermal via) is allowed in SMD footprint
-            if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_SMD )
-                    && master->GetAttribute() == PAD_ATTRIB::PTH )
-            {
-                if( pad->GetProperty() != PAD_PROP::HEATSINK )
-                {
-                    pad->SetAttribute( PAD_ATTRIB::SMD );
-                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-                    pad->SetSizeX( 1.5 * pad->GetSizeY() );
-                    pad->SetLayerSet( PAD::SMDMask() );
-                }
-            }
-            else if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_THROUGH_HOLE )
-                    && master->GetAttribute() == PAD_ATTRIB::SMD )
-            {
-                pad->SetAttribute( PAD_ATTRIB::PTH );
-                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pad->GetSizeX(), pad->GetSizeX() ) );
-
-                // Gives an acceptable drill size: it cannot be 0, but from pad master
-                // it is currently 0, therefore change it:
-                pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-                int hole_size = pad->GetSizeX() / 2;
-                pad->SetDrillSize( VECTOR2I( hole_size, hole_size ) );
-
-                pad->SetLayerSet( PAD::PTHMask() );
-            }
-
             if( pad->CanHaveNumber() )
             {
                 wxString padNumber = m_padTool->GetLastPadNumber();
@@ -686,7 +656,8 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                 ignored_items.insert( ignored_items.end(), graphics.begin(), graphics.end() );
             }
 
-            VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, LSET::AllLayersMask(), GRID_CURRENT, ignored_items );
+            VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, LSET::AllLayersMask(), GRID_CURRENT,
+                                                              ignored_items );
             viewControls->ForceCursorPosition( true, cursorPos );
             aItem->SetPosition( cursorPos );
         }
@@ -903,7 +874,7 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
 
 std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
 {
-    int        maxError = board()->GetDesignSettings().m_MaxError;
+    int maxError = board()->GetDesignSettings().m_MaxError;
 
     // Don't leave an object in the point editor that might no longer exist after recombining.
     m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -936,7 +907,7 @@ void PAD_TOOL::setTransitions()
 
     Go( &PAD_TOOL::PlacePad,                PCB_ACTIONS::placePad.MakeEvent() );
     Go( &PAD_TOOL::EnumeratePads,           PCB_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &PAD_TOOL::PadTable,              PCB_ACTIONS::padTable.MakeEvent() );
+    Go( &PAD_TOOL::PadTable,                PCB_ACTIONS::padTable.MakeEvent() );
 
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::explodePad.MakeEvent() );
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::recombinePad.MakeEvent() );
