@@ -168,7 +168,7 @@ const wxSize ZONE_PREVIEW_CANVAS::GetPageSizeIU() const
 
 void ZONE_PREVIEW_CANVAS::ZoomFitScreen()
 {
-    BOX2I bBox = GetDocumentExtents();
+    BOX2I bBox = GetDocumentExtents( false );
     BOX2I defaultBox = GetDefaultViewBBox();
 
     m_view->SetScale( 1.0 );
