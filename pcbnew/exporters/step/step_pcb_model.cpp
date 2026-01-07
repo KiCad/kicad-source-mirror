@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -73,6 +74,7 @@
 #include <TDocStd_XLinkTool.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
+#include <TDF_ChildIterator.hxx>
 #include <TDF_LabelSequence.hxx>
 #include <TDF_Tool.hxx>
 #include <TopExp_Explorer.hxx>
@@ -3141,12 +3143,126 @@ bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fna
 }
 
 
+void STEP_PCB_MODEL::transferColors( Handle( XCAFDoc_ShapeTool )& aSrcShapeTool,
+                                     Handle( XCAFDoc_ColorTool )& aSrcColorTool,
+                                     Handle( XCAFDoc_ShapeTool )& aDstShapeTool,
+                                     Handle( XCAFDoc_ColorTool )& aDstColorTool )
+{
+    // Get all shapes from the source document
+    TDF_LabelSequence srcLabels;
+    aSrcShapeTool->GetShapes( srcLabels );
+
+    for( Standard_Integer i = 1; i <= srcLabels.Length(); i++ )
+    {
+        TDF_Label srcLabel = srcLabels.Value( i );
+        TopoDS_Shape srcShape = aSrcShapeTool->GetShape( srcLabel );
+
+        if( srcShape.IsNull() )
+            continue;
+
+        // Try to find the same shape in the destination document
+        TDF_Label dstLabel;
+
+        if( !aDstShapeTool->Search( srcShape, dstLabel, Standard_True, Standard_True, Standard_False ) )
+            continue;
+
+        // Transfer surface color
+        Quantity_ColorRGBA surfColor;
+
+        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorSurf, surfColor ) )
+            aDstColorTool->SetColor( dstLabel, surfColor, XCAFDoc_ColorSurf );
+
+        // Transfer curve color
+        Quantity_ColorRGBA curvColor;
+
+        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorCurv, curvColor ) )
+            aDstColorTool->SetColor( dstLabel, curvColor, XCAFDoc_ColorCurv );
+
+        // Transfer generic color
+        Quantity_ColorRGBA genColor;
+
+        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorGen, genColor ) )
+            aDstColorTool->SetColor( dstLabel, genColor, XCAFDoc_ColorGen );
+
+        // Also check for colors on individual faces
+        if( aSrcShapeTool->IsSimpleShape( srcLabel ) )
+        {
+            TopoDS_Shape shape = aSrcShapeTool->GetShape( srcLabel );
+
+            for( TopExp_Explorer exp( shape, TopAbs_FACE ); exp.More(); exp.Next() )
+            {
+                TopoDS_Face face = TopoDS::Face( exp.Current() );
+                Quantity_ColorRGBA faceColor;
+
+                if( aSrcColorTool->GetColor( face, XCAFDoc_ColorSurf, faceColor ) )
+                    aDstColorTool->SetColor( face, faceColor, XCAFDoc_ColorSurf );
+                else if( aSrcColorTool->GetColor( face, XCAFDoc_ColorGen, faceColor ) )
+                    aDstColorTool->SetColor( face, faceColor, XCAFDoc_ColorGen );
+            }
+        }
+    }
+
+    // Also iterate through subshapes and components recursively
+    TDF_LabelSequence srcFreeShapes;
+    aSrcShapeTool->GetFreeShapes( srcFreeShapes );
+
+    std::function<void( const TDF_Label& )> transferColorsRecursive = [&]( const TDF_Label& aLabel )
+    {
+        TopoDS_Shape shape = aSrcShapeTool->GetShape( aLabel );
+
+        if( shape.IsNull() )
+            return;
+
+        // Find this shape in destination
+        TDF_Label dstLabel;
+
+        if( aDstShapeTool->Search( shape, dstLabel, Standard_True, Standard_True, Standard_False ) )
+        {
+            Quantity_ColorRGBA color;
+
+            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorSurf, color ) )
+                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorSurf );
+
+            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorCurv, color ) )
+                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorCurv );
+
+            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorGen, color ) )
+                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorGen );
+        }
+
+        // Process children
+        for( TDF_ChildIterator it( aLabel ); it.More(); it.Next() )
+            transferColorsRecursive( it.Value() );
+
+        // Process components if this is an assembly
+        if( aSrcShapeTool->IsAssembly( aLabel ) )
+        {
+            TDF_LabelSequence components;
+            aSrcShapeTool->GetComponents( aLabel, components );
+
+            for( Standard_Integer j = 1; j <= components.Length(); j++ )
+            {
+                TDF_Label compLabel = components.Value( j );
+                TDF_Label refLabel;
+
+                if( aSrcShapeTool->GetReferredShape( compLabel, refLabel ) )
+                    transferColorsRecursive( refLabel );
+            }
+        }
+    };
+
+    for( Standard_Integer i = 1; i <= srcFreeShapes.Length(); i++ )
+        transferColorsRecursive( srcFreeShapes.Value( i ) );
+}
+
+
 TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
                                          Handle( TDocStd_Document ) & dest, VECTOR3D aScale )
 {
     // transfer data from Source into a top level component of Dest
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
+    Handle( XCAFDoc_ColorTool ) s_color = XCAFDoc_DocumentTool::ColorTool( source->Main() );
 
     // retrieve all free shapes within the assembly
     TDF_LabelSequence frshapes;
@@ -3154,6 +3270,7 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
 
     // d_assy = shape tool for the destination
     Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool( dest->Main() );
+    Handle( XCAFDoc_ColorTool ) d_color = XCAFDoc_DocumentTool::ColorTool( dest->Main() );
 
     // create a new shape within the destination and set the assembly tool to point to it
     TDF_Label d_targetLabel = d_assy->NewShape();
@@ -3212,6 +3329,11 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
             d_assy->AddComponent( d_targetLabel, d_component, TopLoc_Location() );
         }
     }
+
+    // Transfer colors from source to destination document
+    // This is necessary because TDocStd_XLinkTool::Copy may not properly transfer
+    // color associations which are stored separately in the ColorTool section
+    transferColors( s_assy, s_color, d_assy, d_color );
 
     if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
         rescaleShapes( d_targetLabel, gp_XYZ( aScale.x, aScale.y, aScale.z ) );

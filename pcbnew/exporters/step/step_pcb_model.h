@@ -68,6 +68,7 @@ class PAD;
 
 class TDocStd_Document;
 class XCAFApp_Application;
+class XCAFDoc_ColorTool;
 class XCAFDoc_ShapeTool;
 
 typedef std::pair< std::string, TDF_Label > MODEL_DATUM;
@@ -260,6 +261,20 @@ private:
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source, Handle( TDocStd_Document ) & dest,
                              VECTOR3D aScale );
+
+    /**
+     * Transfer color information from source document to destination document.
+     *
+     * This is necessary because TDocStd_XLinkTool::Copy may not properly transfer color
+     * associations which are stored separately in the ColorTool section of XDE documents.
+     * Colors are matched by searching for equivalent shapes in the destination document.
+     */
+    void transferColors( Handle( XCAFDoc_ShapeTool )& aSrcShapeTool,
+                         Handle( XCAFDoc_ColorTool )& aSrcColorTool,
+                         Handle( XCAFDoc_ShapeTool )& aDstShapeTool,
+                         Handle( XCAFDoc_ColorTool )& aDstColorTool );
+
+    bool CompressSTEP( wxString& inputFile, wxString& outputFile );
 
     Handle( XCAFApp_Application )   m_app;
     Handle( TDocStd_Document )      m_doc;
