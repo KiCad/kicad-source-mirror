@@ -801,6 +801,13 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
     // Create a temporary board to hold the footprint (required by the dialog)
     std::unique_ptr<BOARD> tempBoard( new BOARD() );
 
+    // Set up the temp board with the current project and board settings.
+    // Use reference-only mode to avoid modifying the project's settings.
+    tempBoard->SetDesignSettings( m_frame->GetBoard()->GetDesignSettings() );
+    tempBoard->SetProject( &m_frame->Prj(), true );
+    tempBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+    tempBoard->SynchronizeProperties();
+
     // Create a copy to work with and add it to the temporary board
     FOOTPRINT* tempFootprint = static_cast<FOOTPRINT*>( libraryFootprint->Clone() );
     delete libraryFootprint;
