@@ -978,10 +978,10 @@ BOOST_AUTO_TEST_CASE( Slice )
                            expectedSliceArc0.GetP0() ); // equal to arc start
         BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
 
-        for( int i = 1; i <= 6; i++ )
+        for( int i = 1; i <= 4; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
 
-        for( int i = 0; i <= 5; i++ )
+        for( int i = 0; i <= 3; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
 
         BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 4 ), true );
@@ -1013,10 +1013,10 @@ BOOST_AUTO_TEST_CASE( Slice )
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), sliceArc0.GetP0() ); // equal to arc start
         BOOST_CHECK_EQUAL( sliceResult.IsArcStart( 0 ), true );
 
-        for( int i = 1; i <= 4; i++ )
+        for( int i = 1; i <= 6; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcStart( i ), false );
 
-        for( int i = 0; i <= 3; i++ )
+        for( int i = 0; i <= 5; i++ )
             BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( i ), false );
 
         BOOST_CHECK_EQUAL( sliceResult.IsArcEnd( 6 ), true );
