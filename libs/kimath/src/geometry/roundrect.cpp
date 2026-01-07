@@ -86,6 +86,10 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
     // typical maxError.
     int               maxError = aMaxError / 5;
 
+    SHAPE_POLY_SET    tmp;
+    const int         idx = tmp.NewOutline();
+    SHAPE_LINE_CHAIN& outline = tmp.Outline( idx );
+
     const int w = m_rect.GetWidth();
     const int h = m_rect.GetHeight();
 
@@ -108,9 +112,6 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
         wxLogDebug( "ROUNDRECT::TransformToPolygon: Degenerate roundrect, skipping polygon generation." );
         return;
     }
-
-    const int         idx = aBuffer.NewOutline();
-    SHAPE_LINE_CHAIN& outline = aBuffer.Outline( idx );
 
     const VECTOR2I& m_p0 = m_rect.GetPosition();
 
@@ -178,4 +179,5 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
     }
 
     outline.SetClosed( true );
+    aBuffer = std::move( tmp );
 }
