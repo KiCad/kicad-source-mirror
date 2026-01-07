@@ -137,6 +137,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXP
         m_buttonDRC->Hide();
         m_DRCExclusionsWarning->Hide();
         m_sdbSizer1Apply->Hide();
+        m_zoneFillCheck->SetLabel( _( "Refill zones before plotting" ) );
     }
     else
     {

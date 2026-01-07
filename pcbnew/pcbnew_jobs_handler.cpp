@@ -929,7 +929,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     if( aSvgJob->m_argLayers )
@@ -995,7 +995,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     if( aDxfJob->m_argLayers )
@@ -1082,7 +1082,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     if( pdfJob->m_argLayers )
@@ -1170,7 +1170,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     if( psJob->m_argLayers )
@@ -1266,7 +1266,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     bool hasLayerListSpecified = false; // will be true if the user layer list is not empty
@@ -1581,7 +1581,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
             toolManager->RegisterTool( new ZONE_FILLER_TOOL );
 
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( nullptr );
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
     PCB_PLOT_PARAMS plotOpts;
