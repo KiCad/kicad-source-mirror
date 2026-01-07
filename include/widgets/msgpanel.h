@@ -107,20 +107,11 @@ public:
 
     void OnPaint( wxPaintEvent& aEvent );
     void OnDPIChanged( wxDPIChangedEvent& aEvent );
+    void OnSize( wxSizeEvent& aEvent );
     void EraseMsgBox();
 
     wxSize DoGetBestSize() const override;
     wxSize DoGetBestClientSize() const override;
-
-    /**
-     * Set a message at \a aXPosition to \a aUpperText and \a aLowerText in the message panel.
-     *
-     * @param aXPosition The horizontal position to display the message or less than zero
-     *                   to set the message using the last message position.
-     * @param aUpperText The text to be displayed in top line.
-     * @param aLowerText The text to be displayed in bottom line.
-     */
-    void SetMessage( int aXPosition, const wxString& aUpperText, const wxString& aLowerText );
 
    /**
     * Append a message to the message panel.
@@ -152,6 +143,10 @@ public:
 
 protected:
     void updateFontSize();
+
+    void rebuildItems();
+
+    void updateItemPos( MSG_PANEL_ITEM& aItem );
 
     void showItem( wxDC& dc, const MSG_PANEL_ITEM& aItem );
 

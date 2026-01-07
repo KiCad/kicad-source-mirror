@@ -284,7 +284,7 @@ void BITMAP_BUTTON::OnDPIChanged( wxDPIChangedEvent& aEvent )
         invalidateBestSize();
     }
 
-    // Don't skip, otherwise the button gets too big
+    aEvent.Skip();
 }
 
 

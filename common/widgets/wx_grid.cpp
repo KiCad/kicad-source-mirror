@@ -244,7 +244,7 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
                    wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
                } );
 
-    // Don't skip, otherwise the grid gets too big
+    aEvt.Skip();
 }
 
 

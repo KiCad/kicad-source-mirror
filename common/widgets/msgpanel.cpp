@@ -38,6 +38,7 @@
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
     EVT_DPI_CHANGED( EDA_MSG_PANEL::OnDPIChanged )
+    EVT_SIZE( EDA_MSG_PANEL::OnSize )
     EVT_PAINT( EDA_MSG_PANEL::OnPaint )
 END_EVENT_TABLE()
 
@@ -93,6 +94,21 @@ void EDA_MSG_PANEL::OnDPIChanged( wxDPIChangedEvent& aEvent )
 }
 
 
+void EDA_MSG_PANEL::rebuildItems()
+{
+    m_last_x = 0;
+
+    for( MSG_PANEL_ITEM& item : m_Items )
+        updateItemPos( item );
+}
+
+
+void EDA_MSG_PANEL::OnSize( wxSizeEvent& aEvent )
+{
+    rebuildItems();
+}
+
+
 void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
 {
     wxPaintDC dc( this );
@@ -111,16 +127,15 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
 }
 
 
-void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText, const wxString& aLowerText,
-                                   int aPadding )
+void EDA_MSG_PANEL::updateItemPos( MSG_PANEL_ITEM& item )
 {
-    wxString    text;
-    wxSize      drawSize = GetClientSize();
+    wxString text;
+    wxString upperText = item.GetUpperText();
+    wxString lowerText = item.GetLowerText();
+    wxSize   drawSize = GetClientSize();
 
-    text = ( aUpperText.Len() > aLowerText.Len() ) ? aUpperText : aLowerText;
-    text.Append( ' ', aPadding );
-
-    MSG_PANEL_ITEM item;
+    text = ( upperText.Len() > lowerText.Len() ) ? upperText : lowerText;
+    text.Append( ' ', item.GetPadding() );
 
     /* Don't put the first message a window client position 0.  Offset by
      * one 'W' character width. */
@@ -132,62 +147,22 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText, const wxString& a
     item.m_UpperY = ( drawSize.y / 2 ) - m_fontSize.y;
     item.m_LowerY = drawSize.y - m_fontSize.y;
 
-    item.m_UpperText = aUpperText;
-    item.m_LowerText = aLowerText;
-    m_Items.push_back( item );
     m_last_x += GetTextExtent( text ).x;
 
     // Add an extra space between texts for a better look:
     m_last_x += m_fontSize.x;
-
-    Refresh();
 }
 
 
-void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
-                                const wxString& aLowerText )
+void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText, const wxString& aLowerText, int aPadding )
 {
-    wxPoint pos;
-    wxSize drawSize = GetClientSize();
-
-    if( aXPosition >= 0 )
-        m_last_x = pos.x = aXPosition * (m_fontSize.x + 2);
-    else
-        pos.x = m_last_x;
-
     MSG_PANEL_ITEM item;
-
-    item.m_X = pos.x;
-
-    item.m_UpperY = (drawSize.y / 2) - m_fontSize.y;
-    item.m_LowerY = drawSize.y - m_fontSize.y;
 
     item.m_UpperText = aUpperText;
     item.m_LowerText = aLowerText;
 
-    int ndx;
-
-    // update the vector, which is sorted by m_X
-    int limit = m_Items.size();
-
-    for( ndx = 0;  ndx < limit;  ++ndx )
-    {
-        // replace any item with same X
-        if( m_Items[ndx].m_X == item.m_X )
-        {
-            m_Items[ndx] = item;
-            break;
-        }
-
-        if( m_Items[ndx].m_X > item.m_X )
-        {
-            m_Items.insert( m_Items.begin() + ndx, item );
-            break;
-        }
-    }
-
-    if( ndx == limit )        // mutually exclusive with two above if tests
-        m_Items.push_back( item );
+    updateItemPos( item );
+    m_Items.push_back( item );
 
     Refresh();
 }

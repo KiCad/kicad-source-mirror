@@ -304,14 +304,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Ensure the window is on top
     Raise();
-
-    Bind( wxEVT_DPI_CHANGED,
-          [&]( wxDPIChangedEvent& )
-          {
-              m_auimgr.Update();
-
-              // Don't skip, otherwise the frame gets too big
-          } );
 }
 
 

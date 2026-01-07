@@ -192,6 +192,27 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
 
     commonInit( aFrameType );
 
+    Bind( wxEVT_DPI_CHANGED,
+          [&]( wxDPIChangedEvent& aEvent )
+          {
+#ifdef __WXMSW__
+              // Workaround to update toolbar sizes on MSW
+              wxAuiPaneInfoArray& panes = m_auimgr.GetAllPanes();
+
+              for( wxAuiPaneInfo& pinfo : panes )
+              {
+                  pinfo.best_size = pinfo.window->GetSize();
+
+                  // But we still shouldn't make it too small.
+                  pinfo.best_size.IncTo( pinfo.window->GetBestSize() );
+                  pinfo.best_size.IncTo( pinfo.min_size );
+              }
+
+              m_auimgr.Update();
+#endif
+
+              aEvent.Skip();
+          } );
 }
 
 
@@ -315,6 +336,18 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 
         if( dlg )
             dlg->Raise();
+    }
+#endif
+
+#ifdef __WXMSW__
+    // When changing DPI to a lower value, somehow, called from wxNonOwnedWindow::HandleDPIChange,
+    // our sizers compute a min size that is larger than the old frame size. wx then sets this wrong size.
+    // This shouldn't be needed since the OS have already sent a size event.
+    // Avoid this wx behaviour by pretending we've processed the event even if we use Skip in handlers.
+    if( aEvent.GetEventType() == wxEVT_DPI_CHANGED )
+    {
+        wxFrame::ProcessEvent( aEvent );
+        return true;
     }
 #endif
 

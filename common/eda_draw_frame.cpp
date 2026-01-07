@@ -150,7 +150,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_messagePanel->SetSize( m_frameSize.x, m_msgFrameHeight );
 
     Bind( wxEVT_DPI_CHANGED,
-          [&]( wxDPIChangedEvent& )
+          [&]( wxDPIChangedEvent& aEvent )
           {
               if( ( GetWindowStyle() & wxFRAME_NO_TASKBAR ) == 0 )
                   updateStatusBarWidths();
@@ -168,7 +168,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
               m_messagePanel->SetPosition( wxPoint( 0, m_frameSize.y ) );
               m_messagePanel->SetSize( m_frameSize.x, m_msgFrameHeight );
 
-              // Don't skip, otherwise the frame gets too big
+              aEvent.Skip();
           } );
 }
 
