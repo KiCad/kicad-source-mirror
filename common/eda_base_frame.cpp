@@ -197,18 +197,21 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
           {
 #ifdef __WXMSW__
               // Workaround to update toolbar sizes on MSW
-              wxAuiPaneInfoArray& panes = m_auimgr.GetAllPanes();
-
-              for( wxAuiPaneInfo& pinfo : panes )
+              if( m_auimgr.GetManagedWindow() )
               {
-                  pinfo.best_size = pinfo.window->GetSize();
+                  wxAuiPaneInfoArray& panes = m_auimgr.GetAllPanes();
 
-                  // But we still shouldn't make it too small.
-                  pinfo.best_size.IncTo( pinfo.window->GetBestSize() );
-                  pinfo.best_size.IncTo( pinfo.min_size );
+                  for( wxAuiPaneInfo& pinfo : panes )
+                  {
+                      pinfo.best_size = pinfo.window->GetSize();
+
+                      // But we still shouldn't make it too small.
+                      pinfo.best_size.IncTo( pinfo.window->GetBestSize() );
+                      pinfo.best_size.IncTo( pinfo.min_size );
+                  }
+
+                  m_auimgr.Update();
               }
-
-              m_auimgr.Update();
 #endif
 
               aEvent.Skip();
