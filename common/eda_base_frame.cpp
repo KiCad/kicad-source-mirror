@@ -201,8 +201,9 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
               {
                   wxAuiPaneInfoArray& panes = m_auimgr.GetAllPanes();
 
-                  for( wxAuiPaneInfo& pinfo : panes )
+                  for( size_t ii = 0; ii < panes.GetCount(); ii++ )
                   {
+                      wxAuiPaneInfo& pinfo = panes.Item( ii );
                       pinfo.best_size = pinfo.window->GetSize();
 
                       // But we still shouldn't make it too small.
