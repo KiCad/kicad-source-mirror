@@ -585,7 +585,7 @@ void EDA_BASE_FRAME::RecreateToolbars()
         if( !m_tbRight )
         {
             m_tbRight = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL | wxAUI_TB_TEXT );
             m_tbRight->SetAuiManager( &m_auimgr );
         }
 
@@ -600,7 +600,7 @@ void EDA_BASE_FRAME::RecreateToolbars()
         if( !m_tbLeft )
         {
             m_tbLeft = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                   KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+                                           KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL | wxAUI_TB_TEXT );
             m_tbLeft->SetAuiManager( &m_auimgr );
         }
 
@@ -615,7 +615,8 @@ void EDA_BASE_FRAME::RecreateToolbars()
         if( !m_tbTopMain )
         {
             m_tbTopMain = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                              KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL
+                                                      | wxAUI_TB_TEXT );
             m_tbTopMain->SetAuiManager( &m_auimgr );
         }
 
@@ -630,7 +631,8 @@ void EDA_BASE_FRAME::RecreateToolbars()
         if( !m_tbTopAux )
         {
             m_tbTopAux = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                     KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL
+                                                     | wxAUI_TB_TEXT );
             m_tbTopAux->SetAuiManager( &m_auimgr );
         }
 
