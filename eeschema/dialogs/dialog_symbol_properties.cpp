@@ -76,7 +76,7 @@ static void EnableFocusDebugging( wxWindow* aWindow, const wxString& aWindowName
         if( ctrl && !ctrl->GetLabel().empty() )
             controlLabel = ctrl->GetLabel();
 
-        wxString windowInfo = aWindowName.empty() ? wxS( "" ) : aWindowName + wxS( ": " );
+        wxString windowInfo = aWindowName.empty() ? wxString( "" ) : aWindowName + wxString( ": " );
 
         if( aEvent.GetEventType() == wxEVT_SET_FOCUS )
         {
