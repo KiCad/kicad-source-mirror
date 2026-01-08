@@ -77,6 +77,7 @@
 #include <tools/sch_tool_utils.h>
 #include <tools/sch_edit_table_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <view/view_controls.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
@@ -95,6 +96,7 @@
 #include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/mstream.h>
+#include <wx/clipbrd.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -229,10 +231,12 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
 /**
  * Helper to render selection to a bitmap with a specific background color.
  * Used for dual-buffer alpha computation.
+ *
+ * @param aIncludeDrawingSheet If true, include the drawing sheet layer in the render
  */
 wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
                                  const BOX2I& aBBox, int aWidth, int aHeight, double aViewScale,
-                                 const wxColour& aBgColor )
+                                 const wxColour& aBgColor, bool aIncludeDrawingSheet = false )
 {
     wxBitmap bitmap( aWidth, aHeight, 24 );
     wxMemoryDC dc;
@@ -294,7 +298,30 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
         view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 
-    view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
+    view->SetLayerVisible( LAYER_DRAWINGSHEET, aIncludeDrawingSheet );
+
+    // Create and add drawing sheet proxy view item if requested
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet;
+
+    if( aIncludeDrawingSheet )
+    {
+        SCH_SCREEN* screen = aFrame->GetScreen();
+
+        drawingSheet.reset( new DS_PROXY_VIEW_ITEM( schIUScale, &screen->GetPageSettings(),
+                                                    &screen->Schematic()->Project(),
+                                                    &screen->GetTitleBlock(),
+                                                    screen->Schematic()->GetProperties() ) );
+        drawingSheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+        drawingSheet->SetSheetCount( screen->GetPageCount() );
+        drawingSheet->SetFileName( TO_UTF8( screen->GetFileName() ) );
+        drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+        drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
+        drawingSheet->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
+        drawingSheet->SetSheetName( TO_UTF8( aFrame->GetScreenDesc() ) );
+        drawingSheet->SetSheetPath( TO_UTF8( aFrame->GetFullScreenDesc() ) );
+
+        view->Add( drawingSheet.get() );
+    }
 
     // Set up page size to match the output bitmap dimensions at our target ppi.
     // This ensures the content will be centered in the bitmap.
@@ -327,7 +354,7 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
 
 
 bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
-                         wxMemoryBuffer& aBuffer )
+                         wxMemoryBuffer& aBuffer, bool aIncludeDrawingSheet = false )
 {
     VECTOR2I size = aBBox.GetSize();
 
@@ -357,9 +384,9 @@ bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
     // - On black: result_b = α*F
     // Therefore: α = 1 - (result_w - result_b)/255
     wxImage imageOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
-                                                    bitmapHeight, viewScale, *wxWHITE );
+                                                    bitmapHeight, viewScale, *wxWHITE, aIncludeDrawingSheet );
     wxImage imageOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
-                                                    bitmapHeight, viewScale, *wxBLACK );
+                                                    bitmapHeight, viewScale, *wxBLACK, aIncludeDrawingSheet );
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
         return false;
@@ -2998,7 +3025,50 @@ int SCH_EDITOR_CONTROL::GenerateBOMLegacy( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
 {
     m_frame->RecalculateConnections( nullptr, LOCAL_CLEANUP );
-    m_frame->DrawCurrentSheetToClipboard();
+
+    // Create a selection with all items from the current sheet
+    SCH_SELECTION sheetSelection;
+    SCH_SCREEN* screen = m_frame->GetScreen();
+
+    for( SCH_ITEM* item : screen->Items() )
+    {
+        sheetSelection.Add( item );
+    }
+
+    // Get the full page bounding box for rendering the complete sheet
+    BOX2I pageBBox( VECTOR2I( 0, 0 ), m_frame->GetPageSizeIU() );
+
+    wxMemoryBuffer pngBuffer;
+
+    // Use plotSelectionToPng with the full sheet selection and include the worksheet
+    if( plotSelectionToPng( m_frame, sheetSelection, pageBBox, pngBuffer, true )
+        && pngBuffer.GetDataLen() > 0 )
+    {
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject();
+
+            // Load PNG from buffer into bitmap
+            wxMemoryInputStream stream( pngBuffer.GetData(), pngBuffer.GetDataLen() );
+            wxImage image( stream, wxBITMAP_TYPE_PNG );
+
+            if( image.IsOk() )
+            {
+                clipbrd_data->SetBitmap( wxBitmap( image ) );
+                wxTheClipboard->SetData( clipbrd_data );
+                wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            }
+
+            wxTheClipboard->Close();
+        }
+    }
+    else
+    {
+        wxLogMessage( _( "Cannot create the schematic image" ) );
+    }
+
     return 0;
 }
 
