@@ -2392,18 +2392,16 @@ static std::vector<std::pair<T*, T*>> matchItemsBySimilarity( const std::vector<
 
             double similarity = existing->Similarity( *updated );
 
-            if( similarity <= 0.0 )
-                continue;
-
-            double score = similarity;
-
             if constexpr( std::is_same_v<T, PAD> )
             {
                 if( existing->GetNumber() == updated->GetNumber() )
-                    score += 2.0;
+                    similarity += 2.0;
             }
 
-            candidates.push_back( { existing, updated, score } );
+            if( similarity <= 0.0 )
+                continue;
+
+            candidates.push_back( { existing, updated, similarity } );
         }
     }
 
