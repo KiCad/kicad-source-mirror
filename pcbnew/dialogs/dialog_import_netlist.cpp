@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
@@ -80,6 +81,15 @@ DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
 {
     if( m_runDragCommand )
     {
+        PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        PCB_SELECTION&      selection = selTool->GetSelection();
+
+        // Set the reference point to (0,0) where the new footprints were spread. This ensures
+        // the move tool knows where the items are located, preventing an offset when the "warp
+        // cursor to origin of moved object" preference is disabled.
+        if( selection.Size() > 0 )
+            selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
+
         KIGFX::VIEW_CONTROLS* controls = m_parent->GetCanvas()->GetViewControls();
         controls->SetCursorPosition( controls->GetMousePosition() );
         m_parent->GetToolManager()->RunAction( PCB_ACTIONS::move );

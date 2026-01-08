@@ -30,6 +30,7 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <view/view_controls.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
@@ -63,6 +64,15 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
     if( m_runDragCommand )
     {
+        PCB_SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        PCB_SELECTION&      selection = selTool->GetSelection();
+
+        // Set the reference point to (0,0) where the new footprints were spread. This ensures
+        // the move tool knows where the items are located, preventing an offset when the "warp
+        // cursor to origin of moved object" preference is disabled.
+        if( selection.Size() > 0 )
+            selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
+
         KIGFX::VIEW_CONTROLS* controls = m_frame->GetCanvas()->GetViewControls();
         controls->SetCursorPosition( controls->GetMousePosition() );
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::move );
