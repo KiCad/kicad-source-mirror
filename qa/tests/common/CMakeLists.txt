@@ -92,6 +92,8 @@ set( QA_COMMON_SRCS
 
     view/test_zoom_controller.cpp
 
+    test_netname_validator.cpp
+
     # GAL tests
     test_gal_xor_mode.cpp
 

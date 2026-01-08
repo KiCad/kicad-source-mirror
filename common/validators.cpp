@@ -167,7 +167,7 @@ void ENV_VAR_NAME_VALIDATOR::OnTextChanged( wxCommandEvent& event )
 
 NETNAME_VALIDATOR::NETNAME_VALIDATOR( wxString *aVal ) :
          wxTextValidator(),
-         m_allowSpaces( false )
+         m_allowSpaces( true )
 {
 }
 
