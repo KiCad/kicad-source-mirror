@@ -442,6 +442,11 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
         SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Variant" ) );
 
+    Layout();
+
+    if( GetSizer() )
+        GetSizer()->Fit( this );
+
     finishDialogSettings();
 }
 
@@ -1133,6 +1138,7 @@ void DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection( wxCommandEvent& event )
         KIUI::SelectReferenceNumber( txt );
 
     cellEditor->DecRef();   // we're done; must release
+    delete loc;
 }
 
 
