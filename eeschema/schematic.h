@@ -618,6 +618,10 @@ private:
     wxString m_currentVariant;
 
     std::set<wxString> m_variantNames;
+
+    /// Re-entry guard to prevent infinite recursion between ensureDefaultTopLevelSheet and
+    /// RefreshHierarchy when setting up new schematics
+    bool m_settingTopLevelSheets = false;
 };
 
 #endif

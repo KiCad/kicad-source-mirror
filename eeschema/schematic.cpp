@@ -272,6 +272,10 @@ void SCHEMATIC::ensureVirtualRoot()
 
 void SCHEMATIC::ensureDefaultTopLevelSheet()
 {
+    // Early exit if we're already in the process of setting top-level sheets to avoid recursion
+    if( m_settingTopLevelSheets )
+        return;
+
     ensureVirtualRoot();
 
     if( !m_topLevelSheets.empty() )
@@ -339,9 +343,14 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
     if( validSheets.empty() )
     {
-        ensureDefaultTopLevelSheet();
+        // Guard against re-entry to prevent infinite recursion
+        if( !m_settingTopLevelSheets )
+            ensureDefaultTopLevelSheet();
+
         return;
     }
+
+    m_settingTopLevelSheets = true;
 
     ensureVirtualRoot();
 
@@ -375,6 +384,8 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
     ensureCurrentSheetIsTopLevel();
     rebuildHierarchyState( true );
+
+    m_settingTopLevelSheets = false;
 }
 
 
