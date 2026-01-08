@@ -331,4 +331,96 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesFootprintProperties, MULTICHANNEL_TES
 }
 
 
+/**
+ * Test that repeat layout does not remove vias from the reference area when a copper zone
+ * has the same name as one of the rule areas (issue 21184).
+ *
+ * The bug occurred because enclosedByArea() matched zones by name, and when a copper fill zone
+ * shared a name with a rule area, items enclosed by either zone could be incorrectly affected.
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutDoesNotRemoveReferenceVias, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue21184/issue21184", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Found %d rule areas",
+                                          static_cast<int>( ruleData->m_areas.size() ) ) );
+
+    BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 2 );
+
+    if( ruleData->m_areas.size() < 2 )
+        return;
+
+    RULE_AREA* refArea = nullptr;
+    RULE_AREA* targetArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_ruleName == wxT( "Test1" ) )
+            refArea = &ra;
+        else if( ra.m_ruleName == wxT( "Test2" ) )
+            targetArea = &ra;
+    }
+
+    BOOST_REQUIRE( refArea != nullptr );
+    BOOST_REQUIRE( targetArea != nullptr );
+
+    int refViaCountBefore = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            VECTOR2I viaPos = via->GetPosition();
+
+            if( refArea->m_zone->Outline()->Contains( viaPos ) )
+                refViaCountBefore++;
+        }
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Reference area vias before repeat: %d", refViaCountBefore ) );
+    BOOST_CHECK( refViaCountBefore > 0 );
+
+    mtTool->CheckRACompatibility( refArea->m_zone );
+
+    ruleData->m_compatMap[targetArea].m_doCopy = true;
+    ruleData->m_options.m_copyPlacement = true;
+    ruleData->m_options.m_copyRouting = true;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone );
+
+    BOOST_CHECK( result >= 0 );
+
+    int refViaCountAfter = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            VECTOR2I viaPos = via->GetPosition();
+
+            if( refArea->m_zone->Outline()->Contains( viaPos ) )
+                refViaCountAfter++;
+        }
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Reference area vias after repeat: %d", refViaCountAfter ) );
+
+    BOOST_CHECK_EQUAL( refViaCountAfter, refViaCountBefore );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
