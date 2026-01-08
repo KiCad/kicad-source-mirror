@@ -624,7 +624,11 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 #else
             int chunkSize = 100000;
 #endif
-            if( dc.GetPen().GetStyle() == wxPENSTYLE_DOT )
+            wxPenStyle penStyle = dc.GetPen().GetStyle();
+            bool isSolidPen = ( penStyle == wxPENSTYLE_SOLID
+                                || penStyle == wxPENSTYLE_TRANSPARENT );
+
+            if( !isSolidPen )
                 chunkSize /= 500;
 
             drawPoints.push_back( pointList[0] );   // push the first point in list
@@ -632,9 +636,11 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             for( size_t ii = 1; ii < pointList.size()-1; ii++ )
             {
                 // Skip intermediate points between the first point and the last point of the
-                // segment candidate
-                if( drawPoints.back().y == pointList[ii].y &&
-                    drawPoints.back().y == pointList[ii+1].y )
+                // segment candidate. This optimization merges horizontal line segments, which
+                // breaks non-solid pen styles by altering segment lengths.
+                if( isSolidPen
+                    && drawPoints.back().y == pointList[ii].y
+                    && drawPoints.back().y == pointList[ii+1].y )
                 {
                     continue;
                 }
