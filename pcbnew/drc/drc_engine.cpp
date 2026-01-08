@@ -2374,7 +2374,7 @@ void DRC_ENGINE::InitializeClearanceCache()
         return localCache;
     };
 
-    auto results = tp.parallelize_loop( itemsToProcess.size(),
+    auto results = tp.submit_loop( 0, itemsToProcess.size(),
             [&]( size_t aStart, size_t aEnd ) -> CLEARANCE_MAP
             {
                 return processItems( aStart, aEnd, itemsToProcess );
