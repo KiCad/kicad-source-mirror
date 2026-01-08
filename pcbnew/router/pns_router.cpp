@@ -353,6 +353,24 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             return false;
         }
 
+        // Check if the gap at the start point is compatible with the configured diff pair settings.
+        // This catches neckdown areas where the existing tracks have different gap/width than configured.
+        int actualGap = ( dpPair.AnchorP() - dpPair.AnchorN() ).EuclideanNorm();
+        int configuredGap = m_sizes.DiffPairGap() + m_sizes.DiffPairWidth();
+
+        // Allow some tolerance (10%) for minor differences, but warn about significant mismatches
+        int tolerance = configuredGap / 10;
+
+        if( std::abs( actualGap - configuredGap ) > tolerance )
+        {
+            SetFailureReason(
+                    _( "The differential pair gap at the start point does not match "
+                       "the configured gap. This can occur in neckdown areas where tracks "
+                       "have narrower width and spacing. Adjust the differential pair "
+                       "settings or start from a location with the correct gap." ) );
+            return false;
+        }
+
         SHAPE_LINE_CHAIN dummyStartSegA;
         SHAPE_LINE_CHAIN dummyStartSegB;
         LINE             dummyStartLineA;
