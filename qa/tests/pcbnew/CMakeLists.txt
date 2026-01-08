@@ -80,6 +80,8 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/kicad_sexpr/test_kicad_sexpr.cpp
 
+    pcb_io/fabmaster/test_fabmaster_import.cpp
+
     group_saveload.cpp
 )
 

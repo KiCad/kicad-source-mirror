@@ -2223,25 +2223,22 @@ bool FABMASTER::loadZones( BOARD* aBoard )
      * outline.
      */
     std::set<ZONE*> zones_to_delete;
+    std::set<ZONE*> matched_fills;
 
     for( auto zone : aBoard->Zones() )
     {
-        /// Remove the filled areas in favor of the outlines
         if( zone->GetNetCode() > 0 )
-        {
             zones_to_delete.insert( zone );
-        }
     }
 
     for( auto zone1 : aBoard->Zones() )
     {
-        /// Zone1 will be the destination zone for the new net
         if( zone1->GetNetCode() > 0 )
             continue;
 
         SHAPE_LINE_CHAIN& outline1 = zone1->Outline()->Outline( 0 );
         std::vector<size_t> overlaps( aBoard->GetNetInfo().GetNetCount() + 1, 0 );
-        std::vector<std::vector<ZONE*>> possible_deletions( overlaps.size() );
+        std::map<int, std::vector<ZONE*>> net_to_fills;
 
         for( auto zone2 : aBoard->Zones() )
         {
@@ -2256,19 +2253,24 @@ bool FABMASTER::loadZones( BOARD* aBoard )
             if( !outline1.BBox().Intersects( outline2.BBox() ) )
                 continue;
 
+            size_t match_count = 0;
+
             for( auto& pt1 : outline1.CPoints() )
             {
-                /// We're looking for the netcode with the most overlaps to the un-netted zone
                 if( outline2.PointOnEdge( pt1, 1 ) )
-                    overlaps[ zone2->GetNetCode() ]++;
+                    match_count++;
             }
 
             for( auto& pt2 : outline2.CPoints() )
             {
-                /// The overlap between outline1 and outline2 isn't perfect, so look for overlaps
-                /// in both directions
-                if( outline1.PointOnEdge( pt2,  1 ) )
-                    overlaps[ zone2->GetNetCode() ]++;
+                if( outline1.PointOnEdge( pt2, 1 ) )
+                    match_count++;
+            }
+
+            if( match_count > 0 )
+            {
+                overlaps[zone2->GetNetCode()] += match_count;
+                net_to_fills[zone2->GetNetCode()].push_back( zone2 );
             }
         }
 
@@ -2285,13 +2287,21 @@ bool FABMASTER::loadZones( BOARD* aBoard )
         }
 
         if( max_net > 0 )
+        {
             zone1->SetNetCode( max_net_id );
+
+            for( ZONE* fill : net_to_fills[max_net_id] )
+                matched_fills.insert( fill );
+        }
     }
 
     for( auto zone : zones_to_delete )
     {
-        aBoard->Remove( zone );
-        delete zone;
+        if( matched_fills.find( zone ) != matched_fills.end() )
+        {
+            aBoard->Remove( zone );
+            delete zone;
+        }
     }
 
     return true;
