@@ -1,7 +1,7 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2024 The KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,39 +21,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PREVIEW_ANGLE_ITEM_H
-#define PREVIEW_ANGLE_ITEM_H
-
 #include <memory>
 
-#include <preview_items/simple_overlay_item.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
-class EDIT_POINTS;
+#include <preview_items/angle_item.h>
+#include <tool/edit_points.h>
 
-namespace KIGFX
+
+BOOST_AUTO_TEST_SUITE( AngleItem )
+
+BOOST_AUTO_TEST_CASE( IgnoresExpiredEditPoints )
 {
-namespace PREVIEW
-{
+    std::unique_ptr<KIGFX::PREVIEW::ANGLE_ITEM> angleItem;
 
-class ANGLE_ITEM : public SIMPLE_OVERLAY_ITEM
-{
-public:
-    ANGLE_ITEM( const std::shared_ptr<EDIT_POINTS>& aPoints );
-
-    const BOX2I ViewBBox() const override;
-
-    void SetEditPoints( const std::shared_ptr<EDIT_POINTS>& aPoints )
     {
-        m_points = aPoints;
+        auto editPoints = std::make_shared<EDIT_POINTS>( nullptr );
+        angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( editPoints );
     }
 
-private:
-    void drawPreviewShape( KIGFX::VIEW* aView ) const override;
+    BOOST_CHECK_NO_THROW( angleItem->ViewBBox() );
+}
 
-    std::weak_ptr<EDIT_POINTS> m_points;
-};
-
-} // PREVIEW
-} // KIGFX
-
-#endif
+BOOST_AUTO_TEST_SUITE_END()

@@ -30,6 +30,8 @@ set( QA_COMMON_SRCS
 
     wximage_test_utils.cpp
 
+    test_angle_item.cpp
+
     test_array_axis.cpp
     test_base_set.cpp
     test_bitmap_base.cpp

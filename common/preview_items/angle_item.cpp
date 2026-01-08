@@ -35,7 +35,7 @@
 
 using namespace KIGFX::PREVIEW;
 
-ANGLE_ITEM::ANGLE_ITEM( EDIT_POINTS* aPoints ) :
+ANGLE_ITEM::ANGLE_ITEM( const std::shared_ptr<EDIT_POINTS>& aPoints ) :
         SIMPLE_OVERLAY_ITEM(),
         m_points( aPoints )
 {
@@ -43,15 +43,19 @@ ANGLE_ITEM::ANGLE_ITEM( EDIT_POINTS* aPoints ) :
 
 const BOX2I ANGLE_ITEM::ViewBBox() const
 {
-    if( m_points )
-        return m_points->ViewBBox();
-    else
-        return BOX2I();
+    std::shared_ptr<EDIT_POINTS> points = m_points.lock();
+
+    if( points )
+        return points->ViewBBox();
+
+    return BOX2I();
 }
 
 void ANGLE_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 {
-    if( !m_points )
+    std::shared_ptr<EDIT_POINTS> points = m_points.lock();
+
+    if( !points )
         return;
 
     KIGFX::GAL*             gal = aView->GetGAL();
@@ -70,16 +74,16 @@ void ANGLE_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 
     std::vector<const EDIT_POINT*> anglePoints;
 
-    for( unsigned i = 0; i < m_points->PointsSize(); ++i )
+    for( unsigned i = 0; i < points->PointsSize(); ++i )
     {
-        const EDIT_POINT& point = m_points->Point( i );
+        const EDIT_POINT& point = points->Point( i );
 
         if( point.IsActive() || point.IsHover() )
         {
             anglePoints.push_back( &point );
 
-            EDIT_POINT* prev = m_points->Previous( point );
-            EDIT_POINT* next = m_points->Next( point );
+            EDIT_POINT* prev = points->Previous( point );
+            EDIT_POINT* next = points->Next( point );
 
             if( prev )
                 anglePoints.push_back( prev );
@@ -110,8 +114,8 @@ void ANGLE_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 
     for( const EDIT_POINT* pt : anglePoints )
     {
-        EDIT_POINT* prev = m_points->Previous( *pt );
-        EDIT_POINT* next = m_points->Next( *pt );
+        EDIT_POINT* prev = points->Previous( *pt );
+        EDIT_POINT* next = points->Next( *pt );
 
         if( !( prev && next ) )
             continue;

@@ -1022,6 +1022,16 @@ void SCH_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     SCH_TOOL_BASE::Reset( aReason );
 
+    if( KIGFX::VIEW* view = getView() )
+    {
+        if( m_angleItem )
+            view->Remove( m_angleItem.get() );
+
+        if( m_editPoints )
+            view->Remove( m_editPoints.get() );
+    }
+
+    m_angleItem.reset();
     m_editPoints.reset();
     m_editedPoint = nullptr;
 }
@@ -1135,7 +1145,7 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
 
     makePointsAndBehavior( item );
-    m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints.get() );
+    m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints );
     view->Add( m_editPoints.get() );
     view->Add( m_angleItem.get() );
     setEditedPoint( nullptr );

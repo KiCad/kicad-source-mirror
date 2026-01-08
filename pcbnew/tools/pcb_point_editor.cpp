@@ -1808,6 +1808,19 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
 void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
+
+    if( KIGFX::VIEW* view = getView() )
+    {
+        if( m_angleItem )
+            view->Remove( m_angleItem.get() );
+
+        if( m_editPoints )
+            view->Remove( m_editPoints.get() );
+
+        view->Remove( &m_preview );
+    }
+
+    m_angleItem.reset();
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
@@ -2225,7 +2238,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     // Only add the angle_item if we are editing a polygon or zone
     if( item->Type() == PCB_ZONE_T || ( graphicItem && graphicItem->GetShape() == SHAPE_T::POLY ) )
     {
-        m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints.get() );
+        m_angleItem = std::make_unique<KIGFX::PREVIEW::ANGLE_ITEM>( m_editPoints );
     }
 
     m_preview.FreeItems();
@@ -2694,7 +2707,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 if( m_angleItem )
                 {
-                    m_angleItem->SetEditPoints( m_editPoints.get() );
+                    m_angleItem->SetEditPoints( m_editPoints );
                     getView()->Add( m_angleItem.get() );
                 }
 
