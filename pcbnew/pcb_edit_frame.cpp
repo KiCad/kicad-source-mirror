@@ -1624,6 +1624,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
         // we'll stay quiet for now.  Feel free to revisit this decision....
     }
 
+    GetBoard()->InitializeClearanceCache();
+
     UpdateTitle();
 
     wxFileName fn = GetBoard()->GetFileName();
