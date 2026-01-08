@@ -1098,6 +1098,13 @@ void BOARD::InvalidateClearanceCache( const KIID& aUuid )
 }
 
 
+void BOARD::InitializeClearanceCache()
+{
+    if( m_designSettings && m_designSettings->m_DRCEngine )
+        m_designSettings->m_DRCEngine->InitializeClearanceCache();
+}
+
+
 int BOARD::GetMaxClearanceValue() const
 {
     if( !m_maxClearanceValue.has_value() )

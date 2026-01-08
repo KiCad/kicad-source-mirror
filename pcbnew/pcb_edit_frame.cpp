@@ -1811,6 +1811,8 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
         // we'll stay quiet for now.  Feel free to revisit this decision....
     }
 
+    GetBoard()->InitializeClearanceCache();
+
     UpdateTitle();
 
     // Display a warning that the file is read only

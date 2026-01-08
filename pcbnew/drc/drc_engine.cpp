@@ -2287,3 +2287,106 @@ void DRC_ENGINE::ClearClearanceCache()
 {
     m_ownClearanceCache.clear();
 }
+
+
+void DRC_ENGINE::InitializeClearanceCache()
+{
+    if( !m_board )
+        return;
+
+    // Pre-populate the cache for all connected items to avoid delays during first render.
+    // We only need to cache copper layers since clearance outlines are only drawn on copper.
+
+    LSET copperLayers = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+    using CLEARANCE_MAP = std::unordered_map<DRC_OWN_CLEARANCE_CACHE_KEY, int>;
+
+    // Build flat list of (item, layer) pairs to process.
+    // Estimate size based on tracks + pads * average layers (2 for typical TH pads).
+    std::vector<std::pair<const BOARD_ITEM*, PCB_LAYER_ID>> itemsToProcess;
+    size_t estimatedPads = 0;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+        estimatedPads += footprint->Pads().size();
+
+    itemsToProcess.reserve( m_board->Tracks().size() + estimatedPads * 2 );
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & copperLayers ).Seq() )
+                itemsToProcess.emplace_back( track, layer );
+        }
+        else
+        {
+            itemsToProcess.emplace_back( track, track->GetLayer() );
+        }
+    }
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & copperLayers ).Seq() )
+                itemsToProcess.emplace_back( pad, layer );
+        }
+    }
+
+    if( itemsToProcess.empty() )
+        return;
+
+    m_ownClearanceCache.reserve( itemsToProcess.size() );
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    auto processItems = [this]( size_t aStart, size_t aEnd,
+                                const std::vector<std::pair<const BOARD_ITEM*, PCB_LAYER_ID>>& aItems )
+                                -> CLEARANCE_MAP
+    {
+        CLEARANCE_MAP localCache;
+
+        for( size_t i = aStart; i < aEnd; ++i )
+        {
+            const BOARD_ITEM* item = aItems[i].first;
+            PCB_LAYER_ID layer = aItems[i].second;
+
+            DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
+
+            if( item->Type() == PCB_PAD_T )
+            {
+                const PAD* pad = static_cast<const PAD*>( item );
+
+                if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                    constraintType = HOLE_CLEARANCE_CONSTRAINT;
+            }
+
+            DRC_CONSTRAINT constraint = EvalRules( constraintType, item, nullptr, layer );
+
+            int clearance = 0;
+
+            if( constraint.Value().HasMin() )
+                clearance = constraint.Value().Min();
+
+            localCache[{ item->m_Uuid, layer }] = clearance;
+        }
+
+        return localCache;
+    };
+
+    auto results = tp.parallelize_loop( itemsToProcess.size(),
+            [&]( size_t aStart, size_t aEnd ) -> CLEARANCE_MAP
+            {
+                return processItems( aStart, aEnd, itemsToProcess );
+            } );
+
+    // Merge all thread-local caches into the main cache
+    for( size_t i = 0; i < results.size(); ++i )
+    {
+        if( results[i].valid() )
+        {
+            CLEARANCE_MAP localCache = results[i].get();
+            m_ownClearanceCache.insert( localCache.begin(), localCache.end() );
+        }
+    }
+}

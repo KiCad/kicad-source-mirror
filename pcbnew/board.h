@@ -787,6 +787,13 @@ public:
      */
     void InvalidateClearanceCache( const KIID& aUuid );
 
+    /**
+     * Initialize the clearance cache for all board items.
+     *
+     * Pre-populates the cache to avoid delays during first render.
+     */
+    void InitializeClearanceCache();
+
     BOARD_STACKUP GetStackupOrDefault() const;
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }

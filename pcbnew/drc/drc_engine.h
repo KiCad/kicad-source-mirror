@@ -226,6 +226,14 @@ public:
      */
     void ClearClearanceCache();
 
+    /**
+     * Initialize the clearance cache for all items on the board.
+     *
+     * Pre-populates the cache to avoid delays during first render. Should be called
+     * after InitEngine() when a board is loaded.
+     */
+    void InitializeClearanceCache();
+
     void ProcessAssertions( const BOARD_ITEM* a,
                             std::function<void( const DRC_CONSTRAINT* )> aFailureHandler,
                             REPORTER* aReporter = nullptr );
