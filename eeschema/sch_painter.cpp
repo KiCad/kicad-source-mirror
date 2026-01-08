@@ -2104,10 +2104,15 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
         case FILL_T::HATCH:
         case FILL_T::REVERSE_HATCH:
         case FILL_T::CROSS_HATCH:
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            m_gal->SetFillColor( color );
-            m_gal->DrawPolygon( aShape->GetHatching() );
+            aShape->UpdateHatching();
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->SetLineWidth( aShape->GetHatchLineWidth() );
+
+            for( const SEG& seg : aShape->GetHatchLines() )
+                m_gal->DrawLine( seg.A, seg.B );
+
             break;
 
         case FILL_T::FILLED_WITH_COLOR:

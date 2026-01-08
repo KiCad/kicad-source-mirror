@@ -2330,9 +2330,13 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
     if( isHatchedFill )
     {
-        m_gal->SetIsStroke( false );
-        m_gal->SetIsFill( true );
-        m_gal->DrawPolygon( aShape->GetHatching() );
+        aShape->UpdateHatching();
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( aShape->GetHatchLineWidth() );
+
+        for( const SEG& seg : aShape->GetHatchLines() )
+            m_gal->DrawLine( seg.A, seg.B );
     }
 }
 

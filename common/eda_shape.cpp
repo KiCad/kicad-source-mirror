@@ -575,16 +575,16 @@ void EDA_SHAPE::UpdateHatching() const
     if( !m_hatchingDirty )
         return;
 
-    m_hatching.RemoveAllContours();
-
     std::vector<double> slopes;
     int                 lineWidth = GetHatchLineWidth();
     int                 spacing = GetHatchLineSpacing();
     SHAPE_POLY_SET      shapeBuffer;
 
+    // Validate state before clearing cached hatching. If we can't regenerate, keep existing cache.
     if( isMoving() )
         return;
-    else if( GetFillMode() == FILL_T::CROSS_HATCH )
+
+    if( GetFillMode() == FILL_T::CROSS_HATCH )
         slopes = { 1.0, -1.0 };
     else if( GetFillMode() == FILL_T::HATCH )
         slopes = { -1.0 };
@@ -627,15 +627,25 @@ void EDA_SHAPE::UpdateHatching() const
         return;
     }
 
+    // Clear cached hatching only after all validation passes.
+    // This prevents flickering when early returns would otherwise leave empty hatching.
+    m_hatching.RemoveAllContours();
+    m_hatchLines.clear();
+
     BOX2I extents = shapeBuffer.BBox();
     int   majorAxis = std::max( extents.GetWidth(), extents.GetHeight() );
 
     if( majorAxis / spacing > 100 )
         spacing = majorAxis / 100;
 
+    // Generate hatch lines for stroke-based rendering. All hatch types use line segments.
+    std::vector<SEG> hatchSegs = shapeBuffer.GenerateHatchLines( slopes, spacing, -1 );
+    m_hatchLines = hatchSegs;
+
+    // Also generate polygon representation for exports, 3D viewer, and hit testing
     if( GetFillMode() == FILL_T::HATCH || GetFillMode() == FILL_T::REVERSE_HATCH )
     {
-        for( const SEG& seg : shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) )
+        for( const SEG& seg : hatchSegs )
         {
             // We don't really need the rounded ends at all, so don't spend any extra time on them
             int maxError = lineWidth;
@@ -644,11 +654,12 @@ void EDA_SHAPE::UpdateHatching() const
         }
 
         m_hatching.Fracture();
+        m_hatchingDirty = false;
     }
     else
     {
-        // Generate a grid of holes for a cross-hatch.  This is about 3X the speed of the above
-        // algorithm, even when modified for the 45-degree fracture problem.
+        // Generate a grid of holes for a cross-hatch polygon representation.
+        // This is used for exports, 3D viewer, and hit testing.
 
         int gridsize = spacing;
         int hole_size = gridsize - GetHatchLineWidth();
@@ -691,6 +702,7 @@ void EDA_SHAPE::UpdateHatching() const
         // Must re-rotate after Fracture().  Clipper struggles mightily with fracturing
         // 45-degree holes.
         m_hatching.Rotate( ANGLE_45 );
+        m_hatchingDirty = false;
     }
 }
 

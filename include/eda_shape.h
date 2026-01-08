@@ -146,6 +146,7 @@ public:
 
     void SetHatchingDirty()                    { m_hatchingDirty = true; }
     const SHAPE_POLY_SET& GetHatching() const  { return m_hatching; }
+    const std::vector<SEG>& GetHatchLines() const { return m_hatchLines; }
 
     bool IsClosed() const;
 
@@ -496,6 +497,7 @@ protected:
     COLOR4D                m_fillColor;
 
     mutable SHAPE_POLY_SET m_hatching;
+    mutable std::vector<SEG> m_hatchLines;
     mutable bool           m_hatchingDirty;
 
     long long int          m_rectangleHeight;
