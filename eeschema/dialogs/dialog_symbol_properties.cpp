@@ -54,6 +54,70 @@
 wxDEFINE_EVENT( SYMBOL_DELAY_FOCUS, wxCommandEvent );
 wxDEFINE_EVENT( SYMBOL_DELAY_SELECTION, wxCommandEvent );
 
+
+/**
+ * Debug helper to trap all SetFocus events on a window and its children.
+ * This creates a custom event handler that logs whenever focus is set on any control.
+ */
+static void EnableFocusDebugging( wxWindow* aWindow, const wxString& aWindowName = wxEmptyString )
+{
+    // Lambda-based focus event handler
+    auto onFocus = [aWindowName]( wxFocusEvent& aEvent ) -> void
+    {
+        wxWindow* window = static_cast<wxWindow*>( aEvent.GetEventObject() );
+        if( !window )
+            return;
+
+        wxString controlName = window->GetName();
+        wxString controlLabel;
+
+        // Try to get a human-readable label for the control
+        wxControl* ctrl = dynamic_cast<wxControl*>( window );
+        if( ctrl && !ctrl->GetLabel().empty() )
+            controlLabel = ctrl->GetLabel();
+
+        wxString windowInfo = aWindowName.empty() ? wxS( "" ) : aWindowName + wxS( ": " );
+
+        if( aEvent.GetEventType() == wxEVT_SET_FOCUS )
+        {
+            wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "%sFocus SET on: %s (name=%s, label=%s)" ),
+                        windowInfo,
+                        window->GetClassInfo()->GetClassName(),
+                        controlName,
+                        controlLabel );
+        }
+        else if( aEvent.GetEventType() == wxEVT_KILL_FOCUS )
+        {
+            wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "%sFocus LOST from: %s (name=%s, label=%s)" ),
+                        windowInfo,
+                        window->GetClassInfo()->GetClassName(),
+                        controlName,
+                        controlLabel );
+        }
+
+        aEvent.Skip();  // Allow event to propagate
+    };
+
+    // Recursively attach handler to this window and all children
+    std::function<void( wxWindow* )> attachToTree = [&]( wxWindow* w ) -> void
+    {
+        if( !w )
+            return;
+
+        w->Bind( wxEVT_SET_FOCUS, onFocus );
+        w->Bind( wxEVT_KILL_FOCUS, onFocus );
+
+        // Recursively attach to all child windows
+        for( wxWindow* child : w->GetChildren() )
+            attachToTree( child );
+    };
+
+    attachToTree( aWindow );
+
+    wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "Focus debugging enabled for: %s" ), aWindowName );
+}
+
+
 enum PIN_TABLE_COL_ORDER
 {
     COL_NUMBER,
@@ -388,46 +452,16 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
+    // Enable focus debugging to track which element has focus
+    EnableFocusDebugging( this, wxS( "DIALOG_SYMBOL_PROPERTIES" ) );
+
     // wxFormBuilder doesn't include this event...
     m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging, this );
     m_pinGrid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort, this );
     Bind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
     Bind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
 
-#ifdef __WXGTK__
-    // On GTK, the first keypress after dialog activation is consumed by the grid.
-    // Work around by simulating Shift key presses which primes GTK keyboard handling
-    // without affecting the grid selection, then open the cell editor.
-    Bind( wxEVT_ACTIVATE,
-          [this]( wxActivateEvent& aEvent )
-          {
-              aEvent.Skip();
 
-              if( aEvent.GetActive() )
-              {
-                  CallAfter(
-                          [this]()
-                          {
-                              // Simulate Shift key to prime GTK keyboard handling
-                              // Shift alone doesn't affect grid selection
-                              wxUIActionSimulator sim;
-                              sim.KeyDown( WXK_SHIFT );
-                              sim.KeyUp( WXK_SHIFT );
-                              sim.KeyDown( WXK_SHIFT );
-                              sim.KeyUp( WXK_SHIFT );
-
-                              // Now open cell editor for immediate editing
-                              wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
-                              evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
-                              QueueEvent( evt );
-
-                              evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
-                              evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
-                              QueueEvent( evt );
-                          } );
-              }
-          } );
-#else
     // On non-GTK platforms, just open the cell editor directly
     wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
@@ -436,7 +470,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
     QueueEvent( evt );
-#endif
 
     // Remind user that they are editing the current variant.
     if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
