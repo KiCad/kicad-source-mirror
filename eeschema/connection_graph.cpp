@@ -4181,6 +4181,13 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         for( SCH_TEXT* text : label_vec )
         {
             size_t allPins = pinCount;
+            size_t localPins = pinCount;
+
+            // For local labels that are bus members, track local pins separately.
+            // A local label connected to a bus that crosses hierarchy boundaries should
+            // still have a local connection to component pins. Without this check, a label
+            // that only connects to pins through the hierarchical bus would not be flagged.
+            bool isBusMemberLabel = ( type == SCH_LABEL_T ) && !aSubgraph->m_bus_parents.empty();
 
             auto it = m_net_name_to_subgraphs_map.find( netName );
 
@@ -4194,17 +4201,23 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     if( neighbor->m_no_connect )
                         has_nc = true;
 
-                    allPins += hasPins( neighbor );
+                    size_t neighborPins = hasPins( neighbor );
+                    allPins += neighborPins;
+
+                    if( neighbor->m_sheet == sheet )
+                        localPins += neighborPins;
                 }
             }
 
             if( allPins == 1 && !has_nc )
             {
-                reportError( text,  ERCE_LABEL_SINGLE_PIN );
+                reportError( text, ERCE_LABEL_SINGLE_PIN );
                 ok = false;
             }
 
-            if( allPins == 0 )
+            // For local bus member labels, check that there's at least one local pin connection.
+            // Labels that only connect to pins through a hierarchical bus should be flagged.
+            if( allPins == 0 || ( isBusMemberLabel && localPins == 0 && !has_nc ) )
             {
                 reportError( text, ERCE_LABEL_NOT_CONNECTED );
                 ok = false;

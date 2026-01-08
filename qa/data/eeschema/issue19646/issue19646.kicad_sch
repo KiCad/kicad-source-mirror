@@ -1,0 +1,136 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "ec65a669-5fa6-4d04-9f49-8d6d3de6c502")
+	(paper "A4")
+	(title_block
+		(date "2025-02-02")
+		(comment 1 "Author: Luciano Vittori")
+	)
+	(lib_symbols)
+	(bus_alias "CURRENT"
+		(members "A" "B" "C" "POS" "GRID")
+	)
+	(bus_alias "PWM"
+		(members "PWM_A_H" "PWM_A_L" "PWM_B_H" "PWM_B_L" "PWM_C_H" "PWM_C_L" "PWM_BUCK")
+	)
+	(bus_alias "VOLTAGE"
+		(members "DCBUS" "GRID")
+	)
+	(bus
+		(pts
+			(xy 153.67 93.98) (xy 158.75 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5139ade8-eeee-4587-ac5c-51da8cfe9006")
+	)
+	(sheet
+		(at 114.3 88.9)
+		(size 39.37 10.16)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "36adac2d-e510-47a1-a56b-2a204b465c7a")
+		(property "Sheetname" "MCU"
+			(at 114.3 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MCU.kicad_sch"
+			(at 114.3 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "RES{RESOLVER}" input
+			(at 153.67 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "e3b5bf68-5c12-49d2-b00a-e334620b13e7")
+		)
+		(instances
+			(project "P2D_ELT_056_ICU_COMMUNICATION"
+				(path "/748821c2-cd57-447d-9e21-e014e2ec2536"
+					(page "20")
+				)
+			)
+			(project "issue19646"
+				(path "/ec65a669-5fa6-4d04-9f49-8d6d3de6c502"
+					(page "19")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 158.75 91.44)
+		(size 26.67 5.08)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "eacf85c5-c9b5-40bc-890d-75c91d6a7f21")
+		(property "Sheetname" "RESOLVER"
+			(at 158.75 90.7284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Resolver.kicad_sch"
+			(at 158.75 97.1046 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "R{RESOLVER}" output
+			(at 158.75 93.98 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "7c6f92ad-ee9f-4159-98b7-06f8d3bc61e7")
+		)
+		(instances
+			(project "issue19646"
+				(path "/ec65a669-5fa6-4d04-9f49-8d6d3de6c502"
+					(page "16")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

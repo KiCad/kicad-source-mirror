@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "VOLTU")(type "KiCad")(uri "${KIPRJMOD}/Kicad-libraries-voltu/VOLTU.kicad_sym")(options "")(descr ""))
+  (lib (name "Library")(type "KiCad")(uri "${KIPRJMOD}/Library.kicad_sym")(options "")(descr ""))
+)
