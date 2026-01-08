@@ -107,7 +107,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                 BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_scrolledWindow, wxID_ANY );
                 btn->SetBitmap( KiBitmapBundle( aBitmaps ) );
                 btn->SetDisabledBitmap( KiDisabledBitmapBundle( aBitmaps ) );
-                btn->SetPadding( FromDIP( 4 ) );
+                btn->SetPadding( 4 );
                 btn->SetToolTip( aAction.GetTooltip() );
 
                 m_scrolledWindow->SetFont( titleFont ); // Use font inheritance to avoid extra SetFont call.

@@ -2478,7 +2478,7 @@ wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 
     m_netNavigatorMenuButton = new BITMAP_BUTTON( panel, wxID_ANY );
     m_netNavigatorMenuButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
-    m_netNavigatorMenuButton->SetPadding( FromDIP( 2 ) );
+    m_netNavigatorMenuButton->SetPadding( 2 );
     searchSizer->Add( m_netNavigatorMenuButton, 0, wxALIGN_CENTER_VERTICAL );
 
     sizer->Add( searchSizer, 0, wxEXPAND | wxALL, FromDIP( 2 ) );

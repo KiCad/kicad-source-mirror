@@ -55,9 +55,9 @@ public:
     /**
      * Set the amount of padding present on each side of the bitmap.
      *
-     * @param aPadding is the amount in px of padding for each side.
+     * @param aPadding is the amount in DIP of padding for each side.
      */
-    void SetPadding( int aPadding );
+    void SetPadding( int aPaddingDIP );
 
     /**
      * Set the bitmap shown when the button is enabled.
@@ -167,7 +167,7 @@ private:
     wxFont    m_badgeFont;
     int       m_buttonState;
     int       m_padding;
-    wxSize    m_unadjustedMinSize;
+    wxSize    m_dipSize;
     bool      m_isToolbarButton;
 
     /// Accept mouse-up as click even if mouse-down happened outside of the control.

@@ -502,13 +502,13 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
 
     m_refreshButton = new BITMAP_BUTTON( this, wxID_ANY );
     m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::reload ) );
-    m_refreshButton->SetPadding( FromDIP( 2 ) );
+    m_refreshButton->SetPadding( 2 );
     m_refreshButton->SetToolTip( _( "Refresh" ) );
     controlsSizer->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, FromDIP( 2 ) );
 
     m_configButton = new BITMAP_BUTTON( this, wxID_ANY );
     m_configButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
-    m_configButton->SetPadding( FromDIP( 2 ) );
+    m_configButton->SetPadding( 2 );
     m_configButton->SetToolTip( _( "Configure remote data sources." ) );
     controlsSizer->Add( m_configButton, 0, wxALIGN_CENTER_VERTICAL );
 

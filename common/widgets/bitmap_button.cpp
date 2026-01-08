@@ -101,9 +101,9 @@ BITMAP_BUTTON::~BITMAP_BUTTON()
 wxSize BITMAP_BUTTON::DoGetBestSize() const
 {
     if( hasFlag( wxCONTROL_SEPARATOR ) )
-        return wxSize( m_unadjustedMinSize.x + m_padding * 2, wxButton::GetDefaultSize().y );
+        return wxSize( FromDIP( m_dipSize.x + m_padding * 2 ), wxButton::GetDefaultSize().y );
 
-    return m_unadjustedMinSize + wxSize( m_padding * 2, m_padding * 2 );
+    return FromDIP( m_dipSize + wxSize( m_padding * 2, m_padding * 2 ) );
 }
 
 
@@ -116,9 +116,9 @@ void BITMAP_BUTTON::invalidateBestSize()
 }
 
 
-void BITMAP_BUTTON::SetPadding( int aPadding )
+void BITMAP_BUTTON::SetPadding( int aPaddingDIP )
 {
-    m_padding = aPadding;
+    m_padding = aPaddingDIP;
 
     invalidateBestSize();
 }
@@ -127,21 +127,7 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-
-    // This is a bit of a hack, but fixes button scaling issues on some platforms when those buttons
-    // use KiScaledBitmap.  When that method is retired, this can probably be revisited.
-    if( m_isToolbarButton )
-    {
-        m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
-    }
-    else
-    {
-#ifndef __WXMSW__
-        m_unadjustedMinSize = m_normalBitmap.GetDefaultSize();
-#else
-        m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
-#endif
-    }
+    m_dipSize = m_normalBitmap.GetDefaultSize();
 
     invalidateBestSize();
 }
@@ -276,14 +262,7 @@ void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
 
 void BITMAP_BUTTON::OnDPIChanged( wxDPIChangedEvent& aEvent )
 {
-    wxSize newBmSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
-
-    if( newBmSize != m_unadjustedMinSize )
-    {
-        m_unadjustedMinSize = newBmSize;
-        invalidateBestSize();
-    }
-
+    invalidateBestSize();
     aEvent.Skip();
 }
 
@@ -340,7 +319,7 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
 
     if( bmp.IsOk() )
     {
-        bmpImg = bmp.GetBitmap( ToPhys( m_unadjustedMinSize ) );
+        bmpImg = bmp.GetBitmap( ToPhys( FromDIP( m_dipSize ) ) );
         bmSize = bmpImg.GetLogicalSize();
     }
 
