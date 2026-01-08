@@ -1572,14 +1572,6 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
                 return;
             }
         }
-
-        // Sometimes (cf: Symbol Properties dialog) GTK fails to process ESC (likely due to
-        // focus issues).
-        if( IsQuasiModal() )
-        {
-            EndQuasiModal( wxID_CANCEL );
-            return;
-        }
     }
 
     aEvt.Skip();
