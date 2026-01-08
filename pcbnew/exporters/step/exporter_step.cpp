@@ -512,6 +512,17 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
         //    m_poly_holes[B_SilkS].Append( holePoly );
         //}
 
+        // Cut via holes in soldermask when the via is not tented.
+        // This ensures the mask has a proper hole through the via drill, not just the annular ring opening.
+        if( m_params.m_ExportSoldermask )
+        {
+            if( via->IsOnLayer( F_Mask ) )
+                m_poly_holes[F_Mask].Append( holePoly );
+
+            if( via->IsOnLayer( B_Mask ) )
+                m_poly_holes[B_Mask].Append( holePoly );
+        }
+
         m_pcbModel->AddHole( *holeShape, m_platingThickness, top_layer, bot_layer, true, aOrigin,
                              !m_params.m_FillAllVias, m_params.m_CutViasInBody );
 
@@ -533,12 +544,13 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 }
 
 
-void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
+void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin, bool aSolderMaskOnly )
 {
     for( ZONE* zone : m_board->Zones() )
     {
         LSET layers = zone->GetLayerSet();
 
+        // Filter by net if a net filter is specified and zone is on copper layer(s)
         if( ( layers & LSET::AllCuMask() ).count() && !m_params.m_NetFilter.IsEmpty()
             && !zone->GetNetname().Matches( m_params.m_NetFilter ) )
         {
@@ -547,6 +559,16 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 
         for( PCB_LAYER_ID layer : layers.Seq() )
         {
+            bool isMaskLayer = ( layer == F_Mask || layer == B_Mask );
+
+            // If we're only processing soldermask zones, skip non-mask layers
+            if( aSolderMaskOnly && !isMaskLayer )
+                continue;
+
+            // If we're doing full zone export, skip mask layers if they'll be handled separately
+            if( !aSolderMaskOnly && isMaskLayer && !m_params.m_ExportZones )
+                continue;
+
             SHAPE_POLY_SET fill_shape;
             zone->TransformSolidAreasShapesToPolygon( layer, fill_shape );
             fill_shape.Unfracture();
@@ -778,6 +800,11 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     {
         buildZones3DShape( origin );
     }
+
+    // Process zones on soldermask layers even when copper zone export is disabled.
+    // This ensures mask openings defined by zones are properly exported.
+    if( m_params.m_ExportSoldermask && !m_params.m_ExportZones )
+        buildZones3DShape( origin, true );
 
     for( PCB_LAYER_ID pcblayer : m_layersToExport.Seq() )
     {
