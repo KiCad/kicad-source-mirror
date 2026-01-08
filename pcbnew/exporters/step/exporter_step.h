@@ -57,7 +57,7 @@ private:
     bool buildBoard3DShapes();
     bool buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2D& aOrigin, SHAPE_POLY_SET* aClipPolygon );
     bool buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigin );
-    void buildZones3DShape( VECTOR2D aOrigin );
+    void buildZones3DShape( VECTOR2D aOrigin, bool aSolderMaskOnly = false );
     bool buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOrigin );
     void initOutputVariant();
 
