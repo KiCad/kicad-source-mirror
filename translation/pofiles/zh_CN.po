@@ -5,7 +5,7 @@
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022, 2023, 2025.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
-# CloverGit <w991593239@163.com>, 2021, 2022, 2023, 2024, 2025.
+# CloverGit <w991593239@163.com>, 2021, 2022, 2023, 2024, 2025, 2026.
 # Deleted User <noreply+33206@weblate.org>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
@@ -6189,7 +6189,7 @@ msgstr "颜色选项"
 #: common/eda_base_frame.cpp:1413 common/eda_base_frame.cpp:1434
 #: common/eda_base_frame.cpp:1456
 msgid "Toolbars"
-msgstr "工具栏 (&T)"
+msgstr "工具栏"
 
 #: common/eda_base_frame.cpp:1362 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:133
@@ -9441,7 +9441,7 @@ msgstr "缩放选择框"
 
 #: common/tool/action_toolbar.cpp:1098
 msgid "IPC/Scripting plugins"
-msgstr "IPC/脚本插件"
+msgstr "IPC/Scripting 插件"
 
 #: common/tool/action_toolbar.cpp:1099
 msgid "Region to hold the IPC/Scripting action buttons"
