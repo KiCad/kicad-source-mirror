@@ -134,8 +134,6 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
 
 bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOARD_ITEM*>& aItems )
 {
-    std::vector<BOARD_ITEM*> result;
-
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
     PCBEXPR_UCODE    ucode;
     PCBEXPR_CONTEXT  ctx, preflightCtx;
@@ -149,23 +147,13 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
     preflightCtx.SetErrorCallback( reportError );
     compiler.SetErrorCallback( reportError );
 
-    bool restoreBlankName = false;
-
-    if( aRuleArea->GetZoneName().IsEmpty() )
-    {
-        restoreBlankName = true;
-        aRuleArea->SetZoneName( aRuleArea->m_Uuid.AsString() );
-    }
-
-    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ), aRuleArea->GetZoneName() );
+    // Use the zone's UUID to identify it uniquely. Using the zone name could match other zones
+    // with the same name (e.g., a copper fill zone with the same name as a rule area).
+    wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
+                                          aRuleArea->m_Uuid.AsString() );
 
     if( !compiler.Compile( ruleText, &ucode, &preflightCtx ) )
-    {
-        if( restoreBlankName )
-            aRuleArea->SetZoneName( wxEmptyString );
-
         return false;
-    }
 
     auto testAndAdd =
         [&]( BOARD_ITEM* aItem )
@@ -209,9 +197,6 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
         if( addGroup )
             aItems.insert( group );
     }
-
-    if( restoreBlankName )
-        aRuleArea->SetZoneName( wxEmptyString );
 
     return true;
 }
@@ -631,16 +616,10 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
     preflightCtx.SetErrorCallback( reportError );
     compiler.SetErrorCallback( reportError );
 
-    bool restoreBlankName = false;
-
-    if( aRA->m_area->GetZoneName().IsEmpty() )
-    {
-        restoreBlankName = true;
-        aRA->m_area->SetZoneName( aRA->m_area->m_Uuid.AsString() );
-    }
-
+    // Use the zone's UUID to identify it uniquely. Using the zone name could match other zones
+    // with the same name (e.g., a copper fill zone with the same name as a rule area).
     wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
-                                          aRA->m_area->GetZoneName() );
+                                          aRA->m_area->m_Uuid.AsString() );
 
     auto testAndAdd =
         [&]( BOARD_ITEM* aItem )
@@ -663,9 +642,6 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*>&            
         for( PCB_TRACK* track : board()->Tracks() )
             testAndAdd( track );
     }
-
-    if( restoreBlankName )
-        aRA->m_area->SetZoneName( wxEmptyString );
 
     return count;
 }
