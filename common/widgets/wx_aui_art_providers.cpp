@@ -266,24 +266,21 @@ int WX_AUI_TOOLBAR_ART::ShowDropDown( wxWindow* wnd, const wxAuiToolBarItemArray
                 text << "\t" << accel;
             }
 
-            wxMenuItem* m = new wxMenuItem( &menuPopup, item.GetId(), text, item.GetShortHelp(),
-                                            static_cast<wxItemKind>( item.GetKind() ) );
+            bool       checked = item.GetState() & wxAUI_BUTTON_STATE_CHECKED;
+            wxItemKind menuKind = wxITEM_NORMAL;
 
-            wxBitmapBundle bnd = item.GetBitmapBundle().GetBitmapFor( wnd );
+            if( ( item.GetKind() == wxITEM_CHECK || item.GetKind() == wxITEM_RADIO ) && checked )
+                menuKind = static_cast<wxItemKind>( item.GetKind() );
 
-#ifdef __WXMSW__
-            if( m->IsCheckable() )
-                m->SetBitmaps( wxNullBitmap, bnd );
-            else
-                m->SetBitmap( bnd );
-#else
-            m->SetBitmap( bnd );
-#endif
+            wxMenuItem* m = new wxMenuItem( &menuPopup, item.GetId(), text, item.GetShortHelp(), menuKind );
+
+            if( !m->IsCheckable() )
+                m->SetBitmap( item.GetBitmapBundle() );
 
             menuPopup.Append( m );
 
             if( m->IsCheckable() )
-                m->Check( item.IsActive() );
+                m->Check( checked );
 
             skipNextSeparator = false;
         }
