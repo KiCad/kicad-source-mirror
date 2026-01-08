@@ -197,7 +197,7 @@ wxString TOOL_ACTION::GetButtonTooltip() const
     wxString tooltip = GetFriendlyName();
 
     if( GetHotKey() )
-        tooltip += wxString::Format( wxT( "  (%s)" ), KeyNameFromKeyCode( GetHotKey() ) );
+        tooltip += wxString::Format( wxT( "\t(%s)" ), KeyNameFromKeyCode( GetHotKey() ) );
 
     if( !GetTooltip( false ).IsEmpty() )
         tooltip += '\n' + GetTooltip( false );

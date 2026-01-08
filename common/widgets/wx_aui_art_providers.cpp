@@ -198,6 +198,115 @@ void WX_AUI_TOOLBAR_ART::UpdateColoursFromSystem()
 }
 
 
+class ToolbarCommandCapture : public wxEvtHandler
+{
+public:
+    ToolbarCommandCapture() { m_lastId = 0; }
+    int GetCommandId() const { return m_lastId; }
+
+    bool ProcessEvent( wxEvent& evt ) override
+    {
+        if( evt.GetEventType() == wxEVT_MENU )
+        {
+            m_lastId = evt.GetId();
+            return true;
+        }
+
+        if( GetNextHandler() )
+            return GetNextHandler()->ProcessEvent( evt );
+
+        return false;
+    }
+
+private:
+    int m_lastId;
+};
+
+
+int WX_AUI_TOOLBAR_ART::ShowDropDown( wxWindow* wnd, const wxAuiToolBarItemArray& items )
+{
+    wxMenu menuPopup;
+    bool   skipNextSeparator = true;
+
+    size_t i, count = items.GetCount();
+    for( i = 0; i < count; ++i )
+    {
+        wxAuiToolBarItem& item = items.Item( i );
+
+        if( item.GetKind() == wxITEM_SEPARATOR )
+        {
+            if( !skipNextSeparator )
+            {
+                menuPopup.AppendSeparator();
+                skipNextSeparator = true;
+            }
+        }
+        else if( item.GetKind() == wxITEM_NORMAL || item.GetKind() == wxITEM_CHECK || item.GetKind() == wxITEM_RADIO )
+        {
+            wxString text = item.GetShortHelp();
+
+            if( text.empty() )
+                text = item.GetLabel();
+
+            if( text.empty() )
+                text = wxT( " " );
+
+            wxString firstLine = text.BeforeFirst( '\n' );
+            wxString accel;
+            wxString label = firstLine.BeforeFirst( '\t', &accel );
+
+            text = label;
+
+            if( !accel.empty() )
+            {
+                // Remove brackets from accelerator string so it's recognized
+                if( accel.starts_with( "(" ) && accel.ends_with( ")" ) )
+                    accel = accel.Mid( 1, accel.size() - 2 );
+
+                text << "\t" << accel;
+            }
+
+            wxMenuItem* m = new wxMenuItem( &menuPopup, item.GetId(), text, item.GetShortHelp(),
+                                            static_cast<wxItemKind>( item.GetKind() ) );
+
+            wxBitmapBundle bnd = item.GetBitmapBundle().GetBitmapFor( wnd );
+
+#ifdef __WXMSW__
+            if( m->IsCheckable() )
+                m->SetBitmaps( wxNullBitmap, bnd );
+            else
+                m->SetBitmap( bnd );
+#else
+            m->SetBitmap( bnd );
+#endif
+
+            menuPopup.Append( m );
+
+            if( m->IsCheckable() )
+                m->Check( item.IsActive() );
+
+            skipNextSeparator = false;
+        }
+    }
+
+    // find out where to put the popup menu of window items
+    wxPoint pt = ::wxGetMousePosition();
+    pt = wnd->ScreenToClient( pt );
+
+    // find out the screen coordinate at the bottom of the tab ctrl
+    wxRect cli_rect = wnd->GetClientRect();
+    pt.y = cli_rect.y + cli_rect.height;
+
+    ToolbarCommandCapture* cc = new ToolbarCommandCapture;
+    wnd->PushEventHandler( cc );
+    wnd->PopupMenu( &menuPopup, pt );
+    int command = cc->GetCommandId();
+    wnd->PopEventHandler( true );
+
+    return command;
+}
+
+
 WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() :
         wxAuiDefaultDockArt()
 {

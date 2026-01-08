@@ -220,6 +220,13 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
     Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ), nullptr, this );
 
+    Bind( wxEVT_SIZE,
+          [&]( wxSizeEvent& aEvent )
+          {
+              SetOverflowVisible( !GetToolBarFits() );
+              aEvent.Skip();
+          } );
+
     Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( ACTION_TOOLBAR::onThemeChanged ), this );
 
     Bind( wxEVT_DPI_CHANGED,
@@ -404,6 +411,17 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 
     // Apply the configuration
     KiRealize();
+}
+
+
+void ACTION_TOOLBAR::DoSetToolTipText( const wxString& aTip )
+{
+    // We use \t in short description to align accelerators in wxMenuItem
+    // But they should be converted when displaying tooltips
+    wxString tip = aTip;
+    tip.Replace( "\t", "  " );
+
+    wxAuiToolBar::DoSetToolTipText( tip );
 }
 
 

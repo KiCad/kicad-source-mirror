@@ -403,6 +403,8 @@ protected:
     ///< is available for an item
     void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem, const wxRect& aRect ) override;
 
+    void DoSetToolTipText( const wxString& aTip ) override;
+
 protected:
     // Timer used to determine when the palette should be opened after a group item is pressed
     EDA_BASE_FRAME*         m_parent;

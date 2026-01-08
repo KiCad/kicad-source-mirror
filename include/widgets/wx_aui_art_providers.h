@@ -48,6 +48,8 @@ public:
 
     void UpdateColoursFromSystem() override;
 
+    int ShowDropDown( wxWindow* wnd, const wxAuiToolBarItemArray& items ) override;
+
 private:
     void saturateHighlightColor();
 };
