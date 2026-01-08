@@ -81,7 +81,7 @@
 
 #define DEFAULT_MINCLEARANCE          0.0     // overall min clearance
 #define DEFAULT_MINCONNECTION         0.0     // overall min connection width
-#define DEFAULT_TRACKMINWIDTH         0.0     // track width min value
+#define DEFAULT_TRACKMINWIDTH         0.2     // track width min value (mm)
 #define DEFAULT_VIASMINSIZE           0.5     // vias (not micro vias) min diameter
 #define DEFAULT_MINTHROUGHDRILL       0.3     // through holes (not micro vias) min drill diameter
 #define DEFAULT_MICROVIASMINSIZE      0.2     // micro vias (not vias) min diameter
