@@ -307,6 +307,8 @@ public:
     SCH_REFERENCE& GetItem( size_t aIdx ) { return m_flatList[aIdx]; }
     const SCH_REFERENCE& GetItem( size_t aIdx ) const { return m_flatList[aIdx]; }
 
+    SCH_REFERENCE* FindItem( const SCH_REFERENCE& aItem );
+
     void AddItem( const SCH_REFERENCE& aItem ) { m_flatList.push_back( aItem ); }
 
     /**

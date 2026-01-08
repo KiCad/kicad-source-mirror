@@ -2726,9 +2726,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     // Reserved name is not allowed (case-insensitive).
     if( newVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
     {
-        m_parent->GetInfoBar()->ShowMessageFor(
-                wxString::Format( _( "'%s' is a reserved variant name." ), GetDefaultVariantName() ),
-                10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
+                                                                  GetDefaultVariantName() ),
+                                                10000, wxICON_ERROR );
         return;
     }
 
@@ -2742,9 +2742,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
         if( existingName.CmpNoCase( newVariantName ) == 0
             && existingName.CmpNoCase( oldVariantName ) != 0 )
         {
-            m_parent->GetInfoBar()->ShowMessageFor(
-                    wxString::Format( _( "Variant '%s' already exists." ), existingName ),
-                    10000, wxICON_ERROR );
+            m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
+                                                                      existingName ),
+                                                    0000, wxICON_ERROR );
             return;
         }
     }
@@ -2801,8 +2801,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     if( m_variantListBox->FindString( newVariantName ) != wxNOT_FOUND )
     {
         m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                                   newVariantName ),
-                                                 10000, wxICON_ERROR );
+                                                                  newVariantName ),
+                                                10000, wxICON_ERROR );
         return;
     }
 

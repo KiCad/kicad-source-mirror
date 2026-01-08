@@ -62,6 +62,18 @@ bool SCH_REFERENCE_LIST::Contains( const SCH_REFERENCE& aItem ) const
 }
 
 
+SCH_REFERENCE* SCH_REFERENCE_LIST::FindItem( const SCH_REFERENCE& aItem )
+{
+    for( unsigned ii = 0; ii < GetCount(); ii++ )
+    {
+        if( m_flatList[ii].IsSameInstance( aItem ) )
+            return &m_flatList[ii];
+    }
+
+    return nullptr;
+}
+
+
 bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );

@@ -1555,7 +1555,11 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
         for( const DATA_MODEL_COL& col : m_cols )
             updateDataStoreSymbolField( ref, col.m_fieldName, aVariantName );
 
-        if( !m_symbolsList.Contains( ref ) )
+        if( SCH_REFERENCE* listRef = m_symbolsList.FindItem( ref ) )
+        {
+            *listRef = ref;
+        }
+        else
         {
             m_symbolsList.AddItem( ref );
             refListChanged = true;
