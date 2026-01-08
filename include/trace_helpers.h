@@ -122,7 +122,7 @@ extern KICOMMON_API const wxChar* const traceSchPlugin;
 extern KICOMMON_API const wxChar* const traceSchLegacyPlugin;
 
 /**
- * Flag to enable GEDA PCB plugin debug output.
+ * Flag to enable KiCad PCB plugin debug output.
  *
  * Use "KICAD_PCB_PLUGIN" to enable.
  */

@@ -301,7 +301,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNet( BOARD_CONNECTED_ITEM* aItem )
     {
         if( !aItem->SetNetCode( std::max( 0, getNetCode( parseInt() ) ), /* aNoAssert */ true ) )
         {
-            wxLogError( _( "Invalid net ID in\nfile: %s;\nline: %d\noffset: %d." ),
+            wxLogTrace( traceKicadPcbPlugin,
+                        _( "Invalid net ID in\nfile: %s;\nline: %d\noffset: %d." ),
                         CurSource(), CurLineNumber(), CurOffset() );
         }
 
@@ -5918,7 +5919,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             {
                 if( !pad->SetNetCode( getNetCode( parseInt() ), /* aNoAssert */ true ) )
                 {
-                    wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
+                    wxLogTrace( traceKicadPcbPlugin,
+                                _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
                                 CurSource(), CurLineNumber(), CurOffset() );
                 }
                 else
@@ -5949,7 +5951,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     if( netName != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
                     {
                         pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
-                        wxLogError( _( "Net name doesn't match ID in\nfile: %s\nline: %d offset: %d" ),
+                        wxLogTrace( traceKicadPcbPlugin,
+                                    _( "Net name doesn't match ID in\nfile: %s\nline: %d offset: %d" ),
                                     CurSource(), CurLineNumber(), CurOffset() );
                     }
                 }
