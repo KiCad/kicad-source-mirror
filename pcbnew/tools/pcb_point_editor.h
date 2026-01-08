@@ -39,6 +39,7 @@ namespace KIGFX { namespace PREVIEW { class ANGLE_ITEM; } }
 
 class PCB_SELECTION_TOOL;
 class POINT_EDIT_BEHAVIOR;
+class RECT_RADIUS_TEXT_ITEM;
 class SHAPE_POLY_SET;
 
 /**
@@ -149,6 +150,7 @@ private:
     ARC_EDIT_MODE                 m_arcEditMode;
 
     PCB_SELECTION                 m_preview;
+    RECT_RADIUS_TEXT_ITEM*        m_radiusHelper;
 
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;

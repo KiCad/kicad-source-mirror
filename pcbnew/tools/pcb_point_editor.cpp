@@ -1797,6 +1797,7 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
         m_hoveredPoint( nullptr ),
         m_original( VECTOR2I( 0, 0 ) ),
         m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
+        m_radiusHelper( nullptr ),
         m_altConstrainer( VECTOR2I( 0, 0 ) ),
         m_inPointEditorTool( false ),
         m_angleSnapPos( VECTOR2I( 0, 0 ) ),
@@ -2243,10 +2244,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     }
 
     m_preview.FreeItems();
+    m_radiusHelper = nullptr;
     getView()->Add( &m_preview );
 
-    RECT_RADIUS_TEXT_ITEM* radiusHelper = new RECT_RADIUS_TEXT_ITEM( pcbIUScale, editFrame->GetUserUnits() );
-    m_preview.Add( radiusHelper );
+    m_radiusHelper = new RECT_RADIUS_TEXT_ITEM( pcbIUScale, editFrame->GetUserUnits() );
+    m_preview.Add( m_radiusHelper );
 
     getView()->Add( m_editPoints.get() );
 
@@ -2576,23 +2578,26 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
 
-            if( m_editPoints->PointsSize() > RECT_RADIUS
-                && m_editedPoint == &m_editPoints->Point( RECT_RADIUS ) )
+            if( m_radiusHelper )
             {
-                if( PCB_SHAPE* rect = dynamic_cast<PCB_SHAPE*>( item ) )
+                if( m_editPoints->PointsSize() > RECT_RADIUS
+                    && m_editedPoint == &m_editPoints->Point( RECT_RADIUS ) )
                 {
-                    int radius = rect->GetCornerRadius();
-                    int offset = radius - M_SQRT1_2 * radius;
-                    VECTOR2I topLeft = rect->GetTopLeft();
-                    VECTOR2I botRight = rect->GetBotRight();
-                    VECTOR2I topRight( botRight.x, topLeft.y );
-                    VECTOR2I center( topRight.x - offset, topRight.y + offset );
-                    radiusHelper->Set( radius, center, VECTOR2I( 1, -1 ), editFrame->GetUserUnits() );
+                    if( PCB_SHAPE* rect = dynamic_cast<PCB_SHAPE*>( item ) )
+                    {
+                        int radius = rect->GetCornerRadius();
+                        int offset = radius - M_SQRT1_2 * radius;
+                        VECTOR2I topLeft = rect->GetTopLeft();
+                        VECTOR2I botRight = rect->GetBotRight();
+                        VECTOR2I topRight( botRight.x, topLeft.y );
+                        VECTOR2I center( topRight.x - offset, topRight.y + offset );
+                        m_radiusHelper->Set( radius, center, VECTOR2I( 1, -1 ), editFrame->GetUserUnits() );
+                    }
                 }
-            }
-            else
-            {
-                radiusHelper->Hide();
+                else
+                {
+                    m_radiusHelper->Hide();
+                }
             }
 
             getView()->Update( &m_preview );
@@ -2625,7 +2630,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     getView()->Update( m_angleItem.get() );
             }
 
-            radiusHelper->Hide();
+            if( m_radiusHelper )
+                m_radiusHelper->Hide();
+
             getView()->Update( &m_preview );
 
             getViewControls()->SetAutoPan( false );
@@ -2640,6 +2647,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
 
                 m_preview.FreeItems();
+                m_radiusHelper = nullptr;
                 m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genFinishEdit, &commit, generator );
 
                 commit.Push( generator->GetCommitMessage() );
@@ -2733,6 +2741,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     }
 
     m_preview.FreeItems();
+    m_radiusHelper = nullptr;
 
     if( getView()->HasItem( &m_preview ) )
         getView()->Remove( &m_preview );
@@ -2847,6 +2856,7 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
         // themselves (ROUTER_PREVIEW_ITEMs) are owned by the router.
 
         m_preview.FreeItems();
+        m_radiusHelper = nullptr;
 
         for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(), STATUS_ITEMS_ONLY ) )
             m_preview.Add( previewItem );

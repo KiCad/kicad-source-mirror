@@ -720,8 +720,10 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
     int maxAmpl = std::max( st.m_maxAmplitude, minAmpl );
 
     // Calculate minimum acceptable corner radius for visible rounding.
-    // Use at least 1/4 of track width to ensure curves aren't too sharp.
-    int minCornerRadius = m_width / 4;
+    // Use at least half the track width to ensure curves are noticeably rounded.
+    // Smaller values lead to corners that appear nearly square, which is problematic
+    // for high-speed signals (e.g., DDR4) where 90-degree corners cause reflections.
+    int minCornerRadius = m_width / 2;
 
     for( int ampl = maxAmpl; ampl >= minAmpl; ampl -= st.m_step )
     {
