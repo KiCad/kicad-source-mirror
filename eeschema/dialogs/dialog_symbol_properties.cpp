@@ -77,6 +77,10 @@ static void EnableFocusDebugging( wxWindow* aWindow, const wxString& aWindowName
             controlLabel = ctrl->GetLabel();
 
         wxString windowInfo = aWindowName.empty() ? wxString( "" ) : aWindowName + wxString( ": " );
+        // fix a conflict that happens with a Windows header on MINGW. so undefine GetClassName
+        #if defined( GetClassName ) && defined( __MINGW32__ )
+        #undef GetClassName
+        #endif
 
         if( aEvent.GetEventType() == wxEVT_SET_FOCUS )
         {
