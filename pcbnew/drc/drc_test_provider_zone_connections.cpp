@@ -27,6 +27,7 @@
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <thread_pool.h>
 
@@ -237,6 +238,33 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 {
                     if( aZone->GetFilledPolysList( aLayer )->Collide( track->GetStart() ) )
                         spokes++;
+                }
+            }
+
+            for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems( pad, EXCLUDE_ZONES ) )
+            {
+                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+                if( !shape || !shape->IsOnLayer( aLayer ) )
+                    continue;
+
+                std::vector<VECTOR2I> connectionPts = shape->GetConnectionPoints();
+
+                for( const VECTOR2I& pt : connectionPts )
+                {
+                    if( padOutline.PointInside( pt ) )
+                    {
+                        for( const VECTOR2I& other : connectionPts )
+                        {
+                            if( other != pt && zoneFill->Collide( other ) )
+                            {
+                                spokes++;
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
                 }
             }
 

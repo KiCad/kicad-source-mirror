@@ -51,6 +51,7 @@ BOOST_FIXTURE_TEST_CASE( DRCStarvedThermal, DRC_REGRESSION_TEST_FIXTURE )
     // clang-format off : suggestions look worse.
     std::vector<std::pair<wxString, int>> tests = {
         { "test_starved_thermal", 2 },
+        { "issue19090/issue19090", 0 }, // Copper graphic shapes count as thermal connections
     };
     // clang-format on
 

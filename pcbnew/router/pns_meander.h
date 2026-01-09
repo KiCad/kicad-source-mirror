@@ -29,6 +29,8 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
+class NETCLASS;
+
 namespace PNS {
 
 class MEANDER_PLACER_BASE;
