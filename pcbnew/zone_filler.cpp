@@ -1604,15 +1604,15 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 continue;
 
             // Deduplicate coincident pads (skip custom pads - they have complex shapes)
-            PAD_SHAPE padShape = pad->GetShape( aLayer );
+            PAD_SHAPE padShapeType = pad->GetShape( aLayer );
 
-            if( padShape != PAD_SHAPE::CUSTOM )
+            if( padShapeType != PAD_SHAPE::CUSTOM )
             {
                 // For circular pads: use max of drill and pad size; otherwise just pad size
                 VECTOR2I padSize = pad->GetSize( aLayer );
                 VECTOR2I effectiveSize;
 
-                if( padShape == PAD_SHAPE::CIRCLE )
+                if( padShapeType == PAD_SHAPE::CIRCLE )
                 {
                     int drill = std::max( pad->GetDrillSize().x, pad->GetDrillSize().y );
                     int maxDim = std::max( { padSize.x, padSize.y, drill } );
@@ -1624,7 +1624,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 }
 
                 PAD_KNOCKOUT_KEY padKey{ pad->GetPosition(), effectiveSize,
-                                         static_cast<int>( padShape ), pad->GetOrientation() };
+                                         static_cast<int>( padShapeType ), pad->GetOrientation() };
 
                 if( !processedPads.insert( padKey ).second )
                     continue;
