@@ -52,6 +52,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
+#include <drawing_sheet/ds_data_model.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <kiface_base.h>
@@ -384,6 +385,32 @@ protected:
     }
 
     /**
+     * Compute the drawable area (inside the drawing sheet border) for collision detection.
+     */
+    BOX2I getDrawableArea()
+    {
+        if( !m_screen )
+            return BOX2I();
+
+        const PAGE_INFO& pageInfo = m_screen->GetPageSettings();
+        DS_DATA_MODEL&   dsModel = DS_DATA_MODEL::GetTheInstance();
+
+        int pageWidth = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS );
+        int pageHeight = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
+
+        int leftMargin = schIUScale.mmToIU( dsModel.GetLeftMargin() );
+        int rightMargin = schIUScale.mmToIU( dsModel.GetRightMargin() );
+        int topMargin = schIUScale.mmToIU( dsModel.GetTopMargin() );
+        int bottomMargin = schIUScale.mmToIU( dsModel.GetBottomMargin() );
+
+        BOX2I drawableArea;
+        drawableArea.SetOrigin( leftMargin, topMargin );
+        drawableArea.SetEnd( pageWidth - rightMargin, pageHeight - bottomMargin );
+
+        return drawableArea;
+    }
+
+    /**
      * Return a list of the sides where a field set would collide with another item.
      */
     std::vector<SIDE_AND_COLL> getCollidingSides()
@@ -391,6 +418,9 @@ protected:
         SIDE                       sides_init[] = { SIDE_RIGHT, SIDE_TOP, SIDE_LEFT, SIDE_BOTTOM };
         std::vector<SIDE>          sides( sides_init, sides_init + arrayDim( sides_init ) );
         std::vector<SIDE_AND_COLL> colliding;
+
+        BOX2I drawableArea = getDrawableArea();
+        bool  checkDrawableArea = ( drawableArea.GetWidth() > 0 && drawableArea.GetHeight() > 0 );
 
         // Iterate over all sides and find the ones that collide
         for( SIDE side : sides )
@@ -402,6 +432,10 @@ protected:
             BOX2I box( fieldBoxPlacement( sideandpins ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
+
+            // Check collision with drawing sheet boundary
+            if( checkDrawableArea && !drawableArea.Contains( box ) )
+                collision = COLLIDE_OBJECTS;
 
             for( SCH_ITEM* collider : filterCollisions( box ) )
             {
