@@ -59,8 +59,17 @@
 #define _NAVLIB_DLLAPI
 #endif
 
+// __cdecl is a Windows-specific calling convention.
+// - On Windows with GCC (MinGW), define it using the attribute
+// - On non-Windows platforms, define it as empty since the default ABI is equivalent
+#ifdef _WIN32
 #if defined(__GNUC__) && !defined(__clang__)
 #define __cdecl __attribute__((__cdecl__))
+#endif
+#else
+#ifndef __cdecl
+#define __cdecl
+#endif
 #endif
 
 #endif // NAVLIB_DEFINES_H_INCLUDED_
