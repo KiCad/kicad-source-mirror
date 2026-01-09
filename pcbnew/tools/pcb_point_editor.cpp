@@ -1811,13 +1811,14 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 
     if( KIGFX::VIEW* view = getView() )
     {
-        if( m_angleItem )
+        if( m_angleItem && view->HasItem( m_angleItem.get() ) )
             view->Remove( m_angleItem.get() );
 
-        if( m_editPoints )
+        if( m_editPoints && view->HasItem( m_editPoints.get() ) )
             view->Remove( m_editPoints.get() );
 
-        view->Remove( &m_preview );
+        if( view->HasItem( &m_preview ) )
+            view->Remove( &m_preview );
     }
 
     m_angleItem.reset();
@@ -2698,9 +2699,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             // Re-create the points for items which can have different behavior on different layers
             if( item->Type() == PCB_PAD_T && m_isFootprintEditor )
             {
-                getView()->Remove( m_editPoints.get() );
+                if( getView()->HasItem( m_editPoints.get() ) )
+                    getView()->Remove( m_editPoints.get() );
 
-                if( m_angleItem )
+                if( m_angleItem && getView()->HasItem( m_angleItem.get() ) )
                     getView()->Remove( m_angleItem.get() );
 
                 m_editPoints = makePoints( item );
@@ -2731,13 +2733,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     }
 
     m_preview.FreeItems();
-    getView()->Remove( &m_preview );
+
+    if( getView()->HasItem( &m_preview ) )
+        getView()->Remove( &m_preview );
 
     if( m_editPoints )
     {
-        getView()->Remove( m_editPoints.get() );
+        if( getView()->HasItem( m_editPoints.get() ) )
+            getView()->Remove( m_editPoints.get() );
 
-        if( m_angleItem )
+        if( m_angleItem && getView()->HasItem( m_angleItem.get() ) )
             getView()->Remove( m_angleItem.get() );
 
         m_editPoints.reset();
@@ -2906,7 +2911,9 @@ void PCB_POINT_EDITOR::updatePoints()
 
     if( !m_editorBehavior->UpdatePoints( *m_editPoints ) )
     {
-        getView()->Remove( m_editPoints.get() );
+        if( getView()->HasItem( m_editPoints.get() ) )
+            getView()->Remove( m_editPoints.get() );
+
         m_editPoints = makePoints( item );
         getView()->Add( m_editPoints.get() );
     }
