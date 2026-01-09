@@ -179,7 +179,7 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
         // Action plugins can be modified, therefore the plugins menu must be updated:
         frame()->ReCreateMenuBar();
         // Recreate top toolbar to add action plugin buttons
-        frame()->ReCreateHToolbar();
+        frame()->RecreateToolbars();
         // Post a size event to force resizing toolbar by the AUI manager:
         frame()->PostSizeEvent();
     }
