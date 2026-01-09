@@ -4169,13 +4169,12 @@ void FOOTPRINT::FixUpPadsForBoard( BOARD* aBoard )
     if( !aBoard )
         return;
 
-    if( GetStackupMode() != FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS )
-        return;
-
     const LSET boardCopper = LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
     for( PAD* pad : Pads() )
     {
+        // We force PTH pads to include all copper layers since PTH pads are always drawn on
+        // all copper layers, even if the padstack has inner layers smaller than the hole.
         if( pad->GetAttribute() == PAD_ATTRIB::PTH )
         {
             LSET padLayers = pad->GetLayerSet();
