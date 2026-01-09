@@ -35,6 +35,7 @@
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
 #include <schematic_settings.h>
+#include <sch_screen.h>
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <memory>
@@ -307,6 +308,20 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     renderSettings->SetDefaultFont( font );
     renderSettings->SetMinPenWidth( aPlotJob->m_minPenWidth );
+
+    // Clear cached bounding boxes for all text items so they're recomputed with the correct
+    // default font. This is necessary because text bounding boxes may have been cached during
+    // schematic loading before the render settings (and thus default font) were configured.
+    SCH_SCREENS screens( sch->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items() )
+            item->ClearCaches();
+
+        for( const auto& [libItemName, libSymbol] : screen->GetLibSymbols() )
+            libSymbol->ClearCaches();
+    }
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
 
