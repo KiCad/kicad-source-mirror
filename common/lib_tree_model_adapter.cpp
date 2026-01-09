@@ -637,7 +637,10 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
         size_t i = 0;
 
         for( const auto& [ colName, colPtr ] : m_colNameMap )
-            m_colWidths[ colName ] = widths[i++];
+        {
+            if( i < widths.size() )
+                m_colWidths[ colName ] = widths[i++];
+        }
     }
 
     auto colIt = m_colWidths.begin();
