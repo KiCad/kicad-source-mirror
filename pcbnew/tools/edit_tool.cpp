@@ -3088,6 +3088,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         // In "alternative" mode, we expand selected track items to their full connection.
         if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
             m_toolMgr->RunAction( PCB_ACTIONS::selectConnection );
+
+        selectionCopy = m_selectionTool->GetSelection();
     }
 
     DeleteItems( selectionCopy, isCut );
