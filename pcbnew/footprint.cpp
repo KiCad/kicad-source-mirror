@@ -256,7 +256,8 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
 
 FOOTPRINT::FOOTPRINT( FOOTPRINT&& aFootprint ) :
-    BOARD_ITEM_CONTAINER( aFootprint )
+    BOARD_ITEM_CONTAINER( aFootprint ),
+    m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
     *this = std::move( aFootprint );
 }
