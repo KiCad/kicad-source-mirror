@@ -1344,7 +1344,18 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
         // here to prevent overly-long LIB_IDs because KiCad doesn't store the full path to the
         // footprint library in the design file, only in a library table.
         wxFileName libName( elem.sourcefootprintlibrary, wxPATH_WIN );
-        LIB_ID fpID = AltiumToKiCadLibID( libName.GetName(), elem.pattern );
+
+        // The pattern field may also contain a path when Altium stores it with a full library path.
+        // Extract just the footprint name portion to avoid creating invalid filenames.
+        wxString fpName = elem.pattern;
+
+        if( fpName.Contains( wxT( "\\" ) ) || fpName.Contains( wxT( "/" ) ) )
+        {
+            wxFileName fpPath( fpName, wxPATH_WIN );
+            fpName = fpPath.GetFullName();
+        }
+
+        LIB_ID fpID = AltiumToKiCadLibID( libName.GetName(), fpName );
 
         footprint->SetFPID( fpID );
 
