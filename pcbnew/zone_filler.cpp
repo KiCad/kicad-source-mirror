@@ -24,7 +24,9 @@
  */
 
 #include <future>
+#include <hash.h>
 #include <set>
+#include <unordered_set>
 #include <core/kicad_algo.h>
 #include <advanced_config.h>
 #include <board.h>
@@ -204,6 +206,101 @@ private:
     std::set<RESULTS> m_results;
     int m_dist;
 };
+
+
+/**
+ * Helper structures for deduplicating coincident knockout items.
+ * When multiple pads, vias, or tracks occupy the same position with the same geometry,
+ * we only need to add them to the knockout polygon once.
+ */
+namespace
+{
+
+/// Key for deduplicating coincident pads.
+/// For circular pads: uses max of drill and pad size.
+/// For non-circular pads: uses pad size only.
+struct PAD_KNOCKOUT_KEY
+{
+    VECTOR2I  position;
+    VECTOR2I  effectiveSize;   // For circular: max of drill and pad; otherwise pad size
+    int       shape;           // PAD_SHAPE enum value
+    EDA_ANGLE orientation;
+
+    bool operator==( const PAD_KNOCKOUT_KEY& other ) const
+    {
+        return position == other.position && effectiveSize == other.effectiveSize
+               && shape == other.shape && orientation == other.orientation;
+    }
+};
+
+struct PAD_KNOCKOUT_KEY_HASH
+{
+    size_t operator()( const PAD_KNOCKOUT_KEY& key ) const
+    {
+        return hash_val( key.position.x, key.position.y, key.effectiveSize.x, key.effectiveSize.y,
+                         key.shape, key.orientation.AsDegrees() );
+    }
+};
+
+/// Key for deduplicating coincident vias (circular, so use max of drill and width)
+struct VIA_KNOCKOUT_KEY
+{
+    VECTOR2I position;
+    int      effectiveSize;    // max of drill and via width
+
+    bool operator==( const VIA_KNOCKOUT_KEY& other ) const
+    {
+        return position == other.position && effectiveSize == other.effectiveSize;
+    }
+};
+
+struct VIA_KNOCKOUT_KEY_HASH
+{
+    size_t operator()( const VIA_KNOCKOUT_KEY& key ) const
+    {
+        return hash_val( key.position.x, key.position.y, key.effectiveSize );
+    }
+};
+
+/// Key for deduplicating coincident tracks (same endpoints, width)
+/// Endpoints are canonicalized so that start < end lexicographically
+struct TRACK_KNOCKOUT_KEY
+{
+    VECTOR2I start;
+    VECTOR2I end;
+    int      width;
+
+    TRACK_KNOCKOUT_KEY( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth ) :
+            width( aWidth )
+    {
+        // Canonicalize endpoint order for consistent hashing
+        if( aStart.x < aEnd.x || ( aStart.x == aEnd.x && aStart.y <= aEnd.y ) )
+        {
+            start = aStart;
+            end = aEnd;
+        }
+        else
+        {
+            start = aEnd;
+            end = aStart;
+        }
+    }
+
+    bool operator==( const TRACK_KNOCKOUT_KEY& other ) const
+    {
+        return start == other.start && end == other.end && width == other.width;
+    }
+};
+
+struct TRACK_KNOCKOUT_KEY_HASH
+{
+    size_t operator()( const TRACK_KNOCKOUT_KEY& key ) const
+    {
+        return hash_val( key.start.x, key.start.y, key.end.x, key.end.y, key.width );
+    }
+};
+
+} // anonymous namespace
 
 
 ZONE_FILLER::ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit ) :
@@ -1489,6 +1586,10 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     int                    holeClearance;
     SHAPE_POLY_SET         holes;
 
+    // Deduplication sets for coincident pads and vias
+    std::unordered_set<PAD_KNOCKOUT_KEY, PAD_KNOCKOUT_KEY_HASH> processedPads;
+    std::unordered_set<VIA_KNOCKOUT_KEY, VIA_KNOCKOUT_KEY_HASH> processedVias;
+
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
@@ -1501,6 +1602,33 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             if( !padBBox.Intersects( aZone->GetBoundingBox() ) )
                 continue;
+
+            // Deduplicate coincident pads (skip custom pads - they have complex shapes)
+            PAD_SHAPE padShape = pad->GetShape( aLayer );
+
+            if( padShape != PAD_SHAPE::CUSTOM )
+            {
+                // For circular pads: use max of drill and pad size; otherwise just pad size
+                VECTOR2I padSize = pad->GetSize( aLayer );
+                VECTOR2I effectiveSize;
+
+                if( padShape == PAD_SHAPE::CIRCLE )
+                {
+                    int drill = std::max( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                    int maxDim = std::max( { padSize.x, padSize.y, drill } );
+                    effectiveSize = VECTOR2I( maxDim, maxDim );
+                }
+                else
+                {
+                    effectiveSize = padSize;
+                }
+
+                PAD_KNOCKOUT_KEY padKey{ pad->GetPosition(), effectiveSize,
+                                         static_cast<int>( padShape ), pad->GetOrientation() };
+
+                if( !processedPads.insert( padKey ).second )
+                    continue;
+            }
 
             bool noConnection = pad->GetNetCode() != aZone->GetNetCode();
 
@@ -1651,6 +1779,13 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 if( !viaBBox.Intersects( aZone->GetBoundingBox() ) )
                     continue;
 
+                // Deduplicate coincident vias (circular, so use max of drill and width)
+                int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
+                VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize };
+
+                if( !processedVias.insert( viaKey ).second )
+                    continue;
+
                 bool noConnection = via->GetNetCode() != aZone->GetNetCode()
                         || ( via->Padstack().UnconnectedLayerMode() == UNCONNECTED_LAYER_MODE::START_END_ONLY
                              && aLayer != via->Padstack().Drill().start
@@ -1724,6 +1859,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     long                   ticker = 0;
+
+    // Deduplication sets for coincident items
+    std::unordered_set<PAD_KNOCKOUT_KEY, PAD_KNOCKOUT_KEY_HASH>     processedPads;
+    std::unordered_set<VIA_KNOCKOUT_KEY, VIA_KNOCKOUT_KEY_HASH>     processedVias;
+    std::unordered_set<TRACK_KNOCKOUT_KEY, TRACK_KNOCKOUT_KEY_HASH> processedTracks;
 
     auto checkForCancel =
             [&ticker]( PROGRESS_REPORTER* aReporter ) -> bool
@@ -1828,6 +1968,33 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     {
         if( checkForCancel( m_progressReporter ) )
             return;
+
+        // Deduplicate coincident pads (skip custom pads - they have complex shapes)
+        PAD_SHAPE padShape = pad->GetShape( aLayer );
+
+        if( padShape != PAD_SHAPE::CUSTOM )
+        {
+            // For circular pads: use max of drill and pad size; otherwise just pad size
+            VECTOR2I padSize = pad->GetSize( aLayer );
+            VECTOR2I effectiveSize;
+
+            if( padShape == PAD_SHAPE::CIRCLE )
+            {
+                int drill = std::max( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                int maxDim = std::max( { padSize.x, padSize.y, drill } );
+                effectiveSize = VECTOR2I( maxDim, maxDim );
+            }
+            else
+            {
+                effectiveSize = padSize;
+            }
+
+            PAD_KNOCKOUT_KEY padKey{ pad->GetPosition(), effectiveSize,
+                                     static_cast<int>( padShape ), pad->GetOrientation() };
+
+            if( !processedPads.insert( padKey ).second )
+                continue;
+        }
 
         knockoutPadClearance( pad );
     }
@@ -1936,6 +2103,24 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
         if( checkForCancel( m_progressReporter ) )
             return;
+
+        // Deduplicate coincident tracks and vias
+        if( track->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
+            VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize };
+
+            if( !processedVias.insert( viaKey ).second )
+                continue;
+        }
+        else
+        {
+            TRACK_KNOCKOUT_KEY trackKey( track->GetStart(), track->GetEnd(), track->GetWidth() );
+
+            if( !processedTracks.insert( trackKey ).second )
+                continue;
+        }
 
         knockoutTrackClearance( track );
     }
