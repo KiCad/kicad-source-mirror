@@ -700,24 +700,27 @@ void BOARD_COMMIT::Revert()
         switch( changeType )
         {
         case CHT_ADD:
-            if( !( changeFlags & CHT_DONE ) )
-                break;
-
-            if( boardItem->Type() != PCB_NETINFO_T )
-                view->Remove( boardItem );
-
-            if( m_isFootprintEditor )
+            if( changeFlags & CHT_DONE )
             {
-                if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
-                    parentFP->Remove( boardItem );
-            }
-            else
-            {
-                board->Remove( boardItem, REMOVE_MODE::BULK );
-                bulkRemovedItems.push_back( boardItem );
+                if( boardItem->Type() != PCB_NETINFO_T )
+                    view->Remove( boardItem );
+
+                if( m_isFootprintEditor )
+                {
+                    if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                        parentFP->Remove( boardItem );
+                }
+                else
+                {
+                    board->Remove( boardItem, REMOVE_MODE::BULK );
+                    bulkRemovedItems.push_back( boardItem );
+                }
             }
 
-            break;
+            // Item was staged for addition but is being reverted, so delete it
+            delete boardItem;
+            entry.m_item = nullptr;
+            continue;
 
         case CHT_REMOVE:
         {
@@ -760,8 +763,6 @@ void BOARD_COMMIT::Revert()
             itemsChanged.push_back( boardItem );
 
             updateComponentClasses( boardItem );
-
-            delete entry.m_copy;
             break;
         }
 
@@ -769,6 +770,10 @@ void BOARD_COMMIT::Revert()
             UNIMPLEMENTED_FOR( boardItem->GetClass() );
             break;
         }
+
+        // Delete any copies we still have ownership of
+        delete entry.m_copy;
+        entry.m_copy = nullptr;
 
         boardItem->ClearEditFlags();
     }
