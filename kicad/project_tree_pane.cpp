@@ -1368,6 +1368,11 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     }
 
     const wxFileName& pathModified = event.GetPath();
+
+    // Ignore events from .history directory (local backup)
+    if( pathModified.GetFullPath().Contains( wxS( ".history" ) ) )
+        return;
+
     wxString subdir = pathModified.GetPath();
     wxString fn = pathModified.GetFullPath();
 
@@ -1570,6 +1575,34 @@ void PROJECT_TREE_PANE::FileWatcherReset()
                         TO_UTF8( fn.GetFullPath() ) );
             return;
         }
+
+        // Explicitly remove .history directory and its descendants from the watch list.
+        // AddTree adds all subdirectories, but we don't want to watch .history (local backup).
+        wxFileName historyDir( prj_dir, wxEmptyString );
+        historyDir.AppendDir( wxS( ".history" ) );
+
+        if( historyDir.DirExists() )
+        {
+            wxDir dir( historyDir.GetPath() );
+
+            if( dir.IsOpened() )
+            {
+                // Remove .history itself
+                m_watcher->Remove( historyDir );
+
+                // Remove all subdirectories of .history
+                wxString subdir;
+                bool     cont = dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS );
+
+                while( cont )
+                {
+                    wxFileName subdirFn( historyDir.GetPath(), wxEmptyString );
+                    subdirFn.AppendDir( subdir );
+                    m_watcher->Remove( subdirFn );
+                    cont = dir.GetNext( &subdir );
+                }
+            }
+        }
     }
 #else
         if( !m_watcher->Add( fn ) )
@@ -1617,6 +1650,13 @@ void PROJECT_TREE_PANE::FileWatcherReset()
         {
             // we can see wxString under a debugger, not a wxFileName
             const wxString& path = itemData->GetFileName();
+
+            // Skip .history directory and its descendants (local backup)
+            if( path.Contains( wxS( ".history" ) ) )
+            {
+                kid = m_TreeProject->GetNextChild( root_id, cookie );
+                continue;
+            }
 
             wxLogTrace( tracePathsAndFiles, "%s: add '%s'\n", __func__, TO_UTF8( path ) );
 
