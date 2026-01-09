@@ -274,8 +274,9 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         WRL2BASE* bp = new WRL2BASE;
 
-        // allow Inline{} files to be included
-        bp->SetEnableInline( true );
+        // allow Inline{} files to be included (controlled by the useInline parameter
+        // to prevent infinite recursion when loading referenced VRML files)
+        bp->SetEnableInline( useInline );
 
         if( !bp->Read( proc ) )
         {

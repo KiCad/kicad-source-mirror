@@ -53,6 +53,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline );
 WRL2BASE::WRL2BASE() : WRL2NODE()
 {
     m_useInline = false;
+    m_applyUnitConversion = true;  // default to legacy behavior
     m_Type = WRL2NODES::WRL2_BASE;
 }
 
@@ -86,6 +87,18 @@ bool WRL2BASE::SetParent( WRL2NODE* aParent, bool /* doUnlink */ )
 void WRL2BASE::SetEnableInline( bool enable )
 {
     m_useInline = enable;
+}
+
+
+bool WRL2BASE::GetApplyUnitConversion( void ) const
+{
+    return m_applyUnitConversion;
+}
+
+
+void WRL2BASE::SetApplyUnitConversion( bool apply )
+{
+    m_applyUnitConversion = apply;
 }
 
 

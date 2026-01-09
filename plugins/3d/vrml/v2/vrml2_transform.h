@@ -49,6 +49,9 @@ public:
 
     bool isDangling( void ) override;
 
+    // Returns true if this transform has a scale that differs significantly from 1.0
+    bool HasNonUnityScale() const;
+
 private:
     bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
 

@@ -66,6 +66,12 @@ public:
     void SetEnableInline( bool enable );
     bool GetEnableInline( void );
 
+    // function to check if unit conversion should be applied
+    // when false, coordinates are used as-is (PCBnew export style with top-level scale)
+    // when true, coordinates are multiplied by 2.54 (legacy KiCad 0.1 inch units)
+    bool GetApplyUnitConversion( void ) const;
+    void SetApplyUnitConversion( bool apply );
+
     // function to manipulate Inline{} objects
     SGNODE* GetInlineData( const std::string& aName );
 
@@ -104,6 +110,7 @@ private:
     bool readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
     bool m_useInline;
+    bool m_applyUnitConversion;  // if true, multiply coords by 2.54 (legacy mode)
     std::string m_dir;  // parent directory of the file
     std::map< std::string, SGNODE* > m_inlineModels;
 };

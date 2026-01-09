@@ -144,17 +144,20 @@ bool WRL2COORDS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         return false;
     }
 
-    // assuming legacy KiCad expectation of 1U = 0.1 inch,
-    // convert to mm to meet the expectations of the SG structure
-    std::vector< WRLVEC3F >::iterator sP = points.begin();
-    std::vector< WRLVEC3F >::iterator eP = points.end();
-
-    while( sP != eP )
+    // For legacy KiCad VRML files (1U = 0.1 inch), convert to mm.
+    // For PCBnew exports with top-level scale, skip conversion as coordinates are already correct.
+    if( aTopNode->GetApplyUnitConversion() )
     {
-        sP->x *= 2.54f;
-        sP->y *= 2.54f;
-        sP->z *= 2.54f;
-        ++sP;
+        std::vector< WRLVEC3F >::iterator sP = points.begin();
+        std::vector< WRLVEC3F >::iterator eP = points.end();
+
+        while( sP != eP )
+        {
+            sP->x *= 2.54f;
+            sP->y *= 2.54f;
+            sP->z *= 2.54f;
+            ++sP;
+        }
     }
 
     if( proc.Peek() == '}' )

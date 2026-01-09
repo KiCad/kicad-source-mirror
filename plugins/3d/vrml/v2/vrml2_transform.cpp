@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include <wx/log.h>
 
 #include "vrml2_base.h"
@@ -168,10 +169,14 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 return false;
             }
 
-            // convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
-            center.x *= 2.54f;
-            center.y *= 2.54f;
-            center.z *= 2.54f;
+            // Convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
+            // Only apply if using legacy unit conversion mode
+            if( aTopNode->GetApplyUnitConversion() )
+            {
+                center.x *= 2.54f;
+                center.y *= 2.54f;
+                center.z *= 2.54f;
+            }
         }
         else if( !glob.compare( "rotation" ) )
         {
@@ -199,6 +204,19 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                             proc.GetFileName(), proc.GetError() );
 
                 return false;
+            }
+
+            // If this is a top-level transform (parent is WRL2_BASE) with a non-unity scale,
+            // disable unit conversion. This handles PCBnew-exported VRML which includes a
+            // top-level scale factor, meaning coordinates are already properly scaled.
+            if( m_Parent != nullptr && m_Parent->GetNodeType() == WRL2NODES::WRL2_BASE
+                && HasNonUnityScale() )
+            {
+                aTopNode->SetApplyUnitConversion( false );
+
+                wxLogTrace( traceVrmlPlugin,
+                            wxT( " * [INFO] Detected top-level scale in VRML file, "
+                                 "disabling unit conversion." ) );
             }
         }
         else if( !glob.compare( "scaleOrientation" ) )
@@ -229,10 +247,14 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 return false;
             }
 
-            // convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
-            translation.x *= 2.54f;
-            translation.y *= 2.54f;
-            translation.z *= 2.54f;
+            // Convert from 1 VRML Unit = 0.1 inch to 1 VRML Unit = 1 mm
+            // Only apply if using legacy unit conversion mode
+            if( aTopNode->GetApplyUnitConversion() )
+            {
+                translation.x *= 2.54f;
+                translation.y *= 2.54f;
+                translation.z *= 2.54f;
+            }
         }
         else if( !glob.compare( "children" ) )
         {
@@ -253,6 +275,17 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     }   // while( true ) -- reading contents of Transform{}
 
     return true;
+}
+
+
+bool WRL2TRANSFORM::HasNonUnityScale() const
+{
+    // Check if any scale component differs from 1.0 by more than a small tolerance
+    const float tolerance = 0.001f;
+
+    return ( std::fabs( scale.x - 1.0f ) > tolerance )
+        || ( std::fabs( scale.y - 1.0f ) > tolerance )
+        || ( std::fabs( scale.z - 1.0f ) > tolerance );
 }
 
 
