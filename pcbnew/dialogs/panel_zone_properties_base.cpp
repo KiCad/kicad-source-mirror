@@ -54,7 +54,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bPropertiesSizer->Add( gbSizer8, 0, wxEXPAND|wxALL, 5 );
 
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( m_cbLocked, 0, wxRIGHT, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearancesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

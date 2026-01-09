@@ -100,7 +100,7 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     topSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
     m_grid = new WX_GRID( this, wxID_ANY );
-    m_grid->CreateGrid( 0, 11 );
+    m_grid->CreateGrid( m_footprint->GetPadCount(), 11 );
     m_grid->SetColLabelValue( COL_NUMBER, _( "Number" ) );
     m_grid->SetColLabelValue( COL_TYPE,   _( "Type" ) );
     m_grid->SetColLabelValue( COL_SHAPE,  _( "Shape" ) );
@@ -215,6 +215,8 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
           },
           wxID_CANCEL );
 
+    Layout();
+    topSizer->Fit( this );
     finishDialogSettings();
 }
 
@@ -242,7 +244,9 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 
     for( PAD* pad : m_footprint->Pads() )
     {
-        m_grid->AppendRows( 1 );
+        if( row >= m_grid->GetNumberRows() )
+            continue;
+
         m_grid->SetCellValue( row, COL_NUMBER, pad->GetNumber() );
 
         // Pad attribute to string
@@ -306,7 +310,8 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 
         // Pad to die metrics
         if( pad->GetPadToDieLength() )
-            m_grid->SetCellValue( row, COL_P2D_LENGTH, m_unitsProvider->StringFromValue( pad->GetPadToDieLength(), true ) );
+            m_grid->SetCellValue( row, COL_P2D_LENGTH, m_unitsProvider->StringFromValue( pad->GetPadToDieLength(),
+                                                                                         true ) );
 
         if( pad->GetPadToDieDelay() )
             m_grid->SetCellValue( row, COL_P2D_DELAY, wxString::Format( "%d", pad->GetPadToDieDelay() ) );
