@@ -465,8 +465,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     Bind( SYMBOL_DELAY_FOCUS, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, this );
     Bind( SYMBOL_DELAY_SELECTION, &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, this );
 
-
-    // On non-GTK platforms, just open the cell editor directly
     wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
     evt->SetClientData( new VECTOR2I( 0, FDC_VALUE ) );
     QueueEvent( evt );
@@ -1148,6 +1146,10 @@ void DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus( wxCommandEvent& event )
     VECTOR2I *loc = static_cast<VECTOR2I*>( event.GetClientData() );
 
     wxCHECK_RET( loc, wxT( "Missing focus cell location" ) );
+
+    // Run the AutoColumnSizer before setting focus (as it will clear any shown cell edit control
+    // if it has to resize that column).
+    m_fieldsGrid->RecomputeGridWidths();
 
     // Handle a delayed focus
 

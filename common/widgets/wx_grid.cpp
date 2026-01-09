@@ -1008,7 +1008,7 @@ void WX_GRID::SetupColumnAutosizer( int aFlexibleCol )
     Bind( wxEVT_UPDATE_UI,
           [this]( wxUpdateUIEvent& aEvent )
           {
-              recomputeGridWidths();
+              RecomputeGridWidths();
               aEvent.Skip();
           } );
 
@@ -1029,7 +1029,7 @@ void WX_GRID::SetupColumnAutosizer( int aFlexibleCol )
 }
 
 
-void WX_GRID::recomputeGridWidths()
+void WX_GRID::RecomputeGridWidths()
 {
     if( m_gridWidthsDirty )
     {
