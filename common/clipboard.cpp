@@ -123,7 +123,13 @@ std::string GetClipboardUTF8()
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-    if( wxTheClipboard->Open() )
+    // Check if clipboard is already open. This can happen if another event handler (such as
+    // wxTextEntry::CanPaste() called during UPDATE_UI processing) opened the clipboard and
+    // didn't close it. We handle this by reusing the existing session.
+    bool wasAlreadyOpen = wxTheClipboard->IsOpened();
+    bool isOpen = wasAlreadyOpen || wxTheClipboard->Open();
+
+    if( isOpen )
     {
         if( wxTheClipboard->IsSupported( wxDataFormat( wxS( "application/kicad" ) ) ) )
         {
@@ -132,7 +138,10 @@ std::string GetClipboardUTF8()
             if( wxTheClipboard->GetData( data ) )
             {
                 result.assign( static_cast<const char*>( data.GetData() ), data.GetSize() );
-                wxTheClipboard->Close();
+
+                if( !wasAlreadyOpen )
+                    wxTheClipboard->Close();
+
                 return result;
             }
         }
@@ -148,7 +157,8 @@ std::string GetClipboardUTF8()
             result = data.GetText().utf8_str();
         }
 
-        wxTheClipboard->Close();
+        if( !wasAlreadyOpen )
+            wxTheClipboard->Close();
     }
 
     return result;
@@ -160,12 +170,16 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
     std::unique_ptr<wxImage> image;
     wxLogNull                doNotLog; // disable logging of failed clipboard actions
 
-    // First try for an image
-    if( wxTheClipboard->Open() )
+    // Check if clipboard is already open (same handling as GetClipboardUTF8)
+    bool wasAlreadyOpen = wxTheClipboard->IsOpened();
+    bool isOpen = wasAlreadyOpen || wxTheClipboard->Open();
+
+    if( isOpen )
     {
         if( wxTheClipboard->IsSupported( wxDF_BITMAP ) )
         {
             wxBitmapDataObject data;
+
             if( wxTheClipboard->GetData( data ) )
             {
                 image = std::make_unique<wxImage>( data.GetBitmap().ConvertToImage() );
@@ -174,6 +188,7 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
         else if( wxTheClipboard->IsSupported( wxDF_FILENAME ) )
         {
             wxFileDataObject data;
+
             if( wxTheClipboard->GetData( data ) && data.GetFilenames().size() == 1 )
             {
                 image = std::make_unique<wxImage>( data.GetFilenames()[0] );
@@ -183,7 +198,8 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
             }
         }
 
-        wxTheClipboard->Close();
+        if( !wasAlreadyOpen )
+            wxTheClipboard->Close();
     }
 
     return image;
@@ -231,12 +247,16 @@ bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData )
 
     bool ok = false;
 
-    // First try for text data
-    if( wxTheClipboard->Open() )
+    // Check if clipboard is already open (same handling as GetClipboardUTF8)
+    bool wasAlreadyOpen = wxTheClipboard->IsOpened();
+    bool isOpen = wasAlreadyOpen || wxTheClipboard->Open();
+
+    if( isOpen )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
         {
             wxTextDataObject data;
+
             if( wxTheClipboard->GetData( data ) )
             {
                 ok = AutoDecodeCSV( data.GetText(), aData );
@@ -245,7 +265,8 @@ bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData )
 
         // We could also handle .csv wxDF_FILENAMEs here
 
-        wxTheClipboard->Close();
+        if( !wasAlreadyOpen )
+            wxTheClipboard->Close();
     }
 
     return ok;
