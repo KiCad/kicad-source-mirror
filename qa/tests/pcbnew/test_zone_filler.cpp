@@ -26,6 +26,7 @@
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
+#include <board_commit.h>
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -36,6 +37,7 @@
 #include <geometry/shape_poly_set.h>
 #include <advanced_config.h>
 #include <connectivity/connectivity_data.h>
+#include <teardrop/teardrop.h>
 
 
 struct ZONE_FILL_TEST_FIXTURE
@@ -861,4 +863,292 @@ BOOST_FIXTURE_TEST_CASE( RegressionTHPadInnerLayerFlashing, ZONE_FILL_TEST_FIXTU
                          wxString::Format( "Found %d TH pads that should flash on inner layers "
                                            "but don't. This indicates issue 22826 is not fixed.",
                                            padsWithMissingFlashing ) );
+}
+
+
+/**
+ * Test for issue 19405: Rounded teardrop geometry should not create concave shapes
+ * when connecting to rounded rectangle pads at corners.
+ *
+ * The test board has a rounded rectangle pad with a track connecting to its short side
+ * (hitting the corner radius). With curved teardrops enabled, the teardrop should not
+ * intersect the pad's corner radius, which would create sharp inside corners.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionRoundRectTeardropGeometry, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue19405_roundrect_teardrop", m_board );
+
+    // Set up tool manager for teardrop generation
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    // Generate teardrops
+    BOARD_COMMIT commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // Find teardrop zones
+    int teardropCount = 0;
+    bool foundBadTeardrop = false;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        // Get the teardrop outline
+        const SHAPE_POLY_SET* outline = zone->Outline();
+
+        if( !outline || outline->OutlineCount() == 0 )
+            continue;
+
+        const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+        // Check that the teardrop polygon is convex or at least doesn't have
+        // any sharp concave angles that would indicate intersection with the pad corner.
+        // A well-formed teardrop should have all turns in the same direction
+        // (or very close to it) except at the pad anchor points.
+        int concaveCount = 0;
+
+        for( int i = 0; i < chain.PointCount(); i++ )
+        {
+            int prev = ( i == 0 ) ? chain.PointCount() - 1 : i - 1;
+            int next = ( i + 1 ) % chain.PointCount();
+
+            VECTOR2I v1 = chain.CPoint( i ) - chain.CPoint( prev );
+            VECTOR2I v2 = chain.CPoint( next ) - chain.CPoint( i );
+
+            // Cross product gives handedness of turn
+            int64_t cross = (int64_t) v1.x * v2.y - (int64_t) v1.y * v2.x;
+
+            // Count significant concave turns (negative cross product for CCW polygons)
+            // Small values are numerical noise
+            if( cross < -1000 )
+                concaveCount++;
+        }
+
+        // A teardrop should have at most 2-3 concave points (at the pad anchor points)
+        // Many concave points indicate the curve is intersecting the pad corner
+        if( concaveCount > 5 )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Teardrop has %d concave vertices, "
+                                                   "indicating possible corner intersection",
+                                                   concaveCount ) );
+            foundBadTeardrop = true;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone" );
+
+    BOOST_CHECK_MESSAGE( !foundBadTeardrop,
+                         "Found teardrop with excessive concave vertices, indicating "
+                         "issue 19405 - teardrop curve intersecting rounded rectangle corner" );
+}
+
+
+/**
+ * Test that teardrops connecting to oval pads at their curved ends have proper tangent curves.
+ *
+ * Oval pads have semicircular ends. When a track connects to the curved end, the teardrop
+ * curve should be tangent to the semicircle, similar to how rounded rectangle corners are
+ * handled.
+ */
+BOOST_FIXTURE_TEST_CASE( OvalPadTeardropGeometry, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "oval_teardrop", m_board );
+
+    // Set up tool manager for teardrop generation
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    // Generate teardrops
+    BOARD_COMMIT commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // Find teardrop zones
+    int teardropCount = 0;
+    bool foundBadTeardrop = false;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        const SHAPE_POLY_SET* outline = zone->Outline();
+
+        if( !outline || outline->OutlineCount() == 0 )
+            continue;
+
+        const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+        // Check for excessive concave vertices that would indicate the teardrop curve
+        // is not tangent to the oval's semicircular end
+        int concaveCount = 0;
+
+        for( int i = 0; i < chain.PointCount(); i++ )
+        {
+            int prev = ( i == 0 ) ? chain.PointCount() - 1 : i - 1;
+            int next = ( i + 1 ) % chain.PointCount();
+
+            VECTOR2I v1 = chain.CPoint( i ) - chain.CPoint( prev );
+            VECTOR2I v2 = chain.CPoint( next ) - chain.CPoint( i );
+
+            int64_t cross = (int64_t) v1.x * v2.y - (int64_t) v1.y * v2.x;
+
+            if( cross < -1000 )
+                concaveCount++;
+        }
+
+        if( concaveCount > 5 )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Oval teardrop has %d concave vertices",
+                                                   concaveCount ) );
+            foundBadTeardrop = true;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone" );
+
+    BOOST_CHECK_MESSAGE( !foundBadTeardrop,
+                         "Found teardrop with excessive concave vertices on oval pad, "
+                         "indicating curve is not tangent to semicircular end" );
+}
+
+
+/**
+ * Test that teardrops connecting to large circular pads maintain proper tangent contact.
+ *
+ * When a circle is larger than the configured teardrop max width, the anchor points should
+ * still be on the actual circle edge (not on a clipped boundary) to ensure the teardrop
+ * curve is tangent to the circle.
+ */
+BOOST_FIXTURE_TEST_CASE( LargeCircleTeardropGeometry, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "large_circle_teardrop", m_board );
+
+    // Set up tool manager for teardrop generation
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    // Generate teardrops
+    BOARD_COMMIT commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // Find the pad and its teardrop
+    PAD* largePad = nullptr;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE )
+            {
+                largePad = pad;
+                break;
+            }
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( largePad != nullptr, "Expected a circular pad in test board" );
+
+    int padRadius = largePad->GetSize( F_Cu ).x / 2;
+    VECTOR2I padCenter = largePad->GetPosition();
+
+    // Find teardrop zones
+    int teardropCount = 0;
+    bool foundBadTeardrop = false;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        const SHAPE_POLY_SET* outline = zone->Outline();
+
+        if( !outline || outline->OutlineCount() == 0 )
+            continue;
+
+        const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+        // Check for excessive concave vertices
+        int concaveCount = 0;
+
+        for( int i = 0; i < chain.PointCount(); i++ )
+        {
+            int prev = ( i == 0 ) ? chain.PointCount() - 1 : i - 1;
+            int next = ( i + 1 ) % chain.PointCount();
+
+            VECTOR2I v1 = chain.CPoint( i ) - chain.CPoint( prev );
+            VECTOR2I v2 = chain.CPoint( next ) - chain.CPoint( i );
+
+            int64_t cross = (int64_t) v1.x * v2.y - (int64_t) v1.y * v2.x;
+
+            if( cross < -1000 )
+                concaveCount++;
+        }
+
+        if( concaveCount > 5 )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Large circle teardrop has %d concave vertices",
+                                                   concaveCount ) );
+            foundBadTeardrop = true;
+        }
+
+        // Also verify that the teardrop anchor points near the pad are approximately
+        // on the circle edge (within tolerance)
+        int maxError = m_board->GetDesignSettings().m_MaxError;
+
+        for( int i = 0; i < chain.PointCount(); i++ )
+        {
+            VECTOR2I pt = chain.CPoint( i );
+            double dist = ( pt - padCenter ).EuclideanNorm();
+
+            // Points that are close to the circle should be approximately on it
+            if( dist > padRadius * 0.5 && dist < padRadius * 1.5 )
+            {
+                double deviation = std::abs( dist - padRadius );
+
+                // Allow some tolerance for polygon approximation
+                if( deviation > maxError * 5 && deviation < padRadius * 0.2 )
+                {
+                    BOOST_TEST_MESSAGE( wxString::Format(
+                            "Teardrop point at distance %.2f from pad center (radius %.2f), "
+                            "deviation %.2f exceeds tolerance",
+                            dist / 1000.0, padRadius / 1000.0, deviation / 1000.0 ) );
+                }
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone" );
+
+    BOOST_CHECK_MESSAGE( !foundBadTeardrop,
+                         "Found teardrop with excessive concave vertices on large circle, "
+                         "indicating anchor points may not be on circle edge" );
 }

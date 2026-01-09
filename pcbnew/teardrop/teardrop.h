@@ -153,12 +153,14 @@ private:
     /**
      * Compute the curve part points for teardrops connected to a rectangular/polygonal shape
      * The Bezier curve control points are not optimized for a special shape,
-     * so use computeCurvedForRoundShape() for round shapes for better result
+     * so use computeCurvedForRoundShape() for round shapes for better result.
+     * For rounded rectangles, special handling ensures curves are tangent to corner radii.
      */
     void computeCurvedForRectShape( const TEARDROP_PARAMETERS& aParams,
                                     std::vector<VECTOR2I>& aPoly, int aTdWidth,
                                     int aTrackHalfWidth, std::vector<VECTOR2I>& aPts,
-                                    const VECTOR2I& aIntersection ) const;
+                                    const VECTOR2I& aIntersection, BOARD_ITEM* aOther,
+                                    const VECTOR2I& aOtherPos, PCB_LAYER_ID aLayer ) const;
 
     /**
      * Compute all teardrop points of the polygon shape
