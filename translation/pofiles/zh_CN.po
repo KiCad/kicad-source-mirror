@@ -36,7 +36,7 @@
 # HalfSweet <HalfSweet@halfsweet.cn>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # KK0571 <190506420@qq.com>, 2025.
-# yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025.
+# yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025, 2026.
 # Li Yi <yilibj@gmail.com>, 2025.
 # CharlieYu <charlieyu4994@outlook.com>, 2025.
 # aisuneko icecat <iceneko@protonmail.ch>, 2025.
@@ -5738,7 +5738,7 @@ msgid ""
 "Library tables will be imported from the version you selected on the "
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
-msgstr ""
+msgstr "库表将从您在上一步中选择的版本导入。任何无法导入的表都将从KiCad的默认库创建。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
 msgid "Start with no libraries"
@@ -5751,6 +5751,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"无法在预期位置找到内置库表。这通常意味着您已安装KiCad软件但未同时安装库。您可"
+"以继续进行安装，但需要单独安装库文件才能使其可用。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -5779,6 +5781,10 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad可以匿名地向开发团队报告崩溃和其他事件数据，以帮助识别和修复错误并提升性"
+"能。启用数据收集后，KiCad 会在发生崩溃或其他重要事件时自动发送报告。这些报告"
+"包含报告生成时 KiCad 软件状态的技术细节。我们不会收集任何个人身份信息 (PII)，"
+"您的设计文件（例如原理图、PCB 和库文件）也不会在此过程中共享。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
@@ -9445,7 +9451,7 @@ msgstr "IPC/Scripting 插件"
 
 #: common/tool/action_toolbar.cpp:1099
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "用于放置 IPC/脚本操作按钮的区域"
 
 #: common/tool/action_toolbar.cpp:1104
 msgid "Layer selector"
@@ -14489,7 +14495,7 @@ msgid ""
 "When enabled, this footprint can have more than one pad with the same "
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
-msgstr ""
+msgstr "启用后，此封装可以有多个编号相同的焊盘，编号相同的焊盘在内部将被视为连通的。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
 #, fuzzy
@@ -16812,7 +16818,7 @@ msgstr "优先交换原理图符号而不是标签"
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
-msgstr ""
+msgstr "尽可能检测封装门交换并应用到相应的符号单元交换，而不是更改网络标签。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -16824,7 +16830,7 @@ msgstr "从封装更新符号的所有其它字段"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr ""
+msgstr "优先选择符号引脚互换，而不是标签互换"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
 msgid ""
