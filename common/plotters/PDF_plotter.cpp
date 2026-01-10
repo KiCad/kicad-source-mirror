@@ -2085,10 +2085,11 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
         return aPosition;
 
     // If the word is just a space character, advance position by space width and continue
-    if( aWord == wxT(" ") )
+    if( aWord == wxT( " " ) )
     {
         // Calculate space width and advance position
-        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic, aFontMetrics ).x / 2, 0 );
+        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic,
+                                                        aFontMetrics ).x / 2, 0 );
 
         if( aTextMirrored )
             spaceBox.x *= -1;
@@ -2096,6 +2097,51 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
         VECTOR2I rotatedSpaceBox = spaceBox;
         RotatePoint( rotatedSpaceBox, aOrient );
         return aPosition + rotatedSpaceBox;
+    }
+
+    // If the word contains tab characters, we need to handle them specially.
+    // Split by tabs and render each segment, advancing to the next tab stop for each tab.
+    if( aWord.Contains( wxT( '\t' ) ) )
+    {
+        constexpr double TAB_WIDTH = 4 * 0.6;
+
+        VECTOR2I pos = aPosition;
+        wxString segment;
+
+        for( wxUniChar c : aWord )
+        {
+            if( c == '\t' )
+            {
+                if( !segment.IsEmpty() )
+                {
+                    pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold,
+                                      aItalic, aFont, aFontMetrics, aV_justify, aTextStyle );
+                    segment.clear();
+                }
+
+                int tabWidth = KiROUND( aSize.x * TAB_WIDTH );
+                int currentIntrusion = ( pos.x - aPosition.x ) % tabWidth;
+                VECTOR2I tabAdvance( tabWidth - currentIntrusion, 0 );
+
+                if( aTextMirrored )
+                    tabAdvance.x *= -1;
+
+                RotatePoint( tabAdvance, aOrient );
+                pos += tabAdvance;
+            }
+            else
+            {
+                segment += c;
+            }
+        }
+
+        if( !segment.IsEmpty() )
+        {
+            pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold, aItalic,
+                              aFont, aFontMetrics, aV_justify, aTextStyle );
+        }
+
+        return pos;
     }
 
     // Compute transformation parameters for this word
