@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-07 23:01+0000\n"
+"PO-Revision-Date: 2026-01-10 18:08+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -48130,9 +48130,8 @@ msgid "Width Constraints: %s"
 msgstr "Megkötések:"
 
 #: pcbnew/pcb_track.cpp:1684
-#, fuzzy
 msgid "Micro Via"
-msgstr "μVia"
+msgstr "Mikro via"
 
 #: pcbnew/pcb_track.cpp:1685
 #, fuzzy
@@ -48404,11 +48403,9 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2061
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült menteni a DRC jelentést: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2066
 #, c-format
