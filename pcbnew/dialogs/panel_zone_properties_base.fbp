@@ -423,7 +423,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxRIGHT</property>
+                  <property name="flag">wxLEFT|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxCheckBox" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -2018,16 +2018,16 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style">wxTAB_TRAVERSAL</property>
-                        <object class="wxBoxSizer" expanded="false">
+                        <object class="wxBoxSizer" expanded="true">
                           <property name="minimum_size"></property>
                           <property name="name">bHatchedFillSizer</property>
                           <property name="orient">wxHORIZONTAL</property>
                           <property name="permission">none</property>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxGridBagSizer" expanded="false">
+                            <object class="wxGridBagSizer" expanded="true">
                               <property name="empty_cell_size">-1,10</property>
                               <property name="flexible_direction">wxBOTH</property>
                               <property name="growablecols">2</property>
@@ -2042,7 +2042,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">0</property>
-                                <property name="flag">wxRIGHT</property>
+                                <property name="flag">wxLEFT|wxRIGHT</property>
                                 <property name="row">0</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxCheckBox" expanded="false">
