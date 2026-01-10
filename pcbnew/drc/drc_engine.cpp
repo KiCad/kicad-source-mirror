@@ -279,6 +279,7 @@ void DRC_ENGINE::loadImplicitRules()
                     DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
                     constraint.Value().SetMin( nc->GetClearance() );
                     netclassRule->AddConstraint( constraint );
+                    m_netclassClearances[nc->GetName()] = nc->GetClearance();
                 }
 
                 if( nc->HasTrackWidth() )
@@ -346,6 +347,8 @@ void DRC_ENGINE::loadImplicitRules()
                         DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
                         min_clearanceConstraint.Value().SetMin( nc->GetDiffPairGap() );
                         netclassRule->AddConstraint( min_clearanceConstraint );
+
+                        m_hasDiffPairClearanceOverrides = true;
                     }
                 }
 
@@ -725,6 +728,23 @@ void DRC_ENGINE::compileRules()
             m_constraintMap[ constraint.m_Type ]->push_back( engineConstraint );
         }
     }
+
+    m_hasExplicitClearanceRules = false;
+    m_explicitConstraints.clear();
+
+    for( auto& [constraintType, ruleList] : m_constraintMap )
+    {
+        for( DRC_ENGINE_CONSTRAINT* c : *ruleList )
+        {
+            if( c->parentRule && !c->parentRule->IsImplicit() )
+            {
+                m_explicitConstraints[constraintType].push_back( c );
+
+                if( constraintType == CLEARANCE_CONSTRAINT )
+                    m_hasExplicitClearanceRules = true;
+            }
+        }
+    }
 }
 
 
@@ -753,6 +773,10 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
     m_constraintMap.clear();
     m_ownClearanceCache.clear();
+    m_netclassClearances.clear();
+    m_hasExplicitClearanceRules = false;
+    m_hasDiffPairClearanceOverrides = false;
+    m_explicitConstraints.clear();
 
     m_board->IncrementTimeStamp();  // Clear board-level caches
 
@@ -1614,7 +1638,49 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 }
             };
 
-    if( m_constraintMap.count( aConstraintType ) )
+    // Fast-path for netclass clearance when no explicit or diff pair override rules exist
+    if( aConstraintType == CLEARANCE_CONSTRAINT
+        && !m_hasExplicitClearanceRules
+        && !m_hasDiffPairClearanceOverrides
+        && !aReporter
+        && !a_is_non_copper
+        && ( !b || !b_is_non_copper ) )
+    {
+        int clearance = 0;
+
+        if( ac )
+        {
+            NETCLASS* ncA = ac->GetEffectiveNetClass();
+
+            if( ncA )
+            {
+                auto it = m_netclassClearances.find( ncA->GetName() );
+
+                if( it != m_netclassClearances.end() )
+                    clearance = it->second;
+            }
+        }
+
+        if( bc )
+        {
+            NETCLASS* ncB = bc->GetEffectiveNetClass();
+
+            if( ncB )
+            {
+                auto it = m_netclassClearances.find( ncB->GetName() );
+
+                if( it != m_netclassClearances.end() )
+                    clearance = std::max( clearance, it->second );
+            }
+        }
+
+        if( clearance > 0 )
+        {
+            constraint.m_Value.SetMin( clearance );
+            constraint.m_ImplicitMin = true;
+        }
+    }
+    else if( m_constraintMap.count( aConstraintType ) )
     {
         std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
 
@@ -1849,6 +1915,41 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
 
     return constraint;
+}
+
+
+DRC_CLEARANCE_BATCH DRC_ENGINE::EvalClearanceBatch( const BOARD_ITEM* a, const BOARD_ITEM* b,
+                                                     PCB_LAYER_ID aLayer )
+{
+    DRC_CLEARANCE_BATCH result;
+    DRC_CONSTRAINT c;
+
+    c = EvalRules( CLEARANCE_CONSTRAINT, a, b, aLayer );
+
+    if( c.m_Value.HasMin() )
+        result.clearance = c.m_Value.Min();
+
+    c = EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, aLayer );
+
+    if( c.m_Value.HasMin() )
+        result.holeClearance = c.m_Value.Min();
+
+    c = EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, aLayer );
+
+    if( c.m_Value.HasMin() )
+        result.holeToHole = c.m_Value.Min();
+
+    c = EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, aLayer );
+
+    if( c.m_Value.HasMin() )
+        result.edgeClearance = c.m_Value.Min();
+
+    c = EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, aLayer );
+
+    if( c.m_Value.HasMin() )
+        result.physicalClearance = c.m_Value.Min();
+
+    return result;
 }
 
 
