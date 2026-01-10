@@ -52945,7 +52945,7 @@ msgstr "Megkötések:"
 #: pcbnew/pcb_track.cpp:2407
 #, fuzzy
 msgid "Micro Via"
-msgstr "μVia"
+msgstr "Mikro via"
 
 #: pcbnew/pcb_track.cpp:2408
 #, fuzzy
@@ -53339,11 +53339,9 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr ""
-"Nem sikerült elemezni az URL-t:\n"
-"\"%s\""
+msgstr "Nem sikerült menteni a DRC jelentést: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2410
 #, c-format
@@ -53351,9 +53349,8 @@ msgid "Saved DRC Report to %s\n"
 msgstr "DRC hibajelentés elmentve ide: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2417
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Nyákterv mentése"
+msgstr "Nyákterv mentése\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2421
 msgid "Failed to save board.\n"
@@ -53413,9 +53410,9 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Kimeneti mappa \"%s\" nem hozható létre."
+msgstr "Nem sikerült megnyitni a plugin könyvtárat: \"%s\"."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:220
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:228
