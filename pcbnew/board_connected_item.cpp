@@ -34,6 +34,7 @@
 #include <i18n_utility.h>
 #include <netinfo.h>
 #include <api/board/board_types.pb.h>
+#include <shared_mutex>
 
 using namespace std::placeholders;
 
@@ -101,7 +102,12 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
     // Invalidate clearance cache since net can affect clearance rules
     if( board )
+    {
         board->InvalidateClearanceCache( m_Uuid );
+
+        std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+        board->m_ItemNetclassCache.erase( this );
+    }
 
     return ( m_netinfo != nullptr );
 }

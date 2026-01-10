@@ -106,6 +106,20 @@ typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR
                             int aLayer, DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )>
         DRC_VIOLATION_HANDLER;
 
+
+/**
+ * Batch result for clearance-related constraints to reduce per-query overhead during PNS routing.
+ */
+struct DRC_CLEARANCE_BATCH
+{
+    int clearance = 0;
+    int holeClearance = 0;
+    int holeToHole = 0;
+    int edgeClearance = 0;
+    int physicalClearance = 0;
+};
+
+
 /**
  * Design Rule Checker object that performs all the DRC tests.
  *
@@ -199,6 +213,18 @@ public:
 
     DRC_CONSTRAINT EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
                                        PCB_LAYER_ID aLayer, REPORTER* aReporter = nullptr );
+
+    /**
+     * Evaluate all clearance-related constraints in a single batch call.
+     * This reduces per-call overhead during interactive PNS routing.
+     *
+     * @param a First board item
+     * @param b Second board item (may be nullptr)
+     * @param aLayer Layer to evaluate constraints on
+     * @return DRC_CLEARANCE_BATCH containing all clearance constraint values
+     */
+    DRC_CLEARANCE_BATCH EvalClearanceBatch( const BOARD_ITEM* a, const BOARD_ITEM* b,
+                                            PCB_LAYER_ID aLayer );
 
     /**
      * Get the cached own clearance for an item on a specific layer.
@@ -338,6 +364,11 @@ protected:
     // Cache for GetOwnClearance lookups to improve rendering performance.
     // Key is (UUID, layer), value is clearance in internal units.
     std::unordered_map<DRC_OWN_CLEARANCE_CACHE_KEY, int> m_ownClearanceCache;
+
+    std::unordered_map<wxString, int> m_netclassClearances;  // netclass name -> clearance
+    bool m_hasExplicitClearanceRules = false;
+    bool m_hasDiffPairClearanceOverrides = false;
+    std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>> m_explicitConstraints;
 };
 
 #endif // DRC_H

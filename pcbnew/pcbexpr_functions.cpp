@@ -1322,12 +1322,34 @@ static void hasExactNetclassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                     return 0.0;
 
                 BOARD_CONNECTED_ITEM* bcItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                NETCLASS*             netclass = bcItem->GetEffectiveNetClass();
+                BOARD*                board = bcItem->GetBoard();
+                wxString              netclassName;
 
-                if( netclass->GetName() == arg->AsString() )
-                    return 1.0;
+                if( board && ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                {
+                    std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
 
-                return 0.0;
+                    auto it = board->m_ItemNetclassCache.find( item );
+
+                    if( it != board->m_ItemNetclassCache.end() )
+                        netclassName = it->second;
+                }
+
+                if( netclassName.empty() )
+                {
+                    NETCLASS* netclass = bcItem->GetEffectiveNetClass();
+
+                    if( netclass )
+                        netclassName = netclass->GetName();
+
+                    if( board && !netclassName.empty() && ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                    {
+                        std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+                        board->m_ItemNetclassCache[item] = netclassName;
+                    }
+                }
+
+                return ( netclassName == arg->AsString() ) ? 1.0 : 0.0;
             } );
 }
 

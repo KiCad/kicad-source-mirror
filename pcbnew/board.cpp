@@ -272,7 +272,8 @@ void BOARD::IncrementTimeStamp()
         || !m_ZoneBBoxCache.empty()
         || m_CopperItemRTreeCache
         || m_maxClearanceValue.has_value()
-        || !m_itemByIdCache.empty() )
+        || !m_itemByIdCache.empty()
+        || !m_ItemNetclassCache.empty() )
     {
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
@@ -280,6 +281,7 @@ void BOARD::IncrementTimeStamp()
         m_IntersectsFCourtyardCache.clear();
         m_IntersectsBCourtyardCache.clear();
         m_LayerExpressionCache.clear();
+        m_ItemNetclassCache.clear();
 
         m_ZoneBBoxCache.clear();
 

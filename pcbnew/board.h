@@ -1356,6 +1356,8 @@ public:
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
     mutable std::optional<int>                            m_maxClearanceValue;
 
+    mutable std::unordered_map<const BOARD_ITEM*, wxString> m_ItemNetclassCache;
+
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;
     std::vector<ZONE*>    m_DRCCopperZones;

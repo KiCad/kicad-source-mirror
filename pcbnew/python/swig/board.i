@@ -82,6 +82,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %ignore BOARD::m_LayerExpressionCache;
 %ignore BOARD::m_CopperZoneRTreeCache;
 %ignore BOARD::m_CopperItemRTreeCache;
+%ignore BOARD::m_ItemNetclassCache;
 %ignore BOARD::m_DRCZones;
 %ignore BOARD::m_DRCCopperZones;
 %ignore BOARD::m_DRCMaxClearance;
