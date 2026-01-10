@@ -58,6 +58,7 @@ void VIEW_CONTROLS::Reset()
 void VC_SETTINGS::Reset()
 {
     m_showCursor                      = false;
+    m_forcedPosition                  = { 0.0, 0.0 };
     m_forceCursorPosition             = false;
     m_cursorCaptured                  = false;
     m_snappingEnabled                 = true;

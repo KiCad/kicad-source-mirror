@@ -76,13 +76,18 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
         VIEW_CONTROLS( aView ),
         m_state( IDLE ),
         m_parentPanel( aParentPanel ),
+        m_dragStartPoint( 0, 0 ),
+        m_panDirection( 0, 0 ),
         m_scrollScale( 1.0, 1.0 ),
+        m_scrollPos( 0, 0 ),
+        m_zoomStartPoint( 0, 0 ),
         m_cursorPos( 0, 0 ),
         m_updateCursor( true ),
         m_metaPanning( false ),
         m_metaPanStart( 0, 0 ),
         m_infinitePanWorks( false ),
-        m_gestureLastZoomFactor( 1.0 )
+        m_gestureLastZoomFactor( 1.0 ),
+        m_gestureLastPos( 0, 0 )
 {
     LoadSettings();
 
