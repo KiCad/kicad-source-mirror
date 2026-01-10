@@ -312,6 +312,8 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     nearest.m_distFirst = INT_MAX;
     nearest.m_maxFanoutWidth = 0;
 
+    bool foundZeroDistance = false;
+
     auto updateNearest =
             [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, const OBSTACLE& obstacle )
             {
@@ -322,6 +324,9 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                     nearest = obstacle;
                     nearest.m_distFirst = dist;
                     nearest.m_ipFirst = pt.p;
+
+                    if( dist == 0 )
+                        foundZeroDistance = true;
                 }
             };
 
@@ -336,6 +341,9 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
+        if( foundZeroDistance )
+            break;
+
         int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
                             + aLine->Width() / 2;
 
