@@ -96,7 +96,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const S
                   false,        /* update ref */
                   false,        /* update other fields */
                   true,         /* reset ref */
-                  true /* reset other fields */ );
+                  true          /* reset other fields */ );
 
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
@@ -141,7 +141,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
     m_transform = aSymbol.m_transform;
     m_prefix = aSymbol.m_prefix;
-    m_instanceReferences = aSymbol.m_instanceReferences;
+    m_instances = aSymbol.m_instances;
     m_fields = aSymbol.m_fields;
 
     // Re-parent the fields, which before this had aSymbol as parent
@@ -534,7 +534,7 @@ wxString SCH_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) cons
 
 bool SCH_SYMBOL::GetInstance( SCH_SYMBOL_INSTANCE& aInstance, const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
 {
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( !aTestFromEnd )
         {
@@ -565,18 +565,18 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 {
     // Search for an existing path and remove it if found
     // (search from back to avoid invalidating iterator on remove)
-    for( int ii = m_instanceReferences.size() - 1; ii >= 0; --ii )
+    for( int ii = m_instances.size() - 1; ii >= 0; --ii )
     {
-        if( m_instanceReferences[ii].m_Path == aInstancePath )
+        if( m_instances[ii].m_Path == aInstancePath )
         {
             wxLogTrace( traceSchSheetPaths,
                         wxS( "Removing symbol instance:\n"
                              "    sheet path %s\n"
                              "    reference %s, unit %d from symbol %s." ),
-                        aInstancePath.AsString(), m_instanceReferences[ii].m_Reference, m_instanceReferences[ii].m_Unit,
+                        aInstancePath.AsString(), m_instances[ii].m_Reference, m_instances[ii].m_Unit,
                         m_Uuid.AsString() );
 
-            m_instanceReferences.erase( m_instanceReferences.begin() + ii );
+            m_instances.erase( m_instances.begin() + ii );
         }
     }
 }
@@ -606,11 +606,11 @@ void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance 
                      "    unit %d\n" ),
                 m_Uuid.AsString(), instance.m_Path.AsString(), instance.m_Reference, instance.m_Unit );
 
-    m_instanceReferences.push_back( instance );
+    m_instances.push_back( instance );
 
     // This should set the default instance to the first saved instance data for each symbol
     // when importing sheets.
-    if( m_instanceReferences.size() == 1 )
+    if( m_instances.size() == 1 )
     {
         GetField( FIELD_T::REFERENCE )->SetText( instance.m_Reference );
         m_unit = instance.m_Unit;
@@ -627,9 +627,9 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     wxLogTrace( traceSchSymbolRef, "GetRef for symbol %s on path %s (sheet path has %zu sheets)", m_Uuid.AsString(),
                 path.AsString(), sheet->size() );
 
-    wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references", m_instanceReferences.size() );
+    wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references", m_instances.size() );
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         wxLogTrace( traceSchSymbolRef, "    Instance: path=%s, ref=%s", instance.m_Path.AsString(),
                     instance.m_Reference );
@@ -690,7 +690,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     bool      found = false;
 
     // check to see if it is already there before inserting it
-    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == path )
         {
@@ -864,7 +864,7 @@ bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == path )
             return !instance.m_Reference.IsEmpty() && instance.m_Reference.Last() != '?';
@@ -914,7 +914,7 @@ int SCH_SYMBOL::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == path )
             return instance.m_Unit;
@@ -931,7 +931,7 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
     KIID_PATH path = aSheet->Path();
 
     // check to see if it is already there before inserting it
-    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == path )
         {
@@ -1234,7 +1234,7 @@ bool SCH_SYMBOL::GetExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance,
 
 void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 {
-    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
         instance.m_Unit = aUnitSelection;
 }
 
@@ -1729,7 +1729,7 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_DNP, symbol->m_DNP );
     std::swap( m_excludedFromBoard, symbol->m_excludedFromBoard );
 
-    std::swap( m_instanceReferences, symbol->m_instanceReferences );
+    std::swap( m_instances, symbol->m_instances );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
 }
 
@@ -2087,6 +2087,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                     wxString altList;
 
                     const std::map<wxString, SCH_PIN::ALT>& alts = pin->GetAlternates();
+
                     for( const auto& [altName, altDef] : alts )
                     {
                         if( !altList.IsEmpty() )
@@ -2101,7 +2102,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                 SCH_CONNECTION* conn = pin->Connection( aPath );
 
                 if( !conn )
+                {
                     *token = wxEmptyString;
+                }
                 else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
                 {
                     wxString netName = conn->LocalName();
@@ -2111,9 +2114,13 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                         *token = netName;
                 }
                 else if( token->StartsWith( wxT( "NET_NAME" ) ) )
+                {
                     *token = conn->Name();
+                }
                 else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
+                {
                     *token = pin->GetEffectiveNetClass( aPath )->GetName();
+                }
 
                 return true;
             }
@@ -2139,6 +2146,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                         wxString altList;
 
                         const std::map<wxString, SCH_PIN::ALT>& alts = pin->GetAlternates();
+
                         for( const auto& [altName, altDef] : alts )
                         {
                             if( !altList.IsEmpty() )
@@ -2191,6 +2199,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                     // Get the pin from the actual instance symbol we found
                     // Match by pin number, not by pointer, since the library pins are different objects
                     SCH_PIN* instancePin = nullptr;
+
                     for( SCH_PIN* candidate : targetSymbol->GetPins( &targetPath ) )
                     {
                         if( candidate->GetNumber() == pinNumber )
@@ -2217,7 +2226,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                     SCH_CONNECTION* conn = instancePin->Connection( &targetPath );
 
                     if( !conn )
+                    {
                         *token = wxEmptyString;
+                    }
                     else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
                     {
                         wxString netName = conn->LocalName();
@@ -2227,9 +2238,13 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                             *token = netName;
                     }
                     else if( token->StartsWith( wxT( "NET_NAME" ) ) )
+                    {
                         *token = conn->Name();
+                    }
                     else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
+                    {
                         *token = instancePin->GetEffectiveNetClass( &targetPath )->GetName();
+                    }
 
                     return true;
                 }
@@ -2255,7 +2270,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     {
         KIID_PATH path = aSheetPath->Path();
 
-        for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+        for( SCH_SYMBOL_INSTANCE& instance : m_instances )
         {
             if( instance.m_Path == path )
             {
@@ -2268,7 +2283,7 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     }
     else
     {
-        for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+        for( SCH_SYMBOL_INSTANCE& instance : m_instances )
         {
             if( instance.m_Reference.IsEmpty() || aResetPrefix )
                 instance.m_Reference = UTIL::GetRefDesUnannotated( m_prefix );
@@ -2301,7 +2316,7 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
     // An empty sheet path is illegal, at a minimum the root sheet UUID must be present.
     wxCHECK( aSheetPath.size() > 0, false );
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         // if aSheetPath is found, nothing to do:
         if( instance.m_Path == aSheetPath )
@@ -3110,7 +3125,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
         m_bodyStyle = aSymbol.m_bodyStyle;
         m_transform = aSymbol.m_transform;
 
-        m_instanceReferences = aSymbol.m_instanceReferences;
+        m_instances = aSymbol.m_instances;
 
         m_fields = aSymbol.m_fields; // std::vector's assignment operator
 
@@ -3341,6 +3356,7 @@ static void plotLocalPowerIcon( PLOTTER* aPlotter, const VECTOR2D& aPos, double 
             aPlotter->Circle( shape.getCenter(), shape.GetRadius() * 2, filled, lineWidth );
     }
 }
+
 
 void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
 {
@@ -3764,7 +3780,7 @@ void SCH_SYMBOL::BuildLocalPowerIconShape( std::vector<SCH_SHAPE>& aShapeList, c
 
 SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath )
 {
-    for( SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == aSheetPath )
             return &instance;
@@ -3776,7 +3792,7 @@ SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath )
 
 const SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath ) const
 {
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instanceReferences )
+    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
         if( instance.m_Path == aSheetPath )
             return &instance;

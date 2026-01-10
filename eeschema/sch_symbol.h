@@ -134,7 +134,7 @@ public:
 
     const std::vector<SCH_SYMBOL_INSTANCE>& GetInstances() const
     {
-        return m_instanceReferences;
+        return m_instances;
     }
 
     bool GetInstance( SCH_SYMBOL_INSTANCE& aInstance,
@@ -393,7 +393,7 @@ public:
     void ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetPrefix );
 
     /**
-     * Add an instance to the alternate references list (m_instanceReferences), if this entry
+     * Add an instance to the alternate references list (m_instances), if this entry
      * does not already exist.
      *
      * Do nothing if already exists. In symbol lists shared by more than one sheet path, an
@@ -1015,7 +1015,7 @@ private:
      *
      * This allows support for multiple references to a single sub-sheet.
      */
-    std::vector<SCH_SYMBOL_INSTANCE>       m_instanceReferences;
+    std::vector<SCH_SYMBOL_INSTANCE>       m_instances;
 
     /// @see SCH_SYMBOL::GetOrientation
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;

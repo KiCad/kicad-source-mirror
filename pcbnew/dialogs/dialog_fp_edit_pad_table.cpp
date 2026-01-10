@@ -370,6 +370,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
     if( m_grid->GetNumberRows() > 0 )
     {
         m_grid->SetGridCursor( 0, 0 );
+
         // Construct event with required parameters (id, type, obj, row, col,...)
         wxGridEvent ev( m_grid->GetId(), wxEVT_GRID_SELECT_CELL, m_grid, 0, 0, -1, -1, true );
         OnSelectCell( ev );
@@ -703,6 +704,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
             m_grid->SetReadOnly( row, COL_DRILL_Y, !drillsEditable );
             needCanvasRefresh = true;
         }
+
         break;
     }
 
@@ -748,10 +750,15 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
         {
             int dx = m_grid->GetUnitValue( row, COL_DRILL_X );
             int dy = m_grid->GetUnitValue( row, COL_DRILL_Y );
+
             if( dx > 0 || dy > 0 )
             {
-                if( dx <= 0 ) dx = dy;
-                if( dy <= 0 ) dy = dx;
+                if( dx <= 0 )
+                    dx = dy;
+
+                if( dy <= 0 )
+                    dy = dx;
+
                 target->SetDrillSize( { dx, dy } );
                 needCanvasRefresh = true;
             }
