@@ -119,6 +119,38 @@ namespace std
 }
 
 
+struct HULL_CACHE_KEY
+{
+    const PNS::ITEM* item;
+    int              clearance;
+    int              walkaroundThickness;
+    int              layer;
+
+    bool operator==( const HULL_CACHE_KEY& other ) const
+    {
+        return item == other.item
+            && clearance == other.clearance
+            && walkaroundThickness == other.walkaroundThickness
+            && layer == other.layer;
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<HULL_CACHE_KEY>
+    {
+        std::size_t operator()( const HULL_CACHE_KEY& k ) const
+        {
+            size_t retval = 0xBADC0FFEE0DDF00D;
+            hash_combine( retval, hash<const void*>()( k.item ), hash<int>()( k.clearance ),
+                          hash<int>()( k.walkaroundThickness ), hash<int>()( k.layer ) );
+            return retval;
+        }
+    };
+}
+
+
 class PNS_PCBNEW_RULE_RESOLVER : public PNS::RULE_RESOLVER
 {
 public:
@@ -159,6 +191,9 @@ public:
     void ClearCaches() override;
     void ClearTemporaryCaches() override;
 
+    const SHAPE_LINE_CHAIN& HullCache( const PNS::ITEM* aItem, int aClearance,
+                                       int aWalkaroundThickness, int aLayer ) override;
+
 private:
     BOARD_ITEM* getBoardItem( const PNS::ITEM* aItem, PCB_LAYER_ID aBoardLayer, int aIdx = 0 );
 
@@ -172,6 +207,7 @@ private:
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_tempClearanceCache;
+    std::unordered_map<HULL_CACHE_KEY, SHAPE_LINE_CHAIN> m_hullCache;
 };
 
 
@@ -476,28 +512,25 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
 void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems )
 {
-    int n_pruned = 0;
     std::set<const PNS::ITEM*> remainingItems( aItems.begin(), aItems.end() );
 
-/* We need to carefully check both A and B item pointers in the cache against dirty/invalidated
-   items in the set, as the clearance relation is commutative ( CL[a,b] == CL[b,a] ). The code
-   below is a bit ugly, but works in O(n*log(m)) and is run once or twice during ROUTER::Move() call
-   - so I hope it still gets better performance than no cache at all */
     for( auto it = m_clearanceCache.begin(); it != m_clearanceCache.end(); )
     {
-        bool dirty = remainingItems.find( it->first.A ) != remainingItems.end();
-        dirty |= remainingItems.find( it->first.B) != remainingItems.end();
+        bool dirty = remainingItems.count( it->first.A ) || remainingItems.count( it->first.B );
 
         if( dirty )
-        {
             it = m_clearanceCache.erase( it );
-            n_pruned++;
-        } else
-            it++;
+        else
+            ++it;
     }
-#if 0
-    printf("ClearCache : n_pruned %d\n", n_pruned );
-#endif
+
+    for( auto it = m_hullCache.begin(); it != m_hullCache.end(); )
+    {
+        if( remainingItems.count( it->first.item ) )
+            it = m_hullCache.erase( it );
+        else
+            ++it;
+    }
 }
 
 
@@ -505,12 +538,32 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCaches()
 {
     m_clearanceCache.clear();
     m_tempClearanceCache.clear();
+    m_hullCache.clear();
 }
 
 
 void PNS_PCBNEW_RULE_RESOLVER::ClearTemporaryCaches()
 {
     m_tempClearanceCache.clear();
+}
+
+
+const SHAPE_LINE_CHAIN& PNS_PCBNEW_RULE_RESOLVER::HullCache( const PNS::ITEM* aItem,
+                                                             int aClearance,
+                                                             int aWalkaroundThickness,
+                                                             int aLayer )
+{
+    HULL_CACHE_KEY key = { aItem, aClearance, aWalkaroundThickness, aLayer };
+
+    auto it = m_hullCache.find( key );
+
+    if( it != m_hullCache.end() )
+        return it->second;
+
+    SHAPE_LINE_CHAIN hull = aItem->Hull( aClearance, aWalkaroundThickness, aLayer );
+    auto result = m_hullCache.emplace( key, std::move( hull ) );
+
+    return result.first->second;
 }
 
 

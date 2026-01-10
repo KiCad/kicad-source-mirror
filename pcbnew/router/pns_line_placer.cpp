@@ -826,9 +826,10 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNe
     // the shove/walk mode that certain users find too intrusive.
     if( obs )
     {
-        int              clearance = m_currentNode->GetClearance( obs->m_item, &m_head, false );
-        SHAPE_LINE_CHAIN hull = obs->m_item->Hull( clearance, m_head.Width(), m_head.Layer() );
-        VECTOR2I         nearest;
+        int clearance = m_currentNode->GetClearance( obs->m_item, &m_head, false );
+        const SHAPE_LINE_CHAIN& hull = m_currentNode->GetRuleResolver()->HullCache(
+                obs->m_item, clearance, m_head.Width(), m_head.Layer() );
+        VECTOR2I nearest;
 
         DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
 

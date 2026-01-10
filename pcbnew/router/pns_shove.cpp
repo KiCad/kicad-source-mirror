@@ -1274,7 +1274,8 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
         int clearance = getClearance( &aCurrent.Via(), aObstacleVia );
 
-        SHAPE_LINE_CHAIN hull = aObstacleVia->Hull( clearance, aCurrent.Width(), layer );
+        const SHAPE_LINE_CHAIN& hull = m_currentNode->GetRuleResolver()->HullCache(
+                aObstacleVia, clearance, aCurrent.Width(), layer );
 
         bool epInsideHull = hull.PointInside( p0 );
 

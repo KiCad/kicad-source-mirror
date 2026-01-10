@@ -164,16 +164,22 @@ bool WALKAROUND::singleStep()
             }
 
             int clearance = m_world->GetClearance( clItem, &aLine, false );
-            SHAPE_LINE_CHAIN hull = clItem->Hull( clearance + 1000, aLine.Width(), aLine.Layer() );
+            const SHAPE_LINE_CHAIN& cachedHull = m_world->GetRuleResolver()->HullCache(
+                    clItem, clearance + 1000, aLine.Width(), aLine.Layer() );
+
+            SHAPE_LINE_CHAIN hull;
 
             if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
             {
-                BOX2I bbox = hull.BBox();
-                hull.Clear();
+                BOX2I bbox = cachedHull.BBox();
                 hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
                 hull.Append( bbox.GetRight(), bbox.GetTop()    );
                 hull.Append( bbox.GetRight(), bbox.GetBottom() );
                 hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+            }
+            else
+            {
+                hull = cachedHull;
             }
 
             LINE tmp( aLine );
