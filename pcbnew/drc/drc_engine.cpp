@@ -716,8 +716,10 @@ void DRC_ENGINE::compileRules()
 
         for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
         {
-            if( !m_constraintMap.count( constraint.m_Type ) )
-                m_constraintMap[ constraint.m_Type ] = new std::vector<DRC_ENGINE_CONSTRAINT*>();
+            auto& ruleVec = m_constraintMap[ constraint.m_Type ];
+
+            if( !ruleVec )
+                ruleVec = new std::vector<DRC_ENGINE_CONSTRAINT*>();
 
             DRC_ENGINE_CONSTRAINT* engineConstraint = new DRC_ENGINE_CONSTRAINT;
 
@@ -725,7 +727,7 @@ void DRC_ENGINE::compileRules()
             engineConstraint->condition = condition;
             engineConstraint->constraint = constraint;
             engineConstraint->parentRule = rule;
-            m_constraintMap[ constraint.m_Type ]->push_back( engineConstraint );
+            ruleVec->push_back( engineConstraint );
         }
     }
 
@@ -1680,12 +1682,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             constraint.m_ImplicitMin = true;
         }
     }
-    else if( m_constraintMap.count( aConstraintType ) )
+    else
     {
-        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
+        auto it = m_constraintMap.find( aConstraintType );
 
-        for( DRC_ENGINE_CONSTRAINT* rule : *ruleset )
-            processConstraint( rule );
+        if( it != m_constraintMap.end() )
+        {
+            for( DRC_ENGINE_CONSTRAINT* rule : *it->second )
+                processConstraint( rule );
+        }
     }
 
     if( constraint.GetParentRule() && !constraint.GetParentRule()->IsImplicit() )
@@ -1710,11 +1715,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         else
             b = parentFootprint;
 
-        if( m_constraintMap.count( aConstraintType ) )
-        {
-            std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
+        auto it = m_constraintMap.find( aConstraintType );
 
-            for( DRC_ENGINE_CONSTRAINT* rule : *ruleset )
+        if( it != m_constraintMap.end() )
+        {
+            for( DRC_ENGINE_CONSTRAINT* rule : *it->second )
                 processConstraint( rule );
 
             if( constraint.GetParentRule() && !constraint.GetParentRule()->IsImplicit() )
@@ -2015,12 +2020,12 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                 }
             };
 
-    if( m_constraintMap.count( ASSERTION_CONSTRAINT ) )
-    {
-        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ ASSERTION_CONSTRAINT ];
+    auto it = m_constraintMap.find( ASSERTION_CONSTRAINT );
 
-        for( int ii = 0; ii < (int) ruleset->size(); ++ii )
-            processConstraint( ruleset->at( ii ) );
+    if( it != m_constraintMap.end() )
+    {
+        for( int ii = 0; ii < (int) it->second->size(); ++ii )
+            processConstraint( it->second->at( ii ) );
     }
 }
 
@@ -2124,22 +2129,19 @@ bool DRC_ENGINE::IsCancelled() const
 
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 {
-    //drc_dbg( 10, "hascorrect id %d size %d\n", ruleID, m_ruleMap[ruleID]->sortedRules.size() );
-
-    if( m_constraintMap.count( constraintID ) )
-        return m_constraintMap[ constraintID ]->size() > 0;
-
-    return false;
+    auto it = m_constraintMap.find( constraintID );
+    return it != m_constraintMap.end() && !it->second->empty();
 }
 
 
 bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONSTRAINT& aConstraint )
 {
-    int worst = 0;
+    int  worst = 0;
+    auto it = m_constraintMap.find( aConstraintId );
 
-    if( m_constraintMap.count( aConstraintId ) )
+    if( it != m_constraintMap.end() )
     {
-        for( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[aConstraintId] )
+        for( DRC_ENGINE_CONSTRAINT* c : *it->second )
         {
             int current = c->constraint.GetValue().Min();
 
@@ -2158,10 +2160,11 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
 std::set<int> DRC_ENGINE::QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId )
 {
     std::set<int> distinctMinimums;
+    auto          it = m_constraintMap.find( aConstraintId );
 
-    if( m_constraintMap.count( aConstraintId ) )
+    if( it != m_constraintMap.end() )
     {
-        for( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[aConstraintId] )
+        for( DRC_ENGINE_CONSTRAINT* c : *it->second )
             distinctMinimums.emplace( c->constraint.GetValue().Min() );
     }
 

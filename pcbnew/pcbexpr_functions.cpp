@@ -729,33 +729,58 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             else
                                 testLayers = commonLayers;
 
-                            for( PCB_LAYER_ID layer : testLayers.UIOrder() )
+                            bool isTransient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                            std::vector<PCB_LAYER_ID> layersToCompute;
+
+                            if( !isTransient )
                             {
-                                PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
+                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
 
-                                if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                for( PCB_LAYER_ID layer : testLayers.UIOrder() )
                                 {
-                                    std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
-
+                                    PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
                                     auto i = board->m_IntersectsAreaCache.find( key );
 
-                                    if( i != board->m_IntersectsAreaCache.end() && i->second )
-                                        return true;
+                                    if( i != board->m_IntersectsAreaCache.end() )
+                                    {
+                                        if( i->second )
+                                            return true;
+                                    }
+                                    else
+                                    {
+                                        layersToCompute.push_back( layer );
+                                    }
                                 }
-
-                                bool collides = collidesWithArea( item, layer, context, aArea );
-
-                                if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                                {
-                                    std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
-                                    board->m_IntersectsAreaCache[ key ] = collides;
-                                }
-
-                                if( collides )
-                                    return true;
+                            }
+                            else
+                            {
+                                for( PCB_LAYER_ID layer : testLayers.UIOrder() )
+                                    layersToCompute.push_back( layer );
                             }
 
-                            return false;
+                            std::vector<std::pair<PTR_PTR_LAYER_CACHE_KEY, bool>> results;
+                            bool anyCollision = false;
+
+                            for( PCB_LAYER_ID layer : layersToCompute )
+                            {
+                                bool collides = collidesWithArea( item, layer, context, aArea );
+
+                                if( !isTransient )
+                                    results.push_back( { { aArea, item, layer }, collides } );
+
+                                if( collides )
+                                    anyCollision = true;
+                            }
+
+                            if( !isTransient && !results.empty() )
+                            {
+                                std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+
+                                for( const auto& [key, collides] : results )
+                                    board->m_IntersectsAreaCache[key] = collides;
+                            }
+
+                            return anyCollision;
                         } ) )
                 {
                     return 1.0;

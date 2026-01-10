@@ -90,7 +90,14 @@ struct CLEARANCE_CACHE_KEY
     const PNS::ITEM*  B;
     bool              Flag;
 
-    bool operator==(const CLEARANCE_CACHE_KEY& other) const
+    CLEARANCE_CACHE_KEY( const PNS::ITEM* aA, const PNS::ITEM* aB, bool aFlag ) :
+            A( aA < aB ? aA : aB ),
+            B( aA < aB ? aB : aA ),
+            Flag( aFlag )
+    {
+    }
+
+    bool operator==( const CLEARANCE_CACHE_KEY& other ) const
     {
         return A == other.A && B == other.B && Flag == other.Flag;
     }
@@ -104,7 +111,8 @@ namespace std
         std::size_t operator()( const CLEARANCE_CACHE_KEY& k ) const
         {
             size_t retval = 0xBADC0FFEE0DDF00D;
-            hash_combine( retval, hash<const void*>()( k.A ), hash<const void*>()( k.B ), hash<int>()( k.Flag ) );
+            hash_combine( retval, hash<const void*>()( k.A ), hash<const void*>()( k.B ),
+                          hash<int>()( k.Flag ) );
             return retval;
         }
     };
@@ -509,7 +517,7 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearTemporaryCaches()
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                          bool aUseClearanceEpsilon )
 {
-    CLEARANCE_CACHE_KEY key = { aA, aB, aUseClearanceEpsilon };
+    CLEARANCE_CACHE_KEY key( aA, aB, aUseClearanceEpsilon );
 
     // Search cache (used for actual board items)
     auto it = m_clearanceCache.find( key );
