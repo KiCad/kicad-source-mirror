@@ -58,6 +58,8 @@ public:
         m_Reporter = aReporter;
     };
 
+    virtual ~IBIS_BASE() = default;
+
     /** @brief Print a message
      *
      * Call m_Reporter->Report if m_Reporter exists.
@@ -566,8 +568,7 @@ public:
             m_ramp( aReporter )
     {};
 
-    virtual ~IbisModel()
-    {};
+    virtual ~IbisModel() = default;
 
     std::string        m_name;
     IBIS_MODEL_TYPE m_type = IBIS_MODEL_TYPE::UNDEFINED;
@@ -641,8 +642,7 @@ public:
             m_ramp( aReporter )
     {};
 
-    virtual ~IbisSubmodel()
-    {};
+    virtual ~IbisSubmodel() = default;
 
     std::string                m_name;
     IBIS_SUBMODEL_TYPE         m_type = IBIS_SUBMODEL_TYPE::UNDEFINED;
