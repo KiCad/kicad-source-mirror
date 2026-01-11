@@ -828,16 +828,29 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
                            "  Legacy format: Using reference '%s' from field, unit %d",
                            symbolInstance.m_Reference, symbolInstance.m_Unit );
             }
-            else
+            else if( !symbol->GetInstances().empty() )
             {
-                // When schematics are shared, we cannot know which instance the current symbol
-                // reference field and unit belong to.  In this case, we clear the reference
-                // annotation and set the unit to 1.
-                symbolInstance.m_Reference = UTIL::GetRefDesUnannotated( symbol->GetPrefix() );
+                // When a schematic is opened as a different project (e.g., a subsheet opened
+                // directly from File Browser), use the first available instance data.
+                // This provides better UX than showing unannotated references.
+                const SCH_SYMBOL_INSTANCE& firstInstance = symbol->GetInstances()[0];
+                symbolInstance.m_Reference = firstInstance.m_Reference;
+                symbolInstance.m_Unit = firstInstance.m_Unit;
 
                 wxLogTrace( traceSchSheetPaths,
-                           "  Shared schematic: Setting unannotated reference '%s'",
-                           symbolInstance.m_Reference );
+                           "  Using first available instance: ref=%s, unit=%d",
+                           symbolInstance.m_Reference, symbolInstance.m_Unit );
+            }
+            else
+            {
+                // Fall back to the symbol's reference field and unit if no instance data exists.
+                SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
+                symbolInstance.m_Reference = refField->GetText();
+                symbolInstance.m_Unit = symbol->GetUnit();
+
+                wxLogTrace( traceSchSheetPaths,
+                           "  No instance data: Using reference '%s' from field, unit %d",
+                           symbolInstance.m_Reference, symbolInstance.m_Unit );
             }
 
             symbolInstance.m_ProjectName = aProjectName;
