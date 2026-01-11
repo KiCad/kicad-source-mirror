@@ -279,7 +279,11 @@ void DRC_ENGINE::loadImplicitRules()
                     DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
                     constraint.Value().SetMin( nc->GetClearance() );
                     netclassRule->AddConstraint( constraint );
-                    m_netclassClearances[nc->GetName()] = nc->GetClearance();
+
+                    {
+                        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+                        m_netclassClearances[nc->GetName()] = nc->GetClearance();
+                    }
                 }
 
                 if( nc->HasTrackWidth() )
@@ -774,8 +778,13 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     }
 
     m_constraintMap.clear();
-    m_ownClearanceCache.clear();
-    m_netclassClearances.clear();
+
+    {
+        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+        m_ownClearanceCache.clear();
+        m_netclassClearances.clear();
+    }
+
     m_hasExplicitClearanceRules = false;
     m_hasDiffPairClearanceOverrides = false;
     m_explicitConstraints.clear();
@@ -1650,17 +1659,16 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         int clearance = 0;
 
+        // Get netclass names outside of the lock to minimize critical section
+        wxString ncNameA;
+        wxString ncNameB;
+
         if( ac )
         {
             NETCLASS* ncA = ac->GetEffectiveNetClass();
 
             if( ncA )
-            {
-                auto it = m_netclassClearances.find( ncA->GetName() );
-
-                if( it != m_netclassClearances.end() )
-                    clearance = it->second;
-            }
+                ncNameA = ncA->GetName();
         }
 
         if( bc )
@@ -1668,8 +1676,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             NETCLASS* ncB = bc->GetEffectiveNetClass();
 
             if( ncB )
+                ncNameB = ncB->GetName();
+        }
+
+        // Look up clearances with shared lock protection
+        if( !ncNameA.empty() || !ncNameB.empty() )
+        {
+            std::shared_lock<std::shared_mutex> readLock( m_clearanceCacheMutex );
+
+            if( !ncNameA.empty() )
             {
-                auto it = m_netclassClearances.find( ncB->GetName() );
+                auto it = m_netclassClearances.find( ncNameA );
+
+                if( it != m_netclassClearances.end() )
+                    clearance = it->second;
+            }
+
+            if( !ncNameB.empty() )
+            {
+                auto it = m_netclassClearances.find( ncNameB );
 
                 if( it != m_netclassClearances.end() )
                     clearance = std::max( clearance, it->second );
@@ -2333,16 +2358,21 @@ int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLa
 {
     DRC_OWN_CLEARANCE_CACHE_KEY key{ aItem->m_Uuid, aLayer };
 
-    auto it = m_ownClearanceCache.find( key );
-
-    if( it != m_ownClearanceCache.end() )
+    // Fast path: check cache with shared (read) lock
     {
-        // Cache hit. We don't cache the source string since it's rarely requested
-        // and caching it would add complexity.
-        return it->second;
+        std::shared_lock<std::shared_mutex> readLock( m_clearanceCacheMutex );
+
+        auto it = m_ownClearanceCache.find( key );
+
+        if( it != m_ownClearanceCache.end() )
+        {
+            // Cache hit. We don't cache the source string since it's rarely requested
+            // and caching it would add complexity.
+            return it->second;
+        }
     }
 
-    // Cache miss - evaluate the constraint
+    // Cache miss - evaluate the constraint (outside lock to avoid blocking other threads)
     DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
 
     if( aItem->Type() == PCB_PAD_T )
@@ -2365,8 +2395,15 @@ int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLa
             *aSource = constraint.GetName();
     }
 
-    // Store in cache
-    m_ownClearanceCache[key] = clearance;
+    // Store in cache with exclusive (write) lock using double-checked locking
+    {
+        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+
+        auto it = m_ownClearanceCache.find( key );
+
+        if( it == m_ownClearanceCache.end() )
+            m_ownClearanceCache[key] = clearance;
+    }
 
     return clearance;
 }
@@ -2374,6 +2411,8 @@ int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLa
 
 void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
 {
+    std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+
     // Remove all entries for this item (across all layers)
     auto it = m_ownClearanceCache.begin();
 
@@ -2389,6 +2428,7 @@ void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
 
 void DRC_ENGINE::ClearClearanceCache()
 {
+    std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
     m_ownClearanceCache.clear();
 }
 
@@ -2440,7 +2480,10 @@ void DRC_ENGINE::InitializeClearanceCache()
     if( itemsToProcess.empty() )
         return;
 
-    m_ownClearanceCache.reserve( itemsToProcess.size() );
+    {
+        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+        m_ownClearanceCache.reserve( itemsToProcess.size() );
+    }
 
     thread_pool& tp = GetKiCadThreadPool();
 
@@ -2485,12 +2528,16 @@ void DRC_ENGINE::InitializeClearanceCache()
             } );
 
     // Merge all thread-local caches into the main cache
-    for( size_t i = 0; i < results.size(); ++i )
     {
-        if( results[i].valid() )
+        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+
+        for( size_t i = 0; i < results.size(); ++i )
         {
-            CLEARANCE_MAP localCache = results[i].get();
-            m_ownClearanceCache.insert( localCache.begin(), localCache.end() );
+            if( results[i].valid() )
+            {
+                CLEARANCE_MAP localCache = results[i].get();
+                m_ownClearanceCache.insert( localCache.begin(), localCache.end() );
+            }
         }
     }
 }

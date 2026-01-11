@@ -24,6 +24,7 @@
 #pragma once
 
 #include <memory>
+#include <shared_mutex>
 #include <vector>
 #include <unordered_map>
 
@@ -371,9 +372,17 @@ protected:
 
     // Cache for GetOwnClearance lookups to improve rendering performance.
     // Key is (UUID, layer), value is clearance in internal units.
+    // Protected by m_clearanceCacheMutex for thread-safe access during rendering.
     std::unordered_map<DRC_OWN_CLEARANCE_CACHE_KEY, int> m_ownClearanceCache;
 
-    std::unordered_map<wxString, int> m_netclassClearances;  // netclass name -> clearance
+    // Netclass name -> clearance mapping for fast lookup in EvalRules.
+    // Only written during InitEngine(), read during DRC and rendering.
+    // Protected by m_clearanceCacheMutex for thread-safe access.
+    std::unordered_map<wxString, int> m_netclassClearances;
+
+    // Mutex protecting clearance caches for thread-safe access.
+    // Uses shared_mutex for reader-writer pattern (many concurrent reads, exclusive writes).
+    mutable std::shared_mutex m_clearanceCacheMutex;
     bool m_hasExplicitClearanceRules = false;
     bool m_hasDiffPairClearanceOverrides = false;
     std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>> m_explicitConstraints;
