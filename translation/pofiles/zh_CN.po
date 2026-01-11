@@ -621,7 +621,7 @@ msgstr "显示模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "在实时渲染器中显示 3D 模型边框"
+msgstr "在实时渲染中显示 3D 模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
 msgid "Show 3D Navigator"
@@ -4362,13 +4362,13 @@ msgstr ""
 "在的关键问题, 并帮助分析功能以指导改进工作。\n"
 "\n"
 "为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人可识别信息 (PII), 包括 IP 地"
-"址。\n"
+"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人身份信息 (PII), 包括 IP 地址"
+"。\n"
 "您可以随时在数据收集的偏好设置页面重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, KiCad 将在发生崩溃或特殊事件时会自动处理并发送这些报"
-"告。\n"
-"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
+"如果您选择自愿参与, KiCad 将在发生崩溃或特殊事件时会自动处理并发送这些报告"
+"。\n"
+"你的设计文件 (如原理图、PCB 和库) 也绝不会在此过程中被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -5738,7 +5738,7 @@ msgid ""
 "Library tables will be imported from the version you selected on the "
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
-msgstr "库表将从您在上一步中选择的版本导入。任何无法导入的表都将从KiCad的默认库创建。"
+msgstr "库表将从你在上一步选择的版本中导入。无法导入的库表将使用 KiCad 默认库创建。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
 msgid "Start with no libraries"
@@ -5751,8 +5751,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"无法在预期位置找到内置库表。这通常意味着您已安装KiCad软件但未同时安装库。您可"
-"以继续进行安装，但需要单独安装库文件才能使其可用。"
+"未在预期位置找到内置库表。这通常意味着表示你安装了 KiCad 软件但未安装库。你可"
+"以继续进行配置, 但需要单独安装库后才会生效。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -5762,7 +5762,7 @@ msgstr "更新"
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
-msgstr "允许连接到互联网以检查 KiCad 和已安装的插件更新？"
+msgstr "是否允许连接互联网以检查 KiCad 及扩展内容包的更新?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1332
@@ -5781,10 +5781,12 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
-"KiCad可以匿名地向开发团队报告崩溃和其他事件数据，以帮助识别和修复错误并提升性"
-"能。启用数据收集后，KiCad 会在发生崩溃或其他重要事件时自动发送报告。这些报告"
-"包含报告生成时 KiCad 软件状态的技术细节。我们不会收集任何个人身份信息 (PII)，"
-"您的设计文件（例如原理图、PCB 和库文件）也不会在此过程中共享。"
+"KiCad 可以匿名地向开发团队报告崩溃和其他特殊事件数据，以帮助定位并修复问题、"
+"提升性能。\n"
+"\n"
+"启用数据收集后，KiCad 在发生崩溃或其他特殊事件时会自动发送报告。这些报告包含"
+"了报告生成时 KiCad 软件状态的技术细节。我们不会收集任何个人身份信息 (PII),你"
+"的设计文件 (如原理图、PCB 和库) 也绝不会在此过程中被共享。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
@@ -6207,7 +6209,7 @@ msgstr "原理图编辑器"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
-msgstr "字段名称模板"
+msgstr "字段名模板"
 
 #: common/eda_base_frame.cpp:1369
 msgid "Data Sources"
@@ -6252,11 +6254,11 @@ msgstr "插件"
 
 #: common/eda_base_frame.cpp:1414
 msgid "Realtime Renderer"
-msgstr "实时渲染器"
+msgstr "实时渲染"
 
 #: common/eda_base_frame.cpp:1415
 msgid "Raytracing Renderer"
-msgstr "光线追踪渲染器"
+msgstr "光线追踪"
 
 #: common/eda_base_frame.cpp:1431 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:621 gerbview/gerbview_frame.cpp:654
@@ -6267,7 +6269,7 @@ msgstr "Gerber 查看器"
 
 #: common/eda_base_frame.cpp:1436
 msgid "Excellon Options"
-msgstr "Excellon 选项"
+msgstr "Excellon"
 
 #: common/eda_base_frame.cpp:1452 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:620 kicad/tools/kicad_manager_actions.cpp:178
@@ -6282,7 +6284,7 @@ msgstr "扩展和更新"
 
 #: common/eda_base_frame.cpp:1473
 msgid "Maintenance"
-msgstr "维护者"
+msgstr "维护"
 
 #: common/eda_base_frame.cpp:1557 pcbnew/dialogs/dialog_export_odbpp.cpp:286
 #: pcbnew/tools/board_editor_control.cpp:480
@@ -9363,9 +9365,9 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
-"KiCad 初次启动，或者有配置文件缺失。\n"
+"KiCad 正在首次启动中 (缺少某些配置文件), 需要一点时间配置一些基本设置。\n"
 "\n"
-"让我们花一些时间配置基本设置。您也可以随时在“偏好设置”对话框中更改这些设置。"
+"稍后你可以通过「偏好设置」来修改默认设置。"
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
@@ -9379,7 +9381,7 @@ msgstr "KiCad 配置"
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
-msgstr "您确定吗？  如果您取消 KiCad 配置，将采用默认设置。"
+msgstr "确定吗? 如果你取消 KiCad 设置, 将为你选择默认设置。"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
 msgid "Symbol library table"
@@ -9451,7 +9453,7 @@ msgstr "IPC/Scripting 插件"
 
 #: common/tool/action_toolbar.cpp:1099
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr "用于放置 IPC/脚本操作按钮的区域"
+msgstr ""
 
 #: common/tool/action_toolbar.cpp:1104
 msgid "Layer selector"
@@ -9915,7 +9917,7 @@ msgstr "导出表格为 CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
-msgstr "导出带有解析后变量的表格内容到 CSV 文件"
+msgstr "将表格内容导出为解析了文本变量的 CSV 文件"
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
@@ -9923,7 +9925,7 @@ msgstr "保持弧线中心, 调整半径"
 
 #: common/tool/actions.cpp:587
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr "切换弧线编辑模式到保持中心、调整半径和端点"
+msgstr "切换弧线编辑模式, 保持圆心不变, 调整半径和端点位置"
 
 #: common/tool/actions.cpp:593
 msgid "Keep Arc Endpoints or Direction of Starting Point"
@@ -9933,7 +9935,7 @@ msgstr "保持弧线端点或起点方向"
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr "切换弧线编辑模式为保持端点, 或保持另一点的方向"
+msgstr "切换弧线编辑模式, 保持端点不变, 或保持另一端点的方向不变"
 
 #: common/tool/actions.cpp:600
 #, fuzzy
@@ -9942,7 +9944,7 @@ msgstr "保持弧线中心, 调整半径"
 
 #: common/tool/actions.cpp:601
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
-msgstr "切换弧线编辑模式到端点移动时调整半径"
+msgstr "切换弧线编辑模式, 保持半径不变, 调整弧的端点位置"
 
 #: common/tool/actions.cpp:608
 msgid "Cycle Arc Editing Mode"
@@ -10013,7 +10015,7 @@ msgstr "自适应缩放"
 
 #: common/tool/actions.cpp:721
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr "当存在或编辑过对象时放大到工作表区域"
+msgstr ""
 
 #: common/tool/actions.cpp:728
 msgid "Zoom to All Objects"
@@ -10785,10 +10787,7 @@ msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
-"保存库表时出错: \n"
-"\n"
-"\n"
-"%s\n"
+"保存库表时出错:\n"
 "\n"
 
 #: common/widgets/design_block_pane.cpp:295
@@ -14495,7 +14494,9 @@ msgid ""
 "When enabled, this footprint can have more than one pad with the same "
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
-msgstr "启用后，此封装可以有多个编号相同的焊盘，编号相同的焊盘在内部将被视为连通的。"
+msgstr ""
+"启用后, 该封装可包含多个编号相同的焊盘, 并且具有相同编号的焊盘将视为在内部由"
+"跳线所联通。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:497
 #, fuzzy
@@ -15169,7 +15170,7 @@ msgstr "批注偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
-msgstr "字段名称模板"
+msgstr "字段名模板"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 msgid "BOM presets"
@@ -16810,15 +16811,14 @@ msgid "Net names"
 msgstr "网络名称"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:78
-#, fuzzy
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr "优先交换原理图符号而不是标签"
+msgstr "优先进行符号单元交换而非标签交换"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:80
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
-msgstr "尽可能检测封装门交换并应用到相应的符号单元交换，而不是更改网络标签。"
+msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:84
 msgid "Other fields"
@@ -16830,7 +16830,7 @@ msgstr "从封装更新符号的所有其它字段"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:90
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr "优先选择符号引脚互换，而不是标签互换"
+msgstr "优先进行符号引脚交换而非标签交换"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:92
 msgid ""
@@ -17808,11 +17808,11 @@ msgstr "重置库"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 msgid "Project Field Name Templates"
-msgstr "工程字段名称模板"
+msgstr "工程字段名模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
 msgid "Global Field Name Templates"
-msgstr "全局字段名称模板"
+msgstr "全局字段名模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:213
 #, c-format
@@ -22276,7 +22276,7 @@ msgstr "未定义模型类型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
-msgstr "缺少 Submodel_type 的值。"
+msgstr "缺少 Submodel_type 值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
@@ -23793,7 +23793,7 @@ msgstr "用户取消了封装重链接。"
 #: eeschema/tools/backannotate.cpp:754
 #, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "将 %s 单位 %s 与单位 %s 交换。"
+msgstr "将 %s 的单元 %s 与单元 %s 交换。"
 
 #: eeschema/tools/backannotate.cpp:804
 msgid "true"
@@ -30681,7 +30681,7 @@ msgstr "推送工程失败"
 
 #: kicad/project_tree_pane.cpp:1865
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "确定要从工程中移除 Git 追踪?"
+msgstr "确定要从工程中移除 Git 跟踪?"
 
 #: kicad/project_tree_pane.cpp:1876
 msgid "Failed to remove VCS"
