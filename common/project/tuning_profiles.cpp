@@ -68,7 +68,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
     };
 
     auto saveUserDefinedProfileConfigurationLine =
-            [&saveViaOverrideConfigurationLine]( nlohmann::json& json_array, const TUNING_PROFILE& item )
+            [saveViaOverrideConfigurationLine]( nlohmann::json& json_array, const TUNING_PROFILE& item )
     {
         nlohmann::json layer_entries = nlohmann::json::array();
 
@@ -104,7 +104,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         json_array.push_back( item_json );
     };
 
-    auto readUserDefinedProfileConfigurationLine = [&readViaOverrideConfigurationLine]( const nlohmann::json& entry )
+    auto readUserDefinedProfileConfigurationLine = [readViaOverrideConfigurationLine]( const nlohmann::json& entry )
     {
         const wxString                     profileName = entry["profile_name"];
         const TUNING_PROFILE::PROFILE_TYPE profileType = static_cast<TUNING_PROFILE::PROFILE_TYPE>( entry["type"] );
@@ -163,7 +163,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "tuning_profiles_impedance_geometric",
-            [&]() -> nlohmann::json
+            [this, saveUserDefinedProfileConfigurationLine]() -> nlohmann::json
             {
                 nlohmann::json ret = nlohmann::json::array();
 
@@ -172,7 +172,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
 
                 return ret;
             },
-            [&]( const nlohmann::json& aJson )
+            [this, readUserDefinedProfileConfigurationLine]( const nlohmann::json& aJson )
             {
                 if( !aJson.is_array() )
                     return;
