@@ -811,10 +811,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     bool hasBackdrill = secondaryDrill.start != UNDEFINED_LAYER;
     bool hasTertiaryDrill = tertiaryDrill.start != UNDEFINED_LAYER;
 
-    int selection = hasBackdrill
-                    ? ( hasTertiaryDrill ? 3 : 2 )
-                    : ( hasTertiaryDrill ? 1 : 0 );
-    m_backDrillChoice->SetSelection( selection );
+    m_backDrillChoice->SetSelection( hasBackdrill ? ( hasTertiaryDrill ? 3 : 1 )
+                                                  : ( hasTertiaryDrill ? 2 : 0 ) );
 
     if( !hasBackdrill )
     {
@@ -826,7 +824,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         for( unsigned int i = 0; i < m_backDrillBottomLayer->GetCount(); ++i )
         {
-            if( (PCB_LAYER_ID)(intptr_t)m_backDrillBottomLayer->GetClientData( i ) == secondaryDrill.end )
+            if( ToLAYER_ID( (intptr_t)m_backDrillBottomLayer->GetClientData( i ) ) == secondaryDrill.end )
             {
                 m_backDrillBottomLayer->SetSelection( i );
                 break;
@@ -844,7 +842,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         for( unsigned int i = 0; i < m_backDrillTopLayer->GetCount(); ++i )
         {
-            if( (PCB_LAYER_ID)(intptr_t)m_backDrillTopLayer->GetClientData( i ) == tertiaryDrill.end )
+            if( ToLAYER_ID( (intptr_t)m_backDrillTopLayer->GetClientData( i ) ) == tertiaryDrill.end )
             {
                 m_backDrillTopLayer->SetSelection( i );
                 break;
@@ -2257,24 +2255,24 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         secondaryDrill.end = UNDEFINED_LAYER;
     }
 
-    if( m_backDrillChoice->GetSelection() & 1 ) // Bottom
-    {
-        secondaryDrill.start = B_Cu;
-
-        if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
-            secondaryDrill.end = (PCB_LAYER_ID)(intptr_t)m_backDrillBottomLayer->GetClientData( m_backDrillBottomLayer->GetSelection() );
-        else
-            secondaryDrill.end = UNDEFINED_LAYER;
-    }
-
-    if( m_backDrillChoice->GetSelection() & 2 ) // Top
+    if( m_backDrillChoice->GetSelection() == 1 || m_backDrillChoice->GetSelection() == 3 ) // Front
     {
         tertiaryDrill.start = F_Cu;
 
         if( m_backDrillTopLayer->GetSelection() != wxNOT_FOUND )
-            tertiaryDrill.end = (PCB_LAYER_ID)(intptr_t)m_backDrillTopLayer->GetClientData( m_backDrillTopLayer->GetSelection() );
+            tertiaryDrill.end = ToLAYER_ID( (intptr_t)m_backDrillTopLayer->GetClientData( m_backDrillTopLayer->GetSelection() ) );
         else
             tertiaryDrill.end = UNDEFINED_LAYER;
+    }
+
+    if( m_backDrillChoice->GetSelection() == 2 || m_backDrillChoice->GetSelection() == 3 ) // Back
+    {
+        secondaryDrill.start = B_Cu;
+
+        if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
+            secondaryDrill.end = ToLAYER_ID( (intptr_t)m_backDrillBottomLayer->GetClientData( m_backDrillBottomLayer->GetSelection() ) );
+        else
+            secondaryDrill.end = UNDEFINED_LAYER;
     }
 
     aPad->Padstack().SecondaryDrill() = secondaryDrill;
@@ -2285,8 +2283,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( m_topPostMachining->GetSelection() )
     {
-    case 1:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-    case 2:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    case 1:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+    case 2:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
     default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
     }
 
@@ -2304,8 +2302,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( m_bottomPostMachining->GetSelection() )
     {
-    case 1:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-    case 2:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+    case 1:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+    case 2:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
     default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
     }
 
@@ -2327,10 +2325,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 void DIALOG_PAD_PROPERTIES::onBackDrillChoice( wxCommandEvent& event )
 {
     int selection = m_backDrillChoice->GetSelection();
-    // 0: None, 1: Bottom, 2: Top, 3: Both
+    // 0: None, 1: Top, 2: Bottom, 3: Both
 
-    bool enableTop = ( selection == 2 || selection == 3 );
-    bool enableBottom = ( selection == 1 || selection == 3 );
+    bool enableTop = ( selection == 1 || selection == 3 );
+    bool enableBottom = ( selection == 2 || selection == 3 );
 
     m_backDrillTopSizeBinder.Enable( enableTop );
     m_backDrillTopLayer->Enable( enableTop );
