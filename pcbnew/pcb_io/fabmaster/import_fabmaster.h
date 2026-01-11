@@ -211,6 +211,8 @@ private:
 
     struct GRAPHIC_ITEM
     {
+        virtual ~GRAPHIC_ITEM() = default;
+
         int           start_x;  ///<! GRAPHIC_DATA_1
         int           start_y;  ///<! GRAPHIC_DATA_2
         int           width;    ///<! Various sections depending on type
