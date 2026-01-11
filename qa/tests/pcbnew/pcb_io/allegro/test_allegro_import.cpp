@@ -2778,6 +2778,141 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
 
 
 /**
+ * Verify that footprint pads are contained within their F.Fab outline bounding box.
+ * This catches coordinate-space bugs where 0x0D pad positions (footprint-local) are
+ * incorrectly treated as board-absolute, causing pads to be placed far from their
+ * footprint's fabrication outline.
+ */
+BOOST_AUTO_TEST_CASE( PadContainedInFabOutline )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    // Footprints known to have pads and F.Fab outlines
+    const std::set<wxString> targetRefs = { wxS( "J1" ), wxS( "P5" ), wxS( "P6" ), wxS( "P10" ),
+                                            wxS( "U5" ), wxS( "U13" ), wxS( "C78" ) };
+
+    int testedCount = 0;
+    int failedCount = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( targetRefs.find( fp->GetReference() ) == targetRefs.end() )
+            continue;
+
+        PCB_LAYER_ID fabLayer = fp->IsFlipped() ? B_Fab : F_Fab;
+
+        BOX2I fabBbox;
+        bool  hasFab = false;
+
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
+        {
+            if( item->GetLayer() == fabLayer )
+            {
+                if( !hasFab )
+                {
+                    fabBbox = item->GetBoundingBox();
+                    hasFab = true;
+                }
+                else
+                {
+                    fabBbox.Merge( item->GetBoundingBox() );
+                }
+            }
+        }
+
+        if( !hasFab || fp->Pads().empty() )
+            continue;
+
+        // Allow generous tolerance: pad centers can extend slightly beyond the fab outline
+        // (e.g. edge-mount connectors, thermal pads). 3mm handles most cases.
+        BOX2I testBbox = fabBbox;
+        testBbox.Inflate( 3000000 );
+
+        BOOST_TEST_CONTEXT( "Footprint " << fp->GetReference() )
+        {
+            testedCount++;
+
+            for( PAD* pad : fp->Pads() )
+            {
+                VECTOR2I padCenter = pad->GetPosition();
+
+                if( !testBbox.Contains( padCenter ) )
+                {
+                    failedCount++;
+                    BOOST_TEST_MESSAGE( fp->GetReference() << " pad " << pad->GetNumber()
+                                        << " at (" << padCenter.x / 1e6 << ", "
+                                        << padCenter.y / 1e6 << ") mm is outside F.Fab bbox" );
+                }
+            }
+        }
+    }
+
+    BOOST_TEST_MESSAGE( "Tested " << testedCount << " footprints for pad containment" );
+    BOOST_CHECK_GE( testedCount, 4 );
+    BOOST_CHECK_EQUAL( failedCount, 0 );
+}
+
+
+/**
+ * Verify pad orientation on footprints P6 and P10. The binary format stores pad rotation
+ * in footprint-local space via 0x0D. An earlier bug double-subtracted footprint rotation,
+ * causing pads to appear rotated 90 degrees from their correct orientation.
+ */
+BOOST_AUTO_TEST_CASE( PadOrientationP6P10 )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        wxString ref = fp->GetReference();
+
+        if( ref != wxS( "P6" ) && ref != wxS( "P10" ) )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Footprint " << ref )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                long padNum = 0;
+
+                if( !pad->GetNumber().ToLong( &padNum ) )
+                    continue;
+
+                // Pads 1-19 on P6/P10 are rectangular SMD pads that should be wider than tall
+                if( padNum < 1 || padNum > 19 )
+                    continue;
+
+                // GetBoundingBox accounts for rotation, giving visual dimensions
+                BOX2I bbox = pad->GetBoundingBox();
+                auto bboxW = bbox.GetWidth();
+                auto bboxH = bbox.GetHeight();
+
+                // Skip square/circular pads where orientation doesn't affect shape
+                if( bboxW == bboxH )
+                    continue;
+
+                BOOST_TEST_CONTEXT( "Pad " << pad->GetNumber() )
+                {
+                    BOOST_CHECK_MESSAGE( bboxW > bboxH,
+                                         ref << " pad " << pad->GetNumber()
+                                             << " should be visually wider than tall: "
+                                             << bboxW / 1e6 << " x " << bboxH / 1e6 << " mm" );
+                }
+            }
+        }
+    }
+}
+
+
+/**
  * Verify that footprint J1 in BeagleBone_Black_RevC imports at 180 degrees orientation.
  * This catches a bug where EDA_ANGLE was constructed without DEGREES_T, causing the
  * rotation value to be misinterpreted.

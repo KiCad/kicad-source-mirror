@@ -1714,8 +1714,12 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
         const int       netCode = m_netCache.at( netAssignment->m_Net )->GetNetCode();
         const wxString  padName = m_brdDb.GetString( padInfo->m_NameStrId );
-        const VECTOR2I  padPos = scale( VECTOR2I{ padInfo->m_CoordsX, padInfo->m_CoordsY } );
-        const EDA_ANGLE padRotation{ static_cast<double>( padInfo->m_Rotation ) / 1000.0, DEGREES_T };
+
+        // 0x0D coordinates and rotation are in the footprint's local (unrotated) space.
+        // Use SetFPRelativePosition/Orientation to let KiCad handle the transform to
+        // board-absolute coordinates (rotating by FP orientation and adding FP position).
+        const VECTOR2I  padLocalPos = scale( VECTOR2I{ padInfo->m_CoordsX, padInfo->m_CoordsY } );
+        const EDA_ANGLE padLocalRot{ static_cast<double>( padInfo->m_Rotation ) / 1000.0, DEGREES_T };
 
         std::vector<std::unique_ptr<BOARD_ITEM>> padItems = buildPadItems( *padStack, *fp, padName, netCode );
 
@@ -1724,10 +1728,10 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
             if( item->Type() == PCB_PAD_T )
             {
                 PAD* pad = static_cast<PAD*>( item.get() );
-                pad->SetOrientation( padRotation - rotation );
+                pad->SetFPRelativeOrientation( padLocalRot );
             }
 
-            item->Move( padPos );
+            item->SetFPRelativePosition( padLocalPos );
             fp->Add( item.release() );
         }
     }
