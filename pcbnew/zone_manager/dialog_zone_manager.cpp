@@ -357,7 +357,13 @@ void DIALOG_ZONE_MANAGER::OnUpdateDisplayedZonesClick( wxCommandEvent& aEvent )
         return;
 
     m_isFillingZones = true;
-    m_panelZoneProperties->TransferZoneSettingsFromWindow();
+
+    if( !m_panelZoneProperties->TransferZoneSettingsFromWindow() )
+    {
+        m_isFillingZones = false;
+        return;
+    }
+
     m_zoneSettingsBag.UpdateClonedZones();
 
     BOARD* board = m_pcbFrame->GetBoard();
