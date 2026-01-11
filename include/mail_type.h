@@ -56,7 +56,8 @@ enum MAIL_T
     MAIL_FP_EDIT,
     MAIL_RELOAD_LIB,               // Reload Library List if one was added
     MAIL_RELOAD_PLUGINS,           // Reload python plugins
-    MAIL_REFRESH_SYMBOL            // Refresh symbol in symbol viewer
+    MAIL_REFRESH_SYMBOL,           // Refresh symbol in symbol viewer
+    MAIL_SCH_NAVIGATE_TO_SHEET     // Navigate to sheet by filename if in hierarchy
 };
 
 #endif  // MAIL_TYPE_H_
