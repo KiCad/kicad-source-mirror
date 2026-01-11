@@ -478,6 +478,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Variant" ) );
 
     Layout();
+    m_fieldsGrid->Layout();
 
     if( GetSizer() )
         GetSizer()->Fit( this );
@@ -642,13 +643,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     if( m_embeddedFiles && !m_embeddedFiles->TransferDataToWindow() )
         return false;
-
-    Layout();
-    m_fieldsGrid->Layout();
-
-#ifdef __WXGTK__
-    wxSafeYield();
-#endif
 
     return true;
 }
@@ -1202,15 +1196,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizePinsGrid( wxSizeEvent& event )
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();
-}
-
-
-void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
-{
-    TransferDataToWindow();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    finishDialogSettings();
 }
 
 

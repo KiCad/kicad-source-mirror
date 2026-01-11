@@ -79,7 +79,6 @@ private:
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
-    void OnInitDlg( wxInitDialogEvent& event ) override;
     void OnGridEditorShown( wxGridEvent& event ) override;
     void OnGridEditorHidden( wxGridEvent& event ) override;
     void OnUnitChoice( wxCommandEvent& event ) override;

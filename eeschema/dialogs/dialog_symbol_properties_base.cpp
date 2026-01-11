@@ -347,7 +347,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	mainSizer->Fit( this );
 
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnInitDlg ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_notebook1->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnPageChanging ), NULL, this );
 	m_fieldsGrid->Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorHidden ), NULL, this );
@@ -380,7 +379,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 DIALOG_SYMBOL_PROPERTIES_BASE::~DIALOG_SYMBOL_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnInitDlg ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUpdateUI ) );
 	m_notebook1->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnPageChanging ), NULL, this );
 	m_fieldsGrid->Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnGridEditorHidden ), NULL, this );
