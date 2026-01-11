@@ -1157,10 +1157,13 @@ void DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus( wxCommandEvent& event )
     m_fieldsGrid->MakeCellVisible( loc->x, loc->y );
     m_fieldsGrid->SetGridCursor( loc->x, loc->y );
 
-    m_fieldsGrid->EnableCellEditControl( true );
-    m_fieldsGrid->ShowCellEditControl();
-
     delete loc;
+
+    CallAfter(
+            [this]()
+            {
+                m_fieldsGrid->EnableCellEditControl( true );
+            } );
 }
 
 
