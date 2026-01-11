@@ -359,6 +359,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     m_fields->GetField( FIELD_T::SHEET_NAME )->SetText( newSheetname );
 
+    m_sheet->SetName( newSheetname );
+    m_sheet->SetFileName( newRelativeFilename );
+
     // change all field positions from relative to absolute
     for( SCH_FIELD& m_field : *m_fields)
         m_field.Offset( m_sheet->GetPosition() );
