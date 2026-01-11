@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2025-12-23 02:01+0000\n"
+"PO-Revision-Date: 2026-01-12 07:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -591,7 +591,7 @@ msgstr "显示模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "在实时渲染器中显示 3D 模型边框"
+msgstr "在实时渲染中显示 3D 模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -5995,7 +5995,7 @@ msgstr "批注选项"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
-msgstr "字段名称模板"
+msgstr "字段名模板"
 
 #: common/eda_base_frame.cpp:1147 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
@@ -6034,11 +6034,11 @@ msgstr "插件"
 
 #: common/eda_base_frame.cpp:1191
 msgid "Realtime Renderer"
-msgstr "实时渲染器"
+msgstr "实时渲染"
 
 #: common/eda_base_frame.cpp:1192
 msgid "Raytracing Renderer"
-msgstr "光线追踪渲染器"
+msgstr "光线追踪"
 
 #: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:616 gerbview/gerbview_frame.cpp:652
@@ -6049,7 +6049,7 @@ msgstr "Gerber 查看器"
 
 #: common/eda_base_frame.cpp:1215
 msgid "Excellon Options"
-msgstr "Excellon 选项"
+msgstr "Excellon"
 
 #: common/eda_base_frame.cpp:1233 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:615 kicad/tools/kicad_manager_actions.cpp:187
@@ -14085,7 +14085,7 @@ msgstr "格式偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
-msgstr "字段名称模板"
+msgstr "字段名模板"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "BOM presets"
@@ -16710,11 +16710,11 @@ msgstr "重置库"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
 msgid "Project Field Name Templates"
-msgstr "工程字段名称模板"
+msgstr "工程字段名模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
 msgid "Global Field Name Templates"
-msgstr "全局字段名称模板"
+msgstr "全局字段名模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, c-format
@@ -27860,7 +27860,7 @@ msgstr "更新分支 '%s' 的 HEAD 引用失败"
 
 #: kicad/project_tree_pane.cpp:1932
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "确定要从工程中移除 Git 追踪?"
+msgstr "确定要从工程中移除 Git 跟踪?"
 
 #: kicad/project_tree_pane.cpp:1949
 msgid "Failed to remove Git directory"
@@ -49332,7 +49332,7 @@ msgstr "保持弧线中心, 调整半径"
 
 #: pcbnew/tools/pcb_actions.cpp:2000
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr "切换弧线编辑模式到保持中心、调整半径和端点"
+msgstr "切换弧线编辑模式, 保持圆心不变, 调整半径和端点位置"
 
 #: pcbnew/tools/pcb_actions.cpp:2006
 msgid "Keep Arc Endpoints or Direction of Starting Point"
@@ -49342,7 +49342,7 @@ msgstr "保持弧线端点或起点方向"
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr "切换弧线编辑模式为保持端点, 或保持另一点的方向"
+msgstr "切换弧线编辑模式, 保持端点不变, 或保持另一端点的方向不变"
 
 #: pcbnew/tools/pcb_actions.cpp:2030
 msgid "Position Relative To..."
