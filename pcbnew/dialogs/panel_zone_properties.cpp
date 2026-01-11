@@ -95,11 +95,6 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
     m_bpAddCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpDeleteCustomLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-#ifdef __WXMAC__
-    wxSizerItem* lockedSizerItem = m_cbLocked->GetContainingSizer()->GetItem( m_cbLocked );
-    lockedSizerItem->SetFlag( lockedSizerItem->GetFlag() | wxLEFT );
-#endif
-
     m_netSelector->Bind( FILTERED_ITEM_SELECTED, &PANEL_ZONE_PROPERTIES::onNetSelector, this );
 }
 
