@@ -605,9 +605,10 @@ BOOST_AUTO_TEST_CASE( SafeCastingInvalid )
     BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( static_cast<void*>( nullptr ) ) );
     BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( static_cast<const void*>( nullptr ) ) );
 
-    // Random memory should return null
-    int randomInt = 12345;
-    void* randomPtr = &randomInt;
+    // Random memory should return null. Use uint64_t to match the size of the magic value
+    // that SafeCast reads, avoiding buffer overflow when reading the magic field.
+    uint64_t randomValue = 12345;
+    void* randomPtr = &randomValue;
     BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( randomPtr ) );
 
     // Memory with wrong magic value should return null
@@ -622,8 +623,13 @@ BOOST_AUTO_TEST_CASE( SafeCastingInvalid )
 }
 
 /**
- * Test use-after-free detection
+ * Test use-after-free detection.
+ *
+ * This test is disabled when running with AddressSanitizer because the test
+ * deliberately accesses freed memory to verify the magic value detection works.
+ * ASAN will catch the use-after-free before SafeCast can check the magic value.
  */
+#if !defined( __SANITIZE_ADDRESS__ ) && !( defined( __has_feature ) && __has_feature( address_sanitizer ) )
 BOOST_AUTO_TEST_CASE( UseAfterFreeDetection )
 {
     PROPERTY_HOLDER* holder = new PROPERTY_HOLDER();
@@ -641,6 +647,7 @@ BOOST_AUTO_TEST_CASE( UseAfterFreeDetection )
     // Now safe cast should fail (magic value was cleared in destructor)
     BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( ptr ) );
 }
+#endif
 
 /**
  * Test client data creation and deletion helpers
@@ -658,8 +665,9 @@ BOOST_AUTO_TEST_CASE( ClientDataHelpers )
     // Safe delete should succeed
     BOOST_CHECK( PROPERTY_HOLDER::SafeDelete( reinterpret_cast<void*>( holder ) ) );
 
-    // Safe delete of invalid pointer should fail
-    int randomData = 42;
+    // Safe delete of invalid pointer should fail. Use uint64_t to match the size of the magic
+    // value that SafeCast reads, avoiding buffer overflow when reading the magic field.
+    uint64_t randomData = 42;
     BOOST_CHECK_EQUAL( false, PROPERTY_HOLDER::SafeDelete( &randomData ) );
     BOOST_CHECK_EQUAL( false, PROPERTY_HOLDER::SafeDelete( static_cast<void*>( nullptr ) ) );
 }
