@@ -629,7 +629,19 @@ BOOST_AUTO_TEST_CASE( SafeCastingInvalid )
  * deliberately accesses freed memory to verify the magic value detection works.
  * ASAN will catch the use-after-free before SafeCast can check the magic value.
  */
-#if !defined( __SANITIZE_ADDRESS__ ) && !( defined( __has_feature ) && __has_feature( address_sanitizer ) )
+// Detect AddressSanitizer - must use nested #if because __has_feature() can't appear
+// in a preprocessor expression on compilers that don't define it
+#if defined( __has_feature )
+    #if __has_feature( address_sanitizer )
+        #define KICAD_ASAN_ENABLED 1
+    #endif
+#endif
+
+#if defined( __SANITIZE_ADDRESS__ )
+    #define KICAD_ASAN_ENABLED 1
+#endif
+
+#ifndef KICAD_ASAN_ENABLED
 BOOST_AUTO_TEST_CASE( UseAfterFreeDetection )
 {
     PROPERTY_HOLDER* holder = new PROPERTY_HOLDER();
@@ -648,6 +660,8 @@ BOOST_AUTO_TEST_CASE( UseAfterFreeDetection )
     BOOST_CHECK_EQUAL( nullptr, PROPERTY_HOLDER::SafeCast( ptr ) );
 }
 #endif
+
+#undef KICAD_ASAN_ENABLED
 
 /**
  * Test client data creation and deletion helpers
