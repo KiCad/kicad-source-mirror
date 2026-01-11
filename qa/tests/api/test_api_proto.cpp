@@ -63,9 +63,14 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aS
         std::unique_ptr<KiCadClass> output;
 
         if( aStrict )
+        {
             output = std::make_unique<KiCadClass>( aParent );
+        }
         else
-            output = std::make_unique<KiCadClass>( *static_cast<KiCadClass*>( aInput->Clone() ) );
+        {
+            std::unique_ptr<KiCadClass> cloned( static_cast<KiCadClass*>( aInput->Clone() ) );
+            output = std::make_unique<KiCadClass>( *cloned );
+        }
 
         bool deserializeResult = false;
         BOOST_REQUIRE_NO_THROW( deserializeResult = output->Deserialize( any ) );
