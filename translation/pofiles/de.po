@@ -19,7 +19,7 @@
 # Karl SCHUH <k.schuh@schuh-tv.at>, 2023, 2024, 2025.
 # Julian Daube <julian@daube.xyz>, 2023.
 # Johannes Maibaum <jmaibaum@gmail.com>, 2024.
-# "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025.
+# "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025, 2026.
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
 # Frank Sonnenberg <frasoberg@web.de>, 2024, 2025.
@@ -7807,14 +7807,14 @@ msgid "Cannot create history directory: %s"
 msgstr "Konnte Verlaufsverzeichnis nicht erstellen: %s"
 
 #: common/history_lock.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "History repository is locked by %s@%s"
-msgstr "Historie-Repository ist durch %s@%s gesperrt"
+msgstr "Verlaufsrepository ist durch %s@%s gesperrt"
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "Das Historieverzeichnis existiert nicht: %s"
+msgstr "Verlaufsverzeichnis existiert nicht: %s"
 
 #: common/history_lock.cpp:182
 #, c-format
@@ -31110,7 +31110,7 @@ msgstr "Fehler beim Öffnen der Auftragsdatei"
 #, fuzzy
 msgid "A newer local history snapshot is available. Restore it?"
 msgstr ""
-"Lokal ist ein neuerer Snapshot der Historie verfügbar. Wiederherstellen?"
+"Lokal ist ein neuerer Snapshot des Verlaufs verfügbar. Wiederherstellen?"
 
 #: kicad/kicad_manager_frame.cpp:1074
 msgid "Edit File in Text Editor"
@@ -52392,9 +52392,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{Überstrich}</samp><br> &nbsp;<br><samp>~{CLK}"
 "</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>Überstrich</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>Überstrich</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -52435,6 +52435,7 @@ msgstr ""
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
+"    <tr>\n"
 "        <th>Footprint Bezeichner und Referenzen</th>\n"
 "        <th></th>\n"
 "        <th></th>\n"
@@ -52587,12 +52588,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (Vorderseite) oder <samp>BOTTOM</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (Vorderseite) oder <samp>BOTTOM</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Numerische Vergleiche sind ebenfalls möglich</"
 "samp></td>\n"
@@ -52645,12 +52646,12 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Beachten Sie, dass Markups Vorrang vor der Auswertung von Variablen haben."
-"</i>\n"
+"<i>Beachten Sie, dass Markups Vorrang vor der Auswertung von Variablen "
+"haben.</i>\n"
 "<p></p>\n"
 "<p><b>Kreuzverweise zu Footprints:</b> Auf Felder und Pads anderer "
-"Footprints mit der Syntax <samp>${refdes:feldname}</samp> oder "
-"<samp>${refdes:function(pad)}</samp> verweisen.</p>\n"
+"Footprints mit der Syntax <samp>${refdes:feldname}</samp> oder <samp>$"
+"{refdes:function(pad)}</samp> verweisen.</p>\n"
 "<p><b>Verschachtelte Variablen:</b> Variablen können andere Variablen "
 "enthalten. Innere Variablen werden zuerst aufgelöst. Tiefst mögliche "
 "Verschachtelung: 10 Ebenen.\n"
