@@ -1409,11 +1409,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         break;
 
     case SCH_PIN_T:
-    {
-        SCH_PIN*   schPin = static_cast<SCH_PIN*>( driver );
-        SPIN_STYLE spin   = orientLabel( schPin );
-
-        if( schPin->IsPower() )
+        if( static_cast<SCH_PIN*>( driver )->IsPower() )
         {
             msg.Printf( _( "Net %s cannot be changed to %s because it is driven by a power pin." ),
                         EscapeHTML( aOldName ),
@@ -1435,7 +1431,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
             SCH_LABEL* label = new SCH_LABEL( driver->GetPosition(), aNewName );
             label->SetParent( &m_frame->Schematic() );
             label->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-            label->SetSpinStyle( spin );
+            label->SetSpinStyle( orientLabel( static_cast<SCH_PIN*>( driver ) ) );
             label->SetFlags( IS_NEW );
 
             SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
@@ -1443,7 +1439,6 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
-    }
         break;
 
     default:
