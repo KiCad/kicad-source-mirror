@@ -34,6 +34,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <vector>
+#include <future>
 #include <wx/datetime.h>
 #include <wx/fswatcher.h>
 #include <wx/laywin.h>
@@ -322,6 +323,8 @@ private:
     wxString                m_gitCurrentBranchName;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;
+    std::future<void>       m_gitSyncTask;
+    std::future<void>       m_gitStatusIconTask;
 
     std::mutex                                       m_gitTreeCacheMutex;
     std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;

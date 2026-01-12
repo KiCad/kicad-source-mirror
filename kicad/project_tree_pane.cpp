@@ -269,6 +269,12 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
     shutdownFileWatcher();
+
+    if( m_gitSyncTask.valid() )
+        m_gitSyncTask.wait();
+
+    if( m_gitStatusIconTask.valid() )
+        m_gitStatusIconTask.wait();
 }
 
 
@@ -2404,7 +2410,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.detach_task( [this]()
+    m_gitSyncTask = tp.submit_task( [this]()
     {
         KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
@@ -2449,7 +2455,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();
 
-    tp.detach_task( [this]() { updateGitStatusIconMap(); } );
+    m_gitStatusIconTask = tp.submit_task( [this]() { updateGitStatusIconMap(); } );
 }
 
 void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
