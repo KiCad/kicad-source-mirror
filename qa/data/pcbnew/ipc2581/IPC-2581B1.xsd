@@ -1,0 +1,2448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Schema File for IPC-2581 revision B1  (revision B ammendment 1) -->
+<xsd:schema xmlns="http://webstds.ipc.org/2581" xmlns:tn="http://webstds.ipc.org/2581" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webstds.ipc.org/2581">
+	<xsd:simpleType name="angleType">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:minInclusive value="0.00"/>
+			<xsd:maxExclusive value="360.00"/>
+			<xsd:totalDigits value="3"/>
+			<xsd:fractionDigits value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="backdrillListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="START_LAYER"/>
+			<xsd:enumeration value="MUST_NOT_CUT_LAYER"/>
+			<xsd:enumeration value="MAX_STUB_LENGTH"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="bomCategoryType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ELECTRICAL"/>
+			<xsd:enumeration value="PROGRAMMABLE"/>
+			<xsd:enumeration value="MECHANICAL"/>
+			<xsd:enumeration value="MATERIAL"/>
+			<xsd:enumeration value="DOCUMENT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="boardTechnologyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="RIGID"/>
+			<xsd:enumeration value="RIGID_FLEX"/>
+			<xsd:enumeration value="FLEX"/>
+			<xsd:enumeration value="HDI"/>
+			<xsd:enumeration value="EMBEDDED_COMPONENT"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="butterflyShapeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ROUND"/>
+			<xsd:enumeration value="SQUARE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="cadPinType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="THRU"/>
+			<xsd:enumeration value="BLIND"/>
+			<xsd:enumeration value="SURFACE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="cadPropertyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DOUBLE"/>
+			<xsd:enumeration value="INTEGER"/>
+			<xsd:enumeration value="BOOLEAN"/>
+			<xsd:enumeration value="STRING"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="certificationCategoryType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ASSEMBLYDRAWING"/>
+			<xsd:enumeration value="ASSEMBLYFIXTUREGENERATION"/>
+			<xsd:enumeration value="ASSEMBLYPANEL"/>
+			<xsd:enumeration value="ASSEMBLYPREPTOOLS"/>
+			<xsd:enumeration value="ASSEMBLYTESTFIXTUREGENERATION"/>
+			<xsd:enumeration value="ASSEMBLYTESTGENERATION"/>
+			<xsd:enumeration value="BOARDFABRICATION"/>
+			<xsd:enumeration value="BOARDFIXTUREGENERATION"/>
+			<xsd:enumeration value="BOARDPANEL"/>
+			<xsd:enumeration value="BOARDTESTGENERATION"/>
+			<xsd:enumeration value="COMPONENTPLACEMENT"/>
+			<xsd:enumeration value="DETAILEDDRAWING"/>
+			<xsd:enumeration value="FABRICATIONDRAWING"/>
+			<xsd:enumeration value="GENERALASSEMBLY"/>
+			<xsd:enumeration value="GLUEDOT"/>
+			<xsd:enumeration value="MECHANICALHARDWARE"/>
+			<xsd:enumeration value="MULTIBOARDPARTSLIST"/>
+			<xsd:enumeration value="PHOTOTOOLS"/>
+			<xsd:enumeration value="SCHEMATICDRAWINGS"/>
+			<xsd:enumeration value="SINGLEBOARDPARTSLIST"/>
+			<xsd:enumeration value="SOLDERSTENCILPASTE"/>
+			<xsd:enumeration value="SPECSOURCECONTROLDRAWING"/>
+			<xsd:enumeration value="EMBEDDEDCOMPONENT"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="certificationStatusType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ALPHA"/>
+			<xsd:enumeration value="BETA"/>
+			<xsd:enumeration value="CERTIFIED"/>
+			<xsd:enumeration value="SELFTEST"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="complianceListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ROHS"/>
+			<xsd:enumeration value="CONFLICT_MINERALS"/>
+			<xsd:enumeration value="WEEE"/>
+			<xsd:enumeration value="REACH"/>
+			<xsd:enumeration value="HALOGEN_FREE"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="conductorListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CONDUCTIVITY"/>
+			<xsd:enumeration value="SURFACE_ROUGHNESS_UPFACING"/>
+			<xsd:enumeration value="SURFACE_ROUGHNESS_DOWNFACING"/>
+			<xsd:enumeration value="SURFACE_ROUGHNESS_TREATED"/>
+			<xsd:enumeration value="ETCH_FACTOR"/>
+			<xsd:enumeration value="FINISHED_HEIGHT"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="colorListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BLACK"/>
+			<xsd:enumeration value="WHITE"/>
+			<xsd:enumeration value="RED"/>
+			<xsd:enumeration value="GREEN"/>
+			<xsd:enumeration value="YELLOW"/>
+			<xsd:enumeration value="BLUE"/>
+			<xsd:enumeration value="BROWN"/>
+			<xsd:enumeration value="ORANGE"/>
+			<xsd:enumeration value="PINK"/>
+			<xsd:enumeration value="PURPLE"/>
+			<xsd:enumeration value="GRAY"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="contextType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BOARD"/>
+			<xsd:enumeration value="BOARDPANEL"/>
+			<xsd:enumeration value="ASSEMBLY"/>
+			<xsd:enumeration value="ASSEMBLYPALLET"/>
+			<xsd:enumeration value="DOCUMENTATION"/>
+			<xsd:enumeration value="TOOLING"/>
+			<xsd:enumeration value="COUPON"/>
+			<xsd:enumeration value="MISCELLANEOUS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="dfxCategoryType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="COMPONENT"/>
+			<xsd:enumeration value="BOARDFAB"/>
+			<xsd:enumeration value="ASSEMBLY"/>
+			<xsd:enumeration value="TESTING"/>
+			<xsd:enumeration value="DATAQUALITY"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="dielectricListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DIELECTRIC_CONSTANT"/>
+			<xsd:enumeration value="LOSS_TANGENT"/>
+			<xsd:enumeration value="GLASS_TYPE"/>
+			<xsd:enumeration value="GLASS_STYLE"/>
+			<xsd:enumeration value="RESIN_CONTENT"/>
+			<xsd:enumeration value="PROCESSABILITY_TEMP"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="donutShapeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ROUND"/>
+			<xsd:enumeration value="SQUARE"/>
+			<xsd:enumeration value="HEXAGON"/>
+			<xsd:enumeration value="OCTAGON"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="toolListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CARBIDE"/>
+			<xsd:enumeration value="ROUTER"/>
+			<xsd:enumeration value="LASER"/>
+			<xsd:enumeration value="FLATNOSE"/>
+			<xsd:enumeration value="EXTENSION"/>
+			<xsd:enumeration value="V_CUTTER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="toolPropertyListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DRILL_SIZE"/>
+			<xsd:enumeration value="FINISHED_SIZE"/>
+			<xsd:enumeration value="BIT_ANGLE"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="enterpriseCodeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DUNNS"/>
+			<xsd:enumeration value="CAGE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="exposureType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EXPOSED"/>
+			<xsd:enumeration value="COVERED_PRIMARY"/>
+			<xsd:enumeration value="COVERED_SECONDARY"/>
+			<xsd:enumeration value="COVERED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="floorLifeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="UNLIMITED"/>
+			<xsd:enumeration value="1_YEAR"/>
+			<xsd:enumeration value="4_WEEKS"/>
+			<xsd:enumeration value="168_HOURS"/>
+			<xsd:enumeration value="72_HOURS"/>
+			<xsd:enumeration value="48_HOURS"/>
+			<xsd:enumeration value="24_HOURS"/>
+			<xsd:enumeration value="BAKE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="geometryUsageType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="THIEVING"/>
+			<xsd:enumeration value="THERMAL_RELIEF"/>
+			<xsd:enumeration value="NONE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="generalListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ELECTRICAL"/>
+			<xsd:enumeration value="THERMAL"/>
+			<xsd:enumeration value="MATERIAL"/>
+			<xsd:enumeration value="INSTRUCTION"/>
+			<xsd:enumeration value="STANDARD"/>
+			<xsd:enumeration value="CONFIGURATION"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="historyNumberType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]+(.[0-9]+)*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="impedanceListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IMPEDANCE"/>
+			<xsd:enumeration value="LINEWIDTH"/>
+			<xsd:enumeration value="SPACING"/>
+			<xsd:enumeration value="REF_PLANE_LAYER_ID"/>
+			<xsd:enumeration value="COPLANAR_GROUND_SPACING"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="isoCodeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AD"/>
+			<xsd:enumeration value="AE"/>
+			<xsd:enumeration value="AF"/>
+			<xsd:enumeration value="AG"/>
+			<xsd:enumeration value="AI"/>
+			<xsd:enumeration value="AL"/>
+			<xsd:enumeration value="AM"/>
+			<xsd:enumeration value="AN"/>
+			<xsd:enumeration value="AO"/>
+			<xsd:enumeration value="AQ"/>
+			<xsd:enumeration value="AR"/>
+			<xsd:enumeration value="AS"/>
+			<xsd:enumeration value="AT"/>
+			<xsd:enumeration value="AU"/>
+			<xsd:enumeration value="AW"/>
+			<xsd:enumeration value="AZ"/>
+			<xsd:enumeration value="BA"/>
+			<xsd:enumeration value="BB"/>
+			<xsd:enumeration value="BD"/>
+			<xsd:enumeration value="BE"/>
+			<xsd:enumeration value="BF"/>
+			<xsd:enumeration value="BG"/>
+			<xsd:enumeration value="BH"/>
+			<xsd:enumeration value="BI"/>
+			<xsd:enumeration value="BJ"/>
+			<xsd:enumeration value="BM"/>
+			<xsd:enumeration value="BN"/>
+			<xsd:enumeration value="BO"/>
+			<xsd:enumeration value="BR"/>
+			<xsd:enumeration value="BS"/>
+			<xsd:enumeration value="BT"/>
+			<xsd:enumeration value="BV"/>
+			<xsd:enumeration value="BW"/>
+			<xsd:enumeration value="BY"/>
+			<xsd:enumeration value="BZ"/>
+			<xsd:enumeration value="CA"/>
+			<xsd:enumeration value="CC"/>
+			<xsd:enumeration value="CF"/>
+			<xsd:enumeration value="CG"/>
+			<xsd:enumeration value="CH"/>
+			<xsd:enumeration value="CI"/>
+			<xsd:enumeration value="CK"/>
+			<xsd:enumeration value="CL"/>
+			<xsd:enumeration value="CM"/>
+			<xsd:enumeration value="CN"/>
+			<xsd:enumeration value="CO"/>
+			<xsd:enumeration value="CR"/>
+			<xsd:enumeration value="CU"/>
+			<xsd:enumeration value="CV"/>
+			<xsd:enumeration value="CX"/>
+			<xsd:enumeration value="CY"/>
+			<xsd:enumeration value="CZ"/>
+			<xsd:enumeration value="DE"/>
+			<xsd:enumeration value="DJ"/>
+			<xsd:enumeration value="DK"/>
+			<xsd:enumeration value="DM"/>
+			<xsd:enumeration value="DO"/>
+			<xsd:enumeration value="DZ"/>
+			<xsd:enumeration value="EC"/>
+			<xsd:enumeration value="EE"/>
+			<xsd:enumeration value="EG"/>
+			<xsd:enumeration value="EH"/>
+			<xsd:enumeration value="ER"/>
+			<xsd:enumeration value="ES"/>
+			<xsd:enumeration value="ET"/>
+			<xsd:enumeration value="FI"/>
+			<xsd:enumeration value="FJ"/>
+			<xsd:enumeration value="FK"/>
+			<xsd:enumeration value="FM"/>
+			<xsd:enumeration value="FO"/>
+			<xsd:enumeration value="FR"/>
+			<xsd:enumeration value="FX"/>
+			<xsd:enumeration value="GA"/>
+			<xsd:enumeration value="GB"/>
+			<xsd:enumeration value="GD"/>
+			<xsd:enumeration value="GE"/>
+			<xsd:enumeration value="GF"/>
+			<xsd:enumeration value="GH"/>
+			<xsd:enumeration value="GI"/>
+			<xsd:enumeration value="GL"/>
+			<xsd:enumeration value="GM"/>
+			<xsd:enumeration value="GN"/>
+			<xsd:enumeration value="GP"/>
+			<xsd:enumeration value="GQ"/>
+			<xsd:enumeration value="GR"/>
+			<xsd:enumeration value="GS"/>
+			<xsd:enumeration value="GT"/>
+			<xsd:enumeration value="GU"/>
+			<xsd:enumeration value="GW"/>
+			<xsd:enumeration value="GY"/>
+			<xsd:enumeration value="HK"/>
+			<xsd:enumeration value="HM"/>
+			<xsd:enumeration value="HN"/>
+			<xsd:enumeration value="HR"/>
+			<xsd:enumeration value="HT"/>
+			<xsd:enumeration value="HU"/>
+			<xsd:enumeration value="ID"/>
+			<xsd:enumeration value="IE"/>
+			<xsd:enumeration value="IL"/>
+			<xsd:enumeration value="IN"/>
+			<xsd:enumeration value="IO"/>
+			<xsd:enumeration value="IQ"/>
+			<xsd:enumeration value="IR"/>
+			<xsd:enumeration value="IS"/>
+			<xsd:enumeration value="IT"/>
+			<xsd:enumeration value="JM"/>
+			<xsd:enumeration value="JO"/>
+			<xsd:enumeration value="JP"/>
+			<xsd:enumeration value="KE"/>
+			<xsd:enumeration value="KG"/>
+			<xsd:enumeration value="KH"/>
+			<xsd:enumeration value="KI"/>
+			<xsd:enumeration value="KM"/>
+			<xsd:enumeration value="KN"/>
+			<xsd:enumeration value="KP"/>
+			<xsd:enumeration value="KR"/>
+			<xsd:enumeration value="KW"/>
+			<xsd:enumeration value="KY"/>
+			<xsd:enumeration value="KZ"/>
+			<xsd:enumeration value="LA"/>
+			<xsd:enumeration value="LB"/>
+			<xsd:enumeration value="LC"/>
+			<xsd:enumeration value="LI"/>
+			<xsd:enumeration value="LK"/>
+			<xsd:enumeration value="LR"/>
+			<xsd:enumeration value="LS"/>
+			<xsd:enumeration value="LT"/>
+			<xsd:enumeration value="LU"/>
+			<xsd:enumeration value="LV"/>
+			<xsd:enumeration value="LY"/>
+			<xsd:enumeration value="MA"/>
+			<xsd:enumeration value="MC"/>
+			<xsd:enumeration value="MD"/>
+			<xsd:enumeration value="MG"/>
+			<xsd:enumeration value="MH"/>
+			<xsd:enumeration value="MK"/>
+			<xsd:enumeration value="ML"/>
+			<xsd:enumeration value="MM"/>
+			<xsd:enumeration value="MN"/>
+			<xsd:enumeration value="MO"/>
+			<xsd:enumeration value="MP"/>
+			<xsd:enumeration value="MQ"/>
+			<xsd:enumeration value="MR"/>
+			<xsd:enumeration value="MS"/>
+			<xsd:enumeration value="MT"/>
+			<xsd:enumeration value="MU"/>
+			<xsd:enumeration value="MV"/>
+			<xsd:enumeration value="MW"/>
+			<xsd:enumeration value="MX"/>
+			<xsd:enumeration value="MY"/>
+			<xsd:enumeration value="MZ"/>
+			<xsd:enumeration value="NA"/>
+			<xsd:enumeration value="NC"/>
+			<xsd:enumeration value="NE"/>
+			<xsd:enumeration value="NF"/>
+			<xsd:enumeration value="NG"/>
+			<xsd:enumeration value="NI"/>
+			<xsd:enumeration value="NL"/>
+			<xsd:enumeration value="NO"/>
+			<xsd:enumeration value="NP"/>
+			<xsd:enumeration value="NR"/>
+			<xsd:enumeration value="NU"/>
+			<xsd:enumeration value="NZ"/>
+			<xsd:enumeration value="OM"/>
+			<xsd:enumeration value="PA"/>
+			<xsd:enumeration value="PE"/>
+			<xsd:enumeration value="PF"/>
+			<xsd:enumeration value="PG"/>
+			<xsd:enumeration value="PH"/>
+			<xsd:enumeration value="PK"/>
+			<xsd:enumeration value="PL"/>
+			<xsd:enumeration value="PM"/>
+			<xsd:enumeration value="PN"/>
+			<xsd:enumeration value="PR"/>
+			<xsd:enumeration value="PT"/>
+			<xsd:enumeration value="PW"/>
+			<xsd:enumeration value="PY"/>
+			<xsd:enumeration value="QA"/>
+			<xsd:enumeration value="RE"/>
+			<xsd:enumeration value="RO"/>
+			<xsd:enumeration value="RU"/>
+			<xsd:enumeration value="RW"/>
+			<xsd:enumeration value="SA"/>
+			<xsd:enumeration value="SB"/>
+			<xsd:enumeration value="SC"/>
+			<xsd:enumeration value="SD"/>
+			<xsd:enumeration value="SE"/>
+			<xsd:enumeration value="SG"/>
+			<xsd:enumeration value="SH"/>
+			<xsd:enumeration value="SI"/>
+			<xsd:enumeration value="SJ"/>
+			<xsd:enumeration value="SK"/>
+			<xsd:enumeration value="SL"/>
+			<xsd:enumeration value="SM"/>
+			<xsd:enumeration value="SN"/>
+			<xsd:enumeration value="SO"/>
+			<xsd:enumeration value="SR"/>
+			<xsd:enumeration value="ST"/>
+			<xsd:enumeration value="SV"/>
+			<xsd:enumeration value="SY"/>
+			<xsd:enumeration value="SZ"/>
+			<xsd:enumeration value="TC"/>
+			<xsd:enumeration value="TD"/>
+			<xsd:enumeration value="TF"/>
+			<xsd:enumeration value="TG"/>
+			<xsd:enumeration value="TH"/>
+			<xsd:enumeration value="TJ"/>
+			<xsd:enumeration value="TK"/>
+			<xsd:enumeration value="TM"/>
+			<xsd:enumeration value="TN"/>
+			<xsd:enumeration value="TO"/>
+			<xsd:enumeration value="TP"/>
+			<xsd:enumeration value="TR"/>
+			<xsd:enumeration value="TT"/>
+			<xsd:enumeration value="TV"/>
+			<xsd:enumeration value="TW"/>
+			<xsd:enumeration value="TZ"/>
+			<xsd:enumeration value="UA"/>
+			<xsd:enumeration value="UG"/>
+			<xsd:enumeration value="UM"/>
+			<xsd:enumeration value="US"/>
+			<xsd:enumeration value="UY"/>
+			<xsd:enumeration value="UZ"/>
+			<xsd:enumeration value="VA"/>
+			<xsd:enumeration value="VC"/>
+			<xsd:enumeration value="VE"/>
+			<xsd:enumeration value="VG"/>
+			<xsd:enumeration value="VI"/>
+			<xsd:enumeration value="VN"/>
+			<xsd:enumeration value="VU"/>
+			<xsd:enumeration value="WF"/>
+			<xsd:enumeration value="WS"/>
+			<xsd:enumeration value="YE"/>
+			<xsd:enumeration value="YT"/>
+			<xsd:enumeration value="YU"/>
+			<xsd:enumeration value="ZA"/>
+			<xsd:enumeration value="ZM"/>
+			<xsd:enumeration value="ZR"/>
+			<xsd:enumeration value="ZW"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="layerFunctionType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ASSEMBLY"/>
+			<xsd:enumeration value="BOARDFAB"/>
+			<xsd:enumeration value="BOARD_OUTLINE"/>
+			<xsd:enumeration value="CAPACITIVE"/>
+			<xsd:enumeration value="COATINGCOND"/>
+			<xsd:enumeration value="COATINGNONCOND"/>
+			<xsd:enumeration value="COMPONENT"/>
+			<xsd:enumeration value="COMPONENT_BOTTOM"/>
+			<xsd:enumeration value="COMPONENT_TOP"/>
+			<xsd:enumeration value="CONDFILM"/>
+			<xsd:enumeration value="CONDFOIL"/>
+			<xsd:enumeration value="CONDUCTIVE_ADHESIVE"/>
+			<xsd:enumeration value="CONDUCTOR"/>
+			<xsd:enumeration value="COURTYARD"/>
+			<xsd:enumeration value="DIELBASE"/>
+			<xsd:enumeration value="DIELCORE"/>
+			<xsd:enumeration value="DIELPREG"/>
+			<xsd:enumeration value="DIELADHV"/>
+			<xsd:enumeration value="DIELBONDPLY"/>
+			<xsd:enumeration value="DIELCOVERLAY"/>
+			<xsd:enumeration value="DOCUMENT"/>
+			<xsd:enumeration value="DRILL"/>
+			<xsd:enumeration value="FIXTURE"/>
+			<xsd:enumeration value="GLUE"/>
+			<xsd:enumeration value="GRAPHIC"/>
+			<xsd:enumeration value="HOLEFILL"/>
+			<xsd:enumeration value="SOLDERBUMP"/>
+			<xsd:enumeration value="PASTEMASK"/>
+			<xsd:enumeration value="EMBEDDED_COMPONENT"/>
+			<xsd:enumeration value="LANDPATTERN"/>
+			<xsd:enumeration value="LEGEND"/>
+			<xsd:enumeration value="MIXED"/>
+			<xsd:enumeration value="OTHER"/>
+			<xsd:enumeration value="PIN"/>
+			<xsd:enumeration value="PLANE"/>
+			<xsd:enumeration value="PROBE"/>
+			<xsd:enumeration value="RESISTIVE"/>
+			<xsd:enumeration value="SIGNAL"/>
+			<xsd:enumeration value="SILKSCREEN"/>
+			<xsd:enumeration value="SOLDERMASK"/>
+			<xsd:enumeration value="SOLDERPASTE"/>
+			<xsd:enumeration value="STACKUP_COMPOSITE"/>
+			<xsd:enumeration value="REWORK"/>
+			<xsd:enumeration value="ROUT"/>
+			<xsd:enumeration value="V_CUT"/>
+			<xsd:enumeration value="EDGE_CHAMFER"/>
+			<xsd:enumeration value="THIEVING_KEEP_INOUT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="lineEndType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="NONE"/>
+			<xsd:enumeration value="ROUND"/>
+			<xsd:enumeration value="SQUARE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="fillPropertyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="HOLLOW"/>
+			<xsd:enumeration value="HATCH"/>
+			<xsd:enumeration value="MESH"/>
+			<xsd:enumeration value="FILL"/>
+			<xsd:enumeration value="VOID"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="linePropertyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SOLID"/>
+			<xsd:enumeration value="DOTTED"/>
+			<xsd:enumeration value="DASHED"/>
+			<xsd:enumeration value="CENTER"/>
+			<xsd:enumeration value="PHANTOM"/>
+			<xsd:enumeration value="ERASE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="markingUsageType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="REFDES"/>
+			<xsd:enumeration value="PARTNAME"/>
+			<xsd:enumeration value="TARGET"/>
+			<xsd:enumeration value="POLARITY_MARKING"/>
+			<xsd:enumeration value="ATTRIBUTE_GRAPHICS"/>
+			<xsd:enumeration value="PIN_ONE"/>
+			<xsd:enumeration value="NONE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="modeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="USERDEF"/>
+			<xsd:enumeration value="BOM"/>
+			<xsd:enumeration value="STACKUP"/>
+			<xsd:enumeration value="FABRICATION"/>
+			<xsd:enumeration value="ASSEMBLY"/>
+			<xsd:enumeration value="TEST"/>
+			<xsd:enumeration value="STENCIL"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="mountType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SMT"/>
+			<xsd:enumeration value="THMT"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="netClassType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CLK"/>
+			<xsd:enumeration value="FIXED"/>
+			<xsd:enumeration value="GROUND"/>
+			<xsd:enumeration value="SIGNAL"/>
+			<xsd:enumeration value="POWER"/>
+			<xsd:enumeration value="UNUSED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="netPointType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="END"/>
+			<xsd:enumeration value="MIDDLE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="nonNegativeDoubleType">
+		<xsd:restriction base="xsd:double">
+			<xsd:minInclusive value="0.0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="packageTypeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AXIAL_LEADED"/>
+			<xsd:enumeration value="BARE_DIE"/>
+			<xsd:enumeration value="CERAMIC_BGA"/>
+			<xsd:enumeration value="CERAMIC_DIP"/>
+			<xsd:enumeration value="CERAMIC_FLATPACK"/>
+			<xsd:enumeration value="CERAMIC_QUAD_FLATPACK"/>
+			<xsd:enumeration value="CERAMIC_SIP"/>
+			<xsd:enumeration value="CHIP"/>
+			<xsd:enumeration value="CHIP_SCALE"/>
+			<xsd:enumeration value="CHOKE_SWITCH_SM"/>
+			<xsd:enumeration value="COIL"/>
+			<xsd:enumeration value="CONNECTOR_SM"/>
+			<xsd:enumeration value="CONNECTOR_TH"/>
+			<xsd:enumeration value="EMBEDDED"/>
+			<xsd:enumeration value="FLIPCHIP"/>
+			<xsd:enumeration value="HERMETIC_HYBRED"/>
+			<xsd:enumeration value="LEADLESS_CERAMIC_CHIP_CARRIER"/>
+			<xsd:enumeration value="MCM"/>
+			<xsd:enumeration value="MELF"/>
+			<xsd:enumeration value="FINEPITCH_BGA"/>
+			<xsd:enumeration value="MOLDED"/>
+			<xsd:enumeration value="NETWORK"/>
+			<xsd:enumeration value="PGA"/>
+			<xsd:enumeration value="PLASTIC_BGA"/>
+			<xsd:enumeration value="PLASTIC_CHIP_CARRIER"/>
+			<xsd:enumeration value="PLASTIC_DIP"/>
+			<xsd:enumeration value="PLASTIC_SIP"/>
+			<xsd:enumeration value="POWER_TRANSISTOR"/>
+			<xsd:enumeration value="RADIAL_LEADED"/>
+			<xsd:enumeration value="RECTANGULAR_QUAD_FLATPACK"/>
+			<xsd:enumeration value="RELAY_SM"/>
+			<xsd:enumeration value="RELAY_TH"/>
+			<xsd:enumeration value="SOD123"/>
+			<xsd:enumeration value="SOIC"/>
+			<xsd:enumeration value="SOJ"/>
+			<xsd:enumeration value="SOPIC"/>
+			<xsd:enumeration value="SOT143"/>
+			<xsd:enumeration value="SOT23"/>
+			<xsd:enumeration value="SOT52"/>
+			<xsd:enumeration value="SOT89"/>
+			<xsd:enumeration value="SQUARE_QUAD_FLATPACK"/>
+			<xsd:enumeration value="SSOIC"/>
+			<xsd:enumeration value="SWITCH_TH"/>
+			<xsd:enumeration value="TANTALUM"/>
+			<xsd:enumeration value="TO_TYPE"/>
+			<xsd:enumeration value="TRANSFORMER"/>
+			<xsd:enumeration value="TRIMPOT_SM"/>
+			<xsd:enumeration value="TRIMPOT_TH"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="padUsageType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="TERMINATION"/>
+			<xsd:enumeration value="VIA"/>
+			<xsd:enumeration value="PLANE"/>
+			<xsd:enumeration value="MASK"/>
+			<xsd:enumeration value="TOOLING_HOLE"/>
+			<xsd:enumeration value="THIEVING"/>
+			<xsd:enumeration value="THERMAL_RELIEF"/>
+			<xsd:enumeration value="FIDUCIAL"/>
+			<xsd:enumeration value="NONE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="padUseType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="REGULAR"/>
+			<xsd:enumeration value="ANTIPAD"/>
+			<xsd:enumeration value="THERMAL"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="pinElectricalType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ELECTRICAL"/>
+			<xsd:enumeration value="MECHANICAL"/>
+			<xsd:enumeration value="UNDEFINED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="pinMountType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SURFACE_MOUNT_PIN"/>
+			<xsd:enumeration value="SURFACE_MOUNT_PAD"/>
+			<xsd:enumeration value="THROUGH_HOLE_PIN"/>
+			<xsd:enumeration value="THROUGH_HOLE_HOLE"/>
+			<xsd:enumeration value="PRESSFIT"/>
+			<xsd:enumeration value="NONBOARD"/>
+			<xsd:enumeration value="HOLE"/>
+			<xsd:enumeration value="UNDEFINED"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="pinOneOrientationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LOWER_LEFT"/>
+			<xsd:enumeration value="LEFT"/>
+			<xsd:enumeration value="LEFT_CENTER"/>
+			<xsd:enumeration value="UPPER_LEFT"/>
+			<xsd:enumeration value="UPPER_CENTER"/>
+			<xsd:enumeration value="UPPER_RIGHT"/>
+			<xsd:enumeration value="RIGHT"/>
+			<xsd:enumeration value="RIGHT_CENTER"/>
+			<xsd:enumeration value="LOWER_RIGHT"/>
+			<xsd:enumeration value="LOWER_CENTER"/>
+			<xsd:enumeration value="CENTER"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="polarityType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="POSITIVE"/>
+			<xsd:enumeration value="NEGATIVE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="propertyUnitType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="MM"/>
+			<xsd:enumeration value="INCH"/>
+			<xsd:enumeration value="MICRON"/>
+			<xsd:enumeration value="OHMS"/>
+			<xsd:enumeration value="MHO/CM"/>
+			<xsd:enumeration value="SIEMENS/M"/>
+			<xsd:enumeration value="CELCIUS"/>
+			<xsd:enumeration value="FARANHEIT"/>
+			<xsd:enumeration value="PERCENT"/>
+			<xsd:enumeration value="Hz"/>
+			<xsd:enumeration value="DEGREES"/>
+			<xsd:enumeration value="RMAX"/>
+			<xsd:enumeration value="RZ"/>
+			<xsd:enumeration value="RMS"/>
+			<xsd:enumeration value="SECTION"/>
+			<xsd:enumeration value="CLASS"/>
+			<xsd:enumeration value="ITEM"/>
+			<xsd:enumeration value="GAUGE"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="qualifiedNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([a-zA-Z0-9_\-.+&gt;&lt;]*)(:[a-zA-Z0-9_\-.+&gt;&lt;]*)*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="roleFunctionType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SENDER"/>
+			<xsd:enumeration value="OWNER"/>
+			<xsd:enumeration value="RECEIVER"/>
+			<xsd:enumeration value="DESIGNER"/>
+			<xsd:enumeration value="ENGINEER"/>
+			<xsd:enumeration value="BUYER"/>
+			<xsd:enumeration value="CUSTOMERSERVICE"/>
+			<xsd:enumeration value="DELIVERTO"/>
+			<xsd:enumeration value="BILLTO"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="scaleType">
+		<xsd:restriction base="xsd:double">
+			<xsd:minExclusive value="0.0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="sectionKeyType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[ABCDEFGIKLMOPRSUXY]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="shortName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z0-9_\-#+/.&gt;&lt;]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="sideType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="TOP"/>
+			<xsd:enumeration value="BOTTOM"/>
+			<xsd:enumeration value="BOTH"/>
+			<xsd:enumeration value="INTERNAL"/>
+			<xsd:enumeration value="ALL"/>
+			<xsd:enumeration value="NONE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="spokeCountType">
+		<xsd:restriction base="xsd:integer">
+			<xsd:maxInclusive value="4"/>
+			<xsd:minInclusive value="0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="platingStatusType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="PLATED"/>
+			<xsd:enumeration value="NONPLATED"/>
+			<xsd:enumeration value="VIA"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="structureListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="STRIPLINE"/>
+			<xsd:enumeration value="PLANE_LESS_STRIPLINE "/>
+			<xsd:enumeration value="MICROSTRIP_EMBEDDED"/>
+			<xsd:enumeration value="MICROSTRIP_NO_MASK "/>
+			<xsd:enumeration value="MICROSTRIP_MASK_COVERED"/>
+			<xsd:enumeration value="MICROSTRIP_DUAL_MASKED_COVERED"/>
+			<xsd:enumeration value="COPLANAR_WAVEGUIDE_STRIPLINE"/>
+			<xsd:enumeration value="COPLANAR_WAVEGUIDE_EMBEDDED"/>
+			<xsd:enumeration value="COPLANAR_WAVEGUIDE_NO_MASK"/>
+			<xsd:enumeration value="COPLANAR_WAVEGUIDE_MASK_COVERED"/>
+			<xsd:enumeration value="COPLANAR_WAVEGUIDE_DUAL_MASKED_COVERED"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="technologyListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="RIGID"/>
+			<xsd:enumeration value="RIGID_FLEX"/>
+			<xsd:enumeration value="FLEX"/>
+			<xsd:enumeration value="HDI"/>
+			<xsd:enumeration value="EMBEDDED_COMPONENT"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="temperatureListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="THERMAL_DELAMINATION"/>
+			<xsd:enumeration value="EXPANSION_Z_AXIS"/>
+			<xsd:enumeration value="EXPANSION_X_Y_AXIS"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="thermalShapeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ROUND"/>
+			<xsd:enumeration value="SQUARE"/>
+			<xsd:enumeration value="HEXAGON"/>
+			<xsd:enumeration value="OCTAGON"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="thievingListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="KEEP_IN"/>
+			<xsd:enumeration value="KEEP_OUT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="transmissionListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SINGLE_ENDED"/>
+			<xsd:enumeration value="EDGE_COUPLED"/>
+			<xsd:enumeration value="BROADSIDE_COUPLED"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="unitModeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DISTANCE"/>
+			<xsd:enumeration value="AREA"/>
+			<xsd:enumeration value="RESISTANCE"/>
+			<xsd:enumeration value="CAPACITANCE"/>
+			<xsd:enumeration value="IMPEDANCE"/>
+			<xsd:enumeration value="PERCENTAGE"/>
+			<xsd:enumeration value="SIZE"/>
+			<xsd:enumeration value="NONE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="unitsType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="MILLIMETER"/>
+			<xsd:enumeration value="MICRON"/>
+			<xsd:enumeration value="INCH"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="unsignedByte">
+		<xsd:restriction base="xsd:nonNegativeInteger">
+			<xsd:maxInclusive value="255"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="vCutListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ANGLE"/>
+			<xsd:enumeration value="THICKNESS_REMAINING"/>
+			<xsd:enumeration value="OFFSET"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="edgeChamferListType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ANGLE"/>
+			<xsd:enumeration value="WIDTH"/>
+			<xsd:enumeration value="SIDE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="whereMeasuredType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LAMINATE"/>
+			<xsd:enumeration value="METAL"/>
+			<xsd:enumeration value="MASK"/>
+			<xsd:enumeration value="OTHER"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="Approval" type="ApprovalType"/>
+	<xsd:complexType name="ApprovalType">
+		<xsd:attribute name="datetime" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="personRef" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Arc" type="ArcType" substitutionGroup="Simple"/>
+	<xsd:complexType name="ArcType">
+		<xsd:sequence>
+			<xsd:element ref="LineDescGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="startX" type="xsd:double" use="required"/>
+		<xsd:attribute name="startY" type="xsd:double" use="required"/>
+		<xsd:attribute name="endX" type="xsd:double" use="required"/>
+		<xsd:attribute name="endY" type="xsd:double" use="required"/>
+		<xsd:attribute name="centerX" type="xsd:double" use="required"/>
+		<xsd:attribute name="centerY" type="xsd:double" use="required"/>
+		<xsd:attribute name="clockwise" type="xsd:boolean" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="AssemblyDrawing" type="AssemblyDrawingType"/>
+	<xsd:complexType name="AssemblyDrawingType">
+		<xsd:sequence>
+			<xsd:element ref="Outline"/>
+			<xsd:element ref="Marking" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Avl" type="AvlType"/>
+	<xsd:element name="AvlHeader" type="AvlHeaderType"/>
+	<xsd:complexType name="AvlHeaderType">
+		<xsd:attribute name="title" type="xsd:string" use="required"/>
+		<xsd:attribute name="source" type="xsd:string" use="required"/>
+		<xsd:attribute name="author" type="xsd:string" use="required"/>
+		<xsd:attribute name="datetime" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="version" type="xsd:positiveInteger" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string"/>
+		<xsd:attribute name="modRef" type="modeType"/>
+	</xsd:complexType>
+	<xsd:element name="AvlItem" type="AvlItemType"/>
+	<xsd:complexType name="AvlItemType">
+		<xsd:sequence>
+			<xsd:element ref="AvlVmpn" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="OEMDesignNumber" type="shortName" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="AvlMpn" type="AvlMpnType"/>
+	<xsd:complexType name="AvlMpnType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="rank" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="cost" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="moistureSensitivity" type="floorLifeType"/>
+		<xsd:attribute name="availability" type="xsd:boolean"/>
+		<xsd:attribute name="other" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="AvlRef" type="AvlRefType"/>
+	<xsd:complexType name="AvlRefType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="AvlType">
+		<xsd:sequence>
+			<xsd:element ref="AvlHeader"/>
+			<xsd:element ref="AvlItem" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="AvlVendor" type="AvlVendorType"/>
+	<xsd:complexType name="AvlVendorType">
+		<xsd:attribute name="enterpriseRef" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="AvlVmpn" type="AvlVmpnType"/>
+	<xsd:complexType name="AvlVmpnType">
+		<xsd:sequence>
+			<xsd:element ref="AvlMpn"/>
+			<xsd:element ref="AvlVendor"/>
+		</xsd:sequence>
+		<xsd:attribute name="evplVendor" type="xsd:string" use="optional"/>
+		<xsd:attribute name="evplMpn" type="xsd:string" use="optional"/>
+		<xsd:attribute name="qualified" type="xsd:boolean" use="optional"/>
+		<xsd:attribute name="chosen" type="xsd:boolean" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="BadBoardMark" type="FiducialType" substitutionGroup="Fiducial"/>
+	<xsd:element name="Bom" type="BomType"/>
+	<xsd:element name="BomHeader" type="BomHeaderType"/>
+	<xsd:complexType name="BomHeaderType">
+		<xsd:sequence>
+			<xsd:element ref="StepRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="assembly" type="shortName" use="required"/>
+		<xsd:attribute name="revision" type="xsd:string" use="required"/>
+		<xsd:attribute name="affecting" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:element name="BomItem" type="BomItemType"/>
+	<xsd:complexType name="BomItemType">
+		<xsd:sequence>
+			<xsd:element ref="BomDes" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Characteristics"/>
+		</xsd:sequence>
+		<xsd:attribute name="OEMDesignNumberRef" type="shortName" use="required"/>
+		<xsd:attribute name="quantity" type="xsd:string" use="required"/>
+		<xsd:attribute name="pinCount" type="xsd:nonNegativeInteger" use="optional"/>
+		<xsd:attribute name="category" type="bomCategoryType" use="required"/>
+		<xsd:attribute name="internalPartNumber" type="xsd:string"/>
+		<xsd:attribute name="description" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="BomDes" abstract="true"/>
+	<xsd:element name="RefDes" type="RefDesType" substitutionGroup="BomDes"/>
+	<xsd:complexType name="RefDesType">
+		<xsd:sequence>
+			<xsd:element ref="Tuning" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Firmware" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="packageRef" type="qualifiedNameType" use="optional"/>
+		<xsd:attribute name="populate" type="xsd:boolean"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="MatDes" type="MatDesType" substitutionGroup="BomDes"/>
+	<xsd:complexType name="MatDesType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="DocDes" type="DocDesType" substitutionGroup="BomDes"/>
+	<xsd:complexType name="DocDesType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="ToolDes" type="ToolDesType" substitutionGroup="BomDes"/>
+	<xsd:complexType name="ToolDesType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="FindDes" type="FindDesType" substitutionGroup="BomDes"/>
+	<xsd:complexType name="FindDesType">
+		<xsd:attribute name="number" type="xsd:positiveInteger" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="BomRef" type="BomRefType"/>
+	<xsd:complexType name="BomRefType">
+		<xsd:attribute name="name" type="shortName" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="BomType">
+		<xsd:sequence>
+			<xsd:element ref="BomHeader"/>
+			<xsd:element ref="BomItem" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="shortName" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="BoundingBox" type="BoundingBoxType"/>
+	<xsd:complexType name="BoundingBoxType">
+		<xsd:attribute name="lowerLeftX" type="xsd:double" use="required"/>
+		<xsd:attribute name="lowerLeftY" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightX" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightY" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Butterfly" type="ButterflyType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="ButterflyType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDescGroup" minOccurs="0"/>
+			<xsd:element ref="FillDescGroup" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="shape" type="butterflyShapeType" use="required"/>
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="side" type="nonNegativeDoubleType"/>
+	</xsd:complexType>
+	<xsd:element name="CachedFirmware" type="CachedFirmwareType" substitutionGroup="FirmwareGroup"/>
+	<xsd:complexType name="CachedFirmwareType">
+		<xsd:attribute name="hexEncodedBinary" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="CadData" type="CadDataType"/>
+	<xsd:complexType name="CadDataType">
+		<xsd:sequence>
+			<xsd:element ref="Layer" maxOccurs="unbounded"/>
+			<xsd:element ref="Stackup" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Step" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="CadHeader" type="CadHeaderType"/>
+	<xsd:complexType name="CadHeaderType">
+		<xsd:sequence>
+			<xsd:element ref="Spec" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ChangeRec" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Certification" type="CertificationType"/>
+	<xsd:complexType name="CertificationType">
+		<xsd:attribute name="certificationStatus" type="certificationStatusType" use="required"/>
+		<xsd:attribute name="certificationCategory" type="certificationCategoryType"/>
+	</xsd:complexType>
+	<xsd:element name="ChangeRec" type="ChangeRecType"/>
+	<xsd:complexType name="ChangeRecType">
+		<xsd:sequence>
+			<xsd:element ref="Approval" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="datetime" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="personRef" type="xsd:string" use="required"/>
+		<xsd:attribute name="application" type="xsd:string" use="required"/>
+		<xsd:attribute name="change" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Characteristics" type="CharacteristicsType"/>
+	<xsd:complexType name="CharacteristicsType">
+		<xsd:sequence>
+			<xsd:element ref="Measured" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Ranged" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Enumerated" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Textual" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="category" type="bomCategoryType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Circle" type="CircleType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="CircleType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDescGroup" minOccurs="0"/>
+			<xsd:element ref="FillDescGroup" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Color" type="ColorType" substitutionGroup="ColorGroup"/>
+	<xsd:element name="ColorGroup" abstract="true"/>
+	<xsd:element name="ColorRef" type="ColorRefType" substitutionGroup="ColorGroup"/>
+	<xsd:complexType name="ColorRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ColorType">
+		<xsd:attribute name="r" type="unsignedByte" use="required"/>
+		<xsd:attribute name="g" type="unsignedByte" use="required"/>
+		<xsd:attribute name="b" type="unsignedByte" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="ColorTerm" type="ColorTermType" substitutionGroup="ColorGroup"/>
+	<xsd:complexType name="ColorTermType">
+		<xsd:attribute name="name" type="colorListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Component" type="ComponentType"/>
+	<xsd:complexType name="ComponentType">
+		<xsd:sequence>
+			<xsd:element ref="NonstandardAttribute" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+		</xsd:sequence>
+		<xsd:attribute name="refDes" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="packageRef" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="part" type="xsd:string" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="mountType" type="mountType" use="required"/>
+		<xsd:attribute name="weight" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="standoff" type="nonNegativeDoubleType"/>
+	</xsd:complexType>
+	<xsd:element name="Content" type="ContentType"/>
+	<xsd:complexType name="ContentType">
+		<xsd:sequence>
+			<xsd:element ref="FunctionMode"/>
+			<xsd:element ref="StepRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="LayerRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="BomRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="AvlRef" minOccurs="0"/>
+			<xsd:element ref="DictionaryStandard" minOccurs="0"/>
+			<xsd:element ref="DictionaryUser" minOccurs="0"/>
+			<xsd:element ref="DictionaryFont" minOccurs="0"/>
+			<xsd:element ref="DictionaryLineDesc" minOccurs="0"/>
+			<xsd:element ref="DictionaryFillDesc" minOccurs="0"/>
+			<xsd:element ref="DictionaryColor" minOccurs="0"/>
+			<xsd:element ref="DictionaryFirmware" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="roleRef" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Contour" type="ContourType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="ContourType">
+		<xsd:sequence>
+			<xsd:element ref="Polygon"/>
+			<xsd:element ref="Cutout" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Cutout" type="PolygonType"/>
+	<xsd:element name="DfxMeasurement" type="DfxMeasurementType"/>
+	<xsd:element name="DfxMeasurementList" type="DfxMeasurementListType"/>
+	<xsd:complexType name="DfxMeasurementListType">
+		<xsd:sequence>
+			<xsd:element ref="DfxMeasurement" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="category" type="dfxCategoryType" use="required"/>
+		<xsd:attribute name="criteria" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="DfxMeasurementType">
+		<xsd:sequence>
+			<xsd:element ref="Simple" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="FeatureDescription" maxOccurs="2"/>
+		</xsd:sequence>
+		<xsd:attribute name="value" type="xsd:double" use="required"/>
+		<xsd:attribute name="unitMode" type="unitModeType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Diamond" type="DiamondType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="DiamondType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DictionaryColor" type="DictionaryColorType"/>
+	<xsd:complexType name="DictionaryColorType">
+		<xsd:sequence>
+			<xsd:element ref="EntryColor" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="DictionaryFirmware" type="DictionaryFirmwareType"/>
+	<xsd:complexType name="DictionaryFirmwareType">
+		<xsd:sequence>
+			<xsd:element ref="EntryFirmware" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="DictionaryFont" type="DictionaryFontType"/>
+	<xsd:complexType name="DictionaryFontType">
+		<xsd:sequence>
+			<xsd:element ref="EntryFont" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DictionaryLineDesc" type="DictionaryLineDescType"/>
+	<xsd:complexType name="DictionaryLineDescType">
+		<xsd:sequence>
+			<xsd:element ref="EntryLineDesc" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DictionaryFillDesc" type="DictionaryFillDescType"/>
+	<xsd:complexType name="DictionaryFillDescType">
+		<xsd:sequence>
+			<xsd:element ref="EntryFillDesc" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DictionaryStandard" type="DictionaryStandardType"/>
+	<xsd:complexType name="DictionaryStandardType">
+		<xsd:sequence>
+			<xsd:element ref="EntryStandard" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DictionaryUser" type="DictionaryUserType"/>
+	<xsd:complexType name="DictionaryUserType">
+		<xsd:sequence>
+			<xsd:element ref="EntryUser" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="units" type="unitsType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Donut" type="DonutType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="DonutType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="shape" type="donutShapeType" use="required"/>
+		<xsd:attribute name="outerDiameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="innerDiameter" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Ecad" type="EcadType"/>
+	<xsd:complexType name="EcadType">
+		<xsd:sequence>
+			<xsd:element ref="CadHeader"/>
+			<xsd:element ref="CadData" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Ellipse" type="EllipseType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="EllipseType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Enterprise" type="EnterpriseType"/>
+	<xsd:complexType name="EnterpriseType">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="name" type="xsd:string"/>
+		<xsd:attribute name="code" type="xsd:string" use="required"/>
+		<xsd:attribute name="codeType" type="enterpriseCodeType"/>
+		<xsd:attribute name="address1" type="xsd:string"/>
+		<xsd:attribute name="address2" type="xsd:string"/>
+		<xsd:attribute name="city" type="xsd:string"/>
+		<xsd:attribute name="stateProvince" type="xsd:string"/>
+		<xsd:attribute name="country" type="isoCodeType"/>
+		<xsd:attribute name="postalCode" type="xsd:string"/>
+		<xsd:attribute name="phone" type="xsd:string"/>
+		<xsd:attribute name="fax" type="xsd:string"/>
+		<xsd:attribute name="email" type="xsd:string"/>
+		<xsd:attribute name="url" type="xsd:anyURI"/>
+	</xsd:complexType>
+	<xsd:element name="EntryColor" type="EntryColorType"/>
+	<xsd:complexType name="EntryColorType">
+		<xsd:sequence>
+			<xsd:element ref="Color"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryFirmware" type="EntryFirmwareType"/>
+	<xsd:complexType name="EntryFirmwareType">
+		<xsd:sequence>
+			<xsd:element ref="CachedFirmware"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryFont" type="EntryFontType"/>
+	<xsd:complexType name="EntryFontType">
+		<xsd:sequence>
+			<xsd:element ref="FontDef"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryLineDesc" type="EntryLineDescType"/>
+	<xsd:complexType name="EntryLineDescType">
+		<xsd:sequence>
+			<xsd:element ref="LineDesc"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryFillDesc" type="EntryFillDescType"/>
+	<xsd:complexType name="EntryFillDescType">
+		<xsd:sequence>
+			<xsd:element ref="FillDesc"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryStandard" type="EntryStandardType"/>
+	<xsd:complexType name="EntryStandardType">
+		<xsd:sequence>
+			<xsd:element ref="StandardPrimitive"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="EntryUser" type="EntryUserType"/>
+	<xsd:complexType name="EntryUserType">
+		<xsd:sequence>
+			<xsd:element ref="UserPrimitive"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Enumerated" type="EnumeratedType"/>
+	<xsd:complexType name="EnumeratedType">
+		<xsd:attribute name="definitionSource" type="xsd:string"/>
+		<xsd:attribute name="enumeratedCharacteristicName" type="xsd:string"/>
+		<xsd:attribute name="enumeratedCharacteristicValue" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="Feature" abstract="true"/>
+	<xsd:element name="FeatureDescription" type="FeatureDescriptionType"/>
+	<xsd:complexType name="FeatureDescriptionType">
+		<xsd:sequence>
+			<xsd:element ref="Location" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="required"/>
+		<!--xsd:attribute name = "featureRef" use = "required" type = "qualifiedNameType"/-->
+	</xsd:complexType>
+	<xsd:element name="Features" type="FeaturesType"/>
+	<xsd:complexType name="FeaturesType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Feature"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Fiducial" abstract="true"/>
+	<xsd:complexType name="FiducialType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+			<xsd:element ref="StandardShape"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="File" type="FileType"/>
+	<xsd:element name="FileRevision" type="FileRevisionType"/>
+	<xsd:complexType name="FileRevisionType">
+		<xsd:sequence>
+			<xsd:element ref="SoftwarePackage"/>
+		</xsd:sequence>
+		<xsd:attribute name="fileRevisionId" type="xsd:string" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="required"/>
+		<xsd:attribute name="label" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:complexType name="FileType">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="crc" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Firmware" type="FirmwareType"/>
+	<xsd:element name="FirmwareGroup" abstract="true"/>
+	<xsd:element name="FirmwareRef" type="FirmwareRefType" substitutionGroup="FirmwareGroup"/>
+	<xsd:complexType name="FirmwareRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="FirmwareType">
+		<xsd:sequence>
+			<xsd:element ref="File"/>
+			<xsd:element ref="FirmwareGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="progName" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="progVersion" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FontDef" abstract="true"/>
+	<xsd:element name="FontDefEmbedded" type="FontDefEmbeddedType" substitutionGroup="FontDef"/>
+	<xsd:complexType name="FontDefEmbeddedType">
+		<xsd:sequence>
+			<xsd:element ref="LineDescGroup"/>
+			<xsd:element ref="Glyph" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FontDefExternal" type="FontDefExternalType" substitutionGroup="FontDef"/>
+	<xsd:complexType name="FontDefExternalType">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="urn" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FontRef" type="FontRefType"/>
+	<xsd:complexType name="FontRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FunctionMode" type="FunctionModeType"/>
+	<xsd:complexType name="FunctionModeType">
+		<xsd:attribute name="mode" type="modeType" use="required"/>
+		<xsd:attribute name="level" type="xsd:positiveInteger" use="required"/>
+		<xsd:attribute name="sectionKey" type="sectionKeyType" use="optional"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="GlobalFiducial" type="FiducialType" substitutionGroup="Fiducial"/>
+	<xsd:element name="Glyph" type="GlyphType"/>
+	<xsd:complexType name="GlyphType">
+		<xsd:sequence>
+			<xsd:element ref="Simple" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="charCode" type="xsd:hexBinary" use="required"/>
+		<xsd:attribute name="lowerLeftX" type="xsd:double" use="required"/>
+		<xsd:attribute name="lowerLeftY" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightX" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightY" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="GoodPanelMark" type="FiducialType" substitutionGroup="Fiducial"/>
+	<xsd:element name="Hexagon" type="HexagonType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="HexagonType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="length" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="HistoryRecord" type="HistoryRecordType"/>
+	<xsd:complexType name="HistoryRecordType">
+		<xsd:sequence>
+			<xsd:element ref="FileRevision"/>
+			<xsd:element ref="ChangeRec" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="number" type="historyNumberType" use="required"/>
+		<xsd:attribute name="origination" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="software" type="xsd:string" use="required"/>
+		<xsd:attribute name="lastChange" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="externalConfigurationEntryPoint" type="xsd:anyURI"/>
+	</xsd:complexType>
+	<xsd:element name="Hole" type="HoleType"/>
+	<xsd:complexType name="HoleType">
+		<xsd:sequence>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="platingStatus" type="platingStatusType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="IPC-2581" type="IPC-2581Type">
+		<xsd:key name="enterpriseKey">
+			<xsd:selector xpath="tn:LogisticHeader/tn:Enterprise"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="enterpriseKeyRef" refer="enterpriseKey">
+			<xsd:selector xpath=".//tn:AvlVendor"/>
+			<xsd:field xpath="@enterpriseRef"/>
+		</xsd:keyref>
+		<xsd:key name="stepKey">
+			<xsd:selector xpath="tn:Ecad/tn:CadData/tn:Step"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="stepKeyRef" refer="stepKey">
+			<xsd:selector xpath=".//tn:StepRepeat|.//tn:BomHeader"/>
+			<xsd:field xpath="@stepRef"/>
+		</xsd:keyref>
+		<xsd:keyref name="stepKeyRef2" refer="stepKey">
+			<xsd:selector xpath=".//tn:StepRef"/>
+			<xsd:field xpath="@name"/>
+		</xsd:keyref>
+		<xsd:key name="OEMDesignNumberKey">
+			<xsd:selector xpath="tn:Avl/tn:AvlItem"/>
+			<xsd:field xpath="@OEMDesignNumber"/>
+		</xsd:key>
+		<xsd:keyref name="OEMDesignNumberKeyRef" refer="OEMDesignNumberKey">
+			<xsd:selector xpath=".//tn:BomItem"/>
+			<xsd:field xpath="@OEMDesignNumberRef"/>
+		</xsd:keyref>
+		<xsd:key name="PackageKey">
+			<xsd:selector xpath="tn:Ecad/tn:CadData/tn:Step/tn:Package"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="PackageKeyRef" refer="PackageKey">
+			<xsd:selector xpath=".//tn:Component"/>
+			<xsd:field xpath="@packageRef"/>
+		</xsd:keyref>
+		<xsd:key name="BomKey">
+			<xsd:selector xpath="tn:Bom"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="BomKeyRef" refer="BomKey">
+			<xsd:selector xpath=".//tn:BomRef"/>
+			<xsd:field xpath="@name"/>
+		</xsd:keyref>
+		<!-- Unrealistic requirement for unique names -->
+		<xsd:key name="personKey">
+			<xsd:selector xpath="tn:LogisticHeader/tn:Person"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="personKeyRef" refer="personKey">
+			<xsd:selector xpath=".//tn:ChangeRec|.//tn:Approval"/>
+			<xsd:field xpath="@personRef"/>
+		</xsd:keyref>
+		<xsd:key name="AvlKey">
+			<xsd:selector xpath="tn:Avl"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="AvlKeyRef" refer="AvlKey">
+			<xsd:selector xpath=".//tn:AvlRef"/>
+			<xsd:field xpath="@name"/>
+		</xsd:keyref>
+		<xsd:key name="ColorKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryColor/tn:EntryColor"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="ColorKeyRef" refer="ColorKey">
+			<xsd:selector xpath=".//tn:ColorRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="layerKey">
+			<xsd:selector xpath="tn:Ecad/tn:CadData/tn:Layer"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="layerKeyRef" refer="layerKey">
+			<!-- See also layerKeyRef2 -->
+			<xsd:selector xpath=".//tn:Component|.//tn:FeatureDescription|.//tn:LayerFeature|.//tn:LayerPad|.//tn:PhyNetPoint|.//tn:SurfaceFinish"/>
+			<xsd:field xpath="@layerRef"/>
+		</xsd:keyref>
+		<xsd:keyref name="layerKeyRef2" refer="layerKey">
+			<!-- See also layerKeyRef -->
+			<xsd:selector xpath=".//tn:LayerRef"/>
+			<xsd:field xpath="@name"/>
+		</xsd:keyref>
+		<xsd:key name="StandardPrimitiveKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryStandard/tn:EntryStandard"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="StandardPrimitiveKeyRef" refer="StandardPrimitiveKey">
+			<xsd:selector xpath=".//tn:StandardPrimitiveRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="UserPrimitiveKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryUser/tn:EntryUser"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="UserPrimitiveKeyRef" refer="UserPrimitiveKey">
+			<xsd:selector xpath=".//tn:UserPrimitiveRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="FirmwareKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryFirmware/tn:EntryFirmware"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="FirmwareKeyRef" refer="FirmwareKey">
+			<xsd:selector xpath=".//tn:FirmwareRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="FontKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryFont/tn:EntryFont"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="FontKeyRef" refer="FontKey">
+			<xsd:selector xpath=".//tn:FontRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="LineDescKey">
+			<xsd:selector xpath="tn:Content/tn:DictionaryLineDesc/tn:EntryLineDesc"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="LineDescKeyRef" refer="LineDescKey">
+			<xsd:selector xpath=".//tn:LineDescRef"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:key name="componentKey">
+			<xsd:selector xpath="tn:Ecad/tn:CadData/tn:Step/tn:Component"/>
+			<xsd:field xpath="@refDes"/>
+		</xsd:key>
+		<xsd:keyref name="componentKeyRef" refer="componentKey">
+			<xsd:selector xpath=".//tn:LogicalNetPin"/>
+			<xsd:field xpath="@componentRef"/>
+		</xsd:keyref>
+		<xsd:keyref name="ComponentKeyRef" refer="componentKey">
+			<xsd:selector xpath=".//tn:RefDes"/>
+			<xsd:field xpath="@name"/>
+		</xsd:keyref>
+		<xsd:key name="roleKey">
+			<xsd:selector xpath="tn:LogisticHeader/tn:Role"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="roleKeyRef" refer="roleKey">
+			<xsd:selector xpath=".//tn:Person"/>
+			<xsd:field xpath="@roleRef"/>
+		</xsd:keyref>
+		<xsd:key name="bomItemKey">
+			<xsd:selector xpath="tn:Bom/tn:BomItem"/>
+			<xsd:field xpath="@OEMDesignNumberRef"/>
+		</xsd:key>
+		<xsd:key name="layerOrStackupGroupNameKey">
+			<xsd:selector xpath="tn:Ecad/tn:CadData/tn:Stackup/tn:StackupGroup|tn:Ecad/tn:CadData/tn:Layer"/>
+			<xsd:field xpath="@name"/>
+		</xsd:key>
+		<xsd:keyref name="layerOrGroupKeyRef" refer="layerOrStackupGroupNameKey">
+			<xsd:selector xpath=".//tn:StackupLayer"/>
+			<xsd:field xpath="@layerOrGroupRef"/>
+		</xsd:keyref>
+	</xsd:element>
+	<xsd:complexType name="IPC-2581Type">
+		<xsd:sequence>
+			<xsd:element ref="Content"/>
+			<xsd:element ref="LogisticHeader"/>
+			<xsd:element ref="HistoryRecord"/>
+			<xsd:element ref="Bom" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Ecad"/>
+			<xsd:element ref="Avl" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="revision" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="LandPattern" type="LandPatternType"/>
+	<xsd:complexType name="LandPatternType">
+		<xsd:sequence>
+			<xsd:element ref="Pad" maxOccurs="unbounded"/>
+			<xsd:element ref="Target" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Layer" type="LayerType"/>
+	<xsd:element name="LayerFeature" type="LayerFeatureType"/>
+	<xsd:complexType name="LayerFeatureType">
+		<xsd:sequence>
+			<xsd:element ref="Set" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="LayerHole" type="LayerHoleType"/>
+	<xsd:complexType name="LayerHoleType">
+		<xsd:sequence>
+			<xsd:element ref="Span"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="platingStatus" type="platingStatusType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="PadstackHoleDef" type="PadstackHoleDefType"/>
+	<xsd:complexType name="PadstackHoleDefType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="platingStatus" type="platingStatusType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="LayerPad" type="LayerPadType"/>
+	<xsd:complexType name="LayerPadType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+			<xsd:element ref="Feature"/>
+			<xsd:element ref="PinRef" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="PadstackPadDef" type="PadstackPadDefType"/>
+	<xsd:complexType name="PadstackPadDefType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+			<xsd:element ref="Feature"/>
+		</xsd:sequence>
+		<xsd:attribute name="layerRef" use="required"/>
+		<xsd:attribute name="padUse" use="required"/>
+		<xsd:attribute name="comment" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="LayerRef" type="LayerRefType"/>
+	<xsd:complexType name="LayerRefType">
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="LayerType">
+		<xsd:sequence>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Span" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="layerFunction" type="layerFunctionType" use="required"/>
+		<xsd:attribute name="side" type="sideType" use="required"/>
+		<xsd:attribute name="polarity" type="polarityType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Line" type="LineType" substitutionGroup="Simple"/>
+	<xsd:element name="LineDesc" type="LineDescType" substitutionGroup="LineDescGroup"/>
+	<xsd:element name="LineDescGroup" abstract="true"/>
+	<xsd:element name="LineDescRef" type="LineDescRefType" substitutionGroup="LineDescGroup"/>
+	<xsd:complexType name="LineDescRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="LineDescType">
+		<xsd:attribute name="lineEnd" type="lineEndType" use="required"/>
+		<xsd:attribute name="lineWidth" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="lineProperty" type="linePropertyType"/>
+	</xsd:complexType>
+	<xsd:complexType name="LineType">
+		<xsd:sequence>
+			<xsd:element ref="LineDescGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="startX" type="xsd:double" use="required"/>
+		<xsd:attribute name="startY" type="xsd:double" use="required"/>
+		<xsd:attribute name="endX" type="xsd:double" use="required"/>
+		<xsd:attribute name="endY" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FillDesc" type="FillDescType" substitutionGroup="FillDescGroup"/>
+	<xsd:element name="FillDescGroup" abstract="true"/>
+	<xsd:element name="FillDescRef" type="FillDescRefType" substitutionGroup="FillDescGroup"/>
+	<xsd:complexType name="FillDescRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="FillDescType">
+		<xsd:sequence>
+			<xsd:element ref="ColorGroup" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="fillProperty" type="fillPropertyType" use="required"/>
+		<xsd:attribute name="lineWidth" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="pitch1" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="pitch2" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="angle1" type="angleType"/>
+		<xsd:attribute name="angle2" type="angleType"/>
+	</xsd:complexType>
+	<xsd:element name="LocalFiducial" type="FiducialType" substitutionGroup="Fiducial"/>
+	<xsd:element name="Location" type="LocationType"/>
+	<xsd:element name="PickupPoint" type="LocationType"/>
+	<xsd:complexType name="LocationType">
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="LogicalNet" type="LogicalNetType"/>
+	<xsd:complexType name="LogicalNetType">
+		<xsd:sequence>
+			<xsd:element ref="NonstandardAttribute" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="PinRef" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="netClass" type="netClassType"/>
+	</xsd:complexType>
+	<xsd:element name="LogisticHeader" type="LogisticHeaderType"/>
+	<xsd:complexType name="LogisticHeaderType">
+		<xsd:sequence>
+			<xsd:element ref="Role" maxOccurs="unbounded"/>
+			<xsd:element ref="Enterprise" maxOccurs="unbounded"/>
+			<xsd:element ref="Person" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Marking" type="MarkingType"/>
+	<xsd:complexType name="MarkingType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location" minOccurs="0"/>
+			<xsd:element ref="Feature"/>
+		</xsd:sequence>
+		<xsd:attribute name="markingUsage" type="markingUsageType"/>
+	</xsd:complexType>
+	<xsd:element name="MaterialCut" type="MaterialCutType" substitutionGroup="Z_AxisDim"/>
+	<xsd:complexType name="MaterialCutType">
+		<xsd:attribute name="depth" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="MaterialLeft" type="MaterialLeftType" substitutionGroup="Z_AxisDim"/>
+	<xsd:complexType name="MaterialLeftType">
+		<xsd:attribute name="thickness" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Measured" type="MeasuredType"/>
+	<xsd:complexType name="MeasuredType">
+		<xsd:attribute name="definitionSource" type="xsd:string"/>
+		<xsd:attribute name="measuredCharacteristicName" type="xsd:string"/>
+		<xsd:attribute name="measuredCharacteristicValue" type="xsd:double"/>
+		<xsd:attribute name="engineeringUnitOfMeasure" type="xsd:string"/>
+		<xsd:attribute name="engineeringNegativeTolerance" type="xsd:double"/>
+		<xsd:attribute name="engineeringPositiveTolerance" type="xsd:double"/>
+	</xsd:complexType>
+	<xsd:element name="Modification" type="ModificationType"/>
+	<xsd:complexType name="ModificationType">
+		<xsd:attribute name="repairInfo" type="xsd:string"/>
+		<xsd:attribute name="weldsPermitted" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:element name="Moire" type="MoireType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="MoireType">
+		<xsd:attribute name="diameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="ringWidth" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="ringGap" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="ringNumber" type="xsd:nonNegativeInteger" use="required"/>
+		<xsd:attribute name="lineWidth" type="nonNegativeDoubleType" default="0"/>
+		<xsd:attribute name="lineLength" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="lineAngle" type="angleType"/>
+	</xsd:complexType>
+	<xsd:element name="NonstandardAttribute" type="NonstandardAttributeType"/>
+	<xsd:complexType name="NonstandardAttributeType">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="type" type="cadPropertyType" use="required"/>
+		<xsd:attribute name="value" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Octagon" type="OctagonType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="OctagonType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="length" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Outline" type="OutlineType" substitutionGroup="Simple"/>
+	<xsd:complexType name="OutlineType">
+		<xsd:sequence>
+			<xsd:element ref="Polygon"/>
+			<xsd:element ref="LineDescGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Oval" type="OvalType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="OvalType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Package" type="PackageType"/>
+	<xsd:complexType name="PackageType">
+		<xsd:sequence>
+			<xsd:element ref="Outline"/>
+			<xsd:element ref="PickupPoint" minOccurs="0"/>
+			<xsd:element ref="LandPattern" minOccurs="0"/>
+			<xsd:element ref="SilkScreen" minOccurs="0"/>
+			<xsd:element ref="AssemblyDrawing" minOccurs="0"/>
+			<xsd:element ref="Pin" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="type" type="packageTypeType" use="required"/>
+		<xsd:attribute name="pinOne" type="xsd:string"/>
+		<xsd:attribute name="pinOneOrientation" type="pinOneOrientationType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="comment" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="Pad" type="PadType"/>
+	<xsd:element name="PadStack" type="PadStackType"/>
+	<xsd:complexType name="PadStackType">
+		<xsd:sequence>
+			<xsd:element ref="LayerHole" minOccurs="0"/>
+			<xsd:element ref="LayerPad" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="net" type="qualifiedNameType"/>
+	</xsd:complexType>
+	<xsd:element name="PadStackDef" type="PadStackDefType"/>
+	<xsd:complexType name="PadStackDefType">
+		<xsd:sequence>
+			<xsd:element ref="PadstackHoleDef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="PadstackPadDef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType"/>
+	</xsd:complexType>
+	<xsd:complexType name="PadType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+			<xsd:element ref="Feature"/>
+			<xsd:element ref="PinRef" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="padstackDefRef" type="qualifiedNameType"/>
+	</xsd:complexType>
+	<xsd:element name="Person" type="PersonType"/>
+	<xsd:complexType name="PersonType">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="enterpriseRef" type="xsd:string" use="required"/>
+		<xsd:attribute name="title" type="xsd:string"/>
+		<xsd:attribute name="email" type="xsd:string"/>
+		<xsd:attribute name="phone" type="xsd:string"/>
+		<xsd:attribute name="fax" type="xsd:string"/>
+		<xsd:attribute name="mailstop" type="xsd:string"/>
+		<xsd:attribute name="publicKey" type="xsd:base64Binary"/>
+		<xsd:attribute name="roleRef" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="PhyNet" type="PhyNetType"/>
+	<xsd:element name="PhyNetGroup" type="PhyNetGroupType"/>
+	<xsd:complexType name="PhyNetGroupType">
+		<xsd:sequence>
+			<xsd:element ref="PhyNet" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="optimized" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:element name="PhyNetPoint" type="PhyNetPointType"/>
+	<xsd:complexType name="PhyNetPointType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Feature"/>
+		</xsd:sequence>
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+		<xsd:attribute name="layerRef" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="secondaryLayerRef" type="qualifiedNameType" use="optional"/>
+		<xsd:attribute name="netNode" type="netPointType" use="required"/>
+		<xsd:attribute name="exposure" type="exposureType" use="required"/>
+		<xsd:attribute name="layerIndex" type="xsd:string"/>
+		<xsd:attribute name="comment" type="xsd:string"/>
+		<xsd:attribute name="via" type="xsd:boolean"/>
+		<xsd:attribute name="fiducial" type="xsd:boolean"/>
+		<xsd:attribute name="test" type="xsd:boolean"/>
+		<xsd:attribute name="staggerX" type="xsd:double"/>
+		<xsd:attribute name="staggerY" type="xsd:double"/>
+		<xsd:attribute name="staggerRadius" type="xsd:double"/>
+	</xsd:complexType>
+	<xsd:complexType name="PhyNetType">
+		<xsd:sequence>
+			<xsd:element ref="PhyNetPoint" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Pin" type="PinType"/>
+	<xsd:complexType name="PinType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location" minOccurs="0"/>
+			<xsd:element ref="StandardShape"/>
+		</xsd:sequence>
+		<xsd:attribute name="number" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="name" type="qualifiedNameType"/>
+		<xsd:attribute name="type" type="cadPinType" use="required"/>
+		<xsd:attribute name="electricalType" type="pinElectricalType"/>
+		<xsd:attribute name="mountType" type="pinMountType"/>
+	</xsd:complexType>
+	<xsd:element name="PinRef" type="PinRefType"/>
+	<xsd:complexType name="PinRefType">
+		<xsd:attribute name="componentRef" type="qualifiedNameType" use="optional"/>
+		<xsd:attribute name="pin" type="xsd:string" use="required"/>
+		<xsd:attribute name="title" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="PolyBegin" type="PolyBeginType"/>
+	<xsd:complexType name="PolyBeginType">
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Polygon" type="PolygonType"/>
+	<xsd:complexType name="PolygonType">
+		<xsd:sequence>
+			<xsd:element ref="PolyBegin"/>
+			<xsd:element ref="PolyStep" maxOccurs="unbounded"/>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Polyline" type="PolylineType" substitutionGroup="Simple"/>
+	<xsd:complexType name="PolylineType">
+		<xsd:sequence>
+			<xsd:element ref="PolyBegin"/>
+			<xsd:element ref="PolyStep" minOccurs="2" maxOccurs="unbounded"/>
+			<xsd:element ref="LineDescGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PolyStep" abstract="true"/>
+	<xsd:element name="PolyStepCurve" type="PolyStepCurveType" substitutionGroup="PolyStep"/>
+	<xsd:complexType name="PolyStepCurveType">
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+		<xsd:attribute name="centerX" type="xsd:double" use="required"/>
+		<xsd:attribute name="centerY" type="xsd:double" use="required"/>
+		<xsd:attribute name="clockwise" type="xsd:boolean" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="PolyStepSegment" type="PolyStepSegmentType" substitutionGroup="PolyStep"/>
+	<xsd:complexType name="PolyStepSegmentType">
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Ranged" type="RangedType"/>
+	<xsd:complexType name="RangedType">
+		<xsd:attribute name="definitionSource" type="xsd:string"/>
+		<xsd:attribute name="rangedCharacteristicName" type="xsd:string"/>
+		<xsd:attribute name="rangedCharacteristicLowerValue" type="xsd:double"/>
+		<xsd:attribute name="rangedCharacteristicUpperValue" type="xsd:double"/>
+		<xsd:attribute name="engineeringUnitOfMeasure" type="xsd:string"/>
+		<xsd:attribute name="engineeringNegativeTolerance" type="xsd:double"/>
+		<xsd:attribute name="engineeringPositiveTolerance" type="xsd:double"/>
+	</xsd:complexType>
+	<xsd:element name="RectCenter" type="RectCenterType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="RectCenterType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="RectCham" type="RectChamType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="RectChamType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="chamfer" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="upperRight" type="xsd:boolean"/>
+		<xsd:attribute name="upperLeft" type="xsd:boolean"/>
+		<xsd:attribute name="lowerLeft" type="xsd:boolean"/>
+		<xsd:attribute name="lowerRight" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:element name="RectCorner" type="RectCornerType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="RectCornerType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="lowerLeftX" type="xsd:double" use="required"/>
+		<xsd:attribute name="lowerLeftY" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightX" type="xsd:double" use="required"/>
+		<xsd:attribute name="upperRightY" type="xsd:double" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="RectRound" type="RectRoundType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="RectRoundType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="width" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="radius" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="upperRight" type="xsd:boolean"/>
+		<xsd:attribute name="upperLeft" type="xsd:boolean"/>
+		<xsd:attribute name="lowerLeft" type="xsd:boolean"/>
+		<xsd:attribute name="lowerRight" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:element name="Role" type="RoleType"/>
+	<xsd:complexType name="RoleType">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="roleFunction" type="roleFunctionType" use="required"/>
+		<xsd:attribute name="description" type="xsd:string"/>
+		<xsd:attribute name="publicKey" type="xsd:base64Binary"/>
+		<xsd:attribute name="authority" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="Route" type="RouteType"/>
+	<xsd:complexType name="RouteType">
+		<xsd:sequence>
+			<xsd:element ref="LayerFeature" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="net" type="qualifiedNameType"/>
+	</xsd:complexType>
+	<xsd:element name="Set" type="SetType"/>
+	<xsd:complexType name="SetType">
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+			<xsd:element ref="NonstandardAttribute" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Pad"/>
+			<xsd:element ref="Fiducial"/>
+			<xsd:element ref="Hole"/>
+			<xsd:element ref="SlotCavity"/>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Features"/>
+			<xsd:element ref="ColorGroup"/>
+			<xsd:element ref="LineDescGroup"/>
+		</xsd:choice>
+		<xsd:attribute name="net" type="qualifiedNameType"/>
+		<xsd:attribute name="polarity" type="polarityType"/>
+		<xsd:attribute name="padUsage" type="padUsageType"/>
+		<xsd:attribute name="testPoint" type="xsd:boolean"/>
+		<xsd:attribute name="geometry" type="xsd:string"/>
+		<xsd:attribute name="plate" type="xsd:boolean"/>
+		<xsd:attribute name="componentRef" type="xsd:string"/>
+		<xsd:attribute name="geometryUsage" type="geometryUsageType"/>
+	</xsd:complexType>
+	<xsd:element name="SilkScreen" type="SilkScreenType"/>
+	<xsd:complexType name="SilkScreenType">
+		<xsd:sequence>
+			<xsd:element ref="Outline" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Marking" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Simple" abstract="true" substitutionGroup="UserPrimitive"/>
+	<xsd:element name="SlotCavity" type="SlotCavityType"/>
+	<xsd:complexType name="SlotCavityType">
+		<xsd:sequence>
+			<xsd:element ref="Simple" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Z_AxisDim" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="platingStatus" type="platingStatusType" use="required"/>
+		<xsd:attribute name="plusTol" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="minusTol" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="SoftwarePackage" type="SoftwarePackageType"/>
+	<xsd:complexType name="SoftwarePackageType">
+		<xsd:sequence>
+			<xsd:element ref="Certification" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="vendor" type="xsd:string" use="required"/>
+		<xsd:attribute name="revision" type="xsd:string" use="required"/>
+		<xsd:attribute name="model" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="Span" type="SpanType"/>
+	<xsd:complexType name="SpanType">
+		<xsd:attribute name="fromLayer" type="qualifiedNameType"/>
+		<xsd:attribute name="toLayer" type="qualifiedNameType"/>
+	</xsd:complexType>
+	<xsd:element name="SpecificationType" abstract="true"/>
+	<xsd:element name="Backdrill" type="BackdrillType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="BackdrillType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="backdrillListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Dielectric" type="DielectricType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="DielectricType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="dielectricListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Conductor" type="ConductorType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="ConductorType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="conductorListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Compliance" type="ComplianceType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="ComplianceType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="complianceListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Technology" type="TechnologyType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="TechnologyType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="technologyListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="General" type="GeneralType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="GeneralType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ColorGroup" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="generalListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Temperature" type="TemperatureType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="TemperatureType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="temperatureListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="V_Cut" type="V_CutType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="V_CutType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="vCutListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Tool" type="ToolType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="ToolType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="toolListType" use="required"/>
+		<xsd:attribute name="toolProperty" type="toolPropertyListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Impedance" type="ImpedanceType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="ImpedanceType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="impedanceListType" use="required"/>
+		<xsd:attribute name="transmission" type="transmissionListType" use="required"/>
+		<xsd:attribute name="structure" type="structureListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Thieving" type="ThievingType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="ThievingType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="thievingListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="EdgeChamfer" type="EdgeChamferType" substitutionGroup="SpecificationType"/>
+	<xsd:complexType name="EdgeChamferType">
+		<xsd:sequence>
+			<xsd:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="edgeChamferListType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Property" type="PropertyType"/>
+	<xsd:complexType name="PropertyType">
+		<xsd:attribute name="name" type="xsd:string" use="optional"/>
+		<xsd:attribute name="value" type="xsd:double" use="optional"/>
+		<xsd:attribute name="text" type="xsd:string" use="optional"/>
+		<xsd:attribute name="unit" type="propertyUnitType" use="optional"/>
+		<xsd:attribute name="tolPlus" type="nonNegativeDoubleType" use="optional"/>
+		<xsd:attribute name="tolMinus" type="nonNegativeDoubleType" use="optional"/>
+		<xsd:attribute name="tolPercent" type="xsd:boolean" use="optional"/>
+		<xsd:attribute name="refUnit" type="propertyUnitType" use="optional"/>
+		<xsd:attribute name="refValue" type="xsd:double" use="optional"/>
+		<xsd:attribute name="refText" type="xsd:string" use="optional"/>
+		<xsd:attribute name="layerOrGroupRef" type="qualifiedNameType" use="optional"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Spec" type="SpecType"/>
+	<xsd:complexType name="SpecType">
+		<xsd:sequence>
+			<xsd:element ref="SpecificationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location" minOccurs="0"/>
+			<xsd:element ref="Outline" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Stackup" type="StackupType"/>
+	<xsd:element name="StackupGroup" type="StackupGroupType"/>
+	<xsd:complexType name="StackupGroupType">
+		<xsd:sequence>
+			<xsd:element ref="StackupLayer" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="CADDataLayerRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="MatDes" minOccurs="0"/>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="thickness" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolPlus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolMinus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="StackupLayer" type="StackupLayerType"/>
+	<xsd:complexType name="StackupLayerType">
+		<xsd:sequence>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="layerOrGroupRef" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="thickness" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolPlus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolMinus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="sequence" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="refDes" type="qualifiedNameType"/>
+		<xsd:attribute name="comment" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="CADDataLayerRef" type="CADDataLayerRefType"/>
+	<xsd:complexType name="CADDataLayerRefType">
+		<xsd:attribute name="layerId" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="SpecRef" type="SpecRefType"/>
+	<xsd:complexType name="SpecRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="StackupType">
+		<xsd:sequence>
+			<xsd:element ref="SpecRef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="StackupGroup" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="overallThickness" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolPlus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="tolMinus" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="whereMeasured" type="whereMeasuredType" use="required"/>
+		<xsd:attribute name="refDes" type="qualifiedNameType" use="optional"/>
+		<xsd:attribute name="comment" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="StandardPrimitive" abstract="true" substitutionGroup="StandardShape"/>
+	<xsd:element name="StandardPrimitiveRef" type="StandardPrimitiveRefType" substitutionGroup="StandardShape"/>
+	<xsd:complexType name="StandardPrimitiveRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="StandardShape" abstract="true" substitutionGroup="Feature"/>
+	<xsd:element name="Step" type="StepType"/>
+	<xsd:element name="StepRef" type="StepRefType"/>
+	<xsd:complexType name="StepRefType">
+		<xsd:attribute name="name" type="shortName" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="StepRepeat" type="StepRepeatType"/>
+	<xsd:complexType name="StepRepeatType">
+		<xsd:attribute name="stepRef" type="shortName" use="required"/>
+		<xsd:attribute name="x" type="xsd:double" use="required"/>
+		<xsd:attribute name="y" type="xsd:double" use="required"/>
+		<xsd:attribute name="nx" type="xsd:nonNegativeInteger" use="required"/>
+		<xsd:attribute name="ny" type="xsd:nonNegativeInteger" use="required"/>
+		<xsd:attribute name="dx" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="dy" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="angle" type="angleType" use="required"/>
+		<xsd:attribute name="mirror" type="xsd:boolean" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Datum" type="LocationType"/>
+	<xsd:element name="Profile" type="ContourType"/>
+	<xsd:complexType name="StepType">
+		<xsd:sequence>
+			<xsd:element ref="NonstandardAttribute" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="PadStack" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="PadStackDef" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Route" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Datum"/>
+			<xsd:element ref="Profile" minOccurs="0"/>
+			<xsd:element ref="StepRepeat" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Package" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Component" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="LogicalNet" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="PhyNetGroup" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="LayerFeature" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="DfxMeasurementList" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="shortName" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Target" type="TargetType"/>
+	<xsd:complexType name="TargetType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="Location"/>
+			<xsd:element ref="StandardShape"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Text" type="TextType" substitutionGroup="UserPrimitive"/>
+	<xsd:complexType name="TextType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="BoundingBox"/>
+			<xsd:element ref="FontRef" minOccurs="0"/>
+			<xsd:element ref="ColorGroup" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="textString" type="xsd:string" use="required"/>
+		<xsd:attribute name="fontSize" type="xsd:positiveInteger" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Textual" type="TextualType"/>
+	<xsd:complexType name="TextualType">
+		<xsd:attribute name="definitionSource" type="xsd:string"/>
+		<xsd:attribute name="textualCharacteristicName" type="xsd:string"/>
+		<xsd:attribute name="textualCharacteristicValue" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="Thermal" type="ThermalType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="ThermalType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="shape" type="thermalShapeType" use="required"/>
+		<xsd:attribute name="outerDiameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="innerDiameter" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="spokeCount" type="spokeCountType" default="4"/>
+		<xsd:attribute name="spokeWidth" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="spokeStartAngle" type="angleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Triangle" type="TriangleType" substitutionGroup="StandardPrimitive"/>
+	<xsd:complexType name="TriangleType">
+		<xsd:sequence>
+			<xsd:element ref="Xform" minOccurs="0"/>
+			<xsd:element ref="LineDesc" minOccurs="0"/>
+			<xsd:element ref="FillDesc" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="base" type="nonNegativeDoubleType" use="required"/>
+		<xsd:attribute name="height" type="nonNegativeDoubleType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="Tuning" type="TuningType"/>
+	<xsd:complexType name="TuningType">
+		<xsd:attribute name="value" type="qualifiedNameType" use="required"/>
+		<xsd:attribute name="comments" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="UserPrimitive" abstract="true" substitutionGroup="UserShape"/>
+	<xsd:element name="UserPrimitiveRef" type="UserPrimitiveRefType" substitutionGroup="UserShape"/>
+	<xsd:complexType name="UserPrimitiveRefType">
+		<xsd:attribute name="id" type="qualifiedNameType" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="UserShape" abstract="true" substitutionGroup="Feature"/>
+	<xsd:element name="UserSpecial" type="UserSpecialType" substitutionGroup="UserPrimitive"/>
+	<xsd:complexType name="UserSpecialType">
+		<xsd:sequence>
+			<xsd:element ref="Feature" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Xform" type="XformType"/>
+	<xsd:complexType name="XformType">
+		<xsd:attribute name="xOffset" type="xsd:double"/>
+		<xsd:attribute name="yOffset" type="xsd:double"/>
+		<xsd:attribute name="rotation" type="nonNegativeDoubleType"/>
+		<xsd:attribute name="mirror" type="xsd:boolean"/>
+		<xsd:attribute name="scale" type="scaleType"/>
+	</xsd:complexType>
+	<xsd:element name="Z_AxisDim" abstract="true"/>
+</xsd:schema>
