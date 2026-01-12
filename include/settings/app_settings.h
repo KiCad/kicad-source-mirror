@@ -178,13 +178,18 @@ public:
 
     struct PRINTING
     {
-        bool             background;    ///< Whether or not to print background color.
-        bool             monochrome;    ///< Whether or not to print in monochrome.
-        double           scale;         ///< Printout scale.
-        bool             use_theme;     ///< If false, display color theme will be used.
-        wxString         color_theme;   ///< Color theme to use for printing.
-        bool             title_block;   ///< Whether or not to print title block.
-        std::vector<int> layers;        ///< List of enabled layers for printing.
+        bool             background;             ///< Whether or not to print background color.
+        bool             monochrome;             ///< Whether or not to print in monochrome.
+        double           scale;                  ///< Printout scale.
+        bool             use_theme;              ///< If false, display color theme will be used.
+        wxString         color_theme;            ///< Color theme to use for printing.
+        bool             title_block;            ///< Whether or not to print title block.
+        std::vector<int> layers;                 ///< List of enabled layers for printing.
+        bool             mirror;                 ///< Print mirrored.
+        int              drill_marks;            ///< Drill marks type (0=none, 1=small, 2=real).
+        int              pagination;             ///< 0=all layers on one page, 1=one page per layer.
+        bool             edge_cuts_on_all_pages; ///< Print board edges on all pages.
+        bool             as_item_checkboxes;     ///< Honor checkboxes in appearance manager.
     };
 
     struct SYSTEM

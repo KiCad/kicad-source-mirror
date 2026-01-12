@@ -53,12 +53,22 @@ PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
 void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Load( aConfig );
+
+    m_DrillMarks = static_cast<DRILL_MARKS>( aConfig->m_Printing.drill_marks );
+    m_Pagination = static_cast<PAGINATION_T>( aConfig->m_Printing.pagination );
+    m_PrintEdgeCutsOnAllPages = aConfig->m_Printing.edge_cuts_on_all_pages;
+    m_AsItemCheckboxes = aConfig->m_Printing.as_item_checkboxes;
 }
 
 
 void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Save( aConfig );
+
+    aConfig->m_Printing.drill_marks = static_cast<int>( m_DrillMarks );
+    aConfig->m_Printing.pagination = static_cast<int>( m_Pagination );
+    aConfig->m_Printing.edge_cuts_on_all_pages = m_PrintEdgeCutsOnAllPages;
+    aConfig->m_Printing.as_item_checkboxes = m_AsItemCheckboxes;
 }
 
 

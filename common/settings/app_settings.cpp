@@ -189,6 +189,21 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<int>( "printing.layers",
             &m_Printing.layers, {} ) );
 
+    m_params.emplace_back( new PARAM<bool>( "printing.mirror",
+            &m_Printing.mirror, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "printing.drill_marks",
+            &m_Printing.drill_marks, 1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "printing.pagination",
+            &m_Printing.pagination, 1 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "printing.edge_cuts_on_all_pages",
+            &m_Printing.edge_cuts_on_all_pages, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "printing.as_item_checkboxes",
+            &m_Printing.as_item_checkboxes, false ) );
+
     m_params.emplace_back( new PARAM<int>( "search_pane.selection_zoom",
             reinterpret_cast<int*>( &m_SearchPane.selection_zoom ),
             static_cast<int>( SEARCH_PANE::SELECTION_ZOOM::PAN ) ) );

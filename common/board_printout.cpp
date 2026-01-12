@@ -51,6 +51,8 @@ void BOARD_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 
     for( int layer : aConfig->m_Printing.layers )
         m_LayerSet.set( layer, true );
+
+    m_Mirror = aConfig->m_Printing.mirror;
 }
 
 
@@ -63,6 +65,8 @@ void BOARD_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
     for( unsigned layer = 0; layer < m_LayerSet.size(); ++layer )
         if( m_LayerSet.test( layer ) )
             aConfig->m_Printing.layers.push_back( layer );
+
+    aConfig->m_Printing.mirror = m_Mirror;
 }
 
 
