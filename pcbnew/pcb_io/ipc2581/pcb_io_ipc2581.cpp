@@ -109,6 +109,7 @@ static surfaceFinishType getSurfaceFinishType( const wxString& aFinish )
 PCB_IO_IPC2581::~PCB_IO_IPC2581()
 {
     clearLoadedFootprints();
+    delete m_xml_doc;
 }
 
 
@@ -3866,6 +3867,11 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
                                 const std::map<std::string, UTF8>* aProperties )
 {
+    // Clean up any previous export state to allow multiple exports per plugin instance
+    delete m_xml_doc;
+    m_xml_doc = nullptr;
+    m_xml_root = nullptr;
+
     m_board = aBoard;
     m_padstack_backdrill_specs.clear();
     m_backdrill_spec_nodes.clear();
@@ -3873,6 +3879,30 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     m_backdrill_spec_index = 0;
     m_cad_header_node = nullptr;
     m_layer_name_map.clear();
+
+    // Clear all internal dictionaries and caches
+    m_user_shape_dict.clear();
+    m_shape_user_node = nullptr;
+    m_std_shape_dict.clear();
+    m_shape_std_node = nullptr;
+    m_line_dict.clear();
+    m_line_node = nullptr;
+    m_padstack_dict.clear();
+    m_padstacks.clear();
+    m_last_padstack = nullptr;
+    m_footprint_dict.clear();
+    m_footprint_refdes_dict.clear();
+    m_footprint_refdes_reverse_dict.clear();
+    m_OEMRef_dict.clear();
+    m_net_pin_dict.clear();
+    m_drill_layers.clear();
+    m_slot_holes.clear();
+    m_auxilliary_Layers.clear();
+    m_element_names.clear();
+    m_generated_names.clear();
+    m_acceptable_chars.clear();
+    m_total_bytes = 0;
+
     m_units_str = "MILLIMETER";
     m_scale = 1.0 / PCB_IU_PER_MM;
     m_sigfig = 6;
