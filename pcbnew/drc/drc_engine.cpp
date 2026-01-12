@@ -2527,17 +2527,24 @@ void DRC_ENGINE::InitializeClearanceCache()
                 return processItems( aStart, aEnd, itemsToProcess );
             } );
 
-    // Merge all thread-local caches into the main cache
+    // Collect all results first WITHOUT holding the lock to avoid deadlock.
+    // Worker threads call EvalRules() which needs a read lock on m_clearanceCacheMutex.
+    // If we held a write lock while calling .get(), workers would block on the read lock
+    // while we block waiting for them to complete.
+    std::vector<CLEARANCE_MAP> collectedResults;
+    collectedResults.reserve( results.size() );
+
+    for( size_t i = 0; i < results.size(); ++i )
+    {
+        if( results[i].valid() )
+            collectedResults.push_back( results[i].get() );
+    }
+
+    // Now merge with write lock held, but no blocking on futures
     {
         std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
 
-        for( size_t i = 0; i < results.size(); ++i )
-        {
-            if( results[i].valid() )
-            {
-                CLEARANCE_MAP localCache = results[i].get();
-                m_ownClearanceCache.insert( localCache.begin(), localCache.end() );
-            }
-        }
+        for( const auto& localCache : collectedResults )
+            m_ownClearanceCache.insert( localCache.begin(), localCache.end() );
     }
 }
