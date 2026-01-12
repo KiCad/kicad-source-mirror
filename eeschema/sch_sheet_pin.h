@@ -82,6 +82,11 @@ public:
         return wxT( "SCH_SHEET_PIN" );
     }
 
+    wxString GetFriendlyName() const override
+    {
+        return _( "Sheet Pin" );
+    }
+
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
     bool operator!=( const SCH_SHEET_PIN* aRhs ) const { return !( this == aRhs ); }
 

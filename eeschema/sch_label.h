@@ -408,6 +408,11 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
+    wxString GetFriendlyName() const override
+    {
+        return _( "Label" );
+    }
+
     const BOX2I GetBodyBoundingBox( const RENDER_SETTINGS* aSettings ) const override;
 
     bool IsConnectable() const override { return true; }
@@ -458,6 +463,11 @@ public:
     wxString GetClass() const override
     {
         return wxT( "SCH_DIRECTIVE_LABEL" );
+    }
+
+    wxString GetFriendlyName() const override
+    {
+        return _( "Directive Label" );
     }
 
     EDA_ITEM* Clone() const override
@@ -538,6 +548,11 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
+    wxString GetFriendlyName() const override
+    {
+        return _( "Global Label" );
+    }
+
     EDA_ITEM* Clone() const override
     {
         return new SCH_GLOBALLABEL( *this );
@@ -601,6 +616,11 @@ public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_HIER_LABEL_T == aItem->Type();
+    }
+
+    wxString GetFriendlyName() const override
+    {
+        return _( "Hierarchical Label" );
     }
 
     wxString GetClass() const override
