@@ -46,6 +46,7 @@ KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
 KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // Initialize base class and member variables
         m_repo( aOther.m_repo ),
+        m_projectDir( aOther.m_projectDir ),
         m_connType( aOther.m_connType ),
         m_remote( aOther.m_remote ),
         m_hostname( aOther.m_hostname ),
@@ -68,6 +69,24 @@ git_repository* KIGIT_COMMON::GetRepo() const
 {
     return m_repo;
 }
+
+
+wxString KIGIT_COMMON::GetProjectDir() const
+{
+    if( !m_projectDir.IsEmpty() )
+        return m_projectDir;
+
+    if( m_repo )
+    {
+        const char* workdir = git_repository_workdir( m_repo );
+
+        if( workdir )
+            return wxString( workdir );
+    }
+
+    return wxEmptyString;
+}
+
 
 wxString KIGIT_COMMON::GetCurrentBranchName() const
 {

@@ -118,6 +118,18 @@ public:
 
     wxString GetRemotename() const;
 
+    /**
+     * Set the project directory path, preserving any symlinks in the path.
+     * This is used to ensure git status paths match the paths used in the project tree.
+     */
+    void SetProjectDir( const wxString& aProjectDir ) { m_projectDir = aProjectDir; }
+
+    /**
+     * Get the project directory path. If a symlink-preserving path was set via
+     * SetProjectDir(), returns that path. Otherwise falls back to git_repository_workdir().
+     */
+    wxString GetProjectDir() const;
+
     void ResetNextKey() { m_nextPublicKey = 0; }
 
     wxString GetNextPublicKey()
@@ -164,6 +176,8 @@ public:
 
 protected:
     git_repository* m_repo;
+
+    wxString m_projectDir;  // Project directory path preserving symlinks
 
     GIT_CONN_TYPE m_connType;
     wxString m_remote;      // This is the full connection string

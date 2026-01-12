@@ -693,6 +693,15 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
         if( m_TreeProject->GetGitRepo() )
         {
+            const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
+
+            if( canonicalWorkDir )
+            {
+                wxString symlinkWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir(
+                        fn.GetPath(), wxString::FromUTF8( canonicalWorkDir ) );
+                m_TreeProject->GitCommon()->SetProjectDir( symlinkWorkDir );
+            }
+
             m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
             m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
             m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
@@ -1917,6 +1926,15 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
         if( m_TreeProject->GetGitRepo() )
         {
+            const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
+
+            if( canonicalWorkDir )
+            {
+                wxString symlinkWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir(
+                        fn.GetPath(), wxString::FromUTF8( canonicalWorkDir ) );
+                m_TreeProject->GitCommon()->SetProjectDir( symlinkWorkDir );
+            }
+
             m_TreeProject->GitCommon()->SetUsername( localSettings.m_GitRepoUsername );
             m_TreeProject->GitCommon()->SetSSHKey( localSettings.m_GitSSHKey );
         }

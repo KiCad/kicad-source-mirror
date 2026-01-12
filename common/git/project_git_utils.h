@@ -74,6 +74,22 @@ public:
      */
 static bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath = wxEmptyString,
                       bool aRemoveGitDir = false, wxString* aErrors = nullptr );
+
+    /**
+     * Compute a working directory path that preserves symlinks from the user's project path.
+     *
+     * When a project is opened via a symlinked path, git_repository_workdir() returns the
+     * canonical (symlink-resolved) path. This causes path mismatches between the tree cache
+     * (which uses the user-provided symlinked path) and the git status results (which use
+     * canonical paths). This function computes a working directory path that preserves
+     * the symlinks from the user's original project path.
+     *
+     * @param aUserProjectPath The path the user used to open the project (may contain symlinks)
+     * @param aCanonicalWorkDir The canonical workdir from git_repository_workdir()
+     * @return Working directory path with symlinks preserved, or aCanonicalWorkDir on failure
+     */
+    static wxString ComputeSymlinkPreservingWorkDir( const wxString& aUserProjectPath,
+                                                     const wxString& aCanonicalWorkDir );
 };
 
 } // namespace KIGIT

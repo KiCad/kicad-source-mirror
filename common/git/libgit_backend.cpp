@@ -402,7 +402,7 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
     KIGIT::GitStatusListPtr statusListPtr( status_list );
 
     size_t count = git_status_list_entrycount( status_list );
-    wxString repoWorkDir( git_repository_workdir( repo ) );
+    wxString repoWorkDir = aHandler->GetProjectDir();
 
     for( size_t ii = 0; ii < count; ++ii )
     {
@@ -453,7 +453,7 @@ void LIBGIT_BACKEND::UpdateRemoteStatus( GIT_STATUS_HANDLER* aHandler,
     if( !repo )
         return;
 
-    wxString repoWorkDir( git_repository_workdir( repo ) );
+    wxString repoWorkDir = aHandler->GetProjectDir();
 
     for( auto& [absPath, fileStatus] : aFileStatus )
     {
@@ -484,32 +484,12 @@ void LIBGIT_BACKEND::UpdateRemoteStatus( GIT_STATUS_HANDLER* aHandler,
 
 wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler )
 {
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return wxEmptyString;
-
-    const char* workdir = git_repository_workdir( repo );
-
-    if( !workdir )
-        return wxEmptyString;
-
-    return wxString( workdir );
+    return aHandler->GetProjectDir();
 }
 
 wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_CONFIG_HANDLER* aHandler )
 {
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return wxEmptyString;
-
-    const char* workdir = git_repository_workdir( repo );
-
-    if( !workdir )
-        return wxEmptyString;
-
-    return wxString( workdir );
+    return aHandler->GetProjectDir();
 }
 
 bool LIBGIT_BACKEND::GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey,

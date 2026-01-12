@@ -175,6 +175,15 @@ public:
     }
 
     /**
+     * @brief Get the project directory path, preserving symlinks if set
+     * @return The project directory path
+     */
+    wxString GetProjectDir() const
+    {
+        return m_common->GetProjectDir();
+    }
+
+    /**
      * @brief Return the connection types that have been tested for authentication
      * @return The connection types that have been tested for authentication
      */
