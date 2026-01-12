@@ -93,30 +93,42 @@ NODE::~NODE()
 
     for( ITEM* item : *m_index )
     {
-        if( item->BelongsTo( this ) && item->OfKind( ITEM::HOLE_T ) )
+        if( item->BelongsTo( this ) )
         {
-#ifdef DEBUG
-            HOLE* hole = static_cast<HOLE*>( item );
+            if ( item->OfKind( ITEM::HOLE_T ) )
+            {
+                HOLE* hole = static_cast<HOLE*>( item );
+                if( hole->ParentPadVia() )
+                {
+                    // If a hole is no longer owned by the same NODE as its parent then we're in a
+                    // heap of trouble.
+                    assert( hole->ParentPadVia()->BelongsTo( this ) );
 
-            // If a hole is no longer owned by the same NODE as its parent then we're in a
-            // heap of trouble.
-            if( hole->ParentPadVia() && !hole->ParentPadVia()->BelongsTo( this ) )
-                assert( false );
-#endif
-
-            toDelete.push_back( item );
+                    // we will encounter its parent later, disguised as VIA or SOLID.
+                    // don't bother reparenting the hole now, it's deleted anyway.
+                }
+                else
+                {
+                    // freestanding hole
+                    toDelete.push_back(item);
+                }
+            }
+            else {
+                // other geometry with no holes
+                toDelete.push_back(item);
+            }
         }
+    }
+
+    if( m_ruleResolver )
+    {
+        m_ruleResolver->ClearCacheForItems( toDelete );
     }
 
     for( const ITEM* item : toDelete )
     {
         wxLogTrace( wxT( "PNS" ), wxT( "del item %p type %s" ), item, item->KindStr().c_str() );
         delete item;
-    }
-
-    if( m_ruleResolver )
-    {
-        m_ruleResolver->ClearCacheForItems( toDelete );
     }
 
     releaseGarbage();
@@ -1503,21 +1515,28 @@ void NODE::releaseGarbage()
     if( !isRoot() )
         return;
 
-    std::vector<const ITEM*> cacheCheckItems;
-    cacheCheckItems.reserve( m_garbageItems.size() );
+    std::vector<const ITEM*> toDelete;
+    toDelete.reserve( m_garbageItems.size() );
 
     for( ITEM* item : m_garbageItems )
     {
         if( !item->BelongsTo( this ) )
-            delete item;
+        {
+            toDelete.push_back( item );
+        }
     }
-
-    m_garbageItems.clear();
 
     if( m_ruleResolver )
     {
-        m_ruleResolver->ClearCacheForItems( cacheCheckItems );
+        m_ruleResolver->ClearCacheForItems( toDelete );
     }
+
+    for( const ITEM* item : toDelete)
+    {
+        delete item;
+    }
+
+    m_garbageItems.clear();
 }
 
 
