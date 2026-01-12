@@ -2792,16 +2792,49 @@ int PCB_CONTROL::CollectAndEmbed3DModels( const TOOL_EVENT& aEvent )
                 continue;
 
             wxString fullPath =
-                    resolver ? resolver->ResolvePath( model.m_Filename, workingPath, stack ) : model.m_Filename;
+                    resolver ? resolver->ResolvePath( model.m_Filename, workingPath, stack )
+                             : model.m_Filename;
+
             wxFileName fname( fullPath );
+            wxString   ext = fname.GetExt().Upper();
 
             if( fname.Exists() )
             {
-                if( EMBEDDED_FILES::EMBEDDED_FILE* file = brd->GetEmbeddedFiles()->AddFile( fname, false ) )
+                if( EMBEDDED_FILES::EMBEDDED_FILE* file =
+                            brd->GetEmbeddedFiles()->AddFile( fname, false ) )
                 {
                     model.m_Filename = file->GetLink();
                     fpModified = true;
                     embeddedCount++;
+
+                    // Store STEP along with WRL for the OCCT(STEP) exporter.
+                    if( ext == "WRL" || ext == "WRZ" )
+                    {
+                        wxArrayString alts;
+
+                        // Step files
+                        alts.Add( wxT( "stp" ) );
+                        alts.Add( wxT( "step" ) );
+                        alts.Add( wxT( "STP" ) );
+                        alts.Add( wxT( "STEP" ) );
+                        alts.Add( wxT( "Stp" ) );
+                        alts.Add( wxT( "Step" ) );
+                        alts.Add( wxT( "stpz" ) );
+                        alts.Add( wxT( "stpZ" ) );
+                        alts.Add( wxT( "STPZ" ) );
+
+                        for( const auto& alt : alts )
+                        {
+                            wxFileName altFile( fname.GetPath(),
+                                                fname.GetName() + wxT( "." ) + alt );
+
+                            if( altFile.IsOk() && altFile.FileExists() )
+                            {
+                                brd->GetEmbeddedFiles()->AddFile( altFile, false );
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
