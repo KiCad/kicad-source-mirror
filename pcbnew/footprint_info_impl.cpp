@@ -121,6 +121,9 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapte
 {
     std::unique_lock<std::mutex> lock( m_loadInProgress );
 
+    m_adapter = aAdapter;
+    m_adapter->BlockUntilLoaded();
+
     long long int generatedTimestamp = 0;
 
     if( !CatchErrors( [&]()
@@ -140,7 +143,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapte
     m_progress_reporter = aProgressReporter;
 
     m_cancelled = false;
-    m_adapter = aAdapter;
 
     // Clear data before reading files
     m_errors.clear();

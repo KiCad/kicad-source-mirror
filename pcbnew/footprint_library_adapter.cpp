@@ -50,6 +50,11 @@ wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 
 void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
 {
+    std::unique_lock<std::mutex> asyncLock( m_loadMutex, std::try_to_lock );
+
+    if( !asyncLock )
+        return;
+
     // TODO(JE) this shares most code with the symbol adapter
     // TODO(JE) any reason to clean these up earlier?
     std::erase_if( m_futures,

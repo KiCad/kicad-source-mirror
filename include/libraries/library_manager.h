@@ -208,6 +208,7 @@ protected:
 
     std::atomic<size_t> m_loadCount;
     size_t              m_loadTotal;
+    std::mutex          m_loadMutex;
 };
 
 

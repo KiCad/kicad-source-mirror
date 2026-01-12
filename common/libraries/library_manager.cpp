@@ -980,6 +980,8 @@ std::optional<float> LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
 
 void LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded()
 {
+    std::unique_lock<std::mutex> asyncLock( m_loadMutex );
+
     for( const std::future<void>& future : m_futures )
         future.wait();
 }
