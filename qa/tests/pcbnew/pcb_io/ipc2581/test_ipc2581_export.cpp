@@ -114,13 +114,14 @@ bool FileContainsPattern( const wxString& aFilePath, const wxString& aPattern )
 /**
  * List of board files from qa/data/pcbnew to test for schema validation.
  * These are relatively simple boards that exercise various features.
- * Note: Some boards (issue7241, issue10906) are excluded due to pre-existing
- * crashes or memory issues in the exporter that are unrelated to our changes.
  */
 static const std::vector<std::string> VALIDATION_TEST_BOARDS = {
     "custom_pads.kicad_pcb",
     "notched_zones.kicad_pcb",
     "sliver.kicad_pcb",
+    "tracks_arcs_vias.kicad_pcb",
+    "issue7241.kicad_pcb",
+    "issue10906.kicad_pcb",
 };
 
 } // anonymous namespace
@@ -353,9 +354,7 @@ BOOST_AUTO_TEST_CASE( SchemaValidationVersionB )
             wxString errorMsg;
             bool valid = ExportAndValidate( board.get(), 'B', errorMsg );
 
-            // Use WARN instead of CHECK - exporter has known schema compliance issues
-            // that are not related to surface finish or OtherSideView changes
-            BOOST_WARN_MESSAGE( valid, "IPC-2581B validation failed for " + boardFile + ": " + errorMsg );
+            BOOST_CHECK_MESSAGE( valid, "IPC-2581B validation failed for " + boardFile + ": " + errorMsg );
         }
     }
 }
@@ -398,9 +397,7 @@ BOOST_AUTO_TEST_CASE( SchemaValidationVersionC )
             wxString errorMsg;
             bool valid = ExportAndValidate( board.get(), 'C', errorMsg );
 
-            // Use WARN instead of CHECK - exporter has known schema compliance issues
-            // that are not related to surface finish or OtherSideView changes
-            BOOST_WARN_MESSAGE( valid, "IPC-2581C validation failed for " + boardFile + ": " + errorMsg );
+            BOOST_CHECK_MESSAGE( valid, "IPC-2581C validation failed for " + boardFile + ": " + errorMsg );
         }
     }
 }
@@ -440,8 +437,7 @@ BOOST_AUTO_TEST_CASE( ComplexBoardExport )
                     wxString errorMsg;
                     bool valid = ExportAndValidate( board.get(), version, errorMsg );
 
-                    // Use WARN instead of CHECK - exporter has known schema compliance issues
-                    BOOST_WARN_MESSAGE( valid,
+                    BOOST_CHECK_MESSAGE( valid,
                         wxString::Format( "Export/validation failed for %s version %c: %s",
                                           boardFile, version, errorMsg ) );
                 }

@@ -1456,6 +1456,10 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         fp->SetPosition( {0, 0} );
         fp->SetOrientation( ANGLE_0 );
 
+        // Normalize to unflipped state to match hash computed in addPackage
+        if( fp->IsFlipped() )
+            fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
         size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
         auto iter = m_footprint_dict.find( hash );
 
@@ -3528,8 +3532,8 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                         addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-                    addLocationNode( tempFeature, *shape );
 
+                    // Per IPC-2581 schema, element order in Features must be: Xform, Location, Feature
                     EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
 
                     if( fp_angle != ANGLE_0 )
@@ -3538,6 +3542,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                         addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
                     }
 
+                    addLocationNode( tempFeature, *shape );
                     addShape( tempFeature, *shape );
                 }
                 else if( shape->GetShape() == SHAPE_T::CIRCLE
@@ -3775,6 +3780,11 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 {
     if( m_progressReporter )
         m_progressReporter->AdvancePhase( _( "Generating BOM section" ) );
+
+    // Per IPC-2581 schema, Avl requires at least one AvlItem child element.
+    // Don't emit Avl section if there are no items.
+    if( m_OEMRef_dict.empty() )
+        return nullptr;
 
     wxXmlNode* avl = appendNode( m_xml_root, "Avl" );
     addAttribute( avl,  "name", "Primary_Vendor_List" );
