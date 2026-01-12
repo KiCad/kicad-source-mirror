@@ -331,6 +331,10 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 {
     wxCHECK_RET( !aSheets.empty(), wxS( "Cannot set empty top-level sheets!" ) );
 
+    // Set the recursion guard early before any calls to ensureDefaultTopLevelSheet()
+    bool wasAlreadySetting = m_settingTopLevelSheets;
+    m_settingTopLevelSheets = true;
+
     std::vector<SCH_SHEET*> validSheets;
     validSheets.reserve( aSheets.size() );
 
@@ -344,13 +348,12 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
     if( validSheets.empty() )
     {
         // Guard against re-entry to prevent infinite recursion
-        if( !m_settingTopLevelSheets )
+        if( !wasAlreadySetting )
             ensureDefaultTopLevelSheet();
 
+        m_settingTopLevelSheets = wasAlreadySetting;
         return;
     }
-
-    m_settingTopLevelSheets = true;
 
     ensureVirtualRoot();
 
@@ -385,7 +388,7 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
     ensureCurrentSheetIsTopLevel();
     rebuildHierarchyState( true );
 
-    m_settingTopLevelSheets = false;
+    m_settingTopLevelSheets = wasAlreadySetting;
 }
 
 
