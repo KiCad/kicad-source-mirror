@@ -487,8 +487,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             switch( m_mode )
             {
-            case MOVE: localCommit.Push( _( "Move" ) ); break;
-            case DRAG: localCommit.Push( _( "Drag" ) ); break;
+            case MOVE:  localCommit.Push( _( "Move" ) );       break;
+            case DRAG:  localCommit.Push( _( "Drag" ) );       break;
             case BREAK: localCommit.Push( _( "Break Wire" ) ); break;
             case SLICE: localCommit.Push( _( "Slice Wire" ) ); break;
             }
@@ -527,8 +527,8 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
     {
         if( item->Type() == SCH_LINE_T )
         {
-            // This function gets called every time segments are broken, which can
-            // also be for subsequent breaks in a loop without leaving the current move tool.
+            // This function gets called every time segments are broken, which can also be for subsequent
+            // breaks in a loop without leaving the current move tool.
             // Skip already placed segments (segment keeps IS_BROKEN but will have IS_NEW cleared below)
             // so that only the actively placed tail segment gets split again.
             if( item->HasFlag( IS_BROKEN ) && !item->HasFlag( IS_NEW ) )
@@ -567,9 +567,9 @@ void SCH_MOVE_TOOL::preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const 
         if( !newLine )
             continue;
 
-        // If this is a second+ round break, we need to get rid of the IS_NEW flag since
-        // the new segment is now an existing segment we are breaking from, this will be checked for
-        // in the line selection gathering above
+        // If this is a second+ round break, we need to get rid of the IS_NEW flag since the new segment
+        // is now an existing segment we are breaking from, this will be checked for in the line selection
+        // gathering above
         line->ClearFlags( STARTPOINT | IS_NEW );
         line->SetFlags( ENDPOINT );
         m_selectionTool->AddItemToSel( line );
@@ -705,9 +705,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             //
             m_view->ClearPreview();
 
-            // We need to bypass refreshPreview action here because it is triggered by the move,
-            // so we were getting double-key events that toggled the axis locking if you
-            // pressed them in a certain order.
+            // We need to bypass refreshPreview action here because it is triggered by the move, so we were
+            // getting double-key events that toggled the axis locking if you pressed them in a certain order.
             if( controls->GetSettings().m_lastKeyboardCursorPositionValid && !evt->IsAction( &ACTIONS::refreshPreview ) )
             {
                 VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
@@ -812,9 +811,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 netCollisionMonitor->Update( previewJunctions, selection );
 
             for( SCH_JUNCTION* jct : previewJunctions )
-            {
                 m_view->AddToPreview( jct, true );
-            }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
         }
@@ -845,8 +842,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                     switch( m_mode )
                     {
-                    case MOVE: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) ); break;
-                    case DRAG: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drag." ) ); break;
+                    case MOVE:  m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) );  break;
+                    case DRAG:  m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel drag." ) );  break;
                     case BREAK: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel break." ) ); break;
                     case SLICE: m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel slice." ) ); break;
                     }
@@ -1039,8 +1036,7 @@ SCH_SELECTION& SCH_MOVE_TOOL::prepareSelection( bool& aUnselect )
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection).
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems,
-                                                                  true );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems, true );
     aUnselect = selection.IsHover();
 
     return selection;
@@ -1147,8 +1143,7 @@ void SCH_MOVE_TOOL::setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aC
 }
 
 
-void SCH_MOVE_TOOL::setupItemsForMove( SCH_SELECTION& aSelection,
-                                       std::vector<DANGLING_END_ITEM>& aInternalPoints )
+void SCH_MOVE_TOOL::setupItemsForMove( SCH_SELECTION& aSelection, std::vector<DANGLING_END_ITEM>& aInternalPoints )
 {
     // Mark the edges of the block with dangling flags for a move
     for( EDA_ITEM* item : aSelection )
@@ -1207,15 +1202,13 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
 
         for( const VECTOR2I& pt : line->GetConnectionPoints() )
         {
-            SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>(
-                    m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
+            SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
 
             if( jct && !jct->IsSelected()
-                && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct )
-                           == m_hiddenJunctions.end() )
+                && std::find( m_hiddenJunctions.begin(), m_hiddenJunctions.end(), jct ) == m_hiddenJunctions.end() )
             {
-                JUNCTION_HELPERS::POINT_INFO info = JUNCTION_HELPERS::AnalyzePoint(
-                        m_frame->GetScreen()->Items(), pt, false );
+                JUNCTION_HELPERS::POINT_INFO info = JUNCTION_HELPERS::AnalyzePoint( m_frame->GetScreen()->Items(),
+                                                                                    pt, false );
 
                 if( !info.isJunction )
                 {
@@ -1354,13 +1347,11 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
 }
 
 
-SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection,
-                                           const VECTOR2I& aCursorPos, bool aHasSheetPins,
-                                           bool aIsGraphicsOnly, bool aCtrlDown )
+SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, const VECTOR2I& aCursorPos,
+                                           bool aHasSheetPins, bool aIsGraphicsOnly, bool aCtrlDown )
 {
     // Determine potential target sheet
-    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>(
-            m_frame->GetScreen()->GetItem( aCursorPos, 0, SCH_SHEET_T ) );
+    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetItem( aCursorPos, 0, SCH_SHEET_T ) );
 
     if( sheet && sheet->IsSelected() )
         sheet = nullptr;  // Never target a selected sheet
@@ -1585,8 +1576,7 @@ bool SCH_MOVE_TOOL::handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT*
         if( *aEvent->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT
             && *aEvent->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_END )
         {
-            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>(
-                    m_selectionTool->GetSelection().Front() );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selectionTool->GetSelection().Front() );
             int unit = *aEvent->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT;
 
             if( symbol )
@@ -1598,8 +1588,7 @@ bool SCH_MOVE_TOOL::handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT*
         else if( *aEvent->GetCommandId() >= ID_POPUP_SCH_SELECT_BODY_STYLE
                  && *aEvent->GetCommandId() <= ID_POPUP_SCH_SELECT_BODY_STYLE_END )
         {
-            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>(
-                    m_selectionTool->GetSelection().Front() );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selectionTool->GetSelection().Front() );
             int bodyStyle = ( *aEvent->GetCommandId() - ID_POPUP_SCH_SELECT_BODY_STYLE ) + 1;
 
             if( symbol && symbol->GetBodyStyle() != bodyStyle )
@@ -1980,13 +1969,13 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelectedItem,
-                                           const VECTOR2I& aPoint, EDA_ITEMS& aList )
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelectedItem, const VECTOR2I& aPoint,
+                                           EDA_ITEMS& aList )
 {
-    EE_RTREE&         items = m_frame->GetScreen()->Items();
-    EE_RTREE::EE_TYPE itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
+    EE_RTREE&              items = m_frame->GetScreen()->Items();
+    EE_RTREE::EE_TYPE      itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
     std::vector<SCH_ITEM*> itemsConnectable;
-    bool              ptHasUnselectedJunction = false;
+    bool                   ptHasUnselectedJunction = false;
 
     auto makeNewWire =
             [this]( SCH_COMMIT* commit, SCH_ITEM* fixed, SCH_ITEM* selected, const VECTOR2I& start,
