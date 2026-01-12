@@ -1516,16 +1516,40 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
     }
 
-    // The drill diameter field moved between format versions.
-    // In < V172, it's in the padstack header's m_Drill field.
-    // In >= V172, it's in m_DrillArr[4] (width) and m_DrillArr[7] (height, 0 for round).
+    // The drill/slot dimensions are extracted in priority order:
+    //
+    // 1. V172+ m_SlotAndUnknownArr[0] and [3] hold the true slot outline dimensions (X and Y).
+    //    For routed slots (round drill bit + routing path), m_DrillArr only has the bit diameter,
+    //    while m_SlotAndUnknownArr has the full slot envelope.
+    //
+    // 2. V172+ m_DrillArr[4] (width) and m_DrillArr[7] (height, 0 for round).
+    //    These match m_SlotAndUnknownArr for punched oblong drills but only have the bit
+    //    diameter for routed slots.
+    //
+    // 3. Pre-V172 m_Drill field (drill diameter, always round).
     int drillW = 0;
     int drillH = 0;
 
     if( m_brdDb.m_FmtVer >= FMT_VER::V_172 )
     {
-        drillW = scale( static_cast<int>( aPadstack.m_DrillArr[4] ) );
-        drillH = scale( static_cast<int>( aPadstack.m_DrillArr[7] ) );
+        if( aPadstack.m_SlotAndUnknownArr.has_value() )
+        {
+            const auto& slotArr = aPadstack.m_SlotAndUnknownArr.value();
+            int slotX = scale( static_cast<int>( slotArr[0] ) );
+            int slotY = scale( static_cast<int>( slotArr[3] ) );
+
+            if( slotX > 0 && slotY > 0 )
+            {
+                drillW = slotX;
+                drillH = slotY;
+            }
+        }
+
+        if( drillW == 0 )
+        {
+            drillW = scale( static_cast<int>( aPadstack.m_DrillArr[4] ) );
+            drillH = scale( static_cast<int>( aPadstack.m_DrillArr[7] ) );
+        }
     }
     else
     {
@@ -1544,6 +1568,11 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     else
     {
         padStack.Drill().size = VECTOR2I( drillW, drillH );
+
+        if( drillW != drillH )
+            padStack.Drill().shape = PAD_DRILL_SHAPE::OBLONG;
+        else
+            padStack.Drill().shape = PAD_DRILL_SHAPE::CIRCLE;
     }
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( &aFp );

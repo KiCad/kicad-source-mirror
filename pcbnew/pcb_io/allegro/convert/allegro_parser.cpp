@@ -952,7 +952,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
     ReadArrayU32( aStream, data.m_DrillArr );
 
-    ReadCond( aStream, aVer, data.m_UnknownArr28 );
+    ReadCond( aStream, aVer, data.m_SlotAndUnknownArr );
     ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
 
     // Work out how many fixed slots we have, and how many per-layer slots

@@ -2913,6 +2913,54 @@ BOOST_AUTO_TEST_CASE( PadOrientationP6P10 )
 
 
 /**
+ * Verify that oblong (slot) drill holes are imported with the correct shape and dimensions.
+ * The builder must set PAD_DRILL_SHAPE::OBLONG when width != height.
+ *
+ * BeagleBone Black has 7 slot holes in total:
+ *   2x 50x15 mil, 2x 95x40 mil, 1x 120x40 mil @90, 1x 120x40 mil, 1x 140x40 mil
+ */
+BOOST_AUTO_TEST_CASE( SlotHoles )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    int oblongCount = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            VECTOR2I drillSize = pad->GetDrillSize();
+
+            if( drillSize.x <= 0 || drillSize.y <= 0 )
+                continue;
+
+            if( drillSize.x == drillSize.y )
+                continue;
+
+            oblongCount++;
+
+            BOOST_TEST_CONTEXT( fp->GetReference() << " pad " << pad->GetNumber() )
+            {
+                BOOST_CHECK( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG );
+
+                BOOST_TEST_MESSAGE( fp->GetReference() << " pad " << pad->GetNumber()
+                                    << " slot: " << drillSize.x / 1e6 << " x "
+                                    << drillSize.y / 1e6 << " mm"
+                                    << " attr=" << static_cast<int>( pad->GetAttribute() ) );
+            }
+        }
+    }
+
+    BOOST_TEST_MESSAGE( "Found " << oblongCount << " oblong drill holes" );
+    BOOST_CHECK_EQUAL( oblongCount, 7 );
+}
+
+
+/**
  * Verify that footprint J1 in BeagleBone_Black_RevC imports at 180 degrees orientation.
  * This catches a bug where EDA_ANGLE was constructed without DEGREES_T, causing the
  * rotation value to be misinterpreted.

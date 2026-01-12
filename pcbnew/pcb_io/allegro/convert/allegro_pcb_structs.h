@@ -999,7 +999,13 @@ struct BLK_0x1C_PADSTACK
      */
     std::array<uint32_t, 8> m_DrillArr;
 
-    COND_GE<FMT_VER::V_172, std::array<uint32_t, 28>> m_UnknownArr28;
+    /**
+     * In V172+, elements [0] and [3] hold the true slot outline dimensions (X, Y)
+     * in internal coordinate units. For routed slots (round drill bit routed along a path),
+     * m_DrillArr holds only the bit diameter while this array holds the full slot envelope.
+     * For punched oblong drills, these values match m_DrillArr[4] and [7].
+     */
+    COND_GE<FMT_VER::V_172, std::array<uint32_t, 28>> m_SlotAndUnknownArr;
 
     COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
 
