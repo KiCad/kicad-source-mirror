@@ -426,6 +426,9 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( PCB_ACTIONS::repairBoard );
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::collect3DModels );
+
+    toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::boardReannotate );
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
     update->Enable( !Kiface().IsSingle() );
