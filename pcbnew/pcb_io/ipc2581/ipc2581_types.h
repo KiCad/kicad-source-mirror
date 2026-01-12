@@ -829,4 +829,26 @@ enum class whereMeasuredType
     OTHER
 };
 
+/**
+ * IPC-6012 surface finish types from Table 3-3 "Final Finish and Coating Requirements".
+ * Used in IPC-2581C Section 8.1.1.16 SurfaceFinish specification.
+ *
+ * ENIG/ENEPIG suffixes: -N = Normal (soldering), -G = Gold wire bonding (thicker gold)
+ */
+enum class surfaceFinishType
+{
+    NONE,     ///< No surface finish / not specified - skip coating layer generation
+    ENIG_N,   ///< ENIG for soldering (normal gold thickness)
+    ENEPIG_N, ///< ENEPIG for soldering (normal gold thickness)
+    OSP,      ///< Organic Solderability Preservative
+    HT_OSP,   ///< High Temperature OSP
+    IAG,      ///< Immersion Silver
+    ISN,      ///< Immersion Tin
+    G,        ///< Gold (hard gold)
+    N,        ///< Nickel
+    DIG,      ///< Direct Immersion Gold
+    S,        ///< Solder (HASL/SMOBC)
+    OTHER     ///< Non-standard finish
+};
+
 #endif // IPC2581_TYPES_H

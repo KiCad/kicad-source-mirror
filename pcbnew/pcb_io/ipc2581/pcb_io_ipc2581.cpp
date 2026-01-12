@@ -18,6 +18,7 @@
 */
 
 #include "pcb_io_ipc2581.h"
+#include "ipc2581_types.h"
 
 #include <base_units.h>
 #include <bezier_curves.h>
@@ -54,6 +55,55 @@
  * @ingroup trace_env_vars
  */
 static const wxChar traceIpc2581[] = wxT( "KICAD_IPC_2581" );
+
+
+/**
+ * Map KiCad surface finish strings to IPC-6012 surfaceFinishType enum.
+ */
+static const std::map<wxString, surfaceFinishType> surfaceFinishMap =
+{
+    { wxEmptyString,             surfaceFinishType::NONE },
+    { wxT( "ENIG" ),             surfaceFinishType::ENIG_N },
+    { wxT( "ENEPIG" ),           surfaceFinishType::ENEPIG_N },
+    { wxT( "HAL SNPB" ),         surfaceFinishType::S },
+    { wxT( "HAL LEAD-FREE" ),    surfaceFinishType::S },
+    { wxT( "HARD GOLD" ),        surfaceFinishType::G },
+    { wxT( "IMMERSION TIN" ),    surfaceFinishType::ISN },
+    { wxT( "IMMERSION NICKEL" ), surfaceFinishType::N },
+    { wxT( "IMMERSION SILVER" ), surfaceFinishType::IAG },
+    { wxT( "IMMERSION GOLD" ),   surfaceFinishType::DIG },
+    { wxT( "HT_OSP" ),           surfaceFinishType::HT_OSP },
+    { wxT( "OSP" ),              surfaceFinishType::OSP },
+    { wxT( "NONE" ),             surfaceFinishType::NONE },
+    { wxT( "NOT SPECIFIED" ),    surfaceFinishType::NONE },
+    { wxT( "USER DEFINED" ),     surfaceFinishType::NONE },
+};
+
+
+/**
+ * Map surfaceFinishType enum to IPC-2581 XML string values.
+ */
+static const std::map<surfaceFinishType, wxString> surfaceFinishTypeToString =
+{
+    { surfaceFinishType::ENIG_N,   wxT( "ENIG-N" ) },
+    { surfaceFinishType::ENEPIG_N, wxT( "ENEPIG-N" ) },
+    { surfaceFinishType::OSP,      wxT( "OSP" ) },
+    { surfaceFinishType::HT_OSP,   wxT( "HT_OSP" ) },
+    { surfaceFinishType::IAG,      wxT( "IAg" ) },
+    { surfaceFinishType::ISN,      wxT( "ISn" ) },
+    { surfaceFinishType::G,        wxT( "G" ) },
+    { surfaceFinishType::N,        wxT( "N" ) },
+    { surfaceFinishType::DIG,      wxT( "DIG" ) },
+    { surfaceFinishType::S,        wxT( "S" ) },
+    { surfaceFinishType::OTHER,    wxT( "OTHER" ) },
+};
+
+
+static surfaceFinishType getSurfaceFinishType( const wxString& aFinish )
+{
+    auto it = surfaceFinishMap.find( aFinish.Upper() );
+    return ( it != surfaceFinishMap.end() ) ? it->second : surfaceFinishType::OTHER;
+}
 
 
 PCB_IO_IPC2581::~PCB_IO_IPC2581()
@@ -1665,6 +1715,23 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
             }
         }
     }
+
+    // Generate SurfaceFinish spec from board's copper finish setting
+    surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
+
+    if( finishType != surfaceFinishType::NONE )
+    {
+        wxXmlNode* specNode = appendNode( aCadLayerNode, "Spec" );
+        addAttribute( specNode, "name", "SURFACE_FINISH" );
+
+        wxXmlNode* surfaceFinishNode = appendNode( specNode, "SurfaceFinish" );
+        wxXmlNode* finishNode = appendNode( surfaceFinishNode, "Finish" );
+        addAttribute( finishNode, "type", surfaceFinishTypeToString.at( finishType ) );
+
+        // Add original finish string as comment if it maps to OTHER
+        if( finishType == surfaceFinishType::OTHER )
+            addAttribute( finishNode, "comment", stackup.m_FinishType );
+    }
 }
 
 
@@ -1771,6 +1838,9 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
     stackup.SynchronizeWithBoard( &dsnSettings );
 
+    surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
+    bool              hasCoating = ( finishType != surfaceFinishType::NONE );
+
     wxXmlNode* stackupNode = appendNode( aCadLayerNode, "Stackup" );
     addAttribute( stackupNode, "name", "Primary_Stackup" );
     addAttribute( stackupNode, "overallThickness", floatVal( m_scale * stackup.BuildBoardThicknessFromStackup() ) );
@@ -1789,6 +1859,7 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
 
     std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
     std::set<PCB_LAYER_ID> added_layers;
+    int sequence = 0;
 
     for( int i = 0; i < stackup.GetCount(); i++ )
     {
@@ -1796,6 +1867,21 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
 
         for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
+            PCB_LAYER_ID layer_id = stackup_item->GetBrdLayerId();
+
+            // Insert top coating layer before F.Cu
+            if( hasCoating && layer_id == F_Cu && sublayer_id == 0 )
+            {
+                wxXmlNode* coatingLayer = appendNode( stackupGroup, "StackupLayer" );
+                addAttribute( coatingLayer, "layerOrGroupRef", "COATING_TOP" );
+                addAttribute( coatingLayer, "thickness", "0.0" );
+                addAttribute( coatingLayer, "tolPlus", "0.0" );
+                addAttribute( coatingLayer, "tolMinus", "0.0" );
+                addAttribute( coatingLayer, "sequence", wxString::Format( "%d", sequence++ ) );
+
+                wxXmlNode* specRefNode = appendNode( coatingLayer, "SpecRef" );
+                addAttribute( specRefNode, "id", "SURFACE_FINISH" );
+            }
 
             wxXmlNode* stackupLayer = appendNode( stackupGroup, "StackupLayer" );
             wxString ly_name = stackup_item->GetLayerName();
@@ -1821,10 +1907,24 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
             addAttribute( stackupLayer,  "thickness", floatVal( m_scale * stackup_item->GetThickness() ) );
             addAttribute( stackupLayer,  "tolPlus", "0.0" );
             addAttribute( stackupLayer,  "tolMinus", "0.0" );
-            addAttribute( stackupLayer,  "sequence", wxString::Format( "%d", i ) );
+            addAttribute( stackupLayer,  "sequence", wxString::Format( "%d", sequence++ ) );
 
             wxXmlNode* specLayerNode = appendNode( stackupLayer, "SpecRef" );
             addAttribute( specLayerNode, "id", spec_name );
+
+            // Insert bottom coating layer after B.Cu
+            if( hasCoating && layer_id == B_Cu && sublayer_id == stackup_item->GetSublayersCount() - 1 )
+            {
+                wxXmlNode* coatingLayer = appendNode( stackupGroup, "StackupLayer" );
+                addAttribute( coatingLayer, "layerOrGroupRef", "COATING_BOTTOM" );
+                addAttribute( coatingLayer, "thickness", "0.0" );
+                addAttribute( coatingLayer, "tolPlus", "0.0" );
+                addAttribute( coatingLayer, "tolMinus", "0.0" );
+                addAttribute( coatingLayer, "sequence", wxString::Format( "%d", sequence++ ) );
+
+                wxXmlNode* specRefNode = appendNode( coatingLayer, "SpecRef" );
+                addAttribute( specRefNode, "id", "SURFACE_FINISH" );
+            }
         }
     }
 }
@@ -1905,6 +2005,24 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
         addAttribute( cadLayerNode,  "name", ly_name );
 
         addLayerAttributes( cadLayerNode, layer );
+    }
+
+    // Generate COATINGCOND layers for surface finish if specified
+    surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
+
+    if( finishType != surfaceFinishType::NONE )
+    {
+        wxXmlNode* topCoatingNode = appendNode( aCadLayerNode, "Layer" );
+        addAttribute( topCoatingNode, "name", "COATING_TOP" );
+        addAttribute( topCoatingNode, "layerFunction", "COATINGCOND" );
+        addAttribute( topCoatingNode, "side", "TOP" );
+        addAttribute( topCoatingNode, "polarity", "POSITIVE" );
+
+        wxXmlNode* botCoatingNode = appendNode( aCadLayerNode, "Layer" );
+        addAttribute( botCoatingNode, "name", "COATING_BOTTOM" );
+        addAttribute( botCoatingNode, "layerFunction", "COATINGCOND" );
+        addAttribute( botCoatingNode, "side", "BOTTOM" );
+        addAttribute( botCoatingNode, "polarity", "POSITIVE" );
     }
 }
 
