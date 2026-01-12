@@ -700,6 +700,11 @@ add_custom_command(
     COMMENT "creating pcb_text_help_md.h from pcb_text_help.md"
 )
 
+add_custom_target(pcb_text_help_md_gen DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
+
+# pcbcommon compiles pcb_text.cpp which includes pcb_text_help_md.h
+add_dependencies( pcbcommon pcb_text_help_md_gen )
+
 # Add pcb_text_help_md.h as a dependency for source files that will include it
 set_source_files_properties(pcb_text.cpp
     PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pcb_text_help_md.h)
