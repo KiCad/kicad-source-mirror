@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-10 18:08+0000\n"
+"PO-Revision-Date: 2026-01-13 12:21+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -5193,7 +5193,6 @@ msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:20
-#, fuzzy
 msgid "Pan and Zoom"
 msgstr "Mozgatás és nagyítás"
 
@@ -5279,9 +5278,8 @@ msgstr "Középső gomb vonszolás:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
-#, fuzzy
 msgid "Pan"
-msgstr "Láb"
+msgstr "Mozgatás"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -5373,18 +5371,16 @@ msgid "Reverse"
 msgstr "Visszavonás"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:247
-#, fuzzy
 msgid "Pan up/down:"
-msgstr "Lefelé"
+msgstr "Mozgatás fel/le:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:267
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Jobbra"
+msgstr "Mozgatás balra/jobbra:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:304
 msgid "Pan left/right with horizontal movement"
-msgstr ""
+msgstr "Mozgatás vízszintesen balra/jobbra"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid ""
@@ -9610,22 +9606,19 @@ msgstr "Alkatrészrajzolat mező forgatása"
 
 #: common/tool/actions.cpp:830
 msgid "Pan Up"
-msgstr ""
+msgstr "Mozgatás felfelé"
 
 #: common/tool/actions.cpp:838
-#, fuzzy
 msgid "Pan Down"
-msgstr "Lefelé"
+msgstr "Mozgatás lefelé"
 
 #: common/tool/actions.cpp:846
-#, fuzzy
 msgid "Pan Left"
-msgstr "Balra"
+msgstr "Mozgatás balra"
 
 #: common/tool/actions.cpp:854
-#, fuzzy
 msgid "Pan Right"
-msgstr "Jobbra"
+msgstr "Mozgatás jobbra"
 
 #: common/tool/actions.cpp:864
 #, fuzzy
@@ -27678,13 +27671,12 @@ msgid "Use perspective projection instead of orthogonal"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Camera zoom"
-msgstr "Kamera Beállítások"
+msgstr "Kamera nagyítás"
 
 #: kicad/cli/command_pcb_render.cpp:285
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Kamera mozgatása, formátum: \"X,Y,Z\", pl. \"3,0,0\""
 
 #: kicad/cli/command_pcb_render.cpp:290
 msgid ""
@@ -27734,9 +27726,8 @@ msgid "Invalid rotation format\n"
 msgstr "Érvénytelen forgatási formátum\n"
 
 #: kicad/cli/command_pcb_render.cpp:369
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Érvénytelen vezetősáv szélesség."
+msgstr "Érvénytelen mozgatási formátum\n"
 
 #: kicad/cli/command_pcb_render.cpp:375
 #, fuzzy
