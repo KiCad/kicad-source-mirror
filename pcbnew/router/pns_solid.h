@@ -48,7 +48,9 @@ public:
 
     ~SOLID()
     {
-        delete m_hole;
+        if( m_hole && m_hole->BelongsTo( this ) )
+            delete m_hole;
+
         delete m_shape;
     }
 
