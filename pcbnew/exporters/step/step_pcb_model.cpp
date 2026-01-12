@@ -2879,9 +2879,10 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                 }
             }
 
-            // VRML models only work when exporting to glTF
-            // Also OCCT < 7.9.0 fail to load most VRML 2.0 models because of Switch nodes
-            if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF )
+            // VRML models only work when exporting to mesh formats
+            // Also OCCT < 7.9.0 fails to load most VRML 2.0 models because of Switch nodes
+            if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF || m_outFmt == OUTPUT_FORMAT::FMT_OUT_STL
+                || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PLY )
             {
                 if( readVRML( doc, aFileNameUTF8.c_str() ) )
                 {
