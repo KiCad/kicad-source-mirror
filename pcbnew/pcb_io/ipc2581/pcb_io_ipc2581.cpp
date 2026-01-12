@@ -2740,6 +2740,12 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     fp->SetParentGroup( nullptr );
     fp->SetPosition( { 0, 0 } );
     fp->SetOrientation( ANGLE_0 );
+
+    // Track original flipped state before normalization. This is needed to correctly
+    // determine OtherSideView content per IPC-2581C. After flipping, layer IDs swap,
+    // so for bottom components, B_SilkS/B_Fab after flip is actually the primary view.
+    bool wasFlipped = fp->IsFlipped();
+
     // Normalize package geometry to the unflipped footprint coordinate system.
     if( fp->IsFlipped() )
         fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
@@ -2783,23 +2789,28 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 
     addAttribute( packageNode,  "pinOneOrientation", "OTHER" );
 
-    const SHAPE_POLY_SET& courtyard = fp->GetCourtyard( F_CrtYd );
-    const SHAPE_POLY_SET& courtyard_back = fp->GetCourtyard( B_CrtYd );
+    // After normalization: F_CrtYd is top, B_CrtYd is bottom.
+    // For bottom components (wasFlipped), these are swapped from original orientation.
+    const SHAPE_POLY_SET& courtyard_primary = wasFlipped ? fp->GetCourtyard( B_CrtYd )
+                                                         : fp->GetCourtyard( F_CrtYd );
+    const SHAPE_POLY_SET& courtyard_other = wasFlipped ? fp->GetCourtyard( F_CrtYd )
+                                                       : fp->GetCourtyard( B_CrtYd );
 
-    if( courtyard.OutlineCount() > 0 )
-        addOutlineNode( packageNode, courtyard, courtyard.Outline( 0 ).Width(), LINE_STYLE::SOLID );
+    if( courtyard_primary.OutlineCount() > 0 )
+        addOutlineNode( packageNode, courtyard_primary, courtyard_primary.Outline( 0 ).Width(),
+                        LINE_STYLE::SOLID );
 
-    if( courtyard_back.OutlineCount() > 0 )
+    if( courtyard_other.OutlineCount() > 0 )
     {
         if( m_version > 'B' )
         {
             otherSideViewNode = appendNode( packageNode, "OtherSideView" );
-            addOutlineNode( otherSideViewNode, courtyard_back, courtyard_back.Outline( 0 ).Width(),
+            addOutlineNode( otherSideViewNode, courtyard_other, courtyard_other.Outline( 0 ).Width(),
                             LINE_STYLE::SOLID );
         }
     }
 
-    if( !courtyard.OutlineCount() && !courtyard_back.OutlineCount() )
+    if( !courtyard_primary.OutlineCount() && !courtyard_other.OutlineCount() )
     {
         SHAPE_POLY_SET bbox = fp->GetBoundingHull();
         addOutlineNode( packageNode, bbox );
@@ -2843,9 +2854,18 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
             [&]( PCB_LAYER_ID aLayer ) -> wxXmlNode*
             {
                 wxXmlNode* parent = packageNode;
-                bool is_back = aLayer == B_SilkS || aLayer == B_Fab;
 
-                if( is_back && m_version > 'B' )
+                // Determine if this layer content should go in OtherSideView.
+                // Per IPC-2581C, OtherSideView contains geometry visible from the opposite
+                // side of the package body from the primary view.
+                //
+                // For non-flipped (top) components: B_SilkS/B_Fab → OtherSideView
+                // For flipped (bottom) components after normalization: F_SilkS/F_Fab → OtherSideView
+                //   (because after flip, B_SilkS/B_Fab contains the original primary graphics)
+                bool is_other_side = wasFlipped ? ( aLayer == F_SilkS || aLayer == F_Fab )
+                                                : ( aLayer == B_SilkS || aLayer == B_Fab );
+
+                if( is_other_side && m_version > 'B' )
                 {
                     if( !otherSideViewNode )
                         otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
