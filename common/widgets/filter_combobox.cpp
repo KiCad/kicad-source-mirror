@@ -253,6 +253,10 @@ wxSize FILTER_COMBOPOPUP::updateSize()
 
 void FILTER_COMBOPOPUP::onIdle( wxIdleEvent& aEvent )
 {
+    // Only process when the popup is actually visible to avoid ClientToScreen warnings
+    if( !IsShown() )
+        return;
+
     // Generate synthetic (but reliable) MouseMoved events
     static wxPoint lastPos;
     wxPoint screenPos = KIPLATFORM::UI::GetMousePosition();
