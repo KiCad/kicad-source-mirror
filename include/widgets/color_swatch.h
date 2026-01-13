@@ -142,6 +142,12 @@ private:
      */
     void rePostEvent( wxEvent& aEvent );
 
+    /**
+     * Handle mouse events on the swatch, and trigger the color picker dialog if appropriate.
+     * Binds to the event sink so it is properly freed when the swatch is destroyed.
+     */
+    void onMouseEvent( wxEvent& aEvent );
+
     KIGFX::COLOR4D        m_color;
     KIGFX::COLOR4D        m_background;
     KIGFX::COLOR4D        m_default;
