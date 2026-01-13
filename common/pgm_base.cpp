@@ -807,12 +807,12 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr, bool aUnhandled )
         if( aUnhandled )
         {
             // Log this IO_ERROR escaped our usual uses (bad)
-            APP_MONITOR::SENTRY::Instance()->LogException( ioe.What() );
+            APP_MONITOR::SENTRY::Instance()->LogException( ioe.What(), aUnhandled );
         }
     }
     catch( const std::exception& e )
     {
-        APP_MONITOR::SENTRY::Instance()->LogException( e.what() );
+        APP_MONITOR::SENTRY::Instance()->LogException( e.what(), aUnhandled );
 
         wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                     From_UTF8( typeid( e ).name() ), From_UTF8( e.what() ) );
@@ -824,7 +824,7 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr, bool aUnhandled )
 
         if( aUnhandled )
         {
-            APP_MONITOR::SENTRY::Instance()->LogException( "Unhandled exception of unknown type" );
+            APP_MONITOR::SENTRY::Instance()->LogException( "Unhandled exception of unknown type", aUnhandled );
         }
     }
 }

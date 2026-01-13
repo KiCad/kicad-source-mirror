@@ -127,7 +127,7 @@ namespace APP_MONITOR
         void            ResetSentryId();
 
         void LogAssert( const ASSERT_CACHE_KEY& aKey, const wxString& aMsg );
-        void LogException( const wxString& aMsg );
+        void LogException( const wxString& aMsg, bool aUnhandled );
 
     private:
         SENTRY();
