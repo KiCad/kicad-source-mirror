@@ -67,7 +67,7 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 }
 
 
-const char* IO_ERROR::what() const
+const char* IO_ERROR::what() const throw()
 {
     return problem.utf8_str().data();
 }
