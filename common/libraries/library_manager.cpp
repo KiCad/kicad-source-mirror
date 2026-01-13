@@ -496,6 +496,15 @@ void LIBRARY_MANAGER::ProjectChanged()
 }
 
 
+void LIBRARY_MANAGER::AbortAsyncLoads()
+{
+    std::scoped_lock lock( m_adaptersMutex );
+
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->AbortAsyncLoad();
+}
+
+
 void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                                        std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter )
 {
@@ -791,6 +800,12 @@ void LIBRARY_MANAGER_ADAPTER::ProjectChanged()
         std::lock_guard lock( m_libraries_mutex );
         m_libraries.clear();
     }
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::AbortAsyncLoad()
+{
+    abortLoad();
 }
 
 

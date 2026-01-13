@@ -962,6 +962,11 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     // No MDI yet
     if( aSetActive && !m_projects.empty() )
     {
+        // Abort any async library loads before modifying m_projects_list to prevent race
+        // conditions where background threads try to access Prj() while the list is empty.
+        if( PgmOrNull() )
+            Pgm().GetLibraryManager().AbortAsyncLoads();
+
         PROJECT* oldProject = m_projects.begin()->second;
         unloadProjectFile( oldProject, false );
         m_projects.erase( m_projects.begin() );
@@ -1042,6 +1047,11 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
     PROJECT* toRemove = m_projects.at( projectPath );
     bool wasActiveProject = m_projects_list.begin()->get() == toRemove;
+
+    // Abort any async library loads before modifying m_projects_list to prevent race
+    // conditions where background threads try to access Prj() while the list is empty.
+    if( wasActiveProject && PgmOrNull() )
+        Pgm().GetLibraryManager().AbortAsyncLoads();
 
     auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
                             [&]( const std::unique_ptr<PROJECT>& ptr )

@@ -140,6 +140,10 @@ public:
 
     void BlockUntilLoaded();
 
+    /// Aborts any async load in progress; blocks until fully done aborting.
+    /// This is the public interface to allow LIBRARY_MANAGER to abort loads before project changes.
+    void AbortAsyncLoad();
+
     bool IsLibraryLoaded( const wxString& aNickname );
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
@@ -244,6 +248,11 @@ public:
 
     /// Notify all adapters that the project has changed
     void ProjectChanged();
+
+    /// Abort any async library loading operations in progress. This should be called before
+    /// modifying the project list to prevent race conditions with background threads that
+    /// access Prj().
+    void AbortAsyncLoads();
 
     void RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                           std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter );
