@@ -23,13 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GRID_MENU_H
-#define GRID_MENU_H
+#pragma once
 
 #include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;
-class APP_SETTINGS_BASE;
+struct WINDOW_SETTINGS;
 
 class GRID_MENU : public ACTION_MENU
 {
@@ -38,8 +37,7 @@ public:
 
     void UpdateTitle() override;
 
-    static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
-                                 EDA_DRAW_FRAME* aParent );
+    static void BuildChoiceList( wxArrayString* aGridsList, WINDOW_SETTINGS* aCfg, EDA_DRAW_FRAME* aParent );
 
 private:
     ACTION_MENU* create() const override
@@ -50,7 +48,6 @@ private:
     OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override;
     void update() override;
 
+private:
     EDA_DRAW_FRAME* m_parent;
 };
-
-#endif /* GRID_MENU_H */

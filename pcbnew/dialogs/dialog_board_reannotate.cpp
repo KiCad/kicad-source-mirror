@@ -127,7 +127,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_settings = aParentFrame->config();
     wxArrayString gridslist;
-    GRID_MENU::BuildChoiceList( &gridslist, m_settings, aParentFrame );
+    GRID_MENU::BuildChoiceList( &gridslist, m_frame->GetWindowSettings( m_frame->config() ), aParentFrame );
 
     if( -1 == m_gridIndex ) // If no default loaded
         m_gridIndex = m_settings->m_Window.grid.last_size_idx;        // Get the current grid size

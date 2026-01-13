@@ -225,10 +225,10 @@ public:
      *
      * These parameters are saved in KiCad config for each main frame.
      */
-    bool IsGridVisible() const;
+    bool IsGridVisible();
     virtual void SetGridVisibility( bool aVisible );
 
-    bool         IsGridOverridden() const;
+    bool         IsGridOverridden();
     virtual void SetGridOverrides( bool aOverride );
 
     virtual COLOR4D GetGridColor() { return m_gridColor; }
