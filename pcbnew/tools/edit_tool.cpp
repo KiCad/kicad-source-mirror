@@ -2521,7 +2521,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( !localCommit.Empty() )
+        // Don't push a separate undo entry when we're in the middle of a move operation.
+        // The parent move will handle the commit.
+        if( !localCommit.Empty() && !m_dragging )
             localCommit.Push( _( "Rotate" ) );
 
         if( is_hover && !m_dragging )
@@ -2669,7 +2671,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !localCommit.Empty() )
+    // Don't push a separate undo entry when we're in the middle of a move operation.
+    // The parent move will handle the commit.
+    if( !localCommit.Empty() && !m_dragging )
         localCommit.Push( _( "Mirror" ) );
 
     if( selection.IsHover() && !m_dragging )
@@ -2830,7 +2834,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
             static_cast<FOOTPRINT*>( boardItem )->InvalidateComponentClassCache();
     }
 
-    if( !localCommit.Empty() )
+    // Don't push a separate undo entry when we're in the middle of a move operation.
+    // The parent move will handle the commit.
+    if( !localCommit.Empty() && !m_dragging )
         localCommit.Push( _( "Change Side / Flip" ) );
 
     if( selection.IsHover() && !m_dragging )
