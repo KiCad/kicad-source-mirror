@@ -49,7 +49,6 @@ const wxString IO_ERROR::Problem() const
 }
 
 
-
 void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                      const char* aThrowersFunction, int aThrowersLineNumber )
 {
@@ -65,6 +64,12 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                   srcname.AfterLast( '/' ),
                   wxString( aThrowersFunction ),
                   aThrowersLineNumber );
+}
+
+
+const char* IO_ERROR::what() const
+{
+    return problem.utf8_str().data();
 }
 
 

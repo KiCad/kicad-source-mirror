@@ -1106,14 +1106,14 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 
         libfullname = LIBRARY_MANAGER::GetFullURI( *row, true );
     }
+    catch( const IO_ERROR& error )
+    {
+        wxLogTrace( traceLibWatch, "Error: %s", error.What() );
+        return;
+    }
     catch( const std::exception& e )
     {
         DisplayInfoMessage( this, e.what() );
-        return;
-    }
-    catch( const IO_ERROR& error )
-    {
-    wxLogTrace( traceLibWatch, "Error: %s", error.What() );
         return;
     }
 

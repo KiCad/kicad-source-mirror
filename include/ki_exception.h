@@ -73,7 +73,7 @@ private:
  *
  * @author Dick Hollenbeck
  */
-class KICOMMON_API IO_ERROR // : std::exception
+class KICOMMON_API IO_ERROR : public std::exception
 {
 public:
     /**
@@ -91,7 +91,8 @@ public:
         init( aProblem, aThrowersFile, aThrowersFunction, aThrowersLineNumber );
     }
 
-    IO_ERROR() {}
+    IO_ERROR() = default;
+    ~IO_ERROR() throw() {}
 
     void init( const wxString& aProblem, const char* aThrowersFile,
                const char* aThrowersFunction, int aThrowersLineNumber );
@@ -99,9 +100,8 @@ public:
     virtual const wxString Problem() const;         ///< what was the problem?
     virtual const wxString Where() const;           ///< where did the Problem() occur?
 
+    virtual const char*    what() const throw() override; ///< std::exception interface, returned as UTF-8
     virtual const wxString What() const;            ///< A composite of Problem() and Where()
-
-    virtual ~IO_ERROR() throw () {}
 
 protected:
     wxString    problem;
