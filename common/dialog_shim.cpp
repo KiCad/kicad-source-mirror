@@ -68,8 +68,7 @@ END_EVENT_TABLE()
 
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-                          const wxPoint& pos, const wxSize& size, long style,
-                          const wxString& name ) :
+                          const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
         wxDialog( aParent, id, title, pos, size, style, name ),
         KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
         m_units( EDA_UNITS::MM ),
@@ -1278,8 +1277,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     // release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
     // capture making it impossible to do anything in the modal dialog itself
-    wxWindow* win = wxWindow::GetCapture();
-    if( win )
+    if( wxWindow* win = wxWindow::GetCapture() )
         win->ReleaseMouse();
 
     // Get the optimal parent
@@ -1340,8 +1338,7 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
     if( !IsQuasiModal() )
     {
-        wxFAIL_MSG( wxT( "Either DIALOG_SHIM::EndQuasiModal was called twice, or ShowQuasiModal"
-                         "wasn't called" ) );
+        wxFAIL_MSG( wxT( "Either DIALOG_SHIM::EndQuasiModal was called twice, or ShowQuasiModal wasn't called" ) );
         return;
     }
 
@@ -1397,9 +1394,7 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
             // (i.e. the dialog can't refuse to close as it might with OK, because it
             // isn't closing anyway)
             if( Validate() )
-            {
                 ignore_unused( TransferDataFromWindow() );
-            }
         }
         else if( id == wxID_CANCEL )
         {
@@ -1496,11 +1491,12 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( eventSource ) )
         {
             wxString eol = "\n";
+
             switch( scintilla->GetEOLMode() )
             {
             case wxSTC_EOL_CRLF: eol = "\r\n"; break;
-            case wxSTC_EOL_CR: eol = "\r"; break;
-            case wxSTC_EOL_LF: eol = "\n"; break;
+            case wxSTC_EOL_CR:   eol = "\r";   break;
+            case wxSTC_EOL_LF:   eol = "\n";   break;
             }
 
             long pos = scintilla->GetCurrentPos();
