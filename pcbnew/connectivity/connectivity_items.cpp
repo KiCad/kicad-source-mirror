@@ -84,12 +84,12 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
 void CN_ITEM::Dump()
 {
-    wxLogDebug( "    valid: %d, connected: \n", !!Valid() );
+    wxLogTrace( wxT( "CN" ), wxT( "    valid: %d, connected: \n" ), !!Valid() );
 
     for( CN_ITEM* i : m_connected )
     {
         PCB_TRACK* t = static_cast<PCB_TRACK*>( i->Parent() );
-        wxLogDebug( wxT( "    - %p %d\n" ), t, t->Type() );
+        wxLogTrace( wxT( "CN" ), wxT( "    - %p %d\n" ), t, t->Type() );
     }
 }
 

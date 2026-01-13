@@ -165,7 +165,6 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData 
         // Skip empty files
         if( file.compressedEncodedData.empty() )
         {
-            wxLogDebug( wxT( "Error: Embedded file '%s' is empty" ), file.name );
             continue;
         }
 

@@ -2134,9 +2134,6 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
 int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 {
-    // TODO: (JJ) Reserving before v9 string freeze
-    wxLogDebug( _( "Tune Skew" ) );
-
     if( m_isFootprintEditor )
         return 0;
 

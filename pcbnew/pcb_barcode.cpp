@@ -299,16 +299,10 @@ void PCB_BARCODE::ComputeBarcode()
         return;
 
     if( ZBarcode_Encode( symbol.get(), dataPtr, length ) )
-    {
-        wxLogDebug( wxT( "Zint encode error: %s" ), wxString::FromUTF8( symbol->errtxt ) );
         return;
-    }
 
     if( ZBarcode_Buffer_Vector( symbol.get(), 0 ) ) // 0 means success
-    {
-        wxLogDebug( wxT( "Zint render error: %s" ), wxString::FromUTF8( symbol->errtxt ) );
         return;
-    }
 
     for( zint_vector_rect* rect = symbol->vector->rectangles; rect != nullptr; rect = rect->next )
     {

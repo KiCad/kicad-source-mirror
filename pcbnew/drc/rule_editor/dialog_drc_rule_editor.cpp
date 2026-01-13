@@ -72,11 +72,6 @@ DIALOG_DRC_RULE_EDITOR::DIALOG_DRC_RULE_EDITOR( PCB_EDIT_FRAME* aEditorFrame, wx
         m_reporter( nullptr ),
         m_nodeId( 0 )
 {
-        wxSize ctorStartSize = GetSize();
-        wxSize ctorStartMin = GetMinSize();
-        wxLogDebug( "DRC_RULE_EDITOR: ctor START size=(%d,%d) min=(%d,%d)", ctorStartSize.x, ctorStartSize.y,
-                    ctorStartMin.x, ctorStartMin.y );
-
     m_frame = aEditorFrame;
     m_currentBoard = m_frame->GetBoard();
     m_ruleEditorPanel = nullptr;
@@ -124,18 +119,11 @@ bool DIALOG_DRC_RULE_EDITOR::TransferDataToWindow()
     // Ensure minimum size is our intended small value after base sizing logic
     Layout();
     SetMinSize( wxSize( 400, 300 ) );
-    wxSize afterMinApplySize = GetSize();
-    wxSize afterMinApply = GetMinSize();
-    wxLogDebug( "DRC_RULE_EDITOR: TransferDataToWindow AFTER SetMinSize size=(%d,%d) min=(%d,%d)",
-                afterMinApplySize.x, afterMinApplySize.y, afterMinApply.x, afterMinApply.y );
 
     // If SetSizeHints inflated the height (e.g., to full display height), reset to the ctor's
     // intended initial size so that any saved geometry can apply without being trumped by the
     // current oversized height (Show() uses max(current, saved)).
     SetSize( wxSize( 980, 680 ) );
-    wxSize afterResetSize = GetSize();
-    wxLogDebug( "DRC_RULE_EDITOR: TransferDataToWindow AFTER reset to initial size size=(%d,%d) min=(%d,%d)",
-                afterResetSize.x, afterResetSize.y, afterMinApply.x, afterMinApply.y );
 
     return ok;
 }

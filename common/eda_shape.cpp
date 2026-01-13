@@ -2792,10 +2792,7 @@ static struct EDA_SHAPE_DESC
                                    EDA_SHAPE* prop_shape = dynamic_cast<EDA_SHAPE*>( aItem );
 
                                    if( !prop_shape )
-                                   {
-                                       wxLogDebug( wxT( "Corner Radius Validator: Not an EDA_SHAPE" ) );
                                        return std::nullopt;
-                                   }
 
                                    int maxRadius = std::min( prop_shape->GetRectangleWidth(),
                                                              prop_shape->GetRectangleHeight() ) / 2;

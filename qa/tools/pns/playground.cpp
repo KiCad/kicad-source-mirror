@@ -380,10 +380,10 @@ int playground_main_func( int argc, char* argv[] )
 
     collide( pad1Outline, pad2Outline.Outline( 0 ), dist, &dist, &pt1 );
 
-    wxLogDebug( tracePnsPlayground, wxS( "Nearest distance between pad 1 and pad 2 is %0.6f mm "
+    wxLogTrace( tracePnsPlayground, wxS( "Nearest distance between pad 1 and pad 2 is %0.6f mm "
                                          "at X=%0.6f mm,  Y=%0.6f mm." ),
-                pcbIUScale.IUTomm( dist ), pcbIUScale.IUTomm( pt1.x ),
-                pcbIUScale.IUTomm( pt1.y ) );
+                 pcbIUScale.IUTomm( dist ), pcbIUScale.IUTomm( pt1.x ),
+                 pcbIUScale.IUTomm( pt1.y ) );
 
     overlay->SetStrokeColor( YELLOW );
     overlay->SetGlyphSize( { 100000, 100000 } );

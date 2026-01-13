@@ -1311,8 +1311,6 @@ FABMASTER::GRAPHIC_POLYGON* FABMASTER::processPolygon( const FABMASTER::GRAPHIC_
 
     if( s.x != s.y )
     {
-        wxLogDebug( "FABMASTER::processPolygon: Expected x and y to be the same, got x = %s and y = %s ",
-                    aData.graphic_data3, aData.graphic_data4 );
     }
 
     auto new_poly = std::make_unique<GRAPHIC_POLYGON>();
@@ -1571,13 +1569,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
         auto gr_item = std::unique_ptr<GRAPHIC_ITEM>( processGraphic( gr_data, scale_factor ) );
 
         if( !gr_item )
-        {
-            wxLogDebug( wxT( "Unhandled graphic item '%s' in row %zu." ),
-                        gr_data.graphic_dataname.c_str(),
-                        geo_tag.c_str(),
-                        rownum );
             continue;
-        }
 
         gr_item->layer = row[geo_subclass_col];
         gr_item->seq = seq;

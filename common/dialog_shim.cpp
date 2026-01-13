@@ -271,15 +271,7 @@ void DIALOG_SHIM::finishDialogSettings()
 
     // SetSizeHints fixes the minimal size of sizers in the dialog
     // (SetSizeHints calls Fit(), so no need to call it)
-    wxSize beforeSz = GetSize();
-    wxSize beforeMin = GetMinSize();
-    wxLogDebug( "DIALOG_SHIM: finishDialogSettings BEFORE SetSizeHints size=(%d,%d) min=(%d,%d)", beforeSz.x,
-                beforeSz.y, beforeMin.x, beforeMin.y );
     GetSizer()->SetSizeHints( this );
-    wxSize afterSz = GetSize();
-    wxSize afterMin = GetMinSize();
-    wxLogDebug( "DIALOG_SHIM: finishDialogSettings AFTER SetSizeHints size=(%d,%d) min=(%d,%d)", afterSz.x,
-                afterSz.y, afterMin.x, afterMin.y );
 }
 
 
@@ -349,12 +341,6 @@ bool DIALOG_SHIM::Show( bool show )
 
         if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
         {
-            wxSize preApplySz = GetSize();
-            wxSize preApplyMin = GetMinSize();
-            wxLogDebug( "DIALOG_SHIM: Show(true) applying saved geometry saved=(%d,%d,%d,%d) size(before)=(%d,%d) min(before)=(%d,%d)",
-                        savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
-                        savedDialogRect.GetSize().x, savedDialogRect.GetSize().y, preApplySz.x, preApplySz.y,
-                        preApplyMin.x, preApplyMin.y );
             if( m_useCalculatedSize )
             {
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
@@ -366,10 +352,7 @@ bool DIALOG_SHIM::Show( bool show )
                          std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
                          std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ), 0 );
             }
-            wxSize postApplySz = GetSize();
-            wxSize postApplyMin = GetMinSize();
-            wxLogDebug( "DIALOG_SHIM: Show(true) AFTER saved geometry size=(%d,%d) min=(%d,%d)", postApplySz.x,
-                        postApplySz.y, postApplyMin.x, postApplyMin.y );
+
 #ifdef __WXMAC__
             if( m_parent != nullptr )
             {
@@ -380,6 +363,7 @@ bool DIALOG_SHIM::Show( bool show )
                 }
             }
 #endif
+
         }
         else if( m_initialSize != wxDefaultSize )
         {

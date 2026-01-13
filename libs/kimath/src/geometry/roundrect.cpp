@@ -108,10 +108,7 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
     // Handle degenerate cases where dimensions are invalid
     // This can happen with negative inflate values or zero-size rectangles
     if( x_edge < 0 || y_edge < 0 || m_radius < 0 || w <= 0 || h <= 0 )
-    {
-        wxLogDebug( "ROUNDRECT::TransformToPolygon: Degenerate roundrect, skipping polygon generation." );
         return;
-    }
 
     const VECTOR2I& m_p0 = m_rect.GetPosition();
 

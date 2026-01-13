@@ -123,7 +123,7 @@ bool WEBVIEW_PANEL::AddMessageHandler( const wxString& aName, MESSAGE_HANDLER aH
     if( m_initialized )
     {
         if( !m_browser->AddScriptMessageHandler( aName ) )
-            wxLogDebug( "Could not add script message handler %s", aName );
+            wxLogTrace( "webview", "Could not add script message handler %s", aName );
     }
 
     return true;
@@ -164,7 +164,7 @@ void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& aEvt )
             {
                 if( !m_browser->AddScriptMessageHandler( handler.first ) )
                 {
-                    wxLogDebug( "Could not add script message handler %s", handler.first );
+                    wxLogTrace( "webview", "Could not add script message handler %s", handler.first );
                 }
             }
 
@@ -238,7 +238,7 @@ void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& aEvt )
 
     if( it == m_msgHandlers.end() )
     {
-        wxLogDebug( "No handler registered for message: %s", handler );
+        wxLogTrace( "webview", "No handler registered for message: %s", handler );
         return;
     }
 
@@ -247,14 +247,15 @@ void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& aEvt )
     it->second( aEvt.GetString() );
 }
 
+
 void WEBVIEW_PANEL::OnScriptResult( wxWebViewEvent& aEvt )
 {
     if( aEvt.IsError() )
-        wxLogDebug( "Async script execution failed: %s", aEvt.GetString() );
+        wxLogTrace( "webview", "Async script execution failed: %s", aEvt.GetString() );
 }
 
 void WEBVIEW_PANEL::OnError( wxWebViewEvent& aEvt )
 {
     m_loadError = true;
-    wxLogDebug( "WebView error: %s", aEvt.GetString() );
+    wxLogTrace( "webview", "WebView error: %s", aEvt.GetString() );
 }

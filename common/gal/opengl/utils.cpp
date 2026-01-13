@@ -29,7 +29,7 @@
 #include <gal/opengl/kiglew.h> // Must be included first
 
 #include <stdexcept>
-#include <wx/log.h> // wxLogDebug
+#include <wx/log.h> // wxLogTrace
 
 
 /**

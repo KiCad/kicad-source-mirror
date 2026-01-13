@@ -63,7 +63,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
     if( FAILED( coreWebView->QueryInterface( IID_PPV_ARGS( &webView2 ) ) ) )
     {
-        wxLogDebug( "Failed to get ICoreWebView2_2 interface. WebView2 runtime might be too old." );
+        wxLogTrace( "webview", "Failed to get ICoreWebView2_2 interface. WebView2 runtime might be too old." );
         return false;
     }
 
@@ -71,7 +71,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
     if( FAILED( webView2->get_CookieManager( &cookieManager ) ) )
     {
-        wxLogDebug( "Failed to get cookie manager" );
+        wxLogTrace( "webview", "Failed to get cookie manager" );
         return false;
     }
 
@@ -86,7 +86,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
                     {
                         if( FAILED( result ) || !list )
                         {
-                            wxLogDebug( "GetCookies failed or returned null list" );
+                            wxLogTrace( "webview", "GetCookies failed or returned null list" );
                             callbackFinished = true;
                             return S_OK;
                         }
@@ -160,7 +160,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
     if( FAILED( hr ) )
     {
-        wxLogDebug( "Failed to initiate GetCookies" );
+        wxLogTrace( "webview", "Failed to initiate GetCookies" );
         return false;
     }
 
@@ -174,7 +174,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
         if( ( wxGetLocalTimeMillis().GetValue() - startTime ) > 5000 )
         {
-            wxLogDebug( "Timeout waiting for GetCookies callback" );
+            wxLogTrace( "webview", "Timeout waiting for GetCookies callback" );
             return false;
         }
 
@@ -190,7 +190,7 @@ bool SaveCookies( wxWebView* aWebView, const wxString& aTargetFile )
 
     if( !file.IsOpened() )
     {
-        wxLogDebug( "Failed to open cookie file for writing: %s", aTargetFile );
+        wxLogTrace( "webview", "Failed to open cookie file for writing: %s", aTargetFile );
         return false;
     }
 
@@ -222,9 +222,10 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
     ICoreWebView2* coreWebView = static_cast<ICoreWebView2*>( nativeBackend );
 
     ComPtr<ICoreWebView2_2> webView2;
+
     if( FAILED( coreWebView->QueryInterface( IID_PPV_ARGS( &webView2 ) ) ) )
     {
-        wxLogDebug( "Failed to get ICoreWebView2_2 interface" );
+        wxLogTrace( "webview", "Failed to get ICoreWebView2_2 interface" );
         return false;
     }
 
@@ -241,11 +242,12 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
 
     if( !file.IsOpened() )
     {
-        wxLogDebug( "Failed to open cookie file for reading: %s", aSourceFile );
+        wxLogTrace( "webview", "Failed to open cookie file for reading: %s", aSourceFile );
         return false;
     }
 
     wxFileOffset len = file.Length();
+
     if( len == 0 )
         return false;
 
@@ -254,7 +256,7 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
 
     if( file.Read( &jsonStr[0], len ) != len )
     {
-        wxLogDebug( "Failed to read cookie file" );
+        wxLogTrace( "webview", "Failed to read cookie file" );
         return false;
     }
 
@@ -266,7 +268,7 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
     }
     catch( const nlohmann::json::exception& e )
     {
-        wxLogDebug( "Failed to parse cookie JSON: %s", e.what() );
+        wxLogTrace( "webview", "Failed to parse cookie JSON: %s", e.what() );
         return false;
     }
 
@@ -321,7 +323,7 @@ bool DeleteCookies( wxWebView* aWebView )
 
     if( FAILED( coreWebView->QueryInterface( IID_PPV_ARGS( &webView2 ) ) ) )
     {
-        wxLogDebug( "Failed to get ICoreWebView2_2 interface. WebView2 runtime might be too old." );
+        wxLogTrace( "webview", "Failed to get ICoreWebView2_2 interface. WebView2 runtime might be too old." );
         return false;
     }
 
@@ -329,13 +331,13 @@ bool DeleteCookies( wxWebView* aWebView )
 
     if( FAILED( webView2->get_CookieManager( &cookieManager ) ) )
     {
-        wxLogDebug( "Failed to get cookie manager" );
+        wxLogTrace( "webview", "Failed to get cookie manager" );
         return false;
     }
 
     if( FAILED( cookieManager->DeleteAllCookies() ) )
     {
-        wxLogDebug( "Failed to delete all cookies" );
+        wxLogTrace( "webview", "Failed to delete all cookies" );
         return false;
     }
 

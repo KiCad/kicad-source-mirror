@@ -70,23 +70,27 @@ bool DeleteCookies( wxWebView* aWebView )
 
     // Load symbols
     auto get_context = (webkit_web_view_get_context_t) dlsym(RTLD_DEFAULT, "webkit_web_view_get_context");
-    auto get_data_manager = (webkit_web_context_get_website_data_manager_t) dlsym(RTLD_DEFAULT, "webkit_web_context_get_website_data_manager");
-    auto clear_data = (webkit_website_data_manager_clear_t) dlsym(RTLD_DEFAULT, "webkit_website_data_manager_clear");
+    auto get_data_manager = (webkit_web_context_get_website_data_manager_t) dlsym( RTLD_DEFAULT, "webkit_web_context_get_website_data_manager" );
+    auto clear_data = (webkit_website_data_manager_clear_t) dlsym( RTLD_DEFAULT, "webkit_website_data_manager_clear" );
 
     if( !get_context || !get_data_manager || !clear_data )
     {
-        wxLogDebug("Failed to load WebKit symbols");
+        wxLogTrace( "webview", "Failed to load WebKit symbols" );
         return false;
     }
 
     WebKitWebView* webView = (WebKitWebView*) nativeBackend;
     WebKitWebContext* context = get_context(webView);
-    if( !context ) return false;
+
+    if( !context )
+        return false;
 
     WebKitWebsiteDataManager* dataManager = get_data_manager(context);
-    if( !dataManager ) return false;
 
-    clear_data(dataManager, WEBKIT_WEBSITE_DATA_COOKIES, 0, nullptr, nullptr, nullptr);
+    if( !dataManager )
+        return false;
+
+    clear_data( dataManager, WEBKIT_WEBSITE_DATA_COOKIES, 0, nullptr, nullptr, nullptr );
 
     return true;
 }

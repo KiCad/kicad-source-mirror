@@ -449,13 +449,14 @@ void BEZIER_POLY::cubicParabolicApprox( std::vector<VECTOR2D>& aOutput, double a
     {
         if( c->isNaN() )
         {
-            wxLogDebug( "cubicParabolicApprox: NaN detected" );
+            wxLogTrace(  BEZIER_DBG, "cubicParabolicApprox: NaN detected" );
             break;
         }
 
         if( c->isFlat( aMaxError ) )
         {
-            wxLogTrace( BEZIER_DBG, "cubicParabolicApprox: General Flatness detected, adding %f %f", c->m_ctrlPts[3].x, c->m_ctrlPts[3].y );
+            wxLogTrace( BEZIER_DBG, "cubicParabolicApprox: General Flatness detected, adding %f %f",
+                        c->m_ctrlPts[3].x, c->m_ctrlPts[3].y );
             // If the subsegment deviation satisfies the flatness criterion, store the last point and stop
             aOutput.push_back( c->m_ctrlPts[3] );
             break;
