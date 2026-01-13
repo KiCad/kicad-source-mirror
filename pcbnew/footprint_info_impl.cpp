@@ -191,6 +191,10 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     auto fp_thread =
             [ this, &queue_parsed ]() -> size_t
             {
+                // Each thread pool worker needs its own KIID_NIL_SET_RESET since g_createNilUuids
+                // is thread_local. This prevents generating real UUIDs for temporary footprint data.
+                KIID_NIL_SET_RESET reset_kiid;
+
                 wxString nickname;
 
                 if( m_cancelled || !m_queue.pop( nickname ) )

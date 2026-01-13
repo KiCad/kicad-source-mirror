@@ -61,8 +61,9 @@ static boost::uuids::nil_generator                          nilGenerator;
 KIID niluuid( 0 );
 
 
-// When true, always create nil uuids for performance, when valid ones aren't needed
-static bool g_createNilUuids = false;
+// When true, always create nil uuids for performance, when valid ones aren't needed.
+// Thread-local to prevent background library loading from affecting other threads.
+static thread_local bool g_createNilUuids = false;
 
 
 // For static initialization
