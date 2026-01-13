@@ -2045,7 +2045,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
                 if( !pin->IsSelected()
-                    && pin->GetPosition() == aSelectedItem->GetPosition()
+                    && pin->GetPosition() == aPoint
                     && pin->CanConnect( aSelectedItem ) )
                 {
                     itemsConnectable.push_back( pin );
