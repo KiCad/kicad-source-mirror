@@ -92,8 +92,8 @@ void PROJECT_TREE::LoadIcons()
             wxBitmap       padded( paddedSize, paddedSize, 32 );
 
             {
+                padded.UseAlpha();
                 wxMemoryDC dc( padded );
-                dc.Clear();
                 dc.DrawBitmap( bmp, c_padding * scale, c_padding * scale );
             }
 
