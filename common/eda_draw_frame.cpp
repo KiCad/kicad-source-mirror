@@ -379,7 +379,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 
-    GetToolManager()->RunAction( ACTIONS::gridPreset, config()->m_Window.grid.last_size_idx );
+    GetToolManager()->RunAction( ACTIONS::gridPreset, GetWindowSettings( config() )->grid.last_size_idx );
     UpdateGridSelectBox();
 
     if( m_lastToolbarIconSize == 0
@@ -434,7 +434,7 @@ void EDA_DRAW_FRAME::UpdateGridSelectBox()
 
     wxCHECK( config(), /* void */ );
 
-    GRID_MENU::BuildChoiceList( &gridsList, config(), this );
+    GRID_MENU::BuildChoiceList( &gridsList, GetWindowSettings( config() ), this );
 
     for( const wxString& grid : gridsList )
         m_gridSelectBox->Append( grid );
@@ -442,7 +442,7 @@ void EDA_DRAW_FRAME::UpdateGridSelectBox()
     m_gridSelectBox->Append( wxT( "---" ) );
     m_gridSelectBox->Append( _( "Edit Grids..." ) );
 
-    m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
+    m_gridSelectBox->SetSelection( GetWindowSettings( config() )->grid.last_size_idx );
 }
 
 
@@ -455,7 +455,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     wxCHECK( config(), /* void */ );
 
-    int idx = config()->m_Window.grid.last_size_idx;
+    int idx = GetWindowSettings( config() )->grid.last_size_idx;
     idx = std::clamp( idx, 0, (int) m_gridSelectBox->GetCount() - 1 );
 
     if( idx != m_gridSelectBox->GetSelection() )
@@ -475,7 +475,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     wxCHECK( config(), /* void */ );
 
-    const std::vector<double>& zoomList = config()->m_Window.zoom_factors;
+    const std::vector<double>& zoomList = GetWindowSettings( config() )->zoom_factors;
     int                        curr_selection = m_zoomSelectBox->GetSelection();
     int                        new_selection = 0;      // select zoom auto
     double                     last_approx = 1e9;      // large value to start calculation
@@ -548,11 +548,11 @@ bool EDA_DRAW_FRAME::GetOverrideLocks() const
 }
 
 
-bool EDA_DRAW_FRAME::IsGridVisible() const
+bool EDA_DRAW_FRAME::IsGridVisible()
 {
     wxCHECK( config(), true );
 
-    return config()->m_Window.grid.show;
+    return GetWindowSettings( config() )->grid.show;
 }
 
 
@@ -560,7 +560,7 @@ void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 {
     wxCHECK( config(), /* void */ );
 
-    config()->m_Window.grid.show = aVisible;
+    GetWindowSettings( config() )->grid.show = aVisible;
 
     // Update the display with the new grid
     if( GetCanvas() )
@@ -578,11 +578,11 @@ void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-bool EDA_DRAW_FRAME::IsGridOverridden() const
+bool EDA_DRAW_FRAME::IsGridOverridden()
 {
     wxCHECK( config(), false );
 
-    return config()->m_Window.grid.overrides_enabled;
+    return GetWindowSettings( config() )->grid.overrides_enabled;
 }
 
 
@@ -590,7 +590,7 @@ void EDA_DRAW_FRAME::SetGridOverrides( bool aOverride )
 {
     wxCHECK( config(), /* void */ );
 
-    config()->m_Window.grid.overrides_enabled = aOverride;
+    GetWindowSettings( config() )->grid.overrides_enabled = aOverride;
 }
 
 
@@ -613,9 +613,9 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
 
     wxCHECK( config(), /* void */ );
 
-    for( unsigned ii = 0;  ii < config()->m_Window.zoom_factors.size();  ++ii )
+    for( unsigned ii = 0;  ii < GetWindowSettings( config() )->zoom_factors.size();  ++ii )
     {
-        double current = config()->m_Window.zoom_factors[ii];
+        double current = GetWindowSettings( config() )->zoom_factors[ii];
 
         m_zoomSelectBox->Append( wxString::Format( _( "Zoom %.2f" ), current ) );
 

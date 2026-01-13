@@ -114,7 +114,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
                             { wxID_CANCEL, _( "Close" )          } } );
 
     wxArrayString gridslist;
-    GRID_MENU::BuildChoiceList( &gridslist, m_frame->config(), aParentFrame );
+    GRID_MENU::BuildChoiceList( &gridslist, m_frame->GetWindowSettings( m_frame->config() ), aParentFrame );
 
     m_GridChoice->Set( gridslist );
 

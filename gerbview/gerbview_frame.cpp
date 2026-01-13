@@ -713,14 +713,13 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     {
     case LAYER_DCODES:                return gvconfig()->m_Appearance.show_dcodes;
     case LAYER_NEGATIVE_OBJECTS:      return gvconfig()->m_Appearance.show_negative_objects;
-    case LAYER_GERBVIEW_GRID:         return IsGridVisible();
+    case LAYER_GERBVIEW_GRID:         return gvconfig()->m_Window.grid.show;
     case LAYER_GERBVIEW_DRAWINGSHEET: return gvconfig()->m_Appearance.show_border_and_titleblock;
     case LAYER_GERBVIEW_PAGE_LIMITS:  return gvconfig()->m_Display.m_DisplayPageLimits;
     case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ),
-                                      aLayerID ) );
+        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aLayerID ) );
     }
 
     return true;

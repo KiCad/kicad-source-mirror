@@ -59,12 +59,12 @@ void GRID_MENU::UpdateTitle()
 
 void GRID_MENU::update()
 {
-    APP_SETTINGS_BASE* settings = m_parent->config();
-    unsigned int       current = settings->m_Window.grid.last_size_idx + ID_POPUP_GRID_START;
-    wxArrayString      gridsList;
-    int                i = ID_POPUP_GRID_START;
+    WINDOW_SETTINGS* cfg = m_parent->GetWindowSettings( m_parent->config() );
+    unsigned int     current = cfg->grid.last_size_idx + ID_POPUP_GRID_START;
+    wxArrayString    gridsList;
+    int              i = ID_POPUP_GRID_START;
 
-    GRID_MENU::BuildChoiceList( &gridsList, settings, m_parent );
+    GRID_MENU::BuildChoiceList( &gridsList, cfg, m_parent );
 
     while( GetMenuItemCount() > 0 )
         Delete( FindItemByPosition( 0 ) );
@@ -80,8 +80,7 @@ void GRID_MENU::update()
 }
 
 
-void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
-                                 EDA_DRAW_FRAME* aParent )
+void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, WINDOW_SETTINGS* aCfg, EDA_DRAW_FRAME* aParent )
 {
     wxString     msg;
     EDA_IU_SCALE scale = aParent->GetIuScale();
@@ -90,7 +89,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     aParent->GetUnitPair( primaryUnit, secondaryUnit );
 
-    for( GRID& gridSize : aCfg->m_Window.grid.grids )
+    for( GRID& gridSize : aCfg->grid.grids )
     {
         wxString name;
 
