@@ -27,6 +27,7 @@
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <embedded_files.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -360,29 +361,59 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         if( !fp_model.m_Show || fp_model.m_Filename.empty() )
             continue;
 
-        std::vector<wxString> searchedPaths;
+        std::vector<wxString>              searchedPaths;
         std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
         embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
         embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
-        wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath, embeddedFilesStack );
+        wxString mainPath = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath,
+                                                     embeddedFilesStack );
 
-        if( mname.empty() || !wxFileName::FileExists( mname ) )
+        if( mainPath.empty() || !wxFileName::FileExists( mainPath ) )
         {
             // the error path will return an empty name sometimes, at least report back the original filename
-            if( mname.empty() )
-                mname = fp_model.m_Filename;
+            if( mainPath.empty() )
+                mainPath = fp_model.m_Filename;
 
             m_reporter->Report( wxString::Format( _( "Could not add 3D model for %s.\n"
                                                      "File not found: %s\n" ),
-                                                  aFootprint->GetReference(),
-                                                  mname ),
+                                                  aFootprint->GetReference(), mainPath ),
                                 RPT_SEVERITY_WARNING );
             continue;
         }
 
-        std::string fname( mname.ToUTF8() );
-        std::string refName( aFootprint->GetReference().ToUTF8() );
+        wxString baseName =
+                fp_model.m_Filename.AfterLast( '/' ).AfterLast( '\\' ).BeforeLast( '.' );
+
+        std::vector<wxString> altFilenames;
+
+        // Add embedded files to alternative filenames
+        if( fp_model.m_Filename.StartsWith( FILEEXT::KiCadUriPrefix + "://" ) )
+        {
+            for( const EMBEDDED_FILES* filesPtr : embeddedFilesStack )
+            {
+                const auto& map = filesPtr->EmbeddedFileMap();
+
+                for( auto& [fname, file] : map )
+                {
+                    if( fname.BeforeLast( '.' ) == baseName )
+                    {
+                        wxFileName temp_file = filesPtr->GetTemporaryFileName( fname );
+
+                        if( !temp_file.IsOk() )
+                            continue;
+
+                        wxString altPath = temp_file.GetFullPath();
+
+                        if( mainPath == altPath )
+                            continue;
+
+                        altFilenames.emplace_back( altPath );
+                    }
+                }
+            }
+        }
+
         try
         {
             bool bottomSide = aFootprint->GetLayer() == B_Cu;
@@ -392,11 +423,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
             modelRot *= M_PI;
             modelRot /= 180.0;
 
-            if( m_pcbModel->AddComponent( fname, refName, bottomSide,
-                                          newpos,
-                                          aFootprint->GetOrientation().AsRadians(),
-                                          fp_model.m_Offset, modelRot,
-                                          fp_model.m_Scale, m_params.m_SubstModels ) )
+            if( m_pcbModel->AddComponent(
+                        baseName, mainPath, altFilenames, aFootprint->GetReference(), bottomSide,
+                        newpos, aFootprint->GetOrientation().AsRadians(), fp_model.m_Offset,
+                        modelRot, fp_model.m_Scale, m_params.m_SubstModels ) )
             {
                 hasdata = true;
             }

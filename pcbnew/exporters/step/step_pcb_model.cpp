@@ -1205,28 +1205,30 @@ bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LA
 }
 
 
-bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::string& aRefDes,
-                             bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
-                             VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels )
+bool STEP_PCB_MODEL::AddComponent( const wxString& aBaseName, const wxString& aFileName,
+                                   const std::vector<wxString>& aAltFilenames,
+                                   const wxString& aRefDes, bool aBottom, VECTOR2D aPosition,
+                                   double aRotation, VECTOR3D aOffset, VECTOR3D aOrientation,
+                                   VECTOR3D aScale, bool aSubstituteModels )
 {
-    if( aFileNameUTF8.empty() )
+    if( aFileName.empty() )
     {
         m_reporter->Report( wxString::Format( _( "No model defined for %s." ), aRefDes ),
                             RPT_SEVERITY_WARNING );
         return false;
     }
 
-    wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
     m_reporter->Report( wxString::Format( wxT( "Adding component %s." ), aRefDes ), RPT_SEVERITY_DEBUG );
 
     // first retrieve a label
     TDF_Label lmodel;
     wxString  errorMessage;
 
-    if( !getModelLabel( aFileNameUTF8, aScale, lmodel, aSubstituteModels, &errorMessage ) )
+    if( !getModelLabel( aBaseName, aFileName, aAltFilenames, aScale, lmodel, aSubstituteModels,
+                        &errorMessage ) )
     {
         if( errorMessage.IsEmpty() )
-            errorMessage.Printf( _( "No model for filename '%s'." ), fileName );
+            errorMessage.Printf( _( "No model for filename '%s'." ), aFileName );
 
         m_reporter->Report( errorMessage, RPT_SEVERITY_ERROR );
         return false;
@@ -1237,7 +1239,8 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        m_reporter->Report( wxString::Format( _( "No location data for filename '%s'." ), fileName ),
+        m_reporter->Report(
+                wxString::Format( _( "No location data for filename '%s'." ), aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -1247,13 +1250,14 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 
     if( llabel.IsNull() )
     {
-        m_reporter->Report( wxString::Format( _( "Could not add component with filename '%s'." ), fileName ),
+        m_reporter->Report(
+                wxString::Format( _( "Could not add component with filename '%s'." ), aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
 
     // attach the RefDes name
-    TCollection_ExtendedString refdes( aRefDes.c_str() );
+    TCollection_ExtendedString refdes( aRefDes.utf8_str() );
     TDataStd_Name::Set( llabel, refdes );
 
     return true;
@@ -2694,11 +2698,15 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 }
 
 
-bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D aScale, TDF_Label& aLabel,
-                              bool aSubstituteModels, wxString* aErrorMessage )
+bool STEP_PCB_MODEL::getModelLabel( const wxString& aBaseName, const wxString& aFileName,
+                                    const std::vector<wxString>& aAltFilenames, VECTOR3D aScale,
+                                    TDF_Label& aLabel, bool aSubstituteModels,
+                                    wxString* aErrorMessage )
 {
-    std::string model_key = aFileNameUTF8 + "_" + std::to_string( aScale.x )
-                            + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
+    std::string fileNameUTF8 = aFileName.utf8_string();
+
+    std::string model_key = fileNameUTF8 + "_" + std::to_string( aScale.x ) + "_"
+                            + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
 
     MODEL_MAP::const_iterator mm = m_models.find( model_key );
 
@@ -2713,26 +2721,23 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     Handle( TDocStd_Document )  doc;
     m_app->NewDocument( "MDTV-XCAF", doc );
 
-    wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
-    MODEL3D_FORMAT_TYPE modelFmt = fileType( aFileNameUTF8.c_str() );
+    MODEL3D_FORMAT_TYPE modelFmt = fileType( fileNameUTF8.c_str() );
 
     switch( modelFmt )
     {
     case FMT_IGES:
-        if( !readIGES( doc, aFileNameUTF8.c_str() ) )
+        if( !readIGES( doc, fileNameUTF8.c_str() ) )
         {
-            m_reporter->Report( wxString::Format( wxT( "readIGES() failed on filename '%s'." ),
-                                                  fileName ),
+            m_reporter->Report( wxString::Format( wxT( "readIGES() failed on filename '%s'." ), aFileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }
         break;
 
     case FMT_STEP:
-        if( !readSTEP( doc, aFileNameUTF8.c_str() ) )
+        if( !readSTEP( doc, fileNameUTF8.c_str() ) )
         {
-            m_reporter->Report( wxString::Format( wxT( "readSTEP() failed on filename '%s'." ),
-                                                  fileName ),
+            m_reporter->Report( wxString::Format( wxT( "readSTEP() failed on filename '%s'." ), aFileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }
@@ -2742,8 +2747,8 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
     {
         // To export a compressed step file (.stpz or .stp.gz file), the best way is to
         // decaompress it in a temporaty file and load this temporary file
-        wxFFileInputStream ifile( fileName );
-        wxFileName         outFile( fileName );
+        wxFFileInputStream ifile( aFileName );
+        wxFileName         outFile( aFileName );
 
         outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
         outFile.SetExt( wxT( "step" ) );
@@ -2752,60 +2757,62 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         if( size == wxInvalidOffset )
         {
             m_reporter->Report( wxString::Format( wxT( "getModelLabel() failed on filename '%s'." ),
-                                                  fileName ),
+                                                  aFileName ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }
 
         {
-            bool                success = false;
-            wxFFileOutputStream ofile( outFile.GetFullPath() );
+            bool success = false;
 
-            if( !ofile.IsOk() )
-                return false;
-
-            char* buffer = new char[size];
-
-            ifile.Read( buffer, size );
-            std::string expanded;
-
-            try
             {
-                expanded = gzip::decompress( buffer, size );
-                success = true;
-            }
-            catch( ... )
-            {
-                m_reporter->Report( wxString::Format( wxT( "failed to decompress '%s'." ),
-                                                      fileName ),
-                                    RPT_SEVERITY_ERROR );
-            }
+                wxFFileOutputStream ofile( outFile.GetFullPath() );
 
-            if( expanded.empty() )
-            {
-                ifile.Reset();
-                ifile.SeekI( 0 );
-                wxZipInputStream            izipfile( ifile );
-                std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
+                if( !ofile.IsOk() )
+                    return false;
 
-                if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
+                char* buffer = new char[size];
+
+                ifile.Read( buffer, size );
+                std::string expanded;
+
+                try
                 {
-                    izipfile.Read( ofile );
+                    expanded = gzip::decompress( buffer, size );
                     success = true;
                 }
-            }
-            else
-            {
-                ofile.Write( expanded.data(), expanded.size() );
-            }
+                catch( ... )
+                {
+                    m_reporter->Report(
+                            wxString::Format( wxT( "failed to decompress '%s'." ), aFileName ),
+                            RPT_SEVERITY_ERROR );
+                }
 
-            delete[] buffer;
-            ofile.Close();
+                if( expanded.empty() )
+                {
+                    ifile.Reset();
+                    ifile.SeekI( 0 );
+                    wxZipInputStream            izipfile( ifile );
+                    std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
+
+                    if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
+                    {
+                        izipfile.Read( ofile );
+                        success = true;
+                    }
+                }
+                else
+                {
+                    ofile.Write( expanded.data(), expanded.size() );
+                }
+
+                delete[] buffer;
+            }
 
             if( success )
             {
-                std::string altFileNameUTF8 = TO_UTF8( outFile.GetFullPath() );
-                success = getModelLabel( altFileNameUTF8, VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false );
+                success = getModelLabel( aBaseName, outFile.GetFullPath(), aAltFilenames,
+                                         VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false );
             }
 
             return success;
@@ -2826,7 +2833,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
          */
         if( aSubstituteModels )
         {
-            wxFileName wrlName( fileName );
+            wxFileName wrlName( aFileName );
 
             wxString basePath = wrlName.GetPath();
             wxString baseName = wrlName.GetName();
@@ -2857,14 +2864,30 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
             //TODO - Other alternative formats?
 
-            for( const auto& alt : alts )
+            for( const auto& altExt : alts )
             {
-                wxFileName altFile( basePath, baseName + wxT( "." ) + alt );
+                wxFileName altFile;
+
+                if( !aAltFilenames.empty() )
+                {
+                    for( const wxString& altPath : aAltFilenames )
+                    {
+                        wxFileName iterFn( altPath );
+
+                        if( iterFn.GetExt() == altExt )
+                        {
+                            altFile = iterFn;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    altFile = wxFileName( basePath, baseName + wxT( "." ) + altExt );
+                }
 
                 if( altFile.IsOk() && altFile.FileExists() )
                 {
-                    std::string altFileNameUTF8 = TO_UTF8( altFile.GetFullPath() );
-
                     // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
                     // to the new STEP model.  This process of auto-substitution is janky as all
                     // heck so let's not mix up un-displayed scale factors with potentially
@@ -2872,7 +2895,8 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                     // named "model.wrl" and "model.stp" referring to different parts.
                     // TODO: Fix model handling in v7.  Default models should only be STP.
                     //       Have option to override this in DISPLAY.
-                    if( getModelLabel( altFileNameUTF8, VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false ) )
+                    if( getModelLabel( aBaseName, altFile.GetFullPath(), {},
+                                       VECTOR3D( 1.0, 1.0, 1.0 ), aLabel, false ) )
                     {
                         return true;
                     }
@@ -2884,7 +2908,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
             if( m_outFmt == OUTPUT_FORMAT::FMT_OUT_GLTF || m_outFmt == OUTPUT_FORMAT::FMT_OUT_STL
                 || m_outFmt == OUTPUT_FORMAT::FMT_OUT_PLY )
             {
-                if( readVRML( doc, aFileNameUTF8.c_str() ) )
+                if( readVRML( doc, fileNameUTF8.c_str() ) )
                 {
                     Handle( XCAFDoc_ShapeTool ) shapeTool =
                             XCAFDoc_DocumentTool::ShapeTool( doc->Main() );
@@ -2894,9 +2918,11 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
                 }
                 else
                 {
-                    m_reporter->Report( wxString::Format( wxT( "readVRML() failed on filename '%s'." ),
-                                                          fileName ),
-                                        RPT_SEVERITY_ERROR );
+                    m_reporter->Report(
+                            wxString::Format( wxT( "readVRML() failed on filename '%s'." ),
+                                              aFileName ),
+                            RPT_SEVERITY_ERROR );
+
                     return false;
                 }
             }
@@ -2914,8 +2940,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         // TODO: implement IDF and EMN converters
 
     default:
-        m_reporter->Report( wxString::Format( _( "Cannot identify actual file type for '%s'." ),
-                                              fileName ),
+        m_reporter->Report( wxString::Format( _( "Cannot identify actual file type for '%s'." ), aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2924,17 +2949,14 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
 
     if( aLabel.IsNull() )
     {
-        m_reporter->Report( wxString::Format( _( "Could not transfer model data from file '%s'." ),
-                                              fileName  ),
+        m_reporter->Report( wxString::Format( _( "Could not transfer model data from file '%s'." ), aFileName ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
 
     // attach the PART NAME ( base filename: note that in principle
     // different models may have the same base filename )
-    wxFileName afile( fileName );
-    std::string pname( afile.GetName().ToUTF8() );
-    TCollection_ExtendedString partname( pname.c_str() );
+    TCollection_ExtendedString partname( aBaseName.utf8_str() );
     TDataStd_Name::Set( aLabel, partname );
 
     m_models.insert( MODEL_DATUM( model_key, aLabel ) );

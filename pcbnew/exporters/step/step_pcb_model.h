@@ -115,8 +115,9 @@ public:
                            const VECTOR2D& aOrigin, const wxString& aNetname );
 
     // add a component at the given position and orientation
-    bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
-                       VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
+    bool AddComponent( const wxString& aBaseName, const wxString& aFileName,
+                       const std::vector<wxString>& aAltFilenames, const wxString& aRefDes,
+                       bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
                        VECTOR3D aOrientation, VECTOR3D aScale, bool aSubstituteModels = true );
 
     void SetCopperColor( double r, double g, double b );
@@ -232,17 +233,21 @@ private:
     /**
      * Load a 3D model data.
      *
-     * @param aFileNameUTF8 is the filename encoded UTF8 (different formats allowed)
+     * @param aBaseName is the model name to set.
+     * @param aFileName is the filename (different formats allowed)
      * but for WRML files a model data can be loaded instead of the vrml data,
      * not suitable in a step file.
+     * @param aAltFilenames provides additional filenames for WRL substitution.
      * @param aScale is the X,Y,Z scaling factors.
      * @param aLabel is the TDF_Label to store the data.
      * @param aSubstituteModels = true to allows data substitution, false to disallow.
      * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
      * @return true if successfully loaded, false on error.
      */
-    bool getModelLabel( const std::string& aFileNameUTF8, VECTOR3D aScale, TDF_Label& aLabel,
-                        bool aSubstituteModels, wxString* aErrorMessage = nullptr );
+    bool getModelLabel( const wxString& aBaseName, const wxString& aFileName,
+                        const std::vector<wxString>& aAltFilenames, VECTOR3D aScale,
+                        TDF_Label& aLabel, bool aSubstituteModels,
+                        wxString* aErrorMessage = nullptr );
 
     bool getModelLocation( bool aBottom, VECTOR2D aPosition, double aRotation, VECTOR3D aOffset,
                            VECTOR3D aOrientation, TopLoc_Location& aLocation );
