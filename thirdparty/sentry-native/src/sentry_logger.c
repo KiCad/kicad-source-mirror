@@ -1,11 +1,13 @@
 #include "sentry_logger.h"
 #include "sentry_core.h"
-#include "sentry_options.h"
+#include "sentry_string.h"
+#include "sentry_sync.h"
 
 #include <stdio.h>
 #include <string.h>
 
-static sentry_logger_t g_logger = { NULL, NULL };
+static sentry_logger_t g_logger = { NULL, NULL, SENTRY_LEVEL_DEBUG };
+static volatile long g_logger_enabled = 1;
 
 void
 sentry__logger_set_global(sentry_logger_t logger)
@@ -52,8 +54,12 @@ sentry__logger_defaultlogger(
     const char *prefix = "[sentry] ";
     const char *priority = sentry__logger_describe(level);
 
-    size_t len = strlen(prefix) + strlen(priority) + strlen(message) + 2;
+    size_t len = strlen(prefix) + strlen(priority)
+        + sentry__guarded_strlen(message) + 2;
     char *format = sentry_malloc(len);
+    if (!format) {
+        return;
+    }
     snprintf(format, len, "%s%s%s\n", prefix, priority, message);
 
     vfprintf(stderr, format, args);
@@ -67,6 +73,8 @@ const char *
 sentry__logger_describe(sentry_level_t level)
 {
     switch (level) {
+    case SENTRY_LEVEL_TRACE:
+        return "TRACE ";
     case SENTRY_LEVEL_DEBUG:
         return "DEBUG ";
     case SENTRY_LEVEL_INFO:
@@ -85,6 +93,12 @@ sentry__logger_describe(sentry_level_t level)
 void
 sentry__logger_log(sentry_level_t level, const char *message, ...)
 {
+    if (!sentry__atomic_fetch(&g_logger_enabled)) {
+        return;
+    }
+    if (level < g_logger.logger_level) {
+        return;
+    }
     sentry_logger_t logger = g_logger;
     if (logger.logger_func) {
         va_list args;
@@ -92,4 +106,16 @@ sentry__logger_log(sentry_level_t level, const char *message, ...)
         logger.logger_func(level, message, args, logger.logger_data);
         va_end(args);
     }
+}
+
+void
+sentry__logger_enable(void)
+{
+    sentry__atomic_store(&g_logger_enabled, 1);
+}
+
+void
+sentry__logger_disable(void)
+{
+    sentry__atomic_store(&g_logger_enabled, 0);
 }

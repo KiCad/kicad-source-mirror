@@ -35,7 +35,9 @@ std::vector<std::string> BuildHandlerArgvStrings(
     const std::string& http_proxy,
     const std::map<std::string, std::string>& annotations,
     const std::vector<std::string>& arguments,
-    const std::vector<base::FilePath>& attachments) {
+    const std::vector<base::FilePath>& attachments,
+    const base::FilePath& crash_reporter,
+    const base::FilePath& crash_envelope) {
   std::vector<std::string> argv_strings(1, handler.value());
 
   for (const auto& argument : arguments) {
@@ -67,6 +69,16 @@ std::vector<std::string> BuildHandlerArgvStrings(
   for (const auto& attachment : attachments) {
     argv_strings.push_back(
         FormatArgumentString("attachment", attachment.value()));
+  }
+
+  if (!crash_reporter.empty()) {
+    argv_strings.push_back(
+        FormatArgumentString("crash-reporter", crash_reporter.value()));
+  }
+
+  if (!crash_envelope.empty()) {
+    argv_strings.push_back(
+        FormatArgumentString("crash-envelope", crash_envelope.value()));
   }
 
   return argv_strings;

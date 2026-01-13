@@ -1,6 +1,8 @@
 add_library(crashpad_handler_lib STATIC
     crash_report_upload_thread.cc
     crash_report_upload_thread.h
+    crash_report_upload_rate_limit.cc
+    crash_report_upload_rate_limit.h
     handler_main.cc
     handler_main.h
     minidump_to_upload_parameters.cc
@@ -69,12 +71,6 @@ if(WIN32)
     endif()
 endif()
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(crashpad_handler_lib PRIVATE
-        "-Wno-multichar"
-    )
-endif()
-
 set_property(TARGET crashpad_handler_lib PROPERTY EXPORT_NAME handler)
 add_library(crashpad::handler_lib ALIAS crashpad_handler_lib)
 
@@ -89,6 +85,11 @@ if(NOT IOS)
         main.cc
     )
 
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(crashpad_handler PRIVATE
+            $<$<COMPILE_LANGUAGE:CXX>:-Wno-ignored-attributes>
+        )
+    endif()
     if(LINUX)
         target_sources(crashpad_handler PRIVATE
             ../client/pthread_create_linux.cc
@@ -112,6 +113,10 @@ if(NOT IOS)
     if(WIN32)
         if(MSVC)
             target_link_options(crashpad_handler PRIVATE "/SUBSYSTEM:WINDOWS")
+        endif()
+
+        if (COMMAND sentry_add_version_resource)
+            sentry_add_version_resource(crashpad_handler "Crashpad Handler")
         endif()
     endif()
 
@@ -142,7 +147,12 @@ if (WIN32)
 
     set_property(TARGET crashpad_wer PROPERTY EXPORT_NAME crashpad_wer)
     set_property(TARGET crashpad_wer PROPERTY PREFIX "") # ensure MINGW doesn't prefix "lib" to dll name
+    set_property(TARGET crashpad_wer PROPERTY DEBUG_POSTFIX "") # prevent CMAKE_DEBUG_POSTFIX from being applied
     add_library(crashpad::wer ALIAS crashpad_wer)
+
+    if (COMMAND sentry_add_version_resource)
+        sentry_add_version_resource(crashpad_wer "Crashpad WER Module")
+    endif()
 
     install(TARGETS crashpad_wer EXPORT crashpad_export
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"

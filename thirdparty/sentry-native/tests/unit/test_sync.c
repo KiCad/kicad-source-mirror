@@ -4,7 +4,7 @@
 
 #ifdef SENTRY_PLATFORM_WINDOWS
 #    include <windows.h>
-#    define sleep_s(SECONDS) Sleep((SECONDS)*1000)
+#    define sleep_s(SECONDS) Sleep((SECONDS) * 1000)
 #else
 #    include <unistd.h>
 #    define sleep_s(SECONDS) sleep(SECONDS)
@@ -33,7 +33,7 @@ SENTRY_TEST(background_worker)
 {
     for (size_t i = 0; i < 100; i++) {
         sentry_bgworker_t *bgw = sentry__bgworker_new(NULL, NULL);
-        TEST_CHECK(!!bgw);
+        TEST_ASSERT(!!bgw);
 
         sentry__bgworker_start(bgw);
 
@@ -58,11 +58,23 @@ sleep_task(void *UNUSED(data), void *UNUSED(state))
     sleep_s(1);
 }
 
+static sentry_cond_t trailing_task_done;
+#ifdef SENTRY__MUTEX_INIT_DYN
+SENTRY__MUTEX_INIT_DYN(executed_lock)
+#else
+static sentry_mutex_t executed_lock = SENTRY__MUTEX_INIT;
+#endif
+
 static void
 trailing_task(void *data, void *UNUSED(state))
 {
+    SENTRY__MUTEX_INIT_DYN_ONCE(executed_lock);
+
+    sentry__mutex_lock(&executed_lock);
     bool *executed = (bool *)data;
     *executed = true;
+    sentry__mutex_unlock(&executed_lock);
+    sentry__cond_wake(&trailing_task_done);
 }
 
 static bool
@@ -87,11 +99,16 @@ collect(void *task, void *data)
 
 SENTRY_TEST(task_queue)
 {
+    SENTRY__MUTEX_INIT_DYN_ONCE(executed_lock);
+
+    sentry__cond_init(&trailing_task_done);
     sentry_bgworker_t *bgw = sentry__bgworker_new(NULL, NULL);
+    TEST_ASSERT(!!bgw);
     sentry__bgworker_submit(bgw, sleep_task, NULL, NULL);
     sentry__bgworker_decref(bgw);
 
     bgw = sentry__bgworker_new(NULL, NULL);
+    TEST_ASSERT(!!bgw);
 
     // submit before starting
     for (size_t i = 0; i < 20; i++) {
@@ -123,18 +140,17 @@ SENTRY_TEST(task_queue)
     sentry_value_decref(list);
 
     sentry__bgworker_decref(bgw);
-    // the worker is still "executing" one task, so lets sleep here as well so
-    // we don’t leak
-    sleep_s(1);
 
-    // the worker will still execute tasks as long as there are some, even if it
-    // was instructed to shut down
+    // wait for the trailing task to be finished
+    sentry__mutex_lock(&executed_lock);
+    sentry__cond_wait_timeout(&trailing_task_done, &executed_lock, 1000);
     TEST_CHECK(executed_after_shutdown);
 }
 
 SENTRY_TEST(bgworker_flush)
 {
     sentry_bgworker_t *bgw = sentry__bgworker_new(NULL, NULL);
+    TEST_ASSERT(!!bgw);
     sentry__bgworker_submit(bgw, sleep_task, NULL, NULL);
 
     sentry__bgworker_start(bgw);

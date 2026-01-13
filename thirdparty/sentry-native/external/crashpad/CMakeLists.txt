@@ -21,7 +21,7 @@ else()
 endif()
 option(CRASHPAD_ZLIB_SYSTEM "Use system zlib library" "${CRASHPAD_ZLIB_SYSTEM_DEFAULT}")
 
-if(CRASHPAD_ZLIB_SYSTEM AND NOT ZLIB_FOUND)
+if(CRASHPAD_ZLIB_SYSTEM AND NOT TARGET ZLIB::ZLIB)
     find_package(ZLIB REQUIRED)
 endif()
 
@@ -49,7 +49,7 @@ function(crashpad_install_dev)
     endif()
 endfunction()
 
-if(WIN32)
+if(WIN32 AND NOT (MINGW AND "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "[Aa][Rr][Mm]64"))
     if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES ARM64)
         enable_language(ASM_MARMASM)
     else()
@@ -57,19 +57,22 @@ if(WIN32)
     endif()
 
     if(MINGW)
-        find_program(JWASM_FOUND jwasm)
-        if (JWASM_FOUND)
-            set(CMAKE_ASM_MASM_COMPILER ${JWASM_FOUND})
-            execute_process(COMMAND ${CMAKE_C_COMPILER} --version OUTPUT_VARIABLE COMPILER_VERSION_OUTPUT)
-            if (COMPILER_VERSION_OUTPUT)
-                if (COMPILER_VERSION_OUTPUT MATCHES "x86_64")
-                    set(JWASM_FLAGS -win64)
-                else()
-                    set(JWASM_FLAGS -coff)
+        if(NOT DEFINED CMAKE_ASM_MASM_COMPILER OR CMAKE_ASM_MASM_COMPILER STREQUAL "")
+            # Only check for and set up JWASM if no ASM_MASM has been specified before
+            find_program(JWASM_FOUND jwasm)
+            if (JWASM_FOUND)
+                set(CMAKE_ASM_MASM_COMPILER ${JWASM_FOUND})
+                execute_process(COMMAND ${CMAKE_C_COMPILER} --version OUTPUT_VARIABLE COMPILER_VERSION_OUTPUT)
+                if (COMPILER_VERSION_OUTPUT)
+                    if (COMPILER_VERSION_OUTPUT MATCHES "x86_64")
+                        set(JWASM_FLAGS -win64)
+                    else()
+                        set(JWASM_FLAGS -coff)
+                    endif()
                 endif()
-            endif()
-           set(CMAKE_ASM_MASM_FLAGS ${CMAKE_ASM_MASM_FLAGS} ${JWASM_FLAGS})
-        endif(JWASM_FOUND)
+                set(CMAKE_ASM_MASM_FLAGS ${CMAKE_ASM_MASM_FLAGS} ${JWASM_FLAGS})
+            endif(JWASM_FOUND)
+        endif()
 
         if(NOT CMAKE_ASM_MASM_COMPILER OR CMAKE_ASM_MASM_COMPILER STREQUAL "ml" OR CMAKE_ASM_MASM_COMPILER STREQUAL "ml64")
             message(WARNING "No custom ASM_MASM compiler defined via 'CMAKE_ASM_MASM_COMPILER'. Trying to use UASM...")
@@ -122,12 +125,45 @@ if(MSVC)
         $<$<COMPILE_LANGUAGE:C,CXX>:/wd4351> # New behavior: elements of array will be default initialized.
         $<$<COMPILE_LANGUAGE:C,CXX>:/wd4577> # 'noexcept' used with no exception handling mode specified.
         $<$<COMPILE_LANGUAGE:C,CXX>:/wd4996> # 'X' was declared deprecated.
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-missing-field-initializers> # missing field initializer
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-sign-compare> # comparison of integers of different signs
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-microsoft-cast> # implicit conversion between pointer-to-function and pointer-to-object
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-unused-parameter> # same as /wd4100
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-deprecated-declarations> # same as /wd4996
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-format> # only Clang-CL
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-cast-function-type-mismatch> # only Clang-CL
+        $<$<AND:$<COMPILE_LANGUAGE:C,CXX>,$<C_COMPILER_ID:Clang>>:-Wno-return-type>
     )
 elseif(MINGW)
     # redirect to wmain
     # FIXME: cmake 3.13 added target_link_options
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
 endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(crashpad_interface INTERFACE
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-multichar>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-attributes>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-return-type>
+    )
+endif()
+
+if(LINUX)
+    target_compile_definitions(crashpad_interface INTERFACE
+        _FILE_OFFSET_BITS=64
+        _LARGEFILE64_SOURCE
+        _LARGEFILE_SOURCE
+    )
+endif()
+
+if(APPLE)
+    target_compile_options(crashpad_interface INTERFACE
+        "-fobjc-arc"
+        "-fno-objc-arc-exceptions"
+        "-Wno-deprecated-declarations"
+    )
+endif()
+
 add_library(crashpad::interface ALIAS crashpad_interface)
 
 add_subdirectory(compat)
@@ -139,6 +175,7 @@ add_subdirectory(client)
 
 add_subdirectory(third_party/zlib)
 add_subdirectory(third_party/getopt)
+add_subdirectory(third_party/mpack)
 
 add_subdirectory(tools)
 add_subdirectory(handler)

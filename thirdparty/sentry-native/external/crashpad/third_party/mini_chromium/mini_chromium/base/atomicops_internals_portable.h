@@ -51,13 +51,7 @@ static_assert(sizeof(*(AtomicLocation32) nullptr) == sizeof(Atomic32),
               "incompatible 32-bit atomic layout");
 
 inline void MemoryBarrier() {
-#if defined(__GLIBCXX__)
-  // Work around libstdc++ bug 51038 where atomic_thread_fence was declared but
-  // not defined, leading to the linker complaining about undefined references.
-  __atomic_thread_fence(std::memory_order_seq_cst);
-#else
   std::atomic_thread_fence(std::memory_order_seq_cst);
-#endif
 }
 
 inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
@@ -82,11 +76,6 @@ inline Atomic32 NoBarrier_AtomicIncrement(volatile Atomic32* ptr,
   return increment +
          ((AtomicLocation32)ptr)
              ->fetch_add(increment, std::memory_order_relaxed);
-}
-
-inline Atomic32 Barrier_AtomicIncrement(volatile Atomic32* ptr,
-                                        Atomic32 increment) {
-  return increment + ((AtomicLocation32)ptr)->fetch_add(increment);
 }
 
 inline Atomic32 Acquire_CompareAndSwap(volatile Atomic32* ptr,
@@ -165,11 +154,6 @@ inline Atomic64 NoBarrier_AtomicIncrement(volatile Atomic64* ptr,
   return increment +
          ((AtomicLocation64)ptr)
              ->fetch_add(increment, std::memory_order_relaxed);
-}
-
-inline Atomic64 Barrier_AtomicIncrement(volatile Atomic64* ptr,
-                                        Atomic64 increment) {
-  return increment + ((AtomicLocation64)ptr)->fetch_add(increment);
 }
 
 inline Atomic64 Acquire_CompareAndSwap(volatile Atomic64* ptr,

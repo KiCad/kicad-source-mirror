@@ -17,6 +17,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#include <iterator>
+
 #include "base/check_op.h"
 #include "base/logging.h"
 #include "base/notreached.h"
@@ -229,14 +231,12 @@ std::set<CheckedRange<uint64_t>> ModuleSnapshotMinidump::ExtraMemoryRanges()
     const {
   INITIALIZATION_STATE_DCHECK_VALID(initialized_);
   NOTREACHED();  // https://crashpad.chromium.org/bug/10
-  return std::set<CheckedRange<uint64_t>>();
 }
 
 std::vector<const UserMinidumpStream*>
 ModuleSnapshotMinidump::CustomMinidumpStreams() const {
   INITIALIZATION_STATE_DCHECK_VALID(initialized_);
   NOTREACHED();  // https://crashpad.chromium.org/bug/10
-  return std::vector<const UserMinidumpStream*>();
 }
 
 bool ModuleSnapshotMinidump::InitializeModuleCrashpadInfo(

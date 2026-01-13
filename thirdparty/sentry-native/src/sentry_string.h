@@ -174,6 +174,15 @@ sentry__string_eq(const char *a, const char *b)
 }
 
 /**
+ * Guards strlen() against NULL pointers
+ */
+static inline size_t
+sentry__guarded_strlen(const char *s)
+{
+    return s ? strlen(s) : 0;
+}
+
+/**
  * Converts an int64_t into a string.
  */
 static inline char *
@@ -184,15 +193,37 @@ sentry__int64_to_string(int64_t val)
     return sentry__string_clone(buf);
 }
 
+/**
+ * Converts an uint64_t into a string.
+ */
+static inline char *
+sentry__uint64_to_string(uint64_t val)
+{
+    char buf[24];
+    snprintf(buf, sizeof(buf), "%" PRIu64, val);
+    return sentry__string_clone(buf);
+}
+
 #ifdef SENTRY_PLATFORM_WINDOWS
 /**
  * Create a utf-8 string from a Wide String.
  */
 char *sentry__string_from_wstr(const wchar_t *s);
+
+/**
+ * Create a utf-8 string from a Wide String with length.
+ * We cannot assume that string to be null-terminated.
+ */
+char *sentry__string_from_wstr_n(const wchar_t *s, size_t s_len);
 /**
  * Convert a normal string to a Wide String.
  */
 wchar_t *sentry__string_to_wstr(const char *s);
+
+/**
+ * Implements a wide string clone/dup using our allocator.
+ */
+wchar_t *sentry__string_clone_wstr(const wchar_t *s);
 #endif
 
 /**
@@ -204,6 +235,6 @@ size_t sentry__unichar_to_utf8(uint32_t c, char *buf);
 #define sentry__is_lead_surrogate(c) ((c) >= 0xd800 && (c) < 0xdc00)
 #define sentry__is_trail_surrogate(c) ((c) >= 0xdc00 && (c) < 0xe000)
 #define sentry__surrogate_value(lead, trail)                                   \
-    (((((lead)-0xd800) << 10) | ((trail)-0xdc00)) + 0x10000)
+    (((((lead) - 0xd800) << 10) | ((trail) - 0xdc00)) + 0x10000)
 
 #endif

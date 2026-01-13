@@ -25,9 +25,9 @@ import (
 	"strings"
 	"time"
 
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/memcache"
-	"google.golang.org/appengine/urlfetch"
+	"google.golang.org/appengine/v2"
+	"google.golang.org/appengine/v2/memcache"
+	"google.golang.org/appengine/v2/urlfetch"
 )
 
 func main() {
@@ -146,11 +146,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 // contentType returns the appropriate content type header for file.
 func contentType(file string) string {
 	contentTypes := map[string]string{
-		".html": "text/html; charset=UTF-8",
 		".css":  "text/css; charset=UTF-8",
+		".html": "text/html; charset=UTF-8",
+		".ico":  "image/x-icon",
 		".js":   "text/javascript; charset=UTF-8",
 		".png":  "image/png",
-		".ico":  "image/x-icon",
+		".svg":  "image/svg+xml",
 	}
 	for suffix, typ := range contentTypes {
 		if strings.HasSuffix(file, suffix) {

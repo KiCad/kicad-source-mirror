@@ -16,6 +16,7 @@
 
 #include <type_traits>
 
+#include "base/numerics/safe_conversions.h"
 #include "build/build_config.h"
 #include "util/misc/address_sanitizer.h"
 #include "util/misc/from_pointer_cast.h"
@@ -32,6 +33,21 @@ namespace {
 // incompatible layout, with the understanding that existing readers will not
 // understand new versions.
 constexpr uint32_t kCrashpadInfoVersion = 1;
+
+// Creates a `UserDataMinidumpStreamListEntry` with the given fields, and
+// returns a pointer to it. The caller takes ownership of the returned object.
+crashpad::internal::UserDataMinidumpStreamListEntry* CreateListEntry(
+    uint64_t next,
+    uint32_t stream_type,
+    const void* data,
+    size_t size) {
+  auto to_be_added = new crashpad::internal::UserDataMinidumpStreamListEntry();
+  to_be_added->next = next;
+  to_be_added->stream_type = stream_type;
+  to_be_added->base_address = crashpad::FromPointerCast<uint64_t>(data);
+  to_be_added->size = base::checked_cast<uint64_t>(size);
+  return to_be_added;
+}
 
 }  // namespace
 
@@ -117,22 +133,62 @@ CrashpadInfo::CrashpadInfo()
       crashpad_handler_behavior_(TriState::kUnset),
       system_crash_reporter_forwarding_(TriState::kUnset),
       gather_indirectly_referenced_memory_(TriState::kUnset),
-      padding_1_(0),
+      limit_stack_capture_to_sp_(TriState::kUnset),
       extra_memory_ranges_(nullptr),
       simple_annotations_(nullptr),
       user_data_minidump_stream_head_(nullptr),
-      annotations_list_(nullptr) {}
+      annotations_list_(nullptr)
+#if BUILDFLAG(IS_IOS)
+      ,
+      intermediate_dump_extra_memory_ranges_(nullptr)
+#endif
+{
+}
 
-void CrashpadInfo::AddUserDataMinidumpStream(uint32_t stream_type,
-                                             const void* data,
-                                             size_t size) {
-  auto to_be_added = new internal::UserDataMinidumpStreamListEntry();
-  to_be_added->next =
-      FromPointerCast<uint64_t>(user_data_minidump_stream_head_);
-  to_be_added->stream_type = stream_type;
-  to_be_added->base_address = FromPointerCast<uint64_t>(data);
-  to_be_added->size = base::checked_cast<uint64_t>(size);
-  user_data_minidump_stream_head_ = to_be_added;
+UserDataMinidumpStreamHandle* CrashpadInfo::AddUserDataMinidumpStream(
+    uint32_t stream_type,
+    const void* data,
+    size_t size) {
+  user_data_minidump_stream_head_ = CreateListEntry(
+      crashpad::FromPointerCast<uint64_t>(user_data_minidump_stream_head_),
+      stream_type,
+      data,
+      size);
+  return user_data_minidump_stream_head_;
+}
+
+UserDataMinidumpStreamHandle* CrashpadInfo::UpdateUserDataMinidumpStream(
+    UserDataMinidumpStreamHandle* stream_to_update,
+    uint32_t stream_type,
+    const void* data,
+    size_t size) {
+  // Create a new stream that points to the node `stream_to_update` points to.
+  const auto new_stream =
+      CreateListEntry(stream_to_update->next, stream_type, data, size);
+
+  // If `stream_to_update` is head of the list, replace the head with
+  // `new_stream`.
+  if (stream_to_update == user_data_minidump_stream_head_) {
+    user_data_minidump_stream_head_ = new_stream;
+  } else {
+    // Otherwise, find the node before `stream_to_update`, and make it point to
+    // `new_stream` instead.
+    auto current = user_data_minidump_stream_head_;
+    while (current) {
+      auto next = reinterpret_cast<internal::UserDataMinidumpStreamListEntry*>(
+          current->next);
+      if (next == stream_to_update) {
+        current->next = FromPointerCast<uint64_t>(new_stream);
+        break;
+      }
+      current = next;
+    }
+    CHECK(current)
+        << "Tried to update a UserDataMinidumpStream that doesn't exist";
+  }
+
+  delete stream_to_update;
+  return new_stream;
 }
 
 }  // namespace crashpad

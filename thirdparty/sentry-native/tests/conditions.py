@@ -5,6 +5,7 @@ is_aix = sys.platform == "aix" or sys.platform == "os400"
 is_android = os.environ.get("ANDROID_API")
 is_x86 = os.environ.get("TEST_X86")
 is_asan = "asan" in os.environ.get("RUN_ANALYZER", "")
+is_tsan = "tsan" in os.environ.get("RUN_ANALYZER", "")
 is_kcov = "kcov" in os.environ.get("RUN_ANALYZER", "")
 is_valgrind = "valgrind" in os.environ.get("RUN_ANALYZER", "")
 
@@ -22,9 +23,14 @@ has_breakpad = (
     and not is_android
     and not (is_asan and sys.platform == "darwin")
 )
-# crashpad requires http, needs porting to AIX, and doesn’t work with kcov/valgrind either
+# crashpad requires http, needs porting to AIX, and doesn’t work with kcov/valgrind/tsan either
 has_crashpad = (
-    has_http and not is_valgrind and not is_kcov and not is_android and not is_aix
+    has_http
+    and not is_valgrind
+    and not is_kcov
+    and not is_android
+    and not is_aix
+    and not is_tsan
 )
 # android has no local filesystem
 has_files = not is_android

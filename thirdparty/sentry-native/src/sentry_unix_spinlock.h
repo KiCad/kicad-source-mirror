@@ -2,6 +2,7 @@
 #define SENTRY_UNIX_SPINLOCK_H_INCLUDED
 
 #include "sentry_boot.h"
+#include "sentry_cpu_relax.h"
 
 typedef volatile sig_atomic_t sentry_spinlock_t;
 
@@ -10,12 +11,6 @@ typedef volatile sig_atomic_t sentry_spinlock_t;
  * `malloc` to a custom page-based allocator, which is protected by this special
  * spinlock.
  */
-
-#if (defined(__i386__) || defined(__amd64__))
-#    define sentry__cpu_relax() __asm__ __volatile__("pause\n")
-#else
-#    define sentry__cpu_relax() (void)0
-#endif
 
 #define SENTRY__SPINLOCK_INIT 0
 #define sentry__spinlock_lock(spinlock_ref)                                    \

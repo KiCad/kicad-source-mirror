@@ -19,6 +19,9 @@ SENTRY_TEST(uninitialized)
     sentry_remove_tag("foo");
     sentry_set_extra("foo", sentry_value_new_null());
     sentry_remove_extra("foo");
+    sentry_set_attribute("foo",
+        sentry_value_new_attribute(sentry_value_new_string("bar"), NULL));
+    sentry_remove_attribute("foo");
     sentry_set_context("foo", sentry_value_new_object());
     sentry_remove_context("foo");
     sentry_set_fingerprint("foo", "bar", NULL);
@@ -32,7 +35,7 @@ SENTRY_TEST(uninitialized)
 
 SENTRY_TEST(empty_transport)
 {
-    sentry_options_t *options = sentry_options_new();
+    SENTRY_TEST_OPTIONS_NEW(options);
     sentry_options_set_transport(options, NULL);
 
     TEST_CHECK(sentry_init(options) == 0);
@@ -47,7 +50,7 @@ SENTRY_TEST(empty_transport)
 
 SENTRY_TEST(invalid_dsn)
 {
-    sentry_options_t *options = sentry_options_new();
+    SENTRY_TEST_OPTIONS_NEW(options);
     sentry_options_set_dsn(options, "not a valid dsn");
 
     TEST_CHECK(sentry_init(options) == 0);
@@ -62,8 +65,8 @@ SENTRY_TEST(invalid_dsn)
 
 SENTRY_TEST(invalid_proxy)
 {
-    sentry_options_t *options = sentry_options_new();
-    sentry_options_set_http_proxy(options, "invalid");
+    SENTRY_TEST_OPTIONS_NEW(options);
+    sentry_options_set_proxy(options, "invalid");
 
     TEST_CHECK(sentry_init(options) == 0);
 

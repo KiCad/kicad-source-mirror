@@ -4,7 +4,7 @@
 #include "sentry_value.h"
 
 static void
-send_envelope(const sentry_envelope_t *envelope, void *data)
+send_envelope(sentry_envelope_t *envelope, void *data)
 {
     uint64_t *called = data;
     *called += 1;
@@ -50,15 +50,17 @@ send_envelope(const sentry_envelope_t *envelope, void *data)
         "test");
 
     sentry_value_decref(session);
+    sentry_envelope_free(envelope);
 }
 
 SENTRY_TEST(session_basics)
 {
     uint64_t called = 0;
-    sentry_options_t *options = sentry_options_new();
+    SENTRY_TEST_OPTIONS_NEW(options);
     sentry_options_set_dsn(options, "https://foo@sentry.invalid/42");
-    sentry_options_set_transport(
-        options, sentry_new_function_transport(send_envelope, &called));
+    sentry_transport_t *transport = sentry_transport_new(send_envelope);
+    sentry_transport_set_state(transport, &called);
+    sentry_options_set_transport(options, transport);
     sentry_options_set_release(options, "my_release");
 
     // the default environment is always `production` if not overwritten by the
@@ -101,15 +103,15 @@ typedef struct {
 } session_assertion_t;
 
 static void
-send_sampled_envelope(const sentry_envelope_t *envelope, void *data)
+send_sampled_envelope(sentry_envelope_t *envelope, void *data)
 {
     session_assertion_t *assertion = data;
 
-    SENTRY_DEBUG("send_sampled_envelope");
+    SENTRY_INFO("send_sampled_envelope");
     if (assertion->assert_session) {
         assertion->called += 1;
 
-        SENTRY_DEBUG("assertion + 1");
+        SENTRY_INFO("assertion + 1");
 
         TEST_CHECK_INT_EQUAL(sentry__envelope_get_item_count(envelope), 1);
 
@@ -133,16 +135,18 @@ send_sampled_envelope(const sentry_envelope_t *envelope, void *data)
 
         sentry_value_decref(session);
     }
+    sentry_envelope_free(envelope);
 }
 
 SENTRY_TEST(count_sampled_events)
 {
     session_assertion_t assertion = { false, 0 };
 
-    sentry_options_t *options = sentry_options_new();
+    SENTRY_TEST_OPTIONS_NEW(options);
     sentry_options_set_dsn(options, "https://foo@sentry.invalid/42");
-    sentry_options_set_transport(options,
-        sentry_new_function_transport(send_sampled_envelope, &assertion));
+    sentry_transport_t *transport = sentry_transport_new(send_sampled_envelope);
+    sentry_transport_set_state(transport, &assertion);
+    sentry_options_set_transport(options, transport);
     sentry_options_set_release(options, "my_release");
     sentry_options_set_sample_rate(options, 0.5);
     sentry_init(options);

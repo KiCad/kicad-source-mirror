@@ -53,9 +53,9 @@ class Logger final : public LogOutputStream::Delegate {
   ~Logger() override = default;
 
 #if BUILDFLAG(IS_ANDROID)
-  int Log(const char* buf) override {
+  bool Log(const char* buf) override {
     return __android_log_buf_write(
-        LOG_ID_CRASH, ANDROID_LOG_FATAL, "crashpad", buf);
+        LOG_ID_CRASH, ANDROID_LOG_FATAL, "crashpad", buf) > 0;
   }
 
   size_t OutputCap() override {
@@ -72,7 +72,7 @@ class Logger final : public LogOutputStream::Delegate {
   }
 #else
   // TODO(jperaza): Log to an appropriate location on Linux.
-  int Log(const char* buf) override { return -ENOTCONN; }
+  bool Log(const char* buf) override { return false; }
   size_t OutputCap() override { return 0; }
   size_t LineWidth() override { return 0; }
 #endif
@@ -106,14 +106,20 @@ CrashReportExceptionHandler::CrashReportExceptionHandler(
     const std::vector<base::FilePath>* attachments,
     bool write_minidump_to_database,
     bool write_minidump_to_log,
-    const UserStreamDataSources* user_stream_data_sources)
+    const UserStreamDataSources* user_stream_data_sources,
+    bool wait_for_upload,
+    const base::FilePath* crash_reporter,
+    const base::FilePath* crash_envelope)
     : database_(database),
       upload_thread_(upload_thread),
       process_annotations_(process_annotations),
-      attachments_(attachments),
+      attachments_(*attachments),
       write_minidump_to_database_(write_minidump_to_database),
       write_minidump_to_log_(write_minidump_to_log),
-      user_stream_data_sources_(user_stream_data_sources) {
+      user_stream_data_sources_(user_stream_data_sources),
+      wait_for_upload_(wait_for_upload),
+      crash_reporter_(crash_reporter),
+      crash_envelope_(crash_envelope) {
   DCHECK(write_minidump_to_database_ | write_minidump_to_log_);
 }
 
@@ -188,13 +194,44 @@ bool CrashReportExceptionHandler::HandleExceptionWithConnection(
     process_snapshot->SetClientID(client_id);
   }
 
-  return write_minidump_to_database_
+  // Force Crashpad Handler to wait for one upload attempt if there is a pending report
+  // TODO make this an option + add it to the other handlers (win/mac)
+  bool result =  write_minidump_to_database_
              ? WriteMinidumpToDatabase(process_snapshot.get(),
                                        sanitized_snapshot.get(),
                                        write_minidump_to_log_,
                                        local_report_id)
              : WriteMinidumpToLog(process_snapshot.get(),
                                   sanitized_snapshot.get());
+
+  // Force flush only if WriteMinidumpToDatabase was successful
+  if (wait_for_upload_ && write_minidump_to_database_ && result) {
+    // Flushes upload thread, forcing the handler to wait for one
+    // upload attempt if there is a pending report, before sending SIGCONT to app.
+    // Without this, SIGCONT is sent during the uploading, app crashes and UploadThread gets a SIGKILL.
+    this->FlushUploadThread();
+  }
+  return result;
+}
+
+void CrashReportExceptionHandler::AddAttachment(
+    const base::FilePath& attachment) {
+  auto it = std::find(attachments_.begin(), attachments_.end(), attachment);
+  if (it != attachments_.end()) {
+    LOG(WARNING) << "ignoring duplicate attachment " << attachment;
+    return;
+  }
+  attachments_.push_back(attachment);
+}
+
+void CrashReportExceptionHandler::RemoveAttachment(
+    const base::FilePath& attachment) {
+  auto it = std::find(attachments_.begin(), attachments_.end(), attachment);
+  if (it == attachments_.end()) {
+    LOG(WARNING) << "ignoring non-existent attachment " << attachment;
+    return;
+  }
+  attachments_.erase(it);
 }
 
 bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
@@ -239,7 +276,7 @@ bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
     }
   }
 
-  for (const auto& attachment : (*attachments_)) {
+  for (const auto& attachment : attachments_) {
     FileReader file_reader;
     if (!file_reader.Open(attachment)) {
       LOG(ERROR) << "attachment " << attachment.value().c_str()
@@ -258,6 +295,20 @@ bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
     CopyFileContent(&file_reader, file_writer);
   }
 
+  bool has_crash_reporter = crash_reporter_ && !crash_reporter_->empty() &&
+                            crash_envelope_ && !crash_envelope_->empty();
+  if (has_crash_reporter) {
+    CrashReportDatabase::Envelope envelope(new_report->ReportID());
+    if (envelope.Initialize(*crash_envelope_)) {
+      envelope.AddAttachments(attachments_);
+      if (auto reader = new_report->Reader()) {
+        envelope.AddMinidump(reader);
+      }
+      envelope.Finish();
+      database_->LaunchCrashReporter(*crash_reporter_, *crash_envelope_);
+    }
+  }
+
   UUID uuid;
   database_status =
       database_->FinishedWritingCrashReport(std::move(new_report), &uuid);
@@ -268,7 +319,9 @@ bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
     return false;
   }
 
-  if (upload_thread_) {
+  if (has_crash_reporter) {
+    database_->DeleteReport(new_report->ReportID());
+  } else if (upload_thread_) {
     upload_thread_->ReportPending(uuid);
   }
 
@@ -301,6 +354,18 @@ bool CrashReportExceptionHandler::WriteMinidumpToLog(
     return false;
   }
   return writer.Flush();
+}
+
+
+//  Force Crashpad Handler to wait for one upload attempt if there is a pending report
+void CrashReportExceptionHandler::FlushUploadThread() {
+  if (upload_thread_ && upload_thread_->is_running()) {
+    // Following "Stop" call terminates the upload thread after completing whatever task it is
+    // performing e.g. uploading a report. If it is not performing any task, it will terminate
+    // immediately. It blocks while waiting for the upload thread to terminate making
+    // sure that the pending report (if any) is sent before returning.
+    upload_thread_->Stop();
+  }
 }
 
 }  // namespace crashpad

@@ -2,17 +2,29 @@
 #include "sentry_string.h"
 #include "sentry_testsupport.h"
 
+#ifdef SENTRY_PLATFORM_WINDOWS
+#    include <windows.h>
+#    define sleep_s(SECONDS) Sleep(SECONDS * 1000)
+#else
+#    include <unistd.h>
+#    define sleep_s(SECONDS) sleep(SECONDS)
+#endif
+
 SENTRY_TEST(recursive_paths)
 {
-    sentry_path_t *base = sentry__path_from_str(".foo");
+    sentry_path_t *base = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX ".foo");
+    TEST_ASSERT(!!base);
     sentry_path_t *nested = sentry__path_join_str(base, "bar");
+    TEST_ASSERT(!!nested);
     sentry_path_t *nested2 = sentry__path_join_str(nested, "baz");
+    TEST_ASSERT(!!nested2);
     sentry_path_t *file =
 #ifdef SENTRY_PLATFORM_WINDOWS
         sentry__path_join_wstr(nested2, L"unicode ❤️ Юля.txt");
 #else
         sentry__path_join_str(nested2, "unicode ❤️ Юля.txt");
 #endif
+    TEST_ASSERT(!!file);
 
     sentry__path_create_dir_all(nested2);
     sentry__path_touch(file);
@@ -39,17 +51,20 @@ SENTRY_TEST(path_joining_unix)
     SKIP_TEST();
 #else
     sentry_path_t *path = sentry__path_new("foo/bar/baz.txt");
+    TEST_ASSERT(!!path);
     sentry_path_t *joined;
 
     TEST_CHECK(strcmp(path->path, "foo/bar/baz.txt") == 0);
     TEST_CHECK(strcmp(sentry__path_filename(path), "baz.txt") == 0);
 
     joined = sentry__path_join_str(path, "extra");
+    TEST_ASSERT(!!joined);
     TEST_CHECK(strcmp(joined->path, "foo/bar/baz.txt/extra") == 0);
     TEST_CHECK(strcmp(sentry__path_filename(joined), "extra") == 0);
     sentry__path_free(joined);
 
     joined = sentry__path_join_str(path, "/root/path");
+    TEST_ASSERT(!!joined);
     TEST_CHECK(strcmp(joined->path, "/root/path") == 0);
     TEST_CHECK(strcmp(sentry__path_filename(joined), "path") == 0);
     sentry__path_free(joined);
@@ -70,11 +85,8 @@ SENTRY_TEST(path_from_str_n_wo_null_termination)
     // provide non-null-terminated path string with buffer character at the end.
     char path_str[] = { 't', 'e', 's', 't', 'X' };
     sentry_path_t *test_path = sentry__path_from_str_n(path_str, 4);
-#ifdef SENTRY_PLATFORM_WINDOWS
-    TEST_CHECK_WSTRING_EQUAL(test_path->path, L"test");
-#else
+    TEST_ASSERT(!!test_path);
     TEST_CHECK_STRING_EQUAL(test_path->path, "test");
-#endif
     sentry__path_free(test_path);
 }
 
@@ -83,38 +95,54 @@ SENTRY_TEST(path_joining_windows)
 #ifndef SENTRY_PLATFORM_WINDOWS
     SKIP_TEST();
 #else
-    sentry_path_t *path = sentry__path_new(L"foo/bar/baz.txt");
-    sentry_path_t *winpath = sentry__path_new(L"foo\\bar\\baz.txt");
+    sentry_path_t *path = sentry__path_new("foo/bar/baz.txt");
+    sentry_path_t *winpath = sentry__path_new("foo\\bar\\baz.txt");
     sentry_path_t *awinpath = sentry__path_from_str("foo\\bar\\baz.txt");
     sentry_path_t *cpath = sentry__path_from_str("C:\\foo\\bar\\baz.txt");
-    sentry_path_t *joined;
+    TEST_ASSERT(!!path);
+    TEST_ASSERT(!!winpath);
+    TEST_ASSERT(!!awinpath);
+    TEST_ASSERT(!!cpath);
 
-    TEST_CHECK(_wcsicmp(path->path, L"foo/bar/baz.txt") == 0);
-    TEST_CHECK(_wcsicmp(sentry__path_filename(path), L"baz.txt") == 0);
-    TEST_CHECK(_wcsicmp(winpath->path, L"foo\\bar\\baz.txt") == 0);
-    TEST_CHECK(_wcsicmp(awinpath->path, L"foo\\bar\\baz.txt") == 0);
-    TEST_CHECK(_wcsicmp(sentry__path_filename(winpath), L"baz.txt") == 0);
+    TEST_CHECK(_stricmp(path->path, "foo/bar/baz.txt") == 0);
+    TEST_CHECK(_stricmp(sentry__path_filename(path), "baz.txt") == 0);
+    TEST_CHECK(_stricmp(winpath->path, "foo\\bar\\baz.txt") == 0);
+    TEST_CHECK(_stricmp(awinpath->path, "foo\\bar\\baz.txt") == 0);
+    TEST_CHECK(_stricmp(sentry__path_filename(winpath), "baz.txt") == 0);
 
-    joined = sentry__path_join_str(path, "extra");
-    TEST_CHECK(_wcsicmp(joined->path, L"foo/bar/baz.txt\\extra") == 0);
-    TEST_CHECK(_wcsicmp(sentry__path_filename(joined), L"extra") == 0);
+    TEST_CHECK(_wcsicmp(path->path_w, L"foo/bar/baz.txt") == 0);
+    TEST_CHECK(_wcsicmp(sentry__path_filename_w(path), L"baz.txt") == 0);
+    TEST_CHECK(_wcsicmp(winpath->path_w, L"foo\\bar\\baz.txt") == 0);
+    TEST_CHECK(_wcsicmp(awinpath->path_w, L"foo\\bar\\baz.txt") == 0);
+    TEST_CHECK(_wcsicmp(sentry__path_filename_w(winpath), L"baz.txt") == 0);
+
+    sentry_path_t *joined = sentry__path_join_str(path, "extra");
+    TEST_CHECK(_stricmp(joined->path, "foo/bar/baz.txt\\extra") == 0);
+    TEST_CHECK(_stricmp(sentry__path_filename(joined), "extra") == 0);
+    TEST_CHECK(_wcsicmp(joined->path_w, L"foo/bar/baz.txt\\extra") == 0);
+    TEST_CHECK(_wcsicmp(sentry__path_filename_w(joined), L"extra") == 0);
     sentry__path_free(joined);
 
     joined = sentry__path_join_str(path, "/root/path");
-    TEST_CHECK(_wcsicmp(joined->path, L"/root/path") == 0);
-    TEST_CHECK(_wcsicmp(sentry__path_filename(joined), L"path") == 0);
+    TEST_CHECK(_stricmp(joined->path, "/root/path") == 0);
+    TEST_CHECK(_stricmp(sentry__path_filename(joined), "path") == 0);
+    TEST_CHECK(_wcsicmp(joined->path_w, L"/root/path") == 0);
+    TEST_CHECK(_wcsicmp(sentry__path_filename_w(joined), L"path") == 0);
     sentry__path_free(joined);
 
     joined = sentry__path_join_str(cpath, "/root/path");
-    TEST_CHECK(_wcsicmp(joined->path, L"C:/root/path") == 0);
+    TEST_CHECK(_stricmp(joined->path, "C:/root/path") == 0);
+    TEST_CHECK(_wcsicmp(joined->path_w, L"C:/root/path") == 0);
     sentry__path_free(joined);
 
     joined = sentry__path_join_str(cpath, "D:\\root\\path");
-    TEST_CHECK(_wcsicmp(joined->path, L"D:\\root\\path") == 0);
+    TEST_CHECK(_stricmp(joined->path, "D:\\root\\path") == 0);
+    TEST_CHECK(_wcsicmp(joined->path_w, L"D:\\root\\path") == 0);
     sentry__path_free(joined);
 
     joined = sentry__path_join_str(cpath, "\\root\\path");
-    TEST_CHECK(_wcsicmp(joined->path, L"C:\\root\\path") == 0);
+    TEST_CHECK(_stricmp(joined->path, "C:\\root\\path") == 0);
+    TEST_CHECK(_wcsicmp(joined->path_w, L"C:\\root\\path") == 0);
     sentry__path_free(joined);
 
     sentry__path_free(cpath);
@@ -127,13 +155,8 @@ SENTRY_TEST(path_joining_windows)
 SENTRY_TEST(path_relative_filename)
 {
     sentry_path_t *path = sentry__path_from_str("foobar.txt");
-#ifdef SENTRY_PLATFORM_WINDOWS
-    char *filename = sentry__string_from_wstr(sentry__path_filename(path));
-    TEST_CHECK_STRING_EQUAL(filename, "foobar.txt");
-    sentry_free(filename);
-#else
+    TEST_ASSERT(!!path);
     TEST_CHECK_STRING_EQUAL(sentry__path_filename(path), "foobar.txt");
-#endif
     sentry__path_free(path);
 }
 
@@ -141,10 +164,11 @@ SENTRY_TEST(path_basics)
 {
     size_t items = 0;
     const sentry_path_t *p;
-    sentry_path_t *path = sentry__path_from_str(".");
+    sentry_path_t *path = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX ".");
     TEST_CHECK(!!path);
 
     sentry_pathiter_t *piter = sentry__path_iter_directory(path);
+    TEST_ASSERT(piter != NULL);
     while ((p = sentry__pathiter_next(piter)) != NULL) {
         bool is_file = sentry__path_is_file(p);
         bool is_dir = sentry__path_is_dir(p);
@@ -160,16 +184,29 @@ SENTRY_TEST(path_basics)
 SENTRY_TEST(path_current_exe)
 {
     sentry_path_t *path = sentry__path_current_exe();
-    TEST_CHECK(sentry__path_is_file(path));
-    sentry__path_free(path);
+#if defined(SENTRY_PLATFORM_NX) || defined(SENTRY_PLATFORM_PS)
+    // Not available on NX or PS
+    TEST_CHECK(!path);
+#else
+    TEST_CHECK(!!path);
+    if (path) {
+        TEST_CHECK(sentry__path_is_file(path));
+        sentry__path_free(path);
+    }
+#endif
 }
 
 SENTRY_TEST(path_directory)
 {
-    sentry_path_t *path_1 = sentry__path_from_str("foo");
-    sentry_path_t *path_2 = sentry__path_from_str("foo/bar");
+    sentry_path_t *path_1
+        = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX "foo");
+    TEST_ASSERT(!!path_1);
+    sentry_path_t *path_2
+        = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX "foo/bar");
+    TEST_ASSERT(!!path_2);
 #ifdef SENTRY_PLATFORM_WINDOWS
-    sentry_path_t *path_3 = sentry__path_from_str("foo/bar\\baz");
+    sentry_path_t *path_3
+        = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX "foo/bar\\baz");
 
     // `%TEMP%\sentry_test_unit`
     wchar_t temp_folder[MAX_PATH];
@@ -213,6 +250,38 @@ SENTRY_TEST(path_directory)
     sentry__path_free(path_4);
 #endif
 
+    sentry__path_remove_all(path_1);
     sentry__path_free(path_1);
     sentry__path_free(path_2);
+}
+
+SENTRY_TEST(path_mtime)
+{
+#if defined(SENTRY_PLATFORM_NX)
+    SKIP_TEST();
+#endif
+
+    sentry_path_t *path
+        = sentry__path_from_str(SENTRY_TEST_PATH_PREFIX "foo.txt");
+    TEST_ASSERT(!!path);
+
+    TEST_CHECK(sentry__path_remove(path) == 0);
+    TEST_CHECK(!sentry__path_is_file(path));
+    TEST_CHECK(sentry__path_get_mtime(path) <= 0);
+
+    sentry__path_touch(path);
+    TEST_CHECK(sentry__path_is_file(path));
+
+    const time_t before = sentry__path_get_mtime(path);
+    TEST_CHECK(before > 0);
+
+    sleep_s(1);
+
+    sentry__path_write_buffer(path, "after", 5);
+    const time_t after = sentry__path_get_mtime(path);
+    TEST_CHECK(after > 0);
+    TEST_CHECK(before < after);
+
+    sentry__path_remove(path);
+    sentry__path_free(path);
 }

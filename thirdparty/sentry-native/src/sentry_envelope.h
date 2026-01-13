@@ -4,14 +4,16 @@
 #include "sentry_boot.h"
 #include "sentry_core.h"
 
+#include "sentry_attachment.h"
 #include "sentry_path.h"
+#include "sentry_ratelimiter.h"
 #include "sentry_session.h"
 #include "sentry_string.h"
 
-#define SENTRY_MAX_ENVELOPE_ITEMS 10
+// https://develop.sentry.dev/sdk/data-model/envelopes/#size-limits
+#define SENTRY_MAX_ENVELOPE_SESSIONS 100
 
 typedef struct sentry_envelope_item_s sentry_envelope_item_t;
-typedef struct sentry_rate_limiter_s sentry_rate_limiter_t;
 
 /**
  * Create a new empty envelope.
@@ -31,6 +33,12 @@ sentry_envelope_t *sentry__envelope_from_path(const sentry_path_t *path);
 sentry_uuid_t sentry__envelope_get_event_id(const sentry_envelope_t *envelope);
 
 /**
+ * Set the event ID header for this envelope.
+ */
+void sentry__envelope_set_event_id(
+    sentry_envelope_t *envelope, const sentry_uuid_t *event_id);
+
+/**
  * Add an event to this envelope.
  */
 sentry_envelope_item_t *sentry__envelope_add_event(
@@ -43,6 +51,18 @@ sentry_envelope_item_t *sentry__envelope_add_transaction(
     sentry_envelope_t *envelope, sentry_value_t transaction);
 
 /**
+ * Add a deprecated user report to this envelope.
+ */
+sentry_envelope_item_t *sentry__envelope_add_user_report(
+    sentry_envelope_t *envelope, sentry_value_t user_report);
+
+/**
+ * Add a list of logs to this envelope.
+ */
+sentry_envelope_item_t *sentry__envelope_add_logs(
+    sentry_envelope_t *envelope, sentry_value_t logs);
+
+/**
  * Add a user feedback to this envelope.
  */
 sentry_envelope_item_t *sentry__envelope_add_user_feedback(
@@ -53,6 +73,18 @@ sentry_envelope_item_t *sentry__envelope_add_user_feedback(
  */
 sentry_envelope_item_t *sentry__envelope_add_session(
     sentry_envelope_t *envelope, const sentry_session_t *session);
+
+/**
+ * Add an attachment to this envelope.
+ */
+sentry_envelope_item_t *sentry__envelope_add_attachment(
+    sentry_envelope_t *envelope, const sentry_attachment_t *attachment);
+
+/**
+ * Add attachments to this envelope.
+ */
+void sentry__envelope_add_attachments(
+    sentry_envelope_t *envelope, const sentry_attachment_t *attachments);
 
 /**
  * This will add the file contents from `path` as an envelope item of type

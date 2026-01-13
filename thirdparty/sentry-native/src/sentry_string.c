@@ -3,6 +3,10 @@
 #include "sentry_alloc.h"
 #include "sentry_string.h"
 
+#ifdef SENTRY_PLATFORM_WINDOWS
+#    include <wchar.h>
+#endif
+
 #define INITIAL_BUFFER_SIZE 128
 
 void
@@ -16,7 +20,7 @@ sentry__stringbuilder_init(sentry_stringbuilder_t *sb)
 char *
 sentry__stringbuilder_reserve(sentry_stringbuilder_t *sb, size_t len)
 {
-    size_t needed = sb->len + len;
+    const size_t needed = sb->len + len;
     if (!sb->buf || needed > sb->allocated) {
         size_t new_alloc_size = sb->allocated;
         if (new_alloc_size == 0) {
@@ -85,30 +89,104 @@ sentry__string_from_wstr(const wchar_t *s)
     if (!s) {
         return NULL;
     }
-    int len = WideCharToMultiByte(CP_UTF8, 0, s, -1, NULL, 0, NULL, NULL);
-    char *rv = sentry_malloc(len);
-    if (rv) {
-        WideCharToMultiByte(CP_UTF8, 0, s, -1, rv, len, NULL, NULL);
+    const int len = WideCharToMultiByte(
+        CP_UTF8, WC_ERR_INVALID_CHARS, s, -1, NULL, 0, NULL, NULL);
+    if (len <= 0) {
+        return NULL;
     }
+    char *rv = sentry_malloc((size_t)len);
+    if (!rv) {
+        return NULL;
+    }
+    const int written = WideCharToMultiByte(
+        CP_UTF8, WC_ERR_INVALID_CHARS, s, -1, rv, len, NULL, NULL);
+    if (written != len) {
+        sentry_free(rv);
+        return NULL;
+    }
+    return rv;
+}
+
+char *
+sentry__string_from_wstr_n(const wchar_t *s, size_t s_len)
+{
+    if (!s) {
+        return NULL;
+    }
+    if (s_len == 0) {
+        char *rv = sentry_malloc(1);
+        if (!rv) {
+            return NULL;
+        }
+        rv[0] = '\0';
+        return rv;
+    }
+
+    const int len = WideCharToMultiByte(
+        CP_UTF8, WC_ERR_INVALID_CHARS, s, (int)s_len, NULL, 0, NULL, NULL);
+    if (len <= 0) {
+        return NULL;
+    }
+
+    char *rv = sentry_malloc((size_t)len + 1);
+    if (!rv) {
+        return NULL;
+    }
+
+    const int written = WideCharToMultiByte(
+        CP_UTF8, WC_ERR_INVALID_CHARS, s, (int)s_len, rv, len, NULL, NULL);
+    if (written != len) {
+        sentry_free(rv);
+        return NULL;
+    }
+    rv[len] = '\0';
     return rv;
 }
 
 wchar_t *
 sentry__string_to_wstr(const char *s)
 {
-    size_t len = MultiByteToWideChar(CP_UTF8, 0, s, -1, NULL, 0);
-    wchar_t *rv = sentry_malloc(sizeof(wchar_t) * len);
-    if (rv) {
-        MultiByteToWideChar(CP_UTF8, 0, s, -1, rv, (int)len);
+    if (!s) {
+        return NULL;
+    }
+    const int len
+        = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, s, -1, NULL, 0);
+    if (len <= 0) {
+        return NULL;
+    }
+    wchar_t *rv = sentry_malloc(sizeof(wchar_t) * (size_t)len);
+    if (!rv) {
+        return NULL;
+    }
+    const int written
+        = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, s, -1, rv, len);
+    if (written != len) {
+        sentry_free(rv);
+        return NULL;
     }
     return rv;
+}
+
+wchar_t *
+sentry__string_clone_wstr(const wchar_t *s)
+{
+    if (!s) {
+        return NULL;
+    }
+    const size_t s_len = wcslen(s) + 1;
+    wchar_t *clone = sentry_malloc(sizeof(wchar_t) * s_len);
+    if (!clone) {
+        return NULL;
+    }
+    wmemcpy(clone, s, s_len);
+    return clone;
 }
 #endif
 
 size_t
 sentry__unichar_to_utf8(uint32_t c, char *buf)
 {
-    size_t i, len = 1;
+    size_t len;
     uint32_t first;
 
     if (c < 0x80) {
@@ -127,8 +205,8 @@ sentry__unichar_to_utf8(uint32_t c, char *buf)
         return 0;
     }
 
-    for (i = len - 1; i > 0; --i) {
-        buf[i] = (char)(c & 0x3f) | 0x80;
+    for (size_t i = len - 1; i > 0; --i) {
+        buf[i] = (char)((c & 0x3f) | 0x80);
         c >>= 6;
     }
     buf[0] = (char)(c | first);

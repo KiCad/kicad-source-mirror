@@ -6,7 +6,8 @@
 #define MINI_CHROMIUM_BASE_NOTREACHED_H_
 
 #include "base/check.h"
+#include "base/logging.h"
 
-#define NOTREACHED() DCHECK(false)
+#define NOTREACHED() LOG(FATAL) << "NOTREACHED hit. "
 
 #endif  // MINI_CHROMIUM_BASE_NOTREACHED_H_

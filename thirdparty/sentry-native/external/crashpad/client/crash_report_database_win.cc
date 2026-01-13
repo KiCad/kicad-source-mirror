@@ -35,6 +35,7 @@
 #include "util/misc/implicit_cast.h"
 #include "util/misc/initialization_state_dcheck.h"
 #include "util/misc/metrics.h"
+#include "util/win/command_line.h"
 
 namespace crashpad {
 
@@ -650,6 +651,8 @@ class CrashReportDatabaseWin : public CrashReportDatabase {
   OperationStatus RequestUpload(const UUID& uuid) override;
   int CleanDatabase(time_t lockfile_ttl) override;
   base::FilePath DatabasePath() override;
+  void LaunchCrashReporter(const base::FilePath& crash_reporter,
+                           const base::FilePath& crash_envelope) override;
 
  private:
   // CrashReportDatabase:
@@ -663,13 +666,11 @@ class CrashReportDatabaseWin : public CrashReportDatabase {
   std::unique_ptr<Metadata> AcquireMetadata();
 
   Settings& SettingsInternal() {
-    std::call_once(settings_init_, [this]() {
-      settings_.Initialize(base_dir_.Append(kSettings));
-    });
+    std::call_once(settings_init_, [this]() { settings_.Initialize(); });
     return settings_;
   }
 
-  base::FilePath base_dir_;
+  const base::FilePath base_dir_;
   Settings settings_;
   std::once_flag settings_init_;
   InitializationStateDcheck initialized_;
@@ -678,7 +679,7 @@ class CrashReportDatabaseWin : public CrashReportDatabase {
 CrashReportDatabaseWin::CrashReportDatabaseWin(const base::FilePath& path)
     : CrashReportDatabase(),
       base_dir_(path),
-      settings_(),
+      settings_(path.Append(kSettings)),
       settings_init_(),
       initialized_() {}
 
@@ -709,6 +710,37 @@ bool CrashReportDatabaseWin::Initialize(bool may_create) {
 
 base::FilePath CrashReportDatabaseWin::DatabasePath() {
   return base_dir_;
+}
+
+void CrashReportDatabaseWin::LaunchCrashReporter(
+    const base::FilePath& crash_reporter,
+    const base::FilePath& crash_envelope) {
+  std::wstring command_line;
+  AppendCommandLineArgument(crash_reporter.value(), &command_line);
+  AppendCommandLineArgument(crash_envelope.value(), &command_line);
+
+  STARTUPINFOW si = {0};
+  PROCESS_INFORMATION pi = {0};
+  si.cb = sizeof(si);
+
+  BOOL rv = CreateProcessW(crash_reporter.value().c_str(),  // lpApplicationName
+                           command_line.data(),  // lpCommandLine
+                           nullptr,  // lpProcessAttributes
+                           nullptr,  // lpThreadAttributes
+                           false,  // bInheritHandles
+                           DETACHED_PROCESS,  // dwCreationFlags
+                           nullptr,  // lpEnvironment
+                           nullptr,  // lpCurrentDirectory
+                           &si,  // lpStartupInfo
+                           &pi  // lpProcessInformation
+  );
+  if (!rv) {
+    PLOG(ERROR) << "CreateProcessW";
+    return;
+  }
+
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
 }
 
 Settings* CrashReportDatabaseWin::GetSettings() {
@@ -912,16 +944,6 @@ std::unique_ptr<Metadata> CrashReportDatabaseWin::AcquireMetadata() {
                           AttachmentsRootPath());
 }
 
-std::unique_ptr<CrashReportDatabase> InitializeInternal(
-    const base::FilePath& path,
-    bool may_create) {
-  std::unique_ptr<CrashReportDatabaseWin> database_win(
-      new CrashReportDatabaseWin(path));
-  return database_win->Initialize(may_create)
-             ? std::move(database_win)
-             : std::unique_ptr<CrashReportDatabaseWin>();
-}
-
 OperationStatus CrashReportDatabaseWin::RequestUpload(const UUID& uuid) {
   INITIALIZATION_STATE_DCHECK_VALID(initialized_);
 
@@ -968,6 +990,8 @@ int CrashReportDatabaseWin::CleanDatabase(time_t lockfile_ttl) {
   time_t now = time(nullptr);
 
   std::unique_ptr<Metadata> metadata(AcquireMetadata());
+  if (!metadata)
+    return kDatabaseError;
 
   // Remove old reports without metadata.
   while ((result = reader.NextFile(&filename)) ==
@@ -1024,15 +1048,29 @@ void CrashReportDatabaseWin::CleanOrphanedAttachments() {
         continue;
       }
 
-      // Remove attachments if corresponding report doen't exist.
-      base::FilePath report_path =
-          reports_dir.Append(uuid.ToWString() + kCrashReportFileExtension);
+      // Remove attachments if corresponding report doesn't exist.
+      base::FilePath report_path = reports_dir.Append(
+          uuid.ToWString() + L"." + kCrashReportFileExtension);
       if (!IsRegularFile(report_path)) {
         RemoveAttachmentsByUUID(uuid);
       }
     }
   }
 }
+
+namespace {
+
+std::unique_ptr<CrashReportDatabase> InitializeInternal(
+    const base::FilePath& path,
+    bool may_create) {
+  std::unique_ptr<CrashReportDatabaseWin> database_win(
+      new CrashReportDatabaseWin(path));
+  return database_win->Initialize(may_create)
+             ? std::move(database_win)
+             : std::unique_ptr<CrashReportDatabaseWin>();
+}
+
+}  // namespace
 
 // static
 std::unique_ptr<CrashReportDatabase> CrashReportDatabase::Initialize(
@@ -1044,6 +1082,13 @@ std::unique_ptr<CrashReportDatabase> CrashReportDatabase::Initialize(
 std::unique_ptr<CrashReportDatabase>
 CrashReportDatabase::InitializeWithoutCreating(const base::FilePath& path) {
   return InitializeInternal(path, false);
+}
+
+// static
+std::unique_ptr<SettingsReader>
+CrashReportDatabase::GetSettingsReaderForDatabasePath(
+    const base::FilePath& path) {
+  return std::make_unique<SettingsReader>(path.Append(kSettings));
 }
 
 }  // namespace crashpad

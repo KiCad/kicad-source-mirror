@@ -1,13 +1,16 @@
 import email
 import gzip
+import json
 import platform
 import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime, UTC
+from pathlib import Path
 
 import msgpack
 
+from . import SENTRY_VERSION
 from .conditions import is_android
 
 VERSION_RE = re.compile(r"(\d+\.\d+\.\d+)[-.]?(.*)")
@@ -41,13 +44,25 @@ def assert_session(envelope, extra_assertion=None):
 def assert_user_feedback(envelope):
     user_feedback = None
     for item in envelope:
-        if item.headers.get("type") == "user_report" and item.payload.json is not None:
-            user_feedback = item.payload.json
+        if item.headers.get("type") == "feedback" and item.payload.json is not None:
+            user_feedback = item.payload.json["contexts"]["feedback"]
 
     assert user_feedback is not None
     assert user_feedback["name"] == "some-name"
-    assert user_feedback["email"] == "some-email"
-    assert user_feedback["comments"] == "some-comment"
+    assert user_feedback["contact_email"] == "some-email"
+    assert user_feedback["message"] == "some-message"
+
+
+def assert_user_report(envelope):
+    user_report = None
+    for item in envelope:
+        if item.headers.get("type") == "user_report" and item.payload.json is not None:
+            user_report = item.payload.json
+
+    assert user_report is not None
+    assert user_report["name"] == "some-name"
+    assert user_report["email"] == "some-email"
+    assert user_report["comments"] == "some-comment"
 
 
 def assert_meta(
@@ -55,27 +70,47 @@ def assert_meta(
     release="test-example-release",
     integration=None,
     transaction="test-transaction",
+    transaction_data=None,
     sdk_override=None,
 ):
+    assert envelope.headers["event_id"]
     event = envelope.get_event()
+    assert_event_meta(
+        event, release, integration, transaction, transaction_data, sdk_override
+    )
+
+
+def assert_event_meta(
+    event,
+    release="test-example-release",
+    integration=None,
+    transaction="test-transaction",
+    transaction_data=None,
+    sdk_override=None,
+):
+    assert event["event_id"]
+
+    extra = {
+        "extra stuff": "some value",
+        "…unicode key…": "őá…–🤮🚀¿ 한글 테스트",
+    }
+    if transaction_data:
+        extra.update(transaction_data)
 
     expected = {
         "platform": "native",
         "environment": "development",
         "release": release,
-        "user": {"id": 42, "username": "some_name"},
+        "user": {"id": "42", "username": "some_name"},
         "transaction": transaction,
         "tags": {"expected-tag": "some value"},
-        "extra": {
-            "extra stuff": "some value",
-            "…unicode key…": "őá…–🤮🚀¿ 한글 테스트",
-        },
+        "extra": extra,
     }
     expected_sdk = {
         "name": "sentry.native",
-        "version": "0.7.2",
+        "version": SENTRY_VERSION,
         "packages": [
-            {"name": "github:getsentry/sentry-native", "version": "0.7.2"},
+            {"name": "github:getsentry/sentry-native", "version": SENTRY_VERSION},
         ],
     }
     if is_android:
@@ -97,6 +132,8 @@ def assert_meta(
                 event["contexts"]["os"],
                 {"name": "Linux", "version": version, "build": build},
             )
+            assert "distribution_name" in event["contexts"]["os"]
+            assert "distribution_version" in event["contexts"]["os"]
         elif sys.platform == "darwin":
             version = platform.mac_ver()[0].split(".")
             if len(version) < 3:
@@ -133,7 +170,9 @@ def assert_meta(
         )
 
 
-def assert_stacktrace(envelope, inside_exception=False, check_size=True):
+def assert_stacktrace(
+    envelope, inside_exception=False, check_size=True, check_package=False
+):
     event = envelope.get_event()
 
     parent = event["exception"] if inside_exception else event["threads"]
@@ -148,13 +187,22 @@ def assert_stacktrace(envelope, inside_exception=False, check_size=True):
             for frame in frames
         )
 
+    if check_package:
+        for frame in frames:
+            frame_package = frame.get("package")
+            if frame_package is not None:
+                frame_package_path = Path(frame_package)
+                # only assert on absolute paths, since letting pathlib resolve relative paths is cheating
+                if frame_package_path.is_absolute():
+                    assert (
+                        frame_package_path.is_file()
+                    ), f"package is not a valid file path: '{frame_package}'"
 
-def assert_breadcrumb(envelope):
-    event = envelope.get_event()
 
+def assert_breadcrumb_inner(breadcrumbs, message="debug crumb"):
     expected = {
         "type": "http",
-        "message": "debug crumb",
+        "message": message,
         "category": "example!",
         "level": "debug",
         "data": {
@@ -164,7 +212,12 @@ def assert_breadcrumb(envelope):
             "reason": "OK",
         },
     }
-    assert any(matches(b, expected) for b in event["breadcrumbs"])
+    assert any(matches(b, expected) for b in breadcrumbs)
+
+
+def assert_breadcrumb(envelope, message="debug crumb"):
+    event = envelope.get_event()
+    assert_breadcrumb_inner(event["breadcrumbs"], message)
 
 
 def assert_attachment(envelope):
@@ -172,7 +225,81 @@ def assert_attachment(envelope):
         "type": "attachment",
         "filename": "CMakeCache.txt",
     }
+    assert any(
+        matches(item.headers, expected)
+        and b"This is the CMakeCache file." in item.payload.bytes
+        for item in envelope
+    )
+
+    expected = {
+        "type": "attachment",
+        "filename": "bytes.bin",
+        "content_type": "application/octet-stream",
+    }
+    assert any(
+        matches(item.headers, expected) and item.payload.bytes == b"\xc0\xff\xee"
+        for item in envelope
+    )
+
+
+def assert_logs(envelope, expected_item_count=1, expected_trace_id=None):
+    logs = None
+    for item in envelope:
+        assert item.headers.get("type") == "log"
+        # >= because of random #lost logs in test_logs_threaded
+        assert item.headers.get("item_count") >= expected_item_count
+        assert (
+            item.headers.get("content_type") == "application/vnd.sentry.items.log+json"
+        )
+        logs = item.payload.json
+
+    assert isinstance(logs, dict)
+    assert "items" in logs
+    # >= because of random #lost logs in test_logs_threaded
+    assert len(logs["items"]) >= expected_item_count
+    for i in range(expected_item_count):
+        log_item = logs["items"][i]
+        assert "body" in log_item
+        assert "level" in log_item
+        assert "timestamp" in log_item  # TODO do we need to validate the timestamp?
+        assert "trace_id" in log_item
+        assert "attributes" in log_item
+        assert "os.name" in log_item["attributes"]
+        assert "os.version" in log_item["attributes"]
+        assert "sentry.environment" in log_item["attributes"]
+        assert "sentry.release" in log_item["attributes"]
+        assert "sentry.sdk.name" in log_item["attributes"]
+        assert "sentry.sdk.version" in log_item["attributes"]
+        if expected_trace_id:
+            assert log_item["trace_id"] == expected_trace_id
+
+
+def assert_attachment_view_hierarchy(envelope):
+    expected = {
+        "type": "attachment",
+        "filename": "view-hierarchy.json",
+        "attachment_type": "event.view_hierarchy",
+        "content_type": "application/json",
+    }
     assert any(matches(item.headers, expected) for item in envelope)
+
+
+def assert_attachment_content_view_hierarchy(attachment):
+    expected = {
+        "rendering_system": "android_view_system",
+        "windows": [
+            {
+                "alpha": 1.0,
+                "height": 1280.0,
+                "type": "com.android.internal.policy.DecorView",
+                "visibility": "visible",
+                "width": 768.0,
+                "x": 0.0,
+                "y": 0.0,
+            }
+        ],
+    }
+    assert matches(attachment, expected)
 
 
 def assert_minidump(envelope):
@@ -185,11 +312,12 @@ def assert_minidump(envelope):
     assert minidump.payload.bytes.startswith(b"MDMP")
 
 
-def assert_timestamp(ts, now=datetime.now(UTC)):
-    assert ts[:11] == now.isoformat()[:11]
+def assert_timestamp(ts):
+    elapsed_time = datetime.now(UTC) - datetime.fromisoformat(ts)
+    assert elapsed_time.total_seconds() < 10
 
 
-def assert_event(envelope, message="Hello World!"):
+def assert_event(envelope, message="Hello World!", expected_trace_id=""):
     event = envelope.get_event()
     expected = {
         "level": "info",
@@ -198,6 +326,15 @@ def assert_event(envelope, message="Hello World!"):
     }
     assert_matches(event, expected)
     assert_timestamp(event["timestamp"])
+    assert_trace_id(event, expected_trace_id)
+
+
+# if expected_trace is "" we just expect any value to exist
+def assert_trace_id(event, expected_trace_id):
+    if expected_trace_id == "":
+        assert len(event["contexts"]["trace"]["trace_id"]) == 32
+    else:
+        assert event["contexts"]["trace"]["trace_id"] == expected_trace_id
 
 
 def assert_breakpad_crash(envelope):
@@ -250,6 +387,9 @@ class CrashpadAttachments:
     event: dict
     breadcrumb1: list
     breadcrumb2: list
+    view_hierarchy: dict
+    cmake_cache: int
+    bytes_bin: bytes = None
 
 
 def _unpack_breadcrumbs(payload):
@@ -262,6 +402,9 @@ def _load_crashpad_attachments(msg):
     event = {}
     breadcrumb1 = []
     breadcrumb2 = []
+    view_hierarchy = {}
+    cmake_cache = -1
+    bytes_bin = None
     for part in msg.walk():
         if part.get_filename() is not None:
             assert part.get("Content-Type") is None
@@ -273,8 +416,16 @@ def _load_crashpad_attachments(msg):
                 breadcrumb1 = _unpack_breadcrumbs(part.get_payload(decode=True))
             case "__sentry-breadcrumb2":
                 breadcrumb2 = _unpack_breadcrumbs(part.get_payload(decode=True))
+            case "view-hierarchy.json":
+                view_hierarchy = json.loads(part.get_payload(decode=True))
+            case "CMakeCache.txt":
+                cmake_cache = len(part.get_payload(decode=True))
+            case "bytes.bin":
+                bytes_bin = part.get_payload(decode=True)
 
-    return CrashpadAttachments(event, breadcrumb1, breadcrumb2)
+    return CrashpadAttachments(
+        event, breadcrumb1, breadcrumb2, view_hierarchy, cmake_cache, bytes_bin
+    )
 
 
 def is_valid_timestamp(timestamp):
@@ -292,19 +443,33 @@ def _validate_breadcrumb_seq(seq, breadcrumb_func):
         assert is_valid_timestamp(breadcrumb["timestamp"])
 
 
-def assert_crashpad_upload(req):
-    multipart = gzip.decompress(req.get_data())
-    msg = email.message_from_bytes(bytes(str(req.headers), encoding="utf8") + multipart)
-    attachments = _load_crashpad_attachments(msg)
-
+def assert_overflowing_breadcrumb(attachments):
     if len(attachments.breadcrumb1) > 3:
         _validate_breadcrumb_seq(range(97), lambda i: attachments.breadcrumb1[3 + i])
         _validate_breadcrumb_seq(
             range(97, 101), lambda i: attachments.breadcrumb2[i - 97]
         )
+    else:
+        assert_breadcrumb_inner(attachments.breadcrumb1)
 
-    assert attachments.event["level"] == "fatal"
 
+def assert_crashpad_upload(req, expect_attachment=False, expect_view_hierarchy=False):
+    multipart = gzip.decompress(req.get_data())
+    msg = email.message_from_bytes(bytes(str(req.headers), encoding="utf8") + multipart)
+    attachments = _load_crashpad_attachments(msg)
+
+    assert_overflowing_breadcrumb(attachments)
+    assert_event_meta(attachments.event, integration="crashpad")
+    if expect_attachment:
+        assert attachments.cmake_cache > 0
+    else:
+        assert attachments.cmake_cache == -1
+    if expect_attachment and (sys.platform == "win32" or sys.platform == "linux"):
+        assert attachments.bytes_bin == b"\xc0\xff\xee"
+    else:
+        assert attachments.bytes_bin == None
+    if expect_view_hierarchy:
+        assert_attachment_content_view_hierarchy(attachments.view_hierarchy)
     assert any(
         b'name="upload_file_minidump"' in part.as_bytes()
         and b"\n\nMDMP" in part.as_bytes()
@@ -318,3 +483,15 @@ def assert_gzip_file_header(output):
 
 def assert_gzip_content_encoding(req):
     assert req.content_encoding == "gzip"
+
+
+def assert_no_proxy_request(stdout):
+    assert "POST" not in stdout
+
+
+def assert_failed_proxy_auth_request(stdout):
+    assert (
+        "POST" in stdout
+        and "407 Proxy Authentication Required" in stdout
+        and "200 OK" not in stdout
+    )

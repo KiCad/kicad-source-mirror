@@ -45,7 +45,7 @@ def test_static_lib(cmake):
 
 @pytest.mark.skipif(not has_crashpad, reason="test needs crashpad backend")
 def test_static_crashpad(cmake):
-    tmp_path = cmake(
+    cmake(
         ["sentry_example"],
         {
             "SENTRY_BACKEND": "crashpad",
@@ -55,9 +55,27 @@ def test_static_crashpad(cmake):
     )
 
 
+@pytest.mark.skipif(not has_crashpad, reason="test needs crashpad backend")
+@pytest.mark.skipif(not sys.platform == "win32", reason="test requires Windows")
+def test_static_crashpad_static_runtime(cmake):
+    """
+    When this test fails it is most likely that you didn't reflect a target change inside the `crashpad` build in the
+    top-level `crashpad` target properties (`FOLDER`, `MSVC_RUNTIME_LIBRARY`) for Windows builds.
+    """
+    cmake(
+        ["sentry_example"],
+        {
+            "SENTRY_BACKEND": "crashpad",
+            "SENTRY_TRANSPORT": "none",
+            "BUILD_SHARED_LIBS": "OFF",
+            "SENTRY_BUILD_RUNTIMESTATIC": "ON",
+        },
+    )
+
+
 @pytest.mark.skipif(not has_breakpad, reason="test needs breakpad backend")
 def test_static_breakpad(cmake):
-    tmp_path = cmake(
+    cmake(
         ["sentry_example"],
         {
             "SENTRY_BACKEND": "breakpad",

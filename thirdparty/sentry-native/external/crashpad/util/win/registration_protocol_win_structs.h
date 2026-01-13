@@ -116,6 +116,26 @@ struct ShutdownRequest {
   uint64_t token;
 };
 
+//! \brief A file attachment request (legacy, limited to MAX_PATH).
+struct AttachmentRequest {
+  //! \brief The path of the attachment.
+  wchar_t path[MAX_PATH];
+};
+
+//! \brief A variable-length file attachment request header.
+//!
+//! For kAddAttachmentV2 and kRemoveAttachmentV2, the message consists of
+//! a ClientToServerMessage with this header in the union, followed by
+//! path_length_bytes of wchar_t data containing the null-terminated path.
+struct AttachmentRequestV2 {
+  //! \brief Length of the path in bytes, including null terminator.
+  uint32_t path_length_bytes;
+};
+
+//! follow the maximum path length documented here:
+//! https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation
+constexpr uint32_t kMaxPathBytes = 32768 * sizeof(wchar_t);
+
 //! \brief The message passed from client to server by
 //!     SendToCrashHandlerServer().
 struct ClientToServerMessage {
@@ -127,15 +147,29 @@ struct ClientToServerMessage {
     //! \brief For ShutdownRequest.
     kShutdown,
 
+    //! \brief For AttachmentRequest (legacy, MAX_PATH limited).
+    kAddAttachment,
+
+    //! \brief For AttachmentRequest (legacy, MAX_PATH limited).
+    kRemoveAttachment,
+
     //! \brief An empty message sent by the initial client in asynchronous mode.
     //!     No data is required, this just confirms that the server is ready to
     //!     accept client registrations.
     kPing,
+
+    //! \brief For AttachmentRequestV2 (variable-length paths).
+    kAddAttachmentV2,
+
+    //! \brief For AttachmentRequestV2 (variable-length paths).
+    kRemoveAttachmentV2,
   } type;
 
   union {
     RegistrationRequest registration;
     ShutdownRequest shutdown;
+    AttachmentRequest attachment;
+    AttachmentRequestV2 attachment_v2;
   };
 };
 

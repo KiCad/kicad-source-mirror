@@ -37,7 +37,9 @@ std::vector<std::string> BuildHandlerArgvStrings(
     const std::string& http_proxy,
     const std::map<std::string, std::string>& annotations,
     const std::vector<std::string>& arguments,
-    const std::vector<base::FilePath>& attachments = {});
+    const std::vector<base::FilePath>& attachments = {},
+    const base::FilePath& crash_reporter = base::FilePath(),
+    const base::FilePath& crash_envelope = base::FilePath());
 
 //! \brief Flattens a string vector into a const char* vector suitable for use
 //!     in an exec() call.

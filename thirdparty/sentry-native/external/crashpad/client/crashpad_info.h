@@ -56,6 +56,8 @@ struct UserDataMinidumpStreamListEntry {
 
 }  // namespace internal
 
+using UserDataMinidumpStreamHandle = internal::UserDataMinidumpStreamListEntry;
+
 //! \brief A structure that can be used by a Crashpad-enabled program to
 //!     provide information to the Crashpad crash handler.
 //!
@@ -79,15 +81,53 @@ struct CrashpadInfo {
   //! this method is called, or they may be added, removed, or modified in \a
   //! address_range_bag after this method is called.
   //!
-  //! TODO(scottmg) This is currently only supported on Windows.
+  //! TODO(scottmg) This is currently only supported on Windows and iOS.
   //!
   //! \param[in] address_range_bag A bag of address ranges. The CrashpadInfo
   //!     object does not take ownership of the SimpleAddressRangeBag object.
   //!     It is the caller’s responsibility to ensure that this pointer remains
   //!     valid while it is in effect for a CrashpadInfo object.
+  //!
+  //! \sa extra_memory_ranges()
   void set_extra_memory_ranges(SimpleAddressRangeBag* address_range_bag) {
     extra_memory_ranges_ = address_range_bag;
   }
+
+  //! \return The simple extra memory ranges SimpleAddressRangeBag object.
+  //!
+  //! \sa set_extra_memory_ranges()
+  SimpleAddressRangeBag* extra_memory_ranges() const {
+    return extra_memory_ranges_;
+  }
+
+#if BUILDFLAG(IS_IOS)
+  //! \brief Sets the bag of extra memory ranges to be included in the iOS
+  //! intermediate dump. This memory is not included in the minidump.
+  //!
+  //! Extra memory ranges may exist in \a address_range_bag at the time that
+  //! this method is called, or they may be added, removed, or modified in \a
+  //! address_range_bag after this method is called.
+  //!
+  //! This is only supported on iOS.
+  //!
+  //! \param[in] address_range_bag A bag of address ranges. The CrashpadInfo
+  //!     object does not take ownership of the SimpleAddressRangeBag object.
+  //!     It is the caller’s responsibility to ensure that this pointer remains
+  //!     valid while it is in effect for a CrashpadInfo object.
+  //!
+  //! \sa extra_memory_ranges()
+  void set_intermediate_dump_extra_memory_ranges(
+      SimpleAddressRangeBag* address_range_bag) {
+    intermediate_dump_extra_memory_ranges_ = address_range_bag;
+  }
+
+  //! \return The simple extra memory ranges SimpleAddressRangeBag object.
+  //!
+  //! \sa set_extra_memory_ranges()
+  SimpleAddressRangeBag* intermediate_dump_extra_memory_ranges() const {
+    return intermediate_dump_extra_memory_ranges_;
+  }
+#endif
 
   //! \brief Sets the simple annotations dictionary.
   //!
@@ -204,6 +244,25 @@ struct CrashpadInfo {
     indirectly_referenced_memory_cap_ = limit;
   }
 
+  //! \brief Limits stack capture to stack pointer.
+  //!
+  //! When handling an exception, the Crashpad handler will scan all modules in
+  //! a process. The first one that has a CrashpadInfo structure populated with
+  //! a value other than TriState::kUnset for this field will dictate whether
+  //! stack capture is limited.
+  //!
+  //! This causes Crashpad to use the current stack pointer as the upper bound
+  //! of the stack capture range, once validated to be within TEB
+  //! StackLimit/StackBase values. This reduces the capture range compared to
+  //! using the full TEB-derived stack region. This is useful when running under
+  //! Wine/Proton where TEB values may be incorrect.
+  //!
+  //! \param[in] limit_stack_capture_to_sp Whether to limit stack capture to
+  //!     the stack pointer.
+  void set_limit_stack_capture_to_sp(TriState limit_stack_capture_to_sp) {
+    limit_stack_capture_to_sp_ = limit_stack_capture_to_sp;
+  }
+
   //! \brief Adds a custom stream to the minidump.
   //!
   //! The memory block referenced by \a data and \a size will added to the
@@ -221,9 +280,41 @@ struct CrashpadInfo {
   //!     which is `0xffff`.
   //! \param[in] data The base pointer of the stream data.
   //! \param[in] size The size of the stream data.
-  void AddUserDataMinidumpStream(uint32_t stream_type,
-                                 const void* data,
-                                 size_t size);
+  //! \return A handle to the added stream, for use in calling
+  //!     UpdateUserDataMinidumpStream() if needed.
+  UserDataMinidumpStreamHandle* AddUserDataMinidumpStream(uint32_t stream_type,
+                                                          const void* data,
+                                                          size_t size);
+
+  //! \brief Replaces the given stream with an updated stream.
+  //!
+  //! Creates a new memory block referencing the given \a data and \a size with
+  //! type \a stream_type. The memory referred to be \a data and \a size is
+  //! owned by the caller and must remain valid while it is in effect for the
+  //! CrashpadInfo object.
+  //!
+  //! Frees \a stream_to_update and returns a new handle to the updated stream.
+  //!
+  //! \param[in] stream_to_update A handle to the stream to be updated, received
+  //!     from either AddUserDataMinidumpStream() or previous calls to this
+  //!     function.
+  //! \param[in] stream_type The stream type identifier to use. This should be
+  //!     normally be larger than `MINIDUMP_STREAM_TYPE::LastReservedStream`
+  //!     which is `0xffff`.
+  //! \param[in] data The base pointer of the stream data.
+  //! \param[in] size The size of the stream data.
+  //! \return A handle to the new memory block that references the updated data,
+  //!     for use in calling this method again if needed.
+  UserDataMinidumpStreamHandle* UpdateUserDataMinidumpStream(
+      UserDataMinidumpStreamHandle* stream_to_update,
+      uint32_t stream_type,
+      const void* data,
+      size_t size);
+
+  internal::UserDataMinidumpStreamListEntry*
+  GetUserDataMinidumpStreamHeadForTesting() {
+    return user_data_minidump_stream_head_;
+  }
 
   enum : uint32_t {
     kSignature = 'CPad',
@@ -257,11 +348,14 @@ struct CrashpadInfo {
   TriState crashpad_handler_behavior_;
   TriState system_crash_reporter_forwarding_;
   TriState gather_indirectly_referenced_memory_;
-  uint8_t padding_1_;
+  TriState limit_stack_capture_to_sp_;
   SimpleAddressRangeBag* extra_memory_ranges_;  // weak
   SimpleStringDictionary* simple_annotations_;  // weak
   internal::UserDataMinidumpStreamListEntry* user_data_minidump_stream_head_;
   AnnotationList* annotations_list_;  // weak
+#if BUILDFLAG(IS_IOS)
+  SimpleAddressRangeBag* intermediate_dump_extra_memory_ranges_;  // weak
+#endif
 
   // It’s generally safe to add new fields without changing
   // kCrashpadInfoVersion, because readers should check size_ and ignore fields

@@ -15,23 +15,13 @@
 #include "snapshot/ios/system_snapshot_ios_intermediate_dump.h"
 
 #include <mach/mach.h>
-#include <stddef.h>
 #include <sys/sysctl.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 
-#include <algorithm>
-
-#include "base/apple/mach_logging.h"
-#include "base/logging.h"
 #include "base/strings/stringprintf.h"
 #include "build/build_config.h"
-#include "snapshot/cpu_context.h"
 #include "snapshot/ios/intermediate_dump_reader_util.h"
-#include "snapshot/posix/timezone.h"
-#include "util/ios/ios_intermediate_dump_data.h"
-#include "util/mac/mac_util.h"
-#include "util/numeric/in_range_cast.h"
 
 namespace crashpad {
 
@@ -118,6 +108,8 @@ void SystemSnapshotIOSIntermediateDump::Initialize(
       free_ *= page_size;
     }
   }
+
+  GetDataValueFromMap(system_data, Key::kCrashpadUptime, &crashpad_uptime_ns_);
 
   INITIALIZATION_STATE_SET_VALID(initialized_);
 }
@@ -247,6 +239,11 @@ void SystemSnapshotIOSIntermediateDump::TimeZone(
 uint64_t SystemSnapshotIOSIntermediateDump::AddressMask() const {
   INITIALIZATION_STATE_DCHECK_VALID(initialized_);
   return address_mask_;
+}
+
+uint64_t SystemSnapshotIOSIntermediateDump::CrashpadUptime() const {
+  INITIALIZATION_STATE_DCHECK_VALID(initialized_);
+  return crashpad_uptime_ns_;
 }
 
 }  // namespace internal

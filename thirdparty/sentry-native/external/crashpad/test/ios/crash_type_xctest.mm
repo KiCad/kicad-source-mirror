@@ -14,6 +14,7 @@
 
 #import <XCTest/XCTest.h>
 #include <objc/runtime.h>
+#include <sys/sysctl.h>
 
 #include <vector>
 
@@ -21,8 +22,38 @@
 #include "build/build_config.h"
 #include "client/length_delimited_ring_buffer.h"
 #import "test/ios/host/cptest_shared_object.h"
+#include "util/mac/sysctl.h"
 #include "util/mach/exception_types.h"
 #include "util/mach/mach_extensions.h"
+
+namespace crashpad {
+namespace {
+
+#if TARGET_OS_SIMULATOR
+// macOS 14.0 is 23A344, macOS 13.6.5 is 22G621, so if the first two characters
+// in the kern.osversion are > 22, this build will reproduce the simulator bug
+// in crbug.com/328282286
+// macOS 14.0 is 23A344, macOS 13.6.5 is 22G621, so if the first two
+// characters in the kern.osversion are > 22, this build will reproduce the
+// simulator bug in crbug.com/328282286
+// This now reproduces on macOS 15.4 24E248 as well for iOS17 simulators.
+bool HasMacOSBrokeDYLDTaskInfo() {
+  if (__builtin_available(iOS 18, *)) {
+    return false;
+  }
+  std::string build = crashpad::ReadStringSysctlByName("kern.osversion", false);
+  if (std::stoi(build.substr(0, 2)) >= 24) {
+    return true;
+  }
+  if (__builtin_available(iOS 17, *)) {
+    return false;
+  }
+  return std::stoi(build.substr(0, 2)) > 22;
+}
+#endif
+
+}  // namespace
+}  // namespace crashpad
 
 @interface CPTestTestCase : XCTestCase {
   XCUIApplication* app_;
@@ -82,6 +113,12 @@
 
 - (void)setUp {
   app_ = [[XCUIApplication alloc] init];
+  if ([self.name isEqualToString:@"-[CPTestTestCase testExtensionStreams]"]) {
+    app_.launchArguments = @[ @"--test-extension-streams" ];
+  } else if ([self.name isEqualToString:
+                            @"-[CPTestTestCase testCrashWithExtraMemory]"]) {
+    app_.launchArguments = @[ @"--test-extra_memory" ];
+  }
   [app_ launch];
   rootObject_ = [EDOClientService rootObjectWithPort:12345];
   [rootObject_ clearPendingReports];
@@ -122,12 +159,19 @@
 
 - (void)testTrap {
   [rootObject_ crashTrap];
+#if !BUILDFLAG(IS_IOS_TVOS)
 #if defined(ARCH_CPU_X86_64)
   [self verifyCrashReportException:EXC_BAD_INSTRUCTION];
 #elif defined(ARCH_CPU_ARM64)
   [self verifyCrashReportException:EXC_BREAKPOINT];
 #else
 #error Port to your CPU architecture
+#endif
+#else  // !BUILDFLAG(IS_IOS_TVOS)
+  [self verifyCrashReportException:EXC_SOFT_SIGNAL];
+  NSNumber* report_exception;
+  XCTAssertTrue([rootObject_ pendingReportExceptionInfo:&report_exception]);
+  XCTAssertEqual(report_exception.intValue, SIGTRAP);
 #endif
 }
 
@@ -141,14 +185,24 @@
 
 - (void)testBadAccess {
   [rootObject_ crashBadAccess];
+#if !BUILDFLAG(IS_IOS_TVOS)
   [self verifyCrashReportException:EXC_BAD_ACCESS];
+#else
+  [self verifyCrashReportException:EXC_SOFT_SIGNAL];
+  NSNumber* report_exception;
+  XCTAssertTrue([rootObject_ pendingReportExceptionInfo:&report_exception]);
+  XCTAssertEqual(report_exception.intValue, SIGSEGV);
+#endif
 }
 
 - (void)testException {
   [rootObject_ crashException];
   // After https://reviews.llvm.org/D141222 exceptions call
   // __libcpp_verbose_abort, which Chromium sets to `brk 0` in release.
-#if defined(CRASHPAD_IS_IN_CHROMIUM) && defined(NDEBUG)
+  // After https://crrev.com/c/5375084, Chromium does not set `brk 0` for local
+  // release builds and official DCHECK builds.
+#if defined(CRASHPAD_IS_IN_CHROMIUM) && defined(NDEBUG) && \
+    defined(OFFICIAL_BUILD) && !defined(DCHECK_ALWAYS_ON)
   [self verifyCrashReportException:SIGABRT];
 #else
   [self verifyCrashReportException:EXC_SOFT_SIGNAL];
@@ -210,7 +264,14 @@
 
 - (void)testCatchUIGestureEnvironmentNSException {
   // Tap the button with the string UIGestureEnvironmentException.
+#if !BUILDFLAG(IS_IOS_TVOS)
   [app_.buttons[@"UIGestureEnvironmentException"] tap];
+#else
+  // tvOS does not have [XCUIElement tap]. This version assumes there is just
+  // one big button with "UIGestureEnvironmentException" as title, so we can
+  // just press Select on the remote to activate it.
+  [XCUIRemote.sharedRemote pressButton:XCUIRemoteButtonSelect];
+#endif
   [self verifyCrashReportException:crashpad::kMachExceptionFromNSException];
   NSDictionary* dict = [rootObject_ getAnnotations];
   XCTAssertTrue([[dict[@"objects"][0] valueForKeyPath:@"exceptionReason"]
@@ -240,10 +301,21 @@
       isEqualToString:@"NSGenericException"]);
 }
 
+// This test cannot run correctly on tvOS: it is impossible to catch this stack
+// overflow as a Mach exception (like we do on iOS), and sigaltstack() is also
+// forbidden so we cannot detect it with POSIX signals either.
+// Per xnu-11215.81.4/bsd/uxkern/ux_exception.c's handle_ux_exception(), when a
+// stack overflow is detected but no alternate stack is specified, the kernel
+// will reset SIGSEGV to SIG_DFL before delivering the signal, so we are never
+// able to capture this crash. Even if we do pass SA_ONSTACK to sigaction(), we
+// will just crash a bit later, as we are still using the same stack that has
+// already overflown.
+#if !BUILDFLAG(IS_IOS_TVOS)
 - (void)testRecursion {
   [rootObject_ crashRecursion];
   [self verifyCrashReportException:EXC_BAD_ACCESS];
 }
+#endif
 
 - (void)testClientAnnotations {
   [rootObject_ crashKillAbort];
@@ -317,6 +389,15 @@
 #endif
 
 - (void)testCrashWithAnnotations {
+#if TARGET_OS_SIMULATOR
+  // This test will fail on <iOS17 simulators when running on macOS >=14.3 or
+  // <iOS18 simulators when running on macOS >=15.4 due to a bug in Simulator.
+  // crbug.com/328282286
+  if (crashpad::HasMacOSBrokeDYLDTaskInfo()) {
+    return;
+  }
+#endif
+
   [rootObject_ crashWithAnnotations];
   [self verifyCrashReportException:EXC_SOFT_SIGNAL];
   NSNumber* report_exception;
@@ -364,12 +445,49 @@
   XCTAssertFalse(reader.Pop(ringBufferEntry));
 }
 
+- (void)testCrashWithExtraMemory {
+#if TARGET_OS_SIMULATOR
+  // This test will fail on <iOS17 simulators when running on macOS >=14.3 or
+  // <iOS18 simulators when running on macOS >=15.4 due to a bug in Simulator.
+  // crbug.com/328282286
+  if (crashpad::HasMacOSBrokeDYLDTaskInfo()) {
+    return;
+  }
+#endif
+
+  [rootObject_ crashKillAbort];
+  [self verifyCrashReportException:EXC_SOFT_SIGNAL];
+
+  NSDictionary* dict = [rootObject_ getExtraMemory];
+  BOOL found = NO;
+  for (NSString* key in dict) {
+    if ([dict[key] isEqualToString:@"hello world"]) {
+      found = YES;
+      break;
+    }
+  }
+  XCTAssertTrue(found);
+}
+
+- (void)testExtensionStreams {
+#if TARGET_OS_SIMULATOR
+  // This test will fail on <iOS17 simulators when running on macOS >=14.3 or
+  // <iOS18 simulators when running on macOS >=15.4 due to a bug in Simulator.
+  // crbug.com/328282286
+  if (crashpad::HasMacOSBrokeDYLDTaskInfo()) {
+    return;
+  }
+#endif
+  [rootObject_ crashKillAbort];
+  [self verifyCrashReportException:EXC_SOFT_SIGNAL];
+  XCTAssertTrue([rootObject_ hasExtensionStream]);
+}
+
 - (void)testDumpWithoutCrash {
   [rootObject_ generateDumpWithoutCrash:10 threads:3];
 
   // The app should not crash
   XCTAssertTrue(app_.state == XCUIApplicationStateRunningForeground);
-
   XCTAssertEqual([rootObject_ pendingReportCount], 30);
 }
 

@@ -1,0 +1,32 @@
+# Copyright 2024 The Crashpad Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This file is copied from
+# https://crsrc.org/c/build/config/fuchsia/gn_configs.gni?q=gn_configs.gni
+# with some local modifications to match the crashpad setup.
+
+# Path to the fuchsia SDK. This is intended for use in other templates &
+# rules to reference the contents of the fuchsia SDK.
+fuchsia_sdk = "//third_party/fuchsia/sdk/linux-amd64"
+
+declare_args() {
+  # Specify a readelf_exec path to use. If not specified, the host's system
+  # executable will be used. Passed to populate_build_id_dir.py and
+  # prepare_package_inputs.py via the --readelf-exec flag.
+  # Must be a GN path (not an absolute path) since it is adjusted with
+  # rebase_path().
+  if (!defined(fuchsia_sdk_readelf_exec)) {
+    fuchsia_sdk_readelf_exec = ""
+  }
+}

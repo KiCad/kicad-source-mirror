@@ -9,6 +9,10 @@
 #include "sentry_transport.h"
 #include "sentry_utils.h"
 
+#ifdef SENTRY_PLATFORM_XBOX
+#    include "sentry_transport_xbox.h"
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <winhttp.h>
@@ -17,6 +21,8 @@ typedef struct {
     sentry_dsn_t *dsn;
     wchar_t *user_agent;
     wchar_t *proxy;
+    wchar_t *proxy_username;
+    wchar_t *proxy_password;
     sentry_rate_limiter_t *ratelimiter;
     HINTERNET session;
     HINTERNET connect;
@@ -51,8 +57,35 @@ sentry__winhttp_bgworker_state_free(void *_state)
     sentry__dsn_decref(state->dsn);
     sentry__rate_limiter_free(state->ratelimiter);
     sentry_free(state->user_agent);
+    sentry_free(state->proxy_username);
+    sentry_free(state->proxy_password);
     sentry_free(state->proxy);
     sentry_free(state);
+}
+
+// Function to extract and set credentials
+static void
+set_proxy_credentials(winhttp_bgworker_state_t *state, const char *proxy)
+{
+    sentry_url_t url;
+    sentry__url_parse(&url, proxy, false);
+    if (url.username && url.password) {
+        // Convert user and pass to LPCWSTR
+        int user_wlen
+            = MultiByteToWideChar(CP_UTF8, 0, url.username, -1, NULL, 0);
+        int pass_wlen
+            = MultiByteToWideChar(CP_UTF8, 0, url.password, -1, NULL, 0);
+        wchar_t *user_w
+            = (wchar_t *)malloc((size_t)user_wlen * sizeof(wchar_t));
+        wchar_t *pass_w
+            = (wchar_t *)malloc((size_t)pass_wlen * sizeof(wchar_t));
+        MultiByteToWideChar(CP_UTF8, 0, url.username, -1, user_w, user_wlen);
+        MultiByteToWideChar(CP_UTF8, 0, url.password, -1, pass_w, pass_wlen);
+
+        state->proxy_username = user_w;
+        state->proxy_password = pass_w;
+    }
+    sentry__url_cleanup(&url);
 }
 
 static int
@@ -68,13 +101,22 @@ sentry__winhttp_transport_start(
 
     sentry__bgworker_setname(bgworker, opts->transport_thread_name);
 
+    const char *env_proxy = opts->dsn
+        ? getenv(opts->dsn->is_secure ? "https_proxy" : "http_proxy")
+        : NULL;
+    const char *proxy = opts->proxy ? opts->proxy : env_proxy ? env_proxy : "";
+
     // ensure the proxy starts with `http://`, otherwise ignore it
-    if (opts->http_proxy
-        && strstr(opts->http_proxy, "http://") == opts->http_proxy) {
-        const char *ptr = opts->http_proxy + 7;
+    if (proxy && strstr(proxy, "http://") == proxy) {
+        const char *ptr = proxy + 7;
+        const char *at_sign = strchr(ptr, '@');
         const char *slash = strchr(ptr, '/');
+        if (at_sign && (!slash || at_sign < slash)) {
+            ptr = at_sign + 1;
+            set_proxy_credentials(state, proxy);
+        }
         if (slash) {
-            char *copy = sentry__string_clone_n(ptr, slash - ptr);
+            char *copy = sentry__string_clone_n(ptr, (size_t)(slash - ptr));
             state->proxy = sentry__string_to_wstr(copy);
             sentry_free(copy);
         } else {
@@ -104,6 +146,7 @@ sentry__winhttp_transport_start(
         SENTRY_WARN("`WinHttpOpen` failed");
         return 1;
     }
+
     return sentry__bgworker_start(bgworker);
 }
 
@@ -174,6 +217,15 @@ sentry__winhttp_send_task(void *_envelope, void *_state)
     url_components.dwUrlPathLength = 1024;
 
     WinHttpCrackUrl(url, 0, 0, &url_components);
+
+#ifdef SENTRY_PLATFORM_XBOX
+    // Ensure Xbox network connectivity is initialized before HTTP requests
+    if (!sentry__xbox_ensure_network_initialized()) {
+        SENTRY_WARN("Xbox: Network not ready, skipping HTTP request");
+        goto exit;
+    }
+#endif
+
     if (!state->connect) {
         state->connect = WinHttpConnect(state->session,
             url_components.lpszHostName, url_components.nPort, 0);
@@ -205,10 +257,23 @@ sentry__winhttp_send_task(void *_envelope, void *_state)
 
     char *headers_buf = sentry__stringbuilder_into_string(&sb);
     headers = sentry__string_to_wstr(headers_buf);
+
+    if (headers_buf) {
+        SENTRY_DEBUGF("sending request using winhttp to \"%s\":\n%s", req->url,
+            headers_buf);
+    }
     sentry_free(headers_buf);
 
-    SENTRY_TRACEF(
-        "sending request using winhttp to \"%s\":\n%S", req->url, headers);
+    if (!headers) {
+        SENTRY_WARN("sentry__winhttp_send_task: failed to allocate headers");
+        goto exit;
+    }
+
+    if (state->proxy_username && state->proxy_password) {
+        WinHttpSetCredentials(state->request, WINHTTP_AUTH_TARGET_PROXY,
+            WINHTTP_AUTH_SCHEME_BASIC, state->proxy_username,
+            state->proxy_password, 0);
+    }
 
     if (WinHttpSendRequest(state->request, headers, (DWORD)-1,
             (LPVOID)req->body, (DWORD)req->body_len, (DWORD)req->body_len, 0)) {
@@ -233,7 +298,7 @@ sentry__winhttp_send_task(void *_envelope, void *_state)
                         WINHTTP_QUERY_RAW_HEADERS_CRLF,
                         WINHTTP_HEADER_NAME_BY_INDEX, lpOutBuffer, &dwSize,
                         WINHTTP_NO_HEADER_INDEX)) {
-                    SENTRY_TRACEF(
+                    SENTRY_DEBUGF(
                         "received response:\n%S", (wchar_t *)lpOutBuffer);
                 }
                 sentry_free(lpOutBuffer);
@@ -272,12 +337,12 @@ sentry__winhttp_send_task(void *_envelope, void *_state)
             sentry__rate_limiter_update_from_429(state->ratelimiter);
         }
     } else {
-        SENTRY_DEBUGF(
+        SENTRY_WARNF(
             "`WinHttpSendRequest` failed with code `%d`", GetLastError());
     }
 
     uint64_t now = sentry__monotonic_time();
-    SENTRY_TRACEF("request handled in %llums", now - started);
+    SENTRY_DEBUGF("request handled in %llums", now - started);
 
 exit:
     if (state->request) {
@@ -319,7 +384,7 @@ sentry__winhttp_dump_queue(sentry_run_t *run, void *transport_state)
 sentry_transport_t *
 sentry__transport_new_default(void)
 {
-    SENTRY_DEBUG("initializing winhttp transport");
+    SENTRY_INFO("initializing winhttp transport");
     winhttp_bgworker_state_t *state = sentry__winhttp_bgworker_state_new();
     if (!state) {
         return NULL;

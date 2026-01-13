@@ -2,19 +2,15 @@
 #define SENTRY_PATH_H_INCLUDED
 
 #include "sentry_boot.h"
+#include "sentry_string.h"
 
-#include <stdio.h>
-
-#ifdef SENTRY_PLATFORM_WINDOWS
-typedef wchar_t sentry_pathchar_t;
-#    define SENTRY_PATH_PRI "S"
-#else
-typedef char sentry_pathchar_t;
-#    define SENTRY_PATH_PRI "s"
-#endif
+#include <time.h>
 
 struct sentry_path_s {
-    sentry_pathchar_t *path;
+    char *path;
+#ifdef SENTRY_PLATFORM_WINDOWS
+    wchar_t *path_w;
+#endif
 };
 
 struct sentry_filelock_s {
@@ -23,15 +19,37 @@ struct sentry_filelock_s {
     bool is_locked;
 };
 
+struct sentry_filewriter_s;
+
 typedef struct sentry_path_s sentry_path_t;
 typedef struct sentry_pathiter_s sentry_pathiter_t;
 typedef struct sentry_filelock_s sentry_filelock_t;
+typedef struct sentry_filewriter_s sentry_filewriter_t;
 
 /**
  * NOTE on encodings:
  *
- * When not stated otherwise, all `char` functions defined here will assume an
- * OS-specific encoding, typically ANSI on Windows, and UTF-8 on Unix.
+ * All `char` represent OS-dependent encoding. On UNIXes the path encoding is
+ * based on the locale settings, which often means UTF-8 (macOS forces it,
+ * Android defaults to it on all layers, and many Linux configurations default
+ * to it too, but there is much more variety).
+ * However, the locale can be set to anything so that we consider paths as an
+ * opaque bytestream that we just pass through.
+ * On Windows, we use UTF-8 as the canonical narrow string encoding and provide
+ * a wide character string as an additional path member `path_w`, which all
+ * functions below must keep in sync.
+ *
+ * If you add a new function that creates paths, you must take care of
+ * synchronizing the contents of `path` and `path_w` on Windows. Further must
+ * you ensure that `char` on Windows stays independent of the ANSI code page.
+ *
+ * In particular this means:
+ * - always do full conversions between the narrow and wide characters
+ * - always use the wide variant of Win32 APIs when leaving the SDK boundary
+ *   (the narrow APIs interpret a `char*` according to the configured ACP)
+ * - never assume you can calculate the buffer size for one encoding out of the
+ *   buffer size for the other (use our string helpers or, if you must, the
+ *   Win32 multibyte APIs with `CP_UTF8`!)
  */
 
 /**
@@ -89,7 +107,12 @@ void sentry__path_free(sentry_path_t *path);
  * This will return a pointer to the last path segment, which is typically the
  * file or directory name
  */
-const sentry_pathchar_t *sentry__path_filename(const sentry_path_t *path);
+const char *sentry__path_filename(const sentry_path_t *path);
+
+/**
+ * Returns whether the two paths are equal.
+ */
+bool sentry__path_eq(const sentry_path_t *path_a, const sentry_path_t *path_b);
 
 /**
  * Returns whether the last path segment matches `filename`.
@@ -116,7 +139,10 @@ bool sentry__path_is_file(const sentry_path_t *path);
  * Remove the directory or file referred to by `path`.
  * This will *not* recursively delete any directory content. Use
  * `sentry__path_remove_all` for that.
- * Returns 0 on success.
+ *
+ * Returns 0 on success. Success means that a file or directory was either
+ * successfully removed or didn't exist before removal. Anything else is a
+ * failure (i.e., return != 0).
  */
 int sentry__path_remove(const sentry_path_t *path);
 
@@ -145,7 +171,13 @@ int sentry__path_touch(const sentry_path_t *path);
 size_t sentry__path_get_size(const sentry_path_t *path);
 
 /**
- * This will read all the content of `path` into a newly allocated buffer, and
+ * This will return the last modification time of the file at `path`, or 0 on
+ * failure.
+ */
+time_t sentry__path_get_mtime(const sentry_path_t *path);
+
+/**
+ * This will read all the content of `path` into a newly allocated buffer and
  * write its size into `size_out`.
  */
 char *sentry__path_read_to_buffer(const sentry_path_t *path, size_t *size_out);
@@ -185,8 +217,8 @@ sentry_filelock_t *sentry__filelock_new(sentry_path_t *path);
 
 /**
  * This will try to acquire a lock on the given file.
- * The function will return `false` when no lock can be acquired, for example if
- * the lock is being held by another process.
+ * The function will return `false` when no lock can be acquired, for example,
+ * if the lock is being held by another process.
  */
 bool sentry__filelock_try_lock(sentry_filelock_t *lock);
 
@@ -200,7 +232,29 @@ void sentry__filelock_unlock(sentry_filelock_t *lock);
  */
 void sentry__filelock_free(sentry_filelock_t *lock);
 
-/* windows specific API additions */
+/**
+ * Create a new file-writer, which is a stateful abstraction over the
+ * OS-specific file-handle and a byte counter.
+ */
+sentry_filewriter_t *sentry__filewriter_new(const sentry_path_t *path);
+
+/**
+ * Writes a buffer to the file behind the handle stored in the filewriter.
+ */
+size_t sentry__filewriter_write(
+    sentry_filewriter_t *filewriter, const char *buf, size_t buf_len);
+
+/**
+ * Retrieves the count of written bytes.
+ */
+size_t sentry__filewriter_byte_count(const sentry_filewriter_t *filewriter);
+
+/**
+ * Frees the filewriter and closes the handle.
+ */
+void sentry__filewriter_free(sentry_filewriter_t *filewriter);
+
+/* windows-specific API additions */
 #ifdef SENTRY_PLATFORM_WINDOWS
 /**
  * Create a new path from a Wide String.
@@ -213,19 +267,21 @@ sentry_path_t *sentry__path_from_wstr_n(const wchar_t *s, size_t s_len);
  */
 sentry_path_t *sentry__path_join_wstr(
     const sentry_path_t *base, const wchar_t *other);
+
+/**
+ * This will return a wide character pointer to the last path segment, which
+ * is typically the file or directory name.
+ */
+const wchar_t *sentry__path_filename_w(const sentry_path_t *path);
 #endif
 
 /**
- * Create a new path from the platform native string type.
+ * Create a new path from string.
  */
 static inline sentry_path_t *
-sentry__path_new(const sentry_pathchar_t *s)
+sentry__path_new(const char *s)
 {
-#ifdef SENTRY_PLATFORM_WINDOWS
-    return sentry__path_from_wstr(s);
-#else
     return sentry__path_from_str(s);
-#endif
 }
 
 #endif

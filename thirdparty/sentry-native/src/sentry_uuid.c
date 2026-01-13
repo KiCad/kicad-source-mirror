@@ -1,6 +1,7 @@
 #include "sentry_boot.h"
 
 #include "sentry_random.h"
+#include "sentry_string.h"
 #include "sentry_uuid.h"
 #include <stdio.h>
 #include <string.h>
@@ -57,7 +58,7 @@ sentry_uuid_from_string_n(const char *str, size_t str_len)
             nibble = val;
             is_nibble = false;
         } else {
-            rv.bytes[pos++] = (nibble << 4) | val;
+            rv.bytes[pos++] = (char)((nibble << 4) | val);
             is_nibble = true;
         }
     }
@@ -129,6 +130,24 @@ sentry__span_uuid_as_string(const sentry_uuid_t *uuid, char str[17])
 #undef B
 }
 
+char *
+sentry__uuid_as_filename(const sentry_uuid_t *uuid, const char *suffix)
+{
+    // 36 for the uuid, suffix, and a null terminator
+    size_t suffix_len = sentry__guarded_strlen(suffix);
+    char *buf = sentry_malloc(36 + suffix_len + 1);
+    if (!buf) {
+        return NULL;
+    }
+    sentry_uuid_as_string(uuid, buf);
+    buf[36] = '\0';
+    if (suffix_len > 0) {
+        memcpy(buf + 36, suffix, suffix_len);
+        buf[36 + suffix_len] = '\0';
+    }
+    return buf;
+}
+
 #ifdef SENTRY_PLATFORM_WINDOWS
 sentry_uuid_t
 sentry__uuid_from_native(const GUID *guid)
@@ -142,14 +161,14 @@ sentry__uuid_from_native(const GUID *guid)
     rv.bytes[5] = (char)(guid->Data2 >> 0);
     rv.bytes[6] = (char)(guid->Data3 >> 8);
     rv.bytes[7] = (char)(guid->Data3 >> 0);
-    rv.bytes[8] = guid->Data4[0];
-    rv.bytes[9] = guid->Data4[1];
-    rv.bytes[10] = guid->Data4[2];
-    rv.bytes[11] = guid->Data4[3];
-    rv.bytes[12] = guid->Data4[4];
-    rv.bytes[13] = guid->Data4[5];
-    rv.bytes[14] = guid->Data4[6];
-    rv.bytes[15] = guid->Data4[7];
+    rv.bytes[8] = (char)guid->Data4[0];
+    rv.bytes[9] = (char)guid->Data4[1];
+    rv.bytes[10] = (char)guid->Data4[2];
+    rv.bytes[11] = (char)guid->Data4[3];
+    rv.bytes[12] = (char)guid->Data4[4];
+    rv.bytes[13] = (char)guid->Data4[5];
+    rv.bytes[14] = (char)guid->Data4[6];
+    rv.bytes[15] = (char)guid->Data4[7];
     return rv;
 }
 #endif

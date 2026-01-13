@@ -44,14 +44,13 @@ const std::string GetProcessNameFromPid(pid_t pid) {
   // Symlink to process binary is at /proc/###/exe.
   std::string link_path = "/proc/" + std::to_string(pid) + "/exe";
 
-  constexpr int kMaxSize = 4096;
-  std::unique_ptr<char[]> buf(new char[kMaxSize]);
-  ssize_t size = readlink(link_path.c_str(), buf.get(), kMaxSize);
-  std::string result;
+  std::string result(4096, '\0');
+  ssize_t size = readlink(link_path.c_str(), result.data(), result.size());
   if (size < 0) {
     PLOG(ERROR) << "Failed to readlink " << link_path;
+    result.clear();
   } else {
-    result.assign(buf.get(), size);
+    result.resize(size);
     size_t last_slash_pos = result.rfind('/');
     if (last_slash_pos != std::string::npos) {
       result = result.substr(last_slash_pos + 1);
@@ -258,8 +257,6 @@ bool CrosCrashReportExceptionHandler::HandleExceptionWithConnection(
   constexpr int32_t kFixedVersion = 15363;
   // TODO(https://crbug.com/1420445): Remove this check (and the
   // CRASHPAD_IS_IN_CHROMIUM defines) when M115 branches.
-  // (Lacros is guaranteed not to be more than 2 milestones ahead of ash, and
-  // M113 on ash has the relevant crash_reporter change.)
   if (major_version >= kFixedVersion) {
     // Used to distinguish between non-fatal and fatal crashes.
     const ExceptionSnapshot* const exception_snapshot = snapshot->Exception();

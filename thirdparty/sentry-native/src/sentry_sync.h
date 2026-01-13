@@ -7,6 +7,9 @@
 #include <assert.h>
 #include <stdio.h>
 
+// This is a NOP for platforms that support static mutex initialization.
+#define SENTRY__MUTEX_INIT_DYN_ONCE(Mutex) ((void)0)
+
 #ifdef _MSC_VER
 #    define THREAD_FUNCTION_API __stdcall
 #else
@@ -35,10 +38,7 @@
 
 #    if _WIN32_WINNT < 0x0600
 
-#        define INIT_ONCE_STATIC_INIT                                          \
-            {                                                                  \
-                0                                                              \
-            }
+#        define INIT_ONCE_STATIC_INIT { 0 }
 
 typedef union {
     PVOID Ptr;
@@ -165,13 +165,7 @@ sentry__winmutex_lock(struct sentry__winmutex_s *mutex)
 
 typedef HANDLE sentry_threadid_t;
 typedef struct sentry__winmutex_s sentry_mutex_t;
-#    define SENTRY__MUTEX_INIT                                                 \
-        {                                                                      \
-            INIT_ONCE_STATIC_INIT,                                             \
-            {                                                                  \
-                0                                                              \
-            }                                                                  \
-        }
+#    define SENTRY__MUTEX_INIT { INIT_ONCE_STATIC_INIT, { 0 } }
 #    define sentry__mutex_init(Lock) sentry__winmutex_init(Lock)
 #    define sentry__mutex_lock(Lock) sentry__winmutex_lock(Lock)
 #    define sentry__mutex_unlock(Lock)                                         \
@@ -237,6 +231,7 @@ void sentry__leave_signal_handler(void);
 typedef pthread_t sentry_threadid_t;
 typedef pthread_mutex_t sentry_mutex_t;
 typedef pthread_cond_t sentry_cond_t;
+
 #    ifdef SENTRY_PLATFORM_LINUX
 #        ifndef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
 // In particular musl libc does not define a recursive initializer itself.
@@ -271,14 +266,36 @@ typedef pthread_cond_t sentry_cond_t;
                         PTHREAD_MUTEX_RECURSIVE                                \
                 }                                                              \
             }
+#    elif defined(__FreeBSD__) || defined(SENTRY_PLATFORM_NX)
+// Don't define `SENTRY__MUTEX_INIT` but instead provide a new definition that
+// can be used by platforms requiring dynamic recursive mutex initialization.
+#        define SENTRY__MUTEX_INIT_DYN(Mutex)                                  \
+            static sentry_mutex_t Mutex;                                       \
+            static pthread_once_t Mutex##_init_once = PTHREAD_ONCE_INIT;       \
+            static void init_##Mutex(void) { sentry__mutex_init(&Mutex); }
+#        undef SENTRY__MUTEX_INIT_DYN_ONCE
+// Ensures that our dynamically configured mutex is safely initialized once.
+#        define SENTRY__MUTEX_INIT_DYN_ONCE(Mutex)                             \
+            pthread_once(&Mutex##_init_once, init_##Mutex)
 #    else
 #        define SENTRY__MUTEX_INIT PTHREAD_RECURSIVE_MUTEX_INITIALIZER
 #    endif
-#    define sentry__mutex_init(Mutex)                                          \
-        do {                                                                   \
-            sentry_mutex_t tmp = SENTRY__MUTEX_INIT;                           \
-            *(Mutex) = tmp;                                                    \
-        } while (0)
+#    ifdef SENTRY__MUTEX_INIT_DYN
+#        define sentry__mutex_init(Mutex)                                      \
+            do {                                                               \
+                pthread_mutexattr_t attr;                                      \
+                pthread_mutexattr_init(&attr);                                 \
+                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);     \
+                pthread_mutex_init(Mutex, &attr);                              \
+                pthread_mutexattr_destroy(&attr);                              \
+            } while (0)
+#    else
+#        define sentry__mutex_init(Mutex)                                      \
+            do {                                                               \
+                sentry_mutex_t tmp = SENTRY__MUTEX_INIT;                       \
+                *(Mutex) = tmp;                                                \
+            } while (0)
+#    endif
 #    define sentry__mutex_lock(Mutex)                                          \
         do {                                                                   \
             if (sentry__block_for_signal_handler()) {                          \
@@ -367,6 +384,34 @@ sentry__atomic_fetch(volatile long *val)
     return sentry__atomic_fetch_and_add(val, 0);
 }
 
+/**
+ * Compare and swap: atomically compare *val with expected, and if equal,
+ * set *val to desired. Returns true if the swap occurred.
+ *
+ * Uses sequential consistency (ATOMIC_SEQ_CST / InterlockedCompareExchange)
+ * to ensure all memory operations are visible across threads. This is
+ * appropriate for thread synchronization and state machine transitions.
+ *
+ * Note: The ABA problem (where a value changes A->B->A between reads) is not
+ * a concern for simple integer-based state machines with monotonic transitions.
+ */
+static inline bool
+sentry__atomic_compare_swap(volatile long *val, long expected, long desired)
+{
+#ifdef SENTRY_PLATFORM_WINDOWS
+#    if SIZEOF_LONG == 8
+    return InterlockedCompareExchange64((LONG64 *)val, desired, expected)
+        == expected;
+#    else
+    return InterlockedCompareExchange((LONG *)val, desired, expected)
+        == expected;
+#    endif
+#else
+    return __atomic_compare_exchange_n(
+        val, &expected, desired, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+#endif
+}
+
 struct sentry_bgworker_s;
 typedef struct sentry_bgworker_s sentry_bgworker_t;
 
@@ -414,6 +459,14 @@ int sentry__bgworker_shutdown(sentry_bgworker_t *bgw, uint64_t timeout);
  * Should be executed before worker start
  */
 void sentry__bgworker_setname(sentry_bgworker_t *bgw, const char *thread_name);
+
+#ifdef SENTRY_UNITTEST
+/**
+ * Test helper function to get the thread name from a bgworker.
+ * Only available in unit tests.
+ */
+const char *sentry__bgworker_get_thread_name(sentry_bgworker_t *bgw);
+#endif
 
 /**
  * This will submit a new task to the background thread.

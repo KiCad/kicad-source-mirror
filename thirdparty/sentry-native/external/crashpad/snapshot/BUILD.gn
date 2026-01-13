@@ -286,7 +286,7 @@ if (crashpad_is_linux) {
     deps = [
       ":snapshot",
       "$mini_chromium_source_parent:base",
-      "../util:util",
+      "../util",
     ]
     seed_corpus = "elf/elf_image_reader_fuzzer_corpus"
   }
@@ -436,8 +436,8 @@ source_set("snapshot_test") {
     "../compat",
     "../minidump:format",
     "../test",
+    "../third_party/googletest",
     "../third_party/googletest:googlemock",
-    "../third_party/googletest:googletest",
     "../util",
   ]
 
@@ -507,7 +507,8 @@ crashpad_loadable_module("crashpad_snapshot_test_module") {
     "../client",
   ]
   if (crashpad_is_in_fuchsia) {
-    # TODO(fxbug.dev/108368): Remove this once the underlying issue is addressed.
+    # TODO(fxbug.dev/42059784): Remove this once the underlying issue is
+    # addressed.
     exclude_toolchain_tags = [ "hwasan" ]
   }
 }
@@ -526,7 +527,8 @@ crashpad_loadable_module("crashpad_snapshot_test_module_large") {
   deps += [ "$mini_chromium_source_parent:base" ]
 
   if (crashpad_is_in_fuchsia) {
-    # TODO(fxbug.dev/108368): Remove this once the underlying issue is addressed.
+    # TODO(fxbug.dev/42059784): Remove this once the underlying issue is
+    # addressed.
     exclude_toolchain_tags = [ "hwasan" ]
   }
 }
@@ -545,7 +547,8 @@ crashpad_loadable_module("crashpad_snapshot_test_module_small") {
   deps += [ "$mini_chromium_source_parent:base" ]
 
   if (crashpad_is_in_fuchsia) {
-    # TODO(fxbug.dev/108368): Remove this once the underlying issue is addressed.
+    # TODO(fxbug.dev/42059784): Remove this once the underlying issue is
+    # addressed.
     exclude_toolchain_tags = [ "hwasan" ]
   }
 }
@@ -560,7 +563,8 @@ if ((crashpad_is_linux || crashpad_is_android || crashpad_is_fuchsia) &&
     ldflags = [ "-Wl,--hash-style=both" ]
 
     if (crashpad_is_in_fuchsia) {
-      # TODO(fxbug.dev/108368): Remove this once the underlying issue is addressed.
+      # TODO(fxbug.dev/42059784): Remove this once the underlying issue is
+      # addressed.
       exclude_toolchain_tags = [ "hwasan" ]
     }
   }

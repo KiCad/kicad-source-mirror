@@ -8,20 +8,29 @@ import urllib
 import pytest
 import pprint
 import textwrap
+import socket
 
 sourcedir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
 
 # https://docs.pytest.org/en/latest/assert.html#assert-details
 pytest.register_assert_rewrite("tests.assertions")
 
+SENTRY_VERSION = "0.12.3"
 
-def make_dsn(httpserver, auth="uiaeosnrtdy", id=123456):
+
+def make_dsn(httpserver, auth="uiaeosnrtdy", id=123456, proxy_host=False):
     url = urllib.parse.urlsplit(httpserver.url_for("/{}".format(id)))
     # We explicitly use `127.0.0.1` here, because on Windows, `localhost` will
     # first try `::1` (the ipv6 loopback), retry a couple times and give up
     # after a timeout of 2 seconds, falling back to the ipv4 loopback instead.
     host = url.netloc.replace("localhost", "127.0.0.1")
+    if proxy_host:
+        # To avoid bypassing the proxy for requests to localhost, we need to add this mapping
+        # to the hosts file & make the DSN using this alternate hostname
+        # see https://learn.microsoft.com/en-us/windows/win32/wininet/enabling-internet-functionality#listing-the-proxy-bypass
+        host = host.replace("127.0.0.1", "sentry.native.test")
+        _check_sentry_native_resolves_to_localhost()
+
     return urllib.parse.urlunsplit(
         (
             url.scheme,
@@ -33,7 +42,57 @@ def make_dsn(httpserver, auth="uiaeosnrtdy", id=123456):
     )
 
 
-def run(cwd, exe, args, env=dict(os.environ), **kwargs):
+def _check_sentry_native_resolves_to_localhost():
+    try:
+        resolved_ip = socket.gethostbyname("sentry.native.test")
+        assert resolved_ip == "127.0.0.1"
+    except socket.gaierror:
+        pytest.skip("sentry.native.test does not resolve to localhost")
+
+
+def is_session_envelope(data):
+    return b'"type":"session"' in data
+
+
+def is_logs_envelope(data):
+    return b'"type":"log"' in data
+
+
+def is_feedback_envelope(data):
+    return b'"type":"feedback"' in data
+
+
+def split_log_request_cond(httpserver_log, cond):
+    return (
+        (httpserver_log[0][0], httpserver_log[1][0])
+        if cond(httpserver_log[0][0].get_data())
+        else (httpserver_log[1][0], httpserver_log[0][0])
+    )
+
+
+def extract_request(httpserver_log, cond):
+    """
+    Extract a request matching the condition from the httpserver log.
+    Returns (matching_request, remaining_log_entries)
+
+    The remaining_log_entries preserves the original format so it can be
+    chained with subsequent extract_request calls.
+    """
+    for i, entry in enumerate(httpserver_log):
+        if cond(entry[0].get_data()):
+            others = [httpserver_log[j] for j in range(len(httpserver_log)) if j != i]
+            return (entry[0], others)
+    return (None, httpserver_log)
+
+
+def run(cwd, exe, args, expect_failure=False, env=None, **kwargs):
+    if env is None:
+        env = dict(os.environ)
+    if kwargs.get("check"):
+        raise pytest.fail.Exception(
+            "`check` is inferred from `expect_failure`, and should not be passed in the kwargs"
+        )
+    check = expect_failure == False
     __tracebackhide__ = True
     if os.environ.get("ANDROID_API"):
         # older android emulators do not correctly pass down the returncode
@@ -55,6 +114,7 @@ def run(cwd, exe, args, env=dict(os.environ), **kwargs):
                     exe, " ".join(args)
                 ),
             ],
+            check=check,
             **kwargs,
         )
         stdout = child.stdout
@@ -62,7 +122,15 @@ def run(cwd, exe, args, env=dict(os.environ), **kwargs):
         child.stdout = stdout[: stdout.rfind(b"ret:")]
         if not is_pipe:
             sys.stdout.buffer.write(child.stdout)
-        if kwargs.get("check") and child.returncode:
+        if expect_failure:
+            assert child.returncode != 0, (
+                f"command unexpectedly successful: {exe} {" ".join(args)}"
+            )
+        else:
+            assert child.returncode == 0, (
+                f"command failed unexpectedly: {exe} {" ".join(args)}"
+            )
+        if check and child.returncode:
             raise subprocess.CalledProcessError(
                 child.returncode, child.args, output=child.stdout, stderr=child.stderr
             )
@@ -72,7 +140,7 @@ def run(cwd, exe, args, env=dict(os.environ), **kwargs):
         "./{}".format(exe) if sys.platform != "win32" else "{}\\{}.exe".format(cwd, exe)
     ]
     if "asan" in os.environ.get("RUN_ANALYZER", ""):
-        env["ASAN_OPTIONS"] = "detect_leaks=1"
+        env["ASAN_OPTIONS"] = "detect_leaks=1:detect_invalid_join=0"
         env["LSAN_OPTIONS"] = "suppressions={}".format(
             os.path.join(sourcedir, "tests", "leaks.txt")
         )
@@ -99,7 +167,16 @@ def run(cwd, exe, args, env=dict(os.environ), **kwargs):
             *cmd,
         ]
     try:
-        return subprocess.run([*cmd, *args], cwd=cwd, env=env, **kwargs)
+        result = subprocess.run([*cmd, *args], cwd=cwd, env=env, check=check, **kwargs)
+        if expect_failure:
+            assert result.returncode != 0, (
+                f"command unexpectedly successful: {cmd} {" ".join(args)}"
+            )
+        else:
+            assert result.returncode == 0, (
+                f"command failed unexpectedly: {cmd} {" ".join(args)}"
+            )
+        return result
     except subprocess.CalledProcessError:
         raise pytest.fail.Exception(
             "running command failed: {cmd} {args}".format(
@@ -109,7 +186,7 @@ def run(cwd, exe, args, env=dict(os.environ), **kwargs):
 
 
 def check_output(*args, **kwargs):
-    stdout = run(*args, check=True, stdout=subprocess.PIPE, **kwargs).stdout
+    stdout = run(*args, stdout=subprocess.PIPE, **kwargs).stdout
     # capturing stdout on windows actually encodes "\n" as "\r\n", which we
     # revert, because it messes with envelope decoding
     stdout = stdout.replace(b"\r\n", b"\n")
@@ -262,7 +339,14 @@ class Item(object):
         headers = json.loads(line)
         length = headers["length"]
         payload = f.read(length)
-        if headers.get("type") in ["event", "session", "transaction", "user_report"]:
+        if headers.get("type") in [
+            "event",
+            "feedback",
+            "session",
+            "transaction",
+            "user_report",
+            "log",
+        ]:
             rv = cls(headers=headers, payload=PayloadRef(json=json.loads(payload)))
         else:
             rv = cls(headers=headers, payload=payload)

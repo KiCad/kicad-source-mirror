@@ -19,42 +19,22 @@
 #endif  // BUILDFLAG(IS_POSIX)
 
 #if BUILDFLAG(IS_APPLE)
-// In macOS 10.12 and iOS 10.0 and later ASL (Apple System Log) was deprecated
-// in favor of OS_LOG (Unified Logging).
-#include <AvailabilityMacros.h>
-#if BUILDFLAG(IS_IOS)
-#if !defined(__IPHONE_10_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_10_0
-#define USE_ASL
-#endif
-#else  // !BUILDFLAG(IS_IOS)
-#if !defined(MAC_OS_X_VERSION_10_12) || \
-    MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
-#define USE_ASL
-#endif
-#endif  // BUILDFLAG(IS_IOS)
-
-#if defined(USE_ASL)
-#include <asl.h>
-#else
-#include <os/log.h>
-#endif  // USE_ASL
-
 #include <CoreFoundation/CoreFoundation.h>
+#include <os/log.h>
 #include <pthread.h>
-
 #elif BUILDFLAG(IS_LINUX)
 #include <sys/syscall.h>
 #include <sys/types.h>
 #elif BUILDFLAG(IS_WIN)
-#include <intrin.h>
 #include <windows.h>
 #elif BUILDFLAG(IS_ANDROID)
 #include <android/log.h>
 #elif BUILDFLAG(IS_FUCHSIA)
-#include <lib/syslog/global.h>
+#include <lib/syslog/cpp/log_message_impl.h>
 #endif
 
 #include "base/check_op.h"
+#include "base/immediate_crash.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
@@ -110,10 +90,10 @@ std::string SystemErrorCodeToString(unsigned long error_code) {
     if (len >= 1 && msgbuf[len - 1] == ' ') {
       msgbuf[len - 1] = '\0';
     }
-    return base::StringPrintf("%s (%u)",
+    return base::StringPrintf("%s (%lu)",
                               base::WideToUTF8(msgbuf).c_str(), error_code);
   }
-  return base::StringPrintf("Error %u while retrieving error %u",
+  return base::StringPrintf("Error %lu while retrieving error %lu",
                             GetLastError(),
                             error_code);
 }
@@ -146,6 +126,10 @@ LogMessage::LogMessage(const char* function,
 }
 
 LogMessage::~LogMessage() {
+  Flush();
+}
+
+void LogMessage::Flush() {
   stream_ << std::endl;
   std::string str_newline(stream_.str());
 
@@ -206,76 +190,6 @@ LogMessage::~LogMessage() {
         }
       }
 
-#if defined(USE_ASL)
-      // Use ASL when this might run on pre-10.12 systems. Unified Logging
-      // (os_log) was introduced in 10.12.
-
-      const class ASLClient {
-       public:
-        explicit ASLClient(const char* asl_facility)
-            : client_(asl_open(nullptr, asl_facility, ASL_OPT_NO_DELAY)) {}
-
-        ASLClient(const ASLClient&) = delete;
-        ASLClient& operator=(const ASLClient&) = delete;
-
-        ~ASLClient() { asl_close(client_); }
-
-        aslclient get() const { return client_; }
-
-       private:
-        aslclient client_;
-      } asl_client(main_bundle_id ? main_bundle_id : "com.apple.console");
-
-      const class ASLMessage {
-       public:
-        ASLMessage() : message_(asl_new(ASL_TYPE_MSG)) {}
-
-        ASLMessage(const ASLMessage&) = delete;
-        ASLMessage& operator=(const ASLMessage&) = delete;
-
-        ~ASLMessage() { asl_free(message_); }
-
-        aslmsg get() const { return message_; }
-
-       private:
-        aslmsg message_;
-      } asl_message;
-
-      // By default, messages are only readable by the admin group. Explicitly
-      // make them readable by the user generating the messages.
-      char euid_string[12];
-      snprintf(euid_string, std::size(euid_string), "%d", geteuid());
-      asl_set(asl_message.get(), ASL_KEY_READ_UID, euid_string);
-
-      // Map Chrome log severities to ASL log levels.
-      const char* const asl_level_string = [](LogSeverity severity) {
-#define ASL_LEVEL_STR(level) ASL_LEVEL_STR_X(level)
-#define ASL_LEVEL_STR_X(level) #level
-        switch (severity) {
-          case LOG_INFO:
-            return ASL_LEVEL_STR(ASL_LEVEL_INFO);
-          case LOG_WARNING:
-            return ASL_LEVEL_STR(ASL_LEVEL_WARNING);
-          case LOG_ERROR:
-            return ASL_LEVEL_STR(ASL_LEVEL_ERR);
-          case LOG_FATAL:
-            return ASL_LEVEL_STR(ASL_LEVEL_CRIT);
-          default:
-            return severity < 0 ? ASL_LEVEL_STR(ASL_LEVEL_DEBUG)
-                                : ASL_LEVEL_STR(ASL_LEVEL_NOTICE);
-        }
-#undef ASL_LEVEL_STR
-#undef ASL_LEVEL_STR_X
-      }(severity_);
-      asl_set(asl_message.get(), ASL_KEY_LEVEL, asl_level_string);
-
-      asl_set(asl_message.get(), ASL_KEY_MSG, str_newline.c_str());
-
-      asl_send(asl_client.get(), asl_message.get());
-#else
-      // Use Unified Logging (os_log) when this will only run on 10.12 and
-      // later. ASL is deprecated in 10.12.
-
       const class OSLog {
        public:
         explicit OSLog(const char* subsystem)
@@ -314,7 +228,6 @@ LogMessage::~LogMessage() {
 
       os_log_with_type(
           log.get(), os_log_type, "%{public}s", str_newline.c_str());
-#endif
     }
 #elif BUILDFLAG(IS_WIN)
     OutputDebugString(base::UTF8ToWide(str_newline).c_str());
@@ -338,58 +251,39 @@ LogMessage::~LogMessage() {
     // The Android system may truncate the string if it's too long.
     __android_log_write(priority, "chromium", str_newline.c_str());
 #elif BUILDFLAG(IS_FUCHSIA)
-    fx_log_severity_t fx_severity;
+    fuchsia_logging::LogSeverity fx_severity;
     switch (severity_) {
       case LOG_INFO:
-        fx_severity = FX_LOG_INFO;
+        fx_severity = fuchsia_logging::LogSeverity::Info;
         break;
       case LOG_WARNING:
-        fx_severity = FX_LOG_WARNING;
+        fx_severity = fuchsia_logging::LogSeverity::Warn;
         break;
       case LOG_ERROR:
-        fx_severity = FX_LOG_ERROR;
+        fx_severity = fuchsia_logging::LogSeverity::Error;
         break;
       case LOG_FATAL:
-        fx_severity = FX_LOG_FATAL;
+        fx_severity = fuchsia_logging::LogSeverity::Fatal;
         break;
       default:
-        fx_severity = FX_LOG_INFO;
+        fx_severity = fuchsia_logging::LogSeverity::Info;
         break;
     }
-    // Temporarily remove the trailing newline from |str_newline|'s C-string
-    // representation, since fx_logger will add a newline of its own.
-    str_newline.pop_back();
+    // Fuchsia's logger doesn't want the trailing newline.
+    std::string_view message(str_newline);
+    message.remove_suffix(1);
+    message.remove_prefix(message_start_);
     // Ideally the tag would be the same as the caller, but this is not
     // supported right now.
-    fx_logger_log_with_source(fx_log_get_logger(),
-                              fx_severity,
-                              /*tag=*/nullptr,
-                              file_path_,
-                              line_,
-                              str_newline.c_str() + message_start_);
-    str_newline.push_back('\n');
+    fuchsia_logging::LogMessage(
+        fx_severity, file_path_, line_, nullptr, nullptr)
+            .stream()
+        << message;
 #endif  // BUILDFLAG(IS_*)
   }
 
   if (severity_ == LOG_FATAL) {
-#if defined(COMPILER_MSVC)
-    __debugbreak();
-#if defined(ARCH_CPU_X86_FAMILY)
-    __ud2();
-#elif defined(ARCH_CPU_ARM64)
-    __hlt(0);
-#else
-#error Unsupported Windows Arch
-#endif
-#elif defined(ARCH_CPU_X86_FAMILY)
-    asm("int3; ud2;");
-#elif defined(ARCH_CPU_ARMEL)
-    asm("bkpt #0; udf #0;");
-#elif defined(ARCH_CPU_ARM64)
-    asm("brk #0; hlt #0;");
-#else
-    __builtin_trap();
-#endif
+    base::ImmediateCrash();
   }
 }
 
@@ -489,6 +383,22 @@ void LogMessage::Init(const char* function) {
   message_start_ = stream_.str().size();
 }
 
+// We intentionally don't return from these destructors. Disable MSVC's warning
+// about the destructor never returning as we do so intentionally here.
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(push)
+#pragma warning(disable : 4722)
+#endif
+
+LogMessageFatal::~LogMessageFatal() {
+  Flush();
+  base::ImmediateCrash();
+}
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(pop)
+#endif
+
 #if BUILDFLAG(IS_WIN)
 
 unsigned long GetLastSystemErrorCode() {
@@ -504,8 +414,29 @@ Win32ErrorLogMessage::Win32ErrorLogMessage(const char* function,
 }
 
 Win32ErrorLogMessage::~Win32ErrorLogMessage() {
+  AppendError();
+}
+
+void Win32ErrorLogMessage::AppendError() {
   stream() << ": " << SystemErrorCodeToString(err_);
 }
+
+// We intentionally don't return from these destructors. Disable MSVC's warning
+// about the destructor never returning as we do so intentionally here.
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(push)
+#pragma warning(disable : 4722)
+#endif
+
+Win32ErrorLogMessageFatal::~Win32ErrorLogMessageFatal() {
+  AppendError();
+  Flush();
+  base::ImmediateCrash();
+}
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(pop)
+#endif
 
 #elif BUILDFLAG(IS_POSIX)
 
@@ -519,11 +450,21 @@ ErrnoLogMessage::ErrnoLogMessage(const char* function,
 }
 
 ErrnoLogMessage::~ErrnoLogMessage() {
+  AppendError();
+}
+
+void ErrnoLogMessage::AppendError() {
   stream() << ": "
            << base::safe_strerror(err_)
            << " ("
            << err_
            << ")";
+}
+
+ErrnoLogMessageFatal::~ErrnoLogMessageFatal() {
+  AppendError();
+  Flush();
+  base::ImmediateCrash();
 }
 
 #endif  // BUILDFLAG(IS_POSIX)
