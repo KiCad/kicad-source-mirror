@@ -209,8 +209,7 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendSeparator()
               .AppendAction( SCH_ACTIONS::showPcbNew );
 
-        if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
-            config.AppendControl( SCH_ACTION_TOOLBAR_CONTROLS::currentVariant );
+        config.AppendControl( SCH_ACTION_TOOLBAR_CONTROLS::currentVariant );
 
         // Insert all the IPC plugins here on the toolbar
         // TODO (ISM): Move this to individual actions for each script
@@ -228,8 +227,6 @@ void SCH_EDIT_FRAME::configureToolbars()
 {
     SCH_BASE_FRAME::configureToolbars();
 
-    if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
-    {
     // Variant selection drop down control on main tool bar.
     auto variantSelectionCtrlFactory =
             [this]( ACTION_TOOLBAR* aToolbar )
@@ -247,7 +244,6 @@ void SCH_EDIT_FRAME::configureToolbars()
             };
 
     RegisterCustomToolbarControlFactory( SCH_ACTION_TOOLBAR_CONTROLS::currentVariant, variantSelectionCtrlFactory );
-    }
 
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire

@@ -897,15 +897,6 @@ public:
     int m_ScreenDPI;
 
     /**
-     * Enable access to the variants user interface.
-     *
-     * Setting name: "EnableVariantsUI"
-     * Valid values: 0 or 1
-     * Default value: 0
-     */
-    bool m_EnableVariantsUI;
-
-    /**
      * Enable use Aui Perspective to store/load geometry of main editor frames.
      * the saved prms are position/size of toolbars and some other widgets
      * Currently (october 12 2025) use only to test this code, nom sutbale for users

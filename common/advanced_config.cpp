@@ -141,7 +141,6 @@ static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout"
 static const wxChar FollowBranchTimeout[] = wxT( "FollowBranchTimeoutMs" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
-static const wxChar EnableVariantsUI[] = wxT( "EnableVariantsUI" );
 static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
 static const wxChar HistoryLockStaleTimeout[] = wxT( "HistoryLockStaleTimeout" );
 static const wxChar ZoneFillIterativeRefill[] = wxT( "ZoneFillIterativeRefill" );
@@ -332,8 +331,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ImportSkipComponentBodies = false;
 
     m_ScreenDPI = 91;
-
-    m_EnableVariantsUI = false;
 
     m_EnableUseAuiPerspective = false;
     m_HistoryLockStaleTimeout = 300; // 5 minutes default
@@ -644,9 +641,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                            &m_ImportSkipComponentBodies, m_ImportSkipComponentBodies ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI, &m_ScreenDPI, m_ScreenDPI, 50, 500 ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableVariantsUI, &m_EnableVariantsUI,
-                                                           m_EnableVariantsUI ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableUseAuiPerspective,
                                                            &m_EnableUseAuiPerspective, m_EnableUseAuiPerspective ) );

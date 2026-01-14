@@ -344,10 +344,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
         config.AppendSeparator();
         config.AppendAction( PCB_ACTIONS::showEeschema );
-
-        if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
-            config.AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant );
-
+        config.AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant );
         config.AppendControl( ACTION_TOOLBAR_CONTROLS::ipcScripting );
 
         break;
@@ -423,28 +420,24 @@ void PCB_EDIT_FRAME::configureToolbars()
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter, viaDiaSelectorFactory );
 
-    if( ADVANCED_CFG::GetCfg().m_EnableVariantsUI )
-    {
-        // Variant selection drop down control on main tool bar
-        auto variantSelectionCtrlFactory =
-                [this]( ACTION_TOOLBAR* aToolbar )
+    // Variant selection drop down control on main tool bar
+    auto variantSelectionCtrlFactory =
+            [this]( ACTION_TOOLBAR* aToolbar )
+            {
+                if( !m_currentVariantCtrl )
                 {
-                    if( !m_currentVariantCtrl )
-                    {
-                        m_currentVariantCtrl = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VARIANT_SELECT,
-                                                             wxDefaultPosition, wxDefaultSize, 0, nullptr );
-                    }
+                    m_currentVariantCtrl = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VARIANT_SELECT,
+                                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
+                }
 
-                    m_currentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
+                m_currentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
 
-                    UpdateVariantSelectionCtrl();
+                UpdateVariantSelectionCtrl();
 
-                    aToolbar->Add( m_currentVariantCtrl );
-                };
+                aToolbar->Add( m_currentVariantCtrl );
+            };
 
-        RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant,
-                                             variantSelectionCtrlFactory );
-    }
+    RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant, variantSelectionCtrlFactory );
 
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
