@@ -2635,9 +2635,12 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * for the hatch webbing instead of connecting directly to the pad.
      */
 
+    SHAPE_POLY_SET thermalRings;
+
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        buildHatchZoneThermalRings( aZone, aLayer, aSmoothedOutline, thermalConnectionPads, aFillPolys );
+        buildHatchZoneThermalRings( aZone, aLayer, aSmoothedOutline, thermalConnectionPads,
+                                    aFillPolys, thermalRings );
         DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In2_Cu, wxT( "plus-thermal-rings" ) );
     }
 
@@ -2748,7 +2751,13 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     if( half_min_width - epsilon > epsilon )
+    {
         aFillPolys.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
+
+        // Also deflate thermal rings to match, for correct hatch hole notching
+        if( thermalRings.OutlineCount() > 0 )
+            thermalRings.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
+    }
 
     // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
     // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
@@ -2784,7 +2793,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         && ( !m_board->GetProject()
              || !m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
     {
-        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
+        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, thermalRings ) )
             return false;
     }
     else
@@ -2968,7 +2977,9 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // Remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        if( !addHatchFillTypeOnZone( aZone, aLayer, aLayer, aFillPolys ) )
+        SHAPE_POLY_SET noThermalRings;  // Non-copper zones have no thermal reliefs
+
+        if( !addHatchFillTypeOnZone( aZone, aLayer, aLayer, aFillPolys, noThermalRings ) )
             return false;
     }
 
@@ -3401,7 +3412,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                               const SHAPE_POLY_SET& aSmoothedOutline,
                                               const std::vector<BOARD_ITEM*>& aThermalConnectionPads,
-                                              SHAPE_POLY_SET& aFillPolys )
+                                              SHAPE_POLY_SET& aFillPolys,
+                                              SHAPE_POLY_SET& aThermalRings )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     DRC_CONSTRAINT         constraint;
@@ -3503,12 +3515,16 @@ void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aL
 
         // Add the thermal ring to the fill
         aFillPolys.BooleanAdd( thermalRing );
+
+        // Also collect thermal rings for hatch hole notching to ensure connectivity
+        aThermalRings.BooleanAdd( thermalRing );
     }
 }
 
 
 bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                          PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aFillPolys )
+                                          PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aFillPolys,
+                                          const SHAPE_POLY_SET& aThermalRings )
 {
     // Build grid:
 
@@ -3674,6 +3690,29 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             holes.DeletePolygon( ii );
         else
             ++ii;
+    }
+
+    // Drop any holes that touch thermal rings to ensure thermal reliefs stay connected
+    // to the hatch webbing even when the hatch gap is larger than the thermal ring.
+    if( aThermalRings.OutlineCount() > 0 )
+    {
+        BOX2I thermalBBox = aThermalRings.BBox();
+
+        for( int ii = holes.OutlineCount() - 1; ii >= 0; ii-- )
+        {
+            const SHAPE_LINE_CHAIN& hole = holes.Outline( ii );
+
+            // Quick rejection: skip if bounding boxes don't overlap
+            if( !thermalBBox.Intersects( hole.BBox() ) )
+                continue;
+
+            // Full collision check using Collide() which is faster than BooleanIntersection()
+            SHAPE_POLY_SET holeAsPoly;
+            holeAsPoly.AddOutline( hole );
+
+            if( aThermalRings.Collide( &holeAsPoly ) )
+                holes.DeletePolygon( ii );
+        }
     }
 
     // create grid. Useto

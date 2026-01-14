@@ -35,6 +35,7 @@
 #include <settings/settings_manager.h>
 #include <geometry/shape_poly_set.h>
 #include <advanced_config.h>
+#include <connectivity/connectivity_data.h>
 
 
 struct ZONE_FILL_TEST_FIXTURE
@@ -589,4 +590,35 @@ BOOST_FIXTURE_TEST_CASE( RegressionViaZoneNetShort, ZONE_FILL_TEST_FIXTURE )
                                            "zones with different nets. This indicates issue 12964 "
                                            "is not fixed.",
                                            viasShortingZones ) );
+}
+
+
+/**
+ * Test that hatch zone thermal reliefs maintain connectivity even when the hatch gap
+ * is larger than the thermal ring diameter.
+ *
+ * The test board has:
+ * - A hatch zone with large gap (6mm) and thermal relief settings
+ * - A pad with thermal relief connection to the zone
+ * - A track that should be connected to the pad via the zone
+ *
+ * Without the fix, the thermal ring around the pad could be entirely inside a hatch hole,
+ * leaving it electrically isolated from the zone webbing.
+ */
+BOOST_FIXTURE_TEST_CASE( HatchZoneThermalConnectivity, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "hatch_thermal_connectivity/hatch_thermal_connectivity",
+                        m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    m_board->BuildConnectivity();
+
+    int unconnectedCount = m_board->GetConnectivity()->GetUnconnectedCount( false );
+
+    BOOST_CHECK_MESSAGE( unconnectedCount == 0,
+                         wxString::Format( "Found %d unconnected items after zone fill. "
+                                           "Hatch zone thermal reliefs should maintain connectivity "
+                                           "even with large hatch gaps.",
+                                           unconnectedCount ) );
 }

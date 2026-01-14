@@ -118,11 +118,15 @@ private:
      * Build thermal rings for pads in hatch zones.
      * For circular pads, creates an arc ring; for other shapes, creates an inflated ring.
      * Rings are clipped to the zone boundary.
+     *
+     * @param aThermalRings Output parameter to collect the thermal ring geometry. Used later
+     *                      to drop hatch holes that would isolate the thermal relief.
      */
     void buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                      const SHAPE_POLY_SET& aSmoothedOutline,
                                      const std::vector<BOARD_ITEM*>& aThermalConnectionPads,
-                                     SHAPE_POLY_SET& aFillPolys );
+                                     SHAPE_POLY_SET& aFillPolys,
+                                     SHAPE_POLY_SET& aThermalRings );
 
     /**
      * Create strands of zero-width between elements of SHAPE_POLY_SET that are within
@@ -151,9 +155,12 @@ private:
      * @param aZone is the zone to modify
      * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
+     * @param aThermalRings: Thermal ring geometry used to drop hatch holes that would isolate
+     *                       thermal reliefs from the zone fill.
      */
     bool addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
-                                 SHAPE_POLY_SET& aFillPolys );
+                                 SHAPE_POLY_SET& aFillPolys,
+                                 const SHAPE_POLY_SET& aThermalRings );
 
     /**
      * Refill a zone from cached pre-knockout fill.
