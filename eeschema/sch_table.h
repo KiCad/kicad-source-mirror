@@ -122,6 +122,9 @@ public:
 
     int GetRowCount() const
     {
+        if( m_colCount == 0 )
+            return 0;
+
         return m_cells.size() / m_colCount;
     }
 

@@ -142,7 +142,7 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( item->Type() == PCB_MARKER_T )
+                    if( item->Type() == PCB_MARKER_T || item->Type() == PCB_TABLECELL_T )
                         aCollector.Remove( item );
                 }
             } );
@@ -483,6 +483,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForTableCells( aCollector );
 
                 // Don't filter for free pads.  We want to allow for distributing other
                 // items (such as a via) between two pads.
