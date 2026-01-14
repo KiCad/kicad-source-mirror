@@ -129,6 +129,19 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
 }
 
 
+void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
+                     wxImage&& aImage )
+{
+    if( !aImage.IsOk() )
+        return;
+
+    CLIPBOARD_MIME_DATA entry;
+    entry.m_mimeType = aMimeType;
+    entry.m_image = std::move( aImage );
+    aMimeData.push_back( std::move( entry ) );
+}
+
+
 bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
 {
     wxFFile file( aFileName, wxS( "rb" ) );
@@ -353,13 +366,13 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
 }
 
 
-bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
-                         wxMemoryBuffer& aBuffer, bool aIncludeDrawingSheet = false )
+wxImage renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
+                                         const BOX2I& aBBox, bool aIncludeDrawingSheet = false )
 {
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
-        return false;
+        return wxImage();
 
     // Use the current view scale to match what the user sees on screen
     double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
@@ -376,7 +389,7 @@ bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
-        return false;
+        return wxImage();
 
     // Render twice with different backgrounds for alpha computation.
     // This dual-buffer technique computes true alpha by comparing renders on white vs black:
@@ -389,7 +402,7 @@ bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
                                                     bitmapHeight, viewScale, *wxBLACK, aIncludeDrawingSheet );
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
-        return false;
+        return wxImage();
 
     // Create output image with alpha channel
     wxImage result( bitmapWidth, bitmapHeight );
@@ -438,13 +451,7 @@ bool plotSelectionToPng( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
         }
     }
 
-    wxMemoryOutputStream stream;
-
-    if( !result.SaveFile( stream, wxBITMAP_TYPE_PNG ) )
-        return false;
-
-    aBuffer.AppendData( stream.GetOutputStreamBuffer()->GetBufferStart(), stream.GetSize() );
-    return true;
+    return result;
 }
 } // namespace
 
@@ -1745,10 +1752,10 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             else
                 wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
 
-            wxMemoryBuffer pngBuffer;
+            wxImage pngImage = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox );
 
-            if( plotSelectionToPng( m_frame, selection, selectionBox, pngBuffer ) )
-                appendMimeData( mimeData, wxS( "image/png" ), pngBuffer );
+            if( pngImage.IsOk() )
+                appendMimeData( mimeData, wxS( "image/png" ), std::move( pngImage ) );
             else
                 wxLogTrace( traceSchPaste, wxS( "Failed to generate PNG for clipboard" ) );
         }
@@ -3038,29 +3045,19 @@ int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
     // Get the full page bounding box for rendering the complete sheet
     BOX2I pageBBox( VECTOR2I( 0, 0 ), m_frame->GetPageSizeIU() );
 
-    wxMemoryBuffer pngBuffer;
+    // Render the full sheet selection including the worksheet
+    wxImage image = renderSelectionToImageWithAlpha( m_frame, sheetSelection, pageBBox, true );
 
-    // Use plotSelectionToPng with the full sheet selection and include the worksheet
-    if( plotSelectionToPng( m_frame, sheetSelection, pageBBox, pngBuffer, true )
-        && pngBuffer.GetDataLen() > 0 )
+    if( image.IsOk() )
     {
         wxLogNull doNotLog; // disable logging of failed clipboard actions
 
         if( wxTheClipboard->Open() )
         {
             wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject();
-
-            // Load PNG from buffer into bitmap
-            wxMemoryInputStream stream( pngBuffer.GetData(), pngBuffer.GetDataLen() );
-            wxImage image( stream, wxBITMAP_TYPE_PNG );
-
-            if( image.IsOk() )
-            {
-                clipbrd_data->SetBitmap( wxBitmap( image ) );
-                wxTheClipboard->SetData( clipbrd_data );
-                wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-            }
-
+            clipbrd_data->SetBitmap( wxBitmap( image ) );
+            wxTheClipboard->SetData( clipbrd_data );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }
     }

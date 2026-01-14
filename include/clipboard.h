@@ -24,17 +24,22 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 #include <wx/buffer.h>
+#include <wx/image.h>
 #include <wx/string.h>
-
-class wxImage;
 
 struct CLIPBOARD_MIME_DATA
 {
     wxString       m_mimeType;
     wxMemoryBuffer m_data;
+
+    /// Optional pre-decoded image for "image/png" MIME type.
+    /// When set, SaveClipboard() uses this directly instead of decoding m_data,
+    /// avoiding expensive double PNG encode/decode during clipboard operations.
+    std::optional<wxImage> m_image;
 };
 
 /**

@@ -85,6 +85,19 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
 }
 
 
+void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
+                     wxImage&& aImage )
+{
+    if( !aImage.IsOk() )
+        return;
+
+    CLIPBOARD_MIME_DATA entry;
+    entry.m_mimeType = aMimeType;
+    entry.m_image = std::move( aImage );
+    aMimeData.push_back( std::move( entry ) );
+}
+
+
 bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
 {
     wxFFile file( aFileName, wxS( "rb" ) );
@@ -253,16 +266,16 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
 }
 
 
-bool plotSymbolToPng( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
-                      int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
+wxImage renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol,
+                                      const BOX2I& aBBox, int aUnit, int aBodyStyle )
 {
     if( !aSymbol )
-        return false;
+        return wxImage();
 
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
-        return false;
+        return wxImage();
 
     // Use the current view scale to match what the user sees on screen
     double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
@@ -279,7 +292,7 @@ bool plotSymbolToPng( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
-        return false;
+        return wxImage();
 
     // Render twice with different backgrounds for alpha computation
     wxImage imageOnWhite = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle,
@@ -288,7 +301,7 @@ bool plotSymbolToPng( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2
                                                   bitmapWidth, bitmapHeight, viewScale, *wxBLACK );
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
-        return false;
+        return wxImage();
 
     // Create output image with alpha channel
     wxImage result( bitmapWidth, bitmapHeight );
@@ -332,15 +345,7 @@ bool plotSymbolToPng( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2
         }
     }
 
-    wxMemoryOutputStream stream;
-
-    if( !result.SaveFile( stream, wxBITMAP_TYPE_PNG ) )
-        return false;
-
-    size_t dataSize = stream.GetOutputStreamBuffer()->GetBufferSize();
-    aBuffer.AppendData( stream.GetOutputStreamBuffer()->GetBufferStart(), dataSize );
-
-    return true;
+    return result;
 }
 
 }  // namespace
@@ -1612,10 +1617,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         if( plotSymbolToSvg( m_frame, cleanSymbol, bbox, unit, bodyStyle, svgBuffer ) )
             appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
 
-        wxMemoryBuffer pngBuffer;
+        wxImage pngImage = renderSymbolToImageWithAlpha( m_frame, cleanSymbol, bbox, unit, bodyStyle );
 
-        if( plotSymbolToPng( m_frame, cleanSymbol, bbox, unit, bodyStyle, pngBuffer ) )
-            appendMimeData( mimeData, wxS( "image/png" ), pngBuffer );
+        if( pngImage.IsOk() )
+            appendMimeData( mimeData, wxS( "image/png" ), std::move( pngImage ) );
 
         delete cleanSymbol;
     }

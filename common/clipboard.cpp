@@ -70,8 +70,8 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
 
         for( const CLIPBOARD_MIME_DATA& entry : aMimeData )
         {
-            // Skip entries with no data
-            if( entry.m_data.GetDataLen() == 0 )
+            // Skip entries with no data (check both buffer and image)
+            if( entry.m_data.GetDataLen() == 0 && !entry.m_image.has_value() )
                 continue;
 
             // For PNG data, add as wxBitmapDataObject for compatibility with image
@@ -80,10 +80,20 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
             // widely supported and avoids clipboard format query issues.
             if( entry.m_mimeType == wxS( "image/png" ) )
             {
-                wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
                 wxImage image;
 
-                if( image.LoadFile( stream, wxBITMAP_TYPE_PNG ) && image.IsOk() )
+                // Use pre-decoded image if available (avoids expensive PNG decode)
+                if( entry.m_image.has_value() && entry.m_image->IsOk() )
+                {
+                    image = *entry.m_image;
+                }
+                else if( entry.m_data.GetDataLen() > 0 )
+                {
+                    wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
+                    image.LoadFile( stream, wxBITMAP_TYPE_PNG );
+                }
+
+                if( image.IsOk() )
                 {
                     data->Add( new wxBitmapDataObject( wxBitmap( image ) ) );
                 }
