@@ -308,25 +308,15 @@ void SCH_PIN::SetType( ELECTRICAL_PINTYPE aType )
 
 wxString SCH_PIN::GetCanonicalElectricalTypeName() const
 {
-    if( m_type != ELECTRICAL_PINTYPE::PT_INHERIT )
-        return ::GetCanonicalElectricalTypeName( m_type );
-
-    if( !m_libPin )
-        return ::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
-
-    return m_libPin->GetCanonicalElectricalTypeName();
+    // Use GetType() which correctly handles alternates
+    return ::GetCanonicalElectricalTypeName( GetType() );
 }
 
 
 wxString SCH_PIN::GetElectricalTypeName() const
 {
-    if( m_type != ELECTRICAL_PINTYPE::PT_INHERIT )
-        return ElectricalPinTypeGetText( m_type );
-
-    if( !m_libPin )
-        return ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
-
-    return m_libPin->GetElectricalTypeName();
+    // Use GetType() which correctly handles alternates
+    return ElectricalPinTypeGetText( GetType() );
 }
 
 
@@ -1186,7 +1176,7 @@ void SCH_PIN::PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition,
                                       y1 + ( MapY1 + MapX1 ) * deco_size ) );
     }
 
-    if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
+    if( GetType() == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
         const int ex1 = aPosition.x;
