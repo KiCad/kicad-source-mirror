@@ -216,6 +216,334 @@ BOOST_AUTO_TEST_CASE( AlternatePinRenameUpdates )
 
 
 /**
+ * Test for issue #22286 - GetType() should return the alternate's type when alternate is selected
+ */
+BOOST_AUTO_TEST_CASE( AlternatePinTypeReturnsCorrectType )
+{
+    // Set the library pin's default type to no_connect
+    m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_NC );
+
+    // Add an alternate with a different type (power_in)
+    SCH_PIN::ALT powerAlt;
+    powerAlt.m_Name = wxS( "8.pow" );
+    powerAlt.m_Shape = GRAPHIC_PINSHAPE::LINE;
+    powerAlt.m_Type = ELECTRICAL_PINTYPE::PT_POWER_IN;
+    m_lib_pin->GetAlternates()[ wxS( "8.pow" ) ] = powerAlt;
+
+    // Flatten and update the symbol to get a fresh schematic pin
+    m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
+    m_sch_pin = m_parent_symbol->GetPins()[0];
+
+    // Before selecting alternate, type should be the default (NC)
+    BOOST_CHECK( m_sch_pin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
+
+    // Select the alternate
+    m_sch_pin->SetAlt( wxS( "8.pow" ) );
+
+    // After selecting alternate, type should be the alternate's type (POWER_IN)
+    BOOST_CHECK_EQUAL( m_sch_pin->GetAlt(), "8.pow" );
+    BOOST_CHECK( m_sch_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+
+    // Also verify shape changed
+    BOOST_CHECK( m_sch_pin->GetShape() == GRAPHIC_PINSHAPE::LINE );
+}
+
+
+/**
+ * Test for issue #22286 - simulate schematic loading scenario
+ * When a schematic is loaded, the pin's alternate is set BEFORE SetLibSymbol is called.
+ * The alternate must persist through UpdatePins().
+ */
+BOOST_AUTO_TEST_CASE( AlternatePinTypePersistsThroughSymbolUpdate )
+{
+    // Set the library pin's default type to no_connect
+    m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_NC );
+
+    // Add an alternate with a different type (power_in)
+    SCH_PIN::ALT powerAlt;
+    powerAlt.m_Name = wxS( "8.pow" );
+    powerAlt.m_Shape = GRAPHIC_PINSHAPE::LINE;
+    powerAlt.m_Type = ELECTRICAL_PINTYPE::PT_POWER_IN;
+    m_lib_pin->GetAlternates()[ wxS( "8.pow" ) ] = powerAlt;
+
+    // First flatten to set up the symbol
+    m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
+    m_sch_pin = m_parent_symbol->GetPins()[0];
+
+    // Set the alternate on the schematic pin (like the parser would)
+    m_sch_pin->SetAlt( wxS( "8.pow" ) );
+    BOOST_CHECK_EQUAL( m_sch_pin->GetAlt(), "8.pow" );
+    BOOST_CHECK( m_sch_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+
+    // Now simulate what happens when the library symbol is re-resolved
+    // This is similar to what happens after loading a schematic from file
+    m_parent_symbol->SetLibSymbol( m_parent_part->Flatten().release() );
+    m_sch_pin = m_parent_symbol->GetPins()[0];
+
+    // After the symbol update, the alternate should still be set
+    BOOST_CHECK_EQUAL( m_sch_pin->GetAlt(), "8.pow" );
+
+    // And GetType() should return the alternate's type
+    BOOST_CHECK( m_sch_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+}
+
+
+/**
+ * Test for issue #22286 - simulate parser-created pins with alternates
+ * The parser creates pins with m_alt set but m_libPin=nullptr.
+ * Verify that after UpdatePins() the alternate type is correctly returned.
+ */
+BOOST_AUTO_TEST_CASE( ParserCreatedPinWithAlternate )
+{
+    // Create a library symbol with a pin that has alternates
+    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( "test_symbol", nullptr );
+
+    SCH_PIN* libPin = new SCH_PIN( libSymbol );
+    libPin->SetNumber( "8" );
+    libPin->SetName( "PIN8" );
+    libPin->SetType( ELECTRICAL_PINTYPE::PT_NC );  // Default type is NC
+    libPin->SetPosition( VECTOR2I( 0, 0 ) );
+
+    // Add an alternate with power_in type
+    SCH_PIN::ALT powerAlt;
+    powerAlt.m_Name = wxS( "8.pow" );
+    powerAlt.m_Shape = GRAPHIC_PINSHAPE::LINE;
+    powerAlt.m_Type = ELECTRICAL_PINTYPE::PT_POWER_IN;
+    libPin->GetAlternates()[ wxS( "8.pow" ) ] = powerAlt;
+
+    libSymbol->AddDrawItem( libPin );
+
+    // Create a schematic symbol
+    SCH_SHEET_PATH path;
+    SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libSymbol->GetLibId(), &path, 0, 0,
+                                          VECTOR2I( 0, 0 ) );
+    symbol->SetRef( &path, "J1" );
+
+    // Simulate what the parser does: create a raw pin with alternate set
+    // This bypasses SetAlt() validation by using the constructor directly
+    symbol->GetRawPins().clear();  // Remove auto-created pins
+    symbol->GetRawPins().emplace_back(
+        std::make_unique<SCH_PIN>( symbol, wxS( "8" ), wxS( "8.pow" ), KIID() ) );
+
+    SCH_PIN* parserPin = symbol->GetRawPins()[0].get();
+
+    // At this point, m_alt is set but m_libPin is nullptr
+    BOOST_CHECK_EQUAL( parserPin->GetAlt(), "8.pow" );
+    BOOST_CHECK( parserPin->GetLibPin() == nullptr );
+
+    // GetType() should return PT_UNSPECIFIED when m_libPin is null
+    BOOST_CHECK( parserPin->GetType() == ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+
+    // Now simulate SetLibSymbol() which calls UpdatePins()
+    symbol->SetLibSymbol( libSymbol->Flatten().release() );
+
+    // Verify the flattened library symbol has pins with alternates
+    BOOST_CHECK( symbol->GetLibSymbolRef() != nullptr );
+    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetPins();
+    BOOST_CHECK_EQUAL( libPins.size(), 1 );
+
+    if( !libPins.empty() )
+    {
+        SCH_PIN* flattenedLibPin = libPins[0];
+        BOOST_CHECK( !flattenedLibPin->GetAlternates().empty() );
+        BOOST_CHECK( flattenedLibPin->GetAlternates().count( wxS( "8.pow" ) ) > 0 );
+    }
+
+    // Get the pin after the update
+    SCH_PIN* updatedPin = symbol->GetPins( &path )[0];
+
+    // The alternate should still be set
+    BOOST_CHECK_EQUAL( updatedPin->GetAlt(), "8.pow" );
+
+    // m_libPin should now be set
+    BOOST_CHECK( updatedPin->GetLibPin() != nullptr );
+
+    // GetType() should return the alternate's type (PT_POWER_IN)
+    BOOST_CHECK( updatedPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+
+    delete symbol;
+    delete libSymbol;
+}
+
+
+/**
+ * Test for issue #22286 - detailed trace of SetLibSymbol flow
+ * Verifies that library pin alternates are preserved through the copy
+ * and that SetAlt succeeds in UpdatePins().
+ */
+BOOST_AUTO_TEST_CASE( LibraryPinAlternatesPreservedThroughCopy )
+{
+    // Create original library symbol with pin that has alternates
+    LIB_SYMBOL* origLibSymbol = new LIB_SYMBOL( "test_symbol", nullptr );
+
+    SCH_PIN* origLibPin = new SCH_PIN( origLibSymbol );
+    origLibPin->SetNumber( "8" );
+    origLibPin->SetName( "8" );  // Default name matches number
+    origLibPin->SetType( ELECTRICAL_PINTYPE::PT_NC );  // Default type is NC
+    origLibPin->SetPosition( VECTOR2I( 0, 0 ) );
+
+    // Add alternate with power_in type
+    SCH_PIN::ALT powerAlt;
+    powerAlt.m_Name = wxS( "8.pow" );
+    powerAlt.m_Shape = GRAPHIC_PINSHAPE::LINE;
+    powerAlt.m_Type = ELECTRICAL_PINTYPE::PT_POWER_IN;
+    origLibPin->GetAlternates()[ wxS( "8.pow" ) ] = powerAlt;
+
+    origLibSymbol->AddDrawItem( origLibPin );
+
+    // Verify original has alternates
+    BOOST_CHECK( !origLibPin->GetAlternates().empty() );
+    BOOST_CHECK( origLibPin->GetAlternates().count( wxS( "8.pow" ) ) > 0 );
+
+    // Simulate what happens during loading:
+    // 1. Library symbol is stored in m_libSymbols (just keep the original)
+    // 2. Create a COPY of the library symbol (like UpdateLocalLibSymbolLinks does)
+    LIB_SYMBOL* copiedLibSymbol = new LIB_SYMBOL( *origLibSymbol );
+
+    // Verify the copied library symbol has pins with alternates
+    std::vector<SCH_PIN*> copiedLibPins = copiedLibSymbol->GetPins();
+    BOOST_CHECK_EQUAL( copiedLibPins.size(), 1 );
+
+    if( !copiedLibPins.empty() )
+    {
+        SCH_PIN* copiedLibPin = copiedLibPins[0];
+
+        // This is the critical check - does the copied lib pin have alternates?
+        BOOST_CHECK_MESSAGE( !copiedLibPin->GetAlternates().empty(),
+                             "Copied library pin should have alternates" );
+        BOOST_CHECK_MESSAGE( copiedLibPin->GetAlternates().count( wxS( "8.pow" ) ) > 0,
+                             "Copied library pin should have '8.pow' alternate" );
+
+        // Check if the alternate has the correct type
+        if( copiedLibPin->GetAlternates().count( wxS( "8.pow" ) ) > 0 )
+        {
+            BOOST_CHECK( copiedLibPin->GetAlternates().at( wxS( "8.pow" ) ).m_Type
+                         == ELECTRICAL_PINTYPE::PT_POWER_IN );
+        }
+    }
+
+    // Now create a schematic symbol with parser-created raw pins
+    SCH_SHEET_PATH path;
+    SCH_SYMBOL* symbol = new SCH_SYMBOL( *origLibSymbol, origLibSymbol->GetLibId(), &path, 0, 0,
+                                          VECTOR2I( 0, 0 ) );
+    symbol->SetRef( &path, "J1" );
+
+    // Clear auto-created pins and add parser-style raw pin
+    symbol->GetRawPins().clear();
+    symbol->GetRawPins().emplace_back(
+        std::make_unique<SCH_PIN>( symbol, wxS( "8" ), wxS( "8.pow" ), KIID() ) );
+
+    // Verify raw pin state before SetLibSymbol
+    SCH_PIN* rawPin = symbol->GetRawPins()[0].get();
+    BOOST_CHECK_EQUAL( rawPin->GetAlt(), "8.pow" );
+    BOOST_CHECK( rawPin->GetLibPin() == nullptr );
+
+    // Call SetLibSymbol with the COPIED library symbol (like UpdateLocalLibSymbolLinks does)
+    symbol->SetLibSymbol( copiedLibSymbol );  // Takes ownership
+
+    // Get the pin after UpdatePins() was called
+    std::vector<SCH_PIN*> schPins = symbol->GetPins( &path );
+    BOOST_CHECK_EQUAL( schPins.size(), 1 );
+
+    if( !schPins.empty() )
+    {
+        SCH_PIN* schPin = schPins[0];
+
+        // Check that m_libPin is set
+        BOOST_CHECK_MESSAGE( schPin->GetLibPin() != nullptr,
+                             "Schematic pin should have m_libPin set after UpdatePins" );
+
+        // Check that the alternate is still set
+        BOOST_CHECK_MESSAGE( schPin->GetAlt() == "8.pow",
+                             "Alternate should be preserved as '8.pow'" );
+
+        // Check that GetType() returns the alternate's type
+        BOOST_CHECK_MESSAGE( schPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN,
+                             "GetType() should return alternate's type (PT_POWER_IN)" );
+
+        // Additional diagnostic: check the library pin's alternates
+        if( schPin->GetLibPin() )
+        {
+            BOOST_CHECK_MESSAGE( !schPin->GetLibPin()->GetAlternates().empty(),
+                                 "Library pin pointed to by schematic pin should have alternates" );
+            BOOST_CHECK_MESSAGE( schPin->GetLibPin()->GetAlternates().count( wxS( "8.pow" ) ) > 0,
+                                 "Library pin should have '8.pow' in its alternates map" );
+        }
+    }
+
+    delete symbol;
+    delete origLibSymbol;
+}
+
+
+/**
+ * Test for issue #22286 - verify behavior when GetType() is called before
+ * m_libPin is set. This simulates what happens if GetType() is called
+ * during loading before UpdateLocalLibSymbolLinks() runs.
+ */
+BOOST_AUTO_TEST_CASE( GetTypeBeforeLibPinSet )
+{
+    // Create a schematic symbol with parser-created raw pin
+    SCH_SHEET_PATH path;
+    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( "test_symbol", nullptr );
+
+    SCH_PIN* libPin = new SCH_PIN( libSymbol );
+    libPin->SetNumber( "8" );
+    libPin->SetName( "8" );
+    libPin->SetType( ELECTRICAL_PINTYPE::PT_NC );
+    libPin->SetPosition( VECTOR2I( 0, 0 ) );
+
+    SCH_PIN::ALT powerAlt;
+    powerAlt.m_Name = wxS( "8.pow" );
+    powerAlt.m_Shape = GRAPHIC_PINSHAPE::LINE;
+    powerAlt.m_Type = ELECTRICAL_PINTYPE::PT_POWER_IN;
+    libPin->GetAlternates()[ wxS( "8.pow" ) ] = powerAlt;
+    libSymbol->AddDrawItem( libPin );
+
+    // Create symbol using default constructor (like parser does)
+    SCH_SYMBOL* symbol = new SCH_SYMBOL();
+    symbol->SetLibId( libSymbol->GetLibId() );
+
+    // Add parser-style raw pin with alternate set but no m_libPin
+    symbol->GetRawPins().emplace_back(
+        std::make_unique<SCH_PIN>( symbol, wxS( "8" ), wxS( "8.pow" ), KIID() ) );
+
+    SCH_PIN* rawPin = symbol->GetRawPins()[0].get();
+
+    // At this point: m_alt is set, m_libPin is nullptr, m_type is PT_INHERIT
+    BOOST_CHECK_EQUAL( rawPin->GetAlt(), "8.pow" );
+    BOOST_CHECK( rawPin->GetLibPin() == nullptr );
+
+    // GetType() with m_alt set but m_libPin=nullptr should return PT_UNSPECIFIED
+    // per the code in GetType()
+    BOOST_CHECK_MESSAGE( rawPin->GetType() == ELECTRICAL_PINTYPE::PT_UNSPECIFIED,
+                         "GetType() with m_alt set but m_libPin=nullptr should return PT_UNSPECIFIED" );
+
+    // GetShownName() should still return the alternate name
+    BOOST_CHECK_EQUAL( rawPin->GetShownName(), "8.pow" );
+
+    // Now set the library symbol which triggers UpdatePins()
+    symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
+
+    // After UpdatePins(), pin should have correct type
+    std::vector<SCH_PIN*> schPins = symbol->GetPins( &path );
+    BOOST_CHECK_EQUAL( schPins.size(), 1 );
+
+    if( !schPins.empty() )
+    {
+        SCH_PIN* schPin = schPins[0];
+        BOOST_CHECK_EQUAL( schPin->GetAlt(), "8.pow" );
+        BOOST_CHECK( schPin->GetLibPin() != nullptr );
+        BOOST_CHECK_MESSAGE( schPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN,
+                             "After SetLibSymbol, GetType() should return PT_POWER_IN" );
+    }
+
+    delete symbol;
+    delete libSymbol;
+}
+
+
+/**
  * Test for issue #22566 - changing to a symbol with fewer pins should not crash
  */
 BOOST_AUTO_TEST_CASE( ChangeSymbolFewerPinsNoCrash )

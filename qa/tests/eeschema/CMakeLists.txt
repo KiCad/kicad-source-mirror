@@ -72,6 +72,7 @@ set( QA_EESCHEMA_SRCS
     test_issue18119_bus_hierarchy.cpp
     test_issue18299_bus_member_rename.cpp
     test_issue20173_paste_subsheet.cpp
+    test_issue22286_pin_alternate.cpp
     test_issue22620_group_annotation.cpp
     test_issue22651_sheet_annotation.cpp
     test_issue22576_subsheet_standalone.cpp

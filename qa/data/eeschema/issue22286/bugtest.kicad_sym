@@ -1,0 +1,392 @@
+(kicad_symbol_lib
+	(version 20241209)
+	(generator "kicad_symbol_editor")
+	(generator_version "9.0")
+	(symbol "MOLEX_PICOBLADE_8PHOR"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "J1"
+			(at 6.35 0.0001 0)
+			(effects
+				(font
+					(size 1.27 1.0795)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MOLEX"
+			(at 6.35 -2.5399 0)
+			(effects
+				(font
+					(size 1.27 1.0795)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "1.25mm (.049\") Pitch PicoBlade Header, SMT, Vertical, Lead-free, 8 Circuits"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LOCATION" "Front"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "FUNCTION" "Panel"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "MOLEX_PICOBLADE_8PHOR_1_0"
+			(polyline
+				(pts
+					(xy -2.54 12.7) (xy 5.08 12.7)
+				)
+				(stroke
+					(width 0.254)
+					(type solid)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.54 -15.24) (xy -2.54 12.7)
+				)
+				(stroke
+					(width 0.254)
+					(type solid)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 5.08 12.7) (xy 5.08 -15.24)
+				)
+				(stroke
+					(width 0.254)
+					(type solid)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 5.08 -15.24) (xy -2.54 -15.24)
+				)
+				(stroke
+					(width 0.254)
+					(type solid)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(text "${LOCATION}"
+				(at 2.286 -2.54 900)
+				(effects
+					(font
+						(size 1.27 1.0795)
+					)
+					(justify bottom)
+				)
+			)
+			(text "${FUNCTION}"
+				(at 3.81 -2.54 900)
+				(effects
+					(font
+						(size 1.27 1.0795)
+					)
+					(justify bottom)
+				)
+			)
+			(pin no_connect line
+				(at -5.08 7.62 0)
+				(length 2.54)
+				(name "1"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "1.bidir" bidirectional line)
+				(alternate "1.free" free line)
+				(alternate "1.in" input line)
+				(alternate "1.oc" open_collector line)
+				(alternate "1.oe" open_emitter line)
+				(alternate "1.out" output line)
+				(alternate "1.pas" passive line)
+				(alternate "1.pow" power_in line)
+				(alternate "1.sup" power_out line)
+				(alternate "1.tristate" tri_state line)
+				(alternate "1.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 5.08 0)
+				(length 2.54)
+				(name "2"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "2.bidir" bidirectional line)
+				(alternate "2.free" free line)
+				(alternate "2.in" input line)
+				(alternate "2.oc" open_collector line)
+				(alternate "2.oe" open_emitter line)
+				(alternate "2.out" output line)
+				(alternate "2.pas" passive line)
+				(alternate "2.pow" power_in line)
+				(alternate "2.sup" power_out line)
+				(alternate "2.tristate" tri_state line)
+				(alternate "2.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 2.54 0)
+				(length 2.54)
+				(name "3"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "3.bidir" bidirectional line)
+				(alternate "3.free" free line)
+				(alternate "3.in" input line)
+				(alternate "3.oc" open_collector line)
+				(alternate "3.oe" open_emitter line)
+				(alternate "3.out" output line)
+				(alternate "3.pas" passive line)
+				(alternate "3.pow" power_in line)
+				(alternate "3.sup" power_out line)
+				(alternate "3.tristate" tri_state line)
+				(alternate "3.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "4"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "4.bidir" bidirectional line)
+				(alternate "4.free" free line)
+				(alternate "4.in" input line)
+				(alternate "4.oc" open_collector line)
+				(alternate "4.oe" open_emitter line)
+				(alternate "4.out" output line)
+				(alternate "4.pas" passive line)
+				(alternate "4.pow" power_in line)
+				(alternate "4.sup" power_out line)
+				(alternate "4.tristate" tri_state line)
+				(alternate "4.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 -2.54 0)
+				(length 2.54)
+				(name "5"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "5.bidir" bidirectional line)
+				(alternate "5.free" free line)
+				(alternate "5.in" input line)
+				(alternate "5.oc" open_collector line)
+				(alternate "5.oe" open_emitter line)
+				(alternate "5.out" output line)
+				(alternate "5.pas" passive line)
+				(alternate "5.pow" power_in line)
+				(alternate "5.sup" power_out line)
+				(alternate "5.tristate" tri_state line)
+				(alternate "5.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 -5.08 0)
+				(length 2.54)
+				(name "6"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "6.bidir" bidirectional line)
+				(alternate "6.free" free line)
+				(alternate "6.in" input line)
+				(alternate "6.oc" open_collector line)
+				(alternate "6.oe" open_emitter line)
+				(alternate "6.out" output line)
+				(alternate "6.pas" passive line)
+				(alternate "6.pow" power_in line)
+				(alternate "6.sup" power_out line)
+				(alternate "6.tristate" tri_state line)
+				(alternate "6.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 -7.62 0)
+				(length 2.54)
+				(name "7"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "7.bidir" bidirectional line)
+				(alternate "7.free" free line)
+				(alternate "7.in" input line)
+				(alternate "7.oc" open_collector line)
+				(alternate "7.oe" open_emitter line)
+				(alternate "7.out" output line)
+				(alternate "7.pas" passive line)
+				(alternate "7.pow" power_in line)
+				(alternate "7.sup" power_out line)
+				(alternate "7.tristate" tri_state line)
+				(alternate "7.unspec" unspecified line)
+			)
+			(pin no_connect line
+				(at -5.08 -10.16 0)
+				(length 2.54)
+				(name "8"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(alternate "8.bidir" bidirectional line)
+				(alternate "8.free" free line)
+				(alternate "8.in" input line)
+				(alternate "8.oc" open_collector line)
+				(alternate "8.oe" open_emitter line)
+				(alternate "8.out" output line)
+				(alternate "8.pas" passive line)
+				(alternate "8.pow" power_in line)
+				(alternate "8.sup" power_out line)
+				(alternate "8.tristate" tri_state line)
+				(alternate "8.unspec" unspecified line)
+			)
+			(pin passive line
+				(at -5.08 -15.24 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+				(number "G"
+					(effects
+						(font
+							(size 0 0)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+)
