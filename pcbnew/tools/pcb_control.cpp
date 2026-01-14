@@ -1413,11 +1413,22 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
         return 1;
 
     DESIGN_BLOCK_PANE*            designBlockPane = editFrame->GetDesignBlockPane();
-    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( designBlockPane->GetSelectedLibId(),
-                                                                                true, true ) );
+    const LIB_ID                  selectedLibId = designBlockPane->GetSelectedLibId();
+    std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( selectedLibId, true, true ) );
 
-    if( !designBlock || designBlock->GetBoardFile().IsEmpty() )
+    if( !designBlock )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not find design block %s." ), selectedLibId.GetUniStringLibId() );
+        editFrame->ShowInfoBarError( msg, true );
         return 1;
+    }
+
+    if( designBlock->GetBoardFile().IsEmpty() || !wxFileName::FileExists( designBlock->GetBoardFile() ) )
+    {
+        editFrame->ShowInfoBarError( _( "Design block has no layout to place." ), true );
+        return 1;
+    }
 
     PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
     IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::FindPlugin( pluginType ) );
