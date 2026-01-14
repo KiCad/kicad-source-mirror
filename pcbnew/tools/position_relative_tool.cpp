@@ -322,13 +322,22 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
             // Hide the popup text so it doesn't get in the way
             statusPopup.Hide();
 
-            // Start with the forward vector from the ruler item
-            VECTOR2I           offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
+            // This is the forward vector from the ruler item
+            VECTOR2I       offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
+            const VECTOR2I toReferencePtVector = twoPtMgr.GetOrigin() - twoPtMgr.GetEnd();
+
+            // Start with the value of that vector in the dialog (will match the rule HUD)
             DIALOG_OFFSET_ITEM dlg( *frame(), offsetVector );
 
             if( dlg.ShowModal() == wxID_OK )
             {
-                applyVector( offsetVector );
+                const VECTOR2I move = toReferencePtVector + offsetVector;
+
+                applyVector( move );
+
+                // Leave the arrow in place but update it
+                twoPtMgr.SetEnd( twoPtMgr.GetOrigin() + offsetVector );
+                view.Update( &ruler, KIGFX::GEOMETRY );
                 canvas()->Refresh();
             }
 
@@ -352,7 +361,8 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
                 snap = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
 
             twoPtMgr.SetAngleSnap( snap );
-            twoPtMgr.SetEnd( cursorPos );
+            // The end is fixed; we must update the origin
+            twoPtMgr.SetOrigin( cursorPos );
 
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
