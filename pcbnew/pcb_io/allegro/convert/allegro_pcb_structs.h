@@ -861,7 +861,7 @@ struct BLK_0x1B_NET
     uint32_t m_Ratline;
     ///< Pointer to first 0x03 FIELD object or null
     uint32_t m_FieldsPtr;
-    uint32_t m_UnknownPtr3;
+    uint32_t m_MatchGroupPtr; ///< Diff pair / match group pointer (0x26 or 0x2C)
     uint32_t m_ModelPtr;
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
@@ -1094,9 +1094,9 @@ struct BLK_0x1C_PADSTACK
 struct BLK_0x1D
 {
     uint32_t m_Key;
-    uint32_t m_Unknown1;
-    uint32_t m_Unknown2;
-    uint32_t m_Unknown3;
+    uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
+    uint32_t m_NameStrKey;   ///< String table key for constraint set name
+    uint32_t m_FieldPtr;     ///< Pointer to 0x03 FIELD with CS name (fallback when m_NameStrKey fails)
     uint16_t m_SizeA;
     uint16_t m_SizeB;
 
@@ -1123,7 +1123,7 @@ struct BLK_0x1E
     uint8_t  m_Type;
     uint16_t m_T2;
     uint32_t m_Key;
-    uint32_t m_Unknown1;
+    uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
 
     // Versioning seems unsure here
     // At least it is in Kinoma (V_164)
@@ -1145,7 +1145,7 @@ struct BLK_0x1E
 struct BLK_0x1F
 {
     uint32_t m_Key;
-    uint32_t m_Unknown1;
+    uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
     uint32_t m_Unknown2;
     uint32_t m_Unknown3;
     uint32_t m_Unknown4;
@@ -1268,13 +1268,19 @@ struct BLK_0x26
 
 
 /**
- * 0x27 objects extend to some offset defined in the header.
+ * 0x27 is a constraint manager cross-reference table.
  *
-* They do appear to contain a lot of data.
+ * It maps constraint manager display list entries to board objects via block keys
+ * (V172+) or runtime heap pointers (pre-V172). The blob starts with 3 bytes of
+ * padding, then a flat array of uint32 LE values. Zero values separate sections
+ * (groups of related object references).
+ *
+ * The block extends to an offset defined in the header (m_0x27_End). Not imported
+ * directly since it's a display/navigation structure, not design data.
  */
 struct BLK_0x27
 {
-    std::vector<uint8_t> m_Data;
+    std::vector<uint32_t> m_Refs;
 };
 
 

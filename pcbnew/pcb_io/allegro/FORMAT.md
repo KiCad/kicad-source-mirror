@@ -103,15 +103,15 @@ indexed by key in a flat hash map (`m_ObjectKeyMap`).
 | 0x17 | (same as 0x15)          | Line segment variant                 |
 | 0x1B | BLK_0x1B_NET            | Net definition                       |
 | 0x1C | BLK_0x1C_PADSTACK       | Padstack definition                  |
-| 0x1D | BLK_0x1D                | Design rule                          |
-| 0x1E | BLK_0x1E                | Design rule variant                  |
-| 0x1F | BLK_0x1F                | Design rule variant                  |
+| 0x1D | BLK_0x1D                | Physical constraint set (see below)  |
+| 0x1E | BLK_0x1E                | Signal integrity model (IBIS data)   |
+| 0x1F | BLK_0x1F                | Linked list connector (empty)        |
 | 0x21 | BLK_0x21                | Headered block (rules, stackup)      |
 | 0x22 | BLK_0x22                | Unknown                              |
 | 0x23 | BLK_0x23_RATLINE        | Ratsnest line                        |
 | 0x24 | BLK_0x24_RECT           | Rectangle shape                      |
-| 0x26 | BLK_0x26                | Unknown                              |
-| 0x27 | BLK_0x27                | Unknown                              |
+| 0x26 | BLK_0x26                | Match group indirection (diff pair)  |
+| 0x27 | BLK_0x27                | Constraint manager cross-ref table   |
 | 0x28 | BLK_0x28_SHAPE          | Polygon shape (zones, fills, pads)   |
 | 0x29 | BLK_0x29_PIN            | Pin instance in .dra files           |
 | 0x2A | BLK_0x2A_LAYER_LIST     | Layer list entry                     |
@@ -125,7 +125,7 @@ indexed by key in a flat hash map (`m_ObjectKeyMap`).
 | 0x32 | BLK_0x32_PLACED_PAD     | Placed pad instance                  |
 | 0x33 | BLK_0x33_VIA            | Via instance                         |
 | 0x34 | BLK_0x34_KEEPOUT        | Keepout area                         |
-| 0x35 | BLK_0x35                | Design constraints                   |
+| 0x35 | BLK_0x35                | File references (log paths)          |
 | 0x36 | BLK_0x36                | Font/misc definitions (substructs)   |
 | 0x37 | BLK_0x37                | Pointer array (net resolution, etc.) |
 | 0x38 | BLK_0x38_FILM           | Film definition                      |
@@ -404,6 +404,248 @@ into the cached list of FontDef_X08 entries.
 Located at fixed offset 0x1200. Each entry is a 4-byte ID followed
 by a null-terminated string. String IDs are used throughout the file
 to reference net names, pad names, refdes values, and other text.
+
+## Physical Constraint Sets (0x1D)
+
+0x1D blocks define Allegro Physical Constraint Sets containing trace
+width, clearance, and routing rules. They reside on the
+`m_LL_0x1D_0x1E_0x1F` linked list in the file header.
+
+### Record Structure
+
+Each 0x1D block contains two record arrays:
+
+- `m_DataA`: `m_SizeA` records of 256 bytes each. ASCII padstack/via
+  name strings (null-terminated at offset 4) and file path references.
+- `m_DataB`: `m_SizeB` records of 56 bytes each. Per-copper-layer
+  dimension values. The count equals the board's copper layer count.
+
+### Header Fields
+
+| Field | Content |
+|-------|---------|
+| m_Key | Unique block key |
+| m_Next | Linked list next pointer (used by LL_WALKER) |
+| m_NameStrKey | String table key for constraint set name (e.g., "DEFAULT", "PWR", "DDR") |
+| m_FieldPtr | Pointer to 0x03 FIELD block with CS name as schematic cross-reference (fallback when m_NameStrKey fails) |
+| m_Unknown4 | V172+ only; usually 0 |
+
+### 56-Byte Record Layout (V172+)
+
+All values are in internal units (mils * divisor). Interpreted as 14
+consecutive `int32_t` fields:
+
+| Field | Offset | Content                              | Example (BB Black) |
+|-------|--------|--------------------------------------|--------------------|
+| f[0]  | 0      | Reserved (always 0)                  | 0                  |
+| f[1]  | 4      | Line width (min trace width)         | 15.0 mil           |
+| f[2]  | 8      | Spacing (min spacing)                | 8.0 mil            |
+| f[3]  | 12     | Max length (0 = unlimited)           | 200 mil            |
+| f[4]  | 16     | **Clearance**                        | 4.0 mil            |
+| f[5]  | 20     | Max value or 0                       | 0                  |
+| f[6]  | 24     | Flag (usually 1; packed in complex)  | 1                  |
+| f[7]  | 28     | Neck width                           | 5.0 mil            |
+| f[8]  | 32     | Dimension or 0                       | 3.0 mil            |
+| f[9]  | 36     | Dimension or 0                       | 3.5 mil            |
+| f[10] | 40     | Dimension or 0                       | 4.0 mil            |
+| f[11] | 44     | Reserved (usually 0)                 | 0                  |
+| f[12] | 48     | Reserved (always 0)                  | 0                  |
+| f[13] | 52     | Reserved (always 0)                  | 0                  |
+
+BB Black: f[4] = 4.0 mil (all 5 sets). BB-AI: f[4] = 5.0 mil.
+EVK boards: f[4] = 5.0 mil.
+
+### 56-Byte Record Layout (Pre-V172)
+
+The field layout is shifted compared to V172+. Line width moved from
+f[1] to f[0], and there is no dedicated clearance field:
+
+| Field | Offset | Content                              | Example (TRS80)    |
+|-------|--------|--------------------------------------|--------------------|
+| f[0]  | 0      | Line width                           | 15.0 mil           |
+| f[1]  | 4      | Spacing                              | 7.0 mil            |
+| f[2]  | 8      | Usually 0                            | 0                  |
+| f[3]  | 12     | Max length or dimension              | 47.2 mil           |
+| f[4]  | 16     | Always 0 (no clearance field)        | 0                  |
+| f[5]  | 20     | Flag (1 or 0x10001)                  | 1                  |
+| f[6]  | 24     | Dimension or 0                       | 15.0 mil           |
+| f[7]  | 28     | Dimension or 0                       | 15.0 mil           |
+| f[8]  | 32     | Usually 0                            | 0                  |
+| f[9]  | 36     | Dimension or 0                       | 7.0 mil            |
+| f[10-13]| 40-52| Reserved (usually 0)                 | 0                  |
+
+Pre-V172 boards have no dedicated clearance field. The importer uses
+f[1] (spacing) as the clearance fallback since spacing is typically
+the closest proxy for pad-to-trace clearance in Allegro's rule model.
+
+### Net-to-Constraint-Set Linkage
+
+Nets reference their Physical Constraint Set by name through NET
+field code 0x1a0:
+
+1. Each 0x1D block's `m_NameStrKey` is a string table key resolving to
+   the constraint set name (e.g., "DEFAULT", "PWR", "DDR", "BGA")
+2. Each NET may have a field with code 0x1a0 whose value is the SAME
+   string table key. On most boards this field is an integer (subtype
+   0x6a), but on EVK boards it appears as a direct string.
+3. Nets WITHOUT field 0x1a0 implicitly use the "DEFAULT" constraint set
+
+Example (BeagleBone Black, 5 constraint sets):
+
+| Constraint Set | Nets Matched |
+|----------------|-------------|
+| DEFAULT        | ~483 (implicit, no 0x1a0 field) |
+| PWR            | 23 |
+| BGA            | 0 |
+| 90_OHM_DIFF    | 0 |
+| 100OHM_DIFF    | 0 |
+
+Additional NET field codes discovered:
+
+| Code  | Purpose |
+|-------|---------|
+| 0x1a0 | Physical Constraint Set name |
+| 0x1a1 | Spacing Constraint Set name |
+| 0x3d  | Match group name |
+| 0x77  | Net class/schedule name |
+
+### Import Algorithm
+
+The constraint import runs in three passes during BuildBoard():
+
+1. **applyConstraintSets()** walks `m_LL_0x1D_0x1E_0x1F`, creates one
+   NETCLASS per 0x1D block with clearance and trace width. Nets are
+   assigned via field 0x1a0 (default set for nets without the field).
+2. **applyNetConstraints()** creates per-net trace width netclasses
+   (`Allegro_W<N>mil`) from MIN_LINE_WIDTH field 0x55. These override
+   the constraint set trace width for nets that have explicit widths.
+3. **applyMatchGroups()** creates diff pair and match group netclasses
+   from m_MatchGroupPtr pointer chains. Uses direct SetNetClass().
+
+### Constraint Set Name Resolution
+
+The constraint set name is resolved from 0x1D blocks in two ways:
+
+1. **m_NameStrKey** (primary): String table key resolving to the name.
+   Works for all tested boards except BB-AI which uses 0x0300XXXX keys
+   that don't resolve (producing synthetic names like "CS_0").
+2. **m_FieldPtr** (fallback): Points to a 0x03 FIELD block containing
+   a schematic cross-reference string in the format
+   `@lib.xxx(view):\CONSTRAINT_SET_NAME\`. The name is extracted from
+   after the last `:\` separator.
+
+Some constraint sets (e.g., BGA, 90_OHM_DIFF, 100OHM_DIFF in
+BeagleBone Black) resolve correctly but have zero net assignments.
+These are unused design templates, not orphaned references. Only field
+0x1a0 assigns nets to constraint sets; there is no component-based,
+region-based, or class-based assignment mechanism in the binary format.
+
+## Blocks 0x1E and 0x1F
+
+0x1E and 0x1F blocks share the `m_LL_0x1D_0x1E_0x1F` linked list
+with 0x1D constraint set blocks.
+
+**0x1E blocks** contain IBIS and simulation netlists. The m_DataA
+records hold ASCII netlist strings (IBIS model references, SKIDL
+simulation data). Not currently imported.
+
+**0x1F blocks** contain per-padstack dimension records. Each has a
+name (`m_NameStrKey`) and dimension value. Not currently imported.
+
+## Block 0x27 (Constraint Manager Cross-Reference Table)
+
+The 0x27 block extends to an offset defined in the header (`m_0x27_End`).
+Size scales with board complexity (10KB for simple boards to 4MB for
+VCU118).
+
+### Binary Layout
+
+The blob starts with 3 bytes of zero padding, then a flat array of
+uint32 LE values. The first non-zero byte always appears at an offset
+congruent to 3 mod 4 (verified across all 11 test boards).
+
+    [3 zero bytes] [uint32 val0] [uint32 val1] ... [uint32 valN]
+
+Non-zero values are block key references (V172+) or runtime heap
+pointers (pre-V172). Zero values separate sections, which are groups
+of related object references forming a display list entry.
+
+### V172+ Format
+
+Values are compact block keys (small integers matching keys from
+blocks of types 0x01, 0x05, 0x0a, 0x0c, 0x15, 0x16, 0x17, 0x28,
+0x2d, 0x31, 0x32, etc). Key match rate is 99.6-100% across all V172+
+test boards (verified: led_youtube 100%, BB-AI 99.6%, BB-Black 99.7%,
+EVK_BaseBoard 99.7%, EVK_SOM 99.9%).
+
+Sections typically contain keys referencing a consistent set of block
+types. For example, sections of 0x15 BOUNDARY + 0x17 LINE keys
+(constraint region shapes), or mixed sections with 0x28 SHAPE + 0x31
++ 0x32 placed pad keys (component display lists).
+
+### Pre-V172 Format
+
+Values are Allegro runtime heap addresses (large values like
+0x0f4487b0). These are block keys from the Allegro address space,
+NOT file offsets. Key match rate against the board's block key table
+is 92-100% (verified: TRS80 100%, mainBoard 100%, mainBoard2 100%,
+ProiectBoard 99.8%, CutiePi 92.7%, VCU118 97.7%).
+
+Section structure is identical to V172+: zero-separated groups of
+related pointer values.
+
+### Purpose
+
+This is a constraint manager display and navigation structure. It
+maps display list entries to board objects for Allegro's interactive
+constraint editor. It does NOT contain clearance, trace width, or
+other design rule values directly; those are in 0x1D blocks.
+
+Not imported for PCB conversion since the data is purely
+navigational. Parsed into a vector of uint32 references for
+validation and potential future use.
+
+## Block 0x35 (File References)
+
+Contains ASCII file path references to Allegro log and report files
+(e.g., `terminator.log`, `eclrpt.txt`). Structure: 1 byte T2 +
+2 bytes T3 + 120 bytes content with null-terminated strings. Not
+imported.
+
+## Per-Net Trace Widths
+
+NET FIELD_KEYS contain trace width constraints (MIN_LINE_WIDTH field
+key 0x55, MAX_LINE_WIDTH field key 0x173). These are imported as
+KiCad netclasses (e.g., `Allegro_W20mil` with 508000nm track width).
+Spacing and clearance values are not present in NET fields.
+
+## NET Pointer Fields
+
+| Field | Usage | Target Type |
+|-------|-------|-------------|
+| m_MatchGroupPtr | Differential pair / match group | 0x26 (V172+) or 0x2C (pre-V172) |
+| m_ModelPtr | IBIS signal integrity model | 0x1E (compiled binary, not imported) |
+| m_UnknownPtr4 | Unused (always zero) | - |
+| m_UnknownPtr5 | Unused (always zero) | - |
+| m_UnknownPtr6 | Unused (always zero) | - |
+
+## Differential Pairs and Match Groups
+
+NET.m_MatchGroupPtr chains to a 0x2C TABLE naming the match group.
+The pointer path is version-dependent:
+
+    V172+:      NET -> 0x26 -> m_GroupPtr -> 0x2C TABLE -> string
+    Pre-V172:   NET -> 0x2C TABLE -> string
+
+On V172+ boards, some 0x26 blocks have m_GroupPtr pointing to another
+0x26 instead of a 0x2C. The importer handles this gracefully by
+returning an empty name. VCU118 has 142 match groups total (117 diff
+pairs + 25 match groups); BB Black has 21 (17 + 4).
+
+Groups with exactly 2 nets are imported as differential pair netclasses
+(`Allegro_DP_<name>`). Groups with more nets are imported as match
+group netclasses (`Allegro_MG_<name>`). Assignment uses direct
+`SetNetClass()` on the NETINFO_ITEM.
 
 ## Keepout Areas
 

@@ -81,6 +81,9 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x16:
     case 0x17: return BLK_FIELD( BLK_0x15_16_17_SEGMENT, m_Next );
     case 0x1B: return BLK_FIELD( BLK_0x1B_NET, m_Next );
+    case 0x1D: return BLK_FIELD( BLK_0x1D, m_Next );
+    case 0x1E: return BLK_FIELD( BLK_0x1E, m_Next );
+    case 0x1F: return BLK_FIELD( BLK_0x1F, m_Next );
     case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
     case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
     case 0x2E: return BLK_FIELD( BLK_0x2E, m_Next );

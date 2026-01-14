@@ -875,7 +875,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT
     data.m_Assignment = stream.ReadU32();
     data.m_Ratline = stream.ReadU32();
     data.m_FieldsPtr = stream.ReadU32();
-    data.m_UnknownPtr3 = stream.ReadU32();
+    data.m_MatchGroupPtr = stream.ReadU32();
     data.m_ModelPtr = stream.ReadU32();
     data.m_UnknownPtr4 = stream.ReadU32();
     data.m_UnknownPtr5 = stream.ReadU32();
@@ -1016,9 +1016,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1D( FILE_STREAM& aStream, FMT_VE
     aStream.Skip( 3 );
 
     data.m_Key = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
-    data.m_Unknown2 = aStream.ReadU32();
-    data.m_Unknown3 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    data.m_NameStrKey = aStream.ReadU32();
+    data.m_FieldPtr = aStream.ReadU32();
 
     data.m_SizeA = aStream.ReadU16();
     data.m_SizeB = aStream.ReadU16();
@@ -1058,7 +1058,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1E( FILE_STREAM& aStream, FMT_VE
     data.m_Type = aStream.ReadU8();
     data.m_T2 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
     ReadCond( aStream, aVer, data.m_Unknown3 );
@@ -1084,7 +1084,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VE
 
     data.m_Key = aStream.ReadU32();
 
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
     data.m_Unknown3 = aStream.ReadU32();
     data.m_Unknown4 = aStream.ReadU32();
@@ -1243,10 +1243,30 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x27( FILE_STREAM& aStream, FMT_VE
 
     auto& data = block->GetData();
 
-    const size_t size = aEndOff - 1 - aStream.Position();
+    const size_t totalBytes = aEndOff - 1 - aStream.Position();
 
-    data.m_Data.resize( size );
-    aStream.ReadBytes( data.m_Data.data(), size );
+    // The blob starts with 3 bytes of padding, then uint32 LE values
+    constexpr size_t kPadding = 3;
+
+    if( totalBytes <= kPadding )
+    {
+        aStream.Skip( totalBytes );
+        return block;
+    }
+
+    aStream.Skip( kPadding );
+
+    const size_t payloadBytes = totalBytes - kPadding;
+    const size_t numValues = payloadBytes / 4;
+    const size_t remainder = payloadBytes % 4;
+
+    data.m_Refs.resize( numValues );
+
+    for( size_t i = 0; i < numValues; i++ )
+        data.m_Refs[i] = aStream.ReadU32();
+
+    if( remainder > 0 )
+        aStream.Skip( remainder );
 
     return block;
 }
