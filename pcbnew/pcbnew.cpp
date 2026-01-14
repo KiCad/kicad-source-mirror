@@ -630,6 +630,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &aKiway->Prj() );
 
             int elapsed = 0;
+            bool aborted = false;
 
             reporter->Report( _( "Loading Footprint Libraries" ) );
             adapter->AsyncLoad();
@@ -638,7 +639,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             {
                 if( m_libraryPreloadAbort.load() )
                 {
-                    m_libraryPreloadAbort.store( false );
+                    aborted = true;
                     break;
                 }
 
@@ -666,55 +667,80 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             adapter->BlockUntilLoaded();
 
-            // Collect and report library load errors from adapter
-            wxString errors = adapter->GetLibraryLoadErrors();
+            // Check again after blocking - abort may have been requested while we were waiting
+            if( m_libraryPreloadAbort.load() )
+                aborted = true;
 
-            wxLogTrace( traceLibraries, "pcbnew PreloadLibraries: adapter errors.IsEmpty()=%d, length=%zu",
-                        errors.IsEmpty(), errors.length() );
-
-            if( !errors.IsEmpty() )
+            // If aborted, skip operations that use the adapter since the project may have changed
+            // and the adapter's project reference could be stale. This prevents use-after-free
+            // crashes when switching projects during library preload.
+            if( !aborted )
             {
-                std::vector<LOAD_MESSAGE> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+                // Collect and report library load errors from adapter
+                wxString errors = adapter->GetLibraryLoadErrors();
 
-                wxLogTrace( traceLibraries, "  -> adapter: collected %zu messages", messages.size() );
+                wxLogTrace( traceLibraries,
+                            "pcbnew PreloadLibraries: adapter errors.IsEmpty()=%d, length=%zu",
+                            errors.IsEmpty(), errors.length() );
 
-                if( !messages.empty() )
-                    Pgm().AddLibraryLoadMessages( messages );
+                if( !errors.IsEmpty() )
+                {
+                    std::vector<LOAD_MESSAGE> messages =
+                            ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+
+                    wxLogTrace( traceLibraries, "  -> adapter: collected %zu messages",
+                                messages.size() );
+
+                    if( !messages.empty() )
+                        Pgm().AddLibraryLoadMessages( messages );
+                }
+                else
+                {
+                    wxLogTrace( traceLibraries, "  -> no errors from footprint adapter" );
+                }
+
+                // TODO: Remove once fp-info-cache isn't a thing
+                GFootprintList.ReadFootprintFiles( adapter, nullptr, reporter.get() );
+
+                // Also collect errors from GFootprintList
+                wxLogTrace( traceLibraries, "  -> GFootprintList.GetErrorCount()=%u",
+                            GFootprintList.GetErrorCount() );
+
+                if( GFootprintList.GetErrorCount() > 0 )
+                {
+                    std::vector<LOAD_MESSAGE> messages =
+                            ExtractLibraryLoadErrors( GFootprintList.GetErrorMessages(),
+                                                      RPT_SEVERITY_ERROR );
+
+                    wxLogTrace( traceLibraries, "  -> GFootprintList: collected %zu messages",
+                                messages.size() );
+
+                    if( !messages.empty() )
+                        Pgm().AddLibraryLoadMessages( messages );
+                }
+                else
+                {
+                    wxLogTrace( traceLibraries, "  -> no errors from GFootprintList" );
+                }
             }
             else
             {
-                wxLogTrace( traceLibraries, "  -> no errors from footprint adapter" );
+                wxLogTrace( traceLibraries, "pcbnew PreloadLibraries: aborted, skipping footprint processing" );
             }
 
-            // TODO: Remove once fp-info-cache isn't a thing
-            GFootprintList.ReadFootprintFiles( adapter, nullptr, reporter.get() );
-
-            // Also collect errors from GFootprintList
-            wxLogTrace( traceLibraries, "  -> GFootprintList.GetErrorCount()=%u", GFootprintList.GetErrorCount() );
-
-            if( GFootprintList.GetErrorCount() > 0 )
-            {
-                std::vector<LOAD_MESSAGE> messages =
-                        ExtractLibraryLoadErrors( GFootprintList.GetErrorMessages(), RPT_SEVERITY_ERROR );
-
-                wxLogTrace( traceLibraries, "  -> GFootprintList: collected %zu messages", messages.size() );
-
-                if( !messages.empty() )
-                    Pgm().AddLibraryLoadMessages( messages );
-            }
-            else
-            {
-                wxLogTrace( traceLibraries, "  -> no errors from GFootprintList" );
-            }
-
+            m_libraryPreloadAbort.store( false );
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
             m_libraryPreloadInProgress.store( false );
 
-            std::string payload = "";
-            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-            aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-            aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
+            // Only send reload notifications if we weren't aborted
+            if( !aborted )
+            {
+                std::string payload = "";
+                aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
+            }
         };
 
     thread_pool& tp = GetKiCadThreadPool();

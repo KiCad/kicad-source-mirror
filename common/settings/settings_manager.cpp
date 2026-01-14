@@ -962,6 +962,15 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     // No MDI yet
     if( aSetActive && !m_projects.empty() )
     {
+        // Cancel any in-progress library preloads and wait for them to finish before
+        // modifying m_projects_list. Background preload threads access Prj() which becomes
+        // invalid when the project list is modified.
+        if( m_kiway )
+        {
+            if( KIFACE* pcbFace = m_kiway->KiFACE( KIWAY::FACE_PCB, false ) )
+                pcbFace->CancelPreload( true );
+        }
+
         // Abort any async library loads before modifying m_projects_list to prevent race
         // conditions where background threads try to access Prj() while the list is empty.
         if( PgmOrNull() )
@@ -1047,6 +1056,15 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
     PROJECT* toRemove = m_projects.at( projectPath );
     bool wasActiveProject = m_projects_list.begin()->get() == toRemove;
+
+    // Cancel any in-progress library preloads and wait for them to finish before
+    // modifying m_projects_list. Background preload threads access Prj() which becomes
+    // invalid when the project list is modified.
+    if( wasActiveProject && m_kiway )
+    {
+        if( KIFACE* pcbFace = m_kiway->KiFACE( KIWAY::FACE_PCB, false ) )
+            pcbFace->CancelPreload( true );
+    }
 
     // Abort any async library loads before modifying m_projects_list to prevent race
     // conditions where background threads try to access Prj() while the list is empty.
