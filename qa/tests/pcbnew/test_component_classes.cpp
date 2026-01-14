@@ -26,6 +26,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <component_classes/component_class.h>
+#include <component_classes/component_class_manager.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
@@ -155,4 +156,82 @@ BOOST_FIXTURE_TEST_CASE( ComponentClasses, PCB_COMPONENT_CLASS_FIXTURE )
         }
     }
 
+}
+
+
+/**
+ * Test that FinishNetlistUpdate clears footprint static component class pointers
+ * when their classes are deleted. This prevents use-after-free crashes during
+ * auto-save serialization. Regression test for GitLab issue #22623.
+ */
+BOOST_FIXTURE_TEST_CASE( FinishNetlistUpdateClearsDeletedClassPointers, PCB_COMPONENT_CLASS_FIXTURE )
+{
+    // Create a board with a footprint
+    m_board = std::make_unique<BOARD>();
+    FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+    fp->SetReference( wxT( "U1" ) );
+    m_board->Add( fp );
+
+    COMPONENT_CLASS_MANAGER& mgr = m_board->GetComponentClassManager();
+
+    // Simulate a previous netlist update that assigned a component class
+    mgr.InitNetlistUpdate();
+    std::unordered_set<wxString> classNames = { wxT( "TEST_CLASS" ) };
+    COMPONENT_CLASS* testClass = mgr.GetEffectiveStaticComponentClass( classNames );
+    BOOST_REQUIRE( testClass != nullptr );
+    fp->SetStaticComponentClass( testClass );
+    mgr.FinishNetlistUpdate();
+
+    // Verify the class exists and footprint has it
+    BOOST_CHECK( fp->GetStaticComponentClass() == testClass );
+    BOOST_CHECK( !testClass->IsEmpty() );
+
+    // Now simulate a NEW netlist update where the class is no longer used
+    // InitNetlistUpdate() caches existing static classes, then FinishNetlistUpdate()
+    // deletes any that weren't used during the update
+    mgr.InitNetlistUpdate();
+
+    // Don't call GetEffectiveStaticComponentClass for TEST_CLASS - simulates the class
+    // no longer being in the netlist
+
+    mgr.FinishNetlistUpdate();
+
+    // Verify the footprint's pointer was cleared since the class was deleted
+    BOOST_CHECK( fp->GetStaticComponentClass() == nullptr );
+}
+
+
+/**
+ * Test that FinishNetlistUpdate preserves footprint static component class pointers
+ * when their classes are still in use.
+ */
+BOOST_FIXTURE_TEST_CASE( FinishNetlistUpdatePreservesActiveClassPointers, PCB_COMPONENT_CLASS_FIXTURE )
+{
+    // Create a board with a footprint
+    m_board = std::make_unique<BOARD>();
+    FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+    fp->SetReference( wxT( "U1" ) );
+    m_board->Add( fp );
+
+    COMPONENT_CLASS_MANAGER& mgr = m_board->GetComponentClassManager();
+
+    // Begin netlist update and assign a static component class to the footprint
+    mgr.InitNetlistUpdate();
+
+    std::unordered_set<wxString> classNames = { wxT( "TEST_CLASS" ) };
+    COMPONENT_CLASS* testClass = mgr.GetEffectiveStaticComponentClass( classNames );
+    BOOST_REQUIRE( testClass != nullptr );
+
+    fp->SetStaticComponentClass( testClass );
+
+    // Simulate the class being used in this netlist update by calling GetEffectiveStaticComponentClass
+    // again, which removes it from the cache of unused classes
+    testClass = mgr.GetEffectiveStaticComponentClass( classNames );
+    fp->SetStaticComponentClass( testClass );
+
+    mgr.FinishNetlistUpdate();
+
+    // The footprint's pointer should still be valid since the class is still in use
+    BOOST_CHECK( fp->GetStaticComponentClass() == testClass );
+    BOOST_CHECK( fp->GetStaticComponentClass() != nullptr );
 }

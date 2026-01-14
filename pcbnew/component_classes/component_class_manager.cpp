@@ -98,6 +98,38 @@ void COMPONENT_CLASS_MANAGER::FinishNetlistUpdate()
     // m_staticClassesCache now contains any static component classes that are unused from the
     // netlist update. Delete any effective component classes which refer to them in a static-only
     // context, or update their usage context.
+
+    // First, collect all component classes that will be deleted so we can clear footprint pointers
+    // before deletion. This prevents use-after-free when auto-save serializes footprints.
+    std::unordered_set<const COMPONENT_CLASS*> classesToDelete;
+
+    for( const wxString& className : m_staticClassNamesCache )
+    {
+        COMPONENT_CLASS* staticClass = m_constituentClasses[className].get();
+
+        if( staticClass->GetUsageContext() == COMPONENT_CLASS::USAGE::STATIC )
+        {
+            classesToDelete.insert( staticClass );
+
+            for( const auto& [combinedFullName, combinedCompClass] : m_effectiveClasses )
+            {
+                if( combinedCompClass->ContainsClassName( className ) )
+                    classesToDelete.insert( combinedCompClass.get() );
+            }
+        }
+    }
+
+    // Clear footprint static component class pointers that reference classes being deleted
+    if( !classesToDelete.empty() )
+    {
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            if( classesToDelete.count( footprint->GetStaticComponentClass() ) )
+                footprint->SetStaticComponentClass( nullptr );
+        }
+    }
+
+    // Now perform the actual deletions
     for( const wxString& className : m_staticClassNamesCache )
     {
         COMPONENT_CLASS* staticClass = m_constituentClasses[className].get();
@@ -105,15 +137,15 @@ void COMPONENT_CLASS_MANAGER::FinishNetlistUpdate()
         if( staticClass->GetUsageContext() == COMPONENT_CLASS::USAGE::STATIC )
         {
             // Any static-only classes can be deleted, along with effective classes which refer to them
-            std::unordered_set<wxString> classesToDelete;
+            std::unordered_set<wxString> effectiveClassesToDelete;
 
             for( const auto& [combinedFullName, combinedCompClass] : m_effectiveClasses )
             {
                 if( combinedCompClass->ContainsClassName( className ) )
-                    classesToDelete.insert( combinedFullName );
+                    effectiveClassesToDelete.insert( combinedFullName );
             }
 
-            for( const wxString& classNameToDelete : classesToDelete )
+            for( const wxString& classNameToDelete : effectiveClassesToDelete )
                 m_effectiveClasses.erase( classNameToDelete );
 
             m_constituentClasses.erase( className );
