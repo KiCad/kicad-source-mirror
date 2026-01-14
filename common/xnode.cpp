@@ -77,7 +77,7 @@ XATTR::XATTR( const wxString& aName, const VALUE_TYPE& aValue ) :
                     }
                     else
                     {
-                        static_assert( false, "Missing type handling in XNODE::FormatContents" );
+                        static_assert( !std::is_same_v<T, T>, "Missing type handling in XNODE::FormatContents" );
                     }
                     }, aValue );
 }
