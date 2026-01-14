@@ -10,6 +10,17 @@ from typing import Any, NamedTuple
 import re
 import sys
 
+try:
+    import fontforge
+except ImportError:
+    print("** fontforge is not installed. woff output will fail")
+    print("** see https://fontforge.org for installation instructions")
+    class fontforge:
+        class glyphPen:
+            pass
+        class font:
+            pass
+
 global_duplicate_point_removal = True
 
 input_fonts = ['symbol', 'font', 'hiragana',
@@ -30,6 +41,10 @@ output_cpp = '../../common/newstroke_font.cpp'
 
 FONT_BASE = 9
 FONT_SCALE = 50
+FONT_WOFF_THICKNESS = 2.53
+FONT_WOFF_XOFFS = 0
+FONT_WOFF_YOFFS = FONT_WOFF_THICKNESS/2
+FONT_WOFF_SCALE = 29.7
 FONT_C_BIAS = ord("R")
 FONT_NEWSTROKE = " R"
 C_ESC_TRANS = str.maketrans({'"': '\\"', '\\': '\\\\'})
@@ -215,6 +230,24 @@ class Glyph(NamedTuple):
         else:
             return remove_duplicate_points(data)
 
+    def render(self, tr: Transform, ofs: Point, pen: fontforge.glyphPen):
+        woff_tr = Transform(SX=FONT_WOFF_SCALE, SY=-FONT_WOFF_SCALE, OY=0)
+        woff_ofs = Point(
+                x=FONT_WOFF_XOFFS*FONT_WOFF_SCALE,
+                y=FONT_WOFF_YOFFS*FONT_WOFF_SCALE
+                )
+        for stroke in self.strokes:
+            if not stroke:
+                continue
+            transformed = (
+                    p.transformed(tr, ofs).transformed(woff_tr, woff_ofs)
+                    for p in stroke
+                    )
+            pen.moveTo(next(transformed))
+            for t in transformed:
+                pen.lineTo(t)
+            pen.endPath()
+
     @property
     def width(self):
         return self.metrics.r - self.metrics.l
@@ -334,6 +367,10 @@ class SubGlyph(NamedTuple):
     def as_data(self):
         return self.glyph.as_data(self.transform, self.offset)
 
+    def render(self, pen: fontforge.glyphPen, ofs: Point):
+        offset = self.offset.transformed(Transform(), ofs)
+        self.glyph.render(self.transform, offset, pen)
+
 
 class Composition(list[SubGlyph]):
     __slots__ = ["metrics"]
@@ -355,6 +392,19 @@ class Composition(list[SubGlyph]):
             return mdata + remove_duplicate_points(gdata)
         else:
             return mdata + gdata
+
+    def create_char(self, cp: int, font: fontforge.font):
+        name = ' '.join(c.tname for c in self if c.tname)
+        if name == "0":  # 0 has special meaning in fonts
+            name = "ZERO"
+        glyph = font.createChar(cp, name)
+        offset = Point(x=-self.metrics.l, y=0)
+        pen = glyph.glyphPen()
+        for g in self:
+            g.render(pen, offset)
+        pen = None
+        glyph.stroke("circular", font.strokewidth)
+        glyph.width = round((self.metrics.r - self.metrics.l) * FONT_WOFF_SCALE)
 
 
 class Compositions:
@@ -520,7 +570,39 @@ class CFontWriter:
                 print(f'    "{data}", /* U+{codepoint:X} */', file=sout)
 
 
+class WoffFontWriter:
+    """Processes the compositions to fill in a font's glyphs."""
+
+    def __init__(self, comps: Compositions):
+        self.comps = comps
+
+    def generate_glyphs(self, start_cp: int, end_cp: int, font: fontforge.font):
+        fname = self.comps.font_name.replace("_font", "")
+        font.familyname = fname
+        font.fontname = f"kicad-{fname}"
+        font.fullname = f"KiCad {fname.capitalize()}"
+        font.copyright = 'CC0-1.0'
+        font.strokedfont = True
+        font.strokewidth = FONT_WOFF_THICKNESS * FONT_WOFF_SCALE
+        for cp, composition in enumerate(self.comps.codepoints[start_cp:end_cp+1], start_cp):
+            # Don't output tofu/blanks into the file
+            if chr(cp).isspace() or any(c.glyph.strokes and c.glyph != self.comps.default_subglyph.glyph for c in composition):
+                composition.create_char(cp, font)
+
+
 if __name__ == "__main__":
+    cp_min = 0x20
+    cp_max = 0xFFFF
+    woff = None
+    for arg in sys.argv[1:]:
+        param = arg.partition("=")
+        if param[0] == "--woff":
+            woff = param[2]
+        elif param[0] == "--cp_min":
+            cp_min = int(param[2], 0)
+        elif param[0] == "--cp_max":
+            cp_max = int(param[2], 0)
+
     print('** Reading glyphs from fonts:')
     all_glyphs: dict[str, Glyph] = {}
     for basename in input_fonts:
@@ -534,11 +616,17 @@ if __name__ == "__main__":
     with open(input_charlist, encoding='utf-8') as src:
         compositions = Compositions.from_read(src, all_glyphs)
 
-    print(f"** Writing {output_cpp}")
-    font = CFontWriter(compositions)
-    with open(output_cpp, "w", encoding='utf-8') as dst:
-        dst.write(header)
-        font.generate_c_output(0x20, dst)
-        font.print_stats(dst)
+    if woff:
+        print(f"** Writing {woff}")
+        font = fontforge.font()
+        WoffFontWriter(compositions).generate_glyphs(cp_min, cp_max, font)
+        font.generate(woff, flags=("no-FFTM-table",))
+    else:
+        print(f"** Writing {output_cpp}")
+        font = CFontWriter(compositions)
+        with open(output_cpp, "w", encoding='utf-8') as dst:
+            dst.write(header)
+            font.generate_c_output(cp_min, dst)
+            font.print_stats(dst)
 
     print("** Done")
