@@ -189,7 +189,7 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
 
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsBOARD_ITEM() )
+        if( !item->IsBOARD_ITEM() || item->Type() == PCB_TABLECELL_T )
             continue;
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
