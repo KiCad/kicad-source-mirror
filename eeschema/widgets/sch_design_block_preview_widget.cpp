@@ -197,6 +197,7 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
     if( m_previewItem )
     {
         view->Clear();
+        view->MarkDirty();
         delete m_previewItem;
         m_previewItem = nullptr;
     }
