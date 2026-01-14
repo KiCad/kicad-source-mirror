@@ -2653,6 +2653,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     for( PCB_FIELD* field : aExisting->GetFields() )
     {
+        wxCHECK2( field, continue );
+
         if( field->IsReference() || field->IsValue() )
             continue;
 
@@ -2663,6 +2665,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     for( PCB_FIELD* field : aNew->GetFields() )
     {
+        wxCHECK2( field, continue );
+
         if( field->IsReference() || field->IsValue() )
             continue;
 
@@ -2773,6 +2777,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     // Copy fields in accordance with the reset* flags
     for( PCB_FIELD* oldField : aExisting->GetFields() )
     {
+        wxCHECK2( oldField, continue );
+
         // Reference and value are already handled
         if( oldField->IsReference() || oldField->IsValue() )
             continue;
@@ -2805,6 +2811,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     // Check for any newly-added fields and set the update flag as appropriate
     for( PCB_FIELD* newField : aNew->GetFields() )
     {
+        wxCHECK2( newField, continue );
+
         // Reference and value are already handled
         if( newField->IsReference() || newField->IsValue() )
             continue;

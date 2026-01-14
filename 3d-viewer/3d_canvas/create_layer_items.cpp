@@ -133,6 +133,8 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
         if( !aFlags.test( LAYER_FP_TEXT ) )
             continue;
 
+        wxCHECK2( field, continue );
+
         if( field->IsReference() && !aFlags.test( LAYER_FP_REFERENCES ) )
             continue;
 

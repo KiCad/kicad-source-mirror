@@ -70,7 +70,11 @@ PANEL_ASSIGN_COMPONENT_CLASSES::PANEL_ASSIGN_COMPONENT_CLASSES(
         }
 
         for( const PCB_FIELD* field : fp->GetFields() )
+        {
+            wxCHECK2( field, continue );
+
             fieldsSet.insert( field->GetName() );
+        }
     }
 
     // Sort field names

@@ -172,6 +172,8 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
 
         for( const PCB_FIELD* field : fp->GetFields() )
         {
+            wxCHECK2( field, continue );
+
             if( field->IsReference() || field->IsValue() )
                 continue;
 
@@ -1001,6 +1003,8 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
 
             for( const PCB_FIELD* field : footprint->GetFields() )
             {
+                wxCHECK2( field, continue );
+
                 if( field->IsReference() && !aPlotReferences )
                     continue;
 

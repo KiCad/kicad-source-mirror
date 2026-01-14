@@ -310,7 +310,11 @@ void DIALOG_EXPORT_2581::init()
     for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
     {
         for( PCB_FIELD* field : fp->GetFields() )
+        {
+            wxCHECK2( field, continue );
+
             options.insert( field->GetName() );
+        }
     }
 
     std::vector<wxString> items( options.begin(), options.end() );

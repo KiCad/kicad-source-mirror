@@ -208,6 +208,8 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
         if( !aFlags.test( LAYER_FP_TEXT ) )
             continue;
 
+        wxCHECK2( field, continue );
+
         if( field->IsReference() && !aFlags.test( LAYER_FP_REFERENCES ) )
             continue;
 

@@ -337,7 +337,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     // Footprint Fields
     for( PCB_FIELD* field : m_footprint->GetFields() )
+    {
+        wxCHECK2( field, continue );
+
         m_fields->push_back( *field );
+    }
 
     // Notify the grid
     wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
@@ -729,6 +733,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // Find any files referenced in the old fields that are not in the new fields
     for( PCB_FIELD* field : m_footprint->GetFields() )
     {
+        wxCHECK2( field, continue );
+
         if( field->GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
         {
             if( files.find( field->GetText() ) == files.end() )

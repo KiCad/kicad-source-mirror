@@ -259,6 +259,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     // Footprint Fields
     for( PCB_FIELD* srcField : m_footprint->GetFields() )
     {
+        wxCHECK2( srcField, continue );
+
         PCB_FIELD field( *srcField );
         field.SetText( m_footprint->GetBoard()->ConvertKIIDsToCrossReferences( field.GetText() ) );
 
@@ -532,6 +534,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // Find any files referenced in the old fields that are not in the new fields
     for( PCB_FIELD* field : m_footprint->GetFields() )
     {
+        wxCHECK2( field, continue );
+
         if( field->GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
         {
             if( files.find( field->GetText() ) == files.end() )

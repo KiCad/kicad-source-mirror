@@ -250,6 +250,8 @@ void DIALOG_FIND::search( bool aDirection )
                 {
                     for( PCB_FIELD* field : fp->GetFields() )
                     {
+                        wxCHECK2( field, continue );
+
                         if( field->Matches( frd, nullptr ) )
                         {
                             found = true;

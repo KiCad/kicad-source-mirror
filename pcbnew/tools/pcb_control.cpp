@@ -938,6 +938,8 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     //
     for( PCB_FIELD* field : aClipFootprint->GetFields() )
     {
+        wxCHECK2( field, continue );
+
         if( field->IsMandatory() )
         {
             if( EDA_GROUP* parentGroup = field->GetParentGroup() )

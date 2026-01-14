@@ -224,6 +224,8 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
     {
         for( PCB_FIELD* field : fp->GetFields() )
         {
+            wxCHECK2( field, continue );
+
             view()->Update( field, KIGFX::REPAINT );
         }
 

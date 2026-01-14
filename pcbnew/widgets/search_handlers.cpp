@@ -160,6 +160,8 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
         {
             for( PCB_FIELD* field : fp->GetFields() )
             {
+                wxCHECK2( field, continue );
+
                 if( field->Matches( frp, nullptr ) )
                 {
                     found = true;

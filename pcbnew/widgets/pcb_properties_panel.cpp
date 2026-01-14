@@ -381,7 +381,11 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
         for( PCB_FIELD* field : footprint->GetFields() )
+        {
+            wxCHECK2( field, continue );
+
             m_currentFieldNames.insert( field->GetCanonicalName() );
+        }
     }
 
     const wxString groupFields = _HKI( "Fields" );

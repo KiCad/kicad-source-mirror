@@ -1814,6 +1814,8 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 
         for( PCB_FIELD* field : footprint->GetFields() )
         {
+            wxCHECK2( field, continue );
+
             if( field && field->m_Uuid == aID )
                 return field;
         }
