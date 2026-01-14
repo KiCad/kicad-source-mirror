@@ -325,21 +325,32 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
             // Hide the popup text so it doesn't get in the way
             statusPopup.Hide();
 
-            // Start with the forward vector from the ruler item
-            VECTOR2I          offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
+            // This is the forward vector from the ruler item
+            VECTOR2I       offsetVector = twoPtMgr.GetEnd() - twoPtMgr.GetOrigin();
+            const VECTOR2I toReferencePtVector = twoPtMgr.GetOrigin() - twoPtMgr.GetEnd();
+
+            // Start with the value of that vector in the dialog (will match the rule HUD)
             DIALOG_SET_OFFSET dlg( *frame(), offsetVector, false );
 
             if( dlg.ShowModal() == wxID_OK )
             {
-                applyVector( offsetVector );
-                canvas()->Refresh();
+                const VECTOR2I move = toReferencePtVector + offsetVector;
+
+                applyVector( move );
+
+                // Leave the arrow in place but update it
+                twoPtMgr.SetEnd( twoPtMgr.GetOrigin() + offsetVector );
+                view.Update( &ruler, KIGFX::GEOMETRY );
+            }
+            else
+            {
+                twoPtMgr.Reset();
+                view.SetVisible( &ruler, false );
+                view.Update( &ruler, KIGFX::GEOMETRY );
             }
 
-            twoPtMgr.Reset();
-            view.SetVisible( &ruler, false );
-            view.Update( &ruler, KIGFX::GEOMETRY );
-
             originSet = false;
+            canvas()->Refresh();
 
             setInitialMsg();
 
@@ -360,7 +371,8 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
                 force45Deg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_Use45Limit;
 
             twoPtMgr.SetAngleSnap( force45Deg );
-            twoPtMgr.SetEnd( cursorPos );
+            // The end is fixed; we must update the origin
+            twoPtMgr.SetOrigin( cursorPos );
 
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
