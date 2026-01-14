@@ -1174,7 +1174,21 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
     if( !restored && !m_perspective.IsEmpty() )
         m_auimgr.LoadPerspective( m_perspective );
 #else
-    // Do nothing: Save/LoadPerspective() is broken on wx before 3.3
+    if( !m_perspective.IsEmpty() )
+    {
+        m_auimgr.LoadPerspective( m_perspective );
+
+        // Workaround for wx 3.2: LoadPerspective() hides all panes first, then shows only
+        // those in the saved string. If toolbar names changed or new toolbars were added,
+        // they'd stay hidden. Ensure all toolbars are visible after restore.
+        wxAuiPaneInfoArray& panes = m_auimgr.GetAllPanes();
+
+        for( size_t i = 0; i < panes.GetCount(); ++i )
+        {
+            if( panes.Item( i ).IsToolbar() )
+                panes.Item( i ).Show( true );
+        }
+    }
 #endif
 }
 
