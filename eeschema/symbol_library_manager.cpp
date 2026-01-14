@@ -847,14 +847,9 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateLibraryBuffer( const wxString& aLibrary )
         m_libs.erase( aLibrary );
         getLibraryBuffer( aLibrary );
     }
-    catch(const std::exception& e)
+    catch( const std::exception& e )
     {
         wxLogError( _( "Error updating library buffer: %s" ), e.what() );
-        return false;
-    }
-    catch( const IO_ERROR& e )
-    {
-        wxLogError( _( "Error updating library buffer: %s" ), e.What() );
         return false;
     }
     catch(...)
