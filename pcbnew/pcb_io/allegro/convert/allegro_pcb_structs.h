@@ -463,6 +463,7 @@ enum FIELD_KEYS
     MAX_LINE_WIDTH = 0x173,
     MIN_NECK_WIDTH = 0x5c,
     MAX_NECK_LENGTH = 0x1fb,
+    PHYS_CONSTRAINT_SET = 0x1a0,
 };
 
 

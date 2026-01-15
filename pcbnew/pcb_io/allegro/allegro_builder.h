@@ -122,12 +122,35 @@ private:
      */
     int resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const;
 
+    /**
+     * Follow m_MatchGroupPtr through the 0x26/0x2C pointer chain to get
+     * the match group name for a NET.
+     *
+     * V172+: NET.m_MatchGroupPtr -> 0x26 -> m_GroupPtr -> 0x2C TABLE -> string
+     * Pre-V172: NET.m_MatchGroupPtr -> 0x2C TABLE -> string
+     *
+     * @return the group name, or empty string if none
+     */
+    wxString resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const;
+
+    /**
+     * Extract constraint set name from a 0x03 FIELD block pointer.
+     *
+     * Some boards store the constraint set name in a FIELD block referenced by m_FieldPtr in
+     * the 0x1D block instead of the main string table. The FIELD string is a schematic
+     * cross-reference like "@lib.xxx(view):\CONSTRAINT_SET_NAME\".
+     */
+    wxString resolveConstraintSetNameFromField( uint32_t aFieldKey ) const;
+
     void cacheFontDefs();
     void setupLayers();
     void createNets();
     void createTracks();
     void createBoardOutline();
     void createZones();
+    void applyConstraintSets();
+    void applyNetConstraints();
+    void applyMatchGroups();
     /**
      * Get the font definition for a given index in a 0x30, etc.
      *

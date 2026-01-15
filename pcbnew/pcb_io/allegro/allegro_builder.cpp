@@ -32,6 +32,7 @@
 
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <netclass.h>
 #include <pad.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
@@ -891,6 +892,439 @@ void BOARD_BUILDER::createNets()
     m_board.FinalizeBulkAdd( bulkAdded );
 
     wxLogTrace( traceAllegroBuilder, "Added %zu nets", m_netCache.size() );
+}
+
+
+wxString BOARD_BUILDER::resolveConstraintSetNameFromField( uint32_t aFieldKey ) const
+{
+    const BLOCK_BASE* fieldBlock = m_brdDb.GetObjectByKey( aFieldKey );
+
+    if( !fieldBlock || fieldBlock->GetBlockType() != 0x03 )
+        return wxEmptyString;
+
+    const BLK_0x03& field = static_cast<const BLOCK<BLK_0x03>&>( *fieldBlock ).GetData();
+    const std::string* str = std::get_if<std::string>( &field.m_Substruct );
+
+    if( !str )
+        return wxEmptyString;
+
+    // Extract name from schematic cross-reference format: @lib.xxx(view):\NAME\.
+    // Find the last colon-backslash separator in the raw std::string and extract from there.
+    size_t sep = str->find( ":\\" );
+
+    if( sep == std::string::npos )
+        return wxEmptyString;
+
+    std::string extracted = str->substr( sep + 2 );
+
+    if( !extracted.empty() && extracted.back() == '\\' )
+        extracted.pop_back();
+
+    return wxString( extracted );
+}
+
+
+void BOARD_BUILDER::applyConstraintSets()
+{
+    wxLogTrace( traceAllegroBuilder, "Importing physical constraint sets from 0x1D blocks" );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board.GetDesignSettings();
+    std::shared_ptr<NET_SETTINGS> netSettings = bds.m_NetSettings;
+
+    bool isV172Plus = ( m_brdDb.m_FmtVer >= FMT_VER::V_172 );
+
+    struct CS_DEF
+    {
+        wxString name;
+        int      lineWidth = 0;
+        int      clearance = 0;
+    };
+
+    // Map from constraint set name to its definition
+    std::map<wxString, CS_DEF> constraintSets;
+
+    // Also map string table keys to set names for net lookup
+    std::map<uint32_t, wxString> keyToSetName;
+
+    int csIndex = 0;
+    const LL_WALKER csWalker( m_brdDb.m_Header->m_LL_0x1D_0x1E_0x1F, m_brdDb );
+
+    for( const BLOCK_BASE* block : csWalker )
+    {
+        if( block->GetBlockType() != 0x1D )
+            continue;
+
+        const BLK_0x1D& csBlock = static_cast<const BLOCK<BLK_0x1D>&>( *block ).GetData();
+
+        wxString setName;
+        const wxString* resolved = m_brdDb.ResolveString( csBlock.m_NameStrKey );
+
+        if( resolved && !resolved->IsEmpty() )
+        {
+            setName = *resolved;
+        }
+        else if( csBlock.m_FieldPtr != 0 )
+        {
+            // Some boards store the name in a 0x03 FIELD block as a schematic cross-reference
+            setName = resolveConstraintSetNameFromField( csBlock.m_FieldPtr );
+        }
+
+        if( setName.IsEmpty() )
+            setName = wxString::Format( wxS( "CS_%d" ), csIndex );
+
+        csIndex++;
+
+        if( csBlock.m_DataB.empty() )
+        {
+            wxLogTrace( traceAllegroBuilder, "Constraint set '%s' has no DataB records, skipping", setName );
+            continue;
+        }
+
+        // Parse first DataB record (first copper layer) as 14 x int32
+        const auto& record = csBlock.m_DataB[0];
+        int32_t fields[14];
+        static_assert( sizeof( fields ) == std::tuple_size_v<std::decay_t<decltype( record )>> );
+        memcpy( fields, record.data(), sizeof( fields ) );
+
+        CS_DEF def;
+        def.name = setName;
+
+        if( isV172Plus )
+        {
+            def.lineWidth = scale( fields[1] );
+            def.clearance = scale( fields[4] );
+        }
+        else
+        {
+            def.lineWidth = scale( fields[0] );
+            // No dedicated clearance field in pre-V172; use spacing as fallback
+            def.clearance = scale( fields[1] );
+        }
+
+        constraintSets[setName] = def;
+        keyToSetName[csBlock.m_NameStrKey] = setName;
+
+        wxLogTrace( traceAllegroBuilder,
+                    "Constraint set '%s': line_width=%d nm, clearance=%d nm",
+                    setName, def.lineWidth, def.clearance );
+    }
+
+    if( constraintSets.empty() )
+    {
+        wxLogTrace( traceAllegroBuilder, "No physical constraint sets found" );
+        return;
+    }
+
+    // Create a netclass for each constraint set that has nonzero values
+    for( const auto& [name, def] : constraintSets )
+    {
+        wxString ncName = wxString::Format( wxS( "Allegro_%s" ), name );
+
+        if( netSettings->HasNetclass( ncName ) )
+            continue;
+
+        auto nc = std::make_shared<NETCLASS>( ncName );
+
+        if( def.lineWidth > 0 )
+            nc->SetTrackWidth( def.lineWidth );
+
+        if( def.clearance > 0 )
+            nc->SetClearance( def.clearance );
+
+        netSettings->SetNetclass( ncName, nc );
+
+        wxLogTrace( traceAllegroBuilder, "Created netclass '%s' from constraint set '%s'", ncName, name );
+    }
+
+    // Walk all NETs and assign them to constraint set netclasses via field 0x1a0
+    wxString defaultSetName;
+
+    for( const auto& [name, def] : constraintSets )
+    {
+        if( name.CmpNoCase( wxS( "DEFAULT" ) ) == 0 )
+        {
+            defaultSetName = name;
+            break;
+        }
+    }
+
+    m_brdDb.VisitNets( [&]( const VIEW_OBJS& aView )
+    {
+        if( !aView.m_Net )
+            return;
+
+        const NET& net = *aView.m_Net;
+
+        // Field 0x1a0 references the constraint set. It can be an integer (string table key
+        // that matches 0x1D.m_NameStrKey) or a direct string (the constraint set name).
+        auto csField = net.m_Fields.GetOptField( FIELD_KEYS::PHYS_CONSTRAINT_SET );
+
+        wxString assignedSetName;
+
+        if( csField.has_value() )
+        {
+            if( auto* intVal = std::get_if<uint32_t>( &csField.value() ) )
+            {
+                auto it = keyToSetName.find( *intVal );
+
+                if( it != keyToSetName.end() )
+                    assignedSetName = it->second;
+            }
+            else if( auto* strVal = std::get_if<wxString>( &csField.value() ) )
+            {
+                if( constraintSets.count( *strVal ) )
+                    assignedSetName = *strVal;
+            }
+        }
+
+        // Nets without field 0x1a0 use the DEFAULT constraint set
+        if( assignedSetName.IsEmpty() && !defaultSetName.IsEmpty() )
+            assignedSetName = defaultSetName;
+
+        if( assignedSetName.IsEmpty() )
+            return;
+
+        wxString ncName = wxString::Format( wxS( "Allegro_%s" ), assignedSetName );
+
+        if( !netSettings->HasNetclass( ncName ) )
+            return;
+
+        auto netIt = m_netCache.find( net.GetKey() );
+
+        if( netIt == m_netCache.end() )
+            return;
+
+        NETINFO_ITEM* kiNet = netIt->second;
+        netSettings->SetNetclassPatternAssignment( kiNet->GetNetname(), ncName );
+        kiNet->SetNetClass( netSettings->GetNetClassByName( ncName ) );
+    } );
+
+    wxLogTrace( traceAllegroBuilder, "Applied %zu physical constraint sets", constraintSets.size() );
+}
+
+
+void BOARD_BUILDER::applyNetConstraints()
+{
+    wxLogTrace( traceAllegroBuilder, "Applying per-net trace width constraints" );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board.GetDesignSettings();
+    std::shared_ptr<NET_SETTINGS> netSettings = bds.m_NetSettings;
+
+    // Group nets by their minimum trace width to create netclasses.
+    // Allegro stores per-net min/max trace width in FIELD blocks attached to each NET.
+    std::map<int, std::vector<uint32_t>> widthToNetKeys;
+
+    m_brdDb.VisitNets( [&]( const VIEW_OBJS& aView )
+    {
+        if( !aView.m_Net )
+            return;
+
+        std::optional<int> minWidth = aView.m_Net->GetNetMinLineWidth();
+
+        if( !minWidth.has_value() || minWidth.value() <= 0 )
+            return;
+
+        int widthNm = scale( minWidth.value() );
+        widthToNetKeys[widthNm].push_back( aView.m_Net->GetKey() );
+    } );
+
+    if( widthToNetKeys.empty() )
+    {
+        wxLogTrace( traceAllegroBuilder, "No per-net trace width constraints found" );
+        return;
+    }
+
+    for( const auto& [widthNm, netKeys] : widthToNetKeys )
+    {
+        int widthMils = ( widthNm + 12700 ) / 25400;
+        wxString ncName = wxString::Format( wxS( "Allegro_W%dmil" ), widthMils );
+
+        if( netSettings->HasNetclass( ncName ) )
+            continue;
+
+        auto nc = std::make_shared<NETCLASS>( ncName );
+        nc->SetTrackWidth( widthNm );
+        netSettings->SetNetclass( ncName, nc );
+
+        for( uint32_t netKey : netKeys )
+        {
+            auto it = m_netCache.find( netKey );
+
+            if( it == m_netCache.end() )
+                continue;
+
+            NETINFO_ITEM* kiNet = it->second;
+            netSettings->SetNetclassPatternAssignment( kiNet->GetNetname(), ncName );
+            kiNet->SetNetClass( nc );
+        }
+
+        wxLogTrace( traceAllegroBuilder, "Created netclass '%s' (track width %d nm) with %zu nets",
+                    ncName, widthNm, netKeys.size() );
+    }
+
+    wxLogTrace( traceAllegroBuilder, "Applied trace width constraints from %zu unique width groups",
+                widthToNetKeys.size() );
+}
+
+
+wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
+{
+    if( aNet.m_MatchGroupPtr == 0 )
+        return wxEmptyString;
+
+    const BLOCK_BASE* block = m_brdDb.GetObjectByKey( aNet.m_MatchGroupPtr );
+
+    if( !block )
+        return wxEmptyString;
+
+    uint32_t tableKey = 0;
+
+    if( block->GetBlockType() == 0x26 )
+    {
+        // V172+ path: NET -> 0x26 -> m_GroupPtr -> 0x2C TABLE
+        const auto& x26 = static_cast<const BLOCK<BLK_0x26>&>( *block ).GetData();
+        tableKey = x26.m_GroupPtr;
+
+        // Some boards have chained 0x26 blocks (m_GroupPtr -> another 0x26 -> 0x2C)
+        if( tableKey != 0 )
+        {
+            const BLOCK_BASE* next = m_brdDb.GetObjectByKey( tableKey );
+
+            if( next && next->GetBlockType() == 0x26 )
+            {
+                const auto& x26b = static_cast<const BLOCK<BLK_0x26>&>( *next ).GetData();
+                tableKey = x26b.m_GroupPtr;
+            }
+        }
+    }
+    else if( block->GetBlockType() == 0x2C )
+    {
+        // Pre-V172 path: NET -> 0x2C TABLE directly
+        tableKey = aNet.m_MatchGroupPtr;
+    }
+    else
+    {
+        return wxEmptyString;
+    }
+
+    if( tableKey == 0 )
+        return wxEmptyString;
+
+    // Verify the target is actually a 0x2C TABLE before calling expectBlockByKey to
+    // avoid noisy warnings on boards with unexpected pointer chain configurations.
+    const BLOCK_BASE* tableBlock = m_brdDb.GetObjectByKey( tableKey );
+
+    if( !tableBlock || tableBlock->GetBlockType() != 0x2C )
+        return wxEmptyString;
+
+    const BLK_0x2C_TABLE* tbl = expectBlockByKey<BLK_0x2C_TABLE>( tableKey, 0x2C );
+
+    if( !tbl || tbl->m_StringPtr == 0 )
+        return wxEmptyString;
+
+    const wxString& name = m_brdDb.GetString( tbl->m_StringPtr );
+    return name;
+}
+
+
+void BOARD_BUILDER::applyMatchGroups()
+{
+    wxLogTrace( traceAllegroBuilder, "Applying match group / differential pair assignments" );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board.GetDesignSettings();
+    std::shared_ptr<NET_SETTINGS> netSettings = bds.m_NetSettings;
+
+    // Group NET keys by their match group name
+    std::map<wxString, std::vector<uint32_t>> groupToNetKeys;
+
+    LL_WALKER netWalker{ m_brdDb.m_Header->m_LL_0x1B_Nets, m_brdDb };
+
+    for( const BLOCK_BASE* block : netWalker )
+    {
+        if( block->GetBlockType() != BLOCK_TYPE::x1B_NET )
+            continue;
+
+        const auto& netBlk = static_cast<const BLOCK<BLK_0x1B_NET>&>( *block ).GetData();
+        wxString groupName = resolveMatchGroupName( netBlk );
+
+        if( groupName.empty() )
+            continue;
+
+        groupToNetKeys[groupName].push_back( netBlk.m_Key );
+    }
+
+    if( groupToNetKeys.empty() )
+    {
+        wxLogTrace( traceAllegroBuilder, "No match groups found" );
+        return;
+    }
+
+    int dpCount = 0;
+    int mgCount = 0;
+
+    for( const auto& [groupName, netKeys] : groupToNetKeys )
+    {
+        // A diff pair has exactly 2 nets. We don't check P/N naming because Allegro doesn't
+        // require any naming convention for paired nets.
+        bool isDiffPair = ( netKeys.size() == 2 );
+        wxString ncPrefix = isDiffPair ? wxS( "Allegro_DP_" ) : wxS( "Allegro_MG_" );
+        wxString ncName = ncPrefix + groupName;
+
+        if( netSettings->HasNetclass( ncName ) )
+            continue;
+
+        auto nc = std::make_shared<NETCLASS>( ncName );
+
+        // Inherit constraint set values from the first net's current netclass so that
+        // clearance and track width from the underlying constraint set are not lost.
+        for( uint32_t netKey : netKeys )
+        {
+            auto it = m_netCache.find( netKey );
+
+            if( it == m_netCache.end() )
+                continue;
+
+            NETCLASS* existing = it->second->GetNetClass();
+
+            if( existing && existing->GetName() != NETCLASS::Default )
+            {
+                if( existing->HasClearance() )
+                    nc->SetClearance( existing->GetClearance() );
+
+                if( existing->HasTrackWidth() )
+                    nc->SetTrackWidth( existing->GetTrackWidth() );
+
+                break;
+            }
+        }
+
+        netSettings->SetNetclass( ncName, nc );
+
+        for( uint32_t netKey : netKeys )
+        {
+            auto it = m_netCache.find( netKey );
+
+            if( it == m_netCache.end() )
+                continue;
+
+            NETINFO_ITEM* kiNet = it->second;
+            netSettings->SetNetclassPatternAssignment( kiNet->GetNetname(), ncName );
+            kiNet->SetNetClass( nc );
+        }
+
+        if( isDiffPair )
+            dpCount++;
+        else
+            mgCount++;
+
+        wxLogTrace( traceAllegroBuilder, "%s group '%s' -> netclass '%s' with %zu nets",
+                    isDiffPair ? wxS( "Diff pair" ) : wxS( "Match" ),
+                    groupName, ncName, netKeys.size() );
+    }
+
+    wxLogTrace( traceAllegroBuilder,
+                "Applied match groups: %d diff pairs, %d match groups (%zu total groups)",
+                dpCount, mgCount, groupToNetKeys.size() );
 }
 
 
@@ -2504,6 +2938,10 @@ bool BOARD_BUILDER::BuildBoard()
     createBoardOutline();
 
     createZones();
+
+    applyConstraintSets();
+    applyNetConstraints();
+    applyMatchGroups();
 
     if( m_progressReporter )
     {

@@ -358,6 +358,12 @@ public:
 
     const wxString* GetOptFieldExpectString( uint16_t aFieldCode ) const;
 
+    /**
+     * Get the raw variant value of the field with the given code, if present.
+     * Returns nullopt if the field is not in the list.
+     */
+    std::optional<std::variant<wxString, uint32_t>> GetOptField( uint16_t aFieldCode ) const;
+
 private:
     DB_REF_CHAIN& m_Chain;
 };

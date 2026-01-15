@@ -659,6 +659,23 @@ const wxString* FIELD_LIST::GetOptFieldExpectString( uint16_t aFieldCode ) const
 }
 
 
+std::optional<std::variant<wxString, uint32_t>> FIELD_LIST::GetOptField( uint16_t aFieldCode ) const
+{
+    for( const DB_OBJ* obj : m_Chain.m_Chain )
+    {
+        if( !obj || obj->GetType() != DB_OBJ::TYPE::FIELD )
+            continue;
+
+        const FIELD& field = static_cast<const FIELD&>( *obj );
+
+        if( field.m_Hdr1 == aFieldCode )
+            return field.m_FieldValue;
+    }
+
+    return std::nullopt;
+}
+
+
 COMPONENT::COMPONENT( const BRD_DB& aBrd, const BLK_0x06& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::COMPONENT, aBlk.m_Key )
 {

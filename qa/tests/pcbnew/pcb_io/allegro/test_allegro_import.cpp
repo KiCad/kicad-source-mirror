@@ -39,6 +39,8 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <netinfo.h>
+#include <netclass.h>
+#include <board_design_settings.h>
 #include <reporter.h>
 
 #include <filesystem>
@@ -2990,6 +2992,326 @@ BOOST_AUTO_TEST_CASE( FootprintOrientation )
     EDA_ANGLE orientation = j1->GetOrientation();
     BOOST_TEST_MESSAGE( "J1 orientation: " << orientation.AsDegrees() << " degrees" );
     BOOST_CHECK_CLOSE( orientation.AsDegrees(), 90.0, 0.1 );
+}
+
+
+/**
+ * Verify that per-net trace width constraints from Allegro FIELD blocks are imported
+ * as KiCad netclass track width settings. ProiectBoard has 17 nets at 20mil and 2 at 24mil.
+ */
+BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ProiectBoard.brd" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W20mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W24mil" ) ) );
+
+    auto nc20 = netSettings->GetNetClassByName( wxS( "Allegro_W20mil" ) );
+    auto nc24 = netSettings->GetNetClassByName( wxS( "Allegro_W24mil" ) );
+
+    BOOST_REQUIRE( nc20 );
+    BOOST_REQUIRE( nc24 );
+
+    // 20 mil = 508000 nm, 24 mil = 609600 nm
+    BOOST_CHECK_EQUAL( nc20->GetTrackWidth(), 508000 );
+    BOOST_CHECK_EQUAL( nc24->GetTrackWidth(), 609600 );
+
+    // Count nets in each netclass
+    int count20 = 0;
+    int count24 = 0;
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() <= 0 )
+            continue;
+
+        NETCLASS* nc = net->GetNetClass();
+
+        if( !nc )
+            continue;
+
+        if( nc->GetName() == wxS( "Allegro_W20mil" ) )
+            count20++;
+        else if( nc->GetName() == wxS( "Allegro_W24mil" ) )
+            count24++;
+    }
+
+    BOOST_CHECK_EQUAL( count20, 17 );
+    BOOST_CHECK_EQUAL( count24, 2 );
+}
+
+
+/**
+ * Verify that diff pair match groups in BeagleBone Black produce netclasses with the
+ * Allegro_DP_ prefix and contain exactly 2 nets each.
+ */
+BOOST_AUTO_TEST_CASE( DiffPairNetclass )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "DiffPairNetclass" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // HDMI_TXC is a well-known diff pair on BeagleBone Black
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DP_HDMI_TXC" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DP_USB0" ) ) );
+
+    // Verify HDMI_TXC has exactly 2 nets assigned
+    int hdmiTxcCount = 0;
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() <= 0 )
+            continue;
+
+        NETCLASS* nc = net->GetNetClass();
+
+        if( nc && nc->GetName() == wxS( "Allegro_DP_HDMI_TXC" ) )
+            hdmiTxcCount++;
+    }
+
+    BOOST_CHECK_EQUAL( hdmiTxcCount, 2 );
+}
+
+
+/**
+ * Verify that match groups with more than 2 nets (DDR byte lanes, address buses) produce
+ * netclasses with the Allegro_MG_ prefix.
+ */
+BOOST_AUTO_TEST_CASE( MatchGroupNetclass )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "MatchGroupNetclass" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // DDR_DQ0 is a DDR byte lane with 11 nets (not a diff pair)
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_MG_DDR_DQ0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_MG_DDR_ADD" ) ) );
+
+    // DDR_DQ0 should have 11 nets, DDR_ADD should have 26
+    int dq0Count = 0;
+    int addCount = 0;
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() <= 0 )
+            continue;
+
+        NETCLASS* nc = net->GetNetClass();
+
+        if( !nc )
+            continue;
+
+        if( nc->GetName() == wxS( "Allegro_MG_DDR_DQ0" ) )
+            dq0Count++;
+        else if( nc->GetName() == wxS( "Allegro_MG_DDR_ADD" ) )
+            addCount++;
+    }
+
+    BOOST_CHECK_EQUAL( dq0Count, 11 );
+    BOOST_CHECK_EQUAL( addCount, 26 );
+}
+
+
+/**
+ * Verify the total number of match group netclasses across all boards that have them.
+ * BeagleBone Black has 17 diff pair groups and 4 match groups (21 total).
+ */
+BOOST_AUTO_TEST_CASE( MatchGroupCounts )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "MatchGroupCounts" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    int dpCount = 0;
+    int mgCount = 0;
+
+    for( const auto& [name, nc] : netSettings->GetNetclasses() )
+    {
+        if( name.StartsWith( wxS( "Allegro_DP_" ) ) )
+            dpCount++;
+        else if( name.StartsWith( wxS( "Allegro_MG_" ) ) )
+            mgCount++;
+    }
+
+    BOOST_CHECK_EQUAL( dpCount, 17 );
+    BOOST_CHECK_EQUAL( mgCount, 4 );
+}
+
+
+/**
+ * Verify that boards without match groups (e.g., simple boards) don't produce any
+ * Allegro_DP_ or Allegro_MG_ netclasses.
+ */
+BOOST_AUTO_TEST_CASE( NoMatchGroupsOnSimpleBoard )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/led_youtube.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "NoMatchGroupsOnSimpleBoard" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    for( const auto& [name, nc] : netSettings->GetNetclasses() )
+    {
+        BOOST_CHECK_MESSAGE( !name.StartsWith( wxS( "Allegro_DP_" ) ) && !name.StartsWith( wxS( "Allegro_MG_" ) ),
+                             "Simple board should not have match group netclass: " + name );
+    }
+}
+
+
+/**
+ * Verify that physical constraint sets (0x1D blocks) from BeagleBone Black are imported as
+ * KiCad netclasses with correct track width and clearance values.
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetNetclasses )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ConstraintSetNetclasses" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // BB Black has 5 constraint sets, all with 4.0 mil (101600 nm) clearance
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DEFAULT" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_PWR" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_BGA" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_90_OHM_DIFF" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_100OHM_DIFF" ) ) );
+
+    auto ncDefault = netSettings->GetNetClassByName( wxS( "Allegro_DEFAULT" ) );
+    auto ncPwr = netSettings->GetNetClassByName( wxS( "Allegro_PWR" ) );
+
+    BOOST_REQUIRE( ncDefault );
+    BOOST_REQUIRE( ncPwr );
+
+    BOOST_CHECK_EQUAL( ncDefault->GetClearance(), 101600 );
+    BOOST_CHECK_EQUAL( ncDefault->GetTrackWidth(), 120650 );
+
+    BOOST_CHECK_EQUAL( ncPwr->GetClearance(), 101600 );
+    BOOST_CHECK_EQUAL( ncPwr->GetTrackWidth(), 381000 );
+
+    // Nets without explicit 0x1a0 field assignment fall back to DEFAULT.
+    // BB Black nets have empty-string 0x1a0 fields which don't match any constraint set,
+    // so all nets get assigned to DEFAULT.
+    int defaultCount = 0;
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() <= 0 )
+            continue;
+
+        NETCLASS* nc = net->GetNetClass();
+
+        if( !nc )
+            continue;
+
+        if( nc->GetName() == wxS( "Allegro_DEFAULT" ) )
+            defaultCount++;
+    }
+
+    BOOST_CHECK_MESSAGE( defaultCount > 0, "DEFAULT constraint set should have assigned nets (implicit)" );
+}
+
+
+/**
+ * Verify constraint set import on a pre-V172 board (TRS80_POWER). Pre-V172 boards have
+ * no dedicated clearance field, so spacing is used as the clearance fallback.
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetPreV172 )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/TRS80_POWER.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ConstraintSetPreV172" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_CS_0" ) ) );
+
+    auto nc = netSettings->GetNetClassByName( wxS( "Allegro_CS_0" ) );
+
+    BOOST_REQUIRE( nc );
+
+    // Pre-V172 f[0]=line_width=15 mil (381000 nm), f[1]=spacing=7 mil (177800 nm) used as clearance
+    BOOST_CHECK_EQUAL( nc->GetTrackWidth(), 381000 );
+    BOOST_CHECK_EQUAL( nc->GetClearance(), 177800 );
+}
+
+
+/**
+ * Verify that constraint set netclasses and per-net trace width netclasses coexist.
+ * ProiectBoard has both a constraint set (CS_0) and per-net trace widths (W20mil, W24mil).
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ConstraintSetAndTraceWidth" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // Constraint set netclass
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_CS_0" ) ) );
+
+    // Per-net trace width netclasses
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W20mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W24mil" ) ) );
+
+    // Constraint set values (pre-V172, 5 mil line/spacing/clearance)
+    auto ncCS = netSettings->GetNetClassByName( wxS( "Allegro_CS_0" ) );
+
+    BOOST_REQUIRE( ncCS );
+    BOOST_CHECK_EQUAL( ncCS->GetTrackWidth(), 127000 );
+    BOOST_CHECK_EQUAL( ncCS->GetClearance(), 127000 );
+
+    // Per-net trace widths still intact
+    auto nc20 = netSettings->GetNetClassByName( wxS( "Allegro_W20mil" ) );
+    auto nc24 = netSettings->GetNetClassByName( wxS( "Allegro_W24mil" ) );
+
+    BOOST_REQUIRE( nc20 );
+    BOOST_REQUIRE( nc24 );
+    BOOST_CHECK_EQUAL( nc20->GetTrackWidth(), 508000 );
+    BOOST_CHECK_EQUAL( nc24->GetTrackWidth(), 609600 );
 }
 
 
