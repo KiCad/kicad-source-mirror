@@ -3445,6 +3445,13 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                     m_selectionTool->AddItemToSel( sheetGroup );
                 else
                     m_selectionTool->AddItemToSel( sheet );
+
+                if( ( isDrawSheetCopy || isDrawSheetFromDesignBlock )
+                    && !cfg->m_DesignBlockChooserPanel.repeated_placement )
+                {
+                    m_frame->PopTool( aEvent );
+                    break;
+                }
             }
             else
             {
