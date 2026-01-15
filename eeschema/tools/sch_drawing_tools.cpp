@@ -703,6 +703,16 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
 
+    // Guard to reset forced cursor positioning on exit, regardless of error path
+    struct RESET_FORCED_CURSOR_GUARD
+    {
+        KIGFX::VIEW_CONTROLS* m_controls;
+
+        ~RESET_FORCED_CURSOR_GUARD() { m_controls->ForceCursorPosition( false ); }
+    };
+
+    RESET_FORCED_CURSOR_GUARD forcedCursorGuard{ controls };
+
     if( !cfg || !common_settings )
         return 0;
 
