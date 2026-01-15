@@ -2793,7 +2793,12 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         && ( !m_board->GetProject()
              || !m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
     {
-        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, thermalRings ) )
+        // Combine thermal rings with clearance holes (non-connected pad clearances) so that
+        // the hatch hole-dropping logic considers both types of rings
+        SHAPE_POLY_SET ringsToProtect = thermalRings;
+        ringsToProtect.BooleanAdd( clearanceHoles );
+
+        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, ringsToProtect ) )
             return false;
     }
     else
@@ -2817,6 +2822,10 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
 
     if( half_min_width - epsilon > epsilon )
         aFillPolys.Inflate( half_min_width - epsilon, cornerStrategy, m_maxError, true );
+
+    // The deflation/inflation process can leave notches in the outline.  Remove these by
+    // doing a union with the original ring
+    aFillPolys.BooleanAdd( thermalRings );
 
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 
@@ -3692,26 +3701,54 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             ++ii;
     }
 
-    // Drop any holes that touch thermal rings to ensure thermal reliefs stay connected
-    // to the hatch webbing even when the hatch gap is larger than the thermal ring.
+    // Drop any holes that completely enclose a thermal ring to ensure thermal reliefs
+    // stay connected to the hatch webbing. Only drop holes where the thermal ring is
+    // entirely inside the hole; partial overlaps are kept to preserve the hatch pattern.
     if( aThermalRings.OutlineCount() > 0 )
     {
         BOX2I thermalBBox = aThermalRings.BBox();
 
-        for( int ii = holes.OutlineCount() - 1; ii >= 0; ii-- )
+        // Iterate through holes (backwards since we may delete)
+        for( int holeIdx = holes.OutlineCount() - 1; holeIdx >= 0; holeIdx-- )
         {
-            const SHAPE_LINE_CHAIN& hole = holes.Outline( ii );
+            const SHAPE_LINE_CHAIN& hole = holes.Outline( holeIdx );
+            BOX2I                   holeBBox = hole.BBox();
 
-            // Quick rejection: skip if bounding boxes don't overlap
-            if( !thermalBBox.Intersects( hole.BBox() ) )
+            // Quick rejection: skip if hole bbox doesn't intersect thermal rings bbox
+            if( !holeBBox.Intersects( thermalBBox ) )
                 continue;
 
-            // Full collision check using Collide() which is faster than BooleanIntersection()
-            SHAPE_POLY_SET holeAsPoly;
-            holeAsPoly.AddOutline( hole );
+            // Check if ANY thermal ring is completely enclosed by this hole
+            for( int ringIdx = 0; ringIdx < aThermalRings.OutlineCount(); ringIdx++ )
+            {
+                const SHAPE_LINE_CHAIN& ring = aThermalRings.Outline( ringIdx );
+                BOX2I                   ringBBox = ring.BBox();
+                VECTOR2I                ringCenter = ringBBox.Centre();
 
-            if( aThermalRings.Collide( &holeAsPoly ) )
-                holes.DeletePolygon( ii );
+                // Quick rejection: hole bbox must contain ring bbox
+                if( !holeBBox.Contains( ringBBox ) )
+                    continue;
+
+                // Check 1: Is the ring center inside the hole?
+                if( !hole.PointInside( ringCenter ) )
+                    continue;
+
+                // Check 2: Is at least one point on the ring inside the hole?
+                if( ring.PointCount() == 0 || !hole.PointInside( ring.CPoint( 0 ) ) )
+                    continue;
+
+                // Check 3: Does the ring outline NOT intersect the hole outline?
+                // If there's no intersection, the ring is fully enclosed (not touching edges)
+                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+                ring.Intersect( hole, intersections );
+
+                if( intersections.empty() )
+                {
+                    // This hole completely encloses a ring - drop it
+                    holes.DeletePolygon( holeIdx );
+                    break;  // Move to next hole
+                }
+            }
         }
     }
 
