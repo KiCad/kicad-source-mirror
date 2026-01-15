@@ -54,7 +54,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16334,9 +16334,8 @@ msgid "View presets:"
 msgstr "预设视图:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "原理图一致性检验"
+msgstr "原理图变体:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
 msgid "Entire Project"
@@ -16776,7 +16775,7 @@ msgstr "更新原理图"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "根据原理图的位号将封装重新链接到原理图符号"
+msgstr "根据参考位号将封装重新链接到原理图符号"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
