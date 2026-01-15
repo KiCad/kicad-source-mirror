@@ -210,16 +210,18 @@ void DRC_RE_CONDITION_GROUP_PANEL::addConditionRow( BOOL_OPERATOR aOp )
         entry.operatorChoice->SetSelection( static_cast<int>( aOp ) );
         entry.rowSizer->Add( entry.operatorChoice, 0, wxALL | wxALIGN_TOP, 2 );
 
-        entry.operatorChoice->Bind( wxEVT_CHOICE,
-                [this, &entry]( wxCommandEvent& )
+        wxChoice* opChoice = entry.operatorChoice;
+
+        opChoice->Bind( wxEVT_CHOICE,
+                [this, opChoice]( wxCommandEvent& )
                 {
                     // Find this entry and update its operator
                     for( size_t i = 0; i < m_conditions.size(); ++i )
                     {
-                        if( m_conditions[i].operatorChoice == entry.operatorChoice )
+                        if( m_conditions[i].operatorChoice == opChoice )
                         {
-                            m_conditions[i].boolOp = static_cast<BOOL_OPERATOR>(
-                                    entry.operatorChoice->GetSelection() );
+                            m_conditions[i].boolOp =
+                                    static_cast<BOOL_OPERATOR>( opChoice->GetSelection() );
                             break;
                         }
                     }
