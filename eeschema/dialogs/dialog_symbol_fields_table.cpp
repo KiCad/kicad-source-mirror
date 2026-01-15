@@ -278,8 +278,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     updateVariantButtonStates();
 
-    m_splitter_left->Unsplit( m_variantsPanel );
-
     if( m_job )
         SetTitle( m_job->GetSettingsDialogTitle() );
 
