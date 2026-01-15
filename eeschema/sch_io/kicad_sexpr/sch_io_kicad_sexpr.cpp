@@ -1609,9 +1609,12 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
 
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
+        int  oldModifyHash = 1;
         bool isNewCache = false;
 
-        if( !m_cache )
+        if( m_cache )
+            oldModifyHash = m_cache->m_modHash;
+        else
             isNewCache = true;
 
         // a spectacular episode in memory management:
@@ -1619,7 +1622,10 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryFileName );
 
         if( !isBuffering( aProperties ) || isNewCache )
+        {
             m_cache->Load();
+            m_cache->m_modHash = oldModifyHash + 1;
+        }
     }
 }
 
