@@ -447,19 +447,8 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
         else
             relStr = src.GetFullName(); // Fallback (should not normally happen)
 
-        wxFileName dst( aHistoryPath + wxFILE_SEP_PATH + relStr );
-
-        // Ensure directory tree exists.
-        wxFileName dstDir( dst );
-        dstDir.SetFullName( wxEmptyString );
-        wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
-
-        // Copy file into history mirror.
-        wxCopyFile( src.GetFullPath(), dst.GetFullPath(), true );
-
-        // Path inside repo (strip hist + '/').
-        std::string rel = dst.GetFullPath().ToStdString().substr( aHistoryPath.length() + 1 );
-        git_index_add_bypath( index, rel.c_str() );
+        int rc = git_index_add_bypath( index, relStr.mb_str().data() );
+        wxLogTrace( traceAutoSave, wxS( "Adding %s ret: %d" ), relStr, rc );
     }
 
     git_oid tree_id;

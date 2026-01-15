@@ -184,6 +184,17 @@ bool HISTORY_LOCK_MANAGER::openRepository()
         return false;
     }
 
+    // Attempt to set workdir
+    rc = git_repository_set_workdir( m_repo, m_projectPath.mb_str().data(), false );
+
+    if( rc != 0 )
+    {
+        const git_error* err = git_error_last();
+        m_lockError = wxString::Format( _( "Failed to set git repository workdir to %s: %s" ), m_projectPath,
+                                        err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
+        return false;
+    }
+
     m_repoOwned = true;
     return true;
 }
