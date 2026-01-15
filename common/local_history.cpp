@@ -394,7 +394,7 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 
                 wxFileName fn( path, name );
 
-                if( fn.DirExists() )
+                if( fn.IsDir() && fn.DirExists() )
                 {
                     collect( fn.GetFullPath() );
                 }
