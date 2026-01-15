@@ -42,6 +42,11 @@ fastfloat_really_inline constexpr uint64_t byteswap(uint64_t val) {
          (val & 0x000000000000FF00) << 40 | (val & 0x00000000000000FF) << 56;
 }
 
+fastfloat_really_inline constexpr uint32_t byteswap_32(uint32_t val) {
+  return (val >> 24) | ((val >> 8) & 0x0000FF00u) | ((val << 8) & 0x00FF0000u) |
+         (val << 24);
+}
+
 // Read 8 UC into a u64. Truncates UC if not char.
 template <typename UC>
 fastfloat_really_inline FASTFLOAT_CONSTEXPR20 uint64_t
@@ -441,7 +446,7 @@ parse_number_string(UC const *p, UC const *pend,
     if (digit_count > 19) {
       answer.too_many_digits = true;
       // Let us start again, this time, avoiding overflows.
-      // We don't need to check if is_integer, since we use the
+      // We don't need to call if is_integer, since we use the
       // pre-tokenized spans from above.
       i = 0;
       p = answer.integer.ptr;
@@ -451,7 +456,7 @@ parse_number_string(UC const *p, UC const *pend,
         i = i * 10 + uint64_t(*p - UC('0'));
         ++p;
       }
-      if (i >= minimal_nineteen_digit_integer) { // We have a big integers
+      if (i >= minimal_nineteen_digit_integer) { // We have a big integer
         exponent = end_of_integer_part - p + exp_number;
       } else { // We have a value with a fractional component.
         p = answer.fraction.ptr;
@@ -508,6 +513,96 @@ parse_int_string(UC const *p, UC const *pend, T &value,
   bool const has_leading_zeros = p > start_num;
 
   UC const *const start_digits = p;
+
+  FASTFLOAT_IF_CONSTEXPR17((std::is_same<T, std::uint8_t>::value)) {
+    const size_t len = (size_t)(pend - p);
+    if (len == 0) {
+      if (has_leading_zeros) {
+        value = 0;
+        answer.ec = std::errc();
+        answer.ptr = p;
+      } else {
+        answer.ec = std::errc::invalid_argument;
+        answer.ptr = first;
+      }
+      return answer;
+    }
+
+    uint32_t digits;
+
+#if FASTFLOAT_HAS_IS_CONSTANT_EVALUATED && FASTFLOAT_HAS_BIT_CAST
+    if (std::is_constant_evaluated()) {
+      uint8_t str[4]{};
+      for (size_t j = 0; j < 4 && j < len; ++j) {
+        str[j] = static_cast<uint8_t>(p[j]);
+      }
+      digits = std::bit_cast<uint32_t>(str);
+#if FASTFLOAT_IS_BIG_ENDIAN
+      digits = byteswap_32(digits);
+#endif
+    }
+#else
+    if (false) {
+    }
+#endif
+    else if (len >= 4) {
+      ::memcpy(&digits, p, 4);
+#if FASTFLOAT_IS_BIG_ENDIAN
+      digits = byteswap_32(digits);
+#endif
+    } else {
+      uint32_t b0 = static_cast<uint8_t>(p[0]);
+      uint32_t b1 = (len > 1) ? static_cast<uint8_t>(p[1]) : 0xFFu;
+      uint32_t b2 = (len > 2) ? static_cast<uint8_t>(p[2]) : 0xFFu;
+      uint32_t b3 = 0xFFu;
+      digits = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
+    }
+
+    uint32_t magic =
+        ((digits + 0x46464646u) | (digits - 0x30303030u)) & 0x80808080u;
+    uint32_t tz = (uint32_t)countr_zero_32(magic); // 7, 15, 23, 31, or 32
+    uint32_t nd = (tz == 32) ? 4 : (tz >> 3);
+    nd = (uint32_t)std::min((size_t)nd, len);
+    if (nd == 0) {
+      if (has_leading_zeros) {
+        value = 0;
+        answer.ec = std::errc();
+        answer.ptr = p;
+        return answer;
+      }
+      answer.ec = std::errc::invalid_argument;
+      answer.ptr = first;
+      return answer;
+    }
+    if (nd > 3) {
+      const UC *q = p + nd;
+      size_t rem = len - nd;
+      while (rem) {
+        if (*q < UC('0') || *q > UC('9'))
+          break;
+        ++q;
+        --rem;
+      }
+      answer.ec = std::errc::result_out_of_range;
+      answer.ptr = q;
+      return answer;
+    }
+
+    digits ^= 0x30303030u;
+    digits <<= ((4 - nd) * 8);
+
+    uint32_t check = ((digits >> 24) & 0xff) | ((digits >> 8) & 0xff00) |
+                     ((digits << 8) & 0xff0000);
+    if (check > 0x00020505) {
+      answer.ec = std::errc::result_out_of_range;
+      answer.ptr = p + nd;
+      return answer;
+    }
+    value = (uint8_t)((0x640a01 * digits) >> 24);
+    answer.ec = std::errc();
+    answer.ptr = p + nd;
+    return answer;
+  }
 
   uint64_t i = 0;
   if (base == 10) {
