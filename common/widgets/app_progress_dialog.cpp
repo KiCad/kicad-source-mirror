@@ -22,8 +22,8 @@
  */
 
 #include <wx/version.h>
+#include <wx/sizer.h>
 #include <widgets/app_progress_dialog.h>
-
 
 APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage,
                                           int aMaximum, wxWindow* aParent,
@@ -39,6 +39,11 @@ APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString
     {
         m_appProgressIndicator.Pulse();
     }
+
+    Layout();
+
+    if( GetSizer() )
+        GetSizer()->Fit( this );
 }
 
 
