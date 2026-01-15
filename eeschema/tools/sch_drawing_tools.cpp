@@ -3149,6 +3149,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
     SCH_SHEET* sheet = nullptr;
     wxString   filename;
+    SCH_GROUP* sheetGroup = nullptr;
 
     if( isDrawSheetCopy )
     {
@@ -3428,9 +3429,22 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                                               reporter );
                 }
 
+                if( isDrawSheetFromDesignBlock && cfg->m_DesignBlockChooserPanel.place_as_group )
+                {
+                    sheetGroup = new SCH_GROUP( m_frame->GetScreen() );
+                    sheetGroup->SetName( designBlock->GetLibId().GetLibItemName() );
+                    sheetGroup->SetDesignBlockLibId( designBlock->GetLibId() );
+                    c.Add( sheetGroup, m_frame->GetScreen() );
+                    c.Modify( sheet, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+                    sheetGroup->AddItem( sheet );
+                }
+
                 c.Push( isDrawSheetCopy ? "Import Sheet Copy" : "Draw Sheet" );
 
-                m_selectionTool->AddItemToSel( sheet );
+                if( sheetGroup )
+                    m_selectionTool->AddItemToSel( sheetGroup );
+                else
+                    m_selectionTool->AddItemToSel( sheet );
             }
             else
             {
