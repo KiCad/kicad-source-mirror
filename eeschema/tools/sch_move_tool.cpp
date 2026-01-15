@@ -947,20 +947,21 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         m_frame->UpdateItem( hoverSheet, false );
     }
 
-    if( targetSheet )
-    {
-        moveSelectionToSheet( selection, targetSheet, aCommit );
-        m_toolMgr->RunAction( ACTIONS::selectionClear );
-        m_newDragLines.clear();
-        m_changedDragLines.clear();
-    }
-
     if( restore_state )
     {
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
     }
     else
     {
+        // Only drop into a sheet when the move is committed, not when canceled.
+        if( targetSheet )
+        {
+            moveSelectionToSheet( selection, targetSheet, aCommit );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
+            m_newDragLines.clear();
+            m_changedDragLines.clear();
+        }
+
         finalizeMoveOperation( selection, aCommit, unselect, internalPoints );
     }
 
