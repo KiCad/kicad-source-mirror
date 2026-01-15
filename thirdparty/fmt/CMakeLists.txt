@@ -9,7 +9,9 @@ endif ()
 # or if it is the master project.
 if (NOT DEFINED FMT_MASTER_PROJECT)
   set(FMT_MASTER_PROJECT OFF)
-  if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  # NOTE: source vs current_source detection is unreliable
+  # this heuristic is more generally applicable esp w.r.t FetchContent
+  if (NOT DEFINED PROJECT_NAME)
     set(FMT_MASTER_PROJECT ON)
     message(STATUS "CMake version: ${CMAKE_VERSION}")
   endif ()
@@ -27,12 +29,15 @@ endfunction()
 # DEPRECATED! Should be merged into add_module_library.
 function(enable_module target)
   if (MSVC)
-    set(BMI ${CMAKE_CURRENT_BINARY_DIR}/${target}.ifc)
-    target_compile_options(${target}
-      PRIVATE /interface /ifcOutput ${BMI}
-      INTERFACE /reference fmt=${BMI})
-    set_target_properties(${target} PROPERTIES ADDITIONAL_CLEAN_FILES ${BMI})
-    set_source_files_properties(${BMI} PROPERTIES GENERATED ON)
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+      set(BMI_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+      file(TO_NATIVE_PATH "${BMI_DIR}/${target}.ifc" BMI)
+      target_compile_options(${target}
+        PRIVATE /interface /ifcOutput ${BMI}
+        INTERFACE /reference fmt=${BMI})
+      set_target_properties(${target} PROPERTIES ADDITIONAL_CLEAN_FILES ${BMI})
+      set_source_files_properties(${BMI} PROPERTIES GENERATED ON)
+    endif()
   endif ()
 endfunction()
 
@@ -68,8 +73,6 @@ function(add_module_library name)
   if (CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(${name} PUBLIC -fmodules-ts)
   endif ()
-
-  target_compile_definitions(${name} PRIVATE FMT_MODULE)
 
   if (FMT_USE_CMAKE_MODULES)
     target_sources(${name} PUBLIC FILE_SET fmt TYPE CXX_MODULES
@@ -160,7 +163,7 @@ option(FMT_WERROR "Halt the compilation with an error on compiler warnings."
 
 # Options that control generation of various targets.
 option(FMT_DOC "Generate the doc target." ${FMT_MASTER_PROJECT})
-option(FMT_INSTALL "Generate the install target." ON)
+option(FMT_INSTALL "Generate the install target." ${FMT_MASTER_PROJECT})
 option(FMT_TEST "Generate the test target." ${FMT_MASTER_PROJECT})
 option(FMT_FUZZ "Generate the fuzz target." OFF)
 option(FMT_CUDA_TEST "Generate the cuda-test target." OFF)
@@ -201,8 +204,7 @@ if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 endif ()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-  "${CMAKE_CURRENT_SOURCE_DIR}/support/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/support/cmake")
 
 include(CheckCXXCompilerFlag)
 include(JoinPaths)
@@ -295,6 +297,7 @@ function(add_headers VAR)
 endfunction()
 
 # Define the fmt library, its includes and the needed defines.
+set(FMT_HEADERS)
 add_headers(FMT_HEADERS args.h base.h chrono.h color.h compile.h core.h format.h
                         format-inl.h os.h ostream.h printf.h ranges.h std.h
                         xchar.h)
@@ -427,7 +430,7 @@ if (FMT_INSTALL)
 
   # Install the library and headers.
   install(TARGETS ${INSTALL_TARGETS}
-          COMPONENT core
+          COMPONENT fmt_core
           EXPORT ${targets_export_name}
           LIBRARY DESTINATION ${FMT_LIB_DIR}
           ARCHIVE DESTINATION ${FMT_LIB_DIR}
@@ -443,13 +446,13 @@ if (FMT_INSTALL)
   # Install version, config and target files.
   install(FILES ${project_config} ${version_config}
           DESTINATION ${FMT_CMAKE_DIR}
-          COMPONENT core)
+          COMPONENT fmt_core)
   install(EXPORT ${targets_export_name} DESTINATION ${FMT_CMAKE_DIR}
           NAMESPACE fmt::
-          COMPONENT core)
+          COMPONENT fmt_core)
 
   install(FILES "${pkgconfig}" DESTINATION "${FMT_PKGCONFIG_DIR}"
-          COMPONENT core)
+          COMPONENT fmt_core)
 endif ()
 
 function(add_doc_target)
@@ -486,7 +489,7 @@ function(add_doc_target)
   include(GNUInstallDirs)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc-html/
           DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/fmt
-          COMPONENT doc OPTIONAL)
+          COMPONENT fmt_doc OPTIONAL)
 endfunction()
 
 if (FMT_DOC)

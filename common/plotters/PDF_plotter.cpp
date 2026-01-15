@@ -1872,7 +1872,8 @@ bool PDF_PLOTTER::EndPlot()
 
     int         infoDictHandle = startPdfObject();
 
-    std::string dt = fmt::format( "D:{:%Y:%m:%d:%H:%M:%S}", fmt::localtime( std::time( nullptr ) ) );
+    std::string dt = fmt::format( "D:{:%Y:%m:%d:%H:%M:%S}",
+                                  std::chrono::current_zone()->to_local( std::chrono::system_clock::now() ) );
 
     if( m_title.IsEmpty() )
     {
