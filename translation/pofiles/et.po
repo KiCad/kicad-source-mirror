@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2025-11-04 10:51+0000\n"
+"PO-Revision-Date: 2026-01-15 23:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v9/et/>\n"
 "Language: et\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:360
@@ -86,44 +86,45 @@ msgstr "Aukude ja läbiviikude BVH-kihi loomine"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
 msgid "OpenGL context creation error"
-msgstr ""
+msgstr "Viga OpenGL konteksti loomisel"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
+"Teie OpenGL-i versioon ei ole toetatud. Minimaalne nõutav versioon on 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "Viimase renderduse aeg %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr ""
+msgstr "Võrk %s VõrguKlass %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "Jootepadi %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:797
 #, c-format
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "Reeglipiirkond %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "Tsoon %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "Laadi OpenGL: trükkplaat"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Laadi OpenGL: avad ja läbiviigud"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:546
 msgid "Load OpenGL: layers"
@@ -8020,7 +8021,7 @@ msgstr ""
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr ""
+msgstr "Läbivad viigud"
 
 #: common/layer_id.cpp:130
 msgid "Blind/Buried vias"
@@ -8028,7 +8029,7 @@ msgstr ""
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr ""
+msgstr "Mikroläbiviigud"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -12940,7 +12941,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1765
 msgid "Power Symbol"
-msgstr ""
+msgstr "Toitesümbol"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 msgid "Library Fields Editor"
@@ -15097,7 +15098,7 @@ msgstr "Laadimine %s..."
 #: pcbnew/dialogs/dialog_export_step.cpp:110
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr ""
+msgstr "Eksport"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:141
 msgid "Symbol Fields Table"
@@ -30186,7 +30187,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
 msgid "Teardrops"
-msgstr ""
+msgstr "Pisarühendused"
 
 #: pcbnew/board_connected_item.cpp:278
 msgid "Enable Teardrops"
@@ -30470,7 +30471,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Kontrollitud impedantsiga"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -39227,7 +39228,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Copper sliver"
-msgstr ""
+msgstr "Vaselaast"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Solder mask aperture bridges items with different nets"
@@ -45585,11 +45586,11 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
 msgid "Loss Tangent"
-msgstr ""
+msgstr "Kadutangent"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:302
 msgid "Dielectric"
-msgstr ""
+msgstr "Dielektrik"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:355
 msgid "Insert Board Stackup Table"
