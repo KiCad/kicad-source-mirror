@@ -2355,6 +2355,8 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     }
     else
     {
+        wxString activeUrl;
+
         if( aText->IsRollover() && !aText->IsMoving() )
         {
             // Highlight any urls found within the text
@@ -2365,6 +2367,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             {
                 attrs.m_Hover = true;
                 attrs.m_Underlined = true;
+                activeUrl = aText->GetHyperlink();
             }
         }
 
@@ -2388,16 +2391,14 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             }
             else
             {
-                wxString activeUrl;
-
                 strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
                             aText->GetFontMetrics(), aText->GetRolloverPos(), &activeUrl );
-
-                aText->SetActiveUrl( activeUrl );
             }
 
             const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
         }
+
+        aText->SetActiveUrl( activeUrl );
     }
 
     // Draw anchor
@@ -2466,6 +2467,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
             {
                 wxString        shownText = aTextBox->GetShownText( true );
                 TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+                wxString        activeUrl;
 
                 attrs.m_Angle = aTextBox->GetDrawRotation();
                 attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
@@ -2480,6 +2482,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                     {
                         attrs.m_Hover = true;
                         attrs.m_Underlined = true;
+                        activeUrl = aTextBox->GetHyperlink();
                     }
                 }
 
@@ -2495,13 +2498,11 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 }
                 else
                 {
-                    wxString activeUrl;
-
                     strokeText( *m_gal, shownText, aTextBox->GetDrawPos(), attrs,
                                 aTextBox->GetFontMetrics(), aTextBox->GetRolloverPos(), &activeUrl );
-
-                    aTextBox->SetActiveUrl( activeUrl );
                 }
+
+                aTextBox->SetActiveUrl( activeUrl );
             };
 
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )

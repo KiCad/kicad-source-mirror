@@ -381,7 +381,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
         for( int ii = start; ii < (int) aGlyphs->size(); ++ii )
             (*aGlyphs)[ii]->SetIsHover( true );
 
-        if( aActiveUrl )
+        if( aActiveUrl && aActiveUrl->IsEmpty() )
             *aActiveUrl = aNode->asWxString();
     }
 
