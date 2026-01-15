@@ -99,40 +99,40 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:564
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "Viimase renderduse aeg %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr ""
+msgstr "OpenGL viga ekraніvälisel renderdamisel: 0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:963
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr ""
+msgstr "Võrk %s VõrguKlass %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:986
 #, c-format
 msgid "Pad %s\t"
-msgstr ""
+msgstr "Jootepadi %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1017
 #, c-format
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "Reeglipiirkond %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1019
 #, c-format
 msgid "Zone %s\t"
-msgstr ""
+msgstr "Tsoon %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:704
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "Laadi OpenGL: trükkplaat"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:753
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Laadi OpenGL: avad ja läbiviigud"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:806
 msgid "Load OpenGL: layers"
@@ -13683,7 +13683,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:100
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:121
 msgid "Export"
-msgstr ""
+msgstr "Eksport"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:175
 #, fuzzy
@@ -33361,7 +33361,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
 msgid "Teardrops"
-msgstr ""
+msgstr "Pisarühendused"
 
 #: pcbnew/board_connected_item.cpp:288
 msgid "Enable Teardrops"
@@ -33651,7 +33651,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Kontrollitud impedantsiga"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -34094,7 +34094,7 @@ msgstr ""
 
 #: pcbnew/board_tables/board_stackup_table.cpp:91
 msgid "Loss Tangent"
-msgstr ""
+msgstr "Kadutangent"
 
 #: pcbnew/board_tables/board_stackup_table.cpp:113
 msgid "Dielectric"
@@ -43445,7 +43445,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Copper sliver"
-msgstr ""
+msgstr "Vaselaast"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Solder mask aperture bridges items with different nets"
