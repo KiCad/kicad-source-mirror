@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-12 07:01+0000\n"
+"PO-Revision-Date: 2026-01-15 23:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15760,7 +15760,7 @@ msgstr "更新原理图"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "根据原理图的位号将封装重新链接到原理图符号"
+msgstr "根据参考位号将封装重新链接到原理图符号"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -46235,19 +46235,18 @@ msgstr "加载工程封装库时出错。"
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "通过 Python C API 初始化 Python 模块 '%s', 第一阶段初始化失败。"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "脚本控制台"
+msgstr "脚本初始化"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "通过 Python C API 初始化 Python 模块 '%s', 第二阶段初始化失败。"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
