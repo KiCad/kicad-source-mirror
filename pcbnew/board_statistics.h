@@ -83,9 +83,9 @@ struct DRILL_LINE_ITEM
             case COL_Y_SIZE:
                 return compareDrillParameters( aLeft.ySize, aRight.ySize );
             case COL_PLATED:
-                return ascending ? aLeft.isPlated : aRight.isPlated;
+                return compareDrillParameters( aLeft.isPlated, aRight.isPlated );
             case COL_VIA_PAD:
-                return ascending ? aLeft.isPad : aRight.isPad;
+                return compareDrillParameters( aLeft.isPad, aRight.isPad );
             case COL_START_LAYER:
                 return compareDrillParameters( aLeft.startLayer, aRight.startLayer );
             case COL_STOP_LAYER:
