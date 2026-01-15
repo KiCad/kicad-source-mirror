@@ -61,9 +61,7 @@ DIALOG_DESTINATION::DIALOG_DESTINATION( wxWindow* aParent, JOBSET* aJobsFile,
         m_choiceArchiveformat->Hide();
     }
 
-    m_textCtrlOutputPath->SetValue( m_destination->m_outputHandler->GetOutputPath() );
     m_buttonOutputPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-    m_textCtrlDescription->SetValue( m_destination->GetDescription() );
 
     SetupStandardButtons();
 }
@@ -164,6 +162,9 @@ bool DIALOG_DESTINATION::TransferDataFromWindow()
 
 bool DIALOG_DESTINATION::TransferDataToWindow()
 {
+    m_textCtrlDescription->SetValue( m_destination->GetDescription() );
+    m_textCtrlOutputPath->SetValue( m_destination->m_outputHandler->GetOutputPath() );
+
     wxArrayString    arrayStr;
     std::vector<int> selectedList;
 
