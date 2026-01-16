@@ -349,8 +349,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_validator_min_max_ctrl.cpp
     drc/rule_editor/drc_re_validator_min_preferred_max_ctrl.cpp
     drc/rule_editor/drc_re_validator_numeric_ctrl.cpp
-    drc/rule_editor/drc_re_layers_selection_choice_popup.cpp
-    drc/rule_editor/drc_re_layers_selection_combo.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS
