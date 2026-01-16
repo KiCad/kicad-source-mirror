@@ -50,6 +50,7 @@
 #include <wx/ffile.h>
 #include <functional>
 #include <memory>
+#include <set>
 
 
 const RULE_TREE_NODE* FindNodeById( const std::vector<RULE_TREE_NODE>& aNodes, int aTargetId )
@@ -1121,6 +1122,9 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
 {
     bool allValid = true;
 
+    // Track rule names and their conditions to detect same-name different-condition conflicts
+    std::map<wxString, std::set<wxString>> ruleConditions;
+
     for( RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
     {
         if( node.m_nodeType != RULE )
@@ -1130,6 +1134,7 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
 
         if( constraintData )
         {
+            // Individual constraint validation
             VALIDATION_RESULT result = constraintData->Validate();
 
             if( !result.isValid )
@@ -1147,6 +1152,23 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
                 aErrors[node.m_nodeName] = errorMsg;
                 allValid = false;
             }
+
+            // Track conditions for same-name different-condition validation
+            wxString ruleName = constraintData->GetRuleName();
+            wxString condition = constraintData->GetRuleCondition();
+            ruleConditions[ruleName].insert( condition );
+        }
+    }
+
+    // Check for same-name different-condition conflicts
+    for( const auto& [ruleName, conditions] : ruleConditions )
+    {
+        if( conditions.size() > 1 )
+        {
+            wxString errorMsg = _( "Multiple rules with the same name have different conditions. "
+                                   "Rules with the same name must have identical conditions to be merged." );
+            aErrors[ruleName] = errorMsg;
+            allValid = false;
         }
     }
 

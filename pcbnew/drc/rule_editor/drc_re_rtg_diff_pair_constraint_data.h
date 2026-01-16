@@ -103,9 +103,9 @@ public:
         return result;
     }
 
-    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        auto formatDistance = [&]( double aValue )
+        auto formatDistance = []( double aValue )
         {
             return formatDouble( aValue ) + wxS( "mm" );
         };
@@ -126,7 +126,12 @@ public:
                 wxS( "(constraint diff_pair_uncoupled (max %s))" ),
                 formatDistance( m_maxUncoupledLength ) );
 
-        return buildRule( aContext, { widthClause, gapClause, uncoupledClause } );
+        return { widthClause, gapClause, uncoupledClause };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
     }
 
     double GetMaxUncoupledLength() { return m_maxUncoupledLength; }

@@ -52,13 +52,23 @@ public:
         return VALIDATION_RESULT();
     }
 
-    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
         if( !m_boolInputValue )
-            return wxEmptyString;
+            return {};
 
         wxString code = GetConstraintCode();
-        return buildRule( aContext, { wxString::Format( "(constraint %s)", code ) } );
+        return { wxString::Format( "(constraint %s)", code ) };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        auto clauses = GetConstraintClauses( aContext );
+
+        if( clauses.empty() )
+            return wxEmptyString;
+
+        return buildRule( aContext, clauses );
     }
 
     bool GetBoolInputValue() { return m_boolInputValue; }

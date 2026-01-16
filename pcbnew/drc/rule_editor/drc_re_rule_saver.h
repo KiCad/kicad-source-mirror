@@ -24,6 +24,7 @@
 #ifndef DRC_RE_RULE_SAVER_H_
 #define DRC_RE_RULE_SAVER_H_
 
+#include <map>
 #include <vector>
 
 #include <wx/string.h>
@@ -98,6 +99,18 @@ private:
      * @return Severity clause string like "(severity warning)".
      */
     wxString generateSeverityClause( SEVERITY aSeverity );
+
+    /**
+     * Generate a merged rule text from multiple panel entries with the same name/condition.
+     *
+     * Combines constraint clauses from multiple entries into a single rule.
+     *
+     * @param aEntries Vector of entries to merge (must have same name and condition).
+     * @param aBoard Optional board for layer name resolution.
+     * @return Merged rule text.
+     */
+    wxString generateMergedRuleText( const std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>& aEntries,
+                                      const BOARD*                                         aBoard );
 };
 
 

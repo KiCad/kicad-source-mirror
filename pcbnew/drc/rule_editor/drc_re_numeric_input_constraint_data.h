@@ -46,27 +46,32 @@ public:
 
     virtual ~DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA() = default;
 
-    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
         wxString code = GetConstraintCode();
         wxString valueStr = formatDouble( m_numericInputValue );
 
         if( code == "via_count" )
         {
-            return buildRule( aContext, { wxString::Format( "(constraint %s (max %s))", code, valueStr ) } );
+            return { wxString::Format( "(constraint %s (max %s))", code, valueStr ) };
         }
         else if( code == "track_angle" )
         {
-            return buildRule( aContext, { wxString::Format( "(constraint %s (min %sdeg))", code, valueStr ) } );
+            return { wxString::Format( "(constraint %s (min %sdeg))", code, valueStr ) };
         }
         else if( code == "maximum_allowed_deviation" )
         {
-            return buildRule( aContext, { wxString::Format( "(constraint %s (max %smm))", code, valueStr ) } );
+            return { wxString::Format( "(constraint %s (max %smm))", code, valueStr ) };
         }
         else
         {
-            return buildRule( aContext, { wxString::Format( "(constraint %s (min %smm))", code, valueStr ) } );
+            return { wxString::Format( "(constraint %s (min %smm))", code, valueStr ) };
         }
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
     }
 
     double GetNumericInputValue() { return m_numericInputValue; }

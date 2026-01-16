@@ -25,8 +25,10 @@
 
 #include <board.h>
 #include <lset.h>
+#include <string_utils.h>
 #include <wx/ffile.h>
 
+#include "drc_re_base_constraint_data.h"
 #include "drc_rule_editor_enums.h"
 
 
@@ -57,9 +59,43 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 {
     wxString result = "(version 1)\n";
 
+    // Group entries by (ruleName, condition) for merging same-name same-condition rules
+    // Use a vector to preserve insertion order
+    std::vector<std::pair<std::pair<wxString, wxString>, std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>>>
+            groupedEntries;
+    std::map<std::pair<wxString, wxString>, size_t> groupIndex;
+
     for( const DRC_RE_LOADED_PANEL_ENTRY& entry : aEntries )
     {
-        wxString ruleText = generateRuleText( entry, aBoard );
+        auto key = std::make_pair( entry.ruleName, entry.condition );
+        auto it = groupIndex.find( key );
+
+        if( it == groupIndex.end() )
+        {
+            groupIndex[key] = groupedEntries.size();
+            groupedEntries.push_back( { key, { &entry } } );
+        }
+        else
+        {
+            groupedEntries[it->second].second.push_back( &entry );
+        }
+    }
+
+    // Generate rule text for each group
+    for( const auto& [key, entries] : groupedEntries )
+    {
+        wxString ruleText;
+
+        if( entries.size() == 1 )
+        {
+            // Single entry, no merge needed
+            ruleText = generateRuleText( *entries[0], aBoard );
+        }
+        else
+        {
+            // Multiple entries with same name/condition need merging
+            ruleText = generateMergedRuleText( entries, aBoard );
+        }
 
         if( !ruleText.IsEmpty() )
             result += ruleText + "\n";
@@ -141,4 +177,99 @@ wxString DRC_RULE_SAVER::generateSeverityClause( SEVERITY aSeverity )
     case RPT_SEVERITY_EXCLUSION: return "(severity exclusion)";
     default:                     return wxEmptyString;
     }
+}
+
+
+wxString DRC_RULE_SAVER::generateMergedRuleText(
+        const std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>& aEntries,
+        const BOARD*                                         aBoard )
+{
+    if( aEntries.empty() )
+        return wxEmptyString;
+
+    // Check if all entries are unedited and the first one has original text
+    // If so, we can use round-trip preservation
+    bool allUnedited = true;
+
+    for( const auto* entry : aEntries )
+    {
+        if( entry->wasEdited )
+        {
+            allUnedited = false;
+            break;
+        }
+    }
+
+    if( allUnedited && !aEntries[0]->originalRuleText.IsEmpty() )
+        return aEntries[0]->originalRuleText;
+
+    // Otherwise, merge constraint clauses from all entries
+    const DRC_RE_LOADED_PANEL_ENTRY* firstEntry = aEntries[0];
+
+    RULE_GENERATION_CONTEXT ctx;
+    ctx.ruleName = firstEntry->ruleName;
+    ctx.conditionExpression = firstEntry->condition;
+
+    // Generate layer clause if layers are specified on any entry
+    for( const auto* entry : aEntries )
+    {
+        if( entry->layerCondition.any() && aBoard )
+        {
+            ctx.layerClause = generateLayerClause( entry->layerCondition, aBoard );
+            break;
+        }
+    }
+
+    // Collect all constraint clauses from all entries
+    std::vector<wxString> allClauses;
+
+    for( const auto* entry : aEntries )
+    {
+        if( entry->constraintData )
+        {
+            RULE_GENERATION_CONTEXT entryCtx;
+            entryCtx.ruleName = entry->ruleName;
+            entryCtx.conditionExpression = entry->condition;
+            entryCtx.constraintCode = entry->constraintData->GetConstraintCode();
+
+            auto clauses = entry->constraintData->GetConstraintClauses( entryCtx );
+
+            for( const wxString& clause : clauses )
+            {
+                if( !clause.IsEmpty() )
+                    allClauses.push_back( clause );
+            }
+        }
+    }
+
+    // Build the merged rule
+    wxString rule;
+    rule << wxS( "(rule " ) << DRC_RE_BASE_CONSTRAINT_DATA::sanitizeRuleName( ctx.ruleName )
+         << wxS( "\n" );
+
+    if( !ctx.layerClause.IsEmpty() )
+        rule << wxS( "\t" ) << ctx.layerClause << wxS( "\n" );
+
+    for( const wxString& clause : allClauses )
+        rule << wxS( "\t" ) << clause << wxS( "\n" );
+
+    if( !ctx.conditionExpression.IsEmpty() )
+    {
+        rule << wxS( "\t(condition \"" )
+             << EscapeString( ctx.conditionExpression, CTX_QUOTED_STR ) << wxS( "\")\n" );
+    }
+
+    // Add severity if any entry has non-default severity
+    for( const auto* entry : aEntries )
+    {
+        if( entry->severity != RPT_SEVERITY_UNDEFINED && entry->severity != RPT_SEVERITY_ERROR )
+        {
+            rule << wxS( "\t" ) << generateSeverityClause( entry->severity ) << wxS( "\n" );
+            break;
+        }
+    }
+
+    rule << wxS( ")" );
+
+    return rule;
 }

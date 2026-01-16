@@ -76,9 +76,9 @@ public:
         return result;
     }
 
-    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        auto formatDistance = [&]( double aValue )
+        auto formatDistance = []( double aValue )
         {
             return formatDouble( aValue ) + wxS( "mm" );
         };
@@ -95,7 +95,12 @@ public:
                 formatDistance( m_preferredRoutingWidth ),
                 formatDistance( m_maxRoutingWidth ) );
 
-        return buildRule( aContext, { clause } );
+        return { clause };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
     }
 
     double GetMinRoutingWidth() { return m_minRoutingWidth; }

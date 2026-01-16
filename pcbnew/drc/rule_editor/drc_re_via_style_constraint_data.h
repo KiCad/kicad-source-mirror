@@ -98,9 +98,9 @@ public:
         return result;
     }
 
-    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        auto formatDimension = [&]( double aValue )
+        auto formatDimension = []( double aValue )
         {
             return formatDouble( aValue ) + wxS( "mm" );
         };
@@ -117,7 +117,12 @@ public:
                 formatDimension( m_preferredViaHoleSize ),
                 formatDimension( m_maxViaHoleSize ) );
 
-        return buildRule( aContext, { diaClause, drillClause } );
+        return { diaClause, drillClause };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
     }
 
     double GetMinViaDiameter() { return m_minViaDiameter; }

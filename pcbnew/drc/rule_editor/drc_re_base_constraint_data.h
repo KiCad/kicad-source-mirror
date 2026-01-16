@@ -52,6 +52,15 @@ public:
 
     virtual wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) { return wxEmptyString; }
 
+    /**
+     * Returns just the constraint clauses without the rule wrapper.
+     * Used for merging multiple constraint panels into a single rule.
+     */
+    virtual std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const
+    {
+        return {};
+    }
+
     std::vector<PCB_LAYER_ID> GetLayers() { return m_layers; }
 
     void SetLayers( std::vector<PCB_LAYER_ID> aLayers ) { m_layers = aLayers; }
@@ -64,7 +73,7 @@ public:
 
     void SetRuleCondition( wxString aRuleCondition ) { m_ruleCondition = aRuleCondition; }
 
-    wxString GetConstraintCode() { return m_constraintCode; }
+    wxString GetConstraintCode() const { return m_constraintCode; }
 
     void SetConstraintCode( wxString aCode ) { m_constraintCode = aCode; }
 
@@ -94,7 +103,10 @@ public:
         m_wasEdited = source.m_wasEdited;
     }
 
-protected:
+    /**
+     * Sanitize a rule name for use in S-expression output.
+     * Replaces spaces and invalid characters with underscores.
+     */
     static wxString sanitizeRuleName( const wxString& aRuleName )
     {
         if( aRuleName.IsEmpty() )
@@ -126,6 +138,7 @@ protected:
         return result;
     }
 
+protected:
     static wxString quoteString( const wxString& aCondition )
     {
         return EscapeString( aCondition, CTX_QUOTED_STR );
