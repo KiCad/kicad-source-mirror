@@ -34,7 +34,7 @@
 
 CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : COMMAND( "upgrade" )
 {
-    addCommonArgs( true, true, false, false );
+    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
 
     m_argParser.add_description( UTF8STDSTR( _( "Upgrades the symbol library to the current "
                                                 "kicad version format" ) ) );

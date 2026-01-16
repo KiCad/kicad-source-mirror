@@ -30,7 +30,7 @@
 #define ARG_MODE_SINGLE "--mode-single"
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "pdf", false, true )
+        PCB_EXPORT_BASE_COMMAND( "pdf", INPUT_TYPE::FILE, true )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate PDF from a list of layers" ) ) );
 

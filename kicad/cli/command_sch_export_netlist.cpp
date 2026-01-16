@@ -33,7 +33,7 @@
 CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : COMMAND( "netlist" )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Export a netlist" ) ) );
-    addCommonArgs( true, true, false, false );
+    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
     addVariantsArg();
 
     m_argParser.add_argument( ARG_FORMAT )

@@ -39,7 +39,7 @@
 
 CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
 {
-    addCommonArgs( true, true, false, false );
+    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
     addDefineArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the "

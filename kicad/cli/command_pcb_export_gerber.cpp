@@ -30,7 +30,7 @@
 
 
 CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName, bool aOutputIsDir ) :
-        PCB_EXPORT_BASE_COMMAND( aName, false, aOutputIsDir )
+        PCB_EXPORT_BASE_COMMAND( aName, INPUT_TYPE::FILE, aOutputIsDir )
 {
     addLayerArg();
     addCommonLayersArg();

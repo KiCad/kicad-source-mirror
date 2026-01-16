@@ -27,7 +27,7 @@
 CLI::SCH_UPGRADE_COMMAND::SCH_UPGRADE_COMMAND() :
         COMMAND( "upgrade" )
 {
-    addCommonArgs( true, false, false, false );
+    addCommonArgs( true, false, INPUT_TYPE::FILE, false );
     m_argParser.add_description( UTF8STDSTR( _( "Upgrade the schematic file's format to the latest one" ) ) );
 
     m_argParser.add_argument( ARG_FORCE )

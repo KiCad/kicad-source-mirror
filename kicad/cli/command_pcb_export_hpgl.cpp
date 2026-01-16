@@ -25,7 +25,7 @@
 
 
 CLI::PCB_EXPORT_HPGL_COMMAND::PCB_EXPORT_HPGL_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "hpgl", false, true )
+        PCB_EXPORT_BASE_COMMAND( "hpgl", INPUT_TYPE::FILE, true )
 {
     m_argParser.add_description( UTF8STDSTR( _( "No longer supported as of KiCad 10.0." ) ) );
 }

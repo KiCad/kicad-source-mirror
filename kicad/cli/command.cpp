@@ -130,8 +130,7 @@ int CLI::COMMAND::doPerform( KIWAY& aKiway )
 }
 
 
-void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aInputCanBeDir,
-                                  bool aOutputIsDir )
+void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, INPUT_TYPE aInputType, bool aOutputIsDir )
 {
     m_hasInputArg = aInput;
     m_hasOutputArg = aOutput;
@@ -139,16 +138,31 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aInputCanBeDir
 
     if( aInput )
     {
-        if( aInputCanBeDir )
+        switch( aInputType )
         {
-            m_argParser.add_argument( ARG_INPUT )
-                    .help( UTF8STDSTR( _( "Input directory" ) ) )
-                    .metavar( "INPUT_DIR" );
+            case INPUT_TYPE::FILE:
+            {
+                m_argParser.add_argument( ARG_INPUT )
+                        .help( UTF8STDSTR( _( "Input file" ) ) )
+                        .metavar( "INPUT_FILE" );
+                break;
+            }
+            case INPUT_TYPE::DIRECTORY:
+            {
+                m_argParser.add_argument( ARG_INPUT )
+                        .help( UTF8STDSTR( _( "Input directory" ) ) )
+                        .metavar( "INPUT_DIR" );
+                break;
+            }
+            case INPUT_TYPE::FILE_OR_DIRECTORY:
+            {
+                m_argParser.add_argument( ARG_INPUT )
+                        .help( UTF8STDSTR( _( "Input file or directory" ) ) )
+                        .metavar( "INPUT_FILE_OR_DIR" );
+                break;
+            }
+            // no default
         }
-
-        m_argParser.add_argument( ARG_INPUT )
-                    .help( UTF8STDSTR( _( "Input file" ) ) )
-                    .metavar( "INPUT_FILE" );
     }
 
     if( aOutput )

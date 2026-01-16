@@ -62,6 +62,13 @@ public:
 
     void PrintHelp();
 
+    enum class INPUT_TYPE
+    {
+        FILE,
+        DIRECTORY,
+        FILE_OR_DIRECTORY
+    };
+
 protected:
     /**
      * Set up the most common of args used across cli
@@ -73,7 +80,7 @@ protected:
      * @param aOutputIsDir Configures whether the output arg description will be for a file or
      *                     directory
      */
-    void addCommonArgs( bool aInput, bool aOutput, bool aInputCanBeDir, bool aOutputIsDir );
+    void addCommonArgs( bool aInput, bool aOutput, INPUT_TYPE aInputType, bool aOutputIsDir );
 
     /**
      * Set up the drawing sheet arg used by many of the export commands

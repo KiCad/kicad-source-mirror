@@ -23,11 +23,11 @@
 #include <string_utils.h>
 
 
-CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
-                                                       bool aInputCanBeDir, bool aOutputIsDir ) :
+CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName, INPUT_TYPE aInputType,
+                                                       bool aOutputIsDir ) :
         COMMAND( aName )
 {
-    addCommonArgs( true, true, aInputCanBeDir, aOutputIsDir );
+    addCommonArgs( true, true, aInputType, aOutputIsDir );
 }
 
 

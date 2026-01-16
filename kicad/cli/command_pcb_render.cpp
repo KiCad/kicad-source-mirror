@@ -213,7 +213,7 @@ static bool getColorOrIntensity( const std::string& aInput, VECTOR3D& aOutput )
 
 CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
 {
-    addCommonArgs( true, true, false, false );
+    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
     addDefineArg();
 
     m_argParser.add_description(
@@ -305,12 +305,12 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
             .default_value( std::string( "" ) )
             .metavar( "COLOR" )
             .help( UTF8STDSTR( _( "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
-    
+
     m_argParser.add_argument( ARG_LIGHT_SIDE )
             .default_value( std::string( "" ) )
             .metavar( "COLOR" )
             .help( UTF8STDSTR( _( "Side lights intensity, format 'R,G,B' or a single number, range: 0-1" ) ) );
-    
+
     m_argParser.add_argument( ARG_LIGHT_CAMERA )
             .default_value( std::string( "" ) )
             .metavar( "COLOR" )
