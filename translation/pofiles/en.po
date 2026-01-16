@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 20:31+0300\n"
+"POT-Creation-Date: 2026-01-16 18:17+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2929,6 +2929,9 @@ msgstr "Failed to add file '%s'."
 
 msgid "Select a file to embed"
 msgstr "Select a file to embed"
+
+msgid "Embedded files inherited from a parent symbol cannot be removed."
+msgstr "Embedded files inherited from a parent symbol cannot be removed."
 
 msgid "Select a directory to export files"
 msgstr "Select a directory to export files"
@@ -6071,6 +6074,9 @@ msgid ""
 msgstr ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
+
+msgid "Footprint Browser"
+msgstr "Footprint Browser"
 
 msgid "New name:"
 msgstr "New name:"
@@ -14444,6 +14450,10 @@ msgstr "Measurement"
 
 msgid "Format"
 msgstr "Format"
+
+#, c-format
+msgid "Error parsing SPICE library '%s': %s"
+msgstr "Error parsing SPICE library '%s': %s"
 
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
@@ -35327,6 +35337,12 @@ msgstr "Bill of Materials..."
 msgid "Create bill of materials from board"
 msgstr "Create bill of materials from board"
 
+msgid "Collect And Embed 3D Models"
+msgstr "Collect And Embed 3D Models"
+
+msgid "Collect footprint 3D models and embed them into the board"
+msgstr "Collect footprint 3D models and embed them into the board"
+
 msgid "Switch Track Width to Next"
 msgstr "Switch Track Width to Next"
 
@@ -36183,6 +36199,13 @@ msgstr "Selected Items"
 
 msgid "Selected 2D Length"
 msgstr "Selected 2D Length"
+
+msgid "Embed 3D Models"
+msgstr "Embed 3D Models"
+
+#, c-format
+msgid "%d 3D model(s) successfully embedded."
+msgstr "%d 3D model(s) successfully embedded."
 
 msgid "Resize Table Cells"
 msgstr "Resize Table Cells"
