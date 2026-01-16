@@ -307,8 +307,10 @@ public:
         if( resolvedPath.IsEmpty() )
             return;
 
-        if( !LaunchExternal( resolvedPath ) )
-            DisplayError( this, wxString::Format( _( "Failed to open '%s'." ), resolvedPath ) );
+        wxString fullPath = wxFileName( resolvedPath ).GetFullPath();
+
+        if( !LaunchExternal( fullPath ) )
+            DisplayError( this, wxString::Format( _( "Failed to open '%s'." ), fullPath ) );
     }
 
     void OnLastStatusClick( wxMouseEvent& aEvent ) override
