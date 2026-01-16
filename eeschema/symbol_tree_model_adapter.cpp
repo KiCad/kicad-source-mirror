@@ -54,12 +54,9 @@ SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, S
 {
     m_colWidths[ GetDefaultFieldName( FIELD_T::VALUE, false ) ] = 300;
     m_colWidths[ GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) ] = 600;
-    m_colWidths[ GetDefaultFieldName( FIELD_T::DATASHEET, false ) ] = 600;
 
     m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::VALUE, false ) );
     m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) );
-    // Datasheet probably isn't useful, but better to leave that decision to the user:
-    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::DATASHEET, false ) );
 }
 
 

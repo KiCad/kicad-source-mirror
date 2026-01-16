@@ -1769,16 +1769,20 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
     if( !fn.IsDir() )
     {
         if( wxRemove( aLibraryPath ) )
+        {
             THROW_IO_ERROR( wxString::Format( _( "Symbol library file '%s' cannot be deleted." ),
                                               aLibraryPath.GetData() ) );
+        }
     }
     else
     {
         // This may be overly agressive.  Perhaps in the future we should remove all of the *.kicad_sym
         // files and only delete the folder if it's empty.
         if( !fn.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+        {
             THROW_IO_ERROR( wxString::Format( _( "Symbol library folder '%s' cannot be deleted." ),
                                               fn.GetPath() ) );
+        }
     }
 
     if( m_cache && m_cache->IsFile( aLibraryPath ) )
@@ -1791,8 +1795,7 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 }
 
 
-void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath,
-                                      const std::map<std::string, UTF8>* aProperties )
+void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryPath );
@@ -1843,18 +1846,11 @@ void SCH_IO_KICAD_SEXPR::GetAvailableSymbolFields( std::vector<wxString>& aNames
 
     for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        std::vector<SCH_FIELD*> fields;
-        it->second->GetFields( fields );
+        std::map<wxString, wxString> chooserFields;
+        it->second->GetChooserFields( chooserFields );
 
-        for( SCH_FIELD* field : fields )
-        {
-            if( field->IsMandatory() )
-                continue;
-
-            // TODO(JE): enable configurability of this outside database libraries?
-            // if( field->ShowInChooser() )
-            fieldNames.insert( field->GetName() );
-        }
+        for( const auto& [name, value] : chooserFields )
+            fieldNames.insert( name );
     }
 
     std::copy( fieldNames.begin(), fieldNames.end(), std::back_inserter( aNames ) );
@@ -1867,8 +1863,7 @@ void SCH_IO_KICAD_SEXPR::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 }
 
 
-std::vector<LIB_SYMBOL*> SCH_IO_KICAD_SEXPR::ParseLibSymbols( std::string& aSymbolText,
-                                                              std::string  aSource,
+std::vector<LIB_SYMBOL*> SCH_IO_KICAD_SEXPR::ParseLibSymbols( std::string& aSymbolText, std::string  aSource,
                                                               int aFileVersion )
 {
     LIB_SYMBOL*    newSymbol = nullptr;

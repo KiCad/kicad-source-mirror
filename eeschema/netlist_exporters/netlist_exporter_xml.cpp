@@ -154,17 +154,15 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                     footprint = candidate;
 
                 // Datasheet
-                candidate = m_resolveTextVars
-                                ? symbol2->GetField( FIELD_T::DATASHEET )->GetShownText( &sheet, false )
-                                : symbol2->GetField( FIELD_T::DATASHEET )->GetText();
+                candidate = m_resolveTextVars ? symbol2->GetField( FIELD_T::DATASHEET )->GetShownText( &sheet, false )
+                                              : symbol2->GetField( FIELD_T::DATASHEET )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
                     datasheet = candidate;
 
                 // Description
-                candidate = m_resolveTextVars
-                                ? symbol2->GetField( FIELD_T::DESCRIPTION )->GetShownText( &sheet, false )
-                                : symbol2->GetField( FIELD_T::DESCRIPTION )->GetText();
+                candidate = m_resolveTextVars ? symbol2->GetField( FIELD_T::DESCRIPTION )->GetShownText( &sheet, false )
+                                              : symbol2->GetField( FIELD_T::DESCRIPTION )->GetText();
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || description.IsEmpty() ) )
                     description = candidate;

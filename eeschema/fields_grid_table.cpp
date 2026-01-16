@@ -1193,16 +1193,14 @@ void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         && m_grid->GetGridCursorCol() == FDC_VALUE
         && !m_grid->IsReadOnly( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE ) )
     {
-        menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
-                     _( "Browse for footprint" ) );
+        menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
         menu.AppendSeparator();
     }
     else if( m_grid->GetGridCursorRow() == getFieldRow( FIELD_T::DATASHEET )
            && m_grid->GetGridCursorCol() == FDC_VALUE
            && !m_grid->IsReadOnly( getFieldRow( FIELD_T::DATASHEET ), FDC_VALUE ) )
     {
-        menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
-                     _( "Show datasheet in browser" ) );
+        menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
         menu.AppendSeparator();
     }
 
