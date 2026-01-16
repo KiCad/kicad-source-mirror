@@ -831,6 +831,16 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
           []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
           {
               return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( data );
+          } },
+        { DRC_RULE_EDITOR_CONSTRAINT_NAME::ABSOLUTE_LENGTH,
+          []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
+          {
+              return std::make_shared<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( data );
+          } },
+        { DRC_RULE_EDITOR_CONSTRAINT_NAME::MATCHED_LENGTH_DIFF_PAIR,
+          []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
+          {
+              return std::make_shared<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( data );
           } }
     };
 
