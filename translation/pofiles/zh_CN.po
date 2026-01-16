@@ -4455,9 +4455,9 @@ msgstr "警告: 重复的名称"
 #: common/dialogs/panel_design_block_lib_table.cpp:682
 #: eeschema/dialogs/panel_sym_lib_table.cpp:443
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:622
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
-msgstr "名称为 '%s' 的库已存在。"
+msgstr "已存在名为 '%s' 的项目。"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:683
 #: eeschema/dialogs/panel_sym_lib_table.cpp:445
@@ -5862,7 +5862,7 @@ msgstr "顶部主工具栏"
 #: common/dialogs/panel_toolbar_customization.cpp:50
 #, fuzzy
 msgid "Top auxiliary"
-msgstr "顶部辅助工具栏"
+msgstr "顶部辅助栏"
 
 #: common/dialogs/panel_toolbar_customization.cpp:148
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
@@ -9948,7 +9948,7 @@ msgstr "切换弧线编辑模式, 保持半径不变, 调整弧的端点位置"
 
 #: common/tool/actions.cpp:608
 msgid "Cycle Arc Editing Mode"
-msgstr "循环切换弧线编辑模式"
+msgstr "切换弧线编辑模式"
 
 #: common/tool/actions.cpp:609
 msgid "Switch to a different method of editing arcs"
@@ -10217,7 +10217,7 @@ msgstr "切换到快速栅格 2"
 
 #: common/tool/actions.cpp:1035
 msgid "Cycle Fast Grid"
-msgstr "循环切换快速栅格"
+msgstr "切换快速栅格"
 
 #: common/tool/actions.cpp:1042
 msgid "Switch to Next Grid"
@@ -12280,11 +12280,11 @@ msgstr "更新字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
 msgid "Remove fields if not in new symbol"
-msgstr "如果在新符号中不存在, 则移除字段"
+msgstr "移除字段在新符号中不存在的字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Reset fields if empty in new symbol"
-msgstr "如果在新符号中为空, 则重置字段"
+msgstr "重置在新符号中为空的字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Update field text"
@@ -16968,7 +16968,7 @@ msgstr "交叉探测"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "选择/高亮 PCB 所选对象"
+msgstr "选中/高亮 PCB 所选对象"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -18133,9 +18133,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
 #: eeschema/erc/erc.cpp:1274
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not connected to ground net"
-msgstr "引脚 %s 未连接到接地网"
+msgstr "引脚 %s 未连接到接地网络"
 
 #: eeschema/erc/erc.cpp:1529
 #, c-format
@@ -18373,9 +18373,8 @@ msgid "Invalid connection between bus and net items"
 msgstr "总线和网络项目之间的连接无效"
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "无法连接到远程"
+msgstr "接地引脚未连接到接地网络"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
@@ -23948,7 +23947,7 @@ msgstr "选择光标下的连接项"
 
 #: eeschema/tools/sch_actions.cpp:111 pcbnew/tools/pcb_actions.cpp:2341
 msgid "Select/Expand Connection"
-msgstr "选择/扩展连接"
+msgstr "选中/扩展连接"
 
 #: eeschema/tools/sch_actions.cpp:112
 #, fuzzy
@@ -23962,9 +23961,8 @@ msgid "Show/hide design blocks library"
 msgstr "显示/隐藏 设计图块库"
 
 #: eeschema/tools/sch_actions.cpp:131
-#, fuzzy
 msgid "Show/hide the remote symbol panel"
-msgstr "显示/隐藏 搜索面板"
+msgstr "显示/隐藏 远程符号"
 
 #: eeschema/tools/sch_actions.cpp:137
 msgid "Save Current Sheet as Design Block..."
@@ -23983,19 +23981,17 @@ msgid "Create a new design block from the current selection"
 msgstr "从当前选区创建新的设计图块"
 
 #: eeschema/tools/sch_actions.cpp:151
-#, fuzzy
 msgid "Update Design Block from Current Sheet"
-msgstr "从当前图纸创建新的设计图块"
+msgstr "从当前图纸更新设计图块"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "添加选中设计图块到当前图纸"
+msgstr "将设计图块原理图设为当前图纸"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:534
 #, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "更新设计图块库"
+msgstr "从选区更新设计图块"
 
 #: eeschema/tools/sch_actions.cpp:159
 #, fuzzy
@@ -24561,7 +24557,7 @@ msgstr "在网络导航中定位选定的网络"
 
 #: eeschema/tools/sch_actions.cpp:901
 msgid "Cycle Body Style"
-msgstr "循环切换图形样式"
+msgstr "切换图形样式"
 
 #: eeschema/tools/sch_actions.cpp:902
 msgid "Switch between De Morgan (or other) representations"
@@ -26408,7 +26404,7 @@ msgstr "无法对选定走线段进行圆角处理。"
 #: eeschema/widgets/panel_remote_symbol.cpp:1565
 #, fuzzy
 msgid "Unable to access the schematic placement tools."
-msgstr "无法对选定走线段进行圆角处理。"
+msgstr "无法访问原理图放置工具。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
 #: eeschema/widgets/panel_remote_symbol.cpp:1810
@@ -26456,7 +26452,7 @@ msgstr ""
 #: eeschema/widgets/panel_remote_symbol.cpp:2077
 #, fuzzy, c-format
 msgid "Failed to parse component list: %s"
-msgstr "元件数据添加失败"
+msgstr "解析元件列表失败: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2083
 msgid "Component list must be an array."
@@ -39871,7 +39867,7 @@ msgstr "数量"
 #: pcbnew/pcb_track.cpp:3153
 #, fuzzy
 msgid "Backdrill"
-msgstr "背景填充"
+msgstr "背钻"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1228
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
@@ -39889,7 +39885,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1282
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:464
 msgid "The backdrill must pass through this layer"
-msgstr ""
+msgstr "背钻必须穿过该层"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1275
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:459
@@ -41474,7 +41470,7 @@ msgstr "选中父封装时显示所有字段"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:225
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "选择/高亮原理图选区所对应的的对象"
+msgstr "选中/高亮原理图选区所对应的的对象"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:227
 msgid "Highlight footprints corresponding to selected symbols"
@@ -50916,19 +50912,18 @@ msgstr "自 KiCad 10.0 起, 不再支持绘制 HPGL 图"
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "通过 Python C API 初始化 Python 模块 '%s', 第一阶段初始化失败。"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
-#, fuzzy
 msgid "Scripting init"
-msgstr "脚本控制台"
+msgstr "脚本初始化"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "通过 Python C API 初始化 Python 模块 '%s', 第二阶段初始化失败。"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
@@ -52927,7 +52922,7 @@ msgstr "将链接的设计图块布局应用到所选分组"
 #: pcbnew/tools/pcb_actions.cpp:513
 #, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "将当前电路板另存为设计图块..."
+msgstr "将电路板保存为设计图块..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
@@ -52936,12 +52931,12 @@ msgstr "从当前电路板创建新的设计图块"
 #: pcbnew/tools/pcb_actions.cpp:527
 #, fuzzy
 msgid "Update Design Block from Board"
-msgstr "更新设计图块库"
+msgstr "从电路板更新设计图块"
 
 #: pcbnew/tools/pcb_actions.cpp:528
 #, fuzzy
 msgid "Set design block layout to current board"
-msgstr "添加选中设计图块到当前电路板"
+msgstr "将设计图块布局设为当前电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:535
 #, fuzzy
@@ -54047,11 +54042,11 @@ msgstr "增加当前层的透明度"
 
 #: pcbnew/tools/pcb_actions.cpp:2133
 msgid "Cycle Layer Pair Presets"
-msgstr "循环切换预设层对"
+msgstr "切换预设层对"
 
 #: pcbnew/tools/pcb_actions.cpp:2134
 msgid "Cycle between preset layer pairs"
-msgstr "循环切换活动层对"
+msgstr "切换活动层对"
 
 #: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Show Board Statistics"
@@ -54395,11 +54390,11 @@ msgstr "将布线切换到绕走模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2565
 msgid "Cycle Router Mode"
-msgstr "循环切换布线器模式"
+msgstr "切换布线器模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2566
 msgid "Cycle router to the next mode"
-msgstr "循环切换布线器到下一个模式"
+msgstr "切换布线器到下一个模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2571
 msgid "Set Layer Pair..."
@@ -54776,7 +54771,7 @@ msgstr "选择"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1604
 msgid "Select/Expand Connection..."
-msgstr "选择/扩展连接..."
+msgstr "选中/扩展连接..."
 
 #: pcbnew/tools/position_relative_tool.cpp:217
 msgid "Select the reference point on the item to move."
@@ -56138,14 +56133,12 @@ msgid "Zone Manager"
 msgstr "填充区管理器"
 
 #: pcbnew/zone_settings.h:279
-#, fuzzy
 msgid "Offset X"
-msgstr "偏移 X："
+msgstr "X 偏移"
 
 #: pcbnew/zone_settings.h:280
-#, fuzzy
 msgid "Offset Y"
-msgstr "偏移 Y："
+msgstr "Y 偏移"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
