@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 20:30+0300\n"
+"POT-Creation-Date: 2026-01-16 18:17+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2719,11 +2719,29 @@ msgstr ""
 "Delete from symbols as well?"
 
 #, c-format
-msgid "File '%s' already exists."
-msgstr "File '%s' already exists."
+msgid "Failed to read file '%s'."
+msgstr "Failed to read file '%s'."
 
-msgid "Overwrite"
-msgstr "Overwrite"
+#, c-format
+msgid ""
+"A file named '%s' is already embedded, but the file on disk has different "
+"content.\n"
+"\n"
+"Do you want to replace the embedded file with the new version?"
+msgstr ""
+"A file named '%s' is already embedded, but the file on disk has different "
+"content.\n"
+"\n"
+"Do you want to replace the embedded file with the new version?"
+
+msgid "Embedded File Conflict"
+msgstr "Embedded File Conflict"
+
+msgid "Replace"
+msgstr "Replace"
+
+msgid "Reuse Existing"
+msgstr "Reuse Existing"
 
 #, c-format
 msgid "Failed to add file '%s'."
@@ -2737,6 +2755,13 @@ msgstr "Embedded files inherited from a parent symbol cannot be removed."
 
 msgid "Select a directory to export files"
 msgstr "Select a directory to export files"
+
+#, c-format
+msgid "File '%s' already exists."
+msgstr "File '%s' already exists."
+
+msgid "Overwrite"
+msgstr "Overwrite"
 
 #, c-format
 msgid "Directory '%s' is not writable."
@@ -3504,14 +3529,14 @@ msgstr "Top main"
 msgid "Top auxiliary"
 msgstr "Top auxiliary"
 
-msgid "Insert separator"
-msgstr "Insert separator"
+msgid "Insert Separator"
+msgstr "Insert Separator"
 
-msgid "Insert spacer"
-msgstr "Insert spacer"
+msgid "Insert Spacer"
+msgstr "Insert Spacer"
 
-msgid "Insert group"
-msgstr "Insert group"
+msgid "Insert Group"
+msgstr "Insert Group"
 
 msgid "Separator"
 msgstr "Separator"
@@ -3528,6 +3553,27 @@ msgstr "Customize toolbars"
 
 msgid "Toolbar:"
 msgstr "Toolbar:"
+
+msgid "Insert separator"
+msgstr "Insert separator"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "New Rule"
+msgstr "New Rule"
+
+msgid "Copy Rule"
+msgstr "Copy Rule"
+
+msgid "Delete Rule"
+msgstr "Delete Rule"
+
+msgid "Move Up"
+msgstr "Move Up"
+
+msgid "Move Down"
+msgstr "Move Down"
 
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
@@ -3670,8 +3716,17 @@ msgid "Run: %s"
 msgstr "Run: %s"
 
 #, c-format
-msgid "File '%s' was not found."
-msgstr "File '%s' was not found."
+msgid "File '%s' was not found.\n"
+msgstr "File '%s' was not found.\n"
+
+msgid "Do you want to remove it from list of recently opened files?"
+msgstr "Do you want to remove it from list of recently opened files?"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Keep"
+msgstr "Keep"
 
 msgid "Preferences"
 msgstr "Preferences"
@@ -4563,6 +4618,10 @@ msgstr "History directory does not exist: %s"
 #, c-format
 msgid "Failed to open git repository: %s"
 msgstr "Failed to open git repository: %s"
+
+#, c-format
+msgid "Failed to set git repository workdir to %s: %s"
+msgstr "Failed to set git repository workdir to %s: %s"
 
 msgid "Cannot acquire index lock: repository not open"
 msgstr "Cannot acquire index lock: repository not open"
@@ -5868,9 +5927,6 @@ msgstr "Open in file explorer..."
 msgid "Open a library file with system file explorer"
 msgstr "Open a library file with system file explorer"
 
-msgid "Save"
-msgstr "Save"
-
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -6649,6 +6705,9 @@ msgid ""
 msgstr ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
+
+msgid "Footprint Browser"
+msgstr "Footprint Browser"
 
 msgid "New Design Block Library"
 msgstr "New Design Block Library"
@@ -7632,6 +7691,9 @@ msgstr "Keep existing annotations"
 
 msgid "Reset existing annotations"
 msgstr "Reset existing annotations"
+
+msgid "Regroup symbol units"
+msgstr "Regroup symbol units"
 
 msgid "Numbering"
 msgstr "Numbering"
@@ -8627,6 +8689,54 @@ msgstr "Ibis parser"
 msgid "Image Properties"
 msgstr "Image Properties"
 
+#, c-format
+msgid "Import Symbols from %s"
+msgstr "Import Symbols from %s"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Unable to find a plugin to read this library."
+msgstr "Unable to find a plugin to read this library."
+
+#, c-format
+msgid "Cannot read symbol library '%s'."
+msgstr "Cannot read symbol library '%s'."
+
+#, c-format
+msgid "Symbol library '%s' is empty."
+msgstr "Symbol library '%s' is empty."
+
+#, c-format
+msgid "%d symbols selected, %d parents auto-included"
+msgstr "%d symbols selected, %d parents auto-included"
+
+#, c-format
+msgid "%d symbols selected"
+msgstr "%d symbols selected"
+
+msgid "Resolve Import Conflicts"
+msgstr "Resolve Import Conflicts"
+
+msgid ""
+"The following symbols already exist in the destination library. Choose how "
+"to handle each conflict:"
+msgstr ""
+"The following symbols already exist in the destination library. Choose how "
+"to handle each conflict:"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Skip All"
+msgstr "Skip All"
+
+msgid "Overwrite All"
+msgstr "Overwrite All"
+
+msgid "0 symbols selected"
+msgstr "0 symbols selected"
+
 msgid "Start reference designator:"
 msgstr "Start reference designator:"
 
@@ -8849,9 +8959,6 @@ msgstr "To File..."
 
 msgid "To Clipboard"
 msgstr "To Clipboard"
-
-msgid "Import"
-msgstr "Import"
 
 msgid "Replace all existing pins"
 msgstr "Replace all existing pins"
@@ -9182,6 +9289,9 @@ msgstr "units"
 
 msgid "Exclude from simulation"
 msgstr "Exclude from simulation"
+
+msgid "Exclude from position files"
+msgstr "Exclude from position files"
 
 msgid "Symbol Units"
 msgstr "Symbol Units"
@@ -9712,9 +9822,6 @@ msgstr "Replace matches in reference designators"
 
 msgid "Search &net names"
 msgstr "Search &net names"
-
-msgid "Replace"
-msgstr "Replace"
 
 msgid "Show search panel"
 msgstr "Show search panel"
@@ -10510,11 +10617,37 @@ msgstr ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 
-msgid "Add new variant name:"
-msgstr "Add new variant name:"
+msgid "Cannot delete the default variant."
+msgstr "Cannot delete the default variant."
 
-msgid "New Variant"
-msgstr "New Variant"
+msgid "Cannot rename the default variant."
+msgstr "Cannot rename the default variant."
+
+msgid "Enter new variant name:"
+msgstr "Enter new variant name:"
+
+msgid "Rename Variant"
+msgstr "Rename Variant"
+
+msgid "Variant name cannot be empty."
+msgstr "Variant name cannot be empty."
+
+#, c-format
+msgid "'%s' is a reserved variant name."
+msgstr "'%s' is a reserved variant name."
+
+#, c-format
+msgid "Variant '%s' already exists."
+msgstr "Variant '%s' already exists."
+
+msgid "Cannot copy the default variant."
+msgstr "Cannot copy the default variant."
+
+msgid "Enter name for the copied variant:"
+msgstr "Enter name for the copied variant:"
+
+msgid "Copy Variant"
+msgstr "Copy Variant"
 
 msgid "Add a new field"
 msgstr "Add a new field"
@@ -10623,6 +10756,13 @@ msgstr "Show pin numbers"
 
 msgid "Show pin names"
 msgstr "Show pin names"
+
+msgid ""
+"This is useful for adding symbols that should not be included in the \n"
+"exported position files used for pick and place machines"
+msgstr ""
+"This is useful for adding symbols that should not be included in the \n"
+"exported position files used for pick and place machines"
 
 msgid "Update Symbol from Library..."
 msgstr "Update Symbol from Library..."
@@ -11456,9 +11596,6 @@ msgstr "Vertical Touchpad or Scroll Wheel Movement"
 msgid "Modifier"
 msgstr "Modifier"
 
-msgid "Action"
-msgstr "Action"
-
 msgid "None:"
 msgstr "None:"
 
@@ -11646,12 +11783,12 @@ msgid "BOM preset '%s' not found"
 msgstr "BOM preset '%s' not found"
 
 #, c-format
-msgid "Unable to open destination '%s'"
-msgstr "Unable to open destination '%s'"
-
-#, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "BOM format preset '%s' not found"
+
+#, c-format
+msgid "Unable to open destination '%s'"
+msgstr "Unable to open destination '%s'"
 
 #, c-format
 msgid "Wrote bill of materials to '%s'."
@@ -12402,6 +12539,9 @@ msgstr "Exclude from bill of materials settings differ."
 msgid "Exclude from board settings differ."
 msgstr "Exclude from board settings differ."
 
+msgid "Exclude from position files settings differ."
+msgstr "Exclude from position files settings differ."
+
 msgid "Datasheet"
 msgstr "Datasheet"
 
@@ -12437,6 +12577,9 @@ msgstr "Exclude from Board"
 
 msgid "Exclude from Bill of Materials"
 msgstr "Exclude from Bill of Materials"
+
+msgid "Exclude from Position Files"
+msgstr "Exclude from Position Files"
 
 msgid "Units and Body Styles"
 msgstr "Units and Body Styles"
@@ -14002,6 +14145,9 @@ msgstr "Mirror Y"
 
 msgid "Library Link"
 msgstr "Library Link"
+
+msgid "Exclude From Position Files"
+msgstr "Exclude From Position Files"
 
 #, c-format
 msgid "%d Column Table"
@@ -15571,6 +15717,14 @@ msgstr "expecting measurement definition"
 msgid "expecting measurement format definition"
 msgstr "expecting measurement format definition"
 
+#, c-format
+msgid ""
+"Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
+"invalid netlist. The simulator will be reset."
+msgstr ""
+"Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
+"invalid netlist. The simulator will be reset."
+
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr "Unable to load ngspice shared library. Please check your install."
 
@@ -15889,6 +16043,10 @@ msgstr "Measurement"
 
 msgid "Format"
 msgstr "Format"
+
+#, c-format
+msgid "Error parsing SPICE library '%s': %s"
+msgstr "Error parsing SPICE library '%s': %s"
 
 #, c-format
 msgid "Could not find parent model '%s' for \"A Kind Of\" model '%s'"
@@ -16332,9 +16490,6 @@ msgstr ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 
-msgid "Overwrite All"
-msgstr "Overwrite All"
-
 msgid "Rename All"
 msgstr "Rename All"
 
@@ -16436,12 +16591,12 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Unable to find a reader for '%s'."
 
 #, c-format
-msgid "Cannot import symbol library '%s'."
-msgstr "Cannot import symbol library '%s'."
+msgid "Cannot import symbol '%s': %s"
+msgstr "Cannot import symbol '%s': %s"
 
 #, c-format
-msgid "Symbol library file '%s' is empty."
-msgstr "Symbol library file '%s' is empty."
+msgid "Imported %d symbol(s), skipped %d."
+msgstr "Imported %d symbol(s), skipped %d."
 
 #, c-format
 msgid "Error deleting symbol %s from library '%s'."
@@ -16536,6 +16691,18 @@ msgstr "Selection modes"
 
 msgid "Select the current variant to display and edit."
 msgstr "Select the current variant to display and edit."
+
+msgid "Add New Variant..."
+msgstr "Add New Variant..."
+
+msgid "New Variant"
+msgstr "New Variant"
+
+msgid "Variant name:"
+msgstr "Variant name:"
+
+msgid "Description (optional):"
+msgstr "Description (optional):"
 
 msgid "Symbol Viewer"
 msgstr "Symbol Viewer"
@@ -17807,6 +17974,13 @@ msgstr "All units of this symbol are already placed."
 msgid "Requested unit already placed."
 msgstr "Requested unit already placed."
 
+#, c-format
+msgid "Could not find design block %s."
+msgstr "Could not find design block %s."
+
+msgid "Design block has no schematic to place."
+msgstr "Design block has no schematic to place."
+
 msgid "Add Design Block"
 msgstr "Add Design Block"
 
@@ -18090,10 +18264,6 @@ msgstr "%d potential problems repaired."
 
 msgid "No errors found."
 msgstr "No errors found."
-
-#, c-format
-msgid "Could not find design block %s."
-msgstr "Could not find design block %s."
 
 #, c-format
 msgid "Design block %s does not have a schematic file."
@@ -19617,6 +19787,13 @@ msgstr "Hide this message."
 msgid "Failed to output data"
 msgstr "Failed to output data"
 
+msgid ""
+"When specifying multiple variants, the output path must contain ${VARIANT} "
+"to generate separate output files for each variant.\n"
+msgstr ""
+"When specifying multiple variants, the output path must contain ${VARIANT} "
+"to generate separate output files for each variant.\n"
+
 msgid "Input directory"
 msgstr "Input directory"
 
@@ -19646,13 +19823,17 @@ msgstr ""
 "Use in the format of '--define-var key=value' or '-D key=value'"
 
 msgid ""
-"List of variant names to output.\n"
-"When no --variants arguement is provided the default variant is output.\n"
-"To output all variants use '--variants=all'"
+"The variant name(s) to output, can be used multiple times to specify "
+"multiple variants.\n"
+"When specifying multiple variants, use ${VARIANT} in the output path to "
+"generate separate files for each variant.\n"
+"When no --variant argument is provided the default variant is output."
 msgstr ""
-"List of variant names to output.\n"
-"When no --variants arguement is provided the default variant is output.\n"
-"To output all variants use '--variants=all'"
+"The variant name(s) to output, can be used multiple times to specify "
+"multiple variants.\n"
+"When specifying multiple variants, use ${VARIANT} in the output path to "
+"generate separate files for each variant.\n"
+"When no --variant argument is provided the default variant is output."
 
 msgid "Shows help message and exits"
 msgstr "Shows help message and exits"
@@ -20114,6 +20295,13 @@ msgstr "Exclude all footprints with the Do Not Populate flag set"
 
 msgid "Include board edge layer (Gerber only)"
 msgstr "Include board edge layer (Gerber only)"
+
+msgid ""
+"Board variant for variant-aware filtering (DNP, BOM, position file "
+"exclusions)"
+msgstr ""
+"Board variant for variant-aware filtering (DNP, BOM, position file "
+"exclusions)"
 
 msgid "Invalid format\n"
 msgstr "Invalid format\n"
@@ -20663,9 +20851,6 @@ msgstr "Save Jobset"
 
 msgid "Generate All Destinations"
 msgstr "Generate All Destinations"
-
-msgid "Open the generated output"
-msgstr "Open the generated output"
 
 msgid "Jobset Run Log"
 msgstr "Jobset Run Log"
@@ -21685,11 +21870,17 @@ msgstr "Switch to a different branch"
 msgid "Switch to Branch"
 msgstr "Switch to Branch"
 
-msgid "Remove Version Control"
-msgstr "Remove Version Control"
+msgid "Enable Git Integration"
+msgstr "Enable Git Integration"
 
-msgid "Delete all version control files from the project directory."
-msgstr "Delete all version control files from the project directory."
+msgid "Re-enable Git integration for this project"
+msgstr "Re-enable Git integration for this project"
+
+msgid "Disable Git Integration"
+msgstr "Disable Git Integration"
+
+msgid "Disable Git integration for this project"
+msgstr "Disable Git integration for this project"
 
 #, c-format
 msgid "Change filename: '%s'"
@@ -21730,12 +21921,6 @@ msgstr "Failed to pull project"
 
 msgid "Failed to push project"
 msgstr "Failed to push project"
-
-msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Are you sure you want to remove Git tracking from this project?"
-
-msgid "Failed to remove VCS"
-msgstr "Failed to remove VCS"
 
 msgid "The selected directory is not a Git project."
 msgstr "The selected directory is not a Git project."
@@ -26656,9 +26841,6 @@ msgstr "SMD"
 msgid "Not in schematic"
 msgstr "Not in schematic"
 
-msgid "Exclude from position files"
-msgstr "Exclude from position files"
-
 msgid "Update Footprint from Library..."
 msgstr "Update Footprint from Library…"
 
@@ -28280,8 +28462,8 @@ msgstr ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 
-msgid "Hole post machining"
-msgstr "Hole post machining"
+msgid "Hole Post Machining"
+msgstr "Hole Post Machining"
 
 msgid "Countersink"
 msgstr "Countersink"
@@ -28292,8 +28474,8 @@ msgstr "Counterbore"
 msgid "Backdrill"
 msgstr "Backdrill"
 
-msgid "Both"
-msgstr "Both"
+msgid "Top & bottom"
+msgstr "Top & bottom"
 
 msgid "Top backdrill must-cut:"
 msgstr "Top backdrill must-cut:"
@@ -28306,6 +28488,9 @@ msgstr "Bottom backdrill must-cut:"
 
 msgid "Preview pad in sketch mode"
 msgstr "Preview pad in sketch mode"
+
+msgid "Refill zones before plotting"
+msgstr "Refill zones before plotting"
 
 msgid "Plot on All Layers"
 msgstr "Plot on All Layers"
@@ -29231,6 +29416,9 @@ msgstr "Annular rings:"
 msgid "Protection features:"
 msgstr "Protection features:"
 
+msgid "Both"
+msgstr "Both"
+
 msgid "Hole post-machining"
 msgstr "Hole post-machining"
 
@@ -29692,12 +29880,6 @@ msgstr "Show Button"
 msgid "Plugin"
 msgstr "Plugin"
 
-msgid "Move Up"
-msgstr "Move Up"
-
-msgid "Move Down"
-msgstr "Move Down"
-
 msgid "Open Plugin Directory"
 msgstr "Open Plugin Directory"
 
@@ -29772,6 +29954,32 @@ msgstr "Place items matching component class:"
 
 msgid "Place items in group:"
 msgstr "Place items in group:"
+
+msgid ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
+msgstr ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
+
+msgid ""
+"### Notes\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+msgstr ""
+"### Notes\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
 
 msgid "Minimum clearance:"
 msgstr "Minimum clearance:"
@@ -30878,7 +31086,7 @@ msgid ""
 "### Notes\n"
 "\n"
 "Version clause must be the first clause.  It indicates the syntax version of "
-"the file so that \n"
+"the file so that\n"
 "future rules parsers can perform automatic updates.  It should be\n"
 "set to \"1\".\n"
 "\n"
@@ -30887,13 +31095,28 @@ msgid ""
 "no further rules will be checked.\n"
 "\n"
 "Use Ctrl+/ to comment or uncomment line(s).\n"
+"\n"
+"### Graphical Rule Editor\n"
+"\n"
+"When loading rules into the graphical editor, constraints are automatically\n"
+"mapped to appropriate editing panels. Rules with multiple constraints may "
+"be\n"
+"split across panels, each showing a subset of the rule's constraints.\n"
+"\n"
+"Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
+"Differential Pair Routing (track_width + diff_pair_gap) are matched first.\n"
+"Single-constraint panels handle the remainder. Unmapped constraints appear\n"
+"in the Custom Rule panel.\n"
+"\n"
+"Rules that are not modified in the graphical editor preserve their original\n"
+"text formatting when saved.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
 "### Notes\n"
 "\n"
 "Version clause must be the first clause.  It indicates the syntax version of "
-"the file so that \n"
+"the file so that\n"
 "future rules parsers can perform automatic updates.  It should be\n"
 "set to \"1\".\n"
 "\n"
@@ -30902,6 +31125,21 @@ msgstr ""
 "no further rules will be checked.\n"
 "\n"
 "Use Ctrl+/ to comment or uncomment line(s).\n"
+"\n"
+"### Graphical Rule Editor\n"
+"\n"
+"When loading rules into the graphical editor, constraints are automatically\n"
+"mapped to appropriate editing panels. Rules with multiple constraints may "
+"be\n"
+"split across panels, each showing a subset of the rule's constraints.\n"
+"\n"
+"Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
+"Differential Pair Routing (track_width + diff_pair_gap) are matched first.\n"
+"Single-constraint panels handle the remainder. Unmapped constraints appear\n"
+"in the Custom Rule panel.\n"
+"\n"
+"Rules that are not modified in the graphical editor preserve their original\n"
+"text formatting when saved.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -33149,6 +33387,152 @@ msgstr "(layer %s; %s min spoke count %d; actual %d)"
 msgid "Checking thermal reliefs..."
 msgstr "Checking thermal reliefs..."
 
+msgid "Design Rule Editor"
+msgstr "Design Rule Editor"
+
+msgid "Are you sure you want to delete?"
+msgstr "Are you sure you want to delete?"
+
+msgid "Minimum Length"
+msgstr "Minimum Length"
+
+msgid "Optimum Length"
+msgstr "Optimum Length"
+
+msgid "Maximum Length"
+msgstr "Maximum Length"
+
+msgid "0 Degrees"
+msgstr "0 Degrees"
+
+msgid "90 Degrees"
+msgstr "90 Degrees"
+
+msgid "180 Degrees"
+msgstr "180 Degrees"
+
+msgid "270 Degrees"
+msgstr "270 Degrees"
+
+msgid "All Orientations"
+msgstr "All Orientations"
+
+msgid "Check Me!"
+msgstr "Check Me!"
+
+msgid "Where conditions match:"
+msgstr "Where conditions match:"
+
+msgid "Where object matches:"
+msgstr "Where object matches:"
+
+msgid "Add another condition"
+msgstr "Add another condition"
+
+msgid "AND"
+msgstr "AND"
+
+msgid "OR"
+msgstr "OR"
+
+msgid "AND NOT"
+msgstr "AND NOT"
+
+msgid "OR NOT"
+msgstr "OR NOT"
+
+msgid "Object A"
+msgstr "Object A"
+
+msgid "Object B"
+msgstr "Object B"
+
+msgid "Any"
+msgstr "Any"
+
+msgid "Netclass"
+msgstr "Netclass"
+
+msgid "Within Area"
+msgstr "Within Area"
+
+msgid "Custom Query"
+msgstr "Custom Query"
+
+msgid "Remove this condition"
+msgstr "Remove this condition"
+
+#, c-format
+msgid "%.2f"
+msgstr "%.2f"
+
+msgid "Minimum Text Height"
+msgstr "Minimum Text Height"
+
+msgid "Minimum Text Thickness"
+msgstr "Minimum Text Thickness"
+
+msgid "Top Layer"
+msgstr "Top Layer"
+
+msgid "Bottom Layer"
+msgstr "Bottom Layer"
+
+msgid "Minimum Routing Width"
+msgstr "Minimum Routing Width"
+
+msgid "Preferred Routing Width"
+msgstr "Preferred Routing Width"
+
+msgid "Maximum Routing Width"
+msgstr "Maximum Routing Width"
+
+msgid "Max Uncoupled Length"
+msgstr "Max Uncoupled Length"
+
+msgid "Minimum"
+msgstr "Minimum"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Preferred"
+msgstr "Preferred"
+
+msgid "Via Diameter"
+msgstr "Via Diameter"
+
+msgid "Via Hole Size"
+msgstr "Via Hole Size"
+
+msgid "Rule type"
+msgstr "Rule type"
+
+msgid "Rule name"
+msgstr "Rule name"
+
+msgid "ERROR: No condition text provided for validation."
+msgstr "ERROR: No condition text provided for validation."
+
+msgid "DRC rule"
+msgstr "DRC rule"
+
+msgid "Show Matches (error)"
+msgstr "Show Matches (error)"
+
+#, c-format
+msgid "Show Matches (%d)"
+msgstr "Show Matches (%d)"
+
+msgid "Show Matches"
+msgstr "Show Matches"
+
+msgid "Constraint"
+msgstr "Constraint"
+
+msgid "Conditions"
+msgstr "Conditions"
+
 msgid "Edit Zone Properties"
 msgstr "Edit Zone Properties"
 
@@ -33610,9 +33994,6 @@ msgstr "Thermal reliefs for PTH"
 msgid "Not in Schematic"
 msgstr "Not in Schematic"
 
-msgid "Exclude From Position Files"
-msgstr "Exclude From Position Files"
-
 msgid "Overrides"
 msgstr "Overrides"
 
@@ -33912,9 +34293,6 @@ msgstr "Length Constraints: %s"
 
 msgid "Tuning Pattern"
 msgstr "Tuning Pattern"
-
-msgid "Tune Skew"
-msgstr "Tune Skew"
 
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr "Unable to tune segments inside other tuning patterns."
@@ -34371,6 +34749,22 @@ msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "Removed %s 'Do not place' fabrication attribute."
 
 #, c-format
+msgid "Add %s 'exclude from position files' fabrication attribute."
+msgstr "Add %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+msgid "Remove %s 'exclude from position files' fabrication attribute."
+msgstr "Remove %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+msgid "Added %s 'exclude from position files' fabrication attribute."
+msgstr "Added %s 'exclude from position files' fabrication attribute."
+
+#, c-format
+msgid "Removed %s 'exclude from position files' fabrication attribute."
+msgstr "Removed %s 'exclude from position files' fabrication attribute."
+
+#, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "Added %s 'duplicate pad numbers are jumpers' attribute."
 
@@ -34451,6 +34845,66 @@ msgid "Updated %s unit metadata."
 msgstr "Updated %s unit metadata."
 
 #, c-format
+msgid "Invalid footprint ID '%s' for variant '%s' on %s."
+msgstr "Invalid footprint ID '%s' for variant '%s' on %s."
+
+#, c-format
+msgid "Add %s:%s 'Do not place' variant attribute."
+msgstr "Add %s:%s 'Do not place' variant attribute."
+
+#, c-format
+msgid "Remove %s:%s 'Do not place' variant attribute."
+msgstr "Remove %s:%s 'Do not place' variant attribute."
+
+#, c-format
+msgid "Added %s:%s 'Do not place' variant attribute."
+msgstr "Added %s:%s 'Do not place' variant attribute."
+
+#, c-format
+msgid "Removed %s:%s 'Do not place' variant attribute."
+msgstr "Removed %s:%s 'Do not place' variant attribute."
+
+#, c-format
+msgid "Add %s:%s 'exclude from BOM' variant attribute."
+msgstr "Add %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+msgid "Remove %s:%s 'exclude from BOM' variant attribute."
+msgstr "Remove %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+msgid "Added %s:%s 'exclude from BOM' variant attribute."
+msgstr "Added %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+msgid "Removed %s:%s 'exclude from BOM' variant attribute."
+msgstr "Removed %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+msgid "Add %s:%s 'exclude from position files' variant attribute."
+msgstr "Add %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+msgid "Remove %s:%s 'exclude from position files' variant attribute."
+msgstr "Remove %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+msgid "Added %s:%s 'exclude from position files' variant attribute."
+msgstr "Added %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+msgid "Removed %s:%s 'exclude from position files' variant attribute."
+msgstr "Removed %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+msgid "Change %s:%s field '%s' to '%s'."
+msgstr "Change %s:%s field '%s' to '%s'."
+
+#, c-format
+msgid "Changed %s:%s field '%s' to '%s'."
+msgstr "Changed %s:%s field '%s' to '%s'."
+
+#, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Reconnect via from %s to %s."
 
@@ -34519,10 +34973,6 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Processing symbol '%s:%s'."
 
 #, c-format
-msgid "Multiple footprints found for %s."
-msgstr "Multiple footprints found for %s."
-
-#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "Cannot remove unused footprint %s (footprint is locked)."
 
@@ -34541,6 +34991,21 @@ msgstr "Removed unused footprint %s."
 #, c-format
 msgid "Removed unused net %s."
 msgstr "Removed unused net %s."
+
+msgid "Updating design variants..."
+msgstr "Updating design variants..."
+
+#, c-format
+msgid "Added variant '%s'."
+msgstr "Added variant '%s'."
+
+#, c-format
+msgid "Updated description for variant '%s'."
+msgstr "Updated description for variant '%s'."
+
+#, c-format
+msgid "Removed variant '%s'."
+msgstr "Removed variant '%s'."
 
 msgid "Update Netlist"
 msgstr "Update Netlist"
@@ -35148,6 +35613,10 @@ msgstr "Loading extended primitive information data..."
 
 msgid "Loading board data..."
 msgstr "Loading board data..."
+
+#, c-format
+msgid "Layer '%s' could not be mapped and will be skipped."
+msgstr "Layer '%s' could not be mapped and will be skipped."
 
 msgid "Loading netclasses..."
 msgstr "Loading netclasses..."
@@ -37670,6 +38139,17 @@ msgstr "The routing start point violates DRC."
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "Cannot start a differential pair in the middle of nowhere."
 
+msgid ""
+"The differential pair gap at the start point does not match the configured "
+"gap. This can occur in neckdown areas where tracks have narrower width and "
+"spacing. Adjust the differential pair settings or start from a location with "
+"the correct gap."
+msgstr ""
+"The differential pair gap at the start point does not match the configured "
+"gap. This can occur in neckdown areas where tracks have narrower width and "
+"spacing. Adjust the differential pair settings or start from a location with "
+"the correct gap."
+
 msgid "Place Through Via"
 msgstr "Place Through Via"
 
@@ -37980,6 +38460,9 @@ msgstr "Via diameter selector"
 msgid "Control to select the via diameter"
 msgstr "Control to select the via diameter"
 
+msgid "Control to select the current variant"
+msgstr "Control to select the current variant"
+
 msgid "Track routing tools"
 msgstr "Track routing tools"
 
@@ -38174,9 +38657,6 @@ msgstr "Connection width resolution for:"
 #, c-format
 msgid "Resolved min connection width: %s."
 msgstr "Resolved min connection width: %s."
-
-msgid "Via Diameter"
-msgstr "Via Diameter"
 
 msgid "Via diameter resolution for:"
 msgstr "Via diameter resolution for:"
@@ -39179,11 +39659,11 @@ msgstr "Add dogbone corners to selected lines"
 msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Simplify polygon outlines, removing superfluous points"
 
-msgid "Edit Vertices..."
-msgstr "Edit Vertices..."
+msgid "Edit Corners..."
+msgstr "Edit Corners..."
 
-msgid "Edit polygon vertices using a table"
-msgstr "Edit polygon vertices using a table"
+msgid "Edit polygon corners using a table"
+msgstr "Edit polygon corners using a table"
 
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
@@ -39662,6 +40142,12 @@ msgstr "Switch to Schematic Editor"
 
 msgid "Open schematic in schematic editor"
 msgstr "Open schematic in schematic editor"
+
+msgid "DRC Rule Editor"
+msgstr "DRC Rule Editor"
+
+msgid "Open drc rule editor window"
+msgstr "Open drc rule editor window"
 
 msgid "Local Ratsnest"
 msgstr "Local Ratsnest"
@@ -40354,6 +40840,9 @@ msgstr "Paste Text"
 
 msgid "Invalid clipboard contents"
 msgstr "Invalid clipboard contents"
+
+msgid "Design block has no layout to place."
+msgstr "Design block has no layout to place."
 
 #, c-format
 msgid "Design block %s does not have a board file."
@@ -41154,9 +41643,6 @@ msgid ""
 msgstr ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
 
-msgid "Netclass"
-msgstr "Netclass"
-
 msgid "Total Delay"
 msgstr "Total Delay"
 
@@ -41618,6 +42104,98 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Insert spacer"
+#~ msgstr "Insert spacer"
+
+#~ msgid "Insert group"
+#~ msgstr "Insert group"
+
+#, c-format
+#~ msgid "File '%s' was not found."
+#~ msgstr "File '%s' was not found."
+
+#~ msgid "Add new variant name:"
+#~ msgstr "Add new variant name:"
+
+#, c-format
+#~ msgid "Cannot import symbol library '%s'."
+#~ msgstr "Cannot import symbol library '%s'."
+
+#, c-format
+#~ msgid "Symbol library file '%s' is empty."
+#~ msgstr "Symbol library file '%s' is empty."
+
+#~ msgid ""
+#~ "List of variant names to output.\n"
+#~ "When no --variants arguement is provided the default variant is output.\n"
+#~ "To output all variants use '--variants=all'"
+#~ msgstr ""
+#~ "List of variant names to output.\n"
+#~ "When no --variants arguement is provided the default variant is output.\n"
+#~ "To output all variants use '--variants=all'"
+
+#~ msgid "Open the generated output"
+#~ msgstr "Open the generated output"
+
+#~ msgid "Remove Version Control"
+#~ msgstr "Remove Version Control"
+
+#~ msgid "Delete all version control files from the project directory."
+#~ msgstr "Delete all version control files from the project directory."
+
+#~ msgid "Are you sure you want to remove Git tracking from this project?"
+#~ msgstr "Are you sure you want to remove Git tracking from this project?"
+
+#~ msgid "Failed to remove VCS"
+#~ msgstr "Failed to remove VCS"
+
+#~ msgid "Hole post machining"
+#~ msgstr "Hole post machining"
+
+#~ msgid ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+
+#~ msgid "Tune Skew"
+#~ msgstr "Tune Skew"
+
+#, c-format
+#~ msgid "Multiple footprints found for %s."
+#~ msgstr "Multiple footprints found for %s."
+
+#~ msgid "Edit Vertices..."
+#~ msgstr "Edit Vertices..."
+
+#~ msgid "Edit polygon vertices using a table"
+#~ msgstr "Edit polygon vertices using a table"
 
 #~ msgid "Grid Selector"
 #~ msgstr "Grid Selector"
@@ -54453,9 +55031,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Show or hide the schematic sheet hierarchy navigator"
 #~ msgstr "Show or hide the schematic sheet hierarchy navigator"
 
-#~ msgid "Rule type"
-#~ msgstr "Rule type"
-
 #~ msgid "Condition:"
 #~ msgstr "Condition:"
 
@@ -63924,9 +64499,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Symbol Footprint Association Files (.equ)"
 #~ msgstr "Symbol Footprint Association Files (.equ)"
 
-#~ msgid "Remove"
-#~ msgstr "Remove"
-
 #~ msgid "Edit File"
 #~ msgstr "Edit File"
 
@@ -67933,22 +68505,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Exclude from BOM"
 #~ msgstr "Exclude from BOM"
-
-#, c-format
-#~ msgid "Add %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Add %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-#~ msgid "Remove %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Remove %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-#~ msgid "Added %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Added %s 'exclude from position files' fabrication attribute."
-
-#, c-format
-#~ msgid "Removed %s 'exclude from position files' fabrication attribute."
-#~ msgstr "Removed %s 'exclude from position files' fabrication attribute."
 
 #, c-format
 #~ msgid "The auto save file '%s' could not be removed!"
