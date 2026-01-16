@@ -457,9 +457,9 @@ wxDataViewColumn* LIB_TREE_MODEL_ADAPTER::doAddColumn( const wxString& aHeader, 
 
     int index = (int) m_columns.size();
 
-    wxDataViewColumn* col = new wxDataViewColumn(
-            translatedHeader, new LIB_TREE_RENDERER(), index, m_colWidths[aHeader], wxALIGN_NOT,
-            wxDATAVIEW_CELL_INERT | static_cast<int>( wxDATAVIEW_COL_RESIZABLE ) );
+    wxDataViewColumn* col = new wxDataViewColumn( translatedHeader, new LIB_TREE_RENDERER(), index,
+                                                  m_colWidths[aHeader], wxALIGN_NOT,
+                                                  wxDATAVIEW_CELL_INERT | (int) wxDATAVIEW_COL_RESIZABLE );
     m_widget->AppendColumn( col );
 
     col->SetMinWidth( headerMinWidth.x );
@@ -565,8 +565,8 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetCurrentDataViewItem()
 }
 
 
-unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
-                                                  wxDataViewItemArray&    aChildren ) const
+unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem& aItem,
+                                                  wxDataViewItemArray& aChildren ) const
 {
     const LIB_TREE_NODE* node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
     unsigned int         count = 0;
@@ -697,9 +697,8 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( const wxDataViewItem& aItem ) 
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
-                                       const wxDataViewItem&   aItem,
-                                       unsigned int            aCol ) const
+void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant& aVariant, const wxDataViewItem& aItem,
+                                       unsigned int aCol ) const
 {
     if( IsFrozen() )
     {
@@ -743,9 +742,8 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 }
 
 
-bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
-                                      unsigned int            aCol,
-                                      wxDataViewItemAttr&     aAttr ) const
+bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem& aItem, unsigned int aCol,
+                                      wxDataViewItemAttr& aAttr ) const
 {
     if( IsFrozen() )
         return false;
