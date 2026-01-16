@@ -1,5 +1,5 @@
 # Kuzemko Alexsandr <alexandrkuzemko@gmail.com>, 2022.
-# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024, 2025.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024, 2025, 2026.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022, 2024.
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-12-24 09:00+0000\n"
-"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
+"PO-Revision-Date: 2026-01-17 09:19+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -4646,9 +4646,9 @@ msgstr ""
 "Видалити також з символів?"
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Не вдалося додати файл '%s'."
+msgstr "Не вдалося прочитати файл '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4658,11 +4658,13 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Файл із назвою '%s' уже вбудований, але файл на диску має інший вміст.\n"
+"\n"
+"Бажаєте замінити вбудований файл новою версією?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "Вбудовані файли"
+msgstr "Конфлікт з вбудованим файлом"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4670,9 +4672,8 @@ msgid "Replace"
 msgstr "Замінити"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "Додати наявні"
+msgstr "Використати наявний"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -4686,7 +4687,8 @@ msgstr "Виберіть файл для вставки"
 #: common/dialogs/panel_embedded_files.cpp:418
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
-"Вбудовані файли, успадковані від батьківського символу, не можна видалити."
+"Вбудовані файли що успадковані з батьківського символу, не можу бути "
+"видаленим."
 
 #: common/dialogs/panel_embedded_files.cpp:460
 msgid "Select a directory to export files"
@@ -5984,31 +5986,27 @@ msgid "Top auxiliary"
 msgstr "Верхній допоміжний"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
-msgstr "Встановити розділювач"
-
-#: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
-msgid "Insert Spacer"
 msgstr "Вставити роздільник"
 
+#: common/dialogs/panel_toolbar_customization.cpp:159
+msgid "Insert Spacer"
+msgstr "Вставити проставку"
+
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
 msgstr "Вставити групу"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "Розділювачі рядків"
+msgstr "Роздільник"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "Проставка: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:357 pcbnew/pcb_group.cpp:411
@@ -6021,9 +6019,8 @@ msgid "Customize toolbars"
 msgstr "Налаштувати панелі інструментів"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Панель інструментів"
+msgstr "Панель інструментів:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6037,19 +6034,16 @@ msgid "Save"
 msgstr "Зберегти"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "Новий звʼязок"
+msgstr "Нове правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Власні правила"
+msgstr "Копіювати правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Видалити Рядок"
+msgstr "Видалити правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6300,25 +6294,21 @@ msgid "Run: %s"
 msgstr "Виконано: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Файл '%s' не знайдено."
+msgstr "Файл '%s' не знайдено.\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Ви хочете перезаписати їх усі чи перейменувати нові символи?"
+msgstr "Вилучити зі списку нещодавніх відкритих файлів?"
 
 #: common/eda_base_frame.cpp:1283
 msgid "Remove"
 msgstr "Видалити"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Keep"
-msgstr "Заборонено"
+msgstr "Залишити"
 
 #: common/eda_base_frame.cpp:1333
 msgid "Preferences"
@@ -7853,9 +7843,9 @@ msgid "Failed to open git repository: %s"
 msgstr "Не вдалося відкрити репозиторій git: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Не вдалося відкрити репозиторій git: %s"
+msgstr "Не вдалося встановити робочу теку репозиторію git у %s: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -9039,9 +9029,9 @@ msgid "Library not found in library table"
 msgstr "Бібліотеку не знайдено в таблиці бібліотек"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Бібліотека: "
+msgstr "Бібліотека '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -9113,12 +9103,11 @@ msgstr ""
 
 #: common/local_history.cpp:1728
 msgid "Cannot restore - the following files are open by another user:"
-msgstr ""
+msgstr "Не вдалося відновити - наступні файли відкриті іншим користувачем:"
 
 #: common/local_history.cpp:1730
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Не вдалося об'єднати"
+msgstr "Помилка відновлення"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -9643,7 +9632,6 @@ msgid "Quit %s"
 msgstr "Вийти з %s"
 
 #: common/tool/action_toolbar.cpp:1128
-#, fuzzy
 msgid "Grid selector"
 msgstr "Вибір сітки"
 
@@ -9652,7 +9640,6 @@ msgid "Grid Selection box"
 msgstr "Поле вибору сітки"
 
 #: common/tool/action_toolbar.cpp:1141
-#, fuzzy
 msgid "Zoom selector"
 msgstr "Вибір масштабу"
 
@@ -10856,9 +10843,8 @@ msgstr ""
 "Для пожертвування для KiCad проєкту, відвідайте %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Вибір сліду"
+msgstr "Переглядач посадкових місць"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -11128,19 +11114,17 @@ msgid "Select Path"
 msgstr "Вибрати шлях"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Немає вихідних повідомлень"
+msgstr "Переглянути повідомлення завантаження"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "Переглянути %zu повідомлення завантаження"
 
 #: common/widgets/kistatusbar.cpp:438
-#, fuzzy
 msgid "Load Messages"
-msgstr "Повідомлення"
+msgstr "Завантажити повідомлення"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11843,9 +11827,9 @@ msgid "Footprint '%s' not found."
 msgstr "Посадкове місце '%s' не знайдено."
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Помилка завантаження сліду"
+msgstr "Помилка завантаження посадкового місця: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2080
 #, c-format
@@ -12226,9 +12210,8 @@ msgid "Reset existing annotations"
 msgstr "Скинути наявне анотування"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Групувати символи"
+msgstr "Перегрупувати частини символу"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13710,9 +13693,9 @@ msgstr "Властивості зображення"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Імпортувати символ"
+msgstr "Імпортувати символи з %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13723,40 +13706,40 @@ msgid "Import"
 msgstr "Імпорт"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Не вдалося завантажити бібліотеку\n"
+msgstr "Не вдалося знайти плагін для читання цієї бібліотеки."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Не вдалося імпортувати бібліотеку символів'%s'."
+msgstr "Не вдалося прочитати символ з бібліотеки '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Файл бібліотеки символів '%s' незаповнений."
+msgstr "Символ з бібліотеки '%s' незаповнений."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "Вибрано символів: %d, автоматично додано батьківських об'єктів: %d"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Не вибрано жодного символу"
+msgstr "%d вибрано символів"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "Відобразити конфлікти"
+msgstr "Вирішити конфлікти імпорту"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:511
 msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Наступні символи вже існують у цільовій бібліотеці. Виберіть, як розв'язати "
+"кожен конфлікт:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:518
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -13770,9 +13753,8 @@ msgid "Action"
 msgstr "Дія"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "Пропустити"
+msgstr "Пропустити все"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13780,7 +13762,6 @@ msgid "Overwrite All"
 msgstr "Перезаписати все"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
 msgstr "Не вибрано жодного символу"
 
@@ -16719,58 +16700,51 @@ msgstr ""
 "Будь ласка використовуйте інше ім'я."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2661
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Неможливо видалити останній аркуш верхнього рівня."
+msgstr "Неможливо видалити типовий варіант."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Не вдається створити схематичне зображення"
+msgstr "Неможливо перейменувати типовий варіант."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Введіть назву нового варіанта"
+msgstr "Введіть назву нового варіанта:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Вилучити варіант..."
+msgstr "Перейменувати варіант"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "Імʼя змінної не може бути незаповненим."
+msgstr "Імʼя варіанту не може бути незаповненим."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "Гаряча клавіша '%s' є зарезервованою для KiCad та не може змінюватись."
+msgstr "'%s' це зарезервована назва варіанта."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "'%s' вже існує."
+msgstr "Варіант '%s' вже існує."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Неможливо скопіювати типовий варіант."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Введіть назву для нового шаблону:"
+msgstr "Введіть назву для скопійованого варіанту:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "Варіанти"
+msgstr "Скопіювати варіант"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16868,9 +16842,8 @@ msgid "Alternate Assignment"
 msgstr "Альтернативне призначення"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "Варіанти"
+msgstr " Варіант"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -16946,6 +16919,8 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"Це корисно для додавання символів, які не мають бути включені \n"
+"у вихідні файли координат для автоматичного монтажу (pick-and-place)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2368
@@ -19451,9 +19426,8 @@ msgid "Exclude from board settings differ."
 msgstr "Налаштування виключення з дошки відрізняються."
 
 #: eeschema/lib_symbol.cpp:2141
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Налаштування виключення з симуляції відрізняються."
+msgstr "Налаштування виключити з файлів координат відрізняється."
 
 #: eeschema/lib_symbol.cpp:2376 eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Datasheet"
@@ -19504,9 +19478,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "Виключити з переліку матеріали"
 
 #: eeschema/lib_symbol.cpp:2424
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "Виключити з файлів позиція"
+msgstr "Виключити з файлів позицій"
 
 #: eeschema/lib_symbol.cpp:2429
 msgid "Units and Body Styles"
@@ -19568,11 +19541,10 @@ msgid "Panels"
 msgstr "Панелі"
 
 #: eeschema/menubar.cpp:196
-#, fuzzy
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"Встановіть віддалений сервер символів за допомогою плагіна та менеджера "
+"Установіть віддалений сервер символів за допомогою Менеджера плагінів та "
 "вмісту, щоб увімкнути"
 
 #: eeschema/menubar.cpp:333
@@ -20942,15 +20914,18 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Папку бібліотеки символів '%s' неможливо видалити."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Бібліотека '%s' вже існує."
+msgstr ""
+"Бібілотека '%s' завантажена з помилками:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"Бібліотеку неможливо зберегти, доки ці помилки не будуть виправлені вручну."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:146
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:360
@@ -20965,6 +20940,9 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"Бібліотеку неможливо зберегти, доки ці помилки не будуть виправлені вручну."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -20974,6 +20952,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Не вдалося зберегти бібліотеку '%s', оскільки під час завантаження сталася "
+"помилка аналізу.\n"
+"\n"
+"Збереження призведе до безповоротної втрати символів, які не вдалося "
+"завантажити.\n"
+"Будь ласка, виправте файл бібліотеки вручну перед збереженням."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:226
 #, c-format
@@ -20993,6 +20977,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Помилка аналізу символу в рядку %d: %s\n"
+"Пропуск символу та продовження."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:310
 #, c-format
@@ -23500,6 +23486,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"Збій симуляції (%s). Зазвичай це спричинено помилкою в ngspice або "
+"неправильним списком з’єднань (netlist). Симулятор буде перезавантажено."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -23955,9 +23943,9 @@ msgid "Format"
 msgstr "Формат"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Помилка завантаження бібліотеки '%s'"
+msgstr "Помилка аналізу бібліотеки SPICE '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24650,19 +24638,19 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Не вдалося знайти читача для '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Не вдалося імпортувати бібліотеку символів'%s'."
+msgstr "Не вдалося імпортуватисимвол '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "Імпортовано %d символ(ів), пропущено %d."
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
+msgstr "Помилка видалення символу %s з бібліотеки '%s'."
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24765,14 +24753,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Зв'язок(и) між закріпленими елементами аркуша та ієрархічними мітками"
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Current variant"
 msgstr "Поточний варіант"
 
 #: eeschema/toolbars_sch_editor.cpp:54
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "Елемент керування для вибору поточного варіанту схеми"
+msgstr "Вибір поточного варіанта схеми"
 
 #: eeschema/toolbars_sch_editor.cpp:92 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:163
@@ -24789,23 +24775,20 @@ msgid "Select the current variant to display and edit."
 msgstr "Виберіть поточний варіант для відображення та редагування."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "Додати варіант..."
+msgstr "Додати новий варіант..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
 msgstr "Новий варіант"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "Назва варіанта"
+msgstr "Назва варіанта:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "Опис:"
+msgstr "Опис (необов'язково):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -26531,9 +26514,8 @@ msgid "Could not find design block %s."
 msgstr "Не вдалося знайти блок дизайну %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "Блок проєкту %s не має файлу схеми."
+msgstr "Блок дизайну не має схеми для розміщення."
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -27434,14 +27416,12 @@ msgid "No remote data sources are currently installed."
 msgstr "Наразі не встановлено жодних віддалених джерел даних."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "Налаштування шляхів..."
+msgstr "Налаштувати..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "Очистити колір"
+msgstr "Очистити файли cookie"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -28714,7 +28694,6 @@ msgid "Aperture highlight"
 msgstr "Підсвічування діафрагми"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "Селектор D-коду"
 
@@ -29150,6 +29129,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"При вказанні декількох варіантів, шлях виводу повинен містити ${VARIANT}, "
+"щоб створити окремі вихідні файли для кожного варіанта.\n"
 
 #: kicad/cli/command.cpp:145
 msgid "Input directory"
@@ -29193,6 +29174,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"Назва(и) варіанта для виводу, можна використовувати декілька разів, щоб "
+"вказати кілька варіантів.\n"
+"При вказанні декількох варіантів використовуйте ${VARIANT} у шляху виводу, "
+"щоб створити окремі файли для кожного варіанта.\n"
+"Якщо аргумент --variant не вказано, виводиться варіант за замовчуванням."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -29868,6 +29854,8 @@ msgid ""
 "Board variant for variant-aware filtering (DNP, BOM, position file "
 "exclusions)"
 msgstr ""
+"Варіант плати для фільтрації з урахуванням варіантів (виключення DNP, BOM, "
+"файлів розташування)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:138
 #: kicad/cli/command_sch_export_netlist.cpp:97 kicad/cli/command_version.cpp:71
@@ -31919,22 +31907,20 @@ msgid "Switch to Branch"
 msgstr "Перейти до відділення"
 
 #: kicad/project_tree_pane.cpp:1072
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Увімкнути відстеження Git"
+msgstr "Увімкнути інтеграцію з Git"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Повторно увімкнути інтеграцію з Git для цього проєкту"
 
 #: kicad/project_tree_pane.cpp:1077
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Увімкнути відстеження Git"
+msgstr "Вимкнути інтеграцію з Git"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Вимкнути інтеграцію з Git для цього проєкту"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -32642,18 +32628,16 @@ msgstr ""
 "відображаються не на всій сторінці"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
-msgstr "Вибір походження"
+msgstr "Селектор початку координат"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:178
 msgid "Select the origin of the status bar coordinates"
 msgstr "Виберіть початок координат рядка стану"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
-msgstr "Вибір сторінки"
+msgstr "Селектор сторінок"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:182
 msgid "Select the page to simulate item displays"
@@ -38760,9 +38744,8 @@ msgstr "3D моделі"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Абсолютний зазор паяльної пасти:"
+msgstr "Зазор для паяльної пасти:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -38774,6 +38757,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"Локальний зазор паяльної пасти для цього посадкового місця.\n"
+"Введіть абсолютне значення (наприклад, -0.1мм), відсоток (наприклад, -5%) "
+"або обидва значення (наприклад, -0.1мм - 5%).\n"
+"Якщо поле порожнє, використовується глобальне значення."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
 msgid ""
@@ -38973,16 +38960,17 @@ msgstr "Дозволяти мостики паяльної маски між к�
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:47
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Solder paste clearance relative to pad size.\n"
 "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Глобальне значення зазору між контактними площадками та паяльною маскою.\n"
-"Це значення можна замінити локальними значеннями для посадкового місця або "
-"контактної площадки."
+"Зазор паяльної пасти відносно розміру контактного майданчика.\n"
+"Введіть абсолютне значення (наприклад, -0.1мм), відсоток (наприклад, -5%) "
+"або обидва значення (наприклад, -0.1мм - 5%).\n"
+"Це значення може бути замінене локальними значеннями для посадкового місця "
+"або окремого майданчика."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:383
@@ -40802,6 +40790,11 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"Локальний зазор паяльної пасти для цього майданчика.\n"
+"Введіть абсолютне значення (напр., -0.1mm), відсоткове значення (напр., -5%) "
+"або обидва значення (напр., -0.1mm - 5%).\n"
+"Якщо поле порожнє, буде використано значення посадкового місця або глобальне "
+"значення."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:679
 #, c-format
@@ -41312,9 +41305,8 @@ msgstr ""
 "площадки."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1115
-#, fuzzy
 msgid "Hole Post Machining"
-msgstr "Обробка отворів для стовпів"
+msgstr "Механічна обробка отворів після виготовлення"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
@@ -41338,9 +41330,8 @@ msgid "Backdrill"
 msgstr "Зворотне буріння"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Верхній/нижній"
+msgstr "Верх & низ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -41365,9 +41356,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Попередній перегляд контакту в контурному режимі"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Заправка зон перед запуском DRC"
+msgstr "Перезаповнити зони перед кресленням"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -43408,6 +43398,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Умова\n"
+"\n"
+"    (умова \"<вираз>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43417,6 +43412,12 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Примітки\n"
+"\n"
+"Використовуйте Ctrl+/ для того, щоб закоментувати або розкоментувати рядок "
+"(рядки).\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -43871,19 +43872,16 @@ msgid "Pad %s of %s on %s"
 msgstr "Конт. площадка %s від %s на %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"Знайдені елементи на видалених шарах. Ця операція видалить усі елементи з "
-"вилучених шарів і не може бути скасована.\n"
-"Ви бажаєте продовжити?"
+"На видалених шарах виявлено об'єкти. Ця операція видалить усі об'єкти з цих "
+"шарів, і її неможливо буде скасувати."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
-msgstr "Переглянути подробиці"
+msgstr "Показати подробиці"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1003
 msgid "Layer must have a name."
@@ -44721,6 +44719,36 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Примітки\n"
+"\n"
+"Пункт про версію (version clause) має бути першим. Він вказує на версію "
+"синтаксису файлу, щоб парсери правил у майбутньому могли виконувати "
+"автоматичні оновлення. Потрібно встановити значення \"1\".\n"
+"\n"
+"Правила мають бути впорядковані за ступенем специфічності. Наступні правила "
+"мають пріоритет над попередніми; як тільки знайдено відповідне правило, "
+"подальші правила не перевірятимуться.\n"
+"\n"
+"Використовуйте Ctrl+/ для того, щоб закоментувати або розкоментувати рядок "
+"(рядки).\n"
+"\n"
+"### Графічний редактор правил\n"
+"\n"
+"Під час завантаження правил у графічний редактор обмеження автоматично "
+"розподіляються за відповідними панелями редагування. Правила з декількома "
+"обмеженнями можуть бути розділені між панелями, кожна з яких показуватиме "
+"підмножину обмежень цього правила.\n"
+"\n"
+"Панелі з декількома обмеженнями, такі як «Стиль перехідного отвору» "
+"(via_diameter + hole_size) та «Трасування диференціальних пар» (track_width "
+"+ diff_pair_gap), перевіряються першими. Панелі з одним обмеженням "
+"обробляють решту. Нерозподілені обмеження відображаються на панелі «"
+"Спеціальні правила» (Custom Rule).\n"
+"\n"
+"Правила, які не були змінені у графічному редакторі, зберігають своє "
+"оригінальне текстове форматування при збереженні.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -47522,106 +47550,90 @@ msgid "Checking thermal reliefs..."
 msgstr "Перевірка теплових підключень..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:70
-#, fuzzy
 msgid "Design Rule Editor"
-msgstr "Правила Проектування"
+msgstr "Редактор правил проєктування"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "Ви впевнені, що хочете видалити всю друковану плату?"
+msgstr "Ви впевнені, що хочете видалити?"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "Максимальна довжина:"
+msgstr "Мінімальна довжина"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "Максимальна довжина:"
+msgstr "Оптимальна довжина"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "Максимальна довжина:"
+msgstr "Максимальна довжина"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "°"
+msgstr "0 градусів"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
-msgstr "90°"
+msgstr "90 Градусів"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "°"
+msgstr "180 Градусів"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "°"
+msgstr "270 Градусів"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "Орієнтація"
+msgstr "Усі орієнтації"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "Перевірте зони"
+msgstr "Перевір мене!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
-msgstr ""
+msgstr "За умови збігу:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
-msgstr ""
+msgstr "За умови відповідності об’єкта:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "Додати розмір центру"
+msgstr "Додати ще одну умову"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "І"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "АБО"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "ТА НЕ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "АБО НЕ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "Об'єкти"
+msgstr "Об’єкт А"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "Об'єкти"
+msgstr "Об’єкт B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:115
-#, fuzzy
 msgid "Any"
-msgstr "Будь-який:"
+msgstr "Будь-який"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:72
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -47632,20 +47644,17 @@ msgstr "Мережевий клас"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:73
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "Контур області"
+msgstr "У межах області"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "Власні правила"
+msgstr "Власний запит"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
-#, fuzzy
 msgid "Remove this condition"
-msgstr "Використовуйте початкові умови"
+msgstr "Видалити цю умову"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -47666,72 +47675,62 @@ msgstr "Використовуйте початкові умови"
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "Масштаб %.2f"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Text Height"
-msgstr "Мінімальна висота тексту:"
+msgstr "Мінімальна висота тексту"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:47
-#, fuzzy
 msgid "Minimum Text Thickness"
-msgstr "Мінімальна товщина тексту:"
+msgstr "Мінімальна товщина тексту"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
 msgstr "Верхній шар"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
 msgstr "Нижній шар"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "Мінімальна ширина"
+msgstr "Мінімальна ширина трасування"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
-msgstr ""
+msgstr "Бажана ширина трасування"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Routing Width"
-msgstr "Мінімальна ширина доріжки"
+msgstr "Максимальна ширина трасування"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
-#, fuzzy
 msgid "Max Uncoupled Length"
-msgstr "Незчеплена довжина"
+msgstr "Максимальна незв'язана довжина"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "Мінімальна ширина"
+msgstr "Мінімум"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "Максимальна ширина:"
+msgstr "Максимум"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:58
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:105
-#, fuzzy
 msgid "Preferred"
-msgstr "Налаштування"
+msgstr "Бажане"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:460
@@ -47740,53 +47739,45 @@ msgid "Via Diameter"
 msgstr "Діаметр перехідного отвору"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:76
-#, fuzzy
 msgid "Via Hole Size"
-msgstr "Розмір отвору"
+msgstr "Діаметр свердління перехідного отвору"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
-#, fuzzy
 msgid "Rule type"
-msgstr "Область з правилами"
+msgstr "Тип правила"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "Перейменувати"
+msgstr "Назва правила"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "ПОМИЛКА: Не надано текст умови для перевірки."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
-msgstr "Правила DRC"
+msgstr "Правило DRC"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "Показати всі помилки"
+msgstr "Показати знайдені елементи (помилка)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "Кольорові теми (%d)"
+msgstr "Показати збіги (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "Показати доріжку"
+msgstr "Показати збіги"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
 msgstr "Обмеження"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "Підтвердження"
+msgstr "Обмеження"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -49537,85 +49528,79 @@ msgstr "Оновлено метадані одиниці %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"Некоректний ID посадкового місця\n"
-"файл: '%s'\n"
-"ряд: %d"
+msgstr "Некоректний ID посадкового місця '%s' для варіанта '%s' на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "Додати атрибут виготовлення %s «Не розміщувати»."
+msgstr "І додати атрибут варіанта %s:%s 'не розміщувати'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "Вилучити атрибут виготовлення %s «Не розміщувати»."
+msgstr "Видалити атрибут варіанта %s:%s 'Не розміщувати'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "Додано атрибут виготовлення %s «Не розміщувати»."
+msgstr "Додано атрибут варіанта %s:%s 'Не розміщувати'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "Вилучено атрибут виготовлення %s «Не розміщувати»."
+msgstr "Видалено атрибут варіанта %s:%s 'Не розміщувати'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr ""
-"Встановлення виробничого атрибута 'виключено з переліку елементів' для %s."
+msgstr "Додати атрибут варіанта %s:%s 'виключити зі специфікації (BOM)'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr ""
-"Виділення виробничого атрибута 'виключено з переліку елементів' для %s."
+msgstr "Видалити атрибут варіанта %s:%s 'виключити зі специфікації (BOM)'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr ""
-"Встановлений виробничий атрибут 'виключено з переліку елементів' для %s."
+msgstr "Додано атрибут варіанта %s:%s 'виключити зі специфікації (BOM)'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "Видалений виробничий атрибут 'виключено з переліку елементів' для %s."
+msgstr "Видалено атрибут варіанта %s:%s 'виключити зі специфікації (BOM)'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "Додайте атрибут виготовлення %s 'виключити з файлів позицій'."
+msgstr "Додати атрибут варіанта %s:%s 'виключити з файлів координат'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "Видалити атрибут виробництва %s 'виключити з файлів позиції'."
+msgstr "Видалити атрибут варіанта %s:%s 'виключити з файлів координат'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "Додано атрибут виробництва %s \"виключити з файлів позиції\"."
+msgstr "Додано атрибут варіанта %s:%s 'виключити з файлів координат'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "Видалено атрибут виробництва %s 'виключити з файлів позиції'."
+msgstr "Видалено атрибут варіанта %s:%s 'виключити з файлів координат'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s:%s field '%s' to '%s'."
-msgstr "Змініть значення поля %s '%s' на '%s'."
+msgstr "Змінити %s:%s значення '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "Змініть значення поля %s '%s' на '%s'."
+msgstr "Змінено %s:%s значення '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 #, c-format
@@ -49729,24 +49714,23 @@ msgid "Removed unused net %s."
 msgstr "Видалено невикористаний зв'язок %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "Оновлення звʼязків..."
+msgstr "Оновлення варіантів проєкту..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "Додано %s (посадкове місце '%s')."
+msgstr "Додано варіант '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Оновлено фільтри слідів %s на '%s'."
+msgstr "Оновлено опис до варіанту'%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "Вилучити варіант..."
+msgstr "Видалено варіант '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -50550,9 +50534,9 @@ msgid "Loading board data..."
 msgstr "Завантаження даних про плату..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1200
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Шар '%s' не вдалося зіставити, тому його буде пропущено."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1264
 msgid "Loading netclasses..."
@@ -51901,9 +51885,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Бібліотека посадкових місць '%s' тільки в режимі читання."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "Не вдалося відкрити файл '%s'"
+msgstr "Попередження у файлі '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1635
 #, c-format
@@ -52124,6 +52108,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Компонент '%s' має символи не-ASCII у своєму позиційному позначенні; для "
+"експорту в ODB++ його змінено на '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:88
 #, c-format
@@ -52131,6 +52117,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Компонент '%s' має неоднозначне позиційне позначення після конвертації; для "
+"експорту в ODB++ його перейменовано на '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1129
 msgid "Failed to add component data"
@@ -53607,6 +53595,10 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"Зазор диференційної пари в початковій точці не відповідає налаштованому "
+"зазору. Це може траплятися в областях звуження (neckdown), де доріжки мають "
+"меншу ширину та відстань. Налаштуйте параметри диференційної пари або "
+"почніть трасування з місця з коректним зазором."
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Place Through Via"
@@ -54016,9 +54008,8 @@ msgid "Control to select the via diameter"
 msgstr "Контроль для вибору діаметра переходного отвору"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "Контроль для вибору діаметра переходного отвору"
+msgstr "Елемент керування для вибору поточного варіанта"
 
 #: pcbnew/toolbars_pcb_editor.cpp:209
 msgid "Track routing tools"
@@ -55653,14 +55644,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Спростіть контури полігонів, видаливши зайві точки"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "Редагувати параметри..."
+msgstr "Редагувати кути..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
-msgstr "Редагування вершин полігону за допомогою таблиці"
+msgstr "Редагувати кути багатокутника за допомогою таблиці"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid ""
@@ -56190,11 +56179,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 msgid "Collect And Embed 3D Models"
-msgstr "Збирати та вбудовувати 3D-моделі"
+msgstr "Зібрати та вбудувати 3D-моделі"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "Зберіть 3D-моделі слідів та вбудуйте їх у дошку"
+msgstr "Зібрати 3D-моделі посадкових місць та вбудувати їх у плату"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Switch Track Width to Next"
@@ -56323,13 +56312,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Відкрити схему в редакторі схем"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "Правила DRC'"
+msgstr "Редактор правил DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
 msgid "Open drc rule editor window"
-msgstr ""
+msgstr "Відкрити вікно редактора правил DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -57249,9 +57237,8 @@ msgid "Invalid clipboard contents"
 msgstr "Неприпустимий вміст буфера обміну"
 
 #: pcbnew/tools/pcb_control.cpp:1431
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "Блок дизайну '%s' вже має макет."
+msgstr "Блок проєктування не має шару для розміщення."
 
 #: pcbnew/tools/pcb_control.cpp:1496 pcbnew/tools/pcb_control.cpp:1683
 #, c-format
@@ -57314,9 +57301,8 @@ msgid "Resolved Margin Clearance"
 msgstr "Вирішено питання про зазор маржі"
 
 #: pcbnew/tools/pcb_control.cpp:2449
-#, fuzzy
 msgid "Pad Size"
-msgstr "Розмір сторінки"
+msgstr "Розмір контактного майданчика"
 
 #: pcbnew/tools/pcb_control.cpp:2481
 msgid "Selected Items"
@@ -57331,14 +57317,12 @@ msgid "Selected 2D Copper Area"
 msgstr "Вибрана двовимірна мідна область"
 
 #: pcbnew/tools/pcb_control.cpp:2658
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "Вибрана двовимірна мідна область"
+msgstr "Вибрана 2D-область"
 
 #: pcbnew/tools/pcb_control.cpp:2660
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "Вибрана двовимірна мідна область"
+msgstr "Загальна площа вибраних 2D-областей"
 
 #: pcbnew/tools/pcb_control.cpp:2718
 msgid "Place Board Characteristics"
@@ -57350,12 +57334,12 @@ msgstr "Таблиця стекування дощок розміщення"
 
 #: pcbnew/tools/pcb_control.cpp:2861
 msgid "Embed 3D Models"
-msgstr "Вбудовувати 3D-моделі"
+msgstr "Вбудована 3D моделі"
 
 #: pcbnew/tools/pcb_control.cpp:2862
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr "%d 3D-моделей успішно вбудовано."
+msgstr "Успішно вбудовано %d 3D-модель(ей)."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2657
 msgid "Resize Table Cells"
@@ -58724,9 +58708,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Усунення ізольованих островів міді..."
 
 #: pcbnew/zone_filler.cpp:985
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Зони поповнення запасів після внесених змін на борту"
+msgstr "Повторне заповнення зон після видалення острівців..."
 
 #: pcbnew/zone_filler.cpp:1394
 msgid "Prototype zone fill enabled. Disable setting and refill?"
