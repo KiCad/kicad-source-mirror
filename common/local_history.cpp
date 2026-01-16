@@ -485,7 +485,7 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
 
     int rc = git_index_add_all( index, &filesArrGit, GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH | GIT_INDEX_ADD_FORCE, NULL,
                                 NULL );
-    wxLogTrace( traceAutoSave, wxS( "Adding %d files, rc %d" ), filesArrStr.size(), rc );
+    wxLogTrace( traceAutoSave, wxS( "Adding %zu files, rc %d" ), filesArrStr.size(), rc );
 
     if( rc != 0 )
         return false;
