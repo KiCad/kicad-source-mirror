@@ -24,11 +24,15 @@
 #ifndef DRC_RE_CUSTOM_RULE_PANEL_H
 #define DRC_RE_CUSTOM_RULE_PANEL_H
 
+#include <memory>
+
 #include <wx/panel.h>
 #include <wx/stc/stc.h>
 
 #include "drc_re_content_panel_base.h"
 #include "drc_re_custom_rule_constraint_data.h"
+
+class SCINTILLA_TRICKS;
 
 /**
  * Simple panel used for editing custom rule text.  The panel consists of a
@@ -38,7 +42,7 @@ class DRC_RE_CUSTOM_RULE_PANEL : public wxPanel, public DRC_RULE_EDITOR_CONTENT_
 {
 public:
     DRC_RE_CUSTOM_RULE_PANEL( wxWindow* aParent, std::shared_ptr<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA> aConstraintData );
-    ~DRC_RE_CUSTOM_RULE_PANEL() override = default;
+    ~DRC_RE_CUSTOM_RULE_PANEL() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -47,8 +51,11 @@ public:
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
 
 private:
+    void onScintillaCharAdded( wxStyledTextEvent& aEvent );
+
     std::shared_ptr<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA> m_constraintData;
     wxStyledTextCtrl*                                   m_textCtrl;
+    std::unique_ptr<SCINTILLA_TRICKS>                   m_scintillaTricks;
 };
 
 #endif // DRC_RE_CUSTOM_RULE_PANEL_H
