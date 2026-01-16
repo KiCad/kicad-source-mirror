@@ -33,6 +33,8 @@
 #include "drc_re_custom_rule_constraint_data.h"
 
 class SCINTILLA_TRICKS;
+class wxButton;
+class wxTipWindow;
 
 /**
  * Simple panel used for editing custom rule text.  The panel consists of a
@@ -52,9 +54,12 @@ public:
 
 private:
     void onScintillaCharAdded( wxStyledTextEvent& aEvent );
+    void onCheckSyntax( wxCommandEvent& aEvent );
 
     std::shared_ptr<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA> m_constraintData;
     wxStyledTextCtrl*                                   m_textCtrl;
+    wxButton*                                           m_checkSyntaxBtn;
+    wxTipWindow*                                        m_tipWindow;
     std::unique_ptr<SCINTILLA_TRICKS>                   m_scintillaTricks;
 };
 

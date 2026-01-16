@@ -25,18 +25,32 @@
 
 #include <stack>
 
+#include <drc/drc_rule.h>
+#include <drc/drc_rule_parser.h>
+#include <ki_exception.h>
+#include <reporter.h>
 #include <scintilla_tricks.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
+#include <wx/tipwin.h>
 
 DRC_RE_CUSTOM_RULE_PANEL::DRC_RE_CUSTOM_RULE_PANEL(
         wxWindow* aParent, std::shared_ptr<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA> aConstraintData ) :
         wxPanel( aParent ),
-        m_constraintData( aConstraintData )
+        m_constraintData( aConstraintData ),
+        m_textCtrl( nullptr ),
+        m_checkSyntaxBtn( nullptr ),
+        m_tipWindow( nullptr )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
     m_textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
     sizer->Add( m_textCtrl, 1, wxEXPAND | wxALL, 5 );
+
+    m_checkSyntaxBtn = new wxButton( this, wxID_ANY, _( "Check Syntax" ) );
+    sizer->Add( m_checkSyntaxBtn, 0, wxALIGN_RIGHT | wxRIGHT | wxBOTTOM, 5 );
+
     SetSizer( sizer );
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>(
@@ -53,6 +67,8 @@ DRC_RE_CUSTOM_RULE_PANEL::DRC_RE_CUSTOM_RULE_PANEL(
             } );
 
     m_textCtrl->AutoCompSetSeparator( '|' );
+
+    m_checkSyntaxBtn->Bind( wxEVT_BUTTON, &DRC_RE_CUSTOM_RULE_PANEL::onCheckSyntax, this );
 }
 
 
@@ -251,4 +267,60 @@ void DRC_RE_CUSTOM_RULE_PANEL::onScintillaCharAdded( wxStyledTextEvent& aEvent )
 
     if( !tokens.IsEmpty() )
         m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, '|' ) );
+}
+
+
+void DRC_RE_CUSTOM_RULE_PANEL::onCheckSyntax( wxCommandEvent& aEvent )
+{
+    // Close any existing tip window
+    if( m_tipWindow )
+    {
+        m_tipWindow->Close();
+        m_tipWindow = nullptr;
+    }
+
+    wxString rulesText = m_textCtrl->GetText();
+
+    if( rulesText.Trim().IsEmpty() )
+    {
+        m_tipWindow = new wxTipWindow( this, _( "No rule text to check." ) );
+        m_tipWindow->SetTipWindowPtr( &m_tipWindow );
+        return;
+    }
+
+    WX_STRING_REPORTER reporter;
+
+    try
+    {
+        std::vector<std::shared_ptr<DRC_RULE>> dummyRules;
+        DRC_RULES_PARSER parser( rulesText, _( "Custom rule" ) );
+
+        parser.Parse( dummyRules, &reporter );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        reporter.Report( wxString::Format( _( "ERROR at line %d, column %d: %s" ),
+                                           pe.lineNumber,
+                                           pe.byteIndex,
+                                           pe.ParseProblem() ),
+                         RPT_SEVERITY_ERROR );
+    }
+
+    wxString message;
+
+    if( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+    {
+        message = reporter.GetMessages();
+    }
+    else if( reporter.HasMessage() )
+    {
+        message = _( "Syntax check passed with warnings:\n" ) + reporter.GetMessages();
+    }
+    else
+    {
+        message = _( "Syntax OK" );
+    }
+
+    m_tipWindow = new wxTipWindow( this, message );
+    m_tipWindow->SetTipWindowPtr( &m_tipWindow );
 }
