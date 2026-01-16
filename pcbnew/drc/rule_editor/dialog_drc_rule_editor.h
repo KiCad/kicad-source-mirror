@@ -22,6 +22,8 @@
 #define DIALOG_DRC_RULE_EDITOR_H
 
 
+#include <map>
+
 #include <drc/drc_rule_parser.h>
 #include <thread_pool.h>
 #include <drc/drc_item.h>
@@ -215,6 +217,35 @@ private:
      * @param aResult The vector to store the child nodes.
      */
     void collectChildRuleNodes( int aParentId, std::vector<RULE_TREE_NODE*>& aResult );
+
+    /**
+     * Collects all rule nodes that have unsaved changes (new or edited).
+     *
+     * @param aResult The vector to store the modified rule nodes.
+     */
+    void collectModifiedRules( std::vector<RULE_TREE_NODE*>& aResult );
+
+    /**
+     * Validates all rules and returns any that have validation errors.
+     *
+     * @param aErrors Output map of rule names to error messages.
+     * @return True if all rules are valid, false if any have errors.
+     */
+    bool validateAllRules( std::map<wxString, wxString>& aErrors );
+
+    /**
+     * Shows a prompt for unsaved changes when closing with modifications.
+     *
+     * @return wxID_YES to save and close, wxID_NO to discard and close, wxID_CANCEL to abort close.
+     */
+    int promptUnsavedChanges();
+
+    /**
+     * Selects a rule node in the tree by its ID.
+     *
+     * @param aNodeId The ID of the node to select.
+     */
+    void selectRuleNode( int aNodeId );
 
     // PROGRESS_REPORTER calls
     bool updateUI() override;

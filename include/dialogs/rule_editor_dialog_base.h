@@ -128,9 +128,21 @@ public:
     wxTreeCtrl* GetRuleTreeCtrl() { return m_ruleTreeCtrl; }
 
     /**
-     * Marks the dialog as modified, typically used to indicate unsaved changes.
+     * Marks the dialog as modified, indicating unsaved changes.
+     * Updates button states to reflect that changes can be discarded or saved.
      */
-    void SetModified() { m_modified = true; }
+    void SetModified();
+
+    /**
+     * Clears the modified flag, typically after saving.
+     * Updates button states to reflect no unsaved changes.
+     */
+    void ClearModified();
+
+    /**
+     * Returns whether the dialog has unsaved changes.
+     */
+    bool IsModified() const { return m_modified; }
 
     /**
      * Static method to retrieve the rule editor dialog instance associated with a given window.
@@ -465,6 +477,7 @@ private:
     bool m_enableAddRule;
     bool m_enableDuplicateRule;
     bool m_enableDeleteRule;
+    bool m_modified;
     int  m_defaultSashPosition;
 
     wxString                    m_title;

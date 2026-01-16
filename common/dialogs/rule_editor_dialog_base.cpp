@@ -76,6 +76,7 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
         m_enableAddRule( false ),
         m_enableDuplicateRule( false ),
         m_enableDeleteRule( false ),
+        m_modified( false ),
         m_defaultSashPosition( 200 ),
         m_title( aTitle ),
         m_selectedData( nullptr ),
@@ -220,6 +221,9 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
                               this );
     m_saveRuleButton->Bind( wxEVT_BUTTON, &RULE_EDITOR_DIALOG_BASE::OnSave, this );
     m_cancelRuleButton->Bind( wxEVT_BUTTON, &RULE_EDITOR_DIALOG_BASE::OnCancel, this );
+
+    // Initially disable Save button until modifications are made
+    m_saveRuleButton->Enable( false );
 
     this->Bind( wxEVT_SIZE, &RULE_EDITOR_DIALOG_BASE::onResize, this );
 
@@ -396,7 +400,44 @@ void RULE_EDITOR_DIALOG_BASE::SetControlsEnabled( bool aEnable )
     updateRuleTreeActionButtonsState( m_selectedData );
 
     if( m_cancelRuleButton )
-        m_cancelRuleButton->SetLabelText( aEnable ? _( "Close" ) : _( "Cancel" ) );
+    {
+        if( !aEnable )
+        {
+            m_cancelRuleButton->SetLabelText( _( "Cancel" ) );
+        }
+        else if( m_modified )
+        {
+            m_cancelRuleButton->SetLabelText( _( "Discard" ) );
+        }
+        else
+        {
+            m_cancelRuleButton->SetLabelText( _( "Close" ) );
+        }
+    }
+}
+
+
+void RULE_EDITOR_DIALOG_BASE::SetModified()
+{
+    m_modified = true;
+
+    if( m_saveRuleButton )
+        m_saveRuleButton->Enable( true );
+
+    if( m_cancelRuleButton && m_ruleTreeCtrl->IsEnabled() )
+        m_cancelRuleButton->SetLabelText( _( "Discard" ) );
+}
+
+
+void RULE_EDITOR_DIALOG_BASE::ClearModified()
+{
+    m_modified = false;
+
+    if( m_saveRuleButton )
+        m_saveRuleButton->Enable( false );
+
+    if( m_cancelRuleButton && m_ruleTreeCtrl->IsEnabled() )
+        m_cancelRuleButton->SetLabelText( _( "Close" ) );
 }
 
 

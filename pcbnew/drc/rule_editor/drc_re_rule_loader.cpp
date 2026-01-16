@@ -253,6 +253,9 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name,
                                              condition, aRule.m_Severity, aRule.m_LayerCondition );
 
+            // Preserve original layer source text for round-trip fidelity
+            entry.layerSource = aRule.m_LayerSource;
+
             // Store original text only for the first entry to avoid duplication issues
             if( entries.empty() )
                 entry.originalRuleText = aOriginalText;
@@ -271,6 +274,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         DRC_RE_LOADED_PANEL_ENTRY entry( CUSTOM_RULE, customData, aRule.m_Name, condition,
                                          aRule.m_Severity, aRule.m_LayerCondition );
+        entry.layerSource = aRule.m_LayerSource;
         entry.originalRuleText = aOriginalText;
         entries.push_back( std::move( entry ) );
     }

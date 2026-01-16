@@ -773,3 +773,106 @@ bool DRC_RULE_EDITOR_UTILS::SaveRules( const wxString& aFilename,
     file.Close();
     return true;
 }
+
+
+// ==================== Layer Filtering ====================
+
+DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
+        DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType )
+{
+    switch( aConstraintType )
+    {
+    // COPPER_ONLY: Constraints that only apply to copper layers
+    case BASIC_CLEARANCE:
+    case MINIMUM_CLEARANCE:
+    case MINIMUM_ITEM_CLEARANCE:
+    case CREEPAGE_DISTANCE:
+    case COPPER_TO_HOLE_CLEARANCE:
+    case COPPER_TO_EDGE_CLEARANCE:
+    case VIA_STYLE:
+    case MINIMUM_VIA_DIAMETER:
+    case MINIMUM_UVIA_DIAMETER:
+    case MINIMUM_UVIA_HOLE:
+    case MINIMUM_ANNULAR_WIDTH:
+    case MINIMUM_TRACK_WIDTH:
+    case MINIMUM_CONNECTION_WIDTH:
+    case ROUTING_WIDTH:
+    case ROUTING_DIFF_PAIR:
+    case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
+    case MATCHED_LENGTH_DIFF_PAIR:
+    case ABSOLUTE_LENGTH:
+        return DRC_LAYER_CATEGORY::COPPER_ONLY;
+
+    // SILKSCREEN_ONLY: Constraints that only apply to silkscreen layers
+    case SILK_TO_SILK_CLEARANCE:
+        return DRC_LAYER_CATEGORY::SILKSCREEN_ONLY;
+
+    // SOLDERMASK_ONLY: Constraints that only apply to soldermask layers
+    case MINIMUM_SOLDERMASK_SILVER:
+    case SOLDERMASK_EXPANSION:
+        return DRC_LAYER_CATEGORY::SOLDERMASK_ONLY;
+
+    // SOLDERPASTE_ONLY: Constraints that only apply to solderpaste layers
+    case SOLDERPASTE_EXPANSION:
+        return DRC_LAYER_CATEGORY::SOLDERPASTE_ONLY;
+
+    // TOP_BOTTOM_ANY: Constraints with simplified top/bottom/any selection
+    case COURTYARD_CLEARANCE:
+    case SILK_TO_SOLDERMASK_CLEARANCE:
+    case PERMITTED_LAYERS:
+    case VIAS_UNDER_SMD:
+    case ALLOWED_ORIENTATION:
+        return DRC_LAYER_CATEGORY::TOP_BOTTOM_ANY;
+
+    // GENERAL_ANY_LAYER: Constraints that can apply to any layer type
+    case BOARD_OUTLINE_CLEARANCE:
+    case HOLE_TO_HOLE_CLEARANCE:
+    case PHYSICAL_CLEARANCE:
+    case HOLE_SIZE:
+    case HOLE_TO_HOLE_DISTANCE:
+    case MINIMUM_THROUGH_HOLE:
+    case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
+    case MAXIMUM_ALLOWED_DEVIATION:
+    case MINIMUM_ANGULAR_RING:
+        return DRC_LAYER_CATEGORY::GENERAL_ANY_LAYER;
+
+    // NO_LAYER_SELECTOR: Constraints where layer selection doesn't apply
+    case MAXIMUM_VIA_COUNT:
+    case CUSTOM_RULE:
+        return DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR;
+
+    default:
+        return DRC_LAYER_CATEGORY::GENERAL_ANY_LAYER;
+    }
+}
+
+
+wxString DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType,
+                                                         bool aIsTop )
+{
+    switch( aConstraintType )
+    {
+    case COURTYARD_CLEARANCE:
+        return wxString::Format( wxS( "(layer \"%s\")" ),
+                                 aIsTop ? wxS( "F.CrtYd" ) : wxS( "B.CrtYd" ) );
+
+    case SILK_TO_SOLDERMASK_CLEARANCE:
+        // Generates a condition to match silk on one side with mask on the same side
+        return wxString::Format( wxS( "(condition \"A.Layer == '%s' && B.Layer == '%s'\")" ),
+                                 aIsTop ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ),
+                                 aIsTop ? wxS( "F.Mask" ) : wxS( "B.Mask" ) );
+
+    case PERMITTED_LAYERS:
+    case VIAS_UNDER_SMD:
+        return wxString::Format( wxS( "(layer \"%s\")" ),
+                                 aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
+
+    case ALLOWED_ORIENTATION:
+        // Orientation typically applies to footprints on a specific side
+        return wxString::Format( wxS( "(condition \"A.Layer == '%s'\")" ),
+                                 aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
+
+    default:
+        return wxEmptyString;
+    }
+}

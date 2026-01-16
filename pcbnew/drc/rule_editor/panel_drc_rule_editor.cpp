@@ -106,22 +106,21 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
 {
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "[PANEL_DRC_RULE_EDITOR] ctor START" ) );
 
+    m_constraintType = aConstraintType;
     m_constraintPanel = getConstraintPanel( this, aConstraintType );
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "[PANEL_DRC_RULE_EDITOR] adding constraint panel to sizer" ) );
     m_constraintContentSizer->Add( dynamic_cast<wxPanel*>( m_constraintPanel ), 0, wxEXPAND | wxTOP, 5 );
     m_layerList = m_board->GetEnabledLayers().UIOrder();
     m_constraintHeaderTitle->SetLabelText( *aConstraintTitle + " Constraint" );
 
-    m_layerIDs = m_layerList;
-
     m_layerListChoiceCtrl = new wxChoice( this, wxID_ANY );
-    m_layerListChoiceCtrl->Append( _( "Any" ) );
-
-    for( PCB_LAYER_ID id : m_layerIDs )
-        m_layerListChoiceCtrl->Append( m_board->GetLayerName( id ) );
-
-    m_layerListChoiceCtrl->SetSelection( 0 );
+    m_layerCategory = DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint( aConstraintType );
+    populateLayerSelector( m_layerCategory );
     m_LayersComboBoxSizer->Add( m_layerListChoiceCtrl, 0, wxALL | wxEXPAND, 5 );
+
+    // Hide layer selector for constraints where it doesn't apply
+    if( m_layerCategory == DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR )
+        m_LayersComboBoxSizer->Show( false );
 
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -202,7 +201,7 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataToWindow()
     {
         m_nameCtrl->SetValue( m_constraintData->GetRuleName() );
         m_commentCtrl->SetValue( m_constraintData->GetComment() );
-        setSelectedLayers( m_constraintData->GetLayers() );
+        setSelectedLayers( m_constraintData->GetLayers(), m_constraintData->GetLayerSource() );
         wxString cond = m_constraintData->GetRuleCondition();
 
         // Use the new condition group panel
@@ -930,6 +929,81 @@ void PANEL_DRC_RULE_EDITOR::ResetShowMatchesButton()
     m_btnShowMatches->SetLabel( _( "Show Matches" ) );
 }
 
+
+void PANEL_DRC_RULE_EDITOR::populateLayerSelector( DRC_LAYER_CATEGORY aCategory )
+{
+    m_layerListChoiceCtrl->Clear();
+    m_layerIDs.clear();
+
+    m_layerListChoiceCtrl->Append( _( "Any" ) );
+
+    switch( aCategory )
+    {
+    case DRC_LAYER_CATEGORY::COPPER_ONLY:
+        m_layerListChoiceCtrl->Append( _( "outer" ) );
+        m_layerIDs.push_back( LAYER_SEL_OUTER );
+        m_layerListChoiceCtrl->Append( _( "inner" ) );
+        m_layerIDs.push_back( LAYER_SEL_INNER );
+
+        for( PCB_LAYER_ID id : m_board->GetEnabledLayers().CuStack() )
+        {
+            m_layerListChoiceCtrl->Append( m_board->GetLayerName( id ) );
+            m_layerIDs.push_back( static_cast<int>( id ) );
+        }
+
+        break;
+
+    case DRC_LAYER_CATEGORY::SILKSCREEN_ONLY:
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( F_SilkS ) );
+        m_layerIDs.push_back( static_cast<int>( F_SilkS ) );
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( B_SilkS ) );
+        m_layerIDs.push_back( static_cast<int>( B_SilkS ) );
+        break;
+
+    case DRC_LAYER_CATEGORY::SOLDERMASK_ONLY:
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( F_Mask ) );
+        m_layerIDs.push_back( static_cast<int>( F_Mask ) );
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( B_Mask ) );
+        m_layerIDs.push_back( static_cast<int>( B_Mask ) );
+        break;
+
+    case DRC_LAYER_CATEGORY::SOLDERPASTE_ONLY:
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( F_Paste ) );
+        m_layerIDs.push_back( static_cast<int>( F_Paste ) );
+        m_layerListChoiceCtrl->Append( m_board->GetLayerName( B_Paste ) );
+        m_layerIDs.push_back( static_cast<int>( B_Paste ) );
+        break;
+
+    case DRC_LAYER_CATEGORY::TOP_BOTTOM_ANY:
+        m_layerListChoiceCtrl->Append( _( "Top" ) );
+        m_layerIDs.push_back( LAYER_SEL_TOP );
+        m_layerListChoiceCtrl->Append( _( "Bottom" ) );
+        m_layerIDs.push_back( LAYER_SEL_BOTTOM );
+        break;
+
+    case DRC_LAYER_CATEGORY::GENERAL_ANY_LAYER:
+        m_layerListChoiceCtrl->Append( _( "outer" ) );
+        m_layerIDs.push_back( LAYER_SEL_OUTER );
+        m_layerListChoiceCtrl->Append( _( "inner" ) );
+        m_layerIDs.push_back( LAYER_SEL_INNER );
+
+        for( PCB_LAYER_ID id : m_board->GetEnabledLayers().UIOrder() )
+        {
+            m_layerListChoiceCtrl->Append( m_board->GetLayerName( id ) );
+            m_layerIDs.push_back( static_cast<int>( id ) );
+        }
+
+        break;
+
+    case DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR:
+        // No layers to add - selector will be hidden
+        break;
+    }
+
+    m_layerListChoiceCtrl->SetSelection( 0 );
+}
+
+
 wxString PANEL_DRC_RULE_EDITOR::buildLayerClause() const
 {
     if( !m_layerListChoiceCtrl || !m_board )
@@ -945,8 +1019,33 @@ wxString PANEL_DRC_RULE_EDITOR::buildLayerClause() const
     if( index >= m_layerIDs.size() )
         return wxEmptyString;
 
-    PCB_LAYER_ID layerId = m_layerIDs[index];
-    wxString clause = wxString::Format( wxS( "(layer %s)" ), m_board->GetLayerName( layerId ) );
+    int layerValue = m_layerIDs[index];
+
+    // Handle synthetic layers
+    if( layerValue < 0 )
+    {
+        switch( layerValue )
+        {
+        case LAYER_SEL_OUTER:
+            return wxS( "(layer outer)" );
+
+        case LAYER_SEL_INNER:
+            return wxS( "(layer inner)" );
+
+        case LAYER_SEL_TOP:
+            return DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( m_constraintType, true );
+
+        case LAYER_SEL_BOTTOM:
+            return DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( m_constraintType, false );
+
+        default:
+            return wxEmptyString;
+        }
+    }
+
+    // Real layer ID
+    PCB_LAYER_ID layerId = static_cast<PCB_LAYER_ID>( layerValue );
+    wxString clause = wxString::Format( wxS( "(layer \"%s\")" ), m_board->GetLayerName( layerId ) );
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "Layer clause: %s" ), clause );
     return clause;
 }
@@ -958,18 +1057,53 @@ std::vector<PCB_LAYER_ID> PANEL_DRC_RULE_EDITOR::getSelectedLayers()
     if( sel <= 0 )
         return {};
 
-    return { m_layerIDs[sel - 1] };
+    int layerValue = m_layerIDs[sel - 1];
+
+    // Synthetic layers don't map to single PCB_LAYER_IDs
+    if( layerValue < 0 )
+        return {};
+
+    return { static_cast<PCB_LAYER_ID>( layerValue ) };
 }
 
-void PANEL_DRC_RULE_EDITOR::setSelectedLayers( const std::vector<PCB_LAYER_ID>& aLayers )
+
+void PANEL_DRC_RULE_EDITOR::setSelectedLayers( const std::vector<PCB_LAYER_ID>& aLayers,
+                                                const wxString& aLayerSource )
 {
+    // Check for synthetic layer keywords first (for round-trip preservation)
+    if( aLayerSource == wxS( "outer" ) )
+    {
+        for( size_t i = 0; i < m_layerIDs.size(); ++i )
+        {
+            if( m_layerIDs[i] == LAYER_SEL_OUTER )
+            {
+                m_layerListChoiceCtrl->SetSelection( static_cast<int>( i ) + 1 );
+                return;
+            }
+        }
+    }
+
+    if( aLayerSource == wxS( "inner" ) )
+    {
+        for( size_t i = 0; i < m_layerIDs.size(); ++i )
+        {
+            if( m_layerIDs[i] == LAYER_SEL_INNER )
+            {
+                m_layerListChoiceCtrl->SetSelection( static_cast<int>( i ) + 1 );
+                return;
+            }
+        }
+    }
+
+    // Handle empty layers (default to "Any")
     if( aLayers.empty() )
     {
         m_layerListChoiceCtrl->SetSelection( 0 );
         return;
     }
 
-    PCB_LAYER_ID target = aLayers.front();
+    // Find and select the matching layer
+    int target = static_cast<int>( aLayers.front() );
 
     for( size_t i = 0; i < m_layerIDs.size(); ++i )
     {

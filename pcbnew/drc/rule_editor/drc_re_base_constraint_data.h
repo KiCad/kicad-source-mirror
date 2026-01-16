@@ -56,6 +56,10 @@ public:
 
     void SetLayers( std::vector<PCB_LAYER_ID> aLayers ) { m_layers = aLayers; }
 
+    wxString GetLayerSource() { return m_layerSource; }
+
+    void SetLayerSource( wxString aSource ) { m_layerSource = aSource; }
+
     wxString GetRuleCondition() { return m_ruleCondition; }
 
     void SetRuleCondition( wxString aRuleCondition ) { m_ruleCondition = aRuleCondition; }
@@ -83,6 +87,7 @@ public:
         RULE_EDITOR_DATA_BASE::CopyFrom( source );
 
         m_layers = source.m_layers;
+        m_layerSource = source.m_layerSource;
         m_constraintCode = source.m_constraintCode;
         m_generatedRule = source.m_generatedRule;
         m_originalRuleText = source.m_originalRuleText;
@@ -188,6 +193,7 @@ protected:
 
 private:
     std::vector<PCB_LAYER_ID> m_layers;
+    wxString m_layerSource;     ///< Original layer text: "inner", "outer", or layer name
     wxString m_ruleCondition;
     wxString m_constraintCode;
     wxString m_generatedRule;

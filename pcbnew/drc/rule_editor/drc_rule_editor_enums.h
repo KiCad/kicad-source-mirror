@@ -116,4 +116,36 @@ enum DRC_RULE_EDITOR_CONSTRAINT_NAME
     CUSTOM_RULE
 };
 
+
+/**
+ * Layer categories for filtering the layer selector dropdown.
+ * Each constraint type maps to one category that determines which layers are shown.
+ */
+enum class DRC_LAYER_CATEGORY
+{
+    COPPER_ONLY,           ///< Copper layers + inner/outer synthetic
+    SILKSCREEN_ONLY,       ///< F_SilkS, B_SilkS
+    SOLDERMASK_ONLY,       ///< F_Mask, B_Mask
+    SOLDERPASTE_ONLY,      ///< F_Paste, B_Paste
+    TOP_BOTTOM_ANY,        ///< Simplified top/bottom/any selector with custom translation
+    GENERAL_ANY_LAYER,     ///< All layers + inner/outer synthetic
+    NO_LAYER_SELECTOR      ///< Hide layer selector entirely
+};
+
+
+/**
+ * Synthetic layer pseudo-IDs for the layer selector.
+ * Negative values avoid collision with PCB_LAYER_ID (which are >= 0).
+ * Pattern follows UNDEFINED_LAYER = -1, UNSELECTED_LAYER = -2 in layer_ids.h.
+ */
+enum DRC_LAYER_SELECTOR_ID : int
+{
+    LAYER_SEL_ANY    = -10,   ///< No layer filter (default "Any" selection)
+    LAYER_SEL_OUTER  = -11,   ///< External copper layers (F_Cu + B_Cu)
+    LAYER_SEL_INNER  = -12,   ///< Internal copper layers (In1_Cu through In30_Cu)
+    LAYER_SEL_TOP    = -13,   ///< Context-dependent front/top layer
+    LAYER_SEL_BOTTOM = -14,   ///< Context-dependent back/bottom layer
+};
+
+
 #endif // DRC_RULE_EDITOR_ENUMS_H_

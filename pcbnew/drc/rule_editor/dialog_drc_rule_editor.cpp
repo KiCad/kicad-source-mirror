@@ -48,6 +48,7 @@
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <wx/ffile.h>
+#include <functional>
 #include <memory>
 
 
@@ -296,6 +297,7 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
             ruleData->SetParentId( parentId );
             ruleData->SetOriginalRuleText( entry.originalRuleText );
             ruleData->SetWasEdited( entry.wasEdited );
+            ruleData->SetLayerSource( entry.layerSource );
             node.m_nodeData = ruleData;
         }
 
@@ -324,6 +326,7 @@ void DIALOG_DRC_RULE_EDITOR::AddNewRule( RULE_TREE_ITEM_DATA* aRuleTreeItemData 
     }
 
     AppendNewRuleTreeItem( buildRuleTreeNode( aRuleTreeItemData ), treeItemId );
+    SetModified();
 }
 
 
@@ -341,6 +344,7 @@ void DIALOG_DRC_RULE_EDITOR::DuplicateRule( RULE_TREE_ITEM_DATA* aRuleTreeItemDa
 
     wxTreeItemId treeItemId = aRuleTreeItemData->GetParentTreeItemId();
     AppendNewRuleTreeItem( targetTreeNode, treeItemId );
+    SetModified();
 }
 
 
@@ -427,6 +431,7 @@ void DIALOG_DRC_RULE_EDITOR::OnSave( wxCommandEvent& aEvent )
 
 void DIALOG_DRC_RULE_EDITOR::OnCancel( wxCommandEvent& aEvent )
 {
+    // If currently editing a panel, cancel that first
     if( m_ruleEditorPanel )
     {
         auto data = m_ruleEditorPanel->GetConstraintData();
@@ -435,7 +440,54 @@ void DIALOG_DRC_RULE_EDITOR::OnCancel( wxCommandEvent& aEvent )
         m_ruleEditorPanel->Cancel( aEvent );
 
         if( isNew )
+        {
+            // After canceling a new rule, check if there are any remaining modified rules
+            std::vector<RULE_TREE_NODE*> modifiedRules;
+            collectModifiedRules( modifiedRules );
+
+            if( modifiedRules.empty() )
+                ClearModified();
+
             return;
+        }
+    }
+
+    // If there are unsaved changes, prompt the user
+    if( IsModified() )
+    {
+        int result = promptUnsavedChanges();
+
+        if( result == wxID_CANCEL )
+            return;
+
+        if( result == wxID_YES )
+        {
+            // Validate all rules before saving
+            std::map<wxString, wxString> errors;
+
+            if( !validateAllRules( errors ) )
+            {
+                // Find the first rule with an error and select it
+                for( RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
+                {
+                    if( errors.find( node.m_nodeName ) != errors.end() )
+                    {
+                        selectRuleNode( node.m_nodeId );
+
+                        wxString msg = wxString::Format(
+                                _( "Cannot save due to validation errors in rule '%s':\n\n%s" ),
+                                node.m_nodeName, errors[node.m_nodeName] );
+                        DisplayErrorMessage( this, msg );
+                        return;
+                    }
+                }
+
+                return;
+            }
+
+            SaveRulesToFile();
+            ClearModified();
+        }
     }
 
     aEvent.Skip();
@@ -506,6 +558,7 @@ void DIALOG_DRC_RULE_EDITOR::RemoveRule( int aNodeId )
 
         DeleteRuleTreeItem( GetCurrentlySelectedRuleTreeItemData()->GetTreeItemId(), nodeId );
         deleteTreeNodeData( nodeId );
+        SetModified();
     }
 
     SetControlsEnabled( true );
@@ -886,6 +939,7 @@ void DIALOG_DRC_RULE_EDITOR::saveRule( int aNodeId )
         }
 
         SaveRulesToFile();
+        ClearModified();
 
         SetControlsEnabled( true );
     }
@@ -1029,6 +1083,127 @@ void DIALOG_DRC_RULE_EDITOR::collectChildRuleNodes( int aParentId, std::vector<R
 
         collectChildRuleNodes( childNode->m_nodeId, aResult );
     }
+}
+
+
+void DIALOG_DRC_RULE_EDITOR::collectModifiedRules( std::vector<RULE_TREE_NODE*>& aResult )
+{
+    for( RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
+    {
+        if( node.m_nodeType != RULE )
+            continue;
+
+        if( node.m_nodeData && node.m_nodeData->IsNew() )
+        {
+            aResult.push_back( &node );
+            continue;
+        }
+
+        auto constraintData = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( node.m_nodeData );
+
+        if( constraintData && constraintData->WasEdited() )
+            aResult.push_back( &node );
+    }
+}
+
+
+bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aErrors )
+{
+    bool allValid = true;
+
+    for( RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
+    {
+        if( node.m_nodeType != RULE )
+            continue;
+
+        auto constraintData = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( node.m_nodeData );
+
+        if( constraintData )
+        {
+            VALIDATION_RESULT result = constraintData->Validate();
+
+            if( !result.isValid )
+            {
+                wxString errorMsg;
+
+                for( const std::string& err : result.errors )
+                {
+                    if( !errorMsg.IsEmpty() )
+                        errorMsg += wxS( "\n" );
+
+                    errorMsg += wxString::FromUTF8( err );
+                }
+
+                aErrors[node.m_nodeName] = errorMsg;
+                allValid = false;
+            }
+        }
+    }
+
+    return allValid;
+}
+
+
+int DIALOG_DRC_RULE_EDITOR::promptUnsavedChanges()
+{
+    std::vector<RULE_TREE_NODE*> modifiedRules;
+    collectModifiedRules( modifiedRules );
+
+    if( modifiedRules.empty() )
+        return wxID_NO;
+
+    wxString message = _( "The following rules have unsaved changes:\n\n" );
+
+    for( RULE_TREE_NODE* rule : modifiedRules )
+        message += wxString::Format( wxS( "  \u2022 %s\n" ), rule->m_nodeName );
+
+    message += _( "\nDo you want to save your changes?" );
+
+    int result = wxMessageBox( message, _( "Save Changes?" ),
+                               wxYES_NO | wxCANCEL | wxICON_QUESTION, this );
+
+    if( result == wxYES )
+        return wxID_YES;
+    else if( result == wxNO )
+        return wxID_NO;
+    else
+        return wxID_CANCEL;
+}
+
+
+void DIALOG_DRC_RULE_EDITOR::selectRuleNode( int aNodeId )
+{
+    // Find the tree item ID for this node
+    wxTreeItemIdValue cookie;
+    wxTreeItemId root = m_ruleTreeCtrl->GetRootItem();
+
+    std::function<wxTreeItemId( wxTreeItemId )> findItem = [&]( wxTreeItemId parent ) -> wxTreeItemId
+    {
+        wxTreeItemId item = m_ruleTreeCtrl->GetFirstChild( parent, cookie );
+
+        while( item.IsOk() )
+        {
+            RULE_TREE_ITEM_DATA* data =
+                    dynamic_cast<RULE_TREE_ITEM_DATA*>( m_ruleTreeCtrl->GetItemData( item ) );
+
+            if( data && data->GetNodeId() == aNodeId )
+                return item;
+
+            wxTreeItemId found = findItem( item );
+
+            if( found.IsOk() )
+                return found;
+
+            item = m_ruleTreeCtrl->GetNextSibling( item );
+        }
+
+        return wxTreeItemId();
+    };
+
+    wxTreeItemId itemId = findItem( root );
+
+    if( itemId.IsOk() )
+        m_ruleTreeCtrl->SelectItem( itemId );
 }
 
 

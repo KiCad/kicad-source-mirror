@@ -50,6 +50,7 @@ struct DRC_RE_LOADED_PANEL_ENTRY
     wxString                                     condition;
     SEVERITY                                     severity = RPT_SEVERITY_UNDEFINED;
     LSET                                         layerCondition;
+    wxString                                     layerSource;  ///< Original layer text: "inner", "outer", or layer name
 
     wxString originalRuleText;
     bool     wasEdited = false;

@@ -160,8 +160,10 @@ private:
     void onShowMatchesButtonClicked( wxCommandEvent& aEvent );
 
 private:
+    void populateLayerSelector( DRC_LAYER_CATEGORY aCategory );
     std::vector<PCB_LAYER_ID> getSelectedLayers();
-    void setSelectedLayers( const std::vector<PCB_LAYER_ID>& aLayers );
+    void setSelectedLayers( const std::vector<PCB_LAYER_ID>& aLayers,
+                            const wxString& aLayerSource = wxEmptyString );
 
     wxButton*         m_btnShowMatches;
     std::vector<int>  m_validLayers;
@@ -173,7 +175,9 @@ private:
 
     std::unique_ptr<SCINTILLA_TRICKS>            m_scintillaTricks;
     wxChoice*                                    m_layerListChoiceCtrl;
-    std::vector<PCB_LAYER_ID>                    m_layerIDs;
+    std::vector<int>                             m_layerIDs;   // PCB_LAYER_ID or DRC_LAYER_SELECTOR_ID
+    DRC_LAYER_CATEGORY                           m_layerCategory;
+    DRC_RULE_EDITOR_CONSTRAINT_NAME              m_constraintType;
     DRC_RULE_EDITOR_CONTENT_PANEL_BASE*          m_constraintPanel;
     std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> m_constraintData;
     DRC_RE_CONDITION_GROUP_PANEL*                m_conditionGroupPanel;

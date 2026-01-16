@@ -264,6 +264,28 @@ public:
      */
     static bool ValidateSelection( int aSelectionIndex, const std::string& aLabel,
                                    VALIDATION_RESULT* aResult );
+
+    // ==================== Layer Filtering ====================
+
+    /**
+     * Get the layer category for a constraint type.
+     * Determines which layers should be shown in the layer selector dropdown.
+     *
+     * @param aConstraintType The constraint type.
+     * @return The layer category that determines available layer options.
+     */
+    static DRC_LAYER_CATEGORY GetLayerCategoryForConstraint( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType );
+
+    /**
+     * Translate a top/bottom selection to the appropriate layer clause or condition.
+     * Used for TOP_BOTTOM_ANY category constraints where "Top" and "Bottom" have
+     * different meanings depending on the constraint type.
+     *
+     * @param aConstraintType The constraint type.
+     * @param aIsTop True for top/front, false for bottom/back.
+     * @return The layer clause string (e.g., "(layer \"F.CrtYd\")") or condition string.
+     */
+    static wxString TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType, bool aIsTop );
 };
 
 #endif // DRC_RULE_EDITOR_UTILS_H_
