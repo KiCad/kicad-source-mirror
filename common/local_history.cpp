@@ -437,19 +437,58 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
                                     const wxString& aHistoryPath, const wxString& aProjectPath,
                                     const std::vector<wxString>& aFiles, const wxString& aTitle )
 {
+    git_status_options statusOpts;
+    git_status_options_init( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+
+    std::vector<std::string> filesArrStr;
+
     for( const wxString& file : aFiles )
     {
         wxFileName src( file );
-        wxString relStr;
+        wxString   relPath;
 
         if( src.GetFullPath().StartsWith( aProjectPath + wxFILE_SEP_PATH ) )
-            relStr = src.GetFullPath().Mid( aProjectPath.length() + 1 );
+            relPath = src.GetFullPath().Mid( aProjectPath.length() + 1 );
         else
-            relStr = src.GetFullName(); // Fallback (should not normally happen)
+            relPath = src.GetFullName(); // Fallback (should not normally happen)
 
-        int rc = git_index_add_bypath( index, relStr.mb_str().data() );
-        wxLogTrace( traceAutoSave, wxS( "Adding %s ret: %d" ), relStr, rc );
+        std::string relPathStr = relPath.ToStdString();
+
+        unsigned int status = 0;
+        int          rc = git_status_file( &status, repo, relPathStr.data() );
+
+        if( rc == 0 && status != 0 )
+        {
+            wxLogTrace( traceAutoSave, wxS( "File %s status %d " ), relPath, status );
+            filesArrStr.emplace_back( relPathStr );
+        }
+        else if( rc != 0 )
+        {
+            wxLogTrace( traceAutoSave, wxS( "File %s status error %d " ), relPath, rc );
+        }
     }
+
+    std::vector<char*> cStrings( filesArrStr.size() );
+
+    for( size_t i = 0; i < filesArrStr.size(); i++ )
+        cStrings[i] = filesArrStr[i].data();
+
+    git_strarray filesArrGit;
+    filesArrGit.count = filesArrStr.size();
+    filesArrGit.strings = cStrings.data();
+
+    if( filesArrStr.size() == 0 )
+    {
+        wxLogTrace( traceAutoSave, wxS( "No changes, skipping" ) );
+        return false;
+    }
+
+    int rc = git_index_add_all( index, &filesArrGit, GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH | GIT_INDEX_ADD_FORCE, NULL,
+                                NULL );
+    wxLogTrace( traceAutoSave, wxS( "Adding %d files, rc %d" ), filesArrStr.size(), rc );
+
+    if( rc != 0 )
+        return false;
 
     git_oid tree_id;
     if( git_index_write_tree( &tree_id, index ) != 0 )
