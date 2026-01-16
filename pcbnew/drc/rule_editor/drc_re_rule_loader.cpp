@@ -305,8 +305,8 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wx
 
     for( const auto& rule : parsedRules )
     {
-        // Generate original text representation for round-trip
-        wxString originalText = wxString::Format( "(rule \"%s\" ...)", rule->m_Name );
+        // Extract the actual original text from the file content
+        wxString originalText = extractRuleText( aRulesText, rule->m_Name );
 
         std::vector<DRC_RE_LOADED_PANEL_ENTRY> ruleEntries = LoadRule( *rule, originalText );
 
@@ -315,6 +315,74 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wx
     }
 
     return allEntries;
+}
+
+
+wxString DRC_RULE_LOADER::extractRuleText( const wxString& aContent, const wxString& aRuleName )
+{
+    // Search for the rule by name, handling both quoted and unquoted names
+    wxString quotedSearch = wxString::Format( wxS( "(rule \"%s\"" ), aRuleName );
+    wxString unquotedSearch = wxString::Format( wxS( "(rule %s" ), aRuleName );
+
+    size_t startPos = aContent.find( quotedSearch );
+
+    if( startPos == wxString::npos )
+        startPos = aContent.find( unquotedSearch );
+
+    if( startPos == wxString::npos )
+        return wxEmptyString;
+
+    // Find the matching closing parenthesis by counting balanced parens
+    int parenCount = 0;
+    size_t endPos = startPos;
+    bool inString = false;
+    bool escaped = false;
+
+    for( size_t i = startPos; i < aContent.length(); ++i )
+    {
+        wxUniChar c = aContent[i];
+
+        if( escaped )
+        {
+            escaped = false;
+            continue;
+        }
+
+        if( c == '\\' )
+        {
+            escaped = true;
+            continue;
+        }
+
+        if( c == '"' )
+        {
+            inString = !inString;
+            continue;
+        }
+
+        if( inString )
+            continue;
+
+        if( c == '(' )
+        {
+            parenCount++;
+        }
+        else if( c == ')' )
+        {
+            parenCount--;
+
+            if( parenCount == 0 )
+            {
+                endPos = i;
+                break;
+            }
+        }
+    }
+
+    if( parenCount != 0 )
+        return wxEmptyString;
+
+    return aContent.Mid( startPos, endPos - startPos + 1 );
 }
 
 

@@ -106,6 +106,15 @@ private:
      */
     double toMM( int aValue );
 
+    /**
+     * Extract the complete original text of a rule from file content.
+     *
+     * @param aContent The full file content.
+     * @param aRuleName The name of the rule to extract.
+     * @return The complete rule text including (rule ...) wrapper, or empty if not found.
+     */
+    wxString extractRuleText( const wxString& aContent, const wxString& aRuleName );
+
     DRC_PANEL_MATCHER m_matcher;
 };
 
