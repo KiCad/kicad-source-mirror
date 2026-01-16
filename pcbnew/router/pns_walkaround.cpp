@@ -165,7 +165,7 @@ bool WALKAROUND::singleStep()
 
             int clearance = m_world->GetClearance( clItem, &aLine, false );
             const SHAPE_LINE_CHAIN& cachedHull = m_world->GetRuleResolver()->HullCache(
-                    clItem, clearance + 1000, aLine.Width(), aLine.Layer() );
+                    clItem, clearance, aLine.Width(), aLine.Layer() );
 
             SHAPE_LINE_CHAIN hull;
 
