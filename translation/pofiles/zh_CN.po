@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-01 20:31+0300\n"
-"PO-Revision-Date: 2026-01-15 23:01+0000\n"
+"PO-Revision-Date: 2026-01-16 14:10+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -9022,7 +9022,7 @@ msgstr "编辑表格..."
 
 #: common/tool/actions.cpp:465
 msgid "Cycle Arc Editing Mode"
-msgstr "循环切换弧线编辑模式"
+msgstr "切换弧线编辑模式"
 
 #: common/tool/actions.cpp:466
 msgid "Switch to a different method of editing arcs"
@@ -9281,7 +9281,7 @@ msgstr "切换到快速栅格 2"
 
 #: common/tool/actions.cpp:878
 msgid "Cycle Fast Grid"
-msgstr "循环切换快速栅格"
+msgstr "切换快速栅格"
 
 #: common/tool/actions.cpp:885
 msgid "Switch to Next Grid"
@@ -11446,11 +11446,11 @@ msgstr "更新字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Remove fields if not in new symbol"
-msgstr "如果在新符号中不存在, 则移除字段"
+msgstr "移除字段在新符号中不存在的字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Reset fields if empty in new symbol"
-msgstr "如果在新符号中为空, 则重置字段"
+msgstr "重置在新符号中为空的字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:140
 msgid "Update field text"
@@ -15903,7 +15903,7 @@ msgstr "交叉探测"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "选择/高亮 PCB 所选对象"
+msgstr "选中/高亮 PCB 所选对象"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -38256,7 +38256,7 @@ msgstr "选中父封装时显示所有字段"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "选择/高亮原理图选区所对应的的对象"
+msgstr "选中/高亮原理图选区所对应的的对象"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -49168,11 +49168,11 @@ msgstr "增加当前层的透明度"
 
 #: pcbnew/tools/pcb_actions.cpp:1826
 msgid "Cycle Layer Pair Presets"
-msgstr "循环切换预设层对"
+msgstr "切换预设层对"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Cycle between preset layer pairs"
-msgstr "循环切换活动层对"
+msgstr "切换活动层对"
 
 #: pcbnew/tools/pcb_actions.cpp:1838
 msgid "Show Board Statistics"
@@ -49363,7 +49363,7 @@ msgstr "交互式的精确定位所选项目的相对位置"
 
 #: pcbnew/tools/pcb_actions.cpp:2100
 msgid "Select/Expand Connection"
-msgstr "选择/扩展连接"
+msgstr "选中/扩展连接"
 
 #: pcbnew/tools/pcb_actions.cpp:2101
 msgid ""
@@ -49566,11 +49566,11 @@ msgstr "将布线切换到绕走模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2314
 msgid "Cycle Router Mode"
-msgstr "循环切换布线器模式"
+msgstr "切换布线器模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2315
 msgid "Cycle router to the next mode"
-msgstr "循环切换布线器到下一个模式"
+msgstr "切换布线器到下一个模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2320
 msgid "Set Layer Pair..."
@@ -49857,7 +49857,7 @@ msgstr "拆分多边形拐角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1449
 msgid "Select/Expand Connection..."
-msgstr "选择/扩展连接..."
+msgstr "选中/扩展连接..."
 
 #: pcbnew/tools/position_relative_tool.cpp:220
 msgid "Select the reference point on the item to move."
