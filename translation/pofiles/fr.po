@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-01 17:55+0100\n"
+"POT-Creation-Date: 2026-01-16 18:43+0100\n"
+"PO-Revision-Date: 2026-01-16 18:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -4691,9 +4691,9 @@ msgstr ""
 "Supprimer également dans les symboles ?"
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Échec de l'ajout du fichier '%s'."
+msgstr "Échec de la lecture du fichier '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4703,11 +4703,14 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Un fichier nommé « %s » est déjà intégré, mais le fichier sur le disque a un "
+"contenu différent.\n"
+"\n"
+"Voulez-vous remplacer le fichier intégré par la nouvelle version ?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "Fichiers Intégrés"
+msgstr "Conflit de Fichiers Intégrés"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4715,9 +4718,8 @@ msgid "Replace"
 msgstr "Remplacer"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "Ajouter une Librairie Existante"
+msgstr "Réutiliser Existant"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -6049,19 +6051,16 @@ msgid "Top auxiliary"
 msgstr "Auxiliaire haut"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
-msgstr "Insérer séparateur"
+msgstr "Insérer Séparateur"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
 msgid "Insert Spacer"
-msgstr "Insérer espace"
+msgstr "Insérer Espace"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
-msgstr "Insérer groupe"
+msgstr "Insérer Groupe"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
@@ -6100,19 +6099,16 @@ msgid "Save"
 msgstr "Sauvegarder"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "Nouvelle Équipotentielle"
+msgstr "Nouvelle Règle"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Règles Utilisateur"
+msgstr "Copie Règle"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Suppression Ligne"
+msgstr "Suppression Règle"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6364,26 +6360,21 @@ msgid "Run: %s"
 msgstr "Exécution : %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Le fichier '%s' n'a pas été trouvé."
+msgstr "Le fichier « %s » est introuvable.\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Voulez-vous les écraser tous ou renommer les nouveaux symboles ?"
+msgstr "Voulez-vous le supprimer de la liste des fichiers récemment ouverts ?"
 
 #: common/eda_base_frame.cpp:1283
-#, fuzzy
 msgid "Remove"
-msgstr "Supprimer Fichier"
+msgstr "Supprimer"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Keep"
-msgstr "Zone d'exclusion"
+msgstr "Garder"
 
 #: common/eda_base_frame.cpp:1333
 msgid "Preferences"
@@ -7924,9 +7915,9 @@ msgid "Failed to open git repository: %s"
 msgstr "Échec de l'ouverture du dépôt git : %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Échec de l'ouverture du dépôt git : %s"
+msgstr "Échec de l'ajustage du répertoire de travail du dépôt Git sur %s : %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -9048,12 +9039,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -10956,9 +10945,8 @@ msgstr ""
 "Pour faire un don au projet KiCad, visitez %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Sélecteur d'Empreintes"
+msgstr "Navigateur d'Empreinte"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -12342,9 +12330,8 @@ msgid "Reset existing annotations"
 msgstr "Supprimer l'annotation existante"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Grouper symboles"
+msgstr "Regrouper les unités de symboles"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13849,9 +13836,9 @@ msgstr "Propriétés de l'Image"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Importer Symbole"
+msgstr "Importation des symboles depuis %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13862,39 +13849,40 @@ msgid "Import"
 msgstr "Importer"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Impossible de charger la librairie\n"
+msgstr "Impossible de trouver un plugin pour lire cette librairie."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Impossible d'importer la librairie de symboles '%s'."
+msgstr "Impossible de lire la librairie de symboles '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Le fichier librairie de symboles '%s' est vide."
+msgstr "La librairie de symboles '%s' est vide."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d symboles sélectionnés, %d parents automatiquement inclus"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Pas de symbole sélectionné"
+msgstr "%d symboles sélectionnés"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
 msgid "Resolve Import Conflicts"
-msgstr ""
+msgstr "Résolution des Conflits d'Importation"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:511
 msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Les symboles suivants existent déjà dans la librairie de destination. "
+"Choisissez comment traiter chaque conflit :"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:518
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -13908,9 +13896,8 @@ msgid "Action"
 msgstr "Action"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "Passer"
+msgstr "Tout ignorer"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13918,9 +13905,8 @@ msgid "Overwrite All"
 msgstr "Écraser Tous"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "Pas de symbole sélectionné"
+msgstr "0 symboles sélectionnés"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16433,7 +16419,7 @@ msgstr "70"
 #: pcbnew/dialogs/dialog_render_job_base.cpp:265
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:496
 msgid "Top:"
-msgstr "Haut:"
+msgstr "Dessus:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:853
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
@@ -16692,6 +16678,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -16886,60 +16873,51 @@ msgstr ""
 "Veuillez utiliser un nom différent."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2661
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Impossible de supprimer la dernière feuille de premier niveau."
+msgstr "Impossible de supprimer la variante par défaut."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Impossible de créer l'image du schéma"
+msgstr "Impossible de renommer la variante par défaut."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Saisir un nouveau nom de variante"
+msgstr "Entrer un nouveau nom de variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Supprimer Variante..."
+msgstr "Renommer Variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "Le nom de la variable ne peut pas être vide."
+msgstr "Le nom de la variante ne peut pas être vide."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr ""
-"'%s' est un raccourci clavier réservé dans KiCad et ne peut pas être "
-"attribué."
+msgstr "'%s' est un nom de variante réservé."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "'%s' existe déjà."
+msgstr "La variante '%s' existe déjà."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Impossible de copier la variante par défaut."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Entrer le nom du nouveau modèle :"
+msgstr "Entrez le nom pour la variante copiée :"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "Variante"
+msgstr "Copier Variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -17038,7 +17016,7 @@ msgstr "Affectation Alternative"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
 msgid " Variant"
-msgstr "Variante"
+msgstr " Variante"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17114,6 +17092,9 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"C'est utile pour ajouter des symboles qui ne doivent pas être inclus dans "
+"les\n"
+"fichiers de position exportés utilisés pour les machines de placement"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2368
@@ -19657,9 +19638,8 @@ msgid "Exclude from board settings differ."
 msgstr "Le paramètre d'exclusion du PCB diffère."
 
 #: eeschema/lib_symbol.cpp:2141
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Les paramètres d'exclusion de simulation diffèrent."
+msgstr "Les paramètres d'exclusion des fichiers de position diffèrent."
 
 #: eeschema/lib_symbol.cpp:2376 eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Datasheet"
@@ -19710,7 +19690,6 @@ msgid "Exclude from Bill of Materials"
 msgstr "Exclure de la Liste du Matériel"
 
 #: eeschema/lib_symbol.cpp:2424
-#, fuzzy
 msgid "Exclude from Position Files"
 msgstr "Exclure des Fichiers de Position"
 
@@ -23760,6 +23739,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"La simulation s'est bloquée (%s). Cela est généralement dû à un bug dans "
+"ngspice ou à une netliste non valide. Le simulateur sera réinitialisé."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -24218,12 +24199,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr ""
-"Erreur d'accès à la librairie '%s'.\n"
-"\n"
-"%s"
+msgstr "Erreur lors de l'analyse de la librairie SPICE '%s' : %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24932,14 +24910,14 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Impossible de trouver un lecteur pour '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Impossible d'importer la librairie de symboles '%s'."
+msgstr "Impossible d'importer le symbole '%s' : %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "Symbole(s) importé(s) %d, ignoré(s) %d."
 
 #: eeschema/symbol_library_manager.cpp:179
 #, c-format
@@ -25072,23 +25050,20 @@ msgid "Select the current variant to display and edit."
 msgstr "Sélectionner la variante actuelle à afficher et à modifier."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "Ajouter  Variante..."
+msgstr "Ajouter  Nouvelle Variante..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
 msgstr "Nouvelle Variante"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "Nom de Variante"
+msgstr "Nom de Variante:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "Description:"
+msgstr "Description (optionnel):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -26854,9 +26829,8 @@ msgid "Could not find design block %s."
 msgstr "Impossible de trouver le bloc de conception %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "Le bloc de conception %s n'a pas de fichier de schéma."
+msgstr "Le bloc de conception n'a pas de schéma à placer."
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -29485,6 +29459,9 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"Lorsque vous spécifiez plusieurs variantes, le chemin de sortie doit "
+"contenir ${VARIANT} pour générer des fichiers distincts pour chaque "
+"variante. \n"
 
 #: kicad/cli/command.cpp:145
 msgid "Input directory"
@@ -29528,6 +29505,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"Le ou les noms de variante à générer peuvent être utilisés plusieurs fois "
+"pour spécifier plusieurs variantes.\n"
+"Lorsque vous spécifiez plusieurs variantes, utilisez ${VARIANT} dans le "
+"chemin de sortie pour générer des fichiers distincts pour chaque variante.\n"
+"Si aucun argument --variant n'est fourni, la variante par défaut est générée."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -30220,6 +30202,8 @@ msgid ""
 "Board variant for variant-aware filtering (DNP, BOM, position file "
 "exclusions)"
 msgstr ""
+"Variante de PCB pour le filtrage tenant compte des variantes (DNP, "
+"nomenclature, exclusions de fichiers de position)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:138
 #: kicad/cli/command_sch_export_netlist.cpp:97 kicad/cli/command_version.cpp:71
@@ -32303,22 +32287,20 @@ msgid "Switch to Branch"
 msgstr "Commuter à Branche"
 
 #: kicad/project_tree_pane.cpp:1072
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Activer le suivi Git"
+msgstr "Activer l'Intégration Git"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Réactiver l'intégration Git pour ce projet"
 
 #: kicad/project_tree_pane.cpp:1077
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Activer le suivi Git"
+msgstr "Désactiver l'Intégration Git"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Désactiver l'intégration Git pour ce projet"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -36618,8 +36600,8 @@ msgstr "(pas d'ID de librairie)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
-"Différence des liens de librairie : %s attend '%s' mais le candidat %s est « "
-"%s »."
+"Différence des liens de librairie : %s attend '%s' mais le candidat %s est "
+"« %s »."
 
 #: pcbnew/connectivity/topo_match.cpp:744
 #, c-format
@@ -41762,9 +41744,8 @@ msgstr ""
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1115
-#, fuzzy
 msgid "Hole Post Machining"
-msgstr "Trou Post-usinage"
+msgstr "Trou Post-Usinage"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
@@ -41788,9 +41769,8 @@ msgid "Backdrill"
 msgstr "Backdrill"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Dessus/dessous"
+msgstr "Dessus & dessous"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -41815,9 +41795,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Pad en mode contour"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Remplir zones avant de lancer le DRC"
+msgstr "Remplir zones avant de tracer"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -43873,6 +43852,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Clause\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43882,6 +43866,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Notes\n"
+"\n"
+"Utilisez Ctrl+/ pour commenter ou décommenter des lignes.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -45184,6 +45173,35 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Notes\n"
+"\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that\n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
+"\n"
+"Rules should be ordered by specificity.  Later rules take\n"
+"precedence over earlier rules; once a matching rule is found\n"
+"no further rules will be checked.\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"\n"
+"### Graphical Rule Editor\n"
+"\n"
+"When loading rules into the graphical editor, constraints are automatically\n"
+"mapped to appropriate editing panels. Rules with multiple constraints may "
+"be\n"
+"split across panels, each showing a subset of the rule's constraints.\n"
+"\n"
+"Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
+"Differential Pair Routing (track_width + diff_pair_gap) are matched first.\n"
+"Single-constraint panels handle the remainder. Unmapped constraints appear\n"
+"in the Custom Rule panel.\n"
+"\n"
+"Rules that are not modified in the graphical editor preserve their original\n"
+"text formatting when saved.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -48016,106 +48034,90 @@ msgid "Checking thermal reliefs..."
 msgstr "Vérification freins thermiques..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:70
-#, fuzzy
 msgid "Design Rule Editor"
-msgstr "Règles de Conception"
+msgstr "Editeur de Règles de Conception"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "Etes-vous sûr de vouloir supprimer le champ '%s' ?"
+msgstr "Etes-vous sûr de vouloir supprimer?"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "Épaisseur Minimum"
+msgstr "Longueur Minimale"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "Longueur Net"
+msgstr "Longueur Optimale"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "Longueur Maxi"
+msgstr "Longueur Maximum"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "degré"
+msgstr "0 Degré"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
 msgstr "90 degrés"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "90 degrés"
+msgstr "180 degrés"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "90 degrés"
+msgstr "270 degrés"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "Orientation"
+msgstr "Toutes les Orientations"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "Vérification Zones"
+msgstr "Vérifiez-moi !"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
-msgstr ""
+msgstr "Lorsque les conditions correspondent :"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
-msgstr ""
+msgstr "Où l'objet correspond :"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "Position du centre"
+msgstr "Ajouter une autre condition"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "AND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "OR"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "AND NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "OR NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "Objets"
+msgstr "Objet A"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "Objets"
+msgstr "Objet B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:115
-#, fuzzy
 msgid "Any"
-msgstr "Tout :"
+msgstr "Tout"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:72
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -48126,20 +48128,17 @@ msgstr "Netclasse"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:73
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "Surface de Contour"
+msgstr "Dans Zone"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "Règles Utilisateur"
+msgstr "Requête Personnalisée"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
-#, fuzzy
 msgid "Remove this condition"
-msgstr "Utiliser les conditions initiales"
+msgstr "Supprimer cette condition"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -48160,72 +48159,62 @@ msgstr "Utiliser les conditions initiales"
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "Zoom %.2f"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Text Height"
-msgstr "Hauteur min de texte:"
+msgstr "Hauteur Min de Texte"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:47
-#, fuzzy
 msgid "Minimum Text Thickness"
-msgstr "Épaisseur min de texte:"
+msgstr "Épaisseur Min Texte"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
-msgstr "Couche dessus"
+msgstr "Couche Dessus"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
-msgstr "Couche dessous"
+msgstr "Couche Dessous"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "Épaisseur Minimum"
+msgstr "Largeur Minimale de Routage"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
-msgstr ""
+msgstr "Largeur de routage préférée"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Routing Width"
-msgstr "Largeur maximum:"
+msgstr "Largeur Maximale de Routage"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
-#, fuzzy
 msgid "Max Uncoupled Length"
-msgstr "Longueur On Couplée"
+msgstr "Longueur Max non Couplée"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "Épaisseur Minimum"
+msgstr "Minimum"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "Largeur maximum:"
+msgstr "Maximum"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:58
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:105
-#, fuzzy
 msgid "Preferred"
-msgstr "Préférences"
+msgstr "Préféré"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:460
@@ -48234,53 +48223,45 @@ msgid "Via Diameter"
 msgstr "Diamètre Via"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:76
-#, fuzzy
 msgid "Via Hole Size"
-msgstr "Taille Trou"
+msgstr "Taille Trou Via"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
-#, fuzzy
 msgid "Rule type"
-msgstr "Surface à Règles"
+msgstr "Type de Règle"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "Renommer"
+msgstr "Nom de Règle"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "ERREUR : Aucun texte de condition n'a été fourni pour la validation."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
-msgstr "Règles DRC"
+msgstr "Règle DRC"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "Montrer toutes les erreurs"
+msgstr "Afficher Correspondances (erreur)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "Thèmes de couleurs (%d)"
+msgstr "Afficher Correspondances (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "Afficher Trace"
+msgstr "Afficher Correspondances"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
-msgstr "Contraintes"
+msgstr "Contrainte"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "Connexions"
+msgstr "Conditions"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -49914,24 +49895,26 @@ msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "Supprimé attribut de fabrication 'Ne pas placer'  pour %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:793
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Ajout attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajout %s attribut de fabrication 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr ""
+"Supression %s attribut de fabrication 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Ajouté attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajout %s attribut de fabrication 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr ""
+"Suppression %s attribut de fabrication 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
 #, c-format
@@ -50037,82 +50020,81 @@ msgstr "Métadonnées de l'unité %s mises à jour."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"ID d'empreinte non valide dans le\n"
-"fichier : '%s'\n"
-"ligne : %d"
+msgstr "ID d'empreinte invalide '%s' pour la variante '%s' sur %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "Ajouté attribut de fabrication 'Ne pas placer' pour %s."
+msgstr "Ajout %s:%s attribut de variante 'Ne pas placer'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "Supprimé attribut de fabrication 'Ne pas placer' pour %s."
+msgstr "Suppression %s:%s attribut de variante 'Ne pas placer'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "Ajouté attribut de fabrication 'Ne pas placer' pour %s ."
+msgstr "Ajout %s:%s attribut de variante 'Ne pas placer'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "Supprimé attribut de fabrication 'Ne pas placer'  pour %s."
+msgstr "Supprimé %s:%s attribut de variante 'Ne pas placer'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr "Ajout attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajout %s:%s attribut de variante 'exclure de la nomenclature'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr "Suppression %s:%s attribut de variante 'exclure de la nomenclature'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr "Ajouté attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajouté %s:%s attribut de variante 'exclure de la nomenclature'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr "Supprimé %s:%s attribut de variante 'exclure de la nomenclature'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "Ajout attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajout %s:%s attribut de variante 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr ""
+"Suppression %s:%s attribut de variante 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "Ajouté attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajouté  %s:%s attribut de variante 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+msgstr ""
+"Supprimé %s:%s attribut de variante 'exclure des fichiers de position'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s:%s field '%s' to '%s'."
-msgstr "Remplacement %s valeur champ '%s' par '%s'."
+msgstr "Changement %s:%s champ '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "Remplacement %s valeur champ '%s' par '%s'."
+msgstr "Changé %s:%s champ '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 #, c-format
@@ -50227,24 +50209,23 @@ msgid "Removed unused net %s."
 msgstr "Suppression net inutilisé '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "Mise à jour nets..."
+msgstr "Mise à jour variantes de conception..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "Ajouté %s (empreinte '%s')."
+msgstr "Ajout variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Filtres d'empreinte %s mis à jour en '%s'."
+msgstr "Description mise à jour pour la variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "Supprimer Variante..."
+msgstr "Suppression variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -51054,9 +51035,9 @@ msgid "Loading board data..."
 msgstr "Chargement données du PCB..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1200
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "La couche '%s' n'a pas pu être mappée et sera ignorée."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1264
 msgid "Loading netclasses..."
@@ -53948,6 +53929,7 @@ msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr "Le traçage HPGL n'est plus supporté depuis KiCad 10.0"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:104
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:105
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
@@ -53957,10 +53939,13 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:107
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:120
 msgid "Scripting init"
 msgstr "Init des scripts"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:119
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
@@ -53970,6 +53955,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:219
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:236
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:220
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:237
 #, c-format
 msgid "Unable to open plugin directory '%s'."
 msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
@@ -53978,15 +53965,21 @@ msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:228
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:237
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:243
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:221
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:229
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:238
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:244
 msgid "Plugin Directory"
 msgstr "Répertoire Plugin"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:226
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:227
 #, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Le répertoire de plugins '%s' n'existe pas.  Le créer ?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:242
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:243
 #, c-format
 msgid "Unable to create plugin directory '%s'."
 msgstr "Impossible de créer le répertoire de plugins '%s'."
@@ -54144,6 +54137,11 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"L'écart entre les paires différentielles au point de départ ne correspond "
+"pas à l'écart configuré. Cela peut se produire dans les zones rétrécies où "
+"les pistes ont une largeur et un espacement plus réduits. Ajustez les "
+"paramètres des paires différentielles ou recommencez à partir d'un "
+"emplacement où l'écart est correct."
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Place Through Via"
@@ -54554,9 +54552,8 @@ msgid "Control to select the via diameter"
 msgstr "Contrôle pour sélectionner le diamètre de via"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "Contrôle pour sélectionner le diamètre de via"
+msgstr "Contrôle pour sélectionner la variante courante"
 
 #: pcbnew/toolbars_pcb_editor.cpp:209
 msgid "Track routing tools"
@@ -56205,14 +56202,12 @@ msgstr ""
 "Simplifier les contours des polygones en supprimant les points superflus"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "Editer options..."
+msgstr "Editer Coins..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
-msgstr "Modifier les sommets du polygone à l'aide d'un tableau"
+msgstr "Modifier les sommets du polygone à l'aide d'une table"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid ""
@@ -56879,13 +56874,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Ouvrir le schéma dans l'éditeur de schémas"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "Règles DRC"
+msgstr "Editeur de Règles DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
 msgid "Open drc rule editor window"
-msgstr ""
+msgstr "Ouvrir la fenêtre de l'éditeur de règles drc"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -57816,9 +57810,8 @@ msgid "Invalid clipboard contents"
 msgstr "Contenu du presse-papier invalide"
 
 #: pcbnew/tools/pcb_control.cpp:1431
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "Le bloc de conception '%s' a déjà des données graphiques."
+msgstr "Le Bloc de Conception n'a pas de layout à placer."
 
 #: pcbnew/tools/pcb_control.cpp:1496 pcbnew/tools/pcb_control.cpp:1683
 #, c-format
@@ -59529,18 +59522,54 @@ msgstr "Symbole Schématique KiCad"
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
 
+#~ msgid "Tune Skew"
+#~ msgstr "Ajustage asymetrie"
+
+#~ msgid ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+
 #~ msgid "Add new variant name:"
 #~ msgstr "Ajouter nouveau nom de variante :"
 
 #~ msgid ""
-#~ "List of variant names to output.\n"
-#~ "When no --variants arguement is provided the default variant is output.\n"
-#~ "To output all variants use '--variants=all'"
+#~ "The variant name to output.\n"
+#~ "When no --variant argument is provided the default variant is output."
 #~ msgstr ""
-#~ "Liste des noms de variantes à produire.\n"
-#~ "Si l'argument --variants n'est pas fourni, c'est la variante par défaut "
-#~ "qui est affichée.\n"
-#~ "Pour produire toutes les variantes, utilisez '--variants=all'"
+#~ "Nom de la variante à afficher.\n"
+#~ "Si aucun argument --variant n'est fourni, la variante par défaut est "
+#~ "affichée."
+
+#, c-format
+#~ msgid "Multiple footprints found for %s."
+#~ msgstr "Multiples empreintes trouvées pour %s."
 
 #~ msgid "Open the generated output"
 #~ msgstr "Ouvrir la sortie générée"
@@ -59558,44 +59587,6 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Failed to remove VCS"
 #~ msgstr "Échec de la suppression de VCS"
-
-#~ msgid ""
-#~ "### Notes\n"
-#~ "\n"
-#~ "Version clause must be the first clause.  It indicates the syntax version "
-#~ "of the file so that \n"
-#~ "future rules parsers can perform automatic updates.  It should be\n"
-#~ "set to \"1\".\n"
-#~ "\n"
-#~ "Rules should be ordered by specificity.  Later rules take\n"
-#~ "precedence over earlier rules; once a matching rule is found\n"
-#~ "no further rules will be checked.\n"
-#~ "\n"
-#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
-#~ "<br><br><br>\n"
-#~ "\n"
-#~ msgstr ""
-#~ "### Notes\n"
-#~ "\n"
-#~ "Version clause must be the first clause.  It indicates the syntax version "
-#~ "of the file so that \n"
-#~ "future rules parsers can perform automatic updates.  It should be\n"
-#~ "set to \"1\".\n"
-#~ "\n"
-#~ "Rules should be ordered by specificity.  Later rules take\n"
-#~ "precedence over earlier rules; once a matching rule is found\n"
-#~ "no further rules will be checked.\n"
-#~ "\n"
-#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
-#~ "<br><br><br>\n"
-#~ "\n"
-
-#~ msgid "Tune Skew"
-#~ msgstr "Ajustage asymetrie"
-
-#, c-format
-#~ msgid "Multiple footprints found for %s."
-#~ msgstr "Multiples empreintes trouvées pour %s."
 
 #~ msgid "Edit Vertices..."
 #~ msgstr "Editer Sommets..."
