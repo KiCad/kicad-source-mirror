@@ -463,19 +463,19 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
     Bind( wxEVT_IDLE,
-            [this]( wxIdleEvent& aEvent )
-            {
-                BOX2D viewport = GetCanvas()->GetView()->GetViewport();
+          [this]( wxIdleEvent& aEvent )
+          {
+              BOX2D viewport = GetCanvas()->GetView()->GetViewport();
 
-                if( viewport != m_lastNetnamesViewport )
-                {
-                    redrawNetnames();
-                    m_lastNetnamesViewport = viewport;
-                }
+              if( viewport != m_lastNetnamesViewport )
+              {
+                  redrawNetnames();
+                  m_lastNetnamesViewport = viewport;
+              }
 
-                // Do not forget to pass the Idle event to other clients:
-                aEvent.Skip();
-            } );
+              // Do not forget to pass the Idle event to other clients:
+              aEvent.Skip();
+          } );
 
     resolveCanvasType();
 
@@ -592,27 +592,31 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
 }
 
+
 void PCB_EDIT_FRAME::StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItems )
 {
     if( !GetPcbNewSettings()->m_CrossProbing.flash_selection )
     {
-    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (setting disabled) items=%zu", aItems.size() );
+        wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (setting disabled) items=%zu",
+                    aItems.size() );
         return;
     }
 
     if( aItems.empty() )
     {
-    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (no items)" );
+        wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): aborted (no items)" );
         return;
     }
 
     if( m_crossProbeFlashing )
     {
-    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): restarting existing flash (phase=%d)" , m_crossProbeFlashPhase );
+        wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): restarting existing flash (phase=%d)",
+                    m_crossProbeFlashPhase );
         m_crossProbeFlashTimer.Stop();
     }
 
     wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): starting with %zu items", aItems.size() );
+
     // Store uuids
     m_crossProbeFlashItems.clear();
     for( BOARD_ITEM* it : aItems )
@@ -620,24 +624,29 @@ void PCB_EDIT_FRAME::StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItem
 
     m_crossProbeFlashPhase = 0;
     m_crossProbeFlashing = true;
+
     if( !m_crossProbeFlashTimer.GetOwner() )
         m_crossProbeFlashTimer.SetOwner( this );
 
     bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS ); // 0.5s intervals -> 3s total for 6 phases
-    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): timer start=%d id=%d", (int) started, m_crossProbeFlashTimer.GetId() );
+    wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): timer start=%d id=%d",
+                (int) started, m_crossProbeFlashTimer.GetId() );
 }
+
 
 void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 {
-    wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
+    wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired: phase=%d running=%d items=%zu",
+                m_crossProbeFlashPhase, (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
 
     if( !m_crossProbeFlashing )
     {
-    wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired but not flashing (ignored)" );
+        wxLogTrace( traceCrossProbeFlash, "Timer(PCB) fired but not flashing (ignored)" );
         return;
     }
 
     PCB_SELECTION_TOOL* selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+
     if( !selTool )
         return;
 
@@ -649,7 +658,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     {
         // Hide selection
         selTool->ClearSelection( true );
-    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): cleared selection", m_crossProbeFlashPhase );
+        wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): cleared selection", m_crossProbeFlashPhase );
     }
     else
     {
@@ -659,7 +668,9 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
             if( EDA_ITEM* item = GetBoard()->ResolveItem( id, true ) )
                 selTool->AddItemToSel( item, true );
         }
-    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): restored %zu items", m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
+
+        wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): restored %zu items",
+                    m_crossProbeFlashPhase, m_crossProbeFlashItems.size() );
     }
 
     // Force a redraw even if the canvas / frame does not currently have focus (mouse elsewhere)
@@ -672,6 +683,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     m_probingSchToPcb = prevGuard;
 
     m_crossProbeFlashPhase++;
+
     if( m_crossProbeFlashPhase > 6 )
     {
         // Ensure final state (selected)
@@ -680,9 +692,12 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
             if( EDA_ITEM* item = GetBoard()->ResolveItem( id, true ) )
                 selTool->AddItemToSel( item, true );
         }
+
         m_crossProbeFlashing = false;
         m_crossProbeFlashTimer.Stop();
-    wxLogTrace( traceCrossProbeFlash, "Flashing complete (PCB). Final selection size=%zu", m_crossProbeFlashItems.size() );
+
+        wxLogTrace( traceCrossProbeFlash, "Flashing complete (PCB). Final selection size=%zu",
+                    m_crossProbeFlashItems.size() );
     }
 }
 
@@ -1354,6 +1369,7 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( GetLastUnsavedChangesResponse() == wxID_NO )
         {
             wxString projPath = Prj().GetProjectPath();
+
             if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
             {
                 Kiway().LocalHistory().CommitDuplicateOfLastSave( projPath, wxS("pcb"),
@@ -3138,6 +3154,7 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
     }
 }
 
+
 #ifdef KICAD_IPC_API
 void PCB_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
@@ -3258,6 +3275,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
     }
 }
+
 
 bool PCB_EDIT_FRAME::DoAutoSave()
 {
