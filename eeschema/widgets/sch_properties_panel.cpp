@@ -49,8 +49,7 @@ public:
     SCH_SYMBOL_FIELD_PROPERTY( const wxString& aName ) :
             PROPERTY_BASE( aName ),
             m_name( aName )
-    {
-    }
+    { }
 
     size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
     size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
@@ -132,7 +131,12 @@ std::set<wxString> SCH_PROPERTIES_PANEL::m_currentFieldNames;
 SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
-        m_propMgr( PROPERTY_MANAGER::Instance() )
+        m_propMgr( PROPERTY_MANAGER::Instance() ),
+        m_unitEditorInstance( nullptr ),
+        m_checkboxEditorInstance( nullptr ),
+        m_colorEditorInstance( nullptr ),
+        m_fpEditorInstance( nullptr ),
+        m_urlEditorInstance( nullptr )
 {
     m_propMgr.Rebuild();
     bool found = false;
@@ -206,7 +210,6 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         m_urlEditorInstance = static_cast<PG_URL_EDITOR*>( wxPropertyGrid::RegisterEditorClass( urlEditor ) );
     }
 }
-
 
 
 SCH_PROPERTIES_PANEL::~SCH_PROPERTIES_PANEL()
@@ -332,13 +335,10 @@ PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
 
     SCH_ITEM* firstItem = static_cast<SCH_ITEM*>( item );
 
-    wxCHECK_MSG( firstItem, nullptr,
-                 wxT( "getPropertyFromEvent for a property with nothing selected!") );
+    wxCHECK_MSG( firstItem, nullptr, wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
-    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
-                                                     aEvent.GetPropertyName() );
-    wxCHECK_MSG( property, nullptr,
-                 wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
+    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
+    wxCHECK_MSG( property, nullptr, wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
 
     return property;
 }
@@ -428,8 +428,7 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                 if( !variantName.IsEmpty() )
                 {
                     changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
-                    field->SetText( newValue.GetString(), &symbol->Schematic()->CurrentSheet(),
-                                    variantName );
+                    field->SetText( newValue.GetString(), &symbol->Schematic()->CurrentSheet(), variantName );
                     symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
                     continue;
                 }
