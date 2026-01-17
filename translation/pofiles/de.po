@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-17 09:18+0000\n"
+"PO-Revision-Date: 2026-01-18 04:50+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -13856,9 +13856,8 @@ msgid "Import"
 msgstr "Importieren"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Bibliothek kann nicht geladen werden\n"
+msgstr "Kein Plugin gefunden, um diese Bibliothek zu lesen."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
 #, fuzzy, c-format
@@ -16881,9 +16880,8 @@ msgid "Cannot delete the default variant."
 msgstr "Das letzte Top-Level Schaltplanblatt kann nicht gelöscht werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Kann das Schaltplanbild nicht erzeugen"
+msgstr "Die Standardvariante kann nicht umbenannt werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
 #, fuzzy
@@ -16891,9 +16889,8 @@ msgid "Enter new variant name:"
 msgstr "Neuen Variantennamen eingeben"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Variante entfernen ..."
+msgstr "Variante umbenennen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
@@ -21144,11 +21141,13 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Symbolbibliothek-Ordner \"%s\" kann nicht gelöscht werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Bibliothek \"%s\" existiert bereits."
+msgstr ""
+"Bibliothek \"%s\" mit Fehlern geladen:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
@@ -24894,9 +24893,9 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Es konnte keine Lesemethode für \"%s\" gefunden werden."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Kann Symbolbibliothek \"%s\" nicht importieren."
+msgstr "Kann Symbol \"%s\" nicht importieren: %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
@@ -44266,15 +44265,13 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s auf %s von %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"Es wurden Elemente auf entfernten Lagen gefunden. Diese Aktion wird alle "
+"Auf entfernten Lagen wurden Elemente gefunden. Diese Aktion wird alle "
 "Elemente von entfernten Lagen löschen und kann nicht rückgängig gemacht "
-"werden.\n"
-"Möchten Sie fortfahren?"
+"werden."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
 #, fuzzy
@@ -49978,12 +49975,9 @@ msgstr "Metadaten der Einheit %s aktualisiert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"Unzulässige Footprint-ID in\n"
-"Datei: \"%s\"\n"
-"Zeile: %d"
+msgstr "Unzulässige Footprint-ID \"%s\" für Variante \"%s\" auf %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, fuzzy, c-format
@@ -59252,9 +59246,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Entferne isolierte Kupferinseln ..."
 
 #: pcbnew/zone_filler.cpp:985
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Zonen nach Änderungen an Platine neu füllen"
+msgstr "Fülle Zonen nach Entfernung von Inseln erneut..."
 
 #: pcbnew/zone_filler.cpp:1394
 msgid "Prototype zone fill enabled. Disable setting and refill?"
