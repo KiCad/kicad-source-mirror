@@ -42,6 +42,7 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
 {
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
+    m_changesDataView->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( aIsFootprintEditor )
     {

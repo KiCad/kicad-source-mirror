@@ -78,6 +78,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
 
     m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( this, m_pcbFrame, m_zoneSettingsBag );
     m_viewZonesOverview->AssociateModel( m_modelZonesOverview.get() );
+    m_viewZonesOverview->SetLayoutDirection( wxLayout_LeftToRight );
 
 #if wxUSE_DRAG_AND_DROP
     m_viewZonesOverview->EnableDragSource( wxDF_UNICODETEXT );

@@ -96,6 +96,10 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_markerDataView->AssociateModel( m_markerTreeModel );
     m_markerTreeModel->Update( m_markerProvider, getSeverities() );
 
+    // Prevent RTL locales from mirroring the text in the data views
+    m_markerDataView->SetLayoutDirection( wxLayout_LeftToRight );
+    m_ignoredList->SetLayoutDirection( wxLayout_LeftToRight );
+
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
     if( m_currentSchematic == g_lastERCSchematic )

@@ -267,6 +267,7 @@ wxDataViewCtrl* DIALOG_GENERATORS::addPage( const wxString& aName, const wxStrin
                                                    wxDefaultSize, wxDV_MULTIPLE | wxDV_ROW_LINES );
 
     dataView->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &DIALOG_GENERATORS::OnItemSelected, this );
+    dataView->SetLayoutDirection( wxLayout_LeftToRight );
 
     bSizerPage1->Add( dataView, 1, wxEXPAND | wxALL, 5 );
 

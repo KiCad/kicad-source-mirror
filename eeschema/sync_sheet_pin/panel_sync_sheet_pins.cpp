@@ -73,6 +73,7 @@ PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aShe
         auto model = wxObjectDataPtr<SHEET_SYNCHRONIZATION_MODEL>(
                 new SHEET_SYNCHRONIZATION_MODEL( m_agent, m_sheet, m_path ) );
         view->AssociateModel( model.get() );
+        view->SetLayoutDirection( wxLayout_LeftToRight );
         m_models.try_emplace( idx, std::move( model ) );
 
         for( int col : { SHEET_SYNCHRONIZATION_MODEL::NAME, SHEET_SYNCHRONIZATION_MODEL::SHAPE } )
