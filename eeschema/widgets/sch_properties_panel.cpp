@@ -42,7 +42,10 @@
 SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
-        m_propMgr( PROPERTY_MANAGER::Instance() )
+        m_propMgr( PROPERTY_MANAGER::Instance() ),
+        m_unitEditorInstance( nullptr ),
+        m_checkboxEditorInstance( nullptr ),
+        m_colorEditorInstance( nullptr )
 {
     m_propMgr.Rebuild();
     bool found = false;
@@ -94,7 +97,6 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
 }
 
 
-
 SCH_PROPERTIES_PANEL::~SCH_PROPERTIES_PANEL()
 {
     m_unitEditorInstance->UpdateFrame( nullptr );
@@ -140,13 +142,10 @@ PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
     const SELECTION&    selection = selectionTool->GetSelection();
     SCH_ITEM*           firstItem = static_cast<SCH_ITEM*>( selection.Front() );
 
-    wxCHECK_MSG( firstItem, nullptr,
-                 wxT( "getPropertyFromEvent for a property with nothing selected!") );
+    wxCHECK_MSG( firstItem, nullptr, wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
-    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ),
-                                                     aEvent.GetPropertyName() );
-    wxCHECK_MSG( property, nullptr,
-                 wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
+    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
+    wxCHECK_MSG( property, nullptr, wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
 
     return property;
 }
