@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-04 00:02+0000\n"
+"PO-Revision-Date: 2026-01-17 22:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4947,7 +4947,7 @@ msgstr "埋め込むファイルを選択"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "親シンボルから継承された埋め込みファイルは削除できません。"
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -9755,9 +9755,8 @@ msgstr ""
 "KiCad プロジェクトに寄付するには、%s を開いてください"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "フットプリント選択"
+msgstr "フットプリント ブラウザー"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -21673,9 +21672,9 @@ msgid "Format"
 msgstr "フォーマット"
 
 #: eeschema/sim/spice_library_parser.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "シンボル ライブラリ '%s' の列挙中にエラーしました: %s"
+msgstr "Spiceライブラリ '%s' の解析中にエラーが発生しました: %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -22664,7 +22663,7 @@ msgstr "%s のピン '%s' が見つかりません。"
 #: eeschema/tools/backannotate.cpp:508
 #, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "フィールド '%s' の値を '%s' から '%s' に変更します。"
+msgstr "%s フィールドの値を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:523
 #, c-format
@@ -26199,7 +26198,7 @@ msgstr "不正なレポート フォーマットです\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "エクスポート ユーティリティ (ガーバー、ドリル、部品配置ファイルなど)"
+msgstr "エクスポート ユーティリティ (ガーバー、ドリル、 部品位置情報 ファイル など)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
 msgid ""
@@ -26623,7 +26622,7 @@ msgstr "複数のモード フラグは使用できません\n"
 #: kicad/cli/command_pcb_export_pos.cpp:45
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
 msgid "Generate Position File"
-msgstr "部品配置ファイルを生成"
+msgstr "部品位置情報ファイル(.pos)を生成"
 
 #: kicad/cli/command_pcb_export_pos.cpp:49
 msgid ""
@@ -28314,7 +28313,7 @@ msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/project_tree_pane.cpp:1659
 msgid "The selected directory is already a Git project."
-msgstr "選択したディレクトリはすでにgitプロジェクトです。"
+msgstr "選択したディレクトリはすでにGit プロジェクトです。"
 
 #: kicad/project_tree_pane.cpp:1667
 msgid "Set default remote"
@@ -28322,7 +28321,7 @@ msgstr "デフォルトのリモートを設定"
 
 #: kicad/project_tree_pane.cpp:1678
 msgid "Failed to initialize Git project."
-msgstr "git プロジェクトの初期化に失敗しました。"
+msgstr "Git プロジェクトの初期化に失敗しました。"
 
 #: kicad/project_tree_pane.cpp:1736
 msgid "Failed to set default remote."
@@ -28371,7 +28370,7 @@ msgstr "gitディレクトリの削除に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2325
 msgid "The selected directory is not a Git project."
-msgstr "選択したディレクトリはgitプロジェクトではありません。"
+msgstr "選択したディレクトリはGit プロジェクトではありません。"
 
 #: kicad/project_tree_pane.cpp:2471
 msgid "Discarding commit due to empty commit message."
@@ -34955,7 +34954,7 @@ msgstr "回路図にない"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:735
 msgid "Exclude from position files"
-msgstr "部品配置ファイルから除外"
+msgstr "部品位置情報ファイル から除外"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
@@ -35002,9 +35001,10 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"これはこのフットプリントの全てのパッドのローカル ネット クリアランスです。\n"
-"0 した場合、ネットクラスの値が使用されます。\n"
-"この値は、パッドのローカル値で置き換えられます。"
+"これはこのフットプリントの全てのパッドに対するローカル ネット クリアランスで"
+"す。\n"
+"0の場合、Netclassの値が使用されます。\n"
+"この値は、パッドごとのローカル値によって上書きすることができます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
@@ -35020,9 +35020,10 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"これはフットプリントのパッドとハンダマスク間のローカル クリアランスです。\n"
-"この値は、パッドのローカル値で置き換えられます。\n"
-"0 した場合、グローバル値が使用されます。"
+"これはこのフットプリントのパッドとハンダマスク間のローカルクリアランスです"
+"。\n"
+"この値は、パッドのローカル値によって上書きされることがあります。\n"
+"0の場合は、グローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -35071,14 +35072,14 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"これはローカル クリアランス比で、フットプリントのパッドの幅と高さに対する割合"
-"として使われます。\n"
-"値 10 は水平方向のクリアランスの値がパッドの幅の10%、垂直方向のクリアランスの"
-"値がパッドの高さの10%であることを意味します。\n"
-"この値はパッドのローカル設定値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値と絶対クリアランス値を合算したものになりま"
-"す。\n"
-"負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。"
+"これはこのフットプリントのパッド幅と高さに対するパーセンテージとして適用され"
+"るローカル クリアランス比です。\n"
+"値が10の場合、水平クリアランス値はパッド幅の10％、垂直クリアランス値はパッド"
+"高さの10％となります。\n"
+"この値は、パッドのローカル値によって上書きすることができます。\n"
+"最終的なクリアランス値は、この値と絶対クリアランス値を合算したものになります"
+"。\n"
+"負の値は、パッドサイズより小さいステンシル開口サイズを意味します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:313
@@ -39078,9 +39079,9 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
-"### 注\n"
+"### 注釈\n"
 "\n"
-"Use Ctrl+/ to comment or uncomment line(s).\n"
+"Ctrl+/ を使って行をコメント化またはコメント解除できます。\n"
 "<br><br><br>\n"
 "\n"
 
@@ -39605,9 +39606,10 @@ msgid ""
 "for solder mask clearance)."
 msgstr ""
 "パッドとハンダマスク間のグローバル クリアランス。\n"
-"この値は、フットプリントまたはパッドのローカル値で置き換えられます。\n"
-"正のクリアランスは、ハンダマスクの開口部がパッドよりも大きいことを意味します "
-"(ソルダー マスクのクリアランスでは一般的です)。"
+"この値は、フットプリントやパッドごとのローカル値で上書きすることができます"
+"。\n"
+"正のクリアランスは、パッドよりも大きなハンダマスクの開口部を意味します（"
+"ソルダー マスクのクリアランスでは一般的です）。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
@@ -39694,10 +39696,11 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"パッドとハンダペースト間のグローバル クリアランス比 (パッド サイズに対する"
-"パーセンテージ)。\n"
-"値が 10 の場合、クリアランス値はパッド サイズの 10 ％です。\n"
-"この値は、フットプリントまたはパッドのローカル値で置き換えられます。\n"
+"パッドとハンダペースト間のグローバルクリ アランス比率を、パッドサイズに対する"
+"パーセンテージで示します。\n"
+"値が10の場合、クリアランスはパッド サイズの10％を意味します。\n"
+"この値は、フットプリントやパッドごとのローカル値によって上書きすることができ"
+"ます。\n"
 "最終的なクリアランス値は、この値と絶対クリアランス値の合計です。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:183
@@ -43041,7 +43044,7 @@ msgstr "回路図にない"
 
 #: pcbnew/footprint.cpp:4263
 msgid "Exclude From Position Files"
-msgstr "部品配置ファイルから除外"
+msgstr "部品位置情報ファイル から除外"
 
 #: pcbnew/footprint.cpp:4273 pcbnew/pad.cpp:2936
 msgid "Overrides"
@@ -49556,14 +49559,12 @@ msgid "Create bill of materials from board"
 msgstr "基板から 部品表(Bill of materials)を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "3D モデルを選択"
+msgstr "3Dモデルを集めて埋め込む"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
-#, fuzzy
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "メイン基板上からフットプリントのソースを見つけました"
+msgstr "フットプリントの3Dモデルを集めて、基板に埋め込みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -50677,14 +50678,13 @@ msgid "Selected 2D Length"
 msgstr "選択された 2D 長"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "埋め込みモデル"
+msgstr "埋め込み3Dモデル"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 個の 3D モデルが正常に埋め込まれました。"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
