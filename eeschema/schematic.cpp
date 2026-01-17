@@ -324,6 +324,14 @@ void SCHEMATIC::rebuildHierarchyState( bool aResetConnectionGraph )
         std::set<wxString> variantNames = screens.GetVariantNames();
         m_variantNames.insert( variantNames.begin(), variantNames.end() );
     }
+
+    // Also include variants from the project file that may not have any diffs yet.
+    // This ensures newly created variants with no symbol changes are preserved.
+    if( m_project )
+    {
+        for( const auto& [name, description] : Settings().m_VariantDescriptions )
+            m_variantNames.insert( name );
+    }
 }
 
 
@@ -2273,6 +2281,11 @@ void SCHEMATIC::LoadVariants()
             if( descriptions.find( name ) == descriptions.end() )
                 descriptions[name] = wxEmptyString;
         }
+
+        // Also include variants from the project file that may not have any diffs yet.
+        // This ensures newly created variants with no symbol changes are preserved.
+        for( const auto& [name, description] : descriptions )
+            m_variantNames.insert( name );
     }
 }
 
