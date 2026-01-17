@@ -328,7 +328,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 {
     wxCHECK( m_netNavigator && m_schematic, /* void */ );
 
-    if( !m_netNavigator->IsShown() || !m_schematic->HasHierarchy() )
+    if( !m_netNavigator->IsShownOnScreen() || !m_schematic->HasHierarchy() )
         return;
 
     if( m_netNavigatorFilter )
