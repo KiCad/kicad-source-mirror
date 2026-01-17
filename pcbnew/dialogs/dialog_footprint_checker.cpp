@@ -50,7 +50,7 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
 
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markersDataView );
     m_markersDataView->AssociateModel( m_markersTreeModel );
-    m_markersTreeModel->Update( m_markersProvider, m_severities );
+    m_markersDataView->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_frame->GetBoard()->GetFirstFootprint() == g_lastFootprint )
     {

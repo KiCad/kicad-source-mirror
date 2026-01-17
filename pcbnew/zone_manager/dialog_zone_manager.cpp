@@ -93,6 +93,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_modelZoneOverviewTable = new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetManagedZones(),
                                                                aParent->GetBoard(), aParent, this );
     m_viewZonesOverview->AssociateModel( m_modelZoneOverviewTable.get() );
+    m_viewZonesOverview->SetLayoutDirection( wxLayout_LeftToRight );
 
 #if wxUSE_DRAG_AND_DROP
     m_viewZonesOverview->EnableDragSource( wxDF_UNICODETEXT );

@@ -57,6 +57,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
+    m_changesDataView->SetLayoutDirection( wxLayout_LeftToRight );
 
     setupOKButtonLabel();
 

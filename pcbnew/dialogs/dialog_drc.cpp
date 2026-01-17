@@ -114,6 +114,12 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintsDataView->AssociateModel( m_fpWarningsTreeModel );
     m_fpWarningsTreeModel->Update( m_fpWarningsProvider, m_severities );
 
+    // Prevent RTL locales from mirroring the text in the data views
+    m_markerDataView->SetLayoutDirection( wxLayout_LeftToRight );
+    m_unconnectedDataView->SetLayoutDirection( wxLayout_LeftToRight );
+    m_footprintsDataView->SetLayoutDirection( wxLayout_LeftToRight );
+    m_ignoredList->SetLayoutDirection( wxLayout_LeftToRight );
+
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
     if( m_currentBoard == g_lastDRCBoard )
