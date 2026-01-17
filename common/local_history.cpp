@@ -421,6 +421,10 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 
             wxLogTrace( traceAutoSave, wxS( "[history] Init: Creating initial snapshot with %zu files" ), vec.size() );
             CommitSnapshot( vec, wxS( "Initial snapshot" ) );
+
+            // Tag the initial snapshot as saved so HeadNewerThanLastSave() doesn't
+            // incorrectly offer to restore when the project is first opened
+            TagSave( aProjectPath, wxS( "project" ) );
         }
         else
         {
