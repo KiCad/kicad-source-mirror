@@ -202,7 +202,6 @@ struct APP_TEST : public wxApp
                         From_UTF8( typeid(e).name() ),
                         From_UTF8( e.what() ) );
         }
-        }
         catch(...)
         {
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
