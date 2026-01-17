@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-01 13:36+0000\n"
+"PO-Revision-Date: 2026-01-17 09:19+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4661,6 +4661,10 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"ファイル名 '%s' は既に埋め込まれていますが、ディスク上のファイルの内容は異な"
+"ります。\n"
+"\n"
+"埋め込まれた内容をファイルを新しいバージョンに置き換えますか?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
 #, fuzzy
@@ -5987,7 +5991,6 @@ msgid "Insert Separator"
 msgstr "セパレーターを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
 msgid "Insert Spacer"
 msgstr "スペーサーを挿入"
 
@@ -6006,7 +6009,7 @@ msgstr "行セパレーター"
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "スペーサー: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:357 pcbnew/pcb_group.cpp:411
@@ -6019,9 +6022,8 @@ msgid "Customize toolbars"
 msgstr "ツールバーをカスタマイズ"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "ツールバー"
+msgstr "ツールバー:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6297,17 +6299,13 @@ msgid "Run: %s"
 msgstr "実行: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "ファイル '%s' が見つかりません。"
+msgstr "ファイル '%s' が見つかりません。\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"これらを全て上書きしてもよろしいですか?それとも新しいシンボル名に変更します"
-"か？"
+msgstr "最近開いたファイルの履歴から削除しますか?"
 
 #: common/eda_base_frame.cpp:1283
 msgid "Remove"
@@ -7634,7 +7632,7 @@ msgstr "リモート %s にプッシュできません"
 #: common/git/libgit_backend.cpp:555
 #, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "git リポジトリの初期化に失敗しました: %s"
+msgstr "Git リポジトリの初期化に失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:575
 msgid "No repository available to set up remote"
@@ -7848,12 +7846,12 @@ msgstr "履歴ディレクトリがありません: %s"
 #: common/history_lock.cpp:182
 #, c-format
 msgid "Failed to open git repository: %s"
-msgstr "gitリポジトリを開く事に失敗しました: %s"
+msgstr "Git リポジトリを開く事に失敗しました: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "gitリポジトリを開く事に失敗しました: %s"
+msgstr "Git リポジトリの ワークディレクトリ を %s に設定できませんでした: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -7863,7 +7861,7 @@ msgstr "gitのindex.lockを得られていません:リポジトリは開いて�
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr ""
-"gitのindex.lockを得られていません (別のプロセスがindex.lockを保持しています"
+"Gitのindex.lockを得られていません (別のプロセスがindex.lockを保持しています"
 "か ?): %s"
 
 #: common/hotkey_store.cpp:44
@@ -9040,9 +9038,9 @@ msgid "Library not found in library table"
 msgstr "ライブラリ テーブルにライブラリが見つかりません"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "ライブラリ: "
+msgstr "ライブラリ '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -9114,7 +9112,7 @@ msgstr ""
 
 #: common/local_history.cpp:1728
 msgid "Cannot restore - the following files are open by another user:"
-msgstr ""
+msgstr "復元できません - 次のファイルは別のユーザーによって開かれています:"
 
 #: common/local_history.cpp:1730
 #, fuzzy
@@ -10840,9 +10838,8 @@ msgstr ""
 "KiCad プロジェクトに寄付するには、%s を開いてください"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "フットプリント選択"
+msgstr "フットプリント ブラウザー"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -11121,7 +11118,7 @@ msgstr "Info メッセージ:"
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "ライブラリ読み込み時のメッセージ( %zu 個)表示"
 
 #: common/widgets/kistatusbar.cpp:438
 #, fuzzy
@@ -11835,9 +11832,9 @@ msgid "Footprint '%s' not found."
 msgstr "フットプリント '%s' が見つかりません。"
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "フットプリントの読み込み中にエラー"
+msgstr "フットプリントの読み込み中にエラー: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2080
 #, c-format
@@ -13697,9 +13694,9 @@ msgstr "画像のプロパティ"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "シンボルをインポート"
+msgstr "シンボルを %s からインポート"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13710,9 +13707,8 @@ msgid "Import"
 msgstr "インポート"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "ライブラリを読み込めません\n"
+msgstr "このライブラリを読み取るプラグインが見つかりません。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
 #, fuzzy, c-format
@@ -13727,12 +13723,12 @@ msgstr "シンボル ライブラリ ファイル '%s' が空です。"
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d 個のシンボルが選択され、 %d 個のペアが自動的に含まれました"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "保存するシンボルが選択されていません"
+msgstr "%d 個のシンボルが選択されました"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
 #, fuzzy
@@ -13744,6 +13740,8 @@ msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"次のシンボルはすでに宛先ライブラリに存在します。各競合をどうするのか選択して"
+"ください:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:518
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -14769,7 +14767,7 @@ msgstr "シミュレーションから除外"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:165
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:831
 msgid "Exclude from position files"
-msgstr "部品配置ファイルから除外"
+msgstr "部品位置情報ファイル から除外"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
 msgid "Symbol Units"
@@ -16691,26 +16689,20 @@ msgstr ""
 "他の名前を指定してください。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2661
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr ""
-"\n"
-"フットプリントを更新できません"
+msgstr "デフォルトのバリアントを削除できません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "回路図イメージを作成できません"
+msgstr "デフォルトのバリアントの名前を変更できません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "新しいバリアント名を入力"
+msgstr "新しいバリアント名を入力:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "バリアントを削除..."
+msgstr "バリアント名の変更"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
@@ -16733,11 +16725,8 @@ msgid "Variant '%s' already exists."
 msgstr "'%s' はすでに存在します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
-#, fuzzy
 msgid "Cannot copy the default variant."
-msgstr ""
-"\n"
-"フットプリントを更新できません"
+msgstr "デフォルトのバリアントをコピーできません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
 #, fuzzy
@@ -16845,9 +16834,8 @@ msgid "Alternate Assignment"
 msgstr "代替割り当て"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "バリアント"
+msgstr " バリアント"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -16923,6 +16911,8 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"これは、チップマウンターを使うときに部品位置情報ファイルに含めない\n"
+"シンボルを追加するときに便利です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2368
@@ -19418,9 +19408,8 @@ msgid "Exclude from board settings differ."
 msgstr "「基板から除外」の設定が異なります。"
 
 #: eeschema/lib_symbol.cpp:2141
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "「シミュレーションから除外」の設定が異なります。"
+msgstr "部品位置情報ファイル から除外する設定が異なります。"
 
 #: eeschema/lib_symbol.cpp:2376 eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Datasheet"
@@ -19471,9 +19460,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "BOM(部品表)から除外"
 
 #: eeschema/lib_symbol.cpp:2424
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "部品配置ファイルから除外"
+msgstr "部品位置情報ファイル から除外"
 
 #: eeschema/lib_symbol.cpp:2429
 msgid "Units and Body Styles"
@@ -20905,15 +20893,17 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "シンボル ライブラリ フォルダ '%s' が削除できませんでした。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "ライブラリ '%s' はすでに存在します。"
+msgstr ""
+"ライブラリ '%s' はエラーとともに読み込まれました:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
-msgstr ""
+msgstr "これらのエラーが手動で修正されるまで、ライブラリを保存することはできません。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:146
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:360
@@ -20928,6 +20918,9 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"これらのエラーが手動で修正されるまで、ライブラリを保存することはできません。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -20937,6 +20930,10 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"読み込み中に解析エラーが発生したためライブラリ '%s' を保存できません。\n"
+"\n"
+"このまま保存すると、読み込めなかったシンボルが永久に失われます。\n"
+"保存する前に、ライブラ リファイルを手動で正しく修正してください。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:226
 #, c-format
@@ -20954,6 +20951,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"%d 行目のシンボル解析エラー : %s\n"
+"このシンボルをスキップして続行します。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:310
 #, c-format
@@ -21649,7 +21648,7 @@ msgstr "ライブラリへのリンク"
 #: pcbnew/widgets/pcb_properties_panel.cpp:593
 #: pcbnew/widgets/pcb_properties_panel.cpp:697
 msgid "Exclude From Position Files"
-msgstr "部品配置ファイルから除外"
+msgstr "部品位置情報ファイル から除外"
 
 #: eeschema/sch_table.cpp:297
 #, c-format
@@ -23485,6 +23484,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"シミュレーションがクラッシュしました(%s)。これは通常、ngspiceのバグや無効な"
+"ネットリストが原因です。シミュレーターはリセットされます。"
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -23942,9 +23943,9 @@ msgid "Format"
 msgstr "フォーマット"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "シンボル ライブラリ %s の読み込み中にエラー"
+msgstr "Spiceライブラリ '%s' の解析中にエラーが発生しました: %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24628,14 +24629,14 @@ msgid "Unable to find a reader for '%s'."
 msgstr "'%s' のreaderが見つかりませんでした。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "シンボル ライブラリ '%s' をインポートできませんでした。"
+msgstr "シンボル '%s' をインポートできませんでした: %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "%d 個のシンボルを取り込み、%d 個はスキップされました。"
 
 #: eeschema/symbol_library_manager.cpp:179
 #, fuzzy, c-format
@@ -24772,9 +24773,8 @@ msgid "New Variant"
 msgstr "新しいバリアント"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "バリアント名"
+msgstr "バリアント名:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
 #, fuzzy
@@ -24908,7 +24908,7 @@ msgstr "%s のピン '%s' が見つかりません。"
 #: eeschema/tools/backannotate.cpp:945
 #, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "フィールド '%s' の値を '%s' から '%s' に変更します。"
+msgstr "%s フィールドの値を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:960
 #, c-format
@@ -29105,6 +29105,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"複数のバリアントを指定する場合、出力パスには ${VARIANT} を含める必要がありま"
+"す。これにより各バリアントごとに別々の出力ファイルが生成されます。\n"
 
 #: kicad/cli/command.cpp:145
 msgid "Input directory"
@@ -29148,6 +29150,10 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"出力するバリアント名は複数回指定して複数のバリアントを指定できます。\n"
+"複数のバリアントを指定する場合、出力パスに ${VARIANT} を使用して各バリアント"
+"の個別のファイルを生成してください。\n"
+"--variant 引数が指定されていない場合はデフォルトのバリアントが出力されます。"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -29286,7 +29292,7 @@ msgstr "不正なレポート フォーマットです\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "エクスポート ユーティリティ (ガーバー、ドリル、部品配置ファイルなど)"
+msgstr "エクスポート ユーティリティ (ガーバー、ドリル、 部品位置情報 ファイル など)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
 msgid ""
@@ -29750,7 +29756,7 @@ msgstr "複数のモード フラグは使用できません\n"
 #: kicad/cli/command_pcb_export_pos.cpp:47
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:60
 msgid "Generate Position File"
-msgstr "部品配置ファイルを生成"
+msgstr "部品位置情報ファイル(.pos)を生成"
 
 #: kicad/cli/command_pcb_export_pos.cpp:51
 msgid ""
@@ -29801,6 +29807,8 @@ msgid ""
 "Board variant for variant-aware filtering (DNP, BOM, position file "
 "exclusions)"
 msgstr ""
+"バリアント対応フィルタリング用の基板バリアント（未実装(DNP)、部品表(BOM)、部"
+"品位置情報ファイルの除外）"
 
 #: kicad/cli/command_pcb_export_pos.cpp:138
 #: kicad/cli/command_sch_export_netlist.cpp:97 kicad/cli/command_version.cpp:71
@@ -31851,7 +31859,7 @@ msgstr "Gitトラッキングを有効化"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "このプロジェクトの Git を再度有効にする"
 
 #: kicad/project_tree_pane.cpp:1077
 #, fuzzy
@@ -31860,7 +31868,7 @@ msgstr "Gitトラッキングを有効化"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "このプロジェクトの Git を無効にする"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -31889,11 +31897,11 @@ msgstr "Git の操作完了を待っています..."
 
 #: kicad/project_tree_pane.cpp:1784
 msgid "The selected directory is already a Git project."
-msgstr "選択したディレクトリはすでにgitプロジェクトです。"
+msgstr "選択したディレクトリはすでにGit プロジェクトです。"
 
 #: kicad/project_tree_pane.cpp:1791
 msgid "Failed to initialize Git project."
-msgstr "git プロジェクトの初期化に失敗しました。"
+msgstr "Git プロジェクトの初期化に失敗しました。"
 
 #: kicad/project_tree_pane.cpp:1799
 msgid "Set default remote"
@@ -31918,7 +31926,7 @@ msgstr "プロジェクトのプッシュに失敗しました"
 
 #: kicad/project_tree_pane.cpp:2229
 msgid "The selected directory is not a Git project."
-msgstr "選択したディレクトリはgitプロジェクトではありません。"
+msgstr "選択したディレクトリはGit プロジェクトではありません。"
 
 #: kicad/project_tree_pane.cpp:2316
 msgid "Discarding commit due to empty commit message."
@@ -38649,6 +38657,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"フットプリントのハンダペースト ローカル クリアランス値。\n"
+"絶対値 (例: -0.1mm)、パーセンテージ (例: -5%)、またはその両方 (例: -0.1mm - "
+"5%) を入力します。\n"
+"空白の場合は、グローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
 msgid ""
@@ -38812,9 +38824,10 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"これはこのフットプリントの全てのパッドのローカル ネット クリアランスです。\n"
-"0 した場合、ネットクラスの値が使用されます。\n"
-"この値は、パッドのローカル値で置き換えられます。"
+"これはこのフットプリントの全てのパッドに対するローカル ネット クリアランスで"
+"す。\n"
+"0の場合、Netclassの値が使用されます。\n"
+"この値は、パッドごとのローカル値によって上書きすることができます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:286
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:352
@@ -38830,9 +38843,10 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"これはフットプリントのパッドとハンダマスク間のローカル クリアランスです。\n"
-"この値は、パッドのローカル値で置き換えられます。\n"
-"0 した場合、グローバル値が使用されます。"
+"これはこのフットプリントのパッドとハンダマスク間のローカルクリアランスです"
+"。\n"
+"この値は、パッドのローカル値によって上書きされることがあります。\n"
+"0の場合は、グローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:365
@@ -38846,15 +38860,17 @@ msgstr "パッド間を接続するハンダマスク アパーチャを許容�
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:47
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Solder paste clearance relative to pad size.\n"
 "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"これはパッドとハンダマスク間のグローバル クリアランスです。\n"
-"この値は、フットプリントやパッドのローカル値で置き換えられます。"
+"パッドのサイズに対するハンダペーストのクリアランス。\n"
+"絶対値 (例: -0.1mm)、パーセンテージ (例: -5%)、またはその両方 (例: -0.1mm - "
+"5%) を入力します。\n"
+"この値は、フットプリントやパッドのローカル値によって上書きすることができます"
+"。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:383
@@ -38875,14 +38891,14 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"これはローカル クリアランス比で、フットプリントのパッドの幅と高さに対する割合"
-"として使われます。\n"
-"値 10 は水平方向のクリアランスの値がパッドの幅の10%、垂直方向のクリアランスの"
-"値がパッドの高さの10%であることを意味します。\n"
-"この値はパッドのローカル設定値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値と絶対クリアランス値を合算したものになりま"
-"す。\n"
-"負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。"
+"これはこのフットプリントのパッド幅と高さに対するパーセンテージとして適用され"
+"るローカル クリアランス比です。\n"
+"値が10の場合、水平クリアランス値はパッド幅の10％、垂直クリアランス値はパッド"
+"高さの10％となります。\n"
+"この値は、パッドのローカル値によって上書きすることができます。\n"
+"最終的なクリアランス値は、この値と絶対クリアランス値を合算したものになります"
+"。\n"
+"負の値は、パッドサイズより小さいステンシル開口サイズを意味します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:408
@@ -40643,6 +40659,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"パッドのハンダペースト ローカル クリアランス値。\n"
+"絶対値 (例: -0.1mm)、パーセンテージ (例: -5%)、またはその両方 (例: -0.1mm - "
+"5%) を入力します。\n"
+"空白の場合は、フットプリント または グローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:679
 #, c-format
@@ -43223,6 +43243,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### 句\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43232,6 +43257,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### 注釈\n"
+"\n"
+"Ctrl+/ を使って行をコメント化またはコメント解除できます。\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -43672,14 +43702,12 @@ msgid "Pad %s of %s on %s"
 msgstr "パッド %s - %s ( %s 上)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"削除されたレイヤー上にアイテムが見つかりました。この操作は削除されたレイヤー"
-"からすべてのアイテムを削除し、取り消すことができません。\n"
-"続行しますか？"
+"削除されたレイヤー上にアイテムが見つかりました。この操作をおこなうと削除され"
+"たレイヤーからすべてのアイテムを削除され、もとに戻すことができません。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
 #, fuzzy
@@ -43760,9 +43788,10 @@ msgid ""
 "for solder mask clearance)."
 msgstr ""
 "パッドとハンダマスク間のグローバル クリアランス。\n"
-"この値は、フットプリントまたはパッドのローカル値で置き換えられます。\n"
-"正のクリアランスは、ハンダマスクの開口部がパッドよりも大きいことを意味します "
-"(ソルダー マスクのクリアランスでは一般的です)。"
+"この値は、フットプリントやパッドごとのローカル値で上書きすることができます"
+"。\n"
+"正のクリアランスは、パッドよりも大きなハンダマスクの開口部を意味します（"
+"ソルダー マスクのクリアランスでは一般的です）。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
@@ -43833,10 +43862,11 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"パッドとハンダペースト間のグローバル クリアランス比 (パッド サイズに対する"
-"パーセンテージ)。\n"
-"値が 10 の場合、クリアランス値はパッド サイズの 10 ％です。\n"
-"この値は、フットプリントまたはパッドのローカル値で置き換えられます。\n"
+"パッドとハンダペースト間のグローバルクリ アランス比率を、パッドサイズに対する"
+"パーセンテージで示します。\n"
+"値が10の場合、クリアランスはパッド サイズの10％を意味します。\n"
+"この値は、フットプリントやパッドごとのローカル値によって上書きすることができ"
+"ます。\n"
 "最終的なクリアランス値は、この値と絶対クリアランス値の合計です。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:111
@@ -47368,17 +47398,16 @@ msgid "All Orientations"
 msgstr "向き"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "ゾーンをチェック"
+msgstr "チェックして!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
-msgstr ""
+msgstr "条件が一致する:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
-msgstr ""
+msgstr "オブジェクトが一致する:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
 #, fuzzy
@@ -47387,7 +47416,7 @@ msgstr "中心マークを追加"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "AND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
 #, fuzzy
@@ -47396,11 +47425,11 @@ msgstr "R"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "AND NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "OR NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
 #, fuzzy
@@ -47492,7 +47521,7 @@ msgstr "最小幅"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
-msgstr ""
+msgstr "推奨配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
 #, fuzzy
@@ -47550,7 +47579,7 @@ msgstr "名前を変更"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "エラー:バリデーション用の条件テキストが指定されていません。"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
 #, fuzzy
@@ -49191,22 +49220,22 @@ msgstr "%s の製造属性 'DNP(未実装)' を削除しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:793
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s に '部品位置情報ファイル から除外' の製造属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:798
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s の '部品位置情報ファイル から除外' の製造属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:809
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "%s に [部品表から除外] の製造属性を追加しました。"
+msgstr "%s に '部品位置情報ファイル から除外' の製造属性を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:815
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s から [部品表から除外] の製造属性を削除しました。"
+msgstr "%s から '部品位置情報ファイル から除外' の製造属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
 #, c-format
@@ -49312,82 +49341,81 @@ msgstr "ユニット %s のメタデータを更新しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
 msgstr ""
-"不正なフットプリント ID\n"
-"ファイル: '%s'\n"
-"行: %d"
+"無効なフットプリント ID '%s' が、バリアント '%s' (%s 上)に対して指定されてい"
+"ます。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "%s に 'DNP(未実装)' の製造属性を設定します。"
+msgstr "%s:%s に 'DNP(未実装)' のバリアント属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "%s の 'DNP(未実装)' の製造属性を削除します。"
+msgstr "%s:%s の 'DNP(未実装)' のバリアント属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "%s に製造属性 'DNP(未実装)' を追加しました。"
+msgstr "%s:%s に 'DNP(未実装)' のバリアント属性を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "%s の製造属性 'DNP(未実装)' を削除しました。"
+msgstr "%s:%s の 'DNP(未実装)' のバリアント属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr "%s に '部品表(BOM)から除外 'の製造属性を設定します。"
+msgstr "%s:%s に '部品表(BOM)から除外 'のバリアント属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr "%s の '部品表(BOM)から除外 'の製造属性を削除します。"
+msgstr "%s:%s の '部品表(BOM)から除外 'のバリアント属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr "%s に製造属性 '部品表(BOM)から除外' を追加しました。"
+msgstr "%s:%s に '部品表(BOM)から除外' のバリアント属性を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "%s の製造属性 '部品表(BOM)から除外' を削除しました。"
+msgstr "%s:%s の '部品表(BOM)から除外' のバリアント属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "%s に[部品表から除外]の製造属性を設定します。"
+msgstr "%s:%s に '部品位置情報ファイル から除外' のバリアント属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "%s:%s の '部品位置情報ファイル から除外' のバリアント属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "%s に [部品表から除外] の製造属性を追加しました。"
+msgstr "%s:%s に '部品位置情報ファイル から除外' のバリアント属性を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "%s から [部品表から除外] の製造属性を削除しました。"
+msgstr "%s:%s の '部品位置情報ファイル から除外' のバリアント属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s:%s field '%s' to '%s'."
-msgstr "フィールド '%s' の値を '%s' から '%s' に変更します。"
+msgstr "%s:%s フィールドの値を '%s' から '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "フィールド '%s' の値を '%s' から '%s' に変更します。"
+msgstr "%s:%s フィールドの値を '%s' から '%s' に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 #, c-format
@@ -49510,19 +49538,19 @@ msgid "Updating design variants..."
 msgstr "ネットを更新…"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "%s (フットプリント '%s')を追加します。"
+msgstr "バリアント '%s' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "%s のフットプリント フィルター を '%s' に更新します。"
+msgstr "バリアント '%s' の説明を更新しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "バリアントを削除..."
+msgstr "バリアント '%s'を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -51905,6 +51933,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"コンポーネント '%s' の指定子に非 ASCII 文字が含まれています。ODB++ "
+"エクスポートでは '%s' に変換されます。"
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:88
 #, c-format
@@ -51912,6 +51942,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"コンポーネント '%s' は変換後、紛らわしい指定子になってしまうため、ODB++ "
+"エクスポート用に '%s' に名前が変更されました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1129
 msgid "Failed to add component data"
@@ -53388,6 +53420,9 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"差動ペアギャップの開始点が、設定されたギャップと一致していません。これは、配"
+"線の幅と間隔が狭い領域で発生している可能性があります。差動ペアの設定を調整す"
+"るか、適切なギャップのある場所から開始してください。"
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Place Through Via"
@@ -58439,9 +58474,8 @@ msgid "Removing isolated copper islands..."
 msgstr "孤立した導体部分を削除中..."
 
 #: pcbnew/zone_filler.cpp:985
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "基板上で変更を行った後でゾーンを塗りつぶす"
+msgstr "島の除去後にゾーンを塗りつぶしています..."
 
 #: pcbnew/zone_filler.cpp:1394
 msgid "Prototype zone fill enabled. Disable setting and refill?"
