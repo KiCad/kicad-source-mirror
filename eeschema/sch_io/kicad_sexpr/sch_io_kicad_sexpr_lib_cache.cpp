@@ -20,6 +20,7 @@
  */
 
 #include <fmt/format.h>
+#include <set>
 
 #include <wx/log.h>
 #include <wx/dir.h>
@@ -54,6 +55,13 @@ SCH_IO_KICAD_SEXPR_LIB_CACHE::~SCH_IO_KICAD_SEXPR_LIB_CACHE()
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 {
+    // Normalize the path: if it's a directory on the filesystem, ensure m_libFileName
+    // is marked as a directory so that IsDir() checks work correctly throughout the code.
+    // wxFileName::IsDir() only checks if the path string ends with a separator, not if
+    // the path is actually a directory on the filesystem.
+    if( !m_libFileName.IsDir() && wxFileName::DirExists( m_libFileName.GetFullPath() ) )
+        m_libFileName.AssignDir( m_libFileName.GetFullPath() );
+
     if( !isLibraryPathValid() )
     {
         THROW_IO_ERROR( wxString::Format( _( "Library '%s' not found." ), m_libFileName.GetFullPath() ) );
@@ -104,6 +112,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 
         wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library folder '%s'", m_libFileName.GetPath() );
 
+        // Clear source file tracking for fresh load
+        m_symbolSourceFiles.clear();
+
         wxFileName tmp( m_libFileName.GetPath(), wxS( "dummy" ), wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
         wxDir dir( m_libFileName.GetPath() );
         wxString fileSpec = wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
@@ -115,14 +126,44 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
             do
             {
                 tmp.SetFullName( libFileName );
+                wxString sourceFilePath = tmp.GetFullPath();
+
+                // Track symbol pointers before parsing so we can detect which were replaced.
+                // When the parser encounters a duplicate name, it overwrites the existing
+                // symbol, so we need to update source tracking for those symbols too.
+                std::map<wxString, LIB_SYMBOL*> existingPtrs;
+
+                for( const auto& [ name, symbol ] : m_symbols )
+                    existingPtrs[ name ] = symbol;
 
                 try
                 {
-                    FILE_LINE_READER reader( tmp.GetFullPath() );
+                    FILE_LINE_READER reader( sourceFilePath );
                     SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
 
                     parser.ParseLib( m_symbols );
                     SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
+
+                    // Update source tracking for all symbols that came from this file.
+                    // This includes both new symbols and symbols that were overwritten
+                    // (when a duplicate name existed in a previously loaded file).
+                    for( const auto& [ name, symbol ] : m_symbols )
+                    {
+                        auto it = existingPtrs.find( name );
+
+                        if( it == existingPtrs.end() )
+                        {
+                            // New symbol from this file
+                            m_symbolSourceFiles[ name ] = sourceFilePath;
+                        }
+                        else if( it->second != symbol )
+                        {
+                            // Symbol pointer changed - this file overwrote the previous version.
+                            // Update tracking so we save to this file (the one whose version
+                            // is actually in memory).
+                            m_symbolSourceFiles[ name ] = sourceFilePath;
+                        }
+                    }
 
                     // Collect any parse warnings from this file
                     for( const wxString& warning : parser.GetParseWarnings() )
@@ -143,7 +184,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
                     if( !errorCache.IsEmpty() )
                         errorCache += wxT( "\n\n" );
 
-                    errorCache += wxString::Format( _( "Unable to read file '%s'" ) + '\n', tmp.GetFullPath() );
+                    errorCache += wxString::Format( _( "Unable to read file '%s'" ) + '\n', sourceFilePath );
                     errorCache += ioe.What();
                 }
             } while( dir.GetNext( &libFileName ) );
@@ -184,6 +225,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
+
+    // Normalize the path: if it's a directory on the filesystem, ensure fn is marked as a
+    // directory so that IsDir() checks work correctly.
+    if( !fn.IsDir() && wxFileName::DirExists( fn.GetFullPath() ) )
+        fn.AssignDir( fn.GetFullPath() );
 
     if( !fn.IsDir() )
     {
@@ -226,20 +272,59 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
                 THROW_IO_ERROR( wxString::Format( _( "Cannot create symbol library path '%s'." ), fn.GetPath() ) );
         }
 
+        // Group symbols by their source file to preserve multi-symbol files
+        std::map<wxString, std::vector<LIB_SYMBOL*>> symbolsByFile;
+
         for( const auto& [ name, symbol ] : m_symbols )
         {
-            wxFileName saveFn( fn );
-            saveFn.SetName( EscapeString( name, CTX_FILENAME ) );
-            saveFn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
+            auto it = m_symbolSourceFiles.find( name );
 
-            auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( saveFn.GetFullPath() );
+            if( it != m_symbolSourceFiles.end() )
+            {
+                // Symbol has a known source file - group it with others from that file
+                symbolsByFile[ it->second ].push_back( symbol );
+            }
+            else
+            {
+                // New symbol without source file - create individual file
+                wxFileName saveFn( fn );
+                saveFn.SetName( EscapeString( name, CTX_FILENAME ) );
+                saveFn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
+
+                symbolsByFile[ saveFn.GetFullPath() ].push_back( symbol );
+            }
+        }
+
+        // Sort each file's symbols by inheritance depth
+        auto sortByInheritance = []( LIB_SYMBOL* aLhs, LIB_SYMBOL* aRhs )
+        {
+            unsigned int lhDepth = aLhs->GetInheritanceDepth();
+            unsigned int rhDepth = aRhs->GetInheritanceDepth();
+
+            if( lhDepth == rhDepth )
+                return aLhs->GetName() < aRhs->GetName();
+
+            return lhDepth < rhDepth;
+        };
+
+        // Write each file
+        for( auto& [ filePath, symbols ] : symbolsByFile )
+        {
+            std::sort( symbols.begin(), symbols.end(), sortByInheritance );
+
+            auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( filePath );
 
             formatLibraryHeader( *formatter.get() );
 
-            SaveSymbol( symbol, *formatter.get() );
+            for( LIB_SYMBOL* symbol : symbols )
+                SaveSymbol( symbol, *formatter.get() );
 
             formatter->Print( ")" );
             formatter.reset();
+
+            // Update source file tracking for new symbols
+            for( LIB_SYMBOL* symbol : symbols )
+                m_symbolSourceFiles[ symbol->GetName() ] = filePath;
         }
     }
 

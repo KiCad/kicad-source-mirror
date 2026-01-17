@@ -22,6 +22,7 @@
 #ifndef _SCH_IO_LIB_CACHE_H_
 #define _SCH_IO_LIB_CACHE_H_
 
+#include <map>
 #include <mutex>
 #include <optional>
 
@@ -98,7 +99,7 @@ public:
 
     wxString GetLogicalName() const { return m_libFileName.GetName(); }
 
-    void SetFileName( const wxString& aFileName ) { m_libFileName = aFileName; }
+    void SetFileName( const wxString& aFileName );
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
 
@@ -114,6 +115,13 @@ protected:
     wxFileName        m_libFileName;  // Absolute path and file name is required here.
     long long         m_fileModTime;
     LIB_SYMBOL_MAP    m_symbols;      // Map of names of #LIB_SYMBOL pointers.
+
+    /// For folder-based libraries, track which source file each symbol was loaded from.
+    /// Key is symbol name, value is the full path to the source file.
+    /// This allows saving symbols back to their original files rather than creating
+    /// individual files for each symbol.
+    std::map<wxString, wxString> m_symbolSourceFiles;
+
     bool              m_isWritable;
     bool              m_isModified;
     bool              m_hasParseError; // True if library had parse error during load.

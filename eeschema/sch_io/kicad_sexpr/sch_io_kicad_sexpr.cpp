@@ -24,11 +24,13 @@
 
 #include <fmt/format.h>
 
+#include <wx/dir.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
 
 #include <base_units.h>
 #include <bitmap_base.h>
+#include <wildcards_and_files_ext.h>
 #include <build_version.h>
 #include <sch_selection.h>
 #include <font/fontconfig.h>
@@ -1737,6 +1739,12 @@ void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
 {
     wxFileName fn( aLibraryPath );
 
+    // Normalize the path: if it's a directory on the filesystem, ensure fn is marked as a
+    // directory so that IsDir() checks work correctly. wxFileName::IsDir() only checks if
+    // the path string ends with a separator, not if the path is actually a directory.
+    if( !fn.IsDir() && wxFileName::DirExists( fn.GetFullPath() ) )
+        fn.AssignDir( fn.GetFullPath() );
+
     if( !fn.IsDir() )
     {
         if( fn.FileExists() )
@@ -1761,7 +1769,12 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 {
     wxFileName fn = aLibraryPath;
 
-    if( !fn.FileExists() )
+    // Normalize the path: if it's a directory on the filesystem, ensure fn is marked as a
+    // directory so that IsDir() checks work correctly.
+    if( !fn.IsDir() && wxFileName::DirExists( fn.GetFullPath() ) )
+        fn.AssignDir( fn.GetFullPath() );
+
+    if( !fn.FileExists() && !fn.DirExists() )
         return false;
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
@@ -1808,17 +1821,35 @@ void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath, const std::m
     // This is a forced save.
     m_cache->SetModified();
     m_cache->Save();
+
     m_cache->SetFileName( oldFileName );
 }
 
 
 bool SCH_IO_KICAD_SEXPR::CanReadLibrary( const wxString& aLibraryPath ) const
 {
+    // Check if the path is a directory containing at least one .kicad_sym file
+    if( wxFileName::DirExists( aLibraryPath ) )
+    {
+        wxDir dir( aLibraryPath );
+
+        if( dir.IsOpened() )
+        {
+            wxString filename;
+            wxString filespec = wxT( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
+
+            if( dir.GetFirst( &filename, filespec, wxDIR_FILES ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    // Check for proper extension
     if( !SCH_IO::CanReadLibrary( aLibraryPath ) )
         return false;
 
     // Above just checks for proper extension; now check that it actually exists
-
     wxFileName fn( aLibraryPath );
     return fn.IsOk() && fn.FileExists();
 }
