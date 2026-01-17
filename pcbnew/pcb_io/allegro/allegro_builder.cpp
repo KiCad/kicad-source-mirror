@@ -1420,6 +1420,18 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
     text->SetText( strGraphic->m_Value );
     text->SetTextWidth( safeScale( m_scale * fontDef->m_CharWidth ) );
     text->SetTextHeight( safeScale( m_scale * fontDef->m_CharHeight ) );
+    text->SetTextThickness( std::max( 1, safeScale( m_scale * fontDef->m_CharHeight ) / 8 ) );
+
+    const EDA_ANGLE textAngle{ static_cast<double>( aStrWrapper.m_Rotation ) / 1000.0, DEGREES_T };
+    text->SetTextAngle( textAngle );
+
+    if( props->m_Reversal == BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED )
+        text->SetMirrored( true );
+
+    if( props->m_Alignment == BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::CENTER )
+        text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    else if( props->m_Alignment == BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::RIGHT )
+        text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
     return text;
 }
@@ -2114,48 +2126,95 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
         }
     }
 
+    bool valueFieldSet = false;
+
     const LL_WALKER textWalker{ aFpInstance.m_TextPtr, aFpInstance.m_Key, m_brdDb };
+
     for( const BLOCK_BASE* textBlock : textWalker )
     {
         const uint8_t type = textBlock->GetBlockType();
-        if( type == 0x30 )
+
+        if( type != 0x30 )
+            continue;
+
+        const auto& strWrapper = static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( *textBlock ).GetData();
+
+        std::unique_ptr<PCB_TEXT> text = buildPcbText( strWrapper, *fp );
+
+        if( !text )
+            continue;
+
+        const uint8_t textClass = strWrapper.m_Layer.m_Class;
+        const uint8_t textSubclass = strWrapper.m_Layer.m_Subclass;
+
+        bool isSilk = ( textSubclass == LAYER_INFO::SUBCLASS::SILKSCREEN_TOP
+                        || textSubclass == LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM );
+        bool isAssembly = ( textSubclass == LAYER_INFO::SUBCLASS::ASSEMBLY_TOP
+                            || textSubclass == LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM );
+
+        if( textClass == LAYER_INFO::CLASS::REF_DES && isSilk )
         {
-            const auto& strWrapper = static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( *textBlock ).GetData();
+            // Visible silkscreen refdes updates the built-in REFERENCE field.
+            PCB_FIELD* const refDes = fp->GetField( FIELD_T::REFERENCE );
 
-            std::unique_ptr<PCB_TEXT> text = buildPcbText( strWrapper, *fp );
+            // KiCad netlisting requires non-digit + digit annotation.
+            if( !text->GetText().IsEmpty() && !std::isalpha( text->GetText()[0] ) )
+                text->SetText( wxString( "UNK" ) + text->GetText() );
 
-            if( text )
+            *refDes = PCB_FIELD( *text, FIELD_T::REFERENCE );
+        }
+        else if( textClass == LAYER_INFO::CLASS::REF_DES && isAssembly )
+        {
+            // Assembly refdes becomes a user field with the KiCad reference variable
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Reference" ) );
+            field->SetText( wxS( "${REFERENCE}" ) );
+            field->SetVisible( false );
+            fp->Add( field, ADD_MODE::APPEND );
+        }
+        else if( textClass == LAYER_INFO::CLASS::COMPONENT_VALUE && isAssembly )
+        {
+            if( !valueFieldSet )
             {
-                if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
-                    && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::SILKSCREEN_TOP ) )
-                {
-                    // This is a visible silkscreen refdes - use it to update the PCB_FIELD refdes.
-                    PCB_FIELD* const refDes = fp->GetField( FIELD_T::REFERENCE );
-
-                    // KiCad netlisting requires parts to have non-digit + digit annotation.
-                    // If the reference begins with a number, we prepend 'UNK' (unknown) for the source
-                    // designator
-                    if( !std::isalpha( text->GetText()[0] ) )
-                        text->SetText( wxString( "UNK" ) + text->GetText() );
-
-                    // Update all ref-des parameters in-place
-                    *refDes = PCB_FIELD( *text, FIELD_T::REFERENCE );
-                }
-                else
-                {
-                    // Add it as a text item
-                    // In Allegro, the REF_DES::ASSEMBLY_x text is also in the REF_DES class, but
-                    // in KiCad, it's just a Fab layer text item with a special value.
-                    if( strWrapper.m_Layer.m_Class == LAYER_INFO::CLASS::REF_DES
-                        && ( strWrapper.m_Layer.m_Subclass == LAYER_INFO::SUBCLASS::ASSEMBLY_TOP ) )
-                    {
-                        text->SetText( "${REFERENCE}" );
-                    }
-
-                    // text->Rotate( fpPos, rotation );
-                    fp->Add( text.release() );
-                }
+                // First COMPONENT_VALUE on assembly updates the built-in VALUE field
+                PCB_FIELD* valField = fp->GetField( FIELD_T::VALUE );
+                *valField = PCB_FIELD( *text, FIELD_T::VALUE );
+                valField->SetVisible( false );
+                valueFieldSet = true;
             }
+            else
+            {
+                PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Component Value" ) );
+                field->SetVisible( false );
+                fp->Add( field, ADD_MODE::APPEND );
+            }
+        }
+        else if( textClass == LAYER_INFO::CLASS::DEVICE_TYPE )
+        {
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Device Type" ) );
+            field->SetVisible( !isAssembly );
+            fp->Add( field, ADD_MODE::APPEND );
+        }
+        else if( textClass == LAYER_INFO::CLASS::TOLERANCE )
+        {
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Tolerance" ) );
+            field->SetVisible( isSilk );
+            fp->Add( field, ADD_MODE::APPEND );
+        }
+        else if( textClass == LAYER_INFO::CLASS::USER_PART_NUMBER )
+        {
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "User Part Number" ) );
+            field->SetVisible( isSilk );
+            fp->Add( field, ADD_MODE::APPEND );
+        }
+        else if( textClass == LAYER_INFO::CLASS::COMPONENT_VALUE && isSilk )
+        {
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Component Value" ) );
+            field->SetVisible( true );
+            fp->Add( field, ADD_MODE::APPEND );
+        }
+        else
+        {
+            fp->Add( text.release() );
         }
     }
 
