@@ -24,6 +24,8 @@
 #include <dialogs/dialog_edit_library_tables.h>
 #include <panel_sym_lib_table_base.h>
 #include <lib_table_grid_data_model.h>
+#include <sch_io/sch_io_mgr.h>
+#include <io/io_base.h>
 
 
 class LIBRARY_TABLE;
@@ -70,6 +72,8 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
+    void populatePluginList();
+
     SYMBOL_LIB_TABLE_GRID_DATA_MODEL* get_model( int aPage ) const;
     SYMBOL_LIB_TABLE_GRID_DATA_MODEL* cur_model() const { return get_model( m_notebook->GetSelection() ); }
 
@@ -83,6 +87,8 @@ private:
 
     wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
                                                        // project level library.
+
+    std::map<SCH_IO_MGR::SCH_FILE_T, IO_BASE::IO_FILE_DESC> m_supportedSymFiles;
 };
 
 

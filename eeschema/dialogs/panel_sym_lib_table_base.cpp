@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/split_button.h"
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
@@ -29,10 +30,10 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	bButtonsSizer->Add( m_append_button, 0, wxALL, 5 );
 
-	m_browse_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_browse_button->SetToolTip( _("Add existing library to table") );
+	m_browseButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Add Existing" ), wxDefaultPosition );
+	m_browseButton->SetToolTip( _("Add Existing") );
 
-	bButtonsSizer->Add( m_browse_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_browseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_move_up_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
@@ -117,7 +118,6 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
-	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
@@ -131,7 +131,6 @@ PANEL_SYM_LIB_TABLE_BASE::~PANEL_SYM_LIB_TABLE_BASE()
 	// Disconnect Events
 	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
-	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );

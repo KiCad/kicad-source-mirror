@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include <widgets/split_button.h>
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
@@ -41,7 +42,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 	protected:
 		wxAuiNotebook* m_notebook;
 		STD_BITMAP_BUTTON* m_append_button;
-		STD_BITMAP_BUTTON* m_browse_button;
+		SPLIT_BUTTON* m_browseButton;
 		STD_BITMAP_BUTTON* m_move_up_button;
 		STD_BITMAP_BUTTON* m_move_down_button;
 		STD_BITMAP_BUTTON* m_delete_button;

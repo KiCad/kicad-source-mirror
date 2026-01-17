@@ -33,6 +33,7 @@
 #include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_readonly_text_helpers.h>
+#include <widgets/split_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <confirm.h>
 #include <bitmaps.h>
@@ -49,6 +50,8 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <wx/dir.h>
+#include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <project_sch.h>
@@ -73,12 +76,10 @@ struct SUPPORTED_FILE_TYPE
 
 
 /**
- * Event IDs for the menu items in the split button menu for add a library
+ * Special menu ID for folder-based KiCad symbol library format.
+ * This ID is offset from SCH_FILE_T values to distinguish folder mode from file mode.
  */
-enum {
-    ID_PANEL_SYM_LIB_KICAD = ID_END_EESCHEMA_ID_LIST,
-    ID_PANEL_SYM_LIB_LEGACY,
-};
+static constexpr int ID_PANEL_SYM_LIB_KICAD_FOLDER = 1000;
 
 
 class SYMBOL_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
@@ -272,6 +273,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 {
     m_lastProjectLibDir = m_project->GetProjectPath();
 
+    populatePluginList();
+
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
         IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
@@ -310,17 +313,98 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_delete_button->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_move_up_button->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_move_down_button->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
-    m_browse_button->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
+    // For aesthetic reasons, we must set the size of m_browseButton to match the other bitmaps
+    Layout();
+    wxSize buttonSize = m_append_button->GetSize();
+
+    m_browseButton->SetWidthPadding( 4 );
+    m_browseButton->SetMinSize( buttonSize );
+
+    // Populate the browse library options
+    wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+
+    auto joinExtensions = []( const std::vector<std::string>& aExts ) -> wxString
+    {
+        wxString result;
+
+        for( const std::string& ext : aExts )
+        {
+            if( !result.IsEmpty() )
+                result << wxT( ", " );
+
+            result << wxT( "." ) << ext;
+        }
+
+        return result;
+    };
+
+    for( auto& [type, desc] : m_supportedSymFiles )
+    {
+        wxString entryStr = SCH_IO_MGR::ShowType( type );
+
+        if( !desc.m_FileExtensions.empty() )
+            entryStr << wxString::Format( wxS( " (%s)" ), joinExtensions( desc.m_FileExtensions ) );
+
+        browseMenu->Append( type, entryStr );
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
+                          this, type );
+
+        // Add folder-based entry right after KiCad file-based entry
+        if( type == SCH_IO_MGR::SCH_KICAD )
+        {
+            wxString folderEntry = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD );
+            folderEntry << wxString::Format( wxS( " (%s)" ), _( "folder with .kicad_sym files" ) );
+            browseMenu->Append( ID_PANEL_SYM_LIB_KICAD_FOLDER, folderEntry );
+            browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
+                              &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this,
+                              ID_PANEL_SYM_LIB_KICAD_FOLDER );
+        }
+    }
+
+    Layout();
 
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &PANEL_SYM_LIB_TABLE::onNotebookPageCloseRequest, this );
+    m_browseButton->Bind( wxEVT_BUTTON, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this );
 }
 
 
 PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
 {
+    wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+
+    for( auto& [type, desc] : m_supportedSymFiles )
+    {
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
+                            this, type );
+    }
+
+    browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
+                        this, ID_PANEL_SYM_LIB_KICAD_FOLDER );
+    m_browseButton->Unbind( wxEVT_BUTTON, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this );
+
     // Delete the GRID_TRICKS.
     // (Notebook page GRID_TRICKS are deleted by LIB_TABLE_NOTEBOOK_PANEL.)
     m_path_subs_grid->PopEventHandler( true );
+}
+
+
+void PANEL_SYM_LIB_TABLE::populatePluginList()
+{
+    for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
+    {
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
+
+        if( !pi )
+            continue;
+
+        if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
+        {
+            if( !desc.m_FileExtensions.empty() )
+                m_supportedSymFiles.emplace( type, desc );
+        }
+    }
 }
 
 
@@ -375,32 +459,30 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !cur_grid()->CommitPendingChanges() )
         return;
 
-    wxString fileFiltersStr;
-    wxString allWildcardsStr;
+    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_UNKNOWN;
+    bool                   selectingFolder = false;
 
-    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
+    // We are bound both to the menu and button with this one handler
+    if( event.GetEventType() == wxEVT_BUTTON )
     {
-        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
-
-        if( !pi )
-            continue;
-
-        const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
-
-        if( desc.m_FileExtensions.empty() )
-            continue;
-
-        if( !fileFiltersStr.IsEmpty() )
-            fileFiltersStr += wxChar( '|' );
-
-        fileFiltersStr += desc.FileFilter();
-
-        for( const std::string& ext : desc.m_FileExtensions )
-            allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
+        // Default to KiCad file format when clicking the button directly
+        fileType = SCH_IO_MGR::SCH_KICAD;
+    }
+    else if( event.GetId() == ID_PANEL_SYM_LIB_KICAD_FOLDER )
+    {
+        // Special case for folder-based KiCad library
+        fileType = SCH_IO_MGR::SCH_KICAD;
+        selectingFolder = true;
+    }
+    else
+    {
+        fileType = static_cast<SCH_IO_MGR::SCH_FILE_T>( event.GetId() );
     }
 
-    fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
-                     + fileFiltersStr;
+    if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        return;
+
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
 
     EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     wxString           dummy;
@@ -411,38 +493,63 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     else
         lastDir = &m_lastProjectLibDir;
 
-    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+    wxString       title = wxString::Format( _( "Select %s Library" ), SCH_IO_MGR::ShowType( fileType ) );
+    wxWindow*      topLevelParent = wxGetTopLevelParent( this );
+    wxArrayString  files;
 
-    wxFileDialog dlg( topLevelParent, _( "Add Library" ), *lastDir, wxEmptyString, fileFiltersStr,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+    if( selectingFolder )
+    {
+        wxDirDialog dlg( topLevelParent, title, *lastDir,
+                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
 
-    *lastDir = dlg.GetDirectory();
+        dlg.GetPaths( files );
 
-    const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
-    bool               addDuplicates = false;
-    bool               applyToAll    = false;
+        if( !files.IsEmpty() )
+        {
+            wxFileName first( files.front() );
+            *lastDir = first.GetPath();
+        }
+    }
+    else
+    {
+        auto it = m_supportedSymFiles.find( fileType );
 
-    wxArrayString filePathsList;
-    dlg.GetPaths( filePathsList );
+        if( it == m_supportedSymFiles.end() )
+            return;
 
-    for( const wxString& filePath : filePathsList )
+        const IO_BASE::IO_FILE_DESC& fileDesc = it->second;
+
+        wxFileDialog dlg( topLevelParent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        dlg.GetPaths( files );
+        *lastDir = dlg.GetDirectory();
+    }
+
+    bool     addDuplicates = false;
+    bool     applyToAll    = false;
+    wxString warning       = _( "Warning: Duplicate Nicknames" );
+    wxString msg           = _( "An item nicknamed '%s' already exists." );
+    wxString detailedMsg   = _( "One of the nicknames will need to be changed." );
+
+    for( const wxString& filePath : files )
     {
         wxFileName fn( filePath );
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
-        bool       doAdd = true;
+        bool       doAdd    = true;
 
         if( cur_model()->ContainsNickname( nickname ) )
         {
             if( !applyToAll )
             {
-                // The cancel button adds the library to the table anyway
-                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), _( "Warning: Duplicate Nickname" ),
-                                                  wxString::Format( _( "An item nicknamed '%s' already exists." ),
-                                                                    nickname ),
-                                                  _( "One of the nicknames will need to be changed." ),
+                addDuplicates = OKOrCancelDialog( topLevelParent, warning,
+                                                  wxString::Format( msg, nickname ), detailedMsg,
                                                   _( "Skip" ), _( "Add Anyway" ),
                                                   &applyToAll ) == wxID_CANCEL;
             }
@@ -455,26 +562,21 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             int last_row = cur_grid()->GetNumberRows() - 1;
 
             cur_grid()->SetCellValue( last_row, COL_NICKNAME, nickname );
-
-            // attempt to auto-detect the plugin type
-            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( filePath );
-
-            if( pluginType != SCH_IO_MGR::SCH_FILE_UNKNOWN )
-                cur_grid()->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
+            cur_grid()->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( fileType ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_notebook->GetSelection() == 0 && path.Contains( "${KIPRJMOD}" ) )
+            if( m_notebook->GetSelection() == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             cur_grid()->SetCellValue( last_row, COL_URI, path );
         }
     }
 
-    if( !filePathsList.IsEmpty() )
+    if( !files.IsEmpty() )
     {
         cur_grid()->MakeCellVisible( cur_grid()->GetNumberRows() - 1, COL_ENABLED );
         cur_grid()->SetGridCursor( cur_grid()->GetNumberRows() - 1, COL_NICKNAME );
