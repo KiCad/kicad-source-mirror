@@ -717,8 +717,24 @@ void DRILL_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* a
 
     auto cmpPtr = [&]( BOARD_ITEM* pa, BOARD_ITEM* pb )
     {
-        const auto& a = m_drills[m_ptrToDrill[pa]].entry;
-        const auto& b = m_drills[m_ptrToDrill[pb]].entry;
+        auto itA = m_ptrToDrill.find( pa );
+        auto itB = m_ptrToDrill.find( pb );
+
+        bool validA = ( itA != m_ptrToDrill.end() && itA->second >= 0
+                        && itA->second < static_cast<int>( m_drills.size() ) );
+        bool validB = ( itB != m_ptrToDrill.end() && itB->second >= 0
+                        && itB->second < static_cast<int>( m_drills.size() ) );
+
+        if( !validA || !validB )
+        {
+            if( validA != validB )
+                return validA;
+
+            return pa < pb;
+        }
+
+        const auto& a = m_drills[itA->second].entry;
+        const auto& b = m_drills[itB->second].entry;
 
         int col = aCol < 0 ? 0 : aCol;
         DRILL_LINE_ITEM::COMPARE cmp( static_cast<DRILL_LINE_ITEM::COL_ID>( col ), aAscending );
