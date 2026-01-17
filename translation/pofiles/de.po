@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-12-25 13:00+0000\n"
+"PO-Revision-Date: 2026-01-17 09:18+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6387,16 +6387,13 @@ msgid "Run: %s"
 msgstr "Ausführen: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Datei \"%s\" wurde nicht gefunden."
+msgstr "Datei \"%s\" wurde nicht gefunden.\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Möchten Sie alle Symbole überschreiben oder die neuen umbenennen?"
+msgstr "Soll sie aus der Liste der kürzlich geöffneten Dateien entfernt werden?"
 
 #: common/eda_base_frame.cpp:1283
 msgid "Remove"
@@ -9140,9 +9137,9 @@ msgid "Library not found in library table"
 msgstr "Bibliothek nicht in Bibliothekstabelle gefunden"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Bibliothek: "
+msgstr "Bibliothek '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -10966,9 +10963,8 @@ msgstr ""
 "Um an das KiCad-Projekt zu spenden, besuchen Sie %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Footprint-Auswahl"
+msgstr "Footprint-Browser"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -17031,9 +17027,8 @@ msgid "Alternate Assignment"
 msgstr "Alternative Zuordnung"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "Varianten"
+msgstr " Variante"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -24187,9 +24182,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Fehler beim Laden der Bibliothek \"%s\""
+msgstr "Fehler beim Parsen der SPICE-Bibliothek \"%s\": %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -31433,7 +31428,6 @@ msgid "Error opening jobs file"
 msgstr "Fehler beim Öffnen der Auftragsdatei"
 
 #: kicad/kicad_manager_frame.cpp:886
-#, fuzzy
 msgid "A newer local history snapshot is available. Restore it?"
 msgstr ""
 "Lokal ist ein neuerer Snapshot des Verlaufs verfügbar. Wiederherstellen?"
@@ -43793,6 +43787,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Regel\n"
+"\n"
+"    (Bedingung \"<Ausdruck>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43802,6 +43801,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Anmerkungen\n"
+"\n"
+"Strg+/ verwenden, um Zeile(n) aus- oder ein zu kommentieren.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -47997,9 +48001,8 @@ msgid "All Orientations"
 msgstr "Ausrichtung"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "Zonen prüfen"
+msgstr "Prüf' mich!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
