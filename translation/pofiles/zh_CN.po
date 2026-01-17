@@ -45,8 +45,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-12-26 14:00+0000\n"
-"Last-Translator: aisuneko icecat <iceneko@protonmail.ch>\n"
+"PO-Revision-Date: 2026-01-17 09:18+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4616,9 +4616,9 @@ msgstr ""
 "是否同时从符号中删除?"
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "添加文件 '%s' 失败。"
+msgstr "读取文件 '%s' 失败。"
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4630,9 +4630,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "嵌入文件"
+msgstr "嵌入文件冲突"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4640,9 +4639,8 @@ msgid "Replace"
 msgstr "替换"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "添加现有"
+msgstr "重用现有"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -5925,14 +5923,12 @@ msgid "Top auxiliary"
 msgstr "顶部辅助栏"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
 msgstr "插入分隔符"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
 msgid "Insert Spacer"
-msgstr "插入分隔条"
+msgstr "插入间隔符"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
 #, fuzzy
@@ -5942,14 +5938,13 @@ msgstr "插入组"
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "行分隔符"
+msgstr "分隔符"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "间隔符: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:357 pcbnew/pcb_group.cpp:411
@@ -5962,9 +5957,8 @@ msgid "Customize toolbars"
 msgstr "自定义工具栏"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "工具栏 (&T)"
+msgstr "工具栏:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -5978,19 +5972,16 @@ msgid "Save"
 msgstr "保存"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "新建网络"
+msgstr "新建规则"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "自定义规则"
+msgstr "复制规则"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "删除文件"
+msgstr "删除规则"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6240,9 +6231,9 @@ msgid "Run: %s"
 msgstr "运行: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "找不到文件 '%s'。"
+msgstr "未找到文件 '%s'。\n"
 
 #: common/eda_base_frame.cpp:1282
 #, fuzzy
@@ -8967,9 +8958,9 @@ msgid "Library not found in library table"
 msgstr "库表中找不到库"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "库: "
+msgstr "库 '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -9044,9 +9035,8 @@ msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
 
 #: common/local_history.cpp:1730
-#, fuzzy
 msgid "Restore Failed"
-msgstr "合并失败"
+msgstr "恢复失败"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -9565,7 +9555,6 @@ msgid "Quit %s"
 msgstr "退出 %s"
 
 #: common/tool/action_toolbar.cpp:1128
-#, fuzzy
 msgid "Grid selector"
 msgstr "栅格选择器"
 
@@ -9574,7 +9563,6 @@ msgid "Grid Selection box"
 msgstr "栅格选择框"
 
 #: common/tool/action_toolbar.cpp:1141
-#, fuzzy
 msgid "Zoom selector"
 msgstr "缩放选择器"
 
@@ -10756,9 +10744,8 @@ msgstr ""
 "要向 KiCad 项目捐赠, 请访问 %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "封装选择器"
+msgstr "封装浏览器"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -13558,9 +13545,9 @@ msgstr "图像属性"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "导入符号"
+msgstr "从 %s 导入符号"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13581,24 +13568,23 @@ msgid "Cannot read symbol library '%s'."
 msgstr "无法导入符号库 '%s'。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "符号库文件 '%s' 为空。"
+msgstr "符号库 '%s' 为空。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "已选择 %d 个符号, 自动包含 %d 个父级"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "没有选择符号"
+msgstr "已选择 %d 个符号"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "冲突阴影"
+msgstr "解决导入冲突"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:511
 msgid ""
@@ -13618,9 +13604,8 @@ msgid "Action"
 msgstr "操作"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "跳过"
+msgstr "全部跳过"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13628,9 +13613,8 @@ msgid "Overwrite All"
 msgstr "覆盖全部"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "没有选择符号"
+msgstr "未选择符号"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16539,21 +16523,18 @@ msgid "Cannot rename the default variant."
 msgstr "无法创建原理图图像"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "输入新的变体名称"
+msgstr "输入新变体名称："
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "移除变体..."
+msgstr "重命名变体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "变量名不能为空。"
+msgstr "变体名称不能为空。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
@@ -16564,9 +16545,9 @@ msgstr "'%s' 是 KiCad 中的一个保留快捷键, 不能进行分配。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "文件 '%s' 已存在。"
+msgstr "变体 '%s' 已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
@@ -16578,9 +16559,8 @@ msgid "Enter name for the copied variant:"
 msgstr "输入新的模板名称:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "变体"
+msgstr "复制变体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16678,9 +16658,8 @@ msgid "Alternate Assignment"
 msgstr "备选分配"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "变体"
+msgstr " 变体"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17344,7 +17323,7 @@ msgstr "填充所选形状"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:180
 msgid "Selection thickness:"
-msgstr "选区高亮宽度:"
+msgstr "选区高亮线宽:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:188
 msgid "(selection color can be edited in the \"Colors\" page)"
@@ -20627,11 +20606,13 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "符号库文件夹 '%s' 无法删除。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "库 '%s' 已存在。"
+msgstr ""
+"加载库 '%s' 时出错:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
@@ -23877,7 +23858,7 @@ msgstr "无法导入符号库 '%s'。"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "%d 个符号已导入, %d 个符号被跳过。"
 
 #: eeschema/symbol_library_manager.cpp:179
 #, fuzzy, c-format
@@ -23980,14 +23961,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "断开图纸引脚与层次标签的关联"
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Current variant"
 msgstr "当前变体"
 
 #: eeschema/toolbars_sch_editor.cpp:54
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "控制以选择当前原理图变体"
+msgstr "选择当前原理图变体"
 
 #: eeschema/toolbars_sch_editor.cpp:92 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:163
@@ -24004,23 +23983,20 @@ msgid "Select the current variant to display and edit."
 msgstr "选中当前变体以显示并编辑。"
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "添加变体..."
+msgstr "添加新变体..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
 msgstr "新建变体"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "变量名称"
+msgstr "变体名称:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "描述:"
+msgstr "描述(可选):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -24299,9 +24275,8 @@ msgid "Set design block schematic to current sheet"
 msgstr "将设计图块原理图设为当前图纸"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:534
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "从选区更新设计图块"
+msgstr "从所选内容更新设计图块"
 
 #: eeschema/tools/sch_actions.cpp:159
 #, fuzzy
@@ -25705,9 +25680,8 @@ msgid "Could not find design block %s."
 msgstr "找不到设计图块 %s。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "设计图块 %s 缺少原理图文件。"
+msgstr "设计图块中没有可放置的原理图。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -26594,14 +26568,12 @@ msgid "No remote data sources are currently installed."
 msgstr "当前未安装远程数据源。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "配置路径..."
+msgstr "配置..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "清除颜色"
+msgstr "清除 Cookie"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -26767,9 +26739,9 @@ msgid "Unsupported SPICE payload type."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2077
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "解析元件列表失败: %s"
+msgstr "解析元件列表失败：%s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2083
 msgid "Component list must be an array."
@@ -27876,9 +27848,8 @@ msgid "Aperture highlight"
 msgstr "开窗高亮"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
-msgstr "D 码选择器"
+msgstr "DCode 选择器"
 
 #: gerbview/toolbars_gerber.cpp:318
 msgid "Select all items with the selected DCode"
@@ -30940,22 +30911,20 @@ msgid "Switch to Branch"
 msgstr "切换到分支"
 
 #: kicad/project_tree_pane.cpp:1072
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "启用 Git 跟踪"
+msgstr "启用 Git 集成"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1077
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "启用 Git 跟踪"
+msgstr "禁用 Git 集成"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "禁用此项目的 Git 集成"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -31663,7 +31632,6 @@ msgstr ""
 "这并非所有图纸上都显示"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
 msgstr "原点选择器"
 
@@ -31672,7 +31640,6 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "选择状态栏坐标的原点"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
 msgstr "页面选择器"
 
@@ -33781,23 +33748,23 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal tracks or 0.048 for external tracks\n"
 msgstr ""
-"如果你指定最大电流, 则会计算相应的走线宽度。\n"
+"如果你指定最大电流, 则会计算相应的走线线宽。\n"
 "\n"
-"如果你指定了其中一个走线的宽度, 将会计算其可以承载的最大电流。接着会计算另一"
-"个走线在承载相同电流时所需的宽度。\n"
+"如果你指定了其中一个走线的线宽, 将会计算其可以承载的最大电流。接着会计算另一"
+"个走线在承载相同电流时所需的线宽。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
-"计算适用于最大 35A (外部) 或 17.5A (内部) 的电流、温升不超过 100 °C, 以及宽度"
+"计算适用于最大 35A (外部) 或 17.5A (内部) 的电流、温升不超过 100 °C, 以及线宽"
 "不超过 400mil (10mm) 的情况。\n"
 "\n"
 "该公式来自 IPC 2221, 具体为:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "其中: <br>\n"
 "__I__ 为最大电流, 单位为 A (安培)\n"
 "__&Delta;T__ 为环境温度的温升, 单位为 °C (摄氏度)\n"
-"__W__ 为宽度, 单位为 mil (密耳)\n"
+"__W__ 为线宽, 单位为 mil (密耳)\n"
 "__H__ 为厚度 (高度), 单位为 mil (密耳)\n"
 "__K__ 的取值: 内部走线为 0.024, 外部走线为 0.048\n"
 
@@ -36590,7 +36557,7 @@ msgstr "测量标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
-msgstr "测量标注线的宽度"
+msgstr "测量标注线的线宽"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:86
@@ -40188,7 +40155,6 @@ msgstr "数量"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1313
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3165
-#, fuzzy
 msgid "Backdrill"
 msgstr "背钻"
 
@@ -42641,9 +42607,8 @@ msgstr ""
 "是否继续?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
-msgstr "查看详情"
+msgstr "显示详情"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1003
 msgid "Layer must have a name."
@@ -46106,12 +46071,12 @@ msgstr "(TrueType 字体字符的笔画线宽不足)"
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:212
 #, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s 最小宽度 %s; 实际 %s)"
+msgstr "(%s 最小线宽 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:225
 #, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s 最大宽度 %s; 实际 %s)"
+msgstr "(%s 最大线宽 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:67
 msgid "Checking text mirroring..."
@@ -46184,9 +46149,8 @@ msgid "Checking thermal reliefs..."
 msgstr "正在检查缓释热焊盘 (花焊盘) ..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:70
-#, fuzzy
 msgid "Design Rule Editor"
-msgstr "设计规则"
+msgstr "设计规则编辑器"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
 #, fuzzy
@@ -46194,44 +46158,36 @@ msgid "Are you sure you want to delete?"
 msgstr "确定要删除整板吗？"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "最大长度:"
+msgstr "最小长度"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "最大长度:"
+msgstr "最优长度"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "最大长度:"
+msgstr "最大长度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "度"
+msgstr "0 度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
-msgstr "度"
+msgstr "90 度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "度"
+msgstr "180 度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "度"
+msgstr "270 度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "方向"
+msgstr "所有方向"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
 #, fuzzy
@@ -46247,36 +46203,32 @@ msgid "Where object matches:"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "添加中心测量标注"
+msgstr "添加另一个条件"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "AND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "OR"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "AND NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "OR NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "对象"
+msgstr "对象 A"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "对象"
+msgstr "对象 B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -46300,9 +46252,8 @@ msgstr "规则域"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "自定义规则"
+msgstr "自定义查询"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
 #, fuzzy
@@ -46328,19 +46279,17 @@ msgstr "使用初始条件"
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "%.2f mm"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Text Height"
-msgstr "最小文本高度:"
+msgstr "最小文本高度"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:47
-#, fuzzy
 msgid "Minimum Text Thickness"
-msgstr "最小文本线宽:"
+msgstr "最小文本线宽"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
 #, fuzzy
@@ -46353,39 +46302,34 @@ msgid "Bottom Layer"
 msgstr "底层"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "最小宽度"
+msgstr "最小布线宽度"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Routing Width"
-msgstr "最大走线宽度"
+msgstr "最大布线宽度"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
-#, fuzzy
 msgid "Max Uncoupled Length"
-msgstr "未耦合长度"
+msgstr "最大未耦合长度"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "最小宽度"
+msgstr "最小值"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "最大宽度:"
+msgstr "最大值"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
@@ -46411,43 +46355,37 @@ msgid "Rule type"
 msgstr "规则类型"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "重命名"
+msgstr "规则名称"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
 msgstr ""
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
 msgstr "DRC 规则"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "显示所有错误"
+msgstr "显示匹配 (错误)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "配色主题 (%d)"
+msgstr "显示匹配 (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "显示走线"
+msgstr "显示匹配"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
 msgstr "约束"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "条件:"
+msgstr "条件"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -48354,24 +48292,23 @@ msgid "Removed unused net %s."
 msgstr "移除未使用的网络 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "正在更新网络..."
+msgstr "正在更新设计变体..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "添加了 %s (封装 '%s')。"
+msgstr "已添加变体 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "已将 %s 封装筛选规则更新为 '%s'。"
+msgstr "已更新变体 '%s' 的描述。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "移除变体..."
+msgstr "已移除变体 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -49781,9 +49718,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线宽度 (%.2f mm)比填充区的最小"
+"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线线宽 (%.2f mm)比填充区的最小"
 "厚度 (%.2f mm) 更薄。KiCad 要求保留填充区的最小厚度。因此, 已将最小厚度用作新"
-"的引线宽度, 并将在下次填充填充区时应用。"
+"的引线线宽, 并将在下次填充填充区时应用。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2107
 #, c-format
@@ -53654,16 +53591,14 @@ msgid "Apply linked design block layout to selected group"
 msgstr "将链接的设计图块布局应用到所选分组"
 
 #: pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "将电路板保存为设计图块..."
+msgstr "将电路板另存为设计图块..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
 msgstr "从当前电路板创建新的设计图块"
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Update Design Block from Board"
 msgstr "从电路板更新设计图块"
 
@@ -54465,13 +54400,12 @@ msgid "Open schematic in schematic editor"
 msgstr "在原理图编辑器中打开原理图"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "DRC 规则"
+msgstr "DRC 规则编辑器"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
 msgid "Open drc rule editor window"
-msgstr ""
+msgstr "打开 DRC 规则编辑器窗口"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -55359,9 +55293,8 @@ msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
 #: pcbnew/tools/pcb_control.cpp:1431
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "设计图块 '%s' 已有布局。"
+msgstr "设计图块中没有可放置的布局。"
 
 #: pcbnew/tools/pcb_control.cpp:1496 pcbnew/tools/pcb_control.cpp:1683
 #, c-format
@@ -55441,14 +55374,12 @@ msgid "Selected 2D Copper Area"
 msgstr "选中二维铜箔面积"
 
 #: pcbnew/tools/pcb_control.cpp:2658
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "选中二维铜箔面积"
+msgstr "选定的 2D 面积"
 
 #: pcbnew/tools/pcb_control.cpp:2660
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "选中二维铜箔面积"
+msgstr "选定的 2D 总面积"
 
 #: pcbnew/tools/pcb_control.cpp:2718
 msgid "Place Board Characteristics"
