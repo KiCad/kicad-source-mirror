@@ -393,10 +393,11 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
                 }
 
                 wxFileName fn( path, name );
+                wxString   fullPath = fn.GetFullPath();
 
-                if( fn.IsDir() && fn.DirExists() )
+                if( wxFileName::DirExists( fullPath ) )
                 {
-                    collect( fn.GetFullPath() );
+                    collect( fullPath );
                 }
                 else if( fn.FileExists() )
                 {
@@ -441,9 +442,6 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
                                     const wxString& aHistoryPath, const wxString& aProjectPath,
                                     const std::vector<wxString>& aFiles, const wxString& aTitle )
 {
-    git_status_options statusOpts;
-    git_status_options_init( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
-
     std::vector<std::string> filesArrStr;
 
     for( const wxString& file : aFiles )
@@ -456,6 +454,7 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
         else
             relPath = src.GetFullName(); // Fallback (should not normally happen)
 
+        relPath.Replace( "\\", "/" ); // libgit2 needs forward slashes on all platforms
         std::string relPathStr = relPath.ToStdString();
 
         unsigned int status = 0;
@@ -469,6 +468,7 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
         else if( rc != 0 )
         {
             wxLogTrace( traceAutoSave, wxS( "File %s status error %d " ), relPath, rc );
+            filesArrStr.emplace_back( relPathStr ); // Add anyway even if the file is untracked. 
         }
     }
 
@@ -626,10 +626,11 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
             }
 
             wxFileName fn( path, name );
+            wxString   fullPath = fn.GetFullPath();
 
-            if( fn.IsDir() && fn.DirExists() )
+            if( wxFileName::DirExists( fullPath ) )
             {
-                collect( fn.GetFullPath() );
+                collect( fullPath );
             }
             else if( fn.FileExists() )
             {
@@ -850,8 +851,10 @@ static size_t dirSizeRecursive( const wxString& path )
     while( cont )
     {
         wxFileName fn( path, name );
-        if( fn.DirExists() )
-            total += dirSizeRecursive( fn.GetFullPath() );
+        wxString   fullPath = fn.GetFullPath();
+
+        if( wxFileName::DirExists( fullPath ) )
+            total += dirSizeRecursive( fullPath );
         else if( fn.FileExists() )
             total += (size_t) fn.GetSize().GetValue();
         cont = dir.GetNext( &name );
