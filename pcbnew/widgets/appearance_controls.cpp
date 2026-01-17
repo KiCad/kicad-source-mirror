@@ -1345,10 +1345,10 @@ bool APPEARANCE_CONTROLS::isLayerEnabled( PCB_LAYER_ID aLayer ) const
 
 void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
 {
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+
     if( m_isFpEditor )
     {
-        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-
         for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ); i++ )
             view->SetLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ), aLayers.test( i ) );
     }
@@ -1360,6 +1360,10 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
 
         m_frame->SetGridVisibility( aLayers.test( LAYER_GRID - GAL_LAYER_ID_START ) );
         m_frame->GetBoard()->SetVisibleElements( aLayers );
+
+        // Update VIEW layer visibility to stay in sync with board settings
+        for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ); i++ )
+            view->SetLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ), aLayers.test( i ) );
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
     }
