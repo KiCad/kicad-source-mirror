@@ -1,5 +1,5 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020, 2023.
-# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024, 2025.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022, 2025.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-11-28 09:00+0000\n"
-"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
+"PO-Revision-Date: 2026-01-18 04:50+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
 "Language: pl\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4245,8 +4245,8 @@ msgstr "Wyłącz niestandardowe kursory"
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
-"Po włączeniu, KiCad będzie używał domyślnych kursorów systemowych zamiast "
-"własnych."
+"Gdy włączone, KiCad będzie używał domyślnych kursorów systemowych zamiast "
+"własnych"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4579,14 +4579,12 @@ msgstr "Dodaj mimo to"
 #: common/dialogs/panel_design_block_lib_table.cpp:772
 #: eeschema/dialogs/panel_sym_lib_table.cpp:709
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:801
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
-"Błąd zapisu globalnej tablicy bibliotek footprintów:\n"
+"Błąd zapisu globalnej tablicy bibliotek:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:773
 #: common/dialogs/panel_design_block_lib_table.cpp:792
@@ -4607,11 +4605,12 @@ msgstr "Błąd zapisu pliku"
 #: common/dialogs/panel_design_block_lib_table.cpp:791
 #: eeschema/dialogs/panel_sym_lib_table.cpp:728
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:820
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Błąd podczas zapisu lokalnej tablicy bibliotek."
+msgstr ""
+"Błąd podczas zapisu lokalnej tablicy bibliotek:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:880
 msgid "Design Block Libraries"
@@ -6066,9 +6065,8 @@ msgid "Customize toolbars"
 msgstr "Personalizuj paski narzędzi"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Paski narzędzi"
+msgstr "Pasek narzędzi:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6344,16 +6342,13 @@ msgid "Run: %s"
 msgstr "Uruchom: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Plik '%s' nie został znaleziony."
+msgstr "Plik '%s' nie został znaleziony.\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Czy nadpisać wszystkie, czy zmienić nazwy dla nowych symboli?"
+msgstr "Czy chcesz usunąć go z listy ostatnio otwieranych plików?"
 
 #: common/eda_base_frame.cpp:1283
 msgid "Remove"
@@ -8950,19 +8945,16 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Wiele bibliotek nie może mieć tej samej nazwy skrótowej ('%s')."
 
 #: common/lib_table_notebook_panel.cpp:100
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Błąd zapisu globalnej tablicy bibliotek footprintów:\n"
+"Błąd zapisu zagnieżdżonej tablicy bibliotek:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Utwórz nową globalną tabelę bibliotek %s"
+msgstr "Zapisać zmiany w zagnieżdżonej tabeli bibliotek?"
 
 #: common/lib_tree_model_adapter.cpp:155 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:176 common/lib_tree_model_adapter.cpp:178
@@ -9101,9 +9093,9 @@ msgid "Library not found in library table"
 msgstr "Nie znaleziono biblioteki w tabeli bibliotek symboli."
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Biblioteka: "
+msgstr "Biblioteka '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -11087,14 +11079,12 @@ msgstr "Opis biblioteki"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241 eeschema/project_rescue.cpp:853
 #: eeschema/symbol_library_manager.cpp:747
 #: pcbnew/footprint_libraries_utils.cpp:545
-#, fuzzy
 msgid ""
 "Error saving library table:\n"
 "\n"
 msgstr ""
-"Błąd zapisu globalnej tablicy bibliotek footprintów:\n"
+"Błąd zapisu tablicy bibliotek:\n"
 "\n"
-"%s"
 
 #: common/widgets/design_block_pane.cpp:295
 msgid "Please select a library to delete."
@@ -11198,9 +11188,8 @@ msgid "Select Path"
 msgstr "Wybierz ścieżkę"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Wiadomości:"
+msgstr "Pokazuj wiadomości podczas wczytywania"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
@@ -13824,9 +13813,8 @@ msgid "Import"
 msgstr "Importuj"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Nie można załadować biblioteki\n"
+msgstr "Nie można znaleźć wtyczki potrzebnej do załadowania tej biblioteki."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
 #, fuzzy, c-format
@@ -14550,9 +14538,8 @@ msgstr "Nazwa bazowa"
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:57
 #: eeschema/fields_data_model.cpp:56
-#, fuzzy
 msgid "Include"
-msgstr "Uwzględnij:"
+msgstr "Uwzględnij"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:58
@@ -14927,9 +14914,8 @@ msgstr ""
 "żażenie)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:315
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "Wprowadź wyświetlaną nazwę dla części składowej %s"
+msgstr "Wyświetlane nazwy dla części składowych (opcjonalnie):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:351
 #: eeschema/lib_symbol.cpp:2447
@@ -14947,9 +14933,8 @@ msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:365
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "Wspólny dla wszystkich stylów"
+msgstr "Własne style:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 #, fuzzy
@@ -15460,9 +15445,8 @@ msgid "Prefix that will be applied to the generated libraries."
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "Załadowano %zu bibliotek"
+msgstr "Dodano biblioteki do:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
 #, fuzzy
@@ -15499,9 +15483,8 @@ msgid "Please enter a library prefix."
 msgstr "Proszę wybrać bibliotekę do usunięcia."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Wybierz typ docelowy:"
+msgstr "Wybierz folder docelowy"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
@@ -16903,9 +16886,8 @@ msgid "Cannot copy the default variant."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Wprowadź numer strony dla ścieżki arkusza %s"
+msgstr "Wprowadź nazwę dla skopiowanego wariantu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
 #, fuzzy
@@ -16929,9 +16911,8 @@ msgid "View presets:"
 msgstr "Przeglądaj ustawienia wstępne:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "Zgodność ze schematem"
+msgstr "Warianty schematu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:207
 #, fuzzy
@@ -17012,9 +16993,8 @@ msgid "Alternate Assignment"
 msgstr "Alternatywne przypisanie"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "Twórcy bibliotek"
+msgstr " Wariant"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17023,9 +17003,8 @@ msgid "Standard"
 msgstr "Standardowo"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
-#, fuzzy
 msgid "Body style:"
-msgstr "Styl prezentacji"
+msgstr "Styl prezentacji:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -17522,9 +17501,8 @@ msgid "Wire & Bus Properties"
 msgstr "Właściwości połączeń i magistral"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Zdefiniowane formaty BOM:"
+msgstr "Zdefiniowane formaty BOM"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 #, fuzzy
@@ -19879,11 +19857,9 @@ msgstr "Nie można utworzyć pliku '%s'.\n"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:130
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:148
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error writing netlist: %s"
-msgstr ""
-"Błąd podczas odczytywania listy sieci.\n"
-"%s"
+msgstr "Błąd I/O podczas zapisu listy sieci: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:135
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:154
@@ -21147,11 +21123,13 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Biblioteka symboli '%s' nie może zostać usunięta."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Biblioteka '%s' już istnieje."
+msgstr ""
+"Biblioteka '%s' załadowana z błędami:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
@@ -22569,12 +22547,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1250
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1990
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2059
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"Błąd zapisu globalnej tablicy bibliotek footprintów:\n"
-"\n"
-"%s"
+msgstr "Błąd zapisu tablicy bibliotek."
 
 #: eeschema/sheet.cpp:696 eeschema/tools/sch_editor_control.cpp:3066
 msgid "Cannot create the schematic image"
@@ -22881,9 +22855,8 @@ msgid "Invalid POWER Pulse table."
 msgstr "Nieprawidłowy POWER clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "Bryły DXF nie są obecnie obsługiwane."
+msgstr " modele podrzędne nie są obecnie obsługiwane."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
 #, fuzzy
@@ -22971,23 +22944,20 @@ msgid "Error on line "
 msgstr "Błąd w linii "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "Symbolu nie znaleziono."
+msgstr " nie odnaleziono symbolu podrzędnego."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr "Linia nie jest zakończona w sposób poprawny."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "'%s' to nie jest poprawna wartość programu SPICE."
+msgstr " nie jest prawidłową wartością dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
-#, fuzzy
 msgid "A dV/dt value is missing."
-msgstr "Brakuje.\n"
+msgstr "Brak wartości dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1233
 #: eeschema/sim/kibis/ibis_parser.cpp:1248
@@ -23062,14 +23032,12 @@ msgid "Invalid pin name/number in matrix row."
 msgstr "Nieprawidłowy rząd w matrycy"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1942
-#, fuzzy
 msgid "The matrix type is missing."
-msgstr "Brakuje.\n"
+msgstr "Brak typu matrycowego."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
-msgstr "Brak typu matrycy"
+msgstr " nie zostało rozpoznane jako typ matrycowy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
 #, fuzzy
@@ -23137,9 +23105,8 @@ msgstr ""
 "Kontynuacja odczytywania modelu, który się nie rozpoczął. (błąd wewnętrzny)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr "Niezdefiniowany typ modelu."
+msgstr " nie zostało rozpoznane jako typ modelu podrzędnego."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
@@ -26574,11 +26541,13 @@ msgstr "Wszystkie pliki (*.*)|*.*"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:142
 #: pcbnew/tools/pcb_edit_table_tool.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "Nie udało się otworzyć pliku '%s'."
+msgstr ""
+"Nie udało się otworzyć pliku:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:143
 #: pcbnew/tools/pcb_edit_table_tool.cpp:184
@@ -27383,9 +27352,8 @@ msgid "Unable to start the local login listener."
 msgstr "Nie można odjąć zaznaczonych polygonów."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1013
-#, fuzzy
 msgid "Failed to allocate a callback port for login."
-msgstr "Nie można utworzyć folderu kopii '%s'.\n"
+msgstr "Nie udało się przydzielić portu zwrotnych wywołań dla logowania."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1135
 #, fuzzy, c-format
@@ -27417,9 +27385,8 @@ msgstr "Nie można otworzyć pliku"
 #: eeschema/widgets/panel_remote_symbol.cpp:1611
 #: eeschema/widgets/panel_remote_symbol.cpp:1924
 #: eeschema/widgets/panel_remote_symbol.cpp:2154
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "Nie można załadować pliku schematu\n"
+msgstr "Nie można załadować ustawień schematu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1330
 #, fuzzy
@@ -27510,9 +27477,8 @@ msgid "Unable to access the symbol library manager."
 msgstr "Nie dało się utworzyć pliku bibliotek symboli '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1678
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Nie można utworzyć folderu pobierania!"
+msgstr "Nie można przeanalizować pobranego symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1757
 #, fuzzy
@@ -29058,9 +29024,8 @@ msgid "Selected cells are from different tables"
 msgstr ""
 
 #: include/tool/edit_table_tool_base.h:673
-#, fuzzy
 msgid "Cannot paste into merged cells"
-msgstr "Nie można utworzyć strumienia wejściowego '%s'.\n"
+msgstr "Nie można wkleić w połączonych komórkach"
 
 #: include/tool/edit_table_tool_base.h:683
 msgid "Selected cells must form a contiguous block"
@@ -35840,9 +35805,8 @@ msgid "Front component density"
 msgstr "Eksportuj komponenty"
 
 #: pcbnew/board_statistics_report.cpp:594
-#, fuzzy
 msgid "Back component density"
-msgstr "Sprawdzanie komponentu "
+msgstr "Zagęszczenie elementów po stronie dolnej"
 
 #: pcbnew/board_statistics_report.cpp:618
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -39005,17 +38969,16 @@ msgstr "Zezwalaj na mostkowane apertury soldermaski między padami"
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:47
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Solder paste clearance relative to pad size.\n"
 "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Jest to globalna wartość prześwitu pomiędzy punktem lutowniczym a maską "
-"lutowniczą.\n"
-"Wartość ta może zostać zastąpiona przez lokalne wartości zdefiniowane w "
-"footprintach lub dla pól lutowniczych."
+"Prześwit pasty lutowniczej zależny od rozmiaru pola lutowniczego.\n"
+"Wprowadź wartość bezwzględną (np. -0,1 mm), procentową (np. -5%) lub obie "
+"(np. -0,1 mm - 5%).\n"
+"Wartość tą można zastąpić wartościami lokalnymi dla footprintu lub pola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:383
@@ -43448,6 +43411,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Klauzula\n"
+"\n"
+"    (condition \"<wyrażenie>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43457,33 +43425,35 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Uwagi\n"
+"\n"
+"Użyj Ctrl+/ by dodać lub usunąć komentarz w danej linii(-ach).\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
 msgstr "Minimalny prześwit:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
 "Minimalny odstęp między elementami z miedzi, które nie należą do tej samej "
-"sieci.  Jeśli jest ustawione, jest to absolutne minimum, którego nie można "
-"zmniejszyć za pomocą klas sieci, reguł niestandardowych lub innych ustawień."
+"sieci. Jeśli ustawiony, może być zmniejszony tylko poprzez reguły "
+"użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Miminalna szerokość ścieżki:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimalna szerokość ścieżki.  Jeśli jest ustawiona, jest to absolutne "
-"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
-"lub inne ustawienia."
+"Minimalna szerokość ścieżki. Jeśli ustawiona, może być zmniejszona tylko za "
+"pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -43498,55 +43468,47 @@ msgid "Minimum annular width:"
 msgstr "Minimalna szerokość pierścienia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimalna szerokość pierścienia.  Jeśli jest ustawiona, jest to absolutne "
-"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
-"lub inne ustawienia."
+"Minimalna szerokość pierścienia. Jeśli ustawiona, może być zmniejszona tylko "
+"za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
 msgstr "Minimalny rozmiar przelotki:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimalna średnica przelotki.  Jeśli jest ustawiona, jest to absolutne "
-"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
-"lub inne ustawienia."
+"Minimalna średnica przelotki. Jeśli ustawiona, może być zmniejszona tylko za "
+"pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:141
 msgid "Copper to hole clearance:"
 msgstr "Prześwit wobec otworu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
-"Minimalny prześwit między otworem a niepowiązanym elementem z miedzi.  Jeśli "
-"jest ustawione, jest to absolutne minimum i nie można go zmniejszyć za "
-"pomocą reguł niestandardowych lub innych ustawień."
+"Minimalny prześwit między otworem a niepowiązanym elementem z miedzi. Jeśli "
+"ustawiony, może być zmniejszony tylko za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Prześwit wobec krawędzi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"Minimalny odstęp między krawędzią płyty a dowolnym elementem z miedzi.  "
-"Jeśli jest ustawione, jest to absolutne minimum i nie można go zmniejszyć za "
-"pomocą reguł niestandardowych lub innych ustawień."
+"Minimalny odstęp między krawędzią płyty a dowolnym elementem z miedzi. Jeśli "
+"ustawiony, może być zmniejszony tylko za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -43565,29 +43527,25 @@ msgid "Minimum through hole:"
 msgstr "Minimalny otwór na wylot:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimalny rozmiar otworu przelotowego.  Jeśli jest ustawiona, jest to "
-"absolutne minimum i nie może być redukowane przez klasy sieci, reguły "
-"niestandardowe lub inne ustawienia."
+"Minimalny rozmiar otworu przelotowego. Jeśli ustawiony, może być zmniejszony "
+"tylko za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
 msgstr "Prześwit pomiędzy otworami:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"Minimalny prześwit między dwoma wywierconymi otworami.  Jeśli jest "
-"ustawione, jest to absolutne minimum i nie można go zmniejszyć za pomocą "
-"reguł niestandardowych lub innych ustawień. (Uwaga: Nie dotyczy otworów "
-"frezowanych.)"
+"Minimalny prześwit między dwoma wywierconymi otworami. Jeśli ustawiony, może "
+"być zmniejszony tylko za pomocą reguł użytkownika. (Uwaga: Nie dotyczy "
+"otworów frezowanych.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -43598,28 +43556,24 @@ msgid "Minimum uVia diameter:"
 msgstr "Minimalny rozmiar mikroprzelotki:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Minimalna średnica mikroprzelotek.  Jeśli jest ustawiona, jest to absolutne "
-"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
-"lub inne ustawienia."
+"Minimalna średnica mikroprzelotek. Jeśli ustawiona, może być zmniejszona "
+"tylko za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
 msgstr "Minimalny otwór mikroprzelotki:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimalny rozmiar otworu mikroprzelotki.  Jeśli jest ustawiona, jest to "
-"absolutne minimum i nie może być redukowane przez klasy sieci, reguły "
-"niestandardowe lub inne ustawienia."
+"Minimalny rozmiar otworu mikroprzelotki. Jeśli ustawiony, może być "
+"zmniejszony tylko za pomocą reguł użytkownika."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
@@ -43933,14 +43887,12 @@ msgid "Pad %s of %s on %s"
 msgstr "Pole lutownicze %s z %s na %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
 "Na usuwanych warstwach wykryto elementy. Operacja ta spowoduje ich usunięcie "
-"razem z usuwaną warstwą i ta operacja nie może zostać cofnięta.\n"
-"Chcesz kontynuować?"
+"razem z usuwaną warstwą i ta operacja nie może zostać cofnięta."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
 #, fuzzy
@@ -47642,9 +47594,8 @@ msgid "All Orientations"
 msgstr "Orientacja"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "Sprawdź strefy"
+msgstr "Sprawdź!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
@@ -49616,12 +49567,9 @@ msgstr "Uaktualniono %s pól."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"Nieznany ID footprintu w\n"
-"plik: '%s'\n"
-"linia: %d"
+msgstr "Nieznany ID footprintu '%s' dla wariantu '%s' na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, fuzzy, c-format
@@ -50153,9 +50101,8 @@ msgid "Press-fit pad"
 msgstr "Drukuj stronę %d"
 
 #: pcbnew/pad.cpp:3216
-#, fuzzy
 msgid "Undefined"
-msgstr "Niezdefiniowany!"
+msgstr "Niezdefiniowany"
 
 #: pcbnew/pad.cpp:3228
 #, fuzzy
