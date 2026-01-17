@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-12-15 11:00+0000\n"
+"PO-Revision-Date: 2026-01-17 22:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5032,6 +5032,7 @@ msgstr "Einzubettende Datei wählen"
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"Im übergeordneten Symbol eingebettete Dateien können nicht entfernt werden."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -9880,9 +9881,8 @@ msgstr ""
 "Um an das KiCad-Projekt zu spenden, besuchen Sie %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Footprint-Auswahl"
+msgstr "Footprint-Browser"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -21925,9 +21925,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Fehler beim Enumerieren der Symbolbibliothek \"%s\": %s"
+msgstr "Fehler beim Parsen der SPICE-Bibliothek \"%s\": %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -39597,9 +39597,9 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
-"### Regelbestimmungen\n"
+"### Regel\n"
 "\n"
-"    (condition \"<Ausdruck>\")\n"
+"    (Bedingung \"<Ausdruck>\")\n"
 "\n"
 "<br>"
 
@@ -39613,7 +39613,7 @@ msgid ""
 msgstr ""
 "### Anmerkungen\n"
 "\n"
-"Strg+/ verwenden, um Zeile(n) aus zu kommentieren oder ein zu kommentieren.\n"
+"Strg+/ verwenden, um Zeile(n) aus- oder ein zu kommentieren.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -50265,13 +50265,12 @@ msgid "Create bill of materials from board"
 msgstr "Erstellt eine Stückliste (BoM) aus der Platine"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Auswahl des 3D-Modells"
+msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "3D-Modelle von Footprints sammeln und sie in Platine einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -51438,14 +51437,13 @@ msgid "Selected 2D Length"
 msgstr "Gewählte 2D-Länge"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Modell einbetten"
+msgstr "3D-Modelle einbetten"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 3D-Modell(e) erfolgreich eingebettet."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
