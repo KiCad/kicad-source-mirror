@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-16 14:10+0000\n"
+"PO-Revision-Date: 2026-01-17 22:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -9664,9 +9664,8 @@ msgstr ""
 "要向 KiCad 项目捐赠, 请访问 %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "封装选择器"
+msgstr "封装浏览器"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -16002,7 +16001,7 @@ msgstr "填充所选形状"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 msgid "Selection thickness:"
-msgstr "选区高亮宽度:"
+msgstr "选区高亮线宽:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:171
 msgid "(selection color can be edited in the \"Colors\" page)"
@@ -30554,23 +30553,23 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal tracks or 0.048 for external tracks\n"
 msgstr ""
-"如果你指定最大电流, 则会计算相应的走线宽度。\n"
+"如果你指定最大电流, 则会计算相应的走线线宽。\n"
 "\n"
-"如果你指定了其中一个走线的宽度, 将会计算其可以承载的最大电流。接着会计算另一"
-"个走线在承载相同电流时所需的宽度。\n"
+"如果你指定了其中一个走线的线宽, 将会计算其可以承载的最大电流。接着会计算另一"
+"个走线在承载相同电流时所需的线宽。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
-"计算适用于最大 35A (外部) 或 17.5A (内部) 的电流、温升不超过 100 °C, 以及宽度"
+"计算适用于最大 35A (外部) 或 17.5A (内部) 的电流、温升不超过 100 °C, 以及线宽"
 "不超过 400mil (10mm) 的情况。\n"
 "\n"
 "该公式来自 IPC 2221, 具体为:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "其中: <br>\n"
 "__I__ 为最大电流, 单位为 A (安培)\n"
 "__&Delta;T__ 为环境温度的温升, 单位为 °C (摄氏度)\n"
-"__W__ 为宽度, 单位为 mil (密耳)\n"
+"__W__ 为线宽, 单位为 mil (密耳)\n"
 "__H__ 为厚度 (高度), 单位为 mil (密耳)\n"
 "__K__ 的取值: 内部走线为 0.024, 外部走线为 0.048\n"
 
@@ -33237,7 +33236,7 @@ msgstr "测量标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
-msgstr "测量标注线的宽度"
+msgstr "测量标注线的线宽"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:83
@@ -41766,12 +41765,12 @@ msgstr "(TrueType 字体字符的笔画线宽不足)"
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:231
 #, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s 最小宽度 %s; 实际 %s)"
+msgstr "(%s 最小线宽 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:246
 #, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s 最大宽度 %s; 实际 %s)"
+msgstr "(%s 最大线宽 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:78
 msgid "Checking text mirroring..."
@@ -44851,9 +44850,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线宽度 (%.2f mm)比填充区的最小"
+"CADSTAR 模板\"%s\"在原始设计中具有散热片, 但引线线宽 (%.2f mm)比填充区的最小"
 "厚度 (%.2f mm) 更薄。KiCad 要求保留填充区的最小厚度。因此, 已将最小厚度用作新"
-"的引线宽度, 并将在下次填充填充区时应用。"
+"的引线线宽, 并将在下次填充填充区时应用。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2105
 #, c-format
