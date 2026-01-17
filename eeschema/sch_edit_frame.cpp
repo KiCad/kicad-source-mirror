@@ -119,6 +119,7 @@
 #include <wx/log.h>
 #include <wx/choicdlg.h>
 #include <wx/textdlg.h>
+#include <wx/generic/treectlg.h>
 
 
 #ifdef KICAD_IPC_API
@@ -2430,6 +2431,12 @@ DIALOG_SYMBOL_FIELDS_TABLE* SCH_EDIT_FRAME::GetSymbolFieldsTableDialog()
 }
 
 
+wxGenericTreeCtrl* SCH_EDIT_FRAME::GetNetNavigator()
+{
+    return m_netNavigator;
+}
+
+
 void SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog( wxCommandEvent& aEvent )
 {
     if( m_symbolFieldsTableDialog )
@@ -2481,8 +2488,8 @@ wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 
     sizer->Add( searchSizer, 0, wxEXPAND | wxALL, FromDIP( 2 ) );
 
-    m_netNavigator = new wxTreeCtrl( panel, wxID_ANY, wxPoint( 0, 0 ), FromDIP( wxSize( 160, 250 ) ),
-                                     wxTR_DEFAULT_STYLE | wxNO_BORDER );
+    m_netNavigator = new wxGenericTreeCtrl( panel, wxID_ANY, wxPoint( 0, 0 ), FromDIP( wxSize( 160, 250 ) ),
+                                            wxTR_DEFAULT_STYLE | wxNO_BORDER );
     sizer->Add( m_netNavigator, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP( 2 ) );
 
     panel->SetSizer( sizer );

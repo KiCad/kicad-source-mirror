@@ -36,6 +36,7 @@
 #include <wx/treectrl.h>
 #include <wx/utils.h>
 #include <wx/filename.h>
+#include <wx/generic/treectlg.h>
 
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
@@ -68,6 +69,7 @@ class API_HANDLER_SCH;
 class DIALOG_SCHEMATIC_SETUP;
 class PROGRESS_REPORTER;
 class wxSearchCtrl;
+class wxGenericTreeCtrl;
 class BITMAP_BUTTON;
 
 
@@ -834,7 +836,7 @@ public:
 
     DIALOG_SYMBOL_FIELDS_TABLE* GetSymbolFieldsTableDialog();
 
-    wxTreeCtrl* GetNetNavigator() { return m_netNavigator; }
+    wxGenericTreeCtrl* GetNetNavigator();
 
     const SCH_ITEM* GetSelectedNetNavigatorItem() const;
 
@@ -1056,7 +1058,7 @@ private:
     DIALOG_SCHEMATIC_SETUP*     m_schematicSetupDialog;
 
 
-    wxTreeCtrl*                 m_netNavigator;
+    wxGenericTreeCtrl*          m_netNavigator;
     wxSearchCtrl*               m_netNavigatorFilter;
     BITMAP_BUTTON*              m_netNavigatorMenuButton;
     wxString                    m_netNavigatorFilterValue;
