@@ -531,14 +531,22 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
     git_diff_tree_to_index( &rawDiff, repo, parentTree.get(), index, nullptr );
     std::unique_ptr<git_diff, decltype( &git_diff_free )> diff( rawDiff, &git_diff_free );
 
+    size_t numChangedFiles = git_diff_num_deltas( diff.get() );
+
+    if( numChangedFiles == 0 )
+    {
+        wxLogTrace( traceAutoSave, wxS( "No actual changes in tree, skipping commit" ) );
+        return false;
+    }
+
     wxString msg;
 
     if( !aTitle.IsEmpty() )
         msg << aTitle << wxS( ": " );
 
-    msg << aFiles.size() << wxS( " files changed" );
+    msg << numChangedFiles << wxS( " files changed" );
 
-    for( size_t i = 0; i < git_diff_num_deltas( diff.get() ); ++i )
+    for( size_t i = 0; i < numChangedFiles; ++i )
     {
         const git_diff_delta* delta = git_diff_get_delta( diff.get(), i );
         git_patch* rawPatch = nullptr;
