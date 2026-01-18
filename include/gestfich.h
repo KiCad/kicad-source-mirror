@@ -128,10 +128,11 @@ KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = 
  * @param aDestDir is the directory to copy to.
  * @param aErrors is a string to append any errors to.
  */
-KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors );
+KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,
+                                 const std::vector<wxString>& aOverwriteExclusions, wxString& aErrors );
 
-KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors,
-                                        int& fileCopiedCount, const std::vector<wxString>& aExclusions );
+KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxString& aDestDir, bool aAllowOverwrite,
+                                        wxString& aErrors, std::vector<wxString>& aPathsWritten );
 
 /**
  * Add a directory and its contents to a zip file.

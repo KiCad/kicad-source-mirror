@@ -44,6 +44,7 @@ public:
     virtual bool OutputPrecheck() { return true; }
     virtual bool HandleOutputs( const wxString&                aBaseTempPath,
                                 PROJECT*                       aProject,
+                                const std::vector<wxString>&   aPathsWithOverwriteDisallowed,
                                 const std::vector<JOB_OUTPUT>& aOutputsToHandle ) = 0;
 
     virtual void FromJson( const nlohmann::json& j ) = 0;

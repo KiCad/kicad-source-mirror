@@ -27,8 +27,9 @@ class JOBS_OUTPUT_FOLDER : public JOBS_OUTPUT_HANDLER
 public:
     JOBS_OUTPUT_FOLDER();
 
-    bool HandleOutputs( const wxString& aBaseTempPath,
-                        PROJECT* aProject,
+    bool HandleOutputs( const wxString&                aBaseTempPath,
+                        PROJECT*                       aProject,
+                        const std::vector<wxString>&   aPathsWithOverwriteDisallowed,
                         const std::vector<JOB_OUTPUT>& aOutputsToHandle ) override;
 
     bool OutputPrecheck() override;
