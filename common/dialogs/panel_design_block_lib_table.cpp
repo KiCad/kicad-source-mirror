@@ -174,7 +174,7 @@ protected:
         LIBRARY_TABLE_ROW& tableRow = table->at( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxEmptyString;
+            return wxT( "*.*" );
 
         if( tableRow.Type().IsEmpty() )
             return wxEmptyString;
@@ -418,6 +418,12 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populatePluginList()
 {
     for( const DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T& type : { DESIGN_BLOCK_IO_MGR::KICAD_SEXP } )
     {
+        if( type == DESIGN_BLOCK_IO_MGR::NESTED_TABLE )
+        {
+            m_pluginChoices.Add( DESIGN_BLOCK_IO_MGR::ShowType( type ) );
+            continue;
+        }
+
         IO_RELEASER<DESIGN_BLOCK_IO> pi( DESIGN_BLOCK_IO_MGR::FindPlugin( type ) );
 
         if( !pi )

@@ -118,7 +118,7 @@ protected:
         LIBRARY_TABLE_ROW&         tableRow = table->At( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxEmptyString;
+            return wxT( "*.*" );
 
         SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
         IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( pi_type ) );
@@ -277,12 +277,15 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
+        if( type == SCH_IO_MGR::SCH_NESTED_TABLE )
+        {
+            m_pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
+            continue;
+        }
+
         IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
 
-        if( !pi )
-            continue;
-
-        if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
+        if( pi )
             m_pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
     }
 

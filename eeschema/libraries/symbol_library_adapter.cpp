@@ -107,7 +107,17 @@ LIBRARY_RESULT<IO_BASE*> SYMBOL_LIBRARY_ADAPTER::createPlugin( const LIBRARY_TAB
 {
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
 
-    if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+    if( type == SCH_IO_MGR::SCH_NESTED_TABLE )
+    {
+        wxString   msg;
+        wxFileName fileName( row->URI() );
+
+        if( !fileName.FileExists() )
+            msg = wxString::Format( _( "Nested table '%s' not found." ), row->URI() );
+
+        return tl::unexpected( LIBRARY_ERROR( msg ) );
+    }
+    else if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
     {
         wxLogTrace( traceLibraries, "Sym: Plugin type %s is unknown!", row->Type() );
         wxString msg = wxString::Format( _( "Unknown library type %s " ), row->Type() );

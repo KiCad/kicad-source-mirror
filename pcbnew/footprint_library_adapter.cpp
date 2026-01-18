@@ -80,20 +80,20 @@ void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
     thread_pool& tp = GetKiCadThreadPool();
 
     auto check =
-        []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
-        {
-            std::lock_guard lock( aMutex );
-
-            if( aMap.contains( aLib ) )
+            []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
             {
-                if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
-                    return true;
+                std::lock_guard lock( aMutex );
 
-                aMap.erase( aLib );
-            }
+                if( aMap.contains( aLib ) )
+                {
+                    if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
+                        return true;
 
-            return false;
-        };
+                    aMap.erase( aLib );
+                }
+
+                return false;
+            };
 
     for( const LIBRARY_TABLE_ROW* row : rows )
     {
@@ -114,71 +114,73 @@ void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
         }
 
         m_futures.emplace_back( tp.submit_task(
-            [this, nickname, scope]()
-            {
-                if( m_abort.load() )
-                    return;
-
-                LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
-
-                if( result.has_value() )
+                [this, nickname, scope]()
                 {
-                    LIB_DATA* lib = *result;
-                    wxArrayString dummyList;
-                    std::lock_guard lock ( lib->mutex );
-                    lib->status.load_status = LOAD_STATUS::LOADING;
+                    if( m_abort.load() )
+                        return;
 
-                    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+                    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
 
-                    try
+                    if( result.has_value() )
                     {
-                        pcbplugin( lib )->FootprintEnumerate( dummyList, getUri( lib->row ), false, &options );
-                        wxLogTrace( traceLibraries, "FP: %s: library enumerated %zu items", nickname, dummyList.size() );
-                        lib->status.load_status = LOAD_STATUS::LOADED;
+                        LIB_DATA* lib = *result;
+                        wxArrayString dummyList;
+                        std::lock_guard lock ( lib->mutex );
+                        lib->status.load_status = LOAD_STATUS::LOADING;
+
+                        std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+                        try
+                        {
+                            pcbplugin( lib )->FootprintEnumerate( dummyList, getUri( lib->row ), false, &options );
+                            wxLogTrace( traceLibraries, "FP: %s: library enumerated %zu items", nickname,
+                                        dummyList.size() );
+                            lib->status.load_status = LOAD_STATUS::LOADED;
+                        }
+                        catch( IO_ERROR& e )
+                        {
+                            lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+                            lib->status.error = LIBRARY_ERROR( { e.What() } );
+                            wxLogTrace( traceLibraries, "FP: %s: plugin threw exception: %s", nickname, e.What() );
+                        }
                     }
-                    catch( IO_ERROR& e )
+                    else
                     {
-                        lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-                        lib->status.error = LIBRARY_ERROR( { e.What() } );
-                        wxLogTrace( traceLibraries, "FP: %s: plugin threw exception: %s", nickname, e.What() );
+                        switch( scope )
+                        {
+                        case LIBRARY_TABLE_SCOPE::GLOBAL:
+                        {
+                            std::lock_guard lock( GlobalLibraryMutex );
+
+                            GlobalLibraries[nickname].status = LIB_STATUS( {
+                                .load_status = LOAD_STATUS::LOAD_ERROR,
+                                .error = result.error()
+                            } );
+
+                            break;
+                        }
+
+                        case LIBRARY_TABLE_SCOPE::PROJECT:
+                        {
+                            wxLogTrace( traceLibraries, "FP: project library error: %s: %s", nickname,
+                                        result.error().message );
+                            std::lock_guard lock( m_libraries_mutex );
+
+                            m_libraries[nickname].status = LIB_STATUS( {
+                                .load_status = LOAD_STATUS::LOAD_ERROR,
+                                .error = result.error()
+                            } );
+
+                            break;
+                        }
+
+                        default:
+                            wxFAIL_MSG( "Unexpected library table scope" );
+                        }
                     }
-                }
-                else
-                {
-                    switch( scope )
-                    {
-                    case LIBRARY_TABLE_SCOPE::GLOBAL:
-                    {
-                        std::lock_guard lock( GlobalLibraryMutex );
 
-                        GlobalLibraries[nickname].status = LIB_STATUS( {
-                            .load_status = LOAD_STATUS::LOAD_ERROR,
-                            .error = result.error()
-                        } );
-
-                        break;
-                    }
-
-                    case LIBRARY_TABLE_SCOPE::PROJECT:
-                    {
-                        wxLogTrace( traceLibraries, "FP: project library error: %s: %s", nickname, result.error().message );
-                        std::lock_guard lock( m_libraries_mutex );
-
-                        m_libraries[nickname].status = LIB_STATUS( {
-                            .load_status = LOAD_STATUS::LOAD_ERROR,
-                            .error = result.error()
-                        } );
-
-                        break;
-                    }
-
-                    default:
-                        wxFAIL_MSG( "Unexpected library table scope" );
-                    }
-                }
-
-                ++m_loadCount;
-            }, BS::pr::lowest ) );
+                    ++m_loadCount;
+                }, BS::pr::lowest ) );
     }
 
     wxLogTrace( traceLibraries, "FP: Started async load of %zu libraries", m_loadTotal );
@@ -258,8 +260,7 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
     }
     catch( IO_ERROR& e )
     {
-        wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s",
-                    lib->row->Nickname(), e.What() );
+        wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
     }
 
     for( const wxString& footprintName : namesAS )
@@ -272,8 +273,7 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
         }
         catch( IO_ERROR& e )
         {
-            wxLogTrace( traceLibraries, "Sym: Exception enumerating library %s: %s",
-                        lib->row->Nickname(), e.What() );
+            wxLogTrace( traceLibraries, "Sym: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
             continue;
         }
 
@@ -306,8 +306,7 @@ std::vector<wxString> FOOTPRINT_LIBRARY_ADAPTER::GetFootprintNames( const wxStri
         }
         catch( IO_ERROR& e )
         {
-            wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s",
-                        lib->row->Nickname(), e.What() );
+            wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
         }
     }
 
@@ -330,8 +329,8 @@ long long FOOTPRINT_LIBRARY_ADAPTER::GenerateTimestamp( const wxString* aNicknam
         {
             PCB_IO* plugin = dynamic_cast<PCB_IO*>( ( *r )->plugin.get() );
             wxCHECK( plugin, hash );
-            return plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) ) +
-                    wxHashTable::MakeKey( *aNickname );
+            return plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) )
+                    + wxHashTable::MakeKey( *aNickname );
         }
     }
 
@@ -342,8 +341,8 @@ long long FOOTPRINT_LIBRARY_ADAPTER::GenerateTimestamp( const wxString* aNicknam
             // Note: can't use dynamic_cast across compile units on Mac
             wxCHECK2( ( *r )->plugin->IsPCB_IO(), continue );
             PCB_IO* plugin = static_cast<PCB_IO*>( ( *r )->plugin.get() );
-            hash += plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) ) +
-                    wxHashTable::MakeKey( nickname );
+            hash += plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) )
+                        + wxHashTable::MakeKey( nickname );
         }
     }
 
@@ -381,8 +380,7 @@ FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, 
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogTrace( traceLibraries, "LoadFootprint: error loading %s:%s: %s",
-                        aNickname, aName, ioe.What() );
+            wxLogTrace( traceLibraries, "LoadFootprint: error loading %s:%s: %s", aNickname, aName, ioe.What() );
         }
     }
     else
@@ -502,7 +500,17 @@ LIBRARY_RESULT<IO_BASE*> FOOTPRINT_LIBRARY_ADAPTER::createPlugin( const LIBRARY_
 {
     PCB_IO_MGR::PCB_FILE_T type = PCB_IO_MGR::EnumFromStr( row->Type() );
 
-    if( type == PCB_IO_MGR::PCB_FILE_UNKNOWN )
+    if( type == PCB_IO_MGR::NESTED_TABLE )
+    {
+        wxString   msg;
+        wxFileName fileName( row->URI() );
+
+        if( !fileName.FileExists() )
+            msg = wxString::Format( _( "Nested table '%s' not found." ), row->URI() );
+
+        return tl::unexpected( LIBRARY_ERROR( msg ) );
+    }
+    else if( type == PCB_IO_MGR::PCB_FILE_UNKNOWN )
     {
         wxLogTrace( traceLibraries, "FP: Plugin type %s is unknown!", row->Type() );
         wxString msg = wxString::Format( _( "Unknown library type %s " ), row->Type() );
@@ -512,8 +520,8 @@ LIBRARY_RESULT<IO_BASE*> FOOTPRINT_LIBRARY_ADAPTER::createPlugin( const LIBRARY_
     PCB_IO* plugin = PCB_IO_MGR::FindPlugin( type );
     wxCHECK( plugin, tl::unexpected( LIBRARY_ERROR( _( "Internal error" ) ) ) );
 
-    wxLogTrace( traceLibraries, "FP: Library %s (%s) plugin created",
-                 row->Nickname(), magic_enum::enum_name( row->Scope() ) );
+    wxLogTrace( traceLibraries, "FP: Library %s (%s) plugin created", row->Nickname(),
+                magic_enum::enum_name( row->Scope() ) );
 
     return plugin;
 }

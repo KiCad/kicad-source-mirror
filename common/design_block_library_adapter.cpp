@@ -64,7 +64,17 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
     // TODO(JE) do we maintain a precondition that URIs are absolute paths after expansion?
     DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T type = DESIGN_BLOCK_IO_MGR::EnumFromStr( row->Type() );
 
-    if( type == DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_UNKNOWN )
+    if( type == DESIGN_BLOCK_IO_MGR::NESTED_TABLE )
+    {
+        wxString   msg;
+        wxFileName fileName( row->URI() );
+
+        if( !fileName.FileExists() )
+            msg = wxString::Format( _( "Nested table '%s' not found." ), row->URI() );
+
+        return tl::unexpected( LIBRARY_ERROR( msg ) );
+    }
+    else if( type == DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_UNKNOWN )
     {
         wxLogTrace( traceLibraries, "Sym: Plugin type %s is unknown!", row->Type() );
         wxString msg = wxString::Format( _( "Unknown library type %s " ), row->Type() );

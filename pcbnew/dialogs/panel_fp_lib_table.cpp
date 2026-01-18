@@ -109,7 +109,7 @@ protected:
         LIBRARY_TABLE_ROW&            tableRow = table->at( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxEmptyString;
+            return wxT( "*.*" );
 
         PCB_IO_MGR::PCB_FILE_T        fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
 
