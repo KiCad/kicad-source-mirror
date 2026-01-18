@@ -72,6 +72,9 @@ LOCAL_HISTORY_PANE::~LOCAL_HISTORY_PANE()
 
 void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     std::lock_guard<std::mutex> lock( m_mutex );
 
     m_list->DeleteAllItems();
