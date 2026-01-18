@@ -545,10 +545,10 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     PL_SELECTION&  selection = m_selectionTool->GetSelection();
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
+    if( std::unique_ptr<wxBitmap> clipImg = GetImageFromClipboard() )
     {
         auto image = std::make_unique<BITMAP_BASE>();
-        image->SetImage( *clipImg );
+        image->SetImage( clipImg->ConvertToImage() );
         auto dataItem = std::make_unique<DS_DATA_ITEM_BITMAP>( image.release() );
         model.Append( dataItem.release() );
     }

@@ -1165,11 +1165,11 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         // When the clipboard doesn't parse, create a PCB item with the clipboard contents
         std::vector<BOARD_ITEM*> newItems;
 
-        if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
+        if( std::unique_ptr<wxBitmap> clipImg = GetImageFromClipboard() )
         {
             auto refImg = std::make_unique<PCB_REFERENCE_IMAGE>( m_frame->GetModel() );
 
-            if( refImg->GetReferenceImage().SetImage( *clipImg ) )
+            if( refImg->GetReferenceImage().SetImage( clipImg->ConvertToImage() ) )
                 newItems.push_back( refImg.release() );
         }
         else

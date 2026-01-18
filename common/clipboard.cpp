@@ -80,22 +80,24 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
             // widely supported and avoids clipboard format query issues.
             if( entry.m_mimeType == wxS( "image/png" ) )
             {
-                wxImage image;
+                wxBitmap bitmap;
 
                 // Use pre-decoded image if available (avoids expensive PNG decode)
                 if( entry.m_image.has_value() && entry.m_image->IsOk() )
                 {
-                    image = *entry.m_image;
+                    bitmap = *entry.m_image;
                 }
                 else if( entry.m_data.GetDataLen() > 0 )
                 {
                     wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
-                    image.LoadFile( stream, wxBITMAP_TYPE_PNG );
+                    wxImage             img( stream, wxBITMAP_TYPE_PNG );
+
+                    bitmap = wxBitmap( img );
                 }
 
-                if( image.IsOk() )
+                if( bitmap.IsOk() )
                 {
-                    data->Add( new wxBitmapDataObject( wxBitmap( image ) ) );
+                    data->Add( new wxBitmapDataObject( bitmap ) );
                 }
 
                 // Don't also add as custom format - wxBitmapDataObject is sufficient
@@ -175,10 +177,10 @@ std::string GetClipboardUTF8()
 }
 
 
-std::unique_ptr<wxImage> GetImageFromClipboard()
+std::unique_ptr<wxBitmap> GetImageFromClipboard()
 {
-    std::unique_ptr<wxImage> image;
-    wxLogNull                doNotLog; // disable logging of failed clipboard actions
+    std::unique_ptr<wxBitmap> bitmap;
+    wxLogNull                 doNotLog; // disable logging of failed clipboard actions
 
     // Check if clipboard is already open (same handling as GetClipboardUTF8)
     bool wasAlreadyOpen = wxTheClipboard->IsOpened();
@@ -192,7 +194,7 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
 
             if( wxTheClipboard->GetData( data ) )
             {
-                image = std::make_unique<wxImage>( data.GetBitmap().ConvertToImage() );
+                bitmap = std::make_unique<wxBitmap>( data.GetBitmap() );
             }
         }
         else if( wxTheClipboard->IsSupported( wxDF_FILENAME ) )
@@ -201,10 +203,11 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
 
             if( wxTheClipboard->GetData( data ) && data.GetFilenames().size() == 1 )
             {
-                image = std::make_unique<wxImage>( data.GetFilenames()[0] );
+                wxImage img( data.GetFilenames()[0] );
+                bitmap = std::make_unique<wxBitmap>( img );
 
-                if( !image->IsOk() )
-                    image.reset();
+                if( !bitmap->IsOk() )
+                    bitmap.reset();
             }
         }
 
@@ -212,7 +215,7 @@ std::unique_ptr<wxImage> GetImageFromClipboard()
             wxTheClipboard->Close();
     }
 
-    return image;
+    return bitmap;
 }
 
 

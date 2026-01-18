@@ -129,8 +129,7 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
 }
 
 
-void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
-                     wxImage&& aImage )
+void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType, wxBitmap&& aImage )
 {
     if( !aImage.IsOk() )
         return;
@@ -247,16 +246,20 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
  *
  * @param aIncludeDrawingSheet If true, include the drawing sheet layer in the render
  */
-wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
-                                 const BOX2I& aBBox, int aWidth, int aHeight, double aViewScale,
-                                 const wxColour& aBgColor, bool aIncludeDrawingSheet = false )
+wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
+                                  int aWidth, int aHeight, double aViewScale, const wxColour& aBgColorOverride,
+                                  bool aIncludeDrawingSheet )
 {
     wxBitmap bitmap( aWidth, aHeight, 24 );
 
     {
         wxMemoryDC dc( bitmap );
-        dc.SetBackground( wxBrush( aBgColor ) );
-        dc.Clear();
+
+        if( aBgColorOverride.IsOk() )
+        {
+            dc.SetBackground( wxBrush( aBgColorOverride ) );
+            dc.Clear();
+        }
 
         KIGFX::GAL_DISPLAY_OPTIONS options;
         options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
@@ -302,8 +305,11 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
         dstSettings->SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
         dstSettings->SetIsPrinting( true );
 
-        COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0, aBgColor.Blue() / 255.0, 1.0 );
-        dstSettings->SetBackgroundColor( bgColor4D );
+        if( aBgColorOverride.IsOk() )
+        {
+            COLOR4D bgColor4D( aBgColorOverride.Red() / 255.0, aBgColorOverride.Green() / 255.0, aBgColorOverride.Blue() / 255.0, 1.0 );
+            dstSettings->SetBackgroundColor( bgColor4D );
+        }
 
         for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
         {
@@ -350,7 +356,7 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
 
         gal->SetLookAtPoint( aBBox.Centre() );
         gal->SetZoomFactor( zoomFactor );
-        gal->SetClearColor( bgColor4D );
+        gal->SetClearColor( dstSettings->GetBackgroundColor() );
         gal->ClearScreen();
 
         view->UseDrawPriority( true );
@@ -361,17 +367,17 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
         }
     }
 
-    return bitmap.ConvertToImage();
+    return bitmap;
 }
 
 
-wxImage renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
-                                         const BOX2I& aBBox, bool aIncludeDrawingSheet = false )
+wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
+                                         const BOX2I& aBBox, bool aUseAlpha, bool aIncludeDrawingSheet )
 {
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
-        return wxImage();
+        return wxBitmap();
 
     // Use the current view scale to match what the user sees on screen
     double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
@@ -388,17 +394,26 @@ wxImage renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELEC
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
-        return wxImage();
+        return wxBitmap();
+
+    if( !aUseAlpha )
+    {
+        return renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale, wxColour(),
+                                        aIncludeDrawingSheet );
+    }
 
     // Render twice with different backgrounds for alpha computation.
     // This dual-buffer technique computes true alpha by comparing renders on white vs black:
     // - On white: result_w = α*F + (1-α)*255
     // - On black: result_b = α*F
     // Therefore: α = 1 - (result_w - result_b)/255
-    wxImage imageOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
-                                                    bitmapHeight, viewScale, *wxWHITE, aIncludeDrawingSheet );
-    wxImage imageOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth,
-                                                    bitmapHeight, viewScale, *wxBLACK, aIncludeDrawingSheet );
+    wxImage imageOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
+                                                    *wxWHITE, aIncludeDrawingSheet )
+                                   .ConvertToImage();
+
+    wxImage imageOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
+                                                    *wxBLACK, aIncludeDrawingSheet )
+                                   .ConvertToImage();
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
         return wxImage();
@@ -1751,7 +1766,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             else
                 wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
 
-            wxImage pngImage = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox );
+            wxBitmap pngImage = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox, false, false );
 
             if( pngImage.IsOk() )
                 appendMimeData( mimeData, wxS( "image/png" ), std::move( pngImage ) );
@@ -2050,13 +2065,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Only fall back to image data if there's no text content
     if( content.empty() )
     {
-        std::unique_ptr<wxImage> clipImg = GetImageFromClipboard();
+        std::unique_ptr<wxBitmap> clipImg = GetImageFromClipboard();
 
         if( clipImg )
         {
             auto bitmap = std::make_unique<SCH_BITMAP>();
 
-            if( bitmap->GetReferenceImage().SetImage( *clipImg ) )
+            if( bitmap->GetReferenceImage().SetImage( clipImg->ConvertToImage() ) )
                 return m_toolMgr->RunAction( SCH_ACTIONS::placeImage, bitmap.release() );
         }
 
@@ -3045,7 +3060,7 @@ int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
     BOX2I pageBBox( VECTOR2I( 0, 0 ), m_frame->GetPageSizeIU() );
 
     // Render the full sheet selection including the worksheet
-    wxImage image = renderSelectionToImageWithAlpha( m_frame, sheetSelection, pageBBox, true );
+    wxBitmap image = renderSelectionToImageWithAlpha( m_frame, sheetSelection, pageBBox, true, true );
 
     if( image.IsOk() )
     {

@@ -371,7 +371,7 @@ BOOST_AUTO_TEST_CASE( GetImageFromClipboard_NoImage )
         wxTheClipboard->Close();
     }
 
-    std::unique_ptr<wxImage> image = GetImageFromClipboard();
+    std::unique_ptr<wxBitmap> image = GetImageFromClipboard();
     BOOST_CHECK( !image || !image->IsOk() );
 }
 
@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_CASE( GetImageFromClipboard_TextInClipboard )
     // Put text in clipboard
     SaveClipboard( "This is text, not an image" );
 
-    std::unique_ptr<wxImage> image = GetImageFromClipboard();
+    std::unique_ptr<wxBitmap> image = GetImageFromClipboard();
     BOOST_CHECK( !image || !image->IsOk() );
 }
 

@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 #include <wx/buffer.h>
-#include <wx/image.h>
+#include <wx/bitmap.h>
 #include <wx/string.h>
 
 struct CLIPBOARD_MIME_DATA
@@ -39,7 +39,7 @@ struct CLIPBOARD_MIME_DATA
     /// Optional pre-decoded image for "image/png" MIME type.
     /// When set, SaveClipboard() uses this directly instead of decoding m_data,
     /// avoiding expensive double PNG encode/decode during clipboard operations.
-    std::optional<wxImage> m_image;
+    std::optional<wxBitmap> m_image;
 };
 
 /**
@@ -88,4 +88,4 @@ std::string GetClipboardUTF8();
  *
  * If there's a filename there, and it can be loaded as an image, do that.
  */
-std::unique_ptr<wxImage> GetImageFromClipboard();
+std::unique_ptr<wxBitmap> GetImageFromClipboard();
