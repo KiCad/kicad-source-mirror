@@ -2670,6 +2670,12 @@ TOOL_ACTION PCB_ACTIONS::routerAutorouteSelected( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
+TOOL_ACTION PCB_ACTIONS::cancelCurrentItem( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.CancelCurrentItem" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Cancel Current Item" ) )
+        .Tooltip( _( "Skip current item and route next selected item." ) ) );
+
 TOOL_ACTION PCB_ACTIONS::breakTrack( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.BreakTrack" )
         .Scope( AS_GLOBAL )

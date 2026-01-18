@@ -239,7 +239,8 @@ ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
         m_lastTargetLayer( UNDEFINED_LAYER ),
         m_originalActiveLayer( UNDEFINED_LAYER ),
-        m_inRouterTool( false )
+        m_inRouterTool( false ),
+        m_inRouteSelected( false )
 {
 }
 
@@ -530,6 +531,12 @@ bool ROUTER_TOOL::Init()
                 return !m_router->RoutingInProgress();
             };
 
+    auto inRouteSelected =
+            [this]( const SELECTION& )
+            {
+                return m_inRouteSelected;
+            };
+
     auto hasOtherEnd =
             [this]( const SELECTION& )
             {
@@ -548,6 +555,7 @@ bool ROUTER_TOOL::Init()
             };
 
     menu.AddItem( ACTIONS::cancelInteractive,         SELECTION_CONDITIONS::ShowAlways, 1 );
+    menu.AddItem( PCB_ACTIONS::cancelCurrentItem,     inRouteSelected, 1 );
     menu.AddSeparator( 1 );
 
     menu.AddItem( PCB_ACTIONS::clearHighlight,        haveHighlight, 2 );
@@ -1583,10 +1591,11 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit );
             break;
         }
-        else if( evt->IsCancelInteractive() || evt->IsActivate()
+        else if( evt->IsCancelInteractive() || evt->IsAction( &PCB_ACTIONS::cancelCurrentItem )
+                 || evt->IsActivate()
                  || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
         {
-            if( evt->IsCancelInteractive() && !m_router->RoutingInProgress() )
+            if( evt->IsCancelInteractive() && ( m_inRouteSelected || !m_router->RoutingInProgress() ) )
                 m_cancelled = true;
 
             if( evt->IsActivate() && !evt->IsMoveTool() )
@@ -1739,6 +1748,8 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+    m_inRouteSelected = true;
+
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
     controls->ForceCursorPosition( false );
@@ -1765,6 +1776,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 
     // For putting sequential tracks that successfully autoroute into one undo commit
     bool groupStart = true;
+    m_cancelled = false;
 
     for( BOARD_CONNECTED_ITEM* item : itemList )
     {
@@ -1829,15 +1841,22 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
             // Start interactive routing. Will automatically finish if possible.
             performRouting( VECTOR2D() );
 
+            if( m_cancelled )
+                break;
+
             // Route didn't complete automatically, need to a new undo commit
             // for the next line so those can group as far as they autoroute
             if( !autoRouted )
                 groupStart = true;
         }
+
+        if( m_cancelled )
+            break;
     }
 
     m_iface->SetCommitFlags( 0 );
     frame->PopTool( pushedEvent );
+    m_inRouteSelected = false;
     return 0;
 }
 
@@ -2083,7 +2102,8 @@ void ROUTER_TOOL::performDragging( int aMode )
         {
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsCancelInteractive() || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsAction( &PCB_ACTIONS::cancelCurrentItem )
+                || evt->IsActivate() )
         {
             if( evt->IsCancelInteractive() && !m_startItem )
                 m_cancelled = true;
@@ -2517,7 +2537,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &PCB_ACTIONS::cancelCurrentItem )
+                || evt->IsActivate() )
         {
             if( wasLocked )
                 item->SetLocked( true );
