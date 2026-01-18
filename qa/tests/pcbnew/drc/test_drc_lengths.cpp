@@ -30,6 +30,8 @@
 #include <pcb_marker.h>
 #include <footprint.h>
 #include <drc/drc_item.h>
+#include <length_delay_calculation/length_delay_calculation.h>
+#include <length_delay_calculation/length_delay_calculation_item.h>
 #include <settings/settings_manager.h>
 
 
@@ -48,7 +50,8 @@ BOOST_FIXTURE_TEST_CASE( DRCLengths, DRC_REGRESSION_TEST_FIXTURE )
 
     std::vector<std::pair<wxString, int>> tests = {
         { "length_calculations", 0 },
-        { "time_calculations", 1 } // Expect one skew DRC error from NET_P
+        { "time_calculations", 1 }, // Expect one skew DRC error from NET_P
+        { "issue22536", 0 }         // Via electrical span calculation (GitLab #22536)
     };
 
     for( const std::pair<wxString, int>& test : tests )
@@ -110,4 +113,52 @@ BOOST_FIXTURE_TEST_CASE( DRCLengths, DRC_REGRESSION_TEST_FIXTURE )
                                            report ) );
         }
     }
+}
+
+
+// Test that via electrical span is calculated from trace connections, not physical via span.
+// GitLab issue #22536: TH vias near TH connector pads should use the electrical span
+// (layers where traces connect) rather than spanning to layers where TH pads exist.
+BOOST_FIXTURE_TEST_CASE( ViaElectricalSpan, DRC_REGRESSION_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22536", m_board );
+
+    LENGTH_DELAY_CALCULATION lengthCalc( m_board.get() );
+
+    // Find vias on Net 3 (Net-(J1-Pin_3)) which has:
+    // - TH vias with physical span F.Cu to B.Cu
+    // - Traces on F.Cu and In1.Cu only
+    // The electrical span should be F.Cu to In1.Cu, not F.Cu to B.Cu
+    NETINFO_ITEM* net3 = m_board->FindNet( "Net-(J1-Pin_3)" );
+    BOOST_REQUIRE( net3 != nullptr );
+
+    int viaCount = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        if( track->GetNetCode() != net3->GetNetCode() )
+            continue;
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+        // Verify the via is physically a TH via spanning F.Cu to B.Cu
+        BOOST_CHECK_EQUAL( via->TopLayer(), F_Cu );
+        BOOST_CHECK_EQUAL( via->BottomLayer(), B_Cu );
+
+        // Calculate the electrical span using CalculateViaLayers
+        LENGTH_DELAY_CALCULATION_ITEM item = lengthCalc.GetLengthCalculationItem( via );
+        auto [startLayer, endLayer] = item.GetLayers();
+
+        // The electrical span should be F.Cu to In1.Cu (where traces connect),
+        // not F.Cu to B.Cu (the physical via span)
+        BOOST_CHECK_EQUAL( startLayer, F_Cu );
+        BOOST_CHECK_EQUAL( endLayer, In1_Cu );
+
+        viaCount++;
+    }
+
+    BOOST_CHECK_EQUAL( viaCount, 2 ); // Net 3 has 2 vias
 }

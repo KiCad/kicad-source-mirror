@@ -1,0 +1,5 @@
+(version 1)
+(rule length_matching
+	(condition "A.hasNetclass('Match_3in')")
+	(constraint length (min 2997mil) (opt 3000mil) (max 3003mil))
+)

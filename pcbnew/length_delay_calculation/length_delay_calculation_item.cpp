@@ -29,7 +29,11 @@
 
 void LENGTH_DELAY_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
 {
-    static std::initializer_list<KICAD_T> traceAndPadTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
+    // Only consider trace connections when determining via electrical span. Pads are excluded
+    // because they have their own pad-to-die length handling, and including them would cause
+    // through-hole vias to incorrectly span to layers where TH pads exist (e.g., connector pins)
+    // rather than just the layers where traces actually connect.
+    static std::initializer_list<KICAD_T> traceTypes = { PCB_TRACE_T, PCB_ARC_T };
 
     PCB_LAYER_ID top_layer = UNDEFINED_LAYER;
     PCB_LAYER_ID bottom_layer = UNDEFINED_LAYER;
@@ -38,7 +42,7 @@ void LENGTH_DELAY_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
 
     for( auto layer_it = layers.copper_layers_begin(); layer_it != layers.copper_layers_end(); ++layer_it )
     {
-        if( aBoard->GetConnectivity()->IsConnectedOnLayer( m_via, *layer_it, traceAndPadTypes ) )
+        if( aBoard->GetConnectivity()->IsConnectedOnLayer( m_via, *layer_it, traceTypes ) )
         {
             if( top_layer == UNDEFINED_LAYER )
                 top_layer = *layer_it;
