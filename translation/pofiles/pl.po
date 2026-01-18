@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-17 22:02+0000\n"
+"PO-Revision-Date: 2026-01-18 15:22+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -6414,7 +6414,7 @@ msgstr "Informacja o sieci"
 
 #: common/eda_item.cpp:409 pcbnew/pcb_group.cpp:387
 msgid "Group"
-msgstr "Grupuj"
+msgstr "Grupa"
 
 #: common/eda_item.cpp:412 eeschema/sch_junction.cpp:304
 #: eeschema/sch_junction.h:102
@@ -14363,7 +14363,7 @@ msgstr "Wzorce nazw pól"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "BOM presets"
-msgstr "Zdefiniowane formaty BOM"
+msgstr "Predefiniowane BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 msgid "BOM format presets"
@@ -14469,7 +14469,7 @@ msgstr "Importuj ustawienia z innego projektu..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 msgid "BOM Presets"
-msgstr "Zdefiniowane formaty BOM"
+msgstr "Predefinicje BOM"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:82
 msgid "Electrical Rules"
