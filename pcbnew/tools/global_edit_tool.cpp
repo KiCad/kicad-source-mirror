@@ -261,11 +261,14 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
 
     wxBusyCursor dummy;
 
-    // Undraw old zone outlines
+    // OnModify must be called first to clear the zone bounding box cache before
+    // we update the VIEW. Otherwise View->Update() will query stale cached values
+    // and the VIEW's R-Tree will be indexed with incorrect bounding boxes, causing
+    // single-click zone selection to fail.
+    editFrame->OnModify();
+
     for( ZONE* zone : board->Zones() )
         editFrame->GetCanvas()->GetView()->Update( zone );
-
-    editFrame->OnModify();
 
     //rebuildConnectivity
     board->BuildConnectivity();
