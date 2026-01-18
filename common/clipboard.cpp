@@ -92,7 +92,8 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
                     wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
                     wxImage             img( stream, wxBITMAP_TYPE_PNG );
 
-                    bitmap = wxBitmap( img );
+                    if( img.IsOk() )
+                        bitmap = wxBitmap( img );
                 }
 
                 if( bitmap.IsOk() )

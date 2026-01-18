@@ -407,13 +407,16 @@ wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELE
     // - On white: result_w = α*F + (1-α)*255
     // - On black: result_b = α*F
     // Therefore: α = 1 - (result_w - result_b)/255
-    wxImage imageOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
-                                                    *wxWHITE, aIncludeDrawingSheet )
-                                   .ConvertToImage();
+    wxBitmap bmpOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
+                                                   *wxWHITE, aIncludeDrawingSheet );
+    wxBitmap bmpOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
+                                                   *wxBLACK, aIncludeDrawingSheet );
 
-    wxImage imageOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
-                                                    *wxBLACK, aIncludeDrawingSheet )
-                                   .ConvertToImage();
+    if( !bmpOnWhite.IsOk() || !bmpOnBlack.IsOk() )
+        return wxBitmap();
+
+    wxImage imageOnWhite = bmpOnWhite.ConvertToImage();
+    wxImage imageOnBlack = bmpOnBlack.ConvertToImage();
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
         return wxBitmap();
