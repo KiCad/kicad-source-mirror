@@ -111,11 +111,10 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
 }
 
 
-int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject )
+int JOBS_RUNNER::runSpecialCopyFiles( const JOB_SPECIAL_COPYFILES* aJob, PROJECT* aProject,
+                                      std::vector<wxString>& aPathsWritten )
 {
-    JOB_SPECIAL_COPYFILES* job = static_cast<JOB_SPECIAL_COPYFILES*>( aJob->m_job.get() );
-
-    wxString source = ExpandEnvVarSubstitutions( job->m_source, aProject );
+    wxString source = ExpandEnvVarSubstitutions( aJob->m_source, aProject );
 
     if( source.IsEmpty() )
         return CLI::EXIT_CODES::ERR_ARGS;
@@ -124,25 +123,19 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
     wxFileName sourceFn( source );
     sourceFn.MakeAbsolute( projectPath );
 
-    wxFileName destFn( job->GetFullOutputPath( aProject ) );
+    wxFileName destFn( aJob->GetFullOutputPath( aProject ) );
 
-    if( !job->m_dest.IsEmpty() )
-        destFn.AppendDir( job->m_dest );
-
-    std::vector<wxString> exclusions;
-
-    for( const JOBSET_DESTINATION& destination : m_jobsFile->GetDestinations() )
-        exclusions.push_back( projectPath + destination.m_outputHandler->GetOutputPath() );
+    if( !aJob->m_dest.IsEmpty() )
+        destFn.AppendDir( aJob->m_dest );
 
     wxString errors;
-    int      copyCount = 0;
-    bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(),
-                                             errors, copyCount, exclusions );
+    bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(), aJob->m_overwriteDest,
+                                             errors, aPathsWritten );
 
     if( !success )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    if( job->m_generateErrorOnNoCopy && copyCount == 0 )
+    if( aJob->m_generateErrorOnNoCopy && aPathsWritten.empty() )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     return CLI::EXIT_CODES::OK;
@@ -210,6 +203,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
     m_reporter.Report( msg, RPT_SEVERITY_INFO );
 
+    std::vector<wxString>   pathsWithOverwriteDisallowed;
     std::vector<JOB_OUTPUT> outputs;
 
     jobNum = 1;
@@ -258,8 +252,7 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
 
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
-            result = m_kiway->ProcessJob( iface, job.m_job.get(), &isolatedReporter,
-                                          m_progressReporter );
+            result = m_kiway->ProcessJob( iface, job.m_job.get(), &isolatedReporter, m_progressReporter );
         }
         else
         {
@@ -270,7 +263,16 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
             }
             else if( job.m_job->GetType() == "special_copyfiles" )
             {
-                result = runSpecialCopyFiles( &job, m_project );
+                JOB_SPECIAL_COPYFILES* copyJob = static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
+                std::vector<wxString>  pathsWritten;
+
+                result = runSpecialCopyFiles( copyJob, m_project, pathsWritten );
+
+                if( !copyJob->m_overwriteDest )
+                {
+                    pathsWithOverwriteDisallowed.insert( pathsWithOverwriteDisallowed.end(), pathsWritten.begin(),
+                                                         pathsWritten.end() );
+                }
             }
         }
 
@@ -314,9 +316,10 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
     wxUnsetEnv( OUTPUT_TMP_PATH_VAR_NAME );
 
     if( genOutputs )
-        success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs,
-                                                                 aDestination->m_lastResolvedOutputPath );
-
+    {
+        success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, pathsWithOverwriteDisallowed,
+                                                                 outputs, aDestination->m_lastResolvedOutputPath );
+    }
 
     aDestination->m_lastRunSuccess = success;
 

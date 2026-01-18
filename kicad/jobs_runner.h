@@ -24,6 +24,7 @@
 
 class JOBSET;
 struct JOBSET_DESTINATION;
+class JOB_SPECIAL_COPYFILES;
 struct JOBSET_JOB;
 class KIWAY;
 class REPORTER;
@@ -68,7 +69,8 @@ public:
 
 private:
     int runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter, PROJECT* aProject );
-    int runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject );
+    int runSpecialCopyFiles( const JOB_SPECIAL_COPYFILES* aJob, PROJECT* aProject,
+                             std::vector<wxString>& aPathsWritten );
 
 private:
     KIWAY*                  m_kiway;

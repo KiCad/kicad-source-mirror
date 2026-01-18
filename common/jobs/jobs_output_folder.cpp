@@ -32,6 +32,7 @@ JOBS_OUTPUT_FOLDER::JOBS_OUTPUT_FOLDER() :
 
 bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempPath,
                                         PROJECT*                       aProject,
+                                        const std::vector<wxString>&   aPathsWithOverwriteDisallowed,
                                         const std::vector<JOB_OUTPUT>& aOutputsToHandle,
                                         std::optional<wxString>&       aResolvedOutputPath )
 {
@@ -54,7 +55,7 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 
     wxString errors;
 
-    if( !CopyDirectory( baseTempPath, outputPath, errors ) )
+    if( !CopyDirectory( baseTempPath, outputPath, aPathsWithOverwriteDisallowed, errors ) )
     {
         aResolvedOutputPath.reset();
         return false;

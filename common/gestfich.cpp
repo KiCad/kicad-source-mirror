@@ -46,6 +46,7 @@
 #include <wx/zipstrm.h>
 
 #include <filesystem>
+#include <core/kicad_algo.h>
 
 void QuoteString( wxString& string )
 {
@@ -431,7 +432,8 @@ bool RmDirRecursive( const wxString& aFileName, wxString* aErrors )
 }
 
 
-bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxString& aErrors )
+bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,
+                    const std::vector<wxString>& aPathsWithOverwriteDisallowed, wxString& aErrors )
 {
     wxDir dir( aSourceDir );
 
@@ -454,23 +456,25 @@ bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxStri
 
     while( cont )
     {
-        wxString sourcePath = aSourceDir + wxFileName::GetPathSeparator() + filename;
+        wxString sourcePath = dir.GetNameWithSep() + filename;
         wxString destPath = aDestDir + wxFileName::GetPathSeparator() + filename;
 
         if( wxFileName::DirExists( sourcePath ) )
         {
             // Recursively copy subdirectories
-            if( !CopyDirectory( sourcePath, destPath, aErrors ) )
+            if( !CopyDirectory( sourcePath, destPath, aPathsWithOverwriteDisallowed, aErrors ) )
                 return false;
         }
         else
         {
             // Copy files
-            if( !wxCopyFile( sourcePath, destPath ) )
+            if( alg::contains( aPathsWithOverwriteDisallowed, sourcePath ) && wxFileExists( destPath ) )
             {
-                aErrors += wxString::Format( _( "Could not copy file: %s to %s" ),
-                                             sourcePath,
-                                             destPath );
+                // Presumably user does not want an error on a no-overwrite condition....
+            }
+            else if( !wxCopyFile( sourcePath, destPath ) )
+            {
+                aErrors += wxString::Format( _( "Could not copy file: %s to %s" ), sourcePath, destPath );
                 return false;
             }
         }
@@ -482,8 +486,8 @@ bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir, wxStri
 }
 
 
-bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir, wxString& aErrors,
-                           int& aFileCopiedCount, const std::vector<wxString>& aExclusions )
+bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir, bool aAllowOverwrites,
+                           wxString& aErrors, std::vector<wxString>& aPathsWritten )
 {
     // Parse source path and determine if it's a directory
     wxFileName sourceFn( aSourcePath );
@@ -494,9 +498,9 @@ bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir
     auto performCopy =
             [&]( const wxString& src, const wxString& dest ) -> bool
             {
-                if( wxCopyFile( src, dest ) )
+                if( wxCopyFile( src, dest, aAllowOverwrites ) )
                 {
-                    aFileCopiedCount++;
+                    aPathsWritten.push_back( dest );
                     return true;
                 }
 
@@ -528,25 +532,12 @@ bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir
                     const wxString entrySrc = srcDir + wxFileName::GetPathSeparator() + filename;
                     const wxString entryDest = destDir + wxFileName::GetPathSeparator() + filename;
 
-                    // Apply exclusion filters
-                    bool exclude = filename.Matches( wxT( "~*.lck" ) ) || filename.Matches( wxT( "*.lck" ) );
-
-                    for( const auto& exclusion : aExclusions )
-                    {
-                        if( entrySrc.Matches( exclusion ) )
-                        {
-                            exclude = true;
-                            break;
-                        }
-                    }
-
-                    if( !exclude )
+                    if( !filename.Matches( wxT( "~*.lck" ) ) && !filename.Matches( wxT( "*.lck" ) ) )
                     {
                         if( wxFileName::DirExists( entrySrc ) )
                         {
                             // Recursively process subdirectories
-                            if( !CopyFilesOrDirectory( entrySrc, destDir, aErrors, aFileCopiedCount,
-                                                       aExclusions ) )
+                            if( !CopyFilesOrDirectory( entrySrc, destDir, aAllowOverwrites, aErrors, aPathsWritten ) )
                             {
                                 aErrors += wxString::Format( _( "Could not copy directory: %s to %s" ),
                                                              entrySrc, entryDest );

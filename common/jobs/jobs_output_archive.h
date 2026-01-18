@@ -34,6 +34,7 @@ public:
 
     bool HandleOutputs( const wxString&                aBaseTempPath,
                         PROJECT*                       aProject,
+                        const std::vector<wxString>&   aPathsWithOverwriteDisallowed,
                         const std::vector<JOB_OUTPUT>& aOutputsToHandle,
                         std::optional<wxString>&       aResolvedOutputPath ) override;
     bool OutputPrecheck() override;

@@ -44,6 +44,7 @@ bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
 
 bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTempPath,
                                          PROJECT*                       aProject,
+                                         const std::vector<wxString>&   aPathsWithOverwriteDisallowed,
                                          const std::vector<JOB_OUTPUT>& aOutputsToHandle,
                                          std::optional<wxString>&       aResolvedOutputPath )
 {
