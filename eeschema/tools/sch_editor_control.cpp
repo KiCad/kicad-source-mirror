@@ -267,7 +267,7 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
         std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
 
         if( !galPrint )
-            return wxImage();
+            return wxBitmap();
 
         KIGFX::GAL*                         gal = galPrint->GetGAL();
         KIGFX::PRINT_CONTEXT*               printCtx = galPrint->GetPrintCtx();
@@ -416,7 +416,7 @@ wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELE
                                    .ConvertToImage();
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
-        return wxImage();
+        return wxBitmap();
 
     // Create output image with alpha channel
     wxImage result( bitmapWidth, bitmapHeight );
