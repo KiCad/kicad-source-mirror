@@ -252,116 +252,115 @@ wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aS
                                  const wxColour& aBgColor, bool aIncludeDrawingSheet = false )
 {
     wxBitmap bitmap( aWidth, aHeight, 24 );
-    wxMemoryDC dc;
-    dc.SelectObject( bitmap );
-    dc.SetBackground( wxBrush( aBgColor ) );
-    dc.Clear();
-
-    KIGFX::GAL_DISPLAY_OPTIONS options;
-    options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
-    std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
-
-    if( !galPrint )
-        return wxImage();
-
-    KIGFX::GAL* gal = galPrint->GetGAL();
-    KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
-    std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
-    std::unique_ptr<KIGFX::VIEW> view = std::make_unique<KIGFX::VIEW>();
-
-    painter->SetSchematic( &aFrame->Schematic() );
-    view->SetGAL( gal );
-    view->SetPainter( painter.get() );
-    view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
-    view->SetScale( 1.0 );
-    gal->SetWorldUnitLength( SCH_WORLD_UNIT );
-
-    // Clone items and add to view
-    std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
-    clonedItems.reserve( aSelection.GetSize() );
-
-    for( EDA_ITEM* item : aSelection.GetItems() )
-    {
-        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
-
-        if( !schItem )
-            continue;
-
-        SCH_ITEM* clone = static_cast<SCH_ITEM*>( schItem->Clone() );
-        clonedItems.emplace_back( clone );
-        view->Add( clone );
-    }
-
-    SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
-    *dstSettings = *aFrame->GetRenderSettings();
-    dstSettings->m_ShowPinsElectricalType = false;
-    dstSettings->LoadColors( aFrame->GetColorSettings( false ) );
-    dstSettings->SetLayerColor( LAYER_DRAWINGSHEET,
-                                dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
-    dstSettings->SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
-    dstSettings->SetIsPrinting( true );
-
-    COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0,
-                       aBgColor.Blue() / 255.0, 1.0 );
-    dstSettings->SetBackgroundColor( bgColor4D );
-
-    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
-    {
-        view->SetLayerVisible( i, true );
-        view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
-    }
-
-    view->SetLayerVisible( LAYER_DRAWINGSHEET, aIncludeDrawingSheet );
-
-    // Create and add drawing sheet proxy view item if requested
-    std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet;
-
-    if( aIncludeDrawingSheet )
-    {
-        SCH_SCREEN* screen = aFrame->GetScreen();
-
-        drawingSheet.reset( new DS_PROXY_VIEW_ITEM( schIUScale, &screen->GetPageSettings(),
-                                                    &screen->Schematic()->Project(),
-                                                    &screen->GetTitleBlock(),
-                                                    screen->Schematic()->GetProperties() ) );
-        drawingSheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
-        drawingSheet->SetSheetCount( screen->GetPageCount() );
-        drawingSheet->SetFileName( TO_UTF8( screen->GetFileName() ) );
-        drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
-        drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
-        drawingSheet->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
-        drawingSheet->SetSheetName( TO_UTF8( aFrame->GetScreenDesc() ) );
-        drawingSheet->SetSheetPath( TO_UTF8( aFrame->GetFullScreenDesc() ) );
-
-        view->Add( drawingSheet.get() );
-    }
-
-    // Set up page size to match the output bitmap dimensions at our target ppi.
-    // This ensures the content will be centered in the bitmap.
-    double ppi = clipboardPpi;
-    double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
-    VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
-
-    galPrint->SetSheetSize( pageSizeIn );
-    galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
-
-    // Calculate zoom factor so bbox content fills the page centered.
-    // The zoom maps from IU to page coordinates, scaling by viewScale.
-    double zoomFactor = aViewScale * inch2Iu / ppi;
-
-    gal->SetLookAtPoint( aBBox.Centre() );
-    gal->SetZoomFactor( zoomFactor );
-    gal->SetClearColor( bgColor4D );
-    gal->ClearScreen();
-
-    view->UseDrawPriority( true );
 
     {
-        KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
-        view->Redraw();
+        wxMemoryDC dc( bitmap );
+        dc.SetBackground( wxBrush( aBgColor ) );
+        dc.Clear();
+
+        KIGFX::GAL_DISPLAY_OPTIONS options;
+        options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
+
+        std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
+
+        if( !galPrint )
+            return wxImage();
+
+        KIGFX::GAL*                         gal = galPrint->GetGAL();
+        KIGFX::PRINT_CONTEXT*               printCtx = galPrint->GetPrintCtx();
+        std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
+        std::unique_ptr<KIGFX::VIEW>        view = std::make_unique<KIGFX::VIEW>();
+
+        painter->SetSchematic( &aFrame->Schematic() );
+        view->SetGAL( gal );
+        view->SetPainter( painter.get() );
+        view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
+        view->SetScale( 1.0 );
+        gal->SetWorldUnitLength( SCH_WORLD_UNIT );
+
+        // Clone items and add to view
+        std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
+        clonedItems.reserve( aSelection.GetSize() );
+
+        for( EDA_ITEM* item : aSelection.GetItems() )
+        {
+            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item );
+
+            if( !schItem )
+                continue;
+
+            SCH_ITEM* clone = static_cast<SCH_ITEM*>( schItem->Clone() );
+            clonedItems.emplace_back( clone );
+            view->Add( clone );
+        }
+
+        SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
+        *dstSettings = *aFrame->GetRenderSettings();
+        dstSettings->m_ShowPinsElectricalType = false;
+        dstSettings->LoadColors( aFrame->GetColorSettings( false ) );
+        dstSettings->SetLayerColor( LAYER_DRAWINGSHEET, dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
+        dstSettings->SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
+        dstSettings->SetIsPrinting( true );
+
+        COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0, aBgColor.Blue() / 255.0, 1.0 );
+        dstSettings->SetBackgroundColor( bgColor4D );
+
+        for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
+        {
+            view->SetLayerVisible( i, true );
+            view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+        }
+
+        view->SetLayerVisible( LAYER_DRAWINGSHEET, aIncludeDrawingSheet );
+
+        // Create and add drawing sheet proxy view item if requested
+        std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet;
+
+        if( aIncludeDrawingSheet )
+        {
+            SCH_SCREEN* screen = aFrame->GetScreen();
+
+            drawingSheet.reset( new DS_PROXY_VIEW_ITEM( schIUScale, &screen->GetPageSettings(),
+                                                        &screen->Schematic()->Project(), &screen->GetTitleBlock(),
+                                                        screen->Schematic()->GetProperties() ) );
+            drawingSheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+            drawingSheet->SetSheetCount( screen->GetPageCount() );
+            drawingSheet->SetFileName( TO_UTF8( screen->GetFileName() ) );
+            drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+            drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
+            drawingSheet->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
+            drawingSheet->SetSheetName( TO_UTF8( aFrame->GetScreenDesc() ) );
+            drawingSheet->SetSheetPath( TO_UTF8( aFrame->GetFullScreenDesc() ) );
+
+            view->Add( drawingSheet.get() );
+        }
+
+        // Set up page size to match the output bitmap dimensions at our target ppi.
+        // This ensures the content will be centered in the bitmap.
+        double   ppi = clipboardPpi;
+        double   inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
+        VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
+
+        galPrint->SetSheetSize( pageSizeIn );
+        galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
+
+        // Calculate zoom factor so bbox content fills the page centered.
+        // The zoom maps from IU to page coordinates, scaling by viewScale.
+        double zoomFactor = aViewScale * inch2Iu / ppi;
+
+        gal->SetLookAtPoint( aBBox.Centre() );
+        gal->SetZoomFactor( zoomFactor );
+        gal->SetClearColor( bgColor4D );
+        gal->ClearScreen();
+
+        view->UseDrawPriority( true );
+
+        {
+            KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+            view->Redraw();
+        }
     }
 
-    dc.SelectObject( wxNullBitmap );
     return bitmap.ConvertToImage();
 }
 
