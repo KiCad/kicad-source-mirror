@@ -58,6 +58,8 @@ public:
 
     ~PANEL_FOOTPRINT_CHOOSER();
 
+    void OnChar( wxKeyEvent& aEvent );
+
     void FinishSetup();
 
     void SetPreselect( const LIB_ID& aPreselect );

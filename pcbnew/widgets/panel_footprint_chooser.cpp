@@ -180,37 +180,6 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
                         wxKeyEventHandler( PANEL_FOOTPRINT_CHOOSER::OnDetailsCharHook ),
                         nullptr, this );
 
-    Bind( wxEVT_CHAR_HOOK,
-            [&]( wxKeyEvent& aEvent )
-            {
-                if( aEvent.GetKeyCode() == WXK_ESCAPE )
-                {
-                    wxObject* eventSource = aEvent.GetEventObject();
-
-                    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
-                    {
-                        // First escape cancels search string value
-                        if( textCtrl->GetValue() == m_tree->GetSearchString()
-                                && !m_tree->GetSearchString().IsEmpty() )
-                        {
-                            m_tree->SetSearchString( wxEmptyString );
-                            return;
-                        }
-                    }
-
-                    m_escapeHandler();
-                }
-                else
-                {
-                    // aEvent.Skip() should be sufficient to allow the normal key events to be
-                    // generated (at least according to the wxWidgets documentation).  And yet,
-                    // here we are.
-                    aEvent.DoAllowNextEvent();
-
-                    aEvent.Skip();
-                }
-            } );
-
     Layout();
 
     // Open the user's previously opened libraries on timer expiration.
@@ -250,6 +219,27 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
             cfg->m_FootprintChooser.sash_v = m_vsplitter->GetSashPosition();
 
         cfg->m_FootprintChooser.sort_mode = m_tree->GetSortMode();
+    }
+}
+
+
+void PANEL_FOOTPRINT_CHOOSER::OnChar( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        // First escape clears search string, second escape closes
+        if( !m_tree->GetSearchString().IsEmpty() )
+        {
+            m_tree->SetSearchString( wxEmptyString );
+            GetFocusTarget()->SetFocus();
+            return;
+        }
+
+        m_escapeHandler();
+    }
+    else
+    {
+        aEvent.Skip();
     }
 }
 

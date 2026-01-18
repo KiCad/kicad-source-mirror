@@ -199,6 +199,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     Layout();
     m_chooserPanel->FinishSetup();
 
+    Bind( wxEVT_CHAR_HOOK, &PANEL_FOOTPRINT_CHOOSER::OnChar, m_chooserPanel );
+
     if( !m_showDescription )
     {
         m_chooserPanel->GetVerticalSpliter()->SetMinimumPaneSize( 0 );
@@ -259,6 +261,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 {
+    Unbind( wxEVT_CHAR_HOOK, &PANEL_FOOTPRINT_CHOOSER::OnChar, m_chooserPanel );
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
