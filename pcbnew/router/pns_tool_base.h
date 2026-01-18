@@ -67,6 +67,7 @@ protected:
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );
 
+protected:
     SIZES_SETTINGS   m_savedSizes;       // Stores sizes settings between router invocations
     ITEM*            m_startItem;
     VECTOR2I         m_startSnapPoint;
